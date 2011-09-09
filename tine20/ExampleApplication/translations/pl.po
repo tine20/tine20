@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ExampleApplication\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-27 17:25+0100\n"
+"PO-Revision-Date: 2011-09-08 20:40+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -15,11 +15,11 @@ msgstr ""
 
 #: Config.php:31
 msgid "Status Available"
-msgstr ""
+msgstr "Dostępny status"
 
 #: Config.php:33
 msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
-msgstr ""
+msgstr "Możliwy status. Zauważ proszę, że dodatkowy status może wpływać w innych przykładowych aplikacjach na eksport albo synchronizację."
 
 #: Controller.php:74
 #, python-format
@@ -28,17 +28,19 @@ msgstr "%s przykładowe, osobiste wiersze"
 
 #: js/ExampleApplication.js:24
 msgid "Example Application test"
-msgstr ""
+msgstr "Test przykładowej aplikacji"
 
 #: js/ExampleRecordEditDialog.js:87
 msgid "ExampleRecord"
 msgstr "Przykładowy wiersz"
 
-#: js/ExampleRecordEditDialog.js:104 js/ExampleRecordGridPanel.js:83
+#: js/ExampleRecordEditDialog.js:104
+#: js/ExampleRecordGridPanel.js:83
 msgid "Name"
 msgstr "Nazwa"
 
-#: js/ExampleRecordEditDialog.js:110 js/ExampleRecordGridPanel.js:89
+#: js/ExampleRecordEditDialog.js:110
+#: js/ExampleRecordGridPanel.js:89
 #: js/Model.js:71
 msgid "Status"
 msgstr "Status"
@@ -69,37 +71,38 @@ msgstr[0] "Lista przykładowych wierszy"
 msgstr[1] "listy przykładowych wierszy"
 msgstr[2] "listy przykładowych wierszy"
 
-#: js/Model.js:69 js/Model.js:106
+#: js/Model.js:69
+#: js/Model.js:106
 msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
 
 #: js/Model.js:79
 msgid "Last modified"
-msgstr ""
+msgstr "Ostatnio modyfikowane"
 
 #: js/Model.js:80
 msgid "Last modifier"
-msgstr ""
+msgstr "Ostatnio modyfikował/a"
 
 #: js/Model.js:81
 msgid "Creation Time"
-msgstr ""
+msgstr "Czas utworzenia"
 
 #: js/Model.js:82
 msgid "Creator"
-msgstr ""
+msgstr "Autor"
 
 #: Setup/Initialize.php:33
 msgid "Completed"
-msgstr ""
+msgstr "Zakończone"
 
 #: Setup/Initialize.php:34
 msgid "Cancelled"
-msgstr ""
+msgstr "Anulowane"
 
 #: Setup/Initialize.php:35
 msgid "In process"
-msgstr ""
+msgstr "W opracowaniu"
 
 #: Setup/setup.xml:4
 msgid "ExampleApplication"
@@ -118,6 +121,7 @@ msgstr "Przykładowa aplikacja"
 #~ msgstr "Opis"
 
 #~ msgid "record list"
+
 #~ msgid_plural "record lists"
 #~ msgstr[0] "lista aplikacji"
 #~ msgstr[1] "listy aplikacji"

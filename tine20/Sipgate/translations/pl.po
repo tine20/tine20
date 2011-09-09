@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Sipgate\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-06-18 10:50+0100\n"
+"PO-Revision-Date: 2011-09-08 21:11+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -29,16 +29,20 @@ msgstr "Praca"
 msgid "Home"
 msgstr "Dom"
 
-#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:320
+#: js/AddressbookGridPanelHook.js:275
+#: js/AddressbookGridPanelHook.js:320
 msgid "Cell"
 msgstr "Komórka"
 
-#: js/AddressbookGridPanelHook.js:285 js/AddressbookGridPanelHook.js:330
+#: js/AddressbookGridPanelHook.js:285
+#: js/AddressbookGridPanelHook.js:330
 msgid "Cell private"
 msgstr "Komórka prywatna"
 
-#: js/CallStateWindow.js:50 js/DialNumberDialog.js:64
-#: js/SearchAddressDialog.js:64 js/SmsEditDialog.js:60
+#: js/CallStateWindow.js:50
+#: js/DialNumberDialog.js:64
+#: js/SearchAddressDialog.js:64
+#: js/SmsEditDialog.js:60
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -50,70 +54,80 @@ msgstr "nawiązywanie połączenia..."
 msgid "Connecting to: "
 msgstr "Łączę z:"
 
-#: js/DialNumberDialog.js:56 js/DialNumberDialog.js:152
+#: js/DialNumberDialog.js:56
+#: js/DialNumberDialog.js:152
 msgid "Dial Number"
-msgstr ""
+msgstr "Numer telefonu"
 
-#: js/DialNumberDialog.js:72 js/SearchAddressDialog.js:72
+#: js/DialNumberDialog.js:72
+#: js/SearchAddressDialog.js:72
 #: js/SmsEditDialog.js:68
 msgid "Close"
 msgstr "Zamknij"
 
 #: js/DialNumberDialog.js:120
 msgid "Number to call"
-msgstr ""
+msgstr "Numer rozmówcy"
 
 #: js/SearchAddressDialog.js:56
 msgid "Add Number"
-msgstr ""
+msgstr "Dodaj numer"
 
-#: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
+#: js/SearchAddressDialog.js:133
+#: js/SearchAddressDialog.js:155
 msgid "Phone"
-msgstr ""
+msgstr "Telefon"
 
-#: js/SearchAddressDialog.js:134 js/SearchAddressDialog.js:156
+#: js/SearchAddressDialog.js:134
+#: js/SearchAddressDialog.js:156
 msgid "Mobile"
-msgstr ""
+msgstr "Komórka"
 
-#: js/SearchAddressDialog.js:135 js/SearchAddressDialog.js:157
+#: js/SearchAddressDialog.js:135
+#: js/SearchAddressDialog.js:157
 msgid "Fax"
-msgstr ""
+msgstr "Faks"
 
-#: js/SearchAddressDialog.js:136 js/SearchAddressDialog.js:158
+#: js/SearchAddressDialog.js:136
+#: js/SearchAddressDialog.js:158
 msgid "Car phone"
-msgstr ""
+msgstr "Telefon w samochodzie"
 
-#: js/SearchAddressDialog.js:137 js/SearchAddressDialog.js:159
+#: js/SearchAddressDialog.js:137
+#: js/SearchAddressDialog.js:159
 msgid "Pager"
-msgstr ""
+msgstr "Pager"
 
-#: js/SearchAddressDialog.js:138 js/SearchAddressDialog.js:160
+#: js/SearchAddressDialog.js:138
+#: js/SearchAddressDialog.js:160
 msgid "Phone (private)"
-msgstr ""
+msgstr "Telefon (prywatny)"
 
-#: js/SearchAddressDialog.js:139 js/SearchAddressDialog.js:161
+#: js/SearchAddressDialog.js:139
+#: js/SearchAddressDialog.js:161
 msgid "Fax (private)"
-msgstr ""
+msgstr "Faks (prywatny)"
 
-#: js/SearchAddressDialog.js:140 js/SearchAddressDialog.js:162
+#: js/SearchAddressDialog.js:140
+#: js/SearchAddressDialog.js:162
 msgid "Mobile (private)"
-msgstr ""
+msgstr "Komórka (prywatna)"
 
 #: js/SearchAddressDialog.js:145
 msgid "-- create new --"
-msgstr ""
+msgstr "-- utwórz nowy --"
 
 #: js/SearchAddressDialog.js:146
 msgid "Select existing contact or create a new one"
-msgstr ""
+msgstr "Zaznacz istniejący kontakt albo utwórz nowy"
 
 #: js/SearchAddressDialog.js:181
 msgid "Choose Device"
-msgstr ""
+msgstr "Wybierz urządzenie"
 
 #: js/SearchAddressDialog.js:214
 msgid "Choose Address"
-msgstr ""
+msgstr "Wybierz adres"
 
 #: js/Sipgate.js:30
 msgid "Edit phone settings"
@@ -133,29 +147,30 @@ msgstr "Numer telefonu"
 
 #: js/Sipgate.js:154
 msgid "Initiates a new outgoing call"
-msgstr ""
+msgstr "Zestaw nowe połączenie wychodzące"
 
 #: js/Sipgate.js:161
 msgid "Add Number to Addressbook"
-msgstr ""
+msgstr "Dodaj numer do książki adresowej"
 
 #: js/Sipgate.js:162
 msgid "Adds this number to the Addressbook"
-msgstr ""
+msgstr "Dodaje numer do książki adresowej"
 
 #: js/Sipgate.js:281
 msgid "Calls from"
-msgstr ""
+msgstr "Telefony od"
 
 #: js/Sipgate.js:292
 msgid "Calls to"
-msgstr ""
+msgstr "Telefony do"
 
 #: js/Sipgate.js:311
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Wyświetl połączenia {0} - {1} z {2}"
 
-#: js/Sipgate.js:312 js/Sipgate.js:397
+#: js/Sipgate.js:312
+#: js/Sipgate.js:397
 msgid "No calls to display"
 msgstr "Brak połączeń do wyświetlenia"
 
@@ -189,7 +204,7 @@ msgstr "ID połączenia"
 
 #: js/Sipgate.js:527
 msgid "unknown Person"
-msgstr ""
+msgstr "osoba nieznana"
 
 #: js/Sipgate.js:605
 msgid "first dial"
@@ -219,7 +234,8 @@ msgstr "Słuchawka odłożona przed nawiązaniem połączenia"
 msgid "hungup"
 msgstr "Rozmowa zakończona"
 
-#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:187
+#: js/SmsEditDialog.js:52
+#: js/SmsEditDialog.js:187
 msgid "Send"
 msgstr "Wyślij"
 
