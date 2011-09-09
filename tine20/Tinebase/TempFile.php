@@ -189,7 +189,9 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
             if (! $fChunk) {
                 throw new Tinebase_Exception_UnexpectedValue("Can not open chunk {$tempFile->id}");
             }
-            stream_copy_to_stream($fChunk, $fJoin);
+            
+            // NOTE: stream_copy_to_stream is about 15% slower
+            while (!feof($fChunk)) fwrite($fJoin, fread($fChunk, 2097152 /* 2 MB */));
             fclose($fChunk);
         }
         
