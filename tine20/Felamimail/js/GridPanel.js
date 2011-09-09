@@ -1238,7 +1238,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         frame.contentWindow.focus(); 
         frame.contentWindow.print();
         
-        setTimeout(function(){Ext.removeNode(frame);}, 100);
+        // removeing frame chrashes chrome
+//        setTimeout(function(){Ext.removeNode(frame);}, 100);
     },
     
     /**
