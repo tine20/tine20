@@ -45,7 +45,7 @@ Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      */
     defaultSortInfo: {field: 'creation_time', direction: 'DESC'},
     gridConfig: {
-        autoExpandColumn: 'inventory_id'
+        autoExpandColumn: 'name'
     },
      
     /**

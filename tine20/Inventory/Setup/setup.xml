@@ -61,12 +61,12 @@
                 <field>
                     <name>total_number</name>
                     <type>integer</type>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>active_number</name>
                     <type>integer</type>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
               
                 <!-- defaults for tine system -->

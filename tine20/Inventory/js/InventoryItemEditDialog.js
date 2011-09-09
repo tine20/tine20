@@ -38,7 +38,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     showContainerSelector: true,
     
     /**
-     * overwrite update toolbars function (we don't have record grants yet)
+     * overwrite update toolbars function (we don t have record grants yet)
      * @private
      */
     updateToolbars: function() {
@@ -170,6 +170,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             columnWidth: 0.5,
                             fieldLabel: this.app.i18n._('Total number'),
                             name: 'total_number',
+                            //value: null,
                             value: 1,
                             minValue: 1
                             
@@ -179,6 +180,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             columnWidth: 0.5,
                             fieldLabel: this.app.i18n._('Active number'),
                             name: 'active_number',
+                            //value: null,
                             value: 1,
                             minValue: 0
                             

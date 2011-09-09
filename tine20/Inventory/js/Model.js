@@ -34,13 +34,14 @@ Tine.Inventory.Model.InventoryItem = Tine.Tinebase.data.Record.create(Tine.Tineb
     modelName: 'InventoryItem',
     idProperty: 'id',
     titleProperty: 'title',
-    // ngettext('inventory item', 'inventory records', n);
+    // ngettext('Item', 'Items', n);
     recordName: 'Item',
     recordsName: 'Items',
     containerProperty: 'container_id',
-    // ngettext('inventory record list', 'inventory record lists', n);
-    containerName: 'inventory item list',
-    containersName: 'inventory item lists'
+    // gettext('inventories')
+    // ngettext('inventory', 'inventories', n);
+    containerName: 'inventory',
+    containersName: 'inventories'
 });
 
 /**

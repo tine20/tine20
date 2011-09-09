@@ -30,11 +30,11 @@ class Inventory_Setup_Initialize extends Setup_Initialize
         $typeConfig = array(
             'name'    => Inventory_Config::INVENTORY_TYPE,
             'records' => array(
-                array('id' => 'BOOK',    'value' => 'book',   'is_open' => 0, /*'icon' => 'images/oxygen/16x16/actions/ok.png',   */               'system' => true), //_('Completed')
-                array('id' => 'SERVER',    'value' => 'server',   'is_open' => 0, /*'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',  */      'system' => true), //_('Cancelled')
-                array('id' => 'MONITOR',    'value' => 'monitor',   'is_open' => 0, /*'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',  */      'system' => true),
-                array('id' => 'KEYBOARD',    'value' => 'keyboard',   'is_open' => 0, /*'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',  */      'system' => true),
-                array('id' => 'UNKNOWN',   'value' => 'unknown',  'is_open' => 1, /*'icon' => 'images/oxygen/16x16/actions/view-refresh.png',   */      'system' => true), //_('In process')
+                array('id' => 'BOOK',    'value' => 'book',   'is_open' => 0, /*'icon' => 'images/oxygen/16x16/actions/ok.png',   */               'system' => true), //_('book')
+                array('id' => 'SERVER',    'value' => 'server',   'is_open' => 0, /*'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',  */      'system' => true), //_('server')
+                array('id' => 'MONITOR',    'value' => 'monitor',   'is_open' => 0, /*'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',  */      'system' => true), //_('monitor')
+                array('id' => 'KEYBOARD',    'value' => 'keyboard',   'is_open' => 0, /*'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',  */      'system' => true), //_('keyboard')
+                array('id' => 'UNKNOWN',   'value' => 'unknown',  'is_open' => 1, /*'icon' => 'images/oxygen/16x16/actions/view-refresh.png',   */      'system' => true), //_('unkown')
             ),
         );
         
