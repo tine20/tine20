@@ -81,7 +81,7 @@ Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             columns: [{
                 id: 'inventory_id',
                 header: this.app.i18n._("ID"),
-                width: 50,
+                width: 90,
                 sortable: true,
                 dataIndex: 'inventory_id'
             }, {
@@ -113,19 +113,19 @@ Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             },{
                 id: 'total_number',
                 header: this.app.i18n._("Total number"),
-                width: 30,
+                width: 25,
                 sortable: true,
                 dataIndex: 'total_number'
             },{
                 id: 'active_number',
                 header: this.app.i18n._("Active number"),
-                width: 30,
+                width: 25,
                 sortable: true,
                 dataIndex: 'active_number'
             },{
                 id: 'description',
                 header: this.app.i18n._("Description"),
-                width: 80,
+                width: 50,
                 sortable: true,
                 dataIndex: 'description'
             }

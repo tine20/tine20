@@ -24,7 +24,7 @@
                 <field>
                     <name>name</name>
                     <type>text</type>
-                    <length>255</length>
+                    <length>100</length>
                     <notnull>true</notnull>
                 </field>
                 <!-- keyfield 'status' -->
@@ -39,13 +39,12 @@
                 <field>
                     <name>inventory_id</name>
                     <type>text</type>
-                    <length>255</length>
+                    <length>100</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
                     <name>description</name>
                     <type>text</type>
-                    <length>255</length>
                     <notnull>true</notnull>
                 </field>
                 <field>

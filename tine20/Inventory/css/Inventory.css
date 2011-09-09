@@ -7,13 +7,14 @@
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
- 
+
 .InventoryIconCls {
-    background-image:url(../../images/oxygen/16x16/actions/document-open-recent.png) !important;
+    /*background-image:url(../../images/oxygen/16x16/actions/document-open-recent.png) !important;*/
+    background-image:url(../../images/oxygen/16x16/apps/klipper.png) !important;
 }
 .x-btn-medium .InventoryIconCls {
-    background-image:url(../../images/oxygen/22x22/actions/document-open-recent.png) !important;
+    background-image:url(../../images/oxygen/22x22/actions/document-new.png) !important;
 }
 .x-btn-large .InventoryIconCls {
-    background-image:url(../../images/oxygen/32x32/actions/document-open-recent.png) !important;
+    background-image:url(../../images/oxygen/32x32/actions/document-new.png) !important;
 }

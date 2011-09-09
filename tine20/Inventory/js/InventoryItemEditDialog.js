@@ -121,20 +121,22 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         fieldLabel: this.app.i18n._('Name'),
                         name: 'name',
                         columnWidth: 0.5,
-                        allowBlank: false
+                        allowBlank: false,
+                        maxLength: 100
                         }, new Tine.Tinebase.widgets.keyfield.ComboBox({
                             app: 'Inventory',
                             keyFieldName: 'inventoryType',
                             fieldLabel: this.app.i18n._('Type'),
                             name: 'type',
                             columnWidth: 0.5,
-                            allowBlank: false
+                            allowBlank: false,
+                            maxLength: 100
                         })],
                         [{
                             columnWidth: 1,
                             fieldLabel: this.app.i18n._('ID'),
                             name: 'inventory_id',
-                            
+                            maxLength: 100
                         }],
                         [{
                         	xtype: 'textarea',
@@ -144,7 +146,6 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             preventScrollbars: false,
                             columnWidth: 1,
                             height: 150,
-   
                             emptyText: this.app.i18n._('Enter description')
                         }],
                         [{
@@ -152,7 +153,8 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             xtype: 'tine.widget.field.AutoCompleteField',
                             recordClass: this.recordClass,
                             fieldLabel: this.app.i18n._('Location'),
-                            name: 'location'
+                            name: 'location',
+                            maxLength: 255
                             
                         },
                         {
@@ -178,7 +180,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             fieldLabel: this.app.i18n._('Active number'),
                             name: 'active_number',
                             value: 1,
-                            minValue: 0,
+                            minValue: 0
                             
                         }],
                         
