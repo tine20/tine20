@@ -92,7 +92,44 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
         
         return parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
-
+    
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase/Record/Tinebase_Record_Abstract::isValid()
+     */
+    public function isValid($_throwExceptionOnInvalidData = false)
+    {
+    	$isValid = parent::isValid($_throwExceptionOnInvalidData);
+    	
+    	$isValid &= (int) $this->active_number > (int) $this->total_number;
+    	
+    	if (! $isValid && $_throwExceptionOnInvalidData) {
+    		$e = new Tinebase_Exception_Record_Validation('active number must be equal or less than total number');
+    		Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ":\n" .
+               print_r($this->_validationErrors,true). $e);
+            throw $e;
+    	}
+    	
+    	return $isValid;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase/Record/Tinebase_Record_Abstract::setFromArray()
+     */
+    public function setFromArray(array $_data)
+    {
+        if (isset($_data['total_number']) && ! is_int($_data['total_number'])) {
+        	unset($_data['total_number']);
+        }
+        
+        if (isset($_data['active_number']) && ! is_int($_data['active_number'])) {
+        	unset($_data['active_number']);
+        }
+        
+        return parent::setFromArray($_data);
+    }
+    
     /**
      * fills a record from json data
      *
