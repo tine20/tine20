@@ -360,11 +360,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
-            filterModels: Tine.Felamimail.Model.Message.getFilterModel(),
-             defaultFilter: 'query',
-             filters: [],
-             plugins: [
-                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin({
+			filterModels: Tine.Felamimail.Model.Message.getFilterModel(),
+			defaultFilter: 'query',
+			filters: [],
+			recordClass: this.recordClass,
+			plugins: [
+				new Tine.widgets.grid.FilterToolbarQuickFilterPlugin({
                     criteriaIgnores: [
                         {field: 'query',     operator: 'contains',     value: ''},
                         {field: 'id' }
