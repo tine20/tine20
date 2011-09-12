@@ -71,6 +71,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     /**
      * check validity of activ numer field
      */
+    
     isValid: function () {
         var form = this.getForm();
         var isValid = true;
@@ -172,7 +173,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             name: 'total_number',
                             //value: null,
                             value: 1,
-                            minValue: 1
+                            //minValue: 1
                             
                         },
                         {
@@ -182,7 +183,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             name: 'active_number',
                             //value: null,
                             value: 1,
-                            minValue: 0
+                            //minValue: 0
                             
                         }],
                         

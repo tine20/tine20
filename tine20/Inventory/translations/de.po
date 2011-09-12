@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 Inventory\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-09-09 15:25+0100\n"
-"PO-Revision-Date: 2011-09-09 15:25+0100\n"
+"PO-Revision-Date: 2011-09-12 11:53+0100\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -18,40 +18,48 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-SearchPath-0: Inventory\n"
 
-#: js/InventoryItemGridPanel.js:83 js/Model.js:85
+#: js/InventoryItemGridPanel.js:83
+#: js/Model.js:85
 #: js/InventoryItemEditDialog.js:137
 msgid "ID"
 msgstr "ID"
 
-#: js/InventoryItemGridPanel.js:89 js/Model.js:77
+#: js/InventoryItemGridPanel.js:89
+#: js/Model.js:77
 #: js/InventoryItemEditDialog.js:121
 msgid "Name"
 msgstr "Name"
 
-#: js/InventoryItemGridPanel.js:95 js/Model.js:79
+#: js/InventoryItemGridPanel.js:95
+#: js/Model.js:79
 #: js/InventoryItemEditDialog.js:129
 msgid "Type"
 msgstr "Typ"
 
-#: js/InventoryItemGridPanel.js:102 js/Model.js:87
+#: js/InventoryItemGridPanel.js:102
+#: js/Model.js:87
 #: js/InventoryItemEditDialog.js:163
 msgid "Added"
 msgstr "Hinzugefügt"
 
-#: js/InventoryItemGridPanel.js:109 js/Model.js:86
+#: js/InventoryItemGridPanel.js:109
+#: js/Model.js:86
 #: js/InventoryItemEditDialog.js:155
 msgid "Location"
 msgstr "Standort"
 
-#: js/InventoryItemGridPanel.js:115 js/InventoryItemEditDialog.js:171
+#: js/InventoryItemGridPanel.js:115
+#: js/InventoryItemEditDialog.js:171
 msgid "Total number"
 msgstr "Anzahl"
 
-#: js/InventoryItemGridPanel.js:121 js/InventoryItemEditDialog.js:181
+#: js/InventoryItemGridPanel.js:121
+#: js/InventoryItemEditDialog.js:181
 msgid "Active number"
 msgstr "Verwendbare Anzahl"
 
-#: js/InventoryItemGridPanel.js:127 js/InventoryItemEditDialog.js:144
+#: js/InventoryItemGridPanel.js:127
+#: js/InventoryItemEditDialog.js:144
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -67,7 +75,8 @@ msgstr "Budget"
 msgid "Show closed"
 msgstr "Zeige Geschlossene"
 
-#: js/Inventory.js:24 Setup/setup.xml:4
+#: js/Inventory.js:24
+#: Setup/setup.xml:4
 msgid "Inventory"
 msgstr "Inventar"
 
@@ -137,7 +146,7 @@ msgstr "Tastatur"
 
 #: Setup/Initialize.php:37
 msgid "unkown"
-msgstr ""
+msgstr "unbekannt"
 
 #: Controller.php:74
 #, python-format
@@ -156,16 +165,19 @@ msgstr ""
 #~ msgstr "unbekannt"
 
 #~ msgid "inventory item list"
+
 #~ msgid_plural "inventory item lists"
 #~ msgstr[0] "Inventar Gegenstandsliste"
 #~ msgstr[1] "Inventar Gegenstandslisten"
 
 #~ msgid "inventory item"
+
 #~ msgid_plural "inventory records"
 #~ msgstr[0] "Inventar Gegenstand"
 #~ msgstr[1] "Inventar Gegenstände"
 
 #~ msgid "inventory record list"
+
 #~ msgid_plural "inventory record lists"
 #~ msgstr[0] "Inventar Gegenstandsliste"
 #~ msgstr[1] "Inventar Gegenstandslisten"
