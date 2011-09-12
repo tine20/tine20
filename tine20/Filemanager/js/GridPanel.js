@@ -722,7 +722,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 method: 'Filemanager.createNode',
                 filename: upload.id,
                 type: 'file',
-                tempFileId: file.data.id,
+                tempFileId: file.get('id'),
                 forceOverwrite: true
             },
             success: grid.onNodeCreated.createDelegate(this, [upload], true), 
@@ -916,11 +916,11 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             notifyDrop : function(dragSource, e, data){  
                 
                 var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),
-                grid = app.getMainScreen().getCenterPanel(),
-                treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
-                dropIndex = grid.getView().findRowIndex(e.target),
-                dragData = data,
-                target; 
+	                grid = app.getMainScreen().getCenterPanel(),
+	                treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
+	                dropIndex = grid.getView().findRowIndex(e.target),
+	                dragData = data,
+	                target; 
 
                 if(data.selections) {
                     nodes = data.selections;                   

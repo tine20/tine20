@@ -319,18 +319,15 @@ Tine.Filemanager.GridContextMenu = {
     isResumeEnabled: function(action, grants, records) {
         
         for(var i=0; i<records.length; i++) {
-            if(records[i].data.type === 'folder') {
+            if(records[i].get('type') === 'folder') {
                 action.hide();
                 return;
             }
         }
        
-        var grid = this.scope.app.getMainScreen().getCenterPanel();
-        var selectedRows = grid.selectionModel.getSelections(); 
-        
-        for(var i=0; i < selectedRows.length; i++) {
-            if(!selectedRows[i].get('status') || (selectedRows[i].get('type ') !== 'folder' &&  selectedRows[i].get('status') !== 'uploading' 
-                    &&  selectedRows[i].get('status') !== 'paused' && selectedRows[i].get('status') !== 'pending')) {
+        for(var i=0; i < records.length; i++) {
+            if(!records[i].get('status') || (records[i].get('type ') !== 'folder' &&  records[i].get('status') !== 'uploading' 
+                    &&  records[i].get('status') !== 'paused' && records[i].get('status') !== 'pending')) {
                 action.hide();
                 return;
             }
@@ -338,15 +335,14 @@ Tine.Filemanager.GridContextMenu = {
         
         action.show();
         
-       
-        for(var i=0; i < selectedRows.length; i++) {
-            if(selectedRows[i].get('status')) {
+        for(var i=0; i < records.length; i++) {
+            if(records[i].get('status')) {
                 action.setDisabled(false);
             }
             else {
                 action.setDisabled(true);
             }
-            if(selectedRows[i].get('status') && selectedRows[i].get('status') !== 'paused'){               
+            if(records[i].get('status') && records[i].get('status') !== 'paused'){               
                 action.setDisabled(true);               
             }
             
@@ -363,18 +359,15 @@ Tine.Filemanager.GridContextMenu = {
     isPauseEnabled: function(action, grants, records) {
         
         for(var i=0; i<records.length; i++) {
-            if(records[i].data.type === 'folder') {
+            if(records[i].get('type') === 'folder') {
                 action.hide();
                 return;
             }
         }
         
-        var grid = this.scope.app.getMainScreen().getCenterPanel();
-        var selectedRows = grid.selectionModel.getSelections(); 
-       
-        for(var i=0; i < selectedRows.length; i++) {
-            if(!selectedRows[i].get('status') || (selectedRows[i].get('type ') !== 'folder' && selectedRows[i].get('status') !== 'paused'
-                    &&  selectedRows[i].get('status') !== 'uploading' && selectedRows[i].get('status') !== 'pending')) {
+        for(var i=0; i < records.length; i++) {
+            if(!records[i].get('status') || (records[i].get('type ') !== 'folder' && records[i].get('status') !== 'paused'
+                    &&  records[i].get('status') !== 'uploading' && records[i].get('status') !== 'pending')) {
                 action.hide();
                 return;
             }
@@ -382,14 +375,14 @@ Tine.Filemanager.GridContextMenu = {
         
         action.show();
         
-        for(var i=0; i < selectedRows.length; i++) {
-            if(selectedRows[i].get('status')) {
+        for(var i=0; i < records.length; i++) {
+            if(records[i].get('status')) {
                 action.setDisabled(false);
             }
             else {
                 action.setDisabled(true);
             }
-            if(selectedRows[i].get('status') && selectedRows[i].get('status') !== 'uploading'){
+            if(records[i].get('status') && records[i].get('status') !== 'uploading'){
                 action.setDisabled(true);
             }
             
