@@ -592,9 +592,9 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      * copies uploaded temporary file to target location
      * 
      * @param upload    {Ext.ux.file.Upload}
-     * @param response  {Http response} 
+     * @param file  {Ext.ux.file.Upload.file} 
      */
-    onUploadComplete: function(upload, response) {
+    onUploadComplete: function(upload, file) {
              
         var app = Tine.Tinebase.appMgr.get('Filemanager');
         var treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(); 
@@ -608,7 +608,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                 method: 'Filemanager.createNode',
                 filename: upload.id,
                 type: 'file',
-                tempFileId: response.id,
+                tempFileId: file.id,
                 forceOverwrite: true
             },
             success: treePanel.onNodeCreated.createDelegate(this, [upload], true), 
@@ -662,7 +662,10 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             var fileName = file.name || file.fileName,
                 filePath = targetNodePath + '/' + fileName;           
 
-            var upload = new Ext.ux.file.Upload({}, file, fileSelector, filePath);
+            var upload = new Ext.ux.file.Upload({
+                file: file,
+                fileSelector: fileSelector
+            });
 
             upload.on('uploadfailure', treePanel.onUploadFail, this);
             upload.on('uploadcomplete', treePanel.onUploadComplete, this);
