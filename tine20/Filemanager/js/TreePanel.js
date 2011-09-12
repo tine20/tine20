@@ -608,7 +608,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                 method: 'Filemanager.createNode',
                 filename: upload.id,
                 type: 'file',
-                tempFileId: file.id,
+                tempFileId: file.data.id,
                 forceOverwrite: true
             },
             success: treePanel.onNodeCreated.createDelegate(this, [upload], true), 
@@ -664,7 +664,8 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
 
             var upload = new Ext.ux.file.Upload({
                 file: file,
-                fileSelector: fileSelector
+                fileSelector: fileSelector,
+                id: filePath
             });
 
             upload.on('uploadfailure', treePanel.onUploadFail, this);
