@@ -25,7 +25,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
      * @var string
      */    
     protected $_identifier = 'id';    
-    
+
     /**
      * application the record belongs to
      *

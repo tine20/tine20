@@ -73,8 +73,8 @@ Tine.Inventory.Model.InventoryItem.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Inventory');
     
     return [
-        {label: app.i18n._('Quick search'),    field: 'query',       operators: ['contains']},
-        {label: app.i18n._('Name'),    field: 'name',       operators: ['contains']},
+        {label: app.i18n._('Quick search'), field: 'query', operators: ['contains']},
+        {label: app.i18n._('Name'),    		field: 'name', 	operators: ['contains']},
         {
             label: app.i18n._('Type'),
             field: 'type',
@@ -82,9 +82,9 @@ Tine.Inventory.Model.InventoryItem.getFilterModel = function() {
             app: app, 
             keyfieldName: 'inventoryType'
         },
-        {label: app.i18n._('ID'),    field: 'inventory_id',       operators: ['contains']},
-        {label: app.i18n._('Location'),    field: 'location',       operators: ['contains']},
-        {label: app.i18n._('Added'),         field: 'add_time', valueType: 'date', pastOnly: true},
+        {label: app.i18n._('ID'),    		field: 'inventory_id',      operators: ['contains']},
+        {label: app.i18n._('Location'),    	field: 'location',       	operators: ['contains']},
+        {label: app.i18n._('Added'),        field: 'add_time', 			valueType: 'date', 		pastOnly: true},
         {filtertype: 'tinebase.tag', app: app},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Inventory.Model.InventoryItem},
         {label: app.i18n._('Last modified'),                                            field: 'last_modified_time', valueType: 'date'},

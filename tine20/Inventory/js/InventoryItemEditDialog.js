@@ -69,9 +69,8 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
     
     /**
-     * check validity of activ numer field
+     * check validity of activ number field
      */
-    
     isValid: function () {
         var form = this.getForm();
         var isValid = true;
@@ -115,7 +114,6 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         columnWidth: .333
                     },
                     items: [[{
-                    	 
                         columnWidth: 1,
                         xtype: 'tine.widget.field.AutoCompleteField',
                         recordClass: this.recordClass,
@@ -166,29 +164,22 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             
                         }],
                         [{
-                        	
                         	xtype:'numberfield',
                             columnWidth: 0.5,
                             fieldLabel: this.app.i18n._('Total number'),
                             name: 'total_number',
-                            //value: null,
                             value: 1,
-                            //minValue: 1
-                            
+                            minValue: 1
                         },
                         {
                         	xtype:'numberfield',
                             columnWidth: 0.5,
                             fieldLabel: this.app.i18n._('Active number'),
                             name: 'active_number',
-                            //value: null,
                             value: 1,
-                            //minValue: 0
-                            
-                        }],
-                        
+                            minValue: 0
+                        }], 
                     ] 
-                   
                 },
                 {
                     // activities and tags
@@ -203,7 +194,6 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     margins: '0 5 0 5',
                     border: true,
                     
-                          
                     items: [
                     new Tine.widgets.activities.ActivitiesPanel({
                         app: 'Inventory',
