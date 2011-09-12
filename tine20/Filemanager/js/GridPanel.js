@@ -328,19 +328,19 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 //            scope: this
 //        });
         
-//        this.action_pause = new Ext.Action({
-//            text: _('Pause upload'),
-//            iconCls: 'action_pause',
-//            scope: this,
-//            handler: this.onPause
-//        });
-//        
-//        this.action_resume = new Ext.Action({
-//            text: _('Resume upload'),
-//            scope: this,
-//            iconCls: 'action_resume',
-//            handler: this.onResume
-//        });
+        this.action_pause = new Ext.Action({
+            text: _('Pause upload'),
+            iconCls: 'action_pause',
+            scope: this,
+            handler: this.onPause
+        });
+        
+        this.action_resume = new Ext.Action({
+            text: _('Resume upload'),
+            scope: this,
+            iconCls: 'action_resume',
+            handler: this.onResume
+        });
         
         
         Ext.apply(Tine.widgets.tree.ContextMenu, Tine.Filemanager.GridContextMenu);
