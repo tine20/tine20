@@ -40,6 +40,9 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     containerName: 'user file folder', // app.i18n._('user file folder')
     containersName: 'user file folders', // app.i18n._('user file folders')
     
+    /**
+     * checks whether creating folders is allowed
+     */
     isCreateFolderAllowed: function() {
         var grants = this.get('account_grants');
         
