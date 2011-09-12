@@ -287,6 +287,7 @@ Tine.Filemanager.GridContextMenu = {
         }       
         gridStore.resumeEvents();
         grid.actionUpdater.updateActions(gridStore);  
+        this.scope.selectionModel.deselectRange(0, this.scope.selectionModel.getCount());
     },
 
     
@@ -307,6 +308,8 @@ Tine.Filemanager.GridContextMenu = {
         }
         gridStore.resumeEvents();
         grid.actionUpdater.updateActions(gridStore);  
+        this.scope.selectionModel.deselectRange(0, this.scope.selectionModel.getCount());
+
     },
     
     /**

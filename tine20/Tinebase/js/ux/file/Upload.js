@@ -419,7 +419,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         this.fileRecord.set('size', 0);
         this.fileRecord.set('type', response.tempFile.type);
         this.fileRecord.set('path', response.tempFile.path);
-        this.fileRecord.set('status', 'complete');
+//        this.fileRecord.set('status', 'complete');
 
         if(!this.isHtml5ChunkedUpload()) {
             this.fileRecord.set('status', 'complete');
