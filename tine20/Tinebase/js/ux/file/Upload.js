@@ -15,8 +15,11 @@ Ext.ns('Ext.ux.file');
  * @namespace   Ext.ux.file
  * @class       Ext.ux.file.Upload
  * @extends     Ext.util.Observable
+ * 
+ * @constructor
+ * @param       Object config
  */
-Ext.ux.file.Upload = function(config, file, fileSelector, id) {
+Ext.ux.file.Upload = function(config) {
     Ext.apply(this, config);
     
     Ext.ux.file.Upload.superclass.constructor.apply(this, arguments);
@@ -53,19 +56,16 @@ Ext.ux.file.Upload = function(config, file, fileSelector, id) {
           'uploadstart'
     );
         
-    this.fileSelector = fileSelector;
-    this.file = file;
+    if (! this.file && this.fileSelector) {
+        this.file = this.fileSelector.getFileList()[0];
+    }
+    
     this.fileSize = (this.file.size ? this.file.size : this.file.fileSize);
 
     this.maxChunkSize = this.maxPostSize - 16384;
     this.currentChunkSize = this.maxChunkSize;
     
-    if(id) {
-        this.id = id;
-    }
-    
-    this.tempFiles = new Array();
-    
+    this.tempFiles = [];
 };
  
 
@@ -388,7 +388,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             this.fileRecord.set('progress', 100);
             this.fileRecord.set('size', response.size);
             this.fileRecord.commit(false);
-            this.fireEvent('uploadcomplete', this, response);               
+            this.fireEvent('uploadcomplete', this, this.fileRecord);               
         }
         else {
             this.fileRecord.beginEdit();
@@ -426,7 +426,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         
         this.fileRecord.commit(false);
         
-        if(!this.isHtml5ChunkedUpload()) {
+        if(! this.isHtml5ChunkedUpload()) {
             this.fireEvent('uploadcomplete', this, this.fileRecord);
             if(response.status && response.status !== 'success') {
                 this.onUploadFail(response, options, fileRecord);

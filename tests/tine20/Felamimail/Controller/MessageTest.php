@@ -1122,6 +1122,10 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         $badLineEndCount = preg_match_all("/\\x0d\\x0d\\x0a/", $smtpLog, $matches);
         $this->assertEquals(0, $badLineEndCount);
+        
+        $badLineEndCount = preg_match_all("/\\x0d/", $smtpLog, $matches);
+        $this->assertTrue(preg_match_all("/\\x0d/", $smtpLog, $matches) > 70, 'unix line ends are missing');
+        
     }
     
     /********************************* protected helper funcs *************************************/
