@@ -705,7 +705,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * copies uploaded temporary file to target location
      * 
-     * @param upload    {Ext.ux.file.Upload}
+     * @param upload  {Ext.ux.file.Upload}
      * @param file  {Ext.ux.file.Upload.file} 
      */
     onUploadComplete: function(upload, file) {
@@ -722,7 +722,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 method: 'Filemanager.createNode',
                 filename: upload.id,
                 type: 'file',
-                tempFileId: file.id,
+                tempFileId: file.data.id,
                 forceOverwrite: true
             },
             success: grid.onNodeCreated.createDelegate(this, [upload], true), 
@@ -831,7 +831,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             
             var upload = new Ext.ux.file.Upload({
                 file: file,
-                fileSelector: fileSelector
+                fileSelector: fileSelector,
+                id: filePath
             });
 
             upload.on('uploadfailure', grid.onUploadFail, this);
