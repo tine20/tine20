@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-08 11:59+0100\n"
-"PO-Revision-Date: 2011-09-08 11:59+0100\n"
+"POT-Creation-Date: 2011-09-13 16:32+0100\n"
+"PO-Revision-Date: 2011-09-13 16:32+0100\n"
 "Last-Translator: Martin Jatho <m.jatho@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -15,6 +15,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-Basepath: ../../\n"
+"X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: Filemanager\n"
 
 #: Filemanager/Controller.php:95
@@ -42,26 +43,6 @@ msgstr "Shared folders"
 msgid "Other users folders"
 msgstr "Other users folders"
 
-#: Filemanager/js/Filemanager.js:29
-msgid "Filemanager"
-msgstr "Filemanager"
-
-#: Filemanager/js/Filemanager.js:70
-msgid "Files already exists"
-msgstr "Files already exists"
-
-#: Filemanager/js/Filemanager.js:71
-msgid "Do you want to replace the files?"
-msgstr "Do you want to replace the files?"
-
-#: Filemanager/js/Filemanager.js:92
-msgid "Failure on create folder"
-msgstr "Failure on create folder"
-
-#: Filemanager/js/Filemanager.js:93
-msgid "Item with this name already exists!"
-msgstr "Item with this name already exists!"
-
 #: Filemanager/js/GridContextMenu.js:36
 #: Filemanager/js/GridPanel.js:470
 msgid "Please enter the new name of the {0}:"
@@ -80,10 +61,10 @@ msgstr "You have to supply a {0} name!"
 
 #: Filemanager/js/GridContextMenu.js:45
 #: Filemanager/js/GridContextMenu.js:135
+#: Filemanager/js/Model.js:273
 #: Filemanager/js/GridPanel.js:479
 #: Filemanager/js/GridPanel.js:539
 #: Filemanager/js/GridPanel.js:581
-#: Filemanager/js/Model.js:270
 msgid "Please wait"
 msgstr "Please wait"
 
@@ -106,6 +87,57 @@ msgstr "Do you really want to delete \"{0}\"?"
 msgid "Deleting {0} \"{1}\""
 msgstr "Deleting {0} \"{1}\""
 
+#: Filemanager/js/Model.js:37
+msgid "user file"
+msgstr "file"
+
+#: Filemanager/js/Model.js:38
+msgid "user files"
+msgstr "files"
+
+#: Filemanager/js/Model.js:40
+#: Filemanager/js/Model.js:484
+#: Filemanager/js/GridPanel.js:462
+#: Filemanager/js/GridPanel.js:529
+msgid "user file folder"
+msgstr "folder"
+
+#: Filemanager/js/Model.js:41
+msgid "user file folders"
+msgstr "folders"
+
+#: Filemanager/js/Model.js:251
+#: Filemanager/js/Model.js:267
+msgid "Copying data .. {0}"
+msgstr "Copying data .. {0}"
+
+#: Filemanager/js/Model.js:254
+#: Filemanager/js/Model.js:269
+msgid "Moving data .. {0}"
+msgstr "Moving data .. {0}"
+
+#: Filemanager/js/Model.js:480
+msgid "Quick search"
+msgstr "Quick search"
+
+#: Filemanager/js/Model.js:481
+msgid "Type"
+msgstr "Type"
+
+#: Filemanager/js/Model.js:482
+#: Filemanager/js/GridPanel.js:138
+msgid "Contenttype"
+msgstr "Contenttype"
+
+#: Filemanager/js/Model.js:483
+#: Filemanager/js/GridPanel.js:170
+msgid "Creation Time"
+msgstr "Creation Time"
+
+#: Filemanager/js/PathFilterModel.js:59
+msgid "path"
+msgstr "path"
+
 #: Filemanager/js/GridPanel.js:124
 msgid "Name"
 msgstr "Name"
@@ -114,11 +146,6 @@ msgstr "Name"
 msgid "Size"
 msgstr "Size"
 
-#: Filemanager/js/GridPanel.js:138
-#: Filemanager/js/Model.js:479
-msgid "Contenttype"
-msgstr "Contenttype"
-
 #: Filemanager/js/GridPanel.js:146
 msgid "Folder"
 msgstr "Folder"
@@ -126,11 +153,6 @@ msgstr "Folder"
 #: Filemanager/js/GridPanel.js:155
 msgid "Revision"
 msgstr "Revision"
-
-#: Filemanager/js/GridPanel.js:170
-#: Filemanager/js/Model.js:480
-msgid "Creation Time"
-msgstr "Creation Time"
 
 #: Filemanager/js/GridPanel.js:178
 msgid "Created By"
@@ -184,13 +206,6 @@ msgstr "Pause upload"
 msgid "Resume upload"
 msgstr "Resume upload"
 
-#: Filemanager/js/GridPanel.js:462
-#: Filemanager/js/GridPanel.js:529
-#: Filemanager/js/Model.js:40
-#: Filemanager/js/Model.js:481
-msgid "user file folder"
-msgstr "folder"
-
 #: Filemanager/js/GridPanel.js:531
 msgid "New {0}"
 msgstr "New {0}"
@@ -212,53 +227,39 @@ msgid "Deleting {0} "
 msgstr "Deleting {0} "
 
 #: Filemanager/js/GridPanel.js:665
-#: Filemanager/js/GridPanel.js:810
-#: Filemanager/js/TreePanel.js:626
-#: Filemanager/js/TreePanel.js:647
+#: Filemanager/js/GridPanel.js:809
+#: Filemanager/js/TreePanel.js:627
+#: Filemanager/js/TreePanel.js:658
 msgid "Upload Failed"
 msgstr "Upload Failed"
 
 #: Filemanager/js/GridPanel.js:666
-#: Filemanager/js/TreePanel.js:627
+#: Filemanager/js/TreePanel.js:628
 msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
 msgstr "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
 
-#: Filemanager/js/GridPanel.js:811
-#: Filemanager/js/TreePanel.js:648
+#: Filemanager/js/GridPanel.js:810
+#: Filemanager/js/TreePanel.js:659
 msgid "Dropping on this folder not allowed!"
 msgstr "Dropping on this folder not allowed!"
 
-#: Filemanager/js/Model.js:37
-msgid "user file"
-msgstr "file"
+#: Filemanager/js/Filemanager.js:29
+msgid "Filemanager"
+msgstr "Filemanager"
 
-#: Filemanager/js/Model.js:38
-msgid "user files"
-msgstr "files"
+#: Filemanager/js/Filemanager.js:70
+msgid "Files already exists"
+msgstr "Files already exists"
 
-#: Filemanager/js/Model.js:41
-msgid "user file folders"
-msgstr "folders"
+#: Filemanager/js/Filemanager.js:71
+msgid "Do you want to replace the files?"
+msgstr "Do you want to replace the files?"
 
-#: Filemanager/js/Model.js:248
-#: Filemanager/js/Model.js:264
-msgid "Copying data .. {0}"
-msgstr "Copying data .. {0}"
+#: Filemanager/js/Filemanager.js:92
+msgid "Failure on create folder"
+msgstr "Failure on create folder"
 
-#: Filemanager/js/Model.js:251
-#: Filemanager/js/Model.js:266
-msgid "Moving data .. {0}"
-msgstr "Moving data .. {0}"
-
-#: Filemanager/js/Model.js:477
-msgid "Quick search"
-msgstr "Quick search"
-
-#: Filemanager/js/Model.js:478
-msgid "Type"
-msgstr "Type"
-
-#: Filemanager/js/PathFilterModel.js:59
-msgid "path"
-msgstr "path"
+#: Filemanager/js/Filemanager.js:93
+msgid "Item with this name already exists!"
+msgstr "Item with this name already exists!"
 
