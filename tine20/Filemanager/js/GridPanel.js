@@ -578,7 +578,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Ext.MessageBox.confirm(_('Confirm'), String.format(app.i18n._('Do you really want to delete "{0}"?'), nodeName), function(_btn){
             if (nodes && _btn == 'yes') {
                 
-                Ext.MessageBox.wait(_('Please wait'), String.format(app.i18n._('Deleting {0} ' ), nodeName ));
                 Tine.Filemanager.fileRecordBackend.deleteItems(nodes);
             }
         }, this);
