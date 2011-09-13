@@ -170,16 +170,11 @@ Tine.Filemanager.GridContextMenu = {
                                     
                                     
                                 }
-                                this.scope.app.getMainScreen().getCenterPanel().getStore().reload();
+                                this.scope.app.getMainScreen().getCenterPanel().getStore().remove(nodes);
 
                            }
                            
-                            // TODO: evaluate in event handler
-                            if (this.backendModel == 'Node') {
-                                this.scope.app.mainScreen.GridPanel.getStore().reload();
-                            }
-                            
-                            Ext.MessageBox.hide();
+                           Ext.MessageBox.hide();
                         },
                         failure: function(result, request) {
                             var nodeData = Ext.util.JSON.decode(result.responseText);
@@ -277,10 +272,10 @@ Tine.Filemanager.GridContextMenu = {
      */
     onPause: function (button, event) {     
 
-        var grid = this.scope.app.getMainScreen().getCenterPanel();
+        var grid = this.scope;
         var gridStore = grid.store;
         gridStore.suspendEvents();
-        var selectedRows = this.scope.selectionModel.getSelections(); 
+        var selectedRows = grid.selectionModel.getSelections(); 
         for(var i=0; i < selectedRows.length; i++) {
             var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
             upload.setPaused(true);
@@ -298,10 +293,10 @@ Tine.Filemanager.GridContextMenu = {
      */
     onResume: function (button, event) {
         
-        var grid = this.scope.app.getMainScreen().getCenterPanel();
+        var grid = this.scope;
         var gridStore = grid.store;
         gridStore.suspendEvents();
-        var selectedRows = this.scope.selectionModel.getSelections();
+        var selectedRows = grid.selectionModel.getSelections();
         for(var i=0; i < selectedRows.length; i++) {
             var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
             upload.resumeUpload();

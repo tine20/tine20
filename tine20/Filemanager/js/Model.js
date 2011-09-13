@@ -182,7 +182,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 }              
             }
             
-            grid.getStore().reload();
+            grid.getStore().remove(nodeData);
 //            this.fireEvent('containerdelete', nodeData);
             Ext.MessageBox.hide();
         }).createDelegate({items: items});
