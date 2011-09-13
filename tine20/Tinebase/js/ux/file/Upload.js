@@ -228,6 +228,9 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
                 
                 // calculate optimal maxChunkSize       
                 
+            	
+            	// TODO: own method for chunked upload
+            	
                 var chunkMax = this.maxChunkSize;
                 var chunkMin = this.minChunkSize;       
                 var actualChunkSize = this.maxChunkSize;
@@ -283,7 +286,8 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      *  => the only way of uploading is using the XMLHttpRequest Level 2.
      */
     html5upload: function() {
-                    
+                 
+    	// TODO: move to upload method / checks max post size
         if(this.maxPostSize/1 < this.file.size/1 && !this.isHtml5ChunkedUpload()) {
             this.fileRecord.html5upload = true;
             this.onUploadFail(null, null, this.fileRecord);
@@ -299,7 +303,6 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         var xmlData = this.file;
                
         if(this.isHtml5ChunkedUpload()) {
-            defaultHeaders["X-Chunk-finished"] = this.lastChunk;
             xmlData = this.currentChunk;
         }
 
@@ -381,7 +384,10 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     finishUploadRecord: function(response) {
         
         response = Ext.util.JSON.decode(response.responseText);
-       
+        if(response.tempFile) {
+        	response = response.tempFile; 
+        }
+                
         if(response.error == 0) {
             this.fileRecord.beginEdit();
             this.fileRecord.set('status', 'complete');
@@ -391,7 +397,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             this.fileRecord.set('id', response.id);
             this.fileRecord.commit(false);
             this.fireEvent('uploadcomplete', this, this.fileRecord);               
-        }
+        }       
         else {
             this.fileRecord.beginEdit();
             this.fileRecord.set('status', 'failure');
@@ -408,17 +414,18 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      */
     onUploadSuccess: function(response, options, fileRecord) {
         
-        response = Ext.util.JSON.decode(response.responseText);
+        var responseObj = Ext.util.JSON.decode(response.responseText);
         
         this.retryCount = 0;
         
+        // TODO: remove??
         this.fileRecord.beginEdit();
-        this.fileRecord.set('tempFile', response.tempFile);
-        this.fileRecord.set('name', response.tempFile.name);
+        this.fileRecord.set('tempFile', responseObj.tempFile);
+        this.fileRecord.set('name', responseObj.tempFile.name);
 //      this.fileRecord.set('size', response.tempFile.size);
         this.fileRecord.set('size', 0);
-        this.fileRecord.set('type', response.tempFile.type);
-        this.fileRecord.set('path', response.tempFile.path);
+        this.fileRecord.set('type', responseObj.tempFile.type);
+        this.fileRecord.set('path', responseObj.tempFile.path);
 //        this.fileRecord.set('status', 'complete');
 
         if(!this.isHtml5ChunkedUpload()) {
@@ -428,15 +435,17 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         
         this.fileRecord.commit(false);
         
-        if(! this.isHtml5ChunkedUpload()) {
-            this.fireEvent('uploadcomplete', this, this.fileRecord);
-            if(response.status && response.status !== 'success') {
-                this.onUploadFail(response, options, fileRecord);
+        if(! this.isHtml5ChunkedUpload()) {            
+            if(responseObj.status && responseObj.status !== 'success') {
+                this.onUploadFail(responseObj, options, fileRecord);
             } 
+            else {
+            	this.finishUploadRecord(response);
+            }
         }       
         else {
-            if(response.status && response.status !== 'success') {
-                this.onChunkUploadFail(response, options, fileRecord);
+            if(responseObj.status && responseObj.status !== 'success') {
+                this.onChunkUploadFail(responseObj, options, fileRecord);
             } 
             else if(!this.isPaused()) {
 
@@ -642,7 +651,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      * @returns {Boolean}
      */
     isHtml5ChunkedUpload: function() {
-        
+          	
         if(window.File == undefined) return false;
         if(this.isHostMethod(File.prototype, 'mozSlice') || this.isHostMethod(File.prototype, 'webkitSlice')) {
             return true;
