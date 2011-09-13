@@ -309,7 +309,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             pluralText: this.app.i18n._('Delete'),
             translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.translation,
             text: this.app.i18n._('Delete'),
-            handler: this.onDeleteItems,
+            handler: this.onDeleteRecords,
             disabled: true,
             iconCls: 'action_delete',
             scope: this
@@ -553,7 +553,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Ext.Component} button
      * @param {Ext.EventObject} event
      */
-    onDeleteItems: function(button, event) {
+    onDeleteRecords: function(button, event) {
 
         var app = this.app;
         var nodeName = '';
@@ -751,7 +751,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         fileRecord.set('revision', record.revision);
         fileRecord.set('last_modified_by', record.last_modified_by);
         fileRecord.set('last_modified_time', record.last_modified_time);
-//        fileRecord.set('size', record.size);
         fileRecord.set('name', record.name);
         fileRecord.set('path', record.path);
         fileRecord.endEdit();
