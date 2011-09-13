@@ -393,7 +393,6 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             this.fileRecord.set('status', 'complete');
             this.fileRecord.set('progress', 100);
             this.fileRecord.set('size', response.size);
-            this.fileRecord.set('path', response.path);
             this.fileRecord.set('id', response.id);
             this.fileRecord.commit(false);
             this.fireEvent('uploadcomplete', this, this.fileRecord);               
@@ -421,18 +420,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         // TODO: remove??
         this.fileRecord.beginEdit();
         this.fileRecord.set('tempFile', responseObj.tempFile);
-        this.fileRecord.set('name', responseObj.tempFile.name);
-//      this.fileRecord.set('size', response.tempFile.size);
         this.fileRecord.set('size', 0);
-        this.fileRecord.set('type', responseObj.tempFile.type);
-        this.fileRecord.set('path', responseObj.tempFile.path);
-//        this.fileRecord.set('status', 'complete');
-
-        if(!this.isHtml5ChunkedUpload()) {
-            this.fileRecord.set('status', 'complete');
-        }
-        
-        
         this.fileRecord.commit(false);
         
         if(! this.isHtml5ChunkedUpload()) {            
@@ -651,7 +639,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      * @returns {Boolean}
      */
     isHtml5ChunkedUpload: function() {
-          	
+          	  	
         if(window.File == undefined) return false;
         if(this.isHostMethod(File.prototype, 'mozSlice') || this.isHostMethod(File.prototype, 'webkitSlice')) {
             return true;
