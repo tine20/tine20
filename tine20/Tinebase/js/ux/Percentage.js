@@ -175,7 +175,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
     var additionalStyle = '';
     if(record.get('status') == 'paused' && percent < 100) {
         fileName = _('(paused)') + '&#160;&#160;' + fileName;
-        additionalStyle = 'background-image: url(\'/styles/images/tine20/progress/progress-bg-y.gif\') !important;';
+        additionalStyle = 'background-image: url(\'styles/images/tine20/progress/progress-bg-y.gif\') !important;';
     }
        
     var display = 'width:0px';
