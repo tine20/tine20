@@ -635,14 +635,24 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      * @param fileSelector
      * @param targetNodeId
      */
-    dropIntoTree: function(fileSelector, targetNodeId) {
-        var treePanel = fileSelector.component,
-            targetNode = treePanel.getNodeById(targetNodeId);
-            targetNodePath = targetNode.attributes.path,
-            app = treePanel.app,
-            grid = this.app.getMainScreen().getCenterPanel();
-
+    dropIntoTree: function(fileSelector, event) {
+          	
+    	var treePanel = fileSelector.component,
+    		app = treePanel.app,
+    		grid = app.getMainScreen().getCenterPanel(),    
+    		targetNode,
+            targetNodePath;
             
+
+    	var targetNodeId;
+    	var treeNodeAttribute = event.getTarget('div').attributes['ext:tree-node-id'];
+    	if(treeNodeAttribute) {
+    		targetNodeId = treeNodeAttribute.nodeValue;
+    		targetNode = treePanel.getNodeById(targetNodeId);
+    		targetNodePath = targetNode.attributes.path;
+
+    	};         
+
         if(!targetNode.attributes.nodeRecord.isDropFilesAllowed()) {
             Ext.MessageBox.alert(
                     _('Upload Failed'), 
@@ -650,7 +660,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                 ).setIcon(Ext.MessageBox.ERROR);
             
             return;
-        }    
+        };    
       
         var files = fileSelector.getFileList(),
             filePathsArray = [],

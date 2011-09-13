@@ -167,71 +167,19 @@ Ext.ux.file.BrowsePlugin.prototype = {
             }
             
             this.dropEl.on('dragleave', function(e) {
-                e.stopPropagation();
-                e.preventDefault();
+            	e.stopPropagation();
+            	e.preventDefault();
 
-                if(document.createEvent)  {
-                    var evObj = document.createEvent('MouseEvents');
-                    evObj.initMouseEvent('mouseout', true, true, window, e.browserEvent.detail, e.browserEvent.screenX, e.browserEvent.screenY
-                            , e.browserEvent.clientX, e.browserEvent.clientY, e.browserEvent.ctrlKey, e.browserEvent.altKey
-                            , e.browserEvent.shiftKey, e.browserEvent.metaKey, e.browserEvent.button, e.browserEvent.relatedTarget);
-                    e.target.dispatchEvent(evObj);
-                }    
-                // TODO: IE problem on drag over tree nodes (not the whole row tracks onmouseout)
-                else if(document.createEventObject) {
-                    var evObj = document.createEventObject();
-                    evObj.detail = e.browserEvent.detail;
-                    evObj.screenX = e.browserEvent.screenX;
-                    evObj.screenY = e.browserEvent.screenY;
-                    evObj.clientX = e.browserEvent.clientX;
-                    evObj.clientY = e.browserEvent.clientY;
-                    evObj.ctrlKey = e.browserEvent.ctrlKey;
-                    evObj.altKey = e.browserEvent.altKey;
-                    evObj.shiftKey = e.browserEvent.shiftKey;
-                    evObj.metaKey = e.browserEvent.metaKey;
-                    evObj.button = e.browserEvent.button;
-                    evObj.relatedTarget = e.browserEvent.relatedTarget;
-                    e.getTarget('div').fireEvent('onmouseout',evObj);
-                }
-            });
-            
+            	this.createMouseEvent(e, 'mouseout');
+            }, this);
+
             // @see http://dev.w3.org/html5/spec/Overview.html#the-dragevent-and-datatransfer-interfaces
             this.dropEl.on('dragover', function(e) {
 
                 e.stopPropagation();
                 e.preventDefault();
                                          
-                if(document.createEvent) {
-                    var evObj = document.createEvent('MouseEvents');
-                    evObj.initMouseEvent('mouseover', true, true, window, e.browserEvent.detail, e.browserEvent.screenX, e.browserEvent.screenY
-                            , e.browserEvent.clientX, e.browserEvent.clientY, e.browserEvent.ctrlKey, e.browserEvent.altKey
-                            , e.browserEvent.shiftKey, e.browserEvent.metaKey, e.browserEvent.button, e.browserEvent.relatedTarget);
-                    e.target.dispatchEvent(evObj);
-                }    
-                // TODO: IE problem on drag over tree nodes (not the whole row tracks onmouseover)
-                else if(document.createEventObject) {
-                    var evObj = document.createEventObject();
-                    evObj.detail = e.browserEvent.detail;
-                    evObj.screenX = e.browserEvent.screenX;
-                    evObj.screenY = e.browserEvent.screenY;
-                    evObj.clientX = e.browserEvent.clientX;
-                    evObj.clientY = e.browserEvent.clientY;
-                    evObj.ctrlKey = e.browserEvent.ctrlKey;
-                    evObj.altKey = e.browserEvent.altKey;
-                    evObj.shiftKey = e.browserEvent.shiftKey;
-                    evObj.metaKey = e.browserEvent.metaKey;
-                    evObj.button = e.browserEvent.button;
-                    evObj.relatedTarget = e.browserEvent.relatedTarget;
-                    e.getTarget('div').fireEvent('onmouseover',evObj);
-                }
-                
-//                // try to set the effectAllowed to copy (not all UA's accept this)
-//                e.browserEvent.dataTransfer.effectAllowed = 'copy';
-//                    
-//                // set drop effect to copy if allowed
-//                if (e.browserEvent.dataTransfer.effectAllowed.match(/all|copy/i)) {
-//                    e.browserEvent.dataTransfer.dropEffect = 'copy';
-//                }
+                this.createMouseEvent(e, 'mouseover');
                 
             }, this);
             
@@ -240,22 +188,13 @@ Ext.ux.file.BrowsePlugin.prototype = {
                 e.stopPropagation();
                 e.preventDefault();
                 
-                var dropTarget;
-                var treeNodeAttribute = e.getTarget('div').attributes['ext:tree-node-id'];
-                if(treeNodeAttribute) {
-                    dropTarget = treeNodeAttribute.nodeValue;
-                }
-                else {
-                    dropTarget = target;
-                }
-                
                 // a bit hackish, I know...
                 this.onBrowseButtonClick();
                 
                 var dt = e.browserEvent.dataTransfer;
                 var files = dt.files;
                 
-                this.onInputFileChange(null, null, null, files, dropTarget);
+                this.onInputFileChange(null, null, null, files, e);
             }, this);
         }
     },
@@ -382,7 +321,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
      * @param {FileList} files when input comes from drop...
      * @private
      */
-    onInputFileChange: function(e, target, options, files, targetNodeId){
+    onInputFileChange: function(e, target, options, files, e){
         if (window.FileList) { // HTML5 FileList support
             this.files = files ? files : this.input_file.dom.files;
         } else {
@@ -393,7 +332,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
         }
         
         if (this.handler) {
-            this.handler.call(this.scope, this, targetNodeId);
+            this.handler.call(this.scope, this, e);
         }
     },
     
@@ -463,6 +402,34 @@ Ext.ux.file.BrowsePlugin.prototype = {
     isImage: function() {
         var cls = this.getFileCls();
         return (cls == 'jpg' || cls == 'gif' || cls == 'png' || cls == 'jpeg');
+    },
+    
+    createMouseEvent: function(e, mouseEventType) {
+    	
+    	if(document.createEvent)  {
+            var evObj = document.createEvent('MouseEvents');
+            evObj.initMouseEvent(mouseEventType, true, true, window, e.browserEvent.detail, e.browserEvent.screenX, e.browserEvent.screenY
+                    , e.browserEvent.clientX, e.browserEvent.clientY, e.browserEvent.ctrlKey, e.browserEvent.altKey
+                    , e.browserEvent.shiftKey, e.browserEvent.metaKey, e.browserEvent.button, e.browserEvent.relatedTarget);
+            e.target.dispatchEvent(evObj);
+        }    
+        // TODO: IE problem on drag over tree nodes (not the whole row tracks onmouseout)
+        else if(document.createEventObject) {
+            var evObj = document.createEventObject();
+            evObj.detail = e.browserEvent.detail;
+            evObj.screenX = e.browserEvent.screenX;
+            evObj.screenY = e.browserEvent.screenY;
+            evObj.clientX = e.browserEvent.clientX;
+            evObj.clientY = e.browserEvent.clientY;
+            evObj.ctrlKey = e.browserEvent.ctrlKey;
+            evObj.altKey = e.browserEvent.altKey;
+            evObj.shiftKey = e.browserEvent.shiftKey;
+            evObj.metaKey = e.browserEvent.metaKey;
+            evObj.button = e.browserEvent.button;
+            evObj.relatedTarget = e.browserEvent.relatedTarget;
+            e.getTarget('div').fireEvent('on' + mouseEventType ,evObj);
+        }
+    	
     }
 };
 

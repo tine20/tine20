@@ -780,13 +780,13 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {ux.BrowsePlugin} fileSelector
      * @param {} e
      */
-    onFilesSelect: function (fileSelector, targetEl) {
+    onFilesSelect: function (fileSelector, event) {
        
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
             grid = app.getMainScreen().getCenterPanel(),
             targetNode = grid.currentFolderNode,
             gridStore = grid.store,
-            rowIndex = grid.getView().findRowIndex(targetEl),
+            rowIndex = grid.getView().findRowIndex(event.getTarget()),
             targetFolderPath = grid.currentFolderNode.attributes.path,
             addToGrid = true,
             dropAllowed = false,
