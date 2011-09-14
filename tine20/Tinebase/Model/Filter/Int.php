@@ -80,7 +80,7 @@ class Tinebase_Model_Filter_Int extends Tinebase_Model_Filter_Abstract
             $_select->where($field . $action['sqlop'], $value);
         }
         
-        if ($this->_operator == 'not' || $this->_operator == 'notin') {
+        if (in_array($this->_operator, array('not', 'notin')) && $value !== '') {
             $_select->orWhere($field . ' IS NULL');
         }
     }
