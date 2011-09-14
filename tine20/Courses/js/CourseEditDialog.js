@@ -77,7 +77,8 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }, this);
         
         this.loadMask.show();
-        upload.upload();
+        var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);        	
+        var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey); 
     },
     
     /**

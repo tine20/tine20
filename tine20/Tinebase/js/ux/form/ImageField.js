@@ -125,7 +125,9 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             return;
         }
         
+        var files = fileSelector.getFileList();
         var uploader = new Ext.ux.file.Upload({
+        	file: files[0],
             fileSelector: fileSelector
         });
         
@@ -145,7 +147,9 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         uploader.on('uploadfailure', this.onUploadFail, this);
         
         this.loadMask.show();
-        uploader.upload();
+        
+        var uploadKey = Tine.Tinebase.uploadManager.queueUpload(uploader);        	
+        var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);  
         
         if (this.ctxMenu) {
             this.ctxMenu.hide();
