@@ -108,7 +108,11 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         
         $where = Tinebase_Core::getDb()->quoteInto($field . $action['sqlop'], $value);
         
-        if ($this->_operator == 'not' || $this->_operator == 'notin' || ($value === '' && $this->_options['emptyStringAlsoChecksNull'])) {
+        if ($this->_operator == 'not' || $this->_operator == 'notin' /*|| ($value === '' /*&& $this->_options['emptyStringAlsoChecksNull'])*/) {
+            $where = "( $where OR $field IS NULL)";
+        }
+        
+        if (in_array($this->_operator, array('equals', 'contains', 'startswith', 'endswith', 'in')) && $value === '') {
             $where = "( $where OR $field IS NULL)";
         }
         
