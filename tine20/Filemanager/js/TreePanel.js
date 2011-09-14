@@ -490,7 +490,8 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      */
     onFolderDelete: function(node) {
         var grid = this.app.getMainScreen().getCenterPanel();
-        if(grid.currentFolderNode.isAncestor(node)) {
+        if(grid.currentFolderNode.isAncestor && typeof grid.currentFolderNode.isAncestor == 'function' 
+        	&& grid.currentFolderNode.isAncestor(node)) {
             node.parentNode.select();
         }
         grid.getStore().reload();
