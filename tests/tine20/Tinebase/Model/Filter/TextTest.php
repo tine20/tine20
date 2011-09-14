@@ -25,9 +25,9 @@ class Tinebase_Model_Filter_TextTest extends PHPUnit_Framework_TestCase
     {
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'id',          'operator' => 'equals', 'value' => Tinebase_Core::getUser()->contact_id),
-            array('field' => 'org_name',    'operator' => 'equals', 'value' => ''),
+            array('field' => 'org_unit',    'operator' => 'equals', 'value' => ''),
         ));
-        $this->assertEquals(1, count(Addressbook_Controller_Contact::getInstance()->search($filter)), 'org_name is NULL and should be included with empty string');
+        $this->assertEquals(1, count(Addressbook_Controller_Contact::getInstance()->search($filter)), 'org_unit is NULL and should be included with empty string');
         
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'id',          'operator' => 'equals', 'value' => Tinebase_Core::getUser()->contact_id),
@@ -37,9 +37,9 @@ class Tinebase_Model_Filter_TextTest extends PHPUnit_Framework_TestCase
         
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'id',          'operator' => 'equals', 'value' => Tinebase_Core::getUser()->contact_id),
-            array('field' => 'org_name',    'operator' => 'not',    'value' => ''),
+            array('field' => 'org_unit',    'operator' => 'not',    'value' => ''),
         ));
-        $this->assertEquals(0, count(Addressbook_Controller_Contact::getInstance()->search($filter)), 'org_name is NULL and should be not included with empty string with not operator');
+        $this->assertEquals(0, count(Addressbook_Controller_Contact::getInstance()->search($filter)), 'org_unit is NULL and should be not included with empty string with not operator');
         
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'id',          'operator' => 'equals', 'value' => Tinebase_Core::getUser()->contact_id),
