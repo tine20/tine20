@@ -62,7 +62,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.record.data.files = [];
         this.uploadGrid.store.each(function(record) {
-            this.record.data.files.push(Ext.ux.file.Uploader.file.getFileData(record));
+            this.record.data.files.push(Ext.ux.file.Upload.file.getFileData(record));
         }, this);
         
         Tine.widgets.dialog.ImportDialog.superclass.onRecordUpdate.call(this);

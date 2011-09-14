@@ -140,10 +140,6 @@
           "path": "js/ux/file/"
         },
         {
-          "text": "Uploader.js",
-          "path": "js/ux/file/"
-        },
-        {
           "text": "Upload.js",
           "path": "js/ux/file/"
         },

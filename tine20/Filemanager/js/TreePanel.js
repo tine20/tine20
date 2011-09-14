@@ -367,7 +367,6 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                 || Tine.Tinebase.common.hasRight('manage_shared_folders', this.app.appName))){
             this.contextMenuUserFolder.showAt(event.getXY());
         } 
-        // TODO: check auf richtigen user !!!
         else if (path.match(/^\/personal/) && path.match('/personal/' + currentAccount.accountLoginName)) {
             if(typeof container.name == 'object') {
                 this.contextMenuContainerFolder.showAt(event.getXY());
