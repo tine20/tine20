@@ -312,6 +312,14 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             backendModel: 'Node'
         });
         
+        this.contextMenuOtherUserFolder = Tine.widgets.tree.ContextMenu.getMenu({
+        	nodeName: this.app.i18n._(this.containerName),
+        	actions: ['reload'],
+        	scope: this,
+        	backend: 'Filemanager',
+        	backendModel: 'Node'
+        });
+        
         this.contextMenuContainerFolder = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.app.i18n._(this.containerName),
             actions: ['add', 'reload', 'delete', 'rename', 'grants'],
@@ -349,8 +357,11 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             return;
         }
    
-        if (node.id == 'personal' || node.id == 'shared') {
-            this.contextMenuRootFolder.showAt(event.getXY());
+        if (node.id == 'otherUsers' || (node.parentNode && node.parentNode.id == 'otherUsers')) {
+            this.contextMenuOtherUserFolder.showAt(event.getXY());
+        }
+        else if (node.id == 'personal' || node.id == 'shared') {
+        	this.contextMenuRootFolder.showAt(event.getXY());
         }
         else if (path.match(/^\/shared/) && (Tine.Tinebase.common.hasRight('admin', this.app.appName) 
                 || Tine.Tinebase.common.hasRight('manage_shared_folders', this.app.appName))){
