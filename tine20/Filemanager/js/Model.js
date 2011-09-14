@@ -345,21 +345,18 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         params.uploadKey = uploadKey;
         params.addToGridStore = addToGridStore;
         
-        if(addToGridStore) {
-            gridStore.reload();
-        }
-        
         var onSuccess = (function(result, request){ 
             
             var fileRecord = Tine.Tinebase.uploadManager.upload(this.uploadKey);  
 
             if(addToGridStore) {
-                gridStore.add(fileRecord);
-                
-                // TODO: replace more elegantly
-                if(params.forceOverwrite) {
-                    gridStore.reload();
-                }
+            	var recordToRemove = gridStore.query('name', fileRecord.get('name'));
+            	if(recordToRemove.items[0]) {
+            		gridStore.remove(recordToRemove.items[0]);
+            	}
+
+            	gridStore.add(fileRecord);
+
             }           
         }).createDelegate({uploadKey: uploadKey, addToGridStore: addToGridStore});
         
@@ -401,10 +398,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         params.method = 'Filemanager.createNodes';
         params.uploadKeyArray = uploadKeyArray;
         params.addToGridStore = addToGridStore;
-        
-        if(addToGridStore) {
-            gridStore.reload();
-        }
+
         
         var onSuccess = (function(result, request){ 
                        
@@ -412,15 +406,17 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 var fileRecord = Tine.Tinebase.uploadManager.upload(this.uploadKeyArray[i]);  
     
                 if(addToGridStore) {
-                    gridStore.add(fileRecord);
+        
+                	var recordToRemove = gridStore.query('name', fileRecord.get('name'));
+                	if(recordToRemove.items[0]) {
+                		gridStore.remove(recordToRemove.items[0]);
+                	}
+
+                	gridStore.add(fileRecord);
                     
                 }   
             }
 
-            // TODO: replace more elegantly
-            if(this.addToGridStore && params.forceOverwrite) {
-                gridStore.reload();
-            }
         }).createDelegate({uploadKeyArray: uploadKeyArray, addToGridStore: addToGridStore});
         
         var onFailure = (function(response, request) {
