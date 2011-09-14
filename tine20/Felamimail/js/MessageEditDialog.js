@@ -633,7 +633,7 @@ Ext.namespace('Tine.Felamimail');
         var attachmentData = null;
         
         this.attachmentGrid.store.each(function(attachment) {
-            this.record.data.attachments.push(Ext.ux.file.Uploader.file.getFileData(attachment));
+            this.record.data.attachments.push(Ext.ux.file.Upload.file.getFileData(attachment));
         }, this);
         
         var accountId = this.accountCombo.getValue(),

@@ -183,7 +183,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         
         this.action_resume = new Ext.Action({
             text: _('Resume upload'),
-            iconCls: 'resume_pause',
+            iconCls: 'action_resume',
             scope: this,
 //            disabled: true,
             handler: this.onResume
@@ -341,7 +341,10 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         var files = fileSelector.getFileList();
         Ext.each(files, function (file) {
 
-            var upload = new Ext.ux.file.Upload({}, file, fileSelector);
+            var upload = new Ext.ux.file.Upload({
+                file: file,
+                fileSelector: fileSelector
+            });
 
             upload.on('uploadfailure', this.onUploadFail, this);
             upload.on('uploadcomplete', Tine.Tinebase.uploadManager.onUploadComplete, this);
@@ -350,7 +353,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);        	
             var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);  
             		
-        	if(fileRecord.data.status !== 'failure' ) {
+        	if(fileRecord.get('status') !== 'failure' ) {
 	            this.store.add(fileRecord);
         	}
 
