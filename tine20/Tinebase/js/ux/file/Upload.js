@@ -333,11 +333,8 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      * 
      * @param {Boolean} whether this restarts a paused upload
      */
-    html5ChunkedUpload: function(resumeUpload) {
-                    
-        if(!resumeUpload) {
-            this.prepareChunk();        
-        }       
+    html5ChunkedUpload: function() {
+        this.prepareChunk();        
         this.html5upload();                
     },
     
@@ -346,7 +343,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      */
     resumeUpload: function() {
         this.setPaused(false);
-        this.html5ChunkedUpload(true);
+        this.html5ChunkedUpload();
     },
     
     /**
@@ -414,67 +411,65 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     onUploadSuccess: function(response, options, fileRecord) {
         
         var responseObj = Ext.util.JSON.decode(response.responseText);
-        
+
         this.retryCount = 0;
-        
+
+        if(responseObj.status && responseObj.status !== 'success') {
+        	this.onUploadFail(responseObj, options, fileRecord);
+        }
+
         // TODO: remove??
         this.fileRecord.beginEdit();
         this.fileRecord.set('tempFile', responseObj.tempFile);
         this.fileRecord.set('size', 0);
         this.fileRecord.commit(false);
-        
+
         if(! this.isHtml5ChunkedUpload()) {            
-            if(responseObj.status && responseObj.status !== 'success') {
-                this.onUploadFail(responseObj, options, fileRecord);
-            } 
-            else {
-            	this.finishUploadRecord(response);
-            }
+
+        	this.finishUploadRecord(response);           
         }       
         else {
-            if(responseObj.status && responseObj.status !== 'success') {
-                this.onChunkUploadFail(responseObj, options, fileRecord);
-            } 
-            else if(!this.isPaused()) {
 
-                this.addTempfile(this.fileRecord.get('tempFile'));
+        	this.addTempfile(this.fileRecord.get('tempFile'));
+        	var percent = parseInt(this.currentChunkPosition * 100 / this.fileSize/1);                
 
-                var percent = parseInt(this.currentChunkPosition * 100 / this.fileSize/1);
+        	this.fileRecord.beginEdit();
+        	this.fileRecord.set('progress', percent);
+        	this.fileRecord.commit(false);
 
-                if(this.lastChunk) {
-                    percent = 99;
-                }
+        	if(this.lastChunk) {
+        		percent = 99;
+        	}
 
-                this.fileRecord.beginEdit();
-                this.fileRecord.set('progress', percent);
-                this.fileRecord.commit(false);
+        	if(this.lastChunk) {
 
-                if(this.lastChunk) {
+        		window.setTimeout((function() {
+        			Ext.Ajax.request({
+        				timeout: 10*60*1000, // Overriding Ajax timeout - important!
+        				params: {
+        				method: 'Tinebase.joinTempFiles',
+        				tempFilesData: this.tempFiles
+        			},
+        			success: this.finishUploadRecord.createDelegate(this), 
+        			failure: this.finishUploadRecord.createDelegate(this)
+        			});
+        		}).createDelegate(this), this.CHUNK_TIMEOUT_MILLIS);
 
-                    window.setTimeout((function() {
-                        Ext.Ajax.request({
-                            timeout: 10*60*1000, // Overriding Ajax timeout - important!
-                            params: {
-                                method: 'Tinebase.joinTempFiles',
-                                tempFilesData: this.tempFiles
-                            },
-                            success: this.finishUploadRecord.createDelegate(this), 
-                            failure: this.finishUploadRecord.createDelegate(this)
-                        });
-                    }).createDelegate(this), this.CHUNK_TIMEOUT_MILLIS);
+        	}
+        	else {
+        		window.setTimeout((function() {
+        			if(!this.isPaused()) {
+        				this.prepareChunk();
+        				this.html5upload();
+        			}
+        		}).createDelegate(this), this.CHUNK_TIMEOUT_MILLIS);
+        	}                                               
 
-                }
-                else {
-                    window.setTimeout((function() {
-                        this.prepareChunk();
-                        this.html5upload();
-                    }).createDelegate(this), this.CHUNK_TIMEOUT_MILLIS);
-                }                                               
-            }  
-        }
+        }  
+
     },
-    
-      
+
+
     /**
      * executed if a chunk / file upload failed
      */
