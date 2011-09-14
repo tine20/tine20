@@ -912,8 +912,12 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             ddGroup : 'fileDDGroup',  
             
             notifyDrop : function(dragSource, e, data){  
-                
-                var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),
+
+	        	if(data.node && data.node.attributes && !data.node.attributes.nodeRecord.isDragable()) {
+	        		return false;
+	        	}
+	        	
+	        	var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),
 	                grid = app.getMainScreen().getCenterPanel(),
 	                treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
 	                dropIndex = grid.getView().findRowIndex(e.target),
@@ -953,6 +957,10 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             
             notifyOver : function( dragSource, e, data ) {
                      
+            	if(data.node && data.node.attributes && !data.node.attributes.nodeRecord.isDragable()) {
+            		return false;
+            	}
+            	
                 var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),
                     grid = app.getMainScreen().getCenterPanel(),
                     dropIndex = grid.getView().findRowIndex(e.target),
