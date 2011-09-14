@@ -25,22 +25,6 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
     protected $_userValue = NULL;
     
     /**
-     * get a new single filter action
-     *
-     * @param string $_field
-     * @param string $_operator
-     * @param mixed  $_value    
-     * @param array  $_options
-     */
-    public function __construct($_field, $_operator, $_value, array $_options = array())
-    {
-        if (! array_key_exists('emptyStringAlsoChecksNull', $_options)) {
-            $_options['emptyStringAlsoChecksNull'] = TRUE;
-        }
-        parent::__construct($_field, $_operator, $_value, $_options);
-    }
-    
-    /**
      * sets operator
      *
      * @param string $_operator
