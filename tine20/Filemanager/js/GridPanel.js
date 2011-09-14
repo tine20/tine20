@@ -824,7 +824,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Ext.each(files, function (file) {
 
             var fileName = file.name || file.fileName;
-            
             var filePath = targetFolderPath + '/' + fileName;
             
             var upload = new Ext.ux.file.Upload({
@@ -911,6 +910,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
               
         var ddrow = new Ext.dd.DropTarget(this.getEl(), {  
             ddGroup : 'fileDDGroup',  
+            
             notifyDrop : function(dragSource, e, data){  
                 
                 var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),
