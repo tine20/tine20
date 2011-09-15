@@ -7,12 +7,12 @@
  * The property can be used to specify a principal or pseudo principals. 
  *
  * @package Sabre
- * @subpackage DAV
- * @copyright Copyright (C) 2007-2010 Rooftop Solutions. All rights reserved.
+ * @subpackage DAVACL
+ * @copyright Copyright (C) 2007-2011 Rooftop Solutions. All rights reserved.
  * @author Evert Pot (http://www.rooftopsolutions.nl/) 
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Sabre_DAV_Property_Principal extends Sabre_DAV_Property implements Sabre_DAV_Property_IHref {
+class Sabre_DAVACL_Property_Principal extends Sabre_DAV_Property implements Sabre_DAV_Property_IHref {
 
     /**
      * To specify a not-logged-in user, use the UNAUTHENTICTED principal
@@ -118,6 +118,34 @@ class Sabre_DAV_Property_Principal extends Sabre_DAV_Property implements Sabre_D
                 $href->nodeValue = $server->getBaseUri() . $this->href;
                 $node->appendChild($href);
                 break;
+
+        }
+
+    }
+
+    /**
+     * Deserializes a DOM element into a property object. 
+     * 
+     * @param DOMElement $dom 
+     * @return Sabre_DAV_Property_Principal 
+     */
+    static public function unserialize(DOMElement $dom) {
+
+        $parent = $dom->firstChild;
+        while(!Sabre_DAV_XMLUtil::toClarkNotation($parent)) {
+            $parent = $parent->nextSibling;
+        }
+
+        switch(Sabre_DAV_XMLUtil::toClarkNotation($parent)) {
+
+            case '{DAV:}unauthenticated' :
+                return new self(self::UNAUTHENTICATED);
+            case '{DAV:}authenticated' :
+                return new self(self::AUTHENTICATED);
+            case '{DAV:}href':
+                return new self(self::HREF, $parent->textContent);
+            default :
+                throw new Sabre_DAV_Exception_BadRequest('Unexpected element (' . Sabre_DAV_XMLUtil::toClarkNotation($parent) . '). Could not deserialize');
 
         }
 
