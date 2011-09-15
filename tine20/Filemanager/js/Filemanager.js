@@ -57,39 +57,34 @@ Tine.Filemanager.handleRequestException = function(exception, request) {
                 if(exception.existingnodesinfo) {
                     for(var i=0; i<exception.existingnodesinfo.length; i++) {
                         fileName += exception.existingnodesinfo[i].name + '<br />'; 
-                    }
-                    if(fileName.length > 2) {
-                        fileName = fileName.substring(0, fileName.length - 2);
-                    }
-                    fileName += "";
-                    
+                    }                   
+                    fileName += "";                   
                 }
                 
                 this.conflictConfirmWin = Tine.widgets.dialog.FileListDialog.openWindow({
-                    modal: true,
-                    allowCancel: false,
-                    height: 180,
-                    width: 300,
-                    title: app.i18n._('Files already exists') + '. ' +app.i18n._('Möchten Sie folgende Dateien ersetzen?'),
-                    msg: '', //app.i18n._('Möchten Sie folgende Dateien ersetzen?'),
-                    fileText: fileName,
-                    scope: this,
-                    handler: function(button){
-                        if (button === 'yes') {
-                            var params = request.params;
-                            params.forceOverwrite = true;
-                            params.method = request.method;
-                            if(params.method == 'Filemanager.copyNodes' || params.method == 'Filemanager.moveNodes' ) {
-                                Tine.Filemanager.fileRecordBackend.copyNodes(null, null, null, params);
-                            }
-                            else if (params.method == 'Filemanager.createNodes' ){
-                                Tine.Filemanager.fileRecordBackend.createNodes(params, exception.uploadKeyArray, exception.addToGridStore);
-                            }
-                        }
-                        else {
-                        	Ext.MessageBox.hide();
-                        }
+                	modal: true,
+                	allowCancel: false,
+                	height: 180,
+                	width: 300,
+                	title: app.i18n._('Files already exists') + '. ' +app.i18n._('Möchten Sie folgende Dateien ersetzen?'),
+                	text: fileName,
+                	scope: this,
+                	handler: function(button){
+                	if (button === 'yes') {
+                		var params = request.params;
+                		params.forceOverwrite = true;
+                		params.method = request.method;
+                		if(params.method == 'Filemanager.copyNodes' || params.method == 'Filemanager.moveNodes' ) {
+                			Tine.Filemanager.fileRecordBackend.copyNodes(null, null, null, params);
+                		}
+                		else if (params.method == 'Filemanager.createNodes' ){
+                			Tine.Filemanager.fileRecordBackend.createNodes(params, exception.uploadKeyArray, exception.addToGridStore);
+                		}
                 	}
+                	else {
+                		Ext.MessageBox.hide();
+                	}
+                }
                 });
                 
 //                Ext.Msg.show({
