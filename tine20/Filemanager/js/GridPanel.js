@@ -752,7 +752,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         fileRecord.set('last_modified_time', record.last_modified_time);
         fileRecord.set('name', record.name);
         fileRecord.set('path', record.path);
-        fileRecord.endEdit();
+        fileRecord.set('status', 'complete');
+        fileRecord.set('progress', 100);
         fileRecord.commit(false);
        
         var app = Tine.Tinebase.appMgr.get('Filemanager'),

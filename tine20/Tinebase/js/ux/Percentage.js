@@ -136,7 +136,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
             fileName = value.name;
         } 
     
-        if(record.get('status') == 'uploading' || record.get('status') == 'queued') {
+        if(record.get('status') == 'uploading') {
             metadata.css = 'x-tinebase-uploadrow';
         }
         
@@ -179,7 +179,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
     }
        
     var display = 'width:0px';
-    if(percent > 0 && percent < 100) {
+    if(percent > -1 && percent < 100) {
         display = '';
         return Ext.ux.PercentRendererWithName.template.apply({percent: percent, display: display, fileName: fileName, additionalStyle: additionalStyle}) ;
     }

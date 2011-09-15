@@ -590,7 +590,8 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         fileRecord.set('revision', record.revision);
         fileRecord.set('last_modified_by', record.last_modified_by);
         fileRecord.set('last_modified_time', record.last_modified_time);
-//        fileRecord.set('size', record.size);
+        fileRecord.set('status', 'complete');
+        fileRecord.set('progress', 100);
         fileRecord.set('name', record.name);
         fileRecord.set('path', record.path);
         fileRecord.commit(false);
