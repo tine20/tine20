@@ -114,82 +114,86 @@ Tine.Filemanager.GridContextMenu = {
      * delete tree node
      */
     deleteNode: function() {
-        if (this.scope.ctxNode) {
-            var nodes = this.scope.ctxNode;
+    	if (this.scope.ctxNode) {
+    		var nodes = this.scope.ctxNode;
 
-            var nodeName = "";
-            if(nodes && nodes.length) {
-                for(var i=0; i<nodes.length; i++) {
-                    var currNodeData = nodes[i].data;
-                    
-                    if(typeof currNodeData.name == 'object') {
-                        nodeName += currNodeData.name.name + ', ';    
-                    }
-                    else {
-                        nodeName += currNodeData.name + ', ';  
-                    }
-                }
-                if(nodeName.length > 0) {
-                    nodeName = nodeName.substring(0, nodeName.length - 2);
-                }
-            }
-            
-            Ext.MessageBox.confirm(_('Confirm'), String.format(this.scope.app.i18n._('Do you really want to delete "{0}"?'), nodeName), function(_btn){
-                if ( _btn == 'yes') {
-                    
-                    var params = {
-                        method: this.backend + '.delete' + this.backendModel
-                    };
-                    
-                    if (this.backendModel == 'Node') {
-                        
-                        var filenames = new Array();
-                        if(nodes) {
-                             for(var i=0; i<nodes.length; i++) {
-                                 filenames.push(nodes[i].data.path);
-                             }   
-                        }
-                        params.application = this.scope.app.appName || this.scope.appName;    
-                        params.filenames = filenames;
-                        params.method = this.backend + ".deleteNodes";
-                    }
-                    
-                    Ext.Ajax.request({
-                        params: params,
-                        scope: this,
-                        success: function(_result, _request){
-                              
-                           if(nodes &&  this.backendModel == 'Node') {
-                               var treePanel = this.scope.app.getMainScreen().getWestPanel().getContainerTreePanel();
-                               for(var i=0; i<nodes.length; i++){
-                                    this.scope.fireEvent('containerdelete', nodes[i].data.container_id);                                    
-                                    treePanel.fireEvent('containerdelete', nodes[i].data.container_id);
+    		var nodeName = "";
+    		if(nodes && nodes.length) {
+    			for(var i=0; i<nodes.length; i++) {
+    				var currNodeData = nodes[i].data;
 
-                                    // TODO: in EventHandler auslagern
-                                  var treeNode = treePanel.getNodeById(nodes[i].id);
-                                  if(treeNode) {
-                                      treeNode.parentNode.removeChild(treeNode);
-                                  }
-                                    
-                                    
-                                }
-                                this.scope.app.getMainScreen().getCenterPanel().getStore().remove(nodes);
+    				if(typeof currNodeData.name == 'object') {
+    					nodeName += currNodeData.name.name + '<br />';    
+    				}
+    				else {
+    					nodeName += currNodeData.name + '<br />';  
+    				}
+    			}
 
-                           }
-                           
-                        },
-                        failure: function(result, request) {
-                            var nodeData = Ext.util.JSON.decode(result.responseText);
-                            
-                            var appContext = Tine[this.scope.app.appName];
-                            if(appContext && appContext.handleRequestException) {
-                                appContext.handleRequestException(nodeData.data);
-                            }
-                        }
-                    });
-                }
-            }, this);
-        }
+    		}
+
+    		this.conflictConfirmWin = Tine.widgets.dialog.FileListDialog.openWindow({
+    			modal: true,
+    			allowCancel: false,
+    			height: 180,
+    			width: 300,
+    			title: this.scope.app.i18n._('Do you really want to delete the following files?'),
+    			text: nodeName,
+    			scope: this,
+    			handler: function(button){
+	    			if (button === 'yes') {
+	    				var params = {
+	    						method: this.backend + '.delete' + this.backendModel
+	    				};
+	
+	    				if (this.backendModel == 'Node') {
+	
+	    					var filenames = new Array();
+	    					if(nodes) {
+	    						for(var i=0; i<nodes.length; i++) {
+	    							filenames.push(nodes[i].data.path);
+	    						}   
+	    					}
+	    					params.application = this.scope.app.appName || this.scope.appName;    
+	    					params.filenames = filenames;
+	    					params.method = this.backend + ".deleteNodes";
+	    				}
+	
+	    				Ext.Ajax.request({
+	    					params: params,
+	    					scope: this,
+	    					success: function(_result, _request){
+	
+		    					if(nodes &&  this.backendModel == 'Node') {
+		    						var treePanel = this.scope.app.getMainScreen().getWestPanel().getContainerTreePanel();
+		    						for(var i=0; i<nodes.length; i++){
+		    							this.scope.fireEvent('containerdelete', nodes[i].data.container_id);                                    
+		    							treePanel.fireEvent('containerdelete', nodes[i].data.container_id);
+		
+		    							// TODO: in EventHandler auslagern
+		    							var treeNode = treePanel.getNodeById(nodes[i].id);
+		    							if(treeNode) {
+		    								treeNode.parentNode.removeChild(treeNode);
+		    							}		
+		    						}
+		    						this.scope.app.getMainScreen().getCenterPanel().getStore().remove(nodes);		
+		    					}	
+		    				},
+		    				failure: function(result, request) {
+		    					var nodeData = Ext.util.JSON.decode(result.responseText);
+		
+		    					var appContext = Tine[this.scope.app.appName];
+		    					if(appContext && appContext.handleRequestException) {
+		    						appContext.handleRequestException(nodeData.data);
+		    					}
+		    				}
+	    				});
+	    			}
+	
+	    		}
+    		});
+
+    	}
     },
     
     /**

@@ -560,26 +560,31 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var nodes = app.getMainScreen().getCenterPanel().selectionModel.getSelections();
         
         if(nodes && nodes.length) {
-            for(var i=0; i<nodes.length; i++) {
-                var currNodeData = nodes[i].data;
-                
-                if(typeof currNodeData.name == 'object') {
-                    nodeName += currNodeData.name.name + ', ';    
-                }
-                else {
-                    nodeName += currNodeData.name + ', ';  
-                }
-            }
-            if(nodeName.length > 0) {
-                nodeName = nodeName.substring(0, nodeName.length - 2);
-            }
+        	for(var i=0; i<nodes.length; i++) {
+        		var currNodeData = nodes[i].data;
+
+        		if(typeof currNodeData.name == 'object') {
+        			nodeName += currNodeData.name.name + '<br />';    
+        		}
+        		else {
+        			nodeName += currNodeData.name + '<br />';  
+        		}
+        	}
         }
-        
-        Ext.MessageBox.confirm(_('Confirm'), String.format(app.i18n._('Do you really want to delete "{0}"?'), nodeName), function(_btn){
-            if (nodes && _btn == 'yes') {
-                
-                Tine.Filemanager.fileRecordBackend.deleteItems(nodes);
-            }
+    	       
+        this.conflictConfirmWin = Tine.widgets.dialog.FileListDialog.openWindow({
+			modal: true,
+			allowCancel: false,
+			height: 180,
+			width: 300,
+			title: app.i18n._('Do you really want to delete the following files?'),
+			text: nodeName,
+			scope: this,
+			handler: function(button){
+				if (nodes && button == 'yes') {	                
+	                Tine.Filemanager.fileRecordBackend.deleteItems(nodes);
+	            }
+        	}
         }, this);
 
     },

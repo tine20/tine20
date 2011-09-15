@@ -66,10 +66,6 @@ Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
             },
             items: [{
                 border: false,
-                html: this.msg,
-                flex: 0
-            }, {
-                border: false,
                 layout: 'fit',
                 flex: 1,
                 autoScroll: true,
@@ -77,7 +73,7 @@ Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
                     xtype: 'label',
                     border: false,
                     cls: 'ext-mb-text',
-                    html: this.fileText
+                    html: this.text
                 }]
             }]
         }];
