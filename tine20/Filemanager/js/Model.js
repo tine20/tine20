@@ -270,14 +270,15 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             }
         }
         
-        Ext.MessageBox.wait(_('Please wait'), String.format(message, '' ));
-
+        this.loadMask = new Ext.LoadMask(app.getMainScreen().getCenterPanel().getEl(), {msg: String.format(_('Please wait')) + '. ' + String.format(message, '' )});
+        this.loadMask.show();
+        
         Ext.Ajax.request({
             params: params,
             scope: this,
             success: function(result, request){
                 
-                Ext.MessageBox.hide();
+                this.loadMask.hide();
                 
                 var nodeData = Ext.util.JSON.decode(result.responseText),
                     treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
