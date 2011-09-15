@@ -636,7 +636,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
           	  	
         if(window.File == undefined) return false;
         if(this.isHostMethod(File.prototype, 'mozSlice') || this.isHostMethod(File.prototype, 'webkitSlice')) {
-            return true;
+            return this.fileSize > this.minChunkSize;
         }
         else {
             return false;
