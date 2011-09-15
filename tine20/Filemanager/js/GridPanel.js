@@ -889,8 +889,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         for(var i=records.length-1; i>=0; i--) {
             var record = records[i];
-            if(record.data.type == 'file' && (!record.data.size || record.data.size == 0)) {
-                var upload = Tine.Tinebase.uploadManager.getUpload(record.data.path);
+            if(record.get('type') == 'file' && (!record.get('size') || record.get('size') == 0)) {
+                var upload = Tine.Tinebase.uploadManager.getUpload(record.get('path'));
 
                 if(upload) {
                       if(upload.fileRecord && record.get('name') === upload.fileRecord.get('name')) {

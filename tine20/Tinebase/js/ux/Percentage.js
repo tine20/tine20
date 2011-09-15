@@ -122,7 +122,7 @@ Ext.ux.PercentRenderer = function(percent) {
 Ext.ux.PercentRendererWithName = function(value, metadata, record) {
   
     var metaStyle = '';
-    if(record.data.type == 'folder') {
+    if(record.get('type') == 'folder') {
         metadata.css = 'x-tinebase-typefolder';
     }
     else {
@@ -136,7 +136,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
             fileName = value.name;
         } 
     
-        if(record.get('status') == 'uploading') {
+        if(record.get('status') == 'uploading' || record.get('status') == 'queued') {
             metadata.css = 'x-tinebase-uploadrow';
         }
         
@@ -170,7 +170,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
         fileName = value.name;
     }
     
-    var percent = record.data.progress;
+    var percent = record.get('progress');
 
     var additionalStyle = '';
     if(record.get('status') == 'paused' && percent < 100) {

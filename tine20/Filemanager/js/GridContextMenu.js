@@ -85,6 +85,10 @@ Tine.Filemanager.GridContextMenu = {
                                     var treeNode = this.scope.app.getMainScreen().getWestPanel().getContainerTreePanel().getNodeById(nodeData.id);                                 
                                     if(treeNode) {
                                         treeNode.setText(nodeName);
+                                        treeNode.attributes.nodeRecord.beginEdit();
+                                        treeNode.attributes.nodeRecord.set('name', nodeName); // TODO set path
+                                        treeNode.attributes.nodeRecord.set('path', nodeData.path); // TODO set path
+                                        treeNode.attributes.nodeRecord.commit(false);
                                     }
                                 }
                             },
