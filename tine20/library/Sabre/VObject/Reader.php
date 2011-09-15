@@ -134,7 +134,7 @@ class Sabre_VObject_Reader {
         }
 
         $propertyName = strtoupper($matches['name']);
-        $propertyValue = stripcslashes($matches['value']);
+        $propertyValue = Sabre_VObject_Property::stripSlashes($matches['value']);
 
         if (isset(self::$elementMap[$propertyName])) {
             $className = self::$elementMap[$propertyName];

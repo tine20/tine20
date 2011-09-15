@@ -84,7 +84,97 @@ class Sabre_VObject_Property extends Sabre_VObject_Element {
         $this->value = $value;
 
     }
-
+    
+    /**
+     * split compound value into single parts 
+     * 
+     * @param string $value
+     * @param string $delimiter
+     * @return array
+     */
+    public static function splitCompoundValues($value, $delimiter = ';') {
+        
+        // split by any $delimiter which is NOT prefixed by a slash
+        $compoundValues = preg_split("/(?<!\\\)$delimiter/", $value);
+        
+        // remove slashes from any semicolon and comma left escaped in the single values
+        foreach ($compoundValues as &$compoundValue) {
+            $compoundValue = str_replace("\\;", ';', $compoundValue);
+            $compoundValue = str_replace("\\,", ',', $compoundValue);
+        }
+        
+        reset($compoundValues);
+        
+        return $compoundValues;
+    }
+    
+    /**
+     * concat single values to one compound value
+     * 
+     * @param array $values
+     * @param string $glue
+     * @return string
+     */
+    public static function concatCompoundValues(array $values, $glue = ';') {
+        
+        // add slashes to all semicolons and commas in the single values
+        foreach($values as &$value) {
+            $value = str_replace( ';', "\\;", $value);
+            $value = str_replace( ',', "\\,", $value);
+        }
+        
+        return implode($glue, $values);
+    }
+    
+    /**
+     * strip of common slashes from escaped values
+     *  \\ => \
+     *  \n => linebreak
+     *  \: => :
+     *  comma and semicolon are not handled here
+     *  
+     * @param string $value
+     * @return string
+     */
+    public static function stripSlashes($value) {
+        $search  = array(
+            '/\\\\/',
+            '/\\\:/',
+            '/\\\n/'
+        );
+        $replace = array(
+            '\\',
+            ':',
+            "\n"
+        );
+        
+        return preg_replace($search, $replace, $value);
+    }
+    /**
+     * add common slashes from values which must be escaped
+     *  \\ => \
+     *  \n => linebreak
+     *  \: => :
+     *  comma and semicolon are not handled here
+     *
+     * @param string $value
+     * @return string
+     */
+    public static function addSlashes($value) {
+        $search  = array(
+            '/\\\(?!,|;)/',
+            "/\n/",
+            '/:/'
+        );
+        $replace = array(
+            '\\\\\\',
+            '\n',
+            '\:'
+        );
+    
+        return preg_replace($search, $replace, $value);
+    }
+    
     /**
      * Turns the object back into a serialized blob. 
      * 
@@ -102,15 +192,8 @@ class Sabre_VObject_Property extends Sabre_VObject_Element {
 
             }
         }
-        $src = array(
-            '\\',
-            "\n",
-        );
-        $out = array(
-            '\\\\',
-            '\n',
-        );
-        $str.=':' . str_replace($src, $out, $this->value);
+
+        $str.=':' . self::addSlashes($this->value);
 
         $out = '';
         while(strlen($str)>0) {
