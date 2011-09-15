@@ -58,7 +58,6 @@ Tine.Filemanager.handleRequestException = function(exception, request) {
                     for(var i=0; i<exception.existingnodesinfo.length; i++) {
                         fileName += exception.existingnodesinfo[i].name + '<br />'; 
                     }                   
-                    fileName += "";                   
                 }
                 
                 this.conflictConfirmWin = Tine.widgets.dialog.FileListDialog.openWindow({

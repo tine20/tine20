@@ -60,7 +60,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     initComponent: function() {
         
 //        this.on('containeradd', this.onFolderAdd, this);
-//        this.on('containerrename', this.onFolderRename, this);
+        this.on('containerrename', this.onFolderRename, this);
         this.on('containerdelete', this.onFolderDelete, this);
         this.on('nodedragover', this.onNodeDragOver, this);
 
@@ -608,8 +608,8 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      */
     onUploadComplete: function(upload, file) {
              
-        var app = Tine.Tinebase.appMgr.get('Filemanager');
-        var treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(); 
+        var app = Tine.Tinebase.appMgr.get('Filemanager'),
+        	treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(); 
         
         Tine.Tinebase.uploadManager.onUploadComplete();
         
@@ -639,6 +639,14 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             _('Upload Failed'), 
             _('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: ') + Tine.Tinebase.registry.get('maxFileUploadSize')
         ).setIcon(Ext.MessageBox.ERROR);
+    },
+    
+    onFolderRename: function(node, nodeData) {
+    	var app = Tine.Tinebase.appMgr.get('Filemanager'),
+    		grid = app.getMainScreen().getCenterPanel();
+    	
+    	grid.currenFolderNode = node
+    	var a = 'b';
     },
     
     /**

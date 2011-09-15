@@ -88,7 +88,15 @@ Tine.Filemanager.GridContextMenu = {
                                         treeNode.attributes.nodeRecord.beginEdit();
                                         treeNode.attributes.nodeRecord.set('name', nodeName); // TODO set path
                                         treeNode.attributes.nodeRecord.set('path', nodeData.path); // TODO set path
+                                        treeNode.attributes.path = nodeData.path; // TODO set path
                                         treeNode.attributes.nodeRecord.commit(false);
+                                        
+                                        if(typeof treeNode.attributes.name == 'object') {
+                                            treeNode.attributes.name.name = nodeName; // TODO set path
+                                        }
+                                        else {
+                                        	treeNode.attributes.name = nodeName;
+                                        }
                                     }
                                 }
                             },
@@ -141,7 +149,7 @@ Tine.Filemanager.GridContextMenu = {
     			text: nodeName,
     			scope: this,
     			handler: function(button){
-	    			if (button === 'yes') {
+	    			if (button == 'yes') {
 	    				var params = {
 	    						method: this.backend + '.delete' + this.backendModel
 	    				};
