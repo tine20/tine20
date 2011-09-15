@@ -408,6 +408,10 @@
           "path": "js/widgets/dialog/"
         },
         {
+          "text": "FileListDialog.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
           "text": "DetailsPanel.js",
           "path": "js/widgets/grid/"
         },

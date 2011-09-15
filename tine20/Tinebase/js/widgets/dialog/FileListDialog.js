@@ -1,9 +1,9 @@
 
 Ext.ns('Tine.widgets.dialog');
 
-Tine.widgets.dialog.MultiOptionsDialog = function(config) {
+Tine.widgets.dialog.FileListDialog = function(config) {
     
-    Tine.widgets.dialog.MultiOptionsDialog.superclass.constructor.call(this, config);
+    Tine.widgets.dialog.FileListDialog.superclass.constructor.call(this, config);
     
     this.options = config.options || {};
     this.scope = config.scope || window;
@@ -11,10 +11,10 @@ Tine.widgets.dialog.MultiOptionsDialog = function(config) {
 
 /**
  * @namespace   Tine.widgets.dialog
- * @class       Tine.widgets.dialog.MultiOptionsDialog
+ * @class       Tine.widgets.dialog.FileListDialog
  * @extends     Ext.FormPanel
  */
-Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
+Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
     /**
      * @cfg {Array} options
      * @see {Ext.fom.CheckBoxGroup}
@@ -66,9 +66,8 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
             },
             items: [{
                 border: false,
-                html: '<div class="x-window-dlg"><div class="ext-mb-icon ext-mb-question"></div></div>',
-                flex: 0,
-                width: 45
+                html: this.msg,
+                flex: 0
             }, {
                 border: false,
                 layout: 'fit',
@@ -96,16 +95,16 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
             minWidth: 70,
             scope: this,
             handler: this.onOk,
-            iconCls: 'action_saveAndClose'
+            iconCls: 'action_yes'
         }, {
             xtype: 'button',
             text: _('No'),
             minWidth: 70,
-            scope: this
+            scope: this,
             handler: this.onCancel,
-            iconCls: 'action_cancel'
+            iconCls: 'action_no'
         }];
-    }
+    },
     
     onOk: function() {        
         this.handler.call(this.scope, 'yes');
@@ -121,13 +120,13 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
 /**
  * grants dialog popup / window
  */
-Tine.widgets.dialog.MultiOptionsDialog.openWindow = function (config) {
+Tine.widgets.dialog.FileListDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: config.width || 400,
         height: config.height || 150,
         closable: false,
-        name: Tine.widgets.dialog.MultiOptionsDialog.windowNamePrefix + Ext.id(),
-        contentPanelConstructor: 'Tine.widgets.dialog.MultiOptionsDialog',
+        name: Tine.widgets.dialog.FileListDialog.windowNamePrefix + Ext.id(),
+        contentPanelConstructor: 'Tine.widgets.dialog.FileListDialog',
         contentPanelConstructorConfig: config,
         modal: true
     });
