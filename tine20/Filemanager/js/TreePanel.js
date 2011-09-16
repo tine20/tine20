@@ -645,8 +645,10 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     	var app = Tine.Tinebase.appMgr.get('Filemanager'),
     		grid = app.getMainScreen().getCenterPanel();
     	
-    	grid.currenFolderNode = node
-    	var a = 'b';
+    	grid.currenFolderNode = node;
+    	
+    	Tine.Filemanager.TreePanel.superclass.onSelectionChange.call(this, this.getSelectionModel(), node);
+    	
     },
     
     /**
