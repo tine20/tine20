@@ -67,11 +67,19 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         this.record = this.record || null;
         this.id = this.id + Ext.id();
         
+     // init actions
+        this.actionUpdater = new Tine.widgets.ActionUpdater({
+            containerProperty: 'container_id', 
+            evalGrants: false
+        });
+        
+        
         this.initToolbarAndContextMenu();
         this.initStore();
         this.initColumnModel();
         this.initSelectionModel();
         
+    
         this.plugins = [ new Ext.ux.grid.GridViewMenuPlugin({}) ];
         this.enableHdMenu = false;
       
@@ -85,6 +93,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             }
             this.contextMenu.showAt(e.getXY());
         }, this);
+        
                
     },
     
@@ -139,6 +148,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
     	    var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
     	    upload.setPaused(true);
     	}   	
+        this.getSelectionModel().deselectRange(0, this.getSelectionModel().getCount());
     },
 
     
@@ -154,6 +164,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
             upload.resumeUpload();
         }
+        this.getSelectionModel().deselectRange(0, this.getSelectionModel().getCount());
     },
 
     
@@ -178,7 +189,8 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             iconCls: 'action_pause',
             scope: this,
 //            disabled: true,
-            handler: this.onPause
+            handler: this.onPause,
+            actionUpdater: this.isPauseEnabled
         });
         
         this.action_resume = new Ext.Action({
@@ -186,7 +198,8 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             iconCls: 'action_resume',
             scope: this,
 //            disabled: true,
-            handler: this.onResume
+            handler: this.onResume,
+            actionUpdater: this.isResumeEnabled
         });
         
         this.tbar = [
@@ -201,6 +214,12 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
                      this.action_resume
             ]
         });
+        
+        this.actionUpdater.addActions([
+			this.action_pause,
+			this.action_resume                                      
+		]);
+
     },
     
     /**
@@ -266,29 +285,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             width: 300,
             header: _('name'),
             renderer: Ext.ux.PercentRendererWithName
-            	
-            	
-//            function (value, metadata, record) {
-//                var val = value;               
-//                
-//                if (record.get('status') !== 'complete') {
-//                
-//                    if (record.get('status') == 'paused') {
-//                        metadata.css = 'x-tinebase-uploadpaused';
-//                    } 
-//                    else if (record.get('status') == 'uploading') {
-//                        metadata.css = 'x-tinebase-uploading';
-//                    }
-//                    else if (!Tine.Tinebase.uploadManager.isHtml5ChunkedUpload()) {
-//                        metadata.css = 'x-tinebase-uploadrow';
-//                    }
-//                }
-//                else {
-//                    metadata.css = 'x-tinebase-uploadcomplete';
-//                }
-//                
-//                return val;
-//            }
         }, {
             resizable: true,
             id: 'size',
@@ -319,6 +315,8 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         this.selModel.on('selectionchange', function (selModel) {
             var rowCount = selModel.getCount();
             this.action_remove.setDisabled(rowCount === 0);
+            this.actionUpdater.updateActions(selModel);
+
         }, this);
     },
     
@@ -371,5 +369,70 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
     isUploading: function () {
         var uploadingFiles = this.store.query('status', 'uploading');
         return (uploadingFiles.getCount() > 0);
-    }
+    },
+    
+    isPauseEnabled: function(action, grants, records) {
+    	 
+        for(var i=0; i<records.length; i++) {
+            if(records[i].get('type') === 'folder') {
+                action.hide();
+                return;
+            }
+        }
+        
+        for(var i=0; i < records.length; i++) {
+            if(!records[i].get('status') || (records[i].get('type ') !== 'folder' && records[i].get('status') !== 'paused'
+                    &&  records[i].get('status') !== 'uploading' && records[i].get('status') !== 'pending')) {
+                action.hide();
+                return;
+            }
+        }
+        
+        action.show();
+        
+        for(var i=0; i < records.length; i++) {
+            if(records[i].get('status')) {
+                action.setDisabled(false);
+            }
+            else {
+                action.setDisabled(true);
+            }
+            if(records[i].get('status') && records[i].get('status') !== 'uploading'){
+                action.setDisabled(true);
+            }
+            
+        }             
+    },
+
+	isResumeEnabled: function(action, grants, records) {
+    	for(var i=0; i<records.length; i++) {
+            if(records[i].get('type') === 'folder') {
+                action.hide();
+                return;
+            }
+        }
+       
+        for(var i=0; i < records.length; i++) {
+            if(!records[i].get('status') || (records[i].get('type ') !== 'folder' &&  records[i].get('status') !== 'uploading' 
+                    &&  records[i].get('status') !== 'paused' && records[i].get('status') !== 'pending')) {
+                action.hide();
+                return;
+            }
+        }
+        
+        action.show();
+        
+        for(var i=0; i < records.length; i++) {
+            if(records[i].get('status')) {
+                action.setDisabled(false);
+            }
+            else {
+                action.setDisabled(true);
+            }
+            if(records[i].get('status') && records[i].get('status') !== 'paused'){               
+                action.setDisabled(true);               
+            }
+            
+        }   
+	}
 });
