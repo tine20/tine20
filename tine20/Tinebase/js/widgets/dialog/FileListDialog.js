@@ -85,20 +85,22 @@ Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
      * init buttons
      */
     initButtons: function() {
-        this.fbar = ['->', {
-            xtype: 'button',
-            text: _('Yes'),
-            minWidth: 70,
-            scope: this,
-            handler: this.onOk,
-            iconCls: 'action_yes'
-        }, {
+        this.fbar = ['->', 
+        {
             xtype: 'button',
             text: _('No'),
             minWidth: 70,
             scope: this,
             handler: this.onCancel,
-            iconCls: 'action_no'
+            iconCls: 'action_cancel'
+        },
+        {
+            xtype: 'button',
+            text: _('Yes'),
+            minWidth: 70,
+            scope: this,
+            handler: this.onOk,
+            iconCls: 'action_applyChanges'
         }];
     },
     
