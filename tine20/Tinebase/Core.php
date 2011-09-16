@@ -194,7 +194,12 @@ class Tinebase_Core
         } elseif(isset($_SERVER['REDIRECT_CALDAV']) && $_SERVER['REDIRECT_CALDAV'] == 'true') {
             $server = new Tinebase_Server_CalDav();
 
-
+            /**************************** CALDAV API **********************************
+             * RewriteRule ^/carddav /index.php [E=CARDDAV:true,E=REDIRECT_CARDDAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
+             */
+        } elseif(isset($_SERVER['REDIRECT_CARDDAV']) && $_SERVER['REDIRECT_CARDDAV'] == 'true') {
+            $server = new Tinebase_Server_CardDav();
+            
             /**************************** CLI API *****************************/
         } elseif (php_sapi_name() == 'cli') {
             $server = new Tinebase_Server_Cli();
