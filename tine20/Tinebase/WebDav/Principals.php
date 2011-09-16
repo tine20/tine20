@@ -77,31 +77,6 @@ class Tinebase_WebDav_Principals implements Sabre_DAVACL_IPrincipalBackend
     }
     
     /**
-     * Returns a users' information 
-     * 
-     * @param  string  $_realm 
-     * @param  string  $_username 
-     * @return string 
-     */
-#    public function getUserInfo($_realm, $_username) 
-#    {
-#        if ($_username == Tinebase_Core::getUser()->accountLoginName) {
-#            $userInfo = array(
-#                'uri'                                   => 'principals/' . Tinebase_Core::getUser()->accountLoginName,
-#                '{http://sabredav.org/ns}email-address' => Tinebase_Core::getUser()->accountEmailAddress,
-#                '{DAV:}displayname'                     => Tinebase_Core::getUser()->accountDisplayName
-#            ); 
-#        } else {
-#            array(
-#                'uri'               => 'principals/' . $_username,
-#            	'{DAV:}displayname' => 'unknown user'
-#            );
-#        }
-#        
-#        return $userInfo;
-#    }
-
-    /**
      * Returns information about the currently logged in user.
      *
      * If nobody is currently logged in, this method should return null.
@@ -113,33 +88,13 @@ class Tinebase_WebDav_Principals implements Sabre_DAVACL_IPrincipalBackend
         return Tinebase_Core::getUser()->accountLoginName;
     }
     
-#    public function getUsers() 
-#    {
-#        // lis of all users
-#        $result = array(
-#            Tinebase_Core::getUser()
-#        );
-#        
-#        $rv = array();
-#        
-#        foreach($result as $user) {
-#            $rv[] = array(
-#                'uri'                                   => 'principals/' . $user->accountLoginName,
-#                '{http://sabredav.org/ns}email-address' => $user->accountEmailAddress,
-#                '{DAV:}displayname'                     => $user->accountDisplayName
-#            );
-#        }
-#
-#        return $rv;
-#
-#    }
-    
     /**
      * (non-PHPdoc)
      * @see Sabre_DAV_Auth_IBackend::authenticate()
      */
     public function authenticate(Sabre_DAV_Server $_server, $_realm) 
     {
+        // user got authenticated already
         return true;
     }
 }
