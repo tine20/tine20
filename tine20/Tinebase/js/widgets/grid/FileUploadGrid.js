@@ -265,27 +265,30 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             dataIndex: 'name',
             width: 300,
             header: _('name'),
-            renderer: function (value, metadata, record) {
-                var val = value;               
-                
-                if (record.get('status') !== 'complete') {
-                
-                    if (record.get('status') == 'paused') {
-                        metadata.css = 'x-tinebase-uploadpaused';
-                    } 
-                    else if (record.get('status') == 'uploading') {
-                        metadata.css = 'x-tinebase-uploading';
-                    }
-                    else if (!Tine.Tinebase.uploadManager.isHtml5ChunkedUpload()) {
-                        metadata.css = 'x-tinebase-uploadrow';
-                    }
-                }
-                else {
-                    metadata.css = 'x-tinebase-uploadcomplete';
-                }
-                
-                return val;
-            }
+            renderer: Ext.ux.PercentRendererWithName
+            	
+            	
+//            function (value, metadata, record) {
+//                var val = value;               
+//                
+//                if (record.get('status') !== 'complete') {
+//                
+//                    if (record.get('status') == 'paused') {
+//                        metadata.css = 'x-tinebase-uploadpaused';
+//                    } 
+//                    else if (record.get('status') == 'uploading') {
+//                        metadata.css = 'x-tinebase-uploading';
+//                    }
+//                    else if (!Tine.Tinebase.uploadManager.isHtml5ChunkedUpload()) {
+//                        metadata.css = 'x-tinebase-uploadrow';
+//                    }
+//                }
+//                else {
+//                    metadata.css = 'x-tinebase-uploadcomplete';
+//                }
+//                
+//                return val;
+//            }
         }, {
             resizable: true,
             id: 'size',
@@ -302,17 +305,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             // TODO show type icon?
             //renderer: Ext.util.Format.fileSize
         }];
-
-    	if(Tine.Tinebase.uploadManager.isHtml5ChunkedUpload()) {
-    		columns.push({
-    			resizable: true,
-    			id: 'progress',
-    			dataIndex: 'progress',
-    			width: 70,
-    			header: _('progress'),
-    			renderer: Ext.ux.PercentRenderer
-    		});
-    	}
     	
     	return columns;
     },
@@ -346,20 +338,29 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
                 fileSelector: fileSelector
             });
 
+            var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);        	
+            var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey); 
+            
             upload.on('uploadfailure', this.onUploadFail, this);
-            upload.on('uploadcomplete', Tine.Tinebase.uploadManager.onUploadComplete, this);
+            upload.on('uploadcomplete', this.onUploadComplete, fileRecord);
             upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, this);
 
-            var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);        	
-            var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);  
-            		
-        	if(fileRecord.get('status') !== 'failure' ) {
+            if(fileRecord.get('status') !== 'failure' ) {
 	            this.store.add(fileRecord);
         	}
 
             
         }, this);
         
+    },
+    
+    onUploadComplete: function(upload, fileRecord) {
+    
+    	fileRecord.beginEdit();
+        fileRecord.set('status', 'complete');
+        fileRecord.set('progress', 100);
+        fileRecord.commit(false);
+    	Tine.Tinebase.uploadManager.onUploadComplete();
     },
     
     /**
