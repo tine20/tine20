@@ -248,6 +248,36 @@ class Crm_JsonTest extends Crm_AbstractTest
     }    
     
     /**
+     * add relation, remove relation and add relation again
+     * 
+     * see bug #4840 (http://forge.tine20.org/mantisbt/view.php?id=4840)
+     */
+    public function testAddRelationAgain()
+    {
+        $contact    = $this->_getContact();
+        $savedContact = Addressbook_Controller_Contact::getInstance()->create($contact);
+        $lead       = $this->_getLead();
+        
+        $leadData = $lead->toArray();
+        $leadData['relations'] = array(
+            array('type'  => 'PARTNER', 'related_record' => $savedContact->toArray()),
+        );
+        $savedLead = $this->_instance->saveLead($leadData);
+        
+        $savedLead['relations'] = array();
+        $savedLead = $this->_instance->saveLead($savedLead);
+        $this->assertEquals(0, count($savedLead['relations']));
+        
+        $savedLead['relations'] = array(
+            array('type'  => 'PARTNER', 'related_record' => $savedContact->toArray()),
+        );
+        $savedLead = $this->_instance->saveLead($savedLead);
+        
+        $this->assertEquals(1, count($savedLead['relations']), 'Relation has not been added');
+        $this->assertEquals($contact->n_fn, $savedLead['relations'][0]['related_record']['n_fn'], 'Contact name does not match');
+    }
+    
+    /**
      * get contact
      * 
      * @return Addressbook_Model_Contact
