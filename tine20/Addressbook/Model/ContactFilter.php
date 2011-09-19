@@ -101,7 +101,10 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'role'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'pubkey'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'assistent'		       => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'addressbook.id')),
+        'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
+            'idProperty' => 'addressbook.id',
+            'applicationName' => 'Addressbook',
+        )),
         //'bday'               => array('filter' => 'Tinebase_Model_Filter_Date'),
         'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
         'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),

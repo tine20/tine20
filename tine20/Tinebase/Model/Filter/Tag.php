@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -44,6 +44,10 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
      */
     protected function _setOptions(array $_options)
     {
+        if (! isset($_options['applicationName'])) {
+            throw new Tinebase_Exception_InvalidArgument('Tag filter needs the applicationName option');
+        }
+        
         $_options['idProperty'] = isset($_options['idProperty']) ? $_options['idProperty'] : 'id';
         
         $this->_options = $_options;
@@ -79,6 +83,9 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
             /* select */  array());
         
         $_select->where($db->quoteIdentifier("{$correlationName}.tag_id") .  $this->_opSqlMap[$this->_operator]['sqlop']);
+        
+        $app = Tinebase_Application::getInstance()->getApplicationByName($this->_options['applicationName']);
+        $_select->where($db->quoteIdentifier("{$correlationName}.application_id") . ' = ?', $app->getId());
     }
     
     /**
