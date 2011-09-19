@@ -4,7 +4,7 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -13,10 +13,6 @@
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Crm_JsonTest::main');
-}
 
 /**
  * Test class for Crm_Json
@@ -220,6 +216,38 @@ class Crm_JsonTest extends Crm_AbstractTest
     }
     
     /**
+     * test tag filter (adds a contact with the same id + tag)
+     * 
+     * see bug #4834 (http://forge.tine20.org/mantisbt/view.php?id=4834)
+     */
+    public function testTagFilter()
+    {
+        $lead       = $this->_getLead();
+        $savedLead = $this->_instance->saveLead($lead->toArray());
+        
+        $sharedTagName = Tinebase_Record_Abstract::generateUID();
+        $tag = new Tinebase_Model_Tag(array(
+            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+            'name'  => $sharedTagName,
+            'description' => 'testTagFilter',
+            'color' => '#009B31',
+        ));
+        $contact    = $this->_getContact();
+        $contact->setId($savedLead['id']);
+        
+        $contact->tags = array($tag);
+        $savedContact = Addressbook_Controller_Contact::getInstance()->create($contact);
+        $tag = $savedContact->tags->getFirstRecord();
+        
+        $filter = array(
+            array('field' => 'tag',           'operator' => 'equals',       'value' => $tag->getId()),
+        );
+        
+        $result = $this->_instance->searchLeads($filter, array());
+        $this->assertEquals(0, $result['totalcount'], 'Should not find the lead!');
+    }    
+    
+    /**
      * get contact
      * 
      * @return Addressbook_Model_Contact
@@ -329,6 +357,5 @@ class Crm_JsonTest extends Crm_AbstractTest
         return array(
             array('field' => 'query',           'operator' => 'contains',       'value' => 'PHPUnit'),
         );
-        
     }
 }		
