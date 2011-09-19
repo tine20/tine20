@@ -130,7 +130,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 parentNode.appendChild(newNode);
             }
             grid.getStore().reload();
-//            this.fireEvent('containeradd', nodeData);
+            this.fireEvent('containeradd', nodeData);
             Ext.MessageBox.hide();
         };
         
@@ -183,9 +183,9 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             }
             
             grid.getStore().remove(nodeData);
-            this.fireEvent('containerdelete', nodeData);
             grid.getStore().deselectRange(0, grid.getStore().getCount());
-            Ext.MessageBox.hide();
+            this.fireEvent('containerdelete', nodeData);
+
         }).createDelegate({items: items});
         
         return this.doXHTTPRequest(options);
@@ -272,6 +272,8 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         }
         
         this.loadMask = new Ext.LoadMask(app.getMainScreen().getCenterPanel().getEl(), {msg: String.format(_('Please wait')) + '. ' + String.format(message, '' )});
+        app.getMainScreen().getWestPanel().setDisabled(true);
+        app.getMainScreen().getNorthPanel().setDisabled(true);
         this.loadMask.show();
         
         Ext.Ajax.request({
@@ -280,7 +282,9 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             success: function(result, request){
                 
                 this.loadMask.hide();
-                
+                app.getMainScreen().getWestPanel().setDisabled(false);
+                app.getMainScreen().getNorthPanel().setDisabled(false);
+
                 var nodeData = Ext.util.JSON.decode(result.responseText),
                     treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
                     grid = app.getMainScreen().getCenterPanel();
@@ -323,7 +327,12 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             },
             failure: function(response, request) {
                 var nodeData = Ext.util.JSON.decode(response.responseText),
-                request = Ext.util.JSON.decode(request.jsonData);
+                	request = Ext.util.JSON.decode(request.jsonData);
+                
+                this.loadMask.hide();
+                app.getMainScreen().getWestPanel().setDisabled(false);
+                app.getMainScreen().getNorthPanel().setDisabled(false);
+
                 Tine.Filemanager.fileRecordBackend.handleRequestException(nodeData.data, request);
             }
         });
@@ -340,7 +349,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
     createNode: function(params, uploadKey, addToGridStore) {
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
             grid = app.getMainScreen().getCenterPanel(),
-            gridStore = grid.store;
+            gridStore = grid.getStore();
         
         params.application = 'Filemanager';                              
         params.method = 'Filemanager.createNode';
@@ -349,13 +358,16 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         
         var onSuccess = (function(result, request){ 
             
-            var fileRecord = Tine.Tinebase.uploadManager.upload(this.uploadKey);  
+            var nodeData = Ext.util.JSON.decode(response.responseText),
+            	fileRecord = Tine.Tinebase.uploadManager.upload(this.uploadKey);  
 
             if(addToGridStore) {
             	var recordToRemove = gridStore.query('name', fileRecord.get('name'));
             	if(recordToRemove.items[0]) {
             		gridStore.remove(recordToRemove.items[0]);
             	}
+
+            	fileRecord = Tine.Filemanager.fileRecordBackend.updateNodeRecord(nodeData[i], fileRecord);
 
             	gridStore.add(fileRecord);
 
@@ -402,9 +414,9 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         params.addToGridStore = addToGridStore;
 
         
-        var onSuccess = (function(result, request){ 
+        var onSuccess = (function(response, request){ 
                        
-//            var nodeData = Ext.util.JSON.decode(result);
+            var nodeData = Ext.util.JSON.decode(response.responseText);
         	
             for(var i=0; i<this.uploadKeyArray.length; i++) {
                 var fileRecord = Tine.Tinebase.uploadManager.upload(this.uploadKeyArray[i]);  
@@ -416,6 +428,8 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 		gridStore.remove(recordToRemove.items[0]);
                 	}
 
+                	fileRecord = Tine.Filemanager.fileRecordBackend.updateNodeRecord(nodeData[i], fileRecord);
+                	
                 	gridStore.add(fileRecord);
                     
                 }   
@@ -458,10 +472,22 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
      */
     handleRequestException: function(exception, request) {
         Tine.Filemanager.handleRequestException(exception, request);
+    },
+    
+    /**
+     * updates given record with nodeData from from response
+     */
+    updateNodeRecord : function(nodeData, nodeRecord) {
+    	
+    	for(var field in nodeData) {
+    		
+    		nodeRecord.set(field, nodeData[field]);
+    		Tine.log.debug(field);
+    	};
+    	
+    	return nodeRecord;
     }
     
-    
-
 
 });
 
