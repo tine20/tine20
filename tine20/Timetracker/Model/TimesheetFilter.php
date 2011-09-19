@@ -59,7 +59,10 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
                 'requiredCols'  => array('is_cleared_combined'),
             ),
         ),
-        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag',          'options' => array('idProperty' => 'timetracker_timesheet.id')),
+        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag',          'options' => array(
+            'idProperty' => 'timetracker_timesheet.id',
+            'applicationName' => 'Timetracker',
+        )),
         'customfield'    => array('filter' => 'Tinebase_Model_Filter_CustomField',  'options' => array('idProperty' => 'timetracker_timesheet.id')),
     );
     

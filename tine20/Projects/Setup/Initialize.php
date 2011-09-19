@@ -85,7 +85,12 @@ class Projects_Setup_Initialize extends Setup_Initialize
                         'field'     => 'relation_type',
                         'operator'  => 'in',
                         'value'     => Projects_Config::getInstance()->get(Projects_Config::PROJECT_ATTENDEE_ROLE)->records->id
-                ))),
+                    ), array(
+                        'field'     => 'id',
+                        'operator'  => 'equals',
+                        'value'     => Addressbook_Model_Contact::CURRENTCONTACT,
+                    )
+                )),
                 array('field' => 'status',    'operator' => 'notin',  'value' => $closedStatus->getId()),
             )
         ))));
@@ -101,7 +106,12 @@ class Projects_Setup_Initialize extends Setup_Initialize
                         'field'     => 'relation_type',
                         'operator'  => 'in',
                         'value'     => array('RESPONSIBLE')
-                ))),
+                    ), array(
+                        'field'     => 'id',
+                        'operator'  => 'equals',
+                        'value'     => Addressbook_Model_Contact::CURRENTCONTACT,
+                    )
+                )),
                 array('field' => 'status',    'operator' => 'notin',  'value' => $closedStatus->getId()),
             )
         ))));
@@ -117,7 +127,12 @@ class Projects_Setup_Initialize extends Setup_Initialize
                         'field'     => 'relation_type',
                         'operator'  => 'in',
                         'value'     => Projects_Config::getInstance()->get(Projects_Config::PROJECT_ATTENDEE_ROLE)->records->id
-                ))),
+                    ), array(
+                        'field'     => 'id',
+                        'operator'  => 'equals',
+                        'value'     => Addressbook_Model_Contact::CURRENTCONTACT,
+                    )
+                )),
                 array('field' => 'status',    'operator' => 'in',  'value' => array('NEEDS-ACTION')),
             )
         ))));
