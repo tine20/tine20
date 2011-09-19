@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-13 16:32+0100\n"
-"PO-Revision-Date: 2011-09-13 16:32+0100\n"
+"POT-Creation-Date: 2011-09-19 12:08+0100\n"
+"PO-Revision-Date: 2011-09-19 12:08+0100\n"
 "Last-Translator: Martin Jatho <m.jatho@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -60,11 +60,9 @@ msgid "You have to supply a {0} name!"
 msgstr "Sie müssen einen {0}-namen angeben!"
 
 #: Filemanager/js/GridContextMenu.js:45
-#: Filemanager/js/GridContextMenu.js:135
 #: Filemanager/js/Model.js:273
 #: Filemanager/js/GridPanel.js:479
 #: Filemanager/js/GridPanel.js:539
-#: Filemanager/js/GridPanel.js:581
 msgid "Please wait"
 msgstr "Bitte warten"
 
@@ -73,19 +71,10 @@ msgstr "Bitte warten"
 msgid "Updating {0} \"{1}\""
 msgstr "Update {0} \"{1}\""
 
-#: Filemanager/js/GridContextMenu.js:133
-#: Filemanager/js/GridPanel.js:578
-msgid "Confirm"
-msgstr "Bestätigen"
-
-#: Filemanager/js/GridContextMenu.js:133
-#: Filemanager/js/GridPanel.js:578
-msgid "Do you really want to delete \"{0}\"?"
-msgstr "Möchten Sie \"{0}\" wirklich löschen? "
-
-#: Filemanager/js/GridContextMenu.js:135
-msgid "Deleting {0} \"{1}\""
-msgstr "Lösche {0} \"{1}\""
+#: Filemanager/js/GridContextMenu.js:148
+#: Filemanager/js/GridPanel.js:580
+msgid "Do you really want to delete the following files?"
+msgstr "Möchten Sie folgende Datei(en) löschen?"
 
 #: Filemanager/js/Model.js:37
 msgid "user file"
@@ -96,7 +85,7 @@ msgid "user files"
 msgstr "Dateien"
 
 #: Filemanager/js/Model.js:40
-#: Filemanager/js/Model.js:484
+#: Filemanager/js/Model.js:481
 #: Filemanager/js/GridPanel.js:462
 #: Filemanager/js/GridPanel.js:529
 msgid "user file folder"
@@ -116,20 +105,20 @@ msgstr "Kopiere Daten .. {0}"
 msgid "Moving data .. {0}"
 msgstr "Verschiebe Daten .. {0}"
 
-#: Filemanager/js/Model.js:480
+#: Filemanager/js/Model.js:477
 msgid "Quick search"
 msgstr "Schnellsuche"
 
-#: Filemanager/js/Model.js:481
+#: Filemanager/js/Model.js:478
 msgid "Type"
 msgstr "Typ"
 
-#: Filemanager/js/Model.js:482
+#: Filemanager/js/Model.js:479
 #: Filemanager/js/GridPanel.js:138
 msgid "Contenttype"
 msgstr "Typ"
 
-#: Filemanager/js/Model.js:483
+#: Filemanager/js/Model.js:480
 #: Filemanager/js/GridPanel.js:170
 msgid "Creation Time"
 msgstr "Erstellt am"
@@ -222,24 +211,20 @@ msgstr "Kein {0} hinzugefügt"
 msgid "Creating {0}..."
 msgstr "Erstelle {0}..."
 
-#: Filemanager/js/GridPanel.js:581
-msgid "Deleting {0} "
-msgstr "Lösche {0}"
-
-#: Filemanager/js/GridPanel.js:665
-#: Filemanager/js/GridPanel.js:809
-#: Filemanager/js/TreePanel.js:627
-#: Filemanager/js/TreePanel.js:658
+#: Filemanager/js/GridPanel.js:669
+#: Filemanager/js/GridPanel.js:814
+#: Filemanager/js/TreePanel.js:639
+#: Filemanager/js/TreePanel.js:714
 msgid "Upload Failed"
 msgstr "Hochladen fehlgeschlagen"
 
-#: Filemanager/js/GridPanel.js:666
-#: Filemanager/js/TreePanel.js:628
+#: Filemanager/js/GridPanel.js:670
+#: Filemanager/js/TreePanel.js:640
 msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
 msgstr "Die Datei konnte nicht hochgeladen werden. Möglicherweise ist die Datei zu groß. Bitte benachrichtigen Sie Ihren Administrator. Maximale erlaubte Dateigröße:"
 
-#: Filemanager/js/GridPanel.js:810
-#: Filemanager/js/TreePanel.js:659
+#: Filemanager/js/GridPanel.js:815
+#: Filemanager/js/TreePanel.js:715
 msgid "Dropping on this folder not allowed!"
 msgstr "Auf diesen Ordner darf nicht gedropt werden!"
 
@@ -247,30 +232,42 @@ msgstr "Auf diesen Ordner darf nicht gedropt werden!"
 msgid "Filemanager"
 msgstr "Dateimanager"
 
-#: Filemanager/js/Filemanager.js:70
+#: Filemanager/js/Filemanager.js:68
+#: Filemanager/js/Filemanager.js:90
 msgid "Files already exists"
 msgstr "Datei(en) schon vorhanden"
 
-#: Filemanager/js/Filemanager.js:71
+#: Filemanager/js/Filemanager.js:68
+#, fuzzy
+msgid "Do you want to replace the following file(s)?"
+msgstr "Möchten Sie die Datei(en) ersetzen?"
+
+#: Filemanager/js/Filemanager.js:91
 msgid "Do you want to replace the files?"
 msgstr "Möchten Sie die Datei(en) ersetzen?"
 
-#: Filemanager/js/Filemanager.js:92
+#: Filemanager/js/Filemanager.js:112
 msgid "Failure on create folder"
 msgstr "Fehler beim anlegen des Ordners"
 
-#: Filemanager/js/Filemanager.js:93
+#: Filemanager/js/Filemanager.js:113
 msgid "Item with this name already exists!"
 msgstr "Item(s) mit diesem Namen schon vorhanden!"
 
+#~ msgid "Confirm"
+#~ msgstr "Bestätigen"
+#~ msgid "Do you really want to delete \"{0}\"?"
+#~ msgstr "Möchten Sie \"{0}\" wirklich löschen? "
+#~ msgid "Deleting {0} \"{1}\""
+#~ msgstr "Lösche {0} \"{1}\""
+#~ msgid "Deleting {0} "
+#~ msgstr "Lösche {0}"
 #~ msgid "File allready exists"
 #~ msgstr "Es existiert bereits eine Datei mit diesem Namen"
 #~ msgid "Do you want to replace the file?"
 #~ msgstr "Möchten Sie die Datei ersetzen?"
 #~ msgid "Item with this name allready exists!"
 #~ msgstr "Es existiert bereits ein Eintrag mit diesem Namen!"
-#~ msgid "Do you really want to delete the {0} \"{1}\"?"
-#~ msgstr "Möchten Sie wirklich den {0} löschen? "
 #~ msgid "example record"
 #~ msgid_plural "example records"
 #~ msgstr[0] "Beispieleintrag"

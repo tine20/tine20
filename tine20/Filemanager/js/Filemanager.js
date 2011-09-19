@@ -65,7 +65,7 @@ Tine.Filemanager.handleRequestException = function(exception, request) {
                 	allowCancel: false,
                 	height: 180,
                 	width: 300,
-                	title: app.i18n._('Files already exists') + '. ' +app.i18n._('Möchten Sie folgende Dateien ersetzen?'),
+                	title: app.i18n._('Files already exists') + '. ' +app.i18n._('Do you want to replace the following file(s)?'),
                 	text: fileName,
                 	scope: this,
                 	handler: function(button){
