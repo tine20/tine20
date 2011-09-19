@@ -210,21 +210,13 @@ Tine.widgets.tree.ContextMenu = {
                             parentNode.appendChild(newNode);
                         }
                         else {
-                            var newNode = this.loader.createNode(nodeData);
+                            var newNode = this.scope.loader.createNode(nodeData);
                             parentNode.appendChild(newNode);
                         }
                         
                         parentNode.expand();
                         this.scope.fireEvent('containeradd', nodeData);
-                        
-                        // TODO: im event auswerten
-                        if (this.backendModel == 'Node') {
-                            this.scope.app.getMainScreen().getCenterPanel().getStore().reload();
-                            if(nodeData.error) {
-                                Tine.log.debug(nodeData);
-                            }
-                        }
-
+                                              
                         Ext.MessageBox.hide();
                     },
                     failure: function(result, request) {
@@ -266,8 +258,9 @@ Tine.widgets.tree.ContextMenu = {
                             newName: _text
                         };
                         
+                        params.application = this.scope.app.appName || this.scope.appName;                                
+
                         if (this.backendModel == 'Node') {
-                            params.application = this.scope.app.appName || this.scope.appName;                                
                             var filename = node.attributes.path;
                             params.sourceFilenames = [filename];
                             
@@ -283,7 +276,7 @@ Tine.widgets.tree.ContextMenu = {
                         
                         // TODO try to generalize this
                         if (this.backendModel == 'Container') {
-                            params.containerId = node.attributes.nodeRecord.data.id;
+                        	params.containerId = node.attributes.container.id;
                         } else if (this.backendModel == 'Folder') {
                             var folder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(node.attributes.folder_id);
                             params.oldGlobalName = folder.get('globalname');
