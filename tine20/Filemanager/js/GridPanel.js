@@ -555,9 +555,10 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onDeleteRecords: function(button, event) {
 
-        var app = this.app;
-        var nodeName = '';
-        var nodes = app.getMainScreen().getCenterPanel().selectionModel.getSelections();
+        var app = this.app,
+        	nodeName = '',
+        	sm = app.getMainScreen().getCenterPanel().selectionModel,
+        	nodes = sm.getSelections();
         
         if(nodes && nodes.length) {
         	for(var i=0; i<nodes.length; i++) {

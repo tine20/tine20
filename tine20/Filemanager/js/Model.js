@@ -183,7 +183,8 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             }
             
             grid.getStore().remove(nodeData);
-//            this.fireEvent('containerdelete', nodeData);
+            this.fireEvent('containerdelete', nodeData);
+            grid.getStore().deselectRange(0, grid.getStore().getCount());
             Ext.MessageBox.hide();
         }).createDelegate({items: items});
         
@@ -403,6 +404,8 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         
         var onSuccess = (function(result, request){ 
                        
+//            var nodeData = Ext.util.JSON.decode(result);
+        	
             for(var i=0; i<this.uploadKeyArray.length; i++) {
                 var fileRecord = Tine.Tinebase.uploadManager.upload(this.uploadKeyArray[i]);  
     
