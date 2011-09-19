@@ -59,7 +59,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
        
     initComponent: function() {
         
-//        this.on('containeradd', this.onFolderAdd, this);
+        this.on('containeradd', this.onFolderAdd, this);
         this.on('containerrename', this.onFolderRename, this);
         this.on('containerdelete', this.onFolderDelete, this);
         this.on('nodedragover', this.onNodeDragOver, this);
@@ -639,6 +639,20 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             _('Upload Failed'), 
             _('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: ') + Tine.Tinebase.registry.get('maxFileUploadSize')
         ).setIcon(Ext.MessageBox.ERROR);
+    },
+    
+    /**
+     * add folder handler
+     */
+    onFolderAdd: function(nodeData) {
+    	
+    	var app = Tine.Tinebase.appMgr.get('Filemanager'),
+			grid = app.getMainScreen().getCenterPanel();
+    	
+    	grid.getStore().reload();
+        if(nodeData.error) {
+            Tine.log.debug(nodeData);
+        }
     },
     
     /**
