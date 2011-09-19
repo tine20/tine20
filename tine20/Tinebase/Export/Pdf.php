@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage	Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        extend Tinebase_Export_Abstract
  * @todo        use export definition
@@ -87,12 +87,6 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * @var boolean
      */
     protected $_embedFont = TRUE;
-    
-    /**
-     * encoding
-     */
-    protected $_encoding = 'UTF-8';
-    //protected $_encoding = 'CP1252';
     
     /**
      * format strings
@@ -454,29 +448,21 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 	}	
 
 	/**
-	 * draws a text in the pdf and checks correct encoding
+	 * draws a text in the pdf
 	 *
 	 * @param  string $_string the string to draw
 	 * @param  int $_xPos
 	 * @param  int $_yPos
      * @param  int $_page page number (optional)
      * @throws Tinebase_Exception_UnexpectedValue
-     * 
-     * @todo don't use mb_check_encoding
 	 */
 	protected function _writeText($_string, $_xPos, $_yPos, $_page = NULL) {
 	
 	    $page = ($_page !== NULL) ? $_page : $this->_pageNumber;
 	    
-	    if (! extension_loaded('mbstring') || mb_check_encoding($_string, $this->_encoding)) {	
-
-	        //echo $_string;
-	        
-	        @$this->pages[$page]->drawText($_string, $_xPos, $_yPos, $this->_encoding);
-
-	    } else {
-	        throw new Tinebase_Exception_UnexpectedValue('Detected an illegal character in input string: ' . $_string);
-	    }
+	    $string = @iconv('utf-8', 'utf-8//IGNORE', $_string);
+	    
+        @$this->pages[$page]->drawText($string, $_xPos, $_yPos, 'utf-8');
 	}
 	
     /**
