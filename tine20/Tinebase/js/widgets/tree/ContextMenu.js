@@ -294,23 +294,11 @@ Tine.widgets.tree.ContextMenu = {
                             params: params,
                             scope: this,
                             success: function(_result, _request){
-                                var nodeData = Ext.util.JSON.decode(_result.responseText)[0];
-                                node.setText(_text);
+                        	
+                        		var nodeData = Ext.util.JSON.decode(_result.responseText);                        		
+                        		node.setText(_text);
                                 
-                                node.attributes.nodeRecord.beginEdit();
-                                node.attributes.nodeRecord.set('name', _text); // TODO set path
-                                node.attributes.nodeRecord.set('path', nodeData.path); // TODO set path
-                                node.attributes.path = nodeData.path; // TODO set path
-                                node.attributes.nodeRecord.commit(false);
-                                
-                                if(typeof node.attributes.name == 'object') {
-                                	node.attributes.name.name = _text; // TODO set path
-                                }
-                                else {
-                                	node.attributes.name = _text;
-                                }
-                                                                
-                                this.scope.fireEvent('containerrename', node, nodeData);                               
+                                this.scope.fireEvent('containerrename', nodeData, node, _text);                               
                                 Ext.MessageBox.hide();
                                                               
                             },
