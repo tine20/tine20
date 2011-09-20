@@ -2,8 +2,8 @@
 /**
  * Tine 2.0
  *
- * @package     Addressbook
- * @subpackage  Frontend
+ * @package     Tinebase
+ * @subpackage  WebDAV
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -11,12 +11,12 @@
  */
 
 /**
- * root of tree for the CardDAV frontend
+ * root of tree for the WebDAV frontend
  *
- * This class handles the root of the CardDAV tree
+ * This class handles the root of the WebDAV tree
  *
- * @package     Addressbook
- * @subpackage  Frontend
+ * @package     Tinebase
+ * @subpackage  WebDAV
  */
 class Addressbook_Frontend_CardDAV_Root extends Sabre_DAV_SimpleCollection
 {
