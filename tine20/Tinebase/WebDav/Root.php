@@ -24,10 +24,10 @@ class Tinebase_WebDav_Root extends Sabre_DAV_SimpleCollection
     {
         parent::__construct('root', array(
             new Sabre_DAV_SimpleCollection(Sabre_CardDAV_Plugin::ADDRESSBOOK_ROOT, array(
-                new Addressbook_Frontend_CardDAV_Collection_Personal('Addressbook'),
+                new Tinebase_WebDav_Collection('Addressbook', 'Contact'),
             )),
             new Sabre_DAV_SimpleCollection(Sabre_CalDAV_Plugin::CALENDAR_ROOT, array(
-                new Calendar_Frontend_CalDAV_Collection(),
+                new Tinebase_WebDav_Collection('Calendar', 'Event'),
             )),
             new Sabre_DAV_SimpleCollection('principals', array(
                 new Sabre_DAVACL_PrincipalCollection(new Tinebase_WebDav_Principals(), 'principals/users'),
