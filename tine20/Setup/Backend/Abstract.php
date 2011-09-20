@@ -245,15 +245,20 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     }
     
     /**
-     * removes table from database
+     * removes table from database (and from application table if app id is given
      * 
-     * @param string tableName
+     * @param string $_tableName
+     * @param string $_applicationId
      */
-    public function dropTable($_tableName)
+    public function dropTable($_tableName, $_applicationId = NULL)
     {
     	if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Dropping table ' . $_tableName);
         $statement = "DROP TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
         $this->execQueryVoid($statement);
+        
+        if ($_applicationId !== NULL) {
+            Tinebase_Application::getInstance()->removeApplicationTable($_applicationId, $_tableName);
+        }
     }
     
     /**
