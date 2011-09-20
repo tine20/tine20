@@ -33,6 +33,10 @@ class Tinebase_WebDav_Auth implements Sabre_DAV_Auth_IBackend
      */
     public function authenticate(Sabre_DAV_Server $_server, $_realm) 
     {
-        return true;
+        if (Tinebase_Core::getUser() instanceof Tinebase_Model_FullUser) {
+            return true;
+        }
+        
+        return false;
     }
 }
