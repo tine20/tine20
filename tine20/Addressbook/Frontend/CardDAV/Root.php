@@ -1,6 +1,6 @@
 <?php
 /**
- * root of tree for the CardDAV frontend
+ * Tine 2.0
  *
  * @package     Addressbook
  * @subpackage  Frontend
@@ -18,56 +18,22 @@
  * @package     Addressbook
  * @subpackage  Frontend
  */
-class Addressbook_Frontend_CardDAV_Root extends Sabre_DAV_Collection
+class Addressbook_Frontend_CardDAV_Root extends Sabre_DAV_SimpleCollection
 {
-    /**
-     * Returns an array with all the child nodes
-     *
-     * @return Sabre_DAV_INode[]
-     */
-    function getChildren()
+    public function __construct()
     {
-        $children = array(
-            $this->getChild(Addressbook_Frontend_CardDAV_Collection_Personal::ROOT_NODE),
-            $this->getChild('principals'),
-            $this->getChild('shared')
-        );
-        
-        return $children;
-        
-    }
-    
-    public function getChild($_name) 
-    {
-        switch ($_name) {
-            case Addressbook_Frontend_CardDAV_Collection_Personal::ROOT_NODE:
-                return new Addressbook_Frontend_CardDAV_Collection_Personal('Addressbook');
-                
-                break;
-                
-            case 'principals':
-                return new Sabre_DAVACL_PrincipalCollection(new Tinebase_WebDav_Principals());
-                
-                break;
-                
-            case 'shared':
-                return new Addressbook_Frontend_CardDAV_Collection_Shared('Addressbook');
-                
-                break;
-                
-            default:
-                throw new Sabre_DAV_Exception_FileNotFound("child $_name not found");
-                break;
-        }
-    }
-
-    /**
-     * Returns the name of the node
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        // the root has no name
+        parent::__construct('root', array(
+            new Sabre_DAV_SimpleCollection(Sabre_CardDAV_Plugin::ADDRESSBOOK_ROOT, array(
+                new Addressbook_Frontend_CardDAV_Collection_Personal('Addressbook'),
+            )),
+            new Sabre_DAV_SimpleCollection(Sabre_CalDAV_Plugin::CALENDAR_ROOT, array(
+                new Calendar_Frontend_CalDAV_Collection(),
+            )),
+            new Sabre_DAV_SimpleCollection('principals', array(
+                new Sabre_DAVACL_PrincipalCollection(new Tinebase_WebDav_Principals(), 'principals/users'),
+                new Sabre_DAVACL_PrincipalCollection(new Tinebase_WebDav_Principals(), 'principals/groups')
+            )),
+            
+        ));
     }
 }
