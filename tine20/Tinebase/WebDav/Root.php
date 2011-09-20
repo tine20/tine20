@@ -18,7 +18,7 @@
  * @package     Tinebase
  * @subpackage  WebDAV
  */
-class Addressbook_Frontend_CardDAV_Root extends Sabre_DAV_SimpleCollection
+class Tinebase_WebDav_Root extends Sabre_DAV_SimpleCollection
 {
     public function __construct()
     {
