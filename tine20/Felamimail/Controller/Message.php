@@ -370,6 +370,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Zend_Mime_Part $_bodyPart
      * @param array $partStructure
      * @return string
+     * 
+     * @todo reduce complexity
      */
     protected function _getDecodedBodyContent(Zend_Mime_Part $_bodyPart, $_partStructure)
     {
@@ -392,7 +394,17 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Try again with fallback encoding.');
                 $_bodyPart->appendDecodeFilter($this->_getDecodeFilter());
-                $body = $_bodyPart->getDecodedContent();
+                set_error_handler('Felamimail_Controller_Message::decodingErrorHandler', E_WARNING);
+                try {
+                    $body = $_bodyPart->getDecodedContent();
+                    restore_error_handler();
+                } catch (Felamimail_Exception $e) {
+                    restore_error_handler();
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Fallback encoding failed. Trying base64_decode().');
+                    $_bodyPart->resetStream();
+                    $body = base64_decode(stream_get_contents($_bodyPart->getRawStream()));
+                    $body = iconv($charset, 'utf-8', $body);
+                }
             }
         }
         
