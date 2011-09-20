@@ -16,6 +16,8 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
      */
     public function update_0()
     {
+        $tasksAppId = Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId();
+        
         // remove status_id keys
         $this->_backend->dropForeignKey('tasks', 'tasks::status_id--tasks_status::id');
         $this->_backend->dropIndex('tasks', 'status_id');
@@ -40,7 +42,7 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
         // get all current status datas and drop old status table
         $stmt = $this->_db->query("SELECT * FROM `" . SQL_TABLE_PREFIX . "tasks_status`");
         $statusDatas = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        $this->_backend->dropTable('tasks_status');
+        $this->_backend->dropTable('tasks_status', $tasksAppId);
         
         // update task table
         $statusMap = array(); // oldId => newId
@@ -76,14 +78,14 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
         }
         
         $cb->create(new Tinebase_Model_Config(array(
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
+            'application_id'    => $tasksAppId,
             'name'              => Tasks_Config::TASK_STATUS,
             'value'             => json_encode($tasksStatusConfig),
         )));
         
         // update persitent filters
         $stmt = $this->_db->query("SELECT * FROM `" . SQL_TABLE_PREFIX . "filter` WHERE ".
-            "`application_id` = '" . Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId() . "' AND ".
+            "`application_id` = '" . $tasksAppId . "' AND ".
             "`model` = 'Tasks_Model_TaskFilter'"
         );
         $pfiltersDatas = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -111,5 +113,15 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
         
         $this->setTableVersion('tasks', '4');
         $this->setApplicationVersion('Tasks', '5.1');
+    }
+
+    /**
+     * update to 5.2
+     *  - remove task status table from application tables (this was not done by dropTable until now)
+     */
+    public function update_1()
+    {
+        Tinebase_Application::getInstance()->removeApplicationTable(Tinebase_Application::getInstance()->getApplicationByName('Tasks'), 'tasks_status');
+        $this->setApplicationVersion('Tasks', '5.2');
     }
 }
