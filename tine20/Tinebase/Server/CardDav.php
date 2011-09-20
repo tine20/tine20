@@ -54,16 +54,16 @@ class Tinebase_Server_CardDav implements Tinebase_Server_Interface
             return;                            
         }
         
-        $root = new Addressbook_Frontend_CardDAV_Root('carddav');
+        $root = new Tinebase_WebDav_Root();
         
         $tree = new Sabre_DAV_ObjectTree($root);
         
         $server = new Sabre_DAV_Server($tree);
         
         // compute base uri
-        $decodedUri = Sabre_DAV_URLUtil::decodePath($server->getRequestUri());
-        $baseUri = substr($decodedUri, 0, strpos($decodedUri, 'carddav/') + strlen('carddav/'));
-        $server->setBaseUri('/' . $baseUri);
+        #$decodedUri = Sabre_DAV_URLUtil::decodePath($server->getRequestUri());
+        #$baseUri = substr($decodedUri, 0, strpos($decodedUri, 'carddav/') + strlen('carddav/'));
+        $server->setBaseUri('/');
         
         #$lockBackend = new Sabre_DAV_Locks_Backend_FS('/var/www/phpfcgi/cache');
         #$lockPlugin = new Sabre_DAV_Locks_Plugin($lockBackend);
@@ -71,6 +71,7 @@ class Tinebase_Server_CardDav implements Tinebase_Server_Interface
         
         $server->addPlugin(new Sabre_DAV_Browser_Plugin());
         $server->addPlugin(new Sabre_CardDAV_Plugin());
+        $server->addPlugin(new Sabre_CalDAV_Plugin());
         
         $server->exec();
     }
