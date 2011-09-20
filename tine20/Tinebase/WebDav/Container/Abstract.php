@@ -13,10 +13,10 @@
 /**
  * class to handle containers in CardDAV tree
  *
- * @package     Calendar
- * @subpackage  Frontend
+ * @package     Tinebase
+ * @subpackage  WebDAV
  */
-class Addressbook_Frontend_WebDAV_Container extends Sabre_DAV_Collection implements Sabre_CardDAV_IAddressBook, Sabre_DAV_IProperties, Sabre_DAVACL_IACL
+abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection implements Sabre_DAV_IProperties, Sabre_DAVACL_IACL
 {
     /**
      * the current application object
