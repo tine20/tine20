@@ -12,11 +12,81 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
 {
     /**
      * update to 5.1
-     * - enum -> text
+     * - does nothing anymore
      */
     public function update_0()
     {
+        $this->setApplicationVersion('Tinebase', '5.1');
+    }
+    
+    /**
+     * update to 5.2
+     * - custom field config structure
+     */
+    public function update_1()
+    {
+        // create definition col
         $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>definition</name>
+                <type>text</type>
+            </field>');
+        $this->_backend->addCol('customfield_config', $declaration, 4);
+        
+        // fetch all custom field config
+        $stmt = $this->_db->query("SELECT * FROM `" . SQL_TABLE_PREFIX . "customfield_config`");
+        $cfConfigs = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        // xtype to datatype
+        $typeMap = array(
+            'textfield'                 => 'string',
+            'datefield'                 => 'Date',
+            'datetimefield'             => 'DateTime',
+            'extuxclearabledatefield'   => 'Date',
+            'customfieldsearchcombo'    => 'string',
+            'numberfield'               => 'int',
+            'checkbox'                  => 'bool'
+        );
+        
+        // fill definition col
+        foreach ($cfConfigs as $cfConfig) {
+            $definition = array(
+                'label'     => $cfConfig['label'],
+                'type'      => array_key_exists($cfConfig['type'], $typeMap) ? $typeMap[$cfConfig['type']] : 'string',
+                'length'    =>$cfConfig['length'], // validation like definiton
+                'uiconfig' => array(
+                    'xtype'          => $cfConfig['type'],
+                    'value_search'   => $cfConfig['value_search'],
+                    'group'          => $cfConfig['group'],
+                    'order'          => $cfConfig['order'],
+                )
+            );
+            
+            $this->_db->update(SQL_TABLE_PREFIX . 'customfield_config', array(
+                'definition' => json_encode($definition),
+            ), "`id` LIKE '{$cfConfig['id']}'");
+        }
+        
+        // drop unneded cols
+        $this->_backend->dropCol('customfield_config', 'label');
+        $this->_backend->dropCol('customfield_config', 'type');
+        $this->_backend->dropCol('customfield_config', 'length');
+        $this->_backend->dropCol('customfield_config', 'value_search');
+        $this->_backend->dropCol('customfield_config', 'group');
+        $this->_backend->dropCol('customfield_config', 'order');
+        
+        $this->setTableVersion('customfield_config', 5);
+        $this->setApplicationVersion('Tinebase', '5.2');
+    }
+
+    /**
+     * update to 5.3
+     * - enum fields -> text fields
+     * - moved from update 0 because there have been some small changes afterwards
+     */
+    public function update_2()
+    {
+                $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>status</name>
                 <type>text</type>
@@ -176,66 +246,6 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->_backend->alterCol('async_job', $declaration);
         $this->setTableVersion('async_job', 2);
         
-        $this->setApplicationVersion('Tinebase', '5.1');
-    }
-    
-    /**
-     * update to 5.2
-     * - custom field config structure
-     */
-    public function update_1()
-    {
-        // create definition col
-        $declaration = new Setup_Backend_Schema_Field_Xml('
-            <field>
-                <name>definition</name>
-                <type>text</type>
-            </field>');
-        $this->_backend->addCol('customfield_config', $declaration, 4);
-        
-        // fetch all custom field config
-        $stmt = $this->_db->query("SELECT * FROM `" . SQL_TABLE_PREFIX . "customfield_config`");
-        $cfConfigs = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-        // xtype to datatype
-        $typeMap = array(
-            'textfield'                 => 'string',
-            'datefield'                 => 'Date',
-            'datetimefield'             => 'DateTime',
-            'extuxclearabledatefield'   => 'Date',
-            'customfieldsearchcombo'    => 'string',
-            'numberfield'               => 'int',
-            'checkbox'                  => 'bool'
-        );
-        
-        // fill definition col
-        foreach ($cfConfigs as $cfConfig) {
-            $definition = array(
-                'label'     => $cfConfig['label'],
-                'type'      => array_key_exists($cfConfig['type'], $typeMap) ? $typeMap[$cfConfig['type']] : 'string',
-                'length'    =>$cfConfig['length'], // validation like definiton
-                'uiconfig' => array(
-                    'xtype'          => $cfConfig['type'],
-                    'value_search'   => $cfConfig['value_search'],
-                    'group'          => $cfConfig['group'],
-                    'order'          => $cfConfig['order'],
-                )
-            );
-            
-            $this->_db->update(SQL_TABLE_PREFIX . 'customfield_config', array(
-                'definition' => json_encode($definition),
-            ), "`id` LIKE '{$cfConfig['id']}'");
-        }
-        
-        // drop unneded cols
-        $this->_backend->dropCol('customfield_config', 'label');
-        $this->_backend->dropCol('customfield_config', 'type');
-        $this->_backend->dropCol('customfield_config', 'length');
-        $this->_backend->dropCol('customfield_config', 'value_search');
-        $this->_backend->dropCol('customfield_config', 'group');
-        $this->_backend->dropCol('customfield_config', 'order');
-        
-        $this->setTableVersion('customfield_config', 5);
-        $this->setApplicationVersion('Tinebase', '5.2');
+        $this->setApplicationVersion('Tinebase', '5.3');
     }
 }
