@@ -18,7 +18,7 @@
  * @package     Addressbook
  * @subpackage  Frontend
  */
-class Addressbook_Frontend_CardDAV_Card extends Sabre_DAV_File implements Sabre_CardDAV_ICard, Sabre_DAVACL_IACL
+class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabre_CardDAV_ICard, Sabre_DAVACL_IACL
 {
     /**
      * @var Addressbook_Model_Contact
