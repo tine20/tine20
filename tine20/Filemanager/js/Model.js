@@ -479,10 +479,8 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
      */
     updateNodeRecord : function(nodeData, nodeRecord) {
     	
-    	for(var field in nodeData) {
-    		
+    	for(var field in nodeData) { 		
     		nodeRecord.set(field, nodeData[field]);
-    		Tine.log.debug(field);
     	};
     	
     	return nodeRecord;
