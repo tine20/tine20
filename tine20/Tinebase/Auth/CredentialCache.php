@@ -221,7 +221,9 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
         if (Setup_Controller::getInstance()->isInstalled('Felamimail')) {
             // delete only records that are not related to email accounts
             $fmailIds = $this->_getFelamimailCredentialIds();
-            $where[] = $this->_db->quoteInto('id NOT IN (?)', $fmailIds);
+            if (! empty($fmailIds)) {
+                $where[] = $this->_db->quoteInto('id NOT IN (?)', $fmailIds);
+            }
         }
         
         $tableName = $this->getTablePrefix() . $this->getTableName();
