@@ -100,23 +100,6 @@ class Tinebase_WebDav_Collection extends Sabre_DAV_Collection implements Sabre_D
                 
                 break;
             
-            ## /accountLoginName/(personal|shared)/foldername
-            ## list events
-            #case 3:
-            #    $modelName = $this->_application->name . '_Model_' . $this->_model;
-            #    $controller = Tinebase_Core::getApplicationInstance($this->_application->name, $this->_model);
-            #    
-            #    try {
-            #        $object = $_name instanceof $modelName ? $_name : $controller->get(str_replace('.ics', '', $_name));
-            #    } catch (Tinebase_Exception_NotFound $tenf) {
-            #        throw new Sabre_DAV_Exception_FileNotFound('Object not found');
-            #    }
-            #    
-            #    $objectClass = $this->_application->name . '_Frontend_CalDAV_' . $this->_model;
-            #    return new $objectClass($object);
-            #    
-            #    break;
-                
             default:
                 throw new Sabre_DAV_Exception_FileNotFound('Child not found');
             
@@ -165,29 +148,6 @@ class Tinebase_WebDav_Collection extends Sabre_DAV_Collection implements Sabre_D
                 }
                 
                 break;
-                
-            ## /accountLoginName/(personal|shared)/foldername
-            ## list events
-            #case 3:
-            #    $container = Tinebase_Container::getInstance()->getContainerByName($this->_application->name, $pathParts[2], $pathParts[1]);
-            #    
-            #    $filterClass = $this->_application->name . '_Model_' . $this->_model . 'Filter';
-            #    $filter = new $filterClass(array(
-            #        array(
-            #            'field'     => 'container_id',
-            #            'operator'  => 'equals',
-            #            'value'     => $container->getId()
-            #        )
-            #    ));
-            #    
-            #    $controller = Tinebase_Core::getApplicationInstance($this->_application->name, $this->_model);
-            #    $objects = $controller->search($filter);
-            #    
-            #    foreach ($objects as $object) {
-            #        $children[] = $this->getChild($object);
-            #    }
-            #    break;
-            
         }
                 
         return $children;
