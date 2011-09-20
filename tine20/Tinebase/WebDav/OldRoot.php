@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  WebDav
  */
-class Tinebase_WebDav_Root extends Sabre_DAV_Directory 
+class Tinebase_WebDav_OldRoot extends Sabre_DAV_Directory 
 {
     const ROOT_NODE = 'webdav';
     
