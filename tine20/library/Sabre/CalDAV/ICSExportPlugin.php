@@ -53,7 +53,7 @@ class Sabre_CalDAV_ICSExportPlugin extends Sabre_DAV_ServerPlugin {
 
         $node = $this->server->tree->getNodeForPath($uri);
 
-        if (!($node instanceof Sabre_CalDAV_Calendar)) return;
+        if (!($node instanceof Sabre_CalDAV_ICalendar)) return;
 
         $this->server->httpResponse->setHeader('Content-Type','text/calendar');
         $this->server->httpResponse->sendStatus(200);
