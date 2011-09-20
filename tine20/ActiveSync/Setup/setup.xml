@@ -7,6 +7,7 @@
         <application>Addressbook</application>
         <application>Tasks</application>
         <application>Calendar</application>
+        <application>Felamimail</application>
     </depends>
     <tables>
         <table>
