@@ -593,6 +593,25 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * testCopyFileNodeToFileExistingCatchException
+     */
+    public function testCopyFileNodeToFileExistingCatchException()
+    {
+        $filesToCopy = $this->testCreateFileNodes();
+        $file1 = $filesToCopy[0];
+        
+        try {
+            $result = $this->_json->copyNodes(array($file1), array($file1), FALSE);
+        } catch (Filemanager_Exception_NodeExists $fene) {
+            $info = $fene->toArray();
+            $this->assertEquals(1, count($info['existingnodesinfo']));
+            return;
+        }
+        
+        $this->fail('An expected exception has not been raised.');
+    }
+    
+    /**
      * testMoveFolderNodesToFolder
      */
     public function testMoveFolderNodesToFolder()

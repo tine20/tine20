@@ -297,15 +297,48 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     public function createNodes($_filenames, $_type, $_tempFileIds = array(), $_forceOverwrite = FALSE)
     {
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        $nodeExistsException = NULL;
         
         foreach ($_filenames as $idx => $filename) {
             $tempFileId = (isset($_tempFileIds[$idx])) ? $_tempFileIds[$idx] : NULL;
-            $node = $this->_createNode($filename, $_type, $tempFileId, $_forceOverwrite);
-            $result->addRecord($node);
+
+            try {
+                $node = $this->_createNode($filename, $_type, $tempFileId, $_forceOverwrite);
+                $result->addRecord($node);
+            } catch (Filemanager_Exception_NodeExists $fene) {
+                $nodeExistsException = $this->_handleNodeExistsException($fene, $nodeExistsException);
+            }
         }
+
+        if ($nodeExistsException) {
+            throw $nodeExistsException;
+        }            
         
         return $result;
     }
+    
+    /**
+     * collect information of a Filemanager_Exception_NodeExists in a "parent" exception
+     * 
+     * @param Filemanager_Exception_NodeExists $_fene
+     * @param Filemanager_Exception_NodeExists|NULL $_parentNodeExistsException
+     */
+    protected function _handleNodeExistsException($_fene, $_parentNodeExistsException = NULL)
+    {
+        // collect all nodes that already exist and add them to exception info
+        if (! $_parentNodeExistsException) {
+            $_parentNodeExistsException = new Filemanager_Exception_NodeExists();
+        }
+        
+        $nodesInfo = $_fene->getExistingNodesInfo();
+        if (count($nodesInfo) > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Adding node info to exception.');
+            $_parentNodeExistsException->addExistingNodeInfo($nodesInfo->getFirstRecord());
+        }
+        
+        return $_parentNodeExistsException;
+    }    
     
     /**
      * create new node
@@ -565,6 +598,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     protected function _copyOrMoveNodes($_sourceFilenames, $_destinationFilenames, $_action, $_forceOverwrite = FALSE)
     {
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        $nodeExistsException = NULL;
         
         foreach ($_sourceFilenames as $idx => $source) {
             $sourcePathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($source));
@@ -578,26 +612,13 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 }
                 $result->addRecord($node);
             } catch (Filemanager_Exception_NodeExists $fene) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' Node exists: ' . $destinationPathRecord->statpath);
-                
-                // collect all nodes that already exist and add them to exception info
-                if (! isset($nodeExistsException)) {
-                    $nodeExistsException = new Filemanager_Exception_NodeExists();
-                }
-                
-                $nodesInfo = $fene->getExistingNodesInfo();
-                if (count($nodesInfo) > 0) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                        . ' Adding node info to exception.');
-                    $nodeExistsException->addExistingNodeInfo($nodesInfo->getFirstRecord());
-                }
+                $nodeExistsException = $this->_handleNodeExistsException($fene, $nodeExistsException);
             }
         }
         
         $this->resolveContainerAndAddPath($result, $destinationPathRecord->getParent());
         
-        if (isset($nodeExistsException)) {
+        if ($nodeExistsException) {
             // @todo add correctly moved/copied files here?
             throw $nodeExistsException;
         }
