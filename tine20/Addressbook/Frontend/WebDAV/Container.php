@@ -31,7 +31,7 @@ class Addressbook_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
         $properties = array(
             '{http://calendarserver.org/ns/}getctag' => time(),
             'id'                => $this->_container->getId(),
-            'uri'               => $this->_container->name,
+            'uri'               => $this->_container->getId(),
             #'principaluri'      => $principalUri,
             #'{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}addressbook-description' => $this->_container->description,
             '{DAV:}displayname' => $this->_container->name,

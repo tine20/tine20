@@ -42,7 +42,7 @@ class Tinebase_WebDav_Collection extends Sabre_DAV_Collection implements Sabre_D
      */
     public function __construct($_application, $_model, $_path = null)
     {
-        $this->_path = (!empty($_path)) ? $_path : Tinebase_Core::getUser()->accountLoginName;
+        $this->_path = (!empty($_path)) ? $_path : Tinebase_Core::getUser()->contact_id;
         
         $this->_application = $_application instanceof Tinebase_Model_Application ? $_application : Tinebase_Application::getInstance()->getApplicationByName($_application);
         $this->_model       = $_model;
@@ -78,7 +78,7 @@ class Tinebase_WebDav_Collection extends Sabre_DAV_Collection implements Sabre_D
         $pathParts = explode('/', trim($this->_path, '/'));
         #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' part count: ' . count($pathParts) . ' ' . print_r($pathParts, true));
         switch(count($pathParts)) {
-            # path == /accountLoginName
+            # path == /account->contact_id
             # list personal and shared folders
             case 1:
                 return new self($this->_application, $this->_model, $this->_path . '/' . $_name);
@@ -89,7 +89,7 @@ class Tinebase_WebDav_Collection extends Sabre_DAV_Collection implements Sabre_D
             # list container
             case 2;
                 try {
-                    $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerByName($this->_application->name, $_name, $pathParts[1]);
+                    $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->get($_name);
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
                 }
@@ -123,7 +123,7 @@ class Tinebase_WebDav_Collection extends Sabre_DAV_Collection implements Sabre_D
         $children = array();
         
         switch(count($pathParts)) {
-            # path == /accountLoginName
+            # path == /account->contact_id
             # list personal and shared folder
             case 1:
                 $children[] = $this->getChild(Tinebase_Model_Container::TYPE_PERSONAL);
@@ -230,26 +230,39 @@ class Tinebase_WebDav_Collection extends Sabre_DAV_Collection implements Sabre_D
      */
     public function getProperties($requestedProperties) 
     {
-        list(, $basename) = Sabre_DAV_URLUtil::splitPath($this->_path);
-        $properties = array(
-            '{http://calendarserver.org/ns/}getctag' => 1,
-            'id'                => $basename,
-            'uri'               => $basename,
-            #'principaluri'      => $principalUri,
-            #'{DAV:}displayname' => $basename,
-            '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre_CalDAV_Property_SupportedCalendarComponentSet(array('VEVENT')),
-        );
+        $pathParts = explode('/', trim($this->_path, '/'));
         
-        list($accountName, $folderType, $folderName) = Sabre_DAV_URLUtil::splitPath($this->_path);
-        if (!empty($folderName)) {
-            $container = Tinebase_Container::getInstance()->getContainerByName($this->_application->name, $folderName, $folderType);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' part count: ' . count($pathParts) . ' ' . print_r($pathParts, true));
+        
+        $children = array();
+        
+        list(, $basename) = Sabre_DAV_URLUtil::splitPath($this->_path);
+        
+        switch(count($pathParts)) {
+            # path == /accountLoginName
+            # list personal and shared folder
+            case 1:
+                $properties = array(
+                    '{http://calendarserver.org/ns/}getctag' => 1,
+                    'id'                => $basename,
+                    'uri'               => $basename,
+                    #'principaluri'      => $principalUri,
+                    '{DAV:}displayname' => Tinebase_Core::getUser()->accountLoginName,
+                );
+                break;
             
-            $properties['{http://calendarserver.org/ns/}getctag'] = time();
-            $properties['id']                = $container->getId();
-            $properties['uri']               = $container->name;
-            #'principaluri'      => $principalUri,
-            $properties['{DAV:}displayname'] = $container->name;
-            $properties['{http://apple.com/ns/ical/}calendar-color'] = $container->color;
+            # path == /accountLoginName/(personal|shared)
+            # list container
+            case 2:
+                $properties = array(
+                    '{http://calendarserver.org/ns/}getctag' => 1,
+                    'id'                => $basename,
+                    'uri'               => $basename,
+                    #'principaluri'      => $principalUri,
+                    '{DAV:}displayname' => $basename,
+                );
+                    
+                break;
         }
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' path: ' . $this->_path . ' ' . print_r($requestedProperties, true));
@@ -258,15 +271,6 @@ class Tinebase_WebDav_Collection extends Sabre_DAV_Collection implements Sabre_D
         $response = array();
     
         foreach($requestedProperties as $prop) switch($prop) {
-    
-            case '{urn:ietf:params:xml:ns:caldav}supported-calendar-data' :
-                $response[$prop] = new Sabre_CalDAV_Property_SupportedCalendarData();
-                break;
-                
-            case '{urn:ietf:params:xml:ns:caldav}supported-collation-set' :
-                $response[$prop] =  new Sabre_CalDAV_Property_SupportedCollationSet();
-                break;
-                
             case '{DAV:}owner' :
                 $response[$prop] = new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF,$this->calendarInfo['principaluri']);
                 break;
