@@ -216,7 +216,7 @@ class Tinebase_Relations
         }
         
         foreach ($_relations as $relation) {
-            if (empty($relation->related_record) || $relation->related_record instanceof  $relation->related_model) {
+            if (empty($relation->related_record) || $relation->related_record instanceof $relation->related_model) {
                 continue;
             }
             
