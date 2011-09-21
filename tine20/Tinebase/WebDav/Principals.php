@@ -27,7 +27,7 @@ class Tinebase_WebDav_Principals implements Sabre_DAVACL_IPrincipalBackend
         $principals = array();
         
         $principals[] = array(
-            'uri'                                   => 'principals/users/' . Tinebase_Core::getUser()->accountLoginName,
+            'uri'                                   => 'principals/users/' . Tinebase_Core::getUser()->contact_id,
             '{http://sabredav.org/ns}email-address' => Tinebase_Core::getUser()->accountEmailAddress,
             '{DAV:}displayname'                     => Tinebase_Core::getUser()->accountDisplayName
         );
@@ -42,8 +42,7 @@ class Tinebase_WebDav_Principals implements Sabre_DAVACL_IPrincipalBackend
     public function getPrincipalByPath($path) 
     {
         return array(
-            'id'                                    => Tinebase_Core::getUser()->getId(),
-            'uri'                                   => 'principals/users/' . Tinebase_Core::getUser()->accountLoginName,
+            'uri'                                   => 'principals/users/' . Tinebase_Core::getUser()->contact_id,
             '{http://sabredav.org/ns}email-address' => Tinebase_Core::getUser()->accountEmailAddress,
             '{DAV:}displayname'                     => Tinebase_Core::getUser()->accountDisplayName
         );
@@ -74,27 +73,5 @@ class Tinebase_WebDav_Principals implements Sabre_DAVACL_IPrincipalBackend
     public function setGroupMemberSet($principal, array $members) 
     {
         // do nothing
-    }
-    
-    /**
-     * Returns information about the currently logged in user.
-     *
-     * If nobody is currently logged in, this method should return null.
-     * 
-     * @return array|null
-     */
-    public function getCurrentUser()
-    {
-        return Tinebase_Core::getUser()->accountLoginName;
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see Sabre_DAV_Auth_IBackend::authenticate()
-     */
-    public function authenticate(Sabre_DAV_Server $_server, $_realm) 
-    {
-        // user got authenticated already
-        return true;
     }
 }
