@@ -179,8 +179,10 @@ class Tinebase_WebDav_Collection extends Sabre_DAV_Collection implements Sabre_D
      * @todo implement real logic
      * @return array
      */
-    public function getACL() {
-    
+    public function getACL() 
+    {
+        return null;
+        
         return array(
             array(
                         'privilege' => '{DAV:}read',
