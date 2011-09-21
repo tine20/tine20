@@ -129,8 +129,10 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
      * @todo implement real logic
      * @return array
      */
-    public function getACL() {
-    
+    public function getACL() 
+    {
+        return null;
+        
         return array(
             array(
                         'privilege' => '{DAV:}read',
