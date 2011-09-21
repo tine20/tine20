@@ -247,7 +247,7 @@ class Tinebase_WebDav_Collection extends Sabre_DAV_Collection implements Sabre_D
                     'id'                => $basename,
                     'uri'               => $basename,
                     #'principaluri'      => $principalUri,
-                    '{DAV:}displayname' => Tinebase_Core::getUser()->accountLoginName,
+                    '{DAV:}displayname' => Tinebase_Core::getUser()->accountDisplayName ,
                 );
                 break;
             
