@@ -39,11 +39,11 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
     protected $_modlogActive = FALSE;
     
     /**
-     * only do revision counting if this is TRUE
+     * keep old revisions in tree_filerevisions table
      * 
      * @var boolean
      */
-    protected $_updateRevisionCount = FALSE;
+    protected $_keepOldRevisions = FALSE;
     
     /**
      * get the basic select object to fetch records from the database
@@ -128,35 +128,39 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         if ($_record->type != Tinebase_Model_Tree_FileObject::TYPE_FILE || empty($_record->hash)) {
             return;
         }
-        $data = null;
+        $createRevision = $this->_keepOldRevisions || $_mode === 'create';
+        $updateRevision = FALSE;
         
-        if ($_mode == 'create') {
-            $data = array(
-                'id'            => $_record->getId(),
-                'creation_time' => Tinebase_DateTime::now()->toString(Tinebase_Record_Abstract::ISO8601LONG),
-            	'created_by'    => Tinebase_Core::getUser()->getId(),
-                'hash'          => $_record->hash,
-                'size'          => $_record->size
-            );
-        } else {
+        if ($_mode !== 'create') {
             // select latest hash of id and compare with new hash
             $currentRecord = $this->get($_record);
-            if ($currentRecord->hash !== $_record->hash) {
-                $data = array(
-                    'id'            => $_record->getId(),
-                    'creation_time' => Tinebase_DateTime::now()->toString(Tinebase_Record_Abstract::ISO8601LONG),
-                	'created_by'    => Tinebase_Core::getUser()->getId(),
-                    'hash'          => $_record->hash,
-                    'size'          => $_record->size
-                );
+            if ($currentRecord->hash !== NULL) {
+                $updateRevision = ($currentRecord->hash !== $_record->hash);
+            } else {
+                $createRevision = TRUE;
             }
         }
         
-        if ($data !== null) {
-            if ($this->_updateRevisionCount) {
-                $data['revision'] = $this->_getNextRevision($_record);
-            }
-            $this->_db->insert($this->_tablePrefix . 'tree_filerevisions', $data);
+        if (! $createRevision && ! $updateRevision) {
+            return;
         }
-    }    
+
+        $data = array(
+            'creation_time' => Tinebase_DateTime::now()->toString(Tinebase_Record_Abstract::ISO8601LONG),
+            'created_by'    => Tinebase_Core::getUser()->getId(),
+            'hash'          => $_record->hash,
+            'size'          => $_record->size,
+            'revision'      => $this->_getNextRevision($_record),
+        );
+            
+        if ($createRevision) {
+            $data['id'] = $_record->getId();
+            $this->_db->insert($this->_tablePrefix . 'tree_filerevisions', $data);
+        } else if ($updateRevision) {
+            $where = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_record->getId()),
+            );
+            $this->_db->update($this->_tablePrefix . 'tree_filerevisions', $data, $where);
+        }
+    }
 }
