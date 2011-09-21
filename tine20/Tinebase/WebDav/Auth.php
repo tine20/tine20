@@ -24,7 +24,7 @@ class Tinebase_WebDav_Auth implements Sabre_DAV_Auth_IBackend
      */
     public function getCurrentUser()
     {
-        return Tinebase_Core::getUser()->accountLoginName;
+        return Tinebase_Core::getUser()->contact_id;
     }
     
     /**
