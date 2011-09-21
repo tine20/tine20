@@ -140,8 +140,10 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      * @todo add the real logic
      * @return array 
      */
-    public function getACL() {
-
+    public function getACL() 
+    {
+        return null;
+        
         return array(
             array(
                 'privilege' => '{DAV:}read',
