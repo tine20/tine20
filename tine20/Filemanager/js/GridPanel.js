@@ -700,8 +700,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var files = record.get(this.filesProperty);
             for (var i = 0; i < files.length; i += 1) {
                 var file = new Ext.ux.file.Upload.file(files[i]);
-                file.data.status = 'complete';
-                file.data.nodeRecord = new Tine.Filemanager.Model.Node(file.data);
+                file.set('status', 'complete');
+                file.set('nodeRecord', new Tine.Filemanager.Model.Node(file.data));
                 this.store.add(file);
             }
         }

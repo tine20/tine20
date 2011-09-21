@@ -368,7 +368,8 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             	}
 
             	fileRecord = Tine.Filemanager.fileRecordBackend.updateNodeRecord(nodeData[i], fileRecord);
-
+//            	var nodeRecord = new Tine.Filemanager.Model.Node(nodeData[i]);
+            	
             	gridStore.add(fileRecord);
 
             }           
@@ -429,6 +430,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 	}
 
                 	fileRecord = Tine.Filemanager.fileRecordBackend.updateNodeRecord(nodeData[i], fileRecord);
+//                	var nodeRecord = new Tine.Filemanager.Model.Node(nodeData[i]);
                 	
                 	gridStore.add(fileRecord);
                     
