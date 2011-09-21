@@ -70,11 +70,11 @@ class Tinebase_Server_CardDav implements Tinebase_Server_Interface
         #$server->addPlugin($lockPlugin);
         
         $authPlugin = new Sabre_DAV_Auth_Plugin(new Tinebase_WebDav_Auth(), null);
-        $this->addPlugin($authPlugin);
+        $server->addPlugin($authPlugin);
         
         $aclPlugin = new Sabre_DAVACL_Plugin();
-        $aclPlugin->defaultUsernamePath = 'principals/user'
-        $this->addPlugin($aclPlugin);
+        $aclPlugin->defaultUsernamePath = 'principals/user';
+        $server->addPlugin($aclPlugin);
         
         $server->addPlugin(new Sabre_DAV_Browser_Plugin());
         $server->addPlugin(new Sabre_CardDAV_Plugin());
