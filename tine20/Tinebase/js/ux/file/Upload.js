@@ -417,7 +417,6 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         	this.onUploadFail(responseObj, options, fileRecord);
         }
 
-        // TODO: remove??
         this.fileRecord.beginEdit();
         this.fileRecord.set('tempFile', responseObj.tempFile);
         this.fileRecord.set('size', 0);
