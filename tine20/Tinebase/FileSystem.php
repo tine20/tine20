@@ -136,10 +136,17 @@ class Tinebase_FileSystem
     
     /**
      * clear stat cache
+     * 
+     * @param string $_path if given, only remove this path from statcache
      */
-    public function clearStatCache()
+    public function clearStatCache($_path = NULL)
     {
-        $this->_statCache = array();
+        if ($_path !== NULL) {
+            unset($this->_statCache[$_path]);
+        } else {
+            // clear the whole cache
+            $this->_statCache = array();
+        }
     }
     
     /**
