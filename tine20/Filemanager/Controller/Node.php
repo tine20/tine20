@@ -416,6 +416,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                     if ($tempData) {
                         stream_copy_to_stream($tempData, $handle);
                         fclose($tempData);
+                        $this->_backend->clearStatCache($_statpath);
                     } else {
                         throw new Filemanager_Exception('Could not read tempfile ' . $tempFile->path);
                     }

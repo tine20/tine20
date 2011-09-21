@@ -408,11 +408,13 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->_objects['paths'][] = Filemanager_Controller_Node::getInstance()->addBasePath($sharedContainerNode['path']);
         
+        $filepath = $sharedContainerNode['path'] . '/test.txt';
+        // create empty file first (like the js frontend does)
+        $result = $this->_json->createNode($filepath, Tinebase_Model_Tree_Node::TYPE_FILE, array(), FALSE);
+
         $tempFileBackend = new Tinebase_TempFile();
         $tempFile = $tempFileBackend->createTempFile(dirname(dirname(__FILE__)) . '/files/test.txt');
-        
-        $filepath = $sharedContainerNode['path'] . '/test.txt';
-        $result = $this->_json->createNode($filepath, Tinebase_Model_Tree_Node::TYPE_FILE, $tempFile->getId(), FALSE);
+        $result = $this->_json->createNode($filepath, Tinebase_Model_Tree_Node::TYPE_FILE, $tempFile->getId(), TRUE);
         
         $this->assertEquals('text/plain', $result['contenttype']);
         $this->assertEquals(17, $result['size']);
