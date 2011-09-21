@@ -128,13 +128,13 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
     else {
         metadata.css = 'x-tinebase-typeoctet';
 
-        var imageFilePath =  record.get('contenttype');
-        
-        if(imageFilePath) {
-        
-        	imageFilePath = 'images/oxygen/16x16/mimetypes/' + imageFilePath.replace("/", "-") + '.png';
-        	metadata.attr = 'style="background-image:url(\'' + imageFilePath + '\')  !important;"';
-        	    
+//        var imageFilePath =  record.get('contenttype');
+//        
+//        if(imageFilePath) {
+//        
+//        	imageFilePath = 'images/oxygen/16x16/mimetypes/' + imageFilePath.replace("/", "-") + '.png';
+//        	metadata.attr = 'style="background-image:url(\'' + imageFilePath + '\')  !important;"';
+//        	    
         	
 //            var img = document.createElement('img');
 //            img.src = imageFilePath;
@@ -142,7 +142,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
 ////            	metadata.attr = 'style="background-image:url(\'' + imageFilePath + '\')  !important;"';
 //            	Tine.log.debug("loaded: " + imageFilePath);
 //            }
-        }
+//        }
                
     }
     
