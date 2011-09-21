@@ -201,7 +201,7 @@ class Sabre_DAV_Server {
             $this->invokeMethod($this->httpRequest->getMethod(), $this->getRequestUri());
 
         } catch (Exception $e) {
-
+error_log($e);
             $DOM = new DOMDocument('1.0','utf-8');
             $DOM->formatOutput = true;
 
