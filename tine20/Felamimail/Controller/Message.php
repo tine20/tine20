@@ -475,7 +475,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     public static function decodingErrorHandler($severity, $errstr, $errfile, $errline)
     {
-        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
+        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
         
         throw new Felamimail_Exception($errstr);
     }
