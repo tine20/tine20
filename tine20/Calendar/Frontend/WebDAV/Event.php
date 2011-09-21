@@ -140,8 +140,10 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      * @todo add the real logic
      * @return array 
      */
-    public function getACL() {
-
+    public function getACL() 
+    {
+        return null;
+        
         return array(
             array(
                 'privilege' => '{DAV:}read',
