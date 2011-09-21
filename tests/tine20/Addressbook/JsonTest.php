@@ -197,24 +197,34 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function _addContact()
     {
-        $note = array(
-            'note_type_id'      => 1,
-            'note'              => 'phpunit test note',            
-        );
-        
-        $newContactData = array(
-            'n_family'          => 'PHPUNIT',
-            'container_id'      => $this->container->id,
-            'notes'             => array($note),
-            'tel_cell_private'  => '+49TELCELLPRIVATE',
-        );        
-
+        $newContactData = $this->_getContactData();
         $newContact = $this->_instance->saveContact($newContactData);
         $this->assertEquals($newContactData['n_family'], $newContact['n_family'], 'Adding contact failed');
         
         $this->_contactIdsToDelete[] = $newContact['id'];
         
         return $newContact;
+    }
+    
+    /**
+     * get contact data
+     * 
+     * @return array
+     */
+    protected function _getContactData()
+    {
+        $note = array(
+            'note_type_id'      => 1,
+            'note'              => 'phpunit test note',            
+        );
+        
+        return array(
+            'n_family'          => 'PHPUNIT',
+            'org_name'          => Tinebase_Record_Abstract::generateUID(),
+            'container_id'      => $this->container->id,
+            'notes'             => array($note),
+            'tel_cell_private'  => '+49TELCELLPRIVATE',
+        );
     }
     
     /**
@@ -392,4 +402,58 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $personalTagToDelete = Tinebase_Tags::getInstance()->getTagByName($personalTagName);
         Tinebase_Tags::getInstance()->deleteTags(array($sharedTagToDelete->getId(), $personalTagToDelete->getId()));
     }    
-}		
+
+    /**
+     * test project relation filter
+     * 
+     * @todo add another contact + project that should not match
+     */
+    public function testProjectRelationFilter()
+    {
+        // create and link project + contacts
+        $project = $this->_getProjectData();
+        $contact = $this->_getContactData();
+        $project['relations'] = array(
+            array(
+                'own_model'              => 'Projects_Model_Project',
+                'own_backend'            => 'Sql',
+                'own_id'                 => 0,
+                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'type'                   => 'COWORKER',
+                'related_record'         => $contact,
+                'related_id'             => NULL,
+                'related_model'          => 'Addressbook_Model_Contact',
+                'remark'                 => NULL,
+            )
+        );
+        $projectJson = new Projects_Frontend_Json();
+        $newProject = $projectJson->saveProject($project);
+        
+        $closedStatus = Projects_Config::getInstance()->get(Projects_Config::PROJECT_STATUS)->records->filter('is_open', 0);
+        $filter = array(
+            array('field' => 'project', 'operator' => 'AND', 'value' => array(
+                array('field' => "relation_type", "operator" => "equals", "value" => "COWORKER"),
+                array('field' => "status",        "operator" => "notin",  "value" => $closedStatus->getId()),
+            )),
+            array('field' => 'org_name', 'operator' => 'equals', 'value' => $contact['org_name'])
+        );
+        $result = $this->_instance->searchContacts($filter, array());
+        
+        $this->assertEquals(1, $result['totalcount']);
+        $this->assertEquals($contact['org_name'], $result['results'][0]['org_name']);
+    }
+    
+    /**
+     * get Project
+     *
+     * @return array
+     */
+    protected function _getProjectData()
+    {
+        return array(
+            'title'         => Tinebase_Record_Abstract::generateUID(),
+            'description'   => 'blabla',
+            'status'        => 'IN-PROCESS',
+        );
+    }
+}
