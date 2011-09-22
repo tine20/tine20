@@ -828,9 +828,15 @@ class Tinebase_Core
         if ((bool) $config->profiler) {
             $profiler = Zend_Db_Table::getDefaultAdapter()->getProfiler();
 
+			if (! empty($config->profilerFilterElapsedSecs)) {
+				$profiler->setFilterElapsedSecs($config->profilerFilterElapsedSecs);	
+			}
+
             $data = array(
                 'totalNumQueries' => $profiler->getTotalNumQueries(),
-                'totalElapsedSec' => $profiler->getTotalElapsedSecs()
+                'totalElapsedSec' => $profiler->getTotalElapsedSecs(),
+                'longestTime'  	  => 0,
+				'longestQuery' 	  => ''
             );
 
             if ((bool) $config->queryProfiles) {
@@ -840,6 +846,11 @@ class Tinebase_Core
                         'query'       => $profile->getQuery(),
                         'elapsedSecs' => $profile->getElapsedSecs(),
                     );
+                    
+                    if ($profile->getElapsedSecs() > $data['longestTime']) {
+				        $data['longestTime']  = $profile->getElapsedSecs();
+				        $data['longestQuery'] = $profile->getQuery();
+				    }
                 }
             }
 
