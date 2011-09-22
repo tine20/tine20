@@ -131,7 +131,6 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             }
             grid.getStore().reload();
 //            this.fireEvent('containeradd', nodeData);
-            Ext.MessageBox.hide();
         };
         
         return this.doXHTTPRequest(options);

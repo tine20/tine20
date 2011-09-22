@@ -42,7 +42,6 @@ Tine.Filemanager.GridContextMenu = {
                             Ext.Msg.alert(String.format(_('Not renamed {0}'), this.nodeName), String.format(_('You have to supply a {0} name!'), this.nodeName));
                             return;
                         }
-//                        Ext.MessageBox.wait(_('Please wait'), String.format(_('Updating {0} "{1}"'), this.nodeName, nodeText));
 
                         var params = {
                                 method: this.backend + '.rename' + this.backendModel,
