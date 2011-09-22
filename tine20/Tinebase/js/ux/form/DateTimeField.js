@@ -74,8 +74,12 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         }
         
         var date = this.dateField.getValue();
+        var time = this.timeField.getValue();
+        
         // this is odd, why doesn't Ext.form.TimeField a Date datatype?
-        var time = Date.parseDate(this.timeField.getValue(), this.timeField.format);
+        if (! Ext.isDate(time)) {
+            time = Date.parseDate(time, this.timeField.format);
+        }
         
         if (Ext.isDate(date)) {
             date = this.combineDateTime(date, time);
