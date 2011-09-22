@@ -247,7 +247,8 @@
             }
             
             function main() {
-            	$imgPath = '${project.basedir}/images/oxygen/16x16/mimetypes/';
+            	$relatedImgPath = '/images/oxygen/16x16/mimetypes/';
+            	$imgPath = '${project.basedir}'.$relatedImgPath;
             	if (! file_exists($imgPath) || ! is_dir($imgPath)) {
             		echo 'Mimetype images no found!';
             		return;
@@ -257,7 +258,11 @@
     			// öffnen des Verzeichnisses
     			if ( $handle = opendir($imgPath) ) {
     			
-    				$styleSheet = fopen('mimetypes.css', 'w+');
+    				$styleSheet = fopen('Tinebase/css/mimetypes.css', 'w+');
+                	
+                	fwrite($styleSheet, ".standardFileClass {\n");
+        					fwrite($styleSheet, "    background-image: url(".$relatedImgPath."application-octet-stream.png) !important;\n");
+        					fwrite($styleSheet, "}\n\n");
                 
        			    // einlesen der Verzeichnisses
         			while (($file = readdir($handle)) !== false)
@@ -266,7 +271,10 @@
         				
         				$addToStyle = strcmp($fileName, "..") + strcmp($fileName, "..");
         				if($addToStyle > 0) {
-        					fwrite($styleSheet, $fileName."\n");
+        				
+        					fwrite($styleSheet, ".".$fileName." {\n");
+        					fwrite($styleSheet, "    background-image: url(".$relatedImgPath.$file.") !important;\n");
+        					fwrite($styleSheet, "}\n\n");
         				}
 			        }
         			fclose($styleSheet);
