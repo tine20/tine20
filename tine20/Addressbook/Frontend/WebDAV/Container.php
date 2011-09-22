@@ -34,7 +34,7 @@ class Addressbook_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
             'uri'               => $this->_container->getId(),
             #'principaluri'      => $principalUri,
             #'{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}addressbook-description' => $this->_container->description,
-            '{DAV:}displayname' => $this->_container->name,
+            '{DAV:}displayname' => $this->_container->type == Tinebase_Model_Container::TYPE_SHARED ? $this->_container->name . ' (shared)' : $this->_container->name,
         );
         
         $response = array();
