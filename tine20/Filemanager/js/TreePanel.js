@@ -758,7 +758,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         if(!targetNode.attributes.nodeRecord.isDropFilesAllowed()) {
             Ext.MessageBox.alert(
                     _('Upload Failed'), 
-                    app.i18n._('Dropping on this folder not allowed!')
+                    app.i18n._('Putting files in this folder is not allowed!')
                 ).setIcon(Ext.MessageBox.ERROR);
             
             return;

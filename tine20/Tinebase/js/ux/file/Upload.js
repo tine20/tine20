@@ -750,7 +750,7 @@ Ext.ux.file.Upload.file.getFileData = function(file) {
 
 Ext.ux.file.Upload.fileSize = function (value, metadata, record) {
     
-  if (!value || record.get('type') == 'folder') {
+  if (!value || (record && record.get('type') == 'folder')) {
       return '';
   }
   else if (value < 1) {
