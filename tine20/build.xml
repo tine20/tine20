@@ -157,6 +157,13 @@
     </target>
     
     <!-- ============================================  -->
+    <!-- Target: mimetypes                                 -->
+    <!-- ============================================  -->
+    <target name="mimetypes">
+        <build-mimetypes appName="${name}" />
+    </target>
+    
+    <!-- ============================================  -->
     <!-- Task: init                                    -->
     <!-- ============================================  -->
     <adhoc-task name="init"><![CDATA[
@@ -226,6 +233,51 @@
             }
         }
     ]]></adhoc-task>
+    
+    
+    <!-- ============================================  -->
+    <!-- Task: build-mimetypes                         -->
+    <!-- ============================================  -->
+    <adhoc-task name="build-mimetypes"><![CDATA[
+        class mimetypeTask extends Task {
+            private $appName;
+        
+            function setAppName($appName) {
+                $this->appName = $appName;
+            }
+            
+            function main() {
+            	$imgPath = '${project.basedir}/images/oxygen/16x16/mimetypes/';
+            	if (! file_exists($imgPath) || ! is_dir($imgPath)) {
+            		echo 'Mimetype images no found!';
+            		return;
+                }
+ 
+ 				
+    			// öffnen des Verzeichnisses
+    			if ( $handle = opendir($imgPath) ) {
+    			
+    				$styleSheet = fopen('mimetypes.css', 'w+');
+                
+       			    // einlesen der Verzeichnisses
+        			while (($file = readdir($handle)) !== false)
+        			{	
+        				$fileName = basename($file, '.png');
+        				
+        				$addToStyle = strcmp($fileName, "..") + strcmp($fileName, "..");
+        				if($addToStyle > 0) {
+        					fwrite($styleSheet, $fileName."\n");
+        				}
+			        }
+        			fclose($styleSheet);
+        			closedir($handle);
+    			}
+
+        	}	
+        }
+    ]]></adhoc-task>
+    
+    
     
     <!-- ============================================  -->
     <!-- Task: manifest-build                          -->
