@@ -79,15 +79,8 @@ class Tinebase_WebDav_Collection extends Sabre_DAV_Collection implements Sabre_D
         #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' part count: ' . count($pathParts) . ' ' . print_r($pathParts, true));
         switch(count($pathParts)) {
             # path == /account->contact_id
-            # list personal and shared folders
-            case 1:
-                return new self($this->_application, $this->_model, $this->_path . '/' . $_name);
-                
-                break;
-            
-            # path == /accountLoginName/(personal|shared)
             # list container
-            case 2;
+            case 1:
                 try {
                     $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->get($_name);
                 } catch (Tinebase_Exception_NotFound $tenf) {
@@ -124,25 +117,14 @@ class Tinebase_WebDav_Collection extends Sabre_DAV_Collection implements Sabre_D
         
         switch(count($pathParts)) {
             # path == /account->contact_id
-            # list personal and shared folder
-            case 1:
-                $children[] = $this->getChild(Tinebase_Model_Container::TYPE_PERSONAL);
-                $children[] = $this->getChild(Tinebase_Model_Container::TYPE_SHARED);
-                break;
-            
-            # path == /accountLoginName/(personal|shared)
             # list container
-            case 2:
-                switch ($pathParts[1]) {
-                    case Tinebase_Model_Container::TYPE_PERSONAL:
-                        $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_application->name, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_READ);
-                        break;
-                        
-                    case Tinebase_Model_Container::TYPE_SHARED:
-                        $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_application->name, Tinebase_Model_Grants::GRANT_READ);
-                        break;
+            case 1:
+                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_application->name, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_READ);
+                foreach ($containers as $container) {
+                    $children[] = $this->getChild($container);
                 }
-                
+            
+                $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_application->name, Tinebase_Model_Grants::GRANT_READ);
                 foreach ($containers as $container) {
                     $children[] = $this->getChild($container);
                 }
@@ -252,29 +234,16 @@ class Tinebase_WebDav_Collection extends Sabre_DAV_Collection implements Sabre_D
                     '{DAV:}displayname' => Tinebase_Core::getUser()->accountDisplayName ,
                 );
                 break;
-            
-            # path == /accountLoginName/(personal|shared)
-            # list container
-            case 2:
-                $properties = array(
-                    '{http://calendarserver.org/ns/}getctag' => 1,
-                    'id'                => $basename,
-                    'uri'               => $basename,
-                    #'principaluri'      => $principalUri,
-                    '{DAV:}displayname' => $basename,
-                );
-                    
-                break;
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' path: ' . $this->_path . ' ' . print_r($requestedProperties, true));
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' path: ' . $this->_path . ' ' . print_r($properties, true));
+        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' path: ' . $this->_path . ' ' . print_r($requestedProperties, true));
+        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' path: ' . $this->_path . ' ' . print_r($properties, true));
         
         $response = array();
     
         foreach($requestedProperties as $prop) switch($prop) {
             case '{DAV:}owner' :
-                $response[$prop] = new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF,$this->calendarInfo['principaluri']);
+                $response[$prop] = new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id);
                 break;
                 
             default :
