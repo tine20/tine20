@@ -298,7 +298,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         
         this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.app.i18n._(this.containerName),
-            actions: ['add', 'reload', 'delete', 'rename'],
+            actions: ['add', 'reload', 'delete', 'rename', 'grants'],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
@@ -326,6 +326,14 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
+        });
+
+        this.contextMenuReloadFolder = Tine.widgets.tree.ContextMenu.getMenu({
+        	nodeName: this.app.i18n._(this.containerName),
+        	actions: ['reload'],
+        	scope: this,
+        	backend: 'Filemanager',
+        	backendModel: 'Node'
         });
     },
     
@@ -366,6 +374,9 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         else if (path.match(/^\/shared/) && (Tine.Tinebase.common.hasRight('admin', this.app.appName) 
                 || Tine.Tinebase.common.hasRight('manage_shared_folders', this.app.appName))){
             this.contextMenuUserFolder.showAt(event.getXY());
+        } 
+        else if (path.match(/^\/shared/)){
+        	this.contextMenuReloadFolder.showAt(event.getXY());
         } 
         else if (path.match(/^\/personal/) && path.match('/personal/' + currentAccount.accountLoginName)) {
             if(typeof container.name == 'object') {
@@ -685,6 +696,14 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     	
     },
     
+    /**
+     * upload update handler
+     * 
+     * @param change {String} kind of change
+     * @param upload {Ext.ux.file.Upload} upload
+     * @param fileRecord {file} fileRecord
+     * 
+     */
     onUpdate: function(change, upload, fileRecord) {
     	
     	var app = Tine.Tinebase.appMgr.get('Filemanager'),

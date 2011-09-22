@@ -459,24 +459,24 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Ext.EventObject} event
      */
     onCreateFolder: function(button, event) {
-        
-        var app = this.app,
-        	nodeName = app.i18n._('user file folder');
-        
-        Ext.MessageBox.prompt(String.format(_('New {0}'), nodeName), String.format(_('Please enter the name of the new {0}:'), nodeName), function(_btn, _text) {
 
-            var currentFolderNode = app.mainScreen.GridPanel.currentFolderNode;
-            if(currentFolderNode && _btn == 'ok') {
-                if (! _text) {
-                    Ext.Msg.alert(String.format(_('No {0} added'), nodeName), String.format(_('You have to supply a {0} name!'), nodeName));
-                    return;
-                }
+    	var app = this.app,
+    	nodeName = app.i18n._('user file folder');
 
-                var filename = currentFolderNode.attributes.path + '/' + _text;
-                Tine.Filemanager.fileRecordBackend.createFolder(filename);
-                
-            }
-        }, this);
+    	Ext.MessageBox.prompt(String.format(_('New {0}'), nodeName), String.format(_('Please enter the name of the new {0}:'), nodeName), function(_btn, _text) {
+
+    		var currentFolderNode = app.mainScreen.GridPanel.currentFolderNode;
+    		if(currentFolderNode && _btn == 'ok') {
+    			if (! _text) {
+    				Ext.Msg.alert(String.format(_('No {0} added'), nodeName), String.format(_('You have to supply a {0} name!'), nodeName));
+    				return;
+    			}
+
+    			var filename = currentFolderNode.attributes.path + '/' + _text;
+    			Tine.Filemanager.fileRecordBackend.createFolder(filename);
+
+    		}
+    	}, this);
         
         
     },
