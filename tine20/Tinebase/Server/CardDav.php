@@ -54,11 +54,7 @@ class Tinebase_Server_CardDav implements Tinebase_Server_Interface
             return;                            
         }
         
-        $root = new Tinebase_WebDav_Root();
-        
-        $tree = new Sabre_DAV_ObjectTree($root);
-        
-        $server = new Sabre_DAV_Server($tree);
+        $server = new Sabre_DAV_Server(new Tinebase_WebDav_Root());
         
         // compute base uri
         #$decodedUri = Sabre_DAV_URLUtil::decodePath($server->getRequestUri());
