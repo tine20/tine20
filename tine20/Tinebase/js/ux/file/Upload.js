@@ -20,6 +20,7 @@ Ext.ns('Ext.ux.file');
  * @param       Object config
  */
 Ext.ux.file.Upload = function(config) {
+	
     Ext.apply(this, config);
     
     Ext.ux.file.Upload.superclass.constructor.apply(this, arguments);
@@ -53,7 +54,14 @@ Ext.ux.file.Upload = function(config) {
           * @param {Ext.ux.file.Upload} this
           * @param {Ext.Record} Ext.ux.file.Upload.file
           */
-          'uploadstart'
+          'uploadstart',
+         /**
+          * @event uploadstart
+          * Fires on upload progress (html5 only)
+          * @param {Ext.ux.file.Upload} this
+          * @param {Ext.Record} Ext.ux.file.Upload.file
+          */
+         'update'
     );
         
     if (! this.file && this.fileSelector) {
@@ -227,8 +235,6 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
 //                }
                 
                 // calculate optimal maxChunkSize       
-                
-            	
             	// TODO: own method for chunked upload
             	
                 var chunkMax = this.maxChunkSize;
@@ -250,6 +256,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
                 else {
                     this.createFileRecord(false);
                     this.fireEvent('uploadstart', this);
+                    this.fireEvent('update', 'uploadstart', this, this.fileRecord);
                     this.html5ChunkedUpload();
                     
                 }
@@ -259,6 +266,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             } else {
                 this.createFileRecord(false);
                 this.fireEvent('uploadstart', this);
+                this.fireEvent('update', 'uploadstart', this, this.fileRecord);
                 this.html5upload();
                 
                 return this.fileRecord;
@@ -391,13 +399,16 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             this.fileRecord.set('id', response.id);
         	this.fileRecord.set('progress', 99);
             this.fileRecord.commit(false);
-            this.fireEvent('uploadcomplete', this, this.fileRecord);               
+            this.fireEvent('uploadcomplete', this, this.fileRecord);  
+            this.fireEvent('update', 'uploadcomplete', this, this.fileRecord);
+
         }       
         else {
             this.fileRecord.beginEdit();
             this.fileRecord.set('status', 'failure');
             this.fileRecord.set('progress', -1);
             this.fileRecord.commit(false);
+            this.fireEvent('update', 'uploadfailure', this, this.fileRecord);
                        
         }
                 
@@ -422,6 +433,8 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         this.fileRecord.set('size', 0);
         this.fileRecord.commit(false);
 
+        this.fireEvent('update', 'uploadprogress', this, this.fileRecord);
+        
         if(! this.isHtml5ChunkedUpload()) {            
 
         	this.finishUploadRecord(response);           
@@ -484,7 +497,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
                 this.fileRecord.set('status', 'failure');
                 this.fileRecord.endEdit();
 
-                this.fireEvent('uploadfailure', this, this.fileRecord);
+                this.fireEvent('update', 'uploadfailure', this, this.fileRecord);
             }
             else {
                 window.setTimeout((function() {
@@ -498,7 +511,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             this.fileRecord.set('status', 'failure');
             this.fileRecord.endEdit();
 
-            this.fireEvent('uploadfailure', this, this.fileRecord);
+            this.fireEvent('update', 'uploadfailure', this, this.fileRecord);
         }
     },
     
@@ -523,6 +536,8 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             status: 'uploading',
             progress: 0
         });
+        
+        this.fireEvent('update', 'uploadprogress', this, this.fileRecord);
         
         if(this.maxFileUploadSize/1 < this.file.size/1) {
             this.fileRecord.html4upload = true;
@@ -566,6 +581,9 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             uploadKey: this.id,
             type: 'file'
         });
+        
+        this.fireEvent('update', 'uploadprogress', this, this.fileRecord);
+
     },
    
     /** 
@@ -603,6 +621,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         this.fileRecord.beginEdit();
         this.fileRecord.set('status', pausedState);
         this.fileRecord.endEdit();
+        this.fireEvent('update', 'uploadpaused', this, this.fileRecord);
     },
     
     /**
@@ -690,6 +709,8 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         this.fileRecord.beginEdit();
         this.fileRecord.set('status', queuedState);
         this.fileRecord.endEdit();
+        
+        this.fireEvent('update', 'uploadqueued', this, this.fileRecord);
         
     },
     

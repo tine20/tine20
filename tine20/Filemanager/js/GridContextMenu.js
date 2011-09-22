@@ -42,7 +42,7 @@ Tine.Filemanager.GridContextMenu = {
                             Ext.Msg.alert(String.format(_('Not renamed {0}'), this.nodeName), String.format(_('You have to supply a {0} name!'), this.nodeName));
                             return;
                         }
-                        Ext.MessageBox.wait(_('Please wait'), String.format(_('Updating {0} "{1}"'), this.nodeName, nodeText));
+//                        Ext.MessageBox.wait(_('Please wait'), String.format(_('Updating {0} "{1}"'), this.nodeName, nodeText));
 
                         var params = {
                                 method: this.backend + '.rename' + this.backendModel,
@@ -70,7 +70,6 @@ Tine.Filemanager.GridContextMenu = {
                             success: function(_result, _request){
                                 var nodeData = Ext.util.JSON.decode(_result.responseText)[0];
                                 this.scope.fireEvent('containerrename', nodeData);
-                                Ext.MessageBox.hide();
 
                                 // TODO: im event auswerten
                                 if (this.backendModel == 'Node') {
@@ -175,9 +174,9 @@ Tine.Filemanager.GridContextMenu = {
 		    					if(nodes &&  this.backendModel == 'Node') {
 		    						var treePanel = this.scope.app.getMainScreen().getWestPanel().getContainerTreePanel();
 		    						for(var i=0; i<nodes.length; i++){
-		    							this.scope.fireEvent('containerdelete', nodes[i].data.container_id);                                    
+//		    							this.scope.fireEvent('containerdelete', nodes[i].data.container_id);                                    
 		    							treePanel.fireEvent('containerdelete', nodes[i].data.container_id);
-		
+//		
 		    							// TODO: in EventHandler auslagern
 		    							var treeNode = treePanel.getNodeById(nodes[i].id);
 		    							if(treeNode) {
@@ -291,7 +290,11 @@ Tine.Filemanager.GridContextMenu = {
         gridStore.suspendEvents();
         var selectedRows = grid.selectionModel.getSelections(); 
         for(var i=0; i < selectedRows.length; i++) {
-            var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
+        	var fileRecord = selectedRows[i];
+        	if(fileRecord.fileRecord) {
+        		fileRecord = fileRecord.fileRecord;
+        	}
+            var upload = Tine.Tinebase.uploadManager.getUpload(fileRecord.get('uploadKey'));
             upload.setPaused(true);
         }       
         gridStore.resumeEvents();
@@ -312,7 +315,11 @@ Tine.Filemanager.GridContextMenu = {
         gridStore.suspendEvents();
         var selectedRows = grid.selectionModel.getSelections();
         for(var i=0; i < selectedRows.length; i++) {
-            var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
+        	var fileRecord = selectedRows[i];
+        	if(fileRecord.fileRecord) {
+        		fileRecord = fileRecord.fileRecord;
+        	}
+            var upload = Tine.Tinebase.uploadManager.getUpload(fileRecord.get('uploadKey'));
             upload.resumeUpload();
         }
         gridStore.resumeEvents();
@@ -331,15 +338,26 @@ Tine.Filemanager.GridContextMenu = {
     isResumeEnabled: function(action, grants, records) {
         
         for(var i=0; i<records.length; i++) {
-            if(records[i].get('type') === 'folder') {
+        	
+        	var record = records[i];
+        	if(record.fileRecord) {
+        		record = record.fileRecord;
+        	}
+        	
+            if(record.get('type') == 'folder') {
                 action.hide();
                 return;
             }
         }
        
         for(var i=0; i < records.length; i++) {
-            if(!records[i].get('status') || (records[i].get('type ') !== 'folder' &&  records[i].get('status') !== 'uploading' 
-                    &&  records[i].get('status') !== 'paused' && records[i].get('status') !== 'pending')) {
+        	
+        	var record = records[i];
+        	if(record.fileRecord) {
+        		record = record.fileRecord;
+        	}
+            if(!record.get('status') || (record.get('type') != 'folder' &&  record.get('status') != 'uploading' 
+                    &&  record.get('status') != 'paused' && record.get('status') != 'pending')) {
                 action.hide();
                 return;
             }
@@ -348,13 +366,19 @@ Tine.Filemanager.GridContextMenu = {
         action.show();
         
         for(var i=0; i < records.length; i++) {
-            if(records[i].get('status')) {
+        	
+        	var record = records[i];
+        	if(record.fileRecord) {
+        		record = record.fileRecord;
+        	}
+        	
+            if(record.get('status')) {
                 action.setDisabled(false);
             }
             else {
                 action.setDisabled(true);
             }
-            if(records[i].get('status') && records[i].get('status') !== 'paused'){               
+            if(record.get('status') && record.get('status') != 'paused'){               
                 action.setDisabled(true);               
             }
             
@@ -371,15 +395,27 @@ Tine.Filemanager.GridContextMenu = {
     isPauseEnabled: function(action, grants, records) {
         
         for(var i=0; i<records.length; i++) {
-            if(records[i].get('type') === 'folder') {
+        	
+        	var record = records[i];
+        	if(record.fileRecord) {
+        		record = record.fileRecord;
+        	}
+        	
+            if(record.get('type') === 'folder') {
                 action.hide();
                 return;
             }
         }
         
         for(var i=0; i < records.length; i++) {
-            if(!records[i].get('status') || (records[i].get('type ') !== 'folder' && records[i].get('status') !== 'paused'
-                    &&  records[i].get('status') !== 'uploading' && records[i].get('status') !== 'pending')) {
+        	
+        	var record = records[i];
+        	if(record.fileRecord) {
+        		record = record.fileRecord;
+        	}
+        	
+            if(!record.get('status') || (record.get('type ') != 'folder' && record.get('status') != 'paused'
+                    &&  record.get('status') != 'uploading' && record.get('status') != 'pending')) {
                 action.hide();
                 return;
             }
@@ -388,13 +424,19 @@ Tine.Filemanager.GridContextMenu = {
         action.show();
         
         for(var i=0; i < records.length; i++) {
-            if(records[i].get('status')) {
+        	
+        	var record = records[i];
+        	if(record.fileRecord) {
+        		record = record.fileRecord;
+        	}
+        	
+            if(record.get('status')) {
                 action.setDisabled(false);
             }
             else {
                 action.setDisabled(true);
             }
-            if(records[i].get('status') && records[i].get('status') !== 'uploading'){
+            if(record.get('status') && record.get('status') !=='uploading'){
                 action.setDisabled(true);
             }
             

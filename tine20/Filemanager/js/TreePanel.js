@@ -67,7 +67,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         this.selModel = new Ext.ux.tree.FileTreeSelectionModel({});
                 
         this.getSelectionModel().on('initDrag', this.onInitDrag, this);
-
+        Tine.Tinebase.uploadManager.on('update', this.onUpdate);
 
         Tine.Filemanager.TreePanel.superclass.initComponent.call(this);
 
@@ -685,6 +685,33 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     	
     },
     
+    onUpdate: function(change, upload, fileRecord) {
+    	
+    	var app = Tine.Tinebase.appMgr.get('Filemanager'),
+    		grid = app.getMainScreen().getCenterPanel()
+    		treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
+    		rowsToUpdate = grid.getStore().query('name', fileRecord.get('name'));
+    	
+    	if(change == 'uploadstart') {
+    		Tine.Tinebase.uploadManager.onUploadStart();
+    	}
+    	else if(change == 'uploadfailure') {
+    		treePanel.onUploadFail();
+    	}
+    	
+    	if(rowsToUpdate.get(0)) {
+    		if(change == 'uploadcomplete') {   			
+    			treePanel.onUploadComplete(upload, fileRecord);
+    		}
+    		else if(change == 'uploadfinished') {
+    			rowsToUpdate.get(0).set('size', upload.fileSize);	
+    			rowsToUpdate.get(0).set('contenttype', fileRecord.get('contenttype'));	
+    		}
+    		rowsToUpdate.get(0).afterEdit();
+    		rowsToUpdate.get(0).commit(false);
+    	}   	
+    },
+    
     /**
      * handels tree drop of object from outside the browser
      * 
@@ -734,11 +761,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                 id: filePath
             });
 
-            upload.on('uploadfailure', treePanel.onUploadFail, this);
-            upload.on('uploadcomplete', treePanel.onUploadComplete, this);
-            upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, this);
-
-            var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);     
+        var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);     
             
             filePathsArray.push(filePath);
             uploadKeyArray.push(uploadKey);

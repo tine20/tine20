@@ -69,10 +69,11 @@ Tine.Filemanager.handleRequestException = function(exception, request) {
                 	text: fileName,
                 	scope: this,
                 	handler: function(button) {
-	                	if (button === 'yes') {
+	                	if (button == 'yes') {
 	                		var params = request.params;
 	                		params.forceOverwrite = true;
 	                		params.method = request.method;
+	                		
 	                		if(params.method == 'Filemanager.copyNodes' || params.method == 'Filemanager.moveNodes' ) {
 	                			Tine.Filemanager.fileRecordBackend.copyNodes(null, null, null, params);
 	                		}

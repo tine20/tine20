@@ -9,9 +9,51 @@ Ext.ns('Ext.ux.file');
  * @class       Ext.ux.file.UploadManager
  */
 Ext.ux.file.UploadManager = function(config) {
-
-    return {
-        
+	
+    Ext.apply(this, config);
+    Ext.ux.file.UploadManager.superclass.constructor.apply(this, arguments);
+    
+    this.addEvents(
+        /**
+         * @event uploadcomplete
+         * Fires when the upload was done successfully 
+         * @param {Ext.ux.file.Upload} this
+         * @param {Ext.Record} Ext.ux.file.Upload.file
+         */
+         'uploadcomplete',
+        /**
+         * @event uploadfailure
+         * Fires when the upload failed 
+         * @param {Ext.ux.file.Upload} this
+         * @param {Ext.Record} Ext.ux.file.Upload.file
+         */
+         'uploadfailure',
+        /**
+         * @event uploadprogress
+         * Fires on upload progress (html5 only)
+         * @param {Ext.ux.file.Upload} this
+         * @param {Ext.Record} Ext.ux.file.Upload.file
+         * @param {XMLHttpRequestProgressEvent}
+         */
+         'uploadprogress',
+         /**
+          * @event uploadstart
+          * Fires on upload progress (html5 only)
+          * @param {Ext.ux.file.Upload} this
+          * @param {Ext.Record} Ext.ux.file.Upload.file
+          */
+          'uploadstart',
+         /**
+          * @event uploadstart
+          * Fires on upload progress (html5 only)
+          * @param {Ext.ux.file.Upload} this
+          * @param {Ext.Record} Ext.ux.file.Upload.file
+          */
+         'update'
+    ); 
+};	
+	
+Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {   	
         /**
          * @cfg {Int} number of allowed concurrent uploads
          */
@@ -50,7 +92,9 @@ Ext.ux.file.UploadManager = function(config) {
             }
             upload.id = uploadId;
             
-            this.uploads[uploadId] = upload;
+            this.uploads[uploadId] = upload;            
+            this.relayEvents(upload, ['update']);
+            
             return uploadId;
         },
 
@@ -157,5 +201,5 @@ Ext.ux.file.UploadManager = function(config) {
             Tine.Tinebase.uploadManager.runningUploads 
                 = Math.min(Tine.Tinebase.uploadManager.maxConcurrentUploads, Tine.Tinebase.uploadManager.runningUploads + 1);  
         }
-    };
- };
+    
+});

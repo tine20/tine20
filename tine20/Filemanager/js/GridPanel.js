@@ -99,6 +99,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         Tine.Filemanager.GridPanel.superclass.initComponent.call(this);      
         this.getStore().on('load', this.onLoad);
+        
+        Tine.Tinebase.uploadManager.on('update', this.onUpdate);
     },
     
     afterRender: function() {
@@ -456,66 +458,66 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Ext.Component} button
      * @param {Ext.EventObject} event
      */
-    onRenameItem: function(button, event) {
-        
-        var app = this.app;
-        var nodeName = app.i18n._('user file folder');
-        
-        var selectedNode = app.mainScreen.GridPanel.selectionModel.getSelections()[0];
-        
-        if (selectedNode) {
-            var node = selectedNode;
-            Ext.MessageBox.show({
-                title: 'Rename ' + nodeName,
-                msg: String.format(_('Please enter the new name of the {0}:'), nodeName),
-                buttons: Ext.MessageBox.OKCANCEL,
-                value: node.text,
-                fn: function(_btn, _text){
-                    if (_btn == 'ok') {
-                        if (! _text) {
-                            Ext.Msg.alert(String.format(_('Not renamed {0}'), nodeName), String.format(_('You have to supply a {0} name!'), nodeName));
-                            return;
-                        }
-                        Ext.MessageBox.wait(_('Please wait'), String.format(_('Updating {0} "{1}"'), nodeName, node.text));
-                                                
-                        var filename = node.data.path;                        
-                        var targetFilename = "/";
-                        var sourceSplitArray = filename.split("/");
-                        for (var i=1; i<sourceSplitArray.length-1; i++) {
-                            targetFilename += sourceSplitArray[i] + '/'; 
-                        }
-                        
-                        var params = {
-                            method: app.appName + '.moveNodes',
-                            newName: _text,
-                            application: this.app.appName || this.appName,
-                            sourceFilenames: [filename],
-                            destinationFilenames: [targetFilename + _text]
-                        };
-                        
-                        Ext.Ajax.request({
-                            params: params,
-                            scope: this,
-                            success: function(_result, _request){
-                                var nodeData = Ext.util.JSON.decode(_result.responseText);
-                                
-                                var currentFolderNode = app.mainScreen.GridPanel.currentFolderNode;
-                                if(currentFolderNode){
-                                    currentFolderNode.reload();
-                                }                                
-                                app.mainScreen.GridPanel.getStore().reload();
+//    onRenameItem: function(button, event) {
+//        
+//        var app = this.app;
+//        var nodeName = app.i18n._('user file folder');
+//        
+//        var selectedNode = app.mainScreen.GridPanel.selectionModel.getSelections()[0];
+//        
+//        if (selectedNode) {
+//            var node = selectedNode;
+//            Ext.MessageBox.show({
+//                title: 'Rename ' + nodeName,
+//                msg: String.format(_('Please enter the new name of the {0}:'), nodeName),
+//                buttons: Ext.MessageBox.OKCANCEL,
+//                value: node.text,
+//                fn: function(_btn, _text){
+//                    if (_btn == 'ok') {
+//                        if (! _text) {
+//                            Ext.Msg.alert(String.format(_('Not renamed {0}'), nodeName), String.format(_('You have to supply a {0} name!'), nodeName));
+//                            return;
+//                        }
+//                        Ext.MessageBox.wait(_('Please wait'), String.format(_('Updating {0} "{1}"'), nodeName, node.text));
+//                                                
+//                        var filename = node.data.path;                        
+//                        var targetFilename = "/";
+//                        var sourceSplitArray = filename.split("/");
+//                        for (var i=1; i<sourceSplitArray.length-1; i++) {
+//                            targetFilename += sourceSplitArray[i] + '/'; 
+//                        }
+//                        
+//                        var params = {
+//                            method: app.appName + '.moveNodes',
+//                            newName: _text,
+//                            application: this.app.appName || this.appName,
+//                            sourceFilenames: [filename],
+//                            destinationFilenames: [targetFilename + _text]
+//                        };
+//                        
+//                        Ext.Ajax.request({
+//                            params: params,
+//                            scope: this,
+//                            success: function(_result, _request){
+//                                var nodeData = Ext.util.JSON.decode(_result.responseText);
+//                                
+//                                var currentFolderNode = app.mainScreen.GridPanel.currentFolderNode;
+//                                if(currentFolderNode){
+//                                    currentFolderNode.reload();
+//                                }                                
+//                                app.mainScreen.GridPanel.getStore().reload();
 //                                this.fireEvent('containerrename', nodeData);
-                                Ext.MessageBox.hide();
-                            }
-                        });
-                    }
-                },
-                scope: this,
-                prompt: true,
-                icon: Ext.MessageBox.QUESTION
-            });
-        }
-    },
+//                                Ext.MessageBox.hide();
+//                            }
+//                        });
+//                    }
+//                },
+//                scope: this,
+//                prompt: true,
+//                icon: Ext.MessageBox.QUESTION
+//            });
+//        }
+//    },
     
     /**
      * create folder in current position
@@ -525,8 +527,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onCreateFolder: function(button, event) {
         
-        var app = this.app;
-        var nodeName = app.i18n._('user file folder');
+        var app = this.app,
+        	nodeName = app.i18n._('user file folder');
         
         Ext.MessageBox.prompt(String.format(_('New {0}'), nodeName), String.format(_('Please enter the name of the new {0}:'), nodeName), function(_btn, _text) {
 
@@ -598,8 +600,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onLoadParentFolder: function(button, event) {
      
-        var app = this.app;
-        var currentFolderNode = app.mainScreen.GridPanel.currentFolderNode;
+        var app = this.app,
+        	currentFolderNode = app.mainScreen.GridPanel.currentFolderNode;
         
         if(currentFolderNode && currentFolderNode.parentNode) {
             app.mainScreen.GridPanel.currentFolderNode = currentFolderNode.parentNode;
@@ -762,6 +764,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         fileRecord.set('progress', 100);
         fileRecord.commit(false);
        
+        upload.fireEvent('update', 'uploadfinished', upload, fileRecord);
+        
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
         grid = app.getMainScreen().getCenterPanel();
 
@@ -839,10 +843,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 id: filePath
             });
 
-            upload.on('uploadfailure', grid.onUploadFail, this);
-            upload.on('uploadcomplete', grid.onUploadComplete, this);
-            upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, this);
-
             var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);   
             
             filePathsArray.push(filePath);
@@ -869,9 +869,9 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onDownload: function(button, event) {
         
-        var app = Tine.Tinebase.appMgr.get('Filemanager');
-        var grid = app.getMainScreen().getCenterPanel(); 
-        var selectedRows = grid.selectionModel.getSelections();
+        var app = Tine.Tinebase.appMgr.get('Filemanager'),
+        	grid = app.getMainScreen().getCenterPanel(),
+        	selectedRows = grid.selectionModel.getSelections();
         
         var fileRow = selectedRows[0];
                
@@ -894,20 +894,70 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onLoad: function(store, records, options){
 
+    	var app = Tine.Tinebase.appMgr.get('Filemanager'),
+			grid = app.getMainScreen().getCenterPanel();
+    	
         for(var i=records.length-1; i>=0; i--) {
             var record = records[i];
             if(record.get('type') == 'file' && (!record.get('size') || record.get('size') == 0)) {
                 var upload = Tine.Tinebase.uploadManager.getUpload(record.get('path'));
 
                 if(upload) {
-                      if(upload.fileRecord && record.get('name') === upload.fileRecord.get('name')) {
-                        var index = this.indexOf(record);
-                        this.remove(record);
-                        this.insert(index, [upload.fileRecord]);
+                      if(upload.fileRecord && record.get('name') == upload.fileRecord.get('name')) {
+                    	  grid.updateNodeRecord(record, upload.fileRecord);
+                    	  record.afterEdit();
                     }
                 }
             }
         }
+    },
+    
+    /**
+     * update grid nodeRecord with fileRecord data
+     * 
+     * @param nodeRecord
+     * @param fileRecord
+     */
+    updateNodeRecord: function(nodeRecord, fileRecord) {
+    	
+    	for(var field in fileRecord.fields) {
+    		nodeRecord.set(field, fileRecord.get(field));
+    	}
+    	nodeRecord.fileRecord = fileRecord;
+    },
+    
+    /**
+     * upload update handler
+     * 
+     * @param change {String} kind of change
+     * @param upload {Ext.ux.file.Upload} upload
+     * @param fileRecord {file} fileRecord
+     * 
+     */
+    onUpdate: function(change, upload, fileRecord) {
+    	
+    	var app = Tine.Tinebase.appMgr.get('Filemanager'),
+    		grid = app.getMainScreen().getCenterPanel(),
+    		rowsToUpdate = grid.getStore().query('name', fileRecord.get('name'));
+    	
+    	if(change == 'uploadstart') {
+    		Tine.Tinebase.uploadManager.onUploadStart();
+    	}
+    	else if(change == 'uploadfailure') {
+    		grid.onUploadFail();
+    	}
+    	
+    	if(rowsToUpdate.get(0)) {
+    		if(change == 'uploadcomplete') {   			
+    			grid.onUploadComplete(upload, fileRecord);
+    		}
+    		else if(change == 'uploadfinished') {
+    			rowsToUpdate.get(0).set('size', upload.fileSize);	
+    			rowsToUpdate.get(0).set('contenttype', fileRecord.get('contenttype'));	
+    		}
+    		rowsToUpdate.get(0).afterEdit();
+    		rowsToUpdate.get(0).commit(false);
+    	}   	
     },
     
     /**

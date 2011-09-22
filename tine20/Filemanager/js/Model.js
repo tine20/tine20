@@ -130,7 +130,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 parentNode.appendChild(newNode);
             }
             grid.getStore().reload();
-            this.fireEvent('containeradd', nodeData);
+//            this.fireEvent('containeradd', nodeData);
             Ext.MessageBox.hide();
         };
         
@@ -183,8 +183,8 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             }
             
             grid.getStore().remove(nodeData);
-            grid.getStore().deselectRange(0, grid.getStore().getCount());
-            this.fireEvent('containerdelete', nodeData);
+            grid.selectionModel.deselectRange(0, grid.getStore().getCount());
+//            this.fireEvent('containerdelete', nodeData);
 
         }).createDelegate({items: items});
         
@@ -368,9 +368,10 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             	}
 
             	fileRecord = Tine.Filemanager.fileRecordBackend.updateNodeRecord(nodeData[i], fileRecord);
-//            	var nodeRecord = new Tine.Filemanager.Model.Node(nodeData[i]);
+            	var nodeRecord = new Tine.Filemanager.Model.Node(nodeData[i]);
             	
-            	gridStore.add(fileRecord);
+            	nodeRecord.fileRecord = fileRecord;
+            	gridStore.add(nodeRecord);
 
             }           
         }).createDelegate({uploadKey: uploadKey, addToGridStore: addToGridStore});
@@ -430,9 +431,10 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 	}
 
                 	fileRecord = Tine.Filemanager.fileRecordBackend.updateNodeRecord(nodeData[i], fileRecord);
-//                	var nodeRecord = new Tine.Filemanager.Model.Node(nodeData[i]);
+                	var nodeRecord = new Tine.Filemanager.Model.Node(nodeData[i]);
                 	
-                	gridStore.add(fileRecord);
+                	nodeRecord.fileRecord = fileRecord;
+                	gridStore.add(nodeRecord);
                     
                 }   
             }
