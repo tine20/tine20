@@ -1,0 +1,1674 @@
+.standardFileClass .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-octet-stream.png);
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pdf .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-pdf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-krita .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-krita.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.shellscript .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/shellscript.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-ar .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-ar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-java-applet .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-java-applet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-marble .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-marble.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-portable-bitmap .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-portable-bitmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.database .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.database.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.text .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.text.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-jpeg2000 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-jpeg2000.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-generic .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-mms .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/uri-mms.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-wmf .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-wmf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-patch .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-patch.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.make .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/make.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.tex .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/tex.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.none .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/none.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-aac .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-aac.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-gzpostscript .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-gzpostscript.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-sgml .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-sgml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-kgetlist .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-kgetlist.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-rpm .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-rpm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.message .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/message.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-java .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-java.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-portable-pixmap .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-portable-pixmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-mpegurl .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-mpegurl.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.cdbo-list .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/cdbo-list.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-mp4 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-mp4.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.document .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/document.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.font-bitmap .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/font-bitmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.info .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/info.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-ico .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-ico.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-aiff .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-aiff.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-rtf .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-rtf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-xml .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-pascal .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-pascal.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-matroska .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-x-matroska.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-tzo .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-tzo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-cpio .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-cpio.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-texinfo .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-texinfo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-compress .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-compress.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-xslfo .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-xslfo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.sun.xml.draw .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.sun.xml.draw.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.spreadsheet-template .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.spreadsheet-template.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-java-archive .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-java-archive.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-ldif .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-ldif.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-bibtex .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-bibtex.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-xslt+xml .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-xslt+xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.unknown .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/unknown.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-dtd .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-dtd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.kwordquiz-do .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/kwordquiz-do.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.vcard .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/vcard.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-xsd .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-xsd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-mp2 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-mp2.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-rtspu .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/uri-rtspu.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-objcsrc .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-objcsrc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-midi .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-midi.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-compressed-tar .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-compressed-tar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.stardivision.calc .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.stardivision.calc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-fits .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-fits.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-vcard .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-vcard.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.stardivision.draw .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.stardivision.draw.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-vnd.abc .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-vnd.abc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.txt .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/txt.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-calendar .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-calendar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.tgz .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/tgz.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-flic .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-x-flic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-gzdvi .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-gzdvi.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-chdr .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-chdr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-ruby .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-ruby.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-mswrite .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-mswrite.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-perl .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-perl.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-mpeg .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-mpeg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.presentation-template .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.presentation-template.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-designer .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-designer.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-dcraw .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-dcraw.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-relaxng .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-relaxng.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-bzdvi .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-bzdvi.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.ms-powerpoint .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.ms-powerpoint.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-mimearchive .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-mimearchive.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-csv .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-csv.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-fax-g3 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-fax-g3.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-ttf .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-font-ttf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.chart .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.chart.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.empty .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/empty.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.sound .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/sound.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-address-book .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/x-office-address-book.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-photo-cd .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-photo-cd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-svg+xml .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-svg+xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-media-podcast .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/x-media-podcast.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pgp-keys .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-pgp-keys.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-arc .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-arc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-directory .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-directory.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.news .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/news.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-generic .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.formula .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.formula.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-svg+xml-compressed .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-svg+xml-compressed.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-exr .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-exr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-octet-stream .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-octet-stream.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-sharedlib .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-sharedlib.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-mod .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-mod.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-xmcd .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-xmcd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-psd .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-psd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.sun.xml.calc.template .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.sun.xml.calc.template.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.ascii .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/ascii.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-cgm .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-cgm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-msod .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-msod.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-tar .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-tar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-hdr .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-hdr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-php .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-php.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-objchdr .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-objchdr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-ms-dos-executable .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-ms-dos-executable.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-gnumeric .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-gnumeric.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-jng .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-jng.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.graphics .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.graphics.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-mmsu .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/uri-mmsu.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-bittorrent .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-bittorrent.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pkcs7-mime .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-pkcs7-mime.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-generic .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-illustrator .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-illustrator.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.ms-word .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.ms-word.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-katefilelist .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-katefilelist.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-calendar .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/x-office-calendar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-awk .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-awk.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.ms-excel .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.ms-excel.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-trash .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-trash.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.font-type1 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/font-type1.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-executable-script .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-executable-script.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-enriched .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-enriched.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-musepack .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-musepack.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-bzip-compressed-tar .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-bzip-compressed-tar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-troff .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-troff.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-ms-wmv .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-x-ms-wmv.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-mplayer2 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-mplayer2.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-cda .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-cda.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pgp-signature .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-pgp-signature.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-tex .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-tex.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-adpcm .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-adpcm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-archive .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-archive.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-tga .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-tga.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.vcalendar .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/vcalendar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.font-truetype .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/font-truetype.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.rn-realmedia .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.rn-realmedia.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.package-x-generic .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/package-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-script .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-script.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-cd-image .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-cd-image.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.inode-directory .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/inode-directory.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-python-bytecode .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-python-bytecode.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-csrc .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-csrc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.sun.xml.calc .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.sun.xml.calc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-xhtml+xml .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-xhtml+xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-makefile .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-makefile.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-rss+xml .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-rss+xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-mp4 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-mp4.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-prs.sid .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-prs.sid.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-kcsrc .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-kcsrc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-mmst .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/uri-mmst.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-png .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-png.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-rar .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-rar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-python .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-python.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-snf .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-font-snf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-gif .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-gif.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.tar .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/tar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-msvideo .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-x-msvideo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-monkey .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-monkey.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-executable .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-executable.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-type1 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-font-type1.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-vnd.rn-realaudio .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-vnd.rn-realaudio.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-generic .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-wav .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-wav.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-egon .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-egon.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-7z-compressed .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-7z-compressed.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-zoo .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-zoo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pkcs7-signature .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-pkcs7-signature.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-ogm+ogg .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-x-ogm+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-contact .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/x-office-contact.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.message-rfc822 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/message-rfc822.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-rdf .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-rdf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-scpls .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-scpls.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-java .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-java.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-pcf .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-font-pcf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.presentation .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.presentation.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-cue .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-cue.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-quicktime .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-quicktime.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-rtf .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-rtf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-html .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-html.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-flac+ogg .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-flac+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-spreadsheet .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/x-office-spreadsheet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-nzb .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-nzb.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-dds .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-dds.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-xfig .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-xfig.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.binary .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/binary.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-tiff .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-tiff.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-ms-wma .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-ms-wma.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-adasrc .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-adasrc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-bzip .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-bzip.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-pak .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-pak.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.pdf .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/pdf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-pcx .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-pcx.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-mng .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-x-mng.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-mpeg .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-mpeg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-gzip .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-gzip.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-vnd.wap.wml .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-vnd.wap.wml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-plain .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-plain.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-mswinurl .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-mswinurl.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-flac .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-flac.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-bmp .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-bmp.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-siag .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-siag.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-vnd.rn-realvideo .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-vnd.rn-realvideo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-tcl .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-tcl.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-document .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/x-office-document.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-mathml .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-mathml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-csharp .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-csharp.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-zerosize .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-zerosize.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.xml .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-deb .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-deb.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-pnm .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/uri-pnm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pgp .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-pgp.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.spreadsheet .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/spreadsheet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.vectorgfx .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/vectorgfx.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-bdf .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-font-bdf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-afm .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-font-afm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.cdtrack .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/cdtrack.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-xcf .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-xcf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-matroska .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-matroska.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-xml .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-lha .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-lha.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.spreadsheet .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.spreadsheet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-css .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-css.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-rtspt .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/uri-rtspt.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-quattropro .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-quattropro.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.zip .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/zip.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-vnd.trolltech.qpicture .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-vnd.trolltech.qpicture.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-c++src .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-c++src.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-plasma .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-plasma.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-desktop .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-desktop.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-arj .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-arj.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-kontour .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-kontour.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pgp-encrypted .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-pgp-encrypted.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-vorbis+ogg .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-vorbis+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.html .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/html.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-hex .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-hex.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-ms-asf .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-x-ms-asf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-otf .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-font-otf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-c++hdr .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-c++hdr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.message-news .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/message-news.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.odf .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/odf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-portable-graymap .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-portable-graymap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-tgif .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-tgif.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-object .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-object.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-applix-graphics .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-applix-graphics.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-pn-realaudio-plugin .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-pn-realaudio-plugin.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-ac3 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-ac3.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-troff-man .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-troff-man.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.man .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/man.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-ace .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-ace.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-tarz .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-tarz.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-jpeg .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-jpeg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.cdimage .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/cdimage.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.sun.xml.draw.template .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.sun.xml.draw.template.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-vcalendar .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-vcalendar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-theora+ogg .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-x-theora+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.encrypted .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/encrypted.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-speex+ogg .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-speex+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-rgb .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-rgb.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.image .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.image.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-lzop .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-lzop.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-empty .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-empty.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.recycled .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/recycled.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-zip .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-zip.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-xbitmap .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-xbitmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-xpixmap .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-xpixmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-eps .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-eps.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-applix-spreadsheet .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-applix-spreadsheet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-shellscript .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-shellscript.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-basic .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-basic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+

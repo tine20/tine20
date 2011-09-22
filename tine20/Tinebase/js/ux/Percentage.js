@@ -131,24 +131,14 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
         metadata.css = 'x-tinebase-typefolder';
     }
     else {
-        metadata.css = 'x-tinebase-typeoctet';
 
-//        var imageFilePath =  record.get('contenttype');
-//        
-//        if(imageFilePath) {
-//        
-//        	imageFilePath = 'images/oxygen/16x16/mimetypes/' + imageFilePath.replace("/", "-") + '.png';
-//        	metadata.attr = 'style="background-image:url(\'' + imageFilePath + '\')  !important;"';
-//        	    
-        	
-//            var img = document.createElement('img');
-//            img.src = imageFilePath;
-//            img.onload = function() {
-////            	metadata.attr = 'style="background-image:url(\'' + imageFilePath + '\')  !important;"';
-//            	Tine.log.debug("loaded: " + imageFilePath);
-//            }
-//        }
+        var contenttype =  record.get('contenttype');       
+        if(contenttype) {       
+        	var iconClass = contenttype.replace("/", "-");
+        	metadata.css = iconClass + ' ';
+        }
                
+        metadata.css += 'standardFileClass';
     }
     
     

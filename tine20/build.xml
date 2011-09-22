@@ -257,12 +257,14 @@
  				
     			// öffnen des Verzeichnisses
     			if ( $handle = opendir($imgPath) ) {
-    			
+    			 !important;
     				$styleSheet = fopen('Tinebase/css/mimetypes.css', 'w+');
                 	
-                	fwrite($styleSheet, ".standardFileClass {\n");
-        					fwrite($styleSheet, "    background-image: url(".$relatedImgPath."application-octet-stream.png) !important;\n");
-        					fwrite($styleSheet, "}\n\n");
+                	fwrite($styleSheet, ".standardFileClass .x-grid3-cell-inner {\n");
+        			fwrite($styleSheet, "    background-image: url(../..".$relatedImgPath."application-octet-stream.png);\n");
+        			fwrite($styleSheet, "    background-repeat:  no-repeat;\n");
+        			fwrite($styleSheet, "    padding-left: 19px;\n");
+        			fwrite($styleSheet, "}\n\n");
                 
        			    // einlesen der Verzeichnisses
         			while (($file = readdir($handle)) !== false)
@@ -272,8 +274,10 @@
         				$addToStyle = strcmp($fileName, "..") + strcmp($fileName, "..");
         				if($addToStyle > 0) {
         				
-        					fwrite($styleSheet, ".".$fileName." {\n");
-        					fwrite($styleSheet, "    background-image: url(".$relatedImgPath.$file.") !important;\n");
+        					fwrite($styleSheet, ".".$fileName." .x-grid3-cell-inner {\n");
+        					fwrite($styleSheet, "    background-image: url(../..".$relatedImgPath.$file.") !important;\n");
+        					fwrite($styleSheet, "    background-repeat:  no-repeat;\n");
+        					fwrite($styleSheet, "    padding-left: 19px;\n");
         					fwrite($styleSheet, "}\n\n");
         				}
 			        }
