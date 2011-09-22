@@ -37,14 +37,11 @@ class Addressbook_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
             '{DAV:}displayname' => $this->_container->name,
         );
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' path: ' . $this->_path . ' ' . print_r($requestedProperties, true));
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' path: ' . $this->_path . ' ' . print_r($properties, true));
-        
         $response = array();
     
         foreach($requestedProperties as $prop) switch($prop) {
             case '{DAV:}owner' :
-                $response[$prop] = new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, '/principals/user/' . Tinebase_Core::getUser()->contact_id);
+                $response[$prop] = new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id);
                 break;
                 
             default :
