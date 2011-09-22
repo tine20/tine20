@@ -114,7 +114,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.initDropTarget();
         this.currentFolderNode = this.app.getMainScreen().getWestPanel().getContainerTreePanel().getRootNode();
 
-
     },
     
     /**
@@ -745,7 +744,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             targetNode = grid.currentFolderNode,
             gridStore = grid.store,
             rowIndex = grid.getView().findRowIndex(event.getTarget()),
-            targetFolderPath = '/',
+            targetFolderPath = grid.currentFolderNode.attributes.path,
             addToGrid = true,
             dropAllowed = false,
             nodeRecord = null;
