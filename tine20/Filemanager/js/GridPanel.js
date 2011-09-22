@@ -587,6 +587,17 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 				if (nodes && button == 'yes') {	                
 	                Tine.Filemanager.fileRecordBackend.deleteItems(nodes);
 	            }
+				
+				for(var i=0; i<nodes.length; i++) {
+					var node = nodes[i];
+					
+					if(node.fileRecord) {
+						var upload = Tine.Tinebase.uploadManager.getUpload(node.fileRecord.get('uploadKey'));
+			            upload.setPaused(true);
+			            Tine.Tinebase.uploadManager.unregisterUpload(upload.id);
+					}
+					
+				}
         	}
         }, this);
 
