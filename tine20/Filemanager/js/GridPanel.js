@@ -101,13 +101,19 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.getStore().on('load', this.onLoad);
         
         Tine.Tinebase.uploadManager.on('update', this.onUpdate);
+        
     },
     
+    /**
+     * after render handler
+     */
     afterRender: function() {
         
         Tine.Filemanager.GridPanel.superclass.afterRender.call(this);  
         this.action_upload.setDisabled(true);
         this.initDropTarget();
+        this.currentFolderNode = this.app.getMainScreen().getWestPanel().getContainerTreePanel().getRootNode();
+
 
     },
     
@@ -613,9 +619,9 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onUploadFail: function () {
         Ext.MessageBox.alert(
             _('Upload Failed'), 
-            _('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: ') + Tine.Tinebase.registry.get('maxFileUploadSize')
+            _('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: ') 
+            + Ext.ux.file.Upload.fileSize(Tine.Tinebase.registry.get('maxFileUploadSize')) 
         ).setIcon(Ext.MessageBox.ERROR);
-//        this.loadMask.hide();
     },
     
     /**
@@ -739,10 +745,11 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             targetNode = grid.currentFolderNode,
             gridStore = grid.store,
             rowIndex = grid.getView().findRowIndex(event.getTarget()),
-            targetFolderPath = grid.currentFolderNode.attributes.path,
+            targetFolderPath = '/',
             addToGrid = true,
             dropAllowed = false,
             nodeRecord = null;
+
         
         if(targetNode.attributes) {
             nodeRecord = targetNode.attributes.nodeRecord;
@@ -760,7 +767,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if(!nodeRecord.isDropFilesAllowed()) {
             Ext.MessageBox.alert(
                     _('Upload Failed'), 
-                    app.i18n._('Dropping on this folder not allowed!')
+                    app.i18n._('Putting files in this folder is not allowed!')
             ).setIcon(Ext.MessageBox.ERROR);
 
             return;
