@@ -14,6 +14,7 @@ Ext.ns('Tine.widgets', 'Tine.widgets.relation');
  * @extends     Tine.widgets.grid.FilterModel
  * 
  * @todo CARE FOR SHEET DESTRUCTON!
+ * @todo CARE FOR OPERATOR CHANGE
  */
 Tine.widgets.relation.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
     /**
@@ -30,13 +31,15 @@ Tine.widgets.relation.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
     initComponent: function() {
         this.label = _('Relation');
         
-        // @TODO init a model store somehow dynamically / whipe models already covered by page 1
-        var relatedModels = [
-            {operator: 'Addressbook.Contact',  label: 'Contact'},
-            {operator: 'Calendar.Event',       label: 'Event'},
-            {operator: 'Projects.Project',     label: 'Project'},
-            {operator: 'Tasks.Task',           label: 'Task'}
-        ];
+        // @TODO whipe some models?
+        var relatedModels = [];
+        Tine.Tinebase.data.RecordMgr.eachKey(function(operator, record) {
+            if (record.getFieldNames().indexOf('relations') > -1 && Ext.isFunction(record.getFilterModel)) {
+                var label = Tine.Tinebase.appMgr.get(record.getMeta('appName')).i18n._hidden(record.getMeta('recordsName'));
+                
+                relatedModels.push({operator: operator, label: label});
+            }
+        }, this);
         
         
         this.relatedModelStore = this.fieldStore = new Ext.data.JsonStore({
@@ -51,10 +54,14 @@ Tine.widgets.relation.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
     },
     
     onDefineRelatedRecord: function(filter) {
+        var operator = filter.formFields.operator.getValue();
+        console.log(operator);
+        console.log(Tine.Tinebase.data.RecordMgr.get(operator));
+        
         try {
             if (! filter.sheet) {
                 filter.sheet = new Tine.widgets.grid.FilterToolbar({
-                    recordClass: Tine.Addressbook.Model.Contact,
+                    recordClass: Tine.Tinebase.data.RecordMgr.get(operator),
                     defaultFilter: 'query'
                 });
                 

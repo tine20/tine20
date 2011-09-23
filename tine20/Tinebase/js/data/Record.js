@@ -151,5 +151,44 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
         }
         return p.fieldsarray;
     };
+    
+    Tine.Tinebase.data.RecordMgr.add(f);
     return f;
 };
+
+Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
+    add: function(record) {
+        if (! Ext.isFunction(record.getMeta)) {
+            throw new Ext.Error('only records of type Tinebase.data.Record could be added');
+        }
+        var appName = record.getMeta('appName')
+            modelName = record.getMeta('modelName');
+            
+        if (! appName && modelName) {
+            throw new Ext.Error('appName and modelName must be in the metadatas');
+        }
+        
+//        console.log('register model "' + appName + '.' + modelName + '"');
+        Tine.Tinebase.data.RecordManager.superclass.add.call(this, appName + '.' + modelName, record);
+    },
+    
+    get: function(appName, modelName) {
+        appName = appName.appName ? appName.appName : appName;
+            
+        if (! Ext.isString(appName)) {
+            throw new Ext.Error('appName must be a string');
+        }
+        
+        Ext.each([appName, modelName], function(what) {
+            if (! Ext.isString(what)) return;
+            var parts = what.split(/(?:_Model_)|(?:\.)/);
+            if (parts.length > 1) {
+                appName = parts[0];
+                modelName = parts[1];
+            }
+        });
+        
+        return Tine.Tinebase.data.RecordManager.superclass.get.call(this, appName + '.' + modelName);
+    }
+});
+Tine.Tinebase.data.RecordMgr = new Tine.Tinebase.data.RecordManager(true);
