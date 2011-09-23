@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Server_WebDav implements Tinebase_Server_Interface
+class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
 {
     public function handle()
     {
@@ -26,16 +26,16 @@ class Tinebase_Server_WebDav implements Tinebase_Server_Interface
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' invalid session. Delete session cookie.');
             Zend_Session::expireSessionCookie();
             
-            header('WWW-Authenticate: Basic realm="WebDav for Tine 2.0"');
+            header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             
             return;
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is WebDav request.');
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is CardDav request.');
         
         if(empty($_SERVER['PHP_AUTH_USER']) && empty($_SERVER['REMOTE_USER']) && empty($_SERVER['REDIRECT_REMOTE_USER'])) {
-            header('WWW-Authenticate: Basic realm="WebDav for Tine 2.0"');
+            header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             
             return;
@@ -49,28 +49,33 @@ class Tinebase_Server_WebDav implements Tinebase_Server_Interface
         }
         
         if(Tinebase_Controller::getInstance()->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $_SERVER['REMOTE_ADDR'], 'TineWebDav') !== true) {
-            header('WWW-Authenticate: Basic realm="WebDav for Tine 2.0"');
+            header('WWW-Authenticate: Basic realm="CardDav for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             return;                            
         }
         
-        $tree = new Tinebase_WebDav_Tree('/');
-        
-        $server = new Sabre_DAV_Server($tree);
+        $server = new Sabre_DAV_Server(new Tinebase_WebDav_Root());
         
         // compute base uri
         #$decodedUri = Sabre_DAV_URLUtil::decodePath($server->getRequestUri());
-        #$baseUri = substr($decodedUri, 0, strpos($decodedUri, Tinebase_WebDav_Root::ROOT_NODE . '/') + strlen(Tinebase_WebDav_Root::ROOT_NODE . '/'));
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' set baseuri to: ' . '/' . $baseUri);
-        #$server->setBaseUri('/' . $baseUri);
+        #$baseUri = substr($decodedUri, 0, strpos($decodedUri, 'carddav/') + strlen('carddav/'));
+        $server->setBaseUri('/');
         
         #$lockBackend = new Sabre_DAV_Locks_Backend_FS('/var/www/phpfcgi/cache');
         #$lockPlugin = new Sabre_DAV_Locks_Plugin($lockBackend);
         #$server->addPlugin($lockPlugin);
         
-        $server->addPlugin(
-            new Sabre_DAV_Browser_Plugin()
-        );
+        $authPlugin = new Sabre_DAV_Auth_Plugin(new Tinebase_WebDav_Auth(), null);
+        $server->addPlugin($authPlugin);
+        
+        $aclPlugin = new Sabre_DAVACL_Plugin();
+        $aclPlugin->defaultUsernamePath = 'principals/users';
+        $aclPlugin->principalCollectionSet = array($aclPlugin->defaultUsernamePath/*, 'principals/groups'*/);
+        $server->addPlugin($aclPlugin);
+        
+        $server->addPlugin(new Sabre_DAV_Browser_Plugin());
+        $server->addPlugin(new Sabre_CardDAV_Plugin());
+        $server->addPlugin(new Sabre_CalDAV_Plugin());
         
         $server->exec();
     }
