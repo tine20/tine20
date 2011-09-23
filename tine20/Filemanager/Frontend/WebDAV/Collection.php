@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  WebDav
  */
-class Tinebase_WebDav_OldRoot extends Sabre_DAV_Directory 
+class Filemanager_Frontend_WebDAV_Collection extends Sabre_DAV_Collection
 {
     const ROOT_NODE = 'webdav';
     
@@ -38,8 +38,8 @@ class Tinebase_WebDav_OldRoot extends Sabre_DAV_Directory
         $children = array();
         
         if (empty($this->_path)) {
-            $children[] = $this->getChild(Tinebase_WebDav_Root::ROOT_NODE);
-        } elseif ($this->_path == Tinebase_WebDav_Root::ROOT_NODE) {
+            $children[] = $this->getChild(self::ROOT_NODE);
+        } elseif ($this->_path == self::ROOT_NODE) {
             // Loop through the directory, and create objects for each node
             foreach(Tinebase_Core::getUser()->getApplications() as $application) {
                 #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' application: ' . $application);
@@ -62,8 +62,8 @@ class Tinebase_WebDav_OldRoot extends Sabre_DAV_Directory
     public function getChild($_name) 
     {
         if (empty($this->_path)) {
-            return new Tinebase_WebDav_Root(Tinebase_WebDav_Root::ROOT_NODE);
-        } elseif (strtolower($this->_path) == Tinebase_WebDav_Root::ROOT_NODE) {
+            return new Tinebase_WebDav_Root(self::ROOT_NODE);
+        } elseif (strtolower($this->_path) == self::ROOT_NODE) {
             return $this->_getApplicationNode($_name);
         }
     }
@@ -75,10 +75,10 @@ class Tinebase_WebDav_OldRoot extends Sabre_DAV_Directory
     
     public function getNodeForPath()
     {
-        if (empty($this->_path) || strtolower($this->_path) == Tinebase_WebDav_Root::ROOT_NODE) {
+        if (empty($this->_path) || strtolower($this->_path) == self::ROOT_NODE) {
             return new Tinebase_WebDav_Root(strtolower($this->_path));
         } else {
-            $applicationNode = $this->_getApplicationNode(substr($this->_path, strlen(Tinebase_WebDav_Root::ROOT_NODE) +1));
+            $applicationNode = $this->_getApplicationNode(substr($this->_path, strlen(self::ROOT_NODE) +1));
             
             return $applicationNode->getNodeForPath();
         }
