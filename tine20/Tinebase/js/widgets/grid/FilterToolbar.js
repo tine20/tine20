@@ -36,6 +36,8 @@ Tine.widgets.grid.FilterToolbar = function(config) {
     
     // become filterPlugin
     Ext.applyIf(this, new Tine.widgets.grid.FilterPlugin());
+    
+    this.childSheets = {};
 };
 
 /**
@@ -78,6 +80,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @cfg {String} row prefix (defaults to _('Show'))
      */
     rowPrefix: null,
+    
+    /**
+     * @property childSheets
+     * @type Object
+     */
+    childSheets: null,
     
     border: false,
     monitorResize: true,
@@ -166,6 +174,13 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 handler: this.onSaveFilter.createDelegate(this)
             })
         };
+
+        this.action_loadFilter = new Ext.Action({
+            text: _('Load a favorite'),
+            iconCls: 'action-tinebase-favorite',
+            scope: this,
+            handler: this.onLoadFilter
+        });
     },
     
     /**
@@ -188,6 +203,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         // render static table
         this.renderTable();
         
+        
         // render each filter row into table
         this.filterStore.each(function(filter) {
             this.renderFilterRow(filter);
@@ -196,7 +212,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         // render static action buttons
         for (action in this.actions) {
             this.actions[action].hidden = true;
-            this.actions[action].render(this.el);
+            this.actions[action].render(this.bwrap);
         }
         
         // wrap search button an set it always mouse-overed
@@ -205,6 +221,22 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         // arrange static action buttons
         this.onFilterRowsChange();
+        
+        if (! this.parentSheet) {
+            this.tbar = new Ext.Toolbar({
+                items: [],
+                hidden: true
+            });
+            this.tbar.render(this.el, 0);
+        }
+        
+        this.breadCrumb = new Ext.Action({
+            text: (this.parentSheet ? '&gt;&nbsp;&nbsp;&nbsp;' : '') + (this.recordClass ? Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName')).i18n._hidden(this.recordClass.getMeta('recordsName')) : this.id),
+            scope: this,
+            handler: function() {
+                this.setActiveSheet(this);
+            }
+        });
     },
     
     /**
@@ -212,6 +244,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     onSaveFilter: function() {
         this.app.getMainScreen().getWestPanel().getFavoritesPanel().saveFilter();
+    },
+    
+    onLoadFilter: function() {
+        Ext.Msg.alert('sorry', 'not yet implemented');
     },
     
     /**
@@ -241,7 +277,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         filter.formFields = {};
         var filterModel = this.getFilterModel(filter.get('field'));
 
-        var fRow = this.el.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
+        var fRow = this.bwrap.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
         
         // field
         filter.formFields.field = new Ext.form.ComboBox({
@@ -303,7 +339,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         var lastId = this.filterStore.getAt(numFilters-1).id;
         
         this.filterStore.each(function(filter){
-            var tr = this.el.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
+            var tr = this.bwrap.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
             
             // prefix
             tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = _('and');
@@ -401,7 +437,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         filter.formFields.value.destroy();
         
         var filterModel = this.getFilterModel(newField);
-        var fRow = this.el.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
+        var fRow = this.bwrap.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
         
         var opEl = fRow.child('td[class=tw-ftb-frow-operator]');
         var valEl = fRow.child('td[class=tw-ftb-frow-value]');
@@ -446,6 +482,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.initActions();
         
         // init filters
+        this.filters = Ext.isArray(this.filters) ? this.filters : [];
         if (this.filters.length < 1) {
             this.filters = [{field: this.defaultFilter}];
         }
@@ -457,6 +494,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         // init filter models
         this.filterModelMap = {};
         var filtersFields = [];
+        
+        if (this.recordClass && ! this.filterModels) {
+            this.filterModels = this.recordClass.getFilterModel();
+        }
         
         for (var i=0; i<this.filterModels.length; i++) {
             var config = this.filterModels[i];
@@ -486,6 +527,11 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 }, this);
             }
         }
+        
+        // have an experimental relation filter
+        var relationFilter = this.createFilterModel({filtertype: 'tinebase.relation'});
+        this.filterModelMap[relationFilter.field] = relationFilter;
+        filtersFields.push(relationFilter);
         
         // init filter selection
         this.fieldStore = new Ext.data.JsonStore({
@@ -542,7 +588,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         }
         this.filterStore.add(filter);
         
-        var fRow = this.templates.filterrow.insertAfter(this.el.child('tr[class=fw-ftb-frow]:last'),{
+        var fRow = this.templates.filterrow.insertAfter(this.bwrap.child('tr[class=fw-ftb-frow]:last'),{
             id: 'tw-ftb-frowid-' + filter.id
         }, true);
         
@@ -571,7 +617,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @param {Ext.Record} filter to delete
      */
     deleteFilter: function(filter) {
-        var fRow = this.el.child('tr[id=tw-ftb-frowid-' + filter.id + ']');
+        var fRow = this.bwrap.child('tr[id=tw-ftb-frowid-' + filter.id + ']');
         //var isLast = this.filterStore.getAt(this.filterStore.getCount()-1).id == filter.id;
         var isLast = this.filterStore.getCount() == 1;
         this.filterStore.remove(this.filterStore.getById(filter.id));
@@ -586,7 +632,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             // save buttons somewhere
         	for (action in this.actions) {
 	            this.actions[action].hide();
-	            this.el.insertFirst(action == 'startSearch' ? this.searchButtonWrap : this.actions[action].getEl());
+	            this.bwrap.insertFirst(action == 'startSearch' ? this.searchButtonWrap : this.actions[action].getEl());
 	        }
         }
         fRow.remove();
@@ -738,8 +784,69 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.allFilterData = options.params.filter;
         this.store.fireEvent('exception');
         return false;
-    }
+    },
     
+    /***** sheets functions *****/
+    addFilterSheet: function(ftb) {
+        ftb.ownerCt = this.ownerCt;
+        ftb.parentSheet = this;
+        this.childSheets[ftb.id] = ftb;
+    },
+    
+    setActiveSheet: function(sheet) {
+        var ftb = Ext.isString(sheet) ? (sheet = this.id ? this : this.childSheets[sheet]) : sheet
+            rootSheet = this.getRootSheet(),
+            parentSheets = sheet.getParentSheets();
+        
+        if (! ftb.rendered) {
+            ftb.render(this.el);
+        }
+        
+        this.bwrap[ftb == this ? 'show' : 'hide']();
+        
+        for( var ftbId in this.childSheets) {
+            if (this.childSheets.hasOwnProperty(ftbId)) {
+                if (ftb == this.childSheets[ftbId]) {
+                    this.childSheets[ftbId].show();
+                    this.childSheets[ftbId].setActiveSheet(sheet);
+                } else {
+                    this.childSheets[ftbId].hide();
+                }
+            }
+        }
+        
+        // show toolbar on demand
+        if (ftb != rootSheet) {
+            rootSheet.tbar.removeAll();
+            Ext.each(parentSheets, function(sheet) {
+                sheet.breadCrumb.enable();
+                rootSheet.tbar.add(sheet.breadCrumb);
+            }, this);
+            ftb.breadCrumb.disable()
+            rootSheet.tbar.add(ftb.breadCrumb, '->', ftb.action_loadFilter);
+            rootSheet.tbar.show();
+            rootSheet.tbar.doLayout();
+        } else {
+            rootSheet.tbar.hide();
+        }
+        
+        this.onFilterRowsChange();
+    },
+    
+    getParentSheets: function(parents) {
+        parents = parents || [];
+        
+        if (this.parentSheet) {
+            parents.unshift(this.parentSheet);
+            return this.parentSheet.getParentSheets(parents);
+        }
+        
+        return parents;
+    },
+    
+    getRootSheet: function() {
+        return this.parentSheet ? this.parentSheet.getRootSheet() : this;
+    }
 });
 
 Ext.reg('tinewidgetsfiltertoolbar', Tine.widgets.grid.FilterToolbar);

@@ -293,14 +293,13 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var condition = value[0]; 
             
             // get header/comperator translation
-            var filterModel = Tine.Felamimail.sieve.RuleConditionsPanel.getFilterModel(this.app),
+            var filterModels = Tine.Felamimail.sieve.RuleConditionsPanel.getFilterModel(this.app),
                 header, 
                 comperator, 
-                i, 
                 found = false;
-            for (i=0; i < filterModel.length; i++) {
-                if (condition.header == filterModel[i].field) {
-                    header = filterModel[i].label;
+            Ext.each(filterModels, function(filterModel) {
+                if (condition.header == filterModel.field) {
+                    header = filterModel.label;
                     if (condition.header == 'size') {
                         comperator = (condition.comperator == 'over') ? _('is greater than') : _('is less than');
                     } else {
@@ -308,7 +307,7 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     }
                     found = true;
                 }
-            }
+            }, this);
             
             if (found === true) {
                 result = header + ' ' + comperator + ' "' + condition.key + '"';
