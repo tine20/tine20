@@ -28,7 +28,7 @@ class Sabre_CalDAV_Property_SupportedCalendarData extends Sabre_DAV_Property {
 
         $prefix = isset($server->xmlNamespaces[Sabre_CalDAV_Plugin::NS_CALDAV])?$server->xmlNamespaces[Sabre_CalDAV_Plugin::NS_CALDAV]:'cal';
 
-        $caldata = $doc->createElement($prefix . ':supported-calendar-data');
+        $caldata = $doc->createElement($prefix . ':calendar-data');
         $caldata->setAttribute('content-type','text/calendar');
         $caldata->setAttribute('version','2.0');
 
