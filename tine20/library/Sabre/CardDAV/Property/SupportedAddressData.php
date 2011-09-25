@@ -45,7 +45,7 @@ class Sabre_CardDAV_Property_SupportedAddressData extends Sabre_DAV_Property {
 
         $prefix = isset($server->xmlNamespaces[Sabre_CardDAV_Plugin::NS_CARDDAV])?$server->xmlNamespaces[Sabre_CardDAV_Plugin::NS_CARDDAV]:'card';
 
-        $caldata = $doc->createElement($prefix . ':supported-address-data');
+        $caldata = $doc->createElement($prefix . ':address-data-type');
         $caldata->setAttribute('content-type','text/vcard');
         $caldata->setAttribute('version',$this->version);
 
