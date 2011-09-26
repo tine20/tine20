@@ -508,11 +508,12 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
                     'filterName'    => 'ContactFilter',
                 ), 
                 'value' => array(
-                    array('condition' => 'OR', 'filters' =>
-                        array('field' => "dtstart",       "operator" => "within", "value" => "yearThis"),
-                        array('field' => "dtstart",       "operator" => "within", "value" => "yearLast")
-                    ),
+                    array('field' => "period",            "operator" => "within", "value" => array(
+                        'from'  => '2009-01-01 00:00:00',
+                        'until' => '2010-12-31 23:59:59',
+                    )),
                     array('field' => "attender_status",   "operator" => "in",  "value" => array('NEEDS-ACTION', 'ACCEPTED')),
+                    array('field' => "attender_role",     "operator" => "in",  "value" => array('REQ')),
                 )
             ),
             array('field' => 'id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->contact_id)
