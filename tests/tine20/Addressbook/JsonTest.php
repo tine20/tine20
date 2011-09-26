@@ -491,10 +491,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * testAttenderForeignIdFilter
-     * 
-     * @todo finish and activate 
      */
-    public function _testAttenderForeignIdFilter()
+    public function testAttenderForeignIdFilter()
     {
         $event = $this->_getEvent();
         Calendar_Controller_Event::getInstance()->create($event);
@@ -534,7 +532,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $testCalendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'           => 'PHPUnit test calendar',
             'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
-            'backend'        => $this->_backend->getType(),
+            'backend'        => 'Sql',
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
         ), true));
         
