@@ -186,37 +186,74 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     }
     
     /**
-     * create standard filter
+     * create foreign record filter (from array)
      * 
      * @param array $_filterData
      * @param string $_linkInfoKey
      */
-    public function _createForeignRecordFilterFromArray($_filterData, $_linkInfoKey)
+    protected function _createForeignRecordFilterFromArray($_filterData, $_linkInfoKey)
     {
         if (! array_key_exists('linkType', $_filterData[$_linkInfoKey])) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' skipping filter (filter syntax problem) -> ' 
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Skipping filter (foreign record filter syntax problem) -> ' 
                 . $this->_className . ' with filter data: ' . print_r($_filterData, TRUE));
             return;
         }
         
         switch ($_filterData[$_linkInfoKey]['linkType']) {
             case 'relation':
-                // @todo implement
-                throw new Tinebase_Exception_NotImplemented('relation filter not implemented yet');
+                $modelName = $this->_getModelNameFromLinkInfo($_filterData[$_linkInfoKey]);
+                
+                // @todo support 'OR' condition?
+                // @todo support different operators: equals, in, definedBy
+                $filter = new Tinebase_Model_Filter_Relation($modelName, 'AND', $_filterData['value'], array(
+                    'related_model'     => $modelName,
+                    'related_filter'    => $modelName . 'Filter'
+                ));
                 break;
             case 'foreignId':
                 // @todo implement
                 throw new Tinebase_Exception_NotImplemented('foreignId filter not implemented yet');
                 break;
         }
-    }
         
+        $this->addFilter($filter);
+    }
+    
     /**
-     * create standard filter
+     * get model name from link info and checks input
+     * 
+     * @param array $_linkInfo
+     * @return string
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _getModelNameFromLinkInfo($_linkInfo)
+    {
+        if (! array_key_exists('appName', $_linkInfo) || ! array_key_exists('modelName', $_linkInfo)) {
+            throw new Tinebase_Exception_InvalidArgument('Relation filter needs appName and modelName');
+        }
+
+        $appName = str_replace('_', '', $_linkInfo['appName']);
+        
+        if (! Tinebase_Application::getInstance()->isInstalled($appName) || ! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN)) {
+            throw new Tinebase_Exception_AccessDenied('No right to access application');
+        }
+        
+        $modelName = $appName . '_Model_' . str_replace('_', '', $_linkInfo['modelName']);
+        
+        if (! class_exists($modelName)) {
+            throw new Tinebase_Exception_InvalidArgument('Model does not exist');
+        }
+        
+        return $modelName;
+    }
+    
+    /**
+     * create standard filter (from array)
      * 
      * @param array $_filterData
      */
-    public function _createStandardFilterFromArray($_filterData)
+    protected function _createStandardFilterFromArray($_filterData)
     {
         $fieldModel = (isset($this->_filterModel[$_filterData['field']])) ? $this->_filterModel[$_filterData['field']] : '';
         
@@ -233,7 +270,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             $this->_customData[] = $_filterData;
         
         } else {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' skipping filter (filter syntax problem) -> ' 
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Skipping filter (filter syntax problem) -> ' 
                 . $this->_className . ' with filter data: ' . print_r($_filterData, TRUE));
         }
     }

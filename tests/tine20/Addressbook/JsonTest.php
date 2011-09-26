@@ -405,8 +405,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * test project relation filter
-     * 
-     * @todo add another contact + project that should not match
      */
     public function testProjectRelationFilter()
     {
@@ -431,10 +429,18 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         $closedStatus = Projects_Config::getInstance()->get(Projects_Config::PROJECT_STATUS)->records->filter('is_open', 0);
         $filter = array(
-            array('field' => 'project', 'operator' => 'AND', 'value' => array(
-                array('field' => "relation_type", "operator" => "equals", "value" => "COWORKER"),
-                array('field' => "status",        "operator" => "notin",  "value" => $closedStatus->getId()),
-            )),
+            array(
+                'field' => array(
+                    'linkType'      => 'relation',
+                    'appName'       => 'Projects',
+                    'modelName'     => 'Project',
+                ), 
+                'operator' => 'definedBy', 
+                'value' => array(
+                    array('field' => "relation_type", "operator" => "equals", "value" => "COWORKER"),
+                    array('field' => "status",        "operator" => "notin",  "value" => $closedStatus->getId()),
+                )
+            ),
             array('field' => 'org_name', 'operator' => 'equals', 'value' => $contact['org_name'])
         );
         $result = $this->_instance->searchContacts($filter, array());

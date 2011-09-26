@@ -114,19 +114,5 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Addressbook')),
         'type'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'customfield'          => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array('idProperty' => 'addressbook.id')),
-        
-    // relation filters
-        'project'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
-            'related_model'     => 'Projects_Model_Project',
-            'related_filter'    => 'Projects_Model_ProjectFilter'
-        )),
-        'event'          => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
-            'related_model'     => 'Calendar_Model_Event',
-            'related_filter'    => 'Calendar_Model_EventFilter'
-        )),
-        'lead'           => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
-            'related_model'     => 'Crm_Model_Lead',
-            'related_filter'    => 'Crm_Model_LeadFilter'
-        )),
     );
 }
