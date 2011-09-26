@@ -33,7 +33,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
     protected $_vcard;
     
     /**
-     * @var Addressbook_Convert_VCard
+     * @var Addressbook_Convert_Contact_VCard
      */
     protected $_converter;
     /**
@@ -44,7 +44,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
     public function __construct($_contact = null) 
     {
         $this->_contact = $_contact;
-        $this->_converter = new Addressbook_Convert_VCard();
+        $this->_converter = new Addressbook_Convert_Contact_VCard();
     }
     
     /**
@@ -57,7 +57,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      */
     public static function create(Tinebase_Model_Container $container, $vcardData)
     {
-        $contact = $this->_converter->import($vcardData);
+        $contact = $this->_converter->toTine20Model($vcardData);
         $contact->container_id = $container->getId();
         
         $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
@@ -214,7 +214,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
     public function put($cardData) 
     {
         $contact = self::convertToAddressbookModelContact($cardData, $this->_getContact());
-        $contact = $this->_converter->import($cardData, $this->_getContact());
+        $contact = $this->_converter->toTine20Model($cardData, $this->_getContact());
         
         $this->_contact = Addressbook_Controller_Contact::getInstance()->update($contact);
         
@@ -258,7 +258,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
     protected function _getVCard()
     {
         if ($this->_vcard == null) {
-            $this->_vcard = $this->_converter->export($this->_getContact());
+            $this->_vcard = $this->_converter->fromTine20Model($this->_getContact());
         }
         
         return $this->_vcard;
