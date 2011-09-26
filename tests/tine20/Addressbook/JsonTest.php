@@ -433,6 +433,20 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * get Project
+     *
+     * @return array
+     */
+    protected function _getProjectData()
+    {
+        return array(
+            'title'         => Tinebase_Record_Abstract::generateUID(),
+            'description'   => 'blabla',
+            'status'        => 'IN-PROCESS',
+        );
+    }
+    
+    /**
      * helper for project relation filter test
      * 
      * @param array $_contact
@@ -476,16 +490,74 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * get Project
-     *
-     * @return array
+     * testAttenderForeignIdFilter
+     * 
+     * @todo finish and activate 
      */
-    protected function _getProjectData()
+    public function _testAttenderForeignIdFilter()
     {
-        return array(
-            'title'         => Tinebase_Record_Abstract::generateUID(),
-            'description'   => 'blabla',
-            'status'        => 'IN-PROCESS',
+        $event = $this->_getEvent();
+        Calendar_Controller_Event::getInstance()->create($event);
+        
+        $filter = array(
+            array(
+                'field' => 'foreignRecord', 
+                'operator' => array(
+                    'linkType'      => 'foreignId',
+                    'appName'       => 'Calendar',
+                    'filterName'    => 'ContactFilter',
+                ), 
+                'value' => array(
+                    array('condition' => 'OR', 'filters' =>
+                        array('field' => "dtstart",       "operator" => "within", "value" => "yearThis"),
+                        array('field' => "dtstart",       "operator" => "within", "value" => "yearLast")
+                    ),
+                    array('field' => "attender_status",   "operator" => "in",  "value" => array('NEEDS-ACTION', 'ACCEPTED')),
+                )
+            ),
+            array('field' => 'id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->contact_id)
         );
+        $result = $this->_instance->searchContacts($filter, array());
+        
+        $this->assertEquals(1, $result['totalcount']);
+        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $result['results'][0]['id']);
+    }
+    
+    /**
+     * returns a simple event
+     *
+     * @return Calendar_Model_Event
+     */
+    protected function _getEvent()
+    {
+        $testCalendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+            'name'           => 'PHPUnit test calendar',
+            'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
+            'backend'        => $this->_backend->getType(),
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
+        ), true));
+        
+        return new Calendar_Model_Event(array(
+            'summary'     => 'Wakeup',
+            'dtstart'     => '2009-03-25 06:00:00',
+            'dtend'       => '2009-03-25 06:15:00',
+            'description' => 'Early to bed and early to rise, makes a men healthy, wealthy and wise',
+            'attendee'    => new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+                array(
+                    'user_id'        => Tinebase_Core::getUser()->contact_id,
+                    'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
+                    'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
+                    'status_authkey' => Tinebase_Record_Abstract::generateUID(),
+                ),
+            )),
+        
+            'container_id' => $testCalendar->getId(),
+            'organizer'    => Tinebase_Core::getUser()->contact_id,
+            'uid'          => Calendar_Model_Event::generateUID(),
+        
+            Tinebase_Model_Grants::GRANT_READ    => true,
+            Tinebase_Model_Grants::GRANT_EDIT    => true,
+            Tinebase_Model_Grants::GRANT_DELETE  => true,
+        ));
     }
 }
