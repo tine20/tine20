@@ -63,7 +63,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
         )));
         
-        Calendar_Model_Rrule::mergeRecuranceSet($weekviewEvents, $from, $until);
+        Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
         $this->assertEquals(2, count($weekviewEvents), 'there should only be 2 events in the set');
         $this->assertFalse(in_array($persistentEvent->getId(), $weekviewEvents->getId()), 'baseEvent should not be in the set!');
     }
@@ -94,7 +94,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
         )));
         
-        Calendar_Model_Rrule::mergeRecuranceSet($weekviewEvents, $from, $until);
+        Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
         $this->assertEquals(12, count($weekviewEvents), 'there should be 12 events in the set');
         
         // delte one instance
@@ -105,7 +105,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
         )));
         
-        Calendar_Model_Rrule::mergeRecuranceSet($weekviewEvents, $from, $until);
+        Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
         $this->assertEquals(11, count($weekviewEvents), 'there should be 11 events in the set');
         
         $exception = $weekviewEvents->filter('dtstart', new Tinebase_DateTime('2011-09-19 22:00:00'))->getFirstRecord();
@@ -135,7 +135,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $from = new Tinebase_DateTime('2009-03-26 00:00:00');
         $until = new Tinebase_DateTime('2009-04-01 23:59:59');
-        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($persistentEvent, $exceptions, $from, $until);
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
         
         $exception = $recurSet->getFirstRecord();
         $attendee = $exception->attendee[0];
@@ -182,7 +182,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
         )));
         
-        Calendar_Model_Rrule::mergeRecuranceSet($weekviewEvents, $from, $until);
+        Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
         
         $this->assertEquals(2, count($weekviewEvents), 'there should only be 2 events in the set');
         $this->assertFalse(in_array($persistentEvent->getId(), $weekviewEvents->getId()), 'baseEvent should not be in the set!');
@@ -259,7 +259,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         
         // get first recurrance
         $eventSet = new Tinebase_Record_RecordSet('Calendar_Model_Event', array($persistentRecurEvent));
-        Calendar_Model_Rrule::mergeRecuranceSet($eventSet, 
+        Calendar_Model_Rrule::mergeRecurrenceSet($eventSet, 
             new Tinebase_DateTime('2010-06-01 00:00:00'),
             new Tinebase_DateTime('2010-06-31 23:59:59')
         );
@@ -277,7 +277,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             array('field' => 'uid', 'operator' => 'equals', 'value' => $persistentRecurEvent->uid),
             array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until),
         ))));
-        Calendar_Model_Rrule::mergeRecuranceSet($weekviewEvents, $from, $until);
+        Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
         
         // make shure the 17.6. is not in the set
         $this->assertEquals(1, count($weekviewEvents), '17.6. is an exception date and must not be part of this weekview');
@@ -301,7 +301,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $persistentEvent = $this->_controller->create($event);
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($event, $exceptions, $from, $until);
         
         // create exceptions
         $recurSet->summary = 'Limo bei Schweinske';
@@ -325,7 +325,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until),
         ))));
         
-        Calendar_Model_Rrule::mergeRecuranceSet($events, $from, $until);
+        Calendar_Model_Rrule::mergeRecurrenceSet($events, $from, $until);
         
         $this->assertEquals(6, count($events), 'there should be exactly 6 events');
         

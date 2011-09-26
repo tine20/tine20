@@ -134,7 +134,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if (! empty($_event->rrule)) {
             $checkUntil = clone $_event->dtstart;
             $checkUntil->add(1, Tinebase_DateTime::MODIFIER_MONTH);
-            Calendar_Model_Rrule::mergeRecuranceSet($eventSet, $_event->dtstart, $checkUntil);
+            Calendar_Model_Rrule::mergeRecurrenceSet($eventSet, $_event->dtstart, $checkUntil);
         }
         
         $periods = array();
@@ -271,7 +271,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $events = $this->search($filter, new Tinebase_Model_Pagination(), FALSE, FALSE);
         
         foreach ($_periods as $period) {
-            Calendar_Model_Rrule::mergeRecuranceSet($events, $period['from'], $period['until']);
+            Calendar_Model_Rrule::mergeRecurrenceSet($events, $period['from'], $period['until']);
         }
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($events->toArray(), true));

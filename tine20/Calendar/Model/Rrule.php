@@ -215,17 +215,17 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         }
     }
     
-    /************************* recurance computation *****************************/
+    /************************* Recurrence computation *****************************/
     
     /**
-     * merges recurances of given events into the given event set
+     * merges Recurrences of given events into the given event set
      * 
      * @param  Tinebase_Record_RecordSet    $_events
      * @param  Tinebase_DateTime                    $_from
      * @param  Tinebase_DateTime                    $_until
      * @return void
      */
-    public static function mergeRecuranceSet($_events, $_from, $_until)
+    public static function mergeRecurrenceSet($_events, $_from, $_until)
     {
         //compute recurset
         $candidates = $_events->filter('rrule', "/^FREQ.*/", TRUE);
@@ -234,7 +234,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             try {
                 $exceptions = $_events->filter('recurid', "/^{$candidate->uid}-.*/", TRUE);
                 
-                $recurSet = Calendar_Model_Rrule::computeRecuranceSet($candidate, $exceptions, $_from, $_until);
+                $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($candidate, $exceptions, $_from, $_until);
                 foreach ($recurSet as $event) {
                     $_events->addRecord($event);
                     $event->setId('fakeid' . $candidate->uid . $event->dtstart->getTimeStamp());
@@ -262,7 +262,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     {
         $period = $_filter->getFilter('period');
         if ($period) {
-            self::mergeRecuranceSet($_events, $period->getFrom(), $period->getUntil());
+            self::mergeRecurrenceSet($_events, $period->getFrom(), $period->getUntil());
             
             foreach ($_events as $event) {
                 if (! $event->isInPeriod($period)) {
@@ -320,7 +320,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             
             
             
-            $recurSet = self::computeRecuranceSet($_event, $_exceptions, $from, $until);
+            $recurSet = self::computeRecurrenceSet($_event, $_exceptions, $from, $until);
             $attempts++;
             
             if (count($recurSet) > 0) {
@@ -342,7 +342,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     }
     
     /**
-     * Computes the recurance set of the given event leaving out $_event->exdate and $_exceptions
+     * Computes the Recurrence set of the given event leaving out $_event->exdate and $_exceptions
      * 
      * @todo respect rrule_until!
      *
@@ -352,7 +352,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * @param  Tinebase_DateTime                    $_until
      * @return Tinebase_Record_RecordSet
      */
-    public static function computeRecuranceSet($_event, $_exceptions, $_from, $_until)
+    public static function computeRecurrenceSet($_event, $_exceptions, $_from, $_until)
     {
         $rrule = new Calendar_Model_Rrule(NULL, TRUE);
         $rrule->setFromString($_event->rrule);

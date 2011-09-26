@@ -719,7 +719,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $from = new Tinebase_DateTime('2009-03-26 00:00:00');
         $until = new Tinebase_DateTime('2009-04-03 23:59:59');
-        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($persistentEvent, $exceptions, $from, $until); // 9 days
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until); // 9 days
         
         // skip 27(exception), 31(exception), 03(until)
         $this->assertEquals(6, count($recurSet));
@@ -748,7 +748,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(2, count($persistentEvents));
                 
         $exceptions = $persistentEvents->filter('recurid', "/^{$persistentEvent->uid}-.*/", TRUE);
-        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($updatedPersistenEvent, $exceptions, $from, $until);
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($updatedPersistenEvent, $exceptions, $from, $until);
         
         // skip 31(exception), and 8 (until)
         $this->assertEquals(7, count($recurSet));
