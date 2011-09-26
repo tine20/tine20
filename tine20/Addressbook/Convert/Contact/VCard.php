@@ -3,7 +3,7 @@
  * Tine 2.0
  *
  * @package     Addressbook
- * @subpackage  Frontend
+ * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,15 +13,13 @@
 /**
  * class to convert a contact to vcard and back again
  *
- * This class handles the creation, update and deletion of vcards
- *
  * @package     Addressbook
- * @subpackage  Frontend
+ * @subpackage  Convert
  */
-class Addressbook_Convert_VCard
+class Addressbook_Convert_Contact_VCard
 {
-    const CLIENT_SOGO    = 'sogo';
-    const CLIENT_GENERIC = 'generic';
+    const CLIENT_AUTODETECT = 'auto';
+    const CLIENT_SOGO       = 'sogo';
     
     /**
      * @var string
@@ -32,14 +30,14 @@ class Addressbook_Convert_VCard
      * @var array
      */
     protected $_supportedFields = array(
-        self::CLIENT_GENERIC => array(),
+        self::CLIENT_AUTODETECT => array(),
         self::CLIENT_SOGO    => array()
     );
     
     /**
      * @param unknown_type $_client
      */
-    public function __construct($_client = self::CLIENT_GENERIC)
+    public function __construct($_client = self::CLIENT_AUTODETECT)
     {
         if (!isset($this->_supportedFields[$_client])) {
             throw new Tinebase_Exception_UnexpectedValue('incalid client provided');
@@ -51,11 +49,11 @@ class Addressbook_Convert_VCard
     /**
      * converts vcard to Addressbook_Model_Contact
      * 
-     * @param  Sabre_VObject_Component|stream|string  $_vcard    the vcard to parse
-     * @param  Addressbook_Model_Contact              $_contact  update existing contact
+     * @param  Sabre_VObject_Component|stream|string  $_vcard  the vcard to parse
+     * @param  Tinebase_Record_Abstract               $_model  update existing contact
      * @return Addressbook_Model_Contact
      */
-    public function import($_vcard, Addressbook_Model_Contact $_contact = null)
+    public function toTine20Model($_vcard, Tinebase_Record_Abstract $_model = null)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . print_r($_vcard, true));
         
@@ -69,8 +67,8 @@ class Addressbook_Convert_VCard
             $vcard = Sabre_VObject_Reader::read($_vcard);
         }
         
-        if ($_contact instanceof Addressbook_Model_Contact) {
-            $contact = $_contact;
+        if ($_model instanceof Addressbook_Model_Contact) {
+            $contact = $_model;
         } else {
             $contact = new Addressbook_Model_Contact(null, false);
         }
@@ -212,55 +210,55 @@ class Addressbook_Convert_VCard
     /**
      * converts Addressbook_Model_Contact to vcard
      * 
-     * @param  Addressbook_Model_Contact  $_contact
+     * @param  Addressbook_Model_Contact  $_model
      * @return string
      */
-    public function export(Addressbook_Model_Contact $_contact)
+    public function fromTine20Model(Addressbook_Model_Contact $_model)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' contact ' . print_r($_contact->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' contact ' . print_r($_model->toArray(), true));
         
         $card = new Sabre_VObject_Component('VCARD');
         
         // required vcard fields
         $card->add(new Sabre_VObject_Property('VERSION', '3.0'));
-        $card->add(new Sabre_VObject_Property('FN', $_contact->n_fileas));
-        $card->add(new Sabre_VObject_Property('N', $_contact->n_family . ';' . $_contact->n_given));
+        $card->add(new Sabre_VObject_Property('FN', $_model->n_fileas));
+        $card->add(new Sabre_VObject_Property('N', $_model->n_family . ';' . $_model->n_given));
         
         $card->add(new Sabre_VObject_Property('PRODID', '-//tine20.org//Tine 2.0//EN'));
-        $card->add(new Sabre_VObject_Property('UID', $_contact->getId()));
+        $card->add(new Sabre_VObject_Property('UID', $_model->getId()));
 
-        $card->add(new Sabre_VObject_Property('ORG', Sabre_VObject_Property::concatCompoundValues(array($_contact->org_name, $_contact->org_unit))));
-        $card->add(new Sabre_VObject_Property('TITLE', $_contact->title));
+        $card->add(new Sabre_VObject_Property('ORG', Sabre_VObject_Property::concatCompoundValues(array($_model->org_name, $_model->org_unit))));
+        $card->add(new Sabre_VObject_Property('TITLE', $_model->title));
         
-        $card->add(new Sabre_VObject_Property('TEL;TYPE=work', $_contact->tel_work));
-        $card->add(new Sabre_VObject_Property('TEL;TYPE=cell', $_contact->tel_cell));
-        $card->add(new Sabre_VObject_Property('TEL;TYPE=fax',  $_contact->tel_fax));
-        $card->add(new Sabre_VObject_Property('TEL;TYPE=home', $_contact->tel_home));
+        $card->add(new Sabre_VObject_Property('TEL;TYPE=work', $_model->tel_work));
+        $card->add(new Sabre_VObject_Property('TEL;TYPE=cell', $_model->tel_cell));
+        $card->add(new Sabre_VObject_Property('TEL;TYPE=fax',  $_model->tel_fax));
+        $card->add(new Sabre_VObject_Property('TEL;TYPE=home', $_model->tel_home));
         
-        $card->add(new Sabre_VObject_Property('ADR;TYPE=work', Sabre_VObject_Property::concatCompoundValues(array(null, $_contact->adr_one_street2, $_contact->adr_one_street, $_contact->adr_one_locality, $_contact->adr_one_region, $_contact->adr_one_postalcode, $_contact->adr_one_countryname))));
-        $card->add(new Sabre_VObject_Property('ADR;TYPE=home', Sabre_VObject_Property::concatCompoundValues(array(null, $_contact->adr_two_street2, $_contact->adr_two_street, $_contact->adr_two_locality, $_contact->adr_two_region, $_contact->adr_two_postalcode, $_contact->adr_two_countryname))));
+        $card->add(new Sabre_VObject_Property('ADR;TYPE=work', Sabre_VObject_Property::concatCompoundValues(array(null, $_model->adr_one_street2, $_model->adr_one_street, $_model->adr_one_locality, $_model->adr_one_region, $_model->adr_one_postalcode, $_model->adr_one_countryname))));
+        $card->add(new Sabre_VObject_Property('ADR;TYPE=home', Sabre_VObject_Property::concatCompoundValues(array(null, $_model->adr_two_street2, $_model->adr_two_street, $_model->adr_two_locality, $_model->adr_two_region, $_model->adr_two_postalcode, $_model->adr_two_countryname))));
         
-        $card->add(new Sabre_VObject_Property('EMAIL;TYPE=work', $_contact->email));
-        $card->add(new Sabre_VObject_Property('EMAIL;TYPE=home', $_contact->email_home));
+        $card->add(new Sabre_VObject_Property('EMAIL;TYPE=work', $_model->email));
+        $card->add(new Sabre_VObject_Property('EMAIL;TYPE=home', $_model->email_home));
         
-        $card->add(new Sabre_VObject_Property('URL;TYPE=work', $_contact->url));
-        $card->add(new Sabre_VObject_Property('URL;TYPE=home', $_contact->url_home));
+        $card->add(new Sabre_VObject_Property('URL;TYPE=work', $_model->url));
+        $card->add(new Sabre_VObject_Property('URL;TYPE=home', $_model->url_home));
         
-        $card->add(new Sabre_VObject_Property('NOTE', $_contact->note));
+        $card->add(new Sabre_VObject_Property('NOTE', $_model->note));
         
-        if(! empty($_contact->jpegphoto)) {
+        if(! empty($_model->jpegphoto)) {
             try {
-                $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $_contact->getId());
+                $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $_model->getId());
                 $jpegData = $image->getBlob('image/jpeg');
                 $card->add(new Sabre_VObject_Property('PHOTO;ENCODING=b;TYPE=JPEG', base64_encode($jpegData)));
             } catch (Exception $e) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Image for contact {$_contact->getId()} not found or invalid");
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Image for contact {$_model->getId()} not found or invalid");
             }
         
         
         }        
-        if(isset($_contact->tags) && count($_contact->tags) > 0) {
-            $card->add(new Sabre_VObject_Property('CATEGORIES', Sabre_VObject_Property::concatCompoundValues((array) $_contact->tags->name, ',')));
+        if(isset($_model->tags) && count($_model->tags) > 0) {
+            $card->add(new Sabre_VObject_Property('CATEGORIES', Sabre_VObject_Property::concatCompoundValues((array) $_model->tags->name, ',')));
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' card ' . $card->serialize());
