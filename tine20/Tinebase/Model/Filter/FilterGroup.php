@@ -234,8 +234,6 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     protected function _getModelNameFromLinkInfo($_linkInfo, $_modelKey)
     {
-        print_r($_linkInfo);
-        
         if (   ! in_array($_modelKey, array('modelName', 'filterName')) 
             || ! array_key_exists('appName', $_linkInfo) 
             || ! array_key_exists($_modelKey, $_linkInfo)
