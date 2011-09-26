@@ -253,6 +253,28 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     }
     
     /**
+     * merge recurrences amd remove all events that do not match period filter
+     * 
+     * @param Tinebase_Record_RecordSet $_events
+     * @param Calendar_Model_EventFilter $_filter
+     */
+    public static function mergeAndRemoveNonMatchingRecurrences(Tinebase_Record_RecordSet $_events, Calendar_Model_EventFilter $_filter)
+    {
+        $period = $_filter->getFilter('period');
+        if ($period) {
+            self::mergeRecuranceSet($_events, $period->getFrom(), $period->getUntil());
+            
+            foreach ($_events as $event) {
+                if (! $event->isInPeriod($period)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__ 
+                        . ') Removing not matching event ' . $event->summary);
+                    $_events->removeRecord($event);
+                }
+            }
+        }
+    }
+    
+    /**
      * returns next occurrence _ignoring exceptions_ or NULL if there is none/not computable
      * 
      * NOTE: computing the next occurrence of an open end rrule can be dangoures, as it might result
