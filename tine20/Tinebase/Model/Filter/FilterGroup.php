@@ -52,6 +52,19 @@
  *     array('field' => 'foreign_id',  'operator' => 'AND', value => array(
  *         array('field' => 'foreignfieldname',  'operator' => 'contains', 'value' => 'test'),
  *     )
+ *     // relation filter (Contact <-> Project) 
+ *     array(
+ *         'field' => array(
+ *              'linkType'      => 'relation',
+ *              'appName'       => 'Projects',
+ *              'modelName'     => 'Project',
+ *          ), 
+ *          'operator' => 'definedBy', 
+ *          'value' => array(
+ *              array('field' => "relation_type", "operator" => "equals", "value" => "COWORKER"),
+ *              array('field' => "status",        "operator" => "notin",  "value" => array(1,2,3)),
+ *          )
+ *     ),
  * );
  * 
  * $filterGroup = new myFilterGroup($filterData);
@@ -162,27 +175,42 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             // if a condition is given, we create a new filtergroup from this class
             if (isset($filterData['condition'])) {
                 $this->addFilterGroup(new $this->_className($filterData['filters'], $filterData['condition'], $this->_options));
-            
+            } else if (is_array($_filterData['field'])) {
+                // @todo implement
+                throw new Tinebase_Exception_NotImplemented('field is array');
+            } else if (is_array($_filterData['operator'])) {
+                // @todo implement
+                throw new Tinebase_Exception_NotImplemented('operator is array');
             } else {
-                $fieldModel = (isset($this->_filterModel[$filterData['field']])) ? $this->_filterModel[$filterData['field']] : '';
-                
-                if (empty($fieldModel)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                        . '[' . $this->_className . '] Skipping filter (no filter model defined) ' . print_r($filterData, true));
-                
-                } elseif (array_key_exists('filter', $fieldModel) && array_key_exists('value', $filterData)) {
-                    // create a 'single' filter
-                    $this->addFilter($this->createFilter($filterData['field'], $filterData['operator'], $filterData['value']));
-                
-                } elseif (array_key_exists('custom', $fieldModel) && $fieldModel['custom'] == true) {
-                    // silently skip data, as they will be evaluated by the concrete filtergroup
-                    $this->_customData[] = $filterData;
-                
-                } else {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' skipping filter (filter syntax problem) -> ' 
-                        . $this->_className . ' with filter data: ' . print_r($filterData, TRUE));
-                }
+                $this->_createStandardFilterFromArray($filterData);
             }
+        }
+    }
+    
+    /**
+     * create standard filter
+     * 
+     * @param array $_filterData
+     */
+    public function _createStandardFilterFromArray($_filterData)
+    {
+        $fieldModel = (isset($this->_filterModel[$_filterData['field']])) ? $this->_filterModel[$_filterData['field']] : '';
+        
+        if (empty($fieldModel)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . '[' . $this->_className . '] Skipping filter (no filter model defined) ' . print_r($_filterData, true));
+        
+        } elseif (array_key_exists('filter', $fieldModel) && array_key_exists('value', $_filterData)) {
+            // create a 'single' filter
+            $this->addFilter($this->createFilter($_filterData['field'], $_filterData['operator'], $_filterData['value']));
+        
+        } elseif (array_key_exists('custom', $fieldModel) && $fieldModel['custom'] == true) {
+            // silently skip data, as they will be evaluated by the concrete filtergroup
+            $this->_customData[] = $_filterData;
+        
+        } else {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' skipping filter (filter syntax problem) -> ' 
+                . $this->_className . ' with filter data: ' . print_r($_filterData, TRUE));
         }
     }
     
