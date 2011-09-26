@@ -49,22 +49,22 @@ class Addressbook_Convert_Contact_VCard
     /**
      * converts vcard to Addressbook_Model_Contact
      * 
-     * @param  Sabre_VObject_Component|stream|string  $_vcard  the vcard to parse
+     * @param  Sabre_VObject_Component|stream|string  $_blob   the vcard to parse
      * @param  Tinebase_Record_Abstract               $_model  update existing contact
      * @return Addressbook_Model_Contact
      */
-    public function toTine20Model($_vcard, Tinebase_Record_Abstract $_model = null)
+    public function toTine20Model($_blob, Tinebase_Record_Abstract $_model = null)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . print_r($_vcard, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . print_r($_blob, true));
         
-        if ($_vcard instanceof Sabre_VObject_Component) {
-            $vcard = $_vcard;
+        if ($_blob instanceof Sabre_VObject_Component) {
+            $vcard = $_blob;
         } else {
-            if (is_resource($_vcard)) {
-                $_vcard = stream_get_contents($_vcard);
+            if (is_resource($_blob)) {
+                $_blob = stream_get_contents($_blob);
             }
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . print_r($_vcard, true));
-            $vcard = Sabre_VObject_Reader::read($_vcard);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . print_r($_blob, true));
+            $vcard = Sabre_VObject_Reader::read($_blob);
         }
         
         if ($_model instanceof Addressbook_Model_Contact) {
