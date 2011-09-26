@@ -36,6 +36,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      * @var Addressbook_Convert_Contact_VCard
      */
     protected $_converter;
+    
     /**
      * Constructor 
      * 
