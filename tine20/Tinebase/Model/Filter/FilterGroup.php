@@ -175,18 +175,42 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             // if a condition is given, we create a new filtergroup from this class
             if (isset($filterData['condition'])) {
                 $this->addFilterGroup(new $this->_className($filterData['filters'], $filterData['condition'], $this->_options));
-            } else if (is_array($_filterData['field'])) {
-                // @todo implement
-                throw new Tinebase_Exception_NotImplemented('field is array');
-            } else if (is_array($_filterData['operator'])) {
-                // @todo implement
-                throw new Tinebase_Exception_NotImplemented('operator is array');
+            } else if (is_array($filterData['field'])) {
+                $this->_createForeignRecordFilterFromArray($filterData, 'field');
+            } else if (is_array($filterData['operator'])) {
+                $this->_createForeignRecordFilterFromArray($filterData, 'operator');
             } else {
                 $this->_createStandardFilterFromArray($filterData);
             }
         }
     }
     
+    /**
+     * create standard filter
+     * 
+     * @param array $_filterData
+     * @param string $_linkInfoKey
+     */
+    public function _createForeignRecordFilterFromArray($_filterData, $_linkInfoKey)
+    {
+        if (! array_key_exists('linkType', $_filterData[$_linkInfoKey])) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' skipping filter (filter syntax problem) -> ' 
+                . $this->_className . ' with filter data: ' . print_r($_filterData, TRUE));
+            return;
+        }
+        
+        switch ($_filterData[$_linkInfoKey]['linkType']) {
+            case 'relation':
+                // @todo implement
+                throw new Tinebase_Exception_NotImplemented('relation filter not implemented yet');
+                break;
+            case 'foreignId':
+                // @todo implement
+                throw new Tinebase_Exception_NotImplemented('foreignId filter not implemented yet');
+                break;
+        }
+    }
+        
     /**
      * create standard filter
      * 
