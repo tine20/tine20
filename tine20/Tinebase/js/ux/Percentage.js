@@ -135,10 +135,10 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
         var contenttype =  record.get('contenttype');       
         if(contenttype) {       
         	var iconClass = contenttype.replace("/", "-");
-        	metadata.css = iconClass + ' ';
+        	metadata.css = iconClass + '_16x16 ';
         }
                
-        metadata.css += 'standardFileClass';
+        metadata.css += 'standardFileClass_16x16';
     }
     
     

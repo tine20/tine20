@@ -245,9 +245,10 @@
             function setAppName($appName) {
                 $this->appName = $appName;
             }
+                                  
+            function buildMimeTypesStyleFile($resolution, &$styleSheet) {
             
-            function main() {
-            	$relatedImgPath = '/images/oxygen/16x16/mimetypes/';
+            	$relatedImgPath = '/images/oxygen/'.$resolution.'/mimetypes/';
             	$imgPath = '${project.basedir}'.$relatedImgPath;
             	if (! file_exists($imgPath) || ! is_dir($imgPath)) {
             		echo 'Mimetype images no found!';
@@ -257,10 +258,8 @@
  				
     			// öffnen des Verzeichnisses
     			if ( $handle = opendir($imgPath) ) {
-    			 !important;
-    				$styleSheet = fopen('Tinebase/css/mimetypes.css', 'w+');
                 	
-                	fwrite($styleSheet, ".standardFileClass .x-grid3-cell-inner {\n");
+                	fwrite($styleSheet, ".standardFileClass_".$resolution." .x-grid3-cell-inner {\n");
         			fwrite($styleSheet, "    background-image: url(../..".$relatedImgPath."application-octet-stream.png);\n");
         			fwrite($styleSheet, "    background-repeat:  no-repeat;\n");
         			fwrite($styleSheet, "    padding-left: 19px;\n");
@@ -274,17 +273,25 @@
         				$addToStyle = strcmp($fileName, "..") + strcmp($fileName, "..");
         				if($addToStyle > 0) {
         				
-        					fwrite($styleSheet, ".".$fileName." .x-grid3-cell-inner {\n");
+        					fwrite($styleSheet, ".".$fileName."_".$resolution." .x-grid3-cell-inner {\n");
         					fwrite($styleSheet, "    background-image: url(../..".$relatedImgPath.$file.") !important;\n");
         					fwrite($styleSheet, "    background-repeat:  no-repeat;\n");
         					fwrite($styleSheet, "    padding-left: 19px;\n");
         					fwrite($styleSheet, "}\n\n");
         				}
 			        }
-        			fclose($styleSheet);
+        			
         			closedir($handle);
     			}
-
+            
+            }
+            
+            function main() {
+    				$styleSheet = fopen('Tinebase/css/mimetypes.css', 'w+');
+            		$this->buildMimeTypesStyleFile('16x16', $styleSheet);
+					$this->buildMimeTypesStyleFile('22x22', $styleSheet);
+					$this->buildMimeTypesStyleFile('32x32', $styleSheet);            	
+					fclose($styleSheet);
         	}	
         }
     ]]></adhoc-task>
