@@ -99,12 +99,6 @@ class Filemanager_Frontend_WebDAV_Collection extends Sabre_DAV_Collection
             throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $_appPath . ' could not be found');
         }
 
-        // apps which have an WebDav Frontend but are not yet working
-        if (in_array($appName, array('Calendar'))) {
-            throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $_appPath . ' could not be found');
-        }
-        
-        
         $className = $appName . '_Frontend_WebDav';
         if (!@class_exists($className)) {
             throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $_appPath . ' could not be found');
