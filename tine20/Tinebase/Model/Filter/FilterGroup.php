@@ -161,7 +161,6 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * sets this filter group from filter data in array representation
      *
      * @param array $_data
-     * @throws Tinebase_Exception_UnexpectedValue
      */
     public function setFromArray($_data)
     {
@@ -203,9 +202,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             case 'relation':
                 $modelName = $this->_getModelNameFromLinkInfo($_filterData[$_linkInfoKey]);
                 
+                $value = ($_filterData['operator'] === 'definedBy') ? $_filterData['value'] :
+                    array(array('field' => 'id', 'operator' => $_filterData['operator'], $_filterData['value']));
+                
                 // @todo support 'OR' condition?
-                // @todo support different operators: equals, in, definedBy
-                $filter = new Tinebase_Model_Filter_Relation($modelName, 'AND', $_filterData['value'], array(
+                $filter = new Tinebase_Model_Filter_Relation($modelName, 'AND', $value, array(
                     'related_model'     => $modelName,
                     'related_filter'    => $modelName . 'Filter'
                 ));

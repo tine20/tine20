@@ -427,7 +427,36 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $projectJson = new Projects_Frontend_Json();
         $newProject = $projectJson->saveProject($project);
         
-        $closedStatus = Projects_Config::getInstance()->get(Projects_Config::PROJECT_STATUS)->records->filter('is_open', 0);
+        $this->_testProjectRelationFilter($contact, 'definedBy');
+        $this->_testProjectRelationFilter($contact, 'in', $newProject);
+        $this->_testProjectRelationFilter($contact, 'equals', $newProject);
+    }
+    
+    /**
+     * helper for project relation filter test
+     * 
+     * @param array $_contact
+     * @param string
+     * @param array $_project
+     */
+    protected function _testProjectRelationFilter($_contact, $_operator, $_project = NULL)
+    {
+        switch ($_operator) {
+            case 'definedBy':
+                $closedStatus = Projects_Config::getInstance()->get(Projects_Config::PROJECT_STATUS)->records->filter('is_open', 0);
+                $value = array(
+                    array('field' => "relation_type", "operator" => "equals", "value" => "COWORKER"),
+                    array('field' => "status",        "operator" => "notin",  "value" => $closedStatus->getId()),
+                );
+                break;
+            case 'in':
+                $value = array($_project['id']);
+                break;
+            case 'equals':
+                $value = $_project['id'];
+                break;
+        }
+        
         $filter = array(
             array(
                 'field' => array(
@@ -435,18 +464,15 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
                     'appName'       => 'Projects',
                     'modelName'     => 'Project',
                 ), 
-                'operator' => 'definedBy', 
-                'value' => array(
-                    array('field' => "relation_type", "operator" => "equals", "value" => "COWORKER"),
-                    array('field' => "status",        "operator" => "notin",  "value" => $closedStatus->getId()),
-                )
+                'operator' => $_operator, 
+                'value' => $value
             ),
-            array('field' => 'org_name', 'operator' => 'equals', 'value' => $contact['org_name'])
+            array('field' => 'org_name', 'operator' => 'equals', 'value' => $_contact['org_name'])
         );
         $result = $this->_instance->searchContacts($filter, array());
         
         $this->assertEquals(1, $result['totalcount']);
-        $this->assertEquals($contact['org_name'], $result['results'][0]['org_name']);
+        $this->assertEquals($_contact['org_name'], $result['results'][0]['org_name']);
     }
     
     /**
