@@ -2474,7 +2474,7 @@
         </table>
         <table>
             <name>async_job</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>

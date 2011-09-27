@@ -248,4 +248,17 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '5.3');
     }
+    
+    /**
+     * update to 5.4
+     * - add seq to async job
+     */
+    public function update_3()
+    {
+        $update4 = new Tinebase_Setup_Update_Release4($this->_backend);
+        $update4->update_8();
+        
+        $this->setTableVersion('async_job', '3');
+        $this->setApplicationVersion('Tinebase', '5.4');
+    }
 }
