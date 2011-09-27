@@ -96,8 +96,14 @@ class Calendar_Model_ContactFilter extends Tinebase_Model_Filter_Abstract
             case 'equals':
                 $result = ($_attender->{$attenderField} === $_filterData['value']);
                 break;
+            case 'not':
+                $result = ($_attender->{$attenderField} !== $_filterData['value']);
+                break;
             case 'in':
                 $result = in_array($_attender->{$attenderField}, $_filterData['value']);
+                break;
+            case 'notin':
+                $result = ! in_array($_attender->{$attenderField}, $_filterData['value']);
                 break;
             default:
                 $result = FALSE;
