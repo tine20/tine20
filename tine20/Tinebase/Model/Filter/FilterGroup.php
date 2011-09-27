@@ -224,8 +224,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 $value = ($operator === 'definedBy') ? $_filterData['value'] :
                     array(array('field' => 'id', 'operator' => $operator, $_filterData['value']));
                 
-                // @todo support 'OR' condition?
-                $filter = new Tinebase_Model_Filter_Relation($modelName, 'AND', $value, array(
+                $filter = new Tinebase_Model_Filter_Relation($_filterData['field'], $_filterData['operator'], $value, array(
                     'related_model'     => $modelName,
                     'related_filter'    => $modelName . 'Filter'
                 ));
@@ -233,7 +232,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
 
             case 'foreignId':
                 $modelName = $this->_getModelNameFromLinkInfo($_filterData[$_linkInfoKey], 'filterName');
-                $filter = new $modelName($modelName, $operator, $_filterData['value']);
+                $filter = new $modelName($_filterData['field'], $_filterData['operator'], $_filterData['value']);
                 break;
         }
         
@@ -573,7 +572,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         foreach ($this->getFilterObjects() as $filter) {
             if ($filter instanceof Tinebase_Model_Filter_Abstract) {
                 $field = $filter->getField();
-                if (array_key_exists($field, $this->_filterModel) && array_key_exists('options', $this->_filterModel[$field]) && array_key_exists('requiredCols', $this->_filterModel[$field]['options'])) {
+                if (   is_string($field) 
+                    && array_key_exists($field, $this->_filterModel) 
+                    && array_key_exists('options', $this->_filterModel[$field]) 
+                    && array_key_exists('requiredCols', $this->_filterModel[$field]['options'])
+                ) {
                     $result = array_merge($result, $this->_filterModel[$field]['options']['requiredCols']);
                 }
             } else if ($filter instanceof Tinebase_Model_Filter_FilterGroup) {
