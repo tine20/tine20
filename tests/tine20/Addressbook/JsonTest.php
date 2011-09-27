@@ -535,26 +535,58 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         Calendar_Controller_Event::getInstance()->create($event);
         
         $filter = array(
-            array(
-                'field' => 'foreignRecord', 
-                'operator' => array(
-                    'linkType'      => 'foreignId',
-                    'appName'       => 'Calendar',
-                    'filterName'    => 'ContactOrganizerFilter',
-                ), 
-                'value' => array(
-                    array('field' => "period",            "operator" => "within", "value" => array(
-                        'from'  => '2009-01-01 00:00:00',
-                        'until' => '2010-12-31 23:59:59',
-                    )),
-                    array('field' => 'organizer',   "operator" => "equals",  "value" => Tinebase_Core::getUser()->contact_id),
-                )
-            ),
+            $this->_getOrganizerForeignIdFilter(),
             array('field' => 'id', 'operator' => 'in', 'value' => array(Tinebase_Core::getUser()->contact_id, $contact['id']))
         );
         $result = $this->_instance->searchContacts($filter, array());
         
         $this->assertEquals(1, $result['totalcount']);
+        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $result['results'][0]['id']);
+    }
+    
+    /**
+     * return event organizuer filter
+     * 
+     * @return array
+     */
+    protected function _getOrganizerForeignIdFilter()
+    {
+        return array(
+            'field' => 'foreignRecord', 
+            'operator' => array(
+                'linkType'      => 'foreignId',
+                'appName'       => 'Calendar',
+                'filterName'    => 'ContactOrganizerFilter',
+            ), 
+            'value' => array(
+                array('field' => "period",            "operator" => "within", "value" => array(
+                    'from'  => '2009-01-01 00:00:00',
+                    'until' => '2010-12-31 23:59:59',
+                )),
+                array('field' => 'organizer',   "operator" => "equals",  "value" => Tinebase_Core::getUser()->contact_id),
+            )
+        );
+    }
+    
+    /**
+     * testOrganizerForeignIdFilterWithOrCondition
+     */
+    public function testOrganizerForeignIdFilterWithOrCondition()
+    {
+        $contact = $this->_addContact();
+        $event = $this->_getEvent($contact);
+        Calendar_Controller_Event::getInstance()->create($event);
+        
+        $filter = array(array(
+            'condition' => 'OR',
+            'filters'   => array(
+                $this->_getOrganizerForeignIdFilter(),
+                array('field' => 'id', 'operator' => 'in', 'value' => array($contact['id']))
+            )
+        ));
+        $result = $this->_instance->searchContacts($filter, array());
+        
+        $this->assertEquals(2, $result['totalcount'], 'expected 2 contacts');
         $this->assertEquals(Tinebase_Core::getUser()->contact_id, $result['results'][0]['id']);
     }
     
