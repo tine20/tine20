@@ -19,6 +19,13 @@
 class Calendar_Model_ContactAttendeeFilter extends Tinebase_Model_Filter_Abstract 
 {
     /**
+     * check allowed operators
+     * 
+     * @var boolean
+     */
+    protected $_checkOperator = FALSE;
+    
+    /**
      * filter fields for role and status
      * 
      * @var array
