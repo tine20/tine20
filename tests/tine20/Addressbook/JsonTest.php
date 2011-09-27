@@ -518,6 +518,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             array('field' => 'id', 'operator' => 'in', 'value' => array(Tinebase_Core::getUser()->contact_id, $contact['id']))
         );
         $result = $this->_instance->searchContacts($filter, array());
+        $this->assertTrue(is_array($result['filter'][0]['operator']));
+        $this->assertEquals('foreignRecord', $result['filter'][0]['field']);
         
         $this->assertEquals(1, $result['totalcount']);
         $this->assertEquals(Tinebase_Core::getUser()->contact_id, $result['results'][0]['id']);
