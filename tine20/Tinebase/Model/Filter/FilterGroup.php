@@ -233,6 +233,16 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             case 'foreignId':
                 $modelName = $this->_getModelNameFromLinkInfo($_filterData[$_linkInfoKey], 'filterName');
                 $filter = new $modelName($_filterData['field'], $_filterData['operator'], $_filterData['value']);
+                
+                // @todo maybe it will be possible to add a generic/implicite foreign id filter 
+                // .... but we have to solve the problem of the foreign id field first
+//                if (! array_key_exists('filterName', $_filterData[$_linkInfoKey])) {
+//                    $modelName = $this->_getModelNameFromLinkInfo($_filterData[$_linkInfoKey], 'modelName');
+//                    $filter = new Tinebase_Model_Filter_ForeignId($_filterData['field'], $_filterData['operator'], $_filterData['value'], array(
+//                        'filtergroup'       => $modelName . 'Filter', 
+//                        'controller'        => str_replace('Model', 'Controller', $modelName),
+//                    ));
+//                }
                 break;
         }
         
