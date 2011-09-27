@@ -100,12 +100,12 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('create');
         
+        $_record->account_grants = $this->_convertGrantsToRecordSet($_record->account_grants);
         Tinebase_Container::getInstance()->checkContainerOwner($_record);
 
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'create');
         
-        $grants = $this->_convertGrantsToRecordSet($_record->account_grants);
-        $container = $this->_containerController->addContainer($_record, $grants, TRUE);
+        $container = $this->_containerController->addContainer($_record, $_record->account_grants, TRUE);
         $container->account_grants = $this->_containerController->getGrantsOfContainer($container, TRUE);
         
         return $container;
