@@ -52,7 +52,7 @@
  *     array('field' => 'foreign_id',  'operator' => 'AND', value => array(
  *         array('field' => 'foreignfieldname',  'operator' => 'contains', 'value' => 'test'),
  *     )
- *     // relation filter (Contact <-> Project) 
+ *     // foreign record (relation) filter (Contact <-> Project) 
  *     array(
  *         'field' => array(
  *              'linkType'      => 'relation',
@@ -65,6 +65,23 @@
  *              array('field' => "status",        "operator" => "notin",  "value" => array(1,2,3)),
  *          )
  *     ),
+ *     // foreign record (id) filter (Contact <-> Event Attender)
+ *     array(
+ *          'field' => 'foreignRecord', 
+ *          'operator' => array(
+ *              'linkType'      => 'foreignId',
+ *              'appName'       => 'Calendar',
+ *              'filterName'    => 'ContactFilter', // this filter model needs to exist in Calendar/Model/
+ *          ), 
+ *          'value' => array(
+ *              array('field' => "period",            "operator" => "within", "value" => array(
+ *                  'from'  => '2009-01-01 00:00:00',
+ *                  'until' => '2010-12-31 23:59:59',
+ *              )),
+ *              array('field' => "attender_status",   "operator" => "in",  "value" => array('NEEDS-ACTION', 'ACCEPTED')),
+ *              array('field' => "attender_role",     "operator" => "in",  "value" => array('REQ')),
+ *          )
+ *      ),
  * );
  * 
  * $filterGroup = new myFilterGroup($filterData);
