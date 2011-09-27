@@ -52,7 +52,7 @@
  *     array('field' => 'foreign_id',  'operator' => 'AND', value => array(
  *         array('field' => 'foreignfieldname',  'operator' => 'contains', 'value' => 'test'),
  *     )
- *     // relation filter (Contact <-> Project) 
+ *     // foreign record (relation) filter (Contact <-> Project) 
  *     array(
  *         'field' => array(
  *              'linkType'      => 'relation',
@@ -65,6 +65,23 @@
  *              array('field' => "status",        "operator" => "notin",  "value" => array(1,2,3)),
  *          )
  *     ),
+ *     // foreign record (id) filter (Contact <-> Event Attender)
+ *     array(
+ *          'field' => 'foreignRecord', 
+ *          'operator' => array(
+ *              'linkType'      => 'foreignId',
+ *              'appName'       => 'Calendar',
+ *              'filterName'    => 'ContactFilter', // this filter model needs to exist in Calendar/Model/
+ *          ), 
+ *          'value' => array(
+ *              array('field' => "period",            "operator" => "within", "value" => array(
+ *                  'from'  => '2009-01-01 00:00:00',
+ *                  'until' => '2010-12-31 23:59:59',
+ *              )),
+ *              array('field' => "attender_status",   "operator" => "in",  "value" => array('NEEDS-ACTION', 'ACCEPTED')),
+ *              array('field' => "attender_role",     "operator" => "in",  "value" => array('REQ')),
+ *          )
+ *      ),
  * );
  * 
  * $filterGroup = new myFilterGroup($filterData);
@@ -207,8 +224,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 $value = ($operator === 'definedBy') ? $_filterData['value'] :
                     array(array('field' => 'id', 'operator' => $operator, $_filterData['value']));
                 
-                // @todo support 'OR' condition?
-                $filter = new Tinebase_Model_Filter_Relation($modelName, 'AND', $value, array(
+                $filter = new Tinebase_Model_Filter_Relation($_filterData['field'], $_filterData['operator'], $value, array(
                     'related_model'     => $modelName,
                     'related_filter'    => $modelName . 'Filter'
                 ));
@@ -216,7 +232,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
 
             case 'foreignId':
                 $modelName = $this->_getModelNameFromLinkInfo($_filterData[$_linkInfoKey], 'filterName');
-                $filter = new $modelName($modelName, $operator, $_filterData['value']);
+                $filter = new $modelName($_filterData['field'], $_filterData['operator'], $_filterData['value']);
                 break;
         }
         
@@ -556,7 +572,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         foreach ($this->getFilterObjects() as $filter) {
             if ($filter instanceof Tinebase_Model_Filter_Abstract) {
                 $field = $filter->getField();
-                if (array_key_exists($field, $this->_filterModel) && array_key_exists('options', $this->_filterModel[$field]) && array_key_exists('requiredCols', $this->_filterModel[$field]['options'])) {
+                if (   is_string($field) 
+                    && array_key_exists($field, $this->_filterModel) 
+                    && array_key_exists('options', $this->_filterModel[$field]) 
+                    && array_key_exists('requiredCols', $this->_filterModel[$field]['options'])
+                ) {
                     $result = array_merge($result, $this->_filterModel[$field]['options']['requiredCols']);
                 }
             } else if ($filter instanceof Tinebase_Model_Filter_FilterGroup) {

@@ -27,12 +27,19 @@ abstract class Tinebase_Model_Filter_Abstract
     protected $_operators = array();
     
     /**
-     * @var string property this filter is applied to
+     * check allowed operators (should be disabled if operator could be an array)
+     * 
+     * @var boolean
+     */
+    protected $_checkOperator = TRUE;
+    
+    /**
+     * @var mixed property this filter is applied to
      */
     protected $_field = NULL;
     
     /**
-     * @var string operator
+     * @var mixed operator
      */
     protected $_operator = NULL;
     
@@ -75,7 +82,7 @@ abstract class Tinebase_Model_Filter_Abstract
     /**
      * set field 
      *
-     * @param string $_field
+     * @param mixed $_field
      */
     public function setField($_field)
     {
@@ -85,7 +92,7 @@ abstract class Tinebase_Model_Filter_Abstract
     /**
      * returns fieldname of this filter
      *
-     * @return string
+     * @return mixed
      */
     public function getField()
     {
@@ -95,7 +102,7 @@ abstract class Tinebase_Model_Filter_Abstract
     /**
      * sets operator
      *
-     * @param string $_operator
+     * @param mixed $_operator
      */
     public function setOperator($_operator)
     {
@@ -104,7 +111,7 @@ abstract class Tinebase_Model_Filter_Abstract
             $_operator = $this->_operators[0];
         }
         
-        if (! in_array($_operator, $this->_operators)) {
+        if ($this->_checkOperator && ! in_array($_operator, $this->_operators)) {
             throw new Tinebase_Exception_UnexpectedValue("operator $_operator is not defined");
         }
         
@@ -114,7 +121,7 @@ abstract class Tinebase_Model_Filter_Abstract
     /**
      * gets operator
      *
-     * @return  string
+     * @return  mixed
      */
     public function getOperator()
     {

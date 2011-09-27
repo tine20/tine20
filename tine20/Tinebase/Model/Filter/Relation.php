@@ -27,12 +27,11 @@
 class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
 {
     /**
-     * @var array list of allowed operators
+     * check allowed operators
+     * 
+     * @var boolean
      */
-    protected $_operators = array(
-        0 => 'AND',
-        1 => 'OR',
-    );
+    protected $_checkOperator = FALSE;
     
     /**
      * appends sql to given select statement
