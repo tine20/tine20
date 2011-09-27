@@ -494,7 +494,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testAttenderForeignIdFilter()
     {
-        $event = $this->_getEvent();
+        $contact = $this->_addContact();
+        $event = $this->_getEvent($contact);
         Calendar_Controller_Event::getInstance()->create($event);
         
         $filter = array(
@@ -510,11 +511,11 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
                         'from'  => '2009-01-01 00:00:00',
                         'until' => '2010-12-31 23:59:59',
                     )),
-                    array('field' => "attender_status",   "operator" => "in",  "value" => array('NEEDS-ACTION', 'ACCEPTED')),
-                    array('field' => "attender_role",     "operator" => "in",  "value" => array('REQ')),
+                    array('field' => Calendar_Model_ContactFilter::STATUS_FIELD,   "operator" => "in",  "value" => array('NEEDS-ACTION', 'ACCEPTED')),
+                    array('field' => Calendar_Model_ContactFilter::ROLE_FIELD,     "operator" => "in",  "value" => array('REQ')),
                 )
             ),
-            array('field' => 'id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->contact_id)
+            array('field' => 'id', 'operator' => 'in', 'value' => array(Tinebase_Core::getUser()->contact_id, $contact['id']))
         );
         $result = $this->_instance->searchContacts($filter, array());
         
@@ -525,9 +526,10 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * returns a simple event
      *
+     * @param array $_contact
      * @return Calendar_Model_Event
      */
-    protected function _getEvent()
+    protected function _getEvent($_contact)
     {
         $testCalendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'           => 'PHPUnit test calendar',
@@ -546,6 +548,12 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
                     'user_id'        => Tinebase_Core::getUser()->contact_id,
                     'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
                     'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
+                    'status_authkey' => Tinebase_Record_Abstract::generateUID(),
+                ),
+                array(
+                    'user_id'        => $_contact['id'],
+                    'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
+                    'role'           => Calendar_Model_Attender::ROLE_OPTIONAL,
                     'status_authkey' => Tinebase_Record_Abstract::generateUID(),
                 ),
             )),
