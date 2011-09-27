@@ -587,7 +587,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_instance->searchContacts($filter, array());
         
         $this->assertEquals(2, $result['totalcount'], 'expected 2 contacts');
-        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $result['results'][0]['id']);
     }
     
     /**
