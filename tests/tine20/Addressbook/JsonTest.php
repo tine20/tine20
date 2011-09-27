@@ -511,8 +511,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
                         'from'  => '2009-01-01 00:00:00',
                         'until' => '2010-12-31 23:59:59',
                     )),
-                    array('field' => Calendar_Model_ContactAttendeeFilter::STATUS_FIELD,   "operator" => "in",  "value" => array('NEEDS-ACTION', 'ACCEPTED')),
-                    array('field' => Calendar_Model_ContactAttendeeFilter::ROLE_FIELD,     "operator" => "in",  "value" => array('REQ')),
+                    array('field' => 'attender_status',   "operator" => "in",  "value" => array('NEEDS-ACTION', 'ACCEPTED')),
+                    array('field' => 'attender_role',     "operator" => "in",  "value" => array('REQ')),
                 )
             ),
             array('field' => 'id', 'operator' => 'in', 'value' => array(Tinebase_Core::getUser()->contact_id, $contact['id']))
