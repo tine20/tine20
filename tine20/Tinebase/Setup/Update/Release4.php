@@ -307,7 +307,7 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
                 </field>
         ');
         try {
-            $this->_backend->addCol('async_job', $declaration, 6);
+            $this->_backend->addCol('async_job', $declaration, 5);
 
             $declaration = new Setup_Backend_Schema_Index_Xml('
                     <index>
