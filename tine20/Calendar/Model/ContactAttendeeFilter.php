@@ -16,7 +16,7 @@
  * @package     Calendar
  * @subpackage  Model
  */
-class Calendar_Model_ContactFilter extends Tinebase_Model_Filter_Abstract 
+class Calendar_Model_ContactAttendeeFilter extends Tinebase_Model_Filter_Abstract 
 {
     /**
      * filter fields for role and status

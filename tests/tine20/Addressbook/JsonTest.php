@@ -504,15 +504,15 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
                 'operator' => array(
                     'linkType'      => 'foreignId',
                     'appName'       => 'Calendar',
-                    'filterName'    => 'ContactFilter',
+                    'filterName'    => 'ContactAttendeeFilter',
                 ), 
                 'value' => array(
                     array('field' => "period",            "operator" => "within", "value" => array(
                         'from'  => '2009-01-01 00:00:00',
                         'until' => '2010-12-31 23:59:59',
                     )),
-                    array('field' => Calendar_Model_ContactFilter::STATUS_FIELD,   "operator" => "in",  "value" => array('NEEDS-ACTION', 'ACCEPTED')),
-                    array('field' => Calendar_Model_ContactFilter::ROLE_FIELD,     "operator" => "in",  "value" => array('REQ')),
+                    array('field' => Calendar_Model_ContactAttendeeFilter::STATUS_FIELD,   "operator" => "in",  "value" => array('NEEDS-ACTION', 'ACCEPTED')),
+                    array('field' => Calendar_Model_ContactAttendeeFilter::ROLE_FIELD,     "operator" => "in",  "value" => array('REQ')),
                 )
             ),
             array('field' => 'id', 'operator' => 'in', 'value' => array(Tinebase_Core::getUser()->contact_id, $contact['id']))
