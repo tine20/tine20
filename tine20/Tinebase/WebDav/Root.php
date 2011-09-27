@@ -22,6 +22,17 @@ class Tinebase_WebDav_Root extends Sabre_DAV_SimpleCollection
 {
     public function __construct()
     {
+        $webdavApps = array();
+        
+        foreach(array('Addressbook', 'Calendar', 'Filemanager') as $application) {
+            if(Tinebase_Core::getUser()->hasRight($application, Tinebase_Acl_Rights::RUN)) {
+                $webdavApps[] = new Sabre_DAV_SimpleCollection($application, array(
+                    new Sabre_DAV_SimpleCollection('personal'),
+                    new Sabre_DAV_SimpleCollection('shared')
+                ));
+            }
+        }
+        
         parent::__construct('root', array(
             new Sabre_DAV_SimpleCollection(Sabre_CardDAV_Plugin::ADDRESSBOOK_ROOT, array(
                 new Tinebase_WebDav_Collection('Addressbook', 'Contact')
@@ -29,7 +40,10 @@ class Tinebase_WebDav_Root extends Sabre_DAV_SimpleCollection
             new Sabre_DAV_SimpleCollection(Sabre_CalDAV_Plugin::CALENDAR_ROOT, array(
                 new Tinebase_WebDav_Collection('Calendar', 'Event')
             )),
-            new Filemanager_Frontend_WebDAV_Collection(Filemanager_Frontend_WebDAV_Collection::ROOT_NODE),
+            new Sabre_DAV_SimpleCollection(Filemanager_Frontend_WebDAV_Collection::ROOT_NODE, 
+                $webdavApps
+            ),
+            #new Filemanager_Frontend_WebDAV_Collection(Filemanager_Frontend_WebDAV_Collection::ROOT_NODE),
             new Sabre_DAV_SimpleCollection('principals', array(
                 new Sabre_DAVACL_PrincipalCollection(new Tinebase_WebDav_Principals(), 'principals/users'),
                 new Sabre_DAVACL_PrincipalCollection(new Tinebase_WebDav_Principals(), 'principals/groups')
