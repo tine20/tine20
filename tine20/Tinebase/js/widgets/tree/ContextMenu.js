@@ -71,7 +71,7 @@ Tine.widgets.tree.ContextMenu = {
         this.action_changecolor = new Ext.Action({     
             text: String.format(_('Set color')),
             iconCls: 'action_changecolor',
-            requiredGrant: 'deleteGrant',
+//            requiredGrant: 'deleteGrant',
             allowMultiple: true,
             menu: new Ext.menu.ColorMenu({
                 scope: this,
@@ -110,7 +110,6 @@ Tine.widgets.tree.ContextMenu = {
             iconCls: 'action_filemanager_save_all',
             handler: this.downloadFile,
             actionUpdater: this.isDownloadEnabled,
-            requiredGrant: 'exportGrant',
             scope: this.config
         });
         
