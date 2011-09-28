@@ -25,9 +25,13 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
      */
     protected $_application;
     
+    protected $_applicationName;
+    
     protected $_model;
     
     protected $_suffix;
+    
+    protected $_useIdAsName;
     
     /**
      * contructor
@@ -35,11 +39,11 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
      * @param  string|Tinebase_Model_Application  $_application  the current application
      * @param  string                             $_container    the current path
      */
-    public function __construct(Tinebase_Model_Application $_application, $_model, Tinebase_Model_Container $_container)
+    public function __construct(Tinebase_Model_Container $_container, $_useIdAsName = false)
     {
-        $this->_application = $_application;
-        $this->_model       = $_model;
+        $this->_application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
         $this->_container   = $_container;
+        $this->_useIdAsName = (boolean)$_useIdAsName;
     }
     
     /**
@@ -155,7 +159,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
      */
     public function getName()
     {
-        return $this->_container->getId();
+        return $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name;
     }
     
     /**
