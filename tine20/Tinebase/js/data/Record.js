@@ -151,7 +151,9 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
         }
         return p.fieldsarray;
     };
-    
+    f.hasField = function(n) {
+        return p.fields.indexOfKey(n) >= 0;
+    };
     Tine.Tinebase.data.RecordMgr.add(f);
     return f;
 };
@@ -173,7 +175,15 @@ Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
     },
     
     get: function(appName, modelName) {
-        appName = appName.appName ? appName.appName : appName;
+        if (Ext.isFunction(appName.getMeta)) {
+            return appName;
+        }
+        if (! modelName && appName.modelName) {
+            modelName = appName.modelName;
+        }
+        if (appName.appName) {
+            appName = appName.appName;
+        }
             
         if (! Ext.isString(appName)) {
             throw new Ext.Error('appName must be a string');

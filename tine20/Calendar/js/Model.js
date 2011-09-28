@@ -214,6 +214,32 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
     ];
 };
 
+// register calendar filters in addressbook
+Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.register('Addressbook', 'Contact', {
+    foreignRecordClass: 'Calendar.Event',
+    linkType: 'foreignId', 
+    filterName: 'ContactAttendeeFilter',
+    // _('Event (as attendee)')
+    label: 'Event (as attendee)'
+});
+Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.register('Addressbook', 'Contact', {
+    foreignRecordClass: 'Calendar.Event',
+    linkType: 'foreignId', 
+    filterName: 'ContactOrganizerFilter',
+    // _('Event (as organizer)')
+    label: 'Event (as organizer)'
+});
+
+// example for explicit definition
+//Tine.widgets.grid.FilterRegistry.register('Addressbook', 'Contact', {
+//    filtertype: 'foreignrecord',
+//    foreignRecordClass: 'Calendar.Event',
+//    linkType: 'foreignId', 
+//    filterName: 'ContactAttendeeFilter',
+//    // _('Event attendee')
+//    label: 'Event attendee'
+//});
+
 /**
  * @namespace Tine.Calendar.Model
  * @class Tine.Calendar.Model.EventJsonBackend
