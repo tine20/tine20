@@ -119,7 +119,12 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                             $content[] = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_lead->$key, NULL, NULL, 'date');
                         } elseif (!empty($_lead->$key) ) {
                             if ( $key === 'turnover' ) {
-                                $content[] = Zend_Locale_Format::toNumber($_lead->$key, array('locale' => $_locale)) . " €";
+                                try {
+                                    $content[] = Zend_Locale_Format::toNumber($_lead->$key, array('locale' => $_locale)) . " €";
+                                } catch (Zend_Locale_Exception $zle) {
+                                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not convert turnover: ' . $zle->getMessage());
+                                    $content[] = 'NaN';
+                                }
                             } elseif ( $key === 'probability' ) {
                                 $content[] = $_lead->$key . " %";
                             } elseif ( $key === 'leadstate_id' ) {
