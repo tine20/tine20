@@ -18,6 +18,10 @@
  */
 class Addressbook_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract implements Sabre_CardDAV_IAddressBook
 {
+    protected $_applicationName = 'Addressbook';
+    
+    protected $_model = 'Contact';
+    
     protected $_suffix = '.vcf';
     
     /**
@@ -31,10 +35,10 @@ class Addressbook_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
         $properties = array(
             '{http://calendarserver.org/ns/}getctag' => time(),
             'id'                => $this->_container->getId(),
-            'uri'               => $this->_container->getId(),
+            'uri'               => $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name,
             #'principaluri'      => $principalUri,
             #'{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}addressbook-description' => $this->_container->description,
-            '{DAV:}displayname' => $this->_container->type == Tinebase_Model_Container::TYPE_SHARED ? $this->_container->name . ' (shared)' : $this->_container->name,
+            '{DAV:}displayname' => $this->_container->type == Tinebase_Model_Container::TYPE_SHARED && $this->_useIdAsName == true ? $this->_container->name . ' (shared)' : $this->_container->name,
         	'{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}supported-addressbook-data' => new Sabre_CardDAV_Property_SupportedAddressData('3.0')
         );
         
