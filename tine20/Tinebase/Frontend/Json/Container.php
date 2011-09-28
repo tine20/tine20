@@ -214,9 +214,11 @@ class Tinebase_Frontend_Json_Container
      */
     public function setContainerGrants($containerId, $grants)
     {
+        $grants = ($grants) ? $grants : array();
+        
         $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $grants);
         
-        $grants = Tinebase_Container::getInstance()->setGrants($containerId, $newGrants);
+        Tinebase_Container::getInstance()->setGrants($containerId, $newGrants);
                
         return $this->getContainerGrants($containerId);
     }
