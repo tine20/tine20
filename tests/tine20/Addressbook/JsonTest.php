@@ -459,7 +459,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             case 'definedBy':
                 $closedStatus = Projects_Config::getInstance()->get(Projects_Config::PROJECT_STATUS)->records->filter('is_open', 0);
                 $filters = array(
-                    array('field' => "relation_type", "operator" => "equals", "value" => "COWORKER"),
+                    array('field' => ":relation_type", "operator" => "equals", "value" => "COWORKER"),
                     array('field' => "status",        "operator" => "notin",  "value" => $closedStatus->getId()),
                 );
                 break;
@@ -485,6 +485,11 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             array('field' => 'org_name', 'operator' => 'equals', 'value' => $_contact['org_name'])
         );
         $result = $this->_instance->searchContacts($filter, array());
+        
+        $this->assertEquals('relation', $result['filter'][0]['value']['linkType']);
+        if ($_operator === 'definedBy') {
+            $this->assertEquals(':relation_type', $result['filter'][0]['value']['filters'][0]['field']);
+        }
         
         $this->assertEquals(1, $result['totalcount']);
         $this->assertEquals($_contact['org_name'], $result['results'][0]['org_name']);
@@ -521,6 +526,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         );
         $result = $this->_instance->searchContacts($filter, array());
         $this->assertEquals('foreignRecord', $result['filter'][0]['field']);
+        $this->assertEquals('foreignId', $result['filter'][0]['value']['linkType']);
         
         $this->assertEquals(1, $result['totalcount']);
         $this->assertEquals(Tinebase_Core::getUser()->contact_id, $result['results'][0]['id']);

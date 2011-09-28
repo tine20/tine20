@@ -191,7 +191,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             // if a condition is given, we create a new filtergroup from this class
             if (isset($filterData['condition'])) {
                 $this->addFilterGroup(new $this->_className($filterData['filters'], $filterData['condition'], $this->_options));
-            } else if (isset($filterData['value']) && is_array($filterData['value']) && isset($filterData['value']['linkType'])) {
+            } else if ($filterData['field'] == 'foreignRecord') {
                 $this->_createForeignRecordFilterFromArray($filterData);
             } else {
                 $this->_createStandardFilterFromArray($filterData);

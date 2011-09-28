@@ -35,6 +35,13 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
     );
     
     /**
+     * relation type filter data
+     * 
+     * @var array
+     */
+    protected $_relationTypeFilter = NULL;
+    
+    /**
      * appends sql to given select statement
      *
      * @param Zend_Db_Select                $_select
@@ -42,14 +49,7 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $filters = $this->_value;   
-        $relationTypeFilter = NULL;
-        foreach ($filters as $idx => $filterData) {
-            if (isset($filterData['field']) && $filterData['field'] === 'relation_type') {
-                $relationTypeFilter = $filters[$idx];
-                unset($filters[$idx]);
-            }
-        }
+        $filters = $this->_getFilters();
         
         $relatedFilterConstructor = $this->_options['related_filter'];
         $relatedFilter = new $relatedFilterConstructor(array(array(
@@ -66,8 +66,8 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
             array('field' => 'related_id',    'operator' => 'in'    , 'value' => $relatedIds)
         ));
         
-        if ($relationTypeFilter) {
-            $relationFilter->addFilter($relationFilter->createFilter('type', $relationTypeFilter['operator'], $relationTypeFilter['value']));
+        if ($this->_relationTypeFilter) {
+            $relationFilter->addFilter($relationFilter->createFilter('type', $this->_relationTypeFilter['operator'], $this->_relationTypeFilter['value']));
         }
         
         $ownIds = Tinebase_Relations::getInstance()->search($relationFilter, NULL)->own_id;
@@ -78,5 +78,49 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
         $qField = $db->quoteIdentifier($_backend->getTableName() . '.' . $idField);
         
         $_select->where($db->quoteInto("$qField IN (?)", empty($ownIds) ? ' ' : $ownIds));
-     }
+    }
+    
+    // @todo test
+    protected function _getFilters()
+    {
+        $filters = $this->_value;   
+        foreach ($filters as $idx => $filterData) {
+            if (! isset($filterData['field'])) {
+                continue;
+            }
+            
+            if (strpos($filterData['field'], ':') !== FALSE) {
+                $filters[$idx]['field'] = str_replace(':', '', $filterData['field']);
+            }
+            
+            if ($filters[$idx]['field'] === 'relation_type') {
+                $this->_relationTypeFilter = $filters[$idx];
+                unset($filters[$idx]);
+            }
+        }        
+        
+        return $filters;
+    }
+    
+    /**
+     * returns array with the filter settings of this filter
+     *
+     * @param  bool $_valueToJson resolve value for json api?
+     * @return array
+     */
+    public function toArray($_valueToJson = false)
+    {
+        $result = parent::toArray($_valueToJson);
+        
+        list($appName, $i, $modelName) = explode('_', $this->_options['related_model']);
+        
+        $result['value'] = array(
+            'linkType'      => 'relation',
+            'appName'       => $appName,
+            'modelName'     => $modelName,
+            'filters'       => $this->_value
+        );
+        
+        return $result;
+    }    
 }
