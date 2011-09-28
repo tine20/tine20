@@ -16,15 +16,8 @@
  * @package     Calendar
  * @subpackage  Model
  */
-class Calendar_Model_ContactAttendeeFilter extends Tinebase_Model_Filter_Abstract 
+class Calendar_Model_ContactAttendeeFilter extends Tinebase_Model_Filter_ForeignId 
 {
-    /**
-     * check allowed operators
-     * 
-     * @var boolean
-     */
-    protected $_checkOperator = FALSE;
-    
     /**
      * filter fields for role and status
      * 
@@ -40,12 +33,21 @@ class Calendar_Model_ContactAttendeeFilter extends Tinebase_Model_Filter_Abstrac
     protected $_filterData = array();
     
     /**
-     * @var array list of allowed operators
+     * set options 
+     *
+     * @param array $_options
      */
-    protected $_operators = array(
-        0 => 'definedBy',
-    );
-
+    protected function _setOptions(array $_options)
+    {
+        if (! array_key_exists('controller', $_options)) {
+            $_options['controller'] = 'Calendar_Controller_Event';
+        }
+        if (! array_key_exists('filtergroup', $_options)) {
+            $_options['filtergroup'] = 'Calendar_Model_EventFilter';
+        }
+        $this->_options = $_options;
+    }
+    
     /**
      * appends sql to given select statement
      *
@@ -58,14 +60,13 @@ class Calendar_Model_ContactAttendeeFilter extends Tinebase_Model_Filter_Abstrac
     {
         $this->_getFilterData();
         
-        $eventFilter = new Calendar_Model_EventFilter($this->_value);
-        $events = Calendar_Controller_Event::getInstance()->search($eventFilter);
-        Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($events, $eventFilter);
+        $events = $this->_controller->search($this->_filterGroup);
+        Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($events, $this->_filterGroup);
         
-        $contactIds = $this->_getContactIds($events);
+        $this->_getForeignIds($events);
         
         // this is supposed to run in ContactFilter context
-        $contactIdFilter = new Addressbook_Model_ContactIdFilter('id', 'in', $contactIds);
+        $contactIdFilter = new Addressbook_Model_ContactIdFilter('id', 'in', $this->_foreignIds);
         $contactIdFilter->appendFilterSql($_select, $_backend);
     }
     
@@ -85,9 +86,8 @@ class Calendar_Model_ContactAttendeeFilter extends Tinebase_Model_Filter_Abstrac
      * extract contact ids
      * 
      * @param Tinebase_Record_RecordSet $_events
-     * @return array
      */
-    protected function _getContactIds($_events)
+    protected function _getForeignIds($_events)
     {
         $contactIds = array();
         
@@ -103,11 +103,11 @@ class Calendar_Model_ContactAttendeeFilter extends Tinebase_Model_Filter_Abstrac
             }
         }
         
-        return array_unique($contactIds);
+        $this->_foreignIds = array_unique($contactIds);
     }
     
     /**
-     * check if attender matches role/status filter
+     * check if record field matches filter
      * 
      * @param Calendar_Model_Attender $_attender
      * @param string $_filterField

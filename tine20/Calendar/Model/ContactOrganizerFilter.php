@@ -29,9 +29,8 @@ class Calendar_Model_ContactOrganizerFilter extends Calendar_Model_ContactAttend
      * extract contact ids
      * 
      * @param Tinebase_Record_RecordSet $_events
-     * @return array
      */
-    protected function _getContactIds($_events)
+    protected function _getForeignIds($_events)
     {
         $contactIds = array();
         
@@ -41,6 +40,6 @@ class Calendar_Model_ContactOrganizerFilter extends Calendar_Model_ContactAttend
             }
         }
         
-        return array_unique($contactIds);
+        $this->_foreignIds = array_unique($contactIds);
     }
 }
