@@ -83,14 +83,14 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
             # list container
             case 1:
                 try {
-                    $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->get($_name);
+                    $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerById($_name);
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
                 }
                 
                 $objectClass = $this->_application->name . '_Frontend_WebDAV_Container';
                 
-                return new $objectClass($this->_application, $this->_model, $container);
+                return new $objectClass($container, true);
                 
                 break;
             
