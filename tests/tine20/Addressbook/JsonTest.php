@@ -458,28 +458,29 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         switch ($_operator) {
             case 'definedBy':
                 $closedStatus = Projects_Config::getInstance()->get(Projects_Config::PROJECT_STATUS)->records->filter('is_open', 0);
-                $value = array(
+                $filters = array(
                     array('field' => "relation_type", "operator" => "equals", "value" => "COWORKER"),
                     array('field' => "status",        "operator" => "notin",  "value" => $closedStatus->getId()),
                 );
                 break;
             case 'in':
-                $value = array($_project['id']);
+                $filters = array(array('field' => 'id', 'operator' => $_operator, 'value' => array($_project['id'])));
                 break;
             case 'equals':
-                $value = $_project['id'];
+                $filters = array(array('field' => 'id', 'operator' => $_operator, 'value' => $_project['id']));
                 break;
         }
         
         $filter = array(
             array(
-                'field' => array(
+                'field' => 'foreignRecord', 
+                'operator' => 'AND', 
+                'value' => array(
                     'linkType'      => 'relation',
                     'appName'       => 'Projects',
                     'modelName'     => 'Project',
-                ), 
-                'operator' => $_operator, 
-                'value' => $value
+                    'filters'       => $filters
+                )
             ),
             array('field' => 'org_name', 'operator' => 'equals', 'value' => $_contact['org_name'])
         );
@@ -501,24 +502,24 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $filter = array(
             array(
                 'field' => 'foreignRecord', 
-                'operator' => array(
+                'operator' => 'AND', 
+                'value' => array(
                     'linkType'      => 'foreignId',
                     'appName'       => 'Calendar',
                     'filterName'    => 'ContactAttendeeFilter',
-                ), 
-                'value' => array(
-                    array('field' => "period",            "operator" => "within", "value" => array(
-                        'from'  => '2009-01-01 00:00:00',
-                        'until' => '2010-12-31 23:59:59',
-                    )),
-                    array('field' => 'attender_status',   "operator" => "in",  "value" => array('NEEDS-ACTION', 'ACCEPTED')),
-                    array('field' => 'attender_role',     "operator" => "in",  "value" => array('REQ')),
+                    'filters'       => array(
+                        array('field' => "period",            "operator" => "within", "value" => array(
+                            'from'  => '2009-01-01 00:00:00',
+                            'until' => '2010-12-31 23:59:59',
+                        )),
+                        array('field' => 'attender_status',   "operator" => "in",  "value" => array('NEEDS-ACTION', 'ACCEPTED')),
+                        array('field' => 'attender_role',     "operator" => "in",  "value" => array('REQ')),
+                    )
                 )
             ),
             array('field' => 'id', 'operator' => 'in', 'value' => array(Tinebase_Core::getUser()->contact_id, $contact['id']))
         );
         $result = $this->_instance->searchContacts($filter, array());
-        $this->assertTrue(is_array($result['filter'][0]['operator']));
         $this->assertEquals('foreignRecord', $result['filter'][0]['field']);
         
         $this->assertEquals(1, $result['totalcount']);
@@ -553,17 +554,18 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         return array(
             'field' => 'foreignRecord', 
-            'operator' => array(
+            'operator' => 'AND', 
+            'value' => array(
                 'linkType'      => 'foreignId',
                 'appName'       => 'Calendar',
                 'filterName'    => 'ContactOrganizerFilter',
-            ), 
-            'value' => array(
-                array('field' => "period",            "operator" => "within", "value" => array(
-                    'from'  => '2009-01-01 00:00:00',
-                    'until' => '2010-12-31 23:59:59',
-                )),
-                array('field' => 'organizer',   "operator" => "equals",  "value" => Tinebase_Core::getUser()->contact_id),
+                'filters'       => array(
+                    array('field' => "period",            "operator" => "within", "value" => array(
+                        'from'  => '2009-01-01 00:00:00',
+                        'until' => '2010-12-31 23:59:59',
+                    )),
+                    array('field' => 'organizer',   "operator" => "equals",  "value" => Tinebase_Core::getUser()->contact_id),
+                )
             )
         );
     }
