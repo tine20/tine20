@@ -16,6 +16,9 @@ class Addressbook_Setup_Update_Release5 extends Setup_Update_Abstract
      */
     public function update_0()
     {
+        // remove this index as it gets to long and we do not need it
+        $this->_backend->dropIndex('addressbook', 'org_name-n_family-n_given');
+        
         $colsToChange = array('n_family', 'org_name');
         foreach ($colsToChange as $col) {
             $declaration = new Setup_Backend_Schema_Field_Xml('
@@ -27,7 +30,7 @@ class Addressbook_Setup_Update_Release5 extends Setup_Update_Abstract
                 </field>');
             $this->_backend->alterCol('addressbook', $declaration);
         }
-        
+
         $this->setTableVersion('addressbook', 13);
         $this->setApplicationVersion('Addressbook', '5.1');
     }
@@ -110,5 +113,22 @@ class Addressbook_Setup_Update_Release5 extends Setup_Update_Abstract
         Tinebase_Config::getInstance()->deleteConfigForApplication(Tinebase_Config::APPDEFAULTS, 'Addressbook');
     	
     	$this->setApplicationVersion('Addressbook', '5.3');
+    }
+
+    /**
+     * update to 5.4
+     * - remove unused index (org_name-n_family-n_given)
+     */
+    public function update_3()
+    {
+        // remove this index as it gets to long and we do not need it
+        try {
+            $this->_backend->dropIndex('addressbook', 'org_name-n_family-n_given');
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // already removed
+        }
+
+        $this->setTableVersion('addressbook', 15);
+        $this->setApplicationVersion('Addressbook', '5.4');
     }
 }
