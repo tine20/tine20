@@ -627,30 +627,4 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         
         $this->assertEquals(1, $result['totalcount'], 'timesheet not found with ExpliciteForeignIdFilter filter');
     }
-    
-    /**
-     * create timesheet and search with implicite foreign filter
-     * 
-     * @todo finish and activate when we have generic foreign id filters
-     */
-    public function _testSearchWithImpliciteForeignIdFilter()
-    {
-        $timesheet = $this->_getTimesheet();
-        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
-        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
-        
-        $filter = array(
-            array('field' => 'foreignRecord', 'operator' => array(
-                'linkType'  => 'foreignId',
-                'appName'   => 'Timetracker',
-                'modelName' => 'Timeaccount',
-            ), 'value' => array(
-                array('field' => 'id', 'operator' => 'equals', 'value' => $timesheetData['timeaccount_id']['id'])
-            ))
-        );
-        
-        $result = $this->_json->searchTimesheets($filter, $this->_getPaging());
-        
-        $this->assertEquals(1, $result['totalcount'], 'timesheet not found with ImpliciteForeignIdFilter filter');
-    }
 }
