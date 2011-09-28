@@ -27,11 +27,12 @@
 class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
 {
     /**
-     * check allowed operators
-     * 
-     * @var boolean
+     * @var array list of allowed operators
      */
-    protected $_checkOperator = FALSE;
+    protected $_operators = array(
+        0 => 'AND',
+        1 => 'OR',
+    );
     
     /**
      * appends sql to given select statement
@@ -41,17 +42,20 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $value = $this->_value;
+        $filters = $this->_value;   
         $relationTypeFilter = NULL;
-        foreach($value as $idx => $filterData) {
-            if ($filterData['field'] == 'relation_type') {
-                $relationTypeFilter = $value[$idx];
-                unset($value[$idx]);
+        foreach ($filters as $idx => $filterData) {
+            if (isset($filterData['field']) && $filterData['field'] === 'relation_type') {
+                $relationTypeFilter = $filters[$idx];
+                unset($filters[$idx]);
             }
         }
         
         $relatedFilterConstructor = $this->_options['related_filter'];
-        $relatedFilter = new $relatedFilterConstructor($value);
+        $relatedFilter = new $relatedFilterConstructor(array(array(
+            'condition'     => $this->_operator,
+            'filters'       => $filters
+        )));
         
         $relatedRecordController = Tinebase_Controller_Record_Abstract::getController($this->_options['related_model']);
         $relatedIds = $relatedRecordController->search($relatedFilter, NULL, FALSE, TRUE);
@@ -75,5 +79,4 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
         
         $_select->where($db->quoteInto("$qField IN (?)", empty($ownIds) ? ' ' : $ownIds));
      }
-     
 }

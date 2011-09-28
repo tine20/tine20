@@ -191,10 +191,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             // if a condition is given, we create a new filtergroup from this class
             if (isset($filterData['condition'])) {
                 $this->addFilterGroup(new $this->_className($filterData['filters'], $filterData['condition'], $this->_options));
-            } else if (is_array($filterData['field'])) {
-                $this->_createForeignRecordFilterFromArray($filterData, 'field');
-            } else if (is_array($filterData['operator'])) {
-                $this->_createForeignRecordFilterFromArray($filterData, 'operator');
+            } else if (isset($filterData['value']) && is_array($filterData['value']) && isset($filterData['value']['linkType'])) {
+                $this->_createForeignRecordFilterFromArray($filterData);
             } else {
                 $this->_createStandardFilterFromArray($filterData);
             }
@@ -205,45 +203,37 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * create foreign record filter (from array)
      * 
      * @param array $_filterData
-     * @param string $_linkInfoKey
      */
-    protected function _createForeignRecordFilterFromArray($_filterData, $_linkInfoKey)
+    protected function _createForeignRecordFilterFromArray($_filterData)
     {
-        if (! array_key_exists('linkType', $_filterData[$_linkInfoKey])) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Skipping filter (foreign record filter syntax problem) -> ' 
-                . $this->_className . ' with filter data: ' . print_r($_filterData, TRUE));
-            return;
-        }
-        
-        $operator = ($_linkInfoKey === 'operator') ? 'definedBy' : $_filterData['operator'];
-        
-        switch ($_filterData[$_linkInfoKey]['linkType']) {
+        switch ($_filterData['value']['linkType']) {
             case 'relation':
-                $modelName = $this->_getModelNameFromLinkInfo($_filterData[$_linkInfoKey], 'modelName');
+                $modelName = $this->_getModelNameFromLinkInfo($_filterData['value'], 'modelName');
                 
-                $value = ($operator === 'definedBy') ? $_filterData['value'] :
-                    array(array('field' => 'id', 'operator' => $operator, $_filterData['value']));
-                
-                $filter = new Tinebase_Model_Filter_Relation($_filterData['field'], $_filterData['operator'], $value, array(
+                $filter = new Tinebase_Model_Filter_Relation($_filterData['field'], $_filterData['operator'], $_filterData['value']['filters'], array(
                     'related_model'     => $modelName,
                     'related_filter'    => $modelName . 'Filter'
                 ));
                 break;
 
             case 'foreignId':
-                $modelName = $this->_getModelNameFromLinkInfo($_filterData[$_linkInfoKey], 'filterName');
-                $filter = new $modelName($_filterData['field'], $_filterData['operator'], $_filterData['value']);
+                $modelName = $this->_getModelNameFromLinkInfo($_filterData['value'], 'filterName');
+                $filter = new $modelName($_filterData['field'], $_filterData['operator'], $_filterData['value']['filters']);
                 
                 // @todo maybe it will be possible to add a generic/implicite foreign id filter 
                 // .... but we have to solve the problem of the foreign id field first
-//                if (! array_key_exists('filterName', $_filterData[$_linkInfoKey])) {
-//                    $modelName = $this->_getModelNameFromLinkInfo($_filterData[$_linkInfoKey], 'modelName');
+//                if (! array_key_exists('filterName', $_filterData['value'])) {
+//                    $modelName = $this->_getModelNameFromLinkInfo($_filterData['value'], 'modelName');
 //                    $filter = new Tinebase_Model_Filter_ForeignId($_filterData['field'], $_filterData['operator'], $_filterData['value'], array(
 //                        'filtergroup'       => $modelName . 'Filter', 
 //                        'controller'        => str_replace('Model', 'Controller', $modelName),
 //                    ));
 //                }
                 break;
+            default:
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Skipping filter (foreign record filter syntax problem) -> ' 
+                    . $this->_className . ' with filter data: ' . print_r($_filterData, TRUE));
+                return;
         }
         
         $this->addFilter($filter);
@@ -289,10 +279,10 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     protected function _createStandardFilterFromArray($_filterData)
     {
-        $fieldModel = (isset($this->_filterModel[$_filterData['field']])) ? $this->_filterModel[$_filterData['field']] : '';
+        $fieldModel = (isset($_filterData['field']) && isset($this->_filterModel[$_filterData['field']])) ? $this->_filterModel[$_filterData['field']] : '';
         
         if (empty($fieldModel)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . '[' . $this->_className . '] Skipping filter (no filter model defined) ' . print_r($_filterData, true));
         
         } elseif (array_key_exists('filter', $fieldModel) && array_key_exists('value', $_filterData)) {

@@ -34,13 +34,6 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_Abstract
     );
     
     /**
-     * check allowed operators (should be disabled if operator could be an array)
-     * 
-     * @var boolean
-     */
-    protected $_checkOperator = FALSE;
-    
-    /**
      * @var Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterGroup = NULL;
@@ -62,9 +55,9 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_Abstract
      */
     public function setValue($_value) {
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_value, true));
-        $operator = (is_array($this->_operator)) ? 'AND' : $this->_operator;
+        $this->_value = (array)$_value;
         
-        $this->_filterGroup = new $this->_options['filtergroup']((array)$_value, $operator, $this->_options);
+        $this->_filterGroup = new $this->_options['filtergroup']($this->_value, $this->_operator, $this->_options);
         $this->_controller = call_user_func($this->_options['controller'] . '::getInstance');
         
         $this->_foreignIds = NULL;
