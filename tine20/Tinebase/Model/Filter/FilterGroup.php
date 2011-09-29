@@ -189,12 +189,12 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             
             // if a condition is given, we create a new filtergroup from this class
             if (isset($filterData['condition'])) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->desbug(__METHOD__ . '::' . __LINE__ . ' ' 
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
                     . ' Adding FilterGroup: ' . $this->_className);
                 $this->addFilterGroup(new $this->_className($filterData['filters'], $filterData['condition'], $this->_options));
                 
             } else if (isset($filterData['field']) && $filterData['field'] == 'foreignRecord') {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->desbug(__METHOD__ . '::' . __LINE__ . ' ' 
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
                     . ' Adding ForeignRecordFilter of type: ' . $filterData['value']['linkType']);
                 $this->_createForeignRecordFilterFromArray($filterData);
                 
