@@ -64,10 +64,7 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
     {
         if ($this->_filterGroup === NULL) {
             $filters = $this->_getRelationFilters();
-            $this->_filterGroup = new $this->_options['filtergroup'](array(array(
-                'condition'     => $this->_operator,
-                'filters'       => $filters
-            )));
+            $this->_filterGroup = new $this->_options['filtergroup']($filters, $this->_operator);
         }
             
         return $this->_filterGroup;
@@ -166,9 +163,11 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
         }
         
         // return prefixes
-        foreach ($result as $idx => $filterData) {
-            if (isset($filterData['field']) && in_array($filterData['field'], $this->_prefixedFields)) {
-                $result[$idx]['field'] = ':' . $filterData['field'];
+        if (! empty($this->_prefixedFields)) {
+            foreach ($result as $idx => $filterData) {
+                if (isset($filterData['field']) && in_array($filterData['field'], $this->_prefixedFields)) {
+                    $result[$idx]['field'] = ':' . $filterData['field'];
+                }
             }
         }
         
