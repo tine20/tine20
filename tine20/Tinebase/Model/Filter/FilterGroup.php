@@ -166,7 +166,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function __construct(array $_data = array(), $_condition = '', $_options = array())
     {
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
         $this->_setOptions($_options);
         
         $this->_concatenationCondition = $_condition == self::CONDITION_OR ? self::CONDITION_OR : self::CONDITION_AND;
@@ -190,9 +190,15 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             
             // if a condition is given, we create a new filtergroup from this class
             if (isset($filterData['condition'])) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->desbug(__METHOD__ . '::' . __LINE__ . ' ' 
+                    . ' Adding FilterGroup: ' . $this->_className);
                 $this->addFilterGroup(new $this->_className($filterData['filters'], $filterData['condition'], $this->_options));
+                
             } else if (isset($filterData['field']) && $filterData['field'] == 'foreignRecord') {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->desbug(__METHOD__ . '::' . __LINE__ . ' ' 
+                    . ' Adding ForeignRecordFilter of type: ' . $filterData['value']['linkType']);
                 $this->_createForeignRecordFilterFromArray($filterData);
+                
             } else {
                 $this->_createStandardFilterFromArray($filterData);
             }
@@ -480,7 +486,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      *
      * @return array
      * 
-     * @todo remove after concrete filter backends are sperated from concrete filter models
+     * @todo remove after concrete filter backends are separated from concrete filter models
      */
     public function getFilterObjects()
     {
