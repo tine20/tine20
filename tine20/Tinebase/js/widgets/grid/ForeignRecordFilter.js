@@ -304,6 +304,8 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             
             // if there where no remaining childfilters, hide this filterrow
             if (! value.length)  {
+                filter.formFields.operator.setValue('equals');
+                this.onOperatorChange(filter, 'equals', true);
                 Tine.log.info('hide row -> not yet implemented');
             }
             
