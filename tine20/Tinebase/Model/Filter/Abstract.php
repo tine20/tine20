@@ -114,7 +114,7 @@ abstract class Tinebase_Model_Filter_Abstract
     /**
      * gets operator
      *
-     * @return  string
+     * @return string
      */
     public function getOperator()
     {
@@ -124,7 +124,7 @@ abstract class Tinebase_Model_Filter_Abstract
     /**
      * sets value
      *
-     * @param mixed $_value
+     * @param string $_value
      */
     public function setValue($_value)
     {

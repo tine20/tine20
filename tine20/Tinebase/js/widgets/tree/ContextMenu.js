@@ -71,7 +71,7 @@ Tine.widgets.tree.ContextMenu = {
         this.action_changecolor = new Ext.Action({     
             text: String.format(_('Set color')),
             iconCls: 'action_changecolor',
-            requiredGrant: 'deleteGrant',
+//            requiredGrant: 'deleteGrant',
             allowMultiple: true,
             menu: new Ext.menu.ColorMenu({
                 scope: this,
@@ -110,7 +110,6 @@ Tine.widgets.tree.ContextMenu = {
             iconCls: 'action_filemanager_save_all',
             handler: this.downloadFile,
             actionUpdater: this.isDownloadEnabled,
-            requiredGrant: 'exportGrant',
             scope: this.config
         });
         
@@ -251,7 +250,6 @@ Tine.widgets.tree.ContextMenu = {
                             Ext.Msg.alert(String.format(_('Not renamed {0}'), this.nodeName), String.format(_('You have to supply a {0} name!'), this.nodeName));
                             return;
                         }
-                        Ext.MessageBox.wait(_('Please wait'), String.format(_('Updating {0} "{1}"'), this.nodeName, node.text));
                         
                         var params = {
                             method: this.backend + '.rename' + this.backendModel,
@@ -292,7 +290,6 @@ Tine.widgets.tree.ContextMenu = {
                         		node.setText(_text);
                                 
                                 this.scope.fireEvent('containerrename', nodeData, node, _text);                               
-                                Ext.MessageBox.hide();
                                                               
                             },
                             failure: function(result, request) {
@@ -323,7 +320,6 @@ Tine.widgets.tree.ContextMenu = {
             
             Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the {0} "{1}"?'), this.nodeName, node.text), function(_btn){
                 if ( _btn == 'yes') {
-                    Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting {0} "{1}"' ), this.nodeName , node.text));
                     
                     var params = {
                         method: this.backend + '.delete' + this.backendModel
@@ -369,9 +365,6 @@ Tine.widgets.tree.ContextMenu = {
                                 }
                             }
                            
-                            
-                            
-                            Ext.MessageBox.hide();
                         },
                         failure: function(result, request) {
                             var nodeData = Ext.util.JSON.decode(result.responseText);

@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_AsyncJobTest::main');
-}
-
 /**
  * Test class for Tinebase_AsyncJob
  */
@@ -41,6 +37,7 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
     {
         $async = Tinebase_AsyncJob::getInstance();
         $job = $async->startJob('Test_Job');
+        $this->assertTrue($job instanceof Tinebase_Model_AsyncJob);
         $this->assertTrue($async->jobIsRunning('Test_Job'));
         $async->finishJob($job);
         $this->assertFalse($async->jobIsRunning('Test_Job'));
@@ -76,8 +73,3 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown() {}
 }
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_AsyncJobTest::main') {
-    Tinebase_AsyncJobTest::main();
-}
-

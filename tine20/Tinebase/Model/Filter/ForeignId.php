@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -55,8 +55,9 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_Abstract
      */
     public function setValue($_value) {
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_value, true));
+        $this->_value = (array)$_value;
         
-        $this->_filterGroup = new $this->_options['filtergroup']((array)$_value, $this->_operator, $this->_options);
+        $this->_filterGroup = new $this->_options['filtergroup']($this->_value, $this->_operator, $this->_options);
         $this->_controller = call_user_func($this->_options['controller'] . '::getInstance');
         
         $this->_foreignIds = NULL;
@@ -110,12 +111,17 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_Abstract
      */
     public function toArray($_valueToJson = false)
     {
-        $result = array(
-            'field'     => $this->_field,
-            'operator'  => $this->_operator,
-            'value'     => $this->_filterGroup->toArray($_valueToJson)
+        $result = parent::toArray($_valueToJson);
+        
+        list($appName, $i, $filterName) = explode('_', $this->_options['filtergroup']);
+        
+        $result['value'] = array(
+            'linkType'      => 'foreignId',
+            'appName'       => $appName,
+            'filterName'    => $filterName,
+            'filters'       => $this->_value
         );
         
         return $result;
-    }    
+    }
 }

@@ -15,7 +15,6 @@ Ext.namespace('Tine.Timetracker');
  */
 Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
-    
     /**
      * @private
      */
@@ -86,9 +85,10 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     	
         this.getForm().findField('billed_in').setDisabled(! checked);
 
+        // open modal window to type in billed in value
         /*
     	if (checked && this.getForm().findField('billed_in').getValue() == '') {
-    		// open modal window to type in billed in value
+    		
             Ext.Msg.prompt(
                 this.app.i18n._('Billed in ...'),
                 this.app.i18n._('Billed in ...'), 
@@ -242,7 +242,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @param {} response
      * @param {} request
      * @private
-     * 
      */
     onRequestFailed: function(response, request) {
         if (response.code && response.code == 902) {
@@ -251,7 +250,15 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 this.app.i18n._('Failed'), 
                 String.format(this.app.i18n._('Could not save {0}.'), this.i18nRecordName) 
                     + ' ( ' + this.app.i18n._('Booking deadline for this Timeaccount has been exceeded.') /* + ' ' + response.message  */ + ')'
-            ); 
+            );
+        } else if (response.code && response.code == 505) {
+            // validation exception
+            // NOTE: it sometimes happens (ExtJS bug?) that the record is submitted even if no timeaccount_id is set in the picker ...
+            Ext.MessageBox.alert(
+                this.app.i18n._('No Timeaccount set'), 
+                String.format(this.app.i18n._('Could not save {0}.'), this.i18nRecordName) 
+                    + ' ( ' + this.app.i18n._('You need to set a Timeaccount this Timesheet belongs to.') + ')'
+            );
         } else {
             // call default exception handler
             Tine.Tinebase.ExceptionHandler.handleRequestException(response);
