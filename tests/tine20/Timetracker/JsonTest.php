@@ -498,8 +498,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals(0, $search['results'][0]['is_billable_combined'], 'is_billable_combined mismatch');
     }
 
-    /******* persistent filter tests *****************/
-    
     /**
      * try to save and search persistent filter
      * 
@@ -608,5 +606,25 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         
         // cleanup / delete file
         $persistentFiltersJson->deletePersistentFilters($persistentFilters['results'][0]['id']);
+    }
+    
+    /**
+     * create timesheet and search with explicite foreign filter
+     */
+    public function testSearchWithExpliciteForeignIdFilter()
+    {
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
+        
+        $filter = array(
+            array('field' => 'timeaccount_id', 'operator' => 'AND', 'value' => array(
+                array('field' => 'id', 'operator' => 'equals', 'value' => $timesheetData['timeaccount_id']['id'])
+            ))
+        );
+        
+        $result = $this->_json->searchTimesheets($filter, $this->_getPaging());
+        
+        $this->assertEquals(1, $result['totalcount'], 'timesheet not found with ExpliciteForeignIdFilter filter');
     }
 }

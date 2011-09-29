@@ -230,7 +230,7 @@ abstract class Tinebase_Config_Abstract
         
         $result = $this->_getBackend()->search($filter)->getFirstRecord();
         
-        if ($cache) $cache->save($result, $cacheId, array('config'));
+        if ($cache) $cache->save($result, $cacheId, array('config'), 60);
         
         return $result;
     }

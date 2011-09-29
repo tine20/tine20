@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>5.3</version>
+    <version>5.4</version>
     <tables>
         <table>
             <name>applications</name>
@@ -2474,7 +2474,7 @@
         </table>
         <table>
             <name>async_job</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2501,6 +2501,11 @@
                     <length>32</length>
                 </field>
                 <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <length>64</length>
+                </field>
+                <field>
                     <name>message</name>
                     <type>text</type>
                 </field>
@@ -2509,6 +2514,13 @@
                     <primary>true</primary>
                     <field>
                         <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>seq</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>seq</name>
                     </field>
                 </index>
             </declaration>

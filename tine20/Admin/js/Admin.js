@@ -191,7 +191,7 @@ Tine.Admin = function () {
         
         treePanel.on('click', function (node, event) {
         	
-        	if (node.disabled) {
+        	if (node === null|| node.disabled) {
         		return false;
         	}
         	

@@ -27,11 +27,41 @@
 class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
 {
     /**
-     * check allowed operators
-     * 
-     * @var boolean
+     * @var array list of allowed operators
      */
-    protected $_checkOperator = FALSE;
+    protected $_operators = array(
+        0 => 'AND',
+        1 => 'OR',
+    );
+    
+    /**
+     * relation type filter data
+     * 
+     * @var array
+     */
+    protected $_relationTypeFilter = NULL;
+    
+    /**
+     * set options 
+     *
+     * @param array $_options
+     */
+    protected function _setOptions(array $_options)
+    {
+        if (! array_key_exists('related_model', $_options)) {
+            throw new Tinebase_Exception_UnexpectedValue('related model is needed in options');
+        }
+
+        if (! array_key_exists('related_filter', $_options)) {
+            $_options['related_filter'] = $_options['related_model'] . 'Filter';
+        }
+        
+        if (! array_key_exists('isGeneric', $_options)) {
+            $_options['isGeneric'] = FALSE;
+        }
+        
+        $this->_options = $_options;
+    }
     
     /**
      * appends sql to given select statement
@@ -41,17 +71,13 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $value = $this->_value;
-        $relationTypeFilter = NULL;
-        foreach($value as $idx => $filterData) {
-            if ($filterData['field'] == 'relation_type') {
-                $relationTypeFilter = $value[$idx];
-                unset($value[$idx]);
-            }
-        }
+        $filters = $this->_getRelationFilters();
         
         $relatedFilterConstructor = $this->_options['related_filter'];
-        $relatedFilter = new $relatedFilterConstructor($value);
+        $relatedFilter = new $relatedFilterConstructor(array(array(
+            'condition'     => $this->_operator,
+            'filters'       => $filters
+        )));
         
         $relatedRecordController = Tinebase_Controller_Record_Abstract::getController($this->_options['related_model']);
         $relatedIds = $relatedRecordController->search($relatedFilter, NULL, FALSE, TRUE);
@@ -62,8 +88,8 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
             array('field' => 'related_id',    'operator' => 'in'    , 'value' => $relatedIds)
         ));
         
-        if ($relationTypeFilter) {
-            $relationFilter->addFilter($relationFilter->createFilter('type', $relationTypeFilter['operator'], $relationTypeFilter['value']));
+        if ($this->_relationTypeFilter) {
+            $relationFilter->addFilter($relationFilter->createFilter('type', $this->_relationTypeFilter['operator'], $this->_relationTypeFilter['value']));
         }
         
         $ownIds = Tinebase_Relations::getInstance()->search($relationFilter, NULL)->own_id;
@@ -74,6 +100,55 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
         $qField = $db->quoteIdentifier($_backend->getTableName() . '.' . $idField);
         
         $_select->where($db->quoteInto("$qField IN (?)", empty($ownIds) ? ' ' : $ownIds));
-     }
-     
+    }
+    
+    /**
+     * get relation filters
+     * 
+     * @return array
+     */
+    protected function _getRelationFilters()
+    {
+        $filters = $this->_value;   
+        foreach ($filters as $idx => $filterData) {
+            if (! isset($filterData['field'])) {
+                continue;
+            }
+            
+            if (strpos($filterData['field'], ':') !== FALSE) {
+                $filters[$idx]['field'] = str_replace(':', '', $filterData['field']);
+            }
+            
+            if ($filters[$idx]['field'] === 'relation_type') {
+                $this->_relationTypeFilter = $filters[$idx];
+                unset($filters[$idx]);
+            }
+        }        
+        
+        return $filters;
+    }
+    
+    /**
+     * returns array with the filter settings of this filter
+     *
+     * @param  bool $_valueToJson resolve value for json api?
+     * @return array
+     */
+    public function toArray($_valueToJson = false)
+    {
+        $result = parent::toArray($_valueToJson);
+        
+        if ($this->_options['isGeneric']) {
+            list($appName, $i, $modelName) = explode('_', $this->_options['related_model']);
+            
+            $result['value'] = array(
+                'linkType'      => 'relation',
+                'appName'       => $appName,
+                'modelName'     => $modelName,
+                'filters'       => $this->_value
+            );
+        }
+        
+        return $result;
+    }    
 }

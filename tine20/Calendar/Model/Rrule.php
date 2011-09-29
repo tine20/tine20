@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -348,12 +348,17 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      *
      * @param  Calendar_Model_Event         $_event
      * @param  Tinebase_Record_RecordSet    $_exceptions
-     * @param  Tinebase_DateTime                    $_from
-     * @param  Tinebase_DateTime                    $_until
+     * @param  Tinebase_DateTime            $_from
+     * @param  Tinebase_DateTime            $_until
      * @return Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_UnexpectedValue
      */
     public static function computeRecurrenceSet($_event, $_exceptions, $_from, $_until)
     {
+        if (! $_event->dtstart instanceof Tinebase_DateTime) {
+            throw new Tinebase_Exception_UnexpectedValue('Event needs DateTime dtstart: ' . print_r($_event->toArray(), TRUE));
+        }
+        
         $rrule = new Calendar_Model_Rrule(NULL, TRUE);
         $rrule->setFromString($_event->rrule);
         
@@ -650,11 +655,6 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $_rrule->interval);
             $computationStartDate = self::array2date($computationStartDateArray, $eventInOrganizerTZ->originator_tz);
             
-                    //print_r($computationStartDate->toArray());
-            
-            
-            
-            
             $recurEvent = self::cloneEvent($eventInOrganizerTZ);
             $recurEvent->dtstart = clone $computationStartDate;
             
@@ -748,10 +748,15 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * converts a Tinebase_DateTime to Array
      *
      * @param  Tinebase_DateTime $_date
-     * $return array
+     * @return array
+     * @throws Tinebase_Exception_UnexpectedValue
      */
     public static function date2array($_date)
     {
+        if (! $_date instanceof Tinebase_DateTime) {
+            throw new Tinebase_Exception_UnexpectedValue('DateTime expected');
+        }
+        
         return array_intersect_key($_date->toArray(), array_flip(array(
             'day' , 'month', 'year', 'hour', 'minute', 'second'
         )));
