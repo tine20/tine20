@@ -289,7 +289,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         
         } elseif (array_key_exists('filter', $fieldModel) && array_key_exists('value', $_filterData)) {
             // create a 'single' filter
-            $this->addFilter($this->createFilter($_filterData['field'], $_filterData['operator'], $_filterData['value']));
+            $filter = $this->createFilter($_filterData['field'], $_filterData['operator'], $_filterData['value']);
+            $this->addFilter($filter, TRUE);
         
         } elseif (array_key_exists('custom', $fieldModel) && $fieldModel['custom'] == true) {
             // silently skip data, as they will be evaluated by the concrete filtergroup
@@ -321,13 +322,19 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * Add a filter to this group
      *
      * @param  Tinebase_Model_Filter_Abstract $_filter
+     * @param  boolean $_setFromArray
      * @return Tinebase_Model_Filter_FilterGroup this
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function addFilter($_filter)
+    public function addFilter(Tinebase_Model_Filter_Abstract $_filter, $_setFromArray = FALSE)
     {
         if (! $_filter instanceof Tinebase_Model_Filter_Abstract) {
             throw new Tinebase_Exception_InvalidArgument('Filters must be of instance Tinebase_Model_Filter_Abstract');
+        }
+        
+        if (! $_setFromArray && $_filter instanceof Tinebase_Model_Filter_AclFilter) {
+            // this is added afterwards and considered as an implicit acl filter
+            $_filter->setIsImplicit(TRUE);
         }
         
         $this->_filterObjects[] = $_filter;

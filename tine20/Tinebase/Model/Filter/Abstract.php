@@ -47,6 +47,15 @@ abstract class Tinebase_Model_Filter_Abstract
     protected $_options = NULL;
     
     /**
+     * filter is implicit, this is returned in toArray
+     * - this is only needed to detect acl filters that have been added by a controller
+     * 
+     * @var boolean
+     * @todo move this to acl filter?
+     */
+    protected $_isImplicit = FALSE;
+    
+    /**
      * get a new single filter action
      *
      * @param string $_field
@@ -148,6 +157,16 @@ abstract class Tinebase_Model_Filter_Abstract
     }
     
     /**
+     * set implicit
+     *
+     * @param boolean $_isImplicit
+     */
+    public function setIsImplicit($_isImplicit)
+    {
+        $this->_isImplicit = ($_isImplicit === TRUE);
+    }
+    
+    /**
      * appends sql to given select statement
      *
      * @param Zend_Db_Select                $_select
@@ -186,6 +205,10 @@ abstract class Tinebase_Model_Filter_Abstract
             'operator'  => $this->_operator,
             'value'     => $this->_value
         );
+        
+        if ($this->_isImplicit) {
+            $result['implicit'] = TRUE;
+        }
         
         return $result;
     }
