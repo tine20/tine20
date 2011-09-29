@@ -120,7 +120,16 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
      */
     protected function _getForeignFiltersForToArray($_valueToJson)
     {
-        return $this->_filterGroup->toArray($_valueToJson);
+        // we can't do this as we do not want the condition/filters syntax
+        // $result = $this->_filterGroup->toArray($_valueToJson);
+        $result = array();
+        
+        $filterObjects = $this->_filterGroup->getFilterObjects();
+        foreach ($filterObjects as $filter) {
+            $result[] = $filter->toArray();
+        }
+        
+        return $result;
     }
     
     /**
