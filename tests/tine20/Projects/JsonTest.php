@@ -164,8 +164,9 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
                 'own_id'                 => 0,
                 'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'type'                   => 'COWORKER',
-                'related_record'         => $contact,
-                'related_id'             => NULL,
+                'related_record'         => NULL,
+                'related_backend'        => 'Sql',
+                'related_id'             => Tinebase_Core::getUser()->contact_id,
                 'related_model'          => 'Addressbook_Model_Contact',
                 'remark'                 => NULL,
             )
@@ -177,13 +178,15 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
         $filter = $this->_getProjectFilter($projectData['title']);
         $filter[] = array('field' => 'contact', 'operator' => 'AND', 'value' => array(
             array('field' => ':relation_type', 'operator' => 'in', 'value' => array('COWORKER')),
-            array('field' => 'n_family', 'operator' => 'contains', 'value' => 'PHPUNIT'),
+            array('field' => 'id', 'operator' => 'equals', 'value' => 'currentContact'),
         ));
         $search = $this->_json->searchProjects($filter, $this->_getPaging());
         $this->assertEquals($project['description'], $search['results'][0]['description']);
         $this->assertEquals(1, $search['totalcount']);
-        $this->assertEquals(2, count($search['filter'][1]['value']));
+        $this->assertEquals(3, count($search['filter'][1]['value']));
         $this->assertEquals(':relation_type', $search['filter'][1]['value'][0]['field']);
+        $this->assertEquals(Tinebase_Core::getUser()->contact_id, 
+            $search['filter'][1]['value'][1]['filters'][0]['value']['id'], 'currentContact not resolved');
     }
 
     /************ protected helper funcs *************/
