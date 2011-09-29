@@ -26,15 +26,18 @@ class Tinebase_WebDav_Root extends Sabre_DAV_SimpleCollection
         
         foreach(array('Addressbook', 'Calendar'/*, 'Filemanager'*/) as $application) {
             if(Tinebase_Core::getUser()->hasRight($application, Tinebase_Acl_Rights::RUN)) {
-                $personalCollection = $application . '_Frontend_WebDAV_Collection_Personal';
-                $sharedCollection   = $application . '_Frontend_WebDAV_Collection_Shared';
+                $applicationClass = $application . '_Frontend_WebDAV';
+                $webdavApps[] = new $applicationClass($application);
                 
-                $webdavApps[] = new Sabre_DAV_SimpleCollection($application, array(
-                    new Sabre_DAV_SimpleCollection('personal', array(
-                        new $personalCollection(Tinebase_Core::getUser())
-                    )),
-                    new $sharedCollection('shared')
-                ));
+                #$personalCollection = $application . '_Frontend_WebDAV_Collection_Personal';
+                #$sharedCollection   = $application . '_Frontend_WebDAV_Collection_Shared';
+                
+                #$webdavApps[] = new Sabre_DAV_SimpleCollection($application, array(
+                #    new Sabre_DAV_SimpleCollection('personal', array(
+                #        new $personalCollection(Tinebase_Core::getUser())
+                #    )),
+                #    new $sharedCollection('shared')
+                #));
             }
         }
         
