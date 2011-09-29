@@ -166,7 +166,6 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function __construct(array $_data = array(), $_condition = '', $_options = array())
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
         $this->_setOptions($_options);
         
         $this->_concatenationCondition = $_condition == self::CONDITION_OR ? self::CONDITION_OR : self::CONDITION_AND;
