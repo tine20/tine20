@@ -691,27 +691,35 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     getValue: function() {
         var filters = [];
 //        var foreignFilters = {};
+        
+//        // detect subfilters with no superfilter
+//        this.filterStore.each(function(filter) {
+////            if 
+//        }, this);
+        
         this.filterStore.each(function(filter) {
             
-            var line = {};
-            for (var formfield in filter.formFields) {
-                line[formfield] = filter.formFields[formfield].getValue();
-            }
-            
-            // fill data with filter record data in case form field not exist (not rendered)
-            filter.fields.each(function(field)  {
-                var name = field.name;
-                if (! line.hasOwnProperty(name)) {
-                    line[name] = filter.get(name);
-                }
-            }, this);
+            var filterModel = this.getFilterModel(filter.get('field')),
+                line = this.getFilterData(filter);
             
             if (line.field && Ext.isString(line.field) &&  line.field.match(/:/)) {
                 var parts = line.field.split(':');
                 
+                // customfield handling
                 if (parts[0] == 'customfield') {
-                    // customfield handling
                     filters.push({field: 'customfield', operator: line.operator, value: {cfId: parts[1], value: line.value}});
+                }
+                
+                else if (filterModel && filterModel.superFilter) {
+                    // check if filter of type superfilter is present
+                    if (this.filterStore.find('field', filterModel.superFilter.field) < 0) {
+                        
+                        // create one
+                        // @TODO HIDE? -> see ForeignRecordFilter line ~300
+                        var superFilter = this.addFilter(new this.record({field: filterModel.superFilter.field, operator: 'definedBy'}));
+                        line = this.getFilterData(superFilter);
+                        filters.push(line);
+                    }
                 }
 //                else {
 //                    // subfilter handling
@@ -722,8 +730,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
 //                    foreignFilters[ownField] = foreignFilters[ownField] || [];
 //                    foreignFilters[ownField].push(line);
 //                }
-            // skip subfilters
-            } else if (! line.superFilter){
+            } else {
                 filters.push(line);
             }
         }, this);
@@ -737,62 +744,88 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         return filters;
     },
     
-    setValue: function(filters) {
-        this.supressEvents = true;
-        
-        var oldFilterCount = this.filterStore.getCount();
-        var skipFilter = [];
-        
-        var filterData, filter, existingFilterPos, existingFilter;
-        
-        for (var i=0; i<filters.length; i++) {
-            filterData = filters[i];
-            
-//            if (filterData.operator == 'AND' || filterData.operator == 'OR') {
-//                // subfilter handling
-//                var subFilters = filterData.value;
-//                for (var j=subFilters.length -1; j>=0; j--) {
-//                    subFilters[j].field = filterData.field + ':' + subFilters[j].field;
-//                    filters.splice(i+1, 0, subFilters[j]);
-//                }
-//            } else 
-            if (filterData.value && filterData.value.cfId) {
-                // custom fields handling
-                filters[i].field = filterData.field + ':' + filterData.value.cfId;
-                filters[i].value = filterData.value.value;
-            }
+    /**
+     * @static
+     * @param {filterRecord} filter
+     */
+    getFilterData: function(filter) {
+        var line = {};
+                
+        for (var formfield in filter.formFields) {
+            line[formfield] = filter.formFields[formfield].getValue();
         }
         
-        for (var i=0; i<filters.length; i++) {
-            filterData = filters[i];
-            filterData.filterValueWidth = this.filterValueWidth;
+        // fill data with filter record data in case form field not exist (not rendered)
+        filter.fields.each(function(field)  {
+            var name = field.name;
+            if (! line.hasOwnProperty(name)) {
+                line[name] = filter.get(name);
+            }
+        }, this);
+        
+        return line;
+    },
+    
+    setValue: function(filters) {
+        try {
+            this.supressEvents = true;
             
-            if (this.filterModelMap[filterData.field]) {
-                filter = new this.record(filterData);
+            var oldFilterCount = this.filterStore.getCount();
+            var skipFilter = [];
+            
+            var filterData, filter, existingFilterPos, existingFilter;
+            
+            for (var i=0; i<filters.length; i++) {
+                filterData = filters[i];
                 
-                // check if this filter is already in our store
-                existingFilterPos = this.filterStore.find('field', filterData.field);
-                existingFilter = existingFilterPos >= 0 ? this.filterStore.getAt(existingFilterPos) : null;
-                
-                // we can't detect resolved records, sorry ;-(
-                if (existingFilter && existingFilter.formFields.operator.getValue() == filter.get('operator') && existingFilter.formFields.value.getValue() == filter.get('value')) {
-                    Tine.log.debug('Tine.widgets.grid.FilterToolbar::setValue skipping filter');
-                    skipFilter.push(existingFilterPos);
-                } else {
-                    this.addFilter(filter);
+    //            if (filterData.operator == 'AND' || filterData.operator == 'OR') {
+    //                // subfilter handling
+    //                var subFilters = filterData.value;
+    //                for (var j=subFilters.length -1; j>=0; j--) {
+    //                    subFilters[j].field = filterData.field + ':' + subFilters[j].field;
+    //                    filters.splice(i+1, 0, subFilters[j]);
+    //                }
+    //            } else 
+                if (filterData.value && filterData.value.cfId) {
+                    // custom fields handling
+                    filters[i].field = filterData.field + ':' + filterData.value.cfId;
+                    filters[i].value = filterData.value.value;
                 }
             }
-        }
-        
-        // delete old filter rows
-        for (var i=oldFilterCount-1; i>=0; i--) {
-            if (skipFilter.indexOf(i) < 0) {
-                this.deleteFilter(this.filterStore.getAt(i));
+            
+            for (var i=0; i<filters.length; i++) {
+                filterData = filters[i];
+                filterData.filterValueWidth = this.filterValueWidth;
+                
+                if (this.filterModelMap[filterData.field]) {
+                    filter = new this.record(filterData);
+                    
+                    // check if this filter is already in our store
+                    existingFilterPos = this.filterStore.find('field', filterData.field);
+                    existingFilter = existingFilterPos >= 0 ? this.filterStore.getAt(existingFilterPos) : null;
+                    
+                    // we can't detect resolved records, sorry ;-(
+                    if (existingFilter && existingFilter.formFields.operator.getValue() == filter.get('operator') && existingFilter.formFields.value.getValue() == filter.get('value')) {
+                        Tine.log.debug('Tine.widgets.grid.FilterToolbar::setValue not renewing resolved filter');
+                        skipFilter.push(existingFilterPos);
+                    } else if (! filterData.implicit) {
+                        this.addFilter(filter);
+                    }
+                }
             }
+            
+            // delete old filter rows
+            for (var i=oldFilterCount-1; i>=0; i--) {
+                if (skipFilter.indexOf(i) < 0) {
+                    this.deleteFilter(this.filterStore.getAt(i));
+                }
+            }
+            
+            this.supressEvents = false;
+            this.onFilterRowsChange();
+        } catch (e) {
+            console.error(e.stack ? e.stack : e);
         }
-        
-        this.supressEvents = false;
-        this.onFilterRowsChange();
         
     },
     

@@ -177,6 +177,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             }
             
             this.ftb.setActiveSheet(filter.toolbar);
+            filter.formFields.value.setText((this.editDefinitionText));
         } catch (e) {
             console.error(e.stack ? e.stack : e);
         }
@@ -210,12 +211,11 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 value.push({field: ':' + foreignRecordClass.getMeta('idProperty'), operator: filter.get('operator'), value: filter.formFields.value.value});
             }
             
-            // @TODO
             // get values of filters of our toolbar we are superfilter for (left hand stuff)
             this.ftb.filterStore.each(function(filter) {
                 var filterModel = this.ftb.getFilterModel(filter.get('field'));
                 if (filterModel.superFilter && filterModel.superFilter == this) {
-                    value.push({field: filter.get('field'), operator: filter.get('operator'), value: filter.get('value')});
+                    value.push(this.ftb.getFilterData(filter));
                 }
             }, this);
             
@@ -236,20 +236,49 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         
         // generic: choose right operator : appname -> generic filters have no subfilters an if one day, no left hand once!
         if (this.isGeneric) {
+            // get operator
+            this.operatorStore.each(function(r) {
+                var operator = r.get('operator'),
+                    foreignRecordClass = operator.foreignRecordClass;
+                    
+                if (foreignRecordClass.getMeta('appName') == value.appName && foreignRecordClass.getMeta('modelName') == value.modelName) {
+                    filter.formFields.operator.setValue(operator);
+                    filter.foreignRecordDefinition = operator;
+                    return false;
+                }
+            }, this);
+            
+            // set all content on childToolbar
+            if (Ext.isObject(filter.foreignRecordDefinition) && value && Ext.isArray(value.filters) && value.filters.length) {
+                if (! filter.toolbar) {
+                    this.createRelatedRecordToolbar(filter);
+                }
+                
+                filter.toolbar.setValue(value.filters);
+                
+                // change button text
+                if (filter.formFields.value && Ext.isFunction(filter.formFields.value.setText)) {
+                    filter.formFields.value.setText(_(this.editDefinitionText));
+                }
+            }
+            
             
         } else {
+            if (! Ext.isArray(value)) return;
             // explicit chose right operator /equals / in /definedBy: left sided values create (multiple) subfilters in filterToolbar
-            var parentFilters = [];
+            var foreignRecordDefinition = filter.foreignRecordDefinition,
+                foreignRecordClass = foreignRecordDefinition.foreignRecordClass,
+                foreignRecordIdProperty = foreignRecordClass.getMeta('idProperty'),
+                parentFilters = [];
+                
             Ext.each(value, function(filterData, i) {
                 if (! Ext.isString(filterData.field)) return;
                 
-                
+                if (filterData.implicit) parentFilters.push(filterData);
+                    
                 var parts = filterData.field.match(/^(:)?(.*)/),
                     leftHand = !!parts[1],
-                    field = parts[2]
-                    foreignRecordDefinition = filter.foreignRecordDefinition,
-                    foreignRecordClass = foreignRecordDefinition.foreignRecordClass,
-                    foreignRecordIdProperty = foreignRecordClass.getMeta('idProperty');
+                    field = parts[2];
                 
                 // force left hand for dev atm.
                 filterData.field = ':' + field;
@@ -275,7 +304,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             
             // if there where no remaining childfilters, hide this filterrow
             if (! value.length)  {
-                console.err('hide row -> not yet implemented');
+                Tine.log.info('hide row -> not yet implemented');
             }
             
             // a single id filter is always displayed in the parent Toolbar with our own filterRow
@@ -292,7 +321,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     this.createRelatedRecordToolbar(filter);
                 }
                 
-                // NOTE: id, relation_type not in right hand side yet
+                // @TODO id, relation_type not in child side yet
                 filter.toolbar.setValue(value);
                 
                 filter.formFields.operator.setValue('definedBy');
@@ -426,11 +455,11 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     valueRenderer: function(filter, el) {
         console.log('valueRenderer');
         console.log(arguments);
-        console.log(filter.get('operator'));
         
         var operator = filter.get('operator') ? filter.get('operator') : this.defaultOperator,
             value;
 
+        console.log(operator);
         switch(operator) {
             case 'equals':
                 value = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
@@ -470,26 +499,26 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     // show button
                     el.addClass('x-btn-over');
                     
-                    value.getValue = this.getRelatedRecordValue.createDelegate(this, [filter]);
+//                    value.getValue = this.getRelatedRecordValue.createDelegate(this, [filter]);
                     value.setValue = this.setRelatedRecordValue.createDelegate(this, [filter]);
-                
-                } else {
-                    value = filter.formFields.value;
                     
                     // change text if setRelatedRecordValue had child filters
                     if (filter.toolbar) {
                         value.setText((this.editDefinitionText));
                     }
+                
+                } else {
+                    value = filter.formFields.value;
                 }
                 
-                value.getValue = this.getRelatedRecordValue.createDelegate(this, [filter]);
                 break;
         }
+        
+        value.getValue = this.getRelatedRecordValue.createDelegate(this, [filter]);
         
         return value;
     },
     
-//    
 //    getSubFilters: function() {
 //        var filterConfigs = this.foreignRecordClass.getFilterModel();
 //        
@@ -499,7 +528,6 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
 //        
 //        return this.subFilterModels;
 //    },
-//    
     
     objectToString: function() {
         return Ext.encode(this);
