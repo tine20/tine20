@@ -133,7 +133,7 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to get a Project
+     * try to search a Project
      *
      */
     public function testSearchProjects()
@@ -147,6 +147,43 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
         $search = $this->_json->searchProjects($this->_getProjectFilter($projectData['title']), $this->_getPaging());
         $this->assertEquals($project['description'], $search['results'][0]['description']);
         $this->assertEquals(1, $search['totalcount']);
+    }
+
+    /**
+     * try to search projects with contact relation
+     */
+    public function testSearchProjectsWithContactRelation()
+    {
+        // create
+        $project = $this->_getProjectData();
+        $contact = $this->_getContactData();
+        $project['relations'] = array(
+            array(
+                'own_model'              => 'Projects_Model_Project',
+                'own_backend'            => 'Sql',
+                'own_id'                 => 0,
+                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'type'                   => 'COWORKER',
+                'related_record'         => $contact,
+                'related_id'             => NULL,
+                'related_model'          => 'Addressbook_Model_Contact',
+                'remark'                 => NULL,
+            )
+        );
+        $projectData = $this->_json->saveProject($project);
+        $this->_projectsToDelete[] = $projectData['id'];
+        
+        // search & check
+        $filter = $this->_getProjectFilter($projectData['title']);
+        $filter[] = array('field' => 'contact', 'operator' => 'AND', 'value' => array(
+            array('field' => ':relation_type', 'operator' => 'in', 'value' => array('COWORKER')),
+            array('field' => 'n_family', 'operator' => 'contains', 'value' => 'PHPUNIT'),
+        ));
+        $search = $this->_json->searchProjects($filter, $this->_getPaging());
+        $this->assertEquals($project['description'], $search['results'][0]['description']);
+        $this->assertEquals(1, $search['totalcount']);
+        $this->assertEquals(2, count($search['filter'][1]['value']));
+        $this->assertEquals(':relation_type', $search['filter'][1]['value'][0]['field']);
     }
 
     /************ protected helper funcs *************/
@@ -193,6 +230,20 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
                 'operator' => 'contains', 
                 'value' => $_projectName
             ),     
+        );
+    }
+    
+    /**
+     * get contact data
+     * 
+     * @return array
+     */
+    protected function _getContactData()
+    {
+        return array(
+            'n_family'          => 'PHPUNIT',
+            'org_name'          => Tinebase_Record_Abstract::generateUID(),
+            'tel_cell_private'  => '+49TELCELLPRIVATE',
         );
     }
 }
