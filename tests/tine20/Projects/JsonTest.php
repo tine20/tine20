@@ -180,13 +180,16 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
             array('field' => ':relation_type', 'operator' => 'in', 'value' => array('COWORKER')),
             array('field' => 'id', 'operator' => 'equals', 'value' => 'currentContact'),
         ));
+        $filter[] = array('field' => 'container_id', 'operator' => 'equals', 'value' => array('path' => '/'));
         $search = $this->_json->searchProjects($filter, $this->_getPaging());
         $this->assertEquals($project['description'], $search['results'][0]['description']);
         $this->assertEquals(1, $search['totalcount']);
         $this->assertEquals(3, count($search['filter'][1]['value']));
         $this->assertEquals(':relation_type', $search['filter'][1]['value'][0]['field']);
+        $this->assertEquals(TRUE, $search['filter'][1]['value'][2]['implicit']);
         $this->assertEquals(Tinebase_Core::getUser()->contact_id, 
-            $search['filter'][1]['value'][1]['filters'][0]['value']['id'], 'currentContact not resolved');
+            $search['filter'][1]['value'][1][0]['value']['id'], 'currentContact not resolved');
+        $this->assertTrue(! isset($search['filter'][2]['implicit']), 'implicit flag should not be set in container filter');
     }
 
     /************ protected helper funcs *************/
