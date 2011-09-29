@@ -201,8 +201,6 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
      *
      * @param array $_ids
      * @return array of ids to actually delete
-     * 
-     * @todo finish
      */
     protected function _inspectDelete(array $_ids) {
         // delete all persistenfilter prefs with this ids
