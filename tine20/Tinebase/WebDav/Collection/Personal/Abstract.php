@@ -57,28 +57,9 @@ abstract class Tinebase_WebDav_Collection_Personal_Abstract extends Sabre_DAV_Co
     }
     
     /**
-    * Creates a new file
-    *
-    * The contents of the new file must be a valid VCARD
-    *
-    * @param string $name
-    * @param resource $vcardData
-    * @return void
-    */
-    public function createFile($name, $vobjectData = null) 
-    {
-        list(, $containerType, $containerName) = explode('/', trim($this->_path, '/'));
-        
-        $container = Tinebase_Container::getInstance()->getContainerByName($this->_application->name, $containerName, $containerType);
-        
-        $objectClass = $this->_application->name . '_Frontend_CalDAV_' . $this->_model;
-        $object = $objectClass::create($container, $vobjectData);
-    }
-    
-    /**
-    * (non-PHPdoc)
-    * @see Sabre_DAV_Collection::getChild()
-    */
+     * (non-PHPdoc)
+     * @see Sabre_DAV_Collection::getChild()
+     */
     public function getChild($_name)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' path: ' . $this->_path . ' name: ' . $_name);
@@ -131,11 +112,6 @@ abstract class Tinebase_WebDav_Collection_Personal_Abstract extends Sabre_DAV_Co
                 foreach ($containers as $container) {
                     $children[] = $this->getChild($container);
                 }
-            
-                #$containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_application->name, Tinebase_Model_Grants::GRANT_READ);
-                #foreach ($containers as $container) {
-                #    $children[] = $this->getChild($container);
-                #}
                 
                 break;
         }
