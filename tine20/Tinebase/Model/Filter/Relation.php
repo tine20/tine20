@@ -42,6 +42,28 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
     protected $_relationTypeFilter = NULL;
     
     /**
+     * set options 
+     *
+     * @param array $_options
+     */
+    protected function _setOptions(array $_options)
+    {
+        if (! array_key_exists('related_model', $_options)) {
+            throw new Tinebase_Exception_UnexpectedValue('related model is needed in options');
+        }
+
+        if (! array_key_exists('related_filter', $_options)) {
+            $_options['related_filter'] = $_options['related_model'] . 'Filter';
+        }
+        
+        if (! array_key_exists('isGeneric', $_options)) {
+            $_options['isGeneric'] = FALSE;
+        }
+        
+        $this->_options = $_options;
+    }
+    
+    /**
      * appends sql to given select statement
      *
      * @param Zend_Db_Select                $_select
@@ -49,7 +71,7 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $filters = $this->_getFilters();
+        $filters = $this->_getRelationFilters();
         
         $relatedFilterConstructor = $this->_options['related_filter'];
         $relatedFilter = new $relatedFilterConstructor(array(array(
@@ -80,8 +102,12 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
         $_select->where($db->quoteInto("$qField IN (?)", empty($ownIds) ? ' ' : $ownIds));
     }
     
-    // @todo test
-    protected function _getFilters()
+    /**
+     * get relation filters
+     * 
+     * @return array
+     */
+    protected function _getRelationFilters()
     {
         $filters = $this->_value;   
         foreach ($filters as $idx => $filterData) {
@@ -112,14 +138,16 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
     {
         $result = parent::toArray($_valueToJson);
         
-        list($appName, $i, $modelName) = explode('_', $this->_options['related_model']);
-        
-        $result['value'] = array(
-            'linkType'      => 'relation',
-            'appName'       => $appName,
-            'modelName'     => $modelName,
-            'filters'       => $this->_value
-        );
+        if ($this->_options['isGeneric']) {
+            list($appName, $i, $modelName) = explode('_', $this->_options['related_model']);
+            
+            $result['value'] = array(
+                'linkType'      => 'relation',
+                'appName'       => $appName,
+                'modelName'     => $modelName,
+                'filters'       => $this->_value
+            );
+        }
         
         return $result;
     }    
