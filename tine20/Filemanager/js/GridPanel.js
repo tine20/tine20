@@ -747,12 +747,16 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             grid = app.getMainScreen().getCenterPanel(),
             targetNode = grid.currentFolderNode,
             gridStore = grid.store,
-            rowIndex = grid.getView().findRowIndex(event.getTarget()),
+            rowIndex = false,
             targetFolderPath = grid.currentFolderNode.attributes.path,
             addToGrid = true,
             dropAllowed = false,
             nodeRecord = null;
 
+        if(event && event.getTarget()) {
+        	rowIndex = grid.getView().findRowIndex(event.getTarget());
+        }
+        
         
         if(targetNode.attributes) {
             nodeRecord = targetNode.attributes.nodeRecord;
