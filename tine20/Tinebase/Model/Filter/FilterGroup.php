@@ -212,7 +212,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 
                 $filter = new Tinebase_Model_Filter_Relation($_filterData['field'], $_filterData['operator'], $_filterData['value']['filters'], array(
                     'related_model'     => $modelName,
-                    'related_filter'    => $modelName . 'Filter'
+                    'isGeneric'         => TRUE
                 ));
                 break;
 
