@@ -439,7 +439,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         filter.formFields.value.removeMode = 'childsonly';
         
         filter.formFields.operator.destroy();
+        delete filter.formFields.operator;
         filter.formFields.value.destroy();
+        delete filter.formFields.value;
         
         var filterModel = this.getFilterModel(newField);
         var fRow = this.bwrap.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
@@ -529,6 +531,20 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             filtersFields.push(fm);
             
             fm.on('filtertrigger', this.onFiltertrigger, this);
+            
+            // insert subfilters
+            if (Ext.isFunction(fm.getSubFilters)) {
+                Ext.each(fm.getSubFilters(), function(sfm) {
+                    sfm.superFilter = fm;
+                    
+                    // :<field> indicates a left hand filter
+                    sfm.field = ':' + sfm.field;
+                    
+                    this.filterModelMap[sfm.field] = sfm;
+                    filtersFields.push(sfm);
+                    sfm.on('filtertrigger', this.onFiltertrigger, this);
+                }, this);
+            }
             
 //            // handle subfilters "inline" at the moment
 //            if (typeof fm.getSubFilters == 'function') {
@@ -690,13 +706,14 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 }
             }, this);
             
-//            if (line.field && Ext.isString(line.field) &&  line.field.match(/:/)) {
-//                var parts = line.field.split(':');
-//                
-//                if (parts[0] == 'customfield') {
-//                    // customfield handling
-//                    filters.push({field: 'customfield', operator: line.operator, value: {cfId: parts[1], value: line.value}});
-//                } else {
+            if (line.field && Ext.isString(line.field) &&  line.field.match(/:/)) {
+                var parts = line.field.split(':');
+                
+                if (parts[0] == 'customfield') {
+                    // customfield handling
+                    filters.push({field: 'customfield', operator: line.operator, value: {cfId: parts[1], value: line.value}});
+                }
+//                else {
 //                    // subfilter handling
 //                    var ownField = parts[0];
 //                    var foreignField = parts[1];
@@ -705,10 +722,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
 //                    foreignFilters[ownField] = foreignFilters[ownField] || [];
 //                    foreignFilters[ownField].push(line);
 //                }
-//                
-//            } else {
+            // skip subfilters
+            } else if (! line.superFilter){
                 filters.push(line);
-//            }
+            }
         }, this);
         
 //        for (var ownField in foreignFilters) {
@@ -731,14 +748,15 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         for (var i=0; i<filters.length; i++) {
             filterData = filters[i];
             
-            if (filterData.operator == 'AND' || filterData.operator == 'OR') {
-                // subfilter handling
-                var subFilters = filterData.value;
-                for (var j=subFilters.length -1; j>=0; j--) {
-                    subFilters[j].field = filterData.field + ':' + subFilters[j].field;
-                    filters.splice(i+1, 0, subFilters[j]);
-                }
-            } else if (filterData.value && filterData.value.cfId) {
+//            if (filterData.operator == 'AND' || filterData.operator == 'OR') {
+//                // subfilter handling
+//                var subFilters = filterData.value;
+//                for (var j=subFilters.length -1; j>=0; j--) {
+//                    subFilters[j].field = filterData.field + ':' + subFilters[j].field;
+//                    filters.splice(i+1, 0, subFilters[j]);
+//                }
+//            } else 
+            if (filterData.value && filterData.value.cfId) {
                 // custom fields handling
                 filters[i].field = filterData.field + ':' + filterData.value.cfId;
                 filters[i].value = filterData.value.value;
@@ -758,6 +776,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 
                 // we can't detect resolved records, sorry ;-(
                 if (existingFilter && existingFilter.formFields.operator.getValue() == filter.get('operator') && existingFilter.formFields.value.getValue() == filter.get('value')) {
+                    Tine.log.debug('Tine.widgets.grid.FilterToolbar::setValue skipping filter');
                     skipFilter.push(existingFilterPos);
                 } else {
                     this.addFilter(filter);
@@ -765,6 +784,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             }
         }
         
+        // delete old filter rows
         for (var i=oldFilterCount-1; i>=0; i--) {
             if (skipFilter.indexOf(i) < 0) {
                 this.deleteFilter(this.filterStore.getAt(i));
@@ -799,11 +819,21 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         return false;
     },
     
+    onDestroy: function() {
+        if (this.parentSheet) {
+            this.parentSheet.removeFilterSheet(this);
+        }
+    },
+    
     /***** sheets functions *****/
     addFilterSheet: function(ftb) {
         ftb.ownerCt = this.ownerCt;
         ftb.parentSheet = this;
         this.childSheets[ftb.id] = ftb;
+    },
+    
+    removeFilterSheet: function(ftb) {
+        delete this.childSheets[ftb.id];
     },
     
     setActiveSheet: function(sheet) {

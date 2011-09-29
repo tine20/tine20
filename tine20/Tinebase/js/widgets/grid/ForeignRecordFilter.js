@@ -36,9 +36,19 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     ownRecordClass: null,
     
     /**
-     * @cfg {Record} foreignRecordClass for explicit filterRow
+     * @cfg {Record} foreignRecordClass needed for explicit defined filters
      */
     foreignRecordClass : null,
+    
+    /**
+     * @cfg {String} linkType {relation|foreignId} needed for explicit defined filters
+     */
+    linkType: 'relation',
+    
+    /**
+     * @cfg {String} filterName server side filterGroup Name, needed for explicit defined filters
+     */
+    filterName: null,
     
     /**
      * @cfg {String} ownField for explicit filterRow
@@ -46,11 +56,22 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     ownField: null,
     
     /**
+     * @cfg {String} editDefinitionText untranslated edit definition button text
+     */
+    editDefinitionText: 'Edit definition', // _('Edit definition')
+    
+    /**
+     * @cfg {String} startDefinitionText untranslated start definition button text
+     */
+    startDefinitionText: 'Start defintion', // _('Start defintion')
+    
+    /**
      * @property this filterModel is the generic filterRow
      * @type Boolean
      */
     isGeneric: false,
     
+    field: 'foreignRecord',
 //    isForeignFilter: true,
 //    filterValueWidth: 200,
     
@@ -76,8 +97,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      */
     initGeneric: function() {
             
-        this.label = _('Relation');
-        this.field = 'foreignRecord';
+        this.label = _('Related to');
         
         var operators = [];
         
@@ -85,13 +105,11 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         if (this.ownRecordClass.hasField('relations')) {
             Tine.Tinebase.data.RecordMgr.eachKey(function(key, record) {
                 if (record.hasField('relations') && Ext.isFunction(record.getFilterModel)) {
-                    var label = Tine.Tinebase.appMgr.get(record.getMeta('appName')).i18n._hidden(record.getMeta('recordsName')),
-                        parts = key.split('.'),
-                        appName = parts[0],
-                        modelName = parts[1];
+                    var appName = record.getMeta('appName'),
+                        label = Tine.Tinebase.appMgr.get(appName).i18n._hidden(record.getMeta('recordsName'));
                     
                     if (Tine.Tinebase.common.hasRight('run', appName)) {
-                        operators.push({operator: {linkType: 'relation', appName: appName, modelName: modelName}, label: label});
+                        operators.push({operator: {linkType: 'relation', foreignRecordClass: record}, label: label});
                     }
                 }
             }, this);
@@ -105,7 +123,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 label = Tine.Tinebase.appMgr.get(appName).i18n._hidden(def.label);
                 
             
-            operators.push({operator: {linkType: def.linkType, appName: appName, modelName: foreignRecordClass.getMeta('modelName'), filterName: def.filterName}, label: label});
+            operators.push({operator: {linkType: def.linkType, foreignRecordClass: foreignRecordClass, filterName: def.filterName}, label: label});
         }, this);
         
         // we need this to detect operator changes
@@ -142,14 +160,6 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             this.label = i18n._(this.label);
         }
         
-        if (! this.field) {
-            this.field = {linkType: this.linkType, appName: this.foreignRecordClass.getMeta('appName'), modelName: this.foreignRecordClass.getMeta('modelName'), filterName: this.filterName};
-        }
-        
-        if (Ext.isObject(this.field)) {
-            this.field.toString = this.objectToString;
-        }
-        
         if (! this.operators) {
             this.operators = ['equals', 'definedBy'];
         }
@@ -161,38 +171,146 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     },
     
     onDefineRelatedRecord: function(filter) {
-        var operator = filter.formFields.operator.getValue(),
-            ftb = this.ftb,
-            foreignRecordClass;
-        
         try {
-            if (! filter.sheet) {
-                foreignRecordClass = operator.appName && operator.modelName ? 
-                    Tine.Tinebase.data.RecordMgr.get(operator.appName, operator.modelName) :
-                    this.foreignRecordClass;
-                    
-                filter.sheet = new Tine.widgets.grid.FilterToolbar({
-                    recordClass: foreignRecordClass,
-                    defaultFilter: 'query'
-                });
-                
-                ftb.addFilterSheet(filter.sheet);
+            if (! filter.toolbar) {
+                this.createRelatedRecordToolbar(filter);
             }
             
-            ftb.setActiveSheet(filter.sheet);
-            filter.formFields.value.setText(_('Edit Definition ...'));
+            this.ftb.setActiveSheet(filter.toolbar);
         } catch (e) {
-            console.error(e.stack);
+            console.error(e.stack ? e.stack : e);
         }
     },
     
     /**
-     * get filter data of (sub) filter sheet
+     * get related record value data
+     * 
+     * NOTE: generic filters have their foreign record defintion in the values
      */
     getRelatedRecordValue: function(filter) {
-        var sheet = filter.sheet;
+        var filters = filter.toolbar ? filter.toolbar.getValue() : [],
+            foreignRecordClass = filter.foreignRecordDefinition.foreignRecordClass,
+            value;
+            
+        if (this.isGeneric) {
+            value = {
+                appName: foreignRecordClass.getMeta('appName'),
+                modelName: foreignRecordClass.getMeta('modelName'),
+                linkType: filter.foreignRecordDefinition.linkType,
+                filterName : filter.foreignRecordDefinition.filterName,
+                filters: filters
+            };
+        } else {
+            // @TODO left right stuff
+            value = filters;
+        }
         
-        return sheet ? sheet.getValue() : null;
+        return value;
+    },
+    
+    /**
+     * set related record value data
+     * @param {} filter
+     */
+    setRelatedRecordValue: function(filter) {
+        var value = filter.get('value');
+        
+        // generic: choose right operator : appname -> generic filters have no subfilters an if one day, no left hand once!
+        if (this.isGeneric) {
+            
+        } else {
+            // explicit chose right operator /equals / in /definedBy: left sided values create (multiple) subfilters in filterToolbar
+            var parentFilters = [];
+            Ext.each(value, function(filterData, i) {
+                if (! Ext.isString(filterData.field)) return;
+                
+                // force left hand for dev atm.
+                filterData.field = ':' + filterData.field;
+                
+                var parts = filterData.field.match(/^(:)?(.*)/),
+                    leftHand = !!parts[1],
+                    field = parts[2]
+                    foreignRecordDefinition = filter.foreignRecordDefinition,
+                    foreignRecordClass = foreignRecordDefinition.foreignRecordClass,
+                    foreignRecordIdProperty = foreignRecordClass.getMeta('idProperty');
+                
+                if (leftHand) {
+                    // leftHand id property is handled below
+                    if (field == foreignRecordIdProperty) {
+                        return;
+                    }
+                    
+                    // move filter to leftHand/parent filterToolbar
+                    if (this.ftb.getFilterModel(filterData.field)) {
+                        this.ftb.addFilter(new this.ftb.record(filterData));
+                    }
+                    
+                    parentFilters.push(filterData);
+                }
+            }, this);
+            
+            // remove parent filters
+            Ext.each(parentFilters, function(filterData) {value.remove(filterData);}, this);
+            
+            // if there where no remaining childfilters, hide this filterrow
+            if (! value.length)  {
+                console.err('hide row -> not yet implemented');
+            }
+            
+            // a single id filter is always displayed in the parent Toolbar with our own filterRow
+            else if (value.length == 1 && [foreignRecordIdProperty, ':' + foreignRecordIdProperty].indexOf(value[0].field) > -1) {
+                console.log('single idProp');
+                filter.set('value', value[0].value);
+                filter.formFields.operator.setValue(value[0].operator);
+                this.onOperatorChange(filter, value[0].operator, true);
+            }
+            
+            // set remaining child filters
+            else {
+                if (! filter.toolbar) {
+                    this.createRelatedRecordToolbar(filter);
+                }
+                
+                // NOTE: id, relation_type not in right hand side yet
+                filter.toolbar.setValue(value);
+                
+                filter.formFields.operator.setValue('definedBy');
+//                this.onOperatorChange(filter, value[0].operator, true);
+                
+                // change button text
+                if (filter.formFields.value && Ext.isFunction(filter.formFields.value.setText)) {
+                    filter.formFields.value.setText(_(this.editDefinitionText));
+                }
+            }
+        }
+        
+    },
+    
+    /**
+     * create a related record toolbar
+     */
+    createRelatedRecordToolbar: function(filter) {
+        var foreignRecordDefinition = filter.foreignRecordDefinition,
+            foreignRecordClass = foreignRecordDefinition.foreignRecordClass,
+            ftb = this.ftb;
+            
+        try {
+            if (! filter.toolbar) {
+                filter.toolbar = new Tine.widgets.grid.FilterToolbar({
+                    recordClass: foreignRecordClass,
+                    defaultFilter: 'query'
+                });
+                
+                ftb.addFilterSheet(filter.toolbar);
+                
+                // force rendering as we can't set values on non rendered toolbar atm.
+                this.ftb.setActiveSheet(filter.toolbar);
+                this.ftb.setActiveSheet(this.ftb);
+            }
+            
+        } catch (e) {
+            console.error(e.stack ? e.stack : e);
+        }
     },
     
     /**
@@ -202,31 +320,45 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * @param {Ext.Element} element to render to 
      */
     operatorRenderer: function (filter, el) {
+        console.log('operatorRenderer');
+        console.log(arguments);
+        var operator;
+        
         if (! this.isGeneric) {
-            return Tine.widgets.grid.ForeignRecordFilter.superclass.operatorRenderer.apply(this, arguments);
+            operator = Tine.widgets.grid.ForeignRecordFilter.superclass.operatorRenderer.apply(this, arguments);
+            filter.foreignRecordDefinition = {linkType: this.linkType, foreignRecordClass: this.foreignRecordClass, filterName: this.filterName}
+        } else {
+            console.log(filter.get('operator') ? filter.get('operator') : this.defaultOperator);
+            operator = new Ext.form.ComboBox({
+                filter: filter,
+                width: 80,
+                id: 'tw-ftb-frow-operatorcombo-' + filter.id,
+                mode: 'local',
+                lazyInit: false,
+                emptyText: _('select a operator'),
+                forceSelection: true,
+                typeAhead: true,
+                triggerAction: 'all',
+                store: this.operatorStore,
+                displayField: 'label',
+                valueField: 'operator',
+                value: filter.get('operator') ? filter.get('operator') : this.defaultOperator,
+                renderTo: el
+            });
+            operator.on('select', function(combo, newRecord, newKey) {
+                if (combo.value != combo.filter.get('operator')) {
+                    this.onOperatorChange(combo.filter, combo.value);
+                }
+            }, this);
+            
+            // init foreignRecordDefinition
+            filter.foreignRecordDefinition = filter.get('operator') ? filter.get('operator') : this.defaultOperator;
         }
         
-        var operator = new Ext.form.ComboBox({
-            filter: filter,
-            width: 80,
-            id: 'tw-ftb-frow-operatorcombo-' + filter.id,
-            mode: 'local',
-            lazyInit: false,
-            emptyText: _('select a operator'),
-            forceSelection: true,
-            typeAhead: true,
-            triggerAction: 'all',
-            store: this.operatorStore,
-            displayField: 'label',
-            valueField: 'operator',
-            value: filter.get('operator') ? filter.get('operator') : this.defaultOperator,
-            renderTo: el
-        });
-        operator.on('select', function(combo, newRecord, newKey) {
-            if (combo.value != combo.filter.get('operator')) {
-                this.onOperatorChange(combo.filter, combo.value);
-            }
-        }, this);
+        // op is always AND atm.
+        operator.getValue = function() {
+            return 'AND';
+        };
         
         return operator;
     },
@@ -235,17 +367,31 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * called on operator change of a filter row
      * @private
      */
-    onOperatorChange: function(filter, newOperator) {
-        filter.set('operator', newOperator);
-        filter.set('value', '');
+    onOperatorChange: function(filter, newOperator, keepValue) {
+        console.log('onOperatorChange ')
+        console.log(arguments);
+        if (this.isGeneric) {
+            filter.foreignRecordDefinition = newOperator;
+            if (filter.toolbar) {
+                filter.toolbar.destroy();
+                delete filter.toolbar;
+            }
+        }
         
-        var el = filter.formFields.value.el.up('td[class^=tw-ftb-frow-value]');
+        filter.set('operator', newOperator);
+        if (! keepValue) {
+            filter.set('value', '');
+        }
+        
+        var el = Ext.select('tr[id=' + this.ftb.frowIdPrefix + filter.id + '] td[class^=tw-ftb-frow-value]', this.ftb.el).first();
         
         // NOTE: removeMode got introduced on ext3.1 but is not docuemented
         //       'childonly' is no ext mode, we just need something other than 'container'
-        filter.formFields.value.removeMode = 'childsonly';
-        filter.formFields.value.destroy();
-        delete filter.formFields.value;
+        if (filter.formFields.value && Ext.isFunction(filter.formFields.value.destroy)) {
+            filter.formFields.value.removeMode = 'childsonly';
+            filter.formFields.value.destroy();
+            delete filter.formFields.value;
+        }
         
         filter.formFields.value = this.valueRenderer(filter, el);
     },
@@ -257,9 +403,11 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * @param {Ext.Element} element to render to 
      */
     valueRenderer: function(filter, el) {
+        console.log('valueRenderer');
+        console.log(arguments);
         var value;
 
-        switch(filter.formFields.operator.getValue()) {
+        switch(filter.get('operator')) {
             case 'equals':
                 value = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
                     recordClass: this.foreignRecordClass,
@@ -280,23 +428,35 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 break;
                 
             default: 
-                value = new Ext.Button({
-                    text: _('Start Definition ...'),
-                    filter: filter,
-                    width: this.filterValueWidth,
-                    id: 'tw-ftb-frow-valuefield-' + filter.id,
-                    renderTo: el,
-                    value: filter.data.value ? filter.data.value : this.defaultValue,
-                    handler: this.onDefineRelatedRecord.createDelegate(this, [filter]),
-                    scope: this,
-                    getValue: this.getRelatedRecordValue.createDelegate(this, [filter])
-                });
+                this.setRelatedRecordValue(filter);
                 
-                // show button
-                el.addClass('x-btn-over');
+                if (! filter.formFields.value) {
+                    value = new Ext.Button({
+                        text: _(this.startDefinitionText),
+                        filter: filter,
+                        width: this.filterValueWidth,
+                        id: 'tw-ftb-frow-valuefield-' + filter.id,
+                        renderTo: el,
+                        handler: this.onDefineRelatedRecord.createDelegate(this, [filter]),
+                        scope: this
+                    });
+                    
+                    // show button
+                    el.addClass('x-btn-over');
+                } else {
+                    value = filter.formFields.value;
+                    
+                    // change text if setRelatedRecordValue had child filters
+                    if (filter.toolbar) {
+                        value.setText((this.editDefinitionText));
+                    }
+                }
+
                 break;
         }
-
+        
+        value.getValue = this.getRelatedRecordValue.createDelegate(this, [filter]);
+        value.setValue = this.setRelatedRecordValue.createDelegate(this, [filter]);
         
         return value;
     },

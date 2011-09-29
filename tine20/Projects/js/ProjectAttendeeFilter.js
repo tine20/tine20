@@ -45,11 +45,8 @@ Tine.Projects.ProjectAttendeeFilter = Ext.extend(Tine.widgets.grid.ForeignRecord
             app: this.app, 
             keyfieldName: 'projectAttendeeRole'
         });
-        this.subFilterModels.push(attendeeRoleFilter);
         
-        this.subFilterModels = Tine.Projects.ProjectAttendeeFilter.superclass.getSubFilters.call(this);
-        
-        return this.subFilterModels;
+        return [attendeeRoleFilter];
     }
 });
 
