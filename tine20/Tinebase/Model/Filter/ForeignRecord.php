@@ -126,7 +126,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         
         $filterObjects = $this->_filterGroup->getFilterObjects();
         foreach ($filterObjects as $filter) {
-            $result[] = $filter->toArray();
+            $result[] = $filter->toArray($_valueToJson);
         }
         
         return $result;
