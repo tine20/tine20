@@ -59,12 +59,12 @@ class Calendar_Model_ContactAttendeeFilter extends Tinebase_Model_Filter_Foreign
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $this->_getFilterData();
-        
-        $events = $this->_controller->search($this->_filterGroup);
-        Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($events, $this->_filterGroup);
-        
-        $this->_getForeignIds($events);
+        if (! is_array($this->_foreignIds)) {
+            $this->_getFilterData();
+            $events = $this->_controller->search($this->_filterGroup);
+            Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($events, $this->_filterGroup);
+            $this->_getForeignIds($events);
+        }
         
         // this is supposed to run in ContactFilter context
         $contactIdFilter = new Addressbook_Model_ContactIdFilter('id', 'in', $this->_foreignIds);

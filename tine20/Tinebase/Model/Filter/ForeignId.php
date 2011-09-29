@@ -26,26 +26,17 @@
 class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecord
 {
     /**
-     * @var Tinebase_Controller_Record_Abstract
+     * get foreign controller
+     * 
+     * @return Tinebase_Controller_Record_Abstract
      */
-    protected $_controller = NULL;
-    
-    /**
-     * @var array
-     */
-    protected $_foreignIds = NULL;
-    
-    /**
-     * creates corresponding filtergroup
-     *
-     * @param array $_value
-     */
-    public function setValue($_value) {
-        parent::setValue($_value);
+    protected function _getController()
+    {
+        if ($this->_controller === NULL) {
+            $this->_controller = call_user_func($this->_options['controller'] . '::getInstance');
+        }
         
-        $this->_controller = call_user_func($this->_options['controller'] . '::getInstance');
-        
-        $this->_foreignIds = NULL;
+        return $this->_controller;
     }
     
     /**
