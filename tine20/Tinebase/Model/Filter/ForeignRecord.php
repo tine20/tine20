@@ -117,19 +117,37 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
      * 
      * @param  bool $_valueToJson resolve value for json api?
      * @return array
+     * 
+     * @todo think about allowing {condition: ...., filters: ....} syntax and just use $this->_filterGroup->toArray
      */
     protected function _getForeignFiltersForToArray($_valueToJson)
     {
         // we can't do this as we do not want the condition/filters syntax
         // $result = $this->_filterGroup->toArray($_valueToJson);
-        $result = array();
-        
-        $filterObjects = $this->_filterGroup->getFilterObjects();
-        foreach ($filterObjects as $filter) {
-            $result[] = $filter->toArray($_valueToJson);
-        }
+        $this->_filterGroupToArrayWithoutCondition($result, $this->_filterGroup, $_valueToJson);
         
         return $result;
+    }
+    
+    /**
+     * the client cannot handle {condition: ...., filters: ....} syntax
+     * 
+     * @param  array $result
+     * @param  Tinebase_Model_Filter_FilterGroup $_filtergroup
+     * @param  bool $_valueToJson resolve value for json api?
+     * 
+     * @todo move this to filtergroup?
+     */
+    protected function _filterGroupToArrayWithoutCondition(&$result, Tinebase_Model_Filter_FilterGroup $_filtergroup, $_valueToJson)
+    {
+        $filterObjects = $_filtergroup->getFilterObjects();
+        foreach ($filterObjects as $filter) {
+            if ($filter instanceof Tinebase_Model_Filter_FilterGroup) {
+                $this->_filterGroupToArrayWithoutCondition($result, $filter, $_valueToJson);
+            } else {
+                $result[] = $filter->toArray($_valueToJson);
+            }
+        }
     }
     
     /**

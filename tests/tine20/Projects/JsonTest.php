@@ -154,25 +154,7 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchProjectsWithContactRelation()
     {
-        // create
-        $project = $this->_getProjectData();
-        $contact = $this->_getContactData();
-        $project['relations'] = array(
-            array(
-                'own_model'              => 'Projects_Model_Project',
-                'own_backend'            => 'Sql',
-                'own_id'                 => 0,
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-                'type'                   => 'COWORKER',
-                'related_record'         => NULL,
-                'related_backend'        => 'Sql',
-                'related_id'             => Tinebase_Core::getUser()->contact_id,
-                'related_model'          => 'Addressbook_Model_Contact',
-                'remark'                 => NULL,
-            )
-        );
-        $projectData = $this->_json->saveProject($project);
-        $this->_projectsToDelete[] = $projectData['id'];
+        $projectData = $this->_createProjectWithContactRelation();
         
         // search & check
         $filter = $this->_getProjectFilter($projectData['title']);
@@ -192,6 +174,33 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(! isset($search['filter'][2]['implicit']), 'implicit flag should not be set in container filter');
     }
 
+    /**
+     * testPersistentRelationFilter
+     */
+    public function testPersistentRelationFilter()
+    {
+        $favoriteId = Tinebase_PersistentFilter::getInstance()->getPreferenceValues('Projects', NULL, 'All my projects');
+        $favorite = Tinebase_PersistentFilter::getInstance()->getFilterById($favoriteId);
+        
+        $closedStatus = Projects_Config::getInstance()->get(Projects_Config::PROJECT_STATUS)->records->filter('is_open', 0);
+        $this->assertEquals(array(
+            array(
+                'field'     => 'contact',
+                'operator'  => 'AND',
+                'value'     => array(array(
+                    'field'     => 'relation_type',
+                    'operator'  => 'in',
+                    'value'     => Projects_Config::getInstance()->get(Projects_Config::PROJECT_ATTENDEE_ROLE)->records->id
+                ), array(
+                    'field'     => 'id',
+                    'operator'  => 'equals',
+                    'value'     => Addressbook_Model_Contact::CURRENTCONTACT,
+                )
+            )),
+            array('field' => 'status',    'operator' => 'notin',  'value' => $closedStatus->getId()),
+        ), $favorite->toArray());
+    }
+        
     /************ protected helper funcs *************/
     
     /**
@@ -251,5 +260,34 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
             'org_name'          => Tinebase_Record_Abstract::generateUID(),
             'tel_cell_private'  => '+49TELCELLPRIVATE',
         );
+    }
+
+    /**
+     * createProjectWithContactRelation
+     * 
+     * @return array
+     */
+    protected function _createProjectWithContactRelation()
+    {
+        $project = $this->_getProjectData();
+        $contact = $this->_getContactData();
+        $project['relations'] = array(
+            array(
+                'own_model'              => 'Projects_Model_Project',
+                'own_backend'            => 'Sql',
+                'own_id'                 => 0,
+                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'type'                   => 'COWORKER',
+                'related_record'         => NULL,
+                'related_backend'        => 'Sql',
+                'related_id'             => Tinebase_Core::getUser()->contact_id,
+                'related_model'          => 'Addressbook_Model_Contact',
+                'remark'                 => NULL,
+            )
+        );
+        $projectData = $this->_json->saveProject($project);
+        $this->_projectsToDelete[] = $projectData['id'];
+        
+        return $projectData;
     }
 }
