@@ -58,15 +58,15 @@ class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
     // relation filters
         'contact'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
             'related_model'     => 'Addressbook_Model_Contact',
-            'related_filter'    => 'Addressbook_Model_ContactFilter'
+            'filtergroup'    => 'Addressbook_Model_ContactFilter'
         )),
         'product'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
             'related_model'     => 'Sales_Model_Product',
-            'related_filter'    => 'Sales_Model_ProductFilter'
+            'filtergroup'    => 'Sales_Model_ProductFilter'
         )),
         'task'           => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
             'related_model'     => 'Tasks_Model_Task',
-            'related_filter'    => 'Tasks_Model_TaskFilter'
+            'filtergroup'    => 'Tasks_Model_TaskFilter'
         )),
     );
 }

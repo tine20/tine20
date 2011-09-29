@@ -50,7 +50,7 @@ class Projects_Model_ProjectFilter extends Tinebase_Model_Filter_FilterGroup
     
         'contact'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
             'related_model'     => 'Addressbook_Model_Contact',
-            'related_filter'    => 'Addressbook_Model_ContactFilter'
+            'filtergroup'    => 'Addressbook_Model_ContactFilter'
         )),
     
         'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
