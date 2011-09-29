@@ -188,6 +188,9 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * NOTE: generic filters have their foreign record defintion in the values
      */
     getRelatedRecordValue: function(filter) {
+        console.log('getRelatedRecordValue');
+        console.log(arguments);
+        
         var filters = filter.toolbar ? filter.toolbar.getValue() : [],
             foreignRecordClass = filter.foreignRecordDefinition.foreignRecordClass,
             value;
@@ -201,8 +204,21 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 filters: filters
             };
         } else {
-            // @TODO left right stuff
             value = filters;
+            // get value for idField if our own operator is not definedBy
+            if (filter.get('operator') != 'definedBy') {
+                value.push({field: ':' + foreignRecordClass.getMeta('idProperty'), operator: filter.get('operator'), value: filter.formFields.value.value});
+            }
+            
+            // @TODO
+            // get values of filters of our toolbar we are superfilter for (left hand stuff)
+            this.ftb.filterStore.each(function(filter) {
+                var filterModel = this.ftb.getFilterModel(filter.get('field'));
+                if (filterModel.superFilter && filterModel.superFilter == this) {
+                    value.push({field: filter.get('field'), operator: filter.get('operator'), value: filter.get('value')});
+                }
+            }, this);
+            
         }
         
         return value;
@@ -213,6 +229,9 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * @param {} filter
      */
     setRelatedRecordValue: function(filter) {
+        console.log('setRelatedRecordValue');
+        console.log(arguments);
+        
         var value = filter.get('value');
         
         // generic: choose right operator : appname -> generic filters have no subfilters an if one day, no left hand once!
@@ -224,8 +243,6 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             Ext.each(value, function(filterData, i) {
                 if (! Ext.isString(filterData.field)) return;
                 
-                // force left hand for dev atm.
-                filterData.field = ':' + filterData.field;
                 
                 var parts = filterData.field.match(/^(:)?(.*)/),
                     leftHand = !!parts[1],
@@ -233,6 +250,10 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     foreignRecordDefinition = filter.foreignRecordDefinition,
                     foreignRecordClass = foreignRecordDefinition.foreignRecordClass,
                     foreignRecordIdProperty = foreignRecordClass.getMeta('idProperty');
+                
+                // force left hand for dev atm.
+                filterData.field = ':' + field;
+                leftHand = true;
                 
                 if (leftHand) {
                     // leftHand id property is handled below
@@ -405,9 +426,12 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     valueRenderer: function(filter, el) {
         console.log('valueRenderer');
         console.log(arguments);
-        var value;
+        console.log(filter.get('operator'));
+        
+        var operator = filter.get('operator') ? filter.get('operator') : this.defaultOperator,
+            value;
 
-        switch(filter.get('operator')) {
+        switch(operator) {
             case 'equals':
                 value = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
                     recordClass: this.foreignRecordClass,
@@ -420,11 +444,13 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     value: filter.data.value ? filter.data.value : this.defaultValue,
                     renderTo: el
                 });
+                
                 value.on('specialkey', function(field, e){
                      if(e.getKey() == e.ENTER){
                          this.onFiltertrigger();
                      }
                 }, this);
+                
                 break;
                 
             default: 
@@ -443,6 +469,10 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     
                     // show button
                     el.addClass('x-btn-over');
+                    
+                    value.getValue = this.getRelatedRecordValue.createDelegate(this, [filter]);
+                    value.setValue = this.setRelatedRecordValue.createDelegate(this, [filter]);
+                
                 } else {
                     value = filter.formFields.value;
                     
@@ -451,12 +481,10 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                         value.setText((this.editDefinitionText));
                     }
                 }
-
+                
+                value.getValue = this.getRelatedRecordValue.createDelegate(this, [filter]);
                 break;
         }
-        
-        value.getValue = this.getRelatedRecordValue.createDelegate(this, [filter]);
-        value.setValue = this.setRelatedRecordValue.createDelegate(this, [filter]);
         
         return value;
     },
