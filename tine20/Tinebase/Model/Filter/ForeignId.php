@@ -23,21 +23,8 @@
  * Hands over AclFilter functions to filtergroup
  *
  */
-class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_Abstract
+class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecord
 {
-    /**
-     * @var array list of allowed operators
-     */
-    protected $_operators = array(
-        0 => 'AND',
-        1 => 'OR',
-    );
-    
-    /**
-     * @var Tinebase_Model_Filter_FilterGroup
-     */
-    protected $_filterGroup = NULL;
-    
     /**
      * @var Tinebase_Controller_Record_Abstract
      */
@@ -54,10 +41,8 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_Abstract
      * @param array $_value
      */
     public function setValue($_value) {
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_value, true));
-        $this->_value = (array)$_value;
+        parent::setValue($_value);
         
-        $this->_filterGroup = new $this->_options['filtergroup']($this->_value, $this->_operator, $this->_options);
         $this->_controller = call_user_func($this->_options['controller'] . '::getInstance');
         
         $this->_foreignIds = NULL;
@@ -73,7 +58,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_Abstract
         if (! array_key_exists('controller', $_options) || ! array_key_exists('filtergroup', $_options)) {
             throw new Tinebase_Exception_InvalidArgument('a controller and a filtergroup must be specified in the options');
         }
-        $this->_options = $_options;
+        parent::_setOptions($_options);
     }
     
     /**
@@ -104,22 +89,18 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_Abstract
     }
     
     /**
-     * returns array with the filter settings of this filter
-     *
-     * @param  bool $_valueToJson resolve value for json api?
+     * get filter information for toArray()
+     * 
      * @return array
      */
-    public function toArray($_valueToJson = false)
+    protected function _getGenericFilterInformation()
     {
-        $result = parent::toArray($_valueToJson);
-        
         list($appName, $i, $filterName) = explode('_', $this->_options['filtergroup']);
         
-        $result['value'] = array(
+        $result = array(
             'linkType'      => 'foreignId',
             'appName'       => $appName,
             'filterName'    => $filterName,
-            'filters'       => $this->_value
         );
         
         return $result;

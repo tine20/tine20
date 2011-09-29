@@ -45,7 +45,8 @@ class Calendar_Model_ContactAttendeeFilter extends Tinebase_Model_Filter_Foreign
         if (! array_key_exists('filtergroup', $_options)) {
             $_options['filtergroup'] = 'Calendar_Model_EventFilter';
         }
-        $this->_options = $_options;
+        
+        parent::_setOptions($_options);
     }
     
     /**
