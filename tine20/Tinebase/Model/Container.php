@@ -133,12 +133,16 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     public function getPath()
     {
         $path = "/{$this->type}";
+        
         switch ($this->type) {
+            // path is deprecated
             case 'internal':
                 break;
+                
             case 'shared':
                 $path .= "/{$this->getId()}";
                 break;
+                
             case 'personal':
                 if (! $this->owner_id) {
                     // we need to find out who has admin grant
@@ -157,10 +161,12 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
                 
                 $path .= "/{$this->owner_id}/{$this->getId()}";
                 break;
+                
             default:
                 throw new Exception("unknown container type: '{$this->type}'");
                 break;
         }
+        
         return $path;
     }
     
