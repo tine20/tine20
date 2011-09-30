@@ -58,7 +58,9 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      */
     public static function create(Tinebase_Model_Container $container, $vcardData)
     {
-        $contact = $this->_converter->toTine20Model($vcardData);
+        $converter = new Addressbook_Convert_Contact_VCard();
+        
+        $contact = $converter->toTine20Model($vcardData);
         $contact->container_id = $container->getId();
         
         $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
