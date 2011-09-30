@@ -135,7 +135,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         $path = "/{$this->type}";
         
         switch ($this->type) {
-            // path is deprecated
+            // this path is deprecated
             case 'internal':
                 break;
                 
