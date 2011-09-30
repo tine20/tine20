@@ -148,6 +148,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
                     // we need to find out who has admin grant
                     $allGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($this, true);
                     
+                    // pick the first user with admin grants
                     foreach ($allGrants as $grants) {
                         if ($grants->{Tinebase_Model_Grants::GRANT_ADMIN} === true) {
                             $this->owner_id = $grants->account_id;
