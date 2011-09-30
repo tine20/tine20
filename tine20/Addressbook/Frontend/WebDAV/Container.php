@@ -36,6 +36,8 @@ class Addressbook_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
             '{http://calendarserver.org/ns/}getctag' => time(),
             'id'                => $this->_container->getId(),
             'uri'               => $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name,
+            '{DAV:}resource-id' => 'urn:uuid:' . $this->_container->getId(),
+            '{DAV:}owner'       => new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id), 
             #'principaluri'      => $principalUri,
             #'{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}addressbook-description' => $this->_container->description,
             '{DAV:}displayname' => $this->_container->type == Tinebase_Model_Container::TYPE_SHARED && $this->_useIdAsName == true ? $this->_container->name . ' (shared)' : $this->_container->name,
@@ -44,18 +46,13 @@ class Addressbook_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
         
         $response = array();
     
-        foreach($requestedProperties as $prop) switch($prop) {
-            case '{DAV:}owner' :
-                $response[$prop] = new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id);
-                break;
-                
-            default :
-                if (isset($properties[$prop])) $response[$prop] = $properties[$prop];
-                break;
-    
+        foreach($requestedProperties as $prop) {
+            if (isset($properties[$prop])) {
+                $response[$prop] = $properties[$prop];
+            }
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' path: ' . $this->_path . ' ' . print_r($response, true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($response, true));
         
         return $response;
     }
