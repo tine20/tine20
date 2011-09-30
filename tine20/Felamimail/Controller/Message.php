@@ -314,7 +314,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $messageBody = $this->_getAndDecodeMessageBody($message, $_partId, $_contentType, $_account);
         
-        $cache->save($messageBody, $cacheId, array('getMessageBody'));
+        $cache->save($messageBody, $cacheId, array('getMessageBody'), 86400);
         
         return $messageBody;
     }
@@ -550,7 +550,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         Zend_Mime_Decode::splitMessage($rawHeaders, $headers, $null);
         
-        $cache->save($headers, $cacheId, array('getMessageHeaders'));
+        $cache->save($headers, $cacheId, array('getMessageHeaders'), 86400);
         
         return $headers;
     }
