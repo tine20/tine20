@@ -28,16 +28,6 @@ class Tinebase_WebDav_Root extends Sabre_DAV_SimpleCollection
             if(Tinebase_Core::getUser()->hasRight($application, Tinebase_Acl_Rights::RUN)) {
                 $applicationClass = $application . '_Frontend_WebDAV';
                 $webdavApps[] = new $applicationClass($application);
-                
-                #$personalCollection = $application . '_Frontend_WebDAV_Collection_Personal';
-                #$sharedCollection   = $application . '_Frontend_WebDAV_Collection_Shared';
-                
-                #$webdavApps[] = new Sabre_DAV_SimpleCollection($application, array(
-                #    new Sabre_DAV_SimpleCollection('personal', array(
-                #        new $personalCollection(Tinebase_Core::getUser())
-                #    )),
-                #    new $sharedCollection('shared')
-                #));
             }
         }
         
