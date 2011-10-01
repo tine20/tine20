@@ -77,7 +77,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         'color'             => array('allowEmpty' => true, array('regex', '/^#[0-9a-fA-F]{6}$/')),
         'application_id'    => array('Alnum', 'presence' => 'required'),
         'account_grants'    => array('allowEmpty' => true), // non persistent
-        'owner_id'          => array('allowEmpty' => true), // non persistent
+        'owner_id'          => array('allowEmpty' => true), // non persistent // only set for personal folders
         'path'              => array('allowEmpty' => true), // non persistent
     // modlog fields
         'created_by'             => array('allowEmpty' => true),
