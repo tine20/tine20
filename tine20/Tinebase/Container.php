@@ -237,6 +237,32 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         return true;
     }
+    /**
+    * get the basic select object to fetch records from the database
+    *
+    * @param array|string $_cols columns to get, * per default
+    * @param boolean $_getDeleted get deleted records (if modlog is active)
+    * @return Zend_Db_Select
+    */
+    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
+    {
+        $select = parent::_getSelect($_cols, $_getDeleted);
+        
+        $select->joinLeft(
+            /* table  */ array('owner' => SQL_TABLE_PREFIX . 'container_acl'),
+            /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')} AND ".
+            "{$this->_db->quoteIdentifier('container.type')} = {$this->_db->quote(Tinebase_Model_Container::TYPE_PERSONAL)} AND " .
+            "{$this->_db->quoteIdentifier('owner.account_type')} = {$this->_db->quote('user')} AND " .
+            "{$this->_db->quoteIdentifier('owner.account_grant')} = {$this->_db->quote(Tinebase_Model_Grants::GRANT_ADMIN)}",
+            /* select */ array('owner_id' => 'account_id')
+        );
+        
+        return $select;
+    }
+    
+    public function addOwnerId(Zend_Db_Select $_select)
+    {
+    }
     
     /**
      * return all container, which the user has the requested right for
@@ -270,13 +296,14 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                     /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
                     /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
                     /* select */ array()
-                )
-                
+                )                
+            
                 ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $applicationId)
                 
                 ->group('container.id')
                 ->order('container.name');
             
+            $this->addOwnerId($select);
             $this->addGrantsSql($select, $accountId, $grant);
     
             $stmt = $this->_db->query($select);
@@ -340,6 +367,23 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * return a container identified by path
+     *
+     * @param   string  $_path        the path to the container
+     * @param   bool    $_getDeleted  get deleted records
+     * @return  Tinebase_Model_Container
+     * @throws  Tinebase_Exception_NotFound
+     */
+    public function getByPath($_path, $_getDeleted = FALSE)
+    {
+        if (($containerId = Tinebase_Model_Container::pathIsContainer($_path) === false)) {
+            throw new Tinebase_Exception_UnexpectedValue ("Invalid path $_path supplied.");
+        }
+    
+        return $this->getContainerById($containerId, $_getDeleted);
+    }
+    
+    /**
      * return a container by container name
      *
      * @param   int|Tinebase_Model_Container $_containerId the id of the container
@@ -397,7 +441,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             )
             ->join(array(
                 /* table  */ 'container' => SQL_TABLE_PREFIX . 'container'), 
-                /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')}")
+                /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')}"
+            )
             
             ->where("{$this->_db->quoteIdentifier('owner.account_id')} = ?", $ownerId)
             ->where("{$this->_db->quoteIdentifier('owner.account_grant')} = ?", Tinebase_Model_Grants::GRANT_ADMIN)
@@ -934,15 +979,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
                 /* select */ array('*', 'account_grants' => "GROUP_CONCAT( DISTINCT container_acl.account_grant)")
             )
-            ->joinLeft(array(
-                /* table  */ 'owner' => SQL_TABLE_PREFIX . 'container_acl'), 
-                /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')} " .
-                             "AND {$this->_db->quoteIdentifier('container.type')} = {$this->_db->quote(Tinebase_Model_Container::TYPE_PERSONAL)} " .
-                             "AND {$this->_db->quoteIdentifier('owner.account_grant')} = {$this->_db->quote(Tinebase_Model_Grants::GRANT_ADMIN)}",
-                /* select */ array('owner.account_id AS owner_id')
-            )
             ->group('container.id', 'container_acl.account_type', 'container_acl.account_id');
         
+        $this->addOwnerId($select);
         $this->addGrantsSql($select, $accountId, '*');
         
         $stmt = $this->_db->query($select);
