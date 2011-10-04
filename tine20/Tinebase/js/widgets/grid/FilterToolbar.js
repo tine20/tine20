@@ -877,6 +877,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         ftb.ownerCt = this.ownerCt;
         ftb.parentSheet = this;
         this.childSheets[ftb.id] = ftb;
+        
+        ftb.onFilterChange = this.onFilterChange.createDelegate(this);
     },
     
     removeFilterSheet: function(ftb) {
