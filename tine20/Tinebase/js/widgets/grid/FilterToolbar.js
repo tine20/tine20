@@ -182,6 +182,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
 
         this.action_loadFilter = new Ext.Action({
             text: _('Load a favorite'),
+            hidden: true,
             iconCls: 'action-tinebase-favorite',
             scope: this,
             handler: this.onLoadFilter
@@ -725,6 +726,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 }
                 
                 else if (filterModel && filterModel.superFilter) {
+                    // if we are a childfilter of a recordclass of the subfilter, just place the subfilter
+                    if (this.parentSheet.recordClass == filterModel.superFilter.foreignRecordClass) {
+                        filters.push(line);
+                        return;
+                    }
+                    
                     // check if filter of type superfilter is present
                     if (this.filterStore.find('field', filterModel.superFilter.field) < 0) {
                         

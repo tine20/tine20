@@ -78,6 +78,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             width: 200,
             border: false,
             layout: 'fit',
+            split: true,
             items: [new Tine.widgets.grid.FilterStructureTreePanel({filterPanel: this})]
         }, {
             region: 'center',
@@ -311,7 +312,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     
     setValue: function(value) {
         if (! value.condition || value.condition == 'AND') {
-            return this.activeFilterPanel.setValue(value);
+//            return this.activeFilterPanel.setValue(value);
         } else {
             // @TODO
         }
