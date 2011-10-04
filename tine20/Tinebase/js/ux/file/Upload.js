@@ -760,7 +760,7 @@ Ext.ux.file.Upload.fileSize = function (value, metadata, record) {
   var intValue= value/1;  
   
   if (intValue < 1024) {
-      return intValue + ' bytes';     
+      return intValue + ' Bytes';     
   }
   else if(intValue < 1048576) {
       

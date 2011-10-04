@@ -233,6 +233,20 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 hidden: true
             });
             this.tbar.render(this.el, 0);
+            
+//            // tab bar to start or filters
+//            this.tabBar = new Ext.Panel({
+//                cls: 'tw-ftb-criteria-tabs',
+//                border: false,
+//                height: Ext.isGecko ? 22 : 20,
+//                items: new Ext.TabPanel({
+//                    border: false,
+//                    plain: true,
+//                    activeItem: 1,
+//                    items: [{title: 'combination', html:''}, {title: 'criteria 1', html:''}, {title: 'criteria 2', html: ''}, {iconCls: 'action_add', title: '&nbsp;', html: ''}]
+//                })
+//            });
+//            this.tabBar.render(this.el, 0);
         }
         
         this.breadCrumb = new Ext.Action({
