@@ -132,6 +132,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array();
+
+    /**
+     * @var string id
+     */
+    protected $_id = NULL;
     
     /******************************* properties ********************************/
     
@@ -192,7 +197,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
                     . ' Adding FilterGroup: ' . $this->_className);
                 $this->addFilterGroup(new $this->_className($filterData['filters'], $filterData['condition'], $this->_options));
-                
+                if (isset($filterData['id'])) {
+                    $this->_id = $filterData['id'];
+                }
             } else if (isset($filterData['field']) && $filterData['field'] == 'foreignRecord') {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
                     . ' Adding ForeignRecordFilter of type: ' . $filterData['value']['linkType']);
@@ -241,6 +248,10 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Skipping filter (foreign record filter syntax problem) -> ' 
                     . $this->_className . ' with filter data: ' . print_r($_filterData, TRUE));
                 return;
+        }
+        
+        if (isset($_filterData['id'])) {
+            $filter->setId($_filterData['id']);
         }
         
         $this->addFilter($filter);
@@ -295,6 +306,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         } elseif (array_key_exists('filter', $fieldModel) && array_key_exists('value', $_filterData)) {
             // create a 'single' filter
             $filter = $this->createFilter($_filterData['field'], $_filterData['operator'], $_filterData['value']);
+            if (isset($_filterData['id'])) {
+                $filter->setId($_filterData['id']);
+            }
             $this->addFilter($filter, TRUE);
         
         } elseif (array_key_exists('custom', $fieldModel) && $fieldModel['custom'] == true) {
@@ -523,7 +537,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             if ($filter instanceof Tinebase_Model_Filter_FilterGroup) {
                 $result[] = array(
                     'condition' => $filter->getCondition(),
-                    'filters'   => $filter->toArray($_valueToJson)
+                    'filters'   => $filter->toArray($_valueToJson),
+                    'id'        => $this->_id,
                 );
                 
             } else {

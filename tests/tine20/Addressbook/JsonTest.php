@@ -487,10 +487,12 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
                 break;
         }
         
+        $filterId = Tinebase_Record_Abstract::generateUID();
         $filter = array(
             array(
-                'field' => 'foreignRecord', 
-                'operator' => 'AND', 
+                'field'     => 'foreignRecord', 
+                'operator'  => 'AND',
+                'id'        => $filterId,
                 'value' => array(
                     'linkType'      => 'relation',
                     'appName'       => 'Projects',
@@ -503,6 +505,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_instance->searchContacts($filter, array());
         
         $this->assertEquals('relation', $result['filter'][0]['value']['linkType']);
+        $this->assertTrue(isset($result['filter'][0]['id']), 'id expected');
+        $this->assertEquals($filterId, $result['filter'][0]['id']);
         
         if ($_operator === 'definedBy') {
             $this->assertEquals(':relation_type',        $result['filter'][0]['value']['filters'][0]['field']);

@@ -100,6 +100,10 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
             'operator'  => $this->_operator,
         );
         
+        if ($this->_id) {
+            $result['id'] = $this->_id;
+        }
+        
         $filters = $this->_getForeignFiltersForToArray($_valueToJson);
         
         if ($this->_options && $this->_options['isGeneric']) {
