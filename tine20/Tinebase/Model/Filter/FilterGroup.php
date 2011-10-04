@@ -54,32 +54,35 @@
  *     )
  *     // foreign record (relation) filter (Contact <-> Project) 
  *     array(
- *         'field' => array(
+ *         'field'      => 'foreignRecord',
+ *          'operator'  => 'AND', 
+ *          'id'        => 'someid' // can be send by the client and is returned in toArray()
+ *          'value' => array(
  *              'linkType'      => 'relation',
  *              'appName'       => 'Projects',
  *              'modelName'     => 'Project',
- *          ), 
- *          'operator' => 'definedBy', 
- *          'value' => array(
- *              array('field' => "relation_type", "operator" => "equals", "value" => "COWORKER"),
- *              array('field' => "status",        "operator" => "notin",  "value" => array(1,2,3)),
+ *              'filters'       => array(
+ *                  array('field' => "relation_type", "operator" => "equals", "value" => "COWORKER"),
+ *                  array('field' => "status",        "operator" => "notin",  "value" => array(1,2,3)),
+ *              ),
  *          )
  *     ),
  *     // foreign record (id) filter (Contact <-> Event Attender)
  *     array(
  *          'field' => 'foreignRecord', 
- *          'operator' => array(
+ *          'operator' => 'AND', 
+ *          'value' => array(
  *              'linkType'      => 'foreignId',
  *              'appName'       => 'Calendar',
  *              'filterName'    => 'ContactFilter', // this filter model needs to exist in Calendar/Model/
- *          ), 
- *          'value' => array(
- *              array('field' => "period",            "operator" => "within", "value" => array(
- *                  'from'  => '2009-01-01 00:00:00',
- *                  'until' => '2010-12-31 23:59:59',
- *              )),
- *              array('field' => "attender_status",   "operator" => "in",  "value" => array('NEEDS-ACTION', 'ACCEPTED')),
- *              array('field' => "attender_role",     "operator" => "in",  "value" => array('REQ')),
+ *              'filters'       => array(
+ *                  array('field' => "period",            "operator" => "within", "value" => array(
+ *                      'from'  => '2009-01-01 00:00:00',
+ *                      'until' => '2010-12-31 23:59:59',
+ *                  )),
+ *                  array('field' => "attender_status",   "operator" => "in",  "value" => array('NEEDS-ACTION', 'ACCEPTED')),
+ *                  array('field' => "attender_role",     "operator" => "in",  "value" => array('REQ')),
+ *              ),
  *          )
  *      ),
  * );
