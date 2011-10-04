@@ -182,6 +182,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
 
         this.action_loadFilter = new Ext.Action({
             text: _('Load a favorite'),
+            hidden: true,
             iconCls: 'action-tinebase-favorite',
             scope: this,
             handler: this.onLoadFilter
@@ -725,6 +726,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 }
                 
                 else if (filterModel && filterModel.superFilter) {
+                    // if we are a childfilter of a recordclass of the subfilter, just place the subfilter
+                    if (this.parentSheet.recordClass == filterModel.superFilter.foreignRecordClass) {
+                        filters.push(line);
+                        return;
+                    }
+                    
                     // check if filter of type superfilter is present
                     if (this.filterStore.find('field', filterModel.superFilter.field) < 0) {
                         
@@ -812,7 +819,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 filterData.filterValueWidth = this.filterValueWidth;
                 
                 if (this.filterModelMap[filterData.field]) {
-                    filter = new this.record(filterData);
+                    filter = new this.record(filterData, filterData.id);
                     
                     // check if this filter is already in our store
                     existingFilterPos = this.filterStore.find('field', filterData.field);
@@ -820,7 +827,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                     
                     // we can't detect resolved records, sorry ;-(
                     if (existingFilter && existingFilter.formFields.operator.getValue() == filter.get('operator') && existingFilter.formFields.value.getValue() == filter.get('value')) {
-                        Tine.log.debug('Tine.widgets.grid.FilterToolbar::setValue not renewing resolved filter');
+                        // the filters exists and has same operator/value -> skip renewing
                         skipFilter.push(existingFilterPos);
                     } else if (! filterData.implicit) {
                         this.addFilter(filter);
@@ -877,6 +884,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         ftb.ownerCt = this.ownerCt;
         ftb.parentSheet = this;
         this.childSheets[ftb.id] = ftb;
+        
+        ftb.onFilterChange = this.onFilterChange.createDelegate(this);
     },
     
     removeFilterSheet: function(ftb) {

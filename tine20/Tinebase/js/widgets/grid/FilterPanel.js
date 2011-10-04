@@ -11,6 +11,10 @@ Tine.widgets.grid.FilterPanel = function(config) {
     this.filterToolbarConfig = config;
     
     // @TODO find quickfilter plungin an pick quickFilterField and criteriaIgnores from it
+    this.criteriaIgnores = config.criteriaIgnores || [
+        {field: 'container_id', operator: 'equals', value: {path: '/'}},
+        {field: 'query',        operator: 'contains',    value: ''}
+    ];
     
     // the plugins woun't work there
     delete this.filterToolbarConfig.plugins;
@@ -78,6 +82,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             width: 200,
             border: false,
             layout: 'fit',
+            split: true,
             items: [new Tine.widgets.grid.FilterStructureTreePanel({filterPanel: this})]
         }, {
             region: 'center',
@@ -158,6 +163,9 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             enableKeyEvents: true
         });
         
+        this.quickFilter.onTrigger1Click = this.quickFilter.onTrigger1Click.createSequence(this.onQuickFilterClear, this);
+        this.quickFilter.onTrigger2Click = this.quickFilter.onTrigger2Click.createSequence(this.onQuickFilterTrigger, this);
+        
         this.criteriaText = new Ext.Panel({
             border: 0,
 //            hidden: true,
@@ -200,6 +208,22 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     },
     
     /**
+     * called when the (external) quick filter is cleared
+     */
+    onQuickFilterClear: function() {
+        this.quickFilter.reset();
+        this.activeFilterPanel.onFiltertrigger.call(this.activeFilterPanel);
+        
+    },
+    
+    /**
+     * called when the (external) filter triggers filter action
+     */
+    onQuickFilterTrigger: function() {
+        this.activeFilterPanel.onFiltertrigger.call(this.activeFilterPanel);
+    },
+    
+    /**
      * called when the details toggle button gets toggled
      * 
      * @param {Ext.Button} btn
@@ -207,13 +231,32 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     onDetailsToggle: function(btn) {
         this[btn.pressed ? 'show' : 'hide']();
         this.quickFilter.setDisabled(btn.pressed);
-        try {
-//        this.manageCriteriaText();
-        } catch (e) {
-            console.log(e);
-            console.log(e.stack);
+        this.manageCriteriaText();
+        
+        if (btn.pressed) {
+            var quickFilterValue = this.quickFilter.getValue(),
+                quickFilter;
+                
+            this.quickFilter.setValue('');
+            
+            if (quickFilterValue) {
+                // find quickfilterrow
+                this.activeFilterPanel.filterStore.each(function(filter) {
+                    if (filter.get('field') == this.quickFilterField && ! filter.get('value')) {
+                        quickFilter = filter;
+                        quickFilter.set('value', quickFilterValue);
+                        quickFilter.formFields.value.setValue(quickFilterValue);
+                        return false;
+                    }
+                }, this);
+                
+                if (! quickFilter) {
+                    quickFilter = this.activeFilterPanel.addFilter(new this.activeFilterPanel.record({field: this.quickFilterField, value: quickFilterValue}));
+                }
+            }
             
         }
+        
         this.activeFilterPanel.doLayout();
         this.manageHeight();
     },
@@ -234,7 +277,9 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             
         } else {
             // not more filters only if we hove one filterPanel & only one queryFilter in it (or implicit filters)
-            this.activeFilterPanel.filterStore.each(function(f) {
+            this.activeFilterPanel.filterStore.each(function(filter) {
+                var f = this.activeFilterPanel.getFilterData(filter);
+                
                 for (var i=0, criteria, ignore; i<this.criteriaIgnores.length; i++) {
                     criteria = this.criteriaIgnores[i];
                     ignore = true;
@@ -266,7 +311,6 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
                     criterias.push(f.field);
                 }
             }, this);
-            
             moreCriterias = criterias.length > 0;
         }
         
@@ -298,6 +342,11 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     },
     
     getValue: function() {
+        var quickFilterValue = this.quickFilter.getValue();
+        
+        if (quickFilterValue) {
+            return [{field: this.quickFilterField, operator: 'contains', value: quickFilterValue, id: 'quickFilter'}];
+        }
         
         var filters = [];
         for (var id in this.filterPanels) {
@@ -310,10 +359,24 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     },
     
     setValue: function(value) {
+        
         if (! value.condition || value.condition == 'AND') {
-            return this.activeFilterPanel.setValue(value);
+            // @TODO remove all criterias but 1 (and rename the first to 1)
+            
+            this.activeFilterPanel.setValue(value);
+            
+            var quickFilterValue = this.activeFilterPanel.filterStore.getById('quickFilter');
+            if (quickFilterValue) {
+                this.quickFilter.setValue(quickFilterValue.get('value'));
+                this.activeFilterPanel.supressEvents = true;
+                this.activeFilterPanel.deleteFilter(quickFilterValue);
+                this.activeFilterPanel.supressEvents = false;
+            }
+            
         } else {
             // @TODO
         }
+        
+        this.manageCriteriaText();
     }
 });

@@ -222,7 +222,11 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Session ip validation disabled.');
         }
         
-        Zend_Session::regenerateId();
+        // check if we started the session in this request
+        $headers = headers_list();
+        if (strpos(implode($headers), 'TINE20SESSID') === FALSE) {
+            Zend_Session::regenerateId();
+        }
         
         Tinebase_Core::getSession()->currentAccount = $_user;
     }

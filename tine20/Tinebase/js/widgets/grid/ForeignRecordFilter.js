@@ -204,6 +204,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 filterName : filter.foreignRecordDefinition.filterName,
                 filters: filters
             };
+            
         } else {
             value = filters;
             // get value for idField if our own operator is not definedBy
