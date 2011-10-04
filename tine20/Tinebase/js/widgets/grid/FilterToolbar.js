@@ -59,6 +59,11 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     defaultFilter: null,
     
     /**
+     * @cfg {Tine.Tinebase.data.Record} model this filter is for
+     */
+    recordClass: null,
+    
+    /**
      * @cfg {Bool} allowSaving (defaults to false)
      */
     allowSaving: false,
@@ -434,13 +439,15 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         filter.formFields.value.removeMode = 'childsonly';
         
         filter.formFields.operator.destroy();
+        delete filter.formFields.operator;
         filter.formFields.value.destroy();
+        delete filter.formFields.value;
         
         var filterModel = this.getFilterModel(newField);
         var fRow = this.bwrap.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
         
-        var opEl = fRow.child('td[class=tw-ftb-frow-operator]');
-        var valEl = fRow.child('td[class=tw-ftb-frow-value]');
+        var opEl = fRow.child('td[class^=tw-ftb-frow-operator]');
+        var valEl = fRow.child('td[class^=tw-ftb-frow-value]');
         
         filter.set('field', newField);
         filter.set('operator', '');
@@ -495,43 +502,65 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.filterModelMap = {};
         var filtersFields = [];
         
-        if (this.recordClass && ! this.filterModels) {
+        if (this.recordClass && !this.filterModels) {
             this.filterModels = this.recordClass.getFilterModel();
         }
         
-        for (var i=0; i<this.filterModels.length; i++) {
-            var config = this.filterModels[i];
-            var fm = this.createFilterModel(config);
+        
+        if (this.recordClass) {
+            // concat registered filters
+            this.filterModels = this.filterModels.concat(Tine.widgets.grid.FilterRegistry.get(this.recordClass));
             
-            if (fm.isForeignFilter) {
-                fm.field = fm.ownField + ':' + fm.foreignField;
+            // auto add foreign record filter on demand
+            var foreignRecordFilter = this.createFilterModel({filtertype: 'foreignrecord', ownRecordClass: this.recordClass, isGeneric: true});
+            if (foreignRecordFilter.operatorStore.getCount() > 0) {
+                this.filterModels.push(foreignRecordFilter);
             }
+        }
+        
+        
+        for (var i=0; i<this.filterModels.length; i++) {
+            var config = this.filterModels[i],
+                fm = this.createFilterModel(config);
+            
+//            if (fm.isForeignFilter) {
+//                fm.field = fm.ownField + ':' + fm.foreignField;
+//            }
             
             this.filterModelMap[fm.field] = fm;
             filtersFields.push(fm);
             
             fm.on('filtertrigger', this.onFiltertrigger, this);
             
-            // handle subfilters "inline" at the moment
-            if (typeof fm.getSubFilters == 'function') {
-                var subfilters = fm.getSubFilters();
-                Ext.each(subfilters, function(sfm) {
-                    sfm.isSubfilter = true;
+            // insert subfilters
+            if (Ext.isFunction(fm.getSubFilters)) {
+                Ext.each(fm.getSubFilters(), function(sfm) {
+                    sfm.superFilter = fm;
                     
-                    sfm.field = fm.ownField + ':' + sfm.field;
-                    sfm.label = fm.label + ' - ' + sfm.label;
+                    // :<field> indicates a left hand filter
+                    sfm.field = ':' + sfm.field;
                     
                     this.filterModelMap[sfm.field] = sfm;
                     filtersFields.push(sfm);
                     sfm.on('filtertrigger', this.onFiltertrigger, this);
                 }, this);
             }
+            
+//            // handle subfilters "inline" at the moment
+//            if (typeof fm.getSubFilters == 'function') {
+//                var subfilters = fm.getSubFilters();
+//                Ext.each(subfilters, function(sfm) {
+//                    sfm.isSubfilter = true;
+//                    
+//                    sfm.field = fm.ownField + ':' + sfm.field;
+//                    sfm.label = fm.label + ' - ' + sfm.label;
+//                    
+//                    this.filterModelMap[sfm.field] = sfm;
+//                    filtersFields.push(sfm);
+//                    sfm.on('filtertrigger', this.onFiltertrigger, this);
+//                }, this);
+//            }
         }
-        
-        // have an experimental relation filter
-        var relationFilter = this.createFilterModel({filtertype: 'tinebase.relation'});
-        this.filterModelMap[relationFilter.field] = relationFilter;
-        filtersFields.push(relationFilter);
         
         // init filter selection
         this.fieldStore = new Ext.data.JsonStore({
@@ -661,105 +690,142 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     
     getValue: function() {
         var filters = [];
-        var foreignFilters = {};
+//        var foreignFilters = {};
+        
+//        // detect subfilters with no superfilter
+//        this.filterStore.each(function(filter) {
+////            if 
+//        }, this);
+        
         this.filterStore.each(function(filter) {
             
-            var line = {};
-            for (var formfield in filter.formFields) {
-                line[formfield] = filter.formFields[formfield].getValue();
-            }
+            var filterModel = this.getFilterModel(filter.get('field')),
+                line = this.getFilterData(filter);
             
-            // fill data with filter record data in case form field not exist (not rendered)
-            filter.fields.each(function(field)  {
-                var name = field.name;
-                if (! line.hasOwnProperty(name)) {
-                    line[name] = filter.get(name);
-                }
-            }, this);
-            
-            if (line.field && line.field.match(/:/)) {
+            if (line.field && Ext.isString(line.field) &&  line.field.match(/:/)) {
                 var parts = line.field.split(':');
                 
+                // customfield handling
                 if (parts[0] == 'customfield') {
-                    // customfield handling
                     filters.push({field: 'customfield', operator: line.operator, value: {cfId: parts[1], value: line.value}});
-                } else {
-                    // subfilter handling
-                    var ownField = parts[0];
-                    var foreignField = parts[1];
-                    
-                    line.field = foreignField;
-                    foreignFilters[ownField] = foreignFilters[ownField] || [];
-                    foreignFilters[ownField].push(line);
                 }
                 
+                else if (filterModel && filterModel.superFilter) {
+                    // check if filter of type superfilter is present
+                    if (this.filterStore.find('field', filterModel.superFilter.field) < 0) {
+                        
+                        // create one
+                        // @TODO HIDE? -> see ForeignRecordFilter line ~300
+                        var superFilter = this.addFilter(new this.record({field: filterModel.superFilter.field, operator: 'definedBy'}));
+                        line = this.getFilterData(superFilter);
+                        filters.push(line);
+                    }
+                }
+//                else {
+//                    // subfilter handling
+//                    var ownField = parts[0];
+//                    var foreignField = parts[1];
+//                    
+//                    line.field = foreignField;
+//                    foreignFilters[ownField] = foreignFilters[ownField] || [];
+//                    foreignFilters[ownField].push(line);
+//                }
             } else {
                 filters.push(line);
             }
         }, this);
         
-        for (var ownField in foreignFilters) {
-            if (foreignFilters.hasOwnProperty(ownField)) {
-                filters.push({field: ownField, operator: 'AND', value: foreignFilters[ownField]});
-            }
-        }
+//        for (var ownField in foreignFilters) {
+//            if (foreignFilters.hasOwnProperty(ownField)) {
+//                filters.push({field: ownField, operator: 'AND', value: foreignFilters[ownField]});
+//            }
+//        }
         
         return filters;
     },
     
+    /**
+     * @static
+     * @param {filterRecord} filter
+     */
+    getFilterData: function(filter) {
+        var line = {};
+                
+        for (var formfield in filter.formFields) {
+            line[formfield] = filter.formFields[formfield].getValue();
+        }
+        
+        // fill data with filter record data in case form field not exist (not rendered)
+        filter.fields.each(function(field)  {
+            var name = field.name;
+            if (! line.hasOwnProperty(name)) {
+                line[name] = filter.get(name);
+            }
+        }, this);
+        
+        return line;
+    },
+    
     setValue: function(filters) {
-        this.supressEvents = true;
-        
-        var oldFilterCount = this.filterStore.getCount();
-        var skipFilter = [];
-        
-        var filterData, filter, existingFilterPos, existingFilter;
-        
-        for (var i=0; i<filters.length; i++) {
-            filterData = filters[i];
+        try {
+            this.supressEvents = true;
             
-            if (filterData.operator == 'AND' || filterData.operator == 'OR') {
-                // subfilter handling
-                var subFilters = filterData.value;
-                for (var j=subFilters.length -1; j>=0; j--) {
-                    subFilters[j].field = filterData.field + ':' + subFilters[j].field;
-                    filters.splice(i+1, 0, subFilters[j]);
-                }
-            } else if (filterData.value && filterData.value.cfId) {
-                // custom fields handling
-                filters[i].field = filterData.field + ':' + filterData.value.cfId;
-                filters[i].value = filterData.value.value;
-            }
-        }
-        
-        for (var i=0; i<filters.length; i++) {
-            filterData = filters[i];
-            filterData.filterValueWidth = this.filterValueWidth;
+            var oldFilterCount = this.filterStore.getCount();
+            var skipFilter = [];
             
-            if (this.filterModelMap[filterData.field]) {
-                filter = new this.record(filterData);
+            var filterData, filter, existingFilterPos, existingFilter;
+            
+            for (var i=0; i<filters.length; i++) {
+                filterData = filters[i];
                 
-                // check if this filter is already in our store
-                existingFilterPos = this.filterStore.find('field', filterData.field);
-                existingFilter = existingFilterPos >= 0 ? this.filterStore.getAt(existingFilterPos) : null;
-                
-                // we can't detect resolved records, sorry ;-(
-                if (existingFilter && existingFilter.formFields.operator.getValue() == filter.get('operator') && existingFilter.formFields.value.getValue() == filter.get('value')) {
-                    skipFilter.push(existingFilterPos);
-                } else {
-                    this.addFilter(filter);
+    //            if (filterData.operator == 'AND' || filterData.operator == 'OR') {
+    //                // subfilter handling
+    //                var subFilters = filterData.value;
+    //                for (var j=subFilters.length -1; j>=0; j--) {
+    //                    subFilters[j].field = filterData.field + ':' + subFilters[j].field;
+    //                    filters.splice(i+1, 0, subFilters[j]);
+    //                }
+    //            } else 
+                if (filterData.value && filterData.value.cfId) {
+                    // custom fields handling
+                    filters[i].field = filterData.field + ':' + filterData.value.cfId;
+                    filters[i].value = filterData.value.value;
                 }
             }
-        }
-        
-        for (var i=oldFilterCount-1; i>=0; i--) {
-            if (skipFilter.indexOf(i) < 0) {
-                this.deleteFilter(this.filterStore.getAt(i));
+            
+            for (var i=0; i<filters.length; i++) {
+                filterData = filters[i];
+                filterData.filterValueWidth = this.filterValueWidth;
+                
+                if (this.filterModelMap[filterData.field]) {
+                    filter = new this.record(filterData);
+                    
+                    // check if this filter is already in our store
+                    existingFilterPos = this.filterStore.find('field', filterData.field);
+                    existingFilter = existingFilterPos >= 0 ? this.filterStore.getAt(existingFilterPos) : null;
+                    
+                    // we can't detect resolved records, sorry ;-(
+                    if (existingFilter && existingFilter.formFields.operator.getValue() == filter.get('operator') && existingFilter.formFields.value.getValue() == filter.get('value')) {
+                        Tine.log.debug('Tine.widgets.grid.FilterToolbar::setValue not renewing resolved filter');
+                        skipFilter.push(existingFilterPos);
+                    } else if (! filterData.implicit) {
+                        this.addFilter(filter);
+                    }
+                }
             }
+            
+            // delete old filter rows
+            for (var i=oldFilterCount-1; i>=0; i--) {
+                if (skipFilter.indexOf(i) < 0) {
+                    this.deleteFilter(this.filterStore.getAt(i));
+                }
+            }
+            
+            this.supressEvents = false;
+            this.onFilterRowsChange();
+        } catch (e) {
+            console.error(e.stack ? e.stack : e);
         }
-        
-        this.supressEvents = false;
-        this.onFilterRowsChange();
         
     },
     
@@ -786,6 +852,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         return false;
     },
     
+    onDestroy: function() {
+        if (this.parentSheet) {
+            this.parentSheet.removeFilterSheet(this);
+        }
+    },
+    
     /***** sheets functions *****/
     addFilterSheet: function(ftb) {
         ftb.ownerCt = this.ownerCt;
@@ -793,8 +865,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.childSheets[ftb.id] = ftb;
     },
     
+    removeFilterSheet: function(ftb) {
+        delete this.childSheets[ftb.id];
+    },
+    
     setActiveSheet: function(sheet) {
-        var ftb = Ext.isString(sheet) ? (sheet = this.id ? this : this.childSheets[sheet]) : sheet
+        var ftb = Ext.isString(sheet) ? (sheet = this.id ? this : this.childSheets[sheet]) : sheet,
             rootSheet = this.getRootSheet(),
             parentSheets = sheet.getParentSheets();
         

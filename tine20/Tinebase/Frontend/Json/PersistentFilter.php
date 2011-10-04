@@ -118,6 +118,6 @@ class Tinebase_Frontend_Json_PersistentFilter extends Tinebase_Frontend_Json_Abs
             }
         }
         
-        return $result;
+        return array_values($result);
     }
 }

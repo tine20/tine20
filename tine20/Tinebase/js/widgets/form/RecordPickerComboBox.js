@@ -69,7 +69,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
         
         this.on('beforequery', this.onBeforeQuery, this);
         
-        this.supr().initComponent.call(this);
+        Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.initComponent.call(this);
     },
     
     /**
@@ -79,7 +79,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
      * @param {Object} options
      */
     onBeforeLoad: function (store, options) {
-    	this.supr().onBeforeLoad.call(this, store, options);
+    	Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.onBeforeLoad.call(this, store, options);
     	
         options.params.paging = {
             start: options.params.start,
@@ -106,7 +106,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
      */
     onSelect: function (record, index) {
         this.selectedRecord = record;
-        return this.supr().onSelect.call(this, record, index);
+        return Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.onSelect.call(this, record, index);
     },
     
     /**
@@ -147,7 +147,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
             }
         }
         
-        return this.supr().setValue.call(this, value);
+        return Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.setValue.call(this, value);
     }
 });
 Ext.reg('tinerecordpickercombobox', Tine.Tinebase.widgets.form.RecordPickerComboBox);

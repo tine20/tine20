@@ -46,7 +46,7 @@ Tine.Crm.LeadGridContactFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     },
     
     getSubFilters: function() {
-        var filterConfigs = Tine.Addressbook.Model.Contact.getFilterModel();
+//        var filterConfigs = Tine.Addressbook.Model.Contact.getFilterModel();
         
         var contactRoleFilter = new Tine.widgets.grid.FilterModel({
             label: this.app.i18n._('CRM Role'),
@@ -71,13 +71,15 @@ Tine.Crm.LeadGridContactFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
             }
         });
         
-        this.subFilterModels.push(contactRoleFilter);
+//        this.subFilterModels.push(contactRoleFilter);
+//        
+//        Ext.each(filterConfigs, function(config) {
+//            this.subFilterModels.push(Tine.widgets.grid.FilterToolbar.prototype.createFilterModel.call(this, config));
+//        }, this);
+//        
+//        return this.subFilterModels;
         
-        Ext.each(filterConfigs, function(config) {
-            this.subFilterModels.push(Tine.widgets.grid.FilterToolbar.prototype.createFilterModel.call(this, config));
-        }, this);
-        
-        return this.subFilterModels;
+        return [contactRoleFilter];
     },
     
     /**

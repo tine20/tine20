@@ -91,7 +91,7 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
                 });
             } catch (e) {
                 Tine.log.err('Could not create centerPanel "Tine.' + this.app.appName + '.' + contentType + this.centerPanelClassNameSuffix + '"');
-                Tine.log.err(e);
+                Tine.log.err(e.stack ? e.stack : e);
                 this[contentType + this.centerPanelClassNameSuffix] = new Ext.Panel({html: 'ERROR'});
             }
         }

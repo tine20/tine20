@@ -20,26 +20,55 @@
  * <code>
  *      'contact'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
  *          'related_model'     => 'Addressbook_Model_Contact',
- *          'related_filter'    => 'Addressbook_Model_ContactFilter'
+ *          'filtergroup'    => 'Addressbook_Model_ContactFilter'
  *      )
  * </code>     
  */
-class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
+class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
 {
-    /**
-     * @var array list of allowed operators
-     */
-    protected $_operators = array(
-        0 => 'AND',
-        1 => 'OR',
-    );
-    
     /**
      * relation type filter data
      * 
      * @var array
      */
     protected $_relationTypeFilter = NULL;
+    
+    /**
+     * the prefixed ("left") fields sent by the client
+     * 
+     * @var array
+     * @todo perhaps we need this in Tinebase_Model_Filter_ForeignRecord later
+     */
+    protected $_prefixedFields = array();
+    
+    /**
+     * get foreign controller
+     * 
+     * @return Tinebase_Controller_Record_Abstract
+     */
+    protected function _getController()
+    {
+        if ($this->_controller === NULL) {
+            $this->_controller = Tinebase_Controller_Record_Abstract::getController($this->_options['related_model']);
+        }
+        
+        return $this->_controller;
+    }
+    
+    /**
+     * get foreign filter group
+     * 
+     * @return Tinebase_Model_Filter_FilterGroup
+     */
+    protected function _getFilterGroup()
+    {
+        if ($this->_filterGroup === NULL) {
+            $filters = $this->_getRelationFilters();
+            $this->_filterGroup = new $this->_options['filtergroup']($filters, $this->_operator);
+        }
+            
+        return $this->_filterGroup;
+    }
     
     /**
      * set options 
@@ -52,15 +81,11 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
             throw new Tinebase_Exception_UnexpectedValue('related model is needed in options');
         }
 
-        if (! array_key_exists('related_filter', $_options)) {
-            $_options['related_filter'] = $_options['related_model'] . 'Filter';
+        if (! array_key_exists('filtergroup', $_options)) {
+            $_options['filtergroup'] = $_options['related_model'] . 'Filter';
         }
         
-        if (! array_key_exists('isGeneric', $_options)) {
-            $_options['isGeneric'] = FALSE;
-        }
-        
-        $this->_options = $_options;
+        parent::_setOptions($_options);
     }
     
     /**
@@ -71,21 +96,14 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $filters = $this->_getRelationFilters();
-        
-        $relatedFilterConstructor = $this->_options['related_filter'];
-        $relatedFilter = new $relatedFilterConstructor(array(array(
-            'condition'     => $this->_operator,
-            'filters'       => $filters
-        )));
-        
-        $relatedRecordController = Tinebase_Controller_Record_Abstract::getController($this->_options['related_model']);
-        $relatedIds = $relatedRecordController->search($relatedFilter, NULL, FALSE, TRUE);
+        if (! is_array($this->_foreignIds)) {
+            $this->_foreignIds = $this->_controller->search($this->_filterGroup, NULL, FALSE, TRUE);
+        }
         
         $relationFilter = new Tinebase_Model_RelationFilter(array(
             array('field' => 'own_model',     'operator' => 'equals', 'value' => $_backend->getModelName()),
             array('field' => 'related_model', 'operator' => 'equals', 'value' => $this->_options['related_model']),
-            array('field' => 'related_id',    'operator' => 'in'    , 'value' => $relatedIds)
+            array('field' => 'related_id',    'operator' => 'in'    , 'value' => $this->_foreignIds)
         ));
         
         if ($this->_relationTypeFilter) {
@@ -117,6 +135,7 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
             
             if (strpos($filterData['field'], ':') !== FALSE) {
                 $filters[$idx]['field'] = str_replace(':', '', $filterData['field']);
+                $this->_prefixedFields[] = $filters[$idx]['field'];
             }
             
             if ($filters[$idx]['field'] === 'relation_type') {
@@ -129,25 +148,46 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
     }
     
     /**
-     * returns array with the filter settings of this filter
-     *
+     * returns filter group filters
+     * 
      * @param  bool $_valueToJson resolve value for json api?
      * @return array
      */
-    public function toArray($_valueToJson = false)
+    protected function _getForeignFiltersForToArray($_valueToJson)
     {
-        $result = parent::toArray($_valueToJson);
+        $result = parent::_getForeignFiltersForToArray($_valueToJson);
         
-        if ($this->_options['isGeneric']) {
-            list($appName, $i, $modelName) = explode('_', $this->_options['related_model']);
-            
-            $result['value'] = array(
-                'linkType'      => 'relation',
-                'appName'       => $appName,
-                'modelName'     => $modelName,
-                'filters'       => $this->_value
-            );
+        // add relation type again
+        if ($this->_relationTypeFilter) {
+            array_unshift($result, $this->_relationTypeFilter);
         }
+        
+        // return prefixes
+        if (! empty($this->_prefixedFields)) {
+            foreach ($result as $idx => $filterData) {
+                if (isset($filterData['field']) && in_array($filterData['field'], $this->_prefixedFields)) {
+                    $result[$idx]['field'] = ':' . $filterData['field'];
+                }
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * get filter information for toArray()
+     * 
+     * @return array
+     */
+    protected function _getGenericFilterInformation()
+    {
+        list($appName, $i, $modelName) = explode('_', $this->_options['related_model']);
+            
+        $result = array(
+            'linkType'      => 'relation',
+            'appName'       => $appName,
+            'modelName'     => $modelName,
+        );
         
         return $result;
     }    

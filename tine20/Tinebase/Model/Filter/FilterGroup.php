@@ -166,7 +166,6 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function __construct(array $_data = array(), $_condition = '', $_options = array())
     {
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
         $this->_setOptions($_options);
         
         $this->_concatenationCondition = $_condition == self::CONDITION_OR ? self::CONDITION_OR : self::CONDITION_AND;
@@ -190,9 +189,15 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             
             // if a condition is given, we create a new filtergroup from this class
             if (isset($filterData['condition'])) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
+                    . ' Adding FilterGroup: ' . $this->_className);
                 $this->addFilterGroup(new $this->_className($filterData['filters'], $filterData['condition'], $this->_options));
-            } else if ($filterData['field'] == 'foreignRecord') {
+                
+            } else if (isset($filterData['field']) && $filterData['field'] == 'foreignRecord') {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
+                    . ' Adding ForeignRecordFilter of type: ' . $filterData['value']['linkType']);
                 $this->_createForeignRecordFilterFromArray($filterData);
+                
             } else {
                 $this->_createStandardFilterFromArray($filterData);
             }
@@ -218,7 +223,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
 
             case 'foreignId':
                 $modelName = $this->_getModelNameFromLinkInfo($_filterData['value'], 'filterName');
-                $filter = new $modelName($_filterData['field'], $_filterData['operator'], $_filterData['value']['filters']);
+                $filter = new $modelName($_filterData['field'], $_filterData['operator'], $_filterData['value']['filters'], array(
+                    'isGeneric'         => TRUE
+                ));
                 
                 // @todo maybe it will be possible to add a generic/implicite foreign id filter 
                 // .... but we have to solve the problem of the foreign id field first
@@ -287,7 +294,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         
         } elseif (array_key_exists('filter', $fieldModel) && array_key_exists('value', $_filterData)) {
             // create a 'single' filter
-            $this->addFilter($this->createFilter($_filterData['field'], $_filterData['operator'], $_filterData['value']));
+            $filter = $this->createFilter($_filterData['field'], $_filterData['operator'], $_filterData['value']);
+            $this->addFilter($filter, TRUE);
         
         } elseif (array_key_exists('custom', $fieldModel) && $fieldModel['custom'] == true) {
             // silently skip data, as they will be evaluated by the concrete filtergroup
@@ -319,13 +327,19 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * Add a filter to this group
      *
      * @param  Tinebase_Model_Filter_Abstract $_filter
+     * @param  boolean $_setFromArray
      * @return Tinebase_Model_Filter_FilterGroup this
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function addFilter($_filter)
+    public function addFilter(Tinebase_Model_Filter_Abstract $_filter, $_setFromArray = FALSE)
     {
         if (! $_filter instanceof Tinebase_Model_Filter_Abstract) {
             throw new Tinebase_Exception_InvalidArgument('Filters must be of instance Tinebase_Model_Filter_Abstract');
+        }
+        
+        if (! $_setFromArray && $_filter instanceof Tinebase_Model_Filter_AclFilter) {
+            // this is added afterwards and considered as an implicit acl filter
+            $_filter->setIsImplicit(TRUE);
         }
         
         $this->_filterObjects[] = $_filter;
@@ -471,7 +485,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      *
      * @return array
      * 
-     * @todo remove after concrete filter backends are sperated from concrete filter models
+     * @todo remove after concrete filter backends are separated from concrete filter models
      */
     public function getFilterObjects()
     {

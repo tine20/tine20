@@ -34,7 +34,7 @@ Tine.widgets.relation.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
         // @TODO whipe some models?
         var relatedModels = [];
         Tine.Tinebase.data.RecordMgr.eachKey(function(operator, record) {
-            if (record.getFieldNames().indexOf('relations') > -1 && Ext.isFunction(record.getFilterModel)) {
+            if (record.hasField('relations') && Ext.isFunction(record.getFilterModel)) {
                 var label = Tine.Tinebase.appMgr.get(record.getMeta('appName')).i18n._hidden(record.getMeta('recordsName'));
                 
                 relatedModels.push({operator: operator, label: label});

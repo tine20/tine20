@@ -176,7 +176,8 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 {operator: 'within',     label: _('is within')},
                 {operator: 'inweek',     label: _('is in week no.')},
                 {operator: 'startswith', label: _('starts with')},
-                {operator: 'endswith',   label: _('ends with')}
+                {operator: 'endswith',   label: _('ends with')},
+                {operator: 'definedBy',  label: _('defined by')}
             ].concat(this.getCustomOperators() || [])
         });
 
@@ -552,3 +553,34 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         this.fireEvent('filtertrigger', this);
     }
 });
+
+/**
+ * @namespace   Tine.widgets.grid
+ * @class       Tine.widgets.grid.FilterRegistry
+ * @singleton
+ */
+Tine.widgets.grid.FilterRegistry = function() {
+    var filters = {};
+    
+    return {
+        register: function(appName, modelName, filter) {
+            var key = appName + '.' + modelName;
+            if (! filters[key]) {
+                filters[key] = [];
+            }
+            
+            filters[key].push(filter);
+        },
+        
+        get: function(appName, modelName) {
+            if (Ext.isFunction(appName.getMeta)) {
+                modelName = appName.getMeta('modelName');
+                appName = appName.getMeta('appName');
+            }
+            
+            var key = appName + '.' + modelName;
+            
+            return filters[key] || [];
+        }
+    };
+}();
