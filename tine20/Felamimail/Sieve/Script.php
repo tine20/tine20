@@ -42,7 +42,7 @@ class Felamimail_Sieve_Script
      */
     public function __construct($script = null)
     {
-        if($script !== null) {
+        if ($script !== null) {
             $this->parseScript($script);
         }
     }
@@ -71,21 +71,29 @@ class Felamimail_Sieve_Script
      * parse Sieve script (only pseudo scripts get loaded)
      * 
      * @param   string  $script     the Sieve script
+     * 
+     * @todo try to repair script on unserialize error and/or prevent bad chars (?) while serializing
      */
     public function parseScript($script)
     {
         $line = strtok($script, "\n");
 
         while ($line !== false) {
-            if(preg_match("/^#rule&&(.*)&&(.*)&&(.*)&&(.*)&&(.*)&&(.*)&&(.*)&&(.*)&&(.*)&&(.*)&&(.*)$/i", $line, $matches)) {
+            if (preg_match("/^#rule&&(.*)&&(.*)&&(.*)&&(.*)&&(.*)&&(.*)&&(.*)&&(.*)&&(.*)&&(.*)&&(.*)$/i", $line, $matches)) {
                 $this->_parseSmartSieveRule($matches);
             } elseif (preg_match("/^#vacation&&(.*)&&(.*)&&(.*)&&(.*)/i", $line, $matches)) {
                 $this->_parseSmartSieveVacation($matches);
             } elseif (preg_match("/^#SieveRule(.*)/i", $line, $matches)) {
                 $rule = unserialize($this->_unescapeChars($matches[1]));
+                if ($rule === FALSE) {
+                    throw new Exception('Error in unserialize() - could not parse rule.');
+                }
                 $this->addRule($rule);
             } elseif (preg_match("/^#SieveVacation(.*)/i", $line, $matches)) {
                 $vacation = unserialize($this->_unescapeChars($matches[1]));
+                if ($vacation === FALSE) {
+                    throw new Exception('Error in unserialize() - could not parse vacation.');
+                }
                 $this->setVacation($vacation);
             }
             
