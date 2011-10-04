@@ -819,7 +819,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 filterData.filterValueWidth = this.filterValueWidth;
                 
                 if (this.filterModelMap[filterData.field]) {
-                    filter = new this.record(filterData);
+                    filter = new this.record(filterData, filterData.id);
                     
                     // check if this filter is already in our store
                     existingFilterPos = this.filterStore.find('field', filterData.field);
@@ -827,7 +827,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                     
                     // we can't detect resolved records, sorry ;-(
                     if (existingFilter && existingFilter.formFields.operator.getValue() == filter.get('operator') && existingFilter.formFields.value.getValue() == filter.get('value')) {
-                        Tine.log.debug('Tine.widgets.grid.FilterToolbar::setValue not renewing resolved filter');
+                        // the filters exists and has same operator/value -> skip renewing
                         skipFilter.push(existingFilterPos);
                     } else if (! filterData.implicit) {
                         this.addFilter(filter);
