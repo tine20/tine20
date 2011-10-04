@@ -54,32 +54,35 @@
  *     )
  *     // foreign record (relation) filter (Contact <-> Project) 
  *     array(
- *         'field' => array(
+ *         'field'      => 'foreignRecord',
+ *          'operator'  => 'AND', 
+ *          'id'        => 'someid' // can be send by the client and is returned in toArray()
+ *          'value' => array(
  *              'linkType'      => 'relation',
  *              'appName'       => 'Projects',
  *              'modelName'     => 'Project',
- *          ), 
- *          'operator' => 'definedBy', 
- *          'value' => array(
- *              array('field' => "relation_type", "operator" => "equals", "value" => "COWORKER"),
- *              array('field' => "status",        "operator" => "notin",  "value" => array(1,2,3)),
+ *              'filters'       => array(
+ *                  array('field' => "relation_type", "operator" => "equals", "value" => "COWORKER"),
+ *                  array('field' => "status",        "operator" => "notin",  "value" => array(1,2,3)),
+ *              ),
  *          )
  *     ),
  *     // foreign record (id) filter (Contact <-> Event Attender)
  *     array(
  *          'field' => 'foreignRecord', 
- *          'operator' => array(
+ *          'operator' => 'AND', 
+ *          'value' => array(
  *              'linkType'      => 'foreignId',
  *              'appName'       => 'Calendar',
  *              'filterName'    => 'ContactFilter', // this filter model needs to exist in Calendar/Model/
- *          ), 
- *          'value' => array(
- *              array('field' => "period",            "operator" => "within", "value" => array(
- *                  'from'  => '2009-01-01 00:00:00',
- *                  'until' => '2010-12-31 23:59:59',
- *              )),
- *              array('field' => "attender_status",   "operator" => "in",  "value" => array('NEEDS-ACTION', 'ACCEPTED')),
- *              array('field' => "attender_role",     "operator" => "in",  "value" => array('REQ')),
+ *              'filters'       => array(
+ *                  array('field' => "period",            "operator" => "within", "value" => array(
+ *                      'from'  => '2009-01-01 00:00:00',
+ *                      'until' => '2010-12-31 23:59:59',
+ *                  )),
+ *                  array('field' => "attender_status",   "operator" => "in",  "value" => array('NEEDS-ACTION', 'ACCEPTED')),
+ *                  array('field' => "attender_role",     "operator" => "in",  "value" => array('REQ')),
+ *              ),
  *          )
  *      ),
  * );
@@ -132,6 +135,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array();
+
+    /**
+     * @var string id
+     */
+    protected $_id = NULL;
     
     /******************************* properties ********************************/
     
@@ -192,7 +200,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
                     . ' Adding FilterGroup: ' . $this->_className);
                 $this->addFilterGroup(new $this->_className($filterData['filters'], $filterData['condition'], $this->_options));
-                
+                if (isset($filterData['id'])) {
+                    $this->_id = $filterData['id'];
+                }
             } else if (isset($filterData['field']) && $filterData['field'] == 'foreignRecord') {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
                     . ' Adding ForeignRecordFilter of type: ' . $filterData['value']['linkType']);
@@ -241,6 +251,10 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Skipping filter (foreign record filter syntax problem) -> ' 
                     . $this->_className . ' with filter data: ' . print_r($_filterData, TRUE));
                 return;
+        }
+        
+        if (isset($_filterData['id'])) {
+            $filter->setId($_filterData['id']);
         }
         
         $this->addFilter($filter);
@@ -295,6 +309,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         } elseif (array_key_exists('filter', $fieldModel) && array_key_exists('value', $_filterData)) {
             // create a 'single' filter
             $filter = $this->createFilter($_filterData['field'], $_filterData['operator'], $_filterData['value']);
+            if (isset($_filterData['id'])) {
+                $filter->setId($_filterData['id']);
+            }
             $this->addFilter($filter, TRUE);
         
         } elseif (array_key_exists('custom', $fieldModel) && $fieldModel['custom'] == true) {
@@ -523,7 +540,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             if ($filter instanceof Tinebase_Model_Filter_FilterGroup) {
                 $result[] = array(
                     'condition' => $filter->getCondition(),
-                    'filters'   => $filter->toArray($_valueToJson)
+                    'filters'   => $filter->toArray($_valueToJson),
+                    'id'        => $this->_id,
                 );
                 
             } else {

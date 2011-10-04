@@ -408,9 +408,30 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testProjectRelationFilter()
     {
-        // create and link project + contacts
-        $project = $this->_getProjectData();
-        $contact = $this->_getContactData();
+        $contact = $this->_instance->saveContact($this->_getContactData());
+        $project = $this->_getProjectData($contact);
+        
+        $projectJson = new Projects_Frontend_Json();
+        $newProject = $projectJson->saveProject($project);
+        
+        $this->_testProjectRelationFilter($contact, 'definedBy', $newProject);
+        $this->_testProjectRelationFilter($contact, 'in', $newProject);
+        $this->_testProjectRelationFilter($contact, 'equals', $newProject);
+    }
+    
+    /**
+     * get Project (create and link project + contacts)
+     *
+     * @return array
+     */
+    protected function _getProjectData($_contact)
+    {
+        $project = array(
+            'title'         => Tinebase_Record_Abstract::generateUID(),
+            'description'   => 'blabla',
+            'status'        => 'IN-PROCESS',
+        );
+        
         $project['relations'] = array(
             array(
                 'own_model'              => 'Projects_Model_Project',
@@ -418,32 +439,26 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
                 'own_id'                 => 0,
                 'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'type'                   => 'COWORKER',
-                'related_record'         => $contact,
-                'related_id'             => NULL,
+                'related_backend'        => 'Sql',
+                'related_id'             => $_contact['id'],
+                'related_model'          => 'Addressbook_Model_Contact',
+                'remark'                 => NULL,
+            ),
+            array(
+                'own_model'              => 'Projects_Model_Project',
+                'own_backend'            => 'Sql',
+                'own_id'                 => 0,
+                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'type'                   => 'RESPONSIBLE',
+                'related_backend'        => 'Sql',
+                'related_id'             => Tinebase_Core::getUser()->contact_id,
                 'related_model'          => 'Addressbook_Model_Contact',
                 'remark'                 => NULL,
             )
+            
         );
-        $projectJson = new Projects_Frontend_Json();
-        $newProject = $projectJson->saveProject($project);
         
-        $this->_testProjectRelationFilter($contact, 'definedBy');
-        $this->_testProjectRelationFilter($contact, 'in', $newProject);
-        $this->_testProjectRelationFilter($contact, 'equals', $newProject);
-    }
-    
-    /**
-     * get Project
-     *
-     * @return array
-     */
-    protected function _getProjectData()
-    {
-        return array(
-            'title'         => Tinebase_Record_Abstract::generateUID(),
-            'description'   => 'blabla',
-            'status'        => 'IN-PROCESS',
-        );
+        return $project;
     }
     
     /**
@@ -453,14 +468,15 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      * @param string
      * @param array $_project
      */
-    protected function _testProjectRelationFilter($_contact, $_operator, $_project = NULL)
+    protected function _testProjectRelationFilter($_contact, $_operator, $_project)
     {
         switch ($_operator) {
             case 'definedBy':
                 $closedStatus = Projects_Config::getInstance()->get(Projects_Config::PROJECT_STATUS)->records->filter('is_open', 0);
                 $filters = array(
                     array('field' => ":relation_type", "operator" => "equals", "value" => "COWORKER"),
-                    array('field' => "status",        "operator" => "notin",  "value" => $closedStatus->getId()),
+                    array('field' => "status",         "operator" => "notin",  "value" => $closedStatus->getId()),
+                    array('field' => 'id',             'operator' =>'in',      'value' => array($_project['id']))
                 );
                 break;
             case 'in':
@@ -471,10 +487,12 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
                 break;
         }
         
+        $filterId = Tinebase_Record_Abstract::generateUID();
         $filter = array(
             array(
-                'field' => 'foreignRecord', 
-                'operator' => 'AND', 
+                'field'     => 'foreignRecord', 
+                'operator'  => 'AND',
+                'id'        => $filterId,
                 'value' => array(
                     'linkType'      => 'relation',
                     'appName'       => 'Projects',
@@ -482,17 +500,21 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
                     'filters'       => $filters
                 )
             ),
-            array('field' => 'org_name', 'operator' => 'equals', 'value' => $_contact['org_name'])
+            array('field' => 'id', 'operator' => 'in', 'value' => array($_contact['id'], Tinebase_Core::getUser()->contact_id)),
         );
         $result = $this->_instance->searchContacts($filter, array());
         
         $this->assertEquals('relation', $result['filter'][0]['value']['linkType']);
-        if ($_operator === 'definedBy') {
-            $this->assertEquals(':relation_type', $result['filter'][0]['value']['filters'][0]['field']);
-        }
+        $this->assertTrue(isset($result['filter'][0]['id']), 'id expected');
+        $this->assertEquals($filterId, $result['filter'][0]['id']);
         
-        $this->assertEquals(1, $result['totalcount']);
-        $this->assertEquals($_contact['org_name'], $result['results'][0]['org_name']);
+        if ($_operator === 'definedBy') {
+            $this->assertEquals(':relation_type',        $result['filter'][0]['value']['filters'][0]['field']);
+            $this->assertEquals(1, $result['totalcount'], 'Should find only the COWORKER!');
+            $this->assertEquals($_contact['org_name'], $result['results'][0]['org_name']);
+        } else {
+            $this->assertEquals(2, $result['totalcount'], 'Should find both contacts!');
+        }
     }
     
     /**

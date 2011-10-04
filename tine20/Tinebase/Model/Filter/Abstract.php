@@ -42,6 +42,11 @@ abstract class Tinebase_Model_Filter_Abstract
     protected $_value = NULL;
     
     /**
+     * @var string filter id [optional]
+     */
+    protected $_id = NULL;
+    
+    /**
      * @var array special options
      */
     protected $_options = NULL;
@@ -147,6 +152,16 @@ abstract class Tinebase_Model_Filter_Abstract
     }
 
     /**
+     * sets id
+     *
+     * @param string $_id
+     */
+    public function setId($_id)
+    {
+        $this->_id = $_id;
+    }
+
+    /**
      * gets value
      *
      * @return  mixed 
@@ -208,6 +223,10 @@ abstract class Tinebase_Model_Filter_Abstract
         
         if ($this->_isImplicit) {
             $result['implicit'] = TRUE;
+        }
+
+        if ($this->_id) {
+            $result['id'] = $this->_id;
         }
         
         return $result;

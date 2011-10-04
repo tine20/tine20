@@ -100,6 +100,10 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
             'operator'  => $this->_operator,
         );
         
+        if ($this->_id) {
+            $result['id'] = $this->_id;
+        }
+        
         $filters = $this->_getForeignFiltersForToArray($_valueToJson);
         
         if ($this->_options && $this->_options['isGeneric']) {
@@ -122,6 +126,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
      */
     protected function _getForeignFiltersForToArray($_valueToJson)
     {
+        $result = array();
         // we can't do this as we do not want the condition/filters syntax
         // $result = $this->_filterGroup->toArray($_valueToJson);
         $this->_filterGroupToArrayWithoutCondition($result, $this->_filterGroup, $_valueToJson);
