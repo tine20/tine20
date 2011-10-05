@@ -800,7 +800,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'from'                  => $this->_account->from . ' <' . $this->_account->email . '>',
             'days'                  => 7,
             'enabled'               => TRUE,
-            'reason'                => "\n<html><body><h1>unittest vacation message</h1></body></html>",
+            'reason'                => "\n<html><body><h1>unittest vacation message&nbsp;</h1></body></html>",
             'mime'                  => NULL,
         );
         

@@ -51,7 +51,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         $this->_foreignIds = NULL;
         $this->_value = (array)$_value;
         // @todo move this to another place?
-        $this->_filterGroup = $this->_getFilterGroup();
+        $this->_setFilterGroup();
         $this->_controller = $this->_getController();
     }
     
@@ -60,10 +60,9 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
      * 
      * @return Tinebase_Model_Filter_FilterGroup
      */
-    protected function _getFilterGroup()
+    protected function _setFilterGroup()
     {
-        return ($this->_filterGroup !== NULL) ? $this->_filterGroup 
-            : new $this->_options['filtergroup']($this->_value, $this->_operator, $this->_options);
+        $this->_filterGroup = new $this->_options['filtergroup']($this->_value, $this->_operator, $this->_options);
     }
     
     /**
