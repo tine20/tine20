@@ -122,7 +122,8 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $container = $this->_instance->getContainerByName(
             'Addressbook',
             $this->objects['initialContainer']->name,
-            $this->objects['initialContainer']->type
+            $this->objects['initialContainer']->type,
+            Tinebase_Core::getUser()->getId()
         );
         
         $this->assertType('Tinebase_Model_Container', $container);
