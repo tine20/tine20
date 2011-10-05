@@ -83,6 +83,12 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
      */
     filterPanels: null,
     
+    /**
+     * @property criteriaCount only to be used to generate titles!
+     * @type Number
+     */
+    criteriaCount: 0,
+    
     cls: 'tw-ftb-filterpanel',
     layout: 'border',
     border: false,
@@ -90,7 +96,6 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
 //    height: 100,
     
     initComponent: function() {
-        this.criteriaCount = 0;
         
         var filterPanel = this.addFilterPanel();
         this.activeFilterPanel = filterPanel;
@@ -224,7 +229,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         this.detailsToggleBtn = new Ext.Button({
             style: {'margin-top': '2px'},
             enableToggle: true,
-            text: _('show details'),
+            text: _('show details'), //'Advanced Search'
             tooltip: _('Always show advanced filters'),
             scope: this,
             handler: this.onDetailsToggle,

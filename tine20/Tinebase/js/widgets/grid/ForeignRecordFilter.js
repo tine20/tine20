@@ -346,12 +346,19 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     createRelatedRecordToolbar: function(filter) {
         var foreignRecordDefinition = filter.foreignRecordDefinition,
             foreignRecordClass = foreignRecordDefinition.foreignRecordClass,
+            filterModels = foreignRecordClass.getFilterModel(),
             ftb = this.ftb;
             
         try {
             if (! filter.toolbar) {
+                // add our subfilters in this toolbar (right hand)
+                if (Ext.isFunction(this.getSubFilters)) {
+                    filterModels = filterModels.concat(this.getSubFilters());
+                }
+                
                 filter.toolbar = new Tine.widgets.grid.FilterToolbar({
                     recordClass: foreignRecordClass,
+                    filterModels: filterModels,
                     defaultFilter: 'query'
                 });
                 
