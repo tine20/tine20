@@ -17,7 +17,9 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
     cls: 'tw-ftb-filterstructure-treepanel',
     autoScroll: true,
     border: false,
-    rootVisible: false,
+    useArrows: true,
+    
+//    rootVisible: false,
     
     initComponent: function() {
         this.tbar = [{
@@ -27,13 +29,19 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
         }];
         
         this.root = {
+            path: '/',
+            iconCls: this.filterPanel.activeFilterPanel.app ? this.filterPanel.activeFilterPanel.app.getIconCls() : '',
             expanded: true,
+            text: _('or alternatively'),
+            qtip: _('Show records that match to one of the following filters'),
             children: [this.createNode(this.filterPanel.activeFilterPanel)]
         };
         
         this.on('click', this.onClick, this);
         this.on('checkchange', this.onCheckChange, this);
         this.on('afterrender', this.onAfterRender, this);
+        this.on('expandnode', this.filterPanel.manageHeight, this.filterPanel);
+        this.on('collapsenode', this.filterPanel.manageHeight, this.filterPanel);
         this.filterPanel.on('filterpaneladded', this.onFilterPanelAdded, this);
         this.filterPanel.on('filterpanelremoved', this.onFilterPanelRemoved, this);
         this.filterPanel.on('filterpanelactivate', this.onFilterPanelActivate, this);
@@ -44,7 +52,8 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
     },
     
     onAfterRender: function() {
-        this.onFilterPanelActivate(this.filterPanel, this.filterPanel.activeFilterPanel)
+        this.onFilterPanelActivate(this.filterPanel, this.filterPanel.activeFilterPanel);
+        this.getRootNode().collapse();
     },
     
     /**

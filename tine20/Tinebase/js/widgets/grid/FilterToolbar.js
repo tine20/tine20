@@ -325,10 +325,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         }, this);
         
         // operator
-        filter.formFields.operator = filterModel.operatorRenderer(filter, fRow.child('td[class=tw-ftb-frow-operator]'));
+        filter.formFields.operator = filterModel.operatorRenderer(filter, fRow.child('td[class^=tw-ftb-frow-operator]'));
         
         // value
-        filter.formFields.value = filterModel.valueRenderer(filter, fRow.child('td[class=tw-ftb-frow-value]'));
+        filter.formFields.value = filterModel.valueRenderer(filter, fRow.child('td[class^=tw-ftb-frow-value]'));
         
         filter.deleteRowButton = new Ext.Button({
             id: 'tw-ftb-frow-deletebutton-' + filter.id,
@@ -706,62 +706,44 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     
     getValue: function() {
         var filters = [];
-//        var foreignFilters = {};
-        
-//        // detect subfilters with no superfilter
-//        this.filterStore.each(function(filter) {
-////            if 
-//        }, this);
         
         this.filterStore.each(function(filter) {
-            
-            var filterModel = this.getFilterModel(filter.get('field')),
-                line = this.getFilterData(filter);
-            
-            if (line.field && Ext.isString(line.field) &&  line.field.match(/:/)) {
-                var parts = line.field.split(':');
+            try {
+                var filterModel = this.getFilterModel(filter.get('field')),
+                    line = this.getFilterData(filter);
                 
-                // customfield handling
-                if (parts[0] == 'customfield') {
-                    filters.push({field: 'customfield', operator: line.operator, value: {cfId: parts[1], value: line.value}});
-                }
-                
-                else if (filterModel && filterModel.superFilter) {
-                    // if we are a childfilter of a recordclass of the subfilter, just place the subfilter
-                    if (this.parentSheet.recordClass == filterModel.superFilter.foreignRecordClass) {
-                        filters.push(line);
-                        return;
+                if (line.field && Ext.isString(line.field) &&  line.field.match(/:/)) {
+                    var parts = line.field.split(':');
+                    
+                    // customfield handling
+                    if (parts[0] == 'customfield') {
+                        filters.push({field: 'customfield', operator: line.operator, value: {cfId: parts[1], value: line.value}});
                     }
                     
-                    // check if filter of type superfilter is present
-                    if (this.filterStore.find('field', filterModel.superFilter.field) < 0) {
+                    else if (filterModel && filterModel.superFilter) {
+                        // if we are a childfilter of a recordclass of the subfilter, just place the subfilter
+                        if (this.parentSheet && this.parentSheet.recordClass == filterModel.superFilter.foreignRecordClass) {
+                            filters.push(line);
+                            return;
+                        }
                         
-                        // create one
-                        // @TODO HIDE? -> see ForeignRecordFilter line ~300
-                        var superFilter = this.addFilter(new this.record({field: filterModel.superFilter.field, operator: 'definedBy'}));
-                        line = this.getFilterData(superFilter);
-                        filters.push(line);
+                        // check if filter of type superfilter is present
+                        if (this.filterStore.find('field', filterModel.superFilter.field) < 0) {
+                            
+                            // create one
+                            // @TODO HIDE? -> see ForeignRecordFilter line ~300
+                            var superFilter = this.addFilter(new this.record({field: filterModel.superFilter.field, operator: 'definedBy'}));
+                            line = this.getFilterData(superFilter);
+                            filters.push(line);
+                        }
                     }
+                } else {
+                    filters.push(line);
                 }
-//                else {
-//                    // subfilter handling
-//                    var ownField = parts[0];
-//                    var foreignField = parts[1];
-//                    
-//                    line.field = foreignField;
-//                    foreignFilters[ownField] = foreignFilters[ownField] || [];
-//                    foreignFilters[ownField].push(line);
-//                }
-            } else {
-                filters.push(line);
+            } catch (e) {
+                console.error(e.stack ? e.stack : e);
             }
         }, this);
-        
-//        for (var ownField in foreignFilters) {
-//            if (foreignFilters.hasOwnProperty(ownField)) {
-//                filters.push({field: ownField, operator: 'AND', value: foreignFilters[ownField]});
-//            }
-//        }
         
         return filters;
     },
@@ -785,63 +767,81 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             }
         }, this);
         
+        // append id
+        line.id = filter.id;
+
         return line;
+    },
+    
+    /**
+     * set filterData in a filter
+     * 
+     * @static
+     * @param {filterRecord} filter
+     * @param {Object} filterData
+     * @return {filterRecord}
+     */
+    setFilterData: function(filter, filterData) {
+        filter.beginEdit();
+        
+        Ext.each(['field', 'operator', 'value'], function(t) {
+            filter.set(t, filterData[t]);
+            if (Ext.isFunction(filter.formFields[t].setValue)) {
+                filter.formFields[t].setValue(filterData[t]);
+            }
+        }, this);
+        
+        filter.endEdit();
+        
+        return filter
     },
     
     setValue: function(filters) {
         try {
             this.supressEvents = true;
             
-            var oldFilterCount = this.filterStore.getCount();
-            var skipFilter = [];
+            var oldFilters = [];
+            this.filterStore.each(function(filter) {oldFilters.push(filter)}, this);
             
             var filterData, filter, existingFilterPos, existingFilter;
             
+            // custom fields handling
             for (var i=0; i<filters.length; i++) {
                 filterData = filters[i];
-                
-    //            if (filterData.operator == 'AND' || filterData.operator == 'OR') {
-    //                // subfilter handling
-    //                var subFilters = filterData.value;
-    //                for (var j=subFilters.length -1; j>=0; j--) {
-    //                    subFilters[j].field = filterData.field + ':' + subFilters[j].field;
-    //                    filters.splice(i+1, 0, subFilters[j]);
-    //                }
-    //            } else 
                 if (filterData.value && filterData.value.cfId) {
-                    // custom fields handling
                     filters[i].field = filterData.field + ':' + filterData.value.cfId;
                     filters[i].value = filterData.value.value;
                 }
             }
             
             for (var i=0; i<filters.length; i++) {
+                filter = null;
                 filterData = filters[i];
                 filterData.filterValueWidth = this.filterValueWidth;
                 
                 if (this.filterModelMap[filterData.field]) {
-                    filter = new this.record(filterData, filterData.id);
+                    if (filterData.id) {
+                        filter = this.filterStore.getById(filterData.id);
+                    }
                     
-                    // check if this filter is already in our store
-                    existingFilterPos = this.filterStore.find('field', filterData.field);
-                    existingFilter = existingFilterPos >= 0 ? this.filterStore.getAt(existingFilterPos) : null;
+                    // refresh existing filters
+                    if (filter) {
+                        this.setFilterData(filter, filterData);
+                        oldFilters.remove(filter);
+                    } 
                     
-                    // we can't detect resolved records, sorry ;-(
-                    if (existingFilter && existingFilter.formFields.operator.getValue() == filter.get('operator') && existingFilter.formFields.value.getValue() == filter.get('value')) {
-                        // the filters exists and has same operator/value -> skip renewing
-                        skipFilter.push(existingFilterPos);
-                    } else if (! filterData.implicit) {
+                    // add non existing filters only if they where not created implicitly by server
+                    else if (! filterData.implicit) {
+                        filter = new this.record(filterData, filterData.id);
                         this.addFilter(filter);
                     }
                 }
             }
             
-            // delete old filter rows
-            for (var i=oldFilterCount-1; i>=0; i--) {
-                if (skipFilter.indexOf(i) < 0) {
-                    this.deleteFilter(this.filterStore.getAt(i));
-                }
-            }
+            // remove unused filters
+            Ext.each(oldFilters, function(filter) {
+                this.deleteFilter(filter);
+            }, this);
             
             this.supressEvents = false;
             this.onFilterRowsChange();

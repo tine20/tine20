@@ -136,10 +136,10 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             this.setHeight(height);
             
             // manage scrolling
-            if (this.layout.center) {
+            if (this.layout.center && tbHeight > 120) {
                 this.layout.center.panel.el.child('div[class^="x-panel-body"]', true).scrollTop = 1000000;
             }
-            if (this.layout.east) {
+            if (this.layout.east && eastHeight > 120) {
                 this.layout.east.panel.el.child('div[class^="x-panel-body"]', true).scrollTop = 1000000;
             }
             this.ownerCt.layout.layout();
@@ -318,7 +318,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             criterias = [];
             
         // count filterPanels
-        for (var id in this.filterPanels) {filterPanelCount++;}
+        for (var id in this.filterPanels) {if (this.filterPanels.hasOwnProperty(id)) {filterPanelCount++;}}
         
         if (! filterPanelCount > 1) {
             moreCriterias = true;
@@ -399,15 +399,24 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         var filters = [];
         for (var id in this.filterPanels) {
             if (this.filterPanels.hasOwnProperty(id) && this.filterPanels[id].isActive) {
-                filters.push({'condition': 'AND', 'filters': this.filterPanels[id].getValue(), 'id': id})
+                filters.push({'condition': 'AND', 'filters': this.filterPanels[id].getValue(), 'id': id});
             }
         }
         
-        return filters.length == 1 ? filters[0] : [{'condition': 'OR', 'filters': filters}];
+        return filters.length == 1 ? filters[0].filters : [{'condition': 'OR', 'filters': filters}];
     },
     
     setValue: function(value) {
+        // scrape out condition on root level -> this whipes implict filters
+        Ext.each(value, function(filterData) {
+            if (filterData.condition) {
+                value = filterData.condition == 'AND' ? filterData.filters : filterData;
+                return false;
+            }
+        }, this);
         
+        
+        // single filter sheets
         if (! value.condition) {
             // reset criterias
             this.criteriaCount = 0;
@@ -429,9 +438,38 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
                 this.activeFilterPanel.deleteFilter(quickFilterValue);
                 this.activeFilterPanel.supressEvents = false;
             }
+        } 
+        
+        // OR condition on root level
+        else if(value.condition == 'OR') {
+            var keepFilterPanels = [],
+                activeFilterPanel = this.activeFilterPanel;
             
-        } else {
-            // @TODO
+            Ext.each(value.filters, function(filterData) {
+                // refresh existing panel panel
+                if (filterData.id && this.filterPanels.hasOwnProperty(filterData.id)) {
+                    this.filterPanels[filterData.id].setValue(filterData.filters);
+                    keepFilterPanels.push(filterData.id);
+                }
+                
+                // create new filterPanel
+                else {
+                    var filterPanel = this.addFilterPanel({id: filterData.id});
+                    filterPanel.setValue(filterData.filters);
+                    keepFilterPanels.push(filterData.id);
+                }
+            }, this);
+            
+            // (re)activate filterPanel
+            this.setActiveFilterPanel(keepFilterPanels.indexOf(activeFilterPanel.id) > 0 ? activeFilterPanel : keepFilterPanels[0]);
+            
+            // remove unused panels
+            for (var id in this.filterPanels) {
+                if (this.filterPanels.hasOwnProperty(id) && keepFilterPanels.indexOf(id) < 0) {
+                    this.removeFilterPanel(id);
+                }
+            }
+            
         }
         
         this.manageCriteriaText();
