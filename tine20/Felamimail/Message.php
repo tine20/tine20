@@ -188,9 +188,10 @@ class Felamimail_Message extends Zend_Mail_Message
      * @param string $_from
      * @param string $_to
      * @param string $_text
+     * @param string $_eol
      * @return string
      */
-    public static function convertContentType($_from, $_to, $_text)
+    public static function convertContentType($_from, $_to, $_text, $_eol = "\r\n")
     {
         // nothing todo
         if($_from == $_to) {
@@ -198,12 +199,13 @@ class Felamimail_Message extends Zend_Mail_Message
         }
         
         if($_from == Zend_Mime::TYPE_TEXT && $_to == Zend_Mime::TYPE_HTML) {
-            $text = htmlspecialchars($_text, ENT_COMPAT, 'utf-8');
+            $text = htmlspecialchars($_text, ENT_COMPAT, 'UTF-8');
             $text = nl2br($text);
             $text = self::addHtmlMarkup($text);
         } else {
-            $text = preg_replace('/\<br *\/*\>/', "\r\n", $_text);
+            $text = preg_replace('/\<br *\/*\>/', $_eol, $_text);
             $text = strip_tags($text);
+            $text = html_entity_decode($text, ENT_NOQUOTES, 'UTF-8');
         }
         
         return $text;
