@@ -20,17 +20,11 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
     rootVisible: false,
     
     initComponent: function() {
-        this.criteriaCount = 0;
-        
         this.tbar = [{
             text: '+',
             scope: this,
             handler: this.onAddFilterPanel
         }];
-        
-        this.selModel = new Ext.ux.tree.CheckboxSelectionModel({
-            defaultValue: true
-        });
         
         this.root = {
             expanded: true,
@@ -39,15 +33,78 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         this.on('click', this.onClick, this);
         this.on('checkchange', this.onCheckChange, this);
+        this.on('afterrender', this.onAfterRender, this);
+        this.filterPanel.on('filterpaneladded', this.onFilterPanelAdded, this);
+        this.filterPanel.on('filterpanelremoved', this.onFilterPanelRemoved, this);
+        this.filterPanel.on('filterpanelactivate', this.onFilterPanelActivate, this);
+        this.filterPanel.activeFilterPanel.on('titlechange', this.onFilterPanelTitleChange, this);
+        new Ext.tree.TreeEditor(this);
         
         Tine.widgets.grid.FilterStructureTreePanel.superclass.initComponent.call(this);
+    },
+    
+    onAfterRender: function() {
+        this.onFilterPanelActivate(this.filterPanel, this.filterPanel.activeFilterPanel)
+    },
+    
+    /**
+     * called when a filterPanel gets added
+     * 
+     * @param {Tine.widgets.grid.filterPanel} filterToolbar
+     * @param {Tine.widgets.grid.filterToolbar} filterPanel
+     */
+    onFilterPanelAdded: function(filterToolbar, filterPanel) {
+        this.getRootNode().appendChild(this.createNode(filterPanel));
+        filterPanel.on('titlechange', this.onFilterPanelTitleChange, this);
+    },
+    
+    /**
+     * called when a filterPanel gets removed
+     * 
+     * @param {Tine.widgets.grid.filterPanel} filterToolbar
+     * @param {Tine.widgets.grid.filterToolbar} filterPanel
+     */
+    onFilterPanelRemoved: function(filterToolbar, filterPanel) {
+        var node = this.getNodeById(filterPanel.id);
+        delete node.filterPanel;
+        if (node) {
+            node.remove();
+        }
+    },
+    
+    /**
+     * called when a filterPanel gets activated
+     * 
+     * @param {Tine.widgets.grid.filterPanel} filterToolbar
+     * @param {Tine.widgets.grid.filterToolbar} filterPanel
+     */
+    onFilterPanelActivate: function(filterToolbar, filterPanel) {
+        var node = this.getNodeById(filterPanel.id);
+        if (node) {
+            this.suspendEvents();
+            node.select();
+            this.resumeEvents();
+        }
+    },
+    
+    /**
+     * called when a filterPanel gets activated
+     * 
+     * @param {Tine.widgets.grid.filterToolbar} filterPanel
+     * @param {String} text
+     */
+    onFilterPanelTitleChange: function(filterPanel, text) {
+        var node = this.getNodeById(filterPanel.id);
+        if (node) {
+            this.suspendEvents();
+            node.setText(text);
+            this.resumeEvents();
+        }
     },
     
     onAddFilterPanel: function() {
         var filterPanel = this.filterPanel.addFilterPanel();
         this.filterPanel.setActiveFilterPanel(filterPanel);
-        
-        this.getRootNode().appendChild(this.createNode(filterPanel));
     },
     
     onCheckChange: function(node, checked) {
@@ -65,10 +122,12 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
         filterPanel.isActive = true;
         
         return {
+            checked: true,
+            editable: true,
             id: filterPanel.id,
             filterPanel: filterPanel,
             leaf: true,
-            text: String.format(_('Criteria {0}'), ++this.criteriaCount),
+            text: filterPanel.title ? filterPanel.title : filterPanel.id,
             iconCls: filterPanel.app ? filterPanel.app.getIconCls() : 'leaf'
         };
     }

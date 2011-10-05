@@ -92,6 +92,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     childSheets: null,
     
+    header: false,
     border: false,
     monitorResize: true,
     region: 'north',
@@ -889,6 +890,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     },
     
     removeFilterSheet: function(ftb) {
+        if (! this.childSheets[ftb.id].destroying) {
+            this.childSheets[ftb.id].destroy();
+        }
         delete this.childSheets[ftb.id];
     },
     

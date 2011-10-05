@@ -19,19 +19,37 @@ Tine.widgets.grid.FilterPanel = function(config) {
     // the plugins woun't work there
     delete this.filterToolbarConfig.plugins;
     
-    // route filterPlugin stuff
-    // NOTE: their is no spechial filterPanel, each filterpanel could be closed  at any time
-    //       ?? what does this mean for quickfilterplugin???
-    //       -> we cant mirror fileds or need to mirror the field from the active tbar
-    //       -> mhh, better deactivate as soon as we have more than one tbar
-    //       -> don't sync, but fetch with this wrapper!
-    
     // become filterPlugin
     Ext.applyIf(this, new Tine.widgets.grid.FilterPlugin());
 //    this.filterToolbarConfig.filterPluginCmp = this;
     
     this.filterPanels = [];
     
+    this.addEvents(
+        /**
+         * @event filterpaneladded
+         * Fires when a filterPanel is added
+         * @param {Tine.widgets.grid.FilterPanel} this
+         * @param {Tine.widgets.grid.FilterToolbar} the filterPanel added
+         */
+        'filterpaneladded',
+        
+        /**
+         * @event filterpanelremoved
+         * Fires when a filterPanel is removed
+         * @param {Tine.widgets.grid.FilterPanel} this
+         * @param {Tine.widgets.grid.FilterToolbar} the filterPanel removed
+         */
+        'filterpanelremoved',
+        
+        /**
+         * @event filterpanelactivate
+         * Fires when a filterPanel is activated
+         * @param {Tine.widgets.grid.FilterPanel} this
+         * @param {Tine.widgets.grid.FilterToolbar} the filterPanel activated
+         */
+        'filterpanelactivate'
+    );
     Tine.widgets.grid.FilterPanel.superclass.constructor.call(this, {});
 };
 
@@ -72,6 +90,8 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
 //    height: 100,
     
     initComponent: function() {
+        this.criteriaCount = 0;
+        
         var filterPanel = this.addFilterPanel();
         this.activeFilterPanel = filterPanel;
         
@@ -126,13 +146,34 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         this.setActiveFilterPanel(filterPanel);
     },
     
-    addFilterPanel: function() {
-        var filterPanel = new Tine.widgets.grid.FilterToolbar(this.filterToolbarConfig);
+    addFilterPanel: function(config) {
+        config = config || {};
+        config.title = config.title ? config.title : String.format(_('Criteria {0}'), ++this.criteriaCount);
+        
+        var filterPanel = new Tine.widgets.grid.FilterToolbar(Ext.apply({}, this.filterToolbarConfig, config));
         filterPanel.onFilterChange = this.onFilterChange.createDelegate(this);
         
         this.filterPanels[filterPanel.id] = filterPanel;
         
+        this.fireEvent('filterpaneladded', this, filterPanel);
         return filterPanel;
+    },
+    
+    /**
+     * remove filter panel
+     * 
+     * @param {mixed} filterPanel
+     */
+    removeFilterPanel: function(filterPanel) {
+        filterPanel = Ext.isString(filterPanel) ? this.filterPanels[filterPanel] : filterPanel;
+        
+        if (! this.filterPanels[filterPanel.id].destroying) {
+            this.filterPanels[filterPanel.id].destroy();
+        }
+        
+        delete this.filterPanels[filterPanel.id];
+        
+        this.fireEvent('filterpanelremoved', this, filterPanel);
     },
     
     setActiveFilterPanel: function(filterPanel) {
@@ -144,6 +185,8 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         
         filterPanel.doLayout();
         this.manageHeight.defer(100, this);
+        
+        this.fireEvent('filterpanelactivate', this, filterPanel);
     },
     
     // NOTE: their is no spechial filterPanel, each filterpanel could be closed  at any time
@@ -355,13 +398,22 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             }
         }
         
-        return filters.length == 1 ? filters[0].filters : [{'condition': 'OR', 'filters': filters}];
+        return filters.length == 1 ? filters[0] : [{'condition': 'OR', 'filters': filters}];
     },
     
     setValue: function(value) {
         
-        if (! value.condition || value.condition == 'AND') {
-            // @TODO remove all criterias but 1 (and rename the first to 1)
+        if (! value.condition) {
+            // reset criterias
+            this.criteriaCount = 0;
+            this.activeFilterPanel.setTitle(String.format(_('Criteria {0}'), ++this.criteriaCount));
+            for (var id in this.filterPanels) {
+                if (this.filterPanels.hasOwnProperty(id)) {
+                    if (this.filterPanels[id] != this.activeFilterPanel) {
+                        this.removeFilterPanel(this.filterPanels[id]);
+                    }
+                }
+            }
             
             this.activeFilterPanel.setValue(value);
             
