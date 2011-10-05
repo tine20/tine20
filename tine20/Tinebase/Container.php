@@ -66,6 +66,23 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     private static $_instance = NULL;
     
     /**
+     * foreign tables
+     * name => array(table, joinOn, field)
+     *
+     * @var array
+     */
+    protected $_foreignTables = array(
+        'owner_id'    => array(
+            'name'	 => 'owner',
+        	'table'  => 'container_acl',
+            //'field'  => 'container_id',
+    		'joinOn' => 'container_id',
+    		'select' => array('owner_id' => 'owner.account_id'),
+            //'preserve' => TRUE,
+        )
+    );
+    
+    /**
      * the singleton pattern
      *
      * @return Tinebase_Container
@@ -248,20 +265,18 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $select = parent::_getSelect($_cols, $_getDeleted);
         
-        $select->joinLeft(
-            /* table  */ array('owner' => SQL_TABLE_PREFIX . 'container_acl'),
-            /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')} AND ".
-            "{$this->_db->quoteIdentifier('container.type')} = {$this->_db->quote(Tinebase_Model_Container::TYPE_PERSONAL)} AND " .
-            "{$this->_db->quoteIdentifier('owner.account_type')} = {$this->_db->quote('user')} AND " .
-            "{$this->_db->quoteIdentifier('owner.account_grant')} = {$this->_db->quote(Tinebase_Model_Grants::GRANT_ADMIN)}",
-            /* select */ array('owner_id' => 'account_id')
-        );
+        #if ($_cols == '*') {
+        #    $select->joinLeft(
+        #        /* table  */ array('owner' => SQL_TABLE_PREFIX . 'container_acl'),
+        #        /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')} AND ".
+        #        "{$this->_db->quoteIdentifier('container.type')} = {$this->_db->quote(Tinebase_Model_Container::TYPE_PERSONAL)} AND " .
+        #        "{$this->_db->quoteIdentifier('owner.account_type')} = {$this->_db->quote('user')} AND " .
+        #        "{$this->_db->quoteIdentifier('owner.account_grant')} = {$this->_db->quote(Tinebase_Model_Grants::GRANT_ADMIN)}",
+        #        /* select */ array('owner_id' => 'account_id')
+        #    );
+        #}
         
         return $select;
-    }
-    
-    public function addOwnerId(Zend_Db_Select $_select)
-    {
     }
     
     /**
@@ -303,7 +318,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 ->group('container.id')
                 ->order('container.name');
             
-            $this->addOwnerId($select);
             $this->addGrantsSql($select, $accountId, $grant);
     
             $stmt = $this->_db->query($select);
@@ -392,10 +406,14 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @throws  Tinebase_Exception_NotFound
      * @throws  Tinebase_Exception_UnexpectedValue
      */
-    public function getContainerByName($_application, $_containerName, $_type)
+    public function getContainerByName($_application, $_containerName, $_type, $_ownerId = null)
     {
         if($_type !== Tinebase_Model_Container::TYPE_PERSONAL && $_type !== Tinebase_Model_Container::TYPE_SHARED) {
             throw new Tinebase_Exception_UnexpectedValue ("Invalid type $_type supplied.");
+        }
+        
+        if($_type == Tinebase_Model_Container::TYPE_PERSONAL && empty($_ownerId)) {
+            throw new Tinebase_Exception_UnexpectedValue ('$_ownerId can not be empty for personal folders');
         }
         
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
@@ -405,6 +423,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             array('field' => 'name', 'operator' => 'equals', 'value' => $_containerName),
             array('field' => 'type', 'operator' => 'equals', 'value' => $_type),
         ));
+        
+        if($_type == Tinebase_Model_Container::TYPE_PERSONAL) {
+            $filter->addFilter($filter->createFilter('owner_id', 'equals', $_ownerId));
+        }
         
         $container =  $this->search($filter)->getFirstRecord();
         if (! $container) {
@@ -981,7 +1003,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             )
             ->group('container.id', 'container_acl.account_type', 'container_acl.account_id');
         
-        $this->addOwnerId($select);
         $this->addGrantsSql($select, $accountId, '*');
         
         $stmt = $this->_db->query($select);
