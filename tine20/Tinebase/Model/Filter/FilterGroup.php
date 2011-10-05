@@ -199,10 +199,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             if (isset($filterData['condition'])) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
                     . ' Adding FilterGroup: ' . $this->_className);
-                $this->addFilterGroup(new $this->_className($filterData['filters'], $filterData['condition'], $this->_options));
+                $filtergroup = new $this->_className($filterData['filters'], $filterData['condition'], $this->_options);
                 if (isset($filterData['id'])) {
-                    $this->_id = $filterData['id'];
+                    $filtergroup->setId($filterData['id']);
                 }
+                $this->addFilterGroup($filtergroup);
             } else if (isset($filterData['field']) && $filterData['field'] == 'foreignRecord') {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
                     . ' Adding ForeignRecordFilter of type: ' . $filterData['value']['linkType']);
@@ -456,6 +457,26 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     }
     
     /**
+     * set id
+     *
+     * @param string $_id
+     */
+    public function setId($_id)
+    {
+        $this->_id = $_id;
+    }
+    
+    /**
+     * returns id
+     *
+     * @return string id
+     */
+    public function getId()
+    {
+        return $this->_id;
+    }
+    
+    /**
      * returns application name of this filtergroup
      *
      * @return string
@@ -541,7 +562,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 $result[] = array(
                     'condition' => $filter->getCondition(),
                     'filters'   => $filter->toArray($_valueToJson),
-                    'id'        => $this->_id,
+                    'id'        => $filter->getId(),
                 );
                 
             } else {
