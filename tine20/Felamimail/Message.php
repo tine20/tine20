@@ -205,10 +205,7 @@ class Felamimail_Message extends Zend_Mail_Message
         } else {
             $text = preg_replace('/\<br *\/*\>/', $_eol, $_text);
             $text = strip_tags($text);
-            
-            if ($_from == Zend_Mime::TYPE_HTML && $_to == Zend_Mime::TYPE_TEXT) {
-                $text = html_entity_decode($text, ENT_NOQUOTES, 'UTF-8');
-            }
+            $text = html_entity_decode($text, ENT_NOQUOTES, 'UTF-8');
         }
         
         return $text;
