@@ -399,7 +399,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             throw new Tinebase_Exception_UnexpectedValue ('$_ownerId can not be empty for personal folders');
         }
         
-        $ownerId = $_ownerId instanceof Tinebase_Model_User ? $_owner->getId() : $_ownerId;
+        $ownerId = $_ownerId instanceof Tinebase_Model_User ? $_ownerId->getId() : $_ownerId;
         
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
 
