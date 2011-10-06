@@ -227,6 +227,8 @@ Tine.Tinebase.tineInit = {
         card.doLayout();
         
         //var ping = new Tine.Tinebase.sync.Ping({});
+        
+        window.initializationComplete = true;
     },
 
     initAjax: function () {

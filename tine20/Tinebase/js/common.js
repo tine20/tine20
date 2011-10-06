@@ -56,10 +56,46 @@ Tine.Tinebase.common = {
         leftPos = ((w - width) / 2) + y;
         topPos = ((h - height) / 2) + x;
         
-        popup = window.open(url, windowName, 'width=' + width + ',height=' + height + ',top=' + topPos + ',left=' + leftPos +
-        ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
-        
+
+		try {
+			popup = window.open(url, windowName, 'width=' + width + ',height=' + height + ',top=' + topPos + ',left=' + leftPos +
+	        	',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
+	        
+	        return popup;
+		}
+		catch(e) {
+			Tine.log.info('window.open Exception: ');
+			Tine.log.info(e);
+			
+			popup = false;
+			
+		}
+		
+		if (! popup) {
+			openCode = "window.open('http://127.0.0.1/tine20/tine20/" + url + "','" + windowName + "','width=" + width + ",height=" + height + ",top=" + topPos + ",left=" + leftPos +
+			",directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no')";
+		
+			var exception = {
+				openCode: openCode,
+				popup: null
+			};
+			
+			Tine.log.debug('openCode: ' + openCode);
+			popup = openCode;
+			
+//			if(Tine.Tinebase.MainScreen.fireEvent('windowopenexception', exception) !== false){
+//	            // show message 'your popupblocker ... please click here'
+//				// mhh how to make this syncron???
+//				
+//				// todo: review code in Ext.ux.PopupWindow...
+//				popup = window;
+//	        } else {
+//	        	popup = exception.popup;
+//	        }
+		}
+		
         return popup;
+        
     },
     
     showDebugConsole: function () {

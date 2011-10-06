@@ -49,7 +49,13 @@ Tine.Tinebase.AppManager = function() {
          * fired when an application gets deactivated
          * @param {Tine.Aplication} deactivated app
          */
-        'deactivate'
+        'deactivate',
+        /**
+         * @event windowopenexception
+         * windowopenexceptionated 
+         * @param {} Exception
+         */
+        'windowopenexception'
     );
     
     
