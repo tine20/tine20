@@ -1,0 +1,10 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Inverse inc.//SOGo Connector 1.0//EN
+UID:C4F4196E-EB30-0001-81D9-17376FD61189
+N:Deising;Sonja
+FN:Sonja Deising
+TEL;TYPE=work:+49 40 3170 31522
+X-MOZILLA-HTML:FALSE
+EMAIL;TYPE=work:s.deising@metaways.de
+END:VCARD
