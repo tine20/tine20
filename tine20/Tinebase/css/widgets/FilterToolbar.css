@@ -80,6 +80,9 @@
     border-bottom: none;
 }
 
+.tw-ftb-filterpanel .ux-arrowcollapse .x-tool-toggle {
+    background-color: #E5EDF8;
+}
 /*
 .tw-filtertoolbar .fw-ftb-actionrow td { 
     padding: 0px 5px 1px;

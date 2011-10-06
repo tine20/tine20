@@ -84,7 +84,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     filterPanels: null,
     
     /**
-     * @property criteriaCount only to be used to generate titles!
+     * @property criteriaCount
      * @type Number
      */
     criteriaCount: 0,
@@ -153,13 +153,17 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     
     addFilterPanel: function(config) {
         config = config || {};
-        config.title = config.title ? config.title : String.format(_('Criteria {0}'), ++this.criteriaCount);
+//        config.title = config.title ? config.title : String.format(_('Criteria {0}'), ++this.criteriaCount);
         
         var filterPanel = new Tine.widgets.grid.FilterToolbar(Ext.apply({}, this.filterToolbarConfig, config));
         filterPanel.onFilterChange = this.onFilterChange.createDelegate(this);
         
         this.filterPanels[filterPanel.id] = filterPanel;
+        this.criteriaCount++;
         
+        if (this.criteriaCount > 1 && filterPanel.title == filterPanel.generateTitle()) {
+            filterPanel.setTitle(filterPanel.title + ' ' + this.criteriaCount);
+        }
         this.fireEvent('filterpaneladded', this, filterPanel);
         return filterPanel;
     },
@@ -177,6 +181,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         }
         
         delete this.filterPanels[filterPanel.id];
+        this.criteriaCount--;
         
         this.fireEvent('filterpanelremoved', this, filterPanel);
     },
@@ -419,8 +424,9 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         // single filter sheets
         if (! value.condition) {
             // reset criterias
-            this.criteriaCount = 0;
-            this.activeFilterPanel.setTitle(String.format(_('Criteria {0}'), ++this.criteriaCount));
+//            this.criteriaCount = 0;
+//            this.activeFilterPanel.setTitle(String.format(_('Criteria {0}'), ++this.criteriaCount));
+            this.activeFilterPanel.setTitle(this.activeFilterPanel.generateTitle());
             for (var id in this.filterPanels) {
                 if (this.filterPanels.hasOwnProperty(id)) {
                     if (this.filterPanels[id] != this.activeFilterPanel) {

@@ -252,12 +252,28 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         }
         
         this.breadCrumb = new Ext.Action({
-            text: (this.parentSheet ? '&gt;&nbsp;&nbsp;&nbsp;' : '') + (this.recordClass ? Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName')).i18n._hidden(this.recordClass.getMeta('recordsName')) : this.id),
+            text: (this.parentSheet ? '&gt;&nbsp;&nbsp;&nbsp;' : '') + this.title,
             scope: this,
             handler: function() {
                 this.setActiveSheet(this);
             }
         });
+    },
+    
+    generateTitle: function() {
+        return (this.recordClass ? Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName')).i18n._hidden(this.recordClass.getMeta('recordsName')) : this.id);
+    },
+    
+    /**
+     * called when the title of this panel changes
+     * 
+     * @param {Ext.Panel} panel
+     * @param {String} title
+     */
+    onTitleChange: function(panel, title) {
+        if (this.breadCrumb) {
+            this.breadCrumb.setText((this.parentSheet ? '&gt;&nbsp;&nbsp;&nbsp;' : '') + title);
+        }
     },
     
     /**
@@ -491,6 +507,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @private
      */
     initComponent: function() {
+        this.title = this.generateTitle();
+        this.on('titlechange', this.onTitleChange, this);
+        
         Tine.widgets.grid.FilterToolbar.superclass.initComponent.call(this);
         
         this.on('show', function() {

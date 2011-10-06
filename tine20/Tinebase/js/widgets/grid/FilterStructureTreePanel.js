@@ -18,42 +18,127 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
     autoScroll: true,
     border: false,
     useArrows: true,
+    collapsible: true,
+    collapsed: true,
+    baseCls: 'ux-arrowcollapse',
+    animCollapse: true,
+    titleCollapse:true,
+    rootVisible: false,
     
+//    draggable : true,
+                        
 //    rootVisible: false,
     
     initComponent: function() {
-        this.tbar = [{
-            text: '+',
-            scope: this,
-            handler: this.onAddFilterPanel
-        }];
+        this.title = [
+            '<span ext:qtip="',
+            _('Show records that match to one of the following filters'),
+            '">',
+            _('or alternatively'),
+            '</span>'
+        ].join('');
+        
+//        this.tbar = [{
+//            text: '+',
+//            scope: this,
+//            handler: this.onAddFilterPanel
+//        }];
         
         this.root = {
             path: '/',
-            iconCls: this.filterPanel.activeFilterPanel.app ? this.filterPanel.activeFilterPanel.app.getIconCls() : '',
+//            iconCls: this.filterPanel.activeFilterPanel.app ? this.filterPanel.activeFilterPanel.app.getIconCls() : '',
             expanded: true,
-            text: _('or alternatively'),
-            qtip: _('Show records that match to one of the following filters'),
-            children: [this.createNode(this.filterPanel.activeFilterPanel)]
+//            text: _('or alternatively'),
+//            qtip: _('Show records that match to one of the following filters'),
+            children: [
+                this.createNode(this.filterPanel.activeFilterPanel),
+                {id: 'addFilterPanel', text: _('Add alternative filter'), iconCls: 'action_add', leaf: true}
+            ]
         };
         
+        this.contextMenu = new Ext.menu.Menu({
+            items: [{
+                text: _('Remove Filter'),
+                iconCls: 'action_remove',
+                scope: this,
+                handler: this.onCtxRemove
+            }]
+        });
+        
         this.on('click', this.onClick, this);
+        this.on('beforeclick', this.onBeforeClick, this);
+        this.on('contextmenu', this.onContextMenu, this);
         this.on('checkchange', this.onCheckChange, this);
         this.on('afterrender', this.onAfterRender, this);
+        this.on('insert', this.onNodeInsert, this);
+        this.on('textchange', this.onNodeTextChange, this);
         this.on('expandnode', this.filterPanel.manageHeight, this.filterPanel);
         this.on('collapsenode', this.filterPanel.manageHeight, this.filterPanel);
+        this.on('collapse', this.filterPanel.manageHeight, this.filterPanel);
+        this.on('expand', this.filterPanel.manageHeight, this.filterPanel);
         this.filterPanel.on('filterpaneladded', this.onFilterPanelAdded, this);
         this.filterPanel.on('filterpanelremoved', this.onFilterPanelRemoved, this);
         this.filterPanel.on('filterpanelactivate', this.onFilterPanelActivate, this);
         this.filterPanel.activeFilterPanel.on('titlechange', this.onFilterPanelTitleChange, this);
-        new Ext.tree.TreeEditor(this);
+        
+        this.editor = new Ext.tree.TreeEditor(this);
         
         Tine.widgets.grid.FilterStructureTreePanel.superclass.initComponent.call(this);
     },
     
+    onContextMenu: function(node, e) {
+        if (this.getRootNode().childNodes.length > 2 && node.id != 'addFilterPanel') {
+            this.contextMenu.contextNode = node;
+            this.contextMenu.showAt(e.getXY());
+        }
+    },
+    
+    onCtxRemove: function() {
+        if (this.contextMenu.contextNode) {
+            this.filterPanel.removeFilterPanel(this.contextMenu.contextNode.id);
+        }
+    },
+    
     onAfterRender: function() {
         this.onFilterPanelActivate(this.filterPanel, this.filterPanel.activeFilterPanel);
-        this.getRootNode().collapse();
+//        this.getRootNode().collapse();
+    },
+    
+    /**
+     * called when the text of a noded changed
+     * 
+     * @param {Ext.tree.TreeNode} node
+     * @param {String} text
+     * @param {String} oldText
+     */
+    onNodeTextChange: function(node, text, oldText) {
+        if (node.attributes && node.attributes.filterPanel) {
+            node.attributes.filterPanel.setTitle(text);
+        }
+    },
+    
+    /**
+     * called when a node got inserted to this tree
+     * 
+     * @param {Ext.tree.TreePanel} tree
+     * @param {Ext.tree.TreeNode} parent
+     * @param {Ext.tree.TreeNode} node
+     */
+    onNodeInsert: function(tree, parent, node) {
+        
+        var clickEl = Ext.EventObject.getTarget('.x-tree-node-el', 10),
+            isUserActionInsert = clickEl && Ext.fly(clickEl, '_treeEvents').getAttribute('tree-node-id', 'ext') == 'addFilterPanel' ? true : false,
+            nodeCount = this.getRootNode().childNodes.length;
+        
+        // expand this panel if more than 2 childnodes (initial + add)
+        if (nodeCount > 2 && this.collapsed) {
+            this.expand();
+        }
+            
+        // start editor for new node (if initialted by user)
+        if (isUserActionInsert) {
+            this.editor.triggerEdit.defer(100, this.editor, [node]);
+        }
     },
     
     /**
@@ -63,7 +148,10 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @param {Tine.widgets.grid.filterToolbar} filterPanel
      */
     onFilterPanelAdded: function(filterToolbar, filterPanel) {
-        this.getRootNode().appendChild(this.createNode(filterPanel));
+//        this.getRootNode().appendChild(this.createNode(filterPanel));
+//        var newNode = this.createNode(filterPanel);
+//        newNode
+        this.getRootNode().insertBefore(this.createNode(filterPanel), this.getNodeById('addFilterPanel'));
         filterPanel.on('titlechange', this.onFilterPanelTitleChange, this);
     },
     
@@ -97,7 +185,7 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
     },
     
     /**
-     * called when a filterPanel gets activated
+     * called when a filterPanel title changed
      * 
      * @param {Tine.widgets.grid.filterToolbar} filterPanel
      * @param {String} text
@@ -108,6 +196,13 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
             this.suspendEvents();
             node.setText(text);
             this.resumeEvents();
+        }
+    },
+    
+    onBeforeClick: function(node) {
+        if (node.id == 'addFilterPanel') {
+            this.onAddFilterPanel();
+            return false;
         }
     },
     
