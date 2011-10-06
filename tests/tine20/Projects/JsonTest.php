@@ -218,7 +218,7 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("ext-comp-1209", $result['filter'][0]['filters'][1]['id']);
         $this->assertEquals("filter1", $result['filter'][0]['filters'][0]['label']);
         $this->assertEquals("filter2", $result['filter'][0]['filters'][1]['label']);
-//        $this->assertEquals("statusfilter", $result['filter'][0]['filters'][0][0][4]['label']);
+        $this->assertEquals("statusfilter", $result['filter'][0]['filters'][0]['filters'][1]['label']);
     }
     
     /************ protected helper funcs *************/

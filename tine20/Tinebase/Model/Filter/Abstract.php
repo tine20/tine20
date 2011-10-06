@@ -47,6 +47,11 @@ abstract class Tinebase_Model_Filter_Abstract
     protected $_id = NULL;
     
     /**
+     * @var string filter label [optional]
+     */
+    protected $_label = NULL;
+    
+    /**
      * @var array special options
      */
     protected $_options = NULL;
@@ -99,6 +104,9 @@ abstract class Tinebase_Model_Filter_Abstract
         
         if (isset($data['id'])) {
             $this->setId($data['id']);
+        }
+        if (isset($data['label'])) {
+            $this->setLabel($data['label']);
         }
     }
     
@@ -188,6 +196,16 @@ abstract class Tinebase_Model_Filter_Abstract
     }
 
     /**
+     * set label
+     *
+     * @param string $_label
+     */
+    public function setLabel($_label)
+    {
+        $this->_label = $_label;
+    }
+    
+    /**
      * gets value
      *
      * @return  mixed 
@@ -253,6 +271,9 @@ abstract class Tinebase_Model_Filter_Abstract
 
         if ($this->_id) {
             $result['id'] = $this->_id;
+        }
+        if ($this->_label) {
+            $result['label'] = $this->_label;
         }
         
         return $result;
