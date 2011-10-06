@@ -222,21 +222,23 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     protected function _createForeignRecordFilterFromArray($_filterData)
     {
+        $filterData = $_filterData;
+        
+        $filterData['value'] = $_filterData['value']['filters'];
+        $filterData['options'] = array(
+            'isGeneric'         => TRUE
+        );
+        
         switch ($_filterData['value']['linkType']) {
             case 'relation':
                 $modelName = $this->_getModelNameFromLinkInfo($_filterData['value'], 'modelName');
-                
-                $filter = new Tinebase_Model_Filter_Relation($_filterData['field'], $_filterData['operator'], $_filterData['value']['filters'], array(
-                    'related_model'     => $modelName,
-                    'isGeneric'         => TRUE
-                ));
+                $filterData['options']['related_model'] = $modelName;
+                $filter = new Tinebase_Model_Filter_Relation($filterData);
                 break;
 
             case 'foreignId':
                 $modelName = $this->_getModelNameFromLinkInfo($_filterData['value'], 'filterName');
-                $filter = new $modelName($_filterData['field'], $_filterData['operator'], $_filterData['value']['filters'], array(
-                    'isGeneric'         => TRUE
-                ));
+                $filter = new $modelName($filterData);
                 
                 // @todo maybe it will be possible to add a generic/implicite foreign id filter 
                 // .... but we have to solve the problem of the foreign id field first
@@ -252,10 +254,6 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Skipping filter (foreign record filter syntax problem) -> ' 
                     . $this->_className . ' with filter data: ' . print_r($_filterData, TRUE));
                 return;
-        }
-        
-        if (isset($_filterData['id'])) {
-            $filter->setId($_filterData['id']);
         }
         
         $this->addFilter($filter);
@@ -309,10 +307,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         
         } elseif (array_key_exists('filter', $fieldModel) && array_key_exists('value', $_filterData)) {
             // create a 'single' filter
-            $filter = $this->createFilter($_filterData['field'], $_filterData['operator'], $_filterData['value']);
-            if (isset($_filterData['id'])) {
-                $filter->setId($_filterData['id']);
-            }
+            $filter = $this->createFilter($_filterData);
             $this->addFilter($filter, TRUE);
         
         } elseif (array_key_exists('custom', $fieldModel) && $fieldModel['custom'] == true) {
@@ -386,31 +381,51 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     /**
      * creates a new filter based on the definition of this filtergroup
      *
-     * @param  string $_field
+     * @param  string|array $_fieldOrData
      * @param  string $_operator
      * @param  mixed  $_value
+     * @param  array  $_additionalData
      * @return Tinebase_Model_Filter_Abstract
+     * 
+     * @todo remove legacy code + obsolete params sometimes
      */
-    public function createFilter($_field, $_operator, $_value)
+    public function createFilter($_fieldOrData, $_operator = NULL, $_value = NULL)
     {
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating filter: $_field $_operator " . print_r($_value, true));
-        
-        if (empty($this->_filterModel[$_field])) {
-            throw new Tinebase_Exception_NotFound('no such field (' . $_field . ') in this filter model');
+        if (is_array($_fieldOrData)) {
+            $data = $_fieldOrData;
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' 
+                . 'Using deprecated function syntax. Please pass all filter data in one array.');
+            
+            $data = array(
+                'field'     => $_fieldOrData,
+                'operator'  => $_operator,
+                'value'     => $_value,
+            );
+        }
+
+        foreach (array('field', 'operator', 'value') as $requiredKey) {
+            if (! isset($data[$requiredKey])) {
+                throw new Tinebase_Exception_InvalidArgument('Filter object needs ' . $requiredKey);
+            }
         }
         
-        $definition = $this->_filterModel[$_field];
+        if (empty($this->_filterModel[$data['field']])) {
+            throw new Tinebase_Exception_NotFound('no such field (' . $data['field'] . ') in this filter model');
+        }
+        
+        $definition = $this->_filterModel[$data['field']];
             
         if (isset($definition['custom']) && $definition['custom']) {
             $this->_customData[] = array(
-                'field'     => $_field,
-                'operator'  => $_operator,
-                'value'     => $_value
+                'field'     => $data['field'],
+                'operator'  => $data['operator'],
+                'value'     => $data['value']
             );
             $filter = NULL;
         } else {
-            $options = array_merge($this->_options, isset($definition['options']) ? (array)$definition['options'] : array());
-            $filter = new $definition['filter']($_field, $_operator, $_value, $options);
+            $data['options'] = array_merge($this->_options, isset($definition['options']) ? (array)$definition['options'] : array());
+            $filter = new $definition['filter']($data);
         }
             
         return $filter;

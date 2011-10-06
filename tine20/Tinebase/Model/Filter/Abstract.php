@@ -63,7 +63,7 @@ abstract class Tinebase_Model_Filter_Abstract
     /**
      * get a new single filter action
      *
-     * @param string $_fieldOrData
+     * @param string|array $_fieldOrData
      * @param string $_operator
      * @param mixed  $_value    
      * @param array  $_options
@@ -75,7 +75,7 @@ abstract class Tinebase_Model_Filter_Abstract
         if (is_array($_fieldOrData)) {
             $data = $_fieldOrData;
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' 
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' 
                 . 'Using deprecated constructor syntax. Please pass all filter data in one array.');
             
             $data = array(
@@ -92,10 +92,14 @@ abstract class Tinebase_Model_Filter_Abstract
             }
         }
         
-        $this->_setOptions(isset($data['options']) ? $_options : array());
+        $this->_setOptions((isset($data['options'])) ? $data['options'] : array());
         $this->setField($data['field']);
         $this->setOperator($data['operator']);
         $this->setValue($data['value']);
+        
+        if (isset($data['id'])) {
+            $this->setId($data['id']);
+        }
     }
     
     /**
