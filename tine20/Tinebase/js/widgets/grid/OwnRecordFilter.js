@@ -11,10 +11,10 @@
 Tine.widgets.grid.OwnRecordFilter = Ext.extend(Tine.widgets.grid.ForeignRecordFilter, {
     
     isGeneric: false,
-    field: 'ownRecord',
 
     initComponent: function() {
         this.label = this.ftb.generateTitle();
+        this.field = this.ownRecordClass.getMeta('idProperty');
         this.operators = ['definedBy'];
         this.defaultOperator = 'definedBy';
         
