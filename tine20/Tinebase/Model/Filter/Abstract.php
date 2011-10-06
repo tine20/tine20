@@ -63,17 +63,39 @@ abstract class Tinebase_Model_Filter_Abstract
     /**
      * get a new single filter action
      *
-     * @param string $_field
+     * @param string $_fieldOrData
      * @param string $_operator
      * @param mixed  $_value    
      * @param array  $_options
+     * 
+     * @todo remove legacy code + obsolete params sometimes
      */
-    public function __construct($_field, $_operator, $_value, array $_options = array())
+    public function __construct($_fieldOrData, $_operator = NULL, $_value = NULL, array $_options = array())
     {
-        $this->_setOptions($_options);
-        $this->setField($_field);
-        $this->setOperator($_operator);
-        $this->setValue($_value);
+        if (is_array($_fieldOrData)) {
+            $data = $_fieldOrData;
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' 
+                . 'Using deprecated constructor syntax. Please pass all filter data in one array.');
+            
+            $data = array(
+                'field'     => $_fieldOrData,
+                'operator'  => $_operator,
+                'value'     => $_value,
+                'options'   => $_options,
+            );
+        }
+
+        foreach (array('field', 'operator', 'value') as $requiredKey) {
+            if (! isset($data[$requiredKey])) {
+                throw new Tinebase_Exception_InvalidArgument('Filter object needs ' . $requiredKey);
+            }
+        }
+        
+        $this->_setOptions(isset($data['options']) ? $_options : array());
+        $this->setField($data['field']);
+        $this->setOperator($data['operator']);
+        $this->setValue($data['value']);
     }
     
     /**
