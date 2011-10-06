@@ -34,6 +34,12 @@ Tine.Projects.ProjectAttendeeFilter = Ext.extend(Tine.widgets.grid.ForeignRecord
      */
     ownField: 'contact',
     
+    initComponent: function() {
+        this.label = this.app.i18n._('Attendee');
+        
+        Tine.Projects.ProjectAttendeeFilter.superclass.initComponent.call(this);
+    },
+    
     /**
      * get subfilter models
      * @return Array of filter models

@@ -800,7 +800,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'from'                  => $this->_account->from . ' <' . $this->_account->email . '>',
             'days'                  => 7,
             'enabled'               => TRUE,
-            'reason'                => "\n<html><body><h1>unittest vacation message</h1></body></html>",
+            'reason'                => "\n<html><body><h1>unittest vacation&nbsp;message</h1></body></html>",
             'mime'                  => NULL,
         );
         
@@ -1043,12 +1043,16 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             
             $_sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
             if (! in_array('mime', $_sieveBackend->capability())) {
-                $_sieveData['reason'] = 'unittest vacation message';
+                $_sieveData['reason'] = Felamimail_Message::convertContentType(Zend_Mime::TYPE_HTML, Zend_Mime::TYPE_TEXT, $_sieveData['reason'], "\r");
+                $_sieveData['reason'] = preg_replace('/\n/', "", $_sieveData['reason']);
             }
             
             if (preg_match('/dbmail/i', $_sieveBackend->getImplementation())) {
                 $translate = Tinebase_Translation::getTranslation('Felamimail');
-                $this->assertEquals($translate->_('Out of Office reply'), $resultSet['subject']);
+                $this->assertEquals(sprintf(
+                    $translate->_('Out of Office reply from %1$s'), Tinebase_Core::getUser()->accountFullName), 
+                    $resultSet['subject']
+                );
             } else {
                 $this->assertEquals($_sieveData['subject'], $resultSet['subject']);
             }

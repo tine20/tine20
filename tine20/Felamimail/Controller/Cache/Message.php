@@ -684,10 +684,17 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $result = $this->_addMessageToCache($messageToCache);
         
         if ($result !== FALSE) { 
-            if ($messageToCache->received->isLater(Tinebase_DateTime::now()->subDay(1))) {
+            if ($messageToCache->received->isLater(Tinebase_DateTime::now()->subDay(3))) {
                 // only cache message headers if received during the last day
                 $cacheId = 'getMessageHeaders' . $result->getId();
-                Tinebase_Core::getCache()->save($_message['header'], $cacheId, array('getMessageHeaders'));            
+                Tinebase_Core::getCache()->save($_message['header'], $cacheId, array('getMessageHeaders'));      
+
+                // prefetch body to cache
+                $account = Felamimail_Controller_Account::getInstance()->get($_folder->account_id);
+                $mimeType = ($account->display_format == Felamimail_Model_Account::DISPLAY_HTML || $account->display_format == Felamimail_Model_Account::DISPLAY_CONTENT_TYPE)
+                    ? Zend_Mime::TYPE_HTML
+                    : Zend_Mime::TYPE_TEXT;
+                Felamimail_Controller_Message::getInstance()->getMessageBody($messageToCache, null, $mimeType, $account);
             }
             
             if ($_updateFolderCounter == TRUE) {

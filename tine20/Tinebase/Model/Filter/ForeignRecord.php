@@ -51,7 +51,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         $this->_foreignIds = NULL;
         $this->_value = (array)$_value;
         // @todo move this to another place?
-        $this->_filterGroup = $this->_getFilterGroup();
+        $this->_setFilterGroup();
         $this->_controller = $this->_getController();
     }
     
@@ -60,10 +60,9 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
      * 
      * @return Tinebase_Model_Filter_FilterGroup
      */
-    protected function _getFilterGroup()
+    protected function _setFilterGroup()
     {
-        return ($this->_filterGroup !== NULL) ? $this->_filterGroup 
-            : new $this->_options['filtergroup']($this->_value, $this->_operator, $this->_options);
+        $this->_filterGroup = new $this->_options['filtergroup']($this->_value, $this->_operator, $this->_options);
     }
     
     /**
@@ -100,6 +99,10 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
             'operator'  => $this->_operator,
         );
         
+        if ($this->_id) {
+            $result['id'] = $this->_id;
+        }
+        
         $filters = $this->_getForeignFiltersForToArray($_valueToJson);
         
         if ($this->_options && $this->_options['isGeneric']) {
@@ -122,6 +125,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
      */
     protected function _getForeignFiltersForToArray($_valueToJson)
     {
+        $result = array();
         // we can't do this as we do not want the condition/filters syntax
         // $result = $this->_filterGroup->toArray($_valueToJson);
         $this->_filterGroupToArrayWithoutCondition($result, $this->_filterGroup, $_valueToJson);

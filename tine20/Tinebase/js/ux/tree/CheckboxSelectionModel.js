@@ -57,6 +57,12 @@ Ext.extend(Ext.ux.tree.CheckboxSelectionModel, Ext.util.Observable, {
     activeNode: null,
     
     /**
+     * @cfg {Boolean} defaultValue
+     * default check value
+     */
+    defaultValue: false,
+    
+    /**
      * activate given node
      * 
      * @param {Ext.tree.TreeNode} node
@@ -132,7 +138,7 @@ Ext.extend(Ext.ux.tree.CheckboxSelectionModel, Ext.util.Observable, {
     },
     
     onBeforeAppend: function(tree, parent, node) {
-        node.attributes.checked = false;
+        node.attributes.checked = this.defaultValue;
     },
     
     onCheckChange: function(node, checked) {

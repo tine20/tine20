@@ -60,14 +60,10 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
      * 
      * @return Tinebase_Model_Filter_FilterGroup
      */
-    protected function _getFilterGroup()
+    protected function _setFilterGroup()
     {
-        if ($this->_filterGroup === NULL) {
-            $filters = $this->_getRelationFilters();
-            $this->_filterGroup = new $this->_options['filtergroup']($filters, $this->_operator);
-        }
-            
-        return $this->_filterGroup;
+        $filters = $this->_getRelationFilters();
+        $this->_filterGroup = new $this->_options['filtergroup']($filters, $this->_operator);
     }
     
     /**
@@ -96,28 +92,59 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
      */
     public function appendFilterSql($_select, $_backend)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
+            . 'Adding Relation filter: ' . $_backend->getModelName() . ' <-> ' . $this->_options['related_model']);
+        
+        $this->_resolveForeignIds();
+        $ownIds = $this->_getOwnIds($_backend->getModelName());
+        
+        $idField = array_key_exists('idProperty', $this->_options) ? $this->_options['idProperty'] : 'id';
+        $db = $_backend->getAdapter();
+        $qField = $db->quoteIdentifier($_backend->getTableName() . '.' . $idField);
+        $_select->where($db->quoteInto("$qField IN (?)", empty($ownIds) ? ' ' : $ownIds));
+    }
+    
+    /**
+     * resolve foreign ids
+     */
+    protected function _resolveForeignIds()
+    {
         if (! is_array($this->_foreignIds)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' foreign filter values: ' 
+                . print_r($this->_filterGroup->toArray(), TRUE));
             $this->_foreignIds = $this->_controller->search($this->_filterGroup, NULL, FALSE, TRUE);
         }
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' foreign ids: ' 
+            . print_r($this->_foreignIds, TRUE));
+    }
+    
+    /**
+     * returns own ids defined by relation filter
+     * 
+     * @param string $_modelName
+     * @return array
+     */
+    protected function _getOwnIds($_modelName)
+    {
         $relationFilter = new Tinebase_Model_RelationFilter(array(
-            array('field' => 'own_model',     'operator' => 'equals', 'value' => $_backend->getModelName()),
+            array('field' => 'own_model',     'operator' => 'equals', 'value' => $_modelName),
             array('field' => 'related_model', 'operator' => 'equals', 'value' => $this->_options['related_model']),
             array('field' => 'related_id',    'operator' => 'in'    , 'value' => $this->_foreignIds)
         ));
         
         if ($this->_relationTypeFilter) {
-            $relationFilter->addFilter($relationFilter->createFilter('type', $this->_relationTypeFilter['operator'], $this->_relationTypeFilter['value']));
+            $typeValue = $this->_relationTypeFilter['value'];
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
+                . 'Adding Relation type filter: ' . ((is_array($typeValue)) ? implode(',', $typeValue) : $typeValue));
+            $relationFilter->addFilter($relationFilter->createFilter('type', $this->_relationTypeFilter['operator'], $typeValue));
         }
-        
         $ownIds = Tinebase_Relations::getInstance()->search($relationFilter, NULL)->own_id;
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' own ids: ' 
+            . print_r($ownIds, TRUE));
         
-        $idField = array_key_exists('idProperty', $this->_options) ? $this->_options['idProperty'] : 'id';
-        
-        $db = $_backend->getAdapter();
-        $qField = $db->quoteIdentifier($_backend->getTableName() . '.' . $idField);
-        
-        $_select->where($db->quoteInto("$qField IN (?)", empty($ownIds) ? ' ' : $ownIds));
+        return $ownIds;
     }
     
     /**
