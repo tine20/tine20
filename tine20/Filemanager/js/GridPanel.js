@@ -82,12 +82,13 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.gridConfig.cm = this.getColumnModel();
 
         this.defaultFilters = [
-                               {field: 'query', operator: 'contains', value: ''},
-                               {field: 'path', operator: 'equals', value: '/'}
-                               ];
+            {field: 'query', operator: 'contains', value: ''},
+            {field: 'path', operator: 'equals', value: '/'}
+        ];
 
         this.filterToolbar = this.filterToolbar || this.getFilterToolbar();
         this.filterToolbar.getQuickFilterPlugin().criteriaIgnores.push({field: 'path'});
+        
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
         this.plugins.push({
