@@ -394,6 +394,10 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         return this.quickFilterGroup;
     },
     
+    getQuickFilterPlugin: function() {
+        return this;
+    },
+    
     getValue: function() {
         var quickFilterValue = this.quickFilter.getValue();
         
