@@ -202,6 +202,30 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * testUpdatePersistentFilterIdsAndLabel
+     * -> id should not be saved, label must be saved
+     */
+    public function testUpdatePersistentFilterIdsAndLabel()
+    {
+        $favoriteId = Tinebase_PersistentFilter::getInstance()->getPreferenceValues('Projects', NULL, 'All my projects');
+        $favorite = Tinebase_PersistentFilter::getInstance()->get($favoriteId);
+        $favorite->name = 'testfilter';
+        unset($favorite->id);
+        // add filter with id and label
+        $favorite->filters->addFilter(new Tinebase_Model_Filter_Text(array(
+            'field'     => 'title',
+            'operator'  => 'equals',
+            'value'     => 'lala',
+            'id'        => 'somenonpersistentid',
+            'label'     => 'somepersistentlabel',
+        )));
+        $updatedFilter = Tinebase_PersistentFilter::getInstance()->create($favorite);
+        $filterArray = $updatedFilter->filters->toArray();
+        $this->assertEquals('somepersistentlabel', $filterArray[2]['label']);
+        $this->assertTrue(! isset($filterArray[2]['id']));
+    }
+        
+    /**
      * testFilterIds
      */
     public function testFilterIdsAndLabel()

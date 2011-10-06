@@ -92,7 +92,7 @@ abstract class Tinebase_Model_Filter_Abstract
         }
 
         foreach (array('field', 'operator', 'value') as $requiredKey) {
-            if (! isset($data[$requiredKey])) {
+            if (! array_key_exists($requiredKey, $data)) {
                 throw new Tinebase_Exception_InvalidArgument('Filter object needs ' . $requiredKey);
             }
         }
@@ -193,6 +193,14 @@ abstract class Tinebase_Model_Filter_Abstract
     public function setId($_id)
     {
         $this->_id = $_id;
+    }
+    
+    /**
+     * remove id of filter object
+     */
+    public function removeId()
+    {
+        $this->_id = NULL;
     }
 
     /**

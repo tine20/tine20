@@ -415,7 +415,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         }
 
         foreach (array('field', 'operator', 'value') as $requiredKey) {
-            if (! isset($data[$requiredKey])) {
+            if (! array_key_exists($requiredKey, $data)) {
                 throw new Tinebase_Exception_InvalidArgument('Filter object needs ' . $requiredKey);
             }
         }
@@ -590,6 +590,19 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             }
         } else {
             $this->_removeFilter($_field);
+        }
+    }
+    
+    /**
+     * remove id of filter object
+     * 
+     * @param boolean $_recursive
+     */
+    public function removeId($_recursive = TRUE)
+    {
+        $this->_id = NULL;
+        foreach ($this->_filterObjects as $filter) {
+            $filter->removeId();
         }
     }
     
