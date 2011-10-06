@@ -66,11 +66,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
         $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
         
         $card = new self($contact);
-        
-        // this belongs to DAV_Server, but is currently not supported
-        header('ETag: ' . $card->getETag());
-        header('Location: /' . $card->getName());
-        
+                
         return $card;
     }
     

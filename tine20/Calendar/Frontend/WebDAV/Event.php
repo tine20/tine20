@@ -65,10 +65,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         
         $vevent = new self($event);
         
-        // this belongs to DAV_Server, but is currently not supported
-        header('ETag: '      . $vevent->getETag());
-        header('Location: /' . $vevent->getName());
-        
         return $vevent;
     }
     

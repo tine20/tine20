@@ -60,6 +60,10 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
         $objectClass = $this->_application->name . '_Frontend_WebDAV_' . $this->_model;
         
         $object = $objectClass::create($this->_container, $vobjectData);
+        
+        // this belongs to DAV_Server, but is currently not supported
+        header('ETag: ' . $object->getETag());
+        header('Location: /' . $object->getName());
     }
     
     /**
