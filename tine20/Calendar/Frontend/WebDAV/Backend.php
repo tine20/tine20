@@ -81,12 +81,6 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $principalUri: ' . $principalUri . ' $calendarUri: ' . $calendarUri . ' $properties' . print_r($properties, TRUE));
         
-        $container = new Tinebase_Model_Container(array(
-            'name'              => $properties['{DAV:}displayname'],
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'backend'           => 'Sql',
-        ));
         
         // NOTE: at the moment we only support a predefined set of colors
 //        if (array_key_exists('{http://apple.com/ns/ical/}calendar-color', $properties)) {
@@ -95,17 +89,20 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract
 //        }
         
         $principalParts = explode('/', $principalUri);
+        
         if (count($principalParts) == 2) {
-            $owner = Tinebase_User::getInstance()->getUserByLoginName($principalParts[1]);
-            $container = Tinebase_Container::getInstance()->addContainer($container, NULL, FALSE, $owner->getId());
+            $container = new Tinebase_Model_Container(array(
+                'name'              => $properties['{DAV:}displayname'],
+                'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+                'owner_id'          => Tinebase_User::getInstance()->getUserByLoginName($principalParts[1]),
+                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+                'backend'           => 'Sql',
+            ));
+            
+            $container = Tinebase_Container::getInstance()->addContainer($container);
         } else {
             throw new Sabre_DAV_Exception_PreconditionFailed('unsupported pricipalUri');
         }
-        
-//        // tmp save in session
-//        $sessionUriMap = (array) Tinebase_Core::getSession()->CalDAVUriMap;
-//        $sessionUriMap[$calendarUri] = $container->getId();
-//        Tinebase_Core::getSession()->CalDAVUriMap = $sessionUriMap;
         
         return $container->getId();
     }

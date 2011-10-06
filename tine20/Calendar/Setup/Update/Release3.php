@@ -379,9 +379,10 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
             $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
                 'name'              => $resource->name,
                 'type'              => Tinebase_Model_Container::TYPE_SHARED,
+                'owner_id'          => $resource->getId(),
                 'backend'           => 'Sql',
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            )), NULL, TRUE, $resource->getId());
+            )), NULL, TRUE);
             
             // remove default admin
             $grants = Tinebase_Container::getInstance()->setGrants($container->getId(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(

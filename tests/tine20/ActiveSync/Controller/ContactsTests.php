@@ -87,6 +87,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
 	        $containerWithSyncGrant = new Tinebase_Model_Container(array(
 	            'name'              => 'ContainerWithSyncGrant',
 	            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+	            'owner_id'          => Tinebase_Core::getUser(),
 	            'backend'           => 'Sql',
 	            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId()
 	        ));
@@ -113,6 +114,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
             $containerWithoutSyncGrant = new Tinebase_Model_Container(array(
                 'name'              => 'ContainerWithoutSyncGrant',
                 'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+            	'owner_id'          => Tinebase_Core::getUser(),
                 'backend'           => 'Sql',
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId()
             ));

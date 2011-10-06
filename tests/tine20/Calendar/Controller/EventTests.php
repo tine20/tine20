@@ -271,6 +271,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $testCal = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'           => 'PHPUnit test calendar',
             'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
+        	'owner_id'       => Tinebase_Core::getUser(),
             'backend'        => $this->_backend->getType(),
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
         ), true));

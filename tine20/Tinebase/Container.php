@@ -93,12 +93,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $_container->isValid(TRUE);
         
-        if (!empty($_container->owner_id)) {
-            $accountId = $_container->owner_id instanceof Tinebase_Model_User ? $_container->owner_id->getId() : $_container->owner_id;
-        } else {
-            $accountId = Tinebase_Core::getUser()->getId();
-        }
-        
         if($_ignoreAcl !== TRUE) {
             switch($_container->type) {
                 case Tinebase_Model_Container::TYPE_PERSONAL:
@@ -132,6 +126,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             }
         }
         
+        if (!empty($_container->owner_id)) {
+            $accountId = $_container->owner_id instanceof Tinebase_Model_User ? $_container->owner_id->getId() : $_container->owner_id;
+        } else {
+            $accountId = Tinebase_Core::getUser()->getId();
+        }
         
         if($_grants === NULL || count($_grants) == 0) {
             $creatorGrants = array(

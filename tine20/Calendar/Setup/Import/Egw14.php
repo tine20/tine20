@@ -664,12 +664,13 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
                 $container = new Tinebase_Model_Container(array(
                     'name'           => $privateString,
                     'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
+                    'owner_id'       => $_userId,
                     'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
                     'backend'        => 'sql',
                 ));
                 
                 // NOTE: if no grants are given, container class gives all grants to accountId
-                $privateCalendar = Tinebase_Container::getInstance()->addContainer($container, NULL, TRUE, $_userId);
+                $privateCalendar = Tinebase_Container::getInstance()->addContainer($container, NULL, TRUE);
             } else {
                 $privateCalendar = $personalCalendars->getFirstRecord();
             }

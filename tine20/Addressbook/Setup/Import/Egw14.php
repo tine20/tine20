@@ -83,6 +83,7 @@ class Adressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
                     $container = new Tinebase_Model_Container(array(
                         'name' => 'Personal Contacts',
                         'type' => Tinebase_Model_Container::TYPE_PERSONAL,      
+                        'owner_id' => Tinebase_Core::getUser(),
                         'backend' => 'Sql',
                         'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),                  
                     ));             

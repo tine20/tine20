@@ -242,6 +242,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
 	        $containerWithSyncGrant = new Tinebase_Model_Container(array(
 	            'name'              => 'ContainerWithSyncGrant-' . $this->_applicationName,
 	            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+	        	'owner_id'          => Tinebase_Core::getUser(),
 	            'backend'           => 'Sql',
 	            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
 	        ));
@@ -289,6 +290,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
             $containerWithoutSyncGrant = new Tinebase_Model_Container(array(
                 'name'              => 'ContainerWithoutSyncGrant-' . $this->_applicationName,
                 'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+            	'owner_id'          => Tinebase_Core::getUser(),
                 'backend'           => 'Sql',
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
             ));

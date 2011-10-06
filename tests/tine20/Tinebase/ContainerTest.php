@@ -55,6 +55,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->objects['initialContainer'] = $this->_instance->addContainer(new Tinebase_Model_Container(array(
             'name'              => 'tine20phpunit',
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+        	'owner_id'          => Tinebase_Core::getUser(),
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
         )));
