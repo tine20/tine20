@@ -48,14 +48,13 @@ class Addressbook_Controller_Frontend_WebDAV_ContainerTest extends PHPUnit_Frame
     protected function setUp()
     {
         $this->objects['initialContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-                    'name'              => Tinebase_Record_Abstract::generateUID(),
-                    'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-                    'backend'           => 'Sql',
-                    'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'name'              => Tinebase_Record_Abstract::generateUID(),
+            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+            'backend'           => 'Sql',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
         )));
+        
         $this->objects['containerToDelete'][] = $this->objects['initialContainer'];
-        
-        
         
         return;
         
@@ -219,6 +218,12 @@ class Addressbook_Controller_Frontend_WebDAV_ContainerTest extends PHPUnit_Frame
         $this->assertEquals($this->objects['initialContainer']->getId(), $result);
     }
     
+    public function testGetChildren()
+    {
+        $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/contacts.vcf', 'r');
+        
+        $contact = Addressbook_Frontend_WebDAV_Contact::create($this->objects['initialContainer'], $vcardStream);
+    }
     /**
      * test getProperties
      */
