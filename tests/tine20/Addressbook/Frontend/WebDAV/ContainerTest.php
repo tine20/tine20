@@ -56,116 +56,7 @@ class Addressbook_Controller_Frontend_WebDAV_ContainerTest extends PHPUnit_Frame
         
         $this->objects['containerToDelete'][] = $this->objects['initialContainer'];
         
-        return;
-        
-        $GLOBALS['Addressbook_Controller_ListTest'] = array_key_exists('Addressbook_Controller_ListTest', $GLOBALS) ? $GLOBALS['Addressbook_ListControllerTest'] : array();
-        
-        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-            Zend_Registry::get('currentAccount'), 
-            'Addressbook', 
-            Zend_Registry::get('currentAccount'), 
-            Tinebase_Model_Grants::GRANT_EDIT
-        );
-        
-        $container = $personalContainer[0];
-
-        $this->objects['contact1'] = new Addressbook_Model_Contact(array(
-            'adr_one_countryname'   => 'DE',
-            'adr_one_locality'      => 'Hamburg',
-            'adr_one_postalcode'    => '24xxx',
-            'adr_one_region'        => 'Hamburg',
-            'adr_one_street'        => 'Pickhuben 4',
-            'adr_one_street2'       => 'no second street',
-            'adr_two_countryname'   => 'DE',
-            'adr_two_locality'      => 'Hamburg',
-            'adr_two_postalcode'    => '24xxx',
-            'adr_two_region'        => 'Hamburg',
-            'adr_two_street'        => 'Pickhuben 4',
-            'adr_two_street2'       => 'no second street2',
-            'assistent'             => 'Cornelius Weiß',
-            'email'                 => 'unittests@tine20.org',
-            'email_home'            => 'unittests@tine20.org',
-            'note'                  => 'Bla Bla Bla',
-            'container_id'          => $container->getId(),
-            'role'                  => 'Role',
-            'title'                 => 'Title',
-            'url'                   => 'http://www.tine20.org',
-            'url_home'              => 'http://www.tine20.com',
-            'n_family'              => 'Contact1',
-            'n_fileas'              => 'Contact1, List',
-            'n_given'               => 'List',
-            'n_middle'              => 'no middle name',
-            'n_prefix'              => 'no prefix',
-            'n_suffix'              => 'no suffix',
-            'org_name'              => 'Metaways Infosystems GmbH',
-            'org_unit'              => 'Tine 2.0',
-            'tel_assistent'         => '+49TELASSISTENT',
-            'tel_car'               => '+49TELCAR',
-            'tel_cell'              => '+49TELCELL',
-            'tel_cell_private'      => '+49TELCELLPRIVATE',
-            'tel_fax'               => '+49TELFAX',
-            'tel_fax_home'          => '+49TELFAXHOME',
-            'tel_home'              => '+49TELHOME',
-            'tel_pager'             => '+49TELPAGER',
-            'tel_work'              => '+49TELWORK',
-        ));
-        $this->objects['contact1'] = Addressbook_Controller_Contact::getInstance()->create($this->objects['contact1']);
-        
-        $this->objects['contact2'] = new Addressbook_Model_Contact(array(
-            'adr_one_countryname'   => 'DE',
-            'adr_one_locality'      => 'Hamburg',
-            'adr_one_postalcode'    => '24xxx',
-            'adr_one_region'        => 'Hamburg',
-            'adr_one_street'        => 'Pickhuben 4',
-            'adr_one_street2'       => 'no second street',
-            'adr_two_countryname'   => 'DE',
-            'adr_two_locality'      => 'Hamburg',
-            'adr_two_postalcode'    => '24xxx',
-            'adr_two_region'        => 'Hamburg',
-            'adr_two_street'        => 'Pickhuben 4',
-            'adr_two_street2'       => 'no second street2',
-            'assistent'             => 'Cornelius Weiß',
-            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
-            'email'                 => 'unittests@tine20.org',
-            'email_home'            => 'unittests@tine20.org',
-            'note'                  => 'Bla Bla Bla',
-            'container_id'          => $container->getId(),
-            'role'                  => 'Role',
-            'title'                 => 'Title',
-            'url'                   => 'http://www.tine20.org',
-            'url_home'              => 'http://www.tine20.com',
-            'n_family'              => 'Contact2',
-            'n_fileas'              => 'Contact2, List',
-            'n_given'               => 'List',
-            'n_middle'              => 'no middle name',
-            'n_prefix'              => 'no prefix',
-            'n_suffix'              => 'no suffix',
-            'org_name'              => 'Metaways Infosystems GmbH',
-            'org_unit'              => 'Tine 2.0',
-            'tel_assistent'         => '+49TELASSISTENT',
-            'tel_car'               => '+49TELCAR',
-            'tel_cell'              => '+49TELCELL',
-            'tel_cell_private'      => '+49TELCELLPRIVATE',
-            'tel_fax'               => '+49TELFAX',
-            'tel_fax_home'          => '+49TELFAXHOME',
-            'tel_home'              => '+49TELHOME',
-            'tel_pager'             => '+49TELPAGER',
-            'tel_work'              => '+49TELWORK',
-        )); 
-        $this->objects['contact2'] = Addressbook_Controller_Contact::getInstance()->create($this->objects['contact2']);
-        
-        $this->objects['initialList'] = new Addressbook_Model_List(array(
-            'name'	=> 'initial list',
-            'container_id' => $container->getId(),
-            'members' => array($this->objects['contact1'], $this->objects['contact2'])
-        )); 
-        
-        #$this->objects['updatedList'] = new Addressbook_Model_List(array(
-        #    'name'	=> 'updated list',
-        #    'container_id' => $container->getId(),
-        #    'members' => array($this->objects['contact2'], $this->objects['contact2'])
-        #)); 
-            	
+        $this->objects['contactsToDelete'] = array();
     }
 
     /**
@@ -176,6 +67,10 @@ class Addressbook_Controller_Frontend_WebDAV_ContainerTest extends PHPUnit_Frame
      */
     protected function tearDown()
     {
+        foreach ($this->objects['contactsToDelete'] as $contact) {
+            $contact->delete();
+        }
+        
         foreach ($this->objects['containerToDelete'] as $containerId) {
             $containerId = $containerId instanceof Tinebase_Model_Container ? $containerId->getId() : $containerId;
             
@@ -185,13 +80,6 @@ class Addressbook_Controller_Frontend_WebDAV_ContainerTest extends PHPUnit_Frame
                 // do nothing
             }
         }
-        
-        return;
-        
-        Addressbook_Controller_Contact::getInstance()->delete(array(
-            $this->objects['contact1']->getId(),
-            $this->objects['contact2']->getId()
-        ));
     }
     
     /**
@@ -218,12 +106,25 @@ class Addressbook_Controller_Frontend_WebDAV_ContainerTest extends PHPUnit_Frame
         $this->assertEquals($this->objects['initialContainer']->getId(), $result);
     }
     
+    /**
+     * test getChildren
+     */
     public function testGetChildren()
     {
-        $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/contacts.vcf', 'r');
+        $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/sogo_connector.vcf', 'r');
         
         $contact = Addressbook_Frontend_WebDAV_Contact::create($this->objects['initialContainer'], $vcardStream);
+        
+        $this->objects['contactsToDelete'][] = $contact;
+        
+        $container = new Addressbook_Frontend_WebDAV_Container($this->objects['initialContainer']);
+        
+        $children = $container->getChildren();
+        
+        $this->assertEquals(1, count($children));
+        $this->assertInstanceOf('Addressbook_Frontend_WebDAV_Contact', $children[0]);
     }
+    
     /**
      * test getProperties
      */
