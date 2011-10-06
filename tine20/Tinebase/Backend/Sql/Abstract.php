@@ -694,10 +694,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                     $this->_removeColFromSelect($_select, $cols, $foreignColumn);
                     
                     try {
-                        $name = isset($join['name']) ? $join['name'] : $join['table'];
                         $_select->joinLeft(
-                            /* table  */ array($name => $this->_tablePrefix . $join['table']), 
-                            /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.' . $joinId) . ' = ' . $this->_db->quoteIdentifier($name . '.' . $join['joinOn']),
+                            /* table  */ array($join['table'] => $this->_tablePrefix . $join['table']), 
+                            /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.' . $joinId) . ' = ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['joinOn']),
                             /* select */ $selectArray
                         );
                         // need to add it to cols to prevent _removeColFromSelect from removing it
