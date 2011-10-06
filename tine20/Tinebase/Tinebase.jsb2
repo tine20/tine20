@@ -460,6 +460,10 @@
           "path": "js/widgets/grid/"
         },
         {
+          "text": "OwnRecordFilter.js",
+          "path": "js/widgets/grid/"
+        },
+        {
           "text": "QuickaddGridPanel.js",
           "path": "js/widgets/grid/"
         },

@@ -412,17 +412,21 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     },
     
     setValue: function(value) {
-        // scrape out condition on root level -> this whipes implict filters
+        
+        // NOTE: value is always an array representing a filterGroup with condition AND (server limitation)!
+        //       so we need to route "alternate criterias" (OR on root level) through this filterGroup for transport
+        //       and scrape them out here -> this also means we whipe all other root level filters (could only be implicit once)
+        var alternateCriterias = false;
         Ext.each(value, function(filterData) {
-            if (filterData.condition) {
-                value = filterData.condition == 'AND' ? filterData.filters : filterData;
+            if (filterData.condition && filterData.condition == 'OR') {
+                value = filterData.filters;
+                alternateCriterias = true;
                 return false;
             }
         }, this);
         
         
-        // single filter sheets
-        if (! value.condition) {
+        if (! alternateCriterias) {
             // reset criterias
 //            this.criteriaCount = 0;
 //            this.activeFilterPanel.setTitle(String.format(_('Criteria {0}'), ++this.criteriaCount));
@@ -447,11 +451,11 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         } 
         
         // OR condition on root level
-        else if(value.condition == 'OR') {
+        else {
             var keepFilterPanels = [],
                 activeFilterPanel = this.activeFilterPanel;
             
-            Ext.each(value.filters, function(filterData) {
+            Ext.each(value, function(filterData) {
                 var filterPanel;
                 
                 // refresh existing filter panel
