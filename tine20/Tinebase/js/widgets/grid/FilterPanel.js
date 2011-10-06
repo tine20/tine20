@@ -404,7 +404,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         var filters = [];
         for (var id in this.filterPanels) {
             if (this.filterPanels.hasOwnProperty(id) && this.filterPanels[id].isActive) {
-                filters.push({'condition': 'AND', 'filters': this.filterPanels[id].getValue(), 'id': id});
+                filters.push({'condition': 'AND', 'filters': this.filterPanels[id].getValue(), 'id': id, label: this.filterPanels[id].title});
             }
         }
         
@@ -452,18 +452,25 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
                 activeFilterPanel = this.activeFilterPanel;
             
             Ext.each(value.filters, function(filterData) {
-                // refresh existing panel panel
+                var filterPanel;
+                
+                // refresh existing filter panel
                 if (filterData.id && this.filterPanels.hasOwnProperty(filterData.id)) {
-                    this.filterPanels[filterData.id].setValue(filterData.filters);
-                    keepFilterPanels.push(filterData.id);
+                    filterPanel = this.filterPanels[filterData.id];
                 }
                 
                 // create new filterPanel
                 else {
-                    var filterPanel = this.addFilterPanel({id: filterData.id});
-                    filterPanel.setValue(filterData.filters);
-                    keepFilterPanels.push(filterData.id);
+                    filterPanel = this.addFilterPanel({id: filterData.id});
                 }
+                
+                filterPanel.setValue(filterData.filters);
+                keepFilterPanels.push(filterData.id);
+                
+                if (filterData.label) {
+                    filterPanel.setTitle(Ext.util.Format.htmlEncode(filterData.label));
+                }
+                
             }, this);
             
             // (re)activate filterPanel
