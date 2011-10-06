@@ -399,6 +399,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             throw new Tinebase_Exception_UnexpectedValue ('$_ownerId can not be empty for personal folders');
         }
         
+        $ownerId = $_ownerId instanceof Tinebase_Model_User ? $_owner->getId() : $_ownerId;
+        
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
 
         $select = $this->_getSelect()
@@ -408,7 +410,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             ->where("{$this->_db->quoteIdentifier('container.is_deleted')} = ?", 0, Zend_Db::INT_TYPE);
 
         if ($_type == Tinebase_Model_Container::TYPE_PERSONAL) {
-            $select->where("{$this->_db->quoteIdentifier('owner.account_id')} = ?", $_ownerId);
+            $select->where("{$this->_db->quoteIdentifier('owner.account_id')} = ?", $ownerId);
         }
         
         $stmt = $this->_db->query($select);
