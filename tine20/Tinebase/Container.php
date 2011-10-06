@@ -66,23 +66,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     private static $_instance = NULL;
     
     /**
-     * foreign tables
-     * name => array(table, joinOn, field)
-     *
-     * @var array
-     */
-    protected $_foreignTables = array(
-        'owner_id'    => array(
-            'name'	 => 'owner',
-        	'table'  => 'container_acl',
-            //'field'  => 'container_id',
-    		'joinOn' => 'container_id',
-    		'select' => array('owner_id' => 'owner.account_id'),
-            //'preserve' => TRUE,
-        )
-    );
-    
-    /**
      * the singleton pattern
      *
      * @return Tinebase_Container
@@ -265,16 +248,16 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $select = parent::_getSelect($_cols, $_getDeleted);
         
-        #if ($_cols == '*') {
-        #    $select->joinLeft(
-        #        /* table  */ array('owner' => SQL_TABLE_PREFIX . 'container_acl'),
-        #        /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')} AND ".
-        #        "{$this->_db->quoteIdentifier('container.type')} = {$this->_db->quote(Tinebase_Model_Container::TYPE_PERSONAL)} AND " .
-        #        "{$this->_db->quoteIdentifier('owner.account_type')} = {$this->_db->quote('user')} AND " .
-        #        "{$this->_db->quoteIdentifier('owner.account_grant')} = {$this->_db->quote(Tinebase_Model_Grants::GRANT_ADMIN)}",
-        #        /* select */ array('owner_id' => 'account_id')
-        #    );
-        #}
+        if ($_cols == '*') {
+            $select->joinLeft(
+                /* table  */ array('owner' => SQL_TABLE_PREFIX . 'container_acl'),
+                /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')} AND ".
+                "{$this->_db->quoteIdentifier('container.type')} = {$this->_db->quote(Tinebase_Model_Container::TYPE_PERSONAL)} AND " .
+                "{$this->_db->quoteIdentifier('owner.account_type')} = {$this->_db->quote('user')} AND " .
+                "{$this->_db->quoteIdentifier('owner.account_grant')} = {$this->_db->quote(Tinebase_Model_Grants::GRANT_ADMIN)}",
+                /* select */ array('owner_id' => 'account_id')
+            );
+        }
         
         return $select;
     }
@@ -417,21 +400,28 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
         
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
-        
-        $filter = new Tinebase_Model_ContainerFilter(array(
-            array('field' => 'application_id', 'operator' => 'equals', 'value' => $applicationId),
-            array('field' => 'name', 'operator' => 'equals', 'value' => $_containerName),
-            array('field' => 'type', 'operator' => 'equals', 'value' => $_type),
-        ));
-        
-        if($_type == Tinebase_Model_Container::TYPE_PERSONAL) {
-            $filter->addFilter($filter->createFilter('owner_id', 'equals', $_ownerId));
+
+        $select = $this->_getSelect()
+            ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $applicationId)
+            ->where("{$this->_db->quoteIdentifier('container.name')} = ?", $_containerName)
+            ->where("{$this->_db->quoteIdentifier('container.type')} = ?", $_type)
+            ->where("{$this->_db->quoteIdentifier('container.is_deleted')} = ?", 0, Zend_Db::INT_TYPE);
+
+        if ($_type == Tinebase_Model_Container::TYPE_PERSONAL) {
+            $select->where("{$this->_db->quoteIdentifier('owner.account_id')} = ?", $_ownerId);
         }
         
-        $container =  $this->search($filter)->getFirstRecord();
-        if (! $container) {
+        $stmt = $this->_db->query($select);
+        $containersData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        if (count($containersData) == 0) {
             throw new Tinebase_Exception_NotFound("Container $_containerName not found.");
         }
+        if (count($containersData) > 1) {
+            throw new Tinebase_Exception_NotFound("Container $_containerName name duplicate.");
+        }
+
+        $container = new Tinebase_Model_Container($containersData[0]);
         
         return $container;
     }
