@@ -188,11 +188,11 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
                 'field'     => 'contact',
                 'operator'  => 'AND',
                 'value'     => array(array(
-                    'field'     => 'relation_type',
+                    'field'     => ':relation_type',
                     'operator'  => 'in',
                     'value'     => Projects_Config::getInstance()->get(Projects_Config::PROJECT_ATTENDEE_ROLE)->records->id
                 ), array(
-                    'field'     => 'id',
+                    'field'     => ':id',
                     'operator'  => 'equals',
                     'value'     => Addressbook_Model_Contact::CURRENTCONTACT,
                 )
@@ -204,18 +204,21 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * testFilterIds
      */
-    public function testFilterIds()
+    public function testFilterIdsAndLabel()
     {
         $filterJson = '[{"condition":"OR","filters":'
             . '[{"condition":"AND","filters":[{"field":"contact","operator":"AND","value":'
                 . '[{"field":"relation_type","operator":"in","value":["COWORKER","RESPONSIBLE"],"id":"ext-record-62"},'
                 . '{"field":":id","operator":"AND"}],"id":"ext-record-23"},'
-                . '{"field":"status","operator":"notin","value":["COMPLETED","CANCELLED"],"id":"ext-record-78"}],"id":"ext-comp-1088"}'
-            . ',{"condition":"AND","filters":[{"field":"query","operator":"contains","value":"","id":"ext-record-94"}],"id":"ext-comp-1209"}]}]';
+                . '{"field":"status","operator":"notin","value":["COMPLETED","CANCELLED"],"id":"ext-record-78","label":"statusfilter"}],"id":"ext-comp-1088","label":"filter1"}'
+            . ',{"condition":"AND","filters":[{"field":"query","operator":"contains","value":"","id":"ext-record-94"}],"id":"ext-comp-1209","label":"filter2"}]}]';
         $result = $this->_json->searchProjects(Zend_Json::decode($filterJson), array());
         
         $this->assertEquals("ext-comp-1088", $result['filter'][0]['filters'][0]['id']);
         $this->assertEquals("ext-comp-1209", $result['filter'][0]['filters'][1]['id']);
+        $this->assertEquals("filter1", $result['filter'][0]['filters'][0]['label']);
+        $this->assertEquals("filter2", $result['filter'][0]['filters'][1]['label']);
+//        $this->assertEquals("statusfilter", $result['filter'][0]['filters'][0][0][4]['label']);
     }
     
     /************ protected helper funcs *************/

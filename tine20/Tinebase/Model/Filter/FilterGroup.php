@@ -141,6 +141,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     protected $_id = NULL;
     
+    /**
+     * @var string label
+     */
+    protected $_label = NULL;
+    
     /******************************* properties ********************************/
     
     /**
@@ -199,10 +204,15 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             if (isset($filterData['condition'])) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
                     . ' Adding FilterGroup: ' . $this->_className);
+                
                 $filtergroup = new $this->_className($filterData['filters'], $filterData['condition'], $this->_options);
                 if (isset($filterData['id'])) {
                     $filtergroup->setId($filterData['id']);
                 }
+                if (isset($filterData['label'])) {
+                    $filtergroup->setLabel($filterData['label']);
+                }
+                
                 $this->addFilterGroup($filtergroup);
             } else if (isset($filterData['field']) && $filterData['field'] == 'foreignRecord') {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
@@ -482,6 +492,16 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     }
     
     /**
+     * set label
+     *
+     * @param string $_label
+     */
+    public function setLabel($_label)
+    {
+        $this->_label = $_label;
+    }
+    
+    /**
      * returns id
      *
      * @return string id
@@ -489,6 +509,16 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     public function getId()
     {
         return $this->_id;
+    }
+    
+    /**
+     * returns label
+     *
+     * @return string label
+     */
+    public function getLabel()
+    {
+        return $this->_label;
     }
     
     /**
@@ -578,6 +608,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                     'condition' => $filter->getCondition(),
                     'filters'   => $filter->toArray($_valueToJson),
                     'id'        => $filter->getId(),
+                    'label'     => $filter->getLabel(),
                 );
                 
             } else {
