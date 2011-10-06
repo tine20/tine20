@@ -14,6 +14,7 @@ Tine.widgets.grid.OwnRecordFilter = Ext.extend(Tine.widgets.grid.ForeignRecordFi
     field: 'ownRecord',
 
     initComponent: function() {
+        this.label = this.ftb.generateTitle();
         this.operators = ['definedBy'];
         this.defaultOperator = 'definedBy';
         
