@@ -126,24 +126,47 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     }
     
     /**
+     * (non-PHPdoc)
+     * @see Tinebase/Record/Tinebase_Record_Abstract#setFromArray($_data)
+     */
+    public function setFromArray(array $_data)
+    {
+        parent::setFromArray($_data);
+        
+        switch ($this->type) {
+            case 'internal':
+                // this path is deprecated
+                
+                break;
+                
+            case Tinebase_Model_Container::TYPE_SHARED:
+                $this->path = "/{$this->type}/{$this->getId()}";
+                
+                break;
+                
+            case Tinebase_Model_Container::TYPE_PERSONAL:
+                if (!empty($this->owner_id)) {
+                    $this->path = "/{$this->type}/{$this->owner_id}/{$this->getId()}";
+                }
+                
+                break;
+                
+            default:
+                throw new Exception("unknown container type: '{$this->type}'");
+            
+                break;
+        }
+    }
+    
+    /**
      * gets path of this container
      *
      * @return string path
      */
     public function getPath()
     {
-        $path = "/{$this->type}";
-        
         switch ($this->type) {
-            // this path is deprecated
-            case 'internal':
-                break;
-                
-            case 'shared':
-                $path .= "/{$this->getId()}";
-                break;
-                
-            case 'personal':
+            case Tinebase_Model_Container::TYPE_PERSONAL:
                 if (! $this->owner_id) {
                     // we need to find out who has admin grant
                     $allGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($this, true);
@@ -160,15 +183,11 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
                     }
                 }
                 
-                $path .= "/{$this->owner_id}/{$this->getId()}";
-                break;
-                
-            default:
-                throw new Exception("unknown container type: '{$this->type}'");
+                $this->path = "/{$this->type}/{$this->owner_id}/{$this->getId()}";
                 break;
         }
         
-        return $path;
+        return $this->path;
     }
     
     public static function path2node($_path)

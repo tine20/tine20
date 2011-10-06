@@ -82,7 +82,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         
         ############# TEST CONTACT ##########
         try {
-            $containerWithSyncGrant = Tinebase_Container::getInstance()->getContainerByName($appName, 'ContainerWithSyncGrant', Tinebase_Model_Container::TYPE_PERSONAL);
+            $containerWithSyncGrant = Tinebase_Container::getInstance()->getContainerByName($appName, 'ContainerWithSyncGrant', Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
         } catch (Tinebase_Exception_NotFound $e) {
 	        $containerWithSyncGrant = new Tinebase_Model_Container(array(
 	            'name'              => 'ContainerWithSyncGrant',
@@ -95,7 +95,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $this->objects['containerWithSyncGrant'] = $containerWithSyncGrant;
         
         try {
-            $containerWithoutSyncGrant = Tinebase_Container::getInstance()->getContainerByName($appName, 'ContainerWithoutSyncGrant', Tinebase_Model_Container::TYPE_PERSONAL);
+            $containerWithoutSyncGrant = Tinebase_Container::getInstance()->getContainerByName($appName, 'ContainerWithoutSyncGrant', Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
         } catch (Tinebase_Exception_NotFound $e) {
             $creatorGrants = array(
                 'account_id'     => Tinebase_Core::getUser()->getId(),

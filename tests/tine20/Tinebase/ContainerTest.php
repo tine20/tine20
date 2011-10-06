@@ -106,10 +106,25 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         $this->assertType('Tinebase_Model_Container', $container);
         $this->assertEquals($this->objects['initialContainer']->name, $container->name);
-        if ($container->type == Tinebase_Model_Container::TYPE_SHARED)  {
-            $this->assertEmpty($container->owner_id);
+        $this->_validateOwnerId($container);
+        $this->_validatePath($container);
+    }
+    
+    protected function _validateOwnerId(Tinebase_Model_Container $_container)
+    {
+        if ($_container->type == Tinebase_Model_Container::TYPE_SHARED)  {
+            $this->assertEmpty($_container->owner_id);
         } else {
-            $this->assertNotEmpty($container->owner_id, 'personal container must have an owner_id');
+            $this->assertNotEmpty($_container->owner_id, 'personal container must have an owner_id');
+        }
+    }
+    
+    protected function _validatePath(Tinebase_Model_Container $_container)
+    {
+        if ($_container->type == Tinebase_Model_Container::TYPE_SHARED)  {
+            $this->assertEquals("/{$_container->type}/{$_container->getId()}", $_container->path);
+        } else {
+            $this->assertEquals("/{$_container->type}/{$_container->owner_id}/{$_container->getId()}", $_container->path);
         }
     }
     
@@ -128,11 +143,8 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         $this->assertType('Tinebase_Model_Container', $container);
         $this->assertEquals($this->objects['initialContainer']->name, $container->name);
-        if ($container->type == Tinebase_Model_Container::TYPE_SHARED)  {
-            $this->assertEmpty($container->owner_id);
-        } else {
-            $this->assertNotEmpty($container->owner_id, 'personal container must have an owner_id');
-        }
+        $this->_validateOwnerId($container);
+        $this->_validatePath($container);
     }
     
     /**
@@ -145,11 +157,8 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         $this->assertType('Tinebase_Model_Container', $container);
         $this->assertEquals('renamed container', $container->name);
-        if ($container->type == Tinebase_Model_Container::TYPE_SHARED)  {
-            $this->assertEmpty($container->owner_id);
-        } else {
-            $this->assertNotEmpty($container->owner_id, 'personal container must have an owner_id');
-        }
+        $this->_validateOwnerId($container);
+        $this->_validatePath($container);
     }
     
     /**
@@ -209,11 +218,6 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Tinebase_Exception_NotFound');
         
         $container = $this->_instance->getContainerById($this->objects['initialContainer']);
-        if ($container->type == Tinebase_Model_Container::TYPE_SHARED)  {
-            $this->assertEmpty($container->owner_id);
-        } else {
-            $this->assertNotEmpty($container->owner_id, 'personal container must have an owner_id');
-        }
     }
     
     /**
@@ -396,11 +400,8 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertType('Tinebase_Record_RecordSet', $readableContainer);
         $this->assertTrue(count($readableContainer) >= 2);
         foreach($readableContainer as $container) {
-            if ($container->type == Tinebase_Model_Container::TYPE_SHARED)  {
-                $this->assertEmpty($container->owner_id);
-            } else {
-                $this->assertNotEmpty($container->owner_id);
-            }
+            $this->_validateOwnerId($container);
+            $this->_validatePath($container);
         }
     }
     
@@ -523,11 +524,8 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($otherUsers->getRecordClassName() === 'Tinebase_Model_Container');
         
         foreach($otherUsers as $container) {
-            if ($container->type == Tinebase_Model_Container::TYPE_SHARED)  {
-                $this->assertEmpty($container->owner_id);
-            } else {
-                $this->assertNotEmpty($container->owner_id);
-            }
+            $this->_validateOwnerId($container);
+            $this->_validatePath($container);
         }
     }
     

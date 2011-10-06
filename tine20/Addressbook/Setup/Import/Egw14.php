@@ -78,7 +78,7 @@ class Adressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
             if ( $contact->contact_owner > 0 ) {
                 // personal container for owner
                 try {
-                    $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Personal Contacts', Tinebase_Model_Container::TYPE_PERSONAL);
+                    $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Personal Contacts', Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
                 } catch (Tinebase_Exception_NotFound $e) {
                     $container = new Tinebase_Model_Container(array(
                         'name' => 'Personal Contacts',

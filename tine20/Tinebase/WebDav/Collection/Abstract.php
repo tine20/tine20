@@ -117,7 +117,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
             # return personal folders
             case 3:
                 try {
-                    $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerByName($this->_applicationName, $_name, Tinebase_Model_Container::TYPE_PERSONAL);
+                    $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerByName($this->_applicationName, $_name, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
                 }
