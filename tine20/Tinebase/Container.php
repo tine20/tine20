@@ -252,9 +252,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $select->joinLeft(
                 /* table  */ array('owner' => SQL_TABLE_PREFIX . 'container_acl'),
                 /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')} AND ".
-                "{$this->_db->quoteIdentifier('container.type')} = {$this->_db->quote(Tinebase_Model_Container::TYPE_PERSONAL)} AND " .
-                "{$this->_db->quoteIdentifier('owner.account_type')} = {$this->_db->quote('user')} AND " .
-                "{$this->_db->quoteIdentifier('owner.account_grant')} = {$this->_db->quote(Tinebase_Model_Grants::GRANT_ADMIN)}",
+                			 "{$this->_db->quoteIdentifier('container.type')} = {$this->_db->quote(Tinebase_Model_Container::TYPE_PERSONAL)} AND " .
+                			 "{$this->_db->quoteIdentifier('owner.account_type')} = {$this->_db->quote('user')} AND " .
+                			 "{$this->_db->quoteIdentifier('owner.account_grant')} = {$this->_db->quote(Tinebase_Model_Grants::GRANT_ADMIN)}",
                 /* select */ array('owner_id' => 'account_id')
             );
         }
