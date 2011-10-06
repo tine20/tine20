@@ -85,17 +85,16 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param   Tinebase_Model_Container $_container the new container
      * @param   Tinebase_Record_RecordSet $_grants the grants for the new folder 
      * @param   bool  $_ignoreAcl
-     * @param   integer $_accountId
      * @return  Tinebase_Model_Container the newly created container
      * @throws  Tinebase_Exception_Record_Validation
      * @throws  Tinebase_Exception_AccessDenied
      */
-    public function addContainer(Tinebase_Model_Container $_container, $_grants = NULL, $_ignoreAcl = FALSE, $_accountId = NULL)
+    public function addContainer(Tinebase_Model_Container $_container, $_grants = NULL, $_ignoreAcl = FALSE)
     {
         $_container->isValid(TRUE);
         
-        if ( $_accountId !== NULL ) {
-            $accountId = $_accountId;
+        if (!empty($_container->owner_id)) {
+            $accountId = $_container->owner_id instanceof Tinebase_Model_User ? $_container->owner_id->getId() : $_container->owner_id;
         } else {
             $accountId = Tinebase_Core::getUser()->getId();
         }
@@ -149,7 +148,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             
             if($_container->type === Tinebase_Model_Container::TYPE_SHARED) {
     
-                // add all grants to creator
+                // add all grants to creator and
                 // add read grants to any other user
                 $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
                     $creatorGrants,            
@@ -161,7 +160,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 ), TRUE);
             } else {
                 // add all grants to creator only
-                $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($creatorGrants), TRUE);
+                $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+                    $creatorGrants
+                ), TRUE);
             }
         } else {
             $grants = $_grants;
