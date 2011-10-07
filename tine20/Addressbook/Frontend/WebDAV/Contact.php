@@ -101,7 +101,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      */
     public function getName() 
     {
-        return $this->getContact()->getId() . '.vcf';
+        return $this->getRecord()->getId() . '.vcf';
     }
     
     /**
@@ -181,7 +181,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      */
     public function getETag() 
     {
-        return '"' . md5($this->getContact()->getId() . $this->getLastModified()) . '"';
+        return '"' . md5($this->getRecord()->getId() . $this->getLastModified()) . '"';
     }
     
     /**
@@ -191,7 +191,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      */
     public function getLastModified() 
     {
-        return ($this->getContact()->last_modified_time instanceof Tinebase_DateTime) ? $this->getContact()->last_modified_time->toString() : $this->getContact()->creation_time->toString();
+        return ($this->getRecord()->last_modified_time instanceof Tinebase_DateTime) ? $this->getRecord()->last_modified_time->toString() : $this->getRecord()->creation_time->toString();
     }
     
     /**
@@ -213,7 +213,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
     public function put($cardData) 
     {
         $converter = new Addressbook_Convert_Contact_VCard();
-        $contact = $converter->toTine20Model($cardData, $this->getContact());
+        $contact = $converter->toTine20Model($cardData, $this->getRecord());
         
         $this->_contact = Addressbook_Controller_Contact::getInstance()->update($contact);
 
@@ -242,7 +242,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      * 
      * @return Addressbook_Model_Contact
      */
-    public function getContact()
+    public function getRecord()
     {
         if (! $this->_contact instanceof Addressbook_Model_Contact) {
             $this->_contact = str_replace('.vcf', '', $this->_contact);
@@ -260,7 +260,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
     protected function _getVCard()
     {
         if ($this->_vcard == null) {
-            $this->_vcard = $this->_converter->fromTine20Model($this->getContact());
+            $this->_vcard = $this->_converter->fromTine20Model($this->getRecord());
         }
         
         return $this->_vcard;
