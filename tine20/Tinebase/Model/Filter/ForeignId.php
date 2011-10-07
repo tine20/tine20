@@ -26,6 +26,13 @@
 class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecord
 {
     /**
+     * @var string class name of this filter group
+     *      this is needed to overcome the static late binding
+     *      limitation in php < 5.3
+     */
+    protected $_className = 'Tinebase_Model_Filter_ForeignId';
+    
+    /**
      * get foreign controller
      * 
      * @return Tinebase_Controller_Record_Abstract
@@ -86,13 +93,18 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
      */
     protected function _getGenericFilterInformation()
     {
-        list($appName, $i, $filterName) = explode('_', $this->_options['filtergroup']);
+        list($appName, $i, $filterName) = explode('_', $this->_className);
         
         $result = array(
             'linkType'      => 'foreignId',
             'appName'       => $appName,
             'filterName'    => $filterName,
         );
+        
+        if (isset($this->_options['modelName'])) {
+            list($appName, $i, $modelName) = explode('_', $this->_options['modelName']);
+            $result['modelName'] = $modelName;
+        }
         
         return $result;
     }

@@ -534,6 +534,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
                     'linkType'      => 'foreignId',
                     'appName'       => 'Calendar',
                     'filterName'    => 'ContactAttendeeFilter',
+                    'modelName'     => 'Event',
                     'filters'       => array(
                         array('field' => "period",            "operator" => "within", "value" => array(
                             'from'  => '2009-01-01 00:00:00',
@@ -549,6 +550,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_instance->searchContacts($filter, array());
         $this->assertEquals('foreignRecord', $result['filter'][0]['field']);
         $this->assertEquals('foreignId', $result['filter'][0]['value']['linkType']);
+        $this->assertEquals('ContactAttendeeFilter', $result['filter'][0]['value']['filterName']);
+        $this->assertEquals('Event', $result['filter'][0]['value']['modelName']);
         
         $this->assertEquals(1, $result['totalcount']);
         $this->assertEquals(Tinebase_Core::getUser()->contact_id, $result['results'][0]['id']);
