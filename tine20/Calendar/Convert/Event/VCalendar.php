@@ -48,6 +48,36 @@ class Calendar_Convert_Event_VCalendar
         $this->_client = $_client;
     }
     
+    protected function _parseVevent(Sabre_VObject_Component $_vevent, &$_data)
+    {
+        foreach($_vevent->children() as $property) {
+            switch($property->name) {
+                case 'CREATED':
+                case 'LAST-MODIFIED':
+                case 'DTSTAMP':
+                    // do nothing
+                    break;
+                    
+                case 'DTEND':
+                    $_data['dtend'] = new Tinebase_DateTime($property->getDateTime()->format("c"), $property->getDateTime()->getTimezone());
+                    break;
+                    
+                case 'DTSTART':
+                    $_data['dtstart'] = new Tinebase_DateTime($property->getDateTime()->format("c"), $property->getDateTime()->getTimezone());
+                    break;
+                    
+                case 'UID':
+                case 'SUMMARY':
+                    $_data[strtolower($property->name)] = $property->value;
+                    break;
+                    
+                default:
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . $property->name);
+                    break;
+            }
+        }
+    }
+    
     /**
      * converts vcalendar to Calendar_Model_Event
      * 
@@ -57,10 +87,6 @@ class Calendar_Convert_Event_VCalendar
      */
     public function toTine20Model($_blob, Tinebase_Record_Abstract $_model = null)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . print_r($_blob, true));
-        
-        return;
-        
         if ($_blob instanceof Sabre_VObject_Component) {
             $vcalendar = $_blob;
         } else {
@@ -78,116 +104,17 @@ class Calendar_Convert_Event_VCalendar
         }
         
         $data = array();
-        
+
         foreach($vcalendar->children() as $property) {
             
             switch($property->name) {
                 case 'VERSION':
                 case 'PRODID':
-                case 'UID':
                     // do nothing
                     break;
-                
-                case 'ADR':
-                    $components = Sabre_VObject_Property::splitCompoundValues($property->value);
                     
-                    if (isset($property['TYPE']) && $property['TYPE'] == 'home') {
-                        // home address
-                        $data['adr_two_street2']     = $components[1];
-                        $data['adr_two_street']      = $components[2];
-                        $data['adr_two_locality']    = $components[3];
-                        $data['adr_two_region']      = $components[4];
-                        $data['adr_two_postalcode']  = $components[5];
-                        $data['adr_two_countryname'] = $components[6];
-                    } else {
-                        // work address
-                        $data['adr_one_street2']     = $components[1];
-                        $data['adr_one_street']      = $components[2];
-                        $data['adr_one_locality']    = $components[3];
-                        $data['adr_one_region']      = $components[4];
-                        $data['adr_one_postalcode']  = $components[5];
-                        $data['adr_one_countryname'] = $components[6];
-                    }
-                    break;
-                    
-                case 'CATEGORIES':
-                    $tags = Sabre_VObject_Property::splitCompoundValues($property->value, ',');
-                    
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . print_r($tags, true));
-                    break;
-                    
-                case 'EMAIL':
-                    switch ($property['TYPE']) {
-                        case 'home':
-                            $data['email_home'] = $property->value;
-                            break;
-                        case 'work':
-                        default:
-                            $data['email'] = $property->value;
-                            break;
-                    }
-                    break;
-                    
-                case 'FN':
-                    $data['n_fn'] = $property->value;
-                    break;
-                    
-                case 'N':
-                    $components = Sabre_VObject_Property::splitCompoundValues($property->value);
-                    
-                    $data['n_family'] = $components[0];
-                    $data['n_given']  = $components[1];
-                    $data['n_middle'] = isset($components[2]) ? $components[2] : null;
-                    $data['n_prefix'] = isset($components[3]) ? $components[3] : null;
-                    $data['n_suffix'] = isset($components[4]) ? $components[4] : null;
-                    break;
-                    
-                case 'NOTE':
-                    $data['note'] = $property->value;
-                    break;
-                    
-                case 'ORG':
-                    $components = Sabre_VObject_Property::splitCompoundValues($property->value);
-                    
-                    $data['org_name'] = $components[0];
-                    $data['org_unit'] = isset($components[1]) ? $components[1] : null;
-                    break;
-                
-                case 'PHOTO':
-                    $data['jpegphoto'] = base64_decode($property->value);
-                    break;
-                    
-                case 'TEL':
-                    switch ($property['TYPE']) {
-                        case 'cell':
-                            $data['tel_cell'] = $property->value;
-                            break;
-                        case 'fax':
-                            $data['tel_fax'] = $property->value;
-                            break;
-                        case 'home':
-                            $data['tel_home'] = $property->value;
-                            break;
-                        case 'work':
-                            $data['tel_work'] = $property->value;
-                            break;
-                    }
-                    break;
-                    
-                case 'URL':
-                    switch ($property['TYPE']) {
-                        case 'home':
-                            $data['url_home'] = $property->value;
-                            break;
-                        case 'work':
-                        default:
-                            $data['url'] = $property->value;
-                            break;
-                    }
-                    break;
-                    
-                case 'TITLE':
-                    $data['title'] = $property->value;
+                case 'VEVENT':
+                    $this->_parseVevent($property, $data);
                     break;
                     
                 default:
@@ -197,13 +124,7 @@ class Calendar_Convert_Event_VCalendar
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' data ' . print_r($data, true));
-        
-        if (empty($data['n_family'])) {
-            $parts = explode(' ', $data['n_fn']);
-            $data['n_family'] = $parts[count($parts) - 1];
-            $data['n_given'] = (count($parts) > 1) ? $parts[0] : null;
-        }
-        
+                
         $event->setFromArray($data);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' data ' . print_r($event->toArray(), true));
