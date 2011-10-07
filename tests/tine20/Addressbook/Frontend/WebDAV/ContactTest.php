@@ -14,13 +14,13 @@
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Addressbook_Controller_Frontend_WebDAV_ContactTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Addressbook_Frontend_WebDAV_ContactTest::main');
 }
 
 /**
- * Test class for Addressbook_Controller_Frontend_WebDAV_Contact
+ * Test class for Addressbook_Frontend_WebDAV_Contact
  */
-class Addressbook_Controller_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
+class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var array test objects
