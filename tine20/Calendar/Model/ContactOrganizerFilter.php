@@ -19,6 +19,13 @@
 class Calendar_Model_ContactOrganizerFilter extends Calendar_Model_ContactAttendeeFilter 
 {
     /**
+     * @var string class name of this filter group
+     *      this is needed to overcome the static late binding
+     *      limitation in php < 5.3
+     */
+    protected $_className = 'Calendar_Model_ContactOrganizerFilter';
+    
+    /**
      * filter fields for organizer
      * 
      * @var array

@@ -19,6 +19,13 @@
 class Calendar_Model_ContactAttendeeFilter extends Tinebase_Model_Filter_ForeignId 
 {
     /**
+     * @var string class name of this filter group
+     *      this is needed to overcome the static late binding
+     *      limitation in php < 5.3
+     */
+    protected $_className = 'Calendar_Model_ContactAttendeeFilter';
+    
+    /**
      * filter fields for role and status
      * 
      * @var array
