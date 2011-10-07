@@ -101,7 +101,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      */
     public function getName() 
     {
-        return $this->_getContact()->getId() . '.vcf';
+        return $this->getContact()->getId() . '.vcf';
     }
     
     /**
@@ -181,7 +181,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      */
     public function getETag() 
     {
-        return '"' . md5($this->_getContact()->getId() . $this->getLastModified()) . '"';
+        return '"' . md5($this->getContact()->getId() . $this->getLastModified()) . '"';
     }
     
     /**
@@ -191,7 +191,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      */
     public function getLastModified() 
     {
-        return ($this->_getContact()->last_modified_time instanceof Tinebase_DateTime) ? $this->_getContact()->last_modified_time->toString() : $this->_getContact()->creation_time->toString();
+        return ($this->getContact()->last_modified_time instanceof Tinebase_DateTime) ? $this->getContact()->last_modified_time->toString() : $this->getContact()->creation_time->toString();
     }
     
     /**
@@ -212,13 +212,16 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      */
     public function put($cardData) 
     {
-        $contact = self::convertToAddressbookModelContact($cardData, $this->_getContact());
-        $contact = $this->_converter->toTine20Model($cardData, $this->_getContact());
+        $converter = new Addressbook_Convert_Contact_VCard();
+        $contact = $converter->toTine20Model($cardData, $this->getContact());
         
         $this->_contact = Addressbook_Controller_Contact::getInstance()->update($contact);
-        
-        // @todo this belong to DAV_Server, but it currently not supported
-        header('ETag: ' . $this->getETag());
+
+        // avoid sending headers during unit tests
+        if (php_sapi_name() != 'cli') {
+            // @todo this belong to DAV_Server, but it currently not supported
+            header('ETag: ' . $this->getETag());
+        }
     }
     
     /**
@@ -239,7 +242,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      * 
      * @return Addressbook_Model_Contact
      */
-    protected function _getContact()
+    public function getContact()
     {
         if (! $this->_contact instanceof Addressbook_Model_Contact) {
             $this->_contact = str_replace('.vcf', '', $this->_contact);
@@ -257,7 +260,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
     protected function _getVCard()
     {
         if ($this->_vcard == null) {
-            $this->_vcard = $this->_converter->fromTine20Model($this->_getContact());
+            $this->_vcard = $this->_converter->fromTine20Model($this->getContact());
         }
         
         return $this->_vcard;
