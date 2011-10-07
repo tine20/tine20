@@ -236,7 +236,8 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         var value = filter.get('value');
         
         if (['equals', 'oneOf'].indexOf(filter.get('operator')) >= 0 ) {
-            return filter.formFields.value.origSetValue(value);
+            // NOTE: if setValue got called in the valueField internally, value is arguments[1] (createCallback)
+            return filter.formFields.value.origSetValue(arguments[1] ? arguments[1] : value);
         }
         
         // generic: choose right operator : appname -> generic filters have no subfilters an if one day, no left hand once!
@@ -535,7 +536,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 break;
         }
         
-        value.setValue = this.setRelatedRecordValue.createDelegate(this, [filter]);
+        value.setValue = this.setRelatedRecordValue.createDelegate(this, [filter], 0);
         value.getValue = this.getRelatedRecordValue.createDelegate(this, [filter]);
         
         return value;
