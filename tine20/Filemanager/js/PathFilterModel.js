@@ -14,18 +14,14 @@ Ext.ns('Tine.Filemanager');
  * @extends     Tine.widgets.grid.FilterModel
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * 
+ * @TODO make valueRenderer a path picker widget
  */
-Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.container.FilterModel, {
+Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
     /**
      * @cfg {Tine.Tinebase.Application} app
      */
     app: null,
-    
-    /**
-     * @cfg {Tine.Tinebase.data.Record} recordClass
-     * record definition class  (required)
-     */
-    recordClass: null,
     
     /**
      * @cfg {Array} operators allowed operators
@@ -47,16 +43,13 @@ Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.container.FilterModel
      */
     defaultValue: '/',
     
-    
-    treePanel: null,
-    
     /**
      * @private
      */
     initComponent: function() {
-        Tine.Filemanager.PathFilterModel.superclass.initComponent.call(this);
-                
         this.label = this.app.i18n._('path');
+        
+        Tine.Filemanager.PathFilterModel.superclass.initComponent.call(this);
     },
     
     /**
@@ -66,62 +59,36 @@ Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.container.FilterModel
      * @param {Ext.Element} element to render to 
      */
     valueRenderer: function(filter, el) {
-        var value,
-            fieldWidth = this.filterValueWidth,
-            commonOptions = {
-                filter: filter,
-                width: fieldWidth,
-                id: 'tw-ftb-frow-valuefield-' + filter.id,
-                renderTo: el,
-                value: filter.data.value ? filter.data.value : this.defaultValue
-            };
+        var value = new Ext.ux.form.ClearableTextField({
+            filter: filter,
+            width: this.filterValueWidth,
+            id: 'tw-ftb-frow-valuefield-' + filter.id,
+            renderTo: el,
+            value: filter.data.value ? filter.data.value : this.defaultValue,
+            emptyText: this.emptyText,
+            value: filter.data.value
+        });
         
-        switch (this.valueType) {
-            
-            case 'string':
-                value = new Ext.ux.form.ClearableTextField(Ext.apply(commonOptions, {
-                    emptyText: this.emptyText,
-                    listeners: {
-                        scope: this,
-                        specialkey: function(field, e){
-                            if(e.getKey() == e.ENTER){
-                                this.onFiltertrigger();
-                            }
-                        }
-                    }
-                }));
-                var filterValue = filter.data.value;
-                if(typeof filterValue == 'object') {
-                    filterValue = filterValue.path;
-                }
-                else if(!filterValue.charAt(0) || filterValue.charAt(0) != '/') {
-                    filterValue = '/' + filterValue;
-                }
-                value.setValue(filterValue);
-                break;
+        value.on('specialkey', function(field, e){
+            if(e.getKey() == e.ENTER){
+                this.onFiltertrigger();
+            }
+        }, this);
                 
-            default:
-                value = new Ext.ux.form.ClearableTextField(Ext.apply(commonOptions, {
-                    emptyText: this.emptyText,
-                    listeners: {
-                        scope: this,
-                        specialkey: function(field, e){
-                            if(e.getKey() == e.ENTER){
-                                this.onFiltertrigger();
-                            }
-                        }
-                    }
-                }));
-                break;
+        value.origSetValue = value.setValue.createDelegate(value);
+        value.setValue = function(value) {
+            if (value && value.path) {
+                value = value.path;
+            }
+            else if(Ext.isString(value) && (!value.charAt(0) || value.charAt(0) != '/')) {
+                value = '/' + value;
+            }
+            
+            return this.origSetValue(value);
         }
         
         return value;
     }
-
-
-   
-   
-    
 });
 
 Tine.widgets.grid.FilterToolbar.FILTERS['tine.filemanager.pathfiltermodel'] = Tine.Filemanager.PathFilterModel;
