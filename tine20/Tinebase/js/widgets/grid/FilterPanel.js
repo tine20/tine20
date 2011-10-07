@@ -19,6 +19,13 @@ Tine.widgets.grid.FilterPanel = function(config) {
     // the plugins woun't work there
     delete this.filterToolbarConfig.plugins;
     
+    // apply some filterPanel configs
+    Ext.each(['onFilterChange', 'getAllFilterData'], function(p) {
+        if (config.hasOwnProperty(p)) {
+            this[p] = config[p];
+        }
+    }, this);
+    
     // become filterPlugin
     Ext.applyIf(this, new Tine.widgets.grid.FilterPlugin());
 //    this.filterToolbarConfig.filterPluginCmp = this;

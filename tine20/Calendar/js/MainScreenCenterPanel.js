@@ -39,6 +39,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     applyState: Ext.emptyFn,
     
     initComponent: function () {
+        var me = this;
+        
         this.addEvents(
         /**
          * @event changeview
@@ -67,9 +69,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             })]},
             {field: 'attender_status', operator: 'notin', value: ['DECLINED']}
         ];
-        this.filterToolbar = this.getFilterToolbar();
-        this.filterToolbar.onFilterChange = this.refresh.createDelegate(this, [false]);
-        this.filterToolbar.getAllFilterData = this.getAllFilterData.createDelegate(this);
+        this.filterToolbar = this.getFilterToolbar({
+            onFilterChange: this.refresh.createDelegate(this, [false]),
+            getAllFilterData: this.getAllFilterData.createDelegate(this)
+        });
         
         this.filterToolbar.getQuickFilterPlugin().criteriaIgnores.push(
             {field: 'period'},
