@@ -432,15 +432,15 @@
           "path": "js/widgets/grid/"
         },
         {
+          "text": "FilterToolbar.js",
+          "path": "js/widgets/grid/"
+        },
+        {
           "text": "FilterStructureTreePanel.js",
           "path": "js/widgets/grid/"
         },
         {
           "text": "FilterPanel.js",
-          "path": "js/widgets/grid/"
-        },
-        {
-          "text": "FilterToolbar.js",
           "path": "js/widgets/grid/"
         },
         {
