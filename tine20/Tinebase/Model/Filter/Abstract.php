@@ -47,6 +47,11 @@ abstract class Tinebase_Model_Filter_Abstract
     protected $_id = NULL;
     
     /**
+     * @var string filter label [optional]
+     */
+    protected $_label = NULL;
+    
+    /**
      * @var array special options
      */
     protected $_options = NULL;
@@ -63,17 +68,46 @@ abstract class Tinebase_Model_Filter_Abstract
     /**
      * get a new single filter action
      *
-     * @param string $_field
+     * @param string|array $_fieldOrData
      * @param string $_operator
      * @param mixed  $_value    
      * @param array  $_options
+     * 
+     * @todo remove legacy code + obsolete params sometimes
      */
-    public function __construct($_field, $_operator, $_value, array $_options = array())
+    public function __construct($_fieldOrData, $_operator = NULL, $_value = NULL, array $_options = array())
     {
-        $this->_setOptions($_options);
-        $this->setField($_field);
-        $this->setOperator($_operator);
-        $this->setValue($_value);
+        if (is_array($_fieldOrData)) {
+            $data = $_fieldOrData;
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' 
+                . 'Using deprecated constructor syntax. Please pass all filter data in one array.');
+            
+            $data = array(
+                'field'     => $_fieldOrData,
+                'operator'  => $_operator,
+                'value'     => $_value,
+                'options'   => $_options,
+            );
+        }
+
+        foreach (array('field', 'operator', 'value') as $requiredKey) {
+            if (! array_key_exists($requiredKey, $data)) {
+                throw new Tinebase_Exception_InvalidArgument('Filter object needs ' . $requiredKey);
+            }
+        }
+        
+        $this->_setOptions((isset($data['options'])) ? $data['options'] : array());
+        $this->setField($data['field']);
+        $this->setOperator($data['operator']);
+        $this->setValue($data['value']);
+        
+        if (isset($data['id'])) {
+            $this->setId($data['id']);
+        }
+        if (isset($data['label'])) {
+            $this->setLabel($data['label']);
+        }
     }
     
     /**
@@ -160,7 +194,25 @@ abstract class Tinebase_Model_Filter_Abstract
     {
         $this->_id = $_id;
     }
+    
+    /**
+     * remove id of filter object
+     */
+    public function removeId()
+    {
+        $this->_id = NULL;
+    }
 
+    /**
+     * set label
+     *
+     * @param string $_label
+     */
+    public function setLabel($_label)
+    {
+        $this->_label = $_label;
+    }
+    
     /**
      * gets value
      *
@@ -227,6 +279,9 @@ abstract class Tinebase_Model_Filter_Abstract
 
         if ($this->_id) {
             $result['id'] = $this->_id;
+        }
+        if ($this->_label) {
+            $result['label'] = $this->_label;
         }
         
         return $result;

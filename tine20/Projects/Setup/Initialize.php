@@ -82,11 +82,11 @@ class Projects_Setup_Initialize extends Setup_Initialize
                     'field'     => 'contact',
                     'operator'  => 'AND',
                     'value'     => array(array(
-                        'field'     => 'relation_type',
+                        'field'     => ':relation_type',
                         'operator'  => 'in',
                         'value'     => Projects_Config::getInstance()->get(Projects_Config::PROJECT_ATTENDEE_ROLE)->records->id
                     ), array(
-                        'field'     => 'id',
+                        'field'     => ':id',
                         'operator'  => 'equals',
                         'value'     => Addressbook_Model_Contact::CURRENTCONTACT,
                     )
@@ -103,11 +103,11 @@ class Projects_Setup_Initialize extends Setup_Initialize
                     'field'     => 'contact',
                     'operator'  => 'AND',
                     'value'     => array(array(
-                        'field'     => 'relation_type',
+                        'field'     => ':relation_type',
                         'operator'  => 'in',
                         'value'     => array('RESPONSIBLE')
                     ), array(
-                        'field'     => 'id',
+                        'field'     => ':id',
                         'operator'  => 'equals',
                         'value'     => Addressbook_Model_Contact::CURRENTCONTACT,
                     )
@@ -124,11 +124,11 @@ class Projects_Setup_Initialize extends Setup_Initialize
                     'field'     => 'contact',
                     'operator'  => 'AND',
                     'value'     => array(array(
-                        'field'     => 'relation_type',
+                        'field'     => ':relation_type',
                         'operator'  => 'in',
                         'value'     => Projects_Config::getInstance()->get(Projects_Config::PROJECT_ATTENDEE_ROLE)->records->id
                     ), array(
-                        'field'     => 'id',
+                        'field'     => ':id',
                         'operator'  => 'equals',
                         'value'     => Addressbook_Model_Contact::CURRENTCONTACT,
                     )
