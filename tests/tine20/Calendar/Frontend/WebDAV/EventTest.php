@@ -14,13 +14,13 @@
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Frontend_WebDAV_ContainerTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Calendar_Frontend_WebDAV_EventTest::main');
 }
 
 /**
- * Test class for Calendar_Frontend_WebDAV_Container
+ * Test class for Calendar_Frontend_WebDAV_Event
  */
-class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
+class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var array test objects
@@ -35,7 +35,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar WebDAV Container Tests');
+		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar WebDAV Event Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
 	}
 
@@ -67,8 +67,8 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        foreach ($this->objects['eventsToDelete'] as $contact) {
-            $contact->delete();
+        foreach ($this->objects['eventsToDelete'] as $event) {
+            $event->delete();
         }
         
         foreach ($this->objects['containerToDelete'] as $containerId) {
@@ -83,33 +83,11 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * assert that name of folder is container name
+     * test create contact
+     * 
+     * @return Calendar_Frontend_WebDAV_Event
      */
-    public function testGetName()
-    {
-        $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
-        
-        $result = $container->getName();
-        
-        $this->assertEquals($this->objects['initialContainer']->name, $result);
-    }
-    
-    /**
-     * assert that name of folder is container name
-     */
-    public function testGetIdAsName()
-    {
-        $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer'], true);
-        
-        $result = $container->getName();
-        
-        $this->assertEquals($this->objects['initialContainer']->getId(), $result);
-    }
-    
-    /**
-     * test getChildren
-     */
-    public function testGetChildren()
+    public function testCreate()
     {
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
         
@@ -117,29 +95,50 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         
         $this->objects['eventsToDelete'][] = $event;
         
-        $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
+        $record = $event->getRecord();
+
+        $this->assertEquals('New Event', $record->summary);
         
-        $children = $container->getChildren();
+        return $event;
+    }    
+    
+    /**
+     * test get vcard
+     */
+    public function testGet()
+    {
+        $event = $this->testCreate();
         
-        $this->assertEquals(1, count($children));
-        $this->assertInstanceOf('Calendar_Frontend_WebDAV_Event', $children[0]);
+        $vcalendar = stream_get_contents($event->get());
+        
+        $this->assertContains('SUMMARY:New Event', $vcalendar);
+    }
+
+    /**
+     * test updating existing contact
+     */
+    public function testPut()
+    {
+        $event = $this->testCreate();
+        
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
+        
+        $event->put($vcalendarStream);
+        
+        $record = $event->getRecord();
+        
+        $this->assertEquals('New Event', $record->summary);
     }
     
     /**
-     * test getProperties
+     * test get name of vcard
      */
-    public function testGetProperties()
+    public function testGetName()
     {
-        $requestedProperties = array(
-        	'{http://calendarserver.org/ns/}getctag',
-            '{DAV:}resource-id'
-        );
+        $event = $this->testCreate();
         
-        $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
+        $record = $event->getRecord();
         
-        $result = $container->getProperties($requestedProperties);
-       
-        $this->assertNotEmpty($result['{http://calendarserver.org/ns/}getctag']);
-        $this->assertEquals($result['{DAV:}resource-id'], 'urn:uuid:' . $this->objects['initialContainer']->getId());
+        $this->assertEquals($event->getName(), $record->getId() . '.ics');
     }
 }

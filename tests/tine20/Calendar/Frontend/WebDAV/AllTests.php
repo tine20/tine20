@@ -27,7 +27,7 @@ class Calendar_Frontend_WebDAV_AllTests
     public static function suite ()
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar All Frontend WebDAV Tests');
-        #$suite->addTestSuite('Calendar_Frontend_WebDAV_EventTest');
+        $suite->addTestSuite('Calendar_Frontend_WebDAV_EventTest');
         $suite->addTestSuite('Calendar_Frontend_WebDAV_ContainerTest');
         return $suite;
     }
