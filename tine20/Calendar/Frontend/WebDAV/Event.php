@@ -58,7 +58,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     public static function create(Tinebase_Model_Container $container, $vobjectData)
     {
-        $event = $this->_converter->toTine20Model($vobjectData);
+        $converter = new Calendar_Convert_Event_VCalendar();
+        
+        $event = $converter->toTine20Model($vobjectData);
         $event->container_id = $container->getId();
         
         $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
@@ -99,7 +101,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     public function getName() 
     {
-        return $this->_getEvent()->getId() . '.ics';
+        return $this->getRecord()->getId() . '.ics';
     }
     
     /**
@@ -179,7 +181,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     public function getETag() 
     {
-        return '"' . md5($this->_getEvent()->getId() . $this->getLastModified()) . '"';
+        return '"' . md5($this->getRecord()->getId() . $this->getLastModified()) . '"';
     }
     
     /**
@@ -189,7 +191,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     public function getLastModified() 
     {
-        return ($this->_getEvent()->last_modified_time instanceof Tinebase_DateTime) ? $this->_getEvent()->last_modified_time->toString() : $this->_getEvent()->creation_time->toString();
+        return ($this->getRecord()->last_modified_time instanceof Tinebase_DateTime) ? $this->getRecord()->last_modified_time->toString() : $this->getRecord()->creation_time->toString();
     }
     
     /**
@@ -210,12 +212,15 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     public function put($cardData) 
     {
-        $contact = $this->_converter->toTine20Model($cardData, $this->_getEvent());
+        $event = $this->_converter->toTine20Model($cardData, $this->getRecord());
         
-        $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($contact);
+        $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
         
-        // @todo this belong to DAV_Server, but it currently not supported
-        header('ETag: ' . $this->getETag());
+        // avoid sending headers during unit tests
+        if (php_sapi_name() != 'cli') {
+            // @todo this belong to DAV_Server, but it currently not supported
+            header('ETag: ' . $this->getETag());
+        }
     }
     
     /**
@@ -236,7 +241,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      * 
      * @return Calendar_Model_Event
      */
-    protected function _getEvent()
+    public function getRecord()
     {
         if (! $this->_event instanceof Calendar_Model_Event) {
             $this->_event = str_replace('.ics', '', $this->_event);
@@ -254,7 +259,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
     protected function _getVEvent()
     {
         if ($this->_vevent == null) {
-            $this->_vevent = $this->_converter->fromTine20Model($this->_getEvent());
+            $this->_vevent = $this->_converter->fromTine20Model($this->getRecord());
         }
         
         return $this->_vevent;
