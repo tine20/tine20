@@ -419,7 +419,9 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             }
         }
         
-        return filters.length == 1 ? filters[0].filters : [{'condition': 'OR', 'filters': filters}];
+        // NOTE: always trigger a OR condition, otherwise we sould loose inactive FilterPanles
+        //return filters.length == 1 ? filters[0].filters : [{'condition': 'OR', 'filters': filters}];
+        return [{'condition': 'OR', 'filters': filters}];
     },
     
     setValue: function(value) {
@@ -493,7 +495,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             
             // remove unused panels
             for (var id in this.filterPanels) {
-                if (this.filterPanels.hasOwnProperty(id) && keepFilterPanels.indexOf(id) < 0) {
+                if (this.filterPanels.hasOwnProperty(id) && keepFilterPanels.indexOf(id) < 0 && this.filterPanels[id].isActive == true) {
                     this.removeFilterPanel(id);
                 }
             }
