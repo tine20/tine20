@@ -84,6 +84,8 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
     
     /**
      * test create contact
+     * 
+     * @return Addressbook_Frontend_WebDAV_Contact
      */
     public function testCreate()
     {
@@ -93,11 +95,13 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
         
         $this->objects['contactsToDelete'][] = $contact;
         
-        $record = $contact->getContact();
+        $record = $contact->getRecord();
 
         $this->assertEquals('l.kneschke@metaways.de', $record->email);
         $this->assertEquals('Kneschke', $record->n_family);
         $this->assertEquals('+49 BUSINESS', $record->tel_work);
+        
+        return $contact;
     }    
     
     /**
@@ -105,11 +109,7 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
      */
     public function testGet()
     {
-        $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/sogo_connector.vcf', 'r');
-    
-        $contact = Addressbook_Frontend_WebDAV_Contact::create($this->objects['initialContainer'], $vcardStream);
-    
-        $this->objects['contactsToDelete'][] = $contact;
+        $contact = $this->testCreate();
     
         $vcard = stream_get_contents($contact->get());
         
@@ -121,16 +121,13 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
      */
     public function testPut()
     {
+        $contact = $this->testCreate();
+    
         $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/sogo_connector.vcf', 'r');
         
-        $contact = Addressbook_Frontend_WebDAV_Contact::create($this->objects['initialContainer'], $vcardStream);
-        
-        $this->objects['contactsToDelete'][] = $contact;
-        
-        rewind($vcardStream);
         $contact->put($vcardStream);
         
-        $record = $contact->getContact();
+        $record = $contact->getRecord();
         
         $this->assertEquals('l.kneschke@metaways.de', $record->email);
         $this->assertEquals('Kneschke', $record->n_family);
@@ -142,13 +139,9 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
      */
     public function testGetName()
     {
-        $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/sogo_connector.vcf', 'r');
+        $contact = $this->testCreate();
         
-        $contact = Addressbook_Frontend_WebDAV_Contact::create($this->objects['initialContainer'], $vcardStream);
-        
-        $this->objects['contactsToDelete'][] = $contact;
-        
-        $record = $contact->getContact();
+        $record = $contact->getRecord();
         
         $this->assertEquals($contact->getName(), $record->getId() . '.vcf');
     }
