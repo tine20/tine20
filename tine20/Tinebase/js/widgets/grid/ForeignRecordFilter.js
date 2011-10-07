@@ -189,9 +189,6 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * NOTE: generic filters have their foreign record defintion in the values
      */
     getRelatedRecordValue: function(filter) {
-        console.log('getRelatedRecordValue');
-        console.log(arguments);
-        
         var filters = filter.toolbar ? filter.toolbar.getValue() : [],
             foreignRecordClass = filter.foreignRecordDefinition.foreignRecordClass,
             value;
@@ -231,8 +228,6 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * @param {} filter
      */
     setRelatedRecordValue: function(filter) {
-        console.log('setRelatedRecordValue');
-        console.log(arguments);
         var value = filter.get('value');
         
         if (['equals', 'oneOf'].indexOf(filter.get('operator')) >= 0 ) {
@@ -271,6 +266,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             
         } else {
             if (! Ext.isArray(value)) return;
+            
             // explicit chose right operator /equals / in /definedBy: left sided values create (multiple) subfilters in filterToolbar
             var foreignRecordDefinition = filter.foreignRecordDefinition,
                 foreignRecordClass = foreignRecordDefinition.foreignRecordClass,
@@ -317,7 +313,6 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             
             // a single id filter is always displayed in the parent Toolbar with our own filterRow
             else if (value.length == 1 && [foreignRecordIdProperty, ':' + foreignRecordIdProperty].indexOf(value[0].field) > -1) {
-                console.log('single idProp');
                 filter.set('value', value[0].value);
                 filter.formFields.operator.setValue(value[0].operator);
                 this.onOperatorChange(filter, value[0].operator, true);
@@ -385,15 +380,12 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * @param {Ext.Element} element to render to 
      */
     operatorRenderer: function (filter, el) {
-        console.log('operatorRenderer');
-        console.log(arguments);
         var operator;
         
         if (! this.isGeneric) {
             operator = Tine.widgets.grid.ForeignRecordFilter.superclass.operatorRenderer.apply(this, arguments);
             filter.foreignRecordDefinition = {linkType: this.linkType, foreignRecordClass: this.foreignRecordClass, filterName: this.filterName}
         } else {
-            console.log(filter.get('operator') ? filter.get('operator') : this.defaultOperator);
             operator = new Ext.form.ComboBox({
                 filter: filter,
                 width: 80,
@@ -427,7 +419,6 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         
 //        var origSetValue = operator.setValue.createDelegate(operator);
 //        operator.setValue = function(value) {
-//            console.log('====== ' + value);
 //            origSetValue(value == 'AND' ? 'definedBy' : value); 
 //        }
         
@@ -439,8 +430,6 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * @private
      */
     onOperatorChange: function(filter, newOperator, keepValue) {
-        console.log('onOperatorChange ')
-        console.log(arguments);
         if (this.isGeneric) {
             filter.foreignRecordDefinition = newOperator;
             if (filter.toolbar) {
@@ -474,13 +463,9 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * @param {Ext.Element} element to render to 
      */
     valueRenderer: function(filter, el) {
-        console.log('valueRenderer');
-        console.log(arguments);
-        
         var operator = filter.get('operator') ? filter.get('operator') : this.defaultOperator,
             value;
 
-        console.log(operator);
         switch(operator) {
             case 'equals':
                 value = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
