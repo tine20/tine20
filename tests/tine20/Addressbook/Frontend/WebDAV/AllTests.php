@@ -34,5 +34,5 @@ class Addressbook_Frontend_WebDAV_AllTests
 }
 
 if (PHPUnit_MAIN_METHOD == 'Addressbook_Frontend_WebDAV_AllTests::main') {
-    Addressbook_Import_AllTests::main();
+    Addressbook_Frontend_WebDAV_AllTests::main();
 }
