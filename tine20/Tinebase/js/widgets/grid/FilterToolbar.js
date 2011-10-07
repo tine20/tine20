@@ -92,6 +92,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     childSheets: null,
     
+    /**
+     * @property isActive
+     * @type Boolean
+     */
+    isActive: true,
+    
     header: false,
     border: false,
     monitorResize: true,
@@ -262,6 +268,15 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     
     generateTitle: function() {
         return (this.recordClass ? Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName')).i18n._hidden(this.recordClass.getMeta('recordsName')) : this.id);
+    },
+    
+    /**
+     * is persiting this filterPanel is allowed
+     * 
+     * @return {Boolean}
+     */
+    isSaveAllowed: function() {
+        return this.allowSaving;
     },
     
     /**
@@ -643,7 +658,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             });
         }
         this.filterStore.add(filter);
-        
+
         var fRow = this.templates.filterrow.insertAfter(this.bwrap.child('tr[class=fw-ftb-frow]:last'),{
             id: 'tw-ftb-frowid-' + filter.id
         }, true);

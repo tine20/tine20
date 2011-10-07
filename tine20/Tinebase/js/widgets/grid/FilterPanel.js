@@ -130,8 +130,19 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         }];
         
         Tine.widgets.grid.FilterPanel.superclass.initComponent.call(this);
-        
     },
+    
+    /**
+     * is persiting this filterPanel is allowed
+     * 
+     * @return {Boolean}
+     */
+    isSaveAllowed: function() {
+        return this.activeFilterPanel.allowSaving;
+    },
+
+    getAllFilterData: Tine.widgets.grid.FilterToolbar.prototype.getAllFilterData,
+    storeOnBeforeload: Tine.widgets.grid.FilterToolbar.prototype.storeOnBeforeload,
     
     manageHeight: function() {
         if (this.rendered) {
@@ -479,10 +490,11 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
                 // create new filterPanel
                 else {
                     filterPanel = this.addFilterPanel({id: filterData.id});
+                    this.setActiveFilterPanel(filterPanel);
                 }
                 
                 filterPanel.setValue(filterData.filters);
-                keepFilterPanels.push(filterData.id);
+                keepFilterPanels.push(filterPanel.id);
                 
                 if (filterData.label) {
                     filterPanel.setTitle(Ext.util.Format.htmlEncode(filterData.label));
@@ -492,6 +504,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             
             // (re)activate filterPanel
             this.setActiveFilterPanel(keepFilterPanels.indexOf(activeFilterPanel.id) > 0 ? activeFilterPanel : keepFilterPanels[0]);
+            
             
             // remove unused panels
             for (var id in this.filterPanels) {

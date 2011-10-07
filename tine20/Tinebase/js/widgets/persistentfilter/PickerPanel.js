@@ -342,7 +342,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         var ftb = this.getFilterToolbar();
         
         // recheck that current ftb is saveable
-        if (! ftb.allowSaving) {
+        if (! ftb.isSaveAllowed()) {
             Ext.Msg.alert(_('Could not save Favorite'), _('Your current view does not support favorites'));
             return;
         }
