@@ -1251,12 +1251,15 @@ class Setup_Controller
      */
     protected function _sortInstallableApplications($_applications)
     {
-        // begin with Tinebase
-        if (isset($_applications['Tinebase'])) {
-            $result['Tinebase'] = $_applications['Tinebase'];
-            unset($_applications['Tinebase']);
-        } else {
-            $result = array();
+        $result = array();
+        
+        // begin with Tinebase, Admin and Addressbook
+        $alwaysOnTop = array('Tinebase', 'Admin', 'Addressbook');
+        foreach ($alwaysOnTop as $app) {
+            if (isset($_applications[$app])) {
+                $result[$app] = $_applications[$app];
+                unset($_applications[$app]);
+            }
         }
         
         // get all apps to install ($name => $dependencies)

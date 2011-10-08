@@ -266,10 +266,7 @@ class Felamimail_Sieve_Vacation
      */
     protected function _getPlaintext($_string)
     {
-        $result = preg_replace('/\<br *\/*\>/', "\r\n", $_string);
-        $result = strip_tags($result);
-
-        return $result;
+        return Felamimail_Message::convertContentType(Zend_Mime::TYPE_HTML, Zend_Mime::TYPE_TEXT, $_string);
     }
     
     /**

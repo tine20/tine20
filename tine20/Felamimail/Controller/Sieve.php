@@ -239,7 +239,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         
         if (! in_array('mime', $capabilities['SIEVE'])) {
             unset($_vacation->mime);
-            $_vacation->reason = preg_replace('/<br \/>/', "\r", $_vacation->reason);
+            $_vacation->reason = Felamimail_Message::convertContentType(Zend_Mime::TYPE_HTML, Zend_Mime::TYPE_TEXT, $_vacation->reason, "\r");
         }
         $_vacation->reason = preg_replace('/\n/', "", $_vacation->reason);
         

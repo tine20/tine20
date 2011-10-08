@@ -216,20 +216,37 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
         $dateWhere = ($dateString === NULL) 
             ? $this->_db->quoteInto('valid_until < ?', Tinebase_DateTime::now()->format(Tinebase_Record_Abstract::ISO8601LONG)) 
             : $this->_db->quoteInto('creation_time < ?', $dateString);
+        $where = array($dateWhere);
             
-        $tableName = $this->getTablePrefix() . $this->getTableName();
         if (Setup_Controller::getInstance()->isInstalled('Felamimail')) {
             // delete only records that are not related to email accounts
-            $where = SQL_TABLE_PREFIX . 'felamimail_account.credentials_id IS NULL';
-            if ($dateWhere) {
-                $where .= ' AND ' . $dateWhere;
+            $fmailIds = $this->_getFelamimailCredentialIds();
+            if (! empty($fmailIds)) {
+                $where[] = $this->_db->quoteInto('id NOT IN (?)', $fmailIds);
             }
-            $this->_db->query('DELETE ' . $tableName . ' FROM ' . $tableName .
-                ' LEFT JOIN ' . $this->getTablePrefix() . 'felamimail_account ON ' . $tableName . '.id = ' . 
-                    $this->getTablePrefix() . 'felamimail_account.credentials_id' .
-                ' WHERE ' . $where);
-        } else {
-            $this->_db->delete($tableName, $dateWhere);            
         }
+        
+        $tableName = $this->getTablePrefix() . $this->getTableName();
+        $this->_db->delete($tableName, $where);
+    }
+    
+    /**
+     * returns all credential ids that are used in felamimail
+     * 
+     * @return array
+     */
+    protected function _getFelamimailCredentialIds()
+    {
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'felamimail_account', array('credentials_id', 'smtp_credentials_id'));
+        $stmt = $this->_db->query($select);
+        $result = $stmt->fetchAll(Zend_Db::FETCH_NUM);
+        $fmailIds = array();
+        foreach ($result as $credentialIds) {
+            $fmailIds = array_merge($fmailIds, $credentialIds);
+        }
+        $fmailIds = array_unique($fmailIds);
+        
+        return $fmailIds;
     }
 }

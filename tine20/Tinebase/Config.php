@@ -138,7 +138,7 @@ class Tinebase_Config
         }
         
         if ($result->getId()) {
-            $this->_cache->save($result, $cacheId, array('config'));
+            $this->_cache->save($result, $cacheId, array('config'), 60);
         }
         
         return $result;

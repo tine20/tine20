@@ -809,8 +809,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $_alarm->minutes_before = isset($options['minutes_before']) ? $options['minutes_before'] : $_alarm->minutes_before;
             $eventLength = $_record->dtstart->diff($_record->dtend);
             
-            // compute next occurance
-            $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($_record, $exceptions, Tinebase_DateTime::now());
+            // compute next occurance from now+minutes_before!
+            $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($_record, $exceptions, Tinebase_DateTime::now()->addMinute($_alarm->minutes_before));
             
             if (! $nextOccurrence) {
                 $_alarm->sent_status = Tinebase_Model_Alarm::STATUS_SUCCESS;

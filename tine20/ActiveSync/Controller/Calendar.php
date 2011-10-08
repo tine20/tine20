@@ -308,7 +308,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 $start = $data->dtstart;
                 $reminder = $alarm->alarm_time;
                 $reminderMinutes = ($start->getTimestamp() - $reminder->getTimestamp()) / 60;
-                $_xmlNode->appendChild(new DOMElement('Reminder', $reminderMinutes, 'uri:Calendar'));
+                if ($reminderMinutes >= 0) {
+                    $_xmlNode->appendChild(new DOMElement('Reminder', $reminderMinutes, 'uri:Calendar'));
+                }
             }
         }
                 

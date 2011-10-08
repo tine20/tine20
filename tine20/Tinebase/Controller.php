@@ -224,6 +224,19 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
         
         Zend_Session::regenerateId();
         
+        /** 
+         * fix php session header handling http://forge.tine20.org/mantisbt/view.php?id=4918 
+         * -> search all Set-Cookie: headers and replace them with the last one!
+         **/
+        $cookieHeaders = array();
+        foreach(headers_list() as $headerString) {
+            if (strpos($headerString, 'Set-Cookie: TINE20SESSID=') === 0) {
+                array_push($cookieHeaders, $headerString);
+            }   
+        }   
+        header(array_pop($cookieHeaders), true);
+        /** end of fix **/
+        
         Tinebase_Core::getSession()->currentAccount = $_user;
     }
     

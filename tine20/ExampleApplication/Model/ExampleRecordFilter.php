@@ -32,7 +32,10 @@ class ExampleApplication_Model_ExampleRecordFilter extends Tinebase_Model_Filter
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', /*'...'*/))),
         'container_id'   => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'ExampleApplication')),
         'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'example_application_record.id')),
+        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
+            'idProperty' => 'example_application_record.id',
+            'applicationName' => 'ExampleApplication',
+        )),
         
         // @todo add filters
         /*

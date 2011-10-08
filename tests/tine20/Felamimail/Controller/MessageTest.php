@@ -647,6 +647,19 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * validate fetching a message from yahoo
+     * 
+     * test was created for task #4680
+     */
+    public function testGetCompleteMessageYahoo()
+    {
+        $cachedMessage = $this->messageTestHelper('yahoo.eml');
+        
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        $this->assertContains('Bitte aktualisieren Sie Ihre Kontoeinstellungen bzw. Daten-Feeds so schnell wie möglich', $message->body);
+    }
+    
+    /**
      * validate fetching a complete message from amazon #2 -> check if images got removed correctly
      */
     public function testGetCompleteMessageAmazon2()

@@ -485,7 +485,7 @@ class Tinebase_User
     public static function createInitialAccounts($_options)
     {
         if (! isset($_options['adminPassword']) || ! isset($_options['adminLoginName'])) {
-            throw new Tinebase_Exception_InvalidArgument('Admin password and login name have to be set when creating initial account.');
+            throw new Tinebase_Exception_InvalidArgument('Admin password and login name have to be set when creating initial account.', 503);
         }
         
         $adminLoginName     = $_options['adminLoginName'];

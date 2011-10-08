@@ -77,7 +77,7 @@ class Tinebase_Relation_Backend_Sql
 		// check if relation is already set (with is_deleted=1)
 		if ($deletedId = $this->_checkExistance($_relation)) {
 		    $where = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('rel_id') . ' IN (?)', $deletedId)
+                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $deletedId)
             );
             $this->_dbTable->delete($where);
 		} 
@@ -346,7 +346,7 @@ class Tinebase_Relation_Backend_Sql
         );
         $relationRow = $this->_dbTable->fetchRow($where);
         
-        if($relationRow) {
+        if ($relationRow) {
             return $relationRow->id;
         } else {
             return FALSE;

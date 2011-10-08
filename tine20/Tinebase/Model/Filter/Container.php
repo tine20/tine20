@@ -68,7 +68,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
     protected function _setOptions(array $_options)
     {
         if (! isset($_options['applicationName'])) {
-            throw new Tinebase_Exception_InvalidArgument('container filter needs the applicationName options');
+            throw new Tinebase_Exception_InvalidArgument('Container filter needs the applicationName option');
         }
         
         $_options['ignoreAcl'] = isset($_options['ignoreAcl']) ? $_options['ignoreAcl'] : false;
