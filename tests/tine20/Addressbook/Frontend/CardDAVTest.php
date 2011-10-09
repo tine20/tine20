@@ -55,8 +55,6 @@ class Addressbook_Frontend_CardDAVTest extends PHPUnit_Framework_TestCase
         )));
         
         $this->objects['containerToDelete'][] = $this->objects['initialContainer'];
-        
-        #$this->objects['contactsToDelete'] = array();
     }
 
     /**
@@ -67,10 +65,6 @@ class Addressbook_Frontend_CardDAVTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        #foreach ($this->objects['contactsToDelete'] as $contact) {
-        #    $contact->delete();
-        #}
-        
         foreach ($this->objects['containerToDelete'] as $containerId) {
             $containerId = $containerId instanceof Tinebase_Model_Container ? $containerId->getId() : $containerId;
             
