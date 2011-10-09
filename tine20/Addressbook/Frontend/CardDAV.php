@@ -50,28 +50,9 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
     }
     
     /**
-    * Creates a new file
-    *
-    * The contents of the new file must be a valid VCARD
-    *
-    * @param string $name
-    * @param resource $vcardData
-    * @return void
-    */
-    public function createFile($name, $vobjectData = null) 
-    {
-        list(, $containerId) = explode('/', trim($this->_path, '/'));
-        
-        $container = Tinebase_Container::getInstance()->getContainerById($containerId);
-        
-        $objectClass = $this->_application->name . '_Frontend_WebDAV_' . $this->_model;
-        $object = $objectClass::create($container, $vobjectData);
-    }
-    
-    /**
-    * (non-PHPdoc)
-    * @see Sabre_DAV_Collection::getChild()
-    */
+     * (non-PHPdoc)
+     * @see Sabre_DAV_Collection::getChild()
+     */
     public function getChild($_name)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' path: ' . $this->_path . ' name: ' . $_name);
