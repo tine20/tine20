@@ -98,5 +98,23 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
         $child = $collection->getChild($this->objects['initialContainer']->getId());
         
         $this->assertInstanceOf('Calendar_Frontend_WebDAV_Container', $child);
-    }    
+    }
+        
+    public function testCreateFile()
+    {
+        $collection = new Calendar_Frontend_CalDAV();
+        
+        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
+        
+        $collection->createFile('foobar');
+    }
+    
+    public function testCreateDirectory()
+    {
+        $collection = new Calendar_Frontend_CalDAV();
+        
+        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
+        
+        $collection->createDirectory('foobar');
+    }
 }

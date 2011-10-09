@@ -99,4 +99,22 @@ class Addressbook_Frontend_CardDAVTest extends PHPUnit_Framework_TestCase
         
         $this->assertInstanceOf('Addressbook_Frontend_WebDAV_Container', $child);
     }    
+    
+    public function testCreateFile()
+    {
+        $collection = new Addressbook_Frontend_CardDAV();
+        
+        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
+        
+        $collection->createFile('foobar');
+    }
+    
+    public function testCreateDirectory()
+    {
+        $collection = new Addressbook_Frontend_CardDAV();
+        
+        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
+        
+        $collection->createDirectory('foobar');
+    }
 }
