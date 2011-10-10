@@ -278,10 +278,8 @@ class Tinebase_Core
             } else {
                 $controllerName = $controllerNameModel;
             }
-        } else {
-            if (!@class_exists($controllerName)) {
-                throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerName . ')!');
-            }
+        } else if (!@class_exists($controllerName)) {
+            throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerName . ')!');
         }
 
         if (! $_ignoreACL && ! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN)) {
