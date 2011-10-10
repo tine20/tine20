@@ -89,6 +89,8 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
                 $result['value'] = $this->_resolveRecord($result['value']);
             }
         }
+        
+        return $result;
     }
     
     /**
@@ -99,7 +101,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
     protected function _getController()
     {
         if ($this->_controller === NULL) {
-            if (! isset($_options['modelName'])) {
+            if (! isset($this->_options['modelName'])) {
                 Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' No modelName defined in filter options, can not resolve record.');
                 return NULL;
             }
