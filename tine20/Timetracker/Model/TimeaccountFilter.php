@@ -29,7 +29,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'id'             => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'Timetracker_Model_Timeaccount')),
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('number', 'title'))),
         'title'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'number'         => array('filter' => 'Tinebase_Model_Filter_Text'),
