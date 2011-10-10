@@ -162,12 +162,13 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
      * returns filter group filters
      * 
      * @param  bool $_valueToJson resolve value for json api?
+     * @param  array $_additionalFilters
      * @return array
      */
-    protected function _getForeignFiltersForToArray($_valueToJson)
+    protected function _getForeignFiltersForToArray($_valueToJson, $_additionalFilters = array())
     {
-        $result = ($this->_relationTypeFilter) ? array($this->_relationTypeFilter) : array();
-        $result = array_merge($result, parent::_getForeignFiltersForToArray($_valueToJson));
+        $additionalFilters = ($this->_relationTypeFilter) ? array($this->_relationTypeFilter) : $_additionalFilters;
+        $result = parent::_getForeignFiltersForToArray($_valueToJson, $additionalFilters);
         
         return $result;
     }

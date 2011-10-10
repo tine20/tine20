@@ -46,7 +46,6 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
      * the prefixed ("left") fields sent by the client
      * 
      * @var array
-     * @todo perhaps we need this in Tinebase_Model_Filter_ForeignRecord later
      */
     protected $_prefixedFields = array();
         
@@ -146,13 +145,14 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
      * returns filter group filters
      * 
      * @param  bool $_valueToJson resolve value for json api?
+     * @param  array $_additionalFilters
      * @return array
      * 
      * @todo think about allowing {condition: ...., filters: ....} syntax and just use $this->_filterGroup->toArray
      */
-    protected function _getForeignFiltersForToArray($_valueToJson)
+    protected function _getForeignFiltersForToArray($_valueToJson, $_additionalFilters = array())
     {
-        $result = array();
+        $result = $_additionalFilters;
         // we can't do this as we do not want the condition/filters syntax
         // $result = $this->_filterGroup->toArray($_valueToJson);
         $this->_filterGroupToArrayWithoutCondition($result, $this->_filterGroup, $_valueToJson);
