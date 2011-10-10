@@ -248,7 +248,8 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 style: {margin: '0px 10px'},
                 getValue: function() { return operatorStore.getAt(0).get('operator'); },
                 text : operatorStore.getAt(0).get('label'),
-                renderTo: el
+                renderTo: el,
+                setValue: Ext.emptyFn
             });
         }
         
