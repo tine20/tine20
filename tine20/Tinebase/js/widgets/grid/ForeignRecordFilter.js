@@ -230,7 +230,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     setRelatedRecordValue: function(filter) {
         var value = filter.get('value');
         
-        if (['equals', 'oneOf'].indexOf(filter.get('operator')) >= 0 ) {
+        if (['equals', 'oneOf'].indexOf(filter.get('operator') ? filter.get('operator') : filter.formFields.operator.origGetValue()) >= 0 ) {
             // NOTE: if setValue got called in the valueField internally, value is arguments[1] (createCallback)
             return filter.formFields.value.origSetValue(arguments[1] ? arguments[1] : value);
         }
@@ -411,6 +411,8 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             // init foreignRecordDefinition
             filter.foreignRecordDefinition = filter.get('operator') ? filter.get('operator') : this.defaultOperator;
         }
+        
+        operator.origGetValue = operator.getValue.createDelegate(operator);
         
         // op is always AND atm.
         operator.getValue = function() {
