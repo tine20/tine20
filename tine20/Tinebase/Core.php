@@ -283,7 +283,7 @@ class Tinebase_Core
         }
 
         if (! $_ignoreACL && ! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN)) {
-            throw new Tinebase_Exception_AccessDenied('No right to access application.');
+            throw new Tinebase_Exception_AccessDenied('No right to access application ' . $appName);
         }
         
         $controller = call_user_func(array($controllerName, 'getInstance'));
