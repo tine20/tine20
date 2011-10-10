@@ -113,7 +113,7 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getFilterToolbar: function() {
         
-        return new Tine.widgets.grid.FilterToolbar({
+        return new Tine.widgets.grid.FilterPanel({
             filterModels: Tine.Crm.Model.Lead.getFilterModel(),
             recordClass: this.recordClass,
             defaultFilter: 'query',
