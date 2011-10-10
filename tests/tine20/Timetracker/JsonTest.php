@@ -627,4 +627,29 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         
         $this->assertEquals(1, $result['totalcount'], 'timesheet not found with ExpliciteForeignIdFilter filter');
     }
+
+    /**
+     * create timesheet and search with explicite foreign left hand filter
+     */
+    public function testSearchWithExpliciteForeignIdLeftFilter()
+    {
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        
+        $anotherTimesheet = $this->_getTimesheet();
+        $anotherTimesheetData = $this->_json->saveTimesheet($anotherTimesheet->toArray());
+        
+        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
+        $this->_toDeleteIds['ta'][] = $anotherTimesheetData['timeaccount_id']['id'];
+        
+        $filter = array(
+            array('field' => 'timeaccount_id', 'operator' => 'AND', 'value' => array(
+                array('field' => ':id', 'operator' => 'equals', 'value' => $timesheetData['timeaccount_id']['id'])
+            ))
+        );
+        
+        $result = $this->_json->searchTimesheets($filter, $this->_getPaging());
+        
+        $this->assertEquals(1, $result['totalcount'], 'timesheet not found with ExpliciteForeignIdFilter filter');
+    }
 }
