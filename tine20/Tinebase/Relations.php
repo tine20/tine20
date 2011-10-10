@@ -239,7 +239,7 @@ class Tinebase_Relations
      */
     protected function _setAppRecord($_relation)
     {
-        $appController = Tinebase_Core::getApplicationInstance($_relation->related_model, $itemName);
+        $appController = Tinebase_Core::getApplicationInstance($_relation->related_model);
         
         if (!$_relation->related_record->getId()) {
             $method = 'create';
@@ -266,15 +266,14 @@ class Tinebase_Relations
             default:
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Unsupported related model ' . $_relation->related_model . '. Using default backend (Sql).');
                 $_relation->related_backend = Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND;
-                //throw new Tinebase_Exception_UnexpectedValue('Related model not supported.');
                 break;
         }
     }
     
     /**
-     * resolved app records and filles the related_record property with the coresponding record
+     * resolved app records and filles the related_record property with the corresponding record
      * 
-     * NOTE: With this, READ ACL is implicitly checked as non readable records woun't get retuned!
+     * NOTE: With this, READ ACL is implicitly checked as non readable records won't get retuned!
      * 
      * @param  Tinebase_Record_RecordSet $_relations of Tinebase_Model_Relation
      * @param  boolean $_ignoreACL 
