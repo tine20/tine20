@@ -461,7 +461,26 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Felamimail_Exception_IMAPMessageNotFound');
         $message = $this->_json->getMessage($message['id']);
     }
-
+    
+    /**
+     * try to get a message as plain/text
+     */
+    public function testGetPlainTextMessage()
+    {
+        $accountBackend = new Felamimail_Backend_Account();
+        $message = $this->_sendMessage();     
+        
+        // get complete message
+        $this->_account->display_format = Felamimail_Model_Account::DISPLAY_PLAIN;
+        $accountBackend->update($this->_account);
+        $message = $this->_json->getMessage($message['id']);
+        $this->_account->display_format = Felamimail_Model_Account::DISPLAY_HTML;
+        $accountBackend->update($this->_account);
+        
+        // check
+        $this->assertEquals("aaaaaä \n\r\n", $message['body']);
+    }
+    
     /**
      * try search for a message with path filter
      */
@@ -713,7 +732,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'account_id'    => $this->_account->getId(),
             'subject'       => $fwdSubject,
             'to'            => array('unittest@' . $this->_mailDomain),
-            'body'          => 'aaaaaä <br>',
+            'body'          => "aaaaaä <br>",
             'headers'       => array('X-Tine20TestMessage' => 'jsontest'),
             'original_id'   => $message['id'],
             'attachments'   => array(new Tinebase_Model_TempFile(array(
@@ -935,6 +954,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'body'          => 'aaaaaä <br>',
             'headers'       => array('X-Tine20TestMessage' => 'jsontest'),
             'from_email'    => $_emailFrom,
+            'content_type'  => Felamimail_Model_Message::CONTENT_TYPE_HTML,
         );
     }
 
