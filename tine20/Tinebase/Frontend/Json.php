@@ -261,7 +261,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // NOTE: this functino makes a new instance of a class whose name is given by user input.
         //       we need to do some sanitising first!
         list($appName, $modelString, $filterGroupName) = explode('_', $filterName);
-        if($modelString !== 'Model') {
+        if ($modelString !== 'Model') {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' spoofing attempt detected, affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), TRUE));
             die('go away!');
         }
@@ -276,7 +276,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             die('go away!');
         }
         
-        // at this point we are shure request is save ;-)
+        // at this point we are sure request is save ;-)
         $filterGroup->setFromArray($filterData);
         
         Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filterGroup, $tag);
