@@ -332,12 +332,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 filter.toolbar.setValue(value);
                 
                 filter.formFields.operator.setValue('definedBy');
-//                this.onOperatorChange(filter, value[0].operator, true);
-                
-                // change button text
-                if (filter.formFields.value && Ext.isFunction(filter.formFields.value.setText)) {
-                    filter.formFields.value.setText(_(this.editDefinitionText));
-                }
+                this.onOperatorChange(filter, 'definedBy', false);
             }
         }
         
