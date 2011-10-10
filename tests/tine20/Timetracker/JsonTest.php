@@ -651,5 +651,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $result = $this->_json->searchTimesheets($filter, $this->_getPaging());
         
         $this->assertEquals(1, $result['totalcount'], 'timesheet not found with ExpliciteForeignIdFilter filter');
+        $this->assertEquals(':id', $result['filter'][0]['value'][0]['field']);
     }
 }

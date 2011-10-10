@@ -34,14 +34,6 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
     protected $_relationTypeFilter = NULL;
     
     /**
-     * the prefixed ("left") fields sent by the client
-     * 
-     * @var array
-     * @todo perhaps we need this in Tinebase_Model_Filter_ForeignRecord later
-     */
-    protected $_prefixedFields = array();
-    
-    /**
      * get foreign controller
      * 
      * @return Tinebase_Controller_Record_Abstract
@@ -156,20 +148,12 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
     {
         $filters = $this->_value;   
         foreach ($filters as $idx => $filterData) {
-            if (! isset($filterData['field'])) {
-                continue;
-            }
-            
-            if (strpos($filterData['field'], ':') !== FALSE) {
-                $filters[$idx]['field'] = str_replace(':', '', $filterData['field']);
-                $this->_prefixedFields[] = $filters[$idx]['field'];
-            }
             
             if ($filters[$idx]['field'] === 'relation_type') {
                 $this->_relationTypeFilter = $filters[$idx];
                 unset($filters[$idx]);
             }
-        }        
+        }
         
         return $filters;
     }
@@ -182,21 +166,8 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
      */
     protected function _getForeignFiltersForToArray($_valueToJson)
     {
-        $result = parent::_getForeignFiltersForToArray($_valueToJson);
-        
-        // add relation type again
-        if ($this->_relationTypeFilter) {
-            array_unshift($result, $this->_relationTypeFilter);
-        }
-        
-        // return prefixes
-        if (! empty($this->_prefixedFields)) {
-            foreach ($result as $idx => $filterData) {
-                if (isset($filterData['field']) && in_array($filterData['field'], $this->_prefixedFields)) {
-                    $result[$idx]['field'] = ':' . $filterData['field'];
-                }
-            }
-        }
+        $result = ($this->_relationTypeFilter) ? array($this->_relationTypeFilter) : array();
+        $result = array_merge($result, parent::_getForeignFiltersForToArray($_valueToJson));
         
         return $result;
     }

@@ -43,6 +43,14 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
     protected $_foreignIds = NULL;
         
     /**
+     * the prefixed ("left") fields sent by the client
+     * 
+     * @var array
+     * @todo perhaps we need this in Tinebase_Model_Filter_ForeignRecord later
+     */
+    protected $_prefixedFields = array();
+        
+    /**
      * creates corresponding filtergroup
      *
      * @param array $_value
@@ -50,9 +58,28 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
     public function setValue($_value) {
         $this->_foreignIds = NULL;
         $this->_value = (array)$_value;
+        $this->_removePrefixes();
+        
         // @todo move this to another place?
         $this->_setFilterGroup();
         $this->_controller = $this->_getController();
+    }
+    
+    /**
+     * remove prefixes from filter fields
+     */
+    protected function _removePrefixes()
+    {
+        foreach ($this->_value as $idx => $filterData) {
+            if (! isset($filterData['field'])) {
+                continue;
+            }
+            
+            if (strpos($filterData['field'], ':') !== FALSE) {
+                $this->_value[$idx]['field'] = str_replace(':', '', $filterData['field']);
+                $this->_prefixedFields[] = $this->_value[$idx]['field'];
+            }
+        }
     }
     
     /**
@@ -129,8 +156,25 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         // we can't do this as we do not want the condition/filters syntax
         // $result = $this->_filterGroup->toArray($_valueToJson);
         $this->_filterGroupToArrayWithoutCondition($result, $this->_filterGroup, $_valueToJson);
+        $this->_returnPrefixes($result);
         
         return $result;
+    }
+    
+    /**
+     * return prefixes to foreign filters
+     * 
+     * @param array $_filters
+     */
+    protected function _returnPrefixes(&$_filters)
+    {
+        if (! empty($this->_prefixedFields)) {
+            foreach ($_filters as $idx => $filterData) {
+                if (isset($filterData['field']) && in_array($filterData['field'], $this->_prefixedFields)) {
+                    $_filters[$idx]['field'] = ':' . $filterData['field'];
+                }
+            }
+        }
     }
     
     /**
