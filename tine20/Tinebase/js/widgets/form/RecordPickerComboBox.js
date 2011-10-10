@@ -130,20 +130,26 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
      */
     setValue: function (value) {
         if (value) {
+            
+            // value is a record
             if (typeof(value.get) === 'function') {
-                // value is a record
                 if (this.store.indexOf(value) < 0) {
                     this.store.addSorted(value);
                 }
                 value = value.get(this.valueField);
-                
-                
-            } else if (value[this.valueField]) {
-                // value is a js object
+            }
+            
+            // value is a js object
+            else if (value[this.valueField]) {
                 if (! this.store.getById(value)) {
                     this.store.addSorted(new this.recordClass(value));
                 }
                 value = value[this.valueField];
+            }
+            
+            // value is the current id
+            else if (Ext.isPrimitive(value) && value == this.getValue()) {
+                return this.setValue(this.selectedRecord);
             }
         }
         
