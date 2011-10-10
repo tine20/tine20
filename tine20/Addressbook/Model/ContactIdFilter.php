@@ -13,6 +13,7 @@
  * Tinebase_Model_Filter_Id
  * 
  * @package     Addressbook
+ * @subpackage  Filter
  * 
  * filters one or more ids
  */
@@ -70,16 +71,16 @@ class Addressbook_Model_ContactIdFilter extends Tinebase_Model_Filter_Id
      */
     protected function _resolveContact($value)
     {
-            if ($value === Addressbook_Model_Contact::CURRENTCONTACT) {
-                $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId(), TRUE)->toArray();
-            } else {
-                try {
-                    $contact = Addressbook_Controller_Contact::getInstance()->get($value)->toArray();
-                } catch (Exception $e) {
-                    $contact = $value;
-                }
+        if ($value === Addressbook_Model_Contact::CURRENTCONTACT) {
+            $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId(), TRUE)->toArray();
+        } else {
+            try {
+                $contact = Addressbook_Controller_Contact::getInstance()->get($value)->toArray();
+            } catch (Exception $e) {
+                $contact = $value;
             }
-            
-            return $contact;
+        }
+        
+        return $contact;
     }
 }
