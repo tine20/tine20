@@ -382,6 +382,9 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     operatorRenderer: function (filter, el) {
         var operator;
         
+        // init operator value
+        filter.set('operator', filter.get('operator') ? filter.get('operator') : this.defaultOperator);
+        
         if (! this.isGeneric) {
             operator = Tine.widgets.grid.ForeignRecordFilter.superclass.operatorRenderer.apply(this, arguments);
             filter.foreignRecordDefinition = {linkType: this.linkType, foreignRecordClass: this.foreignRecordClass, filterName: this.filterName}
@@ -399,7 +402,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 store: this.operatorStore,
                 displayField: 'label',
                 valueField: 'operator',
-                value: filter.get('operator') ? filter.get('operator') : this.defaultOperator,
+                value: filter.get('operator'),
                 renderTo: el
             });
             operator.on('select', function(combo, newRecord, newKey) {
@@ -409,8 +412,9 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             }, this);
             
             // init foreignRecordDefinition
-            filter.foreignRecordDefinition = filter.get('operator') ? filter.get('operator') : this.defaultOperator;
+            filter.foreignRecordDefinition = filter.get('operator');
         }
+        
         
         operator.origGetValue = operator.getValue.createDelegate(operator);
         
