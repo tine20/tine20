@@ -305,8 +305,13 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             
             // if there where no remaining childfilters, hide this filterrow
             if (! value.length)  {
-                filter.formFields.operator.setValue('definedBy');
-//                this.onOperatorChange(filter, 'equals', true);
+                // prevent loop
+                filter.set('value', '###NOT SET###');
+                filter.set('value', '');
+                
+                filter.formFields.operator.setValue(this.defaultOperator);
+                this.onOperatorChange(filter, this.defaultOperator, false);
+                
                 // if (not empty value through operator chage)
                 Tine.log.info('hide row -> not yet implemented');
             }
@@ -324,7 +329,6 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     this.createRelatedRecordToolbar(filter);
                 }
                 
-                // @TODO id, relation_type not in child side yet
                 filter.toolbar.setValue(value);
                 
                 filter.formFields.operator.setValue('definedBy');
@@ -474,7 +478,10 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
 
         switch(operator) {
             case 'equals':
-                value = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+                // @TODO invent a picker registry
+                var picker = this.foreignRecordClass == Tine.Addressbook.Model.Contact ?  Tine.Addressbook.SearchCombo : Tine.Tinebase.widgets.form.RecordPickerComboBox;
+                
+                value = new picker ({
                     recordClass: this.foreignRecordClass,
                     filter: filter,
                     blurOnSelect: true,

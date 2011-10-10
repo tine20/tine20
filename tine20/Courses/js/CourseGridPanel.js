@@ -50,7 +50,8 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 {filtertype: 'foreignrecord', 
                     app: this.app,
                     foreignRecordClass: Tine.Tinebase.Model.Department,
-                    ownField: 'type'
+                    ownField: 'type',
+                    operators: ['equals']
                 }
                 //new Tine.widgets.tags.TagFilter({app: this.app})
             ],
