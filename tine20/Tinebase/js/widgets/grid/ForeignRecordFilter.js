@@ -547,6 +547,12 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     
     objectToString: function() {
         return Ext.encode(this);
+    },
+    
+    onDestroy: function(filterRecord) {
+        if(filterRecord.toolbar) {
+            this.ftb.removeFilterSheet(filterRecord.toolbar);
+        }
     }
 });
     
