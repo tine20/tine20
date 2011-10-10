@@ -239,8 +239,7 @@ class Tinebase_Relations
      */
     protected function _setAppRecord($_relation)
     {
-        list($appName, $i, $itemName) = explode('_', $_relation->related_model);
-        $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
+        $appController = Tinebase_Core::getApplicationInstance($_relation->related_model, $itemName);
         
         if (!$_relation->related_record->getId()) {
             $method = 'create';
@@ -304,8 +303,7 @@ class Tinebase_Relations
                 $appController = Tinebase_User::factory(Tinebase_User::getConfiguredBackend());
                 $records = $appController->$getMultipleMethod($relations->related_id);
             } else {
-                list($appName, $i, $itemName) = explode('_', $modelName);
-                $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
+                $appController = Tinebase_Core::getApplicationInstance($modelName);
                 $records = $appController->$getMultipleMethod($relations->related_id, $_ignoreACL);
             }
             

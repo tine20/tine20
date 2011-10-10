@@ -3,15 +3,18 @@
  * Tine 2.0
  * 
  * @package     Sales
+ * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
 /**
- * contract filter Class
+ * Product filter Class
+ * 
  * @package     Sales
+ * @subpackage  Filter
  */
 class Sales_Model_ProductFilter extends Tinebase_Model_Filter_FilterGroup
 {
@@ -36,7 +39,7 @@ class Sales_Model_ProductFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'id'                    => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'id'                    => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'Sales_Model_Product')),
         'query'                 => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
             'options' => array('fields' => array('description', 'name', 'manufacturer', 'category'))
