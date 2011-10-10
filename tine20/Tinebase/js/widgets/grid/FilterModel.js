@@ -14,7 +14,7 @@ Ext.ns('Tine.widgets.grid');
  * 
  * @namespace   Tine.widgets.grid
  * @class       Tine.widgets.grid.FilterModel
- * @extends     Ext.Component
+ * @extends     Ext.util.Observable
  * @constructor
  */
 Tine.widgets.grid.FilterModel = function(config) {
@@ -30,9 +30,10 @@ Tine.widgets.grid.FilterModel = function(config) {
       'filtertrigger'
     );
     
+    this.initComponent();
 };
 
-Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
+Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
     /**
      * @cfg {String} label 
      * label for the filter
@@ -98,7 +99,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
      * @private
      */
     initComponent: function() {
-        Tine.widgets.grid.FilterModel.superclass.initComponent.call(this);
         this.isFilterModel = true;
         
         if (! this.operators) {
@@ -152,6 +152,8 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             }
         }
     },
+    
+    onDestroy: Ext.emptyFn,
     
     /**
      * operator renderer
