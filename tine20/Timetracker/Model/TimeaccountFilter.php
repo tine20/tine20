@@ -92,7 +92,9 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
     {
         if (! $this->isFilterSet('showClosed')) {
             // add show closed filter if not already set
-            $this->addFilter($this->createFilter('showClosed', 'equals', $this->_options['showClosed']));
+            $showClosedFilter = $this->createFilter('showClosed', 'equals', $this->_options['showClosed']);
+            $showClosedFilter->setIsImplicit(TRUE);
+            $this->addFilter($showClosedFilter);
         }
         
         $this->_appendAclSqlFilter($_select);
