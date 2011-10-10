@@ -267,7 +267,17 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     },
     
     generateTitle: function() {
-        return (this.recordClass ? Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName')).i18n._hidden(this.recordClass.getMeta('recordsName')) : this.id);
+        var title = this.id;
+        
+        if (this.recordClass) {
+            var app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName')),
+                recordName = this.recordClass.getMeta('recordName'),
+                recordsName = this.recordClass.getMeta('recordsName');
+                
+            title = app.i18n.n_hidden(recordName, recordsName, 50);
+        }
+        
+        return title;
     },
     
     /**
