@@ -105,7 +105,10 @@ class Felamimail_Setup_Update_Release5 extends Setup_Update_Abstract
             </declaration>
         </table>
         ');
-        $this->_backend->createTable($tableDefinition, 'Felamimail', 'felamimail_sieve_rule');
+        // tables might already exist because of an update script in Maischa
+        if (! $this->_backend->tableExists('felamimail_sieve_rule')) {
+            $this->_backend->createTable($tableDefinition, 'Felamimail', 'felamimail_sieve_rule');
+        }
 
         $tableDefinition = new Setup_Backend_Schema_Table_Xml('
         <table>
@@ -167,7 +170,10 @@ class Felamimail_Setup_Update_Release5 extends Setup_Update_Abstract
             </declaration>
         </table>
         ');
-        $this->_backend->createTable($tableDefinition, 'Felamimail', 'felamimail_sieve_vacation');
+        // tables might already exist because of an update script in Maischa
+        if (! $this->_backend->tableExists('felamimail_sieve_vacation')) {
+            $this->_backend->createTable($tableDefinition, 'Felamimail', 'felamimail_sieve_vacation');
+        }
         $this->setApplicationVersion('Felamimail', '5.3');
     }
 }
