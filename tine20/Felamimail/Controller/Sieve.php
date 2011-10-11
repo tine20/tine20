@@ -41,27 +41,21 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     protected $_applicationName = 'Felamimail';
     
     /**
-     * Sieve script backend
-     *
-     * @var Felamimail_Backend_Sieve_Abstract
-     */
-    protected $_scriptBackend = NULL;
-    
-    /**
-     * the sieve backend to use (Sql or Script)
-     * 
-     * @todo add config option?
-     * 
-     * @var string
-     */
-    protected $_scriptBackendToUse = 'Script';
-    
-    /**
      * Sieve server backend
      *
      * @var Felamimail_Backend_Sieve
      */
     protected $_backend = NULL;
+    
+    /**
+     * Sieve script data backend
+     *
+     * @var string
+     * 
+     * @todo create factory class?
+     */
+//    protected $_scriptDataBackend = 'Sql';
+    protected $_scriptDataBackend = 'Script';
     
     /**
      * holds the instance of the singleton
@@ -75,13 +69,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      *
      * don't use the constructor. use the singleton
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_currentAccount = Tinebase_Core::getUser();
-        
-        $scriptBackendClass = 'Felamimail_Sieve_Backend_' . $this->_scriptBackendToUse;
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using ' 
-            . $scriptBackendClass . ' as sieve script backend.');
-        $this->_scriptBackend = new $scriptBackendClass();
     }
     
     /**
@@ -114,9 +104,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     public function getVacation($_accountId)
     {
-        $this->_setSieveBackendAndAuthenticate($_accountId);
-        
-        $script = $this->_getSieveScript();
+        $script = $this->_getSieveScript($_accountId);
         $vacation = ($script !== NULL) ? $script->getVacation() : NULL;
         
         $result = new Felamimail_Model_Sieve_Vacation(array(
@@ -133,10 +121,37 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     /**
      * get sieve script for account
      * 
+     * @param string|Felamimail_Model_Account $_accountId
+     * @return NULL|Felamimail_Sieve_Backend_Abstract
+     */
+    protected function _getSieveScript($_accountId)
+    {
+        $script = NULL;
+        if ($this->_scriptDataBackend === 'Sql') {
+            try {
+                $script = new Felamimail_Sieve_Backend_Sql($_accountId);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // get sieve script from server as fallback
+            }
+        }
+        
+        if ($script === NULL) {
+            $script = $this->_getServerSieveScript($_accountId);
+        }
+        
+        return $script;
+    }
+    
+    /**
+     * get sieve script from sieve server
+     * 
+     * @param string|Felamimail_Model_Account $_accountId
      * @return NULL|Felamimail_Sieve_Backend_Script
      */
-    protected function _getSieveScript()
+    protected function _getServerSieveScript($_accountId)
     {
+        $this->_setSieveBackendAndAuthenticate($_accountId);
+        
         $result = NULL;
         $scripts = $this->_backend->listScripts();
 
@@ -200,9 +215,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         
         $fsv = $_vacation->getFSV();
         
-        $script = $this->_getSieveScript();
+        $script = $this->_getSieveScript($account);
         if ($script === NULL) {
-            $script = new Felamimail_Sieve_Backend_Script();
+            $script = $this->_createNewSieveScript($account);
         }
         $script->setVacation($fsv);
         
@@ -280,7 +295,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * put updated sieve script
      * 
      * @param string|Felamimail_Model_Account $_accountId
-     * @param Felamimail_Sieve_Backend_Script $_script
+     * @param Felamimail_Sieve_Backend_Abstract $_script
      * @throws Felamimail_Exception_Sieve
      */
     protected function _putScript($_accountId, $_script)
@@ -370,9 +385,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         $result = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_Rule');
         
-        $this->_setSieveBackendAndAuthenticate($_accountId);
-        
-        $script = $this->_getSieveScript();
+        $script = $this->_getSieveScript($_accountId);
         if ($script !== NULL) {
             foreach ($script->getRules() as $fsr) {
                 $rule = new Felamimail_Model_Sieve_Rule();
@@ -396,11 +409,10 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     public function setRules($_accountId, Tinebase_Record_RecordSet $_rules)
     {
-        $this->_setSieveBackendAndAuthenticate($_accountId);
+        $script = $this->_getSieveScript($_accountId);
         
-        $script = $this->_getSieveScript();
         if ($script === NULL) {
-            $script = new Felamimail_Sieve_Backend_Script();
+            $script = $this->_createNewSieveScript($_accountId);
         } else {
             $script->clearRules();
         }
@@ -415,5 +427,22 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         $this->_putScript($_accountId, $script);
         
         return $this->getRules($_accountId);
+    }
+    
+    /**
+     * create new sieve script for the configured backend
+     * 
+     * @param string|Felamimail_Model_Account $_accountId
+     * @return Felamimail_Sieve_Backend_Abstract
+     */
+    protected function _createNewSieveScript($_accountId)
+    {
+        if ($this->_scriptDataBackend === 'Sql') {
+            $script = new Felamimail_Sieve_Backend_Sql($_accountId, FALSE);
+        } else {
+            $script = new Felamimail_Sieve_Backend_Script();
+        }
+        
+        return $script;
     }
 }

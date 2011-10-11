@@ -41,9 +41,10 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
     /**
      * constructor
      * 
-     * @param   string  $_accountId     the felamimail account id
+     * @param   string|Felamimail_Model_Account  $_accountId     the felamimail account id
+     * @param   boolean $_readData
      */
-    public function __construct($_accountId)
+    public function __construct($_accountId, $_readData = TRUE)
     {
         $this->_rulesBackend = new Tinebase_Backend_Sql(array(
             'modelName' => 'Felamimail_Model_Sieve_Rule', 
@@ -55,7 +56,11 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
             'tableName' => 'felamimail_sieve_rules',
         ));
         
-        $this->readScriptData();
+        $this->_accountId = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId->getId() : $_accountId;
+        
+        if ($_readData) {
+            $this->readScriptData();
+        }
     }
     
     /**
@@ -103,17 +108,26 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
     
     /**
      * persist rules data in db
+     * 
+     * @throws Exception
      */
     protected function _saveRules()
     {
-        // @todo use transaction
-        $this->_rulesBackend->deleteByProperty($this->_accountId, 'accountId');
-        foreach ($this->_rules as $rule) {
-            if (empty($rule->account_id)) {
-                $rule->account_id = $this->_accountId;
+        try {
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+            $this->_rulesBackend->deleteByProperty($this->_accountId, 'accountId');
+            foreach ($this->_rules as $rule) {
+                if (empty($rule->account_id)) {
+                    $rule->account_id = $this->_accountId;
+                }
+                $this->_rulesBackend->create($_rule);
             }
-            $this->_rulesBackend->create($_rule);
-        }
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw Exception;
+        } 
     }
 
     /**
