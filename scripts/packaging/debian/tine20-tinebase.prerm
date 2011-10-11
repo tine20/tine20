@@ -5,6 +5,8 @@ set -e
 
 . /usr/share/debconf/confmodule
 . /usr/share/dbconfig-common/dpkg/prerm.mysql
-dbc_go tine20 $@
+if ! dbc_go tine20 $@ ; then
+    echo 'Automatic database removal failed!'
+fi
 
 #DEBHELPER#

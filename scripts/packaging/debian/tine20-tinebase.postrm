@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 
 set -e
 
@@ -6,8 +6,9 @@ if [ -f /usr/share/debconf/confmodule ]; then
    . /usr/share/debconf/confmodule
 fi
 
-db_version 2.0 || [ $? -lt 30 ]
+db_version 2.0
 
+# handle database removal
 if [ -f /usr/share/dbconfig-common/dpkg/postrm ]; then 
     # currently we support mysql only
     dbc_dbtypes="mysql"
@@ -16,6 +17,36 @@ if [ -f /usr/share/dbconfig-common/dpkg/postrm ]; then
     dbc_go tine20 $@ 
 fi 
 
+if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
+    db_get tine20/webserver_type
+    webservers="$RET"
+
+    if [ "$webservers" != "" ]; then
+
+        for webserver in $webservers; do
+            webserver=${webserver%,}
+
+            # check if webserver is installed
+            test -x /usr/sbin/$webserver || continue
+    
+            case "$webserver" in
+                apache2)
+                    rm -f /etc/$webserver/conf.d/tine20
+                    
+                    # mark webserver for restart (used by restart.sh)
+                    restart="$restart $webserver"
+                    ;;
+            esac
+        done
+    
+        # restart webserver
+        if [ -e /usr/share/wwwconfig-common/restart.sh ]; then
+            . /usr/share/wwwconfig-common/restart.sh
+        fi
+        
+    fi
+fi
+
 if [ "$1" = "purge" ]; then
     
     rm -f /etc/tine20/config.inc.php
@@ -23,66 +54,12 @@ if [ "$1" = "purge" ]; then
         ucf --purge /etc/tine20/config.inc.php
     fi
  
-#    db_get tine20/reconfigure || true
-#
-#    db_get tine20/mysql/configure || true
-#    if [ "$RET" = true ]; then
-#
-#       db_get tine20/purge || true
-#       if [ "$RET" = true ]; then
-#
-#          db_get tine20/mysql/dbserver || true
-#          dbserver=$RET
-#          db_get tine20/mysql/dbadmin || true
-#          dbadmin=$RET
-#          db_input critical tine20/mysql/dbadmpass || true
-#          db_go || true
-#
-#          db_get tine20/mysql/dbadmpass || true
-#          dbadmpass=$RET
-#
-#          # remove the database
-#          db_get tine20/mysql/dbname || true
-#          dbname=$RET
-#	  if [ -f /usr/share/wwwconfig-common/mysql-dropdb.sh ]; then
-#             . /usr/share/wwwconfig-common/mysql-dropdb.sh
-#	  fi
-#
-#          # remove the database user
-#          db_get tine20/mysql/dbuser || true
-#          dbuser=$RET
+#     # remove the database user
+#     db_get tine20/mysql/dbuser || true
+#     dbuser=$RET
 #	  if [ -f /usr/share/wwwconfig-common/mysql-dropuser.sh ]; then
 #             . /usr/share/wwwconfig-common/mysql-dropuser.sh
 #	  fi
-#
-#       fi
-#    fi
-
-
-    db_get tine20/webserver_type
-    webserver="$RET"
-
-    #for webserver in $webservers; do
-    #    webserver=${webserver%,}
-
-        case "$webserver" in
-            apache2)
-                rm -f /etc/$webserver/conf.d/tine20
-                test -x /usr/sbin/$webserver || continue
-                db_reset tine20/webserver_restart || true
-                #db_subst tine20/webserver_restart webserver "$webserver" || true
-                db_input high tine20/webserver_restart || true
-                db_go || true
-                db_get tine20/webserver_restart || true
-
-                if [ "$RET" = "true" ]; then
-                    restart="$restart $webserver"
-                fi
-                ;;
-        esac
-    #done
-
-    . /usr/share/wwwconfig-common/restart.sh
 
     rm -rf /var/lib/tine20/sessions/*
     rm -rf /var/lib/tine20/cache/*
@@ -90,11 +67,9 @@ if [ "$1" = "purge" ]; then
     
 fi
 
-# Automatically added by dh_installdebconf
-if [ "$1" = purge ] && [ -e /usr/share/debconf/confmodule ]; then
+if [ "$1" = "purge" ] && [ -e /usr/share/debconf/confmodule ]; then
 	. /usr/share/debconf/confmodule
 	db_purge
 fi
-# End automatically added section
 
 #DEBHELPER#

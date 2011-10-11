@@ -2,37 +2,99 @@
 
 set -e
 
+fix_permissions() {
+    for dir in sessions tmp cache files; do
+        install -d -m 0750 -o www-data -g www-data /var/lib/tine20/$dir
+    done
+    
+    chown www-data:www-data /var/log/tine20
+    chmod 0750 /var/log/tine20    
+}
+
 . /usr/share/debconf/confmodule
-db_version 2.0 || [ $? -lt 30 ]
+db_version 2.0
 
 
 if [ "$1" = "configure" ]; then
 
+    fix_permissions
+    
     db_get tine20/webserver_type
-    webserver="$RET"
-
-    #for webserver in $servers; do
-    #    webserver=${webserver%,}
-    #    test -x /usr/sbin/$webserver || continue
-
-        case "$webserver" in
-            apache2)
-                test -x /usr/sbin/$webserver || continue
-                
-                if [ -d /etc/$webserver/mods-enabled ]; then
-                    if [ ! -f /etc/$webserver/mods-enabled/expires.load -a ! -h /etc/$webserver/mods-enabled/expires.load ]; then
-                        ln -s /etc/$webserver/mods-available/expires.load /etc/$webserver/mods-enabled/expires.load
-                    fi
-		    if [ -f /etc/apache2/mods-available/php5.load ]; then
-                        if [ ! -f /etc/$webserver/mods-enabled/php5.load -a ! -h /etc/$webserver/mods-enabled/php5.load ]; then
-                            ln -s /etc/$webserver/mods-available/php5.load /etc/$webserver/mods-enabled/php5.load
-                        fi 
-                    fi
-                fi
-                ;;
-        esac
+    webservers="$RET"
+    
+    if [ "$webservers" != "" ]; then
+    
         
-    #done
+
+        for webserver in $webservers; do
+            webserver=${webserver%,}
+            
+            # check if webserver is installed
+            test -x /usr/sbin/$webserver || continue
+    
+            case "$webserver" in
+                apache2)
+                    if [ -d /etc/$webserver/mods-enabled ]; then
+                        if [ ! -f /etc/$webserver/mods-enabled/expires.load -a ! -h /etc/$webserver/mods-enabled/expires.load ]; then
+                            /usr/sbin/a2enmod expires
+                        fi
+                        if [ -f /etc/apache2/mods-available/php5.load ]; then
+                            if [ ! -f /etc/$webserver/mods-enabled/php5.load -a ! -h /etc/$webserver/mods-enabled/php5.load ]; then
+                                /usr/sbin/a2enmod php5
+                            fi 
+                        fi
+                    fi
+
+                    # create vhost configuration links
+                    servers="$webserver"
+                    linkdestination_apache="../../tine20/apache.conf"
+                    linkdestination_lighttpd="../../tine20/lighttpd.conf"
+                    linkname="tine20"
+        
+                    if [ -e /usr/share/wwwconfig-common/confd-link.sh ]; then
+                        . /usr/share/wwwconfig-common/confd-link.sh
+                    fi
+                    
+                    # mark webserver for restart (used by restart.sh)
+                    restart="$restart $webserver"
+                    
+                    ;;
+                
+                lighttpd)
+
+                    # create vhost configuration links
+                    servers="$webserver"
+                    linkdestination_lighttpd="../../tine20/lighttpd.conf"
+                    linkname="15-tine20.conf"
+        
+                    if [ -e /usr/share/wwwconfig-common/confd-link.sh ]; then
+                        . /usr/share/wwwconfig-common/confd-link.sh
+                    fi
+                    
+                    if [ -d /etc/$webserver/conf-available ]; then
+                        if [ ! -f /etc/$webserver/conf-enabled/10-expire.conf -a ! -h /etc/$webserver/conf-enabled/10-expire.conf ]; then
+                            /usr/sbin/lighttpd-enable-mod expire
+                        fi
+
+                        if [ ! -f /etc/$webserver/conf-enabled/15-tine20.conf -a ! -h /etc/$webserver/conf-enabled/15-tine20.conf ]; then
+                            /usr/sbin/lighttpd-enable-mod tine20
+                        fi
+                    fi
+                    
+                    # mark webserver for restart (used by restart.sh)
+                    restart="$restart $webserver"
+                    
+                    ;;
+            esac
+            
+        done
+        
+        # restart webserver
+        if [ -e /usr/share/wwwconfig-common/restart.sh ]; then
+            . /usr/share/wwwconfig-common/restart.sh
+        fi
+    
+    fi
 
     if [ ! -e /etc/tine20/config.inc.php ]; then
         . /usr/share/dbconfig-common/dpkg/postinst
@@ -40,38 +102,26 @@ if [ "$1" = "configure" ]; then
         dbc_generate_include='template:/etc/tine20/config.inc.php'
         dbc_generate_include_owner='root:www-data'
         dbc_generate_include_perms='640'
-        dbc_generate_include_args="-U -o template_infile=/usr/share/doc/tine20/examples/config.inc.php.dist"
+        dbc_generate_include_args="-U -o template_infile=/usr/share/doc/tine20-tinebase/examples/config.inc.php.dist"
         
         dbc_go tine20 $@
+        
+        db_get tine20/setupuser
+        setupuser="$RET"
+        db_reset tine20/setupuser || true
+        
+        db_get tine20/setuppasswd
+        setuppasswd="$RET"
+        db_reset tine20/setuppasswd || true
+        
+        sed -i "s/_SETUPUSERNAME_/$setupuser/"   /etc/tine20/config.inc.php
+        sed -i "s/_SETUPPASSWORD_/$setuppasswd/" /etc/tine20/config.inc.php
+        
     fi
 
+    # create link used by PHP when running as (fast)cgi
     if [ ! -f /etc/php5/conf.d/tine20.ini -a ! -h /etc/php5/conf.d/tine20.ini ]; then
         ln -s /etc/tine20/php5.ini /etc/php5/conf.d/tine20.ini
     fi
-    
-    servers="$webserver"
-    linkdestination_apache="../../tine20/apache.conf"
-    #linkdestination_lighttpd="../../tine20/lighttpd.conf"
-    linkname="tine20"
-    if [ -e /usr/share/wwwconfig-common/confd-link.sh ]; then
-        . /usr/share/wwwconfig-common/confd-link.sh
-    fi
-    
-    
-    case "$webserver" in
-        apache2)
-            test -x /usr/sbin/$webserver || continue
-            db_reset tine20/webserver_restart || true
-            db_input high tine20/webserver_restart || true
-            db_go || true
-            db_get tine20/webserver_restart || true
-
-            if [ "$RET" = "true" ]; then
-                restart="$restart $webserver"
-            fi
-            ;;
-    esac
-
-    . /usr/share/wwwconfig-common/restart.sh
 
 fi

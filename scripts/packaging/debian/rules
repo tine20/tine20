@@ -1,86 +1,28 @@
 #!/usr/bin/make -f
-# -*- makefile -*-
-# Sample debian/rules that uses debhelper.
-# This file was originally written by Joey Hess and Craig Small.
-# As a special exception, when this file is copied by dh-make into a
-# dh-make output file, you may use that output file without restriction.
-# This special exception was added by Craig Small in version 0.37 of dh-make.
-
-#include /usr/share/cdbs/1/rules/debhelper.mk
 
 # Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+export DH_VERBOSE=1
 
 PACKAGES := $(shell dh_listpackages)
 MODULES = $(filter-out tinebase,$(patsubst tine20-%,%,$(filter tine20-%,$(PACKAGES))))
 
-DESTDIR=$(CURDIR)/debian/tine20-tinebase
+%:
+	dh  $@
 
-TINE20DIR=$(DESTDIR)/usr/share/tine20
-TINE20CONFDIR=$(DESTDIR)/etc/tine20
-TINE20DOCDIR=$(DESTDIR)/usr/share/doc/tine20
-TINE20LOGDIR=$(DESTDIR)/var/log/tine20
+# overwrite dh_installdeb to execute an additional shell script
+override_dh_installdeb:
+	dh_installdeb
+	
+	# generate list of available subpackages
+	(echo -n "tine20:Modules="; for x in $(MODULES); do echo -n "tine20-$$x,"; done; echo "") >> debian/tine20.substvars
 
-TINE20SESSIONDIR=$(DESTDIR)/var/lib/tine20/sessions
-TINE20TMPDIR=$(DESTDIR)/var/lib/tine20/tmp
-TINE20CACHEDIR=$(DESTDIR)/var/lib/tine20/cache
-TINE20FILESDIR=$(DESTDIR)/var/lib/tine20/files
-
-
-#%:
-#	dh  $@
-
-clean::
-	dh_testdir
-	dh_testroot
-	debconf-updatepo
-	dh_clean
-
-install: build
-	echo $(PACKAGES)
-	echo $(MODULES)
-	dh_testdir
-	dh_testroot
-	dh_prep
-	dh_installdirs
-
-	install -m 755 -d $(TINE20DIR)
-	install -m 755 -d $(TINE20CONFDIR)
-	install -m 750 -o www-data -g www-data -d $(TINE20SESSIONDIR)
-	install -m 750 -o www-data -g www-data -d $(TINE20TMPDIR)
-	install -m 750 -o www-data -g www-data -d $(TINE20CACHEDIR)
-	install -m 750 -o www-data -g www-data -d $(TINE20LOGDIR)
-	install -m 750 -o www-data -g www-data -d $(TINE20FILESDIR)
-
-	dh_install
-
-	for dir in $(PACKAGES) ; do \
-            find $(CURDIR)/debian/$$dir -type f -exec chmod 644 {} \; ; \
-        done
-
-	install -m 755 tine20.php $(TINE20DIR)
-
-	install -m 644 debian/etc/apache.conf $(TINE20CONFDIR)
-	install -m 644 debian/etc/php5.ini    $(TINE20CONFDIR)
-
-binary-indep: build install
-	dh_testdir -i
-	dh_testroot -i
-	dh_installdebconf -i
-	dh_installdocs -i
-	dh_installexamples -i
-	dh_installchangelogs  -i
-	dh_installlogrotate -i
-	dh_link -i
-	dh_compress -i -X .php
-	dh_fixperms -i -X var/log/tine20 -X var/lib/tine20
-	dh_installdeb -i
-	(echo -n "tine20:Modules="; for x in $(MODULES); do echo -n "tine20-$$x,"; done) >> debian/tine20.substvars
-	dh_gencontrol -i
-	dh_md5sums -i
-	dh_builddeb -i
-
-
-binary: binary-indep binary-arch
-
-.PHONY: build binary binary-arch binary-indep clean install
+# overwrite dh_fixperms to execute an additional shell script
+override_dh_fixperms:
+	dh_fixperms
+	
+	# remove executable bits from all php files as dh_fixperms does not remove them
+	(find $(CURDIR)/debian/tine20-*/usr/share/tine20 -type f -name "*.php" -print0 2>/dev/null | xargs -0r chmod a-x)
+	
+	# make tine20.php executable again
+	chmod 0755 $(CURDIR)/debian/tine20-tinebase/usr/share/tine20/tine20.php
+	
