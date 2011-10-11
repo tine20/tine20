@@ -41,14 +41,23 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     protected $_applicationName = 'Felamimail';
     
     /**
-     * Sieve Script backend
+     * Sieve script backend
      *
-     * @var Felamimail_Sieve_Backend
+     * @var Felamimail_Backend_Sieve_Abstract
      */
     protected $_scriptBackend = NULL;
     
     /**
-     * Sieve backend
+     * the sieve backend to use (Sql or Script)
+     * 
+     * @todo add config option?
+     * 
+     * @var string
+     */
+    protected $_scriptBackendToUse = 'Script';
+    
+    /**
+     * Sieve server backend
      *
      * @var Felamimail_Backend_Sieve
      */
@@ -68,7 +77,11 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     private function __construct() {
         $this->_currentAccount = Tinebase_Core::getUser();
-        $this->_scriptBackend = new Felamimail_Sieve_Backend_Script();
+        
+        $scriptBackendClass = 'Felamimail_Sieve_Backend_' . $this->_scriptBackendToUse;
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using ' 
+            . $scriptBackendClass . ' as sieve script backend.');
+        $this->_scriptBackend = new $scriptBackendClass();
     }
     
     /**
