@@ -245,20 +245,28 @@ class Tinebase_Core
     /**
      * returns an instance of the controller of an application
      *
-     * @param   string $_applicationName
+     * @param   string $_applicationName appname / modelname
      * @param   string $_modelName
      * @return  Tinebase_Controller_Abstract|Tinebase_Controller_Record_Abstract the controller of the application
      * @throws  Tinebase_Exception_NotFound
-     *
-     * @todo    we should use model name here consistent to other params/vars with the same name (i.e. it should have the format App_Model_Record)
+     * 
+     * @todo    make getApplicationInstance work for Tinebase records (Tinebase_Model_User for example)
      */
-    public static function getApplicationInstance($_applicationName, $_modelName = '')
+    public static function getApplicationInstance($_applicationName, $_modelName = '', $_ignoreACL = FALSE)
     {
-        $controllerName = ucfirst((string) $_applicationName) . '_Controller';
+        if (strpos($_applicationName, '_')) {
+            // got (complete) model name name as first param
+            list($appName, $i, $modelName) = explode('_', $_applicationName, 3);
+        } else {
+            $appName = $_applicationName;
+            $modelName = $_modelName;
+        }
+        
+        $controllerName = ucfirst((string) $appName) . '_Controller';
 
         // check for model controller
-        if (!empty($_modelName)) {
-            $modelName = preg_replace('/^' . $_applicationName . '_' . 'Model_/', '', $_modelName);
+        if (!empty($modelName)) {
+            $modelName = preg_replace('/^' . $appName . '_' . 'Model_/', '', $modelName);
 
             $controllerNameModel = $controllerName . '_' . $modelName;
             if (! class_exists($controllerNameModel)) {
@@ -270,12 +278,14 @@ class Tinebase_Core
             } else {
                 $controllerName = $controllerNameModel;
             }
-        } else {
-            if (!@class_exists($controllerName)) {
-                throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerName . ')!');
-            }
+        } else if (!@class_exists($controllerName)) {
+            throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerName . ')!');
         }
 
+        if (! $_ignoreACL && ! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN)) {
+            throw new Tinebase_Exception_AccessDenied('No right to access application ' . $appName);
+        }
+        
         $controller = call_user_func(array($controllerName, 'getInstance'));
 
         return $controller;

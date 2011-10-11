@@ -230,7 +230,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     setRelatedRecordValue: function(filter) {
         var value = filter.get('value');
         
-        if (['equals', 'oneOf'].indexOf(filter.get('operator')) >= 0 ) {
+        if (['equals', 'oneOf'].indexOf(filter.get('operator') ? filter.get('operator') : filter.formFields.operator.origGetValue()) >= 0 ) {
             // NOTE: if setValue got called in the valueField internally, value is arguments[1] (createCallback)
             return filter.formFields.value.origSetValue(arguments[1] ? arguments[1] : value);
         }
@@ -305,8 +305,13 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             
             // if there where no remaining childfilters, hide this filterrow
             if (! value.length)  {
-                filter.formFields.operator.setValue('definedBy');
-//                this.onOperatorChange(filter, 'equals', true);
+                // prevent loop
+                filter.set('value', '###NOT SET###');
+                filter.set('value', '');
+                
+                filter.formFields.operator.setValue(this.defaultOperator);
+                this.onOperatorChange(filter, this.defaultOperator, false);
+                
                 // if (not empty value through operator chage)
                 Tine.log.info('hide row -> not yet implemented');
             }
@@ -324,16 +329,10 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     this.createRelatedRecordToolbar(filter);
                 }
                 
-                // @TODO id, relation_type not in child side yet
                 filter.toolbar.setValue(value);
                 
                 filter.formFields.operator.setValue('definedBy');
-//                this.onOperatorChange(filter, value[0].operator, true);
-                
-                // change button text
-                if (filter.formFields.value && Ext.isFunction(filter.formFields.value.setText)) {
-                    filter.formFields.value.setText(_(this.editDefinitionText));
-                }
+                this.onOperatorChange(filter, 'definedBy', false);
             }
         }
         
@@ -382,6 +381,9 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     operatorRenderer: function (filter, el) {
         var operator;
         
+        // init operator value
+        filter.set('operator', filter.get('operator') ? filter.get('operator') : this.defaultOperator);
+        
         if (! this.isGeneric) {
             operator = Tine.widgets.grid.ForeignRecordFilter.superclass.operatorRenderer.apply(this, arguments);
             filter.foreignRecordDefinition = {linkType: this.linkType, foreignRecordClass: this.foreignRecordClass, filterName: this.filterName}
@@ -399,7 +401,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 store: this.operatorStore,
                 displayField: 'label',
                 valueField: 'operator',
-                value: filter.get('operator') ? filter.get('operator') : this.defaultOperator,
+                value: filter.get('operator'),
                 renderTo: el
             });
             operator.on('select', function(combo, newRecord, newKey) {
@@ -409,8 +411,11 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             }, this);
             
             // init foreignRecordDefinition
-            filter.foreignRecordDefinition = filter.get('operator') ? filter.get('operator') : this.defaultOperator;
+            filter.foreignRecordDefinition = filter.get('operator');
         }
+        
+        
+        operator.origGetValue = operator.getValue.createDelegate(operator);
         
         // op is always AND atm.
         operator.getValue = function() {
@@ -468,7 +473,10 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
 
         switch(operator) {
             case 'equals':
-                value = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+                // @TODO invent a picker registry
+                var picker = this.foreignRecordClass == Tine.Addressbook.Model.Contact ?  Tine.Addressbook.SearchCombo : Tine.Tinebase.widgets.form.RecordPickerComboBox;
+                
+                value = new picker ({
                     recordClass: this.foreignRecordClass,
                     filter: filter,
                     blurOnSelect: true,
@@ -539,6 +547,12 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     
     objectToString: function() {
         return Ext.encode(this);
+    },
+    
+    onDestroy: function(filterRecord) {
+        if(filterRecord.toolbar) {
+            this.ftb.removeFilterSheet(filterRecord.toolbar);
+        }
     }
 });
     

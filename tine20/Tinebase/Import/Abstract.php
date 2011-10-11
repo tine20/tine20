@@ -268,7 +268,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _setController()
     {
-        list($appName, $ns, $modelName) = explode('_', $this->_options['model']);
-        $this->_controller = Tinebase_Core::getApplicationInstance($appName, $modelName);
+        $this->_controller = Tinebase_Core::getApplicationInstance($this->_options['model']);
     }
 }

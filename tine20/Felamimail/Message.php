@@ -190,6 +190,8 @@ class Felamimail_Message extends Zend_Mail_Message
      * @param string $_text
      * @param string $_eol
      * @return string
+     * 
+     * @todo we should use Felamimail_Model_Message::getPlainTextBody here / move all conversion to one place 
      */
     public static function convertContentType($_from, $_to, $_text, $_eol = "\r\n")
     {
@@ -200,7 +202,7 @@ class Felamimail_Message extends Zend_Mail_Message
         
         if($_from == Zend_Mime::TYPE_TEXT && $_to == Zend_Mime::TYPE_HTML) {
             $text = htmlspecialchars($_text, ENT_COMPAT, 'UTF-8');
-            $text = nl2br($text);
+            $text = strtr($text, array("\r\n" => '<br />', "\r" => '<br />', "\n" => '<br />'));
             $text = self::addHtmlMarkup($text);
         } else {
             $text = preg_replace('/\<br *\/*\>/', $_eol, $_text);

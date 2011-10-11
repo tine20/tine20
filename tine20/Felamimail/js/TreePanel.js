@@ -247,6 +247,9 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             
             // get filterToolbar
             var ftb = this.filterPlugin.getGridPanel().filterToolbar;
+            // in case of filterPanel
+            ftb = ftb.activeFilterPanel ? ftb.activeFilterPanel : ftb;
+            
             if (! ftb.rendered) {
                 this.onSelectionChange.defer(150, this, [sm, nodes]);
                 return;

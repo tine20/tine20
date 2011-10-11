@@ -89,7 +89,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     {
         $list = $this->get($_listId);
         
-        $this->_checkGrant($list, 'update', TRUE, 'No permission to update record.');
+        $this->_checkGrant($list, 'update', TRUE, 'No permission to add list member.');
         
         $list = $this->_backend->addListMember($_listId, $_newMembers);
         
@@ -107,7 +107,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     {
         $list = $this->get($_listId);
         
-        $this->_checkGrant($list, 'update', TRUE, 'No permission to update record.');
+        $this->_checkGrant($list, 'update', TRUE, 'No permission to remove list member.');
         
         $list = $this->_backend->removeListMember($_listId, $_newMembers);
         

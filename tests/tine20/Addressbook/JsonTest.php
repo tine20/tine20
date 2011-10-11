@@ -292,11 +292,11 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($contact['id'], $updatedContact['id'], 'updated produced a new contact');
         $this->assertEquals('PHPUNIT UPDATE', $updatedContact['n_family'], 'updating data failed');
-        
+
         if (Tinebase_Config::getInstance()->getConfig(Tinebase_Config::MAPPANEL, NULL, TRUE)->value) {
             // check geo data 
-            $this->assertEquals('9.99489818142748', $updatedContact['lon'], 'wrong geodata (lon)');
-            $this->assertEquals('53.5444309689663', $updatedContact['lat'], 'wrong geodata (lat)');
+            $this->assertEquals('9.99489818142748', $updatedContact['adr_one_lon'], 'wrong geodata (lon)');
+            $this->assertEquals('53.5444309689663', $updatedContact['adr_one_lat'], 'wrong geodata (lat)');
             
             // try another address
             $updatedContact['adr_one_locality']    = 'Wien';
@@ -306,8 +306,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             $updatedContact = $this->_instance->saveContact($updatedContact);
             
             // check geo data 
-            $this->assertEquals('16.3419589',   $updatedContact['lon'], 'wrong geodata (lon)');
-            $this->assertEquals('48.2147964',   $updatedContact['lat'], 'wrong geodata (lat)');
+            $this->assertEquals('16.3419589',   $updatedContact['adr_one_lon'], 'wrong geodata (lon)');
+            $this->assertEquals('48.2147964',   $updatedContact['adr_one_lat'], 'wrong geodata (lat)');
             $this->assertEquals('AT',           $updatedContact['adr_one_countryname'], 'wrong country');
             $this->assertEquals('1080',         $updatedContact['adr_one_postalcode'], 'wrong postalcode');
         }

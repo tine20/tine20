@@ -267,7 +267,17 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     },
     
     generateTitle: function() {
-        return (this.recordClass ? Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName')).i18n._hidden(this.recordClass.getMeta('recordsName')) : this.id);
+        var title = this.id;
+        
+        if (this.recordClass) {
+            var app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName')),
+                recordName = this.recordClass.getMeta('recordName'),
+                recordsName = this.recordClass.getMeta('recordsName');
+                
+            title = app.i18n.n_hidden(recordName, recordsName, 50);
+        }
+        
+        return title;
     },
     
     /**
@@ -690,11 +700,17 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     deleteFilter: function(filter) {
         var fRow = this.bwrap.child('tr[id=tw-ftb-frowid-' + filter.id + ']');
         //var isLast = this.filterStore.getAt(this.filterStore.getCount()-1).id == filter.id;
-        var isLast = this.filterStore.getCount() == 1;
+        var isLast = this.filterStore.getCount() == 1,
+            filterModel = this.getFilterModel(filter.get('field'));
+            
         this.filterStore.remove(this.filterStore.getById(filter.id));
         filter.formFields.field.destroy();
         filter.formFields.operator.destroy();
-        filter.formFields.value.destroy();        
+        filter.formFields.value.destroy();
+        
+        if (filterModel && Ext.isFunction(filterModel.onDestroy)) {
+            filterModel.onDestroy(filter);
+        }
         
         if (isLast) {
             // add a new first row
@@ -922,6 +938,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             this.childSheets[ftb.id].destroy();
         }
         delete this.childSheets[ftb.id];
+        
+        if (ftb == this.activeSheet) {
+            this.setActiveSheet.defer(100, this, [this]);
+        }
     },
     
     setActiveSheet: function(sheet) {
@@ -961,6 +981,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             rootSheet.tbar.hide();
         }
         
+        this.activeSheet = ftb;
         this.onFilterRowsChange();
     },
     

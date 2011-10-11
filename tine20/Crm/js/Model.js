@@ -90,6 +90,42 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
 };
 
 /**
+ * get filtermodel of lead model
+ * 
+ * @namespace Tine.Crm.Model
+ * @static
+ * @return {Array} filterModel definition
+ */ 
+Tine.Crm.Model.Lead.getFilterModel = function() {
+    var app = Tine.Tinebase.appMgr.get('Crm'),
+        filters = [
+            {label: _('Quick search'),  field: 'query',    operators: ['contains']},
+            {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Crm.Model.Lead},
+            {label: app.i18n._('Lead name'),   field: 'lead_name' },
+            {filtertype: 'crm.leadstate', app: app},
+            {label: app.i18n._('Probability'), field: 'probability', valueType: 'percentage'},
+            {label: app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
+            {filtertype: 'tinebase.tag', app: app},
+            {label: app.i18n._('Last modified'),   field: 'last_modified_time', valueType: 'date'},
+            {label: app.i18n._('Last modifier'),   field: 'last_modified_by',   valueType: 'user'},
+            {label: app.i18n._('Creation Time'),   field: 'creation_time',      valueType: 'date'},
+            {label: app.i18n._('Creator'),         field: 'created_by',         valueType: 'user'},
+            {filtertype: 'crm.contact'},
+            {filtertype: 'foreignrecord', app: app, foreignRecordClass: Tine.Tasks.Task, ownField: 'task'}
+        ];
+        
+    if (Tine.Sales && Tine.Tinebase.common.hasRight('run', 'Sales')) {
+        filters.push({filtertype: 'foreignrecord', 
+            app: app,
+            foreignRecordClass: Tine.Sales.Model.Product,
+            ownField: 'product'
+        });
+    }
+    
+    return filters;
+}
+
+/**
  * @namespace Tine.Crm.Model
  * @class Tine.Crm.Model.Settings
  * @extends Tine.Tinebase.data.Record

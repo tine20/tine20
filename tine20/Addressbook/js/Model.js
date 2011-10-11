@@ -125,7 +125,7 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbo
  * 
  * @namespace Tine.Addressbook.Model
  * @static
- * @return {Object} filterModel definition
+ * @return {Array} filterModel definition
  */ 
 Tine.Addressbook.Model.Contact.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Addressbook');

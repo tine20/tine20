@@ -188,6 +188,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 // check if folder is in filter or allinboxes are selected and updated folder is an inbox
                 if (! refresh) {
                     var filters = this.filterToolbar.getValue();
+                    filters = filters.filters ? filter.filters : filters;
+                    
                     for (var i = 0; i < filters.length; i++) {
                         if (filters[i].field == 'path' && filters[i].operator == 'in') {
                             if (filters[i].value.indexOf(record.get('path')) !== -1 || (filters[i].value.indexOf('/allinboxes') !== -1 && record.isInbox())) {
@@ -359,20 +361,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initFilterToolbar: function() {
-        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
-			filterModels: Tine.Felamimail.Model.Message.getFilterModel(),
-			defaultFilter: 'query',
-			filters: [],
-			recordClass: this.recordClass,
-			plugins: [
-				new Tine.widgets.grid.FilterToolbarQuickFilterPlugin({
-                    criteriaIgnores: [
-                        {field: 'query',     operator: 'contains',     value: ''},
-                        {field: 'id' }
-                    ]
-                })
-             ]
-        });
+        this.filterToolbar = this.getFilterToolbar();
+        this.filterToolbar.criteriaIgnores = [
+            {field: 'query',     operator: 'contains',     value: ''},
+            {field: 'id' },
+            {field: 'path' }
+        ];
     },    
     
     /**
@@ -1146,6 +1140,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (! filter) {
             filter = this.filterToolbar.getValue();
         }
+
+        // condition from filterPanel
+        filter = filter.filters ? filter.filters : filter;
         
         var accountId = null, 
             filterAccountId = null,
