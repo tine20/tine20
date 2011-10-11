@@ -142,6 +142,10 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
      */
     protected function _saveRules()
     {
+        if (empty($this->_rules)) {
+            return;
+        }
+        
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             $this->_rulesBackend->deleteByProperty($this->_accountId, 'account_id');
@@ -165,6 +169,10 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
      */
     protected function _saveVacation()
     {
+        if (empty($this->_vacation)) {
+            return;
+        }
+        
         $vacationRecord = new Felamimail_Model_Sieve_Vacation();
         $vacationRecord->setFromFSV($this->_vacation);
         $vacationRecord->account_id = $this->_accountId;
