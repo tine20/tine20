@@ -4,23 +4,19 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
  * Test helper
  */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Felamimail_Sieve_ScriptTest::main');
-}
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
- * Test class for Felamimail_Sieve_Script
+ * Test class for Felamimail_Sieve_Metadata_Script
  */
-class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
+class Felamimail_Sieve_Metadata_ScriptTest extends PHPUnit_Framework_TestCase
 {
     /**
      * serialized rule
@@ -105,7 +101,7 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
      */
     public function testEnabledRule()
     {
-        $script    = new Felamimail_Sieve_Script();
+        $script    = new Felamimail_Sieve_Metadata_Script();
         $rule      = new Felamimail_Sieve_Rule();
         $condition = new Felamimail_Sieve_Rule_Condition();
         $action    = new Felamimail_Sieve_Rule_Action();
@@ -137,7 +133,7 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
      */
     public function testEnabledVacation()
     {
-        $script = new Felamimail_Sieve_Script();
+        $script = new Felamimail_Sieve_Metadata_Script();
         $script->setVacation($this->_getVacation());
         
         $sieveScript = $script->getSieve();
@@ -176,7 +172,7 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
         $vacation = $this->_getVacation();
         $vacation->setMime('multipart/alternative')->setReason('<html><body><strong>AWAY!</strong></body></html>');
         
-        $script = new Felamimail_Sieve_Script();
+        $script = new Felamimail_Sieve_Metadata_Script();
         $script->setVacation($vacation);
         
         $sieveScript = $script->getSieve();
@@ -192,7 +188,7 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
      */
     public function testDisabledVacation()
     {
-        $script = new Felamimail_Sieve_Script();
+        $script = new Felamimail_Sieve_Metadata_Script();
         
         $vacation = new Felamimail_Sieve_Vacation();
         
@@ -215,12 +211,16 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
      */
     public function testParseSerializedSieveRule()
     {
-        $script = new Felamimail_Sieve_Script();
+        $script = new Felamimail_Sieve_Metadata_Script();
         
-        $script->parseScript($this->_serializedSieveRule);
-        $script->parseScript($this->_smartSieveRuleFileInto);
-        $script->parseScript($this->_smartSieveRuleDiscard);
-        $script->parseScript($this->_smartSieveVacation);
+        $script->setScriptToParse($this->_serializedSieveRule);
+        $script->readScriptData();
+        $script->setScriptToParse($this->_smartSieveRuleFileInto);
+        $script->readScriptData();
+        $script->setScriptToParse($this->_smartSieveRuleDiscard);
+        $script->readScriptData();
+        $script->setScriptToParse($this->_smartSieveVacation);
+        $script->readScriptData();
         
         $rules = $script->getRules();
         

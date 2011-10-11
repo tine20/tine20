@@ -43,7 +43,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     /**
      * Sieve Script backend
      *
-     * @var Felamimail_Sieve_Script
+     * @var Felamimail_Sieve_Metadata_Script
      */
     protected $_scriptBackend = NULL;
     
@@ -68,7 +68,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     private function __construct() {
         $this->_currentAccount = Tinebase_Core::getUser();
-        $this->_scriptBackend = new Felamimail_Sieve_Script();
+        $this->_scriptBackend = new Felamimail_Sieve_Metadata_Script();
     }
     
     /**
@@ -120,7 +120,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     /**
      * get sieve script for account
      * 
-     * @return NULL|Felamimail_Sieve_Script
+     * @return NULL|Felamimail_Sieve_Metadata_Script
      */
     protected function _getSieveScript()
     {
@@ -141,7 +141,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got old SIEVE script for migration.');
                     }
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Got SIEVE script: ' . $script);
-                    return new Felamimail_Sieve_Script($script);
+                    return new Felamimail_Sieve_Metadata_Script($script);
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Could not get SIEVE script: ' . $scriptName);
                 }
@@ -189,7 +189,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         
         $script = $this->_getSieveScript();
         if ($script === NULL) {
-            $script = new Felamimail_Sieve_Script();
+            $script = new Felamimail_Sieve_Metadata_Script();
         }
         $script->setVacation($fsv);
         
@@ -267,7 +267,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * put updated sieve script
      * 
      * @param string|Felamimail_Model_Account $_accountId
-     * @param Felamimail_Sieve_Script $_script
+     * @param Felamimail_Sieve_Metadata_Script $_script
      * @throws Felamimail_Exception_Sieve
      */
     protected function _putScript($_accountId, $_script)
@@ -387,7 +387,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         
         $script = $this->_getSieveScript();
         if ($script === NULL) {
-            $script = new Felamimail_Sieve_Script();
+            $script = new Felamimail_Sieve_Metadata_Script();
         } else {
             $script->clearRules();
         }

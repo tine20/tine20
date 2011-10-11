@@ -38,7 +38,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $this->_purgeRecords = FALSE;
         $this->_resolveCustomFields = TRUE;
         
-        $this->addressFields = array('locality', 'postalcode', 'street', 'countryname');
+        // fields used for private and company address
+        $this->_addressFields = array('locality', 'postalcode', 'street', 'countryname');
         
         $this->_setGeoDataForContacts = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::MAPPANEL, NULL, TRUE)->value;
         if (! $this->_setGeoDataForContacts) {
@@ -263,8 +264,9 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+    	// do update of geo data only if one of address field changed
     	$addressDataChanged = FALSE;
-    	foreach ($this->addressFields as $field) {
+    	foreach ($this->_addressFields as $field) {
        		if (
        			($_record->{'adr_one_' . $field} != $_oldRecord->{'adr_one_' . $field}) ||
        			($_record->{'adr_two_' . $field} != $_oldRecord->{'adr_two_' . $field})
@@ -286,7 +288,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     /**
      * set geodata for given address of record
      * 
-     * @param string $_address
+     * @param string 					$_address (addressbook prefix - adr_one_ or adr_two_)
      * @param Addressbook_Model_Contact $_record
      * @param array $_ommitFields do not submit these fields to nominatim
      * @return void
@@ -321,7 +323,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         
         if (! empty($_record->{$_address . 'countryname'})) {
             $country = Zend_Locale::getTranslation($_record->{$_address . 'countryname'}, 'Country', $_record->{$_address . 'countryname'});
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ($_address == 'adr_one_' ? 'Company address' : 'Private address') . ' country ' . $country);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ($_address == 'adr_one_' ? ' Company address' : ' Private address') . ' country ' . $country);
             $nominatim->setCountry($country);
         }
         
@@ -345,12 +347,12 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 }
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-					($_address == 'adr_one_' ? 'Company' : 'Private') . ' Place found: lon/lat ' . $_record->{$_address . 'lon'} . ' / ' . $_record->{$_address . 'lat'});
+					($_address == 'adr_one_' ? ' Company' : ' Private') . ' Place found: lon/lat ' . $_record->{$_address . 'lon'} . ' / ' . $_record->{$_address . 'lat'});
                 
             } else {
                 if (! in_array($_address . 'postalcode', $_ommitFields)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-						($_address == 'adr_one_' ? 'Company address' : 'Private address') . ' could not find place - try it again without postalcode.');
+						($_address == 'adr_one_' ? ' Company address' : ' Private address') . ' could not find place - try it again without postalcode.');
 						
                     $this->_setGeoDataForAddress($_address, $_record, array($_address . 'postalcode'));
                     return;
