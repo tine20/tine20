@@ -13,8 +13,8 @@ MISCPACKAGESDIR="$BASEDIR/packages/misc"
 
 RELEASE=""
 CODENAME="Maischa"
-GITURL="http://git.tine20.org/git/tine20"
-GITBRANCH="2011-05"
+GITURL="https://git.tine20.org/git/customers"
+GITBRANCH="TAZ"
 PACKAGEDIR=""
 
 #
