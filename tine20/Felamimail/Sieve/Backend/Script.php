@@ -19,7 +19,7 @@
  * @package     Felamimail
  * @subpackage  Sieve
  */
-class Felamimail_Sieve_Metadata_Script extends Felamimail_Sieve_Metadata_Abstract
+class Felamimail_Sieve_Backend_Script extends Felamimail_Sieve_Backend_Abstract
 {
     /**
      * the script to parse
@@ -207,8 +207,26 @@ class Felamimail_Sieve_Metadata_Script extends Felamimail_Sieve_Metadata_Abstrac
         $this->setVacation($vacation);        
     }
     
+    
     /**
-     * @see Felamimail/Sieve/Metadata/Felamimail_Sieve_Metadata_Abstract::_getPseudoScript()
+     * get sieve script as string
+     * 
+     * @return string
+     */
+    public function getSieve()
+    {
+        $sieve = parent::getSieve();
+        
+        $pseudoScript = $this->_getPseudoScript();
+        $sieve = $sieve . $pseudoScript;
+        
+        return $sieve;
+    }
+    
+    /**
+     * get pseudo script
+     * 
+     * @return string
      */
     protected function _getPseudoScript()
     {

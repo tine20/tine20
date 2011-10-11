@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>5.2</version>
+    <version>5.3</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
@@ -650,6 +650,112 @@
                         <ondelete>cascade</ondelete>
                         <onupdate>cascade</onupdate>
                     </reference>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>felamimail_sieve_rule</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>action_type</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>action_argument</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>conditions</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>enabled</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id-account_id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>felamimail_sieve_vacation</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>subject</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>from</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>mime</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>days</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>reason</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>addresses</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>enabled</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
                 </index>
             </declaration>
         </table>

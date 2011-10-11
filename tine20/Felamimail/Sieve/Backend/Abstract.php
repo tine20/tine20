@@ -15,7 +15,7 @@
  * @package     Felamimail
  * @subpackage  Sieve
  */
-abstract class Felamimail_Sieve_Metadata_Abstract
+abstract class Felamimail_Sieve_Backend_Abstract
 {
     /**
      * array of Sieve rules(Felamimail_Sieve_Rule)
@@ -92,9 +92,8 @@ abstract class Felamimail_Sieve_Metadata_Abstract
         $header = $this->_getHeaderString();
         $rules = $this->_getRulesString();
         $vacation = $this->_getVacationString();
-        $pseudoScript = $this->_getPseudoScript();
         
-        $sieve = $header . "\r\n\r\n" . $rules . $vacation . "\r\n\r\n" . $pseudoScript;
+        $sieve = $header . "\r\n\r\n" . $rules . $vacation . "\r\n\r\n";
         
         return $sieve;
     }
@@ -179,16 +178,6 @@ abstract class Felamimail_Sieve_Metadata_Abstract
     }
 
     /**
-     * get pseudo script
-     * 
-     * @return string
-     */
-    protected function _getPseudoScript()
-    {
-        return '';
-    }
-    
-    /**
      * set vacation
      * 
      * @param Felamimail_Sieve_Vacation $vacation
@@ -196,5 +185,16 @@ abstract class Felamimail_Sieve_Metadata_Abstract
     public function setVacation(Felamimail_Sieve_Vacation $vacation)
     {
         $this->_vacation = $vacation;
+    }
+    
+    /**
+     * copy data from another script
+     * 
+     * @param Felamimail_Sieve_Backend_Abstract $_scriptToCopyFrom
+     */
+    public function getDataFromScript(Felamimail_Sieve_Backend_Abstract $_scriptToCopyFrom)
+    {
+        $this->_vacation = $_scriptToCopyFrom->getVacation();
+        $this->_rules = $_scriptToCopyFrom->getRules();
     }
 }
