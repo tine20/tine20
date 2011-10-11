@@ -15,7 +15,7 @@
  * @package     Felamimail
  * @subpackage  Sieve
  */
-abstract class Felamimail_Sieve_Metadata_Abstract
+abstract class Felamimail_Sieve_Backend_Abstract
 {
     /**
      * array of Sieve rules(Felamimail_Sieve_Rule)
