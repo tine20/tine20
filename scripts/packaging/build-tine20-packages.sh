@@ -12,7 +12,7 @@ TEMPDIR="$BASEDIR/temp"
 MISCPACKAGESDIR="$BASEDIR/packages/misc"
 
 RELEASE=""
-CODENAME="Neele"
+CODENAME="Maischa"
 GITURL="http://git.tine20.org/git/tine20"
 GITBRANCH="master"
 PACKAGEDIR=""
@@ -41,6 +41,7 @@ function checkout()
     cd - > /dev/null
     
     mv $TEMPDIR/tine20.git/tine20 $TEMPDIR/tine20
+    mv $TEMPDIR/tine20.git/scripts/packaging/debian $TEMPDIR/debian
     rm -Rf $TEMPDIR/tine20.git
     
     echo "done"
