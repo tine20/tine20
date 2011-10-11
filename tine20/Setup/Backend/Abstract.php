@@ -237,11 +237,21 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      * takes the xml stream and creates a table
      *
      * @param object $_table xml stream
+     * @param string $_appName if appname and tablename are given, we create an entry in the application table
+     * @param string $_tableName
      */
-    public function createTable(Setup_Backend_Schema_Table_Abstract  $_table)
+    public function createTable(Setup_Backend_Schema_Table_Abstract $_table, $_appName = NULL, $_tableName = NULL)
     {
         $statement = $this->getCreateStatement($_table);
         $this->execQueryVoid($statement);
+        
+        if ($_appName !== NULL && $_tableName !== NULL) {
+            Tinebase_Application::getInstance()->addApplicationTable(
+                Tinebase_Application::getInstance()->getApplicationByName($_appName), 
+                $_tableName, 
+                1
+            );
+        }
     }
     
     /**
