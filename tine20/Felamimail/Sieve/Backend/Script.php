@@ -19,7 +19,7 @@
  * @package     Felamimail
  * @subpackage  Sieve
  */
-class Felamimail_Sieve_Metadata_Script extends Felamimail_Sieve_Metadata_Abstract
+class Felamimail_Sieve_Backend_Script extends Felamimail_Sieve_Backend_Abstract
 {
     /**
      * the script to parse
@@ -208,7 +208,7 @@ class Felamimail_Sieve_Metadata_Script extends Felamimail_Sieve_Metadata_Abstrac
     }
     
     /**
-     * @see Felamimail/Sieve/Metadata/Felamimail_Sieve_Metadata_Abstract::_getPseudoScript()
+     * @see Felamimail/Sieve/Metadata/Felamimail_Sieve_Backend_Abstract::_getPseudoScript()
      */
     protected function _getPseudoScript()
     {

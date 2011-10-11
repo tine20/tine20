@@ -7,8 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @todo        make it work
  */
 
 /**
@@ -20,6 +18,6 @@
  * @package     Felamimail
  * @subpackage  Sieve
  */
-class Felamimail_Sieve_Metadata_Sql extends Felamimail_Sieve_Metadata_Abstract
+class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
 {
 }
