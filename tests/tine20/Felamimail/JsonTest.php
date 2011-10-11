@@ -76,6 +76,13 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      * @var boolean
      */
     protected $_oldSieveVacationActiveState = FALSE;
+    
+    /**
+     * old sieve data
+     * 
+     * @var Felamimail_Sieve_Backend_Sql
+     */
+    protected $_oldSieveData = NULL;
 
     /**
      * sieve script name to delete
@@ -119,6 +126,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // get (or create) test accout
         $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         $this->_oldSieveVacationActiveState = $this->_account->sieve_vacation_active;
+        try {
+            $this->_oldSieveData = new Felamimail_Sieve_Backend_Sql($this->_account);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // do nothing
+        }
         
         $this->_json = new Felamimail_Frontend_Json();
         $this->_imap = Felamimail_Backend_ImapFactory::factory($this->_account);
@@ -179,6 +191,10 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
                 // do not delete script if active
             }            
             Felamimail_Controller_Account::getInstance()->setVacationActive($this->_account, $this->_oldSieveVacationActiveState);
+            
+            if ($this->_oldSieveData !== NULL) {
+                $this->_oldSieveData->save();
+            }
         }
         if ($this->_oldActiveSieveScriptName !== NULL) {
             Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_oldActiveSieveScriptName);
@@ -802,7 +818,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
         if (preg_match('/dbmail/i', $sieveBackend->getImplementation())) {
             $translate = Tinebase_Translation::getTranslation('Felamimail');
-            $vacationData['subject'] = $translate->_('Out of Office reply');
+            $vacationData['subject'] = sprintf($translate->_('Out of Office reply from %1$s'), Tinebase_Core::getUser()->accountFullName);
         }
         
         $this->assertEquals($vacationData, $result);
