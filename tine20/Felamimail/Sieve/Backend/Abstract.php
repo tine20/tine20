@@ -20,7 +20,7 @@ abstract class Felamimail_Sieve_Backend_Abstract
     /**
      * array of Sieve rules(Felamimail_Sieve_Rule)
      * 
-     * @var array
+     * @var array|Tinebase_Record_RecordSet
      */
     protected $_rules = array();
     
@@ -92,9 +92,8 @@ abstract class Felamimail_Sieve_Backend_Abstract
         $header = $this->_getHeaderString();
         $rules = $this->_getRulesString();
         $vacation = $this->_getVacationString();
-        $pseudoScript = $this->_getPseudoScript();
         
-        $sieve = $header . "\r\n\r\n" . $rules . $vacation . "\r\n\r\n" . $pseudoScript;
+        $sieve = $header . "\r\n\r\n" . $rules . $vacation . "\r\n\r\n";
         
         return $sieve;
     }
@@ -178,16 +177,6 @@ abstract class Felamimail_Sieve_Backend_Abstract
         return $vacation;
     }
 
-    /**
-     * get pseudo script
-     * 
-     * @return string
-     */
-    protected function _getPseudoScript()
-    {
-        return '';
-    }
-    
     /**
      * set vacation
      * 
