@@ -12,7 +12,7 @@ TEMPDIR="$BASEDIR/temp"
 MISCPACKAGESDIR="$BASEDIR/packages/misc"
 
 RELEASE=""
-CODENAME="Maischa"
+CODENAME="Milan"
 GITURL="http://git.tine20.org/git/tine20"
 GITBRANCH="master"
 PACKAGEDIR=""
