@@ -28,7 +28,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     showContainerSelector: true,
     
     getFormItems: function () {
-        
         if (Tine.Tinebase.registry.get('mapPanel') && Tine.widgets.MapPanel) {
             this.mapPanel = new Tine.Addressbook.MapPanel({
                 layout: 'fit',
@@ -459,14 +458,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 this.record.set('container_id', container);
             }
             
-            if (
-            	Tine.Tinebase.registry.get('mapPanel') && 
-            	Tine.widgets.MapPanel &&
-            	(
-            		(! Ext.isEmpty(this.record.get('adr_one_lon')) && ! Ext.isEmpty(this.record.get('adr_one_lat'))) || 
-            		(! Ext.isEmpty(this.record.get('adr_two_lon')) && ! Ext.isEmpty(this.record.get('adr_two_lat')))
-            	)
-            ) {
+            if (this.mapPanel instanceof Tine.Addressbook.MapPanel) {
             	this.mapPanel.onRecordLoad(this.record);
             }
         }
