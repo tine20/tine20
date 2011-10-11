@@ -20,7 +20,7 @@ abstract class Felamimail_Sieve_Backend_Abstract
     /**
      * array of Sieve rules(Felamimail_Sieve_Rule)
      * 
-     * @var array|Tinebase_Record_RecordSet
+     * @var array
      */
     protected $_rules = array();
     
@@ -185,5 +185,16 @@ abstract class Felamimail_Sieve_Backend_Abstract
     public function setVacation(Felamimail_Sieve_Vacation $vacation)
     {
         $this->_vacation = $vacation;
+    }
+    
+    /**
+     * copy data from another script
+     * 
+     * @param Felamimail_Sieve_Backend_Abstract $_scriptToCopyFrom
+     */
+    public function getDataFromScript(Felamimail_Sieve_Backend_Abstract $_scriptToCopyFrom)
+    {
+        $this->_vacation = $_scriptToCopyFrom->getVacation();
+        $this->_rules = $_scriptToCopyFrom->getRules();
     }
 }

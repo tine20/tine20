@@ -45,6 +45,7 @@ class Felamimail_Model_Sieve_Rule extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'action_type'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
         'action_argument'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
         'conditions'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),    
@@ -88,5 +89,4 @@ class Felamimail_Model_Sieve_Rule extends Tinebase_Record_Abstract
             
         return $fsr;
     }
-    
 }
