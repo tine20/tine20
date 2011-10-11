@@ -282,7 +282,7 @@ class Tinebase_Core
             throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerName . ')!');
         }
 
-        if (! $_ignoreACL && ! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN)) {
+        if (! $_ignoreACL && is_object(Tinebase_Core::getUser()) && ! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN)) {
             throw new Tinebase_Exception_AccessDenied('No right to access application ' . $appName);
         }
         
