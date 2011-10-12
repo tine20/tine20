@@ -144,7 +144,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
             'n_fileas'              => 'Kneschke, Lars',
         )); 
         
-        $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
+        $contact = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE);
         $this->objects['contact'] = $contact;
         
         $unSyncableContact = new Addressbook_Model_Contact(array(
@@ -171,7 +171,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
             'n_fileas'              => 'Kneschke, Lars',
         )); 
         
-        $unSyncableContact = Addressbook_Controller_Contact::getInstance()->create($unSyncableContact);
+        $unSyncableContact = Addressbook_Controller_Contact::getInstance()->create($unSyncableContact, FALSE);
         $this->objects['unSyncableContact'] = $unSyncableContact;
 
         
