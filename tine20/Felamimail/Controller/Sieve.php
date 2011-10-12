@@ -211,7 +211,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         
         $this->_setSieveBackendAndAuthenticate($account);
         $this->_addVacationUserData($_vacation, $account);
-        $this->_fixNewlinesAndcheckCapabilities($_vacation);
+        $this->_checkCapabilities($_vacation);
         $this->_addVacationSubject($_vacation);
         
         $fsv = $_vacation->getFSV();
@@ -262,15 +262,14 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * 
      * @param Felamimail_Model_Sieve_Vacation $_vacation
      */
-    protected function _fixNewlinesAndcheckCapabilities(Felamimail_Model_Sieve_Vacation $_vacation)
+    protected function _checkCapabilities(Felamimail_Model_Sieve_Vacation $_vacation)
     {
         $capabilities = $this->_backend->capability();
         
         if (! in_array('mime', $capabilities['SIEVE'])) {
             unset($_vacation->mime);
-            $_vacation->reason = Felamimail_Message::convertContentType(Zend_Mime::TYPE_HTML, Zend_Mime::TYPE_TEXT, $_vacation->reason, "\r");
+            $_vacation->reason = Felamimail_Model_Message::convertHTMLToPlainTextWithQuotes($_vacation->reason);
         }
-        $_vacation->reason = preg_replace('/\n/', "", $_vacation->reason);
         
         if (preg_match('/cyrus/i', $capabilities['IMPLEMENTATION'])) {
             // cyrus does not support :from
