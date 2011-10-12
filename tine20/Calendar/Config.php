@@ -44,8 +44,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::FIXED_CALENDARS => array(
                                    //_('Fixed Calendars')
             'label'                 => 'Fixed Calendars',
-                                   //_('Calendars always selected regardles of all filter parameters. A valid use case might be to force the display of an certain holiday calendar.')
-            'description'           => 'Calendars always selected regardles of all filter parameters. A valid use case might be to force the display of an certain holiday calendar.',
+                                   //_('Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar.')
+            'description'           => 'Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar.',
             'type'                  => 'array',
             'contents'              => 'string', // in fact this are ids of Tinebase_Model_Container of app Calendar and we might what to have te ui to autocreate pickers panel here? x-type? -> later
             'clientRegistryInclude' => TRUE,
