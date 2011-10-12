@@ -175,7 +175,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initFilterToolbar: function() {
-        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
+        this.filterToolbar = new Tine.widgets.grid.FilterPanel({
             app: this.app,
             recordClass: Tine.Timetracker.Model.Timesheet,
             allowSaving: true,
