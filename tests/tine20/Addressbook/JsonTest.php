@@ -194,12 +194,13 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      * add a contact
      *
      * @param string $_orgName
+     * @param boolean $_forceCreation
      * @return array contact data
      */
-    protected function _addContact($_orgName = NULL)
+    protected function _addContact($_orgName = NULL, $_forceCreation = FALSE)
     {
         $newContactData = $this->_getContactData($_orgName);
-        $newContact = $this->_instance->saveContact($newContactData);
+        $newContact = $this->_instance->saveContact($newContactData, $_forceCreation);
         $this->assertEquals($newContactData['n_family'], $newContact['n_family'], 'Adding contact failed');
         
         $this->_contactIdsToDelete[] = $newContact['id'];
@@ -673,13 +674,14 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * testDuplicateCheck
      */
-    public function testDuplicateCheck()
+    public function testDuplicateCheck($_forceCreation = FALSE)
     {
         $contact = $this->_addContact();
         try {
-            $this->_addContact($contact['org_name']);
-            $this->assertTrue(FALSE, 'no duplicate exception');
+            $this->_addContact($contact['org_name'], $_forceCreation);
+            $this->assertTrue($_forceCreation, 'duplicate detection failed');
         } catch (Tinebase_Exception_Duplicate $ted) {
+            $this->assertFalse($_forceCreation, 'force creation failed');
             $exceptionData = $ted->toArray();
             $this->assertEquals(1, count($exceptionData['duplicates']));
             $this->assertEquals($contact['n_given'], $exceptionData['duplicates'][0]['n_given']);
@@ -707,5 +709,13 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             $this->assertEquals(1, count($exceptionData['duplicates']));
             $this->assertEquals($contact['email'], $exceptionData['duplicates'][0]['email']);
         }
+    }
+
+    /**
+     * testForceCreation
+     */
+    public function testForceCreation()
+    {
+        $this->testDuplicateCheck(TRUE);
     }
 }

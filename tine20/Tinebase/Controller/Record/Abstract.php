@@ -360,10 +360,11 @@ abstract class Tinebase_Controller_Record_Abstract
      * add one record
      *
      * @param   Tinebase_Record_Interface $_record
+     * @param   bollean $_forceCreation do not do duplicate check if this is TRUE
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      */
-    public function create(Tinebase_Record_Interface $_record)
+    public function create(Tinebase_Record_Interface $_record, $_forceCreation = FALSE)
     {
         $this->_checkRight('create');
     	
@@ -389,7 +390,9 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             
             $this->_inspectBeforeCreate($_record);
-            $this->_duplicateCheck($_record);
+            if (! $_forceCreation) {
+                $this->_duplicateCheck($_record);
+            }
             $record = $this->_backend->create($_record);
             $this->_inspectAfterCreate($record, $_record);
             

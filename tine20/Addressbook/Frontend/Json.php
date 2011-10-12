@@ -138,21 +138,12 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * if $recordData['id'] is empty the contact gets added, otherwise it gets updated
      *
      * @param  array $recordData an array of contact properties
+     * @param  boolean $forceCreation
      * @return array
      */
-    public function saveContact($recordData)
+    public function saveContact($recordData, $forceCreation = FALSE)
     {
-        $contact = new Addressbook_Model_Contact();
-        $contact->setFromJsonInUsersTimezone($recordData);
-        
-        if (empty($contact->id)) {
-            $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
-        } else {
-            $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
-        }
-        
-        $result =  $this->getContact($contact->getId());
-        return $result;
+        return $this->_save($recordData, Addressbook_Controller_Contact::getInstance(), 'Contact', 'id', array($forceCreation));
     }
     
     /**
