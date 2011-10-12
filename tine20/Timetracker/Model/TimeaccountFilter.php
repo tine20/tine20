@@ -26,6 +26,13 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
     protected $_modelName = 'Timetracker_Model_Timeaccount';
     
     /**
+     * @var string class name of this filter group
+     *      this is needed to overcome the static late binding
+     *      limitation in php < 5.3
+     */
+    protected $_className = 'Timetracker_Model_TimeaccountFilter';
+        
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
