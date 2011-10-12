@@ -88,8 +88,16 @@ class Addressbook_Convert_Contact_VCard
                 
                 case 'ADR':
                     $components = Sabre_VObject_Property::splitCompoundValues($property->value);
+
+                    $type = null;
+                    foreach($property['TYPE'] as $typeProperty) {
+                        if(strtolower($typeProperty) == 'home' || strtolower($typeProperty) == 'work') {
+                            $type = strtolower($typeProperty);
+                            break;
+                        }
+                    }
                     
-                    if (isset($property['TYPE']) && strtolower($property['TYPE']) == 'home') {
+                    if ($type == 'home') {
                         // home address
                         $data['adr_two_street2']     = $components[1];
                         $data['adr_two_street']      = $components[2];
@@ -97,7 +105,7 @@ class Addressbook_Convert_Contact_VCard
                         $data['adr_two_region']      = $components[4];
                         $data['adr_two_postalcode']  = $components[5];
                         $data['adr_two_countryname'] = $components[6];
-                    } elseif (isset($property['TYPE']) && strtolower($property['TYPE']) == 'work') {
+                    } elseif ($type == 'work') {
                         // work address
                         $data['adr_one_street2']     = $components[1];
                         $data['adr_one_street']      = $components[2];
@@ -115,12 +123,20 @@ class Addressbook_Convert_Contact_VCard
                     break;
                     
                 case 'EMAIL':
-                    switch ($property['TYPE']) {
+                    $type = null;
+                    foreach($property['TYPE'] as $typeProperty) {
+                        if(strtolower($typeProperty) == 'home' || strtolower($typeProperty) == 'work') {
+                            $type = strtolower($typeProperty);
+                            break;
+                        }
+                    }
+                    
+                    switch ($type) {
                         case 'home':
                             $data['email_home'] = $property->value;
                             break;
+                            
                         case 'work':
-                        default:
                             $data['email'] = $property->value;
                             break;
                     }
@@ -156,20 +172,53 @@ class Addressbook_Convert_Contact_VCard
                     break;
                     
                 case 'TEL':
-                    switch ($property['TYPE']) {
-                        case 'cell':
-                            $data['tel_cell'] = $property->value;
-                            break;
-                        case 'fax':
-                            $data['tel_fax'] = $property->value;
-                            break;
-                        case 'home':
-                            $data['tel_home'] = $property->value;
-                            break;
-                        case 'work':
-                            $data['tel_work'] = $property->value;
-                            break;
+                    $telField = null;
+                    $types    = array();
+                    
+                    if (isset($property['TYPE'])) {
+                        // get all types
+                        foreach($property['TYPE'] as $typeProperty) {
+                            $types[] = strtoupper($typeProperty->value);
+                        }
+
+                        // CELL
+                        if (in_array('CELL', $types)) {
+                            if (count($types) == 1 || in_array('WORK', $types)) {
+                                $telField = 'tel_cell';
+                            } elseif(in_array('HOME', $types)) {
+                                $telField = 'tel_cell_home';
+                            }
+                            
+                        // PAGER
+                        } elseif (in_array('PAGER', $types)) {
+                            $telField = 'tel_pager';
+                            
+                        // FAX
+                        } elseif (in_array('FAX', $types)) {
+                            if (count($property['TYPE']) == 1 || in_array('WORK', $types)) {
+                                $telField = 'tel_fax';
+                            } elseif(in_array('HOME', $types)) {
+                                $telField = 'tel_fax_home';
+                            }
+                            
+                        // HOME
+                        } elseif (in_array('HOME', $types)) {
+                            $telField = 'tel_home';
+                            
+                        // WORK
+                        } elseif (in_array('WORK', $types)) {
+                            $telField = 'tel_work';
+                        }
+                        
+                        
+                    } else {
+                        $telField = 'work';
                     }
+                    
+                    if (!empty($telField)) {
+                        $data[$telField] = $property->value;
+                    }
+                    
                     break;
                     
                 case 'URL':
