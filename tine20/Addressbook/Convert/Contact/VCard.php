@@ -20,6 +20,7 @@ class Addressbook_Convert_Contact_VCard
 {
     const CLIENT_AUTODETECT = 'auto';
     const CLIENT_SOGO       = 'sogo';
+    const CLIENT_MACOSX     = 'macosx';
     
     /**
      * @var string
@@ -31,7 +32,8 @@ class Addressbook_Convert_Contact_VCard
      */
     protected $_supportedFields = array(
         self::CLIENT_AUTODETECT => array(),
-        self::CLIENT_SOGO    => array()
+        self::CLIENT_MACOSX     => array(),
+        self::CLIENT_SOGO       => array()
     );
     
     /**
@@ -87,7 +89,7 @@ class Addressbook_Convert_Contact_VCard
                 case 'ADR':
                     $components = Sabre_VObject_Property::splitCompoundValues($property->value);
                     
-                    if (isset($property['TYPE']) && $property['TYPE'] == 'home') {
+                    if (isset($property['TYPE']) && strtolower($property['TYPE']) == 'home') {
                         // home address
                         $data['adr_two_street2']     = $components[1];
                         $data['adr_two_street']      = $components[2];
@@ -95,7 +97,7 @@ class Addressbook_Convert_Contact_VCard
                         $data['adr_two_region']      = $components[4];
                         $data['adr_two_postalcode']  = $components[5];
                         $data['adr_two_countryname'] = $components[6];
-                    } else {
+                    } elseif (isset($property['TYPE']) && strtolower($property['TYPE']) == 'work') {
                         // work address
                         $data['adr_one_street2']     = $components[1];
                         $data['adr_one_street']      = $components[2];
