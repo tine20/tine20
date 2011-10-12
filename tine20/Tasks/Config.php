@@ -1,6 +1,7 @@
 <?php
 /**
  * @package     Tasks
+ * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -10,6 +11,7 @@
  * task config class
  * 
  * @package     Tasks
+ * @subpackage  Config
  */
 class Tasks_Config extends Tinebase_Config_Abstract
 {
@@ -86,5 +88,4 @@ class Tasks_Config extends Tinebase_Config_Abstract
     {
         return self::$_properties;
     }
-    
 }
