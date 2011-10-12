@@ -390,6 +390,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         return self::$_properties;
     }
     
+    /**
+     * get config for client registry
+     * 
+     * @return Tinebase_Config_Struct
+     */
     public function getClientRegistryConfig()
     {
         // get all config names to be included in registry
