@@ -98,7 +98,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	   $this->_instance->deleteContacts($this->_contactIdsToDelete);
+	    $this->_instance->deleteContacts($this->_contactIdsToDelete);
     }
     
     /**
@@ -193,11 +193,12 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * add a contact
      *
+     * @param string $_orgName
      * @return array contact data
      */
-    protected function _addContact()
+    protected function _addContact($_orgName = NULL)
     {
-        $newContactData = $this->_getContactData();
+        $newContactData = $this->_getContactData($_orgName);
         $newContact = $this->_instance->saveContact($newContactData);
         $this->assertEquals($newContactData['n_family'], $newContact['n_family'], 'Adding contact failed');
         
@@ -209,9 +210,10 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * get contact data
      * 
+     * @param string $_orgName
      * @return array
      */
-    protected function _getContactData()
+    protected function _getContactData($_orgName = NULL)
     {
         $note = array(
             'note_type_id'      => 1,
@@ -219,8 +221,9 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         );
         
         return array(
+            'n_given'           => 'ali',
             'n_family'          => 'PHPUNIT',
-            'org_name'          => Tinebase_Record_Abstract::generateUID(),
+            'org_name'          => ($_orgName === NULL) ? Tinebase_Record_Abstract::generateUID() : $_orgName,
             'container_id'      => $this->container->id,
             'notes'             => array($note),
             'tel_cell_private'  => '+49TELCELLPRIVATE',
@@ -665,5 +668,44 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             Tinebase_Model_Grants::GRANT_EDIT    => true,
             Tinebase_Model_Grants::GRANT_DELETE  => true,
         ));
+    }
+
+    /**
+     * testDuplicateCheck
+     */
+    public function testDuplicateCheck()
+    {
+        $contact = $this->_addContact();
+        try {
+            $this->_addContact($contact['org_name']);
+            $this->assertTrue(FALSE, 'no duplicate exception');
+        } catch (Tinebase_Exception_Duplicate $ted) {
+            $exceptionData = $ted->toArray();
+            $this->assertEquals(1, count($exceptionData['duplicates']));
+            $this->assertEquals($contact['n_given'], $exceptionData['duplicates'][0]['n_given']);
+            $this->assertEquals($contact['org_name'], $exceptionData['duplicates'][0]['org_name']);
+        }
+    }
+
+    /**
+     * testDuplicateCheckWithEmail
+     */
+    public function testDuplicateCheckWithEmail()
+    {
+        $contact = $this->_getContactData();
+        $contact['email'] = 'test@example.org';
+        $contact = $this->_instance->saveContact($contact);
+        $this->_contactIdsToDelete[] = $contact['id'];
+        try {
+            $contact2 = $this->_getContactData();
+            $contact2['email'] = 'test@example.org';
+            $contact2 = $this->_instance->saveContact($contact2);
+            $this->_contactIdsToDelete[] = $contact2['id'];
+            $this->assertTrue(FALSE, 'no duplicate exception');
+        } catch (Tinebase_Exception_Duplicate $ted) {
+            $exceptionData = $ted->toArray();
+            $this->assertEquals(1, count($exceptionData['duplicates']));
+            $this->assertEquals($contact['email'], $exceptionData['duplicates'][0]['email']);
+        }
     }
 }

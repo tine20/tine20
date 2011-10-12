@@ -35,6 +35,7 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             'type'                  => 'array',
             'contents'              => 'array',
             'clientRegistryInclude' => TRUE,
+        // @todo make default work
             'default'               => array(               // array of alternatives
                 array('n_given', 'n_family', 'org_name'),   // all fields must match
                 array('email'),                             // single field that needs to match
