@@ -83,6 +83,7 @@ class Addressbook_Convert_Contact_VCardTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Address Privat 1',        $contact->adr_two_street);
         $this->assertEquals('Address Privat 2',        $contact->adr_two_street2);
         $this->assertEquals('l.kneschke@metaways.de',  $contact->email);
+        $this->assertEquals('lars@kneschke.de',        $contact->email_home);
         $this->assertEquals('Kneschke',                $contact->n_family);
         $this->assertEquals('Kneschke, Lars',          $contact->n_fileas);
         $this->assertEquals('Lars',                    $contact->n_given);
@@ -94,6 +95,7 @@ class Addressbook_Convert_Contact_VCardTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Business Unit',           $contact->org_unit);
         $this->assertEquals('+49 MOBIL',               $contact->tel_cell);
         $this->assertEquals('+49 FAX',                 $contact->tel_fax);
+        $this->assertEquals(null,                      $contact->tel_fax_home);
         $this->assertEquals('+49 PRIVAT',              $contact->tel_home);
         $this->assertEquals('+49 BUSINESS',            $contact->tel_work);
         $this->assertEquals('Titel',                   $contact->title);
@@ -117,14 +119,15 @@ class Addressbook_Convert_Contact_VCardTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('12345',                   $contact->adr_one_postalcode);
         $this->assertEquals(null,                      $contact->adr_one_region);
         $this->assertEquals('Address Business 1',      $contact->adr_one_street);
-        $this->assertEquals('Address Business 2',      $contact->adr_one_street2);
+        $this->assertEquals(null,                      $contact->adr_one_street2);
         $this->assertEquals('COUNTRY PRIVAT',          $contact->adr_two_countryname);
         $this->assertEquals('City Privat',             $contact->adr_two_locality);
         $this->assertEquals('12345',                   $contact->adr_two_postalcode);
-        $this->assertEquals('Region Privat',           $contact->adr_two_region);
+        $this->assertEquals(null,                      $contact->adr_two_region);
         $this->assertEquals('Address Privat 1',        $contact->adr_two_street);
-        $this->assertEquals('Address Privat 2',        $contact->adr_two_street2);
+        $this->assertEquals(null,                      $contact->adr_two_street2);
         $this->assertEquals('l.kneschke@metaways.de',  $contact->email);
+        $this->assertEquals('lars@kneschke.de',        $contact->email_home);
         $this->assertEquals('Kneschke',                $contact->n_family);
         $this->assertEquals('Kneschke, Lars',          $contact->n_fileas);
         $this->assertEquals('Lars',                    $contact->n_given);
@@ -133,13 +136,14 @@ class Addressbook_Convert_Contact_VCardTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(null,                      $contact->n_suffix);
         $this->assertEquals("Notes\nwith\nLine Break", $contact->note);
         $this->assertEquals('Organisation',            $contact->org_name);
-        $this->assertEquals('Business Unit',           $contact->org_unit);
+        $this->assertEquals(null,                      $contact->org_unit);
         $this->assertEquals('+49 MOBIL',               $contact->tel_cell);
         $this->assertEquals('+49 FAX',                 $contact->tel_fax);
+        $this->assertEquals('+49 FAX PRIVAT',          $contact->tel_fax_home);
         $this->assertEquals('+49 PRIVAT',              $contact->tel_home);
         $this->assertEquals('+49 BUSINESS',            $contact->tel_work);
-        $this->assertEquals('Titel',                   $contact->title);
-        $this->assertEquals('http://www.tine20.com',   $contact->url);
-        $this->assertEquals('http://www.tine20.org',   $contact->url_home);
+        $this->assertEquals(null,                      $contact->title);
+        $this->assertEquals(null,                      $contact->url);
+        $this->assertEquals(null,                      $contact->url_home);
     }        
 }
