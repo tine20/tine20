@@ -272,8 +272,27 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
             } else {
                 this.accountId = null;
             }
+        } else {
+            // value is a record
+            if (typeof(value.get) === 'function') {
+                if (this.store.indexOf(value) < 0) {
+                    this.store.addSorted(value);
+                }
+                value = value.get(this.nameField);
+            }
+            
+            // value is a js object
+            else if (value[this.nameField]) {
+                if (! this.store.getById(value)) {
+                    this.store.addSorted(new Tine.Addressbook.Model.Contact(value));
+                }
+                value = value[this.nameField];
+            }
+            
+            return Tine.Tinebase.widgets.form.RecordPickerComboBox.prototype.setValue.call(this, value);
         }
-        Tine.Addressbook.SearchCombo.superclass.setValue.call(this, value);
+        
+        return Tine.Addressbook.SearchCombo.superclass.setValue.call(this, value);
     },
     
     /**
