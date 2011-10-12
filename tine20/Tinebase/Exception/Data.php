@@ -53,7 +53,17 @@ class Tinebase_Exception_Data extends Tinebase_Exception
     }
     
     /**
-     * get existing nodes info
+     * set exception data
+     * 
+     * @param Tinebase_Record_RecordSet of Tinebase_Record_Interface
+     */
+    public function setData(Tinebase_Record_RecordSet $_exceptionData)
+    {
+        $this->_exceptionData = $_exceptionData;
+    }
+        
+    /**
+     * get exception data
      * 
      * @return Tinebase_Record_RecordSet of Tinebase_Record_Interface
      */
@@ -71,7 +81,7 @@ class Tinebase_Exception_Data extends Tinebase_Exception
     }
     
     /**
-     * returns existing nodes info as array
+     * returns existing exception data as array
      * 
      * @return array
      */

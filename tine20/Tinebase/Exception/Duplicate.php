@@ -18,6 +18,8 @@
  */
 class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
 {
+    protected $_clientRecord = NULL;
+    
     /**
      * construct
      * 
@@ -28,5 +30,34 @@ class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
     public function __construct($_message = 'data exception', $_code = 520)
     {
         parent::__construct($_message, $_code);
+    }
+    
+    /**
+     * set client record
+     * 
+     * @param Tinebase_Record_Interface $_record
+     */
+    public function setClientRecord(Tinebase_Record_Interface $_record)
+    {
+        $this->_clientRecord = $_record;
+    }
+    
+    /**
+     * returns existing nodes info as array
+     * 
+     * @return array
+     */
+    public function toArray()
+    {
+        $data = parent::toArray();
+        
+        if ($this->_clientRecord) {
+            $this->_clientRecord->setTimezone(Tinebase_Core::get('userTimeZone'));
+        }
+        
+        return array(
+            'clientRecord' => $this->_clientRecord->toArray(),
+            'duplicates'   => $data['exceptionData'],
+        );
     }
 }

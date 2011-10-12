@@ -7,6 +7,8 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * 
+ * @todo        this should be splitted into smaller parts!
  */
 
 /**
@@ -95,9 +97,18 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_recordAlarmField = 'dtstart';
     
     /**
+     * the current user
+     * 
      * @var Tinebase_Model_User
      */
     protected $_currentAccount = NULL;
+    
+    /**
+     * duplicate check fields / if this is NULL -> no duplicate check
+     * 
+     * @var array
+     */
+    protected $_duplicateCheckFields = NULL;
     
     /**
      * returns controller for records of given model
@@ -378,6 +389,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             
             $this->_inspectBeforeCreate($_record);
+            $this->_duplicateCheck($_record);
             $record = $this->_backend->create($_record);
             $this->_inspectAfterCreate($record, $_record);
             
@@ -428,6 +440,77 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         
+    }
+    
+    /**
+     * do duplicate check (before create)
+     * 
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     * @throws Tinebase_Exception_Duplicate
+     */
+    protected function _duplicateCheck(Tinebase_Record_Interface $_record)
+    {
+        $duplicateFilter = $this->_getDuplicateFilter($_record);
+        
+        if ($duplicateFilter === NULL) {
+            return;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ' Doing duplicate check.');
+        
+        $duplicates = $this->search($duplicateFilter, new Tasks_Model_Pagination(array('limit' => 5)));
+        
+        if (count($duplicates) > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                ' Found ' . count($duplicates) . ' duplicate(s).');            
+            
+            $ted = new Tinebase_Exception_Duplicate('Duplicate record(s) found');
+            $ted->setModelName($this->_modelName);
+            $ted->setData($duplicates);
+            $ted->setClientRecord($_record);
+            throw $ted;
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                ' No duplicates found.');            
+        }
+    }
+    
+    /**
+     * get duplicate filter
+     * 
+     * @param Tinebase_Record_Interface $_record
+     * @return Tinebase_Model_Filter_FilterGroup|NULL
+     */
+    protected function _getDuplicateFilter(Tinebase_Record_Interface $_record)
+    {
+        if (empty($this->_duplicateCheckFields)) {
+            return NULL;
+        }
+        
+        $filters = array();
+        foreach ($this->_duplicateCheckFields as $group) {
+            $addFilter = array();
+            foreach ($group as $field) {
+                if (! empty($_record->{$field})) {
+                    $addFilter[] = array('field' => $field, 'operator' => 'equals', 'value' => $_record->{$field});
+                }
+            }
+            if (! empty($addFilter)) {
+                $filters[] = array('condition' => 'AND', 'filters' => $addFilter);
+            }
+        }
+        
+        if (empty($filters)) {
+            return NULL;
+        }
+        
+        $filterClass = $this->_modelName . 'Filter';
+        $filterData = (count($filters) > 1) ? array(array('condition' => 'OR', 'filters' => $filters)) : $filters;
+        $filter = new $filterClass($filterData);
+        
+        return $filter;
     }
     
     /**
