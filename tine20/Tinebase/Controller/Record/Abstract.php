@@ -368,7 +368,10 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('create');
     	
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->toArray(),true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
+            . print_r($_record->toArray(),true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Create new ' . $this->_modelName);
         
         try {
             $db = $this->_backend->getAdapter();
@@ -511,8 +514,14 @@ abstract class Tinebase_Controller_Record_Abstract
         
         $filterClass = $this->_modelName . 'Filter';
         $filterData = (count($filters) > 1) ? array(array('condition' => 'OR', 'filters' => $filters)) : $filters;
-        $filter = new $filterClass($filterData);
+
+        // exclude own record if it has an id
+        $recordId = $_record->getId();
+        if (! empty($recordId)) {
+            $filterData[] = array('field' => 'id', 'operator' => 'notin', 'value' => array($recordId));
+        }
         
+        $filter = new $filterClass($filterData);
         return $filter;
     }
     
@@ -538,6 +547,11 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
+            . print_r($_record->toArray(),true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Update ' . $this->_modelName);
+        
         try {
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
