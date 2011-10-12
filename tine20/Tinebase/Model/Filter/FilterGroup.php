@@ -204,6 +204,10 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             if (isset($filterData['condition'])) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
                     . ' Adding FilterGroup: ' . $this->_className);
+                    
+                if (empty($this->_className)) {
+                    throw new Tinebase_Exception_NotFound('className needs to be set in filtergroup');
+                }
                 
                 $filtergroup = new $this->_className($filterData['filters'], $filterData['condition'], $this->_options);
                 if (isset($filterData['id'])) {

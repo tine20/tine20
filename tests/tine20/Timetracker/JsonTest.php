@@ -655,4 +655,22 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertTrue(is_array($result['filter'][0]['value'][0]['value']), 'timeaccount should be resolved');
         $this->assertEquals(TRUE, $result['filter'][0]['value'][1]['implicit'], 'showClosed should be implicit');
     }
+    
+    /**
+     * try to search timesheets with or filter
+     */
+    public function testSearchTimesheetsWithOrFilter()
+    {
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        
+        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
+        $filterData = Zend_Json::decode('[{"condition":"OR","filters":[{"condition":"AND","filters":'
+             . '[{"field":"start_date","operator":"within","value":"weekThis","id":"ext-record-1"},'
+             . '{"field":"account_id","operator":"equals","value":"' . Tinebase_Core::getUser()->getId() . '","id":"ext-record-2"}]'
+             . ',"id":"ext-comp-1076","label":"Stundenzettel"}]}]'
+        );
+        $search = $this->_json->searchTimesheets($filterData, array());
+        $this->assertTrue($search['totalcount'] > 0);
+    }
 }

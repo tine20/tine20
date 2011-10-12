@@ -328,6 +328,11 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             // add usernames (imap + smtp)
             $_record->resolveCredentials();
             $_record->resolveCredentials(TRUE, FALSE, TRUE);
+            
+        } else if ($_record instanceof Felamimail_Model_Sieve_Vacation) {
+            if (! $_record->mime) {
+                $_record->reason = Felamimail_Message::convertFromTextToHTML($_record->reason);
+            }
         }
         
         return parent::_recordToJson($_record);
@@ -422,8 +427,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getVacation($id)
     {
         $record = Felamimail_Controller_Sieve::getInstance()->getVacation($id);
-        
-        $record->reason = nl2br($record->reason);
         
         return $this->_recordToJson($record);
     }
