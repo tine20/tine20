@@ -360,11 +360,11 @@ abstract class Tinebase_Controller_Record_Abstract
      * add one record
      *
      * @param   Tinebase_Record_Interface $_record
-     * @param   bollean $_forceCreation do not do duplicate check if this is TRUE
+     * @param   boolean $_duplicateCheck
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      */
-    public function create(Tinebase_Record_Interface $_record, $_forceCreation = FALSE)
+    public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
     {
         $this->_checkRight('create');
     	
@@ -390,7 +390,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             
             $this->_inspectBeforeCreate($_record);
-            if (! $_forceCreation) {
+            if ($_duplicateCheck) {
                 $this->_duplicateCheck($_record);
             }
             $record = $this->_backend->create($_record);
@@ -532,10 +532,11 @@ abstract class Tinebase_Controller_Record_Abstract
      * update one record
      *
      * @param   Tinebase_Record_Interface $_record
+     * @param   boolean $_duplicateCheck
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      */
-    public function update(Tinebase_Record_Interface $_record)
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
     {
         try {
             $db = $this->_backend->getAdapter();
@@ -570,7 +571,9 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             
             $this->_inspectBeforeUpdate($_record, $currentRecord);
-           
+            if ($_duplicateCheck) {
+                $this->_duplicateCheck($_record);
+            }
             $record = $this->_backend->update($_record);
             $this->_inspectAfterUpdate($record, $_record);
     

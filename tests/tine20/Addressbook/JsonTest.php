@@ -674,14 +674,14 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * testDuplicateCheck
      */
-    public function testDuplicateCheck($_forceCreation = FALSE)
+    public function testDuplicateCheck($_duplicateCheck = TRUE)
     {
         $contact = $this->_addContact();
         try {
-            $this->_addContact($contact['org_name'], $_forceCreation);
-            $this->assertTrue($_forceCreation, 'duplicate detection failed');
+            $this->_addContact($contact['org_name'], $_duplicateCheck);
+            $this->assertFalse($_duplicateCheck, 'duplicate detection failed');
         } catch (Tinebase_Exception_Duplicate $ted) {
-            $this->assertFalse($_forceCreation, 'force creation failed');
+            $this->assertTrue($_duplicateCheck, 'force creation failed');
             $exceptionData = $ted->toArray();
             $this->assertEquals(1, count($exceptionData['duplicates']));
             $this->assertEquals($contact['n_given'], $exceptionData['duplicates'][0]['n_given']);
@@ -716,6 +716,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testForceCreation()
     {
-        $this->testDuplicateCheck(TRUE);
+        $this->testDuplicateCheck(FALSE);
     }
 }
