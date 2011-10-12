@@ -11,7 +11,7 @@
  */
 
 /**
- * Tinebase duplicate exception
+ * Tinebase duplicate exception / error code: 629 (6 => Tinebase, 2 => conflict, 9 => because of 409 for HTTP conflict)
  * 
  * @package     Tinebase
  * @subpackage  Exception
@@ -27,7 +27,7 @@ class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
      * @param integer $_code
      * @return void
      */
-    public function __construct($_message = 'data exception', $_code = 520)
+    public function __construct($_message = 'data exception', $_code = 629)
     {
         parent::__construct($_message, $_code);
     }
