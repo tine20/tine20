@@ -33,8 +33,12 @@ class Addressbook_Config extends Tinebase_Config_Abstract
                                    //_('These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown.')
             'description'           => 'These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown.',
             'type'                  => 'array',
-            'contents'              => 'string',
+            'contents'              => 'array',
             'clientRegistryInclude' => TRUE,
+            'default'               => array(               // array of alternatives
+                array('n_given', 'n_family', 'org_name'),   // all fields must match
+                array('email'),                             // single field that needs to match
+            ),
         ),
     );
     
