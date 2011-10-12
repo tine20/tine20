@@ -808,7 +808,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             $vacationData['mime'] = 'text/html';
         }
         
-        $this->_sieveTestHelper($vacationData);
+        $this->_sieveTestHelper($vacationData, TRUE);
     }
     
     /**
@@ -1027,7 +1027,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      * 
      * @param array $_sieveData
      */
-    protected function _sieveTestHelper($_sieveData)
+    protected function _sieveTestHelper($_sieveData, $_isMime = FALSE)
     {
         $this->_oldActiveSieveScriptName = Felamimail_Controller_Sieve::getInstance()->getActiveScriptName($this->_account->getId());
         
@@ -1051,7 +1051,12 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             } else {
                 $this->assertEquals($_sieveData['subject'], $resultSet['subject']);
             }
-            $this->assertEquals($_sieveData['reason'], $resultSet['reason']);
+            
+            if ($_isMime) {
+                $this->assertEquals(html_entity_decode('unittest vacation&nbsp;message', ENT_NOQUOTES, 'UTF-8'), $resultSet['reason']);
+            } else {
+                $this->assertEquals($_sieveData['reason'], $resultSet['reason']);
+            }
             
         } else if (array_key_exists('action_type', $_sieveData[0])) {
             $resultSet = $this->_json->saveRules($this->_account->getId(), $_sieveData);
