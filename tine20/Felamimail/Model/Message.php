@@ -521,24 +521,37 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     }    
 
     /**
-     * get body as plain text with replaced blockquotes, stripped tags and replaced <br>s
-     * -> use DOM extension
+     * get body as plain text
      * 
      * @return string
      */
     public function getPlainTextBody()
     {
-        $result = '';
+        $result = self::convertHTMLToPlainTextWithQuotes($this->body);
         
+        return $result;
+    }
+    
+    /**
+     * convert html to plain text with replaced blockquotes, stripped tags and replaced <br>s
+     * -> use DOM extension
+     * 
+     * @param string $_html
+     * @param string $_eol
+     * @return string
+     */
+    public static function convertHTMLToPlainTextWithQuotes($_html, $_eol = "\n")
+    {
         $dom = new DOMDocument('1.0', 'utf-8');
         // use a hack to make sure html is loaded as utf8 (@see http://php.net/manual/en/domdocument.loadhtml.php#95251)
-        $dom->loadHTML('<?xml encoding="UTF-8">' . $this->body);
+        $dom->loadHTML('<?xml encoding="UTF-8">' . $_html);
         $bodyElements = $dom->getElementsByTagName('body');
         if ($bodyElements->length > 0) {
-            $result = $this->_addQuotesAndStripTags($bodyElements->item(0));
+            $result = self::addQuotesAndStripTags($bodyElements->item(0), 0, $_eol);
             $result = html_entity_decode($result, ENT_COMPAT, 'UTF-8');
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No body element found.');
+            $result = self::convertHTMLToPlainTextWithQuotes('<body>' . $_html . '</body>', 0, $_eol);
         }
         
         return $result;
@@ -553,12 +566,13 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      * 
      * @param tidyNode|DOMNode $_node
      * @param integer $_quoteIndent
+     * @param string $_eol
      * @return string
      * 
      * @todo we can transform more tags here, i.e. the <strong>BOLDTEXT</strong> tag could be replaced with *BOLDTEXT*
      * @todo think about removing the tidy code
      */
-    protected function _addQuotesAndStripTags($_node, $_quoteIndent = 0) {
+    public static function addQuotesAndStripTags($_node, $_quoteIndent = 0, $_eol = "\n") {
         
         $result = '';
         
@@ -578,12 +592,12 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                         $result .= str_repeat(self::QUOTE, $_quoteIndent) . $child->{$valueProperty};
                         // add newline if parent is div
                         if ($_node->{$nameProperty} == 'div') {
-                            $result .=  "\n" . str_repeat(self::QUOTE, $_quoteIndent);
+                            $result .=  $_eol . str_repeat(self::QUOTE, $_quoteIndent);
                         }
                     } else {
                         // add newline if parent is div
                         if ($_node->{$nameProperty} == 'div') {
-                            $result .= "\n";
+                            $result .= $_eol;
                         }
                         $result .= $child->{$valueProperty};
                     }
@@ -598,17 +612,17 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                         // add quotes to repeating newlines
                         $result .= str_repeat(self::QUOTE, $_quoteIndent);
                     }
-                    $result .= "\n";
+                    $result .= $_eol;
                 }
                 
-                $result .= $this->_addQuotesAndStripTags($child, $_quoteIndent);
+                $result .= self::addQuotesAndStripTags($child, $_quoteIndent);
                 
                 if ($child->{$nameProperty} == 'blockquote') {
                     // closing blockquote
                     $_quoteIndent--;
                     // add newline after last closing blockquote
                     if ($_quoteIndent == 0) {
-                        $result .= "\n";
+                        $result .= $_eol;
                     }
                 }
                 
