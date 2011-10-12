@@ -1,31 +1,31 @@
 BEGIN:VCARD
 VERSION:3.0
-N:Nachname;Vorname;;;
+N:Kneschke;Lars;;;
 FN:Vorname Nachname
-ORG:Firma;
-EMAIL;type=INTERNET;type=WORK;type=pref:email work
-EMAIL;type=INTERNET;type=HOME:email private
+ORG:Organisation;
+EMAIL;type=INTERNET;type=WORK;type=pref:l.kneschke@metaways.de
+EMAIL;type=INTERNET;type=HOME:lars@kneschke.de
 item1.EMAIL;type=INTERNET:email other
 item1.X-ABLabel:_$!<Other>!$_
 item2.EMAIL;type=INTERNET:email other
 item2.X-ABLabel:_$!<Other>!$_
-TEL;type=WORK;type=pref:Tel Arbeit
-TEL;type=CELL:Tel Mobile
-TEL;type=HOME:Tel Private
+TEL;type=WORK;type=pref:+49 BUSINESS
+TEL;type=CELL:+49 MOBIL
+TEL;type=HOME:+49 PRIVAT
 TEL;type=IPHONE:Tel Iphone
 TEL;type=MAIN:Tel Zentrale
-TEL;type=HOME;type=FAX:Fax Private
-TEL;type=WORK;type=FAX:Fax Work
+TEL;type=HOME;type=FAX:+49 FAX PRIVAT
+TEL;type=WORK;type=FAX:+49 FAX
 TEL;type=PAGER:Pager
 TEL;type=OTHER:Tel other
 TEL;type=OTHER:Tel other
-item3.ADR;type=WORK;type=pref:;;Sta..e arbeit;City Business;;12345;COUNTRY BUSINESS
+item3.ADR;type=WORK;type=pref:;;Address Business 1;City Business;;12345;COUNTRY BUSINESS
 item3.X-ABADR:de
-item4.ADR;type=HOME:;;Sta..e privat;stadt privat;;plz privat;land privat
+item4.ADR;type=HOME:;;Address Privat 1;City Privat;;12345;COUNTRY PRIVAT
 item4.X-ABADR:de
 item5.ADR;type=OTHER:;;andere sta..e;andere stan..e;;andere plz;andere land
 item5.X-ABADR:de
-NOTE:Notiz
+NOTE:Notes\nwith\nLine Break
 X-AIM;type=WORK;type=pref:Messenger Work (AIM)
 X-AIM;type=HOME:Messenger Private (AIM)
 item6.X-AIM:Messenger Other (AIM)
