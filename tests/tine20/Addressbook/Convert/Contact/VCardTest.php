@@ -94,9 +94,11 @@ class Addressbook_Convert_Contact_VCardTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Organisation',            $contact->org_name);
         $this->assertEquals('Business Unit',           $contact->org_unit);
         $this->assertEquals('+49 MOBIL',               $contact->tel_cell);
+        $this->assertEquals(null,                      $contact->tel_cell_private);
         $this->assertEquals('+49 FAX',                 $contact->tel_fax);
         $this->assertEquals(null,                      $contact->tel_fax_home);
         $this->assertEquals('+49 PRIVAT',              $contact->tel_home);
+        $this->assertEquals('+49 PAGER',               $contact->tel_pager);
         $this->assertEquals('+49 BUSINESS',            $contact->tel_work);
         $this->assertEquals('Titel',                   $contact->title);
         $this->assertEquals('http://www.tine20.com',   $contact->url);
@@ -138,9 +140,11 @@ class Addressbook_Convert_Contact_VCardTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Organisation',            $contact->org_name);
         $this->assertEquals(null,                      $contact->org_unit);
         $this->assertEquals('+49 MOBIL',               $contact->tel_cell);
+        $this->assertEquals(null,                      $contact->tel_cell_private);
         $this->assertEquals('+49 FAX',                 $contact->tel_fax);
         $this->assertEquals('+49 FAX PRIVAT',          $contact->tel_fax_home);
         $this->assertEquals('+49 PRIVAT',              $contact->tel_home);
+        $this->assertEquals('+49 PAGER',               $contact->tel_pager);
         $this->assertEquals('+49 BUSINESS',            $contact->tel_work);
         $this->assertEquals(null,                      $contact->title);
         $this->assertEquals(null,                      $contact->url);
