@@ -16,7 +16,7 @@ TEL;type=IPHONE:Tel Iphone
 TEL;type=MAIN:Tel Zentrale
 TEL;type=HOME;type=FAX:+49 FAX PRIVAT
 TEL;type=WORK;type=FAX:+49 FAX
-TEL;type=PAGER:Pager
+TEL;type=PAGER:+49 PAGER
 TEL;type=OTHER:Tel other
 TEL;type=OTHER:Tel other
 item3.ADR;type=WORK;type=pref:;;Address Business 1;City Business;;12345;COUNTRY BUSINESS
