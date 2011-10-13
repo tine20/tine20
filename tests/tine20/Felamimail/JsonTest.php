@@ -420,7 +420,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $contactIds = Addressbook_Controller_Contact::getInstance()->search($contactFilter, NULL, FALSE, TRUE);
         $contact = Addressbook_Controller_Contact::getInstance()->get($contactIds[0]);
         $contact->email = $this->_account->email;
-        $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
+        $contact = Addressbook_Controller_Contact::getInstance()->update($contact, FALSE);
 
         // send email
         $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain);

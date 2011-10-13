@@ -255,7 +255,7 @@ class Crm_JsonTest extends Crm_AbstractTest
     public function testAddRelationAgain()
     {
         $contact    = $this->_getContact();
-        $savedContact = Addressbook_Controller_Contact::getInstance()->create($contact);
+        $savedContact = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE);
         $lead       = $this->_getLead();
         
         $leadData = $lead->toArray();
