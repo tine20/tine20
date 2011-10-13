@@ -120,6 +120,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * @return void
      * @throws Tinebase_Exception_Record_Validation
      * 
+     * @todo create new import exception that collects all exceptions + has the counts 
      * @todo move try/catch here to collect exceptions
      * @todo always try to create record (with transaction rollback if dryrun)
      * @todo count duplicate exceptions for duplicatecount / other exceptions for failcount
