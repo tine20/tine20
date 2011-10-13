@@ -33,7 +33,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
     protected $_vcard;
     
     /**
-     * @var Addressbook_Convert_Contact_VCard
+     * @var Addressbook_Convert_Contact_VCard_Interface
      */
     protected $_converter;
     
@@ -62,8 +62,6 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
             $version = null;
         }
 
-        var_dump($backend);
-        
         $this->_converter = Addressbook_Convert_Contact_VCard_Factory::factory($backend, $version);
     }
     
