@@ -21,6 +21,7 @@ class Addressbook_Convert_Contact_VCard
     const CLIENT_AUTODETECT = 'auto';
     const CLIENT_SOGO       = 'sogo';
     const CLIENT_MACOSX     = 'macosx';
+    const CLIENT_UNKNOWN    = 'unknown';
     
     /**
      * @var string
@@ -33,7 +34,8 @@ class Addressbook_Convert_Contact_VCard
     protected $_supportedFields = array(
         self::CLIENT_AUTODETECT => array(),
         self::CLIENT_MACOSX     => array(),
-        self::CLIENT_SOGO       => array()
+        self::CLIENT_SOGO       => array(),
+        self::CLIENT_UNKNOWN    => array()
     );
     
     /**
@@ -281,10 +283,33 @@ class Addressbook_Convert_Contact_VCard
         $card->add(new Sabre_VObject_Property('ORG', Sabre_VObject_Property::concatCompoundValues(array($_model->org_name, $_model->org_unit))));
         $card->add(new Sabre_VObject_Property('TITLE', $_model->title));
         
-        $card->add(new Sabre_VObject_Property('TEL;TYPE=work', $_model->tel_work));
-        $card->add(new Sabre_VObject_Property('TEL;TYPE=cell', $_model->tel_cell));
-        $card->add(new Sabre_VObject_Property('TEL;TYPE=fax',  $_model->tel_fax));
-        $card->add(new Sabre_VObject_Property('TEL;TYPE=home', $_model->tel_home));
+        $tel = new Sabre_VObject_Property('TEL', $_model->tel_work);
+        $tel->add('TYPE', 'WORK');
+        $card->add($tel);
+        
+        $tel = new Sabre_VObject_Property('TEL', $_model->tel_home);
+        $tel->add('TYPE', 'HOME');
+        $card->add($tel);
+        
+        $tel = new Sabre_VObject_Property('TEL', $_model->tel_cell);
+        $tel->add('TYPE', 'CELL');
+        $tel->add('TYPE', 'WORK');
+        $card->add($tel);
+        
+        $tel = new Sabre_VObject_Property('TEL', $_model->tel_cell_private);
+        $tel->add('TYPE', 'CELL');
+        $tel->add('TYPE', 'HOME');
+        $card->add($tel);
+        
+        $tel = new Sabre_VObject_Property('TEL', $_model->tel_fax);
+        $tel->add('TYPE', 'FAX');
+        $tel->add('TYPE', 'WORK');
+        $card->add($tel);
+        
+        $tel = new Sabre_VObject_Property('TEL', $_model->tel_fax_home);
+        $tel->add('TYPE', 'FAX');
+        $tel->add('TYPE', 'HOME');
+        $card->add($tel);
         
         $card->add(new Sabre_VObject_Property('ADR;TYPE=work', Sabre_VObject_Property::concatCompoundValues(array(null, $_model->adr_one_street2, $_model->adr_one_street, $_model->adr_one_locality, $_model->adr_one_region, $_model->adr_one_postalcode, $_model->adr_one_countryname))));
         $card->add(new Sabre_VObject_Property('ADR;TYPE=home', Sabre_VObject_Property::concatCompoundValues(array(null, $_model->adr_two_street2, $_model->adr_two_street, $_model->adr_two_locality, $_model->adr_two_region, $_model->adr_two_postalcode, $_model->adr_two_countryname))));
