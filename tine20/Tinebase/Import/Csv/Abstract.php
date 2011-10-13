@@ -90,6 +90,8 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
      *
      * @param  resource $_resource (if $_filename is a stream)
      * @return array with Tinebase_Record_RecordSet the imported records (if dryrun) and totalcount 
+     * 
+     * @todo generalize this and move to Tinebase_Import_Abstract
      */
     public function import($_resource = NULL)
     {
