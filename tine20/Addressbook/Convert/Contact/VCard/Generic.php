@@ -11,18 +11,13 @@
  */
 
 /**
- * class to convert a contact to vcard and back again
+ * class to convert a generic vcard to contact model and back again
  *
  * @package     Addressbook
  * @subpackage  Convert
  */
-class Addressbook_Convert_Contact_VCard
+class Addressbook_Convert_Contact_VCard_Generic
 {
-    const CLIENT_AUTODETECT = 'auto';
-    const CLIENT_SOGO       = 'sogo';
-    const CLIENT_MACOSX     = 'macosx';
-    const CLIENT_UNKNOWN    = 'unknown';
-    
     /**
      * @var string
      */
@@ -280,6 +275,7 @@ class Addressbook_Convert_Contact_VCard
         $card->add(new Sabre_VObject_Property('PRODID', '-//tine20.org//Tine 2.0//EN'));
         $card->add(new Sabre_VObject_Property('UID', $_model->getId()));
 
+        // optional fields
         $card->add(new Sabre_VObject_Property('ORG', Sabre_VObject_Property::concatCompoundValues(array($_model->org_name, $_model->org_unit))));
         $card->add(new Sabre_VObject_Property('TITLE', $_model->title));
         
