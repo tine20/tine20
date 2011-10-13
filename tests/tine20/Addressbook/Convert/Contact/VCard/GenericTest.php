@@ -11,16 +11,16 @@
 /**
  * Test helper
  */
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Addressbook_Convert_Contact_VCardTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Addressbook_Convert_Contact_VCard_GenericTest::main');
 }
 
 /**
- * Test class for Addressbook_Convert_Contact_VCard
+ * Test class for Addressbook_Convert_Contact_VCard_Generic
  */
-class Addressbook_Convert_Contact_VCardTest extends PHPUnit_Framework_TestCase
+class Addressbook_Convert_Contact_VCard_GenericTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var array test objects
@@ -35,7 +35,7 @@ class Addressbook_Convert_Contact_VCardTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook WebDAV Contact Tests');
+		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook WebDAV Generic Contact Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
 	}
 
@@ -66,7 +66,7 @@ class Addressbook_Convert_Contact_VCardTest extends PHPUnit_Framework_TestCase
     {
         $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/sogo_connector.vcf', 'r');
         
-        $converter = new Addressbook_Convert_Contact_VCard(Addressbook_Convert_Contact_VCard::CLIENT_SOGO);
+        $converter = Addressbook_Convert_Contact_VCard_Factory::factory(Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO);
         
         $contact = $converter->toTine20Model($vcardStream);
         
@@ -112,7 +112,7 @@ class Addressbook_Convert_Contact_VCardTest extends PHPUnit_Framework_TestCase
     {
         $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/mac_os_x_addressbook.vcf', 'r');
         
-        $converter = new Addressbook_Convert_Contact_VCard(Addressbook_Convert_Contact_VCard::CLIENT_MACOSX);
+        $converter = Addressbook_Convert_Contact_VCard_Factory::factory(Addressbook_Convert_Contact_VCard_Factory::CLIENT_MACOSX);
         
         $contact = $converter->toTine20Model($vcardStream);
         
