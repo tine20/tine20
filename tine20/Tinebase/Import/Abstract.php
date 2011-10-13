@@ -119,6 +119,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * @param array $_result
      * @return void
      * @throws Tinebase_Exception_Record_Validation
+     * 
+     * @todo move try/catch here to collect exceptions
+     * @todo always try to create record (with transaction rollback if dryrun)
+     * @todo count duplicate exceptions for duplicatecount / other exceptions for failcount
      */
     protected function _importRecord($_recordData, &$_result)
     {
@@ -130,16 +134,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             if (! $this->_options['dryrun']) {
                 
                 // check for duplicate
-                if ($this->_options['duplicates']) {
-                    // search for record in container and print log message
-                    $existingRecords = $this->_controller->search($this->_getDuplicateSearchFilter($record), NULL, FALSE, TRUE);
-                    if (count($existingRecords) > 0) {
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Duplicate found: ' . $existingRecords[0]);
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
-                        $_result['duplicatecount']++;
-                        return;
-                    }
-                }
+//                if ($this->_options['duplicates']) {
+//                    $_result['duplicatecount']++;
+//                }
                 
                 // create/add shared tags
                 if (isset($_recordData['tags']) && is_array($_recordData['tags'])) {
@@ -157,17 +154,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
             throw new Tinebase_Exception_Record_Validation('Imported record is invalid (' . print_r($record->getValidationErrors(), TRUE) . ')');
         }
-    }
-    
-    /**
-     * get filter for duplicate check
-     * 
-     * @param Tinebase_Record_Interface $_record
-     * @return Tinebase_Model_Filter_FilterGroup
-     */
-    protected function _getDuplicateSearchFilter(Tinebase_Record_Interface $_record)
-    {
-        throw new Tinebase_Exception_NotImplemented('You need to implement this function if you want to use the duplicate check.');
     }
     
     /**
@@ -236,7 +222,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         return $result;
     }
     
-
     /**
      * do conversions (transformations, charset, ...)
      *
