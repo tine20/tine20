@@ -25,26 +25,25 @@ class Addressbook_Convert_Contact_VCard_Factory
     /**
 	 * factory function to return a selected phone backend class
 	 *
-	 * @param   string $_type
-	 * @return  Sipgate_Backend_Interface
-	 * @throws  Sipgate_Exception_InvalidArgument
-	 * @throws  Sipgate_Exception_NotFound
+	 * @param   string $_backend
+	 * @param   string $_version
+	 * @return  Addressbook_Convert_Contact_VCard_Interface
 	 */
-	static public function factory($_backend)
+	static public function factory($_backend, $_version)
 	{
 	    switch ($_backend) {
 	        case Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC:
-	            return new Addressbook_Convert_Contact_VCard_Generic();
+	            return new Addressbook_Convert_Contact_VCard_Generic($_version);
 	            
 	            break;
 	            
 	        case Addressbook_Convert_Contact_VCard_Factory::CLIENT_MACOSX:
-	            return new Addressbook_Convert_Contact_VCard_MacOSX();
+	            return new Addressbook_Convert_Contact_VCard_MacOSX($_version);
 	            
 	            break;
 	            
             case Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO:
-                return new Addressbook_Convert_Contact_VCard_Sogo();
+                return new Addressbook_Convert_Contact_VCard_Sogo($_version);
                  
                 break;
 	                 

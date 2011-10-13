@@ -16,7 +16,7 @@
  * @package     Addressbook
  * @subpackage  Convert
  */
-class Addressbook_Convert_Contact_VCard_Generic
+class Addressbook_Convert_Contact_VCard_Generic implements Addressbook_Convert_Contact_VCard_Interface
 {
     /**
      */

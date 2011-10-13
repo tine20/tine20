@@ -57,14 +57,6 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
     */
     public function createFile($name, $vobjectData = null) 
     {
-        if (strpos($_SERVER['HTTP_USER_AGENT'], 'CardDAVPlugin') === false &&
-            strpos($_SERVER['HTTP_USER_AGENT'], 'iCalendar') === false &&
-            strpos($_SERVER['HTTP_USER_AGENT'], 'CalendarStore') === false &&
-            strpos($_SERVER['HTTP_USER_AGENT'], 'Lightning') === false) {
-            
-            throw new Sabre_DAV_Exception_Forbidden('Permission denied to create file (filename ' . $name . ')');
-        }
-        
         $objectClass = $this->_application->name . '_Frontend_WebDAV_' . $this->_model;
         
         $object = $objectClass::create($this->_container, $vobjectData);
