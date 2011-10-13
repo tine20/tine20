@@ -89,8 +89,8 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
-        
+        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
+                
         $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/sogo_connector.vcf', 'r');
         
         $contact = Addressbook_Frontend_WebDAV_Contact::create($this->objects['initialContainer'], $vcardStream);
@@ -103,6 +103,8 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Kneschke', $record->n_family);
         $this->assertEquals('+49 BUSINESS', $record->tel_work);
         
+        unset($_SERVER['HTTP_USER_AGENT']);
+        
         return $contact;
     }    
     
@@ -111,7 +113,7 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
      */
     public function testGet()
     {
-        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
         
         $contact = $this->testCreate();
     
@@ -121,11 +123,11 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * test updating existing contact
+     * test updating existing contact from sogo connector
      */
-    public function testPut()
+    public function _testPutSogo()
     {
-        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
         
         $contact = $this->testCreate();
     
@@ -141,11 +143,47 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test updating existing contact from MacOS X
+     */
+    public function _testPutMacOSX()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
+    
+        $contact = $this->testCreate();
+    
+        $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/mac_os_x_addressbook.vcf', 'r');
+    
+        $contact->put($vcardStream);
+    
+        $record = $contact->getRecord();
+    
+        $this->assertEquals('l.kneschke@metaways.de', $record->email);
+        $this->assertEquals('Kneschke', $record->n_family);
+        $this->assertEquals('+49 BUSINESS', $record->tel_work);
+    }
+    
+    /**
+     * test updating existing contact from MacOS X
+     */
+    public function testPutGeneric()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
+        
+        $contact = $this->testCreate();
+    
+        $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/mac_os_x_addressbook.vcf', 'r');
+    
+        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
+        
+        $contact->put($vcardStream);    
+    }
+    
+    /**
      * test get name of vcard
      */
     public function testGetName()
     {
-        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
         
         $contact = $this->testCreate();
         
