@@ -210,22 +210,17 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * update one record
-     *
-     * @param   Tinebase_Record_Interface $_record
-     * @param   boolean $_duplicateCheck
-     * @return  Addressbook_Model_Contact
-     * @throws  Tinebase_Exception_AccessDenied
+     * inspect update of one record (after update)
+     * 
+     * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $_record          the update record
+     * @return  void
      */
-    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
+    protected function _inspectAfterUpdate($_updatedRecord, $_record)
     {
-        $contact = parent::update($_record, $_duplicateCheck);
-        
-        if ($contact->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
-            Tinebase_User::getInstance()->updateContact($contact);
-        }
-        
-        return $contact;
+        if ($_updatedRecord->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
+            Tinebase_User::getInstance()->updateContact($_updatedRecord);
+        }        
     }
     
     /**
