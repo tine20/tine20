@@ -37,6 +37,17 @@ class Addressbook_Convert_Contact_VCard_Factory
 	            return new Addressbook_Convert_Contact_VCard_Generic();
 	            
 	            break;
+	            
+	        case Addressbook_Convert_Contact_VCard_Factory::CLIENT_MACOSX:
+	            return new Addressbook_Convert_Contact_VCard_MacOSX();
+	            
+	            break;
+	            
+            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO:
+                return new Addressbook_Convert_Contact_VCard_Sogo();
+                 
+                break;
+	                 
 	    }
 	}
 }

@@ -19,30 +19,9 @@
 class Addressbook_Convert_Contact_VCard_Generic
 {
     /**
-     * @var string
      */
-    protected $_client;
-
-    /**
-     * @var array
-     */
-    protected $_supportedFields = array(
-        self::CLIENT_AUTODETECT => array(),
-        self::CLIENT_MACOSX     => array(),
-        self::CLIENT_SOGO       => array(),
-        self::CLIENT_UNKNOWN    => array()
-    );
-    
-    /**
-     * @param unknown_type $_client
-     */
-    public function __construct($_client = self::CLIENT_AUTODETECT)
+    public function __construct()
     {
-        if (!isset($this->_supportedFields[$_client])) {
-            throw new Tinebase_Exception_UnexpectedValue('incalid client provided');
-        }
-        
-        $this->_client = $_client;
     }
     
     /**
