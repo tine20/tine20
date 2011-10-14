@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Addressbook_Import_AllTests::main');
-}
-
 class Addressbook_Import_AllTests
 {
     public static function main ()
@@ -31,8 +27,4 @@ class Addressbook_Import_AllTests
         $suite->addTestSuite('Addressbook_Import_VCardTest');
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Addressbook_Import_AllTests::main') {
-    Addressbook_Import_AllTests::main();
 }
