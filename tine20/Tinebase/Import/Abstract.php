@@ -14,10 +14,17 @@
  * 
  * @package Tinebase
  * @subpackage  Import
- * 
  */
 abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
 {
+    protected $_importResult = array(
+        'results'           => NULL,
+        'exceptions'        => NULL,
+        'totalcount'        => 0,
+        'failcount'         => 0,
+        'duplicatecount'    => 0,
+    );
+    
     /**
      * possible configs with default values
      * 
@@ -95,6 +102,184 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     }
     
     /**
+     * import the data
+     *
+     * @param  resource $_resource (if $_filename is a stream)
+     * @return array with import data (imported records, failures, duplicates and totalcount)
+     */
+    public function import($_resource = NULL)
+    {
+        $this->_initImportResult();
+        $this->_beforeImport($_resource);
+        $this->_doImport($_resource);
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Import finished. (total: ' . $this->_importResult['totalcount'] 
+            . ' fail: ' . $this->_importResult['failcount'] 
+            . ' duplicates: ' . $this->_importResult['duplicatecount']. ')');
+        
+        return $this->_importResult;
+    }
+    
+    /**
+     * init import result data
+     * 
+     * @todo add model for import exceptions 
+     */
+    protected function _initImportResult()
+    {
+        $this->_importResult['results'] = new Tinebase_Record_RecordSet($this->_options['model']);
+        //$this->_importResult['exceptions'] = new Tinebase_Record_RecordSet('Tinebase_Model_ImportException');
+    }
+    
+    /**
+     * do something before the import
+     * 
+     * @param resource $_resource
+     */
+    protected function _beforeImport($_resource = NULL)
+    {
+        
+    }
+    
+    /**
+     * do import: loop data -> convert to records -> import records
+     * 
+     * @param resource $_resource
+     * 
+     * @todo activate import exceptions 
+     */
+    protected function _doImport($_resource = NULL)
+    {
+        $recordIndex = 0;
+        while (
+            ($recordData = $this->_getRawData($_resource)) !== FALSE && 
+            (! $this->_options['dryrun'] 
+                || ! ($this->_options['dryrunLimit'] && $this->_importResult['totalcount'] >= $this->_options['dryrunCount'])
+            )
+        ) {
+            if (is_array($recordData)) {
+                try {
+                    $mappedData = $this->_doMapping($recordData);
+                    
+                    if (! empty($mappedData)) {
+                        $convertedData = $this->_doConversions($mappedData);
+
+                        // merge additional values (like group id, container id ...)
+                        $mergedData = array_merge($convertedData, $this->_addData($convertedData));
+                        
+                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Merged data: ' . print_r($mergedData, true));
+                        
+                        // import record into tine!
+                        $importedRecord = $this->_importRecord($mergedData);
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got empty record from mapping! Was: ' . print_r($recordData, TRUE));
+                        $this->_importResult['failcount']++;
+                    }
+                    
+                } catch (Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+//                    $this->_importResult['exceptions']->addRecord(new Tinebase_Model_ImportException(array(
+//                        'exception'     => $e,
+//                        'recordIndex'   => $recordIndex,
+//                    )));
+                    if ($e instanceof Tinebase_Exception_Duplicate) {
+                        $this->_importResult['duplicatecount']++;
+                    } else {
+                        $this->_importResult['failcount']++;
+                    }
+                }
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No array: ' . $recordData);
+            }
+            $recordIndex++;
+        }
+    }
+    
+    /**
+     * do the mapping and replacements
+     *
+     * @param array $_data
+     * @return array
+     */
+    protected function _doMapping($_data)
+    {
+        return $_data;
+    }
+    
+    /**
+     * do conversions (transformations, charset, ...)
+     *
+     * @param array $_data
+     * @return array
+     * 
+     * @todo add date and other conversions
+     */
+    protected function _doConversions($_data)
+    {
+        $data = array();
+        foreach ($_data as $key => $value) {
+            if (is_array($value)) {
+                $result = array();
+                foreach ($value as $singleValue) {
+                    $result[] = @iconv($this->_options['encoding'], $this->_options['encodingTo'], $singleValue);
+                }
+                $data[$key] = $result;
+            } else {
+                $data[$key] = @iconv($this->_options['encoding'], $this->_options['encodingTo'], $value);
+            }
+        }
+        
+        return $data;
+    }
+
+    /**
+     * add some more values (overwrite that if you need some special/dynamic fields)
+     *
+     * @param  array recordData
+     */
+    protected function _addData()
+    {
+        return array();
+    }
+    
+    /**
+     * import single record
+     *
+     * @param array $_recordData
+     * @return void
+     * @throws Tinebase_Exception_Record_Validation
+     * 
+     * @todo always try to create record (with transaction rollback if dryrun)
+     */
+    protected function _importRecord($_recordData)
+    {
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_recordData, true));
+        
+        $record = new $this->_options['model']($_recordData, TRUE);
+        
+        if ($record->isValid()) {
+            if (! $this->_options['dryrun']) {
+                // create/add shared tags
+                if (isset($_recordData['tags']) && is_array($_recordData['tags'])) {
+                    $record->tags = $this->_addSharedTags($_recordData['tags']);
+                }
+
+                $record = call_user_func(array($this->_controller, $this->_options['createMethod']), $record);
+            } else {
+                $this->_importResult['results']->addRecord($record);
+            }
+            
+            $this->_importResult['totalcount']++;
+            
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
+            throw new Tinebase_Exception_Record_Validation('Imported record is invalid (' . print_r($record->getValidationErrors(), TRUE) . ')');
+        }
+    }
+    
+    /**
      * returns config from definition
      * 
      * @param Tinebase_Model_ImportExportDefinition $_definition
@@ -110,51 +295,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         }
         
         return $optionsArray;
-    }
-    
-    /**
-     * import single record
-     *
-     * @param array $_recordData
-     * @param array $_result
-     * @return void
-     * @throws Tinebase_Exception_Record_Validation
-     * 
-     * @todo create new import exception that collects all exceptions + has the counts 
-     * @todo move try/catch here to collect exceptions
-     * @todo always try to create record (with transaction rollback if dryrun)
-     * @todo count duplicate exceptions for duplicatecount / other exceptions for failcount
-     */
-    protected function _importRecord($_recordData, &$_result)
-    {
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_recordData, true));
-        
-        $record = new $this->_options['model']($_recordData, TRUE);
-        
-        if ($record->isValid()) {
-            if (! $this->_options['dryrun']) {
-                
-                // check for duplicate
-//                if ($this->_options['duplicates']) {
-//                    $_result['duplicatecount']++;
-//                }
-                
-                // create/add shared tags
-                if (isset($_recordData['tags']) && is_array($_recordData['tags'])) {
-                    $record->tags = $this->_addSharedTags($_recordData['tags']);
-                }
-
-                $record = call_user_func(array($this->_controller, $this->_options['createMethod']), $record);
-            } else {
-                $_result['results']->addRecord($record);
-            }
-            
-            $_result['totalcount']++;
-            
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
-            throw new Tinebase_Exception_Record_Validation('Imported record is invalid (' . print_r($record->getValidationErrors(), TRUE) . ')');
-        }
     }
     
     /**
@@ -223,32 +363,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         return $result;
     }
     
-    /**
-     * do conversions (transformations, charset, ...)
-     *
-     * @param array $_data
-     * @return array
-     * 
-     * @todo add date and other conversions
-     */
-    protected function _doConversions($_data)
-    {
-        $data = array();
-        foreach ($_data as $key => $value) {
-            if (is_array($value)) {
-                $result = array();
-                foreach ($value as $singleValue) {
-                    $result[] = @iconv($this->_options['encoding'], $this->_options['encodingTo'], $singleValue);
-                }
-                $data[$key] = $result;
-            } else {
-                $data[$key] = @iconv($this->_options['encoding'], $this->_options['encodingTo'], $value);
-            }
-        }
-        
-        return $data;
-    }
-
     /**
      * set controller
      */
