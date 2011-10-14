@@ -101,8 +101,6 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
             throw new Tinebase_Exception_InvalidArgument('you need to define a importContainerId');
         }
         
-        $this->_initImportResult();
-                
         $icalData = stream_get_contents($_resource);
         
         $parser = new qCal_Parser();
