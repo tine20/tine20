@@ -12,14 +12,14 @@ Ext.ns('Tine.Tinebase.Model');
  * generic Record fields
  */
 Tine.Tinebase.Model.genericFields = [
-    { name: 'container_id', header: 'Container'                                     },
-    { name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'created_by'},
-    { name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'last_modified_by'},
-    { name: 'is_deleted',         type: 'boolean'              },
-    { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'deleted_by'}
+    { name: 'container_id', header: 'Container',                                       isMetaField: false},
+    { name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long, isMetaField: true },
+    { name: 'created_by',                                                              isMetaField: true },
+    { name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long, isMetaField: true },
+    { name: 'last_modified_by',                                                        isMetaField: true },
+    { name: 'is_deleted',         type: 'boolean',                                     isMetaField: true },
+    { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long, isMetaField: true },
+    { name: 'deleted_by',                                                              isMetaField: true }
 ];
     
 /**
