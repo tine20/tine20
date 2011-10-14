@@ -677,6 +677,18 @@ html, body {
     background-image:url("../../library/ExtJS/resources/images/default/s.gif");
 }
 
+.tine-duplicateresolve-keepvalue {
+    color: #006600;
+}
+
+.tine-duplicateresolve-discardvalue {
+    color: #660000;
+}
+
+.tine-duplicateresolve-adoptedvalue {
+    color: #666666;
+}
+
 /******** downloads ***********/
 
 .tinebase-download-link{

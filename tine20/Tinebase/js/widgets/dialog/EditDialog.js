@@ -551,7 +551,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             app: this.app,
             recordClass: this.recordClass,
             recordProxy: this.recordProxy,
-            clientRecord: exception.clientRecord,
+            clientRecord: this.record, //exception.clientRecord,
             duplicates: exception.duplicates,
             fbar: [
                 '->',

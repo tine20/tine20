@@ -62,18 +62,23 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
         
         // init records
         this.clientRecord = this.createRecord(this.clientRecord);
-        Ext.each([].concat(this.duplicates), function(duplicate, idx) {this.duplicates[idx] = this.createRecord(this.duplicates[idx])}, this);
+        Ext.each([].concat(this.duplicates.results), function(duplicate, idx) {this.duplicates.results[idx] = this.createRecord(this.duplicates.results[idx])}, this);
         
         this.initStore();
         
         // select one duplicate (one of the up to five duplicates we allow to edit)
         this.duplicateIdx = 0;
+        this.applyAction(this.store, 'mergeTheirs');
         
         this.initColumnModel();
         
+        this.on('cellclick', this.onCellClick, this);
         Tine.widgets.dialog.DuplicateResolveGridPanel.superclass.initComponent.call(this);
     },
     
+    /**
+     * init out store of resoveRecords
+     */
     initStore: function() {
         this.store = new Ext.data.JsonStore({
             idProperty: 'fieldName',
@@ -90,15 +95,68 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
                 recordData = {
                     fieldName: fieldName,
                     i18nFieldName: field.label ? this.app.i18n._hidden(field.label) : this.app.i18n._hidden(fieldName),
-                    clientValue: this.clientRecord.get(fieldName)
+                    clientValue: Tine.Tinebase.common.assertComparable(this.clientRecord.get(fieldName))
                 };
             
-            Ext.each([].concat(this.duplicates), function(duplicate, idx) {recordData['value' + idx] =  this.duplicates[idx].get(fieldName)}, this);
+            Ext.each([].concat(this.duplicates.results), function(duplicate, idx) {recordData['value' + idx] =  Tine.Tinebase.common.assertComparable(this.duplicates.results[idx].get(fieldName))}, this);
             
             this.store.addSorted(new Tine.widgets.dialog.DuplicateResolveModel(recordData, fieldName));
         }, this);
+        
     },
     
+    /**
+     * adopt final value to the one selected
+     */
+    onCellClick: function(grid, rowIndex, colIndex, e) {
+        var dataIndex = this.getColumnModel().getDataIndex(colIndex),
+            resolveRecord = this.store.getAt(rowIndex);
+        
+        if (resolveRecord && dataIndex && dataIndex.match(/clientValue|value\d+/)) {
+            resolveRecord.set('finalValue', resolveRecord.get(dataIndex));
+            
+            var celEl = this.getView().getCell(rowIndex, this.colModel.getIndexById('finalValue'));
+            if (celEl) {
+                Ext.fly(celEl).highlight();
+            }
+        }
+    },
+    
+    /**
+     * apply an action (generate final data)
+     * - mergeTheirs:   merge keep existing values (discards client record)
+     * - mergeMine:     merge, keep client values (discards client record)
+     * - discard:       discard client record
+     * - keep:          keep client record (create duplicate)
+     * 
+     * @param {Ext.data.Store} store with field records (DuplicateResolveModel)
+     * @param {Sting} action
+     */
+    applyAction: function(store, action) {
+        store.each(function(resolveRecord) {
+            var theirs = resolveRecord.get('value' + this.duplicateIdx),
+                mine = resolveRecord.get('clientValue'),
+                location = action === 'keep' ? 'mine' : 'theirs';
+            
+            // undefined theirs value -> keep mine
+            if (action == 'mergeTheirs' && String(theirs) === "undefined") {
+                location = 'clientValue';
+            }
+            
+            // only keep mine if its not undefined
+            if (action == 'mergeMine' && String(mine) !== "undefined") {
+                location = 'clientValue';
+            }
+            
+            resolveRecord.set('finalValue', location === 'mine' ? mine : theirs);
+        }, this);
+        
+        store.commitChanges();
+    },
+    
+    /**
+     * init our column model
+     */
     initColumnModel: function() {
         var valueRendererDelegate = this.valueRenderer.createDelegate(this);
         
@@ -134,13 +192,28 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
             menuDisabled:true, 
             renderer: valueRendererDelegate
         }]);
+        
     },
     
+    /**
+     * interceptor for all renderers
+     * - manage colors
+     * - pick appropriate renderer
+     */
     valueRenderer: function(value, metaData, record, rowIndex, colIndex, store) {
         var fieldName = record.get('fieldName'),
+            dataIndex = this.getColumnModel().getDataIndex(colIndex),
             renderer = Tine.widgets.grid.RendererManager.get(this.app, this.recordClass, fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
         
         try {
+            // color management
+            if (dataIndex && dataIndex.match(/clientValue|value\d+/)) {
+                
+                var action = record.get('finalValue') == value ? 'keep' : 'discard';
+                metaData.css = 'tine-duplicateresolve-' + action + 'value';
+//                metaData.css = 'tine-duplicateresolve-adoptedvalue';
+            }
+            
             return renderer.apply(this, arguments);
         } catch (e) {
             Tine.log.err('Tine.widgets.dialog.DuplicateResolveGridPanel::valueRenderer');
@@ -157,82 +230,6 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
     createRecord: function(data) {
         return Ext.isFunction(data.beginEdit) ? data : this.recordProxy.recordReader({responseText: Ext.encode(data)});
     }
-});
-
-/**
- * @class   Tine.widgets.dialog.DuplicateResolveColumnModel
- * @extends Ext.grid.ColumnModel
- * A custom column model for the {@link Tine.widgets.dialog.DuplicateResolveGridPanel}.  Generally it should not need to be used directly.
- * @constructor
- * @param {Object} config
- */
-Tine.widgets.dialog.DuplicateResolveColumnModel = Ext.extend(Ext.grid.ColumnModel, {
-    constructor : function(grid, config) {
-        Ext.apply(this, config);
-        
-        this.grid = grid;
-        var valueRendererDelegate = this.valueRenderer.createDelegate(this);
-        
-        Tine.widgets.dialog.DuplicateResolveColumnModel.superclass.constructor.call(this, [{
-            header: _('Field Name'), 
-            width:50, 
-            sortable: true, 
-            dataIndex:'i18nFieldName', 
-            id: 'i18nFieldName', 
-            menuDisabled:true
-        }, {
-            header: _('My Value'), 
-            width:50, 
-            resizable:false, 
-            dataIndex: 'clientValue', 
-            id: 'clientValue', 
-            menuDisabled:true, 
-            renderer: valueRendererDelegate
-        }, {
-            header: _('Existing Value'), 
-            width:50, 
-            resizable:false, 
-            dataIndex: 'value' + this.duplicateIdx, 
-            id: 'value' + this.duplicateIdx, 
-            menuDisabled:true, 
-            renderer: valueRendererDelegate
-        }, {
-            header: _('Final Value'), 
-            width:50, 
-            resizable:false, 
-            dataIndex: 'finalValue', 
-            id: 'finalValue', 
-            menuDisabled:true, 
-            renderer: valueRendererDelegate
-        }]);
-    },
-    
-//    valueRendererDelegate: function(value, metaData, record, rowIndex, colIndex, store) {
-//        var fieldName = 
-//    }
-//    
-//    getRenderer: function() {
-//    
-//        var bfield = new f.Field({
-//            autoCreate: {tag: 'select', children: [
-//                {tag: 'option', value: 'true', html: this.trueText},
-//                {tag: 'option', value: 'false', html: this.falseText}
-//            ]},
-//            getValue : function(){
-//                return this.el.dom.value == 'true';
-//            }
-//        });
-//        this.editors = {
-//            'date' : new g.GridEditor(new f.DateField({selectOnFocus:true})),
-//            'string' : new g.GridEditor(new f.TextField({selectOnFocus:true})),
-//            'number' : new g.GridEditor(new f.NumberField({selectOnFocus:true, style:'text-align:left;'})),
-//            'boolean' : new g.GridEditor(bfield, {
-//                autoSize: 'both'
-//            })
-//        };
-//        this.renderCellDelegate = this.renderCell.createDelegate(this);
-//        this.renderPropDelegate = this.renderProp.createDelegate(this);
-//    }
 });
 
 /**
