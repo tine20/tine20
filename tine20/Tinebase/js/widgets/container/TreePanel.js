@@ -384,7 +384,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     onAppendNode: function(tree, parent, appendedNode, idx) {
         if (this.useContainerColor && appendedNode.leaf) {
             appendedNode.ui.render = appendedNode.ui.render.createSequence(function() {
-                this.colorNode = Ext.DomHelper.insertAfter(this.iconNode, {tag: 'span', html: '&nbsp;&#9673;&nbsp', style: {color: appendedNode.attributes.container.color}}, true);
+                this.colorNode = Ext.DomHelper.insertAfter(this.iconNode, {tag: 'span', html: '&nbsp;&#9673;&nbsp', style: {color: appendedNode.attributes.container.color || '#808080'}}, true);
             }, appendedNode.ui);
         }
     },

@@ -45,10 +45,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      */
     containerRenderer: function(container) {
         var displayContainer = this.record.getDisplayContainer();
-        return this.containerTpl.apply({
-            color: Tine.Calendar.colorMgr.getColor(displayContainer).color,
-            name: Ext.util.Format.htmlEncode(displayContainer && displayContainer.name ? displayContainer.name : this.app.i18n._('Unknown calendar'))
-        });
+        return Tine.Tinebase.common.containerRenderer(displayContainer);
     },
     
     /**

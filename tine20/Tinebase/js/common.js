@@ -182,6 +182,46 @@ Tine.Tinebase.common = {
     },
     
     /**
+     * Returns rendered containers
+     * 
+     * @TODO show qtip with grants
+     * 
+     * @param {mixed} container
+     * @return {String} 
+     */
+    containerRenderer: function(container, metaData) {
+        // lazy init tempalte
+        if (! Tine.Tinebase.common.containerRenderer.tpl) {
+            Tine.Tinebase.common.containerRenderer.tpl = new Ext.XTemplate(
+                '<div class="x-tree-node-leaf x-unselectable file">',
+                    '<img class="x-tree-node-icon" unselectable="on" src="', Ext.BLANK_IMAGE_URL, '">',
+                    '<span style="color: {color};">&nbsp;&#9673;&nbsp</span>',
+                    '<span>{name}</span>',
+                '</div>'
+            ).compile();
+        }
+        
+        var result =  _('No Information');
+        
+        // non objects are treated as ids and -> No Information
+        if (Ext.isObject(container)) {
+            var name = Ext.isFunction(container.beginEdit) ? container.get('name') : container.name,
+                color = Ext.isFunction(container.beginEdit) ? container.get('color') : container.color;
+            
+            if (name) {
+                result = Tine.Tinebase.common.containerRenderer.tpl.apply({
+                    name: Ext.util.Format.htmlEncode(name).replace(/ /g,"&nbsp;"),
+                    color: color ? color : '#808080'
+                });
+            } else if (Ext.isObject(metaData)) {
+                metaData.css = 'x-form-empty-field';
+            }
+        }
+        
+        return result;
+    },
+    
+    /**
      * Returns prettyfied minutes
      * 
      * @param  {Number} minutes
