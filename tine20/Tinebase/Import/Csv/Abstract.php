@@ -38,6 +38,13 @@
 abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
 {
     /**
+     * csv headline
+     * 
+     * @var array
+     */
+    protected $_headline = array();
+    
+    /**
      * @var array
      */
     protected $_options = array(
@@ -86,76 +93,6 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
     }
     
     /**
-     * import the data
-     *
-     * @param  resource $_resource (if $_filename is a stream)
-     * @return array with Tinebase_Record_RecordSet the imported records (if dryrun) and totalcount 
-     */
-    public function import($_resource = NULL)
-    {
-        // get headline
-        if (isset($this->_options['headline']) && $this->_options['headline']) {
-            $headline = $this->_getRawData($_resource);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got headline: ' . implode(', ', $headline));
-            if (! $this->_options['use_headline']) {
-                // just read headline but do not use it
-                $headline = array();
-            }
-        } else {
-            $headline = array();
-        }
-
-        $result = array(
-            'results'           => new Tinebase_Record_RecordSet($this->_options['model']),
-            'totalcount'        => 0,
-            'failcount'         => 0,
-            'duplicatecount'    => 0,
-        );
-
-        while (
-            ($recordData = $this->_getRawData($_resource)) !== FALSE && 
-            (! $this->_options['dryrun'] 
-                || ! ($this->_options['dryrunLimit'] && $result['totalcount'] >= $this->_options['dryrunCount'])
-            )
-        ) {
-            if (is_array($recordData)) {
-                try {
-                    $mappedData = $this->_doMapping($recordData, $headline);
-                    
-                    if (! empty($mappedData)) {
-                        $convertedData = $this->_doConversions($mappedData);
-
-                        // merge additional values (like group id, container id ...)
-                        $mergedData = array_merge($convertedData, $this->_addData($convertedData));
-                        
-                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Merged data: ' . print_r($mergedData, true));
-                        
-                        // import record into tine!
-                        $importedRecord = $this->_importRecord($mergedData, $result);
-                    } else {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got empty record from mapping! Was: ' . print_r($recordData, TRUE));
-                        $result['failcount']++;
-                    }
-                    
-                } catch (Exception $e) {
-                    // don't add incorrect record (name missing for example)
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-                    $result['failcount']++;
-                }
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No array: ' . $recordData);
-            }
-        }
-        
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            . ' Import finished. (total: ' . $result['totalcount'] 
-            . ' fail: ' . $result['failcount'] . ' duplicates: ' . $result['duplicatecount']. ')');
-        
-        return $result;
-    }
-    
-    /**
      * get raw data of a single record
      * 
      * @param  resource $_resource
@@ -183,19 +120,37 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
     }
     
     /**
+     * do something before the import
+     * 
+     * @param resource $_resource
+     */
+    protected function _beforeImport($_resource = NULL)
+    {
+        // get headline
+        if (isset($this->_options['headline']) && $this->_options['headline']) {
+            $this->_headline = $this->_getRawData($_resource);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Got headline: ' . implode(', ', $this->_headline));
+            if (! $this->_options['use_headline']) {
+                // just read headline but do not use it
+                $this->_headline = array();
+            }
+        }        
+    }
+    
+    /**
      * do the mapping and replacements
      *
      * @param array $_data
-     * @param array $_headline [optional]
      * @return array
      */
-    protected function _doMapping($_data, $_headline = array())
+    protected function _doMapping($_data)
     {
         $data = array();
         $_data_indexed = array();
 
-        if (! empty($_headline) && sizeof($_headline) == sizeof($_data)) {
-            $_data_indexed = array_combine($_headline, $_data);
+        if (! empty($this->_headline) && sizeof($this->_headline) == sizeof($_data)) {
+            $_data_indexed = array_combine($this->_headline, $_data);
         }
         
         foreach ($this->_options['mapping']['field'] as $index => $field) {
@@ -245,15 +200,5 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         }
         
         return $data;
-    }
-    
-    /**
-     * add some more values (overwrite that if you need some special/dynamic fields)
-     *
-     * @param  array recordData
-     */
-    protected function _addData()
-    {
-        return array();
     }
 }

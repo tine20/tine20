@@ -466,15 +466,15 @@ abstract class Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Doing duplicate check.');
         
-        $duplicates = $this->search($duplicateFilter, new Tasks_Model_Pagination(array('limit' => 5)));
+        $duplicateIds = $this->search($duplicateFilter, new Tasks_Model_Pagination(array('limit' => 5)), FALSE, TRUE);
         
-        if (count($duplicates) > 0) {
+        if (count($duplicateIds) > 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-                ' Found ' . count($duplicates) . ' duplicate(s).');            
+                ' Found ' . count($duplicateIds) . ' duplicate(s).');            
             
             $ted = new Tinebase_Exception_Duplicate('Duplicate record(s) found');
             $ted->setModelName($this->_modelName);
-            $ted->setData($duplicates);
+            $ted->setDuplicateIds($duplicateIds);
             $ted->setClientRecord($_record);
             throw $ted;
         } else {

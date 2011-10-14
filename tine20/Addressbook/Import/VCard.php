@@ -135,13 +135,8 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
      */
     public function import($_resource = NULL)
     {
-        $result = array(
-            'results'           => new Tinebase_Record_RecordSet($this->_options['model']),
-            'totalcount'        => 0,
-            'failcount'         => 0,
-            'duplicatecount'    => 0,
-        );
-
+        $this->_initImportResult();
+        
         $lines = array();
         while($line=fgets($_resource)){
         	$lines[] = str_replace("\n", "", $line);
@@ -150,7 +145,7 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         $card = new VCard();
         while ($card->parse($lines) && 
             (! $this->_options['dryrun'] 
-                || ! ($this->_options['dryrunLimit'] && $result['totalcount'] >= $this->_options['dryrunCount'])
+                || ! ($this->_options['dryrunLimit'] && $this->_importResult['totalcount'] >= $this->_options['dryrunCount'])
             )
         ) {
         	$property = $card->getProperty('N');
@@ -167,17 +162,17 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
                         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Merged data: ' . print_r($mergedData, true));
                         
                         // import record into tine!
-                        $importedRecord = $this->_importRecord($mergedData, $result);
+                        $importedRecord = $this->_importRecord($mergedData);
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got empty record from mapping! Was: ' . print_r($recordData, TRUE));
-                        $result['failcount']++;
+                        $this->_importResult['failcount']++;
                     }
                     
                 } catch (Exception $e) {
                     // don't add incorrect record (name missing for example)
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-                    $result['failcount']++;
+                    $this->_importResult['failcount']++;
                 }
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No N property: ' . print_r($card, TRUE));
@@ -187,10 +182,10 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         }
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            . ' Import finished. (total: ' . $result['totalcount'] 
-            . ' fail: ' . $result['failcount'] . ' duplicates: ' . $result['duplicatecount']. ')');
+            . ' Import finished. (total: ' . $this->_importResult['totalcount'] 
+            . ' fail: ' . $this->_importResult['failcount'] . ' duplicates: ' . $this->_importResult['duplicatecount']. ')');
         
-        return $result;
+        return $this->_importResult;
     }
     
     /**
