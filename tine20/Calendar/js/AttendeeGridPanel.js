@@ -498,7 +498,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     renderAttenderRole: function(role, metadata, attender) {
-        var i18n = Tine.Tinebase.appMgr.get('Calendar').i18n;
+        var i18n = Tine.Tinebase.appMgr.get('Calendar').i18n,
+            renderer = Tine.widgets.grid.RendererManager.get('Calendar', 'Attender', 'role', Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
 
         if (this.record && this.record.get('editGrant')) {
             metadata.attr = 'style = "cursor:pointer;"';
@@ -506,11 +507,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             metadata.css = 'x-form-empty-field';
         }
         
-        return Tine.Tinebase.widgets.keyfield.Renderer.render('Calendar', 'attendeeRoles', role);
+        return renderer(role);
     },
     
     renderAttenderStatus: function(status, metadata, attender) {
-        var i18n = Tine.Tinebase.appMgr.get('Calendar').i18n;
+        var i18n = Tine.Tinebase.appMgr.get('Calendar').i18n,
+            renderer = Tine.widgets.grid.RendererManager.get('Calendar', 'Attender', 'status', Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
         
         if (! attender.get('user_id')) {
             return '';
@@ -522,7 +524,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             metadata.css = 'x-form-empty-field';
         }
         
-        return Tine.Tinebase.widgets.keyfield.Renderer.render('Calendar', 'attendeeStatus', status);
+        return renderer(status);
     },
     
     renderAttenderType: function(type, metadata, attender) {

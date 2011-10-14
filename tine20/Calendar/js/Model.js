@@ -342,9 +342,9 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
     {name: 'cal_event_id'},
     {name: 'user_id', sortType: Tine.Tinebase.common.accountSortType },
     {name: 'user_type'},
-    {name: 'role'},
+    {name: 'role', type: 'keyField', keyFieldConfigName: 'attendeeRoles'},
     {name: 'quantity'},
-    {name: 'status'},
+    {name: 'status', type: 'keyField', keyFieldConfigName: 'attendeeStatus'},
     {name: 'status_authkey'},
     {name: 'displaycontainer_id'}
 ], {
