@@ -203,6 +203,11 @@ Tine.Tinebase.common = {
         
         var result =  _('No Information');
         
+        // support container records
+        if (Ext.isFunction(container.beginEdit)) {
+            container = container.data;
+        }
+        
         // non objects are treated as ids and -> No Information
         if (Ext.isObject(container)) {
             var name = Ext.isFunction(container.beginEdit) ? container.get('name') : container.name,
