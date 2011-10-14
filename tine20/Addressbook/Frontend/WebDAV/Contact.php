@@ -52,7 +52,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
             $version = $matches['version'];
             
         // Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13
-        } elseif (preg_match('/ Lightning\/(?P<version>.*) /', $_SERVER['HTTP_USER_AGENT'], $matches)) {
+        } elseif (preg_match('/ Thunderbird\/(?P<version>.*)/', $_SERVER['HTTP_USER_AGENT'], $matches)) {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO;
             $version = $matches['version'];
             
@@ -61,7 +61,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC;
             $version = null;
         }
-
+        
         $this->_converter = Addressbook_Convert_Contact_VCard_Factory::factory($backend, $version);
     }
     
@@ -81,7 +81,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
             $version = $matches['version'];
         
         // Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13
-        } elseif (preg_match('/ Lightning\/(?P<version>.*) /', $_SERVER['HTTP_USER_AGENT'], $matches)) {
+        } elseif (preg_match('/ Thunderbird\/(?P<version>.*)/', $_SERVER['HTTP_USER_AGENT'], $matches)) {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO;
             $version = $matches['version'];
             
