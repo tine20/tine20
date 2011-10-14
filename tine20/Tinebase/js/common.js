@@ -439,6 +439,30 @@ Tine.Tinebase.common = {
     },
     
     /**
+     * assert that given object is comparable
+     * 
+     * @param {mixed} o
+     * @return {mixed} o
+     */
+    assertComparable: function(o) {
+        // NOTE: Ext estimates Object/Array by a toString operation
+        if (Ext.isObject(o) || Ext.isArray(o)) {
+            Tine.Tinebase.common.applyComparableToString(o);
+        }
+        
+        return o;
+    },
+    
+    /**
+     * apply Ext.encode as toString functino to given object
+     * 
+     * @param {mixed} o
+     */
+    applyComparableToString: function(o) {
+        o.toString = function() {return Ext.encode(o)};
+    },
+    
+    /**
      * check if user has right to view/manage this application/resource
      * 
      * @param   {String}      right (view, admin, manage)
