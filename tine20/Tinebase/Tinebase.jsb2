@@ -412,6 +412,10 @@
           "path": "js/widgets/dialog/"
         },
         {
+          "text": "DuplicateResolveGridPanel.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
           "text": "RendererManager.js",
           "path": "js/widgets/grid/"
         },

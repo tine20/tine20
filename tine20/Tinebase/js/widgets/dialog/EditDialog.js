@@ -541,11 +541,51 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     },
     
     /**
+     * doublicate(s) found exception handler
+     * 
+     * @param {Object} exception
+     */
+    onDuplicateException: function(exception) {
+        console.log(exception);
+        var resolveGridPanel = new Tine.widgets.dialog.DuplicateResolveGridPanel({
+            app: this.app,
+            recordClass: this.recordClass,
+            recordProxy: this.recordProxy,
+            clientRecord: exception.clientRecord,
+            duplicates: exception.duplicates,
+            fbar: [
+                '->',
+                //this.action_applyChanges,
+                this.action_cancel,
+                this.action_saveAndClose
+           ]
+        });
+        
+        // place in viewport
+        var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
+        mainCardPanel.add(resolveGridPanel);
+        mainCardPanel.layout.setActiveItem(resolveGridPanel.id);
+        resolveGridPanel.doLayout();
+        
+        this.loadMask.hide();
+        
+        // resolve conflict
+        // fire update event
+        // close window
+        return;
+    },
+    
+    /**
      * generic request exception handler
      * 
      * @param {Object} exception
      */
     onRequestFailed: function(exception) {
+        // Duplicate record(s) found
+        if (exception.code == 629) {
+            return this.onDuplicateException.apply(this, arguments);
+        }
+        
         Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
     }
 });
