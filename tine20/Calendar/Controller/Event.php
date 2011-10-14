@@ -1375,10 +1375,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $options = Zend_Json::decode($_alarm->options);
             if ($options['recurid']) {
                 // adopt event time to recur instance
+                $diff = $event->dtstart->diff($event->dtend);
+                
                 $event->dtstart = new Tinebase_DateTime(substr($options['recurid'], -19));
                 
                 $event->dtend = clone $event->dtstart;
-                $event->dtend->add($event->dtstart->diff($event->dtend));
+                $event->dtend->add($diff);
             }
             
             // NOTE: In case of recuring events $event is always the baseEvent.
