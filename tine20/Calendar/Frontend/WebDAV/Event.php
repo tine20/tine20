@@ -45,7 +45,24 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
     public function __construct($_event = null) 
     {
         $this->_event = $_event;
-        $this->_converter = new Calendar_Convert_Event_VCalendar();
+        
+        // CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)
+        if (preg_match('/^CalendarStore.*Mac_OS_X\/(?P<version>.*) /', $_SERVER['HTTP_USER_AGENT'], $matches)) {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX;
+            $version = $matches['version'];
+        
+            // Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13
+        } elseif (preg_match('/ Thunderbird\/(?P<version>.*)/', $_SERVER['HTTP_USER_AGENT'], $matches)) {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD;
+            $version = $matches['version'];
+        
+            // generic client
+        } else {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC;
+            $version = null;
+        }
+        
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
     }
     
     /**
@@ -58,7 +75,23 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     public static function create(Tinebase_Model_Container $container, $vobjectData)
     {
-        $converter = new Calendar_Convert_Event_VCalendar();
+        // CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)
+        if (preg_match('/^CalendarStore.*Mac_OS_X\/(?P<version>.*) /', $_SERVER['HTTP_USER_AGENT'], $matches)) {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX;
+            $version = $matches['version'];
+        
+            // Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13
+        } elseif (preg_match('/ Thunderbird\/(?P<version>.*)/', $_SERVER['HTTP_USER_AGENT'], $matches)) {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD;
+            $version = $matches['version'];
+        
+            // generic client
+        } else {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC;
+            $version = null;
+        }
+        
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
         
         $event = $converter->toTine20Model($vobjectData);
         $event->container_id = $container->getId();
@@ -212,6 +245,10 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     public function put($cardData) 
     {
+        if (get_class($this->_converter) == 'Calendar_Convert_Event_VCalendar_Generic') {
+            throw new Sabre_DAV_Exception_Forbidden('Update denied for unknow client');
+        }
+        
         $event = $this->_converter->toTine20Model($cardData, $this->getRecord());
         
         $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
