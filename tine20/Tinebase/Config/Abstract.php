@@ -19,6 +19,47 @@
  */
 abstract class Tinebase_Config_Abstract
 {
+    /**
+     * object config type
+     * 
+     * @var string
+     */
+    const TYPE_OBJECT = 'object';
+
+    /**
+     * integer config type
+     * 
+     * @var string
+     */
+    const TYPE_INT = 'int';
+    
+    /**
+     * string config type
+     * 
+     * @var string
+     */
+    const TYPE_STRING = 'string';
+    
+    /**
+     * float config type
+     * 
+     * @var string
+     */
+    const TYPE_FLOAT = 'float';
+    
+    /**
+     * dateTime config type
+     * 
+     * @var string
+     */
+    const TYPE_DATETIME = 'dateTime';
+    
+    /**
+     * keyFieldConfig config type
+     * 
+     * @var string
+     */
+    const TYPE_KEYFIELD = 'keyFieldConfig';
     
     /**
      * application name this config belongs to
@@ -310,17 +351,17 @@ abstract class Tinebase_Config_Abstract
 //            }
 //        }
         
-        if ($definition['type'] == 'object' && isset($definition['class']) && @class_exists($definition['class'])) {
+        if ($definition['type'] === self::TYPE_OBJECT && isset($definition['class']) && @class_exists($definition['class'])) {
             return new $definition['class']($_rawData);
         }
         
         switch ($definition['type']) {
-            case 'int':             return (int) $_rawData;
-            case 'string':          return (string) $_rawData;
-            case 'float':           return (float) $_rawData;
-            case 'dateTime':        return new DateTime($_rawData);
-            case 'keyFieldConfig':  return Tinebase_Config_KeyField::create($_rawData, array_key_exists('options', $definition) ? (array) $definition['options'] : array());
-            default:                return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData) : $_rawData;
+            case self::TYPE_INT:        return (int) $_rawData;
+            case self::TYPE_STRING:     return (string) $_rawData;
+            case self::TYPE_FLOAT:      return (float) $_rawData;
+            case self::TYPE_DATETIME:   return new DateTime($_rawData);
+            case self::TYPE_KEYFIELD:   return Tinebase_Config_KeyField::create($_rawData, array_key_exists('options', $definition) ? (array) $definition['options'] : array());
+            default:                    return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData) : $_rawData;
         }
     }
     

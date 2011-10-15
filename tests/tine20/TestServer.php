@@ -150,7 +150,7 @@ class TestServer
             // set email of test user contact
             $testUserContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
             $testUserContact->email = Zend_Registry::get('testConfig')->email;
-            Addressbook_Controller_Contact::getInstance()->update($testUserContact);
+            Addressbook_Controller_Contact::getInstance()->update($testUserContact, FALSE);
         }
     }
     

@@ -122,7 +122,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             layout: 'card',
             activeItem: 0,
             items: [filterPanel],
-            autoScroll: true,
+            autoScroll: false,
             listeners: {
                 scope: this,
                 afterlayout: this.manageHeight
@@ -156,6 +156,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             // manage scrolling
             if (this.layout.center && tbHeight > 120) {
                 this.layout.center.panel.el.child('div[class^="x-panel-body"]', true).scrollTop = 1000000;
+                this.layout.center.panel.el.child('div[class^="x-panel-body"]', false).applyStyles('overflow-y: auto');
             }
             if (this.layout.east && eastHeight > 120) {
                 this.layout.east.panel.el.child('div[class^="x-panel-body"]', true).scrollTop = 1000000;

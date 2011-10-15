@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
+ * @todo        extend Tinebase_Exception_Data
  */
 
 /**

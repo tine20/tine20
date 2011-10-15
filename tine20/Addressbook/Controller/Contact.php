@@ -37,6 +37,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $this->_currentAccount = Tinebase_Core::getUser();
         $this->_purgeRecords = FALSE;
         $this->_resolveCustomFields = TRUE;
+        $this->_duplicateCheckFields = Addressbook_Config::getInstance()->get(Addressbook_Config::CONTACT_DUP_FIELDS, array(
+                array('n_given', 'n_family', 'org_name'),
+                array('email'),
+            ));
         
         // fields used for private and company address
         $this->_addressFields = array('locality', 'postalcode', 'street', 'countryname');
@@ -206,21 +210,17 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * update one record
-     *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Addressbook_Model_Contact
-     * @throws  Tinebase_Exception_AccessDenied
+     * inspect update of one record (after update)
+     * 
+     * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $_record          the update record
+     * @return  void
      */
-    public function update(Tinebase_Record_Interface $_record)
+    protected function _inspectAfterUpdate($_updatedRecord, $_record)
     {
-        $contact = parent::update($_record);
-        
-        if ($contact->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
-            Tinebase_User::getInstance()->updateContact($contact);
-        }
-        
-        return $contact;
+        if ($_updatedRecord->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
+            Tinebase_User::getInstance()->updateContact($_updatedRecord);
+        }        
     }
     
     /**

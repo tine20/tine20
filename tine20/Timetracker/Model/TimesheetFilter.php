@@ -17,7 +17,6 @@
  */
 class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGroup implements Tinebase_Model_Filter_AclFilter 
 {
-    
     /**
      * @var string application of this filter group
      */
@@ -27,6 +26,13 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
      * @var string name of model this filter group is designed for
      */
     protected $_modelName = 'Timetracker_Model_Timesheet';
+    
+    /**
+     * @var string class name of this filter group
+     *      this is needed to overcome the static late binding
+     *      limitation in php < 5.3
+     */
+    protected $_className = 'Timetracker_Model_TimesheetFilter';
     
     /**
      * @var array filter model fieldName => definition

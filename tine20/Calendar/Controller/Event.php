@@ -156,12 +156,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * add one record
      *
      * @param   Tinebase_Record_Interface $_record
-     * @param   bool                      $_checkBusyConficts
+     * @param   bool                      $_checkBusyConflicts
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function create(Tinebase_Record_Interface $_record, $_checkBusyConficts = FALSE)
+    public function create(Tinebase_Record_Interface $_record, $_checkBusyConflicts = FALSE)
     {
         try {
             $db = $this->_backend->getAdapter();
@@ -173,7 +173,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             // we need to resolve groupmembers before free/busy checking
             Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
             
-            if ($_checkBusyConficts) {
+            if ($_checkBusyConflicts) {
                 // ensure that all attendee are free
                 $this->checkBusyConficts($_record);
             }
@@ -412,12 +412,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * update one record
      *
      * @param   Tinebase_Record_Interface $_record
-     * @param   bool                      $_checkBusyConficts
+     * @param   bool                      $_checkBusyConflicts
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function update(Tinebase_Record_Interface $_record, $_checkBusyConficts = FALSE)
+    public function update(Tinebase_Record_Interface $_record, $_checkBusyConflicts = FALSE)
     {
         try {
             $db = $this->_backend->getAdapter();
@@ -430,7 +430,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 // we need to resolve groupmembers before free/busy checking
                 Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
                         
-                if ($_checkBusyConficts) {
+                if ($_checkBusyConflicts) {
                     // only do free/busy check if start/endtime changed  or attendee added or rrule changed
                     if (   ! $event->dtstart->equals($_record->dtstart) || 
                            ! $event->dtend->equals($_record->dtend) ||
@@ -505,10 +505,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * updates a recur series
      *
      * @param  Calendar_Model_Event $_recurInstance
-     * @param  bool                 $_checkBusyConficts
+     * @param  bool                 $_checkBusyConflicts
      * @return Calendar_Model_Event
      */
-    public function updateRecurSeries($_recurInstance, $_checkBusyConficts = FALSE)
+    public function updateRecurSeries($_recurInstance, $_checkBusyConflicts = FALSE)
     {
         $baseEvent = $this->getRecurBaseEvent($_recurInstance);
         
@@ -533,7 +533,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         $newBaseEvent->exdate      = $baseEvent->exdate;
         
-        return $this->update($newBaseEvent, $_checkBusyConficts);
+        return $this->update($newBaseEvent, $_checkBusyConflicts);
     }
     
     /**
@@ -545,10 +545,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param  Calendar_Model_Event  $_event
      * @param  bool                  $_deleteInstance
      * @param  bool                  $_allFollowing
-     * @param  bool                  $_checkBusyConficts
+     * @param  bool                  $_checkBusyConflicts
      * @return Calendar_Model_Event  exception Event | updated baseEvent
      */
-    public function createRecurException($_event, $_deleteInstance = FALSE, $_allFollowing = FALSE, $_checkBusyConficts = FALSE)
+    public function createRecurException($_event, $_deleteInstance = FALSE, $_allFollowing = FALSE, $_checkBusyConflicts = FALSE)
     {
         $baseEvent = $this->getRecurBaseEvent($_event);
         
@@ -610,7 +610,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                         $_event->{$prop}->setId(NULL);
                     }
                 }
-                $persistentExceptionEvent = $this->create($_event, $_checkBusyConficts);
+                $persistentExceptionEvent = $this->create($_event, $_checkBusyConflicts);
             }
             
         } else {
@@ -640,7 +640,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $updatedBaseEvent = $this->update($baseEvent, FALSE);
             
             if ($_deleteInstance == TRUE) {
-                // delte all future persistent events
+                // delete all future persistent events
                 $this->delete($futurePersistentExceptionEvents->getId());
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " create new recur series for/at: '{$_event->recurid}'");
@@ -668,7 +668,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $_event->exdate = $futureExdates;
                 $futurePersistentExceptionEvents->setRecurId();
                 
-                $persistentExceptionEvent = $this->create($_event, $_checkBusyConficts && $dtStartHasDiff);
+                $persistentExceptionEvent = $this->create($_event, $_checkBusyConflicts && $dtStartHasDiff);
                 foreach($futurePersistentExceptionEvents as $futurePersistentExceptionEvent) {
                     $this->update($futurePersistentExceptionEvent, FALSE);
                 }
@@ -679,7 +679,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     $persistentExceptionEvent->dtend = clone $adoptedDtstart;
                     $persistentExceptionEvent->dtend->add($eventLength);
                     
-                    $persistentExceptionEvent = $this->update($persistentExceptionEvent, $_checkBusyConficts);
+                    $persistentExceptionEvent = $this->update($persistentExceptionEvent, $_checkBusyConflicts);
                 }
             }
                 

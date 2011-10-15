@@ -19,12 +19,12 @@ class Crm_Setup_Update_Release5 extends Setup_Update_Abstract
     public function update_0()
     {
         $filters = Tinebase_PersistentFilter::getInstance()->getAll();
-        $projectFilters = $filters->filter('application_id', Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId());
+        $crmFilters = $filters->filter('application_id', Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId());
         $pfBackend = new Tinebase_PersistentFilter_Backend_Sql();
         
-        foreach ($projectFilters as $pfilter) {
+        foreach ($crmFilters as $pfilter) {
             foreach ($pfilter->filters as $filter) {
-                if ($filter->getField() === 'contact' && $filter instanceof Tinebase_Model_Filter_Relation) {
+                if (in_array($filter->getField(), array('contact', 'product', 'task')) && $filter instanceof Tinebase_Model_Filter_Relation) {
                     $values = array();
                     foreach ($filter->getValue() as $idx => $subfilter) {
                         $values[$idx] = $subfilter;
@@ -40,6 +40,4 @@ class Crm_Setup_Update_Release5 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Crm', '5.1');
     }
-    
-    // @todo add task + product filter update
 }

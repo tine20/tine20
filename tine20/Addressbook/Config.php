@@ -1,41 +1,45 @@
 <?php
 /**
- * @package     Tasks
+ * @package     Addressbook
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
- * task config class
+ * Addressbook config class
  * 
- * @package     Tasks
+ * @package     Addressbook
  * @subpackage  Config
  */
-class Tasks_Config extends Tinebase_Config_Abstract
+class Addressbook_Config extends Tinebase_Config_Abstract
 {
     /**
-     * Tasks Status Available
+     * fields for contact record duplicate check
      * 
      * @var string
      */
-    const TASK_STATUS = 'taskStatus';
+    const CONTACT_DUP_FIELDS = 'contactDupFields';
     
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
-        self::TASK_STATUS => array(
-                                   //_('Tasks Status Available')
-            'label'                 => 'Tasks Status Available',
-                                   //_('Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation.')
-            'description'           => 'Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation.',
-            'type'                  => 'keyFieldConfig',
-            'options'               => array('recordModel' => 'Tasks_Model_Status'),
+        self::CONTACT_DUP_FIELDS => array(
+                                   //_('Contact duplicate check fields')
+            'label'                 => 'Contact duplicate check fields',
+                                   //_('These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown.')
+            'description'           => 'These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown.',
+            'type'                  => 'array',
+            'contents'              => 'array',
             'clientRegistryInclude' => TRUE,
-            'default'               => 'NEEDS-ACTION'
+        // @todo make default work
+            'default'               => array(               // array of alternatives
+                array('n_given', 'n_family', 'org_name'),   // all fields must match
+                array('email'),                             // single field that needs to match
+            ),
         ),
     );
     
@@ -43,7 +47,7 @@ class Tasks_Config extends Tinebase_Config_Abstract
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Abstract::$_appName
      */
-    protected $_appName = 'Tasks';
+    protected $_appName = 'Addressbook';
     
     /**
      * holds the instance of the singleton

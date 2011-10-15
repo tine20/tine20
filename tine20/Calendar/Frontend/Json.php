@@ -185,7 +185,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param   bool    $checkBusyConficts
      * @return  array   created/updated event
      */
-    public function saveEvent($recordData, $checkBusyConficts=FALSE)
+    public function saveEvent($recordData, $checkBusyConficts = FALSE)
     {
         return $this->_save($recordData, Calendar_Controller_Event::getInstance(), 'Event', 'id', array($checkBusyConficts));
     }
@@ -226,10 +226,10 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param  array $recordData
      * @param  bool  $checkBusyConficts
-     * @noparamyet  JSONstring $returnPeriod NOTE IMPLMENTED YET
+     * @noparamyet  JSONstring $returnPeriod NOT IMPLEMENTED YET
      * @return array 
      */
-    public function updateRecurSeries($recordData, $checkBusyConficts=FALSE /*, $returnPeriod*/)
+    public function updateRecurSeries($recordData, $checkBusyConficts = FALSE /*, $returnPeriod*/)
     {
         $recurInstance = new Calendar_Model_Event(array(), TRUE);
         $recurInstance->setFromJsonInUsersTimezone($recordData);
