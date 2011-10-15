@@ -18,7 +18,61 @@
  */
 class Addressbook_Convert_Contact_VCard_MacOSX extends Addressbook_Convert_Contact_VCard_Abstract
 {
-    protected $_emptyArray = array();
+    protected $_emptyArray = array(
+        'adr_one_countryname'   => null,
+        'adr_one_locality'      => null,
+        'adr_one_postalcode'    => null,
+        #'adr_one_region'        => null,
+        'adr_one_street'        => null,
+        #'adr_one_street2'       => null,
+        'adr_two_countryname'   => null,
+        'adr_two_locality'      => null,
+        'adr_two_postalcode'    => null,
+        #'adr_two_region'        => null,
+        'adr_two_street'        => null,
+        #'adr_two_street2'       => null,
+        #'assistent'             => null,
+        'bday'                  => null,
+        #'calendar_uri'          => null,
+        'email'                 => null,
+        'email_home'            => null,
+        'jpegphoto'             => null,
+        #'freebusy_uri'          => null,
+        'note'                  => null,
+        #'role'                  => null,
+        #'salutation_id'         => null,
+        #'title'                 => null,
+        'url'                   => null,
+        'url_home'              => null,
+        'n_family'              => null,
+        'n_fileas'              => null,
+        #'n_fn'                  => null,
+        'n_given'               => null,
+        #'n_middle'              => null,
+        #'n_prefix'              => null,
+        #'n_suffix'              => null,
+        'org_name'              => null,
+        #'org_unit'              => null,
+        #'pubkey'                => null,
+        #'room'                  => null,
+        #'tel_assistent'         => null,
+        #'tel_car'               => null,
+        'tel_cell'              => null,
+        #'tel_cell_private'      => null,
+        'tel_fax'               => null,
+        'tel_fax_home'          => null,
+        'tel_home'              => null,
+        'tel_pager'             => null,
+        'tel_work'              => null,
+        #'tel_other'             => null,
+        #'tel_prefer'            => null,
+        #'tz'                    => null,
+        #'geo'                   => null,
+        #'lon'                   => null,
+        #'lat'                   => null,
+        'tags'                  => null,
+        'notes'                 => null,
+    );
     
     /**
      * converts Addressbook_Model_Contact to vcard
@@ -78,8 +132,10 @@ class Addressbook_Convert_Contact_VCard_MacOSX extends Addressbook_Convert_Conta
         $adr = new Sabre_VObject_Property('ADR', Sabre_VObject_Property::concatCompoundValues(array(null, null, $_model->adr_one_street, $_model->adr_one_locality, $_model->adr_one_region, $_model->adr_one_postalcode, $_model->adr_one_countryname)));
         $adr->add('TYPE', 'WORK');
         $card->add($adr);
-        
-        $card->add(new Sabre_VObject_Property('ADR;TYPE=home', Sabre_VObject_Property::concatCompoundValues(array(null, $_model->adr_two_street2, $_model->adr_two_street, $_model->adr_two_locality, $_model->adr_two_region, $_model->adr_two_postalcode, $_model->adr_two_countryname))));
+
+        $adr = new Sabre_VObject_Property('ADR', Sabre_VObject_Property::concatCompoundValues(array(null, null, $_model->adr_two_street, $_model->adr_two_locality, $_model->adr_two_region, $_model->adr_two_postalcode, $_model->adr_two_countryname)));
+        $adr->add('TYPE', 'HOME');
+        $card->add($adr);
         
         $card->add(new Sabre_VObject_Property('EMAIL;TYPE=work', $_model->email));
         $card->add(new Sabre_VObject_Property('EMAIL;TYPE=home', $_model->email_home));
