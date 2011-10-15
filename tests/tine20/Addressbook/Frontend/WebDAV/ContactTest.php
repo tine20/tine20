@@ -89,7 +89,9 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
+        if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+            $GLOBALS['_SERVER']['HTTP_USER_AGENT'] = 'FooBar User Agent';
+        }
                 
         $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/sogo_connector.vcf', 'r');
         
@@ -125,12 +127,12 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
     /**
      * test updating existing contact from sogo connector
      */
-    public function _testPutSogo()
+    public function testPutSogo()
     {
-        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
         $contact = $this->testCreate();
-    
+        
         $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/sogo_connector.vcf', 'r');
         
         $contact->put($vcardStream);
@@ -145,12 +147,12 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
     /**
      * test updating existing contact from MacOS X
      */
-    public function _testPutMacOSX()
+    public function testPutMacOSX()
     {
-        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
-    
+        $_SERVER['HTTP_USER_AGENT'] = 'AddressBook/6.0 (1043) CardDAVPlugin/182 CFNetwork/520.0.13 Mac_OS_X/10.7.1 (11B26)';
+        
         $contact = $this->testCreate();
-    
+        
         $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/mac_os_x_addressbook.vcf', 'r');
     
         $contact->put($vcardStream);
