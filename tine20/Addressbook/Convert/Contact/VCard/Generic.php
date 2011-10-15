@@ -26,7 +26,7 @@ class Addressbook_Convert_Contact_VCard_Generic extends Addressbook_Convert_Cont
      * @param  Addressbook_Model_Contact  $_model
      * @return string
      */
-    public function fromTine20Model(Addressbook_Model_Contact $_model)
+    public function fromTine20Model(Tinebase_Record_Abstract $_model)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' contact ' . print_r($_model->toArray(), true));
         
