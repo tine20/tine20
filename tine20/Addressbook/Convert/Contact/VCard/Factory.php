@@ -29,7 +29,7 @@ class Addressbook_Convert_Contact_VCard_Factory
 	 * @param   string $_version
 	 * @return  Addressbook_Convert_Contact_VCard_Interface
 	 */
-	static public function factory($_backend, $_version)
+	static public function factory($_backend, $_version = null)
 	{
 	    switch ($_backend) {
 	        case Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC:
