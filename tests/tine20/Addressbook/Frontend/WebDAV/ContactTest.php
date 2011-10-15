@@ -114,8 +114,6 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContact()
     {
-        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
-        
         $contact = $this->testCreateContact();
     
         $vcard = stream_get_contents($contact->get());

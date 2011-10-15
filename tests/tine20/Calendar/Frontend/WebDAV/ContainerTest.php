@@ -111,6 +111,8 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetChildren()
     {
+        $GLOBALS['_SERVER']['HTTP_USER_AGENT'] = 'FooBar User Agent';
+        
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
         
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], $vcalendarStream);

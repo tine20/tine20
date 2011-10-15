@@ -87,8 +87,12 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
      * 
      * @return Calendar_Frontend_WebDAV_Event
      */
-    public function testCreate()
+    public function testCreateEvent()
     {
+        if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+            $GLOBALS['_SERVER']['HTTP_USER_AGENT'] = 'FooBar User Agent';
+        }
+        
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
         
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], $vcalendarStream);
@@ -104,10 +108,11 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
     
     /**
      * test get vcard
+     * @depends testCreateEvent
      */
-    public function testGet()
+    public function testGetEvent()
     {
-        $event = $this->testCreate();
+        $event = $this->testCreateEvent();
         
         $vcalendar = stream_get_contents($event->get());
         
@@ -117,11 +122,13 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
     /**
      * test updating existing contact
      */
-    public function testPut()
+    public function testPutEventFromGenericClient()
     {
-        $event = $this->testCreate();
+        $event = $this->testCreateEvent();
         
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
+        
+        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
         $event->put($vcalendarStream);
         
@@ -133,9 +140,9 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
     /**
      * test get name of vcard
      */
-    public function testGetName()
+    public function testGetNameOfEvent()
     {
-        $event = $this->testCreate();
+        $event = $this->testCreateEvent();
         
         $record = $event->getRecord();
         
