@@ -105,13 +105,12 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Kneschke', $record->n_family);
         $this->assertEquals('+49 BUSINESS', $record->tel_work);
         
-        unset($_SERVER['HTTP_USER_AGENT']);
-        
         return $contact;
     }    
     
     /**
      * test get vcard
+     * @depends testCreateContact
      */
     public function testGetContact()
     {
@@ -126,6 +125,7 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
 
     /**
      * test updating existing contact from sogo connector
+     * @depends testCreateContact
      */
     public function testPutContactFromSogo()
     {
@@ -146,6 +146,7 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
     
     /**
      * test updating existing contact from MacOS X
+     * @depends testCreateContact
      */
     public function testPutContactFromMacOsX()
     {
@@ -166,6 +167,7 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
     
     /**
      * test updating existing contact from MacOS X
+     * @depends testCreateContact
      */
     public function testPutContactFromGenericClient()
     {
@@ -182,6 +184,7 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
     
     /**
      * test get name of vcard
+     * @depends testCreateContact
      */
     public function testGetNameOfContact()
     {
