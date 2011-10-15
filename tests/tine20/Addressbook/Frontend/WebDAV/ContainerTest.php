@@ -111,6 +111,8 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
      */
     public function testGetChildren()
     {
+        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
+        
         $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/sogo_connector.vcf', 'r');
         
         $contact = Addressbook_Frontend_WebDAV_Contact::create($this->objects['initialContainer'], $vcardStream);
