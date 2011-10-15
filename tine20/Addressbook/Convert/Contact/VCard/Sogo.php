@@ -16,8 +16,10 @@
  * @package     Addressbook
  * @subpackage  Convert
  */
-class Addressbook_Convert_Contact_VCard_Sogo extends Addressbook_Convert_Contact_VCard_Generic
+class Addressbook_Convert_Contact_VCard_Sogo extends Addressbook_Convert_Contact_VCard_Abstract
 {
+    protected $_emptyArray = array();
+    
     /**
      * converts Addressbook_Model_Contact to vcard
      * 
