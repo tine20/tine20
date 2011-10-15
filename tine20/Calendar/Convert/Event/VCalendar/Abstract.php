@@ -16,38 +16,18 @@
  * @package     Calendar
  * @subpackage  Convert
  */
-class Calendar_Convert_Event_VCalendar
+class Calendar_Convert_Event_VCalendar_Abstract
 {
-    const CLIENT_AUTODETECT = 'auto';
-    const CLIENT_MACOSX     = 'macosx';
-    const CLIENT_SOGO       = 'sogo';
+    protected $_version;
     
     /**
-     * @var string
+     * @param  string  $_version  the version of the client
      */
-    protected $_client;
-
-    /**
-     * @var array
-     */
-    protected $_supportedFields = array(
-        self::CLIENT_AUTODETECT => array(),
-        self::CLIENT_MACOSX     => array(),
-        self::CLIENT_SOGO       => array()
-    );
-    
-    /**
-     * @param  string  $_client
-     */
-    public function __construct($_client = self::CLIENT_AUTODETECT)
+    public function __construct($_version = null)
     {
-        if (!isset($this->_supportedFields[$_client])) {
-            throw new Tinebase_Exception_UnexpectedValue('incalid client provided');
-        }
-        
-        $this->_client = $_client;
+        $this->_version = $_version;
     }
-    
+        
     protected function _parseVevent(Sabre_VObject_Component $_vevent, &$_data)
     {
         foreach($_vevent->children() as $property) {
@@ -81,8 +61,8 @@ class Calendar_Convert_Event_VCalendar
     /**
      * converts vcalendar to Calendar_Model_Event
      * 
-     * @param  Sabre_VObject_Component|stream|string  $_blob   the vcalendar to parse
-     * @param  Calendar_Model_Event                   $_model  update existing event
+     * @param  mixed                 $_blob   the vcalendar to parse
+     * @param  Calendar_Model_Event  $_model  update existing event
      * @return Calendar_Model_Event
      */
     public function toTine20Model($_blob, Tinebase_Record_Abstract $_model = null)
