@@ -88,10 +88,8 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
 
     /**
      * test import duplicate data
-     * 
-     * @todo rework and activate test again
      */
-    public function _testImportDuplicates()
+    public function testImportDuplicates()
     {
         $internalContainer = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
         $options = array(
@@ -104,6 +102,7 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
         )));
         
         $this->assertGreaterThan(0, $result['duplicatecount'], 'no duplicates.');
+        $this->assertTrue($result['exceptions'] instanceof Tinebase_Record_RecordSet);
     }
     
     /**

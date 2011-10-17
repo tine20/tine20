@@ -250,6 +250,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         
         $result = array(
             'results'           => array(),
+            'exceptions'        => array(),
             'totalcount'        => 0,
             'failcount'         => 0,
             'duplicatecount'    => 0,
@@ -258,6 +259,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         foreach ($_files as $file) {
             $importResult = $importer->importFile($file['path']);
             $result['results']           = array_merge($result['results'], $importResult['results']->toArray());
+            $result['exceptions']        = array_merge($result['exceptions'], $importResult['exceptions']->toArray());
             $result['totalcount']       += $importResult['totalcount'];
             $result['failcount']        += $importResult['failcount'];
             $result['duplicatecount']   += $importResult['duplicatecount'];
