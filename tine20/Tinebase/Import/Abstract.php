@@ -68,16 +68,17 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * import given filename
      * 
      * @param string $_filename
+     * @param Tinebase_Record_RecordSet $_clientRecords
      * @return @see{Tinebase_Import_Interface::import}
      */
-    public function importFile($_filename)
+    public function importFile($_filename, Tinebase_Record_RecordSet $_clientRecords = NULL)
     {
         if (! file_exists($_filename)) {
             throw new Tinebase_Exception_NotFound("File $_filename not found.");
         }
         $resource = fopen($_filename, 'r');
         
-        $retVal = $this->import($resource);
+        $retVal = $this->import($resource, $_clientRecords);
         fclose($resource);
         
         return $retVal;
@@ -87,9 +88,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * import from given data
      * 
      * @param string $_data
+     * @param Tinebase_Record_RecordSet $_clientRecords
      * @return @see{Tinebase_Import_Interface::import}
      */
-    public function importData($_data)
+    public function importData($_data, Tinebase_Record_RecordSet $_clientRecords = NULL)
     {
         $resource = fopen('php://memory', 'w+');
         fwrite($resource, $_data);
@@ -105,13 +107,14 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * import the data
      *
      * @param  resource $_resource (if $_filename is a stream)
+     * @param Tinebase_Record_RecordSet $_clientRecords
      * @return array with import data (imported records, failures, duplicates and totalcount)
      */
-    public function import($_resource = NULL)
+    public function import($_resource = NULL, Tinebase_Record_RecordSet $_clientRecords = NULL)
     {
         $this->_initImportResult();
         $this->_beforeImport($_resource);
-        $this->_doImport($_resource);
+        $this->_doImport($_resource, $_clientRecords);
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             . ' Import finished. (total: ' . $this->_importResult['totalcount'] 
@@ -144,16 +147,14 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * do import: loop data -> convert to records -> import records
      * 
      * @param resource $_resource
+     * @param Tinebase_Record_RecordSet $_clientRecords
+     * 
+     * @todo use $_clientRecords to overwrite import data
      */
-    protected function _doImport($_resource = NULL)
+    protected function _doImport($_resource = NULL, Tinebase_Record_RecordSet $_clientRecords = NULL)
     {
         $recordIndex = 0;
-        while (
-            ($recordData = $this->_getRawData($_resource)) !== FALSE && 
-            (! $this->_options['dryrun'] 
-                || ! ($this->_options['dryrunLimit'] && $this->_importResult['totalcount'] >= $this->_options['dryrunCount'])
-            )
-        ) {
+        while (($recordData = $this->_getRawData($_resource)) !== FALSE) {
             if (is_array($recordData)) {
                 try {
                     $mappedData = $this->_doMapping($recordData);
