@@ -72,7 +72,7 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
     /**
      * test import data
      * 
-     * @todo this has been removed because we now detect duplicates in dryrun -> rework test, get other data to import (CSV?)
+     * @todo this has been removed because we now detect duplicates in dryrun -> rework test, get other data to import (use example csv data)
      */
     public function _testImport()
     {
