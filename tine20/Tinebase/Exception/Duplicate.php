@@ -76,14 +76,13 @@ class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
             return array();
         }
         
-        if ($this->_resolveRecords) {
-            list($app, $i, $model) = explode('_', $this->_modelName, 3);
-            $method = 'get' . $model;
-            $result = call_user_func_array(array($this->_getJsonFrontend(), $method), array($this->_clientRecord->getId()));
-        } else {
-            $this->_clientRecord->setTimezone(Tinebase_Core::get('userTimeZone'));
-            $result = $this->_clientRecord->toArray();
-        }
+//        if ($this->_resolveRecords) {
+//            list($app, $i, $model) = explode('_', $this->_modelName, 3);
+//            $method = 'get' . $model;
+//            $result = call_user_func_array(array($this->_getJsonFrontend(), $method), array($this->_clientRecord->getId()));
+//        } else {
+        $this->_clientRecord->setTimezone(Tinebase_Core::get('userTimeZone'));
+        $result = $this->_clientRecord->toArray();
         
         return $result;
     }
