@@ -17,7 +17,12 @@
  */
 class Tinebase_Model_TempFile extends Tinebase_Record_Abstract 
 {
-
+    /**
+     * key in $_validators/$_properties array for the field which 
+     * represents the identifier
+     * 
+     * @var string
+     */
     protected $_identifier = 'id';
     
     /**
@@ -27,6 +32,12 @@ class Tinebase_Model_TempFile extends Tinebase_Record_Abstract
      */
     protected $_application = 'Tinebase';
     
+    /**
+     * Defintion of properties.
+     * This validators get used when validating user generated content with Zend_Input_Filter
+     * 
+     * @var array list of zend validator
+     */
     protected $_validators = array(
         'id'         => array('presence' => 'required', 'allowEmpty' => false, 'Alnum' ),
         'session_id' => array('allowEmpty' => false, 'Alnum' ),
@@ -38,7 +49,13 @@ class Tinebase_Model_TempFile extends Tinebase_Record_Abstract
         'size'       => array('allowEmpty' => true, 'Int')
     );
     
+    /**
+     * name of fields containing datetime or an array of datetime
+     * information
+     *
+     * @var array list of datetime fields
+     */
     protected $_datetimeFields = array(
         'time'
     );
-} // end of Tinebase_Model_TempFile
+}

@@ -230,13 +230,16 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * import records
      * 
-     * @param array $_files to import
+     * @param string $_tempFileId to import
      * @param string $_importDefinitionId
      * @param array $_options additional import options
+     * @param array $_clientRecordData
      * @return array
      * @throws Tinebase_Exception_NotFound
+     * 
+     * @todo add clientRecords param -> convert to recordset
      */
-    protected function _import($_files, $_importDefinitionId, $_options = array())
+    protected function _import($_tempFileId, $_importDefinitionId, $_options = array(), $_clientRecordData = array())
     {
         $definition = Tinebase_ImportExportDefinition::getInstance()->get($_importDefinitionId);
         $importer = call_user_func($definition->plugin . '::createFromDefinition', $definition, $_options);
@@ -245,30 +248,29 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             throw new Tinebase_Exception_NotFound('No importer found for ' . $definition->name);
         }
         
+        if (! empty($_clientRecordData)) {
+            $clientRecords = new Tinebase_Record_RecordSet($definition->model);
+            foreach ($_clientRecordData as $idx => $recordData) {
+                // @todo add to recordset
+            }
+        } else {
+            $clientRecords = NULL;
+        }
+        
         // extend execution time to 30 minutes
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(1800);
+
+        $file = Tinebase_TempFile::getInstance()->getTempFile($_tempFileId);
+        $importResult = $importer->importFile($file->path, $clientRecords);
         
-        $result = array(
-            'results'           => array(),
-            'exceptions'        => array(),
-            'totalcount'        => 0,
-            'failcount'         => 0,
-            'duplicatecount'    => 0,
-            'status'            => 'success',
-        );
-        foreach ($_files as $file) {
-            $importResult = $importer->importFile($file['path']);
-            $result['results']           = array_merge($result['results'], $importResult['results']->toArray());
-            $result['exceptions']        = array_merge($result['exceptions'], $importResult['exceptions']->toArray());
-            $result['totalcount']       += $importResult['totalcount'];
-            $result['failcount']        += $importResult['failcount'];
-            $result['duplicatecount']   += $importResult['duplicatecount'];
-        }
+        $importResult['results']    = $importResult['results']->toArray();
+        $importResult['exceptions'] = $importResult['exceptions']->toArray();
+        $importResult['status']     = 'success';
         
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
         
-        return $result;
+        return $importResult;
     }
     
     /**

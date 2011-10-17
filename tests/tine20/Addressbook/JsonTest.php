@@ -343,9 +343,9 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test import data
+     * test export data
      */
-    public function testExportImport()
+    public function testExport()
     {
         $filter = new Addressbook_Model_ContactFilter(array(
             array(
@@ -372,8 +372,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         ));
         Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $tag);
         
-        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
-        
         // export first and create files array
         $exporter = new Addressbook_Export_Csv($filter, Addressbook_Controller_Contact::getInstance());
         $filename = $exporter->generate();
@@ -381,31 +379,38 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertContains($sharedTagName, $export, 'shared tag was not found in export:' . $export);
         $this->assertContains($personalTagName, $export, 'personal tag was not found in export:' . $export);
         
-        // then import
-        $files = array(
-            array('name' => $filename, 'path' => $filename)
-        );
-        $options = array(
-            'container_id'  => $this->container->getId(),
-            'dryrun'        => 1,
-        );
-        $result = $this->_instance->importContacts($files, $options, $definition->getId());
-        
-        // check
-        $this->assertGreaterThan(0, $result['totalcount'], 'Didn\'t import anything.');
-        $this->assertEquals(0, $result['failcount'], 'Import failed for one or more records.');
-        $this->assertEquals(Tinebase_Core::getUser()->accountDisplayName, $result['results'][0]['n_fileas'], 'file as not found');
-        $this->assertTrue(in_array($sharedTagName, $result['results'][0]['tags']),
-            'Did not get shared tag: ' . $sharedTagName . ' / ' . print_r($result['results'][0]['tags'], TRUE));
-        $this->assertTrue(in_array($personalTagName, $result['results'][0]['tags']), 
-            'Did not get personal tag: ' . $personalTagName . ' / ' . print_r($result['results'][0]['tags'], TRUE));
-        
         // cleanup
         unset($filename);
         $sharedTagToDelete = Tinebase_Tags::getInstance()->getTagByName($sharedTagName);
         $personalTagToDelete = Tinebase_Tags::getInstance()->getTagByName($personalTagName);
         Tinebase_Tags::getInstance()->deleteTags(array($sharedTagToDelete->getId(), $personalTagToDelete->getId()));
-    }    
+    }
+    
+    /**
+     * test import
+     * 
+     * @todo make it work
+     * @todo test clientRecords, too
+     */
+    public function testImport()
+    {
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
+        
+        $tempFileBackend = new Tinebase_TempFile();
+        $tempFile = $tempFileBackend->createTempFile(dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20/Addressbook/Import/examples/adb_tine_import.csv');
+        $options = array(
+            'container_id'  => $this->container->getId(),
+            'dryrun'        => 1,
+        );
+        $result = $this->_instance->importContacts($tempFile->getId(), $definition->getId(), $options);
+        
+        $this->assertEquals(2, $result['totalcount'], 'Didn\'t import anything.');
+        $this->assertEquals(0, $result['failcount'], 'Import failed for one or more records.');
+        $this->assertEquals('Müller, Klaus', $result['results'][0]['n_fileas'], 'file as not found');
+        
+        // @todo import again without dryrun / with duplicates / clientRecords
+        // @todo test import tags 
+    }
 
     /**
      * test project relation filter
