@@ -46,7 +46,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public $dateConversionFormat = NULL;
     
     /**
-     * key in $_validators/$_properties array for the filed which 
+     * key in $_validators/$_properties array for the field which 
      * represents the identifier
      * NOTE: _Must_ be set by the derived classes!
      * 
