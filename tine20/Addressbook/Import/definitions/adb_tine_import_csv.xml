@@ -9,6 +9,7 @@
     <delimiter>,</delimiter>
     <description>tine adb import</description>
     <example>adb_tine_import.csv</example>
+    <extension>csv</extension>
     <mapping>
         <field>
             <source>adr_one_countryname</source>
