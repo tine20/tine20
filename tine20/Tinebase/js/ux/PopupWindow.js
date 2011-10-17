@@ -174,6 +174,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         if(this.fireEvent("beforeclose", this) !== false){
             this.fireEvent('close', this);
             this.purgeListeners();
+            this.windowManager.unregister(this);
             this.popup.close();
         }
     },

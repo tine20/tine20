@@ -38,7 +38,7 @@ Ext.ux.PopupWindowGroup = function(config) {
             try {
             	var newDate = new Date().getTime();
 
-            	if(list[id].registerTime && (list[id].registerTime/1 + 5000 > newDate/1)) {
+            	if(list[id].registerTime && (list[id].registerTime/1 + 2000 > newDate/1)) {
             		
             		continue;
             	}
