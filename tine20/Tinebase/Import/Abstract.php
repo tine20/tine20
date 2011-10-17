@@ -68,17 +68,17 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * import given filename
      * 
      * @param string $_filename
-     * @param Tinebase_Record_RecordSet $_clientRecords
+     * @param array $_clientRecordData
      * @return @see{Tinebase_Import_Interface::import}
      */
-    public function importFile($_filename, Tinebase_Record_RecordSet $_clientRecords = NULL)
+    public function importFile($_filename, $_clientRecordData = array())
     {
         if (! file_exists($_filename)) {
             throw new Tinebase_Exception_NotFound("File $_filename not found.");
         }
         $resource = fopen($_filename, 'r');
         
-        $retVal = $this->import($resource, $_clientRecords);
+        $retVal = $this->import($resource, $_clientRecordData);
         fclose($resource);
         
         return $retVal;
@@ -88,10 +88,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * import from given data
      * 
      * @param string $_data
-     * @param Tinebase_Record_RecordSet $_clientRecords
+     * @param array $_clientRecordData
      * @return @see{Tinebase_Import_Interface::import}
      */
-    public function importData($_data, Tinebase_Record_RecordSet $_clientRecords = NULL)
+    public function importData($_data, $_clientRecordData = array())
     {
         $resource = fopen('php://memory', 'w+');
         fwrite($resource, $_data);
@@ -107,14 +107,14 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * import the data
      *
      * @param  resource $_resource (if $_filename is a stream)
-     * @param Tinebase_Record_RecordSet $_clientRecords
+     * @param array $_clientRecordData
      * @return array with import data (imported records, failures, duplicates and totalcount)
      */
-    public function import($_resource = NULL, Tinebase_Record_RecordSet $_clientRecords = NULL)
+    public function import($_resource = NULL, $_clientRecordData = array())
     {
         $this->_initImportResult();
         $this->_beforeImport($_resource);
-        $this->_doImport($_resource, $_clientRecords);
+        $this->_doImport($_resource, $_clientRecordData);
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             . ' Import finished. (total: ' . $this->_importResult['totalcount'] 
@@ -147,51 +147,60 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * do import: loop data -> convert to records -> import records
      * 
      * @param resource $_resource
-     * @param Tinebase_Record_RecordSet $_clientRecords
-     * 
-     * @todo use $_clientRecords to overwrite import data
+     * @param array $_clientRecordData
      */
-    protected function _doImport($_resource = NULL, Tinebase_Record_RecordSet $_clientRecords = NULL)
+    protected function _doImport($_resource = NULL, $_clientRecordData = array())
     {
         $recordIndex = 0;
         while (($recordData = $this->_getRawData($_resource)) !== FALSE) {
-            if (is_array($recordData)) {
-                try {
-                    $mappedData = $this->_doMapping($recordData);
-                    
-                    if (! empty($mappedData)) {
-                        $convertedData = $this->_doConversions($mappedData);
-
-                        // merge additional values (like group id, container id ...)
-                        $mergedData = array_merge($convertedData, $this->_addData($convertedData));
-                        
-                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Merged data: ' . print_r($mergedData, true));
-                        
-                        // import record into tine!
-                        $importedRecord = $this->_importRecord($mergedData);
-                    } else {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got empty record from mapping! Was: ' . print_r($recordData, TRUE));
-                        $this->_importResult['failcount']++;
-                    }
-                    
-                } catch (Exception $e) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-                    $this->_importResult['exceptions']->addRecord(new Tinebase_Model_ImportException(array(
-                        'exception'     => $e,
-                        'record_idx'    => $recordIndex,
-                    )));
-                    if ($e instanceof Tinebase_Exception_Duplicate) {
-                        $this->_importResult['duplicatecount']++;
-                    } else {
-                        $this->_importResult['failcount']++;
-                    }
+            try {
+                if (isset($_clientRecordData[$recordIndex])) {
+                    $recordDataToImport = $_clientRecordData[$recordIndex]['recordData'];
+                    $resolveAction = $_clientRecordData[$recordIndex]['resolveAction'];
+                } else {
+                    $recordDataToImport = $this->_processRawData($recordData);
+                    $resolveAction = NULL;
                 }
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No array: ' . $recordData);
+                    
+                if (! empty($recordDataToImport) || $resolveAction === 'discard') {
+                    $importedRecord = $this->_importRecord($recordDataToImport, $resolveAction);
+                }
+                    
+            } catch (Exception $e) {
+                $this->_handleImportException($e, $recordIndex);
             }
+            
             $recordIndex++;
         }
+    }
+    
+    /**
+     * process raw data (mapping + conversions)
+     * 
+     * @param array $_data
+     * @return array|NULL
+     */
+    protected function _processRawData($_data)
+    {
+        $result = NULL;
+        $mappedData = $this->_doMapping($_data);
+        
+        if (! empty($mappedData)) {
+            $convertedData = $this->_doConversions($mappedData);
+
+            // merge additional values (like group id, container id ...)
+            $result = array_merge($convertedData, $this->_addData($convertedData));
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                . ' Merged data: ' . print_r($result, true));
+                
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Got empty record from mapping! Was: ' . print_r($_data, TRUE));
+            $this->_importResult['failcount']++;
+        }
+        
+        return $result;
     }
     
     /**
@@ -245,10 +254,16 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * import single record
      *
      * @param array $_recordData
+     * @param string $_resolveAction
      * @return void
      * @throws Tinebase_Exception_Record_Validation
+     * 
+     * @todo support $_resolveAction: ['mergeTheirs', _('Merge, keeping existing details')],
+                    ['mergeMine',   _('Merge, keeping my details')],
+                    ['discard',     _('Keep existing record and discard mine')],
+                    ['keep',        _('Keep both records')]
      */
-    protected function _importRecord($_recordData)
+    protected function _importRecord($_recordData, $_resolveAction = NULL)
     {
         $record = new $this->_options['model']($_recordData, TRUE);
         
@@ -274,6 +289,28 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
             throw new Tinebase_Exception_Record_Validation('Imported record is invalid (' . print_r($record->getValidationErrors(), TRUE) . ')');
         }
+    }
+    
+    /**
+     * handle import exceptions
+     * 
+     * @param Exception $_e
+     * @param integer $_recordIndex
+     */
+    protected function _handleImportException(Exception $_e, $_recordIndex)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $_e->getMessage());
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $_e->getTraceAsString());
+        
+        $this->_importResult['exceptions']->addRecord(new Tinebase_Model_ImportException(array(
+            'exception'     => $_e,
+            'record_idx'    => $_recordIndex,
+        )));
+        if ($_e instanceof Tinebase_Exception_Duplicate) {
+            $this->_importResult['duplicatecount']++;
+        } else {
+            $this->_importResult['failcount']++;
+        }        
     }
     
     /**

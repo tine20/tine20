@@ -389,8 +389,9 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * test import
      * 
-     * @todo make it work
-     * @todo test clientRecords, too
+     * @todo activate merge test
+     * @todo test import tags 
+     * @todo split into multiple tests
      */
     public function testImport()
     {
@@ -408,8 +409,29 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $result['failcount'], 'Import failed for one or more records.');
         $this->assertEquals('Müller, Klaus', $result['results'][0]['n_fileas'], 'file as not found');
         
-        // @todo import again without dryrun / with duplicates / clientRecords
-        // @todo test import tags 
+        // import again without dryrun / with duplicates / clientRecords
+        $options['dryrun'] = 0;
+        $result = $this->_instance->importContacts($tempFile->getId(), $definition->getId(), $options);
+        $this->assertEquals(2, $result['totalcount'], 'Didn\'t import anything.');
+        foreach ($result['results'] as $contact) {
+            $this->_contactIdsToDelete[] = $contact['id'];
+        }
+        $klaus = $result['results'][0];
+
+        $result = $this->_instance->importContacts($tempFile->getId(), $definition->getId(), $options);
+        $this->assertEquals(0, $result['totalcount'], 'Didn\'t import anything.');
+        $this->assertEquals(2, $result['duplicatecount'], 'Didn\'t import anything.');
+        
+//        $klaus['adr_one_locality'] = 'Hamburg';
+//        $clientRecords = array(array(
+//            'recordData'    => $klaus,
+//            'resolveAction' => 'mergeMine',
+//            'index'         => 0,
+//        ));
+//        $result = $this->_instance->importContacts($tempFile->getId(), $definition->getId(), $options, $clientRecords);
+//        $this->assertEquals(1, $result['totalcount'], 'Should overwrite Klaus');
+//        $this->assertEquals(1, $result['duplicatecount'], 'Didn\'t import anything.');
+//        $this->assertEquals('Hamburg', $result['results'][0]['adr_one_locality'], 'file as not found');
     }
 
     /**
