@@ -38,6 +38,7 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
     
     initComponent: function() {
 //        this.addEvents();
+        this.title = _('The record you try to add might already exist.');
         
         // select one duplicate (one of the up to five duplicates we allow to edit)
         this.store.duplicateIdx = 0;
