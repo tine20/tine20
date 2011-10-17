@@ -8,6 +8,7 @@
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
     <description>tine adb import</description>
+    <example>adb_tine_import.csv</example>
     <mapping>
         <field>
             <source>adr_one_countryname</source>
