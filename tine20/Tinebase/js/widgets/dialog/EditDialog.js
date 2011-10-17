@@ -81,6 +81,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     copyRecord: false,
     
     /**
+     * @cfg {Boolean} doDuplicateCheck
+     * do duplicate check when saveing record (mode remote only)
+     */
+    doDuplicateCheck: true,
+    
+    /**
      * required grant for apply/save
      * @type String
      */
@@ -196,6 +202,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             requiredGrant: this.editGrant,
             text: (this.saveAndCloseButtonText != '') ? this.app.i18n._(this.saveAndCloseButtonText) : _('Ok'),
             minWidth: 70,
+            ref: '../btnSaveAndClose',
             scope: this,
             handler: this.onSaveAndClose,
             iconCls: 'action_saveAndClose'
@@ -489,6 +496,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     },
                     failure: this.onRequestFailed,
                     timeout: 300000 // 5 minutes
+                }, {
+                    duplicateCheck: this.doDuplicateCheck
                 });
             } else {
                 this.onRecordLoad();
@@ -555,11 +564,29 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             duplicates: exception.duplicates,
             fbar: [
                 '->',
-                //this.action_applyChanges,
                 this.action_cancel,
                 this.action_saveAndClose
            ]
         });
+        
+        // intercept save handler
+        resolveGridPanel.btnSaveAndClose.setHandler(function(btn, e) {
+            var resolveAction = resolveGridPanel.resolveAction;
+            
+            // action discard -> close window
+            if (resolveAction == 'discard') {
+                return this.onCancel();
+            }
+            
+            this.record = resolveGridPanel.getResolvedRecord();
+            this.onRecordLoad();
+            
+            mainCardPanel.layout.setActiveItem(this.id);
+            resolveGridPanel.doLayout();
+            
+            this.doDuplicateCheck = false;
+            this.onSaveAndClose(btn, e);
+        }, this);
         
         // place in viewport
         var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
@@ -567,11 +594,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         mainCardPanel.layout.setActiveItem(resolveGridPanel.id);
         resolveGridPanel.doLayout();
         
-        this.loadMask.hide();
         
-        // resolve conflict
-        // fire update event
-        // close window
+        this.loadMask.hide();
+
         return;
     },
     

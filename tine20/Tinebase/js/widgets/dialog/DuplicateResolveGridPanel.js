@@ -52,6 +52,8 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
     resolveAction: 'mergeTheirs',
     
     // private config overrides
+    cls: 'tw-editdialog',
+    border: false,
     layout: 'fit',
     enableColumnMove: false,
     stripeRows: true,
@@ -145,6 +147,22 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
     },
     
     /**
+     * returns record with conflict resolved data
+     */
+    getResolvedRecord: function() {
+        var record = this.resolveAction == 'keep' ? this.clientRecord : this.duplicates.results[this.duplicateIdx];
+        
+        this.store.each(function(resolveRecord) {
+            var fieldName = resolveRecord.get('fieldName'),
+                finalValue = resolveRecord.get('finalValue');
+                
+            record.set(fieldName, Tine.Tinebase.common.assertComparable(finalValue));
+        }, this);
+        
+        return record;
+    },
+    
+    /**
      * adopt final value to the one selected
      */
     onCellClick: function(grid, rowIndex, colIndex, e) {
@@ -196,7 +214,7 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
                 location = action === 'keep' ? 'mine' : 'theirs';
             
             // undefined theirs value -> keep mine
-            if (action == 'mergeTheirs' && String(theirs) === "undefined") {
+            if (action == 'mergeTheirs' && ['', 'undefined'].indexOf(String(theirs)) > -1) {
                 location = 'mine';
             }
             
