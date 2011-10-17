@@ -123,13 +123,11 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     
     /**
      * init import result data
-     * 
-     * @todo add model for import exceptions 
      */
     protected function _initImportResult()
     {
-        $this->_importResult['results'] = new Tinebase_Record_RecordSet($this->_options['model']);
-        //$this->_importResult['exceptions'] = new Tinebase_Record_RecordSet('Tinebase_Model_ImportException');
+        $this->_importResult['results']     = new Tinebase_Record_RecordSet($this->_options['model']);
+        $this->_importResult['exceptions']  = new Tinebase_Record_RecordSet('Tinebase_Model_ImportException');
     }
     
     /**
@@ -146,8 +144,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * do import: loop data -> convert to records -> import records
      * 
      * @param resource $_resource
-     * 
-     * @todo activate import exceptions 
      */
     protected function _doImport($_resource = NULL)
     {
@@ -180,10 +176,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 } catch (Exception $e) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-//                    $this->_importResult['exceptions']->addRecord(new Tinebase_Model_ImportException(array(
-//                        'exception'     => $e,
-//                        'recordIndex'   => $recordIndex,
-//                    )));
+                    $this->_importResult['exceptions']->addRecord(new Tinebase_Model_ImportException(array(
+                        'exception'     => $e,
+                        'record_idx'    => $recordIndex,
+                    )));
                     if ($e instanceof Tinebase_Exception_Duplicate) {
                         $this->_importResult['duplicatecount']++;
                     } else {

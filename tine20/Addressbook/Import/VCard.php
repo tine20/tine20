@@ -10,6 +10,7 @@
  * @author      Yann Le Moigne <segfaultmaker@gmail.com>
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
+ * @todo        use more functionality of Tinebase_Import_Abstract (import() and other fns)
  */
 
 require_once 'vcardphp/vcard.php';
