@@ -246,25 +246,25 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * @param array $_recordData
      * @return void
      * @throws Tinebase_Exception_Record_Validation
-     * 
-     * @todo always try to create record (with transaction rollback if dryrun)
      */
     protected function _importRecord($_recordData)
     {
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_recordData, true));
-        
         $record = new $this->_options['model']($_recordData, TRUE);
         
         if ($record->isValid()) {
             if (! $this->_options['dryrun']) {
-                // create/add shared tags
                 if (isset($_recordData['tags']) && is_array($_recordData['tags'])) {
                     $record->tags = $this->_addSharedTags($_recordData['tags']);
                 }
-
-                $record = call_user_func(array($this->_controller, $this->_options['createMethod']), $record);
             } else {
-                $this->_importResult['results']->addRecord($record);
+                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+            }
+            
+            $record = call_user_func(array($this->_controller, $this->_options['createMethod']), $record);
+            $this->_importResult['results']->addRecord($record);
+            
+            if ($this->_options['dryrun']) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
             }
             
             $this->_importResult['totalcount']++;
