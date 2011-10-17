@@ -15,14 +15,35 @@
  * 
  * @package     Tinebase
  * @subpackage  Exception
- * 
- * @todo add phpdoc
  */
 class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
 {
+    /**
+     * the client record
+     * 
+     * @var Tinebase_Record_Abstract
+     */
     protected $_clientRecord = NULL;
+    
+    /**
+     * resolve records / get complete object graph of $_duplicateIds
+     * 
+     * @var boolean
+     */
     protected $_resolveRecords = TRUE;
+    
+    /**
+     * ids of duplicate records
+     * 
+     * @var unknown_type
+     */
     protected $_duplicateIds = array();
+    
+    /**
+     * json frontend for record resolving
+     * 
+     * @var Tinebase_Frontend_Json_Abstract
+     */
     protected $_jsonFrontend = NULL;
     
     /**
@@ -70,6 +91,11 @@ class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
         );
     }
     
+    /**
+     * convert client record to array
+     * 
+     * @return array
+     */
     protected function _clientRecordToArray()
     {
         if (! $this->_clientRecord) {
@@ -87,6 +113,12 @@ class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
         return $result;
     }
     
+    /**
+     * get json frontend
+     * 
+     * @return Tinebase_Frontend_Json_Abstract
+     * @throws Tinebase_Exception
+     */
     protected function _getJsonFrontend()
     {
         if (! $this->_jsonFrontend) {
@@ -101,6 +133,11 @@ class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
         return $this->_jsonFrontend;
     }
     
+    /**
+     * get duplicates as array
+     * 
+     * @return array
+     */
     protected function _duplicatesToArray()
     {
         if ($this->_resolveRecords) {
