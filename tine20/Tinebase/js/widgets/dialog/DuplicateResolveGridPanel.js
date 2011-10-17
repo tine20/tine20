@@ -45,6 +45,11 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
      */
     duplicates: null,
     
+    /**
+     * @cfg {String} resolveAction
+     * default resolve action
+     */
+    resolveAction: 'mergeTheirs',
     
     // private config overrides
     layout: 'fit',
@@ -68,9 +73,43 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
         
         // select one duplicate (one of the up to five duplicates we allow to edit)
         this.duplicateIdx = 0;
-        this.applyAction(this.store, 'mergeTheirs');
+        this.applyAction(this.store, this.resolveAction);
         
         this.initColumnModel();
+        
+        this.tbar = [{
+            xtype: 'label',
+            text: _('Action:') + ' '
+        }, {
+            xtype: 'combo',
+            ref: '../actionCombo',
+            typeAhead: true,
+            width: 250,
+            triggerAction: 'all',
+            lazyRender:true,
+            mode: 'local',
+            valueField: 'value',
+            displayField: 'text',
+            value: this.resolveAction,
+            store: new Ext.data.ArrayStore({
+                id: 0,
+                fields: ['value', 'text'],
+                data: [
+                    ['mergeTheirs', _('Merge, keeping existing details')],
+                    ['mergeMine',   _('Merge, keeping my details')],
+                    ['discard',     _('Keep existing record and discard mine')],
+                    ['keep',        _('Keep both records')]
+                ]
+            }),
+            listeners: {
+                scope: this, 
+                select: this.onActionSelect
+            }
+        }/*, {
+            text: _('Apply'),
+            scope: this,
+            handler: this.onApplyAction
+        }*/];
         
         this.on('cellclick', this.onCellClick, this);
         Tine.widgets.dialog.DuplicateResolveGridPanel.superclass.initComponent.call(this);
@@ -115,11 +154,25 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
         if (resolveRecord && dataIndex && dataIndex.match(/clientValue|value\d+/)) {
             resolveRecord.set('finalValue', resolveRecord.get(dataIndex));
             
-            var celEl = this.getView().getCell(rowIndex, this.colModel.getIndexById('finalValue'));
+            var celEl = this.getView().getCell(rowIndex, this.getColumnModel().getIndexById('finalValue'));
             if (celEl) {
                 Ext.fly(celEl).highlight();
             }
         }
+    },
+    
+    /**
+     * handler of apply button
+     */
+    onApplyAction: function() {
+        this.applyAction(this.store, this.actionCombo.getValue());
+    },
+    
+    /**
+     * select handler of action combo
+     */
+    onActionSelect: function(combo, record, idx) {
+        this.applyAction(this.store, record.get('value'));
     },
     
     /**
@@ -133,6 +186,10 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
      * @param {Sting} action
      */
     applyAction: function(store, action) {
+        Tine.log.debug('Tine.widgets.dialog.DuplicateResolveGridPanel::applyAction action: ' + action);
+        
+        this.resolveAction = action;
+        
         store.each(function(resolveRecord) {
             var theirs = resolveRecord.get('value' + this.duplicateIdx),
                 mine = resolveRecord.get('clientValue'),
@@ -140,18 +197,26 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
             
             // undefined theirs value -> keep mine
             if (action == 'mergeTheirs' && String(theirs) === "undefined") {
-                location = 'clientValue';
+                location = 'mine';
             }
             
             // only keep mine if its not undefined
             if (action == 'mergeMine' && String(mine) !== "undefined") {
-                location = 'clientValue';
+                location = 'mine';
             }
             
             resolveRecord.set('finalValue', location === 'mine' ? mine : theirs);
         }, this);
         
         store.commitChanges();
+        
+        var cm = this.getColumnModel();
+        if (cm) {
+            cm.setHidden(cm.getIndexById('clientValue'), action == 'discard');
+            cm.setHidden(cm.getIndexById('finalValue'), action == 'keep');
+            
+            this.getView().refresh();
+        }
     },
     
     /**
@@ -207,7 +272,7 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
         
         try {
             // color management
-            if (dataIndex && dataIndex.match(/clientValue|value\d+/)) {
+            if (dataIndex && dataIndex.match(/clientValue|value\d+/) && !this.resolveAction.match(/(keep|discard)/)) {
                 
                 var action = record.get('finalValue') == value ? 'keep' : 'discard';
                 metaData.css = 'tine-duplicateresolve-' + action + 'value';
