@@ -300,6 +300,11 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $from  = clone $_from;
         $until = clone $from;
         
+        // we don't want to compute ourself
+        $ownEvent = clone $_event;
+        $ownEvent->setRecurId();
+        $_exceptions->addRecord($ownEvent);
+        
         if ($_from->isEarlier($_event->dtstart)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' from is ealier dtstart -> given event is next occurrence');
             
