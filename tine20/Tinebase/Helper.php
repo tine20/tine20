@@ -153,3 +153,24 @@ function replaceSpecialChars($_input)
     
     return preg_replace('/[^a-zA-Z0-9._\-]/', '', $output);
 }
+
+/**
+ * Checks if needle $_str is in haystack $_arr but ignores case.
+ * 
+ * @param array $_arr
+ * @param string $_str
+ * @return boolean
+ */
+function in_array_case($_arr, $_str)
+{
+    if (! is_array($_arr)) {
+        return false;
+    }
+    
+    foreach ($_arr as $s) {
+        if (strcasecmp($_str, $s) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
