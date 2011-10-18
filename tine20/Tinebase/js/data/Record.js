@@ -154,6 +154,18 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     f.hasField = function(n) {
         return p.fields.indexOfKey(n) >= 0;
     };
+    f.getRecordName = function() {
+        return Tine.Tinebase.appMgr.get(p.appName).i18n.n_(p.recordName, p.recordsName, 1);
+    };
+    f.getRecordsName = function() {
+        return Tine.Tinebase.appMgr.get(p.appName).i18n.n_(p.recordName, p.recordsName, 50);
+    };
+    f.getContainerName = function() {
+        return Tine.Tinebase.appMgr.get(p.appName).i18n.n_(p.containerName, p.containersName, 1);
+    };
+    f.getContainersName = function() {
+        return Tine.Tinebase.appMgr.get(p.appName).i18n.n_(p.containerName, p.containersName, 50);
+    };
     Tine.Tinebase.data.RecordMgr.add(f);
     return f;
 };
