@@ -107,27 +107,6 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
     }
     
     /**
-     * test getChildren
-     */
-    public function testGetChildren()
-    {
-        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
-        
-        $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/sogo_connector.vcf', 'r');
-        
-        $contact = Addressbook_Frontend_WebDAV_Contact::create($this->objects['initialContainer'], $vcardStream);
-        
-        $this->objects['contactsToDelete'][] = $contact;
-        
-        $container = new Addressbook_Frontend_WebDAV_Container($this->objects['initialContainer']);
-        
-        $children = $container->getChildren();
-        
-        $this->assertEquals(1, count($children));
-        $this->assertInstanceOf('Addressbook_Frontend_WebDAV_Contact', $children[0]);
-    }
-    
-    /**
      * test getProperties
      */
     public function testGetProperties()
@@ -144,4 +123,47 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
         $this->assertNotEmpty($result['{http://calendarserver.org/ns/}getctag']);
         $this->assertEquals($result['{DAV:}resource-id'], 'urn:uuid:' . $this->objects['initialContainer']->getId());
     }
+    
+    /**
+     * test createFile
+     * 
+     * @return Addressbook_Frontend_WebDAV_Contact
+     */
+    public function testCreateFile()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
+        
+        $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/sogo_connector.vcf', 'r');
+        
+        $container = new Addressbook_Frontend_WebDAV_Container($this->objects['initialContainer']);
+        
+        $id = Tinebase_Record_Abstract::generateUID();
+        
+        $contact = $container->createFile("$id.vcf", $vcardStream);
+        $record = $contact->getRecord();
+        
+        $this->objects['contactsToDelete'][] = $contact;
+        
+        $this->assertInstanceOf('Addressbook_Frontend_WebDAV_Contact', $contact);
+        $this->assertEquals($id, $record->getId(), 'ID mismatch');
+        
+        return $contact;
+    }    
+    
+    /**
+     * test getChildren
+     * 
+     * @depends testCreateFile
+     */
+    public function testGetChildren()
+    {
+        $contact = $this->testCreateFile();
+        
+        $container = new Addressbook_Frontend_WebDAV_Container($this->objects['initialContainer']);
+        
+        $children = $container->getChildren();
+        
+        $this->assertEquals(1, count($children));
+        $this->assertInstanceOf('Addressbook_Frontend_WebDAV_Contact', $children[0]);
+    }    
 }

@@ -90,12 +90,13 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
     public function testCreateContact()
     {
         if (!isset($_SERVER['HTTP_USER_AGENT'])) {
-            $GLOBALS['_SERVER']['HTTP_USER_AGENT'] = 'FooBar User Agent';
+            $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
         }
                 
         $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/sogo_connector.vcf', 'r');
         
-        $contact = Addressbook_Frontend_WebDAV_Contact::create($this->objects['initialContainer'], $vcardStream);
+        $id = Tinebase_Record_Abstract::generateUID();
+        $contact = Addressbook_Frontend_WebDAV_Contact::create($this->objects['initialContainer'], "$id.vcf", $vcardStream);
         
         $this->objects['contactsToDelete'][] = $contact;
         
@@ -125,7 +126,7 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
      * test updating existing contact from sogo connector
      * @depends testCreateContact
      */
-    public function testPutContactFromSogo()
+    public function testPutContactFromThunderbird()
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
