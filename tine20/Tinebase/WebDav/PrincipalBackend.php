@@ -35,6 +35,16 @@ class Tinebase_WebDav_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend
         	$principal['{http://sabredav.org/ns}email-address'] = Tinebase_Core::getUser()->accountEmailAddress;
         }
         
+        if (Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
+            try {
+                $defaultCalendar = Tinebase_Core::getPreference('Calendar')->getValue(Calendar_Preference::DEFAULTCALENDAR);
+                
+                $principal['{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}schedule-inbox-URL']  = $defaultCalendar;
+                $principal['{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}schedule-outbox-URL'] = $defaultCalendar;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' no default calendar found');
+            }
+        }
         $principals[] = $principal;
         
         return $principals;
@@ -53,6 +63,17 @@ class Tinebase_WebDav_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend
         
         if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
         	$principal['{http://sabredav.org/ns}email-address'] = Tinebase_Core::getUser()->accountEmailAddress;
+        }
+        
+        if (Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
+            try {
+                $defaultCalendar = Tinebase_Core::getPreference('Calendar')->getValue(Calendar_Preference::DEFAULTCALENDAR);
+                
+                $principal['{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}schedule-inbox-URL']  = $defaultCalendar;
+                $principal['{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}schedule-outbox-URL'] = $defaultCalendar;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' no default calendar found');
+            }
         }
         
         return $principal;
