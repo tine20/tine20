@@ -389,9 +389,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * test import
      * 
-     * @todo activate merge test
      * @todo test import tags 
-     * @todo split into multiple tests
+     * @todo split into multiple tests?
      */
     public function testImport()
     {
@@ -405,7 +404,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         );
         $result = $this->_instance->importContacts($tempFile->getId(), $definition->getId(), $options);
         
-        $this->assertEquals(2, $result['totalcount'], 'Didn\'t import anything.');
+        $this->assertEquals(2, $result['totalcount'], 'dryrun should detect 2 for import.');
         $this->assertEquals(0, $result['failcount'], 'Import failed for one or more records.');
         $this->assertEquals('Müller, Klaus', $result['results'][0]['n_fileas'], 'file as not found');
         
@@ -419,19 +418,19 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $klaus = $result['results'][0];
 
         $result = $this->_instance->importContacts($tempFile->getId(), $definition->getId(), $options);
-        $this->assertEquals(0, $result['totalcount'], 'Didn\'t import anything.');
-        $this->assertEquals(2, $result['duplicatecount'], 'Didn\'t import anything.');
+        $this->assertEquals(0, $result['totalcount'], 'Do not import anything.');
+        $this->assertEquals(2, $result['duplicatecount'], 'Should find 2 dups.');
         
-//        $klaus['adr_one_locality'] = 'Hamburg';
-//        $clientRecords = array(array(
-//            'recordData'    => $klaus,
-//            'resolveAction' => 'mergeMine',
-//            'index'         => 0,
-//        ));
-//        $result = $this->_instance->importContacts($tempFile->getId(), $definition->getId(), $options, $clientRecords);
-//        $this->assertEquals(1, $result['totalcount'], 'Should overwrite Klaus');
-//        $this->assertEquals(1, $result['duplicatecount'], 'Didn\'t import anything.');
-//        $this->assertEquals('Hamburg', $result['results'][0]['adr_one_locality'], 'file as not found');
+        $klaus['adr_one_locality'] = 'Hamburg';
+        $clientRecords = array(array(
+            'recordData'    => $klaus,
+            'resolveAction' => 'mergeMine',
+            'index'         => 0,
+        ));
+        $result = $this->_instance->importContacts($tempFile->getId(), $definition->getId(), $options, $clientRecords);
+        $this->assertEquals(1, $result['totalcount'], 'Should merge Klaus');
+        $this->assertEquals(1, $result['duplicatecount'], 'Fritz is no duplicate.');
+        $this->assertEquals('Hamburg', $result['results'][0]['adr_one_locality'], 'locality should change');
     }
 
     /**

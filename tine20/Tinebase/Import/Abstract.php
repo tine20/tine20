@@ -155,6 +155,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         while (($recordData = $this->_getRawData($_resource)) !== FALSE) {
             try {
                 if (isset($_clientRecordData[$recordIndex])) {
+                    // client record overwrites record in import data
                     $recordDataToImport = $_clientRecordData[$recordIndex]['recordData'];
                     $resolveAction = $_clientRecordData[$recordIndex]['resolveAction'];
                 } else {
@@ -257,11 +258,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * @param string $_resolveAction
      * @return void
      * @throws Tinebase_Exception_Record_Validation
-     * 
-     * @todo support $_resolveAction: ['mergeTheirs', _('Merge, keeping existing details')],
-                    ['mergeMine',   _('Merge, keeping my details')],
-                    ['discard',     _('Keep existing record and discard mine')],
-                    ['keep',        _('Keep both records')]
      */
     protected function _importRecord($_recordData, $_resolveAction = NULL)
     {
@@ -276,8 +272,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             }
             
-            $record = call_user_func(array($this->_controller, $this->_options['createMethod']), $record);
-            $this->_importResult['results']->addRecord($record);
+            $importedRecord = $this->_importAndResolveConflict($record, $_resolveAction);
+            
+            $this->_importResult['results']->addRecord($importedRecord);
             
             if ($this->_options['dryrun']) {
                 Tinebase_TransactionManager::getInstance()->rollBack();
@@ -289,6 +286,62 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
             throw new Tinebase_Exception_Record_Validation('Imported record is invalid (' . print_r($record->getValidationErrors(), TRUE) . ')');
         }
+    }
+    
+    /**
+     * import record and resolve possible conflicts
+     * 
+     * supports $_resolveAction(s): ['mergeTheirs', ('Merge, keeping existing details')],
+     *                              ['mergeMine',   ('Merge, keeping my details')],
+     *                              ['keep',        ('Keep both records')]
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @param string $_resolveAction
+     * @return Tinebase_Record_Abstract
+     */
+    protected function _importAndResolveConflict(Tinebase_Record_Abstract $_record, $_resolveAction = NULL)
+    {
+        switch ($_resolveAction) {
+            case 'mergeTheirs':
+                $existing = $this->_controller->get($_record->getId());
+                $record = $this->_mergeRecords($existing, $_record);
+                break;
+            case 'mergeMine':
+                $existing = $this->_controller->get($_record->getId());
+                $record = $this->_mergeRecords($_record, $existing);
+                break;
+            case 'keep':
+                // do not check for duplicates
+                $record = call_user_func(array($this->_controller, $this->_options['createMethod']), $_record, FALSE);
+                break;
+            default:
+                $record = call_user_func(array($this->_controller, $this->_options['createMethod']), $_record);
+        }
+        
+        return $record;
+    }
+    
+    /**
+     * merge two records
+     * 
+     * @param Tinebase_Record_Abstract $_recordKeep
+     * @param Tinebase_Record_Abstract $_recordDiscard
+     * @return Tinebase_Record_Abstract
+     * 
+     * @todo move this to Tinebase_Record_Abstract?
+     */
+    protected function _mergeRecords(Tinebase_Record_Abstract $_recordKeep, Tinebase_Record_Abstract $_recordDiscard)
+    {
+        $modlogFields = $_recordKeep->getModlogOmitFields();
+        
+        $diff = $_recordKeep->diff($_recordDiscard);
+        foreach ($diff as $key => $value) {
+            if (empty($_recordKeep->{$key}) && ! in_array($key, $modlogFields)) {
+                $_recordKeep->{$key} = $value;
+            }
+        }
+        
+        return $_recordKeep;
     }
     
     /**
