@@ -558,10 +558,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         console.log(exception);
         var resolveGridPanel = new Tine.widgets.dialog.DuplicateResolveGridPanel({
             app: this.app,
-            recordClass: this.recordClass,
-            recordProxy: this.recordProxy,
-            clientRecord: this.record, //exception.clientRecord,
-            duplicates: exception.duplicates,
+            store: new Tine.widgets.dialog.DuplicateResolveStore({
+                app: this.app,
+                recordClass: this.recordClass,
+                recordProxy: this.recordProxy,
+                clientRecord: this.record, //exception.clientRecord,
+                duplicates: exception.duplicates
+            }),
             fbar: [
                 '->',
                 this.action_cancel,
@@ -571,18 +574,20 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         
         // intercept save handler
         resolveGridPanel.btnSaveAndClose.setHandler(function(btn, e) {
-            var resolveAction = resolveGridPanel.resolveAction;
+            var resolveAction = resolveGridPanel.store.resolveAction;
             
             // action discard -> close window
             if (resolveAction == 'discard') {
                 return this.onCancel();
             }
             
-            this.record = resolveGridPanel.getResolvedRecord();
+            this.record = resolveGridPanel.store.getResolvedRecord();
             this.onRecordLoad();
             
+            console.log('heur');
             mainCardPanel.layout.setActiveItem(this.id);
             resolveGridPanel.doLayout();
+            console.log('da');
             
             this.doDuplicateCheck = false;
             this.onSaveAndClose(btn, e);
