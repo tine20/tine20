@@ -114,6 +114,25 @@ html, body {
     background-image:url(../../images/oxygen/32x32/actions/dialog-ok.png) !important;
 }
 
+.action_next {
+    background-image:url(../../images/oxygen/16x16/actions/go-next.png) !important;
+}
+.x-btn-medium .action_next {
+    background-image:url(../../images/oxygen/22x22/actions/go-next.png) !important;
+}
+.x-btn-large .action_next {
+    background-image:url(../../images/oxygen/32x32/actions/go-next.png) !important;
+}
+
+.action_previous {
+    background-image:url(../../images/oxygen/16x16/actions/go-previous.png) !important;
+}
+.x-btn-medium .action_previous {
+    background-image:url(../../images/oxygen/22x22/actions/go-previous.png) !important;
+}
+.x-btn-large .action_previous {
+    background-image:url(../../images/oxygen/32x32/actions/go-previous.png) !important;
+}
 
 .action_managePermissions {
     background-image:url(../../images/oxygen/16x16/actions/password.png) !important;
