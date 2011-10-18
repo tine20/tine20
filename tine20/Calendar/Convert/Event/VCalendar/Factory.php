@@ -49,4 +49,30 @@ class Calendar_Convert_Event_VCalendar_Factory
 	                 
 	    }
 	}
+	
+	/**
+	 * parse iseragent and return backend and version
+	 * 
+	 * @return array
+	 */
+	static public function parseUserAgent($_userAgent)
+	{
+        // CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)
+        if (preg_match('/^CalendarStore.*Mac OS X\/(?P<version>.*) /', $_userAgent, $matches)) {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX;
+            $version = $matches['version'];
+        
+        // Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13
+        } elseif (preg_match('/ Thunderbird\/(?P<version>.*)/', $_userAgent, $matches)) {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD;
+            $version = $matches['version'];
+        
+        // generic client
+        } else {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC;
+            $version = null;
+        }
+	    
+        return array($backend, $version);
+	}
 }
