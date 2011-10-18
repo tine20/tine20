@@ -33,7 +33,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     public function getProperties($requestedProperties) 
     {
         $properties = array(
-            '{http://calendarserver.org/ns/}getctag' => time(),
+            '{http://calendarserver.org/ns/}getctag' => round(time()/60),
             'id'                => $this->_container->getId(),
             'uri'               => $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name,
         	'{DAV:}resource-id'	=> 'urn:uuid:' . $this->_container->getId(),
