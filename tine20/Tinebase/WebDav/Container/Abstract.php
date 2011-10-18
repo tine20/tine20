@@ -53,30 +53,35 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
     *
     * @param string $name
     * @param resource $vcardData
-    * @return void
+    * @return Sabre_DAV_File
     */
     public function createFile($name, $vobjectData = null) 
     {
         $objectClass = $this->_application->name . '_Frontend_WebDAV_' . $this->_model;
         
-        $object = $objectClass::create($this->_container, $vobjectData);
+        $object = $objectClass::create($this->_container, $name, $vobjectData);
         
-        // this belongs to DAV_Server, but is currently not supported
-        header('ETag: ' . $object->getETag());
-        header('Location: /' . $object->getName());
+        // avoid sending headers during unit tests
+        if (php_sapi_name() != 'cli') {
+            // @todo this belongs to DAV_Server, but is currently not supported
+            header('ETag: ' . $object->getETag());
+            #header('Location: /' . $object->getName());
+        }
+        
+        return $object;
     }
     
     /**
-    * (non-PHPdoc)
-    * @see Sabre_DAV_Collection::getChild()
-    */
+     * (non-PHPdoc)
+     * @see Sabre_DAV_Collection::getChild()
+     */
     public function getChild($_name)
     {
         $modelName = $this->_application->name . '_Model_' . $this->_model;
         $controller = Tinebase_Core::getApplicationInstance($this->_application->name, $this->_model);
         
         try {
-            $object = $_name instanceof $modelName ? $_name : $controller->get(str_replace($this->_suffix, '', $_name));
+            $object = $_name instanceof $modelName ? $_name : $controller->get($this->_getIdFromName($_name));
         } catch (Tinebase_Exception_NotFound $tenf) {
             throw new Sabre_DAV_Exception_FileNotFound('Object not found');
         }
@@ -231,5 +236,18 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
     public function updateProperties($mutations) 
     {
         return $this->carddavBackend->updateAddressBook($this->addressBookInfo['id'], $mutations); 
+    }
+    
+    /**
+     * get id from name => strip of everything after last dot
+     * 
+     * @param  string  $_name  the name for example vcard.vcf
+     * @return string
+     */
+    protected function _getIdFromName($_name)
+    {
+        $id = ($pos = strrpos($_name, '.')) === false ? $_name : substr($_name, 0, $pos);
+        
+        return $id;
     }
 }
