@@ -46,21 +46,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
     {
         $this->_contact = $_contact;
 
-        // AddressBook/6.0 (1043) CardDAVPlugin/182 CFNetwork/520.0.13 Mac_OS_X/10.7.1 (11B26)
-        if (preg_match('/^AddressBook.*Mac_OS_X\/(?P<version>.*) /', $_SERVER['HTTP_USER_AGENT'], $matches)) {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_MACOSX;
-            $version = $matches['version'];
-            
-        // Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13
-        } elseif (preg_match('/ Thunderbird\/(?P<version>.*)/', $_SERVER['HTTP_USER_AGENT'], $matches)) {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO;
-            $version = $matches['version'];
-            
-        // generic client
-        } else {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC;
-            $version = null;
-        }
+        list($backend, $version) = Addressbook_Convert_Contact_VCard_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         
         $this->_converter = Addressbook_Convert_Contact_VCard_Factory::factory($backend, $version);
     }
@@ -73,28 +59,17 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      * @param  Tinebase_Model_Container  $container
      * @param  stream|string           $vcardData
      */
-    public static function create(Tinebase_Model_Container $container, $vcardData)
+    public static function create(Tinebase_Model_Container $container, $name, $vcardData)
     {
-        // AddressBook/6.0 (1043) CardDAVPlugin/182 CFNetwork/520.0.13 Mac_OS_X/10.7.1 (11B26)
-        if (preg_match('/^AddressBook.*Mac_OS_X\/(?P<version>.*) /', $_SERVER['HTTP_USER_AGENT'], $matches)) {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_MACOSX;
-            $version = $matches['version'];
-        
-        // Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13
-        } elseif (preg_match('/ Thunderbird\/(?P<version>.*)/', $_SERVER['HTTP_USER_AGENT'], $matches)) {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO;
-            $version = $matches['version'];
-            
-        // generic client
-        } else {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC;
-            $version = null;
-        }
+        list($backend, $version) = Addressbook_Convert_Contact_VCard_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         
         $converter = Addressbook_Convert_Contact_VCard_Factory::factory($backend, $version);
         
         $contact = $converter->toTine20Model($vcardData);
         $contact->container_id = $container->getId();
+        
+        $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
+        $contact->setId($id);
         
         $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
         
@@ -203,7 +178,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      */
     public function getContentType() {
     
-        return 'text/x-vcard';
+        return 'text/vcard';
     
     }
     
@@ -282,8 +257,9 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
     public function getRecord()
     {
         if (! $this->_contact instanceof Addressbook_Model_Contact) {
-            $this->_contact = str_replace('.vcf', '', $this->_contact);
-            $this->_contact = Addressbook_Controller_Contact::getInstance()->get($this->_contact);
+            $id = ($pos = strpos($this->_contact, '.')) === false ? $this->_contact : substr($this->_contact, 0, $pos);
+            
+            $this->_contact = Addressbook_Controller_Contact::getInstance()->get($this->id);
         }
         
         return $this->_contact;
