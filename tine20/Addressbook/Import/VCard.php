@@ -36,7 +36,6 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         'duplicateCount'    => 0,
         'createMethod'      => 'create',
         'model'             => '',
-        'duplicates'        => 0,
     	'urlIsHome'			=> 0,
     	'mapNicknameToField'=> '',
     );
