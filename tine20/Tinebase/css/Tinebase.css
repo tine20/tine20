@@ -721,6 +721,10 @@ span:hover.tinebase-download-link {
 
 /********* uploads ************/
 
+.x-tinebase-uploading {
+    background-image:url(../../library/ExtJS/resources/images/default/grid/wait.gif) !important;
+}
+
 .x-tinebase-uploadrow .x-grid3-cell-inner {
     background-image:url(../../library/ExtJS/resources/images/default/grid/wait.gif);
     background-repeat: no-repeat;

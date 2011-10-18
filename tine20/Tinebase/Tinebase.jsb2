@@ -612,6 +612,10 @@
           "path": "js/widgets/form/"
         },
         {
+          "text": "FileUploadButton.js",
+          "path": "js/widgets/form/"
+        },
+        {
           "text": "Model.js",
           "path": "js/widgets/persistentfilter/"
         },

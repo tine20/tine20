@@ -141,8 +141,8 @@ Ext.ux.file.BrowsePlugin.prototype = {
         this.button_container.position('relative');
         this.wrap = this.component.el.wrap({cls:'tbody'});
 
-        // NOTE: wrap a button in a toolbar is complex, the toolbar doLayout moves the wrap at the end
-        if (this.component.ownerCt && this.component.ownerCt.el.hasClass('x-toolbar')) {
+        // NOTE: wrap a button is complex, its doLayout moves the wrap
+        if (this.component.ownerCt && this.component.btnEl/* && this.component.ownerCt.el.hasClass('x-toolbar')*/) {
             this.component.ownerCt.on('afterlayout', function() {
                 if (this.wrap.first() !== this.component.el) {
                     this.wrap.insertBefore(this.component.el);
