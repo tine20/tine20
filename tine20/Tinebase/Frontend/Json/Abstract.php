@@ -236,8 +236,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param array $_clientRecordData
      * @return array
      * @throws Tinebase_Exception_NotFound
-     * 
-     * @todo add clientRecords param -> convert to recordset
      */
     protected function _import($_tempFileId, $_importDefinitionId, $_options = array(), $_clientRecordData = array())
     {
@@ -248,20 +246,11 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             throw new Tinebase_Exception_NotFound('No importer found for ' . $definition->name);
         }
         
-        if (! empty($_clientRecordData)) {
-            $clientRecords = new Tinebase_Record_RecordSet($definition->model);
-            foreach ($_clientRecordData as $idx => $recordData) {
-                // @todo add to recordset
-            }
-        } else {
-            $clientRecords = NULL;
-        }
-        
         // extend execution time to 30 minutes
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(1800);
 
         $file = Tinebase_TempFile::getInstance()->getTempFile($_tempFileId);
-        $importResult = $importer->importFile($file->path, $clientRecords);
+        $importResult = $importer->importFile($file->path, $_clientRecordData);
         
         $importResult['results']    = $importResult['results']->toArray();
         $importResult['exceptions'] = $importResult['exceptions']->toArray();

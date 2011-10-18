@@ -36,7 +36,6 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         'duplicateCount'    => 0,
         'createMethod'      => 'create',
         'model'             => '',
-        'duplicates'        => 0,
     	'urlIsHome'			=> 0,
     	'mapNicknameToField'=> '',
     );
@@ -132,9 +131,10 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
      * import the data
      *
      * @param  resource $_resource (if $_filename is a stream)
+     * @param  array $_clientRecordData
      * @return array with Tinebase_Record_RecordSet the imported records (if dryrun) and totalcount 
      */
-    public function import($_resource = NULL)
+    public function import($_resource = NULL, $_clientRecordData = array())
     {
         $this->_initImportResult();
         
@@ -401,23 +401,4 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         
         return $_data;
     }
-}
-
-/**
- * Checks if needle $str is in haystack $arr but ignores case.
- * 
- * @todo move this to Helper.php
- */
-function in_array_case($arr, $str)
-{
-    if (! is_array($arr)) {
-        return false;
-    }
-    
-    foreach ($arr as $s) {
-        if (strcasecmp($str, $s) == 0) {
-            return true;
-        }
-    }
-    return false;
 }

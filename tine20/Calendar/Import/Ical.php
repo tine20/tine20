@@ -91,13 +91,14 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
      * import the data
      *
      * @param  stream $_resource 
+     * @param array $_clientRecordData
      * @return array : 
      *  'results'           => Tinebase_Record_RecordSet, // for dryrun only
      *  'totalcount'        => int,
      *  'failcount'         => int,
      *  'duplicatecount'    => int,
      */
-    public function import($_resource = NULL)
+    public function import($_resource = NULL, $_clientRecordData = array())
     {
         if (! $this->_options['importContainerId']) {
             throw new Tinebase_Exception_InvalidArgument('you need to define a importContainerId');
