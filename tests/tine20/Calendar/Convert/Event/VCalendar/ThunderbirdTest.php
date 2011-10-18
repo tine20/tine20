@@ -14,13 +14,13 @@
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Convert_Event_VCalendar_GenericTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Calendar_Convert_Event_VCalendar_ThunderbirdTest::main');
 }
 
 /**
- * Test class for Calendar_Convert_Event_VCalendar_Generic
+ * Test class for Calendar_Convert_Event_VCalendar_Thunderbird
  */
-class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_TestCase
+class Calendar_Convert_Event_VCalendar_ThunderbirdTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var array test objects
@@ -35,7 +35,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar WebDAV Generic Event Tests');
+		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar WebDAV Thunderbird Event Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
 	}
 
