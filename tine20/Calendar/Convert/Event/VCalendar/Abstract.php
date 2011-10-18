@@ -39,11 +39,17 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     break;
                     
                 case 'DTEND':
-                    $_data['dtend'] = new Tinebase_DateTime($property->getDateTime()->format("c"), $property->getDateTime()->getTimezone());
+                    $dtend = new Tinebase_DateTime($property->getDateTime()->format("c"), $property->getDateTime()->getTimezone());
+                    $dtend->setTimezone('UTC');
+                    
+                    $_data['dtend'] = $dtend;
                     break;
                     
                 case 'DTSTART':
-                    $_data['dtstart'] = new Tinebase_DateTime($property->getDateTime()->format("c"), $property->getDateTime()->getTimezone());
+                    $dtstart = new Tinebase_DateTime($property->getDateTime()->format("c"), $property->getDateTime()->getTimezone());
+                    $dtstart->setTimezone('UTC');
+                    
+                    $_data['dtstart'] = $dtstart;
                     break;
                     
                 case 'UID':
