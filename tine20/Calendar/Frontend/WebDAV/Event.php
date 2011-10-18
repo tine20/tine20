@@ -279,7 +279,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
     protected function _getVEvent()
     {
         if ($this->_vevent == null) {
-            // clone event as fromTine20Model changes time_created somehow
+            // clone event as fromTine20Model changes timezones
             $this->_vevent = $this->_converter->fromTine20Model(clone $this->getRecord());
         }
         
