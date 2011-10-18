@@ -46,21 +46,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
     {
         $this->_event = $_event;
         
-        // CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)
-        if (preg_match('/^CalendarStore.*Mac_OS_X\/(?P<version>.*) /', $_SERVER['HTTP_USER_AGENT'], $matches)) {
-            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX;
-            $version = $matches['version'];
-        
-            // Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13
-        } elseif (preg_match('/ Thunderbird\/(?P<version>.*)/', $_SERVER['HTTP_USER_AGENT'], $matches)) {
-            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD;
-            $version = $matches['version'];
-        
-            // generic client
-        } else {
-            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC;
-            $version = null;
-        }
+        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         
         $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
     }
@@ -73,28 +59,17 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      * @param  Tinebase_Model_Container  $container
      * @param  stream|string             $vobjectData
      */
-    public static function create(Tinebase_Model_Container $container, $vobjectData)
+    public static function create(Tinebase_Model_Container $container, $name, $vobjectData)
     {
-        // CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)
-        if (preg_match('/^CalendarStore.*Mac_OS_X\/(?P<version>.*) /', $_SERVER['HTTP_USER_AGENT'], $matches)) {
-            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX;
-            $version = $matches['version'];
-        
-            // Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13
-        } elseif (preg_match('/ Thunderbird\/(?P<version>.*)/', $_SERVER['HTTP_USER_AGENT'], $matches)) {
-            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD;
-            $version = $matches['version'];
-        
-            // generic client
-        } else {
-            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC;
-            $version = null;
-        }
+        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
         
         $event = $converter->toTine20Model($vobjectData);
         $event->container_id = $container->getId();
+        
+        $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
+        $event->setId($id);
         
         $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
         
@@ -110,7 +85,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     public function delete() 
     {
-        Calendar_Controller_MSEventFacade::getInstance()->delete($this->_event);
+        $id = $this->_event instanceof Calendar_Model_Event ? $this->_event->getId() : $this->_event;
+        
+        Calendar_Controller_MSEventFacade::getInstance()->delete($id);
     }
     
     /**
@@ -214,7 +191,11 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     public function getETag() 
     {
-        return '"' . md5($this->getRecord()->getId() . $this->getLastModified()) . '"';
+        $etag = '"' . md5($this->getRecord()->getId() . $this->getLastModified()) . '"'; 
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " ETAG: $etag => {$this->getRecord()->getId()} / {$this->getLastModified()} " . date_default_timezone_get());
+        
+        return $etag;
     }
     
     /**
@@ -224,6 +205,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     public function getLastModified() 
     {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " record: " . print_r($this->getRecord()->toArray(), true));
         return ($this->getRecord()->last_modified_time instanceof Tinebase_DateTime) ? $this->getRecord()->last_modified_time->toString() : $this->getRecord()->creation_time->toString();
     }
     
@@ -281,8 +263,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
     public function getRecord()
     {
         if (! $this->_event instanceof Calendar_Model_Event) {
-            $this->_event = str_replace('.ics', '', $this->_event);
-            $this->_event = Calendar_Controller_MSEventFacade::getInstance()->get($this->_event);
+            $id = ($pos = strpos($this->_event, '.')) === false ? $this->_event : substr($this->_event, 0, $pos);
+            
+            $this->_event = Calendar_Controller_MSEventFacade::getInstance()->get($id);
         }
         
         return $this->_event;
@@ -296,7 +279,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
     protected function _getVEvent()
     {
         if ($this->_vevent == null) {
-            $this->_vevent = $this->_converter->fromTine20Model($this->getRecord());
+            // clone event as fromTine20Model changes time_created somehow
+            $this->_vevent = $this->_converter->fromTine20Model(clone $this->getRecord());
         }
         
         return $this->_vevent;
