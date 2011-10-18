@@ -42,8 +42,8 @@ class Tinebase_WebDav_Root extends Sabre_DAV_SimpleCollection
                 $webdavApps
             ),
             new Sabre_DAV_SimpleCollection('principals', array(
-                new Sabre_DAVACL_PrincipalCollection(new Tinebase_WebDav_Principals(), 'principals/users'),
-                new Sabre_DAVACL_PrincipalCollection(new Tinebase_WebDav_Principals(), 'principals/groups')
+                new Sabre_DAVACL_PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), 'principals/users'),
+                new Sabre_DAVACL_PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), 'principals/groups')
             )),
             
         ));

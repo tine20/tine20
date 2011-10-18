@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  WebDav
  */
-class Tinebase_WebDav_Principals implements Sabre_DAVACL_IPrincipalBackend
+class Tinebase_WebDav_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend
 {
     /**
      * (non-PHPdoc)
