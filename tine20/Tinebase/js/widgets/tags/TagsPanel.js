@@ -29,7 +29,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
     /**
      * @cfg {Array} tags Initial tags
      */
-    tags: [],
+    tags: null,
     /**
      * @var {Ext.data.JsonStore}
      * Holds tags of the record this panel is displayed for
