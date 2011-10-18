@@ -744,4 +744,15 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $this->testDuplicateCheck(FALSE);
     }
+
+    /**
+     * testImportDefinitionsInRegistry
+     */
+    public function testImportDefinitionsInRegistry()
+    {
+        $registryData = $this->_instance->getRegistryData();
+        
+        $this->assertTrue(is_array($registryData['importDefinitions']['results'][0]['plugin_options']));
+        $this->assertEquals('Addressbook_Model_Contact', $registryData['importDefinitions']['results'][0]['plugin_options']['model']);
+    }
 }
