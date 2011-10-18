@@ -83,7 +83,7 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
      */
     public function getFeatures() {
 
-        return array('calendar-access', 'calendar-proxy');
+        return array('calendar-access', 'calendar-auto-schedule', 'calendar-proxy');
 
     }
 
