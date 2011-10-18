@@ -107,27 +107,6 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test getChildren
-     */
-    public function testGetChildren()
-    {
-        $GLOBALS['_SERVER']['HTTP_USER_AGENT'] = 'FooBar User Agent';
-        
-        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
-        
-        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], $vcalendarStream);
-        
-        $this->objects['eventsToDelete'][] = $event;
-        
-        $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
-        
-        $children = $container->getChildren();
-        
-        $this->assertEquals(1, count($children));
-        $this->assertInstanceOf('Calendar_Frontend_WebDAV_Event', $children[0]);
-    }
-    
-    /**
      * test getProperties
      */
     public function testGetProperties()
@@ -143,5 +122,48 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
        
         $this->assertNotEmpty($result['{http://calendarserver.org/ns/}getctag']);
         $this->assertEquals($result['{DAV:}resource-id'], 'urn:uuid:' . $this->objects['initialContainer']->getId());
+    }
+    
+    /**
+     * test getCreateFile
+     * 
+     * @return Calendar_Frontend_WebDAV_Event
+     */
+    public function testCreateFile()
+    {
+        $GLOBALS['_SERVER']['HTTP_USER_AGENT'] = 'FooBar User Agent';
+        
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
+        
+        $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
+        
+        $id = Tinebase_Record_Abstract::generateUID();
+        
+        $event = $container->createFile("$id.ics", $vcalendarStream);
+        $record = $event->getRecord();
+        
+        $this->objects['eventsToDelete'][] = $event;
+        
+        $this->assertInstanceOf('Calendar_Frontend_WebDAV_Event', $event);
+        $this->assertEquals($id, $record->getId(), 'ID mismatch');
+        
+        return $event;
+    }
+    
+    /**
+     * test getChildren
+     * 
+     * @depends testCreateFile
+     */
+    public function testGetChildren()
+    {
+        $event = $this->testCreateFile();
+        
+        $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
+        
+        $children = $container->getChildren();
+        
+        $this->assertEquals(1, count($children));
+        $this->assertInstanceOf('Calendar_Frontend_WebDAV_Event', $children[0]);
     }
 }

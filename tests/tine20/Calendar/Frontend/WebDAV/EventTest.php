@@ -90,12 +90,13 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
     public function testCreateEvent()
     {
         if (!isset($_SERVER['HTTP_USER_AGENT'])) {
-            $GLOBALS['_SERVER']['HTTP_USER_AGENT'] = 'FooBar User Agent';
+            $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
         }
         
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
         
-        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], $vcalendarStream);
+        $id = Tinebase_Record_Abstract::generateUID();
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendarStream);
         
         $this->objects['eventsToDelete'][] = $event;
         
@@ -120,10 +121,48 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * test updating existing contact
+     * test updating existing event
+     */
+    public function testPutEventFromThunderbird()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+        
+        $event = $this->testCreateEvent();
+        
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
+        
+        $event->put($vcalendarStream);
+        
+        $record = $event->getRecord();
+        
+        $this->assertEquals('New Event', $record->summary);
+    }
+    
+    /**
+     * test updating existing event
+     */
+    public function testPutEventFromMacOsX()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+        
+        $event = $this->testCreateEvent();
+    
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
+    
+        $event->put($vcalendarStream);
+    
+        $record = $event->getRecord();
+    
+        $this->assertEquals('New Event', $record->summary);
+    }
+    
+    /**
+     * test updating existing event
      */
     public function testPutEventFromGenericClient()
     {
+        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
+        
         $event = $this->testCreateEvent();
         
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
