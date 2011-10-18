@@ -26,12 +26,17 @@ class Tinebase_WebDav_Principals implements Sabre_DAVACL_IPrincipalBackend
     {
         $principals = array();
         
-        $principals[] = array(
+        $principal = array(
             'uri'                                   => 'principals/users/' . Tinebase_Core::getUser()->contact_id,
-            '{http://sabredav.org/ns}email-address' => Tinebase_Core::getUser()->accountEmailAddress,
             '{DAV:}displayname'                     => Tinebase_Core::getUser()->accountDisplayName
         );
-
+        
+        if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+        	$principal['{http://sabredav.org/ns}email-address'] = Tinebase_Core::getUser()->accountEmailAddress;
+        }
+        
+        $principals[] = $principal;
+        
         return $principals;
     }
     
@@ -41,11 +46,16 @@ class Tinebase_WebDav_Principals implements Sabre_DAVACL_IPrincipalBackend
      */
     public function getPrincipalByPath($path) 
     {
-        return array(
+        $principal = array(
             'uri'                                   => 'principals/users/' . Tinebase_Core::getUser()->contact_id,
-            '{http://sabredav.org/ns}email-address' => Tinebase_Core::getUser()->accountEmailAddress,
             '{DAV:}displayname'                     => Tinebase_Core::getUser()->accountDisplayName
         );
+        
+        if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+        	$principal['{http://sabredav.org/ns}email-address'] = Tinebase_Core::getUser()->accountEmailAddress;
+        }
+        
+        return $principal;
     }
     
     /**
