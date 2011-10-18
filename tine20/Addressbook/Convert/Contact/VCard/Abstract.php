@@ -200,7 +200,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                     }
                     
                     break;
-                    
+                
                 case 'URL':
                     switch ($property['TYPE']) {
                         case 'home':
