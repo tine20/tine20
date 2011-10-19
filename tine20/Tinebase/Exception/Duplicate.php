@@ -87,7 +87,8 @@ class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
     {
         return array(
             'code'		   => $this->getCode(),
-            'clientRecord' => $this->_clientRecordToArray(),
+            'message'	   => $this->getMessage(),
+        	'clientRecord' => $this->_clientRecordToArray(),
             'duplicates'   => $this->_duplicatesToArray(),
         );
     }
@@ -96,6 +97,8 @@ class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
      * convert client record to array
      * 
      * @return array
+     * 
+     * @todo use json converter
      */
     protected function _clientRecordToArray()
     {
