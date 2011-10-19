@@ -74,22 +74,4 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time'
     );
-    
-    /**
-    * returns array with record related properties
-    *
-    * @param boolean $_recursive
-    * @return array
-    */
-    public function toArray($_recursive = TRUE)
-    {
-        $result = parent::toArray($_recursive);
-        
-        // convert plugin_options to array
-        $result['plugin_options'] = (empty($result['plugin_options'])) 
-            ? array()
-            : Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($this)->toArray();
-        
-        return $result;
-    }
 }
