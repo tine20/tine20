@@ -287,9 +287,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         }
         
-        if (isset($_recordData['tags']) && is_array($_recordData['tags']) && ! empty($_recordData['tags'])) {
-            $_record->tags = $this->_addSharedTags($_recordData['tags']);
-        }
+        $this->_handleTags($_record);
         $importedRecord = $this->_importAndResolveConflict($_record, $_resolveAction);
         
         $this->_importResult['results']->addRecord($importedRecord);
@@ -299,6 +297,20 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         }
         
         $this->_importResult['totalcount']++;
+    }
+    
+    /**
+     * handle record tags
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     */
+    protected function _handleTags($_record)
+    {
+        if (isset($_record->tags) && is_array($_record->tags)) {
+            $_record->tags = $this->_addSharedTags($_record->tags);
+        } else {
+            $_record->tags = NULL;
+        }
     }
     
     /**
