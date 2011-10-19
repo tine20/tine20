@@ -68,6 +68,10 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         $event = $converter->toTine20Model($vobjectData);
         $event->container_id = $container->getId();
         
+        if (empty($event->organizer)) {
+            $event->organizer = Tinebase_Core::getUser()->contact_id;
+        }
+        
         $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
         $event->setId($id);
         
@@ -191,11 +195,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     public function getETag() 
     {
-        $etag = '"' . md5($this->getRecord()->getId() . $this->getLastModified()) . '"'; 
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " ETAG: $etag => {$this->getRecord()->getId()} / {$this->getLastModified()} " . date_default_timezone_get());
-        
-        return $etag;
+        return '"' . md5($this->getRecord()->getId() . $this->getLastModified()) . '"'; 
     }
     
     /**
@@ -205,7 +205,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     public function getLastModified() 
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " record: " . print_r($this->getRecord()->toArray(), true));
         return ($this->getRecord()->last_modified_time instanceof Tinebase_DateTime) ? $this->getRecord()->last_modified_time->toString() : $this->getRecord()->creation_time->toString();
     }
     
