@@ -45,27 +45,6 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
     protected $_headline = array();
     
     /**
-     * @var array
-     */
-    protected $_options = array(
-        'maxLineLength'     => 8000,
-        'delimiter'         => ',',
-        'enclosure'         => '"',
-        'escape'            => '\\',
-        'encoding'          => 'UTF-8',
-        'encodingTo'        => 'UTF-8',
-        'dryrun'            => FALSE,
-        'duplicateCount'    => 0,
-        'createMethod'      => 'create',
-        'model'             => '',
-        'mapping'           => '',
-        'headline'          => 0,
-        'use_headline'      => 1,
-        'shared_tags'       => 'onlyexisting',
-        'tags'              => array(),
-    );
-    
-    /**
      * special delimiters
      * 
      * @var array
@@ -81,6 +60,18 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
      */
     public function __construct(array $_options = array())
     {
+        $this->_options = array_merge($this->_options, array(
+            'maxLineLength'     => 8000,
+            'delimiter'         => ',',
+            'enclosure'         => '"',
+            'escape'            => '\\',
+            'encoding'          => 'UTF-8',
+            'encodingTo'        => 'UTF-8',
+            'mapping'           => '',
+            'headline'          => 0,
+            'use_headline'      => 1,
+        ));
+        
         parent::__construct($_options);
         
         if (empty($this->_options['model'])) {
