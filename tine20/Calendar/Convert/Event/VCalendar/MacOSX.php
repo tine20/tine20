@@ -18,5 +18,27 @@
  */
 class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCalendar_Abstract
 {
-    protected $_emptyArray = array(); 
+    protected $_supportedFields = array(
+        'seq',
+        'dtend',
+        'transp',
+        'class',
+        'description',
+        #'geo',
+        'location',
+        'organizer',
+        'priority',
+        'summary',
+        'url',
+        #'uid',
+        'attendee',
+        #'alarms',
+        #'tags',
+        'dtstart',
+        #'exdate',
+        #'rrule',
+        'is_all_day_event',
+        #'rrule_until',
+        #'originator_tz'
+    );
 }
