@@ -89,6 +89,7 @@ class Tinebase_Exception_Data extends Tinebase_Exception
     {
         $this->_exceptionData->setTimezone(Tinebase_Core::get('userTimeZone'));
         return array(
+        	'code'		    => $this->getCode(),
             'exceptionData' => $this->_exceptionData->toArray()
         );
     }

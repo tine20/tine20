@@ -86,6 +86,7 @@ class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
     public function toArray()
     {
         return array(
+            'code'		   => $this->getCode(),
             'clientRecord' => $this->_clientRecordToArray(),
             'duplicates'   => $this->_duplicatesToArray(),
         );
