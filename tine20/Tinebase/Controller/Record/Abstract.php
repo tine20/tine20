@@ -430,7 +430,7 @@ abstract class Tinebase_Controller_Record_Abstract
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
             throw $e;
         }
         
