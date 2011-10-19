@@ -5,6 +5,7 @@
     <type>import</type>
     <headline>1</headline>
     <dryrun>0</dryrun>
+    <extension>csv</extension>
     <mapping>
         <field>
             <source>firstname</source>

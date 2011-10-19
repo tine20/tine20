@@ -8,6 +8,7 @@
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
     <description>google adb import</description>
+    <extension>csv</extension>
     <mapping>
         <field>
             <source>Given Name</source>
