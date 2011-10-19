@@ -1170,7 +1170,7 @@ class Setup_Controller
     protected function _installApplication($_xml, $_options = null)
     {
         if ($this->_backend === NULL) {
-            throw new Setup_Exception('Need configured backend for install.');
+            throw new Setup_Exception('Need configured and working database backend for install.');
         }
         
         try {
