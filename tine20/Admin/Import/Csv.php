@@ -65,12 +65,12 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
      * import single record (create password if in data)
      *
      * @param Tinebase_Record_Abstract $_record
-     * @param string $_resolveAction
+     * @param string $_resolveStrategy
      * @param array $_recordData
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _importRecord($_record, $_resolveAction = NULL, $_recordData = array())
+    protected function _importRecord($_record, $_resolveStrategy = NULL, $_recordData = array())
     {
         if ($_record instanceof Tinebase_Model_FullUser && $this->_controller instanceof Admin_Controller_User) {
             
@@ -128,7 +128,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
                 throw new Tinebase_Exception_Record_Validation('Imported record is invalid.');
             }
         } else {
-            $record = parent::_importRecord($_record, $_resolveAction, $_recordData);
+            $record = parent::_importRecord($_record, $_resolveStrategy, $_recordData);
         }
         
         return $record;

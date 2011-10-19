@@ -275,12 +275,12 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * import single record
      *
      * @param Tinebase_Record_Abstract $_record
-     * @param string $_resolveAction
+     * @param string $_resolveStrategy
      * @param array $_recordData
      * @return void
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _importRecord($_record, $_resolveAction = NULL, $_recordData = array())
+    protected function _importRecord($_record, $_resolveStrategy = NULL, $_recordData = array())
     {
         $_record->isValid(TRUE);
         
@@ -289,7 +289,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         }
         
         $this->_handleTags($_record);
-        $importedRecord = $this->_importAndResolveConflict($_record, $_resolveAction);
+        $importedRecord = $this->_importAndResolveConflict($_record, $_resolveStrategy);
         
         $this->_importResult['results']->addRecord($importedRecord);
         
@@ -317,17 +317,17 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
      * import record and resolve possible conflicts
      * 
-     * supports $_resolveAction(s): ['mergeTheirs', ('Merge, keeping existing details')],
+     * supports $_resolveStrategy(s): ['mergeTheirs', ('Merge, keeping existing details')],
      *                              ['mergeMine',   ('Merge, keeping my details')],
      *                              ['keep',        ('Keep both records')]
      * 
      * @param Tinebase_Record_Abstract $_record
-     * @param string $_resolveAction
+     * @param string $_resolveStrategy
      * @return Tinebase_Record_Abstract
      */
-    protected function _importAndResolveConflict(Tinebase_Record_Abstract $_record, $_resolveAction = NULL)
+    protected function _importAndResolveConflict(Tinebase_Record_Abstract $_record, $_resolveStrategy = NULL)
     {
-        switch ($_resolveAction) {
+        switch ($_resolveStrategy) {
             case 'mergeTheirs':
                 $existing = $this->_controller->get($_record->getId());
                 $record = $this->_mergeRecords($existing, $_record);
