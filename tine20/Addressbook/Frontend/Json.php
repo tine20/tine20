@@ -269,15 +269,16 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
+        $definitionConverter = new Tinebase_Convert_ImportExportDefinition_Json();
         $importDefinitions = $this->_getImportDefinitions();
         $defaultDefinition = $this->_getDefaultImportDefinition($importDefinitions);
         
         $registryData = array(
             'Salutations'               => $this->getSalutations(),
             'defaultAddressbook'        => $this->getDefaultAddressbook(),
-            'defaultImportDefinition'   => $this->_convertImportDefinitionToJson($defaultDefinition),
+            'defaultImportDefinition'   => $definitionConverter->fromTine20Model($defaultDefinition),
             'importDefinitions'         => array(
-                'results'               => $this->_convertImportDefinitionToJson($importDefinitions),
+                'results'               => $definitionConverter->fromTine20RecordSet($importDefinitions),
                 'totalcount'            => count($importDefinitions),
             ),
         );        
@@ -325,34 +326,5 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         return $defaultDefinition;
-    }
-    
-    /**
-     * convertImportDefinitionToJson
-     * 
-     * @param Tinebase_Record_RecordSet|Tinebase_Model_ImportExportDefinition
-     * @return array
-     * 
-     * @todo use converter for this
-     * @todo generalize this
-     */
-    protected function _convertImportDefinitionToJson($_definitions)
-    {
-        if ($_definitions === NULL) {
-            return array();
-        }
-        
-        $definitions = ($_definitions instanceof Tinebase_Record_RecordSet) ? $_definitions : array($_definitions);
-        
-        $definitionsArray = array();
-        foreach ($definitions as $definition) {
-            // convert plugin_options to array
-            $definition->plugin_options = (empty($definition->plugin_options))
-                ? array()
-                : Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($definition)->toArray();
-            $definitionsArray[] = $definition->toArray();
-        }
-        
-        return ($_definitions instanceof Tinebase_Record_RecordSet) ? $definitionsArray : $definitionsArray[0];
     }
 }
