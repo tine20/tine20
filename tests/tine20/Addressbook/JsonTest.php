@@ -399,9 +399,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         // import again without dryrun
         $result = $this->_importHelper(array('dryrun' => 0));
         $this->assertEquals(2, $result['totalcount'], 'Didn\'t import anything.');
-        foreach ($result['results'] as $contact) {
-            $this->_contactIdsToDelete[] = $contact['id'];
-        }
         $klaus = $result['results'][0];
 
         // import with duplicates
@@ -441,8 +438,34 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'container_id'  => $this->container->getId(),
         ));
         $result = $this->_instance->importContacts($tempFile->getId(), $definition->getId(), $options, $_clientRecords);
+        if (isset($_additionalOptions['dryrun']) && $_additionalOptions['dryrun'] === 0) {
+            foreach ($result['results'] as $contact) {
+                $this->_contactIdsToDelete[] = $contact['id'];
+            }
+        }
         
         return $result;
+    }
+    
+    /**
+     * testImportWithTags
+     */
+    public function testImportWithTags()
+    {
+        $options = array(
+        	'dryrun'     => 0,
+        	'tags'       => array(
+        	    array(
+        	        'name'	        => 'Importliste (<substitute>currentDate</substitute>)',
+        	        'description'	=> 'Kontakt der Importliste vom <substitute>currentDate</substitute> um <substitute>currentTime</substitute> Uhr. Bearbeiter: <substitute>currentUser.fullname</substitute>',
+        	        'contexts'		=> array('Addressbook'),
+        	        'type'			=> Tinebase_Model_Tag::TYPE_SHARED,
+        	    )
+        	),
+        );
+        $result = $this->_importHelper($options);
+        
+        //print_r($result);
     }
 
     /**
