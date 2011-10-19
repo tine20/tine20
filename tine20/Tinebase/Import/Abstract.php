@@ -397,7 +397,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         }        
 
         $this->_importResult['exceptions']->addRecord(new Tinebase_Model_ImportException(array(
-            'exception'     => $exception,
+            'code'		    => $_e->getCode(),
+            'message'	    => $_e->getMessage(),
+        	'exception'     => $exception,
             'record_idx'    => $_recordIndex,
         )));
     }
