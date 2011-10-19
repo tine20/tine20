@@ -264,14 +264,13 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $record = new $this->_options['model']($_recordData, TRUE);
         
         if ($record->isValid()) {
-            if (! $this->_options['dryrun']) {
-                if (isset($_recordData['tags']) && is_array($_recordData['tags'])) {
-                    $record->tags = $this->_addSharedTags($_recordData['tags']);
-                }
-            } else {
+            if ($this->_options['dryrun']) {
                 $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             }
             
+            if (isset($_recordData['tags']) && is_array($_recordData['tags']) && ! empty($_recordData['tags'])) {
+                $record->tags = $this->_addSharedTags($_recordData['tags']);
+            }
             $importedRecord = $this->_importAndResolveConflict($record, $_resolveAction);
             
             $this->_importResult['results']->addRecord($importedRecord);
