@@ -87,10 +87,25 @@ class Tinebase_Exception_Data extends Tinebase_Exception
      */
     public function toArray()
     {
-        $this->_exceptionData->setTimezone(Tinebase_Core::get('userTimeZone'));
         return array(
             'code'		    => $this->getCode(),
-            'exceptionData' => $this->_exceptionData->toArray()
+            'message'		=> $this->getMessage(),
+            'exceptionData' => $this->_dataToArray(),
         );
+    }
+    
+    /**
+    * get exception data as array
+    *
+    * @return array
+    *
+    * @todo check if model has a specific json converter (use factory?)
+    */
+    protected function _dataToArray()
+    {
+        $converter = new Tinebase_Convert_Json();
+        $result = $converter->fromTine20RecordSet($this->_exceptionData);
+    
+        return $result;
     }
 }

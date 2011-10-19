@@ -171,7 +171,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                     
                 if (! empty($recordDataToImport) || $resolveAction === 'discard') {
                     $recordToImport = $this->_createRecordToImport($recordDataToImport);
-                    $importedRecord = $this->_importRecord($recordToImport, $resolveAction);
+                    $importedRecord = $this->_importRecord($recordToImport, $resolveAction, $recordDataToImport);
                 }
                     
             } catch (Exception $e) {
@@ -276,10 +276,11 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      *
      * @param Tinebase_Record_Abstract $_record
      * @param string $_resolveAction
+     * @param array $_recordData
      * @return void
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _importRecord($_record, $_resolveAction = NULL)
+    protected function _importRecord($_record, $_resolveAction = NULL, $_recordData = array())
     {
         $_record->isValid(TRUE);
         
@@ -287,9 +288,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         }
         
-        if (isset($_recordData['tags']) && is_array($_recordData['tags']) && ! empty($_recordData['tags'])) {
-            $_record->tags = $this->_addSharedTags($_recordData['tags']);
-        }
+        $this->_handleTags($_record);
         $importedRecord = $this->_importAndResolveConflict($_record, $_resolveAction);
         
         $this->_importResult['results']->addRecord($importedRecord);
@@ -299,6 +298,20 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         }
         
         $this->_importResult['totalcount']++;
+    }
+    
+    /**
+     * handle record tags
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     */
+    protected function _handleTags($_record)
+    {
+        if (isset($_record->tags) && is_array($_record->tags)) {
+            $_record->tags = $this->_addSharedTags($_record->tags);
+        } else {
+            $_record->tags = NULL;
+        }
     }
     
     /**
