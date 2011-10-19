@@ -28,7 +28,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
         $this->_version = $_version;
     }
         
-    protected function _parseVevent(Sabre_VObject_Component $_vevent, &$_data)
+    protected function _parseVevent(Sabre_VObject_Component $_vevent, Calendar_Model_Event $_event)
     {
         foreach($_vevent->children() as $property) {
             switch($property->name) {
@@ -38,23 +38,91 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     // do nothing
                     break;
                     
+                case 'ATTENDEE':
+                    $attendees = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+                    
+                    foreach($property as $attendee) {
+                        if (preg_match('/mailto:(?P<email>.*)/', $attendee->value, $matches)) {
+                            $name    = isset($attendee['CN']) ? $attendee['CN'] : $matches['email'];
+                            $contact = $this->_resolveEmailToContact($matches['email'], $name);
+                            
+                            $newAttendee = new Calendar_Model_Attender(array(
+                                'user_id'   => $contact->getId(),
+                                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                            ));
+                            
+                            if (in_array($attendee['ROLE'], array(Calendar_Model_Attender::ROLE_OPTIONAL, Calendar_Model_Attender::ROLE_REQUIRED))) {
+                                $newAttendee->role = $attendee['ROLE'];
+                            } else {
+                                $newAttendee->role = Calendar_Model_Attender::ROLE_REQUIRED;
+                            }
+                            
+                            if (in_array($attendee['STATUS_PARTSTAT'], array(Calendar_Model_Attender::STATUS_ACCEPTED, 
+                                Calendar_Model_Attender::STATUS_DECLINED, 
+                                Calendar_Model_Attender::STATUS_NEEDSACTION, 
+                                Calendar_Model_Attender::STATUS_TENTATIVE)
+                            )) {
+                                $newAttendee->status = $attendee['STATUS_PARTSTAT'];
+                            } else {
+                                $newAttendee->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+                            }
+                            
+                            $attendees->addRecord($newAttendee);
+                        }
+                    }
+                    
+                    $_event->attendee = $attendees;
+                    
+                    break;
+                    
+                case 'CLASS':
+                    if (in_array($property->value, array(Calendar_Model_Event::CLASS_PRIVATE, Calendar_Model_Event::CLASS_PUBLIC))) {
+                        $_event->class = $property->value;
+                    } else {
+                        $_event->class = Calendar_Model_Event::CLASS_PUBLIC;
+                    }
+                    break;
+                    
                 case 'DTEND':
                     $dtend = new Tinebase_DateTime($property->getDateTime()->format("c"), $property->getDateTime()->getTimezone());
                     $dtend->setTimezone('UTC');
                     
-                    $_data['dtend'] = $dtend;
+                    $_event->dtend = $dtend;
                     break;
                     
                 case 'DTSTART':
                     $dtstart = new Tinebase_DateTime($property->getDateTime()->format("c"), $property->getDateTime()->getTimezone());
                     $dtstart->setTimezone('UTC');
                     
-                    $_data['dtstart'] = $dtstart;
+                    $_event->dtstart = $dtstart;
                     break;
                     
+                case 'LOCATION':
                 case 'UID':
+                case 'SEQ':
                 case 'SUMMARY':
-                    $_data[strtolower($property->name)] = $property->value;
+                    $key = strtolower($property->name);
+                    $_event->$key = $property->value;
+                    break;
+                    
+                // @todo add organizer to attendees
+                case 'ORGANIZER':
+                    if (preg_match('/mailto:(?P<email>.*)/', $property->value, $matches)) {
+                        $name = isset($property['CN']) ? $property['CN'] : $matches['email'];
+                        
+                        $_event->organizer = $this->_resolveEmailToContact($matches['email'], $name);
+                    }
+                    break;
+                
+                case 'TRANSP':
+                    if (in_array($property->value, array(Calendar_Model_Event::TRANSP_OPAQUE, Calendar_Model_Event::TRANSP_TRANSP))) {
+                        $_event->transp = $property->value;
+                    } else {
+                        $_event->transp = Calendar_Model_Event::TRANSP_TRANSP;
+                    }
+                    break;
+                    
+                case 'CATEGORIES':
                     break;
                     
                 default:
@@ -62,6 +130,49 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     break;
             }
         }
+        
+    }
+    
+    protected function _resolveEmailToContact($_email, $_fn)
+    {
+        // search contact from addressbook using the emailaddress
+        $filterArray = array(
+            array(
+                'field'     => 'containerType',
+                'operator'  => 'equals',
+                'value'     => 'all'
+            ),
+            array('condition' => 'OR', 'filters' => array(
+                array(
+                    'field'     => 'email',
+                    'operator'  => 'equals',
+                    'value'     => $_email
+                ),
+                array(
+                    'field'     => 'email_home',
+                    'operator'  => 'equals',
+                    'value'     => $_email
+                )
+            ))
+        );
+         
+        $contacts = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter($filterArray));
+
+        // @todo filter by fn
+        if(count($contacts) > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of contacts " . count($contacts));
+            return $contacts->getFirstRecord();
+        }
+        
+        $contact = new Addressbook_Model_Contact(array(
+            'n_family' => $_fn,
+        	'email'    => $_email,
+            'note'     => 'added by syncronisation'
+        ));
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . print_r($contact->toArray(), true));
+        
+        return Addressbook_Controller_Contact::getInstance()->create($contact);
     }
     
     /**
@@ -89,8 +200,6 @@ class Calendar_Convert_Event_VCalendar_Abstract
             $event = new Calendar_Model_Event(null, false);
         }
         
-        $data = array();
-
         foreach($vcalendar->children() as $property) {
             
             switch($property->name) {
@@ -100,7 +209,36 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     break;
                     
                 case 'VEVENT':
-                    $this->_parseVevent($property, $data);
+                    // keep old attendees
+                    if (isset($event->attendee) && $event->attendee instanceof Tinebase_Record_RecordSet) {
+                        $oldAttendees = clone $event->attendee;
+                    }
+                    
+                    // @todo overwrite supported fields with null
+                    $this->_parseVevent($property, $event);
+                    
+                    // merge old and new attendees
+                    if (isset($oldAttendees) && isset($event->attendee)) {
+                        foreach ($event->attendee as $id => $attendee) {
+                            
+                            // detect if the contact_id is already attending the event
+                            $matchingAttendees = $oldAttendees
+                                ->filter('user_type', $attendee->user_type)
+                                ->filter('user_id',   $attendee->user_id);
+                            
+                            if(count($matchingAttendees) > 0) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updating attendee");
+                                $oldAttendee = $matchingAttendees[0];
+                                $oldAttendee->role = $attendee->role;
+                                $oldAttendee->status = $attendee->status;
+                                
+                                $event->attendee[$id] = $oldAttendee;
+                            }
+                        }
+                        
+                        unset($oldAttendees);
+                    }
+                    
                     break;
                     
                 default:
@@ -109,9 +247,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' data ' . print_r($data, true));
-                
-        $event->setFromArray($data);
+        $event->isValid(true);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' data ' . print_r($event->toArray(), true));
         
