@@ -288,20 +288,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _recordToJson($_record)
     {
-        $_record->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-        $_record->bypassFilters = true;
+        $converter = new Tinebase_Convert_Json();
+        $result = $converter->fromTine20Model($_record);
         
-        $recordArray = $_record->toArray();
-
-        if ($_record->has('container_id')) {
-            $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
-            
-            $recordArray['container_id'] = $container->toArray();
-            $recordArray['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $_record->container_id)->toArray();
-            $recordArray['container_id']['path'] = $container->getPath();
-        }
-
-        return $recordArray;
+        return $result;
     }
 
     /**
@@ -313,26 +303,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL)
     {       
-        if (count($_records) == 0) {
-            return array();
-        }
-        
-        if ($_records->getFirstRecord()->has('container_id')) {
-            Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
-        }
-
-        if ($_records->getFirstRecord()->has('tags')) {
-            Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
-        }
-        
-        if (array_key_exists($_records->getRecordClassName(), $this->_resolveUserFields)) {
-            Tinebase_User::getInstance()->resolveMultipleUsers($_records, $this->_resolveUserFields[$_records->getRecordClassName()], TRUE);
-        }
-
-        $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-        $_records->convertDates = true;
-        
-        $result = $_records->toArray();
+        $converter = new Tinebase_Convert_Json();
+        $result = $converter->fromTine20RecordSet($_records, $this->_resolveUserFields);
         
         return $result;
     }
