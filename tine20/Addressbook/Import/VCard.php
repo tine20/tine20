@@ -163,7 +163,8 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
                         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Merged data: ' . print_r($mergedData, true));
                         
                         // import record into tine!
-                        $importedRecord = $this->_importRecord($mergedData);
+                        $recordToImport = $this->_createRecordToImport($mergedData);
+                        $importedRecord = $this->_importRecord($recordToImport);
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got empty record from mapping! Was: ' . print_r($recordData, TRUE));
                         $this->_importResult['failcount']++;
