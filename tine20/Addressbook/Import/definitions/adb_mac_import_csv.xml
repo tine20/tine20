@@ -11,6 +11,7 @@
 http://www.macupdate.com/info.php/id/9312
 with all fields enabled</description>
     <encoding>MAC-CENTRALEUROPE</encoding>
+    <extension>csv</extension>
     <mapping>
         <field>
             <source>Vorname</source>

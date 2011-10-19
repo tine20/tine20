@@ -269,31 +269,90 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
-        $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
-            array('field' => 'application_id',  'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId()),
-            array('field' => 'type',            'operator' => 'equals', 'value' => 'import'),
-        ));
-        $importDefinitions = Tinebase_ImportExportDefinition::getInstance()->search($filter);
-        try {
-            $defaultDefinitionArray = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv')->toArray();
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            if (count($importDefinitions) > 0) {
-                $defaultDefinitionArray = $importDefinitions->getFirstRecord()->toArray();
-            } else {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No import definitions found for Addressbook');
-                $defaultDefinitionArray = array();
-            }
-        }
+        $importDefinitions = $this->_getImportDefinitions();
+        $defaultDefinition = $this->_getDefaultImportDefinition($importDefinitions);
         
         $registryData = array(
             'Salutations'               => $this->getSalutations(),
             'defaultAddressbook'        => $this->getDefaultAddressbook(),
-            'defaultImportDefinition'   => $defaultDefinitionArray,
+            'defaultImportDefinition'   => $this->_convertImportDefinitionToJson($defaultDefinition),
             'importDefinitions'         => array(
-                'results'               => $importDefinitions->toArray(),
+                'results'               => $this->_convertImportDefinitionToJson($importDefinitions),
                 'totalcount'            => count($importDefinitions),
             ),
         );        
         return $registryData;    
+    }
+    
+    /**
+     * get addressbook import definitions
+     * 
+     * @return Tinebase_Record_RecordSet
+     * 
+     * @todo generalize this
+     */
+    protected function _getImportDefinitions()
+    {
+        $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
+            array('field' => 'application_id',  'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId()),
+            array('field' => 'type',            'operator' => 'equals', 'value' => 'import'),
+        ));
+        
+        $importDefinitions = Tinebase_ImportExportDefinition::getInstance()->search($filter);
+        
+        return $importDefinitions;
+    }
+    
+    /**
+     * get default definition
+     * 
+     * @param Tinebase_Record_RecordSet $_importDefinitions
+     * @return Tinebase_Model_ImportExportDefinition
+     * 
+     * @todo generalize this
+     */
+    protected function _getDefaultImportDefinition($_importDefinitions)
+    {
+        try {
+            $defaultDefinition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (count($_importDefinitions) > 0) {
+                $defaultDefinition = $_importDefinitions->getFirstRecord();
+            } else {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No import definitions found for Addressbook');
+                $defaultDefinition = NULL;
+            }
+        }
+        
+        return $defaultDefinition;
+    }
+    
+    /**
+     * convertImportDefinitionToJson
+     * 
+     * @param Tinebase_Record_RecordSet|Tinebase_Model_ImportExportDefinition
+     * @return array
+     * 
+     * @todo use converter for this
+     * @todo generalize this
+     */
+    protected function _convertImportDefinitionToJson($_definitions)
+    {
+        if ($_definitions === NULL) {
+            return array();
+        }
+        
+        $definitions = ($_definitions instanceof Tinebase_Record_RecordSet) ? $_definitions : array($_definitions);
+        
+        $definitionsArray = array();
+        foreach ($definitions as $definition) {
+            // convert plugin_options to array
+            $definition->plugin_options = (empty($definition->plugin_options))
+                ? array()
+                : Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($definition)->toArray();
+            $definitionsArray[] = $definition->toArray();
+        }
+        
+        return ($_definitions instanceof Tinebase_Record_RecordSet) ? $definitionsArray : $definitionsArray[0];
     }
 }

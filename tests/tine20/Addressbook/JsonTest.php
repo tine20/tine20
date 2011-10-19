@@ -752,6 +752,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $registryData = $this->_instance->getRegistryData();
         
+        $this->assertEquals('adb_tine_import_csv', $registryData['defaultImportDefinition']['name']);
         $this->assertTrue(is_array($registryData['importDefinitions']['results'][0]['plugin_options']));
         $this->assertEquals('Addressbook_Model_Contact', $registryData['importDefinitions']['results'][0]['plugin_options']['model']);
     }
