@@ -17,6 +17,11 @@
  */
 abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
 {
+    /**
+     * import result array
+     * 
+     * @var array
+     */
     protected $_importResult = array(
         'results'           => NULL,
         'exceptions'        => NULL,
@@ -153,6 +158,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     {
         $recordIndex = 0;
         while (($recordData = $this->_getRawData($_resource)) !== FALSE) {
+            $recordToImport = NULL;
             try {
                 if (isset($_clientRecordData[$recordIndex])) {
                     // client record overwrites record in import data
@@ -164,11 +170,12 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 }
                     
                 if (! empty($recordDataToImport) || $resolveAction === 'discard') {
-                    $importedRecord = $this->_importRecord($recordDataToImport, $resolveAction);
+                    $recordToImport = $this->_createRecordToImport($recordDataToImport);
+                    $importedRecord = $this->_importRecord($recordToImport, $resolveAction);
                 }
                     
             } catch (Exception $e) {
-                $this->_handleImportException($e, $recordIndex);
+                $this->_handleImportException($e, $recordIndex, $recordToImport);
             }
             
             $recordIndex++;
@@ -252,39 +259,46 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     }
     
     /**
+     * create record from record data
+     * 
+     * @param array $_recordData
+     * @return Tinebase_Record_Abstract
+     */
+    protected function _createRecordToImport($_recordData)
+    {
+        $record = new $this->_options['model']($_recordData, TRUE);
+        
+        return $record;
+    }
+    
+    /**
      * import single record
      *
-     * @param array $_recordData
+     * @param Tinebase_Record_Abstract $_record
      * @param string $_resolveAction
      * @return void
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _importRecord($_recordData, $_resolveAction = NULL)
+    protected function _importRecord($_record, $_resolveAction = NULL)
     {
-        $record = new $this->_options['model']($_recordData, TRUE);
+        $_record->isValid(TRUE);
         
-        if ($record->isValid()) {
-            if ($this->_options['dryrun']) {
-                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-            }
-            
-            if (isset($_recordData['tags']) && is_array($_recordData['tags']) && ! empty($_recordData['tags'])) {
-                $record->tags = $this->_addSharedTags($_recordData['tags']);
-            }
-            $importedRecord = $this->_importAndResolveConflict($record, $_resolveAction);
-            
-            $this->_importResult['results']->addRecord($importedRecord);
-            
-            if ($this->_options['dryrun']) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-            }
-            
-            $this->_importResult['totalcount']++;
-            
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
-            throw new Tinebase_Exception_Record_Validation('Imported record is invalid (' . print_r($record->getValidationErrors(), TRUE) . ')');
+        if ($this->_options['dryrun']) {
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         }
+        
+        if (isset($_recordData['tags']) && is_array($_recordData['tags']) && ! empty($_recordData['tags'])) {
+            $_record->tags = $this->_addSharedTags($_recordData['tags']);
+        }
+        $importedRecord = $this->_importAndResolveConflict($_record, $_resolveAction);
+        
+        $this->_importResult['results']->addRecord($importedRecord);
+        
+        if ($this->_options['dryrun']) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+        }
+        
+        $this->_importResult['totalcount']++;
     }
     
     /**
@@ -348,21 +362,31 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * 
      * @param Exception $_e
      * @param integer $_recordIndex
+     * @param Tinebase_Record_Abstract $_record
+     * 
+     * @todo use json converter for client record
      */
-    protected function _handleImportException(Exception $_e, $_recordIndex)
+    protected function _handleImportException(Exception $_e, $_recordIndex, $_record = NULL)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $_e->getMessage());
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $_e->getTraceAsString());
         
-        $this->_importResult['exceptions']->addRecord(new Tinebase_Model_ImportException(array(
-            'exception'     => $_e,
-            'record_idx'    => $_recordIndex,
-        )));
         if ($_e instanceof Tinebase_Exception_Duplicate) {
             $this->_importResult['duplicatecount']++;
+            $exception = $_e->toArray();
         } else {
             $this->_importResult['failcount']++;
+            $exception = array(
+                'code'		   => $_e->getCode(),
+                'message'	   => $_e->getMessage(),
+            	'clientRecord' => ($_record !== NULL) ? $_record->toArray() : array(),
+            );
         }        
+
+        $this->_importResult['exceptions']->addRecord(new Tinebase_Model_ImportException(array(
+            'exception'     => $exception,
+            'record_idx'    => $_recordIndex,
+        )));
     }
     
     /**
