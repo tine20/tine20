@@ -8,7 +8,7 @@
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
     <description>tine adb import</description>
-    <example>adb_tine_import.csv</example>
+    <example>Addressbook/Import/examples/adb_tine_import.csv</example>
     <extension>csv</extension>
     <mapping>
         <field>

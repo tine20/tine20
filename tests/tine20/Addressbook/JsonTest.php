@@ -395,9 +395,10 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     public function testImport()
     {
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
+        $definitionOptions = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($definition);
         
         $tempFileBackend = new Tinebase_TempFile();
-        $tempFile = $tempFileBackend->createTempFile(dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20/Addressbook/Import/examples/adb_tine_import.csv');
+        $tempFile = $tempFileBackend->createTempFile(dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20/' . $definitionOptions->example);
         $options = array(
             'container_id'  => $this->container->getId(),
             'dryrun'        => 1,
@@ -710,9 +711,9 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         } catch (Tinebase_Exception_Duplicate $ted) {
             $this->assertTrue($_duplicateCheck, 'force creation failed');
             $exceptionData = $ted->toArray();
-            $this->assertEquals(1, $exceptionData['duplicates']['totalcount'], print_r($exceptionData['duplicates'], TRUE));
-            $this->assertEquals($contact['n_given'], $exceptionData['duplicates']['results'][0]['n_given']);
-            $this->assertEquals($contact['org_name'], $exceptionData['duplicates']['results'][0]['org_name']);
+            $this->assertEquals(1, count($exceptionData['duplicates']), print_r($exceptionData['duplicates'], TRUE));
+            $this->assertEquals($contact['n_given'], $exceptionData['duplicates'][0]['n_given']);
+            $this->assertEquals($contact['org_name'], $exceptionData['duplicates'][0]['org_name']);
         }
     }
 
@@ -733,8 +734,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             $this->assertTrue(FALSE, 'no duplicate exception');
         } catch (Tinebase_Exception_Duplicate $ted) {
             $exceptionData = $ted->toArray();
-            $this->assertEquals(1, $exceptionData['duplicates']['totalcount']);
-            $this->assertEquals($contact['email'], $exceptionData['duplicates']['results'][0]['email']);
+            $this->assertEquals(1, count($exceptionData['duplicates']));
+            $this->assertEquals($contact['email'], $exceptionData['duplicates'][0]['email']);
         }
     }
 
