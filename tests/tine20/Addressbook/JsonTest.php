@@ -388,51 +388,61 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * test import
-     * 
-     * @todo test import tags 
-     * @todo split into multiple tests?
      */
     public function testImport()
     {
-        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
-        $definitionOptions = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($definition);
-        
-        $tempFileBackend = new Tinebase_TempFile();
-        $tempFile = $tempFileBackend->createTempFile(dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20/' . $definitionOptions->example);
-        $options = array(
-            'container_id'  => $this->container->getId(),
-            'dryrun'        => 1,
-        );
-        $result = $this->_instance->importContacts($tempFile->getId(), $definition->getId(), $options);
-        
+        $result = $this->_importHelper();
         $this->assertEquals(2, $result['totalcount'], 'dryrun should detect 2 for import.');
         $this->assertEquals(0, $result['failcount'], 'Import failed for one or more records.');
         $this->assertEquals('Müller, Klaus', $result['results'][0]['n_fileas'], 'file as not found');
         
-        // import again without dryrun / with duplicates / clientRecords
-        $options['dryrun'] = 0;
-        $result = $this->_instance->importContacts($tempFile->getId(), $definition->getId(), $options);
+        // import again without dryrun
+        $result = $this->_importHelper(array('dryrun' => 0));
         $this->assertEquals(2, $result['totalcount'], 'Didn\'t import anything.');
         foreach ($result['results'] as $contact) {
             $this->_contactIdsToDelete[] = $contact['id'];
         }
         $klaus = $result['results'][0];
 
-        $result = $this->_instance->importContacts($tempFile->getId(), $definition->getId(), $options);
+        // import with duplicates
+        $result = $this->_importHelper(array('dryrun' => 0));
         $this->assertEquals(0, $result['totalcount'], 'Do not import anything.');
         $this->assertEquals(2, $result['duplicatecount'], 'Should find 2 dups.');
         $this->assertEquals(0, count($result['exceptions'][0]['exception']['clientRecord']['tags']), 'no tags expected');
         
+        // import again with clientRecords
         $klaus['adr_one_locality'] = 'Hamburg';
         $clientRecords = array(array(
             'recordData'    => $klaus,
             'resolveAction' => 'mergeMine',
             'index'         => 0,
         ));
-        $result = $this->_instance->importContacts($tempFile->getId(), $definition->getId(), $options, $clientRecords);
+        $result = $this->_importHelper(array('dryrun' => 0), $clientRecords);
         $this->assertEquals(1, $result['totalcount'], 'Should merge Klaus');
         $this->assertEquals(1, $result['duplicatecount'], 'Fritz is no duplicate.');
         $this->assertEquals('Hamburg', $result['results'][0]['adr_one_locality'], 'locality should change');
+    }
+    
+    /**
+     * import helper
+     * 
+     * @param array $_additionalOptions
+     * @param array $_clientRecords
+     * @return array
+     */
+    protected function _importHelper($_additionalOptions = array('dryrun' => 1), $_clientRecords = array())
+    {
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
+        $definitionOptions = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($definition);
+        
+        $tempFileBackend = new Tinebase_TempFile();
+        $tempFile = $tempFileBackend->createTempFile(dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20/' . $definitionOptions->example);
+        $options = array_merge($_additionalOptions, array(
+            'container_id'  => $this->container->getId(),
+        ));
+        $result = $this->_instance->importContacts($tempFile->getId(), $definition->getId(), $options, $_clientRecords);
+        
+        return $result;
     }
 
     /**
