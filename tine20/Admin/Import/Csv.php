@@ -64,17 +64,18 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
     /**
      * import single record (create password if in data)
      *
-     * @param array $_recordData
+     * @param Tinebase_Record_Abstract $_record
      * @param string $_resolveAction
+     * @param array $_recordData
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _importRecord($_recordData, $_resolveAction = NULL)
+    protected function _importRecord($_record, $_resolveAction = NULL, $_recordData = array())
     {
-        if ($this->_options['model'] == 'Tinebase_Model_FullUser' && $this->_controller instanceof Admin_Controller_User) {
-        
-            $record = new $this->_options['model']($_recordData, TRUE);
+        if ($_record instanceof Tinebase_Model_FullUser && $this->_controller instanceof Admin_Controller_User) {
             
+            $record = $_record;
+        
             // create valid login name
             if (! isset($record->accountLoginName)) {
                 $record->accountLoginName = Tinebase_User::getInstance()->generateUserName($record);
@@ -108,7 +109,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
             if (! empty($this->_options['password'])) {
                 $password = $this->_options['password'];
             }
-            if (isset($_recordData['password']) && !empty($_recordData['password'])) {
+            if (isset($_recordData['password']) && ! empty($_recordData['password'])) {
                 $password = $_recordData['password'];
             }
             
@@ -127,7 +128,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
                 throw new Tinebase_Exception_Record_Validation('Imported record is invalid.');
             }
         } else {
-            $record = parent::_importRecord($_recordData, $_resolveAction);
+            $record = parent::_importRecord($_record, $_resolveAction, $_recordData);
         }
         
         return $record;

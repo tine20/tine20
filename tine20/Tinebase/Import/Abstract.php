@@ -171,7 +171,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                     
                 if (! empty($recordDataToImport) || $resolveAction === 'discard') {
                     $recordToImport = $this->_createRecordToImport($recordDataToImport);
-                    $importedRecord = $this->_importRecord($recordToImport, $resolveAction);
+                    $importedRecord = $this->_importRecord($recordToImport, $resolveAction, $recordDataToImport);
                 }
                     
             } catch (Exception $e) {
@@ -276,10 +276,11 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      *
      * @param Tinebase_Record_Abstract $_record
      * @param string $_resolveAction
+     * @param array $_recordData
      * @return void
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _importRecord($_record, $_resolveAction = NULL)
+    protected function _importRecord($_record, $_resolveAction = NULL, $_recordData = array())
     {
         $_record->isValid(TRUE);
         
