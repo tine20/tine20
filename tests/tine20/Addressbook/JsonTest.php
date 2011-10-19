@@ -452,20 +452,24 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testImportWithTags()
     {
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
+        $definitionOptions = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($definition);
+        
         $options = array(
         	'dryrun'     => 0,
-        	'tags'       => array(
-        	    array(
-        	        'name'	        => 'Importliste (<substitute>currentDate</substitute>)',
-        	        'description'	=> 'Kontakt der Importliste vom <substitute>currentDate</substitute> um <substitute>currentTime</substitute> Uhr. Bearbeiter: <substitute>currentUser.fullname</substitute>',
-        	        'contexts'		=> array('Addressbook'),
-        	        'type'			=> Tinebase_Model_Tag::TYPE_SHARED,
-        	    )
-        	),
+        	'shared_tags'=> 'create',
+        	'autotags'   => array('tag' => array(
+    	        'name'	        => 'Importliste (19.10.2011)',
+    	        'description'	=> 'Kontakte der Importliste vom 19.10.2011 um 20.00 Uhr. Bearbeiter: UNITTEST',
+    	        'contexts'		=> array('Addressbook' => ''),
+    	        'type'			=> Tinebase_Model_Tag::TYPE_SHARED,
+    	    )),
         );
         $result = $this->_importHelper($options);
         
-        //print_r($result);
+        $this->assertEquals(2, count($result['results']));
+        $this->assertEquals('Importliste (19.10.2011)', $result['results'][0]['tags'][0]['name']);
+        Tinebase_Tags::getInstance()->deleteTags(array($result['results'][0]['tags'][0]['id']));
     }
 
     /**

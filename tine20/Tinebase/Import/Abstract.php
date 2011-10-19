@@ -40,7 +40,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         'createMethod'      => 'create',
         'model'             => '',
         'shared_tags'       => 'onlyexisting',
-        'tags'              => array(),
+        'autotags'          => array(),
     );
     
     /**
@@ -124,11 +124,14 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     public function import($_resource = NULL, $_clientRecordData = array())
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Starting import of ' . ((! empty($this->_options['model'])) ? $this->_options['model'] . 's' : ' records'));
+        
         $this->_initImportResult();
         $this->_beforeImport($_resource);
         $this->_doImport($_resource, $_clientRecordData);
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             . ' Import finished. (total: ' . $this->_importResult['totalcount'] 
             . ' fail: ' . $this->_importResult['failcount'] 
             . ' duplicates: ' . $this->_importResult['duplicatecount']. ')');
@@ -320,7 +323,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $_record->tags = NULL;
         }
         
-        if (! empty($this->_options['tags'])) {
+        if (! empty($this->_options['autotags'])) {
             $this->_addAutoTags($_record);
         }
     }
@@ -344,47 +347,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 continue;
             }
     
-            $name = (strlen($tag) > 40) ? substr($tag, 0, 40) : $tag;
-    
-            $id = NULL;
-            try {
-                $existing = Tinebase_Tags::getInstance()->getTagByName($name, NULL, 'Tinebase', TRUE);
-                $id = $existing->getId();
-    
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
-                        ' Added existing tag ' . $name . ' to record.');
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                if (isset($this->_options['shared_tags']) && $this->_options['shared_tags'] == 'create') {
-                    // create shared tag
-                    $newTag = new Tinebase_Model_Tag(array(
-                            'name'          => $name,
-                            'description'   => $tag . ' (imported)',
-                            'type'          => Tinebase_Model_Tag::TYPE_SHARED,
-                            'color'         => '#000099'
-                    ));
-    
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new shared tag: ' . $name);
-    
-                    $newTag = Tinebase_Tags::getInstance()->createTag($newTag);
-    
-                    $right = new Tinebase_Model_TagRight(array(
-                            'tag_id'        => $newTag->getId(),
-                            'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                            'account_id'    => 0,
-                            'view_right'    => TRUE,
-                            'use_right'     => TRUE,
-                    ));
-                    Tinebase_Tags::getInstance()->setRights($right);
-                    Tinebase_Tags::getInstance()->setContexts(array('any'), $newTag->getId());
-    
-                    $id = $newTag->getId();
-                } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Do not create shared tag (option not set)');
-                }
-            }
-    
-            if ($id !== NULL) {
-                $result[] = $id;
+            $tagId = $this->_getSingleTag($tag);
+            if ($tagId) {
+                $result[] = $tagId;
             }
         }
     
@@ -392,14 +357,83 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     }
     
     /**
+     * get tag / create on the fly
+     * 
+     * @param string $_name
+     * @param string $_description
+     * @param string $_type
+     * 
+     * @todo allow to set contexts / application / color / rights
+     * @todo catch Tinebase_Exception_AccessDenied when trying to create shared tag
+     */
+    protected function _getSingleTag($_name, $_tagData = array())
+    {
+        $name = (strlen($_name) > 40) ? substr($_name, 0, 40) : $_name;
+        
+        $id = NULL;
+        try {
+            $existing = Tinebase_Tags::getInstance()->getTagByName($name, NULL, 'Tinebase', TRUE);
+            $id = $existing->getId();
+        
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            	' Added existing tag ' . $name . ' to record.');
+            
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $description  = substr((isset($_tagData['description'])) ? $_tagData['description'] : $_name . ' (imported)', 0, 50);
+            $type         = (isset($_tagData['type'])) ? $_tagData['type'] : Tinebase_Model_Tag::TYPE_SHARED;
+            
+            if (isset($this->_options['shared_tags']) && $this->_options['shared_tags'] == 'create') {
+                // create new tag
+                $newTag = new Tinebase_Model_Tag(array(
+                                    'name'          => $name,
+                                    'description'   => $description,
+                                    'type'          => $type,
+                                    'color'         => '#000099'
+                ));
+        
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new shared tag: ' . $name);
+        
+                $newTag = Tinebase_Tags::getInstance()->createTag($newTag);
+        
+                $right = new Tinebase_Model_TagRight(array(
+                                    'tag_id'        => $newTag->getId(),
+                                    'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                                    'account_id'    => 0,
+                                    'view_right'    => TRUE,
+                                    'use_right'     => TRUE,
+                ));
+                Tinebase_Tags::getInstance()->setRights($right);
+                Tinebase_Tags::getInstance()->setContexts(array('any'), $newTag->getId());
+        
+                $id = $newTag->getId();
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Do not create shared tag (option not set)');
+            }
+        }
+        
+        return $id;
+    }
+    
+    /**
     * add auto tags from options
     *
     * @param Tinebase_Record_Abstract $_record
-    * 
-    * @todo implement
     */
     protected function _addAutoTags($_record)
     {
+        $autotags = (array_key_exists('name', $this->_options['autotags']['tag'])) ? array($this->_options['autotags']['tag']) : $this->_options['autotags']['tag'];
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+        	' Trying to add ' . count($autotags) . ' autotag(s) to record.');
+        
+        $tags = $_record->tags;
+        foreach ($autotags as $tagData) {
+            $tagId = $this->_getSingleTag($tagData['name'], $tagData);
+            if ($tagId !== NULL) {
+                array_push($tags, $tagId);
+            }
+        }
+        $_record->tags = $tags;
     }
     
     /**
