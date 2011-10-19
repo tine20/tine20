@@ -395,9 +395,10 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     public function testImport()
     {
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
+        $definitionOptions = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($definition);
         
         $tempFileBackend = new Tinebase_TempFile();
-        $tempFile = $tempFileBackend->createTempFile(dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20/Addressbook/Import/examples/adb_tine_import.csv');
+        $tempFile = $tempFileBackend->createTempFile(dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20/' . $definitionOptions->example);
         $options = array(
             'container_id'  => $this->container->getId(),
             'dryrun'        => 1,
