@@ -18,6 +18,9 @@
  */
 class Calendar_Convert_Event_VCalendar_Abstract
 {
+    protected $_supportedFields = array(
+    );
+    
     protected $_version;
     
     /**
@@ -214,7 +217,11 @@ class Calendar_Convert_Event_VCalendar_Abstract
                         $oldAttendees = clone $event->attendee;
                     }
                     
-                    // @todo overwrite supported fields with null
+                    // unset supported fields
+                    foreach ($this->_supportedFields as $field) {
+                        $event->$field = null;
+                    }
+                    
                     $this->_parseVevent($property, $event);
                     
                     // merge old and new attendees
