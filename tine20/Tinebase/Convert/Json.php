@@ -44,6 +44,10 @@ class Tinebase_Convert_Json // implements Tinebase_Convert_Interface
      */
     public function fromTine20Model(Tinebase_Record_Abstract $_model)
     {
+        if (! $_model) {
+            return array();
+        }
+        
         $_model->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $_model->bypassFilters = true;
         
@@ -67,7 +71,7 @@ class Tinebase_Convert_Json // implements Tinebase_Convert_Interface
      * @param  array $_resolveUserFields
      * @return mixed
      */
-    public function fromTine20RecordSet(Tinebase_Record_Abstract $_records, $_resolveUserFields = array())
+    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records, $_resolveUserFields = array())
     {
         if (count($_records) == 0) {
             return array();
