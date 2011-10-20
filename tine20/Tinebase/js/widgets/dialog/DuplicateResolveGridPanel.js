@@ -40,10 +40,10 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
 //        this.addEvents();
         this.title = _('The record you try to add might already exist.');
         
-        // select one duplicate (one of the up to five duplicates we allow to edit)
-        if (this.store.getCount()) {
-            this.applyStrategy(this.store, this.store.resolveStrategy);
-        }
+//        // select one duplicate (one of the up to five duplicates we allow to edit)
+//        if (this.store.getCount()) {
+//            this.applyStrategy(this.store.resolveStrategy);
+//        }
         
         this.initColumnModel();
         this.initToolbar();
@@ -75,21 +75,24 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
      * called when the store got new data
      */
     onStoreLoad: function() {
-        this.applyStrategy(this.store, this.store.resolveStrategy);
+        this.actionCombo.setValue(this.store.resolveStrategy)
+//        if (this.store.resolveStrategy !== 'merge') {
+//            this.applyStrategy(this.store, this.store.resolveStrategy);
+//        }
     },
     
     /**
      * handler of apply button
      */
     onApplyAction: function() {
-        this.applyStrategy(this.store, this.actionCombo.getValue());
+        this.applyStrategy(this.actionCombo.getValue());
     },
     
     /**
      * select handler of action combo
      */
     onActionSelect: function(combo, record, idx) {
-        this.applyStrategy(this.store, record.get('value'));
+        this.applyStrategy(record.get('value'));
     },
     
     /**
@@ -100,17 +103,17 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
      * - keep:          keep client record (create duplicate)
      * 
      * @param {Ext.data.Store} store with field records (DuplicateResolveModel)
-     * @param {Sting} action
+     * @param {Sting} strategy
      */
-    applyStrategy: function(store, action) {
-        this.store.applyStrategy(action);
+    applyStrategy: function(strategy) {
+        this.store.applyStrategy(strategy);
         
         var cm = this.getColumnModel(),
             view = this.getView();
             
         if (cm) {
-            cm.setHidden(cm.getIndexById('clientValue'), action == 'discard');
-            cm.setHidden(cm.getIndexById('finalValue'), action == 'keep');
+            cm.setHidden(cm.getIndexById('clientValue'), strategy == 'discard');
+            cm.setHidden(cm.getIndexById('finalValue'), strategy == 'keep');
             
             if (view && view.grid) {
                 this.getView().refresh();
@@ -271,8 +274,13 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.JsonStore, {
      * @cfg {String} resolveStrategy
      * default resolve action
      */
-    resolveStrategy: 'mergeTheirs',
+    resolveStrategy: null,
     
+    /**
+     * @cfg {String} defaultResolveStrategy
+     * default resolve action
+     */
+    defaultResolveStrategy: 'mergeTheirs',
     
     // private config overrides
     idProperty: 'fieldName',
@@ -298,12 +306,18 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.JsonStore, {
         }
     },
     
-    loadData: function(data) {
+    loadData: function(data, resolveStrategy, finalRecord) {
         // init records
         this.clientRecord = this.createRecord(data.clientRecord);
         
         this.duplicates = data.duplicates;
         Ext.each([].concat(this.duplicates), function(duplicate, idx) {this.duplicates[idx] = this.createRecord(this.duplicates[idx])}, this);
+        
+        this.resolveStrategy = resolveStrategy || this.defaultResolveStrategy;
+        
+        if (finalRecord) {
+            finalRecord = this.createRecord(finalRecord);
+        }
         
         // @TODO sort conflict fileds first 
         //   - group fields (contact org, home / phones etc.)
@@ -320,8 +334,24 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.JsonStore, {
             
             Ext.each([].concat(this.duplicates), function(duplicate, idx) {recordData['value' + idx] =  Tine.Tinebase.common.assertComparable(this.duplicates[idx].get(fieldName))}, this);
             
-            this.addSorted(new Tine.widgets.dialog.DuplicateResolveModel(recordData, fieldName));
+            var record = new Tine.widgets.dialog.DuplicateResolveModel(recordData, fieldName);
+            
+            if (finalRecord) {
+                if (finalRecord.modified && finalRecord.modified.hasOwnProperty(fieldName)) {
+                    console.log('Tine.widgets.dialog.DuplicateResolveStore::loadData ' + fieldName + 'changed from  ' + finalRecord.modified[fieldName] + ' to ' + finalRecord.get(fieldName));
+                    record.set('finalValue', finalRecord.modified[fieldName]);
+                    
+                }
+                
+                record.set('finalValue', finalRecord.get(fieldName));
+            }
+            
+            this.addSorted(record);
         }, this);
+        
+        if (! finalRecord) {
+            this.applyStrategy(this.resolveStrategy);
+        }
         
         this.fireEvent('load', this);
     },
@@ -333,25 +363,25 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.JsonStore, {
      * - discard:       discard client record
      * - keep:          keep client record (create duplicate)
      * 
-     * @param {Sting} action
+     * @param {Sting} strategy
      */
-    applyStrategy: function(action) {
-        Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::applyStrategy action: ' + action);
+    applyStrategy: function(strategy) {
+        Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::applyStrategy action: ' + strategy);
         
-        this.resolveStrategy = action;
+        this.resolveStrategy = strategy;
         
         this.each(function(resolveRecord) {
             var theirs = resolveRecord.get('value' + this.duplicateIdx),
                 mine = resolveRecord.get('clientValue'),
-                location = action === 'keep' ? 'mine' : 'theirs';
+                location = strategy === 'keep' ? 'mine' : 'theirs';
             
             // undefined or empty theirs value -> keep mine
-            if (action == 'mergeTheirs' && ['', 'null', 'undefined'].indexOf(String(theirs)) > -1) {
+            if (strategy == 'mergeTheirs' && ['', 'null', 'undefined'].indexOf(String(theirs)) > -1) {
                 location = 'mine';
             }
             
             // only keep mine if its not undefined or empty
-            if (action == 'mergeMine' && ['', 'null', 'undefined'].indexOf(String(mine)) < 0) {
+            if (strategy == 'mergeMine' && ['', 'null', 'undefined'].indexOf(String(mine)) < 0) {
                 location = 'mine';
             }
             
@@ -365,13 +395,21 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.JsonStore, {
      * returns record with conflict resolved data
      */
     getResolvedRecord: function() {
-        var record = this.resolveStrategy == 'keep' ? this.clientRecord : this.duplicates[this.duplicateIdx];
+        var record = (this.resolveStrategy == 'keep' ? this.clientRecord : this.duplicates[this.duplicateIdx]).copy();
         
         this.each(function(resolveRecord) {
             var fieldName = resolveRecord.get('fieldName'),
-                finalValue = resolveRecord.get('finalValue');
-                
+                finalValue = resolveRecord.get('finalValue'),
+                modified = resolveRecord.modified || {};
+            
+            // also record changes
+            if (modified.hasOwnProperty('finalValue')) {
+                Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::getResolvedRecord ' + fieldName + ' changed from ' + modified.finalValue + ' to ' + finalValue);
+                record.set(fieldName, Tine.Tinebase.common.assertComparable(modified.finalValue));
+            }
+            
             record.set(fieldName, Tine.Tinebase.common.assertComparable(finalValue));
+            
         }, this);
         
         return record;
