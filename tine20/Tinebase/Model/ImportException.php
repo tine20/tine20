@@ -23,7 +23,7 @@ class Tinebase_Model_ImportException extends Tinebase_Record_Abstract
      *
      * @var string
      */
-    protected $_identifier = 'id';
+    protected $_identifier = 'index';
     
     /**
      * application the record belongs to
@@ -39,6 +39,7 @@ class Tinebase_Model_ImportException extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                => array('allowEmpty' => TRUE),
+        'index'             => array('allowEmpty' => TRUE),
         'exception'         => array('allowEmpty' => TRUE),
         'code'              => array('allowEmpty' => TRUE),
         'message'           => array('allowEmpty' => TRUE),

@@ -173,15 +173,15 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 if (isset($_clientRecordData[$recordIndex])) {
                     // client record overwrites record in import data
                     $recordDataToImport = $_clientRecordData[$recordIndex]['recordData'];
-                    $resolveAction = $_clientRecordData[$recordIndex]['resolveAction'];
+                    $resolveStrategy = $_clientRecordData[$recordIndex]['resolveStrategy'];
                 } else {
                     $recordDataToImport = $this->_processRawData($recordData);
-                    $resolveAction = NULL;
+                    $resolveStrategy = NULL;
                 }
                     
-                if (! empty($recordDataToImport) || $resolveAction === 'discard') {
+                if (! empty($recordDataToImport) || $resolveStrategy === 'discard') {
                     $recordToImport = $this->_createRecordToImport($recordDataToImport);
-                    $importedRecord = $this->_importRecord($recordToImport, $resolveAction, $recordDataToImport);
+                    $importedRecord = $this->_importRecord($recordToImport, $resolveStrategy, $recordDataToImport);
                 }
                     
             } catch (Exception $e) {
@@ -522,7 +522,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             'code'		    => $_e->getCode(),
             'message'	    => $_e->getMessage(),
         	'exception'     => $exception,
-            'id'            => $_recordIndex,
+            'index'         => $_recordIndex,
         )));
     }
     
