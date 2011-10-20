@@ -68,6 +68,14 @@ class Calendar_Convert_Event_VCalendar_ThunderbirdTest extends PHPUnit_Framework
         
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
-        $event = $converter->toTine20Model($vcalendarStream);        
-    }            
+        $event = $converter->toTine20Model($vcalendarStream);
+
+        #var_dump($event->attendee->toArray());
+        #var_dump($event->attendee->filter('user_id', $event->organizer->id)->toArray());
+        
+        $this->assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->class);
+        $this->assertEquals('Hamburg',                           $event->location);
+        $this->assertEquals('l.kneschke@metaways.de',            $event->organizer->email);
+        $this->assertNotEmpty($event->attendee->filter('user_id', $event->organizer->id)->toArray(), 'Organizer must be attendee too');
+    }
 }

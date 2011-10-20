@@ -61,6 +61,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     
     /**
      * test converting vcard from sogo connector to Calendar_Model_Event 
+     * @return Calendar_Model_Event
      */
     public function testConvertToTine20Model()
     {
@@ -68,6 +69,52 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
-        $event = $converter->toTine20Model($vcalendarStream);        
-    }            
+        $event = $converter->toTine20Model($vcalendarStream);
+
+        $this->assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->class);
+        $this->assertEquals('Hamburg',                           $event->location);
+        $this->assertEquals("2011-10-04 10:00:00",               (string)$event->dtend);
+        $this->assertEquals("2011-10-04 08:00:00",               (string)$event->dtstart);
+        
+        return $event;
+    }
+                
+    /**
+     * test converting vcard from sogo connector to Calendar_Model_Event 
+     */
+    public function testConvertToTine20ModelWithUpdate()
+    {
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/lightning.ics', 'r');
+        
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        
+        $event = $converter->toTine20Model($vcalendarStream);
+
+        // status_authkey must be kept after second convert
+        $event->attendee[0]->status_authkey = 'FooBar';
+        
+        rewind($vcalendarStream);
+        $event = $converter->toTine20Model($vcalendarStream, $event);
+        
+        $this->assertEquals('FooBar', $event->attendee[0]->status_authkey);
+    }    
+
+    /**
+     * 
+     * @depends testConvertToTine20Model
+     */
+    public function testConvertFromTine20Model()
+    {
+        $event = $this->testConvertToTine20Model();
+        
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        
+        $vevent = $converter->fromTine20Model($event);
+        
+        // required fields
+        $this->assertContains('VERSION:2.0', $vevent, $vevent);
+        $this->assertContains('PRODID:-//tine20.org//Calendar', $vevent, $vevent);
+        $this->assertContains('LOCATION:Hamburg', $vevent, $vevent);
+        $this->assertContains('CLASS:PRIVATE', $vevent, $vevent);
+    }
 }
