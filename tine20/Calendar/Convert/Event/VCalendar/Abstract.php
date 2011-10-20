@@ -39,8 +39,6 @@ class Calendar_Convert_Event_VCalendar_Abstract
      */
     public function fromTine20Model(Tinebase_Record_Abstract $_model)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' contact ' . print_r($_model->toArray(), true));
-                
         $eventId = $_model->getId();
         $lastModified = $_model->last_modified_time ? $_model->last_modified_time : $_model->creation_time;
         
