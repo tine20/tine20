@@ -167,6 +167,9 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         try {
             response = Ext.util.JSON.decode(response.responseText);
             
+            Tine.log.debug('Tine.widgets.dialog.ImportDialog::onImportResponse server response');
+            Tine.log.debug(response);
+            
             // load exception store
             this.exceptionStore.loadData(response.exceptions);
             this.exceptionStore.filterBy(this.exceptionStoreFilter, this);
@@ -416,7 +419,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 doLoad: this.loadConflict.createDelegate(this),
                 onLoad: Ext.emptyFn,
                 listeners: {afterrender: function(t){t.refresh.hide()}},
-                items: ['->', {
+                items: [this.conflictIndexText = new Ext.Toolbar.TextItem({}), '->', {
                     text: _('Conflict is resolved'),
                     scope: this,
                     handler: this.onResolveConflict
@@ -542,8 +545,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             p.prev.setDisabled(ap == 1);
             p.next.setDisabled(ap == ps);
             p.last.setDisabled(ap == ps);
-            p.refresh.enable();
-            p.updateInfo();
+            this.conflictIndexText.setText(String.format(_('(This is record {0} in you import file)'), nextRecord.get('index')));
             
             this.conflictMask.hide();
             this.conflictMask.hidden = true;
