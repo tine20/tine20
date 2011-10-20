@@ -62,7 +62,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
         $exporter = new Calendar_Export_Ical();
         $ics = $exporter->eventToIcal($eventSet);
         
-        return $ics;
+        return $ics->render();
     }
     
     /**
@@ -95,6 +95,10 @@ class Calendar_Convert_Event_VCalendar_Abstract
                 case 'VERSION':
                 case 'PRODID':
                     // do nothing
+                    break;
+                    
+                case 'VTIMEZONE':
+                    $event->originator_tz = $property->TZID->value;
                     break;
                     
                 case 'VEVENT':
@@ -173,12 +177,12 @@ class Calendar_Convert_Event_VCalendar_Abstract
             $newAttendee->role = Calendar_Model_Attender::ROLE_REQUIRED;
         }
         
-        if (in_array($_attendee['STATUS_PARTSTAT'], array(Calendar_Model_Attender::STATUS_ACCEPTED,
+        if (in_array($_attendee['PARTSTAT'], array(Calendar_Model_Attender::STATUS_ACCEPTED,
             Calendar_Model_Attender::STATUS_DECLINED,
             Calendar_Model_Attender::STATUS_NEEDSACTION,
             Calendar_Model_Attender::STATUS_TENTATIVE)
         )) {
-            $newAttendee->status = $_attendee['STATUS_PARTSTAT'];
+            $newAttendee->status = $_attendee['PARTSTAT']->value;
         } else {
             $newAttendee->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
         }
@@ -203,7 +207,6 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     break;
                     
                 case 'ATTENDEE':
-                    
                     foreach($property as $attendee) {
                         if (preg_match('/mailto:(?P<email>.*)/', $attendee->value, $matches)) {
                             $name    = isset($attendee['CN']) ? $attendee['CN'] : $matches['email'];
