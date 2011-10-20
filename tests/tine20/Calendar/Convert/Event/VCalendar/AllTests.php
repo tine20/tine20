@@ -27,6 +27,7 @@ class Calendar_Convert_Event_VCalendar_AllTests
     public static function suite ()
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar All Import Vcard Tests');
+        $suite->addTestSuite('Calendar_Convert_Event_VCalendar_FactoryTest');
         $suite->addTestSuite('Calendar_Convert_Event_VCalendar_GenericTest');
         $suite->addTestSuite('Calendar_Convert_Event_VCalendar_MacOSXTest');
         $suite->addTestSuite('Calendar_Convert_Event_VCalendar_ThunderbirdTest');
