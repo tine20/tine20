@@ -561,8 +561,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 app: this.app,
                 recordClass: this.recordClass,
                 recordProxy: this.recordProxy,
-                clientRecord: this.record, //exception.clientRecord,
-                duplicates: exception.duplicates
+                data: {
+                    clientRecord: this.record, //exception.clientRecord,
+                    duplicates: exception.duplicates
+                }
             }),
             fbar: [
                 '->',
@@ -573,10 +575,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         
         // intercept save handler
         resolveGridPanel.btnSaveAndClose.setHandler(function(btn, e) {
-            var resolveAction = resolveGridPanel.store.resolveAction;
+            var resolveStrategy = resolveGridPanel.store.resolveStrategy;
             
             // action discard -> close window
-            if (resolveAction == 'discard') {
+            if (resolveStrategy == 'discard') {
                 return this.onCancel();
             }
             
