@@ -522,7 +522,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             'code'		    => $_e->getCode(),
             'message'	    => $_e->getMessage(),
         	'exception'     => $exception,
-            'id'            => $_recordIndex,
+            'index'         => $_recordIndex,
         )));
     }
     
