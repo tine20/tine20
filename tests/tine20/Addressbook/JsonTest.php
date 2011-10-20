@@ -411,7 +411,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $klaus['adr_one_locality'] = 'Hamburg';
         $clientRecords = array(array(
             'recordData'    => $klaus,
-            'resolveAction' => 'mergeMine',
+            'resolveStrategy' => 'mergeMine',
             'index'         => 0,
         ));
         $result = $this->_importHelper(array('dryrun' => 0), $clientRecords);
