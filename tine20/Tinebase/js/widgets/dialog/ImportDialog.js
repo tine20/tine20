@@ -78,7 +78,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             this.exceptionStore = new Ext.data.JsonStore({
                 mode: 'local',
                 idProperty: 'record_idx',
-                fields: ['record_idx', 'code', 'exception', 'resolveStrategy']
+                fields: ['record_idx', 'code', 'exception', 'resolveStrategy', 'resolvedRecord', 'isResolved']
             });
         
             this.items = [
@@ -101,7 +101,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
      * @param {Function} callback
      * @param {Object}   importOptions
      */
-    doImport: function(callback, importOptions) {
+    doImport: function(callback, importOptions, clientRecordData) {
         try {
             Ext.Ajax.request({
                 scope: this,
@@ -112,8 +112,9 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                     tempFileId: this.uploadButton.getTempFileId(),
                     definitionId: this.definitionCombo.getValue(),
                     importOptions: Ext.apply({
-                        container_id: this.containerCombo.getValue(),
-                    }, importOptions || {})
+                        container_id: this.containerCombo.getValue()
+                    }, importOptions || {}),
+                    clientRecordData: clientRecordData
                 }
             });
             
@@ -161,7 +162,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
     },
     
     exceptionStoreFilter: function(record, id) {
-        return record.get('code') == 629 && ! record.get('resolveStrategy');
+        return record.get('code') == 629 && ! record.get('isResolved');
     },
     
     /********************************************************** FILE PANEL **********************************************************/
@@ -370,7 +371,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 
                 // check if all conflicts are resolved
                 this.exceptionStore.each(function(exception) {
-                    if (! exception.get('resolveStrategy')) {
+                    if (! exception.get('isResolved')) {
                         nextIsAllowed = false;
                         return false;
                     }
@@ -402,10 +403,14 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
     onResolveConflict: function() {
         var index = this.conflictPagingToolbar.cursor,
             record = this.exceptionStore.getAt(index),
-            strategy = this.duplicateResolveGridPanel.getStore().resolveStrategy;
+            resolveStore = this.duplicateResolveGridPanel.getStore(),
+            resolveStrategy = resolveStore.resolveStrategy,
+            resolveRecord = resolveStore.getResolvedRecord();
         
         // mark exception record resolved
-        record.set('resolveStrategy', strategy);
+        record.set('resolveStrategy', resolveStrategy);
+        record.set('resolvedRecord', resolveRecord);
+        record.set('isResolved', true);
         
         // load next conflict
         this.exceptionStore.filterBy(this.exceptionStoreFilter, this);
@@ -437,12 +442,19 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         
         try {
             
-            var record = this.exceptionStore.getAt(index);
+            var thisRecord = this.exceptionStore.getAt(this.conflictPagingToolbar.cursor),
+                nextRecord = this.exceptionStore.getAt(index),
+                resolveStore = this.duplicateResolveGridPanel.getStore();
+                
+            if (thisRecord && resolveStore.getCount()) {
+                thisRecord.set('resolvedRecord', resolveStore.getResolvedRecord());
+                thisRecord.set('resolveStrategy', resolveStore.resolveStrategy);
+            }
             
-            if (record) {
-                this.duplicateResolveGridPanel.getStore().loadData(record.get('exception'));
+            if (nextRecord) {
+                resolveStore.loadData(nextRecord.get('exception'), nextRecord.get('resolveStrategy'), nextRecord.get('resolvedRecord'));
             } else {
-                this.duplicateResolveGridPanel.getStore().removeAll();
+                resolveStore.removeAll();
                 this.duplicateResolveGridPanel.getView().mainBody.update('<br />  ' + _('No conflict to resolve'));
 //                this.navigate(+1);
             }
@@ -452,7 +464,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             var p = this.conflictPagingToolbar,
                 ap = index+1,
                 ps = this.exceptionStore.getCount();
-            
+                
             p.cursor = index;
             p.afterTextItem.setText(String.format(p.afterPageText, ps));
             p.inputItem.setValue(ap);
@@ -494,14 +506,29 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 if (! this.importMask) {
                     this.importMask = new Ext.LoadMask(this.getEl(), {msg: String.format(_('Importing {0}'), this.recordClass.getRecordsName())});
                 }
-                
                 this.importMask.show();
-            
+                
+                // collect client data
+                var clientRecordData = [];
+                var importOptions = {};
+                
+                this.exceptionStore.clearFilter();
+                this.exceptionStore.each(function(r) {
+                    clientRecordData.push({
+                        recordData: r.get('resolvedRecord'),
+                        resolveStrategy: r.get('resolveStrategy'),
+                        index: r.get('record_idx')
+                    });
+                });
+                
+                
                 this.doImport(function(request, success, response) {
+                    // @todo: fence finish btn
+                    
                     this.importMask.hide();
                     
                     this.fireEvent('finish', this, this.layout.activeItem);
-                });
+                }, importOptions, clientRecordData);
                 
             }).createDelegate(this)
             
