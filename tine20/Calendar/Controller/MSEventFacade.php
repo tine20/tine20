@@ -284,10 +284,12 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $events = $this->getMultiple($ids);
         
         foreach($events as $event) {
-            foreach ($event->exdate as $exception) {
-                $exceptionId = $exception->getId();
-                if ($exceptionId) {
-                    $ids[] = $exceptionId;
+            if ($event->exdate !== null) {
+                foreach ($event->exdate as $exception) {
+                    $exceptionId = $exception->getId();
+                    if ($exceptionId) {
+                        $ids[] = $exceptionId;
+                    }
                 }
             }
         }
