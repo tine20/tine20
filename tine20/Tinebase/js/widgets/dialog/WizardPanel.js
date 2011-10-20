@@ -57,28 +57,44 @@ Tine.widgets.dialog.WizardPanel = Ext.extend(Ext.Panel, {
      * back button handler
      */
     onBackButton: function() {
-        this.navigate(-1);
+        return Ext.isFunction(this.layout.activeItem.onBackButton) ?
+            this.layout.activeItem.onBackButton() :
+            this.navigate(-1);
     },
     
     /**
      * next button handler
      */
     onNextButton: function() {
-        this.navigate(+1);
+        return Ext.isFunction(this.layout.activeItem.onNextButton) ?
+            this.layout.activeItem.onNextButton() :
+            this.navigate(+1);
     },
     
     /**
      * cancel button handler
      */
     onCancelButton: function() {
-        this.fireEvent('cancel', this, this.layout.activeItem);
+        if (Ext.isFunction(this.layout.activeItem.onCancelButton)) {
+            return this.layout.activeItem.onCancelButton();
+        }
+        
+        else {
+            this.fireEvent('cancel', this, this.layout.activeItem);
+        }
     },
     
     /**
      * finish button handler
      */
     onFinishButton: function() {
-        this.fireEvent('finish', this, this.layout.activeItem);
+        if (Ext.isFunction(this.layout.activeItem.onFinishButton)) {
+            return this.layout.activeItem.onFinishButton();
+        }
+        
+        else {
+            this.fireEvent('finish', this, this.layout.activeItem);
+        }
     },
     
     /**
