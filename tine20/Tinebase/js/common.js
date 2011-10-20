@@ -204,7 +204,7 @@ Tine.Tinebase.common = {
         var result =  _('No Information');
         
         // support container records
-        if (Ext.isFunction(container.beginEdit)) {
+        if (container && Ext.isFunction(container.beginEdit)) {
             container = container.data;
         }
         
