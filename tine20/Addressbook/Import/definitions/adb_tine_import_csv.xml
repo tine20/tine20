@@ -10,6 +10,17 @@
     <description>tine adb import</description>
     <example>Addressbook/Import/examples/adb_tine_import.csv</example>
     <extension>csv</extension>
+    <autotags>
+        <tag>
+            <name>Import list (###CURRENTDATE###)</name>
+            <!-- _("Import list (###CURRENTDATE###)") -->
+            <description>Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###</description>
+            <!-- _("Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###") -->
+            <contexts>
+                <Addressbook />
+            </contexts>
+        </tag>
+    </autotags>
     <mapping>
         <field>
             <source>adr_one_countryname</source>
