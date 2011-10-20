@@ -40,11 +40,6 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
 //        this.addEvents();
         this.title = _('The record you try to add might already exist.');
         
-//        // select one duplicate (one of the up to five duplicates we allow to edit)
-//        if (this.store.getCount()) {
-//            this.applyStrategy(this.store.resolveStrategy);
-//        }
-        
         this.initColumnModel();
         this.initToolbar();
         
@@ -75,24 +70,20 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
      * called when the store got new data
      */
     onStoreLoad: function() {
-        this.actionCombo.setValue(this.store.resolveStrategy)
-//        if (this.store.resolveStrategy !== 'merge') {
-//            this.applyStrategy(this.store, this.store.resolveStrategy);
-//        }
-    },
-    
-    /**
-     * handler of apply button
-     */
-    onApplyAction: function() {
-        this.applyStrategy(this.actionCombo.getValue());
+        var strategy = this.store.resolveStrategy;
+        
+        this.actionCombo.setValue(strategy);
+        this.applyStrategy(strategy);
     },
     
     /**
      * select handler of action combo
      */
     onActionSelect: function(combo, record, idx) {
-        this.applyStrategy(record.get('value'));
+        var strategy = record.get('value');
+        
+        this.store.applyStrategy(strategy);
+        this.applyStrategy(strategy);
     },
     
     /**
@@ -106,7 +97,6 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
      * @param {Sting} strategy
      */
     applyStrategy: function(strategy) {
-        this.store.applyStrategy(strategy);
         
         var cm = this.getColumnModel(),
             view = this.getView();
@@ -194,11 +184,7 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
                 scope: this, 
                 select: this.onActionSelect
             }
-        }/*, {
-            text: _('Apply'),
-            scope: this,
-            handler: this.onApplyAction
-        }*/];
+        }];
     },
     
     /**
@@ -338,7 +324,7 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.JsonStore, {
             
             if (finalRecord) {
                 if (finalRecord.modified && finalRecord.modified.hasOwnProperty(fieldName)) {
-                    console.log('Tine.widgets.dialog.DuplicateResolveStore::loadData ' + fieldName + 'changed from  ' + finalRecord.modified[fieldName] + ' to ' + finalRecord.get(fieldName));
+//                    Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::loadData ' + fieldName + 'changed from  ' + finalRecord.modified[fieldName] + ' to ' + finalRecord.get(fieldName));
                     record.set('finalValue', finalRecord.modified[fieldName]);
                     
                 }
@@ -404,7 +390,7 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.JsonStore, {
             
             // also record changes
             if (modified.hasOwnProperty('finalValue')) {
-                Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::getResolvedRecord ' + fieldName + ' changed from ' + modified.finalValue + ' to ' + finalValue);
+//                Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::getResolvedRecord ' + fieldName + ' changed from ' + modified.finalValue + ' to ' + finalValue);
                 record.set(fieldName, Tine.Tinebase.common.assertComparable(modified.finalValue));
             }
             
