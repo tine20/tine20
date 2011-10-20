@@ -18,9 +18,10 @@
  */
 class Calendar_Convert_Event_VCalendar_Factory
 {
-    const CLIENT_THUNDERBIRD = 'thunderbird';
-    const CLIENT_MACOSX      = 'macosx';
     const CLIENT_GENERIC     = 'generic';
+    const CLIENT_IPHONE      = 'iphone';
+    const CLIENT_MACOSX      = 'macosx';
+    const CLIENT_THUNDERBIRD = 'thunderbird';
     
     /**
 	 * factory function to return a selected vcalendar backend class
@@ -37,7 +38,12 @@ class Calendar_Convert_Event_VCalendar_Factory
 	            
 	            break;
 	            
-	        case Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX:
+	        case Calendar_Convert_Event_VCalendar_Factory::CLIENT_IPHONE:
+	            return new Calendar_Convert_Event_VCalendar_Iphone($_version);
+	            
+	            break;
+	            
+            case Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX:
 	            return new Calendar_Convert_Event_VCalendar_MacOSX($_version);
 	            
 	            break;
@@ -67,12 +73,18 @@ class Calendar_Convert_Event_VCalendar_Factory
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD;
             $version = $matches['version'];
         
-        // generic client
+        // iPhone
+        } elseif (preg_match(Calendar_Convert_Event_VCalendar_Iphone::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_IPHONE;
+            $version = $matches['version'];
+        
         } else {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC;
             $version = null;
         }
-	    
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " backend: $backend version: $version");
+        
         return array($backend, $version);
 	}
 }
