@@ -255,10 +255,13 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onImport: function(btn) {
         var popupWindow = Tine.widgets.dialog.ImportDialog.openWindow({
             appName: 'Addressbook',
+            modelName: 'Contact',
+            defaultImportContainer: this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer('defaultAddressbook'),
+            
             // update grid after import
             listeners: {
                 scope: this,
-                'update': function(record) {
+                'finish': function() {
                     this.loadGridData({
                         preserveCursor:     false, 
                         preserveSelection:  false, 
@@ -266,12 +269,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                         removeStrategy:     'default'
                     });
                 }
-            },
-            record: new Tine.Tinebase.Model.ImportJob({
-                container_id: this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer('defaultAddressbook'),
-                model: this.recordClass,
-                import_definition_id:  Tine.Addressbook.registry.get('defaultImportDefinition').id
-            }, 0)
+            }
         });
     },
         
