@@ -125,6 +125,35 @@ Tine.Tinebase.Model.Tag = Ext.data.Record.create([
 ]);
 
 /**
+ * replace template fields with data
+ * @static
+ */
+Tine.Tinebase.Model.Tag.replaceTemplateField = function(tagData) {
+    if (Ext.isArray(tagData)) {
+        return Ext.each(tagData, Tine.Tinebase.Model.Tag.replaceTemplateField);
+    }
+    
+    if (Ext.isFunction(tagData.beginEdit)) {
+        tagData = tagData.data;
+    }
+    
+    var replace = {
+        'CURRENTDATE': Tine.Tinebase.common.dateRenderer(new Date()),
+        'CURRENTTIME': Tine.Tinebase.common.timeRenderer(new Date()),
+        'USERFULLNAME': Tine.Tinebase.registry.get('currentAccount').accountDisplayName
+    };
+    
+    Ext.each(['name', 'description'], function(field) {
+        for(var token in replace) {
+            if (replace.hasOwnProperty(token) && Ext.isString(tagData[field])) {
+                tagData[field] = tagData[field].replace(new RegExp('###' + token + '###', 'g'), replace[token]);
+            }
+        }
+    }, this);
+    
+};
+
+/**
  * Model of a PickerRecord
  * 
  * @constructor {Ext.data.Record}
@@ -276,13 +305,15 @@ Tine.Tinebase.Model.ExportJob = Tine.Tinebase.data.Record.create([
  * 
  * @constructor {Ext.data.Record}
  */
-Tine.Tinebase.Model.ImportExportDefinition = Ext.data.Record.create([
+Tine.Tinebase.Model.ImportExportDefinition = Ext.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     {name: 'id'             },
     {name: 'name'           },
+    {name: 'filename'       },
     {name: 'plugin'         },
     {name: 'description'    },
-    {name: 'model'          }
-]);
+    {name: 'model'          },
+    {name: 'plugin_options' }
+]));
 
 /**
  * @namespace Tine.Tinebase.Model
