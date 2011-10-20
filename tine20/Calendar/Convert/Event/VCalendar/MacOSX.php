@@ -18,6 +18,9 @@
  */
 class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCalendar_Abstract
 {
+    // alendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)
+    const HEADER_MATCH = '/^CalendarStore.*Mac OS X\/(?P<version>.*) /';
+    
     protected $_supportedFields = array(
         'seq',
         'dtend',

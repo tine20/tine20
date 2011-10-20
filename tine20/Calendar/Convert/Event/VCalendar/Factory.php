@@ -63,13 +63,13 @@ class Calendar_Convert_Event_VCalendar_Factory
 	 */
 	static public function parseUserAgent($_userAgent)
 	{
-        // CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)
-        if (preg_match('/^CalendarStore.*Mac OS X\/(?P<version>.*) /', $_userAgent, $matches)) {
+        // MacOS X
+        if (preg_match(Calendar_Convert_Event_VCalendar_MacOSX::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX;
             $version = $matches['version'];
         
-        // Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13
-        } elseif (preg_match('/ Thunderbird\/(?P<version>.*)/', $_userAgent, $matches)) {
+        // Thunderbird
+        } elseif (preg_match(Calendar_Convert_Event_VCalendar_Thunderbird::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD;
             $version = $matches['version'];
         
