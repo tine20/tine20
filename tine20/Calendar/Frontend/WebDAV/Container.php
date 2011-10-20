@@ -39,12 +39,16 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         	'{DAV:}resource-id'	=> 'urn:uuid:' . $this->_container->getId(),
         	'{DAV:}owner'       => new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id),
             #'principaluri'      => $principalUri,
-            #'{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}addressbook-description' => $this->_container->description,
             '{DAV:}displayname' => $this->_container->type == Tinebase_Model_Container::TYPE_SHARED && $this->_useIdAsName == true ? $this->_container->name . ' (shared)' : $this->_container->name,
             '{http://apple.com/ns/ical/}calendar-color' => $this->_container->color,
             '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre_CalDAV_Property_SupportedCalendarComponentSet(array('VEVENT')),
-        	'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-data'          => new Sabre_CalDAV_Property_SupportedCalendarData(/*'3.0'*/)
+        	'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-data'          => new Sabre_CalDAV_Property_SupportedCalendarData(/*'3.0'*/),
+        	'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-description'		       => 'Tine 2.0 Calendar',
         );
+        
+        if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+            $properties['{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-user-address-set'	] = new Sabre_DAV_Property_HrefList(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress), false); 
+        }
         
         $response = array();
     
