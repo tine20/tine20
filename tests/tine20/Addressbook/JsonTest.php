@@ -392,7 +392,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     public function testImport()
     {
         $result = $this->_importHelper();
-        $this->assertEquals(2, $result['totalcount'], 'dryrun should detect 2 for import.');
+        $this->assertEquals(2, $result['totalcount'], 'dryrun should detect 2 for import.' . print_r($result, TRUE));
         $this->assertEquals(0, $result['failcount'], 'Import failed for one or more records.');
         $this->assertEquals('Müller, Klaus', $result['results'][0]['n_fileas'], 'file as not found');
         
@@ -410,16 +410,35 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         // import again with clientRecords
         $klaus['adr_one_locality'] = 'Hamburg';
         $clientRecords = array(array(
-            'recordData'    => $klaus,
-            'resolveStrategy' => 'mergeMine',
-            'index'         => 0,
+            'recordData'        => $klaus,
+            'resolveStrategy'   => 'mergeMine',
+            'index'             => 0,
         ));
         $result = $this->_importHelper(array('dryrun' => 0), $clientRecords);
         $this->assertEquals(1, $result['totalcount'], 'Should merge Klaus');
         $this->assertEquals(1, $result['duplicatecount'], 'Fritz is no duplicate.');
         $this->assertEquals('Hamburg', $result['results'][0]['adr_one_locality'], 'locality should change');
     }
-    
+
+    /**
+    * test import with resolve strategies
+    */
+    public function testImportWithResolveStrategyDiscard()
+    {
+        $result = $this->_importHelper(array('dryrun' => 0));
+        $fritz = $result['results'][1];
+        
+        $clientRecords = array(array(
+            'recordData'        => $fritz,
+            'resolveStrategy'   => 'discard',
+            'index'             => 1,
+        ));
+        $result = $this->_importHelper(array('dryrun' => 0), $clientRecords);
+        $this->assertEquals(0, $result['totalcount'], 'Should discard fritz');
+        $this->assertEquals(0, $result['failcount'], 'no failures expected');
+        $this->assertEquals(1, $result['duplicatecount'], 'klaus should still be a duplicate');
+    }
+        
     /**
      * import helper
      * 

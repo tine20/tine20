@@ -179,7 +179,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                     $resolveStrategy = NULL;
                 }
                     
-                if (! empty($recordDataToImport) || $resolveStrategy === 'discard') {
+                if (! empty($recordDataToImport) && $resolveStrategy !== 'discard') {
                     $recordToImport = $this->_createRecordToImport($recordDataToImport);
                     $importedRecord = $this->_importRecord($recordToImport, $resolveStrategy, $recordDataToImport);
                 }
