@@ -613,7 +613,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 var clientRecordData = [];
                 var importOptions = {};
                 
-                this.exceptionStore.clearFilter();
+                this.exceptionStore.clearFilter(true);
                 this.exceptionStore.each(function(r) {
                     clientRecordData.push({
                         recordData: r.get('resolvedRecord').data,
@@ -623,8 +623,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 });
                 
                 this.doImport(function(request, success, response) {
-                    // @todo: show errors
-                    // @todo: fence finish btn
+                    // @todo: show errors and fence finish btn
                     
                     this.importMask.hide();
                     
