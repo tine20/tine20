@@ -405,7 +405,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_importHelper(array('dryrun' => 0));
         $this->assertEquals(0, $result['totalcount'], 'Do not import anything.');
         $this->assertEquals(2, $result['duplicatecount'], 'Should find 2 dups.');
-        $this->assertEquals(0, count($result['exceptions'][0]['exception']['clientRecord']['tags']), 'no tags expected');
+        $this->assertEquals(1, count($result['exceptions'][0]['exception']['clientRecord']['tags']), '1 autotag expected');
         
         // import again with clientRecords
         $klaus['adr_one_locality'] = 'Hamburg';
