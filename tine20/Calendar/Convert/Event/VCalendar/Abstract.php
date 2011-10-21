@@ -232,6 +232,14 @@ class Calendar_Convert_Event_VCalendar_Abstract
                 case 'DTEND':
                     $dtend = new Tinebase_DateTime($property->getDateTime()->format("c"), $property->getDateTime()->getTimezone());
                     $dtend->setTimezone('UTC');
+
+                    if (isset($property['VALUE']) && strtoupper($property['VALUE']) == 'DATE') {
+                        // all day event
+                        $_event->is_all_day_event = true;
+                        
+                        // whole day events ends at 23:59:59 in Tine 2.0 but 00:00 the next day in vcalendar
+                        $dtend->subSecond(1);
+                    }
                     
                     $_event->dtend = $dtend;
                     break;
@@ -239,6 +247,11 @@ class Calendar_Convert_Event_VCalendar_Abstract
                 case 'DTSTART':
                     $dtstart = new Tinebase_DateTime($property->getDateTime()->format("c"), $property->getDateTime()->getTimezone());
                     $dtstart->setTimezone('UTC');
+                    
+                    if (isset($property['VALUE']) && strtoupper($property['VALUE']) == 'DATE') {
+                        // all day event
+                        $_event->is_all_day_event = true;
+                    }
                     
                     $_event->dtstart = $dtstart;
                     break;
@@ -257,7 +270,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
                         $name = isset($property['CN']) ? $property['CN'] : $matches['email'];
                         $contact = $this->_resolveEmailToContact($matches['email'], $name);
                         
-                        $_event->organizer = $contact;
+                        $_event->organizer = $contact->getId();
                         
                         $newAttendee = $this->_getAttendee($property, $contact);
                         
