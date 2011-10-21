@@ -11,6 +11,10 @@
     float: left;
 }
 
+.ux-arrowcollapse-plain .x-tool-toggle {
+    background-color: #DFE8F6;
+}
+
 .x-panel-collapsed .ux-arrowcollapse-header .x-tool-toggle {
     background-position: -2px 0;
 }

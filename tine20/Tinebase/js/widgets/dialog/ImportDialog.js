@@ -35,6 +35,12 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
     defaultImportContainer: null,
     
     /**
+     * @property allowedFileExtensions
+     * @type Array
+     */
+    allowedFileExtensions: null,
+    
+    /**
      * @property recordClass
      * @type Tine.Tinebase.data.Record
      */
@@ -59,10 +65,10 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
     exceptionStore: null,
     
     /**
-     * @property allowedFileExtensions
-     * @type Array
+     * @property lastImportResponse
+     * @type Objcet resutls of the last import request
      */
-    allowedFileExtensions: null,
+    lastImportResponse: null,
     
     // private config overrides
     windowNamePrefix: 'ImportWindow_',
@@ -106,7 +112,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             this.exceptionStore = new Ext.data.JsonStore({
                 mode: 'local',
                 idProperty: 'index',
-                fields: ['index', 'code', 'exception', 'resolveStrategy', 'resolvedRecord', 'isResolved']
+                fields: ['index', 'code', 'message', 'exception', 'resolveStrategy', 'resolvedRecord', 'isResolved']
             });
         
             this.items = [
@@ -142,7 +148,6 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                     importOptions: Ext.apply({
                         container_id: this.containerCombo.getValue(),
                         autotags: {tag: this.tagsPanel.getFormField().getValue()[0]}
-//                        autotags: this.tagsPanel.getFormField().getValue()
                     }, importOptions || {}),
                     clientRecordData: clientRecordData
                 }
@@ -169,6 +174,8 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             
             Tine.log.debug('Tine.widgets.dialog.ImportDialog::onImportResponse server response');
             Tine.log.debug(response);
+            
+            this.lastImportResponse = response;
             
             // load exception store
             this.exceptionStore.loadData(response.exceptions);
@@ -276,7 +283,6 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
     },
     
     onFileReady: function() {
-//        console.log(arguments);
         this.manageButtons();
     },
     
@@ -338,8 +344,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                        var options = this.getImportPluginOptions();
                     
                         if (options.autotags) {
-//                            console.log(options.autotags);
-                            var tags = [(options.autotags.tag)];
+                            var tags = options.autotags;
                             this.tagsPanel.getFormField().setValue(tags);
                         }
                         
@@ -434,7 +439,15 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                     recordClass: this.recordClass
                 })
             })],
-            
+            listeners: {
+                scope: this,
+                show: function() {
+                    if (! this.exceptionStore.isFiltered()) {
+                        this.exceptionStore.filterBy(this.exceptionStoreFilter, this);
+                        this.manageButtons();
+                    }
+                }
+            },
             /**
              * check if next button is allowed
              */
@@ -452,23 +465,6 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 return nextIsAllowed;
                 
             }).createDelegate(this)
-            
-            
-//            listeners: {
-//                scope: this,
-//                show: function() {
-//                    console.log('SHOW CONFLICT PANEL');
-//                    console.log(this.lastImportResponse);
-//                    
-//                    // load conflicts
-//                    var duplicatecount = this.lastImportResponse ? this.lastImportResponse.duplicatecount : 0,
-//                        recordsName = this.app.i18n.n_(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), duplicatecount);
-//                        
-//                    this.conflictsLabel.setText(String.format(this.conflictsLabel.rawText, duplicatecount, recordsName), false);
-//                }
-//            }
-            
-            
         }
     },
     
@@ -545,7 +541,10 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             p.prev.setDisabled(ap == 1);
             p.next.setDisabled(ap == ps);
             p.last.setDisabled(ap == ps);
-            this.conflictIndexText.setText(String.format(_('(This is record {0} in you import file)'), nextRecord.get('index')));
+            this.conflictIndexText.setText(nextRecord ? 
+                String.format(_('(This is record {0} in you import file)'), nextRecord.get('index') + 1) :
+                _('No conflict to resolve')
+            );
             
             this.conflictMask.hide();
             this.conflictMask.hidden = true;
@@ -564,12 +563,42 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         
         return {
             title: _('Summary'),
-            layout: 'fit',
             border: false,
-            xtype: 'form',
+            xtype: 'ux.displaypanel',
             frame: true,
             ref: '../summaryPanel',
-            items: [{}],
+            autoScroll: true,
+            items: [{
+                height: 100,
+                ref: '../summaryPanelInfo',
+                border: false,
+                layout: 'ux.display',
+                layoutConfig: {
+                    background: 'border'
+                }
+            }, {
+                ref: '../summaryPanelFailures',
+                baseCls: 'ux-arrowcollapse',
+                cls: 'ux-arrowcollapse-plain',
+                collapsible: true,
+                hidden: true,
+                flex: 1,
+                title:'',
+                items: [{
+                    xtype: 'grid',
+                    store: this.exceptionStore,
+                    autoHeight: true,
+                    columns: [
+                        { id: 'index', header: _('Index'), width: 60, sortable: false, dataIndex: 'index'}, 
+                        { id: 'failure', header: _('Failure'), width: 60, sortable: false, dataIndex: 'message'}
+                    ],
+                    autoExpandColumn: 'failure'
+                }]
+            }],
+            listeners: {
+                scope: this,
+                show: this.onSummaryPanelShow
+            },
             
             /**
              * finish button handler for this panel
@@ -584,7 +613,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 var clientRecordData = [];
                 var importOptions = {};
                 
-                this.exceptionStore.clearFilter();
+                this.exceptionStore.clearFilter(true);
                 this.exceptionStore.each(function(r) {
                     clientRecordData.push({
                         recordData: r.get('resolvedRecord').data,
@@ -594,15 +623,92 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 });
                 
                 this.doImport(function(request, success, response) {
-                    // @todo: fence finish btn
+                    // @todo: show errors and fence finish btn
                     
                     this.importMask.hide();
                     
                     this.fireEvent('finish', this, this.layout.activeItem);
+                    this.window.close();
                 }, importOptions, clientRecordData);
                 
             }).createDelegate(this)
             
+        }
+    },
+    
+    /**
+     * summary panel show handler
+     */
+    onSummaryPanelShow: function() {
+        if (! this.summaryPanelInfo.rendered) {
+            return this.onSummaryPanelShow.defer(100, this);
+        }
+        
+        try {
+            // calc metrics
+            var rsp = this.lastImportResponse,
+                totalcount = rsp.totalcount,
+                failcount = 0,
+                mergecount = 0
+                discardcount = 0;
+                
+            this.exceptionStore.clearFilter();
+            this.exceptionStore.each(function(r) {
+                var strategy = r.get('resolveStrategy');
+                if (! strategy || !Ext.isString(strategy)) {
+                    failcount++;
+                } else if (strategy == 'keep') {
+                    totalcount++;
+                } else if (strategy.match(/^merge.*/)) {
+                    mergecount++;
+                } else if (strategy == 'discard') {
+                    discardcount++;
+                }
+            }, this);
+            
+            var tags = this.tagsPanel.getFormField().getValue(),
+                container = this.containerCombo.selectedContainer,
+                info = [String.format(_('In Total we found {0} records in your import file.'), rsp.totalcount + rsp.duplicatecount + rsp.failcount)];
+                
+                if (totalcount) {
+                    info.push(String.format(_('{0} of them will be added as new records into: "{1}".'), 
+                        totalcount, 
+                        Tine.Tinebase.common.containerRenderer(container).replace('<div', '<span').replace('</div>', '</span>')
+                    ));
+                }
+                
+                if (mergecount + discardcount) {
+                    info.push(String.format(_('{0} of them where identified as duplicates.'), mergecount + discardcount));
+                    
+                    if (mergecount) {
+                        info.push(String.format(_('From the identified duplicates {0} will be merged into the existing records.'), mergecount));
+                    }
+                    
+                    if (discardcount) {
+                        info.push(String.format(_('From the identified duplicates {0} will be discarded.'), discardcount));
+                    }
+                }
+                
+                if (Ext.isArray(tags) && tags.length) {
+                    var tagNames = [];
+                    Ext.each(tags, function(tag) {tagNames.push(tag.name)});
+                    info.push(String.format(_('All records will be taged with: "{0}" so you can find them easily.'), tagNames.join(',')));
+                }
+                
+                
+            this.summaryPanelInfo.update('<div style="padding: 5px;">' + info.join('<br />') + '</div>');
+            
+            // failures
+            if (failcount) {
+                this.exceptionStore.filter('code', 0);
+                this.summaryPanelFailures.show();
+                this.summaryPanelFailures.setTitle(String.format(_('{0} records have failures and will be discarded.'), failcount));
+                
+            }
+            
+        } catch (e) {
+            Tine.log.err('Tine.widgets.dialog.ImportDialog::onSummaryPanelShow');
+            Tine.log.err(e.stack ? e.stack : e);
         }
     }
 });
