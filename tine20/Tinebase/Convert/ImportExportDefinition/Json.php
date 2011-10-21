@@ -41,9 +41,21 @@ class Tinebase_Convert_ImportExportDefinition_Json extends Tinebase_Convert_Json
      */
     protected function _convertOptions(Tinebase_Model_ImportExportDefinition $_definition)
     {
-        $_definition->plugin_options = (empty($_definition->plugin_options))
+        $options = (empty($_definition->plugin_options))
             ? array()
             : Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($_definition)->toArray();
+        
+        if (isset($options['autotags'])) {
+            if (isset($options['autotags']['tag'])) {
+                $options['autotags'] = $options['autotags']['tag'];
+            }
+            
+            if ($options['autotags']['name']) {
+                $options['autotags'] = array($options['autotags']);
+            }
+        }
+        
+        $_definition->plugin_options = $options;
     }
 
     /**
