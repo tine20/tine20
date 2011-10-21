@@ -46,16 +46,39 @@ class Tinebase_Convert_ImportExportDefinition_Json extends Tinebase_Convert_Json
             : Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($_definition)->toArray();
         
         if (isset($options['autotags'])) {
-            if (isset($options['autotags']['tag'])) {
-                $options['autotags'] = $options['autotags']['tag'];
-            }
-            
-            if ($options['autotags']['name']) {
-                $options['autotags'] = array($options['autotags']);
-            }
+            $options['autotags'] = $this->_handleAutotags($options['autotags']);
         }
         
         $_definition->plugin_options = $options;
+    }
+    
+    /**
+     * resolve and sanitize tags
+     * 
+     * @param array $_autotagOptions
+     * @return array
+     */
+    protected function _handleAutotags($_autotagOptions)
+    {
+        $result = (isset($_autotagOptions['tag'])) ? $_autotagOptions['tag'] : $_autotagOptions;
+        
+        if (isset($result['name'])) {
+            $result = array($result);
+        }
+        
+        // resolve tags if they exist
+        foreach ($result as $idx => $value) {
+            if (isset($value['id'])) {
+                try {
+                    $tag = Tinebase_Tags::getInstance()->get($value['id']);
+                    $result[$idx] = $tag->toArray();
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    // do nothing
+                }
+            }
+        }
+        
+        return $result;
     }
 
     /**
