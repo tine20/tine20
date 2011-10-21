@@ -307,8 +307,10 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.JsonStore, {
         
         // @TODO sort conflict fileds first 
         //   - group fields (contact org, home / phones etc.)
-        // @TODO add customfields
-        Ext.each(this.recordClass.getFieldDefinitions(), function(field) {
+        var fieldDefinitions = this.recordClass.getFieldDefinitions(),
+            cfDefinitions = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, this.recordClass, true);
+            
+        Ext.each(fieldDefinitions.concat(cfDefinitions), function(field) {
             if (field.isMetaField || field.ommitDuplicateResolveing) return;
             
             var fieldName = field.name,
