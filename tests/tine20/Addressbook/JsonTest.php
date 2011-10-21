@@ -468,8 +468,14 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_importHelper($options);
         
         $this->assertEquals(2, count($result['results']));
+        $this->assertEquals(1, count($result['results'][0]['tags']), 'no tag added');
         $this->assertEquals('Importliste (19.10.2011)', $result['results'][0]['tags'][0]['name']);
         Tinebase_Tags::getInstance()->deleteTags(array($result['results'][0]['tags'][0]['id']));
+        
+        // once again for duplicates (check if client record has tag)
+        $result = $this->_importHelper($options);
+        $this->assertEquals(1, count($result['exceptions'][0]['exception']['clientRecord']['tags']), 'no tag added');
+        $this->assertEquals('Importliste (19.10.2011)', $result['exceptions'][0]['exception']['clientRecord']['tags'][0]['name']);
     }
 
     /**
@@ -792,7 +798,12 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $registryData = $this->_instance->getRegistryData();
         
         $this->assertEquals('adb_tine_import_csv', $registryData['defaultImportDefinition']['name']);
-        $this->assertTrue(is_array($registryData['importDefinitions']['results'][0]['plugin_options']));
-        $this->assertEquals('Addressbook_Model_Contact', $registryData['importDefinitions']['results'][0]['plugin_options']['model']);
+        $this->assertTrue(is_array($registryData['importDefinitions']['results']));
+        
+        $options = $registryData['defaultImportDefinition']['plugin_options'];
+        $this->assertTrue(is_array($options));
+        $this->assertEquals('Addressbook_Model_Contact', $options['model']);
+        $this->assertTrue(is_array($options['autotags']));
+        $this->assertEquals('Import list (###CURRENTDATE###)', $options['autotags'][0]['name']);
     }
 }

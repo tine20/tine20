@@ -41,9 +41,48 @@ class Tinebase_Convert_ImportExportDefinition_Json extends Tinebase_Convert_Json
      */
     protected function _convertOptions(Tinebase_Model_ImportExportDefinition $_definition)
     {
-        $_definition->plugin_options = (empty($_definition->plugin_options))
+        $options = (empty($_definition->plugin_options))
             ? array()
             : Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($_definition)->toArray();
+        
+        if (isset($options['autotags'])) {
+            $options['autotags'] = $this->_handleAutotags($options['autotags']);
+        }
+
+        if (isset($options['container_id'])) {
+            $options['container_id'] = Tinebase_Container::getInstance()->getContainerById($options['container_id'])->toArray();
+        }
+        
+        $_definition->plugin_options = $options;
+    }
+    
+    /**
+     * resolve and sanitize tags
+     * 
+     * @param array $_autotagOptions
+     * @return array
+     */
+    protected function _handleAutotags($_autotagOptions)
+    {
+        $result = (isset($_autotagOptions['tag'])) ? $_autotagOptions['tag'] : $_autotagOptions;
+        
+        if (isset($result['name'])) {
+            $result = array($result);
+        }
+        
+        // resolve tags if they exist
+        foreach ($result as $idx => $value) {
+            if (isset($value['id'])) {
+                try {
+                    $tag = Tinebase_Tags::getInstance()->get($value['id']);
+                    $result[$idx] = $tag->toArray();
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    // do nothing
+                }
+            }
+        }
+        
+        return $result;
     }
 
     /**

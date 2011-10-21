@@ -298,7 +298,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         }
         
-        $this->_handleTags($_record);
+        if ($_resolveStrategy === NULL) {
+            // only add tags for "new" records
+            $this->_handleTags($_record);
+        }
         $importedRecord = $this->_importAndResolveConflict($_record, $_resolveStrategy);
         
         $this->_importResult['results']->addRecord($importedRecord);
@@ -332,24 +335,24 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     * add/create shared tags if they don't exist
     *
     * @param   array $_tags array of tag strings
-    * @return  array with valid tag ids
+    * @return  Tinebase_Record_RecordSet with Tinebase_Model_Tag
     */
     protected function _addSharedTags($_tags)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Adding tags: ' . print_r($_tags, TRUE));
     
-        $result = array();
-        foreach ($_tags as $tag) {
-            $tag = trim($tag);
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tag');
+        foreach ($_tags as $tagName) {
+            $tagName = trim($tagName);
     
             // only check non-empty tags
-            if (empty($tag)) {
+            if (empty($tagName)) {
                 continue;
             }
     
-            $tagId = $this->_getSingleTag($tag);
-            if ($tagId) {
-                $result[] = $tagId;
+            $tagToAdd = $this->_getSingleTag($tagName);
+            if ($tagToAdd) {
+                $result->addRecord($tagToAdd);
             }
         }
     
@@ -362,6 +365,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * @param string $_name
      * @param string $_description
      * @param string $_type
+     * @return Tinebase_Model_Tag
      * 
      * @todo allow to set contexts / application / color / rights
      * @todo catch Tinebase_Exception_AccessDenied when trying to create shared tag
@@ -370,10 +374,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     {
         $name = (strlen($_name) > 40) ? substr($_name, 0, 40) : $_name;
         
-        $id = NULL;
+        $tag = NULL;
         try {
-            $existing = Tinebase_Tags::getInstance()->getTagByName($name, NULL, 'Tinebase', TRUE);
-            $id = $existing->getId();
+            $tag = Tinebase_Tags::getInstance()->getTagByName($name, NULL, 'Tinebase', TRUE);
         
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             	' Added existing tag ' . $name . ' to record.');
@@ -393,7 +396,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new shared tag: ' . $name);
         
-                $newTag = Tinebase_Tags::getInstance()->createTag($newTag);
+                $tag = Tinebase_Tags::getInstance()->createTag($newTag);
         
                 $right = new Tinebase_Model_TagRight(array(
                                     'tag_id'        => $newTag->getId(),
@@ -404,14 +407,12 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 ));
                 Tinebase_Tags::getInstance()->setRights($right);
                 Tinebase_Tags::getInstance()->setContexts(array('any'), $newTag->getId());
-        
-                $id = $newTag->getId();
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Do not create shared tag (option not set)');
             }
         }
         
-        return $id;
+        return $tag;
     }
     
     /**
@@ -426,11 +427,11 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
         	' Trying to add ' . count($autotags) . ' autotag(s) to record.');
         
-        $tags = $_record->tags;
+        $tags = ($_record->tags instanceof Tinebase_Record_RecordSet) ? $_record->tags : new Tinebase_Record_RecordSet('Tinebase_Model_Tag');
         foreach ($autotags as $tagData) {
-            $tagId = $this->_getSingleTag($tagData['name'], $tagData);
-            if ($tagId !== NULL) {
-                array_push($tags, $tagId);
+            $tag = $this->_getSingleTag($tagData['name'], $tagData);
+            if ($tag !== NULL) {
+                $tags->addRecord($tag);
             }
         }
         $_record->tags = $tags;
