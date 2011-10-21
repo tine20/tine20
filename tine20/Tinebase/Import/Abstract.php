@@ -367,9 +367,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * @param array $_tagData
      * @param boolean $_create
      * @return Tinebase_Model_Tag
-     * 
-     * @todo allow to set contexts / application / color / rights
-     * @todo catch Tinebase_Exception_AccessDenied when trying to create shared tag
      */
     protected function _getSingleTag($_name, $_tagData = array(), $_create = TRUE)
     {
@@ -383,34 +380,53 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             	' Added existing tag ' . $name . ' to record.');
             
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $description  = substr((isset($_tagData['description'])) ? $_tagData['description'] : $_name . ' (imported)', 0, 50);
-            $type         = (isset($_tagData['type'])) ? $_tagData['type'] : Tinebase_Model_Tag::TYPE_SHARED;
-            
             if ($_create) {
-                $newTag = new Tinebase_Model_Tag(array(
-                                    'name'          => $name,
-                                    'description'   => $description,
-                                    'type'          => $type,
-                                    'color'         => '#000099'
-                ));
-        
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new shared tag: ' . $name);
-        
-                // @todo only ignore acl for autotags that are present in import definition
-                $tag = Tinebase_Tags::getInstance()->createTag($newTag, TRUE);
-                $right = new Tinebase_Model_TagRight(array(
-                                    'tag_id'        => $newTag->getId(),
-                                    'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                                    'account_id'    => 0,
-                                    'view_right'    => TRUE,
-                                    'use_right'     => TRUE,
-                ));
-                Tinebase_Tags::getInstance()->setRights($right);
-                Tinebase_Tags::getInstance()->setContexts(array('any'), $newTag->getId());
+                $tagData = (! empty($_tagData)) ? $_tagData : array(
+                    'name'          => $name,
+                );
+                $tag = $this->_createTag($tagData);
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Do not create shared tag (option not set)');
             }
         }
+        
+        return $tag;
+    }
+    
+    /**
+     * create new tag
+     * 
+     * @param array $_tagData
+     * @return Tinebase_Model_Tag
+     * 
+     * @todo allow to set contexts / application / color / rights
+     * @todo only ignore acl for autotags that are present in import definition
+     */
+    protected function _createTag($_tagData)
+    {
+        $description  = substr((isset($_tagData['description'])) ? $_tagData['description'] : $_tagData['name'] . ' (imported)', 0, 50);
+        $type         = (isset($_tagData['type'])) ? $_tagData['type'] : Tinebase_Model_Tag::TYPE_SHARED;
+                
+        $newTag = new Tinebase_Model_Tag(array(
+            'name'          => $_tagData['name'],
+            'description'   => $description,
+            'type'          => $type,
+            'color'         => '#000099'
+        ));
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new shared tag: ' . $_tagData['name']);
+        
+        $tag = Tinebase_Tags::getInstance()->createTag($newTag, TRUE);
+        
+        $right = new Tinebase_Model_TagRight(array(
+            'tag_id'        => $newTag->getId(),
+            'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+            'account_id'    => 0,
+            'view_right'    => TRUE,
+            'use_right'     => TRUE,
+        ));
+        Tinebase_Tags::getInstance()->setRights($right);
+        Tinebase_Tags::getInstance()->setContexts(array('any'), $newTag->getId());
         
         return $tag;
     }
