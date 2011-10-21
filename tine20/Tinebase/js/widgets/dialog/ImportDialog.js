@@ -490,9 +490,6 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
     /**
      * load conflict with given index
      * 
-     * @TODO: exception might be no duplicate!!! -> use exception panel?
-     * @TODO: check index / load other if not exist (-1) / show info if none or empty
-     * 
      * @param {Number} index
      */
     loadConflict: function(index) {
