@@ -421,7 +421,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-    * test import with resolve strategies
+    * test import with discard resolve strategy
     */
     public function testImportWithResolveStrategyDiscard()
     {
