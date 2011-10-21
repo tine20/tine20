@@ -405,7 +405,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_importHelper(array('dryrun' => 0));
         $this->assertEquals(0, $result['totalcount'], 'Do not import anything.');
         $this->assertEquals(2, $result['duplicatecount'], 'Should find 2 dups.');
-        $this->assertEquals(0, count($result['exceptions'][0]['exception']['clientRecord']['tags']), 'no tags expected');
+        $this->assertEquals(1, count($result['exceptions'][0]['exception']['clientRecord']['tags']), '1 autotag expected');
         
         // import again with clientRecords
         $klaus['adr_one_locality'] = 'Hamburg';
@@ -457,7 +457,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         $options = array(
         	'dryrun'     => 0,
-        	'shared_tags'=> 'create',
         	'autotags'   => array('tag' => array(
     	        'name'	        => 'Importliste (19.10.2011)',
     	        'description'	=> 'Kontakte der Importliste vom 19.10.2011 um 20.00 Uhr. Bearbeiter: UNITTEST',
@@ -467,7 +466,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         );
         $result = $this->_importHelper($options);
         
-        $this->assertEquals(2, count($result['results']));
+        $this->assertEquals(2, count($result['results']), 'should import 2');
         $this->assertEquals(1, count($result['results'][0]['tags']), 'no tag added');
         $this->assertEquals('Importliste (19.10.2011)', $result['results'][0]['tags'][0]['name']);
         Tinebase_Tags::getInstance()->deleteTags(array($result['results'][0]['tags'][0]['id']));

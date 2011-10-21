@@ -200,11 +200,12 @@ class Tinebase_Tags
      * Creates a single tag
      * 
      * @param   Tinebase_Model_Tag
+     * @param   boolean $_ignoreACL
      * @return  Tinebase_Model_Tag
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_UnexpectedValue
      */
-    public function createTag(Tinebase_Model_Tag $_tag)
+    public function createTag(Tinebase_Model_Tag $_tag, $_ignoreACL = FALSE)
     {
         if ($_tag instanceof Tinebase_Model_FullTag) {
             $_tag = new Tinebase_Model_Tag($_tag->toArray(), TRUE);            
@@ -238,9 +239,7 @@ class Tinebase_Tags
                 ));
                 break;
             case Tinebase_Model_Tag::TYPE_SHARED:
-                // @todo move to controller later?
-                if ( !Tinebase_Acl_Roles::getInstance()
-                        ->hasRight('Admin', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS) ) {
+                if (! $_ignoreACL && ! Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_SHARED_TAGS) ) {
                     throw new Tinebase_Exception_AccessDenied('Your are not allowed to create this tag');
                 }
                 $_tag->owner = 0;
