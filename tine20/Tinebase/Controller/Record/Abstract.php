@@ -403,7 +403,7 @@ abstract class Tinebase_Controller_Record_Abstract
             if ($record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
                 Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), $_record->relations);
             }                    
-            if ($record->has('tags') && !empty($_record->tags) && is_array($_record->tags)) {
+            if ($record->has('tags') && !empty($_record->tags) && (is_array($_record->tags) || $_record->tags instanceof Tinebase_Record_RecordSet)) {
                 $record->tags = $_record->tags;
                 Tinebase_Tags::getInstance()->setTagsOfRecord($record);
             }        
