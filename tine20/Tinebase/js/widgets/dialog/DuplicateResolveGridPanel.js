@@ -362,16 +362,22 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.JsonStore, {
                 location = strategy === 'keep' ? 'mine' : 'theirs';
             
             // undefined or empty theirs value -> keep mine
-            if (strategy == 'mergeTheirs' && ['', 'null', 'undefined'].indexOf(String(theirs)) > -1) {
+            if (strategy == 'mergeTheirs' && ['', 'null', 'undefined', '[]'].indexOf(String(theirs)) > -1) {
                 location = 'mine';
             }
             
             // only keep mine if its not undefined or empty
-            if (strategy == 'mergeMine' && ['', 'null', 'undefined'].indexOf(String(mine)) < 0) {
+            if (strategy == 'mergeMine' && ['', 'null', 'undefined', '[]'].indexOf(String(mine)) < 0) {
                 location = 'mine';
             }
             
-            resolveRecord.set('finalValue', location === 'mine' ? mine : theirs);
+            // spechial merge for tags
+            // @TODO generalize me
+            if (resolveRecord.get('fieldName') == 'tags') {
+                resolveRecord.set('finalValue', Tine.Tinebase.common.assertComparable([].concat(mine).concat(theirs)));
+            } else {
+                resolveRecord.set('finalValue', location === 'mine' ? mine : theirs);
+            }
         }, this);
         
         this.commitChanges();
