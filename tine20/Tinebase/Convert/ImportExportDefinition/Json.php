@@ -48,6 +48,10 @@ class Tinebase_Convert_ImportExportDefinition_Json extends Tinebase_Convert_Json
         if (isset($options['autotags'])) {
             $options['autotags'] = $this->_handleAutotags($options['autotags']);
         }
+
+        if (isset($options['container_id'])) {
+            $options['container_id'] = Tinebase_Container::getInstance()->getContainerById($options['container_id'])->toArray();
+        }
         
         $_definition->plugin_options = $options;
     }
