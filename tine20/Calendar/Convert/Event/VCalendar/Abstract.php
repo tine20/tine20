@@ -239,6 +239,8 @@ class Calendar_Convert_Event_VCalendar_Abstract
                         
                         // whole day events ends at 23:59:59 in Tine 2.0 but 00:00 the next day in vcalendar
                         $dtend->subSecond(1);
+                    } else {
+                        $_event->is_all_day_event = false;
                     }
                     
                     $_event->dtend = $dtend;
@@ -251,6 +253,8 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     if (isset($property['VALUE']) && strtoupper($property['VALUE']) == 'DATE') {
                         // all day event
                         $_event->is_all_day_event = true;
+                    } else {
+                        $_event->is_all_day_event = false;
                     }
                     
                     $_event->dtstart = $dtstart;
