@@ -35,6 +35,20 @@ Tine.widgets.customfields.ConfigManager = function() {
         return stores[app.appName];
     };
     
+    /**
+     * convert config record to record field
+     * 
+     * @param  {Record} cfConfig
+     * @return {Ext.data.Field} field definition
+     */
+    var config2Field = function(cfConfig) {
+        var def = cfConfig.get('definition');
+        
+        return new Ext.data.Field(Ext.apply({
+            name: '#' + cfConfig.get('name')
+        }, def));
+    };
+    
     return {
         /**
          * returns a single field config
@@ -42,9 +56,10 @@ Tine.widgets.customfields.ConfigManager = function() {
          * @param {String/Application}  app
          * @param {String}              model
          * @param {String}              name
+         * @param {Boolean}             asField
          * @return {Record}
          */
-        getConfig: function (app, model, name) {
+        getConfig: function (app, model, name, asField) {
             var cfStore = getStore(app),
                 cfConfig = null;
             
@@ -54,7 +69,7 @@ Tine.widgets.customfields.ConfigManager = function() {
             cfConfig = cfConfig > -1 ? cfStore.getAt(cfConfig): null;
             cfStore.clearFilter(true);
             
-            return cfConfig;
+            return asField ? config2Field(cfConfig) : cfConfig;
             
         },
         
@@ -63,9 +78,14 @@ Tine.widgets.customfields.ConfigManager = function() {
          * 
          * @param {String/Application}  app
          * @param {String}              model
+         * @param {Boolean}             asFields
          * @return {Array}
          */
-        getConfigs: function(app, model) {
+        getConfigs: function(app, model, asFields) {
+            if (Ext.isFunction(model.getMeta)) {
+                model = model.getMeta('appName') + '_Model_' + model.getMeta('modelName');
+            }
+            
             var cfStore = getStore(app),
                 cfConfigs = [];
             
@@ -73,6 +93,12 @@ Tine.widgets.customfields.ConfigManager = function() {
             cfStore.filter('model', model);
             cfStore.each(function(r) {cfConfigs.push(r);});
             cfStore.clearFilter(true);
+            
+            if (asFields) {
+                Ext.each(cfConfigs, function(cfConfig, idx) {
+                    cfConfigs[idx] = config2Field(cfConfig);
+                }, this);
+            }
             
             return cfConfigs;
         }
