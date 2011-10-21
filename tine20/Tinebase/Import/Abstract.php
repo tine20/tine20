@@ -350,7 +350,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 continue;
             }
     
-            $tagToAdd = $this->_getSingleTag($tagName);
+            $createTag = (isset($this->_options['shared_tags']) && $this->_options['shared_tags'] == 'create');
+            $tagToAdd = $this->_getSingleTag($tagName, array(), $createTag);
             if ($tagToAdd) {
                 $result->addRecord($tagToAdd);
             }
@@ -363,14 +364,14 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * get tag / create on the fly
      * 
      * @param string $_name
-     * @param string $_description
-     * @param string $_type
+     * @param array $_tagData
+     * @param boolean $_create
      * @return Tinebase_Model_Tag
      * 
      * @todo allow to set contexts / application / color / rights
      * @todo catch Tinebase_Exception_AccessDenied when trying to create shared tag
      */
-    protected function _getSingleTag($_name, $_tagData = array())
+    protected function _getSingleTag($_name, $_tagData = array(), $_create = TRUE)
     {
         $name = (strlen($_name) > 40) ? substr($_name, 0, 40) : $_name;
         
@@ -385,8 +386,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $description  = substr((isset($_tagData['description'])) ? $_tagData['description'] : $_name . ' (imported)', 0, 50);
             $type         = (isset($_tagData['type'])) ? $_tagData['type'] : Tinebase_Model_Tag::TYPE_SHARED;
             
-            if (isset($this->_options['shared_tags']) && $this->_options['shared_tags'] == 'create') {
-                // create new tag
+            if ($_create) {
                 $newTag = new Tinebase_Model_Tag(array(
                                     'name'          => $name,
                                     'description'   => $description,
@@ -396,8 +396,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new shared tag: ' . $name);
         
-                $tag = Tinebase_Tags::getInstance()->createTag($newTag);
-        
+                // @todo only ignore acl for autotags that are present in import definition
+                $tag = Tinebase_Tags::getInstance()->createTag($newTag, TRUE);
                 $right = new Tinebase_Model_TagRight(array(
                                     'tag_id'        => $newTag->getId(),
                                     'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
@@ -422,7 +422,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     */
     protected function _addAutoTags($_record)
     {
-        $autotags = (array_key_exists('name', $this->_options['autotags']['tag'])) ? array($this->_options['autotags']['tag']) : $this->_options['autotags']['tag'];
+        // sanitize autotag option
+        $autotags = (array_key_exists('tag', $this->_options['autotags'])) ? $this->_options['autotags']['tag'] : $this->_options['autotags'];
+        $autotags = (array_key_exists('name', $autotags)) ? array($autotags) : $autotags;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
         	' Trying to add ' . count($autotags) . ' autotag(s) to record.');
