@@ -468,8 +468,14 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_importHelper($options);
         
         $this->assertEquals(2, count($result['results']));
+        $this->assertEquals(1, count($result['results'][0]['tags']), 'no tag added');
         $this->assertEquals('Importliste (19.10.2011)', $result['results'][0]['tags'][0]['name']);
         Tinebase_Tags::getInstance()->deleteTags(array($result['results'][0]['tags'][0]['id']));
+        
+        // once again for duplicates (check if client record has tag)
+        $result = $this->_importHelper($options);
+        $this->assertEquals(1, count($result['exceptions'][0]['exception']['clientRecord']['tags']), 'no tag added');
+        $this->assertEquals('Importliste (19.10.2011)', $result['exceptions'][0]['exception']['clientRecord']['tags'][0]['name']);
     }
 
     /**
