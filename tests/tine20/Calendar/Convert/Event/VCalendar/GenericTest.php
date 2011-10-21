@@ -78,7 +78,31 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         return $event;
     }
-                
+    
+    /**
+     * test converting vcard from sogo connector to Calendar_Model_Event
+     * @return Calendar_Model_Event
+     */
+    public function testConvertAllDayEventToTine20Model()
+    {
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/lightning_allday.ics', 'r');
+    
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+    
+        $event = $converter->toTine20Model($vcalendarStream);
+        
+        #var_dump($event->dtstart);
+        #var_dump($event->dtend);
+        
+        $this->assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->class);
+        $this->assertEquals('Hamburg',                           $event->location);
+        $this->assertEquals("2011-10-19 23:59:59",               (string)$event->dtend   , 'DTEND mismatch');
+        $this->assertEquals("2011-10-19 00:00:00",               (string)$event->dtstart , 'DTSTART mismatch');
+        $this->assertTrue($event->is_all_day_event , 'All day event mismatch');
+    
+        return $event;
+    }
+    
     /**
      * test converting vcard from sogo connector to Calendar_Model_Event 
      */
