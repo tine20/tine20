@@ -442,19 +442,19 @@ class Tinebase_Tags
      * 
      * @param Tinebase_Record_Abstract  $_record        the record object
      * @param string                    $_tagsProperty  the property in the record where the tags are in (defaults: 'tags')
+     * 
+     * @todo: history log
      */
-    public function setTagsOfRecord($_record, $_tagsProperty='tags')
+    public function setTagsOfRecord($_record, $_tagsProperty = 'tags')
     {
         $tagsToSet = $this->_createTagsOnTheFly($_record[$_tagsProperty])->getArrayOfIds();
         $currentTags = $this->getTagsOfRecord($_record, 'tags', Tinebase_Model_TagRight::USE_RIGHT)->getArrayOfIds();
-        
         
         $toAttach = array_diff($tagsToSet, $currentTags);
         $toDetach = array_diff($currentTags, $tagsToSet);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Attaching tags: ' . print_r($toAttach, true));
         
-        // manage tags
         $appId = Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId();
         $recordId = $_record->getId();
         foreach ($toAttach as $tagId) {
@@ -476,8 +476,6 @@ class Tinebase_Tags
             ));
             $this->_addOccurrence($tagId, -1);
         }
-        
-        // @todo: history log
     }
     
     /**
