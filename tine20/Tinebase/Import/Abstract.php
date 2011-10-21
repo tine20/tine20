@@ -298,7 +298,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         }
         
-        $this->_handleTags($_record);
+        if ($_resolveStrategy === NULL) {
+            // only add tags for "new" records
+            $this->_handleTags($_record);
+        }
         $importedRecord = $this->_importAndResolveConflict($_record, $_resolveStrategy);
         
         $this->_importResult['results']->addRecord($importedRecord);
