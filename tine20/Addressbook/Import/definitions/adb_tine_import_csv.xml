@@ -21,7 +21,7 @@
             <contexts>
                 <Addressbook />
             </contexts>
-            <type>SHARED</type>
+            <type>shared</type>
         </tag>
     </autotags>
     <mapping>
