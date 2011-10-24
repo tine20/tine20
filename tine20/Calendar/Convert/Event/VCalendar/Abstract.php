@@ -46,15 +46,15 @@ class Calendar_Convert_Event_VCalendar_Abstract
         $eventSet = new Tinebase_Record_RecordSet('Calendar_Model_Event', array($_model));
         
         if ($_model->rrule) {
-            foreach($_model->exdate as $exEvent) {
-                if (! $exEvent->is_deleted) {
-                    $eventSet->addRecord($exEvent);
-                    $_model->exdate->removeRecord($exEvent);
-                }
-            }
-            
-            // remaining exdates are fallouts
-            $_model->exdate = $_model->exdate->getOriginalDtStart();
+        #    foreach($_model->exdate as $exEvent) {
+        #        if (! $exEvent->is_deleted) {
+        #            $eventSet->addRecord($exEvent);
+        #            $_model->exdate->removeRecord($exEvent);
+        #        }
+        #    }
+        #    
+        #    // remaining exdates are fallouts
+        #    $_model->exdate = $_model->exdate->getOriginalDtStart();
         }
         
         $exporter = new Calendar_Export_Ical();
@@ -284,7 +284,11 @@ class Calendar_Convert_Event_VCalendar_Abstract
                         $_event->attendee->addRecord($newAttendee);
                     }
                     break;
-                
+                    
+                case 'RRULE':
+                    $_event->rrule = $property->value;
+                    break;
+                    
                 case 'TRANSP':
                     if (in_array($property->value, array(Calendar_Model_Event::TRANSP_OPAQUE, Calendar_Model_Event::TRANSP_TRANSP))) {
                         $_event->transp = $property->value;
@@ -293,6 +297,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     }
                     break;
                     
+                // @todo handle categories
                 case 'CATEGORIES':
                     break;
                     
