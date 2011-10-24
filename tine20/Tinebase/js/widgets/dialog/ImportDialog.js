@@ -347,6 +347,12 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                     
                         if (options.autotags) {
                             var tags = options.autotags;
+                            
+                            Ext.each([].concat(tags), function(tag) {
+                                tag.name = this.app.i18n._hidden(tag.name);
+                                tag.description = this.app.i18n._hidden(tag.description);
+                            }, this);
+                            
                             this.tagsPanel.getFormField().setValue(tags);
                         }
                         
