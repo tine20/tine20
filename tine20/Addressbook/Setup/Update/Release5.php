@@ -131,4 +131,17 @@ class Addressbook_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->setTableVersion('addressbook', 15);
         $this->setApplicationVersion('Addressbook', '5.4');
     }
+    
+    /**
+     * update to 5.5
+     * - update import export defs
+     *
+     * @return void
+     */
+    public function update_4()
+    {
+    Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'));
+    
+    $this->setApplicationVersion('Addressbook', '5.5');
+    }
 }
