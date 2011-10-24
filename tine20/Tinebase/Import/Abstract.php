@@ -37,6 +37,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected $_options = array(
         'dryrun'            => FALSE,
+        'updateMethod'      => 'update',
         'createMethod'      => 'create',
         'model'             => '',
         'shared_tags'       => 'create', //'onlyexisting',
@@ -328,7 +329,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         }
         
-        $this->_handleTags($_record);
+        $this->_handleTags($_record, $_resolveStrategy);
         $importedRecord = $this->_importAndResolveConflict($_record, $_resolveStrategy);
         
         $this->_importResult['results']->addRecord($importedRecord);
@@ -509,20 +510,22 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * @param Tinebase_Record_Abstract $_record
      * @param string $_resolveStrategy
      * @return Tinebase_Record_Abstract
+     * 
+     * @todo replace mergeTheirs + mergeMine (=merge)
      */
     protected function _importAndResolveConflict(Tinebase_Record_Abstract $_record, $_resolveStrategy = NULL)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Merging records with strategy ' . $_resolveStrategy);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' resolveStrategy: ' . $_resolveStrategy);
         
         switch ($_resolveStrategy) {
             case 'mergeTheirs':
-                $existing = $this->_controller->get($_record->getId());
-                $record = $this->_mergeRecords($existing, $_record);
-                break;
+//                 $existing = $this->_controller->get($_record->getId());
+//                 $record = $this->_mergeRecords($existing, $_record);
+//                 break;
             case 'mergeMine':
-                //$record = call_user_func(array($this->_controller, 'update'), $_record, FALSE);
-                $existing = $this->_controller->get($_record->getId());
-                $record = $this->_mergeRecords($_record, $existing);
+                $record = call_user_func(array($this->_controller, $this->_options['updateMethod']), $_record, FALSE);
+//                 $existing = $this->_controller->get($_record->getId());
+//                 $record = $this->_mergeRecords($_record, $existing);
                 break;
             case 'keep':
                 // do not check for duplicates

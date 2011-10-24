@@ -399,6 +399,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $record = $this->_backend->create($_record);
             $this->_inspectAfterCreate($record, $_record);
             
+            // @todo move those to separate functions that can be called in create() + update()
             // set relations / tags / notes / alarms
             if ($record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
                 Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), $_record->relations);
@@ -591,11 +592,12 @@ abstract class Tinebase_Controller_Record_Abstract
             $record = $this->_backend->update($_record);
             $this->_inspectAfterUpdate($record, $_record);
     
+            // @todo move those to separate functions that can be called in create() + update()
             // set relations / tags / notes / alarms
             if ($record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
                 Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), $_record->relations);
-            }        
-            if ($record->has('tags') && isset($_record->tags) && is_array($_record->tags)) {
+            }
+            if ($record->has('tags') && isset($_record->tags) && (is_array($_record->tags) || $_record->tags instanceof Tinebase_Record_RecordSet)) {
                 Tinebase_Tags::getInstance()->setTagsOfRecord($_record);
             }
             if ($record->has('notes')) {
