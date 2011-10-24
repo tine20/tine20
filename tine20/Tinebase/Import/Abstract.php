@@ -399,19 +399,20 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * @param array $_tagData
      * @return Tinebase_Model_Tag
      * 
-     * @todo allow to set contexts / application / color / rights
+     * @todo allow to set contexts / application / rights
      * @todo only ignore acl for autotags that are present in import definition
      */
     protected function _createTag($_tagData)
     {
         $description  = substr((isset($_tagData['description'])) ? $_tagData['description'] : $_tagData['name'] . ' (imported)', 0, 50);
         $type         = (isset($_tagData['type'])) ? $_tagData['type'] : Tinebase_Model_Tag::TYPE_SHARED;
+        $color        = (isset($_tagData['color'])) ? $_tagData['color'] : '#ffffff';
                 
         $newTag = new Tinebase_Model_Tag(array(
             'name'          => $_tagData['name'],
             'description'   => $description,
             'type'          => $type,
-            'color'         => '#000099'
+            'color'         => $color,
         ));
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new shared tag: ' . $_tagData['name']);
