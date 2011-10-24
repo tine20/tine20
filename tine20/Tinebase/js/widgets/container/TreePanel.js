@@ -565,6 +565,9 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             // get filterToolbar
             var ftb = this.filterPlugin.getGridPanel().filterToolbar;
             
+            // in case of filterPanel
+            ftb = ftb.activeFilterPanel ? ftb.activeFilterPanel : ftb;
+
             // remove all ftb container and /toberemoved/ filters
             ftb.supressEvents = true;
             ftb.filterStore.each(function(filter) {
