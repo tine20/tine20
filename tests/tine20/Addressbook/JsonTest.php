@@ -426,15 +426,36 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     public function testImportWithResolveStrategyDiscard()
     {
         $result = $this->_importHelper(array('dryrun' => 0));
-        $fritz = $result['results'][1];
         
         $clientRecords = array(array(
-            'recordData'        => $fritz,
             'resolveStrategy'   => 'discard',
             'index'             => 1,
         ));
         $result = $this->_importHelper(array('dryrun' => 0), $clientRecords);
         $this->assertEquals(0, $result['totalcount'], 'Should discard fritz');
+        $this->assertEquals(0, $result['failcount'], 'no failures expected');
+        $this->assertEquals(1, $result['duplicatecount'], 'klaus should still be a duplicate');
+    }
+        
+    /**
+    * test import with mergeTheirs resolve strategy
+    */
+    public function testImportWithResolveStrategyMergeTheirs()
+    {
+        $result = $this->_importHelper(array('dryrun' => 0));
+        $fritz = $result['results'][1];
+        $fritz['tags'][] = array(
+            'name'		=> 'new import tag'
+        );
+        
+        $clientRecords = array(array(
+            'recordData'        => $fritz,
+            'resolveStrategy'   => 'mergeTheirs',
+            'index'             => 1,
+        ));
+        $result = $this->_importHelper(array('dryrun' => 0), $clientRecords);
+        $this->assertEquals(1, $result['totalcount'], 'Should merge fritz');
+        $this->assertEquals(1, count($result['results'][0]['tags']), 'Should not merge tags');
         $this->assertEquals(0, $result['failcount'], 'no failures expected');
         $this->assertEquals(1, $result['duplicatecount'], 'klaus should still be a duplicate');
     }
