@@ -187,6 +187,15 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     );
     
     /**
+    * name of fields that should be omited from modlog
+    *
+    * @var array list of modlog omit fields
+    */
+    protected $_modlogOmitFields = array(
+            'jpegphoto',
+    );
+    
+    /**
      * returns prefered email address of given contact
      * 
      * @return string
