@@ -40,6 +40,12 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
 //        this.addEvents();
         this.title = _('The record you try to add might already exist.');
         
+        this.view = new Ext.grid.GroupingView({
+            forceFit:true,
+            hideGroupedColumn: true,
+            groupTextTpl: '{group}'
+        });
+        
         this.initColumnModel();
         this.initToolbar();
         
@@ -118,6 +124,13 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
         var valueRendererDelegate = this.valueRenderer.createDelegate(this);
         
         this.cm = new Ext.grid.ColumnModel([{
+            header: _('Field Group'), 
+            width:50, 
+            sortable: true, 
+            dataIndex:'group', 
+            id: 'group', 
+            menuDisabled:true
+        }, {
             header: _('Field Name'), 
             width:50, 
             sortable: true, 
@@ -223,11 +236,13 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
  */
 Tine.widgets.dialog.DuplicateResolveModel = Ext.data.Record.create([
     {name: 'fieldName', type: 'string'},
+    {name: 'fieldDef', type: 'fieldDef'},
+    {name: 'group', type: 'string'},
     {name: 'i18nFieldName', type: 'string'},
     'clientValue', 'value0' , 'value1' , 'value2' , 'value3' , 'value4', 'finalValue'
 ]);
 
-Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.JsonStore, {
+Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
     /**
      * @cfg {Tine.Tinebase.Application} app
      * instance of the app object (required)
@@ -272,9 +287,19 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.JsonStore, {
     idProperty: 'fieldName',
     fields: Tine.widgets.dialog.DuplicateResolveModel,
     
+    groupField: 'group',
+//    groupOnSort: true,
+//    remoteGroup: false,
+    sortInfo: {field: 'group', oder: 'ASC'},
+    
     constructor: function(config) {
         var initialData = config.data;
         delete config.data;
+        
+        this.reader = new Ext.data.JsonReader({
+            idProperty: this.idProperty,
+            fields: this.fields
+        });
         
         Tine.widgets.dialog.DuplicateResolveStore.superclass.constructor.apply(this, arguments);
         
@@ -305,8 +330,6 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.JsonStore, {
             finalRecord = this.createRecord(finalRecord);
         }
         
-        // @TODO sort conflict fileds first 
-        //   - group fields (contact org, home / phones etc.)
         var fieldDefinitions = this.recordClass.getFieldDefinitions(),
             cfDefinitions = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, this.recordClass, true);
             
@@ -316,10 +339,12 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.JsonStore, {
             var fieldName = field.name,
                 recordData = {
                     fieldName: fieldName,
+                    fieldDef: field,
                     i18nFieldName: field.label ? this.app.i18n._hidden(field.label) : this.app.i18n._hidden(fieldName),
                     clientValue: Tine.Tinebase.common.assertComparable(this.clientRecord.get(fieldName))
                 };
             
+            recordData.group = field.group ? this.app.i18n._hidden(field.group) : recordData.i18nFieldName,
             Ext.each([].concat(this.duplicates), function(duplicate, idx) {recordData['value' + idx] =  Tine.Tinebase.common.assertComparable(this.duplicates[idx].get(fieldName))}, this);
             
             var record = new Tine.widgets.dialog.DuplicateResolveModel(recordData, fieldName);
@@ -341,7 +366,53 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.JsonStore, {
             this.applyStrategy(this.resolveStrategy);
         }
         
+        this.sortData();
         this.fireEvent('load', this);
+    },
+    
+    /**
+     * custom sorter
+     * 
+     * @param {String} f (ignored atm.)
+     * @param {String} direction
+     */
+    sortData: function(f, direction) {
+        direction = direction || 'ASC';
+        
+        try {
+            var groupConflictScore = {};
+                
+            this.each(function(r) {
+                var group = r.get('group'),
+                    myValue = String(r.get('clientValue')).replace(/^undefined$|^null$|^\[\]$/, ''),
+                    theirValue = String(r.get('value' + this.duplicateIdx)).replace(/^undefined$|^null$|^\[\]$/, '');
+                
+                if (! groupConflictScore.hasOwnProperty(group)) {
+                    groupConflictScore[group] = 990;
+                }
+                
+                if (myValue || theirValue) {
+                    groupConflictScore[group] -= 1;
+                }
+                
+                if (myValue != theirValue) {
+                    groupConflictScore[group] -= 10;
+                }
+                
+            }, this);
+            
+            this.data.sort('ASC', function(r1, r2) {
+                var g1 = r1.get('group'),
+                    v1 = String(groupConflictScore[g1]) + g1,
+                    g2 = r2.get('group'),
+                    v2 = String(groupConflictScore[g2]) + g2;
+                    
+                return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
+            });
+        } catch (e) {
+            Tine.log.err('Tine.widgets.dialog.DuplicateResolveStore::sortData');
+            Tine.log.err(e.stack ? e.stack : e);
+        }
     },
     
     /**
