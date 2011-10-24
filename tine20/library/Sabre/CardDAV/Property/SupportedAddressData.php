@@ -15,20 +15,27 @@
 class Sabre_CardDAV_Property_SupportedAddressData extends Sabre_DAV_Property {
 
     /**
-     * supported version
+     * supported versions
      * 
-     * @var string
+     * @var array 
      */
-    protected $version;
+    protected $supportedData = array();
     
     /**
      * Creates the property 
      * 
      * @param array $components 
      */
-    public function __construct($version = '3.0') {
+    public function __construct(array $supportedData = null) {
 
-       $this->version = $version; 
+        if (is_null($supportedData)) {
+            $supportedData = array(
+                array('contentType' => 'text/vcard', 'version' => '3.0'),
+                array('contentType' => 'text/vcard', 'version' => '4.0'),
+            );
+        }
+
+       $this->supportedData = $supportedData; 
 
     }
     
@@ -43,13 +50,20 @@ class Sabre_CardDAV_Property_SupportedAddressData extends Sabre_DAV_Property {
 
         $doc = $node->ownerDocument;
 
-        $prefix = isset($server->xmlNamespaces[Sabre_CardDAV_Plugin::NS_CARDDAV])?$server->xmlNamespaces[Sabre_CardDAV_Plugin::NS_CARDDAV]:'card';
+        $prefix = 
+            isset($server->xmlNamespaces[Sabre_CardDAV_Plugin::NS_CARDDAV]) ?
+            $server->xmlNamespaces[Sabre_CardDAV_Plugin::NS_CARDDAV] :
+            'card';
 
-        $caldata = $doc->createElement($prefix . ':address-data-type');
-        $caldata->setAttribute('content-type','text/vcard');
-        $caldata->setAttribute('version',$this->version);
+        foreach($this->supportedData as $supported) {
 
-        $node->appendChild($caldata); 
+            $caldata = $doc->createElementNS(Sabre_CardDAV_Plugin::NS_CARDDAV, $prefix . ':address-data-type');
+            $caldata->setAttribute('content-type',$supported['contentType']);
+            $caldata->setAttribute('version',$supported['version']);
+            $node->appendChild($caldata);
+
+        }
+
     }
 
 }
