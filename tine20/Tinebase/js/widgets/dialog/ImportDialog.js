@@ -290,6 +290,8 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
      * select handler of definition combo
      */
     onDefinitionSelect: function(combo, record, index) {
+        this.selectedDefinition = record;
+        
         this.definitionDescription.setValue(record.get('description'));
         this.manageButtons();
     },
@@ -348,9 +350,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                             this.tagsPanel.getFormField().setValue(tags);
                         }
                         
-                        if (options.container_id) {
-                            this.containerCombo.setValue(options.container_id);
-                        }
+                        this.containerCombo.setValue(options.container_id ? options.container_id : this.defaultImportContainer);
                     } catch (e) {
                         Tine.log.err('Tine.widgets.dialog.ImportDialog::optionsPanelShow');
                         Tine.log.err(e.stack ? e.stack : e);
