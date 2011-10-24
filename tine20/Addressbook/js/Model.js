@@ -16,7 +16,7 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'tid', ommitDuplicateResolveing: true},
     {name: 'private', ommitDuplicateResolveing: true},
     {name: 'cat_id', ommitDuplicateResolveing: true},
-    {name: 'n_family', label: 'Last Name', group: 'Name' },//_('Last Name')
+    {name: 'n_family', label: 'Last Name', group: 'Name' },//_('Last Name') _('Name')
     {name: 'n_given', label: 'First Name', group: 'Name' }, //_('First Name')
     {name: 'n_middle', label: 'Middle Name', group: 'Name' }, //_('Middle Name')
     {name: 'n_prefix', label: 'Title', group: 'Name' }, //_('Title')
@@ -31,7 +31,7 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'role', label: 'Job Role', group: 'Company' }, //_('Job Role')
     {name: 'assistent', group: 'Company', ommitDuplicateResolveing: true},
     {name: 'room', label: 'Room', group: 'Company' }, //_('Room')
-    {name: 'adr_one_street', label: 'Street (Company Address)', group: 'Company Address' }, //_('Street (Company Address)')
+    {name: 'adr_one_street', label: 'Street (Company Address)', group: 'Company Address' }, //_('Street (Company Address)')  _('Company Address')
     {name: 'adr_one_street2', label: 'Street 2 (Company Address)', group: 'Company Address' }, //_('Street 2 (Company Address)')
     {name: 'adr_one_locality', label: 'City (Company Address)', group: 'Company Address' }, //_('City (Company Address)')
     {name: 'adr_one_region', label: 'Region (Company Address)', group: 'Company Address' }, //_('Region (Company Address)')
@@ -40,7 +40,7 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'adr_one_lon', group: 'Company Address', ommitDuplicateResolveing: true },
     {name: 'adr_one_lat', group: 'Company Address', ommitDuplicateResolveing: true },
     {name: 'label', ommitDuplicateResolveing: true},
-    {name: 'adr_two_street', label: 'Street (Private Address)', group: 'Private Address' }, //_('Street (Private Address)')
+    {name: 'adr_two_street', label: 'Street (Private Address)', group: 'Private Address' }, //_('Street (Private Address)')  _('Private Address')
     {name: 'adr_two_street2', label: 'Street 2 (Private Address)', group: 'Private Address' }, //_('Street 2 (Private Address)')
     {name: 'adr_two_locality', label: 'City (Private Address)', group: 'Private Address' }, //_('City (Private Address)')
     {name: 'adr_two_region', label: 'Region (Private Address)', group: 'Private Address' }, //_('Region (Private Address)')
@@ -48,13 +48,13 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'adr_two_countryname', label: 'Country (Private Address)', group: 'Private Address' }, //_('Country (Private Address)')
     {name: 'adr_two_lon', group: 'Private Address', ommitDuplicateResolveing: true},
     {name: 'adr_two_lat', group: 'Private Address', ommitDuplicateResolveing: true},
-    {name: 'tel_work', label: 'Phone', group: 'Company Communication' }, //_('Phone')
+    {name: 'tel_work', label: 'Phone', group: 'Company Communication' }, //_('Phone') _('Company Communication') 
     {name: 'tel_cell', label: 'Mobile', group: 'Company Communication' }, //_('Mobile')
     {name: 'tel_fax', label: 'Fax', group: 'Company Communication' }, //_('Fax')
     {name: 'tel_assistent', group: 'contact_infos', ommitDuplicateResolveing: true },
     {name: 'tel_car', group: 'contact_infos', ommitDuplicateResolveing: true },
     {name: 'tel_pager', group: 'contact_infos', ommitDuplicateResolveing: true },
-    {name: 'tel_home', label: 'Phone (private)', group: 'Private Communication' }, //_('Phone (private)')
+    {name: 'tel_home', label: 'Phone (private)', group: 'Private Communication' }, //_('Phone (private)') _('Private Communication') 
     {name: 'tel_fax_home', label: 'Fax (private)', group: 'Private Communication' }, //_('Fax (private)')
     {name: 'tel_cell_private', label: 'Mobile (private)', group: 'Private Communication' }, //_('Mobile (private)')
     {name: 'tel_other', group: 'contact_infos', ommitDuplicateResolveing: true },

@@ -50,10 +50,16 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
         this.initToolbar();
         
         this.store.on('load', this.onStoreLoad, this);
+        this.store.on('strategychange', this.onStoreLoad, this);
         this.on('cellclick', this.onCellClick, this);
+        this.on('afterrender', this.onAfterRender, this);
         Tine.widgets.dialog.DuplicateResolveGridPanel.superclass.initComponent.call(this);
     },
     
+    onAfterRender: function() {
+        // apply initial strategy
+        this.onStoreLoad();
+    },
     
     /**
      * adopt final value to the one selected
@@ -88,8 +94,8 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
     onActionSelect: function(combo, record, idx) {
         var strategy = record.get('value');
         
-        this.store.applyStrategy(strategy);
         this.applyStrategy(strategy);
+        this.store.applyStrategy(strategy);
     },
     
     /**
@@ -103,7 +109,6 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
      * @param {Sting} strategy
      */
     applyStrategy: function(strategy) {
-        
         var cm = this.getColumnModel(),
             view = this.getView();
             
@@ -426,6 +431,14 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
      */
     applyStrategy: function(strategy) {
         Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::applyStrategy action: ' + strategy);
+        
+        // chage stategy from merge to keep if user has no rights to merge
+        if (strategy.match(/^merge/) && ! this.duplicates[this.duplicateIdx].get('container_id').account_grants['editGrant']) {
+            Tine.log.info('Tine.widgets.dialog.DuplicateResolveStore::applyStrategy user has no editGrant, changeing strategy to keep');
+            
+            this.resolveStrategy = strategy = 'keep';
+            this.fireEvent('strategychange', this, strategy)
+        }
         
         this.resolveStrategy = strategy;
         
