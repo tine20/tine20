@@ -426,8 +426,14 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 listeners: {afterrender: function(t){t.refresh.hide()}},
                 items: [this.conflictIndexText = new Ext.Toolbar.TextItem({}), '->', {
                     text: _('Conflict is resolved'),
+                    xtype: 'splitbutton',
                     scope: this,
-                    handler: this.onResolveConflict
+                    handler: this.onResolveConflict,
+                    menu: [{
+                        text: _('Resolve all conflicts'),
+                        scope: this,
+                        handler: this.onResolveAllConflict
+                    }]
                 }]
             }, new Tine.widgets.dialog.DuplicateResolveGridPanel({
                 flex: 1,
@@ -468,6 +474,9 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         }
     },
     
+    /**
+     * mark current conflict resolved
+     */
     onResolveConflict: function() {
         var index = this.conflictPagingToolbar.cursor,
             record = this.exceptionStore.getAt(index),
@@ -488,6 +497,27 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
     },
     
     /**
+     * resolve all conflicts using current strategy
+     */
+    onResolveAllConflict: function() {
+        
+        // give DOM the time to show loadMask
+        if (this.conflictMask.hidden) {
+            this.conflictMask.show();
+            this.conflictMask.hidden = false;
+            
+            return this.onResolveAllConflict.defer(200, this, arguments);
+        }
+        
+        while(this.exceptionStore.getCount() > 0) {
+            this.conflictMask.show();
+            this.conflictMask.hidden = false;
+            
+            this.onResolveConflict();
+        }
+    },
+    
+    /**
      * load conflict with given index
      * 
      * @param {Number} index
@@ -502,7 +532,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             this.conflictMask.show();
             this.conflictMask.hidden = false;
             
-            return this.loadConflict.defer(10, this, arguments);
+            return this.loadConflict.defer(200, this, arguments);
         }
         
         try {
