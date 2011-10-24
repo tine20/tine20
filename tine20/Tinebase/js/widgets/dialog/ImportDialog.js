@@ -84,6 +84,8 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             this.app = Tine.Tinebase.appMgr.get(this.appName);
             this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.appName, this.modelName);
             
+            this.allowedFileExtensions = [];
+            
             // init definitions
             this.definitionsStore = new Ext.data.JsonStore({
                 fields: Tine.Tinebase.Model.ImportExportDefinition,
@@ -91,23 +93,23 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 totalProperty: 'totalcount',
                 remoteSort: false
             });
+            
             if (Tine[this.appName].registry.get('importDefinitions')) {
-                this.definitionsStore.loadData(Tine[this.appName].registry.get('importDefinitions'));
+                Ext.each(Tine[this.appName].registry.get('importDefinitions').results, function(defData) {
+                    var options = defData.plugin_options,
+                        extension = options ? options.extension : null;
+                    
+                    defData.label = this.app.i18n._hidden(options && options.label ? options.label : defData.name);
+                    
+                    this.allowedFileExtensions = this.allowedFileExtensions.concat(extension);
+                    
+                    this.definitionsStore.addSorted(new Tine.Tinebase.Model.ImportExportDefinition(defData, defData.id));
+                }, this);
             }
             if (! this.selectedDefinition && Tine.Addressbook.registry.get('defaultImportDefinition')) {
                 this.selectedDefinition = this.definitionsStore.getById(Tine.Addressbook.registry.get('defaultImportDefinition').id);
             }
                 
-            this.allowedFileExtensions = [];
-            this.definitionsStore.each(function(d) {
-                var options = d.get('plugin_options'),
-                    extension = options ? options.extension : null
-                    
-                if (extension) {
-                    this.allowedFileExtensions = this.allowedFileExtensions.concat(extension);
-                }
-            }, this);
-            
             // init exception store
             this.exceptionStore = new Ext.data.JsonStore({
                 mode: 'local',
@@ -127,6 +129,14 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             Tine.log.err('Tine.widgets.dialog.ImportDialog::initComponent');
             Tine.log.err(e.stack ? e.stack : e);
         }
+    },
+    
+    /**
+     * close window on cancel
+     */
+    onCancelButton: function() {
+        this.fireEvent('cancel', this, this.layout.activeItem);
+        this.window.close();
     },
     
     /**
@@ -252,7 +262,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 xtype: 'combo',
                 ref: '../definitionCombo',
                 store: this.definitionsStore,
-                displayField:'name',
+                displayField:'label',
                 valueField:'id',
                 mode: 'local',
                 triggerAction: 'all',
@@ -558,7 +568,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             } else {
                 resolveStore.removeAll();
                 this.duplicateResolveGridPanel.getView().mainBody.update('<br />  ' + _('No conflict to resolve'));
-//                this.navigate(+1);
+                this.navigate(+1);
             }
             
             
