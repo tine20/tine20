@@ -187,7 +187,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                     $resolveStrategy = NULL;
                 }
                 
-                if (empty($recordDataToImport) {
+                if (empty($recordDataToImport)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . ' Empty record data.');
                     continue;
