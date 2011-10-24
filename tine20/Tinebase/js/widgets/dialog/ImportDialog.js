@@ -147,7 +147,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                     definitionId: this.definitionCombo.getValue(),
                     importOptions: Ext.apply({
                         container_id: this.containerCombo.getValue(),
-                        autotags: {tag: this.tagsPanel.getFormField().getValue()[0]}
+                        autotags: this.tagsPanel.getFormField().getValue()
                     }, importOptions || {}),
                     clientRecordData: clientRecordData
                 }
