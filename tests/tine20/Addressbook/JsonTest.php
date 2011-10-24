@@ -455,7 +455,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         ));
         $result = $this->_importHelper(array('dryrun' => 0), $clientRecords);
         $this->assertEquals(1, $result['totalcount'], 'Should merge fritz');
-        $this->assertEquals(1, count($result['results'][0]['tags']), 'Should not merge tags');
+        $this->assertEquals(2, count($result['results'][0]['tags']), 'Should merge tags');
         $this->assertEquals(0, $result['failcount'], 'no failures expected');
         $this->assertEquals(1, $result['duplicatecount'], 'klaus should still be a duplicate');
     }
@@ -510,7 +510,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($result['results']), 'should import 2');
         $this->assertEquals(1, count($result['results'][0]['tags']), 'no tag added');
         $this->assertEquals('Importliste (19.10.2011)', $result['results'][0]['tags'][0]['name']);
-        Tinebase_Tags::getInstance()->deleteTags(array($result['results'][0]['tags'][0]['id']));
         
         $fritz['tags'] = array(array(
             'name'	=> 'supi',
@@ -523,18 +522,27 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_importHelper($options);
         $this->assertEquals(1, count($result['exceptions'][0]['exception']['clientRecord']['tags']), 'no tag added');
         $this->assertEquals('Importliste (19.10.2011)', $result['exceptions'][0]['exception']['clientRecord']['tags'][0]['name']);
+        $fritzClient = $result['exceptions'][1]['exception']['clientRecord'];
         
-        $fritz['adr_one_locality'] = '';
+        $fritzClient['tags'][] = array(
+            'name'	=> 'supi',
+            'type'	=> Tinebase_Model_Tag::TYPE_PERSONAL,
+        );
+        $fritzClient['adr_one_locality'] = '';
+        $fritzClient['id'] = $fritz['id'];
         $clientRecords = array(array(
-            'recordData'        => $fritz,
+            'recordData'        => $fritzClient,
             'resolveStrategy'   => 'mergeMine',
             'index'             => 1,
         ));
+        //print_r($clientRecords);
         $result = $this->_importHelper(array('dryrun' => 0), $clientRecords);
         //print_r($result['results'][0]);
         $this->assertEquals(1, $result['totalcount'], 'Should merge fritz');
         $this->assertEquals(2, count($result['results'][0]['tags']), 'Should merge tags');
         $this->assertEquals(NULL, $result['results'][0]['adr_one_locality'], 'Should remove locality');
+
+        //Tinebase_Tags::getInstance()->deleteTags(array($result['results'][0]['tags'][0]['id']));
     }
 
     /**
