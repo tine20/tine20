@@ -228,6 +228,11 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             return this.filePanel;
         }
         
+        var def = this.selectedDefinition,
+            description = def ? def.get('description') : '',
+            options = def ? def.get('plugin_options') : null,
+            example = options && options.example ? options.example : '';
+            
         return {
             title: _('Choose File and Format'),
             layout: 'fit',
@@ -275,11 +280,15 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                     'select': this.onDefinitionSelect
                 }
             }, {
+                xtype: 'label',
+                ref: '../exampleLink',
+                html: example ? ('<p><a href="' + example + '">' + _('Download example file') + '</a></p>') : '<p>&nbsp;</p>'
+            }, {
                 xtype: 'displayfield',
                 fieldLabel: _('Import description'),
                 ref: '../definitionDescription',
                 height: 70,
-                value: this.selectedDefinition ? this.selectedDefinition.get('description') : '',
+                value: description,
                 style: {
                     border: 'silver 1px solid',
                     padding: '3px',
@@ -300,9 +309,15 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
      * select handler of definition combo
      */
     onDefinitionSelect: function(combo, record, index) {
+        var description = record.get('description'),
+            options = record.get('plugin_options'),
+            example = options && options.example ? options.example : '';
+        
         this.selectedDefinition = record;
         
-        this.definitionDescription.setValue(record.get('description'));
+        this.definitionDescription.setValue(description);
+        this.exampleLink.setText(example ? ('<p><a href="' + example + '">' + _('Download example file') + '</a></p>') : '<p>&nbsp;</p>', false);
+        
         this.manageButtons();
     },
     
@@ -344,6 +359,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             }), new Tine.widgets.tags.TagPanel({
                 app: this.appName,
                 ref: '../tagsPanel',
+                style: 'margin-top: 15px; border: 1px solid silver; border-top: none;',
                 border: true,
                 collapsible: false,
                 height: 200
