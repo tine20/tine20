@@ -84,7 +84,7 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      */
     get: function(name) {
         
-        if (cfName = name.match(this.cfExp)) {
+        if (cfName = String(name).match(this.cfExp)) {
             return this.data.customfields ? this.data.customfields[cfName[1]] : null;
         }
         
@@ -111,7 +111,7 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
             this.modified[name] = current;
         }
         
-        if (cfName = name.match(this.cfExp)) {
+        if (cfName = String(name).match(this.cfExp)) {
             this.data.customfields = this.data.customfields || {};
             this.data.customfields[cfName[1]] = value;
         } else {
