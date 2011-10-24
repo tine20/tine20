@@ -435,7 +435,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     protected function _createTag($_tagData)
     {
         $description  = substr((isset($_tagData['description'])) ? $_tagData['description'] : $_tagData['name'] . ' (imported)', 0, 50);
-        $type         = (isset($_tagData['type'])) ? $_tagData['type'] : Tinebase_Model_Tag::TYPE_SHARED;
+        $type         = (isset($_tagData['type']) && ! empty($_tagData['type'])) ? $_tagData['type'] : Tinebase_Model_Tag::TYPE_SHARED;
         $color        = (isset($_tagData['color'])) ? $_tagData['color'] : '#ffffff';
                 
         $newTag = new Tinebase_Model_Tag(array(
