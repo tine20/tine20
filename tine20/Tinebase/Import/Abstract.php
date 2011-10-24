@@ -166,14 +166,21 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _doImport($_resource = NULL, $_clientRecordData = array())
     {
+        $clientRecordData = $this->_sortClientRecordsByIndex($_clientRecordData);
+        
         $recordIndex = 0;
         while (($recordData = $this->_getRawData($_resource)) !== FALSE) {
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Importing record ' . $recordIndex . ' ...');
+            
             $recordToImport = NULL;
             try {
-                if (isset($_clientRecordData[$recordIndex])) {
-                    // client record overwrites record in import data
-                    $recordDataToImport = $_clientRecordData[$recordIndex]['recordData'];
-                    $resolveStrategy = $_clientRecordData[$recordIndex]['resolveStrategy'];
+                if (isset($clientRecordData[$recordIndex])) {
+                    // client record overwrites record in import data (only if set)
+                    $recordDataToImport = (isset($clientRecordData[$recordIndex]['recordData'])) 
+                        ? $clientRecordData[$recordIndex]['recordData'] : $this->_processRawData($recordData);
+                    $resolveStrategy = $clientRecordData[$recordIndex]['resolveStrategy'];
                 } else {
                     $recordDataToImport = $this->_processRawData($recordData);
                     $resolveStrategy = NULL;
@@ -182,6 +189,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 if (! empty($recordDataToImport) && $resolveStrategy !== 'discard') {
                     $recordToImport = $this->_createRecordToImport($recordDataToImport);
                     $importedRecord = $this->_importRecord($recordToImport, $resolveStrategy, $recordDataToImport);
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                        . ' Discarding record ' . $recordIndex);
                 }
                     
             } catch (Exception $e) {
@@ -190,6 +200,25 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             
             $recordIndex++;
         }
+    }
+    
+    /**
+     * sort client data array
+     * 
+     * @param array $_clientRecordData
+     * @return array
+     */
+    protected function _sortClientRecordsByIndex($_clientRecordData)
+    {
+        $result = array();
+        
+        foreach ($_clientRecordData as $data) {
+            if (isset($data['index'])) {
+                $result[$data['index']] = $data;
+            }
+        }
+        
+        return $result;
     }
     
     /**
@@ -386,7 +415,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 );
                 $tag = $this->_createTag($tagData);
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Do not create shared tag (option not set)');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Do not create shared tag (option not set)');
             }
         }
         
