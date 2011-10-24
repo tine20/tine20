@@ -695,7 +695,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             
             var tags = this.tagsPanel.getFormField().getValue(),
                 container = this.containerCombo.selectedContainer,
-                info = [String.format(_('In Total we found {0} records in your import file.'), rsp.totalcount + rsp.duplicatecount + rsp.failcount)];
+                info = [String.format(_('In total we found {0} records in your import file.'), rsp.totalcount + rsp.duplicatecount + rsp.failcount)];
                 
                 if (totalcount) {
                     info.push(String.format(_('{0} of them will be added as new records into: "{1}".'), 
@@ -719,7 +719,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 if (Ext.isArray(tags) && tags.length) {
                     var tagNames = [];
                     Ext.each(tags, function(tag) {tagNames.push(tag.name)});
-                    info.push(String.format(_('All records will be taged with: "{0}" so you can find them easily.'), tagNames.join(',')));
+                    info.push(String.format(_('All records will be tagged with: "{0}" so you can find them easily.'), tagNames.join(',')));
                 }
                 
                 
