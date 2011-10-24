@@ -111,14 +111,15 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     public function setFromArray(array $_data)
     {
         // always update accountDisplayName and accountFullName
-        $_data['accountDisplayName'] = $_data['accountLastName'];
-        if (!empty($_data['accountFirstName'])) {
-            $_data['accountDisplayName'] .= ', ' . $_data['accountFirstName'];
-        }
-            
-        $_data['accountFullName'] = $_data['accountLastName'];
-        if (!empty($_data['accountFirstName'])) {
-            $_data['accountFullName'] = $_data['accountFirstName'] . ' ' . $_data['accountLastName'];
+        if (isset($_data['accountLastName'])) {
+            $_data['accountDisplayName'] = $_data['accountLastName'];
+            if (!empty($_data['accountFirstName'])) {
+                $_data['accountDisplayName'] .= ', ' . $_data['accountFirstName'];
+            }
+            $_data['accountFullName'] = $_data['accountLastName'];
+            if (!empty($_data['accountFirstName'])) {
+                $_data['accountFullName'] = $_data['accountFirstName'] . ' ' . $_data['accountLastName'];
+            }
         }
         
         parent::setFromArray($_data);
