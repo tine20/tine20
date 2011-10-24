@@ -39,7 +39,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         'dryrun'            => FALSE,
         'createMethod'      => 'create',
         'model'             => '',
-        'shared_tags'       => 'onlyexisting',
+        'shared_tags'       => 'create', //'onlyexisting',
         'autotags'          => array(),
     );
     
@@ -166,14 +166,21 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _doImport($_resource = NULL, $_clientRecordData = array())
     {
+        $clientRecordData = $this->_sortClientRecordsByIndex($_clientRecordData);
+        
         $recordIndex = 0;
         while (($recordData = $this->_getRawData($_resource)) !== FALSE) {
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Importing record ' . $recordIndex . ' ...');
+            
             $recordToImport = NULL;
             try {
-                if (isset($_clientRecordData[$recordIndex])) {
-                    // client record overwrites record in import data
-                    $recordDataToImport = $_clientRecordData[$recordIndex]['recordData'];
-                    $resolveStrategy = $_clientRecordData[$recordIndex]['resolveStrategy'];
+                if (isset($clientRecordData[$recordIndex])) {
+                    // client record overwrites record in import data (only if set)
+                    $recordDataToImport = (isset($clientRecordData[$recordIndex]['recordData'])) 
+                        ? $clientRecordData[$recordIndex]['recordData'] : $this->_processRawData($recordData);
+                    $resolveStrategy = $clientRecordData[$recordIndex]['resolveStrategy'];
                 } else {
                     $recordDataToImport = $this->_processRawData($recordData);
                     $resolveStrategy = NULL;
@@ -182,6 +189,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 if (! empty($recordDataToImport) && $resolveStrategy !== 'discard') {
                     $recordToImport = $this->_createRecordToImport($recordDataToImport);
                     $importedRecord = $this->_importRecord($recordToImport, $resolveStrategy, $recordDataToImport);
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                        . ' Discarding record ' . $recordIndex);
                 }
                     
             } catch (Exception $e) {
@@ -190,6 +200,25 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             
             $recordIndex++;
         }
+    }
+    
+    /**
+     * sort client data array
+     * 
+     * @param array $_clientRecordData
+     * @return array
+     */
+    protected function _sortClientRecordsByIndex($_clientRecordData)
+    {
+        $result = array();
+        
+        foreach ($_clientRecordData as $data) {
+            if (isset($data['index'])) {
+                $result[$data['index']] = $data;
+            }
+        }
+        
+        return $result;
     }
     
     /**
@@ -298,10 +327,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         }
         
-        if ($_resolveStrategy === NULL) {
-            // only add tags for "new" records
-            $this->_handleTags($_record);
-        }
+        $this->_handleTags($_record);
         $importedRecord = $this->_importAndResolveConflict($_record, $_resolveStrategy);
         
         $this->_importResult['results']->addRecord($importedRecord);
@@ -317,8 +343,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * handle record tags
      * 
      * @param Tinebase_Record_Abstract $_record
+     * @param string $_resolveStrategy
      */
-    protected function _handleTags($_record)
+    protected function _handleTags($_record, $_resolveStrategy = NULL)
     {
         if (isset($_record->tags) && is_array($_record->tags)) {
             $_record->tags = $this->_addSharedTags($_record->tags);
@@ -326,7 +353,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $_record->tags = NULL;
         }
         
-        if (! empty($this->_options['autotags'])) {
+        if ($_resolveStrategy === NULL && ! empty($this->_options['autotags'])) {
+            // only add autotags for "new" records
             $this->_addAutoTags($_record);
         }
     }
@@ -342,8 +370,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Adding tags: ' . print_r($_tags, TRUE));
     
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tag');
-        foreach ($_tags as $tagName) {
-            $tagName = trim($tagName);
+        foreach ($_tags as $tagData) {
+            $tagData = (is_array($tagData)) ? $tagData : array('name' => $tagData);
+            $tagName = trim($tagData['name']);
     
             // only check non-empty tags
             if (empty($tagName)) {
@@ -351,7 +380,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             }
     
             $createTag = (isset($this->_options['shared_tags']) && $this->_options['shared_tags'] == 'create');
-            $tagToAdd = $this->_getSingleTag($tagName, array(), $createTag);
+            $tagToAdd = $this->_getSingleTag($tagName, $tagData, $createTag);
             if ($tagToAdd) {
                 $result->addRecord($tagToAdd);
             }
@@ -386,7 +415,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 );
                 $tag = $this->_createTag($tagData);
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Do not create shared tag (option not set)');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Do not create shared tag (option not set)');
             }
         }
         
@@ -399,19 +429,20 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * @param array $_tagData
      * @return Tinebase_Model_Tag
      * 
-     * @todo allow to set contexts / application / color / rights
+     * @todo allow to set contexts / application / rights
      * @todo only ignore acl for autotags that are present in import definition
      */
     protected function _createTag($_tagData)
     {
         $description  = substr((isset($_tagData['description'])) ? $_tagData['description'] : $_tagData['name'] . ' (imported)', 0, 50);
-        $type         = (isset($_tagData['type'])) ? $_tagData['type'] : Tinebase_Model_Tag::TYPE_SHARED;
+        $type         = (isset($_tagData['type']) && ! empty($_tagData['type'])) ? $_tagData['type'] : Tinebase_Model_Tag::TYPE_SHARED;
+        $color        = (isset($_tagData['color'])) ? $_tagData['color'] : '#ffffff';
                 
         $newTag = new Tinebase_Model_Tag(array(
             'name'          => $_tagData['name'],
             'description'   => $description,
             'type'          => $type,
-            'color'         => '#000099'
+            'color'         => $color,
         ));
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new shared tag: ' . $_tagData['name']);
