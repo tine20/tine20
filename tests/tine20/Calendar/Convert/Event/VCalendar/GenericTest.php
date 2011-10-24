@@ -104,6 +104,26 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     }
     
     /**
+     * test converting vcard with daily repeating event to Calendar_Model_Event
+     * @return Calendar_Model_Event
+     */
+    public function testConvertRepeatingDailyEventToTine20Model()
+    {
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/lightning_repeating_daily.ics', 'r');
+    
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+    
+        $event = $converter->toTine20Model($vcalendarStream);
+    
+        #var_dump($event->toArray());
+        #var_dump($event->dtend);
+    
+        $this->assertEquals('FREQ=DAILY;UNTIL=20111030T060000Z', $event->rrule);
+    
+        return $event;
+    }
+        
+    /**
      * test converting vcard from sogo connector to Calendar_Model_Event 
      */
     public function testConvertToTine20ModelWithUpdate()
