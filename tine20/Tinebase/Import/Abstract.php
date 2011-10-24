@@ -486,9 +486,13 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $_record->tags = $tags;
     }
     
+    /**
+     * sanitize autotag option
+     * 
+     * @return array
+     */
     protected function _sanitizeAutotagsOption()
     {
-        // sanitize autotag option
         $autotags = (array_key_exists('tag', $this->_options['autotags']) && count($this->_options['autotags']) == 1) 
             ? $this->_options['autotags']['tag'] : $this->_options['autotags'];
         $autotags = (array_key_exists('name', $autotags)) ? array($autotags) : $autotags;
@@ -519,13 +523,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         
         switch ($_resolveStrategy) {
             case 'mergeTheirs':
-//                 $existing = $this->_controller->get($_record->getId());
-//                 $record = $this->_mergeRecords($existing, $_record);
-//                 break;
             case 'mergeMine':
                 $record = call_user_func(array($this->_controller, $this->_options['updateMethod']), $_record, FALSE);
-//                 $existing = $this->_controller->get($_record->getId());
-//                 $record = $this->_mergeRecords($_record, $existing);
                 break;
             case 'keep':
                 // do not check for duplicates
@@ -541,41 +540,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     }
     
     /**
-     * merge two records
-     * 
-     * @param Tinebase_Record_Abstract $_recordKeep
-     * @param Tinebase_Record_Abstract $_recordDiscard
-     * @return Tinebase_Record_Abstract
-     * 
-     * @todo move this to Tinebase_Record_Abstract?
-     */
-    protected function _mergeRecords(Tinebase_Record_Abstract $_recordKeep, Tinebase_Record_Abstract $_recordDiscard)
-    {
-        $modlogFields = $_recordKeep->getModlogOmitFields();
-        
-        $diff = $_recordDiscard->diff($_recordKeep);
-        foreach ($diff as $key => $value) {
-            if (in_array($key, $modlogFields)) {
-                continue;
-            }
-            switch ($key) {
-                case 'tags':
-                    // just use the present tags, client does the merging
-                    break;
-                default:
-                    if (empty($value)) {
-                        $_recordKeep->{$key} = NULL;
-                    } else {
-                        $_recordKeep->{$key} = $value;
-                    }
-            }
-            
-        }
-        
-        return $_recordKeep;
-    }
-    
-    /**
      * handle import exceptions
      * 
      * @param Exception $_e
@@ -587,7 +551,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     protected function _handleImportException(Exception $_e, $_recordIndex, $_record = NULL)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $_e->getMessage());
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $_e->getTraceAsString());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_e->getTraceAsString());
         
         if ($_e instanceof Tinebase_Exception_Duplicate) {
             $this->_importResult['duplicatecount']++;
