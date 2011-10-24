@@ -84,6 +84,8 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             this.app = Tine.Tinebase.appMgr.get(this.appName);
             this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.appName, this.modelName);
             
+            this.allowedFileExtensions = [];
+            
             // init definitions
             this.definitionsStore = new Ext.data.JsonStore({
                 fields: Tine.Tinebase.Model.ImportExportDefinition,
@@ -91,23 +93,23 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 totalProperty: 'totalcount',
                 remoteSort: false
             });
+            
             if (Tine[this.appName].registry.get('importDefinitions')) {
-                this.definitionsStore.loadData(Tine[this.appName].registry.get('importDefinitions'));
+                Ext.each(Tine[this.appName].registry.get('importDefinitions').results, function(defData) {
+                    var options = defData.plugin_options,
+                        extension = options ? options.extension : null;
+                    
+                    defData.label = this.app.i18n._hidden(options && options.label ? options.label : defData.name);
+                    
+                    this.allowedFileExtensions = this.allowedFileExtensions.concat(extension);
+                    
+                    this.definitionsStore.addSorted(new Tine.Tinebase.Model.ImportExportDefinition(defData, defData.id));
+                }, this);
             }
             if (! this.selectedDefinition && Tine.Addressbook.registry.get('defaultImportDefinition')) {
                 this.selectedDefinition = this.definitionsStore.getById(Tine.Addressbook.registry.get('defaultImportDefinition').id);
             }
                 
-            this.allowedFileExtensions = [];
-            this.definitionsStore.each(function(d) {
-                var options = d.get('plugin_options'),
-                    extension = options ? options.extension : null
-                    
-                if (extension) {
-                    this.allowedFileExtensions = this.allowedFileExtensions.concat(extension);
-                }
-            }, this);
-            
             // init exception store
             this.exceptionStore = new Ext.data.JsonStore({
                 mode: 'local',
@@ -127,6 +129,14 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             Tine.log.err('Tine.widgets.dialog.ImportDialog::initComponent');
             Tine.log.err(e.stack ? e.stack : e);
         }
+    },
+    
+    /**
+     * close window on cancel
+     */
+    onCancelButton: function() {
+        this.fireEvent('cancel', this, this.layout.activeItem);
+        this.window.close();
     },
     
     /**
@@ -218,6 +228,11 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             return this.filePanel;
         }
         
+        var def = this.selectedDefinition,
+            description = def ? def.get('description') : '',
+            options = def ? def.get('plugin_options') : null,
+            example = options && options.example ? options.example : '';
+            
         return {
             title: _('Choose File and Format'),
             layout: 'fit',
@@ -252,7 +267,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 xtype: 'combo',
                 ref: '../definitionCombo',
                 store: this.definitionsStore,
-                displayField:'name',
+                displayField:'label',
                 valueField:'id',
                 mode: 'local',
                 triggerAction: 'all',
@@ -265,11 +280,15 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                     'select': this.onDefinitionSelect
                 }
             }, {
+                xtype: 'label',
+                ref: '../exampleLink',
+                html: example ? ('<p><a href="' + example + '">' + _('Download example file') + '</a></p>') : '<p>&nbsp;</p>'
+            }, {
                 xtype: 'displayfield',
                 fieldLabel: _('Import description'),
                 ref: '../definitionDescription',
                 height: 70,
-                value: this.selectedDefinition ? this.selectedDefinition.get('description') : '',
+                value: description,
                 style: {
                     border: 'silver 1px solid',
                     padding: '3px',
@@ -290,9 +309,15 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
      * select handler of definition combo
      */
     onDefinitionSelect: function(combo, record, index) {
+        var description = record.get('description'),
+            options = record.get('plugin_options'),
+            example = options && options.example ? options.example : '';
+        
         this.selectedDefinition = record;
         
-        this.definitionDescription.setValue(record.get('description'));
+        this.definitionDescription.setValue(description);
+        this.exampleLink.setText(example ? ('<p><a href="' + example + '">' + _('Download example file') + '</a></p>') : '<p>&nbsp;</p>', false);
+        
         this.manageButtons();
     },
     
@@ -334,6 +359,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             }), new Tine.widgets.tags.TagPanel({
                 app: this.appName,
                 ref: '../tagsPanel',
+                style: 'margin-top: 15px; border: 1px solid silver; border-top: none;',
                 border: true,
                 collapsible: false,
                 height: 200
@@ -347,6 +373,12 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                     
                         if (options.autotags) {
                             var tags = options.autotags;
+                            
+                            Ext.each([].concat(tags), function(tag) {
+                                tag.name = this.app.i18n._hidden(tag.name);
+                                tag.description = this.app.i18n._hidden(tag.description);
+                            }, this);
+                            
                             this.tagsPanel.getFormField().setValue(tags);
                         }
                         
@@ -552,7 +584,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             } else {
                 resolveStore.removeAll();
                 this.duplicateResolveGridPanel.getView().mainBody.update('<br />  ' + _('No conflict to resolve'));
-//                this.navigate(+1);
+                this.navigate(+1);
             }
             
             
