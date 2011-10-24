@@ -469,9 +469,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     */
     protected function _addAutoTags($_record)
     {
-        // sanitize autotag option
-        $autotags = (array_key_exists('tag', $this->_options['autotags'])) ? $this->_options['autotags']['tag'] : $this->_options['autotags'];
-        $autotags = (array_key_exists('name', $autotags)) ? array($autotags) : $autotags;
+        $autotags = $this->_sanitizeAutotagsOption();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
         	' Trying to add ' . count($autotags) . ' autotag(s) to record.');
@@ -484,6 +482,20 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             }
         }
         $_record->tags = $tags;
+    }
+    
+    protected function _sanitizeAutotagsOption()
+    {
+        // sanitize autotag option
+        $autotags = (array_key_exists('tag', $this->_options['autotags']) && count($this->_options['autotags']) == 1) 
+            ? $this->_options['autotags']['tag'] : $this->_options['autotags'];
+        $autotags = (array_key_exists('name', $autotags)) ? array($autotags) : $autotags;
+        
+        if (array_key_exists('tag', $autotags)) {
+            unset($autotags['tag']);
+        }
+        
+        return $autotags;
     }
     
     /**
@@ -526,6 +538,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * @param Tinebase_Record_Abstract $_recordDiscard
      * @return Tinebase_Record_Abstract
      * 
+     * @todo merge tags, too
      * @todo move this to Tinebase_Record_Abstract?
      */
     protected function _mergeRecords(Tinebase_Record_Abstract $_recordKeep, Tinebase_Record_Abstract $_recordDiscard)

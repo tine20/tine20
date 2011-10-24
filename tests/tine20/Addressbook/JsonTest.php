@@ -497,7 +497,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         $options = array(
         	'dryrun'     => 0,
-        	'autotags'   => array('tag' => array(
+        	'autotags'   => array(array(
     	        'name'	        => 'Importliste (19.10.2011)',
     	        'description'	=> 'Kontakte der Importliste vom 19.10.2011 um 20.00 Uhr. Bearbeiter: UNITTEST',
     	        'contexts'		=> array('Addressbook' => ''),
@@ -515,6 +515,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_importHelper($options);
         $this->assertEquals(1, count($result['exceptions'][0]['exception']['clientRecord']['tags']), 'no tag added');
         $this->assertEquals('Importliste (19.10.2011)', $result['exceptions'][0]['exception']['clientRecord']['tags'][0]['name']);
+        
+        // @todo add another tag and import duplicate
     }
 
     /**
