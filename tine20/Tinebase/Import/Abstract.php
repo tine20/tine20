@@ -305,7 +305,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _createRecordToImport($_recordData)
     {
-        $record = new $this->_options['model']($_recordData, TRUE);
+        $record = new $this->_options['model'](array(), TRUE);
+        $record->setFromJsonInUsersTimezone($_recordData);
         
         return $record;
     }
@@ -511,12 +512,15 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _importAndResolveConflict(Tinebase_Record_Abstract $_record, $_resolveStrategy = NULL)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Merging records with strategy ' . $_resolveStrategy);
+        
         switch ($_resolveStrategy) {
             case 'mergeTheirs':
                 $existing = $this->_controller->get($_record->getId());
                 $record = $this->_mergeRecords($existing, $_record);
                 break;
             case 'mergeMine':
+                //$record = call_user_func(array($this->_controller, 'update'), $_record, FALSE);
                 $existing = $this->_controller->get($_record->getId());
                 $record = $this->_mergeRecords($_record, $existing);
                 break;
@@ -528,6 +532,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 $record = call_user_func(array($this->_controller, $this->_options['createMethod']), $_record);
         }
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), TRUE));
+        
         return $record;
     }
     
@@ -538,18 +544,29 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * @param Tinebase_Record_Abstract $_recordDiscard
      * @return Tinebase_Record_Abstract
      * 
-     * @todo merge tags, too
      * @todo move this to Tinebase_Record_Abstract?
      */
     protected function _mergeRecords(Tinebase_Record_Abstract $_recordKeep, Tinebase_Record_Abstract $_recordDiscard)
     {
         $modlogFields = $_recordKeep->getModlogOmitFields();
         
-        $diff = $_recordKeep->diff($_recordDiscard);
+        $diff = $_recordDiscard->diff($_recordKeep);
         foreach ($diff as $key => $value) {
-            if (empty($_recordKeep->{$key}) && ! in_array($key, $modlogFields)) {
-                $_recordKeep->{$key} = $value;
+            if (in_array($key, $modlogFields)) {
+                continue;
             }
+            switch ($key) {
+                case 'tags':
+                    // just use the present tags, client does the merging
+                    break;
+                default:
+                    if (empty($value)) {
+                        $_recordKeep->{$key} = NULL;
+                    } else {
+                        $_recordKeep->{$key} = $value;
+                    }
+            }
+            
         }
         
         return $_recordKeep;
