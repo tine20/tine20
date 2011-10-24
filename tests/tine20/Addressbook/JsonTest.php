@@ -505,6 +505,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     	    )),
         );
         $result = $this->_importHelper($options);
+        $fritz = $result['results'][1];
         
         $this->assertEquals(2, count($result['results']), 'should import 2');
         $this->assertEquals(1, count($result['results'][0]['tags']), 'no tag added');
@@ -516,7 +517,20 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($result['exceptions'][0]['exception']['clientRecord']['tags']), 'no tag added');
         $this->assertEquals('Importliste (19.10.2011)', $result['exceptions'][0]['exception']['clientRecord']['tags'][0]['name']);
         
-        // @todo add another tag and import duplicate
+        $fritz['tags'][] = array(array(
+            'name'	=> 'supi',
+            'type'	=> Tinebase_Model_Tag::TYPE_PERSONAL,
+        ));
+        print_r($fritz);
+        $fritz = $this->_instance->saveContact($fritz);
+        $clientRecords = array(array(
+            'recordData'        => $fritz,
+            'resolveStrategy'   => 'mergeMine',
+            'index'             => 1,
+        ));
+        $result = $this->_importHelper(array('dryrun' => 0), $clientRecords);
+        $this->assertEquals(1, $result['totalcount'], 'Should merge fritz');
+        $this->assertEquals(2, count($result['results'][0]['tags']), 'Should merge tags');
     }
 
     /**
