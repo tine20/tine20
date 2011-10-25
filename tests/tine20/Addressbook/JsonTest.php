@@ -426,8 +426,10 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     public function testImportWithResolveStrategyDiscard()
     {
         $result = $this->_importHelper(array('dryrun' => 0));
+        $fritz = $result['results'][1];
         
         $clientRecords = array(array(
+        	'recordData'        => $fritz,
             'resolveStrategy'   => 'discard',
             'index'             => 1,
         ));
