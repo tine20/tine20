@@ -200,10 +200,11 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                         . ' Discarding record ' . $recordIndex);
                     
-                    // just add autotags to record
-                    $this->_addAutoTags($recordToImport);
-                    call_user_func(array($this->_controller, $this->_options['updateMethod']), $recordToImport);
-                    
+                    // just add autotags to record (if id is available)
+                    if ($recordToImport->getId()) {
+                        $this->_addAutoTags($recordToImport);
+                        call_user_func(array($this->_controller, $this->_options['updateMethod']), $recordToImport);
+                    }
                 }
                     
             } catch (Exception $e) {
