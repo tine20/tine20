@@ -26,7 +26,11 @@ class qCal_Loader {
 	 */
 	static public function loadClass($name) {
 	
-		$path = str_replace("_", DIRECTORY_SEPARATOR, $name) . ".php";
+        if (class_exists($name, false) || interface_exists($name, false)) {
+            return;
+        }
+        
+	    $path = str_replace("_", DIRECTORY_SEPARATOR, $name) . ".php";
 		self::loadFile($path);
 	
 	}
@@ -45,7 +49,7 @@ class qCal_Loader {
 		if (!self::fileExists($filename)) {
 			throw new qCal_Exception_FileNotFound("$filename does not exist.");
 		}
-		return require_once $filename;
+		return require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . $filename;
 	
 	}
 	/**
@@ -57,13 +61,13 @@ class qCal_Loader {
 	 */
 	static public function fileExists($filename) {
 	
-		$includepath = get_include_path();
-		$includepath = explode(PATH_SEPARATOR, $includepath);
-		foreach ($includepath as $path) {
-			$path = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-			if (file_exists($path . $filename)) return true;
-		}
-		return false;
+	    $path = dirname(dirname(__FILE__));
+	    
+	    if (file_exists($path . DIRECTORY_SEPARATOR . $filename)) {
+	        return true;
+	    }
+	    
+	    return false;
 	
 	}
 
