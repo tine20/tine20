@@ -32,6 +32,7 @@ class Sabre_VObject_Reader {
         'COMPLETED' => 'Sabre_VObject_Element_DateTime',
         'DUE'       => 'Sabre_VObject_Element_DateTime',
         'EXDATE'    => 'Sabre_VObject_Element_MultiDateTime',
+        'RECURRENCE-ID' => 'Sabre_VObject_Element_DateTime',
     );
 
     /**
