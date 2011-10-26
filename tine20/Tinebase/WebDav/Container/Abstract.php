@@ -110,6 +110,8 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
         $controller = Tinebase_Core::getApplicationInstance($this->_application->name, $this->_model);
         $objects = $controller->search($filter);
         
+        $children = array();
+        
         foreach ($objects as $object) {
             $children[] = $this->getChild($object);
         }
