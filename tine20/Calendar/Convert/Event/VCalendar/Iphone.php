@@ -33,15 +33,16 @@ class Calendar_Convert_Event_VCalendar_Iphone extends Calendar_Convert_Event_VCa
         'priority',
         'summary',
         'url',
-        #'uid',
+        'uid',
         'attendee',
         #'alarms',
         #'tags',
         'dtstart',
-        #'exdate',
-        #'rrule',
-        'is_all_day_event',
+        'exdate',
+        'rrule',
+        'recurid',
+    	'is_all_day_event',
         #'rrule_until',
-        #'originator_tz'
+        'originator_tz'
     );
 }

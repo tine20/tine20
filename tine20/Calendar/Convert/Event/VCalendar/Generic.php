@@ -30,15 +30,16 @@ class Calendar_Convert_Event_VCalendar_Generic extends Calendar_Convert_Event_VC
         'priority',
         'summary',
         'url',
-        #'uid',
-        #'attendee',
+        'uid',
+        'attendee',
         #'alarms',
         #'tags',
         'dtstart',
-        #'exdate',
-        #'rrule',
-        'is_all_day_event',
+        'exdate',
+        'rrule',
+        'recurid',
+    	'is_all_day_event',
         #'rrule_until',
-        #'originator_tz'
+        'originator_tz'
     );
 }

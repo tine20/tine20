@@ -33,15 +33,16 @@ class Calendar_Convert_Event_VCalendar_Thunderbird extends Calendar_Convert_Even
         'priority',
         'summary',
         'url',
-        #'uid',
+        'uid',
         'attendee',
         #'alarms',
         #'tags',
         'dtstart',
-        #'exdate',
-        #'rrule',
+        'exdate',
+        'rrule',
+        'recurid',
         'is_all_day_event',
         #'rrule_until',
-        #'originator_tz'
+        'originator_tz'
     );
 }
