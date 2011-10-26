@@ -261,8 +261,16 @@ class Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_
                     $i = 0;
                     foreach ($ids as $id) {
                         $transaction->delete($id);
-
-                        $allTags = array_unique(array_merge($tags, $values[$i][3]));
+                        
+                        // if the record also has some other tags attached, remove record from these tag lists too
+                        // $values[$i] can be null if id was not found by getMultiple
+                        if (is_array($values[$i]) && is_array($values[$i][3])) {
+                            $allTags = array_unique(array_merge((array) $tags, $values[$i][3]));
+                        // otherwise just remove from the tag lists provided
+                        } else {
+                            $allTags = (array) $tags;
+                        }
+                        
                         foreach($allTags as $tag) {
                             $transaction->sRem(self::TAG_PREFIX . $tag, $id);
                         }
