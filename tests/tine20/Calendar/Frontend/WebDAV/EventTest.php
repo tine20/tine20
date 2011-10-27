@@ -105,7 +105,32 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('New Event', $record->summary);
         
         return $event;
-    }    
+    }
+        
+    /**
+     * test create repeating event
+     *
+     * @return Calendar_Frontend_WebDAV_Event
+     */
+    public function testCreateRepeatingEvent()
+    {
+        if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+            $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
+        }
+    
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning_repeating_daily.ics', 'r');
+    
+        $id = Tinebase_Record_Abstract::generateUID();
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendarStream);
+    
+        $this->objects['eventsToDelete'][] = $event;
+    
+        $record = $event->getRecord();
+    
+        $this->assertEquals('New Event', $record->summary);
+    
+        return $event;
+    }
     
     /**
      * test get vcard
@@ -134,8 +159,9 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         $event->put($vcalendarStream);
         
         $record = $event->getRecord();
-        
+        #var_dump($record->attendee[0]->toArray());
         $this->assertEquals('New Event', $record->summary);
+        $this->assertNotEmpty($record->attendee[0]["status_authkey"]);
     }
     
     /**

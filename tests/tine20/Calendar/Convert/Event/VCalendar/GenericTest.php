@@ -73,6 +73,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
 
         $this->assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->class);
         $this->assertEquals('Hamburg',                           $event->location);
+        $this->assertEquals('Europe/Berlin',                     $event->originator_tz);
         $this->assertEquals("2011-10-04 10:00:00",               (string)$event->dtend);
         $this->assertEquals("2011-10-04 08:00:00",               (string)$event->dtstart);
         
@@ -115,11 +116,16 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     
         $event = $converter->toTine20Model($vcalendarStream);
     
-        #var_dump($event->toArray());
-        #var_dump($event->dtend);
+        #var_dump($event->exdate[3]->recurid->format('hm'));
+        #var_dump($event->dtstart->format('hm'));
     
-        $this->assertEquals('FREQ=DAILY;UNTIL=20111030T060000Z', $event->rrule);
-    
+        $this->assertEquals('FREQ=DAILY;UNTIL=2011-10-30 06:00:00', $event->rrule);
+        $this->assertEquals(4, count($event->exdate));
+        $this->assertEquals($event->uid,            $event->exdate[3]->uid);
+        $this->assertEquals("2011-10-08 13:00:00",  (string)$event->exdate[3]->dtend   , 'DTEND mismatch');
+        $this->assertEquals("2011-10-08 11:00:00",  (string)$event->exdate[3]->dtstart , 'DTSTART mismatch');
+        $this->assertEquals($event->dtstart->format('hm'),  $event->exdate[3]->recurid->format('hm') , 'Recurid mismatch');
+        
         return $event;
     }
         
