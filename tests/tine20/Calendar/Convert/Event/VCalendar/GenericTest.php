@@ -128,6 +128,33 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         return $event;
     }
+    
+    /**
+     * test converting vcard with daily repeating event to Calendar_Model_Event
+     * and merge with existing event
+     * @return Calendar_Model_Event
+     */
+    public function testConvertRepeatingDailyEventToTine20ModelWithMerge()
+    {
+        $event = $this->testConvertRepeatingDailyEventToTine20Model();
+        
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/lightning_repeating_daily.ics', 'r');
+    
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+    
+        $event->exdate[3]->attendee[0]->status_authkey = 'TestMe';
+        
+        $updatedEvent = $converter->toTine20Model($vcalendarStream, clone $event);
+    
+        #var_dump($event->exdate[3]->attendee->toArray());
+        #var_dump($updatedEvent->exdate[3]->attendee->toArray());
+        #var_dump($event->dtstart->format('hm'));
+    
+        $this->assertNotEmpty($updatedEvent->exdate[3]->attendee[0]->status_authkey);
+        $this->assertEquals($event->exdate[3]->attendee[0]->status_authkey, $updatedEvent->exdate[3]->attendee[0]->status_authkey);
+    
+        return $event;
+    }
         
     /**
      * test converting vcard from sogo connector to Calendar_Model_Event 
