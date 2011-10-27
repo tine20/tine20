@@ -722,6 +722,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $baseEventId = array_value(0, $this->_backend->search(new Calendar_Model_EventFilter(array(
             array('field' => 'uid',     'operator' => 'equals', 'value' => $_event->uid),
+            array('field' => 'is_deleted', 'operator' => 'equals', 'value' => '0'),
             array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL)
         )), NULL, TRUE));
         
