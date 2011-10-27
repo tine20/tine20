@@ -86,65 +86,32 @@ class Calendar_Convert_Event_VCalendar_Abstract
         } else {
             $event = new Calendar_Model_Event(null, false);
         }
+
+        if (!isset($vcalendar->VEVENT)) {
+            throw new Exception('no vevents found');
+        }
         
-        foreach($vcalendar->children() as $property) {
-            
-            switch($property->name) {
-                case 'VERSION':
-                case 'PRODID':
-                    // do nothing
-                    break;
+        // find the main event
+        foreach($vcalendar->VEVENT as $vevent) {
+            // "-" is not allowed in property names
+            $RECURRENCEID = 'RECURRENCE-ID';
+            if(!isset($vevent->$RECURRENCEID)) {
+                $this->_parseVevent($vevent, $event);
+                break;
+            }
+        }
+
+        // find the event exceptions
+        foreach($vcalendar->VEVENT as $vevent) {
+            $RECURRENCEID = 'RECURRENCE-ID';
+            if(isset($vevent->$RECURRENCEID)) {
+                $recurException = new Calendar_Model_Event();
+                $this->_parseVevent($vevent, $recurException);
                     
-                case 'VTIMEZONE':
-                    $event->originator_tz = $property->TZID->value;
-                    break;
-                    
-                case 'VEVENT':
-                    // keep old attendees
-                    if (isset($event->attendee) && $event->attendee instanceof Tinebase_Record_RecordSet) {
-                        $oldAttendees = clone $event->attendee;
-                    }
-                    
-                    // unset supported fields
-                    foreach ($this->_supportedFields as $field) {
-                        $event->$field = null;
-                    }
-                    
-                    $this->_parseVevent($property, $event);
-                    if (empty($event->seq)) {
-                        $event->seq = 0;
-                    }
-                    if (empty($event->class)) {
-                        $event->class = Calendar_Model_Event::CLASS_PUBLIC;
-                    }
-                    
-                    // merge old and new attendees
-                    if (isset($oldAttendees) && isset($event->attendee)) {
-                        foreach ($event->attendee as $id => $attendee) {
-                            
-                            // detect if the contact_id is already attending the event
-                            $matchingAttendees = $oldAttendees
-                                ->filter('user_type', $attendee->user_type)
-                                ->filter('user_id',   $attendee->user_id);
-                            
-                            if(count($matchingAttendees) > 0) {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updating attendee");
-                                $oldAttendee = $matchingAttendees[0];
-                                $oldAttendee->role = $attendee->role;
-                                $oldAttendee->status = $attendee->status;
-                                
-                                $event->attendee[$id] = $oldAttendee;
-                            }
-                        }
-                        
-                        unset($oldAttendees);
-                    }
-                                        
-                    break;
-                    
-                default:
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' unsupported property ' . $property->name);
-                    break;
+                if(! $event->exdate instanceof Tinebase_Record_RecordSet) {
+                    $event->exdate = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+                }
+                $event->exdate->addRecord($recurException);
             }
         }
         
@@ -196,6 +163,20 @@ class Calendar_Convert_Event_VCalendar_Abstract
      */
     protected function _parseVevent(Sabre_VObject_Component $_vevent, Calendar_Model_Event $_event)
     {
+        $event = $_event;
+        
+        if (isset($event->attendee) && $event->attendee instanceof Tinebase_Record_RecordSet) {
+            $oldAttendees = clone $event->attendee;
+        }
+        
+        // unset supported fields
+        foreach ($this->_supportedFields as $field) {
+            $event->$field = null;
+        }
+        if(! $event->attendee instanceof Tinebase_Record_RecordSet) {
+            $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        }
+        
         foreach($_vevent->children() as $property) {
             switch($property->name) {
                 case 'CREATED':
@@ -212,52 +193,71 @@ class Calendar_Convert_Event_VCalendar_Abstract
                             
                             $newAttendee = $this->_getAttendee($attendee, $contact);
                             
-                            if(! $_event->attendee instanceof Tinebase_Record_RecordSet) {
-                                $_event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-                            }
-                            $_event->attendee->addRecord($newAttendee);
+                            $event->attendee->addRecord($newAttendee);
                         }
+                    }
+                                        
+                    // merge old and new attendees
+                    if (isset($oldAttendees)) {
+                        foreach ($event->attendee as $id => $attendee) {
+                    
+                            // detect if the contact_id is already attending the event
+                            $matchingAttendees = $oldAttendees
+                                ->filter('user_type', $attendee->user_type)
+                                ->filter('user_id',   $attendee->user_id);
+                    
+                            if(count($matchingAttendees) > 0) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updating attendee");
+                                $oldAttendee = $matchingAttendees[0];
+                                $oldAttendee->role = $attendee->role;
+                                $oldAttendee->status = $attendee->status;
+                    
+                                $event->attendee[$id] = $oldAttendee;
+                            }
+                        }
+                    
+                        unset($oldAttendees);
                     }
                     
                     break;
                     
                 case 'CLASS':
                     if (in_array($property->value, array(Calendar_Model_Event::CLASS_PRIVATE, Calendar_Model_Event::CLASS_PUBLIC))) {
-                        $_event->class = $property->value;
+                        $event->class = $property->value;
                     } else {
-                        $_event->class = Calendar_Model_Event::CLASS_PUBLIC;
+                        $event->class = Calendar_Model_Event::CLASS_PUBLIC;
                     }
                     break;
                     
                 case 'DTEND':
                     $dtend = new Tinebase_DateTime($property->getDateTime()->format("c"), $property->getDateTime()->getTimezone());
-                    $dtend->setTimezone('UTC');
 
                     if (isset($property['VALUE']) && strtoupper($property['VALUE']) == 'DATE') {
                         // all day event
-                        $_event->is_all_day_event = true;
+                        $event->is_all_day_event = true;
                         
                         // whole day events ends at 23:59:59 in Tine 2.0 but 00:00 the next day in vcalendar
                         $dtend->subSecond(1);
                     } else {
-                        $_event->is_all_day_event = false;
+                        $event->is_all_day_event = false;
                     }
                     
-                    $_event->dtend = $dtend;
+                    $event->dtend = $dtend;
                     break;
                     
                 case 'DTSTART':
+                    $event->originator_tz = $property->getDateTime()->getTimezone()->getName();
+                    
                     $dtstart = new Tinebase_DateTime($property->getDateTime()->format("c"), $property->getDateTime()->getTimezone());
-                    $dtstart->setTimezone('UTC');
                     
                     if (isset($property['VALUE']) && strtoupper($property['VALUE']) == 'DATE') {
                         // all day event
-                        $_event->is_all_day_event = true;
+                        $event->is_all_day_event = true;
                     } else {
-                        $_event->is_all_day_event = false;
+                        $event->is_all_day_event = false;
                     }
                     
-                    $_event->dtstart = $dtstart;
+                    $event->dtstart = $dtstart;
                     break;
                     
                 case 'LOCATION':
@@ -265,35 +265,60 @@ class Calendar_Convert_Event_VCalendar_Abstract
                 case 'SEQ':
                 case 'SUMMARY':
                     $key = strtolower($property->name);
-                    $_event->$key = $property->value;
+                    $event->$key = $property->value;
                     break;
                     
-                // @todo add organizer to attendees
                 case 'ORGANIZER':
                     if (preg_match('/mailto:(?P<email>.*)/', $property->value, $matches)) {
                         $name = isset($property['CN']) ? $property['CN'] : $matches['email'];
                         $contact = $this->_resolveEmailToContact($matches['email'], $name);
                         
-                        $_event->organizer = $contact->getId();
+                        $event->organizer = $contact->getId();
                         
                         $newAttendee = $this->_getAttendee($property, $contact);
                         
-                        if(! $_event->attendee instanceof Tinebase_Record_RecordSet) {
-                            $_event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-                        }
-                        $_event->attendee->addRecord($newAttendee);
+                        $event->attendee->addRecord($newAttendee);
                     }
+                    break;
+
+                case 'RECURRENCE-ID':
+                    // original start of the event
+                    $event->recurid = new Tinebase_DateTime($property->getDateTime()->format("c"), $property->getDateTime()->getTimezone());
+                    
+                    // convert recurrence id to utc
+                    $event->recurid->setTimezone('UTC');
+                    
                     break;
                     
                 case 'RRULE':
-                    $_event->rrule = $property->value;
+                    $event->rrule = preg_replace('/(UNTIL=)(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z/', '$1$2-$3-$4 $5:$6:$7', $property->value);
+                    
+                    // process exceptions
+                    if (isset($_vevent->EXDATE)) {
+                        $exdates = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+                        
+                        foreach($_vevent->EXDATE as $exdate) {
+                            foreach($exdate->getDateTimes() as $exception) {
+                                $exception->setTimezone(new DateTimeZone('UTC'));
+                                                        
+                                $eventException = new Calendar_Model_Event(array(
+                                	'recurid'    => new Tinebase_DateTime($exception->format("c"), 'UTC'),
+                                	'is_deleted' => true
+                                ));
+                        
+                                $exdates->addRecord($eventException);
+                            }
+                        }
+                    
+                        $event->exdate = $exdates;
+                    }                    
                     break;
                     
                 case 'TRANSP':
                     if (in_array($property->value, array(Calendar_Model_Event::TRANSP_OPAQUE, Calendar_Model_Event::TRANSP_TRANSP))) {
-                        $_event->transp = $property->value;
+                        $event->transp = $property->value;
                     } else {
-                        $_event->transp = Calendar_Model_Event::TRANSP_TRANSP;
+                        $event->transp = Calendar_Model_Event::TRANSP_TRANSP;
                     }
                     break;
                     
@@ -307,6 +332,15 @@ class Calendar_Convert_Event_VCalendar_Abstract
             }
         }
         
+        if (empty($event->seq)) {
+            $event->seq = 0;
+        }
+        if (empty($event->class)) {
+            $event->class = Calendar_Model_Event::CLASS_PUBLIC;
+        }
+        
+        // convert all datetime fields to UTC
+        $event->setTimezone('UTC');
     }
     
     /**
