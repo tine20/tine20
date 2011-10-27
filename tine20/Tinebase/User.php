@@ -375,6 +375,7 @@ class Tinebase_User
             
             $currentUser->accountLoginName          = $user->accountLoginName;
             $currentUser->accountLastPasswordChange = $user->accountLastPasswordChange;
+            $currentUser->accountExpires            = $user->accountExpires;
             $currentUser->accountPrimaryGroup       = $user->accountPrimaryGroup;
             $currentUser->accountDisplayName        = $user->accountDisplayName;
             $currentUser->accountLastName           = $user->accountLastName;
