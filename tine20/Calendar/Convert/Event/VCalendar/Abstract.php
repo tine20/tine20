@@ -11,7 +11,7 @@
  */
 
 /**
- * class to convert single event to/from VCalendar
+ * class to convert single event (repeating with exceptions) to/from VCalendar
  *
  * @package     Calendar
  * @subpackage  Convert
@@ -81,31 +81,46 @@ class Calendar_Convert_Event_VCalendar_Abstract
             $vcalendar = Sabre_VObject_Reader::read($_blob);
         }
         
+        // contains the VCALENDAR any VEVENTS
+        if (!isset($vcalendar->VEVENT)) {
+            throw new Tinebase_Exception_UnexpectedValue('no vevents found');
+        }
+        
+        // update a provided record or create a new one
         if ($_model instanceof Calendar_Model_Event) {
             $event = $_model;
         } else {
             $event = new Calendar_Model_Event(null, false);
         }
-
-        if (!isset($vcalendar->VEVENT)) {
-            throw new Exception('no vevents found');
+        
+        // keep current exdate's (only the not deleted ones)
+        if ($event->exdate instanceof Tinebase_Record_RecordSet) {
+            $oldExdates = $event->exdate->filter('is_deleted', false);
+        } else {
+            $oldExdates = new Tinebase_Record_RecordSet('Calendar_Model_Events');
         }
         
-        // find the main event
+        // find the main event - the main event has no RECURRENCE-ID
         foreach($vcalendar->VEVENT as $vevent) {
             // "-" is not allowed in property names
             $RECURRENCEID = 'RECURRENCE-ID';
             if(!isset($vevent->$RECURRENCEID)) {
                 $this->_parseVevent($vevent, $event);
+                
                 break;
             }
         }
 
-        // find the event exceptions
+        // if we have found no VEVENT component something went wrong, lets stop here
+        if (!isset($event)) {
+            throw new Tinebase_Exception_UnexpectedValue('no main VEVENT component found in VCALENDAR');
+        }
+        
+        // parse the event exceptions
         foreach($vcalendar->VEVENT as $vevent) {
-            $RECURRENCEID = 'RECURRENCE-ID';
-            if(isset($vevent->$RECURRENCEID)) {
-                $recurException = new Calendar_Model_Event();
+            if(isset($vevent->$RECURRENCEID) && $event->uid == $vevent->UID) {
+                $recurException = $this->_getRecurException($oldExdates, $vevent);
+                
                 $this->_parseVevent($vevent, $recurException);
                     
                 if(! $event->exdate instanceof Tinebase_Record_RecordSet) {
@@ -120,6 +135,33 @@ class Calendar_Convert_Event_VCalendar_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' data ' . print_r($event->toArray(), true));
         
         return $event;
+    }
+    
+
+    /**
+     * find a matching exdate or return an empty event record
+     * 
+     * @param  Tinebase_Record_RecordSet  $_oldExdates
+     * @param  Sabre_VObject_Component    $_vevent
+     * @return Calendar_Model_Event
+     */
+    protected function _getRecurException(Tinebase_Record_RecordSet $_oldExdates, Sabre_VObject_Component $_vevent)
+    {
+        // "-" is not allowed in property names
+        $RECURRENCEID = 'RECURRENCE-ID';
+        
+        $exDate = clone $_vevent->$RECURRENCEID->getDateTime();
+        $exDate->setTimeZone(new DateTimeZone('UTC'));
+        $exDateString = $exDate->format('Y-m-d H:i:s');
+        foreach ($_oldExdates as $id => $oldExdate) {
+            if ($exDateString == substr((string) $oldExdate->recurid, -19)) {
+                unset($_oldExdates[$id]);
+                
+                return $oldExdate;
+            }
+        }
+        
+        return new Calendar_Model_Event();
     }
     
     /**
@@ -227,6 +269,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     } else {
                         $event->class = Calendar_Model_Event::CLASS_PUBLIC;
                     }
+                    
                     break;
                     
                 case 'DTEND':
@@ -243,6 +286,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     }
                     
                     $event->dtend = $dtend;
+                    
                     break;
                     
                 case 'DTSTART':
@@ -258,6 +302,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     }
                     
                     $event->dtstart = $dtstart;
+                    
                     break;
                     
                 case 'LOCATION':
@@ -266,6 +311,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
                 case 'SUMMARY':
                     $key = strtolower($property->name);
                     $event->$key = $property->value;
+                    
                     break;
                     
                 case 'ORGANIZER':
@@ -279,6 +325,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
                         
                         $event->attendee->addRecord($newAttendee);
                     }
+                    
                     break;
 
                 case 'RECURRENCE-ID':
@@ -311,7 +358,8 @@ class Calendar_Convert_Event_VCalendar_Abstract
                         }
                     
                         $event->exdate = $exdates;
-                    }                    
+                    }     
+                                   
                     break;
                     
                 case 'TRANSP':
@@ -320,14 +368,17 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     } else {
                         $event->transp = Calendar_Model_Event::TRANSP_TRANSP;
                     }
+                    
                     break;
                     
-                // @todo handle categories
+                
                 case 'CATEGORIES':
+                    // @todo handle categories
                     break;
                     
                 default:
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . $property->name);
+                
                     break;
             }
         }
