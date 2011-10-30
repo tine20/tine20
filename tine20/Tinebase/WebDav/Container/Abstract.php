@@ -27,6 +27,8 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
     
     protected $_applicationName;
     
+    protected $_controller;
+    
     protected $_model;
     
     protected $_suffix;
@@ -78,10 +80,9 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
     public function getChild($_name)
     {
         $modelName = $this->_application->name . '_Model_' . $this->_model;
-        $controller = Tinebase_Core::getApplicationInstance($this->_application->name, $this->_model);
         
         try {
-            $object = $_name instanceof $modelName ? $_name : $controller->get($this->_getIdFromName($_name));
+            $object = $_name instanceof $modelName ? $_name : $this->_getController()->get($this->_getIdFromName($_name));
         } catch (Tinebase_Exception_NotFound $tenf) {
             throw new Sabre_DAV_Exception_FileNotFound('Object not found');
         }
@@ -107,8 +108,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
             )
         ));
         
-        $controller = Tinebase_Core::getApplicationInstance($this->_application->name, $this->_model);
-        $objects = $controller->search($filter);
+        $objects = $this->_getController()->search($filter);
         
         $children = array();
         
@@ -238,6 +238,19 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
     public function updateProperties($mutations) 
     {
         return $this->carddavBackend->updateAddressBook($this->addressBookInfo['id'], $mutations); 
+    }
+    
+    /**
+     * 
+     * @return Tinebase_Controller_Record_Interface
+     */
+    protected function _getController()
+    {
+        if ($this->_controller === null) {
+            $this->_controller = Tinebase_Core::getApplicationInstance($this->_application->name, $this->_model);
+        }
+        
+        return $this->_controller;
     }
     
     /**
