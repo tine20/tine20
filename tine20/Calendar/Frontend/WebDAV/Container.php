@@ -62,4 +62,13 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         
         return $response;
     }
+    
+    protected function _getController()
+    {
+        if ($this->_controller === null) {
+            $this->_controller = Calendar_Controller_MSEventFacade::getInstance();
+        }
+        
+        return $this->_controller;
+    }
 }
