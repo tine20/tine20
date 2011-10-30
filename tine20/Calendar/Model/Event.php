@@ -25,6 +25,11 @@
  *  - despite RFC2445 we have an expicit isAllDayEvent property
  * 
  * @package Calendar
+ * @property Tinnebase_DateTime creation_time
+ * @property string is_all_day_event
+ * @property string originator_tz
+ * @property string seq
+ * @property string uid
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
 {

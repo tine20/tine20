@@ -577,12 +577,13 @@ class Tinebase_DateTime extends DateTime
      * Sets a new timezone.
      * For a list of supported timezones look here: http://php.net/timezones
      *
-     * @param  string  $_timezone      OPTIONAL timezone for date calculation; defaults to date_default_timezone_get()
-     * @return Tinebase_DateTime  $this
+     * @param  string|DateTimeZone  $_timezone  timezone for date calculation
+     * @return Tinebase_DateTime    $this
      */
     public function setTimezone($_timezone)
     {
-        parent::setTimezone(new DateTimeZone($_timezone));
+        $timezone = $_timezone instanceof DateTimeZone ? $_timezone : new DateTimeZone($_timezone);
+        parent::setTimezone($timezone);
         return $this;
     }
     
