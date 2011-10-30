@@ -136,7 +136,7 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
      * test get vcard
      * @depends testCreateEvent
      */
-    public function testGetEvent()
+    public function testGetVCalendar()
     {
         $event = $this->testCreateEvent();
         
@@ -144,7 +144,23 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         
         $this->assertContains('SUMMARY:New Event', $vcalendar);
     }
-
+    
+    /**
+     * test get vcard
+     */
+    public function testGetRepeatingVCalendar()
+    {
+        $event = $this->testCreateRepeatingEvent();
+    
+        $event = new Calendar_Frontend_WebDAV_Event($event->getRecord()->getId());
+        
+        $vcalendar = stream_get_contents($event->get());
+        #var_dump($vcalendar);
+        $this->assertContains('SUMMARY:New Event', $vcalendar);
+        $this->assertContains('EXDATE;VALUE=DATE-TIME:20111005T080000Z', $vcalendar);
+        $this->assertContains('RECURRENCE-ID;VALUE=DATE-TIME;TZID=Europe/Berlin:20111008T100000', $vcalendar);
+    }
+    
     /**
      * test updating existing event
      */
