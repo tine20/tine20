@@ -455,7 +455,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $newTag = new Tinebase_Model_Tag(array(
             'name'          => $_tagData['name'],
             'description'   => $description,
-            'type'          => $type,
+            'type'          => strtolower($type),
             'color'         => $color,
         ));
         
