@@ -400,6 +400,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_importHelper(array('dryrun' => 0));
         $this->assertEquals(2, $result['totalcount'], 'Didn\'t import anything.');
         $klaus = $result['results'][0];
+        $this->assertEquals('Import list (' . Tinebase_Translation::dateToStringInTzAndLocaleFormat(Tinebase_DateTime::now(), NULL, NULL, 'date') . ')', $klaus['tags'][0]['name']);
 
         // import with duplicates
         $result = $this->_importHelper(array('dryrun' => 0));
