@@ -182,6 +182,54 @@ class Calendar_Convert_Event_VCalendar_Abstract
             }
         }
         
+        if ($event->alarms) {
+            foreach($event->alarms as $alarm) {
+                $valarm = new Sabre_VObject_Component('VALARM');
+                $valarm->add('ACTION', 'DISPLAY');
+                $valarm->add('DESCRIPTION', $event->summary);
+
+                if (!empty($alarm->options)) {
+                    $options = Zend_Json::decode($alarm->options);
+                    if (is_array($options) && array_key_exists('custom', $options) && $options['custom'] === true) {
+                        $alarm->minutes_before = 'custom';
+                    }
+                }
+                
+                if (is_numeric($alarm->minutes_before)) {
+                    if ($event->dtstart == $alarm->alarm_time) {
+                        $periodString = 'PT0S';
+                    } else {
+                        $interval = $event->dtstart->diff($alarm->alarm_time);
+                        $periodString = sprintf('%sP%s%s%s%s',
+                            $interval->format('%r'),
+                            $interval->format('%d') > 0 ? $interval->format('%dD') : null,
+                            ($interval->format('%h') > 0 || $interval->format('%i') > 0) ? 'T' : null,
+                            $interval->format('%h') > 0 ? $interval->format('%hH') : null,
+                            $interval->format('%i') > 0 ? $interval->format('%iM') : null
+                        );
+                    }
+                    # TRIGGER;VALUE=DURATION:-PT1H15M
+                    $trigger = new Sabre_VObject_Property('TRIGGER', $periodString);
+                    $trigger->add('VALUE', "DURATION");
+                    $valarm->add($trigger);
+                } else {
+                    # TRIGGER;VALUE=DATE-TIME:...
+                    $trigger = new Sabre_VObject_Element_DateTime('TRIGGER');
+                    $trigger->add('VALUE', "DATE-TIME");
+                    $trigger->setDateTime($alarm->alarm_time, Sabre_VObject_Element_DateTime::UTC);
+                    $valarm->add($trigger);
+                }
+                
+                $vevent->add($valarm);
+            }
+            
+            // @todo this is a ugly hack for Ligthning to avoid the event notifier 
+            // see http://forge.tine20.org/mantisbt/view.php?id=5016
+            $xMozLastAck = new Sabre_VObject_Element_DateTime('X-MOZ-LASTACK');
+            $xMozLastAck->setDateTime(new DateTime(), Sabre_VObject_Element_DateTime::UTC);
+            $vevent->add($xMozLastAck);
+        }
+        
         return $vevent;
     }
     
@@ -513,7 +561,50 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     
                     break;
                     
-                
+                case 'VALARM':
+                    $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+                    
+                    foreach($property as $valarm) {
+                        switch(strtoupper($valarm->TRIGGER['VALUE']->value)) {
+                            # TRIGGER;VALUE=DATE-TIME:20111031T130000Z
+                            case 'DATE-TIME':
+                                $alarmTime = new Tinebase_DateTime($_vevent->DTSTART->getDateTime()->format("c"), $_vevent->DTSTART->getDateTime()->getTimezone());
+                                $alarmTime->setTimezone('UTC');
+                                
+                                $alarm = new Tinebase_Model_Alarm(array(
+                                    'alarm_time'        => $alarmTime,
+                                    'minutes_before'    => 'custom',
+                                    'model'             => 'Calendar_Model_Event'
+                                ));
+                                
+                                $event->alarms->addRecord($alarm);
+                                
+                                break;
+                                
+                            # TRIGGER;VALUE=DURATION:-PT1H15M
+                            case 'DURATION':
+                            default:
+                                $alarmTime = new Tinebase_DateTime($_vevent->DTSTART->getDateTime()->format("c"), $_vevent->DTSTART->getDateTime()->getTimezone());
+                                $alarmTime->setTimezone('UTC');
+                                
+                                preg_match('/(?P<invert>[+-]?)(?P<spec>P.*)/', $valarm->TRIGGER->value, $matches);
+                                $duration = new DateInterval($matches['spec']);
+                                $duration->invert = !!($matches['invert'] === '-');
+
+                                $alarm = new Tinebase_Model_Alarm(array(
+                                    'alarm_time'        => $alarmTime->add($duration),
+                                    'minutes_before'    => ($duration->format('%d') * 60 * 24) + ($duration->format('%h') * 60) + ($duration->format('%i')),
+                                    'model'             => 'Calendar_Model_Event'
+                                ));
+                                
+                                $event->alarms->addRecord($alarm);
+                                
+                                break;
+                        }
+                    }
+                    
+                    break;
+                    
                 case 'CATEGORIES':
                     // @todo handle categories
                     break;
