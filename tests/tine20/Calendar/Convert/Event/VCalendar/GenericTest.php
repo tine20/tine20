@@ -70,12 +70,16 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
         $event = $converter->toTine20Model($vcalendarStream);
-
+        
+        #var_dump($event->toArray());
+        
         $this->assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->class);
         $this->assertEquals('Hamburg',                           $event->location);
         $this->assertEquals('Europe/Berlin',                     $event->originator_tz);
         $this->assertEquals("2011-10-04 10:00:00",               (string)$event->dtend);
         $this->assertEquals("2011-10-04 08:00:00",               (string)$event->dtstart);
+        $this->assertEquals("2011-10-04 06:45:00",               (string)$event->alarms[0]->alarm_time);
+        $this->assertEquals("75",                                (string)$event->alarms[0]->minutes_before);
         
         return $event;
     }
@@ -92,7 +96,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     
         $event = $converter->toTine20Model($vcalendarStream);
         
-        #var_dump($event->dtstart);
+        #var_dump($event->toArray());
         #var_dump($event->dtend);
         
         $this->assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->class);
@@ -100,6 +104,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertEquals("2011-10-19 23:59:59",               (string)$event->dtend   , 'DTEND mismatch');
         $this->assertEquals("2011-10-19 00:00:00",               (string)$event->dtstart , 'DTSTART mismatch');
         $this->assertTrue($event->is_all_day_event , 'All day event mismatch');
+        $this->assertEquals("2011-10-19 00:00:00",               (string)$event->alarms[0]->alarm_time);
     
         return $event;
     }
@@ -189,17 +194,18 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
         $vevent = $converter->fromTine20Model($event);
-        #var_dump($vevent);
+        //var_dump($vevent);
         // required fields
-        $this->assertContains('VERSION:2.0', $vevent, $vevent);
-        $this->assertContains('PRODID:-//tine20.org//Tine 2.0 Calendar V',     $vevent, $vevent);
+        $this->assertContains('VERSION:2.0',                                    $vevent, $vevent);
+        $this->assertContains('PRODID:-//tine20.org//Tine 2.0 Calendar V',      $vevent, $vevent);
         $this->assertContains('CREATED;VALUE=DATE-TIME:20111111T111100Z',       $vevent, $vevent);
         $this->assertContains('LAST-MODIFIED;VALUE=DATE-TIME:20111111T121200Z', $vevent, $vevent);
         $this->assertContains('DTSTAMP;VALUE=DATE-TIME:20111111T121200Z',       $vevent, $vevent);
-        $this->assertContains('TZID:Europe/Berlin',           $vevent, $vevent);
-        $this->assertContains('UID:' . $event->uid,           $vevent, $vevent);
-        $this->assertContains('LOCATION:' . $event->location, $vevent, $vevent);
-        $this->assertContains('CLASS:PRIVATE',                $vevent, $vevent);
+        $this->assertContains('TZID:Europe/Berlin',               $vevent, $vevent);
+        $this->assertContains('UID:' . $event->uid,               $vevent, $vevent);
+        $this->assertContains('LOCATION:' . $event->location,     $vevent, $vevent);
+        $this->assertContains('CLASS:PRIVATE',                    $vevent, $vevent);
+        $this->assertContains('TRIGGER;VALUE=DURATION:-PT1H15M', $vevent, $vevent);
     }
     
     /**
