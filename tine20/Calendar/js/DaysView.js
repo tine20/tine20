@@ -1174,6 +1174,13 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.focusEl.swallowEvent("contextmenu", true);
     },
     
+    /**
+     * @TODO this returns wrong cols on DST boundaries:
+     *  e.g. on DST switch form +2 to +1 an all day event is 25 hrs. long
+     * 
+     * @param {} date
+     * @return {}
+     */
     getColumnNumber: function(date) {
         return Math.floor((date.add(Date.SECOND, 1).getTime() - this.startDate.getTime()) / Date.msDAY);
     },
