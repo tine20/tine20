@@ -3,8 +3,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -51,18 +51,74 @@ Ext.namespace('Tine.Felamimail');
      * @private
      */
     initComponent: function() {
-
-        // init detail template
         this.initTemplate();
+        this.initDefaultTemplate();
+        this.initBottomToolbar();
         
-        // use default Tpl for default and multi view
+        Tine.Felamimail.GridDetailsPanel.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * use default Tpl for default and multi view
+     */
+    initDefaultTemplate: function() {
         this.defaultTpl = new Ext.XTemplate(
             '<div class="preview-panel-felamimail">',
                 '<div class="preview-panel-felamimail-body">{[values ? values.msg : ""]}</div>',
             '</div>'
         );
-        
-        Tine.Felamimail.GridDetailsPanel.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * init bottom toolbar (needed for event invitations atm)
+     * 
+     * TODO add more buttons (show header, add to addressbook, create filter, show images ...) here?
+     * TODO add icons
+     * TODO style toolbar / remove scrollbars
+     * TODO add text
+     */
+    initBottomToolbar: function() {
+        this.bbar = new Ext.Toolbar({
+            hidden: true,
+            items: [{
+                xtype: 'buttongroup',
+                columns: 3,
+                items: [
+                    new Ext.Action({
+                        text: this.app.i18n._('accept'),
+                        handler: this.processInvitation.createDelegate(this, ['accept']),
+                        //iconCls: 'action_saveAsDraft',
+                        disabled: false,
+                        scope: this
+                    }),
+                    new Ext.Action({
+                        text: this.app.i18n._('decline'),
+                        handler: this.processInvitation.createDelegate(this, ['decline']),
+                        //iconCls: 'action_saveAsDraft',
+                        disabled: false,
+                        scope: this
+                    }),
+                    new Ext.Action({
+                        text: this.app.i18n._('tentative'),
+                        handler: this.processInvitation.createDelegate(this, ['tentative']),
+                        //iconCls: 'action_saveAsDraft',
+                        disabled: false,
+                        scope: this
+                    }),
+                ]
+            }]
+        });
+    },
+    
+    /**
+     * process email invitation
+     * 
+     * @param {String} action
+     * 
+     * TODO implement actions
+     */
+    processInvitation: function(action) {
+        Tine.log.debug(action);
     },
 
     /**
@@ -104,6 +160,14 @@ Ext.namespace('Tine.Felamimail');
             this.tpl.overwrite(body, record.data);
             this.getLoadMask().hide();
             this.getEl().down('div').down('div').scrollTo('top', 0, false);
+            
+            if (this.record.get('invitation_status')) {
+                // TODO switch status
+                this.getBottomToolbar().setVisible(true);
+            } else {
+                this.getBottomToolbar().setVisible(false);
+            }
+            this.doLayout();
         }
     },
     
