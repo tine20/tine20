@@ -227,7 +227,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     */
     protected function _handleInvitation(Felamimail_Model_Message $_message)
     {
-        if (! Tinebase_Application::getInstance()->isInstalled('Calendar') || Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
+        if (! Tinebase_Application::getInstance()->isInstalled('Calendar') || ! Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Calendar not installed or access denied.');
             return;
         }
@@ -250,7 +250,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             if ($this->_attachmentIsVcalendarInvitation($attachment)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' VCalendar invitation attachment found.');
                 
-                // @todo create vcalendar stream from attachment
+                $part = Felamimail_Controller_Message::getInstance()->getMessagePart($_message, $attachment['partId']);
+                $vcalendar = $part->getDecodedContent();
                 
                 // use the first one
                 break;
@@ -258,8 +259,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         if ($vcalendar) {
-            // @todo parse vcalendar
-            // $message->invitation_event = parsing($vcalendar);
+            if (isset($_message->headers['user-agent'])) {
+                list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_userAgent);
+                $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
+            } else {
+                $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+            }
+            
+            $event = $converter->toTine20Model($vcalendar);
+            $_message->invitation_event = $event;
+            $_message->invitation_status = Felamimail_Model_Message::INVITATION_STATUS_ACTIONREQUIRED;
         }
     }
     
@@ -268,12 +277,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param array $_attachment
      * @return boolean
-     * 
-     * @todo implement
      */
     protected function _attachmentIsVcalendarInvitation($_attachment)
     {
-        $result = FALSE;
+        $result = (isset($_attachment['filename']) && $_attachment['filename'] === 'invite.ics');
         
         return $result;
     }
