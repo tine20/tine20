@@ -1068,6 +1068,19 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
     }
     
+    /**
+    * validate email invitation
+    * 
+    * @todo add assertions
+    */
+    public function testEmailInvitation()
+    {
+        $cachedMessage = $this->messageTestHelper('invitation.eml');
+    
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        //print_r($message->toArray());
+    }
+    
     /********************************* protected helper funcs *************************************/
     
     /**
