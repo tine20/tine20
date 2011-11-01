@@ -170,7 +170,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             Felamimail_Controller_Message_Flags::getInstance()->setSeenFlag($message);
         }
         
-        $this->_parseInvitation($message);
+        $this->_handleInvitation($message);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
         
@@ -221,14 +221,61 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-    * parse invitation attachments and set invitation data / event
+    * handle invitation attachments and set invitation data / event
     *
     * @param Felamimail_Model_Message $_message
-    * 
-    * @todo implement
     */
-    protected function _parseInvitation(Felamimail_Model_Message $_message)
+    protected function _handleInvitation(Felamimail_Model_Message $_message)
     {
+        if (! Tinebase_Application::getInstance()->isInstalled('Calendar') || Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Calendar not installed or access denied.');
+            return;
+        }
+        
+        // @todo check if there already is an existing event relation
+        // $this->_setInvitationFromEventRelation($_message);
+        
+        $this->_setInvitationEventFromAttachments($_message);
+    }
+    
+    /**
+     * get invitation event from attachment
+     * 
+     * @param Felamimail_Model_Message $_message
+     */
+    protected function _setInvitationEventFromAttachments(Felamimail_Model_Message $_message)
+    {
+        $vcalendar = NULL;
+        foreach ($_message->attachments as $attachment) {
+            if ($this->_attachmentIsVcalendarInvitation($attachment)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' VCalendar invitation attachment found.');
+                
+                // @todo create vcalendar stream from attachment
+                
+                // use the first one
+                break;
+            }
+        }
+        
+        if ($vcalendar) {
+            // @todo parse vcalendar
+            // $message->invitation_event = parsing($vcalendar);
+        }
+    }
+    
+    /**
+     * returns TRUE if attachment is event invitation 
+     * 
+     * @param array $_attachment
+     * @return boolean
+     * 
+     * @todo implement
+     */
+    protected function _attachmentIsVcalendarInvitation($_attachment)
+    {
+        $result = FALSE;
+        
+        return $result;
     }
     
     /**
