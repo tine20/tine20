@@ -24,6 +24,8 @@
  * @property    array   $bcc            the bcc receipients
  * @property    array   $structure      the message structure
  * @property    string  $messageuid     the message uid on the imap server
+ * @property    array   $invitation_event   invitation event object
+ * @property    array   $invitation_status  invitation status
  */
 class Felamimail_Model_Message extends Tinebase_Record_Abstract
 {
@@ -62,6 +64,13 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      * email address regexp
      */
     const EMAIL_ADDRESS_REGEXP = '/([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,5})/i'; 
+    
+    /**
+     * invitation status
+     * 
+     * @todo add more status
+     */
+    const INVITATION_STATUS_ACTIONREQUIRED = "actionrequired";
     
     /**
      * quote string ("> ")
@@ -127,6 +136,9 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'note'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     // Felamimail_Message object
         'message'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    // email invitations
+        'invitation_event'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'invitation_status'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
