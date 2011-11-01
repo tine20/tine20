@@ -59,7 +59,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
         $vtimezone = $this->_convertDateTimezone($_model->originator_tz);
         $vcalendar->add($vtimezone);
         
-        $vevent = $this->_parseEvent($_model);
+        $vevent = $this->_convertCalendarModelEvent($_model);
         $vcalendar->add($vevent);
         
         if ($_model->exdate instanceof Tinebase_Record_RecordSet) {
@@ -72,7 +72,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
                 if (isset($_model->last_modified_time)) {
                     $eventException->last_modified_time = $_model->last_modified_time;
                 }
-                $vevent = $this->_parseEvent($eventException);
+                $vevent = $this->_convertCalendarModelEvent($eventException);
                 $vcalendar->add($vevent);
             }
             
@@ -180,7 +180,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
     }
     
     
-    protected function _parseEvent(Calendar_Model_Event $_event)
+    protected function _convertCalendarModelEvent(Calendar_Model_Event $_event)
     {
         // clone the event and change the timezone
         $event = clone $_event;
@@ -215,14 +215,26 @@ class Calendar_Convert_Event_VCalendar_Abstract
             $vevent->add($recurrenceId);
         }
         
-        $dtstart = new Sabre_VObject_Element_DateTime('DTSTART');
-        $dtstart->setDateTime($event->dtstart);
+        // dtstart and dtend
+        if ($event->is_all_day_event == true) {
+            $dtstart = new Sabre_VObject_Element_DateTime('DTSTART');
+            $dtstart->setDateTime($event->dtstart, Sabre_VObject_Element_DateTime::DATE);
+            
+            // whole day events ends at 23:59:59 in Tine 2.0 but 00:00 the next day in vcalendar
+            $event->dtend->addSecond(1);
+            
+            $dtend = new Sabre_VObject_Element_DateTime('DTEND');
+            $dtend->setDateTime($event->dtend, Sabre_VObject_Element_DateTime::DATE);
+        } else {
+            $dtstart = new Sabre_VObject_Element_DateTime('DTSTART');
+            $dtstart->setDateTime($event->dtstart);
+            
+            $dtend = new Sabre_VObject_Element_DateTime('DTEND');
+            $dtend->setDateTime($event->dtend);
+        }
         $vevent->add($dtstart);
-        
-        $dtend = new Sabre_VObject_Element_DateTime('DTEND');
-        $dtend->setDateTime($event->dtend);
         $vevent->add($dtend);
-
+        
         $this->_addEventAttendee($vevent, $event);
         
         $optionalProperties = array(
@@ -374,7 +386,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
             // "-" is not allowed in property names
             $RECURRENCEID = 'RECURRENCE-ID';
             if(!isset($vevent->$RECURRENCEID)) {
-                $this->_parseVevent($vevent, $event);
+                $this->_convertVevent($vevent, $event);
                 
                 break;
             }
@@ -390,7 +402,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
             if(isset($vevent->$RECURRENCEID) && $event->uid == $vevent->UID) {
                 $recurException = $this->_getRecurException($oldExdates, $vevent);
                 
-                $this->_parseVevent($vevent, $recurException);
+                $this->_convertVevent($vevent, $recurException);
                     
                 if(! $event->exdate instanceof Tinebase_Record_RecordSet) {
                     $event->exdate = new Tinebase_Record_RecordSet('Calendar_Model_Event');
@@ -472,7 +484,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
      * @param  Sabre_VObject_Component  $_vevent  the VEVENT to parse
      * @param  Calendar_Model_Event     $_event   the Tine 2.0 event to update
      */
-    protected function _parseVevent(Sabre_VObject_Component $_vevent, Calendar_Model_Event $_event)
+    protected function _convertVevent(Sabre_VObject_Component $_vevent, Calendar_Model_Event $_event)
     {
         $event = $_event;
         
@@ -542,16 +554,20 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     break;
                     
                 case 'DTEND':
-                    $dtend = new Tinebase_DateTime($property->getDateTime()->format("c"), $property->getDateTime()->getTimezone());
+                    
 
                     if (isset($property['VALUE']) && strtoupper($property['VALUE']) == 'DATE') {
                         // all day event
                         $event->is_all_day_event = true;
                         
+                        $dtend = new Tinebase_DateTime($property->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                        
                         // whole day events ends at 23:59:59 in Tine 2.0 but 00:00 the next day in vcalendar
                         $dtend->subSecond(1);
                     } else {
                         $event->is_all_day_event = false;
+                        
+                        $dtend = new Tinebase_DateTime($property->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), $property->getDateTime()->getTimezone());
                     }
                     
                     $event->dtend = $dtend;
@@ -559,16 +575,18 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     break;
                     
                 case 'DTSTART':
-                    $event->originator_tz = $property->getDateTime()->getTimezone()->getName();
-                    
-                    $dtstart = new Tinebase_DateTime($property->getDateTime()->format("c"), $property->getDateTime()->getTimezone());
-                    
                     if (isset($property['VALUE']) && strtoupper($property['VALUE']) == 'DATE') {
                         // all day event
                         $event->is_all_day_event = true;
+
+                        $dtstart = new Tinebase_DateTime($property->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
                     } else {
                         $event->is_all_day_event = false;
+                        
+                        $dtstart = new Tinebase_DateTime($property->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), $property->getDateTime()->getTimezone());
                     }
+                    
+                    $event->originator_tz = $dtstart->getTimezone()->getName();
                     
                     $event->dtstart = $dtstart;
                     
@@ -599,7 +617,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
 
                 case 'RECURRENCE-ID':
                     // original start of the event
-                    $event->recurid = new Tinebase_DateTime($property->getDateTime()->format("c"), $property->getDateTime()->getTimezone());
+                    $event->recurid = new Tinebase_DateTime($property->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), $property->getDateTime()->getTimezone());
                     
                     // convert recurrence id to utc
                     $event->recurid->setTimezone('UTC');
@@ -618,7 +636,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
                                 $exception->setTimezone(new DateTimeZone('UTC'));
                                                         
                                 $eventException = new Calendar_Model_Event(array(
-                                	'recurid'    => new Tinebase_DateTime($exception->format("c"), 'UTC'),
+                                	'recurid'    => new Tinebase_DateTime($exception->format(Tinebase_Record_Abstract::ISO8601LONG), 'UTC'),
                                 	'is_deleted' => true
                                 ));
                         
@@ -647,7 +665,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
                         switch(strtoupper($valarm->TRIGGER['VALUE']->value)) {
                             # TRIGGER;VALUE=DATE-TIME:20111031T130000Z
                             case 'DATE-TIME':
-                                $alarmTime = new Tinebase_DateTime($_vevent->DTSTART->getDateTime()->format("c"), $_vevent->DTSTART->getDateTime()->getTimezone());
+                                $alarmTime = new Tinebase_DateTime($_vevent->DTSTART->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), $_vevent->DTSTART->getDateTime()->getTimezone());
                                 $alarmTime->setTimezone('UTC');
                                 
                                 $alarm = new Tinebase_Model_Alarm(array(
@@ -663,7 +681,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
                             # TRIGGER;VALUE=DURATION:-PT1H15M
                             case 'DURATION':
                             default:
-                                $alarmTime = new Tinebase_DateTime($_vevent->DTSTART->getDateTime()->format("c"), $_vevent->DTSTART->getDateTime()->getTimezone());
+                                $alarmTime = new Tinebase_DateTime($_vevent->DTSTART->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), $_vevent->DTSTART->getDateTime()->getTimezone());
                                 $alarmTime->setTimezone('UTC');
                                 
                                 preg_match('/(?P<invert>[+-]?)(?P<spec>P.*)/', $valarm->TRIGGER->value, $matches);
