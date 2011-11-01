@@ -23,6 +23,7 @@
  * @property    array   $cc             the cc receipients
  * @property    array   $bcc            the bcc receipients
  * @property    array   $structure      the message structure
+ * @property    array   $attachments    the attachments
  * @property    string  $messageuid     the message uid on the imap server
  * @property    array   $invitation_event   invitation event object
  * @property    array   $invitation_status  invitation status
@@ -68,7 +69,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     /**
      * invitation status
      * 
-     * @todo add more status
+     * @todo add more status or use event status?
      */
     const INVITATION_STATUS_ACTIONREQUIRED = "actionrequired";
     
