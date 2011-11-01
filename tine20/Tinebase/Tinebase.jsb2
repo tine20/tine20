@@ -703,6 +703,10 @@
           "path": "css/ux/"
         },
         {
+          "text": "SubFormPanel.css",
+          "path": "css/ux/"
+        },
+        {
           "text": "ConnectionStatus.css",
           "path": "css/ux/"
         },
