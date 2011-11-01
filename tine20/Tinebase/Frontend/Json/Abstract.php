@@ -108,7 +108,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $result = $this->_multipleRecordsToJson($records, $filter);
         
         return array(
-            'results'       => $result,
+            'results'       => array_values($result),
             'totalcount'    => $_totalCountMethod == self::TOTALCOUNT_CONTROLLER ? 
                 $_controller->searchCount($filter) :
                 count($result),
