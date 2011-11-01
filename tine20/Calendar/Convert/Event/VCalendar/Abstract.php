@@ -56,25 +56,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
         $vcalendar->add(new Sabre_VObject_Property('VERSION', '2.0'));
         $vcalendar->add(new Sabre_VObject_Property('CALSCALE', 'GREGORIAN'));
         
-        $vtimezone = new Sabre_VObject_Component('VTIMEZONE');
-        $vtimezone->add(new Sabre_VObject_Property('TZID', $_model->originator_tz));
-        $vtimezone->add(new Sabre_VObject_Property('X-LIC-LOCATION', $_model->originator_tz));
-        $daylight  = new Sabre_VObject_Component('DAYLIGHT');
-        $daylight->add(new Sabre_VObject_Property('TZOFFSETFROM', '+0100'));
-        $daylight->add(new Sabre_VObject_Property('TZOFFSETTO', '+0200'));
-        $daylight->add(new Sabre_VObject_Property('TZNAME', 'CEST'));
-        $daylight->add(new Sabre_VObject_Property('DTSTART', '19700329T020000'));
-        $daylight->add(new Sabre_VObject_Property('RRULE', 'FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3'));
-        
-        $standard  = new Sabre_VObject_Component('STANDARD');
-        $standard->add(new Sabre_VObject_Property('TZOFFSETFROM', '+0200'));
-        $standard->add(new Sabre_VObject_Property('TZOFFSETTO', '+0100'));
-        $standard->add(new Sabre_VObject_Property('TZNAME', 'CET'));
-        $standard->add(new Sabre_VObject_Property('DTSTART', '19701025T030000'));
-        $standard->add(new Sabre_VObject_Property('RRULE', 'FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10'));
-        
-        $vtimezone->add($daylight);
-        $vtimezone->add($standard);
+        $vtimezone = $this->_convertDateTimezone($_model->originator_tz);
         $vcalendar->add($vtimezone);
         
         $vevent = $this->_parseEvent($_model);
@@ -100,6 +82,103 @@ class Calendar_Convert_Event_VCalendar_Abstract
         
         return $vcalendar->serialize();
     }
+    
+    /**
+     * convert DateTimezone to Sabre_VObject_Component('VTIMEZONE')
+     * 
+     * @param  string|DateTimeZone  $_timezone
+     * @return Sabre_VObject_Component
+     */
+    protected function _convertDateTimezone($_timezone)
+    {
+        $timezone = new DateTimeZone($_timezone);
+        
+        $vtimezone = new Sabre_VObject_Component('VTIMEZONE');
+        $vtimezone->add(new Sabre_VObject_Property('TZID', $timezone->getName()));
+        $vtimezone->add(new Sabre_VObject_Property('X-LIC-LOCATION', $timezone->getName()));
+        
+        list($standardTransition, $daylightTransition) = $transitions = $this->_getTransitionsForTimezoneAndYear($timezone, date('Y'));
+        
+        $dtstart = new Sabre_VObject_Element_DateTime('DTSTART');
+        $dtstart->setDateTime(new DateTime(), Sabre_VObject_Element_DateTime::LOCAL);
+        
+        if ($daylightTransition !== null) {
+            $offsetTo   = ($daylightTransition['offset'] < 0 ? '-' : '+') . strftime('%H%M', abs($daylightTransition['offset']));
+            $offsetFrom = ($standardTransition['offset'] < 0 ? '-' : '+') . strftime('%H%M', abs($standardTransition['offset']));
+            
+            $daylight  = new Sabre_VObject_Component('DAYLIGHT');
+            $daylight->add('TZOFFSETFROM', $offsetFrom);
+            $daylight->add('TZOFFSETTO',   $offsetTo);
+            $daylight->add('TZNAME',       $daylightTransition['abbr']);
+            $daylight->add($dtstart);
+            #$daylight->add('RRULE', 'FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3');
+            
+            $vtimezone->add($daylight);
+        }
+
+        if ($standardTransition !== null) {
+            $offsetTo   = ($standardTransition['offset'] < 0 ? '-' : '+') . strftime('%H%M', abs($standardTransition['offset']));
+            if ($daylightTransition !== null) {
+                $offsetFrom = ($daylightTransition['offset'] < 0 ? '-' : '+') . strftime('%H%M', abs($daylightTransition['offset']));
+            } else {
+                $offsetFrom = $offsetTo;
+            }
+            
+            $standard  = new Sabre_VObject_Component('STANDARD');
+            $standard->add('TZOFFSETFROM', $offsetFrom);
+            $standard->add('TZOFFSETTO',   $offsetTo);
+            $standard->add('TZNAME',       $standardTransition['abbr']);
+            $standard->add($dtstart);
+            #$standard->add('RRULE', 'FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10');
+            
+            $vtimezone->add($standard);
+        }
+        
+        return $vtimezone;
+    }
+    
+    /**
+     * Returns the standard and daylight transitions for the given {@param $_timezone}
+     * and {@param $_year}.
+     *
+     * @param DateTimeZone $_timezone
+     * @param $_year
+     * @return Array
+     */
+    protected function _getTransitionsForTimezoneAndYear(DateTimeZone $_timezone, $_year)
+    {
+        $standardTransition = null;
+        $daylightTransition = null;
+    
+        if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+            // Since php version 5.3.0 getTransitions accepts optional start and end parameters.
+            $start = mktime(0, 0, 0, 12, 1, $_year - 1);
+            $end   = mktime(24, 0, 0, 12, 31, $_year);
+            $transitions = $_timezone->getTransitions($start, $end);
+        } else {
+            $transitions = $_timezone->getTransitions();
+        }
+    
+        $index = 0;            //we need to access index counter outside of the foreach loop
+        $transition = array(); //we need to access the transition counter outside of the foreach loop
+        foreach ($transitions as $index => $transition) {
+            if (strftime('%Y', $transition['ts']) == $_year) {
+                if (isset($transitions[$index+1]) && strftime('%Y', $transitions[$index]['ts']) == strftime('%Y', $transitions[$index+1]['ts'])) {
+                    $daylightTransition = $transition['isdst'] ? $transition : $transitions[$index+1];
+                    $standardTransition = $transition['isdst'] ? $transitions[$index+1] : $transition;
+                } else {
+                    $daylightTransition = $transition['isdst'] ? $transition : null;
+                    $standardTransition = $transition['isdst'] ? null : $transition;
+                }
+                break;
+            } elseif ($index == count($transitions) -1) {
+                $standardTransition = $transition;
+            }
+        }
+         
+        return array($standardTransition, $daylightTransition);
+    }
+    
     
     protected function _parseEvent(Calendar_Model_Event $_event)
     {
