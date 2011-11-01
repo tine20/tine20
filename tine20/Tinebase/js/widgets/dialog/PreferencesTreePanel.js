@@ -95,15 +95,18 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         // console.log(allApps);
         allApps.each(function(app) {
-            var node = new Ext.tree.TreeNode({
-                text: app.getTitle(),
-                cls: 'file',
-                id: app.appName,
-                iconCls: app.getIconCls('PreferencesTreePanel'),
-                leaf: null
-            });
-    
-            treeRoot.appendChild(node);
+            if (app && Ext.isFunction(app.getTitle)) {
+                
+                var node = new Ext.tree.TreeNode({
+                    text: app.getTitle(),
+                    cls: 'file',
+                    id: app.appName,
+                    iconCls: app.getIconCls('PreferencesTreePanel'),
+                    leaf: null
+                });
+        
+                treeRoot.appendChild(node);
+            }
         }, this);
     },
     
