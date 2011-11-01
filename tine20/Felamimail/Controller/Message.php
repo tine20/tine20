@@ -170,7 +170,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             Felamimail_Controller_Message_Flags::getInstance()->setSeenFlag($message);
         }
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
+        $this->_parseInvitation($message);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
         
         return $message;
     }
@@ -216,6 +218,17 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $structure = array_key_exists('messageStructure', $structure) ? $structure['messageStructure'] : $structure;
             $_message->parseStructure($structure);
         }
+    }
+    
+    /**
+    * parse invitation attachments and set invitation data / event
+    *
+    * @param Felamimail_Model_Message $_message
+    * 
+    * @todo implement
+    */
+    protected function _parseInvitation(Felamimail_Model_Message $_message)
+    {
     }
     
     /**
