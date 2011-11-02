@@ -49,7 +49,7 @@ Ext.namespace('Tine.Felamimail');
     initComponent: function() {
         this.initTemplate();
         this.initDefaultTemplate();
-        this.initBottomToolbar();
+        this.initTopToolbar();
         
         Tine.Felamimail.GridDetailsPanel.superclass.initComponent.call(this);
     },
@@ -68,40 +68,12 @@ Ext.namespace('Tine.Felamimail');
     /**
      * init bottom toolbar (needed for event invitations atm)
      * 
-     * TODO add more buttons (show header, add to addressbook, create filter, show images ...) here?
-     * TODO move invitation buttons to separate toolbar in vbox layout
-     * TODO add calendar icon and text
+     * TODO add buttons (show header, add to addressbook, create filter, show images ...) here
      */
-    initBottomToolbar: function() {
+    initTopToolbar: function() {
         this.tbar = new Ext.Toolbar({
             hidden: true,
-            items: [{
-                xtype: 'buttongroup',
-                columns: 3,
-                items: [
-                    new Ext.Action({
-                        text: this.app.i18n._('Accept'),
-                        handler: this.processInvitation.createDelegate(this, ['ACCEPTED']),
-                        iconCls: 'cal-response-action-ACCEPTED',
-                        disabled: false,
-                        scope: this
-                    }),
-                    new Ext.Action({
-                        text: this.app.i18n._('Decline'),
-                        handler: this.processInvitation.createDelegate(this, ['DECLINED']),
-                        iconCls: 'cal-response-action-DECLINED',
-                        disabled: false,
-                        scope: this
-                    }),
-                    new Ext.Action({
-                        text: this.app.i18n._('Tentative'),
-                        handler: this.processInvitation.createDelegate(this, ['TENTATIVE']),
-                        iconCls: 'cal-response-action-TENTATIVE',
-                        disabled: false,
-                        scope: this
-                    }),
-                ]
-            }]
+            items: []
         });
     },
     
@@ -148,14 +120,72 @@ Ext.namespace('Tine.Felamimail');
      */
     getSingleRecordPanel: function() {
         if (! this.singleRecordPanel) {
+            //this.singleRecordPanel = new Ext.Panel(Ext.applyIf(this.defaults, {
             this.singleRecordPanel = new Ext.Panel({
                 layout: 'vbox',
+                layoutConfig: {
+                    align:'stretch'
+                },
+//                layout: 'fit',
+                border: false,
                 items: [
+                    //this.getTopPanel(),
                     this.getMessageRecordPanel()
+                    //this.getBottomPanel()
                 ]
-            })
+            });
         }
         return this.singleRecordPanel;
+    },
+
+    /**
+     * get top panel
+     * 
+     * @return {Ext.Panel}
+     * 
+     * TODO add calendar icon and texts
+     */
+    getTopPanel: function() {
+        if (! this.topPanel) {
+            this.topPanel = new Ext.Panel({
+                //hidden: true,
+                layout: 'fit',
+                //border: false,
+                height: 30
+                //tbar: new Ext.Toolbar({
+//                items: [new Ext.Toolbar({
+//                    //height: 30,
+//                    items: [{
+//                        xtype: 'buttongroup',
+//                        columns: 3,
+//                        items: [
+//                            new Ext.Action({
+//                                text: this.app.i18n._('Accept'),
+//                                handler: this.processInvitation.createDelegate(this, ['ACCEPTED']),
+//                                iconCls: 'cal-response-action-ACCEPTED',
+//                                disabled: false,
+//                                scope: this
+//                            }),
+//                            new Ext.Action({
+//                                text: this.app.i18n._('Decline'),
+//                                handler: this.processInvitation.createDelegate(this, ['DECLINED']),
+//                                iconCls: 'cal-response-action-DECLINED',
+//                                disabled: false,
+//                                scope: this
+//                            }),
+//                            new Ext.Action({
+//                                text: this.app.i18n._('Tentative'),
+//                                handler: this.processInvitation.createDelegate(this, ['TENTATIVE']),
+//                                iconCls: 'cal-response-action-TENTATIVE',
+//                                disabled: false,
+//                                scope: this
+//                            })
+//                        ]
+//                    }]
+//                })]
+            });
+        }
+        return this.topPanel;
     },
     
     /**
@@ -165,11 +195,27 @@ Ext.namespace('Tine.Felamimail');
      */
     getMessageRecordPanel: function() {
         if (! this.messageRecordPanel) {
-            this.messageRecordPanel = new Ext.Panel(Ext.applyIf(this.defaults, {
+            this.messageRecordPanel = new Ext.Panel({
                 flex: 1
-            }));
+            });
         }
         return this.messageRecordPanel;
+    },
+    
+    /**
+     * get bottom panel
+     * 
+     * @return {Ext.Panel}
+     */
+    getBottomPanel: function() {
+        if (! this.bottomPanel) {
+            this.bottomPanel = new Ext.Panel({
+                hidden: true,
+                height: 100,
+                items: []
+            });
+        }
+        return this.bottomPanel;
     },
     
     /**
@@ -200,7 +246,7 @@ Ext.namespace('Tine.Felamimail');
             this.refetchBody(record, this.updateDetails.createDelegate(this, [record, body]), 'updateDetails');
             this.defaultTpl.overwrite(body, {msg: ''});
             this.getLoadMask().show();
-            this.getTopToolbar().setVisible(false);
+            //this.getTopPanel().setVisible(false);
         } else {
             this.getLoadMask().hide();
         }
@@ -235,9 +281,10 @@ Ext.namespace('Tine.Felamimail');
         if (this.record.get('invitation_event')) {
             this.handleInvitationMessage(record);
         } else {
-            this.getTopToolbar().setVisible(false);
-            this.doLayout();
+            //this.getTopPanel().setVisible(false);
         }
+        
+        this.doLayout();
 
         this.tpl.overwrite(body, record.data);
         this.getEl().down('div').down('div').scrollTo('top', 0, false);
@@ -260,7 +307,7 @@ Ext.namespace('Tine.Felamimail');
 //        var myAttenderRecord = invitationEvent.getMyAttenderRecord();
 //        myAttenderRecord.get('status'),
         
-        this.getTopToolbar().setVisible(true);
+        //this.getTopPanel().setVisible(true);
     },
     
     /**
