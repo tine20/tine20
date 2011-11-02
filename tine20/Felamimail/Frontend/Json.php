@@ -324,6 +324,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     }
                 }
             }
+            
+            // @todo add/use converter to/from calendar
+            if ($_record->invitation_event) {
+                Calendar_Model_Attender::resolveAttendee($_record->invitation_event->attendee);
+            } 
+            
         } else if ($_record instanceof Felamimail_Model_Account) {
             // add usernames (imap + smtp)
             $_record->resolveCredentials();
@@ -355,6 +361,28 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $this->_recordToJson($folder);
     }
+    
+    /**
+     * sets attendee status for an attender on the given event invitation
+     *
+     * @param  array         $eventData
+     * @param  array         $attenderData
+     * @return array         complete event
+     */
+    public function setInvitationStatus($eventData, $attenderData)
+    {
+        if (! Tinebase_Application::getInstance()->isInstalled('Calendar') || ! Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Calendar not installed or access denied.');
+            return array();
+        }
+        
+        $calendarJson = new Calendar_Frontend_Json();
+        if (! isset($eventData['id'])) {
+            $eventData = $calendarJson->saveEvent($eventData);
+        }
+        return $calendarJson->setAttenderStatus($eventData, $attenderData, $attenderData['status_authkey']);
+    }
+    
     /***************************** accounts funcs *******************************/
     
     /**

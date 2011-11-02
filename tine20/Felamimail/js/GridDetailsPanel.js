@@ -70,8 +70,7 @@ Ext.namespace('Tine.Felamimail');
      * 
      * TODO add more buttons (show header, add to addressbook, create filter, show images ...) here?
      * TODO move invitation buttons to separate toolbar in vbox layout
-     * TODO add icons / calendar icon
-     * TODO add text
+     * TODO add calendar icon and text
      */
     initBottomToolbar: function() {
         this.tbar = new Ext.Toolbar({
@@ -82,22 +81,22 @@ Ext.namespace('Tine.Felamimail');
                 items: [
                     new Ext.Action({
                         text: this.app.i18n._('Accept'),
-                        handler: this.processInvitation.createDelegate(this, ['accept']),
-                        //iconCls: 'action_saveAsDraft',
+                        handler: this.processInvitation.createDelegate(this, ['ACCEPTED']),
+                        iconCls: 'cal-response-action-ACCEPTED',
                         disabled: false,
                         scope: this
                     }),
                     new Ext.Action({
                         text: this.app.i18n._('Decline'),
-                        handler: this.processInvitation.createDelegate(this, ['decline']),
-                        //iconCls: 'action_saveAsDraft',
+                        handler: this.processInvitation.createDelegate(this, ['DECLINED']),
+                        iconCls: 'cal-response-action-DECLINED',
                         disabled: false,
                         scope: this
                     }),
                     new Ext.Action({
                         text: this.app.i18n._('Tentative'),
-                        handler: this.processInvitation.createDelegate(this, ['tentative']),
-                        //iconCls: 'action_saveAsDraft',
+                        handler: this.processInvitation.createDelegate(this, ['TENTATIVE']),
+                        iconCls: 'cal-response-action-TENTATIVE',
                         disabled: false,
                         scope: this
                     }),
@@ -109,14 +108,29 @@ Ext.namespace('Tine.Felamimail');
     /**
      * process email invitation
      * 
-     * @param {String} action
-     * 
-     * TODO implement actions
+     * @param {String} status
      */
-    processInvitation: function(action) {
-        Tine.log.debug(action);
+    processInvitation: function(status) {
+        Tine.log.debug('Setting event attender status: ' + status);
+
+        var invitationEvent = new Tine.Calendar.Model.Event(this.record.get('invitation_event')),
+            myAttenderRecord = invitationEvent.getMyAttenderRecord();
+        
+        myAttenderRecord.set('status', status);
+        Tine.Felamimail.setInvitationStatus(invitationEvent.data, myAttenderRecord.data, this.onInvitationStatusUpdate);
     },
 
+    /**
+     * callback for invitation status update
+     * 
+     * @param {Object} response
+     * 
+     * TODO remove status buttones and show message
+     */
+    onInvitationStatusUpdate: function(response) {
+        
+    },
+    
     /**
      * add on click event after render
      * @private
@@ -155,6 +169,7 @@ Ext.namespace('Tine.Felamimail');
             this.refetchBody(record, this.updateDetails.createDelegate(this, [record, body]), 'updateDetails');
             this.defaultTpl.overwrite(body, {msg: ''});
             this.getLoadMask().show();
+            this.getTopToolbar().setVisible(false);
         } else {
             this.getLoadMask().hide();
         }
@@ -184,18 +199,37 @@ Ext.namespace('Tine.Felamimail');
      */
     setTemplateContent: function(record, body) {
         this.currentId = record.id;
-        this.tpl.overwrite(body, record.data);
         this.getLoadMask().hide();
-        this.getEl().down('div').down('div').scrollTo('top', 0, false);
-        
-        var invitationEvent = this.record.get('invitation_event');
-        if (invitationEvent) {
-            // TODO switch status
-            this.getTopToolbar().setVisible(true);
+
+        if (this.record.get('invitation_event')) {
+            this.handleInvitationMessage(record);
         } else {
             this.getTopToolbar().setVisible(false);
+            this.doLayout();
         }
-        this.doLayout();
+
+        this.tpl.overwrite(body, record.data);
+        this.getEl().down('div').down('div').scrollTo('top', 0, false);
+    },
+    
+    /**
+     * handle invitation messages
+     * 
+     * @param {Tine.Felamimail.Model.Message} record
+     * 
+     * TODO use calendar details panel?
+     * TODO check status
+     */
+    handleInvitationMessage: function(record) {
+        var invitationEvent = new Tine.Calendar.Model.Event(this.record.get('invitation_event'));
+        
+//        Tine.log.debug(this.record.get('invitation_event'));
+//        Tine.log.debug(invitationEvent);
+        
+//        var myAttenderRecord = invitationEvent.getMyAttenderRecord();
+//        myAttenderRecord.get('status'),
+        
+        this.getTopToolbar().setVisible(true);
     },
     
     /**
