@@ -232,10 +232,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             return;
         }
         
-        // @todo check if there already is an existing event relation
-        // $this->_setInvitationFromEventRelation($_message);
-        
-        $this->_setInvitationEventFromAttachments($_message);
+        $this->_getInvitationEventFromAttachments($_message);
+        // @todo check if there already is an existing event
+
+        $_message->invitation_status = Calendar_Model_Attender::STATUS_NEEDSACTION;
     }
     
     /**
@@ -243,7 +243,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param Felamimail_Model_Message $_message
      */
-    protected function _setInvitationEventFromAttachments(Felamimail_Model_Message $_message)
+    protected function _getInvitationEventFromAttachments(Felamimail_Model_Message $_message)
     {
         $vcalendar = NULL;
         foreach ($_message->attachments as $attachment) {
@@ -268,7 +268,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             
             $event = $converter->toTine20Model($vcalendar);
             $_message->invitation_event = $event;
-            $_message->invitation_status = Felamimail_Model_Message::INVITATION_STATUS_ACTIONREQUIRED;
         }
     }
     

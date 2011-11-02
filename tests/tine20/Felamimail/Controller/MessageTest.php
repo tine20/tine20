@@ -1078,7 +1078,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         $this->assertTrue($message->invitation_event instanceof Calendar_Model_Event);
         $this->assertEquals('testevent', $message->invitation_event->summary);
-        $this->assertEquals(Felamimail_Model_Message::INVITATION_STATUS_ACTIONREQUIRED, $message->invitation_status);
+        $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $message->invitation_status);
     }
     
     /********************************* protected helper funcs *************************************/

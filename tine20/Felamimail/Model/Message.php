@@ -67,13 +67,6 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     const EMAIL_ADDRESS_REGEXP = '/([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,5})/i'; 
     
     /**
-     * invitation status
-     * 
-     * @todo add more status or use event status?
-     */
-    const INVITATION_STATUS_ACTIONREQUIRED = "actionrequired";
-    
-    /**
      * quote string ("> ")
      * 
      * @var string
