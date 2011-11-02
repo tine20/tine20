@@ -1196,12 +1196,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             $event = $this->get($_event->getId());
             
-            $currentAttender                      = $event->attendee[$event->attendee->getIndexById($_attender->getId())];
+            $index = $event->attendee->getIndexById($_attender->getId());
+            if ($index === FALSE) {
+                throw new Tinebase_Exception_NotFound('Could not find attender in event.');
+            }
+            $currentAttender                      = $event->attendee[$index];
             $currentAttender->status              = $_attender->status;
             $currentAttender->displaycontainer_id = $_attender->displaycontainer_id;
             
             if ($currentAttender->status_authkey == $_authKey) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " update attender status for {$currentAttender->user_type} {$currentAttender->user_id}");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . " update attender status to {$_attender->status} for {$currentAttender->user_type} {$currentAttender->user_id}");
                 $updatedAttender = $this->_backend->updateAttendee($currentAttender);
                 
                 $this->_touch($event, TRUE);
