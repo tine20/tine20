@@ -1076,9 +1076,11 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->messageTestHelper('invitation.eml');
     
         $message = $this->_controller->getCompleteMessage($cachedMessage);
+        //print_r($message->toArray());
         $this->assertTrue($message->invitation_event instanceof Calendar_Model_Event);
         $this->assertEquals('testevent', $message->invitation_event->summary);
-        $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $message->invitation_status);
+        $this->assertEquals(2, count($message->invitation_event->attendee));
+        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $message->invitation_event->attendee[1]->user_id);
     }
     
     /********************************* protected helper funcs *************************************/
