@@ -34,7 +34,7 @@ Ext.namespace('Tine.Felamimail');
      * config
      * @private
      */
-    defaultHeight: 300,
+    defaultHeight: 350,
     currentId: null,
     record: null,
     app: null,
@@ -142,6 +142,37 @@ Ext.namespace('Tine.Felamimail');
     },
     
     /**
+     * get panel for single record details
+     * 
+     * @return {Ext.Panel}
+     */
+    getSingleRecordPanel: function() {
+        if (! this.singleRecordPanel) {
+            this.singleRecordPanel = new Ext.Panel({
+                layout: 'vbox',
+                items: [
+                    this.getMessageRecordPanel()
+                ]
+            })
+        }
+        return this.singleRecordPanel;
+    },
+    
+    /**
+     * get panel for single record details
+     * 
+     * @return {Ext.Panel}
+     */
+    getMessageRecordPanel: function() {
+        if (! this.messageRecordPanel) {
+            this.messageRecordPanel = new Ext.Panel(Ext.applyIf(this.defaults, {
+                flex: 1
+            }));
+        }
+        return this.messageRecordPanel;
+    },
+    
+    /**
      * (on) update details
      * 
      * @param {Tine.Felamimail.Model.Message} record
@@ -152,9 +183,9 @@ Ext.namespace('Tine.Felamimail');
         if (record.id === this.currentId) {
             // nothing to do
         } else if (! record.bodyIsFetched()) {
-            this.waitForContent(record, body);
+            this.waitForContent(record, this.getMessageRecordPanel().body);
         } else if (record === this.record) {
-            this.setTemplateContent(record, body);
+            this.setTemplateContent(record, this.getMessageRecordPanel().body);
         }
     },
     
