@@ -24,10 +24,6 @@ Ext.namespace('Tine.Felamimail');
  * TODO         add 'download all' button
  * TODO         'from' to contact: check for duplicates
  * 
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * 
  * @param       {Object} config
  * @constructor
  * Create a new Tine.Felamimail.GridDetailsPanel
@@ -73,8 +69,8 @@ Ext.namespace('Tine.Felamimail');
      * init bottom toolbar (needed for event invitations atm)
      * 
      * TODO add more buttons (show header, add to addressbook, create filter, show images ...) here?
-     * TODO add icons
-     * TODO style toolbar / remove scrollbars
+     * TODO move invitation buttons to separate toolbar in vbox layout
+     * TODO add icons / calendar icon
      * TODO add text
      */
     initBottomToolbar: function() {
@@ -85,21 +81,21 @@ Ext.namespace('Tine.Felamimail');
                 columns: 3,
                 items: [
                     new Ext.Action({
-                        text: this.app.i18n._('accept'),
+                        text: this.app.i18n._('Accept'),
                         handler: this.processInvitation.createDelegate(this, ['accept']),
                         //iconCls: 'action_saveAsDraft',
                         disabled: false,
                         scope: this
                     }),
                     new Ext.Action({
-                        text: this.app.i18n._('decline'),
+                        text: this.app.i18n._('Decline'),
                         handler: this.processInvitation.createDelegate(this, ['decline']),
                         //iconCls: 'action_saveAsDraft',
                         disabled: false,
                         scope: this
                     }),
                     new Ext.Action({
-                        text: this.app.i18n._('tentative'),
+                        text: this.app.i18n._('Tentative'),
                         handler: this.processInvitation.createDelegate(this, ['tentative']),
                         //iconCls: 'action_saveAsDraft',
                         disabled: false,
