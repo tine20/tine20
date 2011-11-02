@@ -132,7 +132,6 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'message'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // email invitations
         'invitation_event'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'invitation_status'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
