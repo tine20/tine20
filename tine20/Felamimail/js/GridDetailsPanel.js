@@ -78,7 +78,7 @@ Ext.namespace('Tine.Felamimail');
      * TODO add text
      */
     initBottomToolbar: function() {
-        this.bbar = new Ext.Toolbar({
+        this.tbar = new Ext.Toolbar({
             hidden: true,
             items: [{
                 xtype: 'buttongroup',
@@ -161,11 +161,12 @@ Ext.namespace('Tine.Felamimail');
             this.getLoadMask().hide();
             this.getEl().down('div').down('div').scrollTo('top', 0, false);
             
-            if (this.record.get('invitation_status')) {
+            var invitationEvent = this.record.get('invitation_event');
+            if (invitationEvent) {
                 // TODO switch status
-                this.getBottomToolbar().setVisible(true);
+                this.getTopToolbar().setVisible(true);
             } else {
-                this.getBottomToolbar().setVisible(false);
+                this.getTopToolbar().setVisible(false);
             }
             this.doLayout();
         }
