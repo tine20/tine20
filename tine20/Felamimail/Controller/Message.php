@@ -233,15 +233,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         $this->_getInvitationEventFromAttachments($_message);
-        // @todo check if there already is an existing event
-
-        $_message->invitation_status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+        $this->_checkExistingInvitationEvent($_message);
     }
     
     /**
      * get invitation event from attachment
      * 
      * @param Felamimail_Model_Message $_message
+     * 
+     * @todo check/use mimetype text/calendar part
      */
     protected function _getInvitationEventFromAttachments(Felamimail_Model_Message $_message)
     {
@@ -282,6 +282,32 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $result = (isset($_attachment['filename']) && $_attachment['filename'] === 'invite.ics');
         
         return $result;
+    }
+    
+    /**
+     * check for existing invitation event
+     * 
+     * @param Felamimail_Model_Message $_message
+     * 
+     * @todo get more data from existing event?
+     */
+    protected function _checkExistingInvitationEvent(Felamimail_Model_Message $_message)
+    {
+        $existingEvent = Calendar_Controller_Event::getInstance()->lookupExistingEvent($_message->invitation_event);
+        if ($existingEvent) {
+            if ($existingEvent->seq < $_message->invitation_event->seq) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Invitation is newer than the existing event.');
+                
+                $_message->invitation_event->setId($existingEvent->getId());
+                
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Invitation is older than or the same as the existing event.');
+                
+                $_message->invitation_event = $existingEvent;
+            }
+        }
     }
     
     /**
