@@ -137,34 +137,26 @@ Ext.namespace('Tine.Felamimail');
     updateDetails: function(record, body) {
         if (record.id === this.currentId) {
             // nothing to do
-            return;
+        } else if (! record.bodyIsFetched()) {
+            this.waitForContent(record, body);
+        } else if (record === this.record) {
+            this.setTemplateContent(record, body);
         }
-        
-        if (! record.bodyIsFetched()) {
-            if (! this.grid || this.grid.getSelectionModel().getCount() == 1) {
-                this.refetchBody(record, this.updateDetails.createDelegate(this, [record, body]), 'updateDetails');
-                this.defaultTpl.overwrite(body, {msg: ''});
-                this.getLoadMask().show();
-            } else {
-                this.getLoadMask().hide();
-            }
-            return;
-        }
-        
-        if (record === this.record) {                
-            this.currentId = record.id;
-            this.tpl.overwrite(body, record.data);
+    },
+    
+    /**
+     * wait for body content
+     * 
+     * @param {Tine.Felamimail.Model.Message} record
+     * @param {String} body
+     */
+    waitForContent: function(record, body) {
+        if (! this.grid || this.grid.getSelectionModel().getCount() == 1) {
+            this.refetchBody(record, this.updateDetails.createDelegate(this, [record, body]), 'updateDetails');
+            this.defaultTpl.overwrite(body, {msg: ''});
+            this.getLoadMask().show();
+        } else {
             this.getLoadMask().hide();
-            this.getEl().down('div').down('div').scrollTo('top', 0, false);
-            
-            var invitationEvent = this.record.get('invitation_event');
-            if (invitationEvent) {
-                // TODO switch status
-                this.getTopToolbar().setVisible(true);
-            } else {
-                this.getTopToolbar().setVisible(false);
-            }
-            this.doLayout();
         }
     },
     
@@ -182,6 +174,28 @@ Ext.namespace('Tine.Felamimail');
             Tine.Felamimail.messageBackend.abort(this.fetchBodyTransactionId);
         }
         this.fetchBodyTransactionId = Tine.Felamimail.messageBackend.fetchBody(record, callback);
+    },
+    
+    /**
+     * overwrite template with (body) content
+     * 
+     * @param {Tine.Felamimail.Model.Message} record
+     * @param {String} body
+     */
+    setTemplateContent: function(record, body) {
+        this.currentId = record.id;
+        this.tpl.overwrite(body, record.data);
+        this.getLoadMask().hide();
+        this.getEl().down('div').down('div').scrollTo('top', 0, false);
+        
+        var invitationEvent = this.record.get('invitation_event');
+        if (invitationEvent) {
+            // TODO switch status
+            this.getTopToolbar().setVisible(true);
+        } else {
+            this.getTopToolbar().setVisible(false);
+        }
+        this.doLayout();
     },
     
     /**
