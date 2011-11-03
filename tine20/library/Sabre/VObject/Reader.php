@@ -30,10 +30,13 @@ class Sabre_VObject_Reader {
         'ADR'			=> 'Sabre_VObject_Element_MultiValue',
     	'CATEGORIES'    => 'Sabre_VObject_Element_List',
         'COMPLETED'     => 'Sabre_VObject_Element_DateTime',
+    	'CREATED'       => 'Sabre_VObject_Element_DateTime',
         'DTEND'         => 'Sabre_VObject_Element_DateTime',
+    	'DTSTAMP'       => 'Sabre_VObject_Element_DateTime',
     	'DTSTART'       => 'Sabre_VObject_Element_DateTime',
     	'DUE'           => 'Sabre_VObject_Element_DateTime',
     	'EXDATE'        => 'Sabre_VObject_Element_MultiDateTime',
+    	'LAST-MODIFIED' => 'Sabre_VObject_Element_DateTime',
     	'N'             => 'Sabre_VObject_Element_MultiValue',
     	'ORG'			=> 'Sabre_VObject_Element_MultiValue',
     	'RECURRENCE-ID' => 'Sabre_VObject_Element_DateTime',
@@ -47,16 +50,10 @@ class Sabre_VObject_Reader {
      */
     static function read($data) {
 
-        // Detecting line endings
-        if (strpos($data,"\r\n")!==false) {
-            $newLine = "\r\n";
-        } elseif (strpos($data,"\r")) {
-            $newLine = "\r";
-        } else {
-            $newLine = "\n";
-        }
+        // Normalizing newlines
+        $data = str_replace(array("\r","\n\n"), array("\n","\n"), $data);
 
-        $lines = explode($newLine, $data);
+        $lines = explode("\n", $data);
 
         // Unfolding lines
         $lines2 = array();
@@ -106,7 +103,8 @@ class Sabre_VObject_Reader {
 
             while(stripos($nextLine,"END:")!==0) {
 
-                $obj->children[] = self::readLine($lines);
+                $obj->add(self::readLine($lines));
+
                 $nextLine = current($lines);
 
                 if ($nextLine===false) 
@@ -157,7 +155,10 @@ class Sabre_VObject_Reader {
 
         if ($matches['parameters']) {
 
-            $obj->parameters = self::readParameters($matches['parameters']);
+            foreach(self::readParameters($matches['parameters']) as $param) {
+                $obj->add($param);
+            }
+
         } 
 
         return $obj;
