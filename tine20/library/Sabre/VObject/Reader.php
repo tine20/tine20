@@ -27,12 +27,16 @@ class Sabre_VObject_Reader {
      * @var array
      */
     static public $elementMap = array(
-        'DTSTART'       => 'Sabre_VObject_Element_DateTime',
-        'DTEND'         => 'Sabre_VObject_Element_DateTime',
+        'ADR'			=> 'Sabre_VObject_Element_MultiValue',
+    	'CATEGORIES'    => 'Sabre_VObject_Element_List',
         'COMPLETED'     => 'Sabre_VObject_Element_DateTime',
-        'DUE'           => 'Sabre_VObject_Element_DateTime',
-        'RECURRENCE-ID' => 'Sabre_VObject_Element_DateTime',
-    	'EXDATE'        => 'Sabre_VObject_Element_MultiDateTime'
+        'DTEND'         => 'Sabre_VObject_Element_DateTime',
+    	'DTSTART'       => 'Sabre_VObject_Element_DateTime',
+    	'DUE'           => 'Sabre_VObject_Element_DateTime',
+    	'EXDATE'        => 'Sabre_VObject_Element_MultiDateTime',
+    	'N'             => 'Sabre_VObject_Element_MultiValue',
+    	'ORG'			=> 'Sabre_VObject_Element_MultiValue',
+    	'RECURRENCE-ID' => 'Sabre_VObject_Element_DateTime',
     );
 
     /**
@@ -137,8 +141,14 @@ class Sabre_VObject_Reader {
         $propertyName = strtoupper($matches['name']);
         $propertyValue = Sabre_VObject_Property::stripSlashes($matches['value']);
 
-        if (isset(self::$elementMap[$propertyName])) {
-            $className = self::$elementMap[$propertyName];
+        if (strpos($propertyName, '.') !== false) {
+            list(, $mapName) = explode('.', $propertyName);
+        } else {
+            $mapName = $propertyName;
+        }
+        
+        if (isset(self::$elementMap[$mapName])) {
+            $className = self::$elementMap[$mapName];
         } else {
             $className = 'Sabre_VObject_Property';
         }
