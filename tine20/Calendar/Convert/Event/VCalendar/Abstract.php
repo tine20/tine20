@@ -256,7 +256,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
         
         // categories
         if(isset($event->tags) && count($event->tags) > 0) {
-            $vevent->add(new Sabre_VObject_Property('CATEGORIES', Sabre_VObject_Property::concatCompoundValues((array) $event->tags->name, ',')));
+            $vevent->add(new Sabre_VObject_Property('CATEGORIES', Sabre_VObject_Element_List((array) $event->tags->name)));
         }
         
         // repeating event properties

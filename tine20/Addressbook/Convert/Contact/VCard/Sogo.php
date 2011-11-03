@@ -95,7 +95,7 @@ class Addressbook_Convert_Contact_VCard_Sogo extends Addressbook_Convert_Contact
         $card->add(new Sabre_VObject_Property('UID', $_model->getId()));
 
         // optional fields
-        $card->add(new Sabre_VObject_Property('ORG', Sabre_VObject_Property::concatCompoundValues(array($_model->org_name, $_model->org_unit))));
+        $card->add(new Sabre_VObject_Element_MultiValue('ORG', array($_model->org_name, $_model->org_unit)));
         $card->add(new Sabre_VObject_Property('TITLE', $_model->title));
         
         $tel = new Sabre_VObject_Property('TEL', $_model->tel_work);
@@ -123,8 +123,13 @@ class Addressbook_Convert_Contact_VCard_Sogo extends Addressbook_Convert_Contact
         #$tel->add('TYPE', 'HOME');
         #$card->add($tel);
         
-        $card->add(new Sabre_VObject_Property('ADR;TYPE=work', Sabre_VObject_Property::concatCompoundValues(array(null, $_model->adr_one_street2, $_model->adr_one_street, $_model->adr_one_locality, $_model->adr_one_region, $_model->adr_one_postalcode, $_model->adr_one_countryname))));
-        $card->add(new Sabre_VObject_Property('ADR;TYPE=home', Sabre_VObject_Property::concatCompoundValues(array(null, $_model->adr_two_street2, $_model->adr_two_street, $_model->adr_two_locality, $_model->adr_two_region, $_model->adr_two_postalcode, $_model->adr_two_countryname))));
+        $adr = new Sabre_VObject_Element_MultiValue('ADR', array(null, $_model->adr_one_street2, $_model->adr_one_street, $_model->adr_one_locality, $_model->adr_one_region, $_model->adr_one_postalcode, $_model->adr_one_countryname));
+        $adr->add('TYPE', 'WORK');
+        $card->add($adr);
+        
+        $adr = new Sabre_VObject_Element_MultiValue('ADR', array(null, $_model->adr_two_street2, $_model->adr_two_street, $_model->adr_two_locality, $_model->adr_two_region, $_model->adr_two_postalcode, $_model->adr_two_countryname));
+        $adr->add('TYPE', 'HOME');
+        $card->add($adr);
         
         $card->add(new Sabre_VObject_Property('EMAIL;TYPE=work', $_model->email));
         $card->add(new Sabre_VObject_Property('EMAIL;TYPE=home', $_model->email_home));
@@ -146,7 +151,7 @@ class Addressbook_Convert_Contact_VCard_Sogo extends Addressbook_Convert_Contact
         
         }        
         if(isset($_model->tags) && count($_model->tags) > 0) {
-            $card->add(new Sabre_VObject_Property('CATEGORIES', Sabre_VObject_Property::concatCompoundValues((array) $_model->tags->name, ',')));
+            $card->add(new Sabre_VObject_Property('CATEGORIES', Sabre_VObject_Element_List((array) $_model->tags->name)));
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' card ' . $card->serialize());
