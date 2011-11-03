@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>5.4</version>
+    <version>5.5</version>
     <tables>
         <table>
             <name>applications</name>
@@ -2190,7 +2190,7 @@
         </table>
         <table>
             <name>filter</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2231,11 +2231,6 @@
                     <name>description</name>
                     <type>text</type>
                     <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>is_default</name>
-                    <type>boolean</type>
-                    <default>false</default>
                 </field>
                 <field>
                     <name>created_by</name>
