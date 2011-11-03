@@ -112,10 +112,12 @@ class Sabre_VObject_Property extends Sabre_VObject_Element {
     
     /**
      * add common slashes from values which must be escaped
-     *  \\ => \
-     *  \n => linebreak
-     *  \: => :
-     *  comma and semicolon are not handled here
+     *  
+     * VCalendar VERSION 2.0 value
+     * ESCAPED-CHAR = ("\\" / "\;" / "\," / "\N" / "\n") in TEXT values
+     * 
+     * VCard VERSION 3.0 value
+     * Backslashes, newlines, and commas must be encoded in values
      *
      * @param string $value
      * @return string
@@ -124,12 +126,14 @@ class Sabre_VObject_Property extends Sabre_VObject_Element {
         $search  = array(
             '/\\\(?!,|;)/',
             "/\n/",
-            '/:/'
+            '/,/',
+            '/;/'
         );
         $replace = array(
             '\\\\\\',
             '\n',
-            '\:'
+            '\,',
+            '\;'
         );
     
         return preg_replace($search, $replace, $value);

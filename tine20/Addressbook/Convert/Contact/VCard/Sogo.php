@@ -89,7 +89,7 @@ class Addressbook_Convert_Contact_VCard_Sogo extends Addressbook_Convert_Contact
         // required vcard fields
         $card->add(new Sabre_VObject_Property('VERSION', '3.0'));
         $card->add(new Sabre_VObject_Property('FN', $_model->n_fileas));
-        $card->add(new Sabre_VObject_Property('N', $_model->n_family . ';' . $_model->n_given));
+        $card->add(new Sabre_VObject_Element_MultiValue('N', array($_model->n_family, $_model->n_given)));
         
         $card->add(new Sabre_VObject_Property('PRODID', '-//tine20.org//Tine 2.0//EN'));
         $card->add(new Sabre_VObject_Property('UID', $_model->getId()));

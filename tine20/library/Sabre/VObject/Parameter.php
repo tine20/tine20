@@ -46,24 +46,41 @@ class Sabre_VObject_Parameter extends Sabre_VObject_Node {
     /**
      * Turns the object back into a serialized blob. 
      * 
+     * VCalendar VERSION 2.0 parameters
+     * Property parameters with values containing a COLON character, a
+     * SEMICOLON character or a COMMA character MUST be placed in quoted
+     * text.
+     * 
+     * VCard VERSION 3.0 parameter
+     * RFC 2425 5.8.2.  ABNF content-type definition
+     *  param-value  = ptext / quoted-string
+     *  Any character except CTLs, DQUOTE, ";", ":", "," OR
+     *  " Any character except CTLs, DQUOTE "
+     *  
      * @return string 
      */
     public function serialize() {
 
+        // esacpe ctl characters and remove double quotes
         $src = array(
             '\\',
             "\n",
-            ';',
-            ',',
+            '"'
         );
         $out = array(
             '\\\\',
             '\n',
-            '\;',
-            '\,',
+            ''
         );
 
-        return $this->name . '=' . str_replace($src, $out, $this->value);
+        $value = str_replace($src, $out, $this->value);
+        
+        // doublequote value if it contains , ; or :
+        if (preg_match('/[,:;]/', $this->value)) {
+            $value = '"' . $value . '"';
+        }
+        
+        return $this->name . '=' . $value;
 
     }
 

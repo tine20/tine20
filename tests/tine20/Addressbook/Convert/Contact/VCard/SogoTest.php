@@ -135,8 +135,8 @@ class Addressbook_Convert_Contact_VCard_SogoTest extends PHPUnit_Framework_TestC
         $this->assertContains('TEL;TYPE=PAGER:+49 PAGER', $vcard, $vcard);
         $this->assertContains('TEL;TYPE=WORK:+49 BUSINESS', $vcard, $vcard);
         $this->assertContains('TITLE:Titel', $vcard, $vcard);
-        $this->assertContains('URL;TYPE=WORK:http\://www.tine20.com', $vcard, $vcard);
-        $this->assertContains('URL;TYPE=HOME:http\://www.tine20.org', $vcard, $vcard);
+        $this->assertContains('URL;TYPE=WORK:http://www.tine20.com', $vcard, $vcard);
+        $this->assertContains('URL;TYPE=HOME:http://www.tine20.org', $vcard, $vcard);
         #$this->assertContains('BDAY:1975-01-16', $vcard, $vcard);        
     }
 }

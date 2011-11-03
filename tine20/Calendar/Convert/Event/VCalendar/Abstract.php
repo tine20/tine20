@@ -261,7 +261,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
         
         // repeating event properties
         if ($event->rrule) {
-            $vevent->add(new Sabre_VObject_Property('RRULE', preg_replace('/(UNTIL=)(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', '$1$2$3$4T$5$6$7Z', $event->rrule)));
+            $vevent->add(new Sabre_VObject_Element_MultiValue('RRULE', explode(';', preg_replace('/(UNTIL=)(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', '$1$2$3$4T$5$6$7Z', $event->rrule))));
             if ($event->exdate instanceof Tinebase_Record_RecordSet) {
                 $deleteEvents = $event->exdate->filter('is_deleted', true);
                 

@@ -33,25 +33,7 @@ class Sabre_VObject_Element_List extends Sabre_VObject_Property {
             $_value = parent::addSlashes($_value);
         }
         
-        return $this->concatCompoundValues($value, self::DELIMITER);
-    }
-    
-    /**
-     * concat single values to one compound value
-     *
-     * @param array $values
-     * @param string $glue
-     * @return string
-     */
-    protected function concatCompoundValues(array $values, $glue = ';') {
-    
-        // add slashes to all semicolons and commas in the single values
-        foreach($values as &$value) {
-            $value = str_replace( ';', "\\;", $value);
-            $value = str_replace( ',', "\\,", $value);
-        }
-    
-        return implode($glue, $values);
+        return implode(self::DELIMITER, $value);
     }
     
     /**
