@@ -89,6 +89,8 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
         foreach ($this->_value as $attenderValue) {
             if (in_array($attenderValue['user_type'], array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
                 
+                // @todo user_id might contain filter in the future -> get userids from adressbook controller with contact filter
+                
                 // transform CURRENTCONTACT
                 $attenderValue['user_id'] = $attenderValue['user_id'] == Addressbook_Model_Contact::CURRENTCONTACT ? 
                     Tinebase_Core::getUser()->contact_id : 
@@ -147,17 +149,14 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
      */
     public function toArray($_valueToJson = false)
     {
+        $result = parent::toArray($_valueToJson);
+        
         if ($_valueToJson) {
             Calendar_Model_Attender::resolveAttendee($this->_value);
         }
         
-        $result = array(
-            'field'     => $this->_field,
-            'operator'  => $this->_operator,
-            'value'     => $this->_operator == 'equals' ? $this->_value[0]->toArray($_valueToJson) : $this->_value->toArray($_valueToJson)
-        );
+        $result['value'] = $this->_operator == 'equals' ? $this->_value[0]->toArray($_valueToJson) : $this->_value->toArray($_valueToJson);
         
         return $result;
     }
-
 }

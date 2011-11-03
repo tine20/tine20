@@ -1,3 +1,9 @@
+#: js/Model.js:41 js/TicketGridPanel.js:41
+msgid "Ticket"
+msgid_plural "Tickets"
+msgstr[0] ""
+msgstr[1] ""
+
 #: js/StatusCombo.js:25
 msgid "New"
 msgstr ""
@@ -33,12 +39,6 @@ msgstr ""
 #: js/StatusCombo.js:50 js/TicketGridPanel.js:94
 msgid "Status"
 msgstr ""
-
-#: js/Model.js:41 js/TicketGridPanel.js:41
-msgid "Ticket"
-msgid_plural "Tickets"
-msgstr[0] ""
-msgstr[1] ""
 
 #: js/TicketGridPanel.js:42 js/TicketGridPanel.js:67
 msgid "Ticket ID"

@@ -54,12 +54,6 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_instance = Tinebase_Config::getInstance();
-        
-        $this->objects['config'] = new Tinebase_Model_Config(array(
-            "application_id"    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-            "name"              => "Test Name",
-            "value"             => "Test value",              
-        ));
     }
 
     /**
@@ -73,46 +67,30 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test set config
-     *
+     * test instance retirval
+     * 
      */
-    public function testSetConfig()
+    public function testConfigInstance()
     {
-        $configSet = $this->_instance->setConfig($this->objects['config']);
-        
-        $configGet = $this->_instance->getConfig($configSet->name);
-            
-        $this->assertEquals($this->objects['config']->value, $configGet->value);
+        $this->assertTrue($this->_instance === Tinebase_Core::getConfig(), 'Tinebase_Core::getConfig() is wrong instance');
+        $this->assertTrue($this->_instance === Tinebase_Core::getConfig()->tinebase, 'Tinebase_Core::getConfig()->tinebase is wrong instance');
+        $this->assertTrue($this->_instance === Tinebase_Core::getConfig()->Tinebase, 'Tinebase_Core::getConfig()->Tinebase is wrong instance');
     }
-        
+    
     /**
-     * test set config for app
-     *
+     * test basic config getting/setting/deleting cycle
      */
-    public function testSetConfigForApplication()
+    public function testSetDeleteConfig()
     {
-        $config = $this->objects['config'];
-        $configSet = $this->_instance->setConfigForApplication($config->name, $config->value);
-        $configGet = $this->_instance->getConfig($configSet->name);
-            
-        $this->assertEquals($this->objects['config']->value, $configGet->value);
-    }
+        $this->_instance->set(Tinebase_Config::PAGETITLEPOSTFIX, 'phpunit');
+        $this->assertEquals('phpunit', $this->_instance->{Tinebase_Config::PAGETITLEPOSTFIX}, 'could not set config');
         
-    /**
-     * test get applicaton config
-     *
-     */
-    public function testGetApplicationConfig()
-    {
-        $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
-        $result = $this->_instance->getConfigForApplication($tinebase);
-            
-        //print_r($result);    
-            
-        $this->assertGreaterThan(0, count($result));
-        $this->assertEquals($this->objects['config']->value, $result[$this->objects['config']->name]);
+        $this->_instance->delete(Tinebase_Config::PAGETITLEPOSTFIX, 'phpunit');
+        
+        $this->assertEquals('###PHPUNIT-NOTSET###', $this->_instance->get(Tinebase_Config::PAGETITLEPOSTFIX, '###PHPUNIT-NOTSET###'), 'config got not deleted');
+        
+        $this->assertFalse(isset($this->_instance->{Tinebase_Config::PAGETITLEPOSTFIX}), '__isset not working');
     }
-
     
     /**
      * test if config from config.inc.php overwrites config in db
@@ -120,32 +98,20 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testConfigFromFileOverwrites()
     {
-        if (! isset(Tinebase_Core::getConfig()->{'Overwrite Test'})) {
-            // test disabled
+        $configData = include('config.inc.php');
+        
+        if (! array_key_exists('Overwrite Test', $configData)) {
+            $this->markTestSkipped('config.inc.php has no test key "Overwrite Test"');
             return;
         }
         
-        $config = $this->objects['config'];
-        $config->name = 'Overwrite Test';
-        $configSet = $this->_instance->setConfigForApplication($config->name, $config->value);
+        $configFileValue = $configData['Overwrite Test'];
+        $overwrittenValue = Tinebase_Record_Abstract::generateUID();
+        $this->_instance->{'Overwrite Test'} = $overwrittenValue;
         
-        $configGet = $this->_instance->getConfig($configSet->name);
-        $this->assertEquals(Tinebase_Core::getConfig()->{'Overwrite Test'}, $configGet->value);
-    }
-    
-    /**
-     * test delete config
-     *
-     */
-    public function testDeleteConfig()
-    {
-        $config = $this->_instance->getConfig($this->objects['config']->name);
+        $this->assertEquals($configData['Overwrite Test'], $this->_instance->{'Overwrite Test'});
         
-        $this->_instance->deleteConfig($config);
-            
-        $this->setExpectedException('Exception');
-        
-        $config = $this->_instance->getConfig($this->objects['config']->name);        
+        $this->_instance->delete('Overwrite Test');
     }
     
     /**
@@ -154,9 +120,36 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testGetConfigFromFile()
     {
-        $result = $this->_instance->getConfigAsArray('database');
-            
-        $this->assertGreaterThan(0, count($result), 'could not get db config');
-        $this->assertTrue($result['dbname'] != '', 'could not get dbname');
+        $dbConfig = $this->_instance->database;
+        
+        $this->assertGreaterThan(0, count($dbConfig), 'could not get db config');
+        $this->assertTrue($dbConfig['dbname'] != '', 'could not get dbname');
+    }
+    
+    /**
+     * test config value is a struct
+     *
+     */
+    public function testConfigTypeStruct()
+    {
+        $dbConfig = $this->_instance->database;
+        
+        $this->assertTrue($dbConfig instanceof Tinebase_Config_Struct, 'db config is not a struct');
+        $this->assertTrue($dbConfig['dbname'] != '', 'could not get dbname via arrayAccess');
+        $this->assertTrue($dbConfig->dbname != '', 'could not get dbname via objectAccess');
+    }
+    
+    /**
+     * test client config retrival
+     * 
+     */
+    public function testGetClientRegistryConfig()
+    {
+        $clientConfig = $this->_instance->getClientRegistryConfig();
+        $this->assertTrue($clientConfig instanceof Tinebase_Config_Struct, 'clientconfig is not a struct');
+        $this->assertTrue($clientConfig->Calendar instanceof Tinebase_Config_Struct, 'calendar clientconfig is not a struct');
+        $this->assertEquals($this->_instance->calendar->fixedCalendars, $clientConfig->Calendar->fixedCalendars->value, 'fixed calendar config not correct');
+        
+        $this->assertFalse(array_key_exists('SMTP', $clientConfig->Tinebase), 'SMTP is not a client config');
     }
 }

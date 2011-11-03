@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -32,9 +32,9 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
      */
     protected $_operators = array(
         0 => 'equals',       // value is expected to represent a single container
-        1 => 'in',           // value is expected to be an array of container representitions
-        2 => 'specialNode',  // value is one of {all|shared|otherUsers|internal} (depricated please use equals with path instead)
-        3 => 'personalNode', // value is expected to be a user id (depricated please use equals with path instead)
+        1 => 'in',           // value is expected to be an array of container representations
+        2 => 'specialNode',  // value is one of {all|shared|otherUsers|internal} (deprecated please use equals with path instead)
+        3 => 'personalNode', // value is expected to be a user id (deprecated please use equals with path instead)
         //4 => 'not',        // value is expected to be a single container id
     );
     
@@ -68,7 +68,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
     protected function _setOptions(array $_options)
     {
         if (! isset($_options['applicationName'])) {
-            throw new Tinebase_Exception_InvalidArgument('container filter needs the applicationName options');
+            throw new Tinebase_Exception_InvalidArgument('Container filter needs the applicationName option');
         }
         
         $_options['ignoreAcl'] = isset($_options['ignoreAcl']) ? $_options['ignoreAcl'] : false;
@@ -257,7 +257,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
             $containerIds = $this->_resolveContainerNode('personal', $ownerId);
         } else {
             $node = $_path == '/' ? 'all' : substr($_path, 1);
-            $node = $node === 'personal' ? 'otherUsers' : $node;
+            $node = $node === 'personal' ? Tinebase_Model_Container::TYPE_OTHERUSERS : $node;
 
             $containerIds = $this->_resolveContainerNode($node);
         }
@@ -282,7 +282,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
             case 'all':        return Tinebase_Container::getInstance()->getContainerByACL($currentAccount, $appName, $this->_requiredGrants, TRUE, $this->_options['ignoreAcl']);
             case 'personal':   return Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, $appName, $_ownerId, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
             case 'shared':     return Tinebase_Container::getInstance()->getSharedContainer($currentAccount, $appName, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
-            case 'otherUsers': return Tinebase_Container::getInstance()->getOtherUsersContainer($currentAccount, $appName, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
+            case Tinebase_Model_Container::TYPE_OTHERUSERS: return Tinebase_Container::getInstance()->getOtherUsersContainer($currentAccount, $appName, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
             case 'internal':
                 // @todo remove legacy code
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
@@ -311,67 +311,6 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
                 return "/personal/{$_value}";
             default:
                 throw new Tinebase_Exception_UnexpectedValue("operator '$_operator' not supported");
-        }
-    }
-    
-    /**
-     * transforms filter data from filter group into new representation if old
-     * container filter notation is in use
-     *
-     * @param  array &$_data
-     * @throws Tinebase_Exception_UnexpectedValue
-     */
-    public static function transformLegacyData(array &$_data, $_containerProperty = 'container_id')
-    {
-        $legacyData = array();
-        foreach ($_data as $key => $filterData) {
-            if (! is_array($filterData)) {
-                $filterData = Tinebase_Model_Filter_FilterGroup::sanitizeFilterData($key, $filterData);
-            }
-            
-            if (array_key_exists('field', $filterData) && in_array($filterData['field'], array('containerType', 'container', 'owner'))) {
-                $legacyData[$filterData['field']] = $filterData['value'];
-                unset($_data[$key]);
-            }
-        }
-        
-        if (! empty($legacyData)) {
-            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . 'HEADS UP DEVELOPERS: old container filter notation in use.  PLEASE UPDATE ');
-            
-            if (! $legacyData['containerType']) {
-                $legacyData['containerType'] = 'all';
-            }
-            
-            switch($legacyData['containerType']) {
-                case 'personal':
-                    $operator = 'personalNode';
-                    
-                    if (! $legacyData['owner']) {
-                        throw new Tinebase_Exception_UnexpectedValue('You need to set an owner when containerType is "Personal".');
-                    }
-                    $value = $legacyData['owner'];
-                    break;
-                case 'shared':
-                case 'otherUsers':
-                case 'internal':
-                case 'all':
-                    $operator = 'specialNode';
-                    $value = $legacyData['containerType'];
-                    break;    
-                case 'singleContainer':
-                    $operator = 'equals';
-                    $value = $legacyData['container'];
-                    break;
-                default:
-                    throw new Tinebase_Exception_UnexpectedValue('ContainerType not supported.');
-                    break;
-            }
-            
-            $_data[] = array(
-                'field'    => $_containerProperty,
-                'operator' => $operator,
-                'value'    => $value
-            );
         }
     }
 }

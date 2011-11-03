@@ -136,7 +136,11 @@
           "path": "js/ux/grid/"
         },
         {
-          "text": "Uploader.js",
+          "text": "UploadManager.js",
+          "path": "js/ux/file/"
+        },
+        {
+          "text": "Upload.js",
           "path": "js/ux/file/"
         },
         {
@@ -240,6 +244,10 @@
           "path": "js/ux/tree/"
         },
         {
+          "text": "FileTreeSelectionModel.js",
+          "path": "js/ux/tree/"
+        },
+        {
           "text": "DisplayPanel.js",
           "path": "js/ux/display/"
         },
@@ -324,6 +332,18 @@
           "path": "js/"
         },
         {
+          "text": "Store.js",
+          "path": "js/widgets/keyfield/"
+        },
+        {
+          "text": "ComboBox.js",
+          "path": "js/widgets/keyfield/"
+        },
+        {
+          "text": "Renderer.js",
+          "path": "js/widgets/keyfield/"
+        },
+        {
           "text": "LangChooser.js",
           "path": "js/widgets/"
         },
@@ -349,6 +369,10 @@
         },
         {
           "text": "EditDialog.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
+          "text": "WizardPanel.js",
           "path": "js/widgets/dialog/"
         },
         {
@@ -388,16 +412,16 @@
           "path": "js/widgets/dialog/"
         },
         {
-          "text": "CustomfieldSearchCombo.js",
-          "path": "js/widgets/customfields/"
+          "text": "FileListDialog.js",
+          "path": "js/widgets/dialog/"
         },
         {
-          "text": "CustomfieldsPanel.js",
-          "path": "js/widgets/customfields/"
+          "text": "DuplicateResolveGridPanel.js",
+          "path": "js/widgets/dialog/"
         },
         {
-          "text": "CustomfieldsCombo.js",
-          "path": "js/widgets/customfields/"
+          "text": "RendererManager.js",
+          "path": "js/widgets/grid/"
         },
         {
           "text": "DetailsPanel.js",
@@ -424,6 +448,14 @@
           "path": "js/widgets/grid/"
         },
         {
+          "text": "FilterStructureTreePanel.js",
+          "path": "js/widgets/grid/"
+        },
+        {
+          "text": "FilterPanel.js",
+          "path": "js/widgets/grid/"
+        },
+        {
           "text": "FilterModelMultiSelect.js",
           "path": "js/widgets/grid/"
         },
@@ -440,6 +472,10 @@
           "path": "js/widgets/grid/"
         },
         {
+          "text": "OwnRecordFilter.js",
+          "path": "js/widgets/grid/"
+        },
+        {
           "text": "QuickaddGridPanel.js",
           "path": "js/widgets/grid/"
         },
@@ -452,8 +488,16 @@
           "path": "js/widgets/grid/"
         },
         {
+          "text": "LinkGridPanel.js",
+          "path": "js/widgets/grid/"
+        },
+        {
           "text": "GridPanel.js",
           "path": "js/widgets/grid/"
+        },
+        {
+          "text": "Filter.js",
+          "path": "js/widgets/keyfield/"
         },
         {
           "text": "Loader.js",
@@ -466,6 +510,38 @@
         {
           "text": "FilterPlugin.js",
           "path": "js/widgets/tree/"
+        },
+        {
+          "text": "ConfigManager.js",
+          "path": "js/widgets/customfields/"
+        },
+        {
+          "text": "Field.js",
+          "path": "js/widgets/customfields/"
+        },
+        {
+          "text": "FilterModel.js",
+          "path": "js/widgets/customfields/"
+        },
+        {
+          "text": "Renderer.js",
+          "path": "js/widgets/customfields/"
+        },
+        {
+          "text": "CustomfieldSearchCombo.js",
+          "path": "js/widgets/customfields/"
+        },
+        {
+          "text": "EditDialogPlugin.js",
+          "path": "js/widgets/customfields/"
+        },
+        {
+          "text": "CustomfieldsCombo.js",
+          "path": "js/widgets/customfields/"
+        },
+        {
+          "text": "FilterModel.js",
+          "path": "js/widgets/relation/"
         },
         {
           "text": "PickerGridPanel.js",
@@ -484,7 +560,7 @@
           "path": "js/widgets/container/"
         },
         {
-          "text": "ContainerTree.js",
+          "text": "TreePanel.js",
           "path": "js/widgets/container/"
         },
         {
@@ -529,6 +605,14 @@
         },
         {
           "text": "ConfigPanel.js",
+          "path": "js/widgets/form/"
+        },
+        {
+          "text": "AutoCompleteField.js",
+          "path": "js/widgets/form/"
+        },
+        {
+          "text": "FileUploadButton.js",
           "path": "js/widgets/form/"
         },
         {
@@ -607,11 +691,19 @@
           "path": "css/"
         },
         {
+          "text": "mimetypes.css",
+          "path": "css/"
+        },
+        {
           "text": "SmallForms.css",
           "path": "css/"
         },
         {
           "text": "ArrowCollapse.css",
+          "path": "css/ux/"
+        },
+        {
+          "text": "SubFormPanel.css",
           "path": "css/ux/"
         },
         {

@@ -64,17 +64,18 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
     /**
      * import single record (create password if in data)
      *
+     * @param Tinebase_Record_Abstract $_record
+     * @param string $_resolveStrategy
      * @param array $_recordData
-     * @param array $_result
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _importRecord($_recordData, &$_result)
+    protected function _importRecord($_record, $_resolveStrategy = NULL, $_recordData = array())
     {
-        if ($this->_options['model'] == 'Tinebase_Model_FullUser' && $this->_controller instanceof Admin_Controller_User) {
-        
-            $record = new $this->_options['model']($_recordData, TRUE);
+        if ($_record instanceof Tinebase_Model_FullUser && $this->_controller instanceof Admin_Controller_User) {
             
+            $record = $_record;
+        
             // create valid login name
             if (! isset($record->accountLoginName)) {
                 $record->accountLoginName = Tinebase_User::getInstance()->generateUserName($record);
@@ -108,7 +109,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
             if (! empty($this->_options['password'])) {
                 $password = $this->_options['password'];
             }
-            if (isset($_recordData['password']) && !empty($_recordData['password'])) {
+            if (isset($_recordData['password']) && ! empty($_recordData['password'])) {
                 $password = $_recordData['password'];
             }
             
@@ -119,15 +120,15 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
                 if (!$this->_options['dryrun']) {
                     $record = $this->_controller->create($record, $password, $password);
                 } else {
-                    $_result['results']->addRecord($record);
+                    $this->_importResult['results']->addRecord($record);
                 }
-                $_result['totalcount']++;
+                $this->_importResult['totalcount']++;
             } else {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Record invalid: ' . print_r($record->getValidationErrors(), TRUE));
                 throw new Tinebase_Exception_Record_Validation('Imported record is invalid.');
             }
         } else {
-            $record = parent::_importRecord($_recordData, $_result);
+            $record = parent::_importRecord($_record, $_resolveStrategy, $_recordData);
         }
         
         return $record;

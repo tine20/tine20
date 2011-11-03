@@ -26,58 +26,14 @@ msgstr "老师"
 msgid "Teacher Account"
 msgstr "老师帐户"
 
-#: js/CourseGridPanel.js:49
-msgid "Quick search"
-msgstr "快速搜索"
-
-#: js/CourseGridPanel.js:71
-msgid "Name"
-msgstr "名字"
-
-#: js/CourseGridPanel.js:77
-msgid "Type"
-msgstr "类型"
-
-#: js/CourseGridPanel.js:84 js/CourseEditDialog.js:178
-msgid "Internet Access"
-msgstr "因特网访问"
-
-#: js/CourseGridPanel.js:92 js/CourseEditDialog.js:184
-msgid "Fileserver Access"
-msgstr "文件服务器访问"
-
-#: js/CourseGridPanel.js:118
-msgid "Internet Access On"
-msgstr "因特网访问开启"
-
-#: js/CourseGridPanel.js:129
-msgid "Internet Access Off"
-msgstr "因特网访问关闭"
-
-#: js/CourseGridPanel.js:140
-msgid "Fileserver Access On"
-msgstr "文件服务器开启"
-
-#: js/CourseGridPanel.js:151
-msgid "Fileserver Access Off"
-msgstr "文件服务器关闭"
-
-#: js/CourseGridPanel.js:211
-msgid "Failed"
-msgstr "失败"
-
-#: js/CourseGridPanel.js:212
-msgid "Some error occured while trying to update the courses."
-msgstr "试图更新课程时有错误发生"
+#: Frontend/Json.php:254 js/CourseEditDialog.js:137 js/Models.js:41
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "课程"
 
 #: js/CourseEditDialog.js:31
 msgid "Import course members"
 msgstr "导入课程成员"
-
-#: js/CourseEditDialog.js:137 js/Models.js:41 Frontend/Json.php:254
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "课程"
 
 #: js/CourseEditDialog.js:153
 msgid "Course Name"
@@ -90,6 +46,14 @@ msgstr "课程 / 学校类型"
 #: js/CourseEditDialog.js:171
 msgid "Description"
 msgstr "描述"
+
+#: js/CourseEditDialog.js:178 js/CourseGridPanel.js:84
+msgid "Internet Access"
+msgstr "因特网访问"
+
+#: js/CourseEditDialog.js:184 js/CourseGridPanel.js:92
+msgid "Fileserver Access"
+msgstr "文件服务器访问"
 
 #: js/CourseEditDialog.js:215
 msgid "Members"
@@ -114,6 +78,42 @@ msgstr "设置新密码"
 #: js/CourseEditDialog.js:268
 msgid "Please enter the new password:"
 msgstr "请输入新密码："
+
+#: js/CourseGridPanel.js:49
+msgid "Quick search"
+msgstr "快速搜索"
+
+#: js/CourseGridPanel.js:71
+msgid "Name"
+msgstr "名字"
+
+#: js/CourseGridPanel.js:77
+msgid "Type"
+msgstr "类型"
+
+#: js/CourseGridPanel.js:118
+msgid "Internet Access On"
+msgstr "因特网访问开启"
+
+#: js/CourseGridPanel.js:129
+msgid "Internet Access Off"
+msgstr "因特网访问关闭"
+
+#: js/CourseGridPanel.js:140
+msgid "Fileserver Access On"
+msgstr "文件服务器开启"
+
+#: js/CourseGridPanel.js:151
+msgid "Fileserver Access Off"
+msgstr "文件服务器关闭"
+
+#: js/CourseGridPanel.js:211
+msgid "Failed"
+msgstr "失败"
+
+#: js/CourseGridPanel.js:212
+msgid "Some error occured while trying to update the courses."
+msgstr "试图更新课程时有错误发生"
 
 #: js/Courses.js:32 Setup/setup.xml:4
 msgid "Courses"

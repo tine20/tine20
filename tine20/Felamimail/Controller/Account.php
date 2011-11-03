@@ -72,7 +72,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         $this->_currentAccount = Tinebase_Core::getUser();
         
-        $this->_imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        $this->_imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::IMAP);
         $this->_useSystemAccount = (array_key_exists('useSystemAccount', $this->_imapConfig) && $this->_imapConfig['useSystemAccount']);
     }
     
@@ -576,7 +576,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             . ' Setting ' . $_namespace . ' namespace: "' . $_account->{$_namespace} . '" for systemfolders of account ' . $_account->name);
         
         foreach ($folders as $folder) {
-            if (! preg_match('/^' . $_account->{$_namespace} . '/', $_account->{$folder})) {
+            if (! preg_match('/^' . preg_quote($_account->{$_namespace}, '/') . '/', $_account->{$folder})) {
                 $_account->{$folder} = $_account->{$_namespace} . $_account->{$folder};
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                     . ' Updated system folder name: ' . $folder .' -> ' . $_account->{$folder});
@@ -645,7 +645,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         // check if folder exists on imap server
         $imapBackend = $this->_getIMAPBackend($account);
-        if ($imapBackend->getFolderStatus(Felamimail_Model_Folder::encodeFolderName($folderName)) === false) {
+        if ($imapBackend && $imapBackend->getFolderStatus(Felamimail_Model_Folder::encodeFolderName($folderName)) === false) {
             $systemFolder = $this->_createSystemFolder($account, $folderName);
             if ($systemFolder->globalname !== $folderName) {
                 $account->{$systemFolderField} = $systemFolder->globalname;
@@ -891,15 +891,15 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     protected function _addSystemAccountConfigValues(Felamimail_Model_Account $_account)
     {
         $configs = array(
-            Tinebase_Model_Config::IMAP     => array(
+            Tinebase_Config::IMAP     => array(
                 'keys'      => array('host', 'port', 'ssl'),
                 'defaults'  => array('port' => 143),
             ),
-            Tinebase_Model_Config::SMTP     => array(
+            Tinebase_Config::SMTP     => array(
                 'keys'      => array('hostname', 'port', 'ssl', 'auth'),
                 'defaults'  => array('port' => 25),
             ),
-            Tinebase_Model_Config::SIEVE    => array(
+            Tinebase_Config::SIEVE    => array(
                 'keys'      => array('hostname', 'port', 'ssl'),
                 'defaults'  => array('port' => 2000, 'ssl' => Felamimail_Model_Account::SECURE_NONE),
             ),
@@ -923,14 +923,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * add config values to account
      * 
      * @param Felamimail_Model_Account $_account
-     * @param string $_configKey for example Tinebase_Model_Config::IMAP for imap settings 
+     * @param string $_configKey for example Tinebase_Config::IMAP for imap settings 
      * @param array $_keysOverwrite keys to overwrite
      * @param array $_defaults
      */
     protected function _addConfigValuesToAccount(Felamimail_Model_Account $_account, $_configKey, $_keysOverwrite = array(), $_defaults = array())
     {
-        $config = ($_configKey == Tinebase_Model_Config::IMAP) ? $this->_imapConfig : Tinebase_Config::getInstance()->getConfigAsArray($_configKey, 'Tinebase', $_defaults);
-        $prefix = ($_configKey == Tinebase_Model_Config::IMAP) ? '' : strtolower($_configKey) . '_';
+        $config = ($_configKey == Tinebase_Config::IMAP) ? $this->_imapConfig : Tinebase_Config::getInstance()->getConfigAsArray($_configKey, 'Tinebase', $_defaults);
+        $prefix = ($_configKey == Tinebase_Config::IMAP) ? '' : strtolower($_configKey) . '_';
         
         if (! is_array($config)) {
             throw new Felamimail_Exception('Invalid config found for ' . $_configKey);
@@ -967,8 +967,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $_account->name   = $_email;
         $_account->from   = $_user->accountFullName;
         
-        // add contact data
-        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_user->getId(), TRUE);
-        $_account->organization = $contact->org_name;
+        // add contact data (if available)
+        try {
+            $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_user->getId(), TRUE);
+            $_account->organization = $contact->org_name;
+        } catch (Addressbook_Exception_NotFound $aenf) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not get system account user contact: ' . $aenf->getMessage());
+        }
     }
 }

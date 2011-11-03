@@ -101,7 +101,11 @@
                     break;
             }
             
-            $this->_queue = new Zend_Queue($adapter, $options);
+            try {
+                $this->_queue = new Zend_Queue($adapter, $options);
+            } catch (Zend_Db_Adapter_Exception $zdae) {
+                throw new Tinebase_Exception_Backend_Database('Could not connect to queue DB: ' . $zdae->getMessage());
+            }
         }
     }
     

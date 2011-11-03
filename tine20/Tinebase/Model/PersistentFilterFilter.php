@@ -7,6 +7,8 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * 
+ * @todo        move acl ensurance to persistent filter controller
  */
 
 /**
@@ -37,7 +39,6 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Filter
         'account_id'     => array('filter' => 'Tinebase_Model_Filter_Id'),
         'name'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'model'          => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'is_default'     => array('filter' => 'Tinebase_Model_Filter_Bool'),
     );
     
     /**
@@ -61,7 +62,7 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Filter
     }
     
     /**
-     * add account id to filter (only if is_default == 0)
+     * add account id to filter
      *
      * @param Zend_Db_Select $_select
      */

@@ -147,11 +147,11 @@ class Tinebase_User
         $options['plugins'] = array();
         
         // manage email user settings
-        if (Tinebase_EmailUser::manages(Tinebase_Model_Config::IMAP)) {
-            $options['plugins'][] = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::IMAP);
+        if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+            $options['plugins'][] = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         }
-        if (Tinebase_EmailUser::manages(Tinebase_Model_Config::SMTP)) {
-            $options['plugins'][] = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::SMTP);
+        if (Tinebase_EmailUser::manages(Tinebase_Config::SMTP)) {
+            $options['plugins'][] = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
         }
         
         switch ($_backendType) {
@@ -192,7 +192,7 @@ class Tinebase_User
     {
         if (!isset(self::$_backendType)) {
             if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-                self::setBackendType(Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::USERBACKENDTYPE, null, self::SQL)->value);
+                self::setBackendType(Tinebase_Config::getInstance()->getConfig(Tinebase_Config::USERBACKENDTYPE, null, self::SQL)->value);
             } else {
                 self::setBackendType(self::SQL); 
             }
@@ -268,8 +268,8 @@ class Tinebase_User
      */
     public static function saveBackendConfiguration()
     {
-        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::USERBACKEND, Zend_Json::encode(self::getBackendConfiguration()));
-        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::USERBACKENDTYPE, self::getConfiguredBackend());
+        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::USERBACKEND, Zend_Json::encode(self::getBackendConfiguration()));
+        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::USERBACKENDTYPE, self::getConfiguredBackend());
     }
     
     /**
@@ -283,7 +283,7 @@ class Tinebase_User
         //lazy loading for $_backendConfiguration
         if (!isset(self::$_backendConfiguration)) {
             if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-                $rawBackendConfiguration = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::USERBACKEND, null, array())->value;
+                $rawBackendConfiguration = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::USERBACKEND, null, array())->value;
             } else {
                 $rawBackendConfiguration = array();
             }
@@ -375,6 +375,7 @@ class Tinebase_User
             
             $currentUser->accountLoginName          = $user->accountLoginName;
             $currentUser->accountLastPasswordChange = $user->accountLastPasswordChange;
+            $currentUser->accountExpires            = $user->accountExpires;
             $currentUser->accountPrimaryGroup       = $user->accountPrimaryGroup;
             $currentUser->accountDisplayName        = $user->accountDisplayName;
             $currentUser->accountLastName           = $user->accountLastName;
@@ -454,11 +455,13 @@ class Tinebase_User
             try {
                 $user = self::syncUser($user, $_syncContactData);
             } catch (Tinebase_Exception_NotFound $ten) {
-                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " User {$user->accountLoginName} not synced: " . $ten->getMessage());
+                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " User {$user->accountLoginName} not synced: "
+                    . $ten->getMessage());
             }
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' finnished synchronizing users');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' finished synchronizing users');
     }
     
     /**
@@ -483,7 +486,7 @@ class Tinebase_User
     public static function createInitialAccounts($_options)
     {
         if (! isset($_options['adminPassword']) || ! isset($_options['adminLoginName'])) {
-            throw new Tinebase_Exception_InvalidArgument('Admin password and login name have to be set when creating initial account.');
+            throw new Tinebase_Exception_InvalidArgument('Admin password and login name have to be set when creating initial account.', 503);
         }
         
         $adminLoginName     = $_options['adminLoginName'];

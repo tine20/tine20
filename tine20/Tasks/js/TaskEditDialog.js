@@ -105,22 +105,24 @@ Ext.namespace('Tine.Tasks');
      * @private
      */
     handleCompletedDate: function() {
-        if (this.getForm().findField('status_id') === null) {
-            return;
-        }
         
-        var status = Tine.Tasks.status.getStatus(this.getForm().findField('status_id').getValue());
-        var completed = this.getForm().findField('completed');
+        var statusStore = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Tasks', 'taskStatus'),
+            status = this.getForm().findField('status').getValue(),
+            statusRecord = statusStore.getById(status),
+            completedField = this.getForm().findField('completed');
         
-        if (status.get('status_is_open')) {
-            completed.setValue(null);
-            completed.setDisabled(true);
-        } else {
-            if (! Ext.isDate(completed.getValue())){
-                completed.setValue(new Date());
+        if (statusRecord) {
+            if (statusRecord.get('is_open') !== 0) {
+                completedField.setValue(null);
+                completedField.setDisabled(true);
+            } else {
+                if (! Ext.isDate(completedField.getValue())){
+                    completedField.setValue(new Date());
+                }
+                completedField.setDisabled(false);
             }
-            completed.setDisabled(false);
         }
+        
     },
     
     /**
@@ -129,7 +131,7 @@ Ext.namespace('Tine.Tasks');
      * @return {Boolean}
      */
     isValid: function() {
-        isValid = true;
+        var isValid = true;
         
         var dueField = this.getForm().findField('due'),
             dueDate = dueField.getValue(),
@@ -202,9 +204,11 @@ Ext.namespace('Tine.Tasks');
                         fieldLabel: this.app.i18n._('Percentage'),
                         editable: false,
                         name: 'percent'
-                    }), new Tine.Tasks.status.ComboBox({
+                    }), new Tine.Tinebase.widgets.keyfield.ComboBox({
+                        app: 'Tasks',
+                        keyFieldName: 'taskStatus',
                         fieldLabel: this.app.i18n._('Status'),
-                        name: 'status_id',
+                        name: 'status',
                         listeners: {scope: this, 'change': this.handleCompletedDate}
                     }), new Ext.form.DateField({
                         fieldLabel: this.app.i18n._('Completed'),

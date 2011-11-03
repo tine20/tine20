@@ -297,6 +297,16 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     }
     
     /**
+     * get and resolve all alarms of given record(s)
+     * 
+     * @param  Tinebase_Record_Interface|Tinebase_Record_RecordSet $_record
+     */
+    public function getAlarms($_record)
+    {
+        return $this->_eventController->getAlarms($_record);
+    }
+    
+    /**
      * filters given eventset for events with matching dtstart
      * 
      * @param Tinebase_Record_RecordSet $_events

@@ -7,7 +7,23 @@
     <headline>1</headline>
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
+    <label>Contact CSV import</label>
+    <!-- _("Contact CSV import") -->
     <description>tine adb import</description>
+    <example>Addressbook/Import/examples/adb_tine_import.csv</example>
+    <extension>csv</extension>
+    <autotags>
+        <tag>
+            <name>Import list (###CURRENTDATE###)</name>
+            <!-- _("Import list (###CURRENTDATE###)") -->
+            <description>Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###</description>
+            <!-- _("Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###") -->
+            <contexts>
+                <Addressbook />
+            </contexts>
+            <type>shared</type>
+        </tag>
+    </autotags>
     <mapping>
         <field>
             <source>adr_one_countryname</source>

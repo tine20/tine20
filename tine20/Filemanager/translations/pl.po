@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-19 19:07+0100\n"
+"PO-Revision-Date: 2011-09-08 20:53+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -21,11 +21,227 @@ msgstr "zarządzanie wspólnymi katalogami"
 msgid "Create new shared folders"
 msgstr "Utwórz nowe, wspólne katalogi"
 
-#: js/Application.js:29
-msgid "Filemanager"
-msgstr "Zarządca plików"
+#: Controller/Node.php:163
+msgid "My folders"
+msgstr "Moje katalogi"
+
+#: Controller/Node.php:170
+msgid "Shared folders"
+msgstr "Katalogi współdzielone"
+
+#: Controller/Node.php:177
+msgid "Other users folders"
+msgstr "Katalogi innych użytkowników"
 
 #: Controller.php:95
 #, python-format
 msgid "%s's personal files"
 msgstr "%s's osobistych plików"
+
+#: js/Filemanager.js:29
+msgid "Filemanager"
+msgstr "Zarządca plików"
+
+#: js/Filemanager.js:70
+msgid "Files already exists"
+msgstr "Te pliki już istnieją"
+
+#: js/Filemanager.js:71
+msgid "Do you want to replace the files?"
+msgstr "Czy chcesz zastąpić niniejsze pliki?"
+
+#: js/Filemanager.js:92
+msgid "Failure on create folder"
+msgstr "Błąd podczas tworzenia katalogu"
+
+#: js/Filemanager.js:93
+msgid "Item with this name already exists!"
+msgstr "Obiekt o takiej nazwie już istnieje!"
+
+#: js/GridContextMenu.js:36
+#: js/GridPanel.js:470
+msgid "Please enter the new name of the {0}:"
+msgstr "Proszę wpisać nową nazwę dla {0}:"
+
+#: js/GridContextMenu.js:42
+#: js/GridPanel.js:476
+msgid "Not renamed {0}"
+msgstr "Nazwa {0} nie została zmieniona"
+
+#: js/GridContextMenu.js:42
+#: js/GridPanel.js:476
+#: js/GridPanel.js:536
+msgid "You have to supply a {0} name!"
+msgstr "Musisz wprowadzić nazwę {0}!"
+
+#: js/GridContextMenu.js:45
+#: js/GridContextMenu.js:135
+#: js/GridPanel.js:479
+#: js/GridPanel.js:539
+#: js/GridPanel.js:581
+#: js/Model.js:270
+msgid "Please wait"
+msgstr "Proszę czekać"
+
+#: js/GridContextMenu.js:45
+#: js/GridPanel.js:479
+msgid "Updating {0} \"{1}\""
+msgstr "Aktualizuję {0} \"{1}\""
+
+#: js/GridContextMenu.js:133
+#: js/GridPanel.js:578
+msgid "Confirm"
+msgstr "Potwierdź"
+
+#: js/GridContextMenu.js:133
+#: js/GridPanel.js:578
+msgid "Do you really want to delete \"{0}\"?"
+msgstr "Czy na pewno chcesz usunąć \"{0}\"?"
+
+#: js/GridContextMenu.js:135
+msgid "Deleting {0} \"{1}\""
+msgstr "Usuwanie {0} \"{1}\""
+
+#: js/GridPanel.js:124
+msgid "Name"
+msgstr "Nazwa"
+
+#: js/GridPanel.js:131
+msgid "Size"
+msgstr "Rozmiar"
+
+#: js/GridPanel.js:138
+#: js/Model.js:479
+msgid "Contenttype"
+msgstr "Typ zawartości"
+
+#: js/GridPanel.js:146
+msgid "Folder"
+msgstr "Katalog"
+
+#: js/GridPanel.js:155
+msgid "Revision"
+msgstr "Rewizja"
+
+#: js/GridPanel.js:170
+#: js/Model.js:480
+msgid "Creation Time"
+msgstr "Czas utworzenia"
+
+#: js/GridPanel.js:178
+msgid "Created By"
+msgstr "Utworzone przez"
+
+#: js/GridPanel.js:185
+msgid "Last Modified Time"
+msgstr "Data ostatniej modyfikacji"
+
+#: js/GridPanel.js:192
+msgid "Last Modified By"
+msgstr "Ostatnio zmodyfikowane przez"
+
+#: js/GridPanel.js:226
+msgid "Show closed"
+msgstr "Pokaż zamknięte"
+
+#: js/GridPanel.js:249
+msgid "Upload"
+msgstr "Przesyłanie"
+
+#: js/GridPanel.js:275
+msgid "Create Folder"
+msgstr "Utwórz katalog"
+
+#: js/GridPanel.js:286
+msgid "Folder Up"
+msgstr "Katalog nadrzędny"
+
+#: js/GridPanel.js:297
+msgid "Save locally"
+msgstr "Zapisz lokalnie"
+
+#: js/GridPanel.js:308
+#: js/GridPanel.js:309
+#: js/GridPanel.js:311
+msgid "Delete"
+msgstr "Usuń"
+
+#: js/GridPanel.js:321
+#: js/GridPanel.js:322
+#: js/GridPanel.js:324
+msgid "Rename"
+msgstr "Zmień nazwę"
+
+#: js/GridPanel.js:332
+msgid "Pause upload"
+msgstr "Zatrzymaj przesyłanie"
+
+#: js/GridPanel.js:339
+msgid "Resume upload"
+msgstr "Kontynuuj przesyłanie"
+
+#: js/GridPanel.js:462
+#: js/GridPanel.js:529
+#: js/Model.js:481
+msgid "user file folder"
+msgstr "katalog pliku użytkownika"
+
+#: js/GridPanel.js:531
+msgid "New {0}"
+msgstr "Nowy {0}"
+
+#: js/GridPanel.js:531
+msgid "Please enter the name of the new {0}:"
+msgstr "Proszę wpisać nazwę nowego {0}:"
+
+#: js/GridPanel.js:536
+msgid "No {0} added"
+msgstr "{0} nie został dodany"
+
+#: js/GridPanel.js:539
+msgid "Creating {0}..."
+msgstr "Tworzenie {0}..."
+
+#: js/GridPanel.js:581
+msgid "Deleting {0} "
+msgstr "Usuwanie {0}..."
+
+#: js/GridPanel.js:665
+#: js/GridPanel.js:810
+#: js/TreePanel.js:626
+#: js/TreePanel.js:647
+msgid "Upload Failed"
+msgstr "Przesyłanie zakończone niepowodzeniem"
+
+#: js/GridPanel.js:666
+#: js/TreePanel.js:627
+msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
+msgstr "Plik nie został przesłany. Być może jego rozmiar jest za duży. Proszę powiadomić swojego administratora. Maksymalny rozmiar przesyłanego pliku:"
+
+#: js/GridPanel.js:811
+#: js/TreePanel.js:648
+msgid "Dropping on this folder not allowed!"
+msgstr "Usunięcie niniejszego katalogu jest niedozwolone!"
+
+#: js/Model.js:248
+#: js/Model.js:264
+msgid "Copying data .. {0}"
+msgstr "Kopiowanie danych .. {0}"
+
+#: js/Model.js:251
+#: js/Model.js:266
+msgid "Moving data .. {0}"
+msgstr "Przenoszenie danych .. {0}"
+
+#: js/Model.js:477
+msgid "Quick search"
+msgstr "Szybkie wyszukiwanie"
+
+#: js/Model.js:478
+msgid "Type"
+msgstr "Typ"
+
+#: js/PathFilterModel.js:59
+msgid "path"
+msgstr "ścieżka"
+

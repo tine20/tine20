@@ -67,11 +67,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     
     stateful: true,
     stateId: 'cal-attendeegridpanel',
-    //stateEvents: ['sortchange', ],
-    applyState: Ext.emptyFn,
-    //applyState: function(state) {
-    //    console.log(state);
-    //},
     
     initComponent: function() {
         this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('Calendar');
@@ -105,7 +100,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             sortable: true,
             hidden: this.showNamesOnly || true,
             header: this.app.i18n._('Role'),
-            renderer: this.renderAttenderRole.createDelegate(this)
+            renderer: this.renderAttenderRole.createDelegate(this),
+            editor: {
+                xtype: 'widget-keyfieldcombo',
+                app:   'Calendar',
+                keyFieldName: 'attendeeRoles'
+            }
         },/* {
             id: 'quantity',
             dataIndex: 'quantity',
@@ -186,14 +186,11 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             header: this.app.i18n._('Status'),
             hidden: this.showNamesOnly,
             renderer: this.renderAttenderStatus.createDelegate(this),
-            editor: new Ext.form.ComboBox({
-                blurOnSelect  : true,
-                expandOnFocus : true,
-                mode          : 'local',
-                displayField  : 'status_name',
-                valueField    : 'id',
-                store         : Tine.Calendar.Model.Attender.getAttendeeStatusStore()
-            })
+            editor: {
+                xtype: 'widget-keyfieldcombo',
+                app:   'Calendar',
+                keyFieldName: 'attendeeStatus'
+            }
         }];
     },
     
@@ -217,6 +214,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     o.record.reject();
                     this.startEditing(o.row, o.column);
                 } else if (o.value) {
+                    // set a status authkey for contacts and recources so user can edit status directly
+                    // NOTE: we can't compute if the user has editgrant to the displaycontainer of an account here!
+                    if (! o.value.account_id ) {
+                        o.record.set('status_authkey', 1);
+                    }
+                    
                     var newAttender = new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() );
                     this.store.add([newAttender]);
                     this.startEditing(o.row +1, o.column);
@@ -240,9 +243,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     
     onBeforeAttenderEdit: function(o) {
         if (o.field == 'status') {
-            // allow status setting if current user has editGrant to displaycontainer
-            var dispContainer = o.record.get('displaycontainer_id');
-            o.cancel = ! (dispContainer && dispContainer.account_grants && dispContainer.account_grants.editGrant);
+            // allow status setting if status authkey is present
+            o.cancel = ! o.record.get('status_authkey');
             return;
         }
         
@@ -259,10 +261,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             return;
         }
         
-        // don't allow to set anything besides quantity for already set attendee
+        // don't allow to set anything besides quantity and role for already set attendee
         if (o.record.get('user_id')) {
             o.cancel = true;
             if (o.field == 'quantity' && o.record.get('user_type') == 'resource') {
+                o.cancel = false;
+            }
+            if (o.field == 'role') {
                 o.cancel = false;
             }
             return;
@@ -492,49 +497,34 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         return quantity > 1 ? quantity : '';
     },
     
-    renderAttenderRole: function(role) {
-        switch (role) {
-            case 'REQ':
-                return this.app.i18n._('Required');
-                break;
-            case 'OPT':
-                return this.app.i18n._('Optional');
-                break;
-            default:
-                return Ext.util.Format.htmlEncode(this.app.i18n._hidden(role));
-                break;
-        }
-    },
-    
-    renderAttenderStatus: function(status, metadata, attender) {
-        if (! attender.get('user_id')) {
-            return '';
-        }
-        
-        if (attender.get('displaycontainer_id')) {
+    renderAttenderRole: function(role, metadata, attender) {
+        var i18n = Tine.Tinebase.appMgr.get('Calendar').i18n,
+            renderer = Tine.widgets.grid.RendererManager.get('Calendar', 'Attender', 'role', Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
+
+        if (this.record && this.record.get('editGrant')) {
             metadata.attr = 'style = "cursor:pointer;"';
         } else {
             metadata.css = 'x-form-empty-field';
         }
         
-        var il8n = Tine.Tinebase.appMgr.get('Calendar').i18n;
-        switch (status) {
-            case 'NEEDS-ACTION':
-                return il8n._('No response');
-                break;
-            case 'ACCEPTED':
-                return il8n._('Accepted');
-                break;
-            case 'DECLINED':
-                return il8n._('Declined');
-                break;
-            case 'TENTATIVE':
-                return il8n._('Tentative');
-                break;
-            default:
-                return Ext.util.Format.htmlEncode(il8n._hidden(status));
-                break;
+        return renderer(role);
+    },
+    
+    renderAttenderStatus: function(status, metadata, attender) {
+        var i18n = Tine.Tinebase.appMgr.get('Calendar').i18n,
+            renderer = Tine.widgets.grid.RendererManager.get('Calendar', 'Attender', 'status', Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
+        
+        if (! attender.get('user_id')) {
+            return '';
         }
+        
+        if (attender.get('status_authkey')) {
+            metadata.attr = 'style = "cursor:pointer;"';
+        } else {
+            metadata.css = 'x-form-empty-field';
+        }
+        
+        return renderer(status);
     },
     
     renderAttenderType: function(type, metadata, attender) {

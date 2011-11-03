@@ -28,8 +28,6 @@ class SimpleFAQ_Setup_Initialize extends Setup_Initialize
             'model'             => 'SimpleFAQ_Model_FaqFilter',
         );
 
-        //$closedStatus = Tasks_Controller_Status::getInstance()->getAllStatus()->filter('status_is_open', 0);
-
         $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => SimpleFAQ_Preference::DEFAULTPERSISTENTFILTER_NAME,
             'description'       => "All FAQs of my FAQ Lists", // _("All FAQs of my FAQ Lists")

@@ -188,24 +188,57 @@ class Felamimail_Message extends Zend_Mail_Message
      * @param string $_from
      * @param string $_to
      * @param string $_text
+     * @param string $_eol
+     * @param boolean $_addMarkup
      * @return string
+     * 
+     * @todo we should use Felamimail_Model_Message::getPlainTextBody here / move all conversion to one place
+     * @todo remove addHtmlMarkup?
      */
     public static function convertContentType($_from, $_to, $_text)
     {
         // nothing todo
-        if($_from == $_to) {
+        if ($_from == $_to) {
             return $_text;
         }
         
-        if($_from == Zend_Mime::TYPE_TEXT && $_to == Zend_Mime::TYPE_HTML) {
-            $text = htmlspecialchars($_text, ENT_COMPAT, 'utf-8');
-            $text = nl2br($text);
+        if ($_from == Zend_Mime::TYPE_TEXT && $_to == Zend_Mime::TYPE_HTML) {
+            $text = self::convertFromTextToHTML($_text);
             $text = self::addHtmlMarkup($text);
         } else {
-            $text = preg_replace('/\<br *\/*\>/', "\r\n", $_text);
-            $text = strip_tags($text);
+            $text = self::convertFromHTMLToText($_text);
         }
         
+        return $text;
+    }
+    
+    /**
+     * convert text to html
+     * 
+     * @param string $_text
+     * @return string
+     */
+    public static function convertFromTextToHTML($_text)
+    {
+        $html = htmlspecialchars($_text, ENT_COMPAT, 'UTF-8');
+        $html = strtr($html, array("\r\n" => '<br />', "\r" => '<br />', "\n" => '<br />'));
+        
+        return $html;
+    }
+    
+    /**
+     * convert html to text
+     * 
+     * @param string $_html
+     * @param string $_eol
+     * @return string
+     */
+    public static function convertFromHTMLToText($_html, $_eol = "\r\n")
+    {
+        $text = preg_replace('/\<br *\/*\>/', $_eol, $_html);
+        $text = strip_tags($text);
+        $text = html_entity_decode($text, ENT_NOQUOTES, 'UTF-8');
+                
         return $text;
     }
     

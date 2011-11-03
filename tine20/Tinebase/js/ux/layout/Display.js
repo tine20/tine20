@@ -17,6 +17,10 @@ Ext.ns('Ext.ux.layout');
  * <b>Layout for displaying information in a displaypanel</b>
  */
 Ext.ux.layout.DisplayLayout = Ext.extend(Ext.layout.FormLayout, {
+    /**
+     * @cfg {String} background
+     * one of {solid|border|none}
+     */
     background: 'none',
     
     onLayout : function(ct, target) {

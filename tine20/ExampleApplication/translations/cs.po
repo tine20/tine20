@@ -13,37 +13,47 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: js/ExampleApplication.js:25
-msgid "Example Application"
-msgstr "Ukázková aplikace"
+#: Config.php:31
+msgid "Status Available"
+msgstr ""
 
-#: js/ExampleRecordGridPanel.js:74
-msgid "Quick search"
-msgstr "Rychlé hledání"
+#: Config.php:33
+msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
+msgstr ""
 
-#: js/ExampleRecordGridPanel.js:102 js/ExampleRecordEditDialog.js:104
-msgid "Name"
-msgstr "Název"
+#: Controller.php:74
+#, python-format
+msgid "%s's personal example records"
+msgstr "Osobní ukázkové záznamy uživatele %s"
 
-#: js/ExampleRecordGridPanel.js:108
-msgid "Title"
-msgstr "Název"
-
-#: js/ExampleRecordGridPanel.js:114
-msgid "Status"
-msgstr "Stav"
-
-#: js/ExampleRecordGridPanel.js:121
-msgid "Budget"
-msgstr "Rozpočet"
-
-#: js/ExampleRecordGridPanel.js:145
-msgid "Show closed"
-msgstr "Zobrazit uzavřené"
+#: js/ExampleApplication.js:24
+msgid "Example Application test"
+msgstr ""
 
 #: js/ExampleRecordEditDialog.js:87
 msgid "ExampleRecord"
 msgstr "Ukázkový záznam"
+
+#: js/ExampleRecordEditDialog.js:104 js/ExampleRecordGridPanel.js:83
+msgid "Name"
+msgstr "Název"
+
+#: js/ExampleRecordEditDialog.js:110 js/ExampleRecordGridPanel.js:89
+#: js/Model.js:71
+msgid "Status"
+msgstr "Stav"
+
+#: js/ExampleRecordGridPanel.js:96
+msgid "Title"
+msgstr "Název"
+
+#: js/ExampleRecordGridPanel.js:102
+msgid "Budget"
+msgstr "Rozpočet"
+
+#: js/ExampleRecordGridPanel.js:126
+msgid "Show closed"
+msgstr "Zobrazit uzavřené"
 
 #: js/Model.js:31
 msgid "example record"
@@ -59,14 +69,44 @@ msgstr[0] "seznam ukázkových záznamů"
 msgstr[1] "seznamy ukázkových záznamů"
 msgstr[2] "seznamů ukázkových záznamů"
 
-#: Setup/setup.xml:10
+#: js/Model.js:69 js/Model.js:106
+msgid "Quick search"
+msgstr "Rychlé hledání"
+
+#: js/Model.js:79
+msgid "Last modified"
+msgstr ""
+
+#: js/Model.js:80
+msgid "Last modifier"
+msgstr ""
+
+#: js/Model.js:81
+msgid "Creation Time"
+msgstr ""
+
+#: js/Model.js:82
+msgid "Creator"
+msgstr ""
+
+#: Setup/Initialize.php:33
+msgid "Completed"
+msgstr ""
+
+#: Setup/Initialize.php:34
+msgid "Cancelled"
+msgstr ""
+
+#: Setup/Initialize.php:35
+msgid "In process"
+msgstr ""
+
+#: Setup/setup.xml:4
 msgid "ExampleApplication"
 msgstr "Ukázková aplikace"
 
-#: Controller.php:96
-#, python-format
-msgid "%s's personal example records"
-msgstr "Osobní ukázkové záznamy uživatele %s"
+#~ msgid "Example Application"
+#~ msgstr "Ukázková aplikace"
 
 #~ msgid "ExampleRecords"
 #~ msgstr "Ukázkové záznamy"

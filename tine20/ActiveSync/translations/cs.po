@@ -56,14 +56,6 @@ msgstr[2] "Zařízení"
 msgid "Devices"
 msgstr "Zařízení"
 
-#: Setup/setup.xml:473
-msgid "Default Policy"
-msgstr "Výchozí politika"
-
-#: Setup/setup.xml:478
-msgid "Default Policy installed during setup"
-msgstr "Výchozí politika nastavená během instalace"
-
 #: Preference.php:74
 msgid "Default Addressbook"
 msgstr ""
@@ -87,3 +79,11 @@ msgstr ""
 #: Preference.php:83
 msgid "The default task list to create new tasks in."
 msgstr ""
+
+#: Setup/setup.xml:473
+msgid "Default Policy"
+msgstr "Výchozí politika"
+
+#: Setup/setup.xml:478
+msgid "Default Policy installed during setup"
+msgstr "Výchozí politika nastavená během instalace"

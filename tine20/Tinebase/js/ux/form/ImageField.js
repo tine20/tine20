@@ -125,13 +125,14 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             return;
         }
         
-        var uploader = new Ext.ux.file.Uploader({
+        var files = fileSelector.getFileList();
+        var uploader = new Ext.ux.file.Upload({
+        	file: files[0],
             fileSelector: fileSelector
         });
         
-        var file = fileSelector.getFileList()[0];
-        
         uploader.on('uploadcomplete', function (uploader, record) {
+            console.log(arguments);
             this.imageSrc = new Ext.ux.util.ImageURL({
                 id: record.get('tempFile').id,
                 width: this.width,
@@ -142,10 +143,13 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             
             this.updateImage();
         }, this);
+        
         uploader.on('uploadfailure', this.onUploadFail, this);
         
         this.loadMask.show();
-        uploader.upload(file);
+        
+        var uploadKey = Tine.Tinebase.uploadManager.queueUpload(uploader);        	
+        var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);  
         
         if (this.ctxMenu) {
             this.ctxMenu.hide();

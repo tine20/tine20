@@ -411,7 +411,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         
         foreach ($_records as $record) {
             foreach ((array)$_userProperties as $property) {
-            	if ($record->$property) {
+            	if ($record->$property && is_string($record->$property)) {
             	    $idx = $users->getIndexById($record->$property);
             	    $user = $idx !== false ? $users[$idx] : NULL;
             	    
@@ -469,7 +469,9 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     public function getUserById($_accountId, $_accountClass = 'Tinebase_Model_User') 
     {
-        return $this->getUserByProperty('accountId', $_accountId, $_accountClass);
+        $userId = $_accountId instanceof Tinebase_Model_User ? $_accountId->getId() : $_accountId;
+        
+        return $this->getUserByProperty('accountId', $userId, $_accountClass);
     }
     
     /**

@@ -40,7 +40,7 @@ class Tinebase_Frontend_Json_Container
                 $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $application, Tinebase_Model_Grants::GRANT_READ);
                 break;
                 
-            case 'otherUsers':
+            case Tinebase_Model_Container::TYPE_OTHERUSERS:
                 $containers = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $application, Tinebase_Model_Grants::GRANT_READ);
                 break;
                 
@@ -116,15 +116,10 @@ class Tinebase_Frontend_Json_Container
      * @param  int      $containerId
      * @param  string   $newName
      * @return array    updated container
-     * @throws Tinebase_Exception
      */
     public function renameContainer($containerId, $newName)
     {
-        try {
-            $container = Tinebase_Container::getInstance()->setContainerName($containerId, $newName);
-        } catch (Tinebase_Exception $e) {
-            throw new Tinebase_Exception('Container not found or permission to set containername denied!');
-        }
+        $container = Tinebase_Container::getInstance()->setContainerName($containerId, $newName);
         
         $result = $container->toArray();
         $result['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
@@ -219,9 +214,11 @@ class Tinebase_Frontend_Json_Container
      */
     public function setContainerGrants($containerId, $grants)
     {
+        $grants = ($grants) ? $grants : array();
+        
         $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $grants);
         
-        $grants = Tinebase_Container::getInstance()->setGrants($containerId, $newGrants);
+        Tinebase_Container::getInstance()->setGrants($containerId, $newGrants);
                
         return $this->getContainerGrants($containerId);
     }

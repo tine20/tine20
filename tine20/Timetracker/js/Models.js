@@ -60,6 +60,7 @@ Tine.Timetracker.Model.Timesheet = Tine.Tinebase.data.Record.create(Tine.Timetra
     },
     copyOmitFields: ['billed_in', 'is_cleared']
 });
+
 Tine.Timetracker.Model.Timesheet.getDefaultData = function() { 
     return {
         account_id: Tine.Tinebase.registry.get('currentAccount'),
@@ -69,6 +70,22 @@ Tine.Timetracker.Model.Timesheet.getDefaultData = function() {
         timeaccount_id: {account_grants: {bookOwnGrant: true}}
     };
 };
+
+Tine.Timetracker.Model.Timesheet.getFilterModel = function() {
+    var app = Tine.Tinebase.appMgr.get('Timetracker');
+    
+    return [
+        //{label: _('Quick search'),    field: 'query',    operators: ['contains']}, // query only searches description
+        {label: app.i18n._('Account'),      field: 'account_id', valueType: 'user'},
+        {label: app.i18n._('Date'),         field: 'start_date', valueType: 'date', pastOnly: true},
+        {label: app.i18n._('Description'),  field: 'description', defaultOperator: 'contains'},
+        {label: app.i18n._('Billable'),     field: 'is_billable_combined', valueType: 'bool', defaultValue: true },
+        {label: app.i18n._('Cleared'),      field: 'is_cleared_combined',  valueType: 'bool', defaultValue: false },
+        {filtertype: 'tinebase.tag', app: app},
+        {filtertype: 'timetracker.timeaccount'}
+    ];
+};
+
 
 /**
  * @type {Array}
@@ -133,6 +150,7 @@ Tine.Timetracker.Model.Timeaccount.getFilterModel = function() {
         {label: app.i18n._('Description'),  field: 'description', operators: ['contains']},
         {label: app.i18n._('Created By'),   field: 'created_by',  valueType: 'user'},
         {label: app.i18n._('Status'),       field: 'status',      filtertype: 'timetracker.timeaccountstatus'},
+        {label: app.i18n._('Booking deadline'), field: 'deadline'},
         {filtertype: 'tinebase.tag', app: app}
     ];
 }

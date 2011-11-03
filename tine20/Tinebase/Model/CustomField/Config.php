@@ -34,16 +34,10 @@ class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                => array('allowEmpty' => true ),
         'application_id'    => array('presence' => 'required', 'allowEmpty' => false, 'Alnum' ),
-        'name'              => array('presence' => 'required', 'allowEmpty' => false ),
-        'label'             => array('presence' => 'required', 'allowEmpty' => false ),        
         'model'             => array('presence' => 'required', 'allowEmpty' => false ),
-        'type'              => array('allowEmpty' => true ),
-        'length'            => array('allowEmpty' => true, 'Alnum'  ),
-        'group'             => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => '' ),
-        'order'             => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => 0, 'Int' ),
-        'account_grants'    => array('allowEmpty' => true ),
-    // search for values with typeahead combobox in cf panel
-        'value_search'      => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => 0 ),
+        'name'              => array('presence' => 'required', 'allowEmpty' => false ),
+        'definition'        => array('presence' => 'required', 'allowEmpty' => false ),
+        'account_grants'    => array('allowEmpty' => true ),       
     );
     
     /**
@@ -54,12 +48,31 @@ class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
      */
     public function valueIsEmpty($_value)
     {
-        if ($this->type == 'checkbox') {
+        if ($this->definition['type'] == 'bool') {
             $result = empty($_value);
         } else {
             $result = ($_value === '' || $_value === NULL);
         }
         
         return $result;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see tine20/Tinebase/Record/Abstract.php::setFromArray()
+     */
+    public function setFromArray(array $_data)
+    {
+        if (array_key_exists('definition', $_data)) {
+            if (is_string($_data['definition'])) {
+                $_data['definition'] = Zend_Json::decode($_data['definition']);
+            }
+            
+            if (is_array($_data['definition'])) {
+                $_data['definition'] = new Tinebase_Config_Struct($_data['definition']);
+            }
+        }
+        
+        return parent::setFromArray($_data);
     }
 }

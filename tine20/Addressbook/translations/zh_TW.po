@@ -31,6 +31,11 @@ msgstr ""
 msgid "Create or update shared addressbook favorites"
 msgstr ""
 
+#: Controller.php:96
+#, python-format
+msgid "%s's personal addressbook"
+msgstr "%s 的個人通訊錄"
+
 #: Export/Pdf.php:37
 msgid "Business Contact Data"
 msgstr "公司聯絡資料"
@@ -75,7 +80,7 @@ msgstr "網址"
 msgid "Role"
 msgstr "角色"
 
-#: Export/Pdf.php:76 js/ContactEditDialog.js:172 js/ContactGrid.js:113
+#: Export/Pdf.php:76 js/ContactEditDialog.js:171 js/ContactGrid.js:113
 #: js/Model.js:33
 msgid "Room"
 msgstr "房號"
@@ -92,8 +97,8 @@ msgstr "助理電話"
 msgid "Private Contact Data"
 msgstr "個人聯絡資料"
 
-#: Export/Pdf.php:88 js/ContactEditDialog.js:289 js/Model.js:153
-#: js/Model.js:154 js/Model.js:155 js/Model.js:156 js/Model.js:157
+#: Export/Pdf.php:88 js/ContactEditDialog.js:288 js/Model.js:155
+#: js/Model.js:156 js/Model.js:157 js/Model.js:158 js/Model.js:159
 msgid "Private Address"
 msgstr "個人地址"
 
@@ -121,211 +126,186 @@ msgstr "個人網址"
 msgid "Other Data"
 msgstr "其他資料"
 
-#: Export/Pdf.php:114 js/ContactEditDialog.js:160 js/ContactGrid.js:139
-#: js/Model.js:26 js/Model.js:147
+#: Export/Pdf.php:114 js/ContactEditDialog.js:159 js/ContactGrid.js:139
+#: js/Model.js:26 js/Model.js:149
 msgid "Birthday"
 msgstr "生日"
 
-#: Export/Pdf.php:117 js/ContactEditDialog.js:154 js/ContactGrid.js:111
-#: js/Model.js:30 js/Model.js:142
+#: Export/Pdf.php:117 js/ContactEditDialog.js:153 js/ContactGrid.js:111
+#: js/Model.js:30 js/Model.js:144
 msgid "Job Title"
 msgstr "職稱"
-
-#: js/ContactEditDialog.js:35 js/ContactEditDialog.js:42
-msgid "Map"
-msgstr ""
-
-#: js/ContactEditDialog.js:65
-msgid "Personal Information"
-msgstr "個人資料"
-
-#: js/ContactEditDialog.js:86 js/Model.js:29
-msgid "Salutation"
-msgstr ""
-
-#: js/ContactEditDialog.js:108 js/Model.js:22
-msgid "Title"
-msgstr "職稱"
-
-#: js/ContactEditDialog.js:116 js/ContactGrid.js:106 js/Model.js:20
-#: js/Model.js:137
-msgid "First Name"
-msgstr "姓名"
-
-#: js/ContactEditDialog.js:121 js/Model.js:21
-msgid "Middle Name"
-msgstr ""
-
-#: js/ContactEditDialog.js:126 js/ContactEditDialog.js:422
-#: js/ContactGrid.js:105 js/Model.js:19 js/Model.js:138
-msgid "Last Name"
-msgstr "姓氏"
-
-#: js/ContactEditDialog.js:135 js/ContactEditDialog.js:422
-#: js/ContactGridDetailsPanel.js:131 js/ContactGrid.js:109 js/Model.js:27
-#: js/Model.js:139 Setup/setup.xml:760
-msgid "Company"
-msgstr "公司名稱"
-
-#: js/ContactEditDialog.js:140 js/ContactGrid.js:110 js/Model.js:28
-#: js/Model.js:140
-msgid "Unit"
-msgstr ""
-
-#: js/ContactEditDialog.js:149 js/ContactGrid.js:108 js/Model.js:24
-msgid "Display Name"
-msgstr "顯示名稱"
-
-#: js/ContactEditDialog.js:164 js/Model.js:23
-msgid "Suffix"
-msgstr ""
-
-#: js/ContactEditDialog.js:168 js/ContactGrid.js:112 js/Model.js:31
-#: js/Model.js:143
-msgid "Job Role"
-msgstr ""
-
-#: js/ContactEditDialog.js:179
-msgid "Contact Information"
-msgstr "聯絡資料"
-
-#: js/ContactEditDialog.js:184 js/ContactGridDetailsPanel.js:139
-#: js/ContactGridDetailsPanel.js:163 js/ContactGrid.js:125 js/Model.js:47
-#: js/Model.js:141
-msgid "Phone"
-msgstr "電話"
-
-#: js/ContactEditDialog.js:189 js/ContactGridDetailsPanel.js:140
-#: js/ContactGridDetailsPanel.js:164 js/ContactGrid.js:126 js/Model.js:48
-msgid "Mobile"
-msgstr "手機號碼"
-
-#: js/ContactEditDialog.js:194 js/ContactGridDetailsPanel.js:141
-#: js/ContactGridDetailsPanel.js:165 js/ContactGrid.js:127 js/Model.js:49
-msgid "Fax"
-msgstr "傳真號碼"
-
-#: js/ContactEditDialog.js:199 js/ContactGrid.js:130 js/Model.js:53
-msgid "Phone (private)"
-msgstr "電話 (個人)"
-
-#: js/ContactEditDialog.js:204 js/ContactGrid.js:132 js/Model.js:55
-msgid "Mobile (private)"
-msgstr "手機號碼 (個人)"
-
-#: js/ContactEditDialog.js:209 js/ContactGrid.js:131 js/Model.js:54
-msgid "Fax (private)"
-msgstr "傳真號碼 (個人)"
-
-#: js/ContactEditDialog.js:214 js/ContactGridDetailsPanel.js:142
-#: js/ContactGridDetailsPanel.js:166 js/Model.js:58 js/Model.js:145
-msgid "E-Mail"
-msgstr "電子郵件"
-
-#: js/ContactEditDialog.js:220 js/Model.js:59
-msgid "E-Mail (private)"
-msgstr "電子郵件 (個人)"
-
-#: js/ContactEditDialog.js:227 js/ContactGridDetailsPanel.js:144
-#: js/ContactGridDetailsPanel.js:168 js/ContactGrid.js:134 js/Model.js:60
-msgid "Web"
-msgstr "網址"
-
-#: js/ContactEditDialog.js:260 js/Model.js:148 js/Model.js:149 js/Model.js:150
-#: js/Model.js:151 js/Model.js:152
-msgid "Company Address"
-msgstr "公司地址"
-
-#: js/ContactEditDialog.js:263 js/ContactEditDialog.js:292
-#: js/ContactGrid.js:114 js/Model.js:148 js/Model.js:153
-msgid "Street"
-msgstr "街"
-
-#: js/ContactEditDialog.js:267 js/ContactEditDialog.js:296
-msgid "Street 2"
-msgstr "街道2"
-
-#: js/ContactEditDialog.js:271 js/ContactEditDialog.js:300
-#: js/ContactGrid.js:116 js/Model.js:149 js/Model.js:154
-msgid "Region"
-msgstr ""
-
-#: js/ContactEditDialog.js:275 js/ContactEditDialog.js:304 js/Model.js:150
-#: js/Model.js:155
-msgid "Postal Code"
-msgstr "郵遞區號"
-
-#: js/ContactEditDialog.js:279 js/ContactEditDialog.js:308
-#: js/ContactGrid.js:115 js/Model.js:151 js/Model.js:156
-msgid "City"
-msgstr "縣市"
-
-#: js/ContactEditDialog.js:284 js/ContactEditDialog.js:313
-#: js/ContactGrid.js:118 js/Model.js:152 js/Model.js:157
-msgid "Country"
-msgstr "國別"
-
-#: js/ContactEditDialog.js:334 js/Model.js:64
-msgid "Description"
-msgstr "說明"
-
-#: js/ContactEditDialog.js:348
-msgid "Enter description"
-msgstr "輸入說明"
-
-#: js/ContactEditDialog.js:397
-#, fuzzy
-msgid "Export as pdf"
-msgstr "匯出成pdf"
-
-#: js/ContactEditDialog.js:422
-msgid "Either {0} or {1} must be given"
-msgstr ""
-
-#: js/ContactGridDetailsPanel.js:62 js/Model.js:92
-msgid "Contacts"
-msgstr "聯絡人"
-
-#: js/ContactGridDetailsPanel.js:65
-msgid "Select contact"
-msgstr "選取聯絡人"
-
-#: js/ContactGridDetailsPanel.js:155
-#, fuzzy
-msgid "Private"
-msgstr "個人地址"
-
-#: js/ContactGridDetailsPanel.js:178
-msgid "Info"
-msgstr ""
-
-#: js/ContactGridDetailsPanel.js:214
-msgid "Insecure link"
-msgstr ""
-
-#: js/ContactGridDetailsPanel.js:214
-msgid "Please review this link in edit dialog."
-msgstr ""
-
-#: js/ListMemberFilterModel.js:37
-msgid "Member of List"
-msgstr ""
 
 #: js/Addressbook.js:22
 msgid "New Contact"
 msgstr ""
 
-#: js/Addressbook.js:32 js/Model.js:96 js/Model.js:213
+#: js/Addressbook.js:32 js/Model.js:98 js/Model.js:215
 #, fuzzy
 msgid "Addressbook"
 msgid_plural "Addressbooks"
 msgstr[0] "通訊錄"
 
-#: js/SearchCombo.js:95
-msgid "Searching..."
+#: js/ContactEditDialog.js:35 js/ContactEditDialog.js:41 js/MapPanel.js:31
+msgid "Map"
 msgstr ""
 
-#: js/ContactGrid.js:103 js/Model.js:158
+#: js/ContactEditDialog.js:64
+msgid "Personal Information"
+msgstr "個人資料"
+
+#: js/ContactEditDialog.js:85 js/Model.js:29
+msgid "Salutation"
+msgstr ""
+
+#: js/ContactEditDialog.js:107 js/Model.js:22
+msgid "Title"
+msgstr "職稱"
+
+#: js/ContactEditDialog.js:115 js/ContactGrid.js:106 js/Model.js:20
+#: js/Model.js:139
+msgid "First Name"
+msgstr "姓名"
+
+#: js/ContactEditDialog.js:120 js/Model.js:21
+msgid "Middle Name"
+msgstr ""
+
+#: js/ContactEditDialog.js:125 js/ContactEditDialog.js:416
+#: js/ContactGrid.js:105 js/Model.js:19 js/Model.js:140
+msgid "Last Name"
+msgstr "姓氏"
+
+#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:416
+#: js/ContactGrid.js:109 js/ContactGridDetailsPanel.js:131 js/Model.js:27
+#: js/Model.js:141 Setup/setup.xml:767
+msgid "Company"
+msgstr "公司名稱"
+
+#: js/ContactEditDialog.js:139 js/ContactGrid.js:110 js/Model.js:28
+#: js/Model.js:142
+msgid "Unit"
+msgstr ""
+
+#: js/ContactEditDialog.js:148 js/ContactGrid.js:108 js/Model.js:24
+msgid "Display Name"
+msgstr "顯示名稱"
+
+#: js/ContactEditDialog.js:163 js/Model.js:23
+msgid "Suffix"
+msgstr ""
+
+#: js/ContactEditDialog.js:167 js/ContactGrid.js:112 js/Model.js:31
+#: js/Model.js:145
+msgid "Job Role"
+msgstr ""
+
+#: js/ContactEditDialog.js:178
+msgid "Contact Information"
+msgstr "聯絡資料"
+
+#: js/ContactEditDialog.js:183 js/ContactGrid.js:125
+#: js/ContactGridDetailsPanel.js:139 js/ContactGridDetailsPanel.js:163
+#: js/Model.js:51 js/Model.js:143
+msgid "Phone"
+msgstr "電話"
+
+#: js/ContactEditDialog.js:188 js/ContactGrid.js:126
+#: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
+#: js/Model.js:52
+msgid "Mobile"
+msgstr "手機號碼"
+
+#: js/ContactEditDialog.js:193 js/ContactGrid.js:127
+#: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
+#: js/Model.js:53
+msgid "Fax"
+msgstr "傳真號碼"
+
+#: js/ContactEditDialog.js:198 js/ContactGrid.js:130 js/Model.js:57
+msgid "Phone (private)"
+msgstr "電話 (個人)"
+
+#: js/ContactEditDialog.js:203 js/ContactGrid.js:132 js/Model.js:59
+msgid "Mobile (private)"
+msgstr "手機號碼 (個人)"
+
+#: js/ContactEditDialog.js:208 js/ContactGrid.js:131 js/Model.js:58
+msgid "Fax (private)"
+msgstr "傳真號碼 (個人)"
+
+#: js/ContactEditDialog.js:213 js/ContactGridDetailsPanel.js:142
+#: js/ContactGridDetailsPanel.js:166 js/Model.js:62 js/Model.js:147
+msgid "E-Mail"
+msgstr "電子郵件"
+
+#: js/ContactEditDialog.js:219 js/Model.js:63
+msgid "E-Mail (private)"
+msgstr "電子郵件 (個人)"
+
+#: js/ContactEditDialog.js:226 js/ContactGrid.js:134
+#: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
+#: js/Model.js:64
+msgid "Web"
+msgstr "網址"
+
+#: js/ContactEditDialog.js:259 js/Model.js:150 js/Model.js:151 js/Model.js:152
+#: js/Model.js:153 js/Model.js:154
+msgid "Company Address"
+msgstr "公司地址"
+
+#: js/ContactEditDialog.js:262 js/ContactEditDialog.js:291
+#: js/ContactGrid.js:114 js/Model.js:150 js/Model.js:155
+msgid "Street"
+msgstr "街"
+
+#: js/ContactEditDialog.js:266 js/ContactEditDialog.js:295
+msgid "Street 2"
+msgstr "街道2"
+
+#: js/ContactEditDialog.js:270 js/ContactEditDialog.js:299
+#: js/ContactGrid.js:116 js/Model.js:151 js/Model.js:156
+msgid "Region"
+msgstr ""
+
+#: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303 js/Model.js:152
+#: js/Model.js:157
+msgid "Postal Code"
+msgstr "郵遞區號"
+
+#: js/ContactEditDialog.js:278 js/ContactEditDialog.js:307
+#: js/ContactGrid.js:115 js/Model.js:153 js/Model.js:158
+msgid "City"
+msgstr "縣市"
+
+#: js/ContactEditDialog.js:283 js/ContactEditDialog.js:312
+#: js/ContactGrid.js:118 js/Model.js:154 js/Model.js:159
+msgid "Country"
+msgstr "國別"
+
+#: js/ContactEditDialog.js:333 js/Model.js:68
+msgid "Description"
+msgstr "說明"
+
+#: js/ContactEditDialog.js:347
+msgid "Enter description"
+msgstr "輸入說明"
+
+#: js/ContactEditDialog.js:391
+#, fuzzy
+msgid "Export as pdf"
+msgstr "匯出成pdf"
+
+#: js/ContactEditDialog.js:416
+msgid "Either {0} or {1} must be given"
+msgstr ""
+
+#: js/ContactFilterModel.js:35 js/Model.js:94 js/Model.js:133
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "聯絡人"
+
+#: js/ContactGrid.js:103 js/Model.js:160
 msgid "Type"
 msgstr ""
 
@@ -377,7 +357,7 @@ msgstr "電子郵件 (個人)"
 msgid "URL (private)"
 msgstr "網址 (個人)"
 
-#: js/ContactGrid.js:136 js/Model.js:144
+#: js/ContactGrid.js:136 js/Model.js:146
 msgid "Note"
 msgstr "備註"
 
@@ -418,10 +398,47 @@ msgstr ""
 msgid "Import contacts"
 msgstr ""
 
-#: js/ContactGrid.js:289
+#: js/ContactGrid.js:288
 #, fuzzy
 msgid "Internal Contact"
 msgstr "分機號碼"
+
+#: js/ContactGridDetailsPanel.js:62 js/Model.js:94
+msgid "Contacts"
+msgstr "聯絡人"
+
+#: js/ContactGridDetailsPanel.js:65
+msgid "Select contact"
+msgstr "選取聯絡人"
+
+#: js/ContactGridDetailsPanel.js:155
+#, fuzzy
+msgid "Private"
+msgstr "個人地址"
+
+#: js/ContactGridDetailsPanel.js:178
+msgid "Info"
+msgstr ""
+
+#: js/ContactGridDetailsPanel.js:214
+msgid "Insecure link"
+msgstr ""
+
+#: js/ContactGridDetailsPanel.js:214
+msgid "Please review this link in edit dialog."
+msgstr ""
+
+#: js/ListMemberFilterModel.js:37
+msgid "Member of List"
+msgstr ""
+
+#: js/MapPanel.js:49
+msgid "Company address"
+msgstr ""
+
+#: js/MapPanel.js:56
+msgid "Private address"
+msgstr ""
 
 #: js/Model.js:34
 msgid "Street (Company Address)"
@@ -447,74 +464,94 @@ msgstr ""
 msgid "Country (Company Address)"
 msgstr ""
 
-#: js/Model.js:41
+#: js/Model.js:43
 msgid "Street (Private Address)"
 msgstr ""
 
-#: js/Model.js:42
+#: js/Model.js:44
 msgid "Street 2 (Private Address)"
 msgstr ""
 
-#: js/Model.js:43
+#: js/Model.js:45
 msgid "City (Private Address)"
 msgstr ""
 
-#: js/Model.js:44
+#: js/Model.js:46
 msgid "Region (Private Address)"
 msgstr ""
 
-#: js/Model.js:45
+#: js/Model.js:47
 msgid "Postal Code (Private Address)"
 msgstr ""
 
-#: js/Model.js:46
+#: js/Model.js:48
 msgid "Country (Private Address)"
 msgstr ""
 
-#: js/Model.js:61
+#: js/Model.js:65
 msgid "Web (private)"
 msgstr ""
 
-#: js/Model.js:92 js/Model.js:131 js/ContactFilterModel.js:35
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] "聯絡人"
-
-#: js/Model.js:96 js/Model.js:213
+#: js/Model.js:98 js/Model.js:215
 msgid "Addressbooks"
 msgstr ""
 
-#: js/Model.js:131
+#: js/Model.js:133
 msgid "User Account"
 msgstr ""
 
-#: js/Model.js:134
+#: js/Model.js:136
 msgid "Quick search"
 msgstr ""
 
-#: js/Model.js:159
+#: js/Model.js:161
 msgid "Last modified"
 msgstr ""
 
-#: js/Model.js:160
+#: js/Model.js:162
 msgid "Last modifier"
 msgstr ""
 
-#: js/Model.js:161
+#: js/Model.js:163
 msgid "Creation Time"
 msgstr ""
 
-#: js/Model.js:162
+#: js/Model.js:164
 msgid "Creator"
 msgstr ""
 
-#: js/Model.js:209
+#: js/Model.js:211
 msgid "List"
 msgid_plural "Lists"
 msgstr[0] ""
 
-#: js/Model.js:209
+#: js/Model.js:211
 msgid "Lists"
+msgstr ""
+
+#: js/SearchCombo.js:97
+msgid "Searching..."
+msgstr ""
+
+#: Preference.php:28
+msgid "All contacts"
+msgstr ""
+
+#: Preference.php:65
+#, fuzzy
+msgid "Default Addressbook"
+msgstr "通訊錄"
+
+#: Preference.php:66
+msgid "The default addressbook for new contacts"
+msgstr ""
+
+#: Preference.php:69
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:70
+msgid "The default favorite which is loaded on addressbook startup"
 msgstr ""
 
 #: Setup/Initialize.php:112 Setup/Update/Release3.php:37
@@ -545,43 +582,17 @@ msgstr ""
 msgid "All contacts that I have last modified"
 msgstr ""
 
-#: Setup/setup.xml:690
+#: Setup/setup.xml:697
 msgid "Internal Contacts"
 msgstr "分機號碼"
 
-#: Setup/setup.xml:716
+#: Setup/setup.xml:723
 msgid "Mr"
 msgstr "先生"
 
-#: Setup/setup.xml:738
+#: Setup/setup.xml:745
 msgid "Ms"
 msgstr "小姐"
-
-#: Controller.php:95
-#, python-format
-msgid "%s's personal addressbook"
-msgstr "%s 的個人通訊錄"
-
-#: Preference.php:28
-msgid "All contacts"
-msgstr ""
-
-#: Preference.php:65
-#, fuzzy
-msgid "Default Addressbook"
-msgstr "通訊錄"
-
-#: Preference.php:66
-msgid "The default addressbook for new contacts"
-msgstr ""
-
-#: Preference.php:69
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:70
-msgid "The default favorite which is loaded on addressbook startup"
-msgstr ""
 
 #, fuzzy
 #~ msgid "Call contact"

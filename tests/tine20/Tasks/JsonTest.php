@@ -70,7 +70,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_backend = new Tasks_Frontend_Json();
-        $this->_smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        $this->_smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::SMTP);
         $this->_smtpTransport = Tinebase_Smtp::getDefaultTransport();
     }
 
@@ -85,7 +85,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         parent::tearDown();
         
         if ($this->_smtpConfigChanged) {
-            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::SMTP, $this->_smtpConfig);
+            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::SMTP, $this->_smtpConfig);
             Tinebase_Smtp::setDefaultTransport($this->_smtpTransport);
         }
     }
@@ -174,7 +174,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         // set wrong smtp user/password
         $wrongCredentialsConfig = $this->_smtpConfig;
         $wrongCredentialsConfig['password'] = 'wrongpw';
-        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::SMTP, $wrongCredentialsConfig);
+        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::SMTP, $wrongCredentialsConfig);
         $this->_smtpConfigChanged = TRUE;
         Tinebase_Smtp::setDefaultTransport(NULL);
         
@@ -246,7 +246,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         
         // set config for automatic alarms
         Tinebase_Config::getInstance()->setConfigForApplication(
-            Tinebase_Model_Config::AUTOMATICALARM,
+            Tinebase_Config::AUTOMATICALARM,
             Zend_Json::encode(array(
                 2*24*60,    // 2 days before
                 //0           // 0 minutes before
@@ -266,7 +266,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
 
         // reset automatic alarms config
         Tinebase_Config::getInstance()->setConfigForApplication(
-            Tinebase_Model_Config::AUTOMATICALARM,
+            Tinebase_Config::AUTOMATICALARM,
             Zend_Json::encode(array()),
             'Tasks'
         );
@@ -378,38 +378,6 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         
         //Cleanup test objects
         $this->_backend->deleteTasks(array($taskId));
-    }
-    
-    /**
-     * test get status
-     *
-     */
-    public function testGetStatus()
-    {
-        $task = $this->_getTask();
-        $returned = $this->_backend->saveTask($task->toArray());
-        $status = $this->_backend->getAllStatus();
-        
-        $this->assertGreaterThan(0, count($status));
-        $this->assertNotEquals('', $status[0]['status_name']);
-        
-        $this->_backend->deleteTasks(array($returned['id']));
-    }
-    
-    /**
-     * test get registry data
-     *
-     */
-    public function testGetRegistryData()
-    {
-        $task = $this->_getTask();
-        $returned = $this->_backend->saveTask($task->toArray());
-        $regData = $this->_backend->getRegistryData();
-        
-        $this->assertGreaterThan(0, count($regData['AllStatus']));
-        $this->assertNotEquals('', $regData['AllStatus'][0]['status_name']);
-        
-        $this->_backend->deleteTasks(array($returned['id']));
     }
     
     /**

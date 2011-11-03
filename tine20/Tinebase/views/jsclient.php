@@ -15,7 +15,8 @@
     <title>Tine 2.0</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=8; IE=7" />
-
+    <meta http-equiv="X-Tine20-Version" content="<?php echo TINE20_PACKAGESTRING ?>" />
+    
     <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
     <link rel="chrome-application-definition" href="chrome_web_app.json" />
 </head>

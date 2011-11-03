@@ -59,6 +59,13 @@ class Setup_Controller
      *
      */
     private function __clone() {}
+    
+    /**
+     * url to Tine 2.0 wiki
+     * 
+     * @var string
+     */
+    protected $_helperLink = ' <a href="http://www.tine20.org/wiki/index.php/Admins/Install_Howto" target="_blank">Check the Tine 2.0 wiki for support.</a>';
 
     /**
      * the singleton pattern
@@ -97,9 +104,9 @@ class Setup_Controller
         }
         
         $this->_emailConfigKeys = array(
-            'imap'  => Tinebase_Model_Config::IMAP,
-            'smtp'  => Tinebase_Model_Config::SMTP,
-            'sieve' => Tinebase_Model_Config::SIEVE,
+            'imap'  => Tinebase_Config::IMAP,
+            'smtp'  => Tinebase_Config::SMTP,
+            'sieve' => Tinebase_Config::SIEVE,
         );
     }
 
@@ -114,15 +121,67 @@ class Setup_Controller
     {
         $envCheck = $this->environmentCheck();
         
+        $databaseCheck = $this->checkDatabase();
+        
         $extCheck = new Setup_ExtCheck(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'essentials.xml');
         $extResult = $extCheck->getData();
 
         $result = array(
-            'success' => ($envCheck['success'] && $extResult['success']),
-            'results' => array_merge($envCheck['result'], $extResult['result']),
+            'success' => ($envCheck['success'] && $databaseCheck['success'] && $extResult['success']),
+            'results' => array_merge($envCheck['result'], $databaseCheck['result'], $extResult['result']),
         );
 
         $result['totalcount'] = count($result['results']);
+        
+        return $result;
+    }
+    
+    /**
+     * check which database extensions are available
+     * 
+     * @return array
+     */
+    public function checkDatabase()
+    {
+        $result = array(
+            'result'  => array(),
+            'success' => false
+        );
+        
+        $loadedExtensions = get_loaded_extensions();
+        
+        if (! in_array('PDO', $loadedExtensions)) {
+            $result['result'][] = array(
+                'key'       => 'Database',
+                'value'     => FALSE,
+                'message'   => "PDO extension not found."  . $this->_helperLink
+            );
+            
+            return $result;
+        }
+        
+        // check mysql requirements
+        $missingMysqlExtensions = array_diff(array('mysql', 'pdo_mysql'), $loadedExtensions);
+        
+        // check pgsql requirements
+        $missingPgsqlExtensions = array_diff(array('pgsql', 'pdo_pgsql'), $loadedExtensions);
+        
+        if (! empty($missingMysqlExtensions) && ! empty($missingPgsqlExtensions)) {
+            $result['result'][] = array(
+                'key'       => 'Database',
+                'value'     => FALSE,
+                'message'   => 'Database extensions missing. For MySQL install: ' . implode(', ', $missingMysqlExtensions) . ' For PostgreSQL install: ' . implode(', ', $missingPgsqlExtensions) . $this->_helperLink
+            );
+            
+            return $result;
+        }
+        
+        $result['result'][] = array(
+            'key'       => 'Database',
+            'value'     => TRUE,
+            'message'   => 'Support for following databases enabled: ' . (empty($missingMysqlExtensions) ? 'MySQL' : '') . ' ' . (empty($missingPgsqlExtensions) ? 'PostgreSQL' : '')
+        );
+        $result['success'] = TRUE;
         
         return $result;
     }
@@ -503,7 +562,7 @@ class Setup_Controller
         $message = array();
         $success = TRUE;
         
-        $helperLink = ' <a href="http://www.tine20.org/wiki/index.php/Admins/Install_Howto" target="_blank">Check the Tine 2.0 wiki for support.</a>';
+        
         
         // check php environment
         $requiredIniSettings = array(
@@ -526,7 +585,7 @@ class Setup_Controller
                     $result[] = array(
                         'key'       => $variable,
                         'value'     => FALSE,
-                        'message'   => "You need to set $variable equal or greater than $required (now: $set)." . $helperLink 
+                        'message'   => "You need to set $variable equal or greater than $required (now: $set)." . $this->_helperLink 
                     );
                     $success = FALSE;
                 }
@@ -536,7 +595,7 @@ class Setup_Controller
                     $result[] = array(
                         'key'       => $variable,
                         'value'     => FALSE,
-                        'message'   => "You need to set $variable from $oldValue to $newValue."  . $helperLink
+                        'message'   => "You need to set $variable from $oldValue to $newValue."  . $this->_helperLink
                     );
                     $success = FALSE;
                 }
@@ -772,33 +831,57 @@ class Setup_Controller
     {
         $originalBackend = Tinebase_User::getConfiguredBackend();
         $newBackend = $_data['backend'];
+        
         Tinebase_User::setBackendType($_data['backend']);
         Tinebase_User::setBackendConfiguration($_data[$_data['backend']]);
         Tinebase_User::saveBackendConfiguration();
-       
-        if ($originalBackend != $newBackend && $this->isInstalled('Addressbook')) {
-            if ($originalBackend == Tinebase_User::SQL) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleteing all user accounts, groups, roles and rights');
-                //delete all users, groups and roles because they will be imported from new accounts storage backend
-                Tinebase_User::factory(Tinebase_User::SQL)->deleteAllUsers();
+        
+        if ($originalBackend != $newBackend && $this->isInstalled('Addressbook') && $originalBackend == Tinebase_User::SQL) {
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Switching from $originalBackend to $newBackend account storage");
+            try {
+                $db = Setup_Core::getDb();
+                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+                $this->_migrateFromSqlAccountsStorage();
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        
+            } catch (Exception $e) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+                Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
                 
-                Tinebase_Group::factory(Tinebase_Group::SQL)->deleteAllGroups();
-                $lists = new Addressbook_Backend_List();
-                $lists->deleteAllLists();
+                Tinebase_User::setBackendType($originalBackend);
+                Tinebase_User::saveBackendConfiguration();
                 
-                $roles = Tinebase_Acl_Roles::getInstance();
-                $roles->deleteAllRoles();
-                
-                Tinebase_User::syncUsers(true); //import users(ldap)/create initial users(sql)
-                
-                $roles->createInitialRoles();
-                $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
-                foreach ($applications as $application)
-                {
-                     Setup_Initialize::initializeApplicationRights($application);
-                }
+                throw $e;
             }
         }
+    }
+    
+    /**
+     * migrate from SQL account storage to another one (for example LDAP)
+     * - deletes all users, groups and roles because they will be 
+     *   imported from new accounts storage backend
+     */
+    protected function _migrateFromSqlAccountsStorage()
+    {
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleting all user accounts, groups, roles and rights');
+        Tinebase_User::factory(Tinebase_User::SQL)->deleteAllUsers();
+        
+        Tinebase_Group::factory(Tinebase_Group::SQL)->deleteAllGroups();
+        $lists = new Addressbook_Backend_List();
+        $lists->deleteAllLists();
+        
+        $roles = Tinebase_Acl_Roles::getInstance();
+        $roles->deleteAllRoles();
+        
+        // import users (from new backend) / create initial users (SQL)
+        Tinebase_User::syncUsers(true); 
+        
+        $roles->createInitialRoles();
+        $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+        foreach ($applications as $application) {
+             Setup_Initialize::initializeApplicationRights($application);
+        }        
     }
     
     /**
@@ -810,7 +893,7 @@ class Setup_Controller
     protected function _updateRedirectSettings($_data)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, 1));
-        $keys = array(Tinebase_Model_Config::REDIRECTURL, Tinebase_Model_Config::REDIRECTALWAYS, Tinebase_Model_Config::REDIRECTTOREFERRER);
+        $keys = array(Tinebase_Config::REDIRECTURL, Tinebase_Config::REDIRECTALWAYS, Tinebase_Config::REDIRECTTOREFERRER);
         foreach ($keys as $key) {
             if (array_key_exists($key, $_data)) {
                 if (strlen($_data[$key]) === 0) {
@@ -860,12 +943,12 @@ class Setup_Controller
     protected function _getRedirectSettings()
     {
         $return = array(
-              Tinebase_Model_Config::REDIRECTURL => '',
-              Tinebase_Model_Config::REDIRECTTOREFERRER => '0'
+              Tinebase_Config::REDIRECTURL => '',
+              Tinebase_Config::REDIRECTTOREFERRER => '0'
         );       
         if (Setup_Core::get(Setup_Core::CHECKDB) && $this->isInstalled('Tinebase')) {
-            $return[Tinebase_Model_Config::REDIRECTURL] = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value;
-            $return[Tinebase_Model_Config::REDIRECTTOREFERRER] = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTTOREFERRER, NULL, '')->value;      
+            $return[Tinebase_Config::REDIRECTURL] = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTURL, NULL, '')->value;
+            $return[Tinebase_Config::REDIRECTTOREFERRER] = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTTOREFERRER, NULL, '')->value;      
         }
         return $return;
     }
@@ -923,7 +1006,7 @@ class Setup_Controller
      */
     public function getAcceptedTerms()
     {
-        return Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::ACCEPTEDTERMSVERSION, 'Tinebase', 0);
+        return Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::ACCEPTEDTERMSVERSION, 'Tinebase', 0);
     }
     
     /**
@@ -934,7 +1017,7 @@ class Setup_Controller
      */
     public function saveAcceptedTerms($_data)
     {
-        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::ACCEPTEDTERMSVERSION, Zend_Json::encode($_data));
+        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::ACCEPTEDTERMSVERSION, Zend_Json::encode($_data));
     }
     
     /**
@@ -1040,9 +1123,15 @@ class Setup_Controller
     public function uninstallApplications($_applications)
     {
         $this->_clearCache();
+
+        $installedApps = Tinebase_Application::getInstance()->getApplications();
+        
+        // uninstall all apps if tinebase ist going to be uninstalled
+        if (count($installedApps) !== count($_applications) && in_array('Tinebase', $_applications)) {
+            $_applications = $installedApps->name;
+        }
         
         // deactivate foreign key check if all installed apps should be uninstalled
-        $installedApps = Tinebase_Application::getInstance()->getApplications();
         if (count($installedApps) == count($_applications) && get_class($this->_backend) == 'Setup_Backend_Mysql') {
             $this->_backend->setForeignKeyChecks(0);
             foreach ($installedApps as $app) {
@@ -1056,7 +1145,6 @@ class Setup_Controller
             $this->_uninstallApplication($tinebase);
             $this->_backend->setForeignKeyChecks(1);
         } else {
-            
             // get xml and sort apps first
             $applications = array();
             foreach($_applications as $applicationName) {
@@ -1082,45 +1170,52 @@ class Setup_Controller
     protected function _installApplication($_xml, $_options = null)
     {
         if ($this->_backend === NULL) {
-            throw new Setup_Exception('Need configured backend for install.');
+            throw new Setup_Exception('Need configured and working database backend for install.');
         }
         
-        $createdTables = array();
-        if (isset($_xml->tables)) {
-            foreach ($_xml->tables[0] as $tableXML) {
-                $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
-                $this->_backend->createTable($table);
-                $createdTables[] = $table;
+        try {
+            $createdTables = array();
+            if (isset($_xml->tables)) {
+                foreach ($_xml->tables[0] as $tableXML) {
+                    $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
+                    $currentTable = $table->name;
+                    
+                    $this->_backend->createTable($table);
+                    $createdTables[] = $table;
+                }
             }
-        }
-
-        $application = new Tinebase_Model_Application(array(
-            'name'      => (string)$_xml->name,
-            'status'    => $_xml->status ? (string)$_xml->status : Tinebase_Application::ENABLED,
-            'order'     => $_xml->order ? (string)$_xml->order : 99,
-            'version'   => (string)$_xml->version
-        ));
-        
-        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' installing application: ' . $_xml->name);
-        
-        $application = Tinebase_Application::getInstance()->addApplication($application);
-        
-        // keep track of tables belonging to this application
-        foreach ($createdTables as $table) {
-            Tinebase_Application::getInstance()->addApplicationTable($application, (string) $table->name, (int) $table->version);
-        }
-        
-        // insert default records
-        if (isset($_xml->defaultRecords)) {
-            foreach ($_xml->defaultRecords[0] as $record) {
-                $this->_backend->execInsertStatement($record);
+    
+            $application = new Tinebase_Model_Application(array(
+                'name'      => (string)$_xml->name,
+                'status'    => $_xml->status ? (string)$_xml->status : Tinebase_Application::ENABLED,
+                'order'     => $_xml->order ? (string)$_xml->order : 99,
+                'version'   => (string)$_xml->version
+            ));
+            
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' installing application: ' . $_xml->name);
+            
+            $application = Tinebase_Application::getInstance()->addApplication($application);
+            
+            // keep track of tables belonging to this application
+            foreach ($createdTables as $table) {
+                Tinebase_Application::getInstance()->addApplicationTable($application, (string) $table->name, (int) $table->version);
             }
+            
+            // insert default records
+            if (isset($_xml->defaultRecords)) {
+                foreach ($_xml->defaultRecords[0] as $record) {
+                    $this->_backend->execInsertStatement($record);
+                }
+            }
+            
+            // look for import definitions and put them into the db
+            $this->createImportExportDefinitions($application);
+            
+            Setup_Initialize::initialize($application, $_options);
+        } catch (Exception $e) {
+            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error at installing: ' . $_xml->name . ' Table: ' . $currentTable  . 'Exception: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString());
+            throw $e;
         }
-        
-        // look for import definitions and put them into the db
-        $this->createImportExportDefinitions($application);
-        
-        Setup_Initialize::initialize($application, $_options);
     }
 
     /**
@@ -1222,12 +1317,15 @@ class Setup_Controller
      */
     protected function _sortInstallableApplications($_applications)
     {
-        // begin with Tinebase
-        if (isset($_applications['Tinebase'])) {
-            $result['Tinebase'] = $_applications['Tinebase'];
-            unset($_applications['Tinebase']);
-        } else {
-            $result = array();
+        $result = array();
+        
+        // begin with Tinebase, Admin and Addressbook
+        $alwaysOnTop = array('Tinebase', 'Admin', 'Addressbook');
+        foreach ($alwaysOnTop as $app) {
+            if (isset($_applications[$app])) {
+                $result[$app] = $_applications[$app];
+                unset($_applications[$app]);
+            }
         }
         
         // get all apps to install ($name => $dependencies)

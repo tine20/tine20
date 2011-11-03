@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -23,43 +23,27 @@
  * Hands over AclFilter functions to filtergroup
  *
  */
-class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_Abstract
+class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecord
 {
     /**
-     * @var array list of allowed operators
+     * @var string class name of this filter group
+     *      this is needed to overcome the static late binding
+     *      limitation in php < 5.3
      */
-    protected $_operators = array(
-        0 => 'AND',
-        1 => 'OR',
-    );
+    protected $_className = 'Tinebase_Model_Filter_ForeignId';
     
     /**
-     * @var Tinebase_Model_Filter_FilterGroup
+     * get foreign controller
+     * 
+     * @return Tinebase_Controller_Record_Abstract
      */
-    protected $_filterGroup = NULL;
-    
-    /**
-     * @var Tinebase_Controller_Record_Abstract
-     */
-    protected $_controller = NULL;
-    
-    /**
-     * @var array
-     */
-    protected $_foreignIds = NULL;
-    
-    /**
-     * creates corresponding filtergroup
-     *
-     * @param array $_value
-     */
-    public function setValue($_value) {
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_value, true));
+    protected function _getController()
+    {
+        if ($this->_controller === NULL) {
+            $this->_controller = call_user_func($this->_options['controller'] . '::getInstance');
+        }
         
-        $this->_filterGroup = new $this->_options['filtergroup']((array)$_value, $this->_operator, $this->_options);
-        $this->_controller = call_user_func($this->_options['controller'] . '::getInstance');
-        
-        $this->_foreignIds = NULL;
+        return $this->_controller;
     }
     
     /**
@@ -72,7 +56,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_Abstract
         if (! array_key_exists('controller', $_options) || ! array_key_exists('filtergroup', $_options)) {
             throw new Tinebase_Exception_InvalidArgument('a controller and a filtergroup must be specified in the options');
         }
-        $this->_options = $_options;
+        parent::_setOptions($_options);
     }
     
     /**
@@ -103,19 +87,25 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_Abstract
     }
     
     /**
-     * returns array with the filter settings of this filter
-     *
-     * @param  bool $_valueToJson resolve value for json api?
+     * get filter information for toArray()
+     * 
      * @return array
      */
-    public function toArray($_valueToJson = false)
+    protected function _getGenericFilterInformation()
     {
+        list($appName, $i, $filterName) = explode('_', $this->_className);
+        
         $result = array(
-            'field'     => $this->_field,
-            'operator'  => $this->_operator,
-            'value'     => $this->_filterGroup->toArray($_valueToJson)
+            'linkType'      => 'foreignId',
+            'appName'       => $appName,
+            'filterName'    => $filterName,
         );
         
+        if (isset($this->_options['modelName'])) {
+            list($appName, $i, $modelName) = explode('_', $this->_options['modelName']);
+            $result['modelName'] = $modelName;
+        }
+        
         return $result;
-    }    
+    }
 }

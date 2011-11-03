@@ -37,18 +37,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     const STATUS_TENTATIVE     = 'TENTATIVE';
     
     /**
-     * maps status constatns to human readable names
-     * 
-     * @var array
-     */
-    protected $_statusNameMap = array(
-        self::STATUS_NEEDSACTION    => 'No response',   // _('No response')
-        self::STATUS_ACCEPTED       => 'Accepted',      // _('Accepted')
-        self::STATUS_DECLINED       => 'Declined',      // _('Declined')
-        self::STATUS_TENTATIVE      => 'Tentative'      // _('Tentative')
-    );
-    
-    /**
      * cache for already resolved attendee
      * 
      * @var array type => array of id => object
@@ -198,11 +186,18 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     
     public function getStatusString()
     {
-        $statusName = array_key_exists($this->status, $this->_statusNameMap) ? 
-            $this->_statusNameMap[$this->status] :
-            'unknown'; // _('unknown)
-            
-        return $statusName;
+        $statusConfig = Calendar_Config::getInstance()->attendeeStatus;
+        $statusRecord = $statusConfig && $statusConfig->records instanceof Tinebase_Record_RecordSet ? $statusConfig->records->getById($this->status) : false;
+        
+        return $statusRecord ? $statusRecord->value : $this->status;
+    }
+    
+    public function getRoleString()
+    {
+        $rolesConfig = Calendar_Config::getInstance()->attendeeRoles;
+        $rolesRecord = $rolesConfig && $rolesConfig->records instanceof Tinebase_Record_RecordSet ? $rolesConfig->records->getById($this->role) : false;
+        
+        return $rolesRecord? $rolesRecord->value : $this->role;
     }
     
     /**
@@ -468,12 +463,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         // sort entries in
         foreach ($eventAttendee as $attendee) {
             foreach ($attendee as $attender) {
-                // remove status_authkey when editGrant for displaycontainer_id is missing
-                if (! isset($attender['displaycontainer_id']) || is_scalar($attender['displaycontainer_id']) || ! array_key_exists(Tinebase_Model_Grants::GRANT_EDIT, $attender['displaycontainer_id']['account_grants']) || ! (bool) $attender['displaycontainer_id']['account_grants'][Tinebase_Model_Grants::GRANT_EDIT]) {
-                    //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug('clearing status_authkey for '. print_r($attender->toArray(), TRUE));
-                    $attender->status_authkey = NULL;
-                }
-                
                 if ($attender->user_id instanceof Tinebase_Record_Abstract) {
                     // allready resolved from cache
                     continue;
@@ -505,6 +494,23 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     
                     $attender->user_id = $attendeeTypeSet[$idx];
                 }
+            }
+        }
+        
+        
+        foreach ($eventAttendee as $attendee) {
+            foreach ($attendee as $attender) {
+                // keep authkey if user has editGrant to displaycontainer
+                if (isset($attender['displaycontainer_id']) && !is_scalar($attender['displaycontainer_id']) && array_key_exists(Tinebase_Model_Grants::GRANT_EDIT, $attender['displaycontainer_id']['account_grants']) &&  $attender['displaycontainer_id']['account_grants'][Tinebase_Model_Grants::GRANT_EDIT]) {
+                    continue;
+                }
+                
+                // keep authkey if attender is not an account and user has editGrant for event
+                if ($attender->user_id instanceof Tinebase_Record_Abstract && (!$attender->user_id->has('account_id') || !$attender->user_id->account_id)) {
+                    continue;
+                }
+                
+                $attender->status_authkey = NULL;
             }
         }
     }

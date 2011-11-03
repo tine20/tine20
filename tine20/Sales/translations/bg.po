@@ -50,26 +50,6 @@ msgstr "Номер на договора"
 msgid "Status"
 msgstr "Статус"
 
-#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
-msgid "Name"
-msgstr ""
-
-#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
-msgid "Price"
-msgstr ""
-
-#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
-msgid "Manufacturer"
-msgstr ""
-
-#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
-msgid "Category"
-msgstr ""
-
-#: js/ProductGridPanel.js:119
-msgid "Tags"
-msgstr ""
-
 #: js/Models.js:40
 msgid "Product"
 msgid_plural "Products"
@@ -99,6 +79,26 @@ msgid_plural "contracts lists"
 msgstr[0] "списък на договори"
 msgstr[1] "списъка на договори"
 
+#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
+msgid "Name"
+msgstr ""
+
+#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
+msgid "Price"
+msgstr ""
+
+#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
+msgid "Manufacturer"
+msgstr ""
+
+#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
+msgid "Category"
+msgstr ""
+
+#: js/ProductGridPanel.js:119
+msgid "Tags"
+msgstr ""
+
 #: js/Sales.js:53
 msgid "Products"
 msgstr ""
@@ -116,6 +116,5 @@ msgstr "Договори"
 msgid "All Contracts"
 msgstr "Договори"
 
-#: Setup/setup.xml:243
-msgid "Shared Contracts"
-msgstr "Общи договори"
+#~ msgid "Shared Contracts"
+#~ msgstr "Общи договори"

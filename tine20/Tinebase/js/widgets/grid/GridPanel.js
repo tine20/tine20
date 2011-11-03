@@ -477,6 +477,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @return {Boolean}
      */
     onStoreNewEntry: function(recordData) {
+        
         var initialData = null;
         if (Ext.isFunction(this.recordClass.getDefaultData)) {
             initialData = Ext.apply(this.recordClass.getDefaultData(), recordData);
@@ -517,6 +518,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @return {Boolean}
      */
     onHeaderClick: function(grid, colIdx, e) {
+
         Ext.apply(this.store.lastOptions, {
             preserveCursor:     true,
             preserveSelection:  true, 
@@ -529,6 +531,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * called when the store gets updated, e.g. from editgrid
      */
     onStoreUpdate: function(store, record, operation) {
+         
         switch (operation) {
             case Ext.data.Record.EDIT:
             
@@ -561,6 +564,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * called before store queries for data
      */
     onStoreBeforeload: function(store, options) {
+        
         // define a transaction
         this.lastStoreTransactionId = options.transactionId = Ext.id();
 
@@ -595,6 +599,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 //            this.grid.getView().focusRow(0);
 //        }
         
+       
         // restore selection
         if (Ext.isArray(options.preserveSelection)) {
             Ext.each(options.preserveSelection, function(record) {
@@ -625,7 +630,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Object} options
      */
     onStoreLoadException: function(proxy, type, error, options) {
-        
+             
         // reset autoRefresh
         if (window.isMainWindow && this.autoRefreshInterval) {
             this.autoRefreshTask.delay(this.autoRefreshInterval * 5000);
@@ -649,6 +654,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Ext.data.Store} store
      */
     onStoreBeforeLoadRecords: function(o, options, success, store) {
+              
         if (this.lastStoreTransactionId && options.transactionId && this.lastStoreTransactionId !== options.transactionId) {
             Tine.log.debug('cancelling old transaction request.');
             return false;
@@ -738,6 +744,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.selectionModel.on('selectionchange', function(sm) {
             //Tine.widgets.actionUpdater(sm, this.actions, this.recordClass.getMeta('containerProperty'), !this.evalGrants);
             this.actionUpdater.updateActions(sm);
+            this.ctxNode = this.selectionModel.getSelections();
             if (this.updateOnSelectionChange && this.detailsPanel) {
                 this.detailsPanel.onDetailsUpdate(sm);
             }
@@ -1004,21 +1011,21 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @return {Array}
      */
     getCustomfieldColumns: function() {
-        var result = [];
-        
-        if (Tine[this.app.appName].registry.containsKey('customfields')) {
-            var allCfs = Tine[this.app.appName].registry.get('customfields');
-            for (var i=0; i < allCfs.length; i++) {
-                result.push({
-                    id: allCfs[i].id,
-                    header: allCfs[i].label,
-                    dataIndex: 'customfields',
-                    renderer: Tine.Tinebase.common.customfieldRenderer.createDelegate(this, [allCfs[i].name], true),
-                    sortable: false,
-                    hidden: true
-                })
-            }
-        }
+        var modelName = this.recordClass.getMeta('appName') + '_Model_' + this.recordClass.getMeta('modelName'),
+            cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName),
+            result = [];
+            
+        Ext.each(cfConfigs, function(cfConfig) {
+            result.push({
+                id: cfConfig.id,
+                header: cfConfig.get('definition').label,
+                dataIndex: 'customfields',
+                renderer: Tine.widgets.customfields.Renderer.get(this.app, cfConfig),
+//                renderer: Tine.Tinebase.common.customfieldRenderer.createDelegate(this, [allCfs[i].name], true),
+                sortable: false,
+                hidden: true
+            })
+        }, this);
         
         return result;
     },
@@ -1029,18 +1036,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @return {Array}
      */
     getCustomfieldFilters: function() {
-        var result = [];
-        
-        if (Tine[this.app.appName].registry.containsKey('customfields')) {
-            var allCfs = Tine[this.app.appName].registry.get('customfields');
-            for (var i=0; i < allCfs.length; i++) {
-                result.push({
-                    label: allCfs[i].label, 
-                    field: 'customfield:' + allCfs[i].id, 
-                    valueType: 'customfield'
-                })
-            }
-        }
+        var modelName = this.recordClass.getMeta('appName') + '_Model_' + this.recordClass.getMeta('modelName'),
+            cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName),
+            result = [];
+        Ext.each(cfConfigs, function(cfConfig) {
+            result.push({filtertype: 'tinebase.customfield', app: this.app, cfConfig: cfConfig});
+        }, this);
         
         return result;
     },
@@ -1057,7 +1058,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             plugins.push(this.quickSearchFilterToolbarPlugin);
         }
         
-        return new Tine.widgets.grid.FilterToolbar(Ext.apply(config, {
+        return new Tine.widgets.grid.FilterPanel(Ext.apply(config, {
             app: this.app,
             recordClass: this.recordClass,
             filterModels: this.recordClass.getFilterModel().concat(this.getCustomfieldFilters()),
@@ -1202,7 +1203,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             config = null,
             popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
-                record: record,
+                record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
                 copyRecord: (button.actionType == 'copy'),
                 listeners: {
                     scope: this,
@@ -1217,7 +1218,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * 
      * @param {String|Tine.Tinebase.data.Record} record
      */
-    onUpdateRecord: function(record) {
+    onUpdateRecord: function(record, mode) {
+
         if (Ext.isString(record) && this.recordProxy) {
             record = this.recordProxy.recordReader({responseText: record});
         } else if (record && Ext.isFunction(record.copy)) {
@@ -1230,6 +1232,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 var isSelected = this.getGrid().getSelectionModel().isSelected(idx);
                 this.getStore().removeAt(idx);
                 this.getStore().insert(idx, [record]);
+                
                 if (isSelected) {
                     this.getGrid().getSelectionModel().selectRow(idx, true);
                 }
@@ -1239,9 +1242,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.addToEditBuffer(record);
         }
         
-        this.loadGridData({
-            removeStrategy: 'keepBuffered'
-        });
+        if (mode == 'local') {
+            this.onStoreUpdate(this.getStore(), record, Ext.data.Record.EDIT);
+        } else {
+            this.loadGridData({
+                removeStrategy: 'keepBuffered'
+            });
+        }
     },
     
     /**
@@ -1250,6 +1257,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {String|Tine.Tinebase.data.Record} record
      */
     addToEditBuffer: function(record) {
+
         var recordData = (Ext.isString(record)) ? Ext.decode(record) : record.data,
             id = recordData[this.recordClass.getMeta('idProperty')];
         

@@ -49,7 +49,7 @@ class Tinebase_Smtp
      */
     public static function createDefaultTransport()
     {
-        $config = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP, 'Tinebase', array(
+        $config = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::SMTP, 'Tinebase', array(
             'hostname' => 'localhost', 
             'port' => 25
         ));

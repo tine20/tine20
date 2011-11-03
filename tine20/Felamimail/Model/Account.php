@@ -244,21 +244,6 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             $result['ssl'] = strtoupper($this->ssl);
         }
         
-        // overwrite settings with config.inc.php values if set
-        if (Tinebase_Core::getConfig()->imap) {
-            $imapConfig = Tinebase_Core::getConfig()->imap->toArray();
-            $imapConfigOverwriteFields = array('host', 'port', 'secure_connection');
-            foreach ($imapConfigOverwriteFields as $field) {
-                if (array_key_exists($field, $imapConfig)) {
-                    if ($field == 'secure_connection' && in_array($imapConfig[$field], array('ssl', 'tls'))) {
-                        $result['ssl'] = strtoupper($imapConfig[$field]);
-                    } else {
-                        $result[$field] = $imapConfig[$field];
-                    }
-                }
-            }
-        }
-        
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
         
         return $result;
@@ -275,7 +260,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         $result = ($_username !== NULL) ? $_username : $this->user;
         
         if ($this->type == self::TYPE_SYSTEM) {
-            $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+            $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::IMAP);
             if (isset($imapConfig['domain']) && ! empty($imapConfig['domain'])) {
                 $result .= '@' . $imapConfig['domain'];
             }
@@ -315,7 +300,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         
         // system account: overwriting with values from config if set
         if ($this->type == self::TYPE_SYSTEM) {
-            $systemAccountConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+            $systemAccountConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::SMTP);
             //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($systemAccountConfig, true));
             // we don't need username/pass from system config (those are the notification service credentials)
             // @todo think about renaming config keys (to something like notification_email/pass)
@@ -429,13 +414,22 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
                         return FALSE;
                     }
                 }
-    
-                $credentials = $credentialsBackend->get($this->{$credentialsField});
-                $credentials->key = substr($userCredentialCache->password, 0, 24);
-                $credentialsBackend->getCachedCredentials($credentials);
+                
+                try {
+                    // NOTE: cache cleanup process might have removed the cache
+                    $credentials = $credentialsBackend->get($this->{$credentialsField});
+                    $credentials->key = substr($userCredentialCache->password, 0, 24);
+                    $credentialsBackend->getCachedCredentials($credentials);
+                } catch (Exception $e) {
+                    if ($_throwException) {
+                        throw $e;
+                    } else {
+                        return FALSE;
+                    }
+                }
             } else {
                 // just use tine user credentials to connect to mailserver / or use credentials from config if set
-                $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+                $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::IMAP);
                 
                 $credentials = $userCredentialCache;
                 if (array_key_exists('user', $imapConfig) && array_key_exists('password', $imapConfig) && ! empty($imapConfig['user'])) {

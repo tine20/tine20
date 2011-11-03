@@ -18,10 +18,6 @@
  * @todo rework account_id to container_id to let Persistent_Filters be organised
  *       in standard contaienr / grants way. This depends on container class to cope
  *       with multiple models per app which is not yet implementet (2010-05-05)
- * @todo rethink is_default. defaults should be handeld by preferences. Unfortunally
- *       preferences can't cope yet with admin/nonadmin prefs. So the admin could 
- *       define/force a faforite the user has no rights for ;-( (2010-05-05)
- *      
  */
 class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
 {
@@ -201,8 +197,6 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
      *
      * @param array $_ids
      * @return array of ids to actually delete
-     * 
-     * @todo finish
      */
     protected function _inspectDelete(array $_ids) {
         // delete all persistenfilter prefs with this ids

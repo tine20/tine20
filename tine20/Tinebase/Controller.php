@@ -195,6 +195,10 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
                 Tinebase_Core::setupUserLocale($userPrefLocaleString);
             }
             
+            // need to set userTimeZone again
+            $userTimezone = Tinebase_Core::getPreference()->getValue(Tinebase_Preference::TIMEZONE);
+            Tinebase_Core::setupUserTimezone($userTimezone);
+            
             $_user->setLoginTime($_accessLog->ip);
             
             $_accessLog->sessionid = session_id();
@@ -210,19 +214,32 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
      */
     protected function _initUserSession(Tinebase_Model_FullUser $_user)
     {
-        if (Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::SESSIONUSERAGENTVALIDATION, NULL, TRUE)->value) {
+        if (Tinebase_Config::getInstance()->getConfig(Tinebase_Config::SESSIONUSERAGENTVALIDATION, NULL, TRUE)->value) {
             Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' User agent validation disabled.');
         }
         
-        if (Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::SESSIONIPVALIDATION, NULL, TRUE)->value) {
+        if (Tinebase_Config::getInstance()->getConfig(Tinebase_Config::SESSIONIPVALIDATION, NULL, TRUE)->value) {
             Zend_Session::registerValidator(new Zend_Session_Validator_IpAddress());
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Session ip validation disabled.');
         }
         
         Zend_Session::regenerateId();
+        
+        /** 
+         * fix php session header handling http://forge.tine20.org/mantisbt/view.php?id=4918 
+         * -> search all Set-Cookie: headers and replace them with the last one!
+         **/
+        $cookieHeaders = array();
+        foreach(headers_list() as $headerString) {
+            if (strpos($headerString, 'Set-Cookie: TINE20SESSID=') === 0) {
+                array_push($cookieHeaders, $headerString);
+            }   
+        }   
+        header(array_pop($cookieHeaders), true);
+        /** end of fix **/
         
         Tinebase_Core::getSession()->currentAccount = $_user;
     }

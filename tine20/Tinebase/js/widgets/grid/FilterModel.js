@@ -14,7 +14,7 @@ Ext.ns('Tine.widgets.grid');
  * 
  * @namespace   Tine.widgets.grid
  * @class       Tine.widgets.grid.FilterModel
- * @extends     Ext.Component
+ * @extends     Ext.util.Observable
  * @constructor
  */
 Tine.widgets.grid.FilterModel = function(config) {
@@ -30,9 +30,10 @@ Tine.widgets.grid.FilterModel = function(config) {
       'filtertrigger'
     );
     
+    this.initComponent();
 };
 
-Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
+Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
     /**
      * @cfg {String} label 
      * label for the filter
@@ -98,7 +99,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
      * @private
      */
     initComponent: function() {
-        Tine.widgets.grid.FilterModel.superclass.initComponent.call(this);
         this.isFilterModel = true;
         
         if (! this.operators) {
@@ -153,6 +153,8 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         }
     },
     
+    onDestroy: Ext.emptyFn,
+    
     /**
      * operator renderer
      * 
@@ -176,7 +178,8 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 {operator: 'within',     label: _('is within')},
                 {operator: 'inweek',     label: _('is in week no.')},
                 {operator: 'startswith', label: _('starts with')},
-                {operator: 'endswith',   label: _('ends with')}
+                {operator: 'endswith',   label: _('ends with')},
+                {operator: 'definedBy',  label: _('defined by')}
             ].concat(this.getCustomOperators() || [])
         });
 
@@ -247,7 +250,8 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 style: {margin: '0px 10px'},
                 getValue: function() { return operatorStore.getAt(0).get('operator'); },
                 text : operatorStore.getAt(0).get('label'),
-                renderTo: el
+                renderTo: el,
+                setValue: Ext.emptyFn
             });
         }
         
@@ -552,3 +556,34 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         this.fireEvent('filtertrigger', this);
     }
 });
+
+/**
+ * @namespace   Tine.widgets.grid
+ * @class       Tine.widgets.grid.FilterRegistry
+ * @singleton
+ */
+Tine.widgets.grid.FilterRegistry = function() {
+    var filters = {};
+    
+    return {
+        register: function(appName, modelName, filter) {
+            var key = appName + '.' + modelName;
+            if (! filters[key]) {
+                filters[key] = [];
+            }
+            
+            filters[key].push(filter);
+        },
+        
+        get: function(appName, modelName) {
+            if (Ext.isFunction(appName.getMeta)) {
+                modelName = appName.getMeta('modelName');
+                appName = appName.getMeta('appName');
+            }
+            
+            var key = appName + '.' + modelName;
+            
+            return filters[key] || [];
+        }
+    };
+}();

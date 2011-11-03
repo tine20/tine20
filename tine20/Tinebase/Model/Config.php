@@ -17,7 +17,9 @@
  */
 class Tinebase_Model_Config extends Tinebase_Record_Abstract 
 {   
-    /**
+    const NOTSET = '###NOTSET###';
+    
+        /**
      * imap conf name
      * 
      * @var string
@@ -154,7 +156,6 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
      * @var string
      */
     const FILESDIR = 'filesdir';
-    
     /**
      * identifier
      * 
@@ -181,4 +182,4 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
         'value'             => array('presence' => 'required', 'allowEmpty' => true ),        
     );
     
-} // end of Tinebase_Model_Config
+}

@@ -12,14 +12,14 @@ Ext.ns('Tine.Tinebase.Model');
  * generic Record fields
  */
 Tine.Tinebase.Model.genericFields = [
-    { name: 'container_id', header: 'Container'                                     },
-    { name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'created_by'},
-    { name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'last_modified_by'},
-    { name: 'is_deleted',         type: 'boolean'              },
-    { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'deleted_by'}
+    { name: 'container_id', header: 'Container',                                       isMetaField: false},
+    { name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long, isMetaField: true },
+    { name: 'created_by',                                                              isMetaField: true },
+    { name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long, isMetaField: true },
+    { name: 'last_modified_by',                                                        isMetaField: true },
+    { name: 'is_deleted',         type: 'boolean',                                     isMetaField: true },
+    { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long, isMetaField: true },
+    { name: 'deleted_by',                                                              isMetaField: true }
 ];
     
 /**
@@ -125,6 +125,35 @@ Tine.Tinebase.Model.Tag = Ext.data.Record.create([
 ]);
 
 /**
+ * replace template fields with data
+ * @static
+ */
+Tine.Tinebase.Model.Tag.replaceTemplateField = function(tagData) {
+    if (Ext.isArray(tagData)) {
+        return Ext.each(tagData, Tine.Tinebase.Model.Tag.replaceTemplateField);
+    }
+    
+    if (Ext.isFunction(tagData.beginEdit)) {
+        tagData = tagData.data;
+    }
+    
+    var replace = {
+        'CURRENTDATE': Tine.Tinebase.common.dateRenderer(new Date()),
+        'CURRENTTIME': Tine.Tinebase.common.timeRenderer(new Date()),
+        'USERFULLNAME': Tine.Tinebase.registry.get('currentAccount').accountDisplayName
+    };
+    
+    Ext.each(['name', 'description'], function(field) {
+        for(var token in replace) {
+            if (replace.hasOwnProperty(token) && Ext.isString(tagData[field])) {
+                tagData[field] = tagData[field].replace(new RegExp('###' + token + '###', 'g'), replace[token]);
+            }
+        }
+    }, this);
+    
+};
+
+/**
  * Model of a PickerRecord
  * 
  * @constructor {Ext.data.Record}
@@ -168,16 +197,11 @@ Tine.Tinebase.Model.NoteType = Ext.data.Record.create([
  * Model of a customfield definition
  */
 Tine.Tinebase.Model.Customfield = Ext.data.Record.create([
-    { name: 'application_id' },
     { name: 'id'             },
+    { name: 'application_id' },
     { name: 'model'          },
     { name: 'name'           },
-    { name: 'label'          },
-    { name: 'type'           },
-    { name: 'length'         },
-    { name: 'group'          },
-    { name: 'order'          },
-    { name: 'value_search'   },
+    { name: 'definition'     },
     { name: 'account_grants' }
 ]);
 
@@ -281,13 +305,16 @@ Tine.Tinebase.Model.ExportJob = Tine.Tinebase.data.Record.create([
  * 
  * @constructor {Ext.data.Record}
  */
-Tine.Tinebase.Model.ImportExportDefinition = Ext.data.Record.create([
+Tine.Tinebase.Model.ImportExportDefinition = Ext.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     {name: 'id'             },
     {name: 'name'           },
+    {name: 'label'          },
+    {name: 'filename'       },
     {name: 'plugin'         },
     {name: 'description'    },
-    {name: 'model'          }
-]);
+    {name: 'model'          },
+    {name: 'plugin_options' }
+]));
 
 /**
  * @namespace Tine.Tinebase.Model

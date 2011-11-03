@@ -165,17 +165,24 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     abstract public function getSupportedFolders();
     
     /**
-     * returns multiple records and resolves tags
+     * Returns a set of records identified by their id's
      * 
-     * @param  array $_ids array of record identifiers
-     * @return Tinebase_Record_RecordSet
+     * @param   array $_ids       array of record identifiers
+     * @return  Tinebase_Record_RecordSet 
      */
-    public function getMultipleAndResolveTags($_ids)
+    public function getMultiple($_ids)
     {
         $records = $this->_contentController->getMultiple($_ids);
         
-        if (count($records) > 0 && $records->getFirstRecord()->has('tags')) {
-            Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($records);
+        $firstRecord = $records->getFirstRecord();
+        if ($firstRecord) {
+            // get tags / alarms
+            if ($firstRecord->has('tags')) {
+                Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($records);
+            }
+            if ($firstRecord->has('alarms')) {
+                $this->_contentController->getAlarms($records);
+            }
         }
         
         return $records;

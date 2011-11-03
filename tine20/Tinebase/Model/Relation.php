@@ -24,32 +24,39 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
      * degree parent
      */
     const DEGREE_PARENT = 'parent';
+    
     /**
      * degree child
      */
     const DEGREE_CHILD = 'child';
+    
     /**
      * degree sibling
      */
     const DEGREE_SIBLING = 'sibling';
+    
     /**
      * manually created relation
      */
     const TYPE_MANUAL = 'manual';
+    
     /**
      * default record backend
      */
     const DEFAULT_RECORD_BACKEND = 'Sql';
+    
     /**
      * key to find identifier
      */
 	protected $_identifier = 'id';
+	
 	/**
      * application the record belongs to
      *
      * @var string
      */
     protected $_application = 'Tinebase';
+    
 	/**
 	 * all valid fields
 	 */
@@ -77,6 +84,7 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
         'deleted_time'           => array('allowEmpty' => true          ),
         'deleted_by'             => array('allowEmpty' => true,         ),
 	);
+	
 	/**
 	 * fields containing datetime data
 	 */
@@ -85,7 +93,6 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time'
     );
-    
     
     /**
      * convert remark to array if json encoded
@@ -104,5 +111,4 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
             $this->remark = Zend_Json::decode($this->remark);
         }
     }
-} // end of Tinebase_Model_Relation
-?>
+}

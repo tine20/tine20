@@ -44,12 +44,15 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     // todo: wrap this into a uploadAction widget
     onFileSelect: function(fileSelector) {
+    	
+    	var files = fileSelector.getFileList();
         this.loadMask.show();
-        var uploader = new Ext.ux.file.Uploader({
+        var upload = new Ext.ux.file.Upload({
+        	file: files[0],
             fileSelector: fileSelector
         });
         
-        uploader.on('uploadcomplete', function(uploader, record){
+        upload.on('uploadcomplete', function(uploader, record){
         	var tempFile = record.get('tempFile');
             Ext.Ajax.request({
             	scope: this,
@@ -69,12 +72,13 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             
         }, this);
         
-        uploader.on('uploadfailure', function(uploader, record){
+        upload.on('uploadfailure', function(uploader, record){
             
         }, this);
         
         this.loadMask.show();
-        uploader.upload();
+        var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);        	
+        var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey); 
     },
     
     /**

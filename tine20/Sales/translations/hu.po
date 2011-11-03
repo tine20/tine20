@@ -51,26 +51,6 @@ msgstr "Szerződés száma"
 msgid "Status"
 msgstr "Állapot"
 
-#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
-msgid "Name"
-msgstr "Név"
-
-#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
-msgid "Price"
-msgstr "Ár"
-
-#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
-msgid "Manufacturer"
-msgstr "Gyártó"
-
-#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
-msgid "Category"
-msgstr "Kategória"
-
-#: js/ProductGridPanel.js:119
-msgid "Tags"
-msgstr "Címke"
-
 #: js/Models.js:40
 msgid "Product"
 msgid_plural "Products"
@@ -99,6 +79,26 @@ msgid_plural "contracts lists"
 msgstr[0] "szerződés lista"
 msgstr[1] "szerződés listák"
 
+#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
+msgid "Name"
+msgstr "Név"
+
+#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
+msgid "Price"
+msgstr "Ár"
+
+#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
+msgid "Manufacturer"
+msgstr "Gyártó"
+
+#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
+msgid "Category"
+msgstr "Kategória"
+
+#: js/ProductGridPanel.js:119
+msgid "Tags"
+msgstr "Címke"
+
 #: js/Sales.js:53
 msgid "Products"
 msgstr "Termék"
@@ -115,6 +115,5 @@ msgstr "Szerződések"
 msgid "All Contracts"
 msgstr "Összes szerződés"
 
-#: Setup/setup.xml:243
-msgid "Shared Contracts"
-msgstr "Megosztott szerződések"
+#~ msgid "Shared Contracts"
+#~ msgstr "Megosztott szerződések"

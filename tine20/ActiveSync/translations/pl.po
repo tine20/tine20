@@ -56,14 +56,6 @@ msgstr[2] "urządzenia"
 msgid "Devices"
 msgstr "Urządzenia"
 
-#: Setup/setup.xml:473
-msgid "Default Policy"
-msgstr "Domyślna polityka"
-
-#: Setup/setup.xml:478
-msgid "Default Policy installed during setup"
-msgstr "Domyślna polityka określona podczas definiowania ustawień"
-
 #: Preference.php:74
 msgid "Default Addressbook"
 msgstr "Domyślna książka adresowa"
@@ -87,3 +79,11 @@ msgstr "Domyślna lista zadań"
 #: Preference.php:83
 msgid "The default task list to create new tasks in."
 msgstr "Domyślna lista dla nowo tworzonych zadań"
+
+#: Setup/setup.xml:473
+msgid "Default Policy"
+msgstr "Domyślna polityka"
+
+#: Setup/setup.xml:478
+msgid "Default Policy installed during setup"
+msgstr "Domyślna polityka określona podczas definiowania ustawień"

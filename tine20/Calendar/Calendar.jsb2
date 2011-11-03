@@ -80,10 +80,6 @@
           "path": "js/"
         },
         {
-          "text": "AttendeeStatusFilterModel.js",
-          "path": "js/"
-        },
-        {
           "text": "CalendarSelectTreePanel.js",
           "path": "js/"
         },
@@ -118,6 +114,10 @@
         {
           "text": "MonthView.js",
           "path": "js/Printer/"
+        },
+        {
+          "text": "ContactEventsGridPanel.js",
+          "path": "js/"
         }
       ]
     },

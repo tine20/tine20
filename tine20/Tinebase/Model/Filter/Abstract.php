@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -42,24 +42,72 @@ abstract class Tinebase_Model_Filter_Abstract
     protected $_value = NULL;
     
     /**
-     * @var array spechial options
+     * @var string filter id [optional]
+     */
+    protected $_id = NULL;
+    
+    /**
+     * @var string filter label [optional]
+     */
+    protected $_label = NULL;
+    
+    /**
+     * @var array special options
      */
     protected $_options = NULL;
     
     /**
+     * filter is implicit, this is returned in toArray
+     * - this is only needed to detect acl filters that have been added by a controller
+     * 
+     * @var boolean
+     * @todo move this to acl filter?
+     */
+    protected $_isImplicit = FALSE;
+    
+    /**
      * get a new single filter action
      *
-     * @param string $_field
+     * @param string|array $_fieldOrData
      * @param string $_operator
      * @param mixed  $_value    
      * @param array  $_options
+     * 
+     * @todo remove legacy code + obsolete params sometimes
      */
-    public function __construct($_field, $_operator, $_value, array $_options = array())
+    public function __construct($_fieldOrData, $_operator = NULL, $_value = NULL, array $_options = array())
     {
-        $this->_setOptions($_options);
-        $this->setField($_field);
-        $this->setOperator($_operator);
-        $this->setValue($_value);
+        if (is_array($_fieldOrData)) {
+            $data = $_fieldOrData;
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' 
+                . 'Using deprecated constructor syntax. Please pass all filter data in one array.');
+            
+            $data = array(
+                'field'     => $_fieldOrData,
+                'operator'  => $_operator,
+                'value'     => $_value,
+                'options'   => $_options,
+            );
+        }
+
+        foreach (array('field', 'operator', 'value') as $requiredKey) {
+            if (! array_key_exists($requiredKey, $data)) {
+                throw new Tinebase_Exception_InvalidArgument('Filter object needs ' . $requiredKey);
+            }
+        }
+        
+        $this->_setOptions((isset($data['options'])) ? $data['options'] : array());
+        $this->setField($data['field']);
+        $this->setOperator($data['operator']);
+        $this->setValue($data['value']);
+        
+        if (isset($data['id'])) {
+            $this->setId($data['id']);
+        }
+        if (isset($data['label'])) {
+            $this->setLabel($data['label']);
+        }
     }
     
     /**
@@ -99,6 +147,11 @@ abstract class Tinebase_Model_Filter_Abstract
      */
     public function setOperator($_operator)
     {
+        if (empty($_operator) && isset($this->_operators[0])) {
+            // try to use default/first operator
+            $_operator = $this->_operators[0];
+        }
+        
         if (! in_array($_operator, $this->_operators)) {
             throw new Tinebase_Exception_UnexpectedValue("operator $_operator is not defined");
         }
@@ -109,7 +162,7 @@ abstract class Tinebase_Model_Filter_Abstract
     /**
      * gets operator
      *
-     * @return  string
+     * @return string
      */
     public function getOperator()
     {
@@ -119,7 +172,7 @@ abstract class Tinebase_Model_Filter_Abstract
     /**
      * sets value
      *
-     * @param mixed $_value
+     * @param string $_value
      */
     public function setValue($_value)
     {
@@ -133,6 +186,34 @@ abstract class Tinebase_Model_Filter_Abstract
     }
 
     /**
+     * sets id
+     *
+     * @param string $_id
+     */
+    public function setId($_id)
+    {
+        $this->_id = $_id;
+    }
+    
+    /**
+     * remove id of filter object
+     */
+    public function removeId()
+    {
+        $this->_id = NULL;
+    }
+
+    /**
+     * set label
+     *
+     * @param string $_label
+     */
+    public function setLabel($_label)
+    {
+        $this->_label = $_label;
+    }
+    
+    /**
      * gets value
      *
      * @return  mixed 
@@ -140,6 +221,16 @@ abstract class Tinebase_Model_Filter_Abstract
     public function getValue()
     {
         return $this->_value;
+    }
+    
+    /**
+     * set implicit
+     *
+     * @param boolean $_isImplicit
+     */
+    public function setIsImplicit($_isImplicit)
+    {
+        $this->_isImplicit = ($_isImplicit === TRUE);
     }
     
     /**
@@ -161,11 +252,12 @@ abstract class Tinebase_Model_Filter_Abstract
      * @todo to be removed once we split filter model / backend
      */
     protected function _getQuotedFieldName($_backend) {
+        $tablename = (isset($this->_options['tablename'])) ? $this->_options['tablename'] : $_backend->getTableName();
+        
         return $_backend->getAdapter()->quoteIdentifier(
-            $_backend->getTableName() . '.' . $this->_field
+            $tablename . '.' . $this->_field
         );
     }
-    
     
     /**
      * returns array with the filter settings of this filter
@@ -180,6 +272,17 @@ abstract class Tinebase_Model_Filter_Abstract
             'operator'  => $this->_operator,
             'value'     => $this->_value
         );
+        
+        if ($this->_isImplicit) {
+            $result['implicit'] = TRUE;
+        }
+
+        if ($this->_id) {
+            $result['id'] = $this->_id;
+        }
+        if ($this->_label) {
+            $result['label'] = $this->_label;
+        }
         
         return $result;
     }

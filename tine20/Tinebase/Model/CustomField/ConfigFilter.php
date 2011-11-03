@@ -54,6 +54,32 @@ class Tinebase_Model_CustomField_ConfigFilter extends Tinebase_Model_Filter_Filt
     protected $_isResolved = FALSE;
     
     /**
+     * check for customfield ACLs
+     *
+     * @var boolean
+     * 
+     */
+    protected $_customfieldACLChecks = TRUE;
+    
+    /**
+     * set/get checking ACL
+     * 
+     * @param  boolean optional
+     * @return boolean
+     */
+    public function customfieldACLChecks()
+    {
+        $currValue = $this->_customfieldACLChecks;
+        if (func_num_args() === 1) {
+            $paramValue = (bool) func_get_arg(0);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resetting customfieldACLChecks to ' . (int) $paramValue);
+            $this->_customfieldACLChecks = $paramValue;
+        }
+        
+        return $currValue;
+    }
+    
+    /**
      * sets the grants this filter needs to assure
      *
      * @param array $_grants
@@ -73,21 +99,23 @@ class Tinebase_Model_CustomField_ConfigFilter extends Tinebase_Model_Filter_Filt
      */
     public function appendFilterSql($_select, $_backend)
     {
-        // only search for ids for which the user has the required grants
-        if (! $this->_isResolved) {
-            $result = array();
-            foreach ($this->_requiredGrants as $grant) {
-                $result = array_merge($result, Tinebase_CustomField::getInstance()->getCustomfieldConfigIdsByAcl($grant));
-            }
-            $this->_validCustomfields = array_unique($result);
-            $this->_isResolved = TRUE;
-        }
-        
-        $db = Tinebase_Core::getDb();
-        
-        $field = $db->quoteIdentifier('id');
-        $where = $db->quoteInto("$field IN (?)", empty($this->_validCustomfields) ? array('') : $this->_validCustomfields);
-        
-        $_select->where($where);
+    	if ($this->_customfieldACLChecks) {
+	        // only search for ids for which the user has the required grants
+	        if (! $this->_isResolved) {
+	            $result = array();
+	            foreach ($this->_requiredGrants as $grant) {
+	                $result = array_merge($result, Tinebase_CustomField::getInstance()->getCustomfieldConfigIdsByAcl($grant));
+	            }
+	            $this->_validCustomfields = array_unique($result);
+	            $this->_isResolved = TRUE;
+	        }
+	        
+	        $db = Tinebase_Core::getDb();
+	        
+	        $field = $db->quoteIdentifier('id');
+	        $where = $db->quoteInto("$field IN (?)", empty($this->_validCustomfields) ? array('') : $this->_validCustomfields);
+	        
+	        $_select->where($where);
+    	}
     }
 }

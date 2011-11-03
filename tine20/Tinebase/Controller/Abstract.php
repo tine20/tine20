@@ -119,7 +119,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
     public function getConfigSettings($_resolve = FALSE)
     {
         $settings = Tinebase_Config::getInstance()->getConfigAsArray(
-            Tinebase_Model_Config::APPDEFAULTS, 
+            Tinebase_Config::APPDEFAULTS, 
             $this->_applicationName, 
             $this->_defaultsSettings
         );
@@ -149,7 +149,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
         $this->checkRight(Tinebase_Acl_Rights::ADMIN);
         
         Tinebase_Config::getInstance()->setConfigForApplication(
-            Tinebase_Model_Config::APPDEFAULTS, 
+            Tinebase_Config::APPDEFAULTS, 
             Zend_Json::encode($_settings), 
             $this->_applicationName
         );
@@ -168,7 +168,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
         }
         
         if (!in_array('Tinebase_Controller_Interface', class_implements($_controllerName))) {
-            throw new Exception("Controller" . $_controllerName . " does not implement Tinebase_Controller_Interface.");
+            throw new Exception("Controller $_controllerName does not implement Tinebase_Controller_Interface.");
         }
         
         return call_user_func(array($_controllerName, 'getInstance')); 

@@ -69,7 +69,44 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_search($filter, $paging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
     }    
-
+    
+    /**
+     * return autocomplete suggestions for a given property and value
+     * 
+     * @todo have spechial controller/backend fns for this
+     * @todo move to abstract json class and have tests
+     *
+     * @param  string   $property
+     * @param  string   $startswith
+     * @return array
+     */
+    public function autoCompleteContactProperty($property, $startswith)
+    {
+        if (preg_match('/[^A-Za-z0-9_]/', $property)) {
+            // NOTE: it would be better to ask the model for property presece, but we can't atm.
+            throw new Tasks_Exception_UnexpectedValue('bad property name');
+        }
+        
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => $property, 'operator' => 'startswith', 'value' => $startswith),
+        ));
+        
+        $paging = new Tinebase_Model_Pagination(array('sort' => $property));
+        
+        $values = array_unique(Addressbook_Controller_Contact::getInstance()->search($filter, $paging)->{$property});
+        
+        $result = array(
+            'results'   => array(),
+            'totalcount' => count($values)
+        );
+        
+        foreach($values as $value) {
+            $result['results'][] = array($property => $value);
+        }
+        
+        return $result;
+    }
+    
     /**
      * Search for lists matching given arguments
      *
@@ -101,34 +138,26 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * if $recordData['id'] is empty the contact gets added, otherwise it gets updated
      *
      * @param  array $recordData an array of contact properties
+     * @param  boolean $duplicateCheck
      * @return array
      */
-    public function saveContact($recordData)
+    public function saveContact($recordData, $duplicateCheck = TRUE)
     {
-        $contact = new Addressbook_Model_Contact();
-        $contact->setFromJsonInUsersTimezone($recordData);
-        
-        if (empty($contact->id)) {
-            $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
-        } else {
-            $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
-        }
-        
-        $result =  $this->getContact($contact->getId());
-        return $result;
+        return $this->_save($recordData, Addressbook_Controller_Contact::getInstance(), 'Contact', 'id', array($duplicateCheck));
     }
     
     /**
      * import contacts
      * 
-     * @param array $files to import
-     * @param array $importOptions
+     * @param string $tempFileId to import
      * @param string $definitionId
+     * @param array $importOptions
+     * @param array $clientRecordData
      * @return array
      */
-    public function importContacts($files, $importOptions, $definitionId)
+    public function importContacts($tempFileId, $definitionId, $importOptions, $clientRecordData = array())
     {
-        return $this->_import($files, $definitionId, $importOptions);
+        return $this->_import($tempFileId, $definitionId, $importOptions, $clientRecordData);
     }
     
     /****************************************** get default adb ****************************/
@@ -240,31 +269,62 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
-        $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
-            array('field' => 'application_id',  'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId()),
-            array('field' => 'type',            'operator' => 'equals', 'value' => 'import'),
-        ));
-        $importDefinitions = Tinebase_ImportExportDefinition::getInstance()->search($filter);
-        try {
-            $defaultDefinitionArray = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv')->toArray();
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            if (count($importDefinitions) > 0) {
-                $defaultDefinitionArray = $importDefinitions->getFirstRecord()->toArray();
-            } else {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No import definitions found for Addressbook');
-                $defaultDefinitionArray = array();
-            }
-        }
+        $definitionConverter = new Tinebase_Convert_ImportExportDefinition_Json();
+        $importDefinitions = $this->_getImportDefinitions();
+        $defaultDefinition = $this->_getDefaultImportDefinition($importDefinitions);
         
         $registryData = array(
             'Salutations'               => $this->getSalutations(),
             'defaultAddressbook'        => $this->getDefaultAddressbook(),
-            'defaultImportDefinition'   => $defaultDefinitionArray,
+            'defaultImportDefinition'   => $definitionConverter->fromTine20Model($defaultDefinition),
             'importDefinitions'         => array(
-                'results'               => $importDefinitions->toArray(),
+                'results'               => $definitionConverter->fromTine20RecordSet($importDefinitions),
                 'totalcount'            => count($importDefinitions),
             ),
         );        
         return $registryData;    
+    }
+    
+    /**
+     * get addressbook import definitions
+     * 
+     * @return Tinebase_Record_RecordSet
+     * 
+     * @todo generalize this
+     */
+    protected function _getImportDefinitions()
+    {
+        $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
+            array('field' => 'application_id',  'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId()),
+            array('field' => 'type',            'operator' => 'equals', 'value' => 'import'),
+        ));
+        
+        $importDefinitions = Tinebase_ImportExportDefinition::getInstance()->search($filter);
+        
+        return $importDefinitions;
+    }
+    
+    /**
+     * get default definition
+     * 
+     * @param Tinebase_Record_RecordSet $_importDefinitions
+     * @return Tinebase_Model_ImportExportDefinition
+     * 
+     * @todo generalize this
+     */
+    protected function _getDefaultImportDefinition($_importDefinitions)
+    {
+        try {
+            $defaultDefinition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (count($_importDefinitions) > 0) {
+                $defaultDefinition = $_importDefinitions->getFirstRecord();
+            } else {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No import definitions found for Addressbook');
+                $defaultDefinition = NULL;
+            }
+        }
+        
+        return $defaultDefinition;
     }
 }

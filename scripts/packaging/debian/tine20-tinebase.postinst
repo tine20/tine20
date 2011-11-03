@@ -4,15 +4,11 @@ set -e
 
 fix_permissions() {
     for dir in sessions tmp cache files; do
-        chown www-data:www-data /var/lib/tine20/$dir
-        chmod 0750 /var/lib/tine20/$dir
+        install -d -m 0750 -o www-data -g www-data /var/lib/tine20/$dir
     done
     
     chown www-data:www-data /var/log/tine20
-    chmod 0750 /var/log/tine20
-    
-    find /usr/share/tine20 -type f -exec chmod 644 {} \;
-    chmod 0755 /usr/share/tine20/tine20.php
+    chmod 0750 /var/log/tine20    
 }
 
 . /usr/share/debconf/confmodule
@@ -28,15 +24,6 @@ if [ "$1" = "configure" ]; then
     
     if [ "$webservers" != "" ]; then
     
-        # create vhost configuration links
-        servers="$webservers"
-        linkdestination_apache="../../tine20/apache.conf"
-        linkdestination_lighttpd="../../tine20/lighttpd.conf"
-        linkname="tine20"
-        
-        if [ -e /usr/share/wwwconfig-common/confd-link.sh ]; then
-            . /usr/share/wwwconfig-common/confd-link.sh
-        fi
         
 
         for webserver in $webservers; do
@@ -55,6 +42,42 @@ if [ "$1" = "configure" ]; then
                             if [ ! -f /etc/$webserver/mods-enabled/php5.load -a ! -h /etc/$webserver/mods-enabled/php5.load ]; then
                                 /usr/sbin/a2enmod php5
                             fi 
+                        fi
+                    fi
+
+                    # create vhost configuration links
+                    servers="$webserver"
+                    linkdestination_apache="../../tine20/apache.conf"
+                    linkdestination_lighttpd="../../tine20/lighttpd.conf"
+                    linkname="tine20"
+        
+                    if [ -e /usr/share/wwwconfig-common/confd-link.sh ]; then
+                        . /usr/share/wwwconfig-common/confd-link.sh
+                    fi
+                    
+                    # mark webserver for restart (used by restart.sh)
+                    restart="$restart $webserver"
+                    
+                    ;;
+                
+                lighttpd)
+
+                    # create vhost configuration links
+                    servers="$webserver"
+                    linkdestination_lighttpd="../../tine20/lighttpd.conf"
+                    linkname="15-tine20.conf"
+        
+                    if [ -e /usr/share/wwwconfig-common/confd-link.sh ]; then
+                        . /usr/share/wwwconfig-common/confd-link.sh
+                    fi
+                    
+                    if [ -d /etc/$webserver/conf-available ]; then
+                        if [ ! -f /etc/$webserver/conf-enabled/10-expire.conf -a ! -h /etc/$webserver/conf-enabled/10-expire.conf ]; then
+                            /usr/sbin/lighttpd-enable-mod expire
+                        fi
+
+                        if [ ! -f /etc/$webserver/conf-enabled/15-tine20.conf -a ! -h /etc/$webserver/conf-enabled/15-tine20.conf ]; then
+                            /usr/sbin/lighttpd-enable-mod tine20
                         fi
                     fi
                     

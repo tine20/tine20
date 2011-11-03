@@ -96,7 +96,7 @@ Ext.namespace('Tine.Felamimail');
      * validation error message
      * @type String
      */
-     validationErrorMessage: '',
+    validationErrorMessage: '',
     
     /**
      * @private
@@ -474,10 +474,10 @@ Ext.namespace('Tine.Felamimail');
                 if (this.replyTo) {
                     // check if there is already a 'Re:' prefix
                     var replyPrefix = this.app.i18n._('Re:'),
-                        signatureRegexp = new RegExp('^' + replyPrefix),
+                        replyPrefixRegexp = new RegExp('^' + replyPrefix, 'i'),
                         replySubject = (this.replyTo.get('subject')) ? this.replyTo.get('subject') : '';
                         
-                    if (! replySubject.match(signatureRegexp)) {
+                    if (! replySubject.match(replyPrefixRegexp)) {
                         this.subject = replyPrefix + ' ' +  replySubject;
                     } else {
                         this.subject = replySubject;
@@ -633,12 +633,13 @@ Ext.namespace('Tine.Felamimail');
         var attachmentData = null;
         
         this.attachmentGrid.store.each(function(attachment) {
-            this.record.data.attachments.push(Ext.ux.file.Uploader.file.getFileData(attachment));
+            this.record.data.attachments.push(Ext.ux.file.Upload.file.getFileData(attachment));
         }, this);
         
-        var accountId = this.accountCombo.getValue();
+        var accountId = this.accountCombo.getValue(),
             account = this.accountCombo.getStore().getById(accountId),
             emailFrom = account.get('email');
+            
         this.record.set('from_email', emailFrom);
         
         Tine.Felamimail.MessageEditDialog.superclass.onRecordUpdate.call(this);

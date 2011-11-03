@@ -1,0 +1,48 @@
+{
+  "projectName": "Tine 2.0 - Projects",
+  "deployDir": "Projects",
+  "licenseText": "Tine 2.0 - Projects \nCopyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)http://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "Projects FAT Client",
+      "file": "js/Projects-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "ProjectAttendeeFilter.js",
+          "path": "js/"
+        },
+        {
+          "text": "Model.js",
+          "path": "js/"
+        },
+        {
+          "text": "Projects.js",
+          "path": "js/"
+        },
+        {
+          "text": "ProjectGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ProjectEditDialog.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Projects FAT Client",
+      "file": "css/Projects-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Projects.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}

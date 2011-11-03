@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>5.0</version>
+    <version>5.1</version>
     <order>50</order>
     <status>enabled</status>
     <tables>
@@ -232,28 +232,4 @@
             </declaration>
         </table>
     </tables>
-    <defaultRecords>
-        <record>
-            <table>
-                <name>container</name>
-            </table>
-            <field>
-                <name>name</name>
-                <value>Shared Contracts</value>
-                <!-- gettext('Shared Contracts') -->
-            </field>
-            <field>
-                <name>type</name>
-                <value>shared</value>
-            </field>
-            <field>
-                <name>backend</name>
-                <value>sql</value>
-            </field>
-            <field>
-                <name>application_id</name>
-                <value special="application_id">Sales</value>
-            </field>
-        </record>
-    </defaultRecords>    
 </application>

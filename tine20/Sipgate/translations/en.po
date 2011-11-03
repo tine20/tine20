@@ -14,27 +14,117 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:187
-msgid "Send"
-msgstr "Send"
+#: js/AddressbookGridPanelHook.js:37
+msgid "Call contact"
+msgstr "Call contact"
 
-#: js/SmsEditDialog.js:60 js/CallStateWindow.js:50
+#: js/AddressbookGridPanelHook.js:60
+msgid "Compose SMS"
+msgstr "Compose SMS"
+
+#: js/AddressbookGridPanelHook.js:255
+msgid "Work"
+msgstr "Work"
+
+#: js/AddressbookGridPanelHook.js:265
+msgid "Home"
+msgstr "Home"
+
+#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:320
+msgid "Cell"
+msgstr "Cell"
+
+#: js/AddressbookGridPanelHook.js:285 js/AddressbookGridPanelHook.js:330
+msgid "Cell private"
+msgstr "Cell private"
+
+#: js/CallStateWindow.js:50 js/DialNumberDialog.js:64
+#: js/SearchAddressDialog.js:64 js/SmsEditDialog.js:60
 msgid "Cancel"
 msgstr "Cancel"
 
+#: js/CallStateWindow.js:104
+msgid "connecting..."
+msgstr "connecting..."
+
+#: js/CallStateWindow.js:142
+msgid "Connecting to: "
+msgstr "Connecting to: "
+
+#: js/DialNumberDialog.js:56 js/DialNumberDialog.js:152
+msgid "Dial Number"
+msgstr "Dial Number"
+
+#: js/DialNumberDialog.js:72 js/SearchAddressDialog.js:72
 #: js/SmsEditDialog.js:68
 msgid "Close"
 msgstr "Close"
 
-#: js/Sipgate.js:29
+#: js/DialNumberDialog.js:120
+msgid "Number to call"
+msgstr "Number to call"
+
+#: js/SearchAddressDialog.js:56
+msgid "Add Number"
+msgstr "Add Number"
+
+#: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
+msgid "Phone"
+msgstr "Phone"
+
+#: js/SearchAddressDialog.js:134 js/SearchAddressDialog.js:156
+msgid "Mobile"
+msgstr "Mobile"
+
+#: js/SearchAddressDialog.js:135 js/SearchAddressDialog.js:157
+msgid "Fax"
+msgstr "Fax"
+
+#: js/SearchAddressDialog.js:136 js/SearchAddressDialog.js:158
+msgid "Car phone"
+msgstr "Car phone"
+
+#: js/SearchAddressDialog.js:137 js/SearchAddressDialog.js:159
+msgid "Pager"
+msgstr "Pager"
+
+#: js/SearchAddressDialog.js:138 js/SearchAddressDialog.js:160
+msgid "Phone (private)"
+msgstr "Phone (private)"
+
+#: js/SearchAddressDialog.js:139 js/SearchAddressDialog.js:161
+msgid "Fax (private)"
+msgstr "Fax (private)"
+
+#: js/SearchAddressDialog.js:140 js/SearchAddressDialog.js:162
+msgid "Mobile (private)"
+msgstr "Mobile (private)"
+
+#: js/SearchAddressDialog.js:145
+msgid "-- create new --"
+msgstr "-- create new --"
+
+#: js/SearchAddressDialog.js:146
+msgid "Select existing contact or create a new one"
+msgstr "Select existing contact or create a new one"
+
+#: js/SearchAddressDialog.js:181
+msgid "Choose Device"
+msgstr "Choose Device"
+
+#: js/SearchAddressDialog.js:214
+msgid "Choose Address"
+msgstr "Choose Address"
+
+#: js/Sipgate.js:30
 msgid "Edit phone settings"
 msgstr "Edit phone settings"
 
-#: js/Sipgate.js:43
+#: js/Sipgate.js:44
 msgid "Sipgate"
 msgstr "Sipgate"
 
-#: js/Sipgate.js:54
+#: js/Sipgate.js:55
 msgid "Devices"
 msgstr "Devices"
 
@@ -43,104 +133,96 @@ msgid "Dial number"
 msgstr "Dial number"
 
 #: js/Sipgate.js:154
-msgid "Initiate a new outgoing call"
-msgstr "Initiate a new outgoing call"
+msgid "Initiates a new outgoing call"
+msgstr "Initiates a new outgoing call"
 
-#: js/Sipgate.js:246
+#: js/Sipgate.js:161
+msgid "Add Number to Addressbook"
+msgstr "Add Number to Addressbook"
+
+#: js/Sipgate.js:162
+msgid "Adds this number to the Addressbook"
+msgstr "Adds this number to the Addressbook"
+
+#: js/Sipgate.js:281
+msgid "Calls from"
+msgstr "Calls from"
+
+#: js/Sipgate.js:292
+msgid "Calls to"
+msgstr "Calls to"
+
+#: js/Sipgate.js:311
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Displaying calls {0} - {1} of {2}"
 
-#: js/Sipgate.js:247 js/Sipgate.js:329
+#: js/Sipgate.js:312 js/Sipgate.js:397
 msgid "No calls to display"
 msgstr "No calls to display"
 
-#: js/Sipgate.js:259
+#: js/Sipgate.js:324
 msgid "Status"
 msgstr "Status"
 
-#: js/Sipgate.js:266
+#: js/Sipgate.js:334
 msgid "Remote Party"
 msgstr "Remote Party"
 
-#: js/Sipgate.js:272
+#: js/Sipgate.js:339
 msgid "Remote Number"
 msgstr "Remote Number"
 
-#: js/Sipgate.js:278
+#: js/Sipgate.js:344
 msgid "Local Uri"
 msgstr "Local Uri"
 
-#: js/Sipgate.js:284
+#: js/Sipgate.js:349
 msgid "Remote Uri"
 msgstr "Remote Uri"
 
-#: js/Sipgate.js:291
+#: js/Sipgate.js:356
 msgid "Call started"
 msgstr "Call started"
 
-#: js/Sipgate.js:298
+#: js/Sipgate.js:366
 msgid "Call ID"
 msgstr "Call ID"
 
-#: js/Sipgate.js:528
+#: js/Sipgate.js:527
+msgid "unknown Person"
+msgstr "unknown Person"
+
+#: js/Sipgate.js:605
 msgid "first dial"
 msgstr "first dial"
 
-#: js/Sipgate.js:534
+#: js/Sipgate.js:610
 msgid "second dial"
 msgstr "second dial"
 
-#: js/Sipgate.js:542
+#: js/Sipgate.js:617
 msgid "established"
 msgstr "established"
 
-#: js/Sipgate.js:547
+#: js/Sipgate.js:622
 msgid "call 1 busy"
 msgstr "call 1 busy"
 
-#: js/Sipgate.js:555
+#: js/Sipgate.js:629
 msgid "call 2 busy"
 msgstr "call 2 busy"
 
-#: js/Sipgate.js:563
+#: js/Sipgate.js:636
 msgid "hungup before other called"
 msgstr "hungup before other called"
 
-#: js/Sipgate.js:566
+#: js/Sipgate.js:639
 msgid "hungup"
 msgstr "hungup"
 
-#: js/CallStateWindow.js:107
-msgid "connecting..."
-msgstr "connecting..."
-
-#: js/CallStateWindow.js:145
-msgid "Connecting to: "
-msgstr "Connecting to: "
-
-#: js/AddressbookGridPanelHook.js:37
-msgid "Call contact"
-msgstr "Call contact"
-
-#: js/AddressbookGridPanelHook.js:61
-msgid "Compose SMS"
-msgstr "Compose SMS"
-
-#: js/AddressbookGridPanelHook.js:257
-msgid "Work"
-msgstr "Work"
-
-#: js/AddressbookGridPanelHook.js:266
-msgid "Home"
-msgstr "Home"
-
-#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:318
-msgid "Cell"
-msgstr "Cell"
-
-#: js/AddressbookGridPanelHook.js:284 js/AddressbookGridPanelHook.js:327
-msgid "Cell private"
-msgstr "Cell private"
+#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:187
+msgid "Send"
+msgstr "Send"
 
 #: Preference.php:72
 msgid "Your phone"

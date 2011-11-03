@@ -188,6 +188,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 // check if folder is in filter or allinboxes are selected and updated folder is an inbox
                 if (! refresh) {
                     var filters = this.filterToolbar.getValue();
+                    filters = filters.filters ? filter.filters : filters;
+                    
                     for (var i = 0; i < filters.length; i++) {
                         if (filters[i].field == 'path' && filters[i].operator == 'in') {
                             if (filters[i].value.indexOf(record.get('path')) !== -1 || (filters[i].value.indexOf('/allinboxes') !== -1 && record.isInbox())) {
@@ -238,6 +240,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             actionType: 'add',
             text: this.app.i18n._('Compose'),
             handler: this.onMessageCompose.createDelegate(this),
+            disabled: ! this.app.getActiveAccount(),
             iconCls: this.app.appName + 'IconCls'
         });
 
@@ -328,7 +331,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         });
         this.actionUpdater.addActions([
-            this.action_write,
+//            this.action_write,
             this.action_deleteRecord,
             this.action_reply,
             this.action_replyAll,
@@ -358,19 +361,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initFilterToolbar: function() {
-        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
-            filterModels: Tine.Felamimail.Model.Message.getFilterModel(),
-             defaultFilter: 'query',
-             filters: [],
-             plugins: [
-                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin({
-                    criteriaIgnores: [
-                        {field: 'query',     operator: 'contains',     value: ''},
-                        {field: 'id' }
-                    ]
-                })
-             ]
-        });
+        this.filterToolbar = this.getFilterToolbar();
+        this.filterToolbar.criteriaIgnores = [
+            {field: 'query',     operator: 'contains',     value: ''},
+            {field: 'id' },
+            {field: 'path' }
+        ];
     },    
     
     /**
@@ -657,7 +653,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onDeleteRecords: function() {
         var account = this.app.getActiveAccount(),
             trashId = (account) ? account.getTrashFolderId() : null,
-            trash = trashId ? this.app.getFolderStore().getById(trashId) : null
+            trash = trashId ? this.app.getFolderStore().getById(trashId) : null,
             trashConfigured = (account.get('trash_folder')); 
             
         return (trash && ! trash.isCurrentSelection()) || (! trash && trashConfigured) ? this.moveSelectedMessages(trash, true) : this.deleteSelectedMessages();
@@ -855,7 +851,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * compose new message handler
      */
     onMessageCompose: function() {
-        Tine.Felamimail.MessageEditDialog.openWindow({
+        var activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
+        
+        var win = Tine.Felamimail.MessageEditDialog.openWindow({
+            accountId: activeAccount ? activeAccount.id : null,
             listeners: {
                 'update': this.onAfterCompose.createDelegate(this, ['compose'], 1)
             }
@@ -873,7 +872,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Ext.each(msgs, function(msg) {msgsData.push(msg.data)}, this);
         
         if (sm.getCount() > 0) {
-            Tine.Felamimail.MessageEditDialog.openWindow({
+            var win = Tine.Felamimail.MessageEditDialog.openWindow({
                 forwardMsgs : Ext.encode(msgsData),
                 listeners: {
                     'update': this.onAfterCompose.createDelegate(this, ['forward', msgs], 1)
@@ -891,7 +890,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var sm = this.getGrid().getSelectionModel(),
             msg = sm.getSelected();
             
-        Tine.Felamimail.MessageEditDialog.openWindow({
+        var win = Tine.Felamimail.MessageEditDialog.openWindow({
             replyTo : Ext.encode(msg.data),
             replyToAll: toAll,
             listeners: {
@@ -936,11 +935,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             folder = this.app.getFolderStore().getById(record.get('folder_id')),
             account = this.app.getAccountStore().getById(folder.get('account_id')),
             action = (folder.get('globalname') == account.get('drafts_folder')) ? 'senddraft' :
-                     folder.get('globalname') == account.get('templates_folder') ? 'sendtemplate' : null;
+                     folder.get('globalname') == account.get('templates_folder') ? 'sendtemplate' : null,
+           	win;
         
         // check folder to determine if mail should be opened in compose dlg
         if (action !== null) {
-            Tine.Felamimail.MessageEditDialog.openWindow({
+            win = Tine.Felamimail.MessageEditDialog.openWindow({
                 draftOrTemplate: Ext.encode(record.data),
                 listeners: {
                     scope: this,
@@ -948,7 +948,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }
             });
         } else {
-            Tine.Felamimail.MessageDisplayDialog.openWindow({
+            win = Tine.Felamimail.MessageDisplayDialog.openWindow({
                 record: record,
                 listeners: {
                     scope: this,
@@ -1140,6 +1140,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (! filter) {
             filter = this.filterToolbar.getValue();
         }
+
+        // condition from filterPanel
+        filter = filter.filters ? filter.filters : filter;
         
         var accountId = null, 
             filterAccountId = null,
@@ -1235,7 +1238,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         frame.contentWindow.focus(); 
         frame.contentWindow.print();
         
-        setTimeout(function(){Ext.removeNode(frame);}, 100);
+        // removeing frame chrashes chrome
+//        setTimeout(function(){Ext.removeNode(frame);}, 100);
     },
     
     /**

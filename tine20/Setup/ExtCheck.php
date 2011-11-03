@@ -402,54 +402,89 @@ class Setup_ExtCheck
         foreach ($this->values as $key => $value) {
             if ($value['tag'] == 'ENVIROMENT') {
                 switch($value['attributes']['NAME']) {
-                case 'Zend':
-                    $required = $value['attributes']['VERSION'];
-                    $zend = Zend_Version::VERSION;
-                    $operator = ($value['attributes']['OPERATOR'] == 'biggerThan') ? '>' : '<';
-                    $text = $value['attributes']['NAME'] . ' ' . $operator . ' ' . $required;
-                    if (version_compare($zend, $required, $operator)) {
-                        $data[] = array($text, 'SUCCESS');
-                    } else {
-                        $data[] = array($text . ' (version is ' . $zend . ')', 'FAILURE');
-                    }
-                    break;
-                case 'PHP':
-                    if (version_compare($value['attributes']['VERSION'], phpversion(), '<=')) {
-                        $data[] = array($value['attributes']['NAME'], 'SUCCESS');
-                    } else {
-                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                            . ' PHP version incompatible: ' . phpversion() . ' < ' . $value['attributes']['VERSION']);
-                        $data[] = array($value['attributes']['NAME'], 'FAILURE');
-                    }
-                    break;
-                case 'MySQL':
-                    // get setup controller for database connection
-                    if (Setup_Core::configFileExists()) {
-                        $dbConfig = Tinebase_Core::getConfig()->database;
-                        $hostnameWithPort = (isset($dbConfig->port)) ? $dbConfig->host . ':' . $dbConfig->port : $dbConfig->host;
-                        $link = @mysql_connect($hostnameWithPort, $dbConfig->username, $dbConfig->password);
-                        if (!$link) {
-                            //die('Could not connect to mysql database: ' . mysql_error());
-                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 'Could not connect to mysql database: ' . mysql_error()); 
-                            Setup_Core::set(Setup_Core::CHECKDB, FALSE);
+                    case 'Zend':
+                        $required = $value['attributes']['VERSION'];
+                        $zend = Zend_Version::VERSION;
+                        $operator = ($value['attributes']['OPERATOR'] == 'biggerThan') ? '>' : '<';
+                        $text = $value['attributes']['NAME'] . ' ' . $operator . ' ' . $required;
+                        if (version_compare($zend, $required, $operator)) {
+                            $data[] = array($text, 'SUCCESS');
+                        } else {
+                            $data[] = array($text . ' (version is ' . $zend . ')', 'FAILURE');
                         }
-                        $mysqlVersion = @mysql_get_server_info();
-                    } else {
-                        $mysqlVersion = @mysql_get_client_info();
-                    }
-                    
-                    $text = $value['attributes']['NAME'];
-                    if (version_compare($value['attributes']['VERSION'], $mysqlVersion, '<=')) {
-                        $data[] = array($text, 'SUCCESS');
-                    } else {
-                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                            . ' MySQL version incompatible: ' . $mysqlVersion . ' < ' . $value['attributes']['VERSION']);                        
-                        $data[] = array($text, 'FAILURE');
-                    }
-                    break;
-                default:
-                    $data[] = array($value['attributes']['NAME'], 'FAILURE');
-                    break;
+                        break;
+                        
+                    case 'PHP':
+                        if (version_compare($value['attributes']['VERSION'], phpversion(), '<=')) {
+                            $data[] = array($value['attributes']['NAME'], 'SUCCESS');
+                        } else {
+                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                                . ' PHP version incompatible: ' . phpversion() . ' < ' . $value['attributes']['VERSION']);
+                            $data[] = array($value['attributes']['NAME'], 'FAILURE');
+                        }
+                        break;
+                        
+                    case 'MySQL':
+                        // get setup controller for database connection
+                        if (Setup_Core::configFileExists()) {
+                            $dbConfig = Tinebase_Core::getConfig()->database;
+                            $hostnameWithPort = (isset($dbConfig->port)) ? $dbConfig->host . ':' . $dbConfig->port : $dbConfig->host;
+                            $link = @mysql_connect($hostnameWithPort, $dbConfig->username, $dbConfig->password);
+                            if (!$link) {
+                                //die('Could not connect to mysql database: ' . mysql_error());
+                                Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                                    . 'Could not connect to mysql database: ' . mysql_error()); 
+                                Setup_Core::set(Setup_Core::CHECKDB, FALSE);
+                            }
+                            $mysqlVersion = @mysql_get_server_info();
+                        } else {
+                            $mysqlVersion = @mysql_get_client_info();
+                        }
+                        
+                        $text = $value['attributes']['NAME'];
+                        if (version_compare($value['attributes']['VERSION'], $mysqlVersion, '<=')) {
+                            $data[] = array($text, 'SUCCESS');
+                        } else {
+                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                                . ' MySQL version incompatible: ' . $mysqlVersion . ' < ' . $value['attributes']['VERSION']);
+                            $data[] = array($text, 'FAILURE');
+                        }
+                        break;
+                        
+                    case 'PgSQL':
+                        $pgsqlVersion = '0.0.0';
+                        // get setup controller for database connection
+                        if (Setup_Core::configFileExists()) {
+                            $dbConfig = Tinebase_Core::getConfig()->database;
+                            $hostname = $dbConfig->host;
+                            $port = isset($dbConfig->port) ? $dbConfig->port : '5432';
+                            $user = $dbConfig->username;
+                            $password = $dbConfig->password;
+                            $link = @pg_connect("host=$hostname port=$port user=$user password=$password");
+                            if (PGSQL_CONNECTION_BAD === pg_connection_status($link)) {
+                                //die('Could not connect to postgresql database: ' . pg_errormessage());
+                                Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                                    . 'Could not connect to postgresql database: ' . pg_errormessage());
+                                Setup_Core::set(Setup_Core::CHECKDB, FALSE);
+                            } else {
+                                $pgsqlVersion = @pg_version($link);
+                                $pgsqlVersion = $pgsqlVersion['server'];
+                            }
+                        }
+                        
+                        $text = $value['attributes']['NAME'];
+                        if (version_compare($value['attributes']['VERSION'], $pgsqlVersion, '<=')) {
+                            $data[] = array($text, 'SUCCESS');
+                        } else {
+                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                                . ' PostgreSQL version incompatible: ' . $pgsqlVersion . ' < ' . $value['attributes']['VERSION']);
+                            $data[] = array($text, 'FAILURE');
+                        }
+                        break;
+                        
+                    default:
+                        $data[] = array($value['attributes']['NAME'], 'FAILURE');
+                        break;
                 }
             } else if ($value['tag'] == 'EXTENSION') {
 

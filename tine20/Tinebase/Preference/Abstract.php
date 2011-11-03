@@ -3,7 +3,7 @@
  * Tine 2.0
  *
  * @package     Tinebase
- * @subpackage  Backend
+ * @subpackage  Preference
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -19,7 +19,7 @@
  * abstract backend for preferences
  *
  * @package     Tinebase
- * @subpackage  Backend
+ * @subpackage  Preference
  */
 abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstract
 {

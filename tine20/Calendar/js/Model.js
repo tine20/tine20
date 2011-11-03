@@ -166,7 +166,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         // if dtstart is out of current period, take start of current period
         mainPanel = app.getMainScreen().getCenterPanel(),
         period = mainPanel.getCalendarPanel(mainPanel.activeView).getView().getPeriod(),
-        container = app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainerForNewRecords(),
+        container = app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
         attender = Tine.Tinebase.registry.get('currentAccount');
         
     if (period.from.getTime() > dtstart.getTime() || period.until.getTime() < dtstart.getTime()) {
@@ -200,11 +200,45 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
         {label: _('Quick search'), field: 'query', operators: ['contains']},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Calendar.Model.Event, /*defaultOperator: 'in',*/ defaultValue: {path: Tine.Tinebase.container.getMyNodePath()}},
         {filtertype: 'calendar.attendee'},
-        {filtertype: 'calendar.attendeestatus'},
+        {
+            label: app.i18n._('Attendee Status'),
+            field: 'attender_status',
+            filtertype: 'tine.widget.keyfield.filter', 
+            app: app, 
+            defaultValue: ['DECLINED'], 
+            keyfieldName: 'attendeeStatus', 
+            defaultOperator: 'notin'
+        },
         {filtertype: 'addressbook.contact', field: 'organizer', label: app.i18n._('Organizer')},
         {filtertype: 'tinebase.tag', app: app}
     ];
 };
+
+// register calendar filters in addressbook
+Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.register('Addressbook', 'Contact', {
+    foreignRecordClass: 'Calendar.Event',
+    linkType: 'foreignId', 
+    filterName: 'ContactAttendeeFilter',
+    // _('Event (as attendee)')
+    label: 'Event (as attendee)'
+});
+Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.register('Addressbook', 'Contact', {
+    foreignRecordClass: 'Calendar.Event',
+    linkType: 'foreignId', 
+    filterName: 'ContactOrganizerFilter',
+    // _('Event (as organizer)')
+    label: 'Event (as organizer)'
+});
+
+// example for explicit definition
+//Tine.widgets.grid.FilterRegistry.register('Addressbook', 'Contact', {
+//    filtertype: 'foreignrecord',
+//    foreignRecordClass: 'Calendar.Event',
+//    linkType: 'foreignId', 
+//    filterName: 'ContactAttendeeFilter',
+//    // _('Event attendee')
+//    label: 'Event attendee'
+//});
 
 /**
  * @namespace Tine.Calendar.Model
@@ -308,9 +342,9 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
     {name: 'cal_event_id'},
     {name: 'user_id', sortType: Tine.Tinebase.common.accountSortType },
     {name: 'user_type'},
-    {name: 'role'},
+    {name: 'role', type: 'keyField', keyFieldConfigName: 'attendeeRoles'},
     {name: 'quantity'},
-    {name: 'status'},
+    {name: 'status', type: 'keyField', keyFieldConfigName: 'attendeeStatus'},
     {name: 'status_authkey'},
     {name: 'displaycontainer_id'}
 ], {
@@ -453,25 +487,6 @@ Tine.Calendar.Model.Attender.getAttendeeStore = function(attendeeData) {
     
     return attendeeStore;
 };
-
-Tine.Calendar.Model.Attender.getAttendeeStatusStore = function() {
-    if (! Tine.Calendar.Model.Attender.attendeeStatusStore) {
-        var app = Tine.Tinebase.appMgr.get('Calendar');
-        Tine.Calendar.Model.Attender.attendeeStatusStore = new Ext.data.ArrayStore({
-            storeId: 'calendar.attener.status',
-            idIndex: 0,  
-            fields: ['id', 'status_name'],
-            data: [
-                ['NEEDS-ACTION', app.i18n._('No response')],
-                ['ACCEPTED',     app.i18n._('Accepted')   ],
-                ['DECLINED',     app.i18n._('Declined')   ],
-                ['TENTATIVE',    app.i18n._('Tentative')  ]
-            ]
-        });
-    }
-    
-    return Tine.Calendar.Model.Attender.attendeeStatusStore;
-}
 
 /**
  * @namespace Tine.Calendar.Model

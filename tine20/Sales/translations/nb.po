@@ -51,26 +51,6 @@ msgstr "Kontrakts nummer"
 msgid "Status"
 msgstr "Status"
 
-#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
-msgid "Name"
-msgstr "Navn"
-
-#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
-msgid "Price"
-msgstr "Pris"
-
-#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
-msgid "Manufacturer"
-msgstr "Produsent"
-
-#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
-msgid "Category"
-msgstr "Kategori"
-
-#: js/ProductGridPanel.js:119
-msgid "Tags"
-msgstr "Merker"
-
 #: js/Models.js:40
 msgid "Product"
 msgid_plural "Products"
@@ -99,6 +79,26 @@ msgid_plural "contracts lists"
 msgstr[0] "kontrakt liste"
 msgstr[1] "kontrakts lister"
 
+#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
+msgid "Name"
+msgstr "Navn"
+
+#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
+msgid "Price"
+msgstr "Pris"
+
+#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
+msgid "Manufacturer"
+msgstr "Produsent"
+
+#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
+msgid "Category"
+msgstr "Kategori"
+
+#: js/ProductGridPanel.js:119
+msgid "Tags"
+msgstr "Merker"
+
 #: js/Sales.js:53
 msgid "Products"
 msgstr "Produkter"
@@ -115,6 +115,5 @@ msgstr "Kontrakter"
 msgid "All Contracts"
 msgstr "Alle Kontrakter"
 
-#: Setup/setup.xml:243
-msgid "Shared Contracts"
-msgstr "Delte Kontrakter"
+#~ msgid "Shared Contracts"
+#~ msgstr "Delte Kontrakter"

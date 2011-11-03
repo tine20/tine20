@@ -56,14 +56,6 @@ msgstr[1] "Eszközök"
 msgid "Devices"
 msgstr "Eszközök"
 
-#: Setup/setup.xml:473
-msgid "Default Policy"
-msgstr "Alapértelmezett szabály"
-
-#: Setup/setup.xml:478
-msgid "Default Policy installed during setup"
-msgstr "Alapértelmezett szabály beállításra került a telepítés közben"
-
 #: Preference.php:74
 msgid "Default Addressbook"
 msgstr "Alapértelmezett Címjegyzék"
@@ -87,3 +79,11 @@ msgstr "Alapértelmezett Feladat Lista"
 #: Preference.php:83
 msgid "The default task list to create new tasks in."
 msgstr "Alapértelmezett Feladat Lista új feladatok létrehozására."
+
+#: Setup/setup.xml:473
+msgid "Default Policy"
+msgstr "Alapértelmezett szabály"
+
+#: Setup/setup.xml:478
+msgid "Default Policy installed during setup"
+msgstr "Alapértelmezett szabály beállításra került a telepítés közben"

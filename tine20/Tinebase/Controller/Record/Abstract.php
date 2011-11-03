@@ -7,6 +7,8 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * 
+ * @todo        this should be splitted into smaller parts!
  */
 
 /**
@@ -95,9 +97,18 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_recordAlarmField = 'dtstart';
     
     /**
+     * the current user
+     * 
      * @var Tinebase_Model_User
      */
     protected $_currentAccount = NULL;
+    
+    /**
+     * duplicate check fields / if this is NULL -> no duplicate check
+     * 
+     * @var array
+     */
+    protected $_duplicateCheckFields = NULL;
     
     /**
      * returns controller for records of given model
@@ -295,7 +306,7 @@ abstract class Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * Returns a set of leads identified by their id's
+     * Returns a set of records identified by their id's
      * 
      * @param   array $_ids       array of record identifiers
      * @param   bool  $_ignoreACL don't check acl grants
@@ -349,14 +360,18 @@ abstract class Tinebase_Controller_Record_Abstract
      * add one record
      *
      * @param   Tinebase_Record_Interface $_record
+     * @param   boolean $_duplicateCheck
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      */
-    public function create(Tinebase_Record_Interface $_record)
+    public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
     {
         $this->_checkRight('create');
     	
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->toArray(),true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
+            . print_r($_record->toArray(),true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Create new ' . $this->_modelName);
         
         try {
             $db = $this->_backend->getAdapter();
@@ -378,14 +393,18 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             
             $this->_inspectBeforeCreate($_record);
+            if ($_duplicateCheck) {
+                $this->_duplicateCheck($_record);
+            }
             $record = $this->_backend->create($_record);
             $this->_inspectAfterCreate($record, $_record);
             
+            // @todo move those to separate functions that can be called in create() + update()
             // set relations / tags / notes / alarms
             if ($record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
                 Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), $_record->relations);
             }                    
-            if ($record->has('tags') && !empty($_record->tags) && is_array($_record->tags)) {
+            if ($record->has('tags') && !empty($_record->tags) && (is_array($_record->tags) || $_record->tags instanceof Tinebase_Record_RecordSet)) {
                 $record->tags = $_record->tags;
                 Tinebase_Tags::getInstance()->setTagsOfRecord($record);
             }        
@@ -412,7 +431,7 @@ abstract class Tinebase_Controller_Record_Abstract
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
             throw $e;
         }
         
@@ -431,6 +450,83 @@ abstract class Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * do duplicate check (before create)
+     * 
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     * @throws Tinebase_Exception_Duplicate
+     */
+    protected function _duplicateCheck(Tinebase_Record_Interface $_record)
+    {
+        $duplicateFilter = $this->_getDuplicateFilter($_record);
+        
+        if ($duplicateFilter === NULL) {
+            return;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ' Doing duplicate check.');
+        
+        $duplicates = $this->search($duplicateFilter, new Tasks_Model_Pagination(array('limit' => 5)));
+        
+        if (count($duplicates) > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                ' Found ' . count($duplicates) . ' duplicate(s).');            
+            
+            $ted = new Tinebase_Exception_Duplicate('Duplicate record(s) found');
+            $ted->setModelName($this->_modelName);
+            $ted->setData($duplicates);
+            $ted->setClientRecord($_record);
+            throw $ted;
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                ' No duplicates found.');            
+        }
+    }
+    
+    /**
+     * get duplicate filter
+     * 
+     * @param Tinebase_Record_Interface $_record
+     * @return Tinebase_Model_Filter_FilterGroup|NULL
+     */
+    protected function _getDuplicateFilter(Tinebase_Record_Interface $_record)
+    {
+        if (empty($this->_duplicateCheckFields)) {
+            return NULL;
+        }
+        
+        $filters = array();
+        foreach ($this->_duplicateCheckFields as $group) {
+            $addFilter = array();
+            foreach ($group as $field) {
+                if (! empty($_record->{$field})) {
+                    $addFilter[] = array('field' => $field, 'operator' => 'equals', 'value' => $_record->{$field});
+                }
+            }
+            if (! empty($addFilter)) {
+                $filters[] = array('condition' => 'AND', 'filters' => $addFilter);
+            }
+        }
+        
+        if (empty($filters)) {
+            return NULL;
+        }
+        
+        $filterClass = $this->_modelName . 'Filter';
+        $filterData = (count($filters) > 1) ? array(array('condition' => 'OR', 'filters' => $filters)) : $filters;
+
+        // exclude own record if it has an id
+        $recordId = $_record->getId();
+        if (! empty($recordId)) {
+            $filterData[] = array('field' => 'id', 'operator' => 'notin', 'value' => array($recordId));
+        }
+        
+        $filter = new $filterClass($filterData);
+        return $filter;
+    }
+    
+    /**
      * inspect creation of one record (after create)
      * 
      * @param   Tinebase_Record_Interface $_createdRecord
@@ -446,11 +542,17 @@ abstract class Tinebase_Controller_Record_Abstract
      * update one record
      *
      * @param   Tinebase_Record_Interface $_record
+     * @param   boolean $_duplicateCheck
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      */
-    public function update(Tinebase_Record_Interface $_record)
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
+            . print_r($_record->toArray(),true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Update ' . $this->_modelName);
+        
         try {
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
@@ -484,15 +586,18 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             
             $this->_inspectBeforeUpdate($_record, $currentRecord);
-           
+            if ($_duplicateCheck) {
+                $this->_duplicateCheck($_record);
+            }
             $record = $this->_backend->update($_record);
             $this->_inspectAfterUpdate($record, $_record);
     
+            // @todo move those to separate functions that can be called in create() + update()
             // set relations / tags / notes / alarms
             if ($record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
                 Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), $_record->relations);
-            }        
-            if ($record->has('tags') && isset($_record->tags) && is_array($_record->tags)) {
+            }
+            if ($record->has('tags') && isset($_record->tags) && (is_array($_record->tags) || $_record->tags instanceof Tinebase_Record_RecordSet)) {
                 Tinebase_Tags::getInstance()->setTagsOfRecord($_record);
             }
             if ($record->has('notes')) {

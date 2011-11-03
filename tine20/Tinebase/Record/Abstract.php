@@ -46,7 +46,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public $dateConversionFormat = NULL;
     
     /**
-     * key in $_validators/$_properties array for the filed which 
+     * key in $_validators/$_properties array for the field which 
      * represents the identifier
      * NOTE: _Must_ be set by the derived classes!
      * 
@@ -433,10 +433,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         if($this->_isValidated === false) {
             
             $inputFilter = $this->_getFilter();
-            
             $inputFilter->setData($this->_properties);
-            
-          
             
             if ($inputFilter->isValid()) {
                 // set $this->_properties with the filtered values

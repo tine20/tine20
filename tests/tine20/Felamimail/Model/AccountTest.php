@@ -62,7 +62,7 @@ class Felamimail_Model_AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSmtpConfig()
     {
-        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::SMTP);
         
         $account = new Felamimail_Model_Account(array(
             'type'      => Felamimail_Model_Account::TYPE_SYSTEM,

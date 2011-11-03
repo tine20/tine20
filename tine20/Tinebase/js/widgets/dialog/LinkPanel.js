@@ -2,7 +2,7 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
@@ -10,7 +10,7 @@
 Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
 
 /**
- * Contract edit dialog
+ * link display panel
  * 
  * @namespace   Tine.widgets.dialog
  * @class       Tine.widgets.dialog.LinkPanel

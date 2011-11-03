@@ -112,32 +112,9 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     getFilterToolbar: function() {
-        var filters = [
-            {label: _('Quick search'),  field: 'query',    operators: ['contains']},
-            {filtertype: 'tine.widget.container.filtermodel', app: this.app, recordClass: Tine.Crm.Model.Lead},
-            {label: this.app.i18n._('Lead name'),   field: 'lead_name' },
-            {filtertype: 'crm.leadstate', app: this.app},
-            {label: this.app.i18n._('Probability'), field: 'probability', valueType: 'percentage'},
-            {label: this.app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
-            {filtertype: 'tinebase.tag', app: this.app},
-            {label: this.app.i18n._('Last modified'),   field: 'last_modified_time', valueType: 'date'},
-            {label: this.app.i18n._('Last modifier'),   field: 'last_modified_by',   valueType: 'user'},
-            {label: this.app.i18n._('Creation Time'),   field: 'creation_time',      valueType: 'date'},
-            {label: this.app.i18n._('Creator'),         field: 'created_by',         valueType: 'user'},
-            {filtertype: 'crm.contact'},
-            {filtertype: 'foreignrecord', app: this.app, foreignRecordClass: Tine.Tasks.Task, ownField: 'task'}
-        ];
         
-        if (Tine.Sales && Tine.Tinebase.common.hasRight('run', 'Sales')) {
-            filters.push({filtertype: 'foreignrecord', 
-                app: this.app,
-                foreignRecordClass: Tine.Sales.Model.Product,
-                ownField: 'product'
-            });
-        }
-        
-        return new Tine.widgets.grid.FilterToolbar({
-            filterModels: filters,
+        return new Tine.widgets.grid.FilterPanel({
+            filterModels: Tine.Crm.Model.Lead.getFilterModel(),
             recordClass: this.recordClass,
             defaultFilter: 'query',
             filters: [

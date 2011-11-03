@@ -172,7 +172,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             isValidDropPoint: function(n, dd, e, data){
                 return n.node.attributes.allowDrop;
             }
-        }
+        };
         
         // init selection model (multiselect)
         this.selModel = new Ext.tree.MultiSelectionModel({});
@@ -247,6 +247,9 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             
             // get filterToolbar
             var ftb = this.filterPlugin.getGridPanel().filterToolbar;
+            // in case of filterPanel
+            ftb = ftb.activeFilterPanel ? ftb.activeFilterPanel : ftb;
+            
             if (! ftb.rendered) {
                 this.onSelectionChange.defer(150, this, [sm, nodes]);
                 return;
@@ -565,6 +568,11 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @param {Object} folderData
      */
     onFolderDelete: function(folderData) {
+    	// if we deleted account, remove it from account store
+    	if (folderData.record && folderData.record.modelName === 'Account') {
+    		this.accountStore.remove(this.accountStore.getById(folderData.id));
+    	}
+    	
         this.folderStore.remove(this.folderStore.getById(folderData.id));
     },
     

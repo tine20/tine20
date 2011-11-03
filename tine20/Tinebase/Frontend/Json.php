@@ -261,7 +261,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // NOTE: this functino makes a new instance of a class whose name is given by user input.
         //       we need to do some sanitising first!
         list($appName, $modelString, $filterGroupName) = explode('_', $filterName);
-        if($modelString !== 'Model') {
+        if ($modelString !== 'Model') {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' spoofing attempt detected, affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), TRUE));
             die('go away!');
         }
@@ -276,7 +276,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             die('go away!');
         }
         
-        // at this point we are shure request is save ;-)
+        // at this point we are sure request is save ;-)
         $filterGroup->setFromArray($filterData);
         
         Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filterGroup, $tag);
@@ -499,7 +499,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'denySurveys'       => Tinebase_Core::getConfig()->denySurveys,
             'titlePostfix'      => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::PAGETITLEPOSTFIX, NULL, '')->value,
             'redirectUrl'       => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value,
-            'maxFileUploadSize' => convertToBytes(ini_get('upload_max_filesize')) / 1048576 . ' MB'
+            'maxFileUploadSize' => convertToBytes(ini_get('upload_max_filesize')),
+            'maxPostSize'       => convertToBytes(ini_get('post_max_size'))
         );
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
@@ -523,7 +524,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'stateInfo'         => Tinebase_State::getInstance()->loadStateInfo(),
                 'changepw'          => Tinebase_User::getBackendConfiguration('changepw', true),
                 'mustchangepw'      => $user->mustChangePassword(),
-                'mapPanel'          => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::MAPPANEL, NULL, TRUE)->value,
+                'mapPanel'          => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::MAPPANEL, NULL, TRUE)->value,
                 'confirmLogout'     => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),
                 'persistentFilters' => Tinebase_Frontend_Json_PersistentFilter::getAllPersistentFilters(),
             );
@@ -544,11 +545,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         if (Tinebase_Core::getUser()) { 
             $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
+			$clientConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
             
             foreach ($userApplications as $application) {
-                
                 $jsonAppName = $application->name . '_Frontend_Json';
-                
+                               
                 if (class_exists($jsonAppName)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting registry data for app ' . $application->name);
                     
@@ -556,7 +557,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     
                     $registryData[$application->name] = $applicationJson->getRegistryData();
                     $registryData[$application->name]['rights'] = Tinebase_Core::getUser()->getRights($application->name);
-                    $registryData[$application->name]['config'] = Tinebase_Config::getInstance()->getConfigForApplication($application);
+                    
+                    $registryData[$application->name]['config'] = isset($clientConfig[$application->name]) ? $clientConfig[$application->name]->toArray() : array();
                     
                     // @todo do we need this for all apps?
                     $exportDefinitions = Tinebase_ImportExportDefinition::getInstance()->getExportDefinitionsForApplication($application);
@@ -822,6 +824,28 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $appController->saveConfigSettings($recordData['settings']);
         
         return $this->getConfig($recordData['id']);
+    }
+    
+    /************************ tempFile functions ******************************/
+    
+    /**
+     * joins all given tempfiles in given order to a single new tempFile
+     * 
+     * @param array of tempfiles arrays $tempFiles
+     * @return array new tempFile
+     */
+    public function joinTempFiles($tempFilesData)
+    {
+        $tempFileRecords = new Tinebase_Record_RecordSet('Tinebase_Model_TempFile');
+        foreach($tempFilesData as $tempFileData) {
+            $record = new Tinebase_Model_TempFile(array(), TRUE);
+            $record->setFromJsonInUsersTimezone($tempFileData);
+            $tempFileRecords->addRecord($record);
+        }
+        
+        $joinedTempFile = Tinebase_TempFile::getInstance()->joinTempFiles($tempFileRecords);
+        
+        return $joinedTempFile->toArray();
     }
     
     /************************ protected functions ***************************/

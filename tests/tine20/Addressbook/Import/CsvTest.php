@@ -70,38 +70,20 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test import data
-     */
-    public function testImport()
-    {
-        $result = $this->_doImport(array('dryrun' => 1), 'adb_tine_import_csv', new Addressbook_Model_ContactFilter(array(
-            array(
-                'field'    => 'n_fileas',
-                'operator' => 'equals',
-                'value'    =>  Tinebase_Core::getUser()->accountDisplayName
-            )
-        )));
-        
-        $this->assertGreaterThan(0, $result['totalcount'], 'Didn\'t import anything.');
-        $this->assertEquals(Tinebase_Core::getUser()->accountDisplayName, $result['results']->getFirstRecord()->n_fileas, 'file as not found');
-    }
-
-    /**
      * test import duplicate data
      */
     public function testImportDuplicates()
     {
         $internalContainer = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
         $options = array(
-            'dryrun'        => 0,
             'container_id'  => $internalContainer->getId(),
-            'duplicates'    => 1,
         );
         $result = $this->_doImport($options, 'adb_tine_import_csv', new Addressbook_Model_ContactFilter(array(
             array('field' => 'container_id',    'operator' => 'equals', 'value' => $internalContainer->getId()),
         )));
         
         $this->assertGreaterThan(0, $result['duplicatecount'], 'no duplicates.');
+        $this->assertTrue($result['exceptions'] instanceof Tinebase_Record_RecordSet);
     }
     
     /**

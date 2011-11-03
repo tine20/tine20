@@ -10,6 +10,7 @@
  * @author      Yann Le Moigne <segfaultmaker@gmail.com>
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
+ * @todo        use more functionality of Tinebase_Import_Abstract (import() and other fns)
  */
 
 require_once 'vcardphp/vcard.php';
@@ -35,7 +36,6 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         'duplicateCount'    => 0,
         'createMethod'      => 'create',
         'model'             => '',
-        'duplicates'        => 0,
     	'urlIsHome'			=> 0,
     	'mapNicknameToField'=> '',
     );
@@ -131,17 +131,13 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
      * import the data
      *
      * @param  resource $_resource (if $_filename is a stream)
+     * @param  array $_clientRecordData
      * @return array with Tinebase_Record_RecordSet the imported records (if dryrun) and totalcount 
      */
-    public function import($_resource = NULL)
+    public function import($_resource = NULL, $_clientRecordData = array())
     {
-        $result = array(
-            'results'           => new Tinebase_Record_RecordSet($this->_options['model']),
-            'totalcount'        => 0,
-            'failcount'         => 0,
-            'duplicatecount'    => 0,
-        );
-
+        $this->_initImportResult();
+        
         $lines = array();
         while($line=fgets($_resource)){
         	$lines[] = str_replace("\n", "", $line);
@@ -150,7 +146,7 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         $card = new VCard();
         while ($card->parse($lines) && 
             (! $this->_options['dryrun'] 
-                || ! ($this->_options['dryrunLimit'] && $result['totalcount'] >= $this->_options['dryrunCount'])
+                || ! ($this->_options['dryrunLimit'] && $this->_importResult['totalcount'] >= $this->_options['dryrunCount'])
             )
         ) {
         	$property = $card->getProperty('N');
@@ -167,17 +163,18 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
                         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Merged data: ' . print_r($mergedData, true));
                         
                         // import record into tine!
-                        $importedRecord = $this->_importRecord($mergedData, $result);
+                        $recordToImport = $this->_createRecordToImport($mergedData);
+                        $importedRecord = $this->_importRecord($recordToImport);
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got empty record from mapping! Was: ' . print_r($recordData, TRUE));
-                        $result['failcount']++;
+                        $this->_importResult['failcount']++;
                     }
                     
                 } catch (Exception $e) {
                     // don't add incorrect record (name missing for example)
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-                    $result['failcount']++;
+                    $this->_importResult['failcount']++;
                 }
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No N property: ' . print_r($card, TRUE));
@@ -187,10 +184,10 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         }
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            . ' Import finished. (total: ' . $result['totalcount'] 
-            . ' fail: ' . $result['failcount'] . ' duplicates: ' . $result['duplicatecount']. ')');
+            . ' Import finished. (total: ' . $this->_importResult['totalcount'] 
+            . ' fail: ' . $this->_importResult['failcount'] . ' duplicates: ' . $this->_importResult['duplicatecount']. ')');
         
-        return $result;
+        return $this->_importResult;
     }
     
     /**
@@ -405,23 +402,4 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         
         return $_data;
     }
-}
-
-/**
- * Checks if needle $str is in haystack $arr but ignores case.
- * 
- * @todo move this to Helper.php
- */
-function in_array_case($arr, $str)
-{
-    if (! is_array($arr)) {
-        return false;
-    }
-    
-    foreach ($arr as $s) {
-        if (strcasecmp($str, $s) == 0) {
-            return true;
-        }
-    }
-    return false;
 }

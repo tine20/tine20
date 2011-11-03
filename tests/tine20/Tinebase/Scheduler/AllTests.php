@@ -4,7 +4,7 @@
  * 
  * @package     Scheduler
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Gökmen Ciyiltepe <g.ciyiltepe@metaways.de>
  * 
  */
@@ -14,17 +14,24 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Scheduler_AllTests::main');
-}
-
+/**
+ * Tinebase_AllTests
+ *
+ * @package     Tinebase
+ */
 class Tinebase_Scheduler_AllTests
 {
+    /**
+     * main
+     */
     public static function main ()
     {
         PHPUnit_TextUI_TestRunner::run(self::suite());
     }
     
+    /**
+     * suite
+     */
     public static function suite ()
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Scheduler All Tests');
@@ -32,9 +39,3 @@ class Tinebase_Scheduler_AllTests
         return $suite;
     }
 }
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Scheduler_AllTests::main') {
-    Scheduler_AllTests::main();
-}
-#EOF
-

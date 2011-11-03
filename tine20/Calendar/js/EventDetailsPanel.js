@@ -28,9 +28,10 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
         
         var a = [];
         attendeeStore.each(function(attender) {
-            var name = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.Calendar.AttendeeGridPanel.prototype, attender.get('user_id'), false, attender);
-            var status = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderStatus.call(Tine.Calendar.AttendeeGridPanel.prototype, attender.get('status'), {}, attender);
-            a.push(name + ' (' + status + ')');
+            var name = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.Calendar.AttendeeGridPanel.prototype, attender.get('user_id'), false, attender),
+                status = Tine.Tinebase.widgets.keyfield.Renderer.render('Calendar', 'attendeeStatus', attender.get('status')),
+                role = Tine.Tinebase.widgets.keyfield.Renderer.render('Calendar', 'attendeeRoles', attender.get('role'))
+            a.push(name + ' (' + role + ', ' + status + ')');
         });
         
         return a.join("\n");
@@ -44,10 +45,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      */
     containerRenderer: function(container) {
         var displayContainer = this.record.getDisplayContainer();
-        return this.containerTpl.apply({
-            color: Tine.Calendar.colorMgr.getColor(displayContainer).color,
-            name: Ext.util.Format.htmlEncode(displayContainer && displayContainer.name ? displayContainer.name : this.app.i18n._('Unknown calendar'))
-        });
+        return Tine.Tinebase.common.containerRenderer(displayContainer);
     },
     
     /**
@@ -246,6 +244,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                                 xtype: 'ux.displayfield',
                                 name: 'attendee',
                                 nl2br: true,
+                                htmlEncode: false,
                                 fieldLabel: this.app.i18n._('Attendee'),
                                 renderer: this.attendeeRenderer
                             }]

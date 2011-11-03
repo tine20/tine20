@@ -237,23 +237,38 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      * takes the xml stream and creates a table
      *
      * @param object $_table xml stream
+     * @param string $_appName if appname and tablename are given, we create an entry in the application table
+     * @param string $_tableName
      */
-    public function createTable(Setup_Backend_Schema_Table_Abstract  $_table)
+    public function createTable(Setup_Backend_Schema_Table_Abstract $_table, $_appName = NULL, $_tableName = NULL)
     {
         $statement = $this->getCreateStatement($_table);
         $this->execQueryVoid($statement);
+        
+        if ($_appName !== NULL && $_tableName !== NULL) {
+            Tinebase_Application::getInstance()->addApplicationTable(
+                Tinebase_Application::getInstance()->getApplicationByName($_appName), 
+                $_tableName, 
+                1
+            );
+        }
     }
     
     /**
-     * removes table from database
+     * removes table from database (and from application table if app id is given
      * 
-     * @param string tableName
+     * @param string $_tableName
+     * @param string $_applicationId
      */
-    public function dropTable($_tableName)
+    public function dropTable($_tableName, $_applicationId = NULL)
     {
     	if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Dropping table ' . $_tableName);
         $statement = "DROP TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
         $this->execQueryVoid($statement);
+        
+        if ($_applicationId !== NULL) {
+            Tinebase_Application::getInstance()->removeApplicationTable($_applicationId, $_tableName);
+        }
     }
     
     /**

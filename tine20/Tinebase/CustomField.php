@@ -178,10 +178,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             
             $filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues);
             $filter->setRequiredGrants((array)$_requiredGrant);
-            $pagination = new Tinebase_Model_Pagination(array(
-                'sort'  => 'order'
-            ));
-            $result = $this->_backendConfig->search($filter, $pagination);
+            $result = $this->_backendConfig->search($filter);
         
             if (count($result) > 0) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
@@ -244,6 +241,36 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         $this->_clearCache();
         $this->_backendConfig->delete($cfId);
         $this->_backendValue->deleteByProperty($cfId, 'customfield_id');
+    }
+    
+    /**
+     * delete custom fields for an application
+     *
+     * @param string|Tinebase_Model_Application $_applicationId
+     * @return integer numer of deleted custom fields
+     */
+    public function deleteCustomFieldsForApplication($_applicationId)
+    {
+    	$this->_clearCache();
+        $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
+ 
+        $filterValues = array(array(
+            'field'     => 'application_id', 
+            'operator'  => 'equals', 
+            'value'     => $applicationId
+        ));
+            
+      	$filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues);
+      	$filter->customfieldACLChecks(FALSE);
+        $customFields = $this->_backendConfig->search($filter);
+            
+    	$deletedCount = 0;
+        foreach ($customFields as $customField) {
+       		$this->deleteCustomField($customField);
+       		$deletedCount++;
+		}
+		
+		return $deletedCount;
     }
     
     /**
@@ -325,7 +352,20 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             $idx = $_configs->getIndexById($customField->customfield_id);
             if ($idx !== FALSE) {
                 $config = $_configs[$idx];
-                $result[$config->name] = $customField->value;
+                if (strtolower($config->definition['type']) == 'record') {
+                	try {
+	                	$modelParts = explode('.', $config->definition['recordConfig']['value']['records']); // get model parts from saved record class e.g. Tine.Admin.Model.Group
+	                	$controllerName = $modelParts[1] . '_Controller_' . $modelParts[3];	
+	                	$controller = call_user_func(array($controllerName, 'getInstance'));
+	                	$result[$config->name] = $controller->get($customField->value)->toArray();
+                	} catch (Exception $e) {
+                		if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error resolving custom field record: ' . $e->getMessage());
+                		$result[$config->name] = $customField->value;
+                	}
+                }
+                else {
+                	$result[$config->name] = $customField->value;
+                }
             }
         }
         $_record->customfields = $result;

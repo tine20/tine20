@@ -1,91 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tasks</name>
-    <version>5.0</version>
+    <version>5.2</version>
     <order>30</order>
     <depends>
         <application>Admin</application>
     </depends>
     <tables>
         <table>
-            <name>tasks_status</name>
-            <version>1</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
-                </field>
-                <field>
-                    <name>created_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>creation_time</name>
-                    <type>datetime</type>
-                </field>            
-                <field>
-                    <name>last_modified_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                </field>
-                <field>
-                    <name>last_modified_time</name>
-                    <type>datetime</type>
-                </field>
-                <field>
-                    <name>is_deleted</name>
-                    <type>boolean</type>
-                    <notnull>true</notnull>
-                    <default>false</default>
-                </field>
-                <field>
-                    <name>deleted_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                </field>            
-                <field>
-                    <name>deleted_time</name>
-                    <type>datetime</type>
-                </field>                
-                 <field>
-                    <name>status_name</name>
-                    <notnull>true</notnull>
-                    <type>text</type>
-                    <length>64</length>
-                </field>
-                 <field>
-                    <name>status_is_open</name>
-                    <type>boolean</type>
-                    <default>false</default>
-                </field>
-                <field>
-                    <name>status_icon</name>
-                    <type>text</type>
-                    <length>64</length>
-                    <notnull>false</notnull>
-                </field>
-                <index>
-                    <name>id</name>
-                    <primary>true</primary>
-                    <field>
-                        <name>id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>status_name</name>
-                    <unique>true</unique>
-                    <field>
-                        <name>status_name</name>
-                    </field>
-                </index>
-            </declaration>
-        </table>    
-        <table>
             <name>tasks</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -179,8 +103,11 @@
                     <type>integer</type>
                 </field>
                 <field>
-                    <name>status_id</name>
-                    <type>integer</type>
+                    <name>status</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <default>NEEDS-ACTION</default>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>summary</name>
@@ -219,23 +146,6 @@
                         <name>class</name>
                     </field>
                 </index>
-                <index>
-                    <name>status_id</name>
-                    <field>
-                        <name>status_id</name>
-                    </field>
-                </index>                
-                <index>
-                    <name>tasks::status_id--tasks_status::id</name>
-                    <foreign>true</foreign>
-                    <field>
-                        <name>status_id</name>
-                    </field>
-                    <reference>
-                        <table>tasks_status</table>
-                        <field>id</field>
-                    </reference>
-                </index>                  
             </declaration>
         </table>
         
@@ -280,94 +190,4 @@
         </table>
             
     </tables>
-    <defaultRecords>
-        <record>
-            <table>
-                <name>tasks_status</name>
-            </table>
-            <field>
-                <name>creation_time</name>
-                <value special="now">NOW</value>
-            </field>
-            <field>
-                <name>status_name</name>
-                <value>NEEDS-ACTION</value>
-                <!-- gettext('NEEDS-ACTION') -->
-            </field>
-            <field>
-                <name>status_is_open</name>
-                <value>1</value>
-            </field>
-            <field>
-                <name>status_icon</name>
-                <value>images/oxygen/16x16/actions/tool.png</value>
-            </field>
-        </record>
-        <record>
-            <table>
-                <name>tasks_status</name>
-            </table>
-            <field>
-                <name>creation_time</name>
-                <value special="now">NOW</value>
-            </field>
-            <field>
-                <name>status_name</name>
-                <value>COMPLETED</value>
-                <!-- gettext('COMPLETED') -->
-            </field>
-            <field>
-                <name>status_is_open</name>
-                <value>0</value>
-            </field>
-            <field>
-                <name>status_icon</name>
-                <value>images/oxygen/16x16/actions/checkmark-korganizer.png</value>
-            </field>
-        </record>
-        <record>
-            <table>
-                <name>tasks_status</name>
-            </table>
-            <field>
-                <name>creation_time</name>
-                <value special="now">NOW</value>
-            </field>
-            <field>
-                <name>status_name</name>
-                <value>IN-PROCESS</value>
-                <!-- gettext('IN-PROCESS') -->
-            </field>
-            <field>
-                <name>status_is_open</name>
-                <value>1</value>
-            </field>
-            <field>
-                <name>status_icon</name>
-                <value>images/oxygen/16x16/actions/view-refresh.png</value>
-            </field>
-        </record>
-        <record>
-            <table>
-                <name>tasks_status</name>
-            </table>
-            <field>
-                <name>creation_time</name>
-                <value special="now">NOW</value>
-            </field>
-            <field>
-                <name>status_name</name>
-                <value>CANCELLED</value>
-                <!-- gettext('CANCELLED') -->
-            </field>
-            <field>
-                <name>status_is_open</name>
-                <value>0</value>
-            </field>
-            <field>
-                <name>status_icon</name>
-                <value>images/oxygen/16x16/actions/dialog-cancel.png</value>
-            </field>
-        </record>
-    </defaultRecords>
 </application>  

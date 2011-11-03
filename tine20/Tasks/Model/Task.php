@@ -62,7 +62,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'organizer'            => array('allowEmpty' => true,        ),
         'originator_tz'        => array('allowEmpty' => true         ),
         'priority'             => array('allowEmpty' => true, 'default' => 1),
-        'status_id'            => array('allowEmpty' => true         ),
+        'status'               => array('allowEmpty' => true         ),
         'summary'              => array('presence' => 'required'     ),
         'url'                  => array('allowEmpty' => true         ),
         // ical common fields with multiple appearance
@@ -173,18 +173,18 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         
         // resolve values
         Tinebase_User::getInstance()->resolveUsers($this, 'organizer', true);
-        $status = Tasks_Controller_Status::getInstance()->getTaskStatus($this->status_id);
+        $status = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)->records->getById($this->status);
         $organizerName = ($this->organizer) ? $this->organizer->accountDisplayName : '';
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), TRUE));
         
         $text = $this->summary . "\n\n" 
-            . $translate->_('Due')          . ': ' . $dueDateString         . "\n" 
-            . $translate->_('Organizer')    . ': ' . $organizerName         . "\n" 
-            . $translate->_('Description')  . ': ' . $this->description     . "\n"
-            . $translate->_('Priority')     . ': ' . $this->priority        . "\n"
-            . $translate->_('Status')       . ': ' . $status['status_name'] . "\n"
-            . $translate->_('Percent')      . ': ' . $this->percent         . "%\n\n";
+            . $translate->_('Due')          . ': ' . $dueDateString                  . "\n" 
+            . $translate->_('Organizer')    . ': ' . $organizerName                  . "\n" 
+            . $translate->_('Description')  . ': ' . $this->description              . "\n"
+            . $translate->_('Priority')     . ': ' . $this->priority                 . "\n"
+            . $translate->_('Status')       . ': ' . $translate->_($status['value']) . "\n"
+            . $translate->_('Percent')      . ': ' . $this->percent                  . "%\n\n";
             
         // add relations (get with ignore acl)
         $relations = Tinebase_Relations::getInstance()->getRelations(get_class($this), 'Sql', $this->getId(), NULL, array('TASK'), TRUE);

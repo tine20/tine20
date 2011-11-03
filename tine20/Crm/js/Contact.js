@@ -6,6 +6,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  *
+ * TODO         use Tine.widgets.grid.LinkGridPanel
  */
  
 Ext.ns('Tine.Crm.Contact');
@@ -341,7 +342,7 @@ Tine.Crm.Contact.TypeComboBox = Ext.extend(Ext.form.ComboBox, {
         translation.textdomain('Crm');
         
         Tine.Crm.Contact.TypeComboBox.superclass.initComponent.call(this);
-        // allways set a default
+        // always set a default
         if(!this.value) {
             this.value = 'responsible';
         }

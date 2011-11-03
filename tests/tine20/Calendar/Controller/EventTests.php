@@ -82,6 +82,41 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, $currentTz);
     }
     
+    public function testUpdateAttendeeStatus()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getAttendee();
+        $event->attendee[1] = new Calendar_Model_Attender(array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'   => $this->_personasContacts['pwulf']->getId(),
+        ));
+        
+        $persistentEvent = $this->_controller->create($event);
+        
+        foreach($persistentEvent->attendee as $attender) {
+            $attender->status = Calendar_Model_Attender::STATUS_DECLINED;
+            $this->_controller->attenderStatusUpdate($persistentEvent, $attender, $attender->status_authkey);
+        }
+        
+        // update time
+        $persistentEvent->dtstart->addHour(2);
+        $persistentEvent->dtend->addHour(2);
+        $updatedEvent = $this->_controller->update($persistentEvent);
+
+        $currentUser = $updatedEvent->attendee
+            ->filter('user_type', Calendar_Model_Attender::USERTYPE_USER)
+            ->filter('user_id', Tinebase_Core::getUser()->contact_id)
+            ->getFirstRecord();
+            
+        $pwulf = $updatedEvent->attendee
+            ->filter('user_type', Calendar_Model_Attender::USERTYPE_USER)
+            ->filter('user_id', $this->_personasContacts['pwulf']->getId())
+            ->getFirstRecord();
+
+        $this->assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $currentUser->status, 'current users status must not be touched');
+        $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $pwulf->status, 'pwulfs status must be reset');
+    }
+    
     public function testUpdateMultiple()
     {
         $persistentEvent = $this->testCreateEvent();
@@ -684,7 +719,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $from = new Tinebase_DateTime('2009-03-26 00:00:00');
         $until = new Tinebase_DateTime('2009-04-03 23:59:59');
-        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($persistentEvent, $exceptions, $from, $until); // 9 days
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until); // 9 days
         
         // skip 27(exception), 31(exception), 03(until)
         $this->assertEquals(6, count($recurSet));
@@ -713,7 +748,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(2, count($persistentEvents));
                 
         $exceptions = $persistentEvents->filter('recurid', "/^{$persistentEvent->uid}-.*/", TRUE);
-        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($updatedPersistenEvent, $exceptions, $from, $until);
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($updatedPersistenEvent, $exceptions, $from, $until);
         
         // skip 31(exception), and 8 (until)
         $this->assertEquals(7, count($recurSet));
@@ -883,13 +918,14 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             ), TRUE)
         ));
         $persistentEvent = $this->_controller->create($event);
-        
+
         // assert alarm time is just before next occurence
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($persistentEvent, $exceptions, new Tinebase_DateTime());
         
         $alarmTime = clone $nextOccurance->dtstart;
         $alarmTime->subMinute(30);
+        
         $this->assertTrue($alarmTime->equals($persistentEvent->alarms->getFirstRecord()->alarm_time), 'initial alarm is not at expected time');
         
         // move whole series

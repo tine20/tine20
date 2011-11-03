@@ -12,7 +12,7 @@ TEMPDIR="$BASEDIR/temp"
 MISCPACKAGESDIR="$BASEDIR/packages/misc"
 
 RELEASE=""
-CODENAME="Neele"
+CODENAME="Milan"
 GITURL="http://git.tine20.org/git/tine20"
 GITBRANCH="master"
 PACKAGEDIR=""
@@ -41,6 +41,7 @@ function checkout()
     cd - > /dev/null
     
     mv $TEMPDIR/tine20.git/tine20 $TEMPDIR/tine20
+    mv $TEMPDIR/tine20.git/scripts/packaging/debian $TEMPDIR/debian
     rm -Rf $TEMPDIR/tine20.git
     
     echo "done"
@@ -221,7 +222,7 @@ function createSpecialArchives()
     rm -rf $TEMPDIR/allinone
     mkdir $TEMPDIR/allinone
     
-    for ARCHIVENAME in calendar tinebase crm felamimail sales tasks timetracker; do
+    for ARCHIVENAME in calendar tinebase crm felamimail filemanager projects sales tasks timetracker; do
         (cd $TEMPDIR/allinone; tar xjf ../../packages/tine20/$RELEASE/tine20-${ARCHIVENAME}_$RELEASE.tar.bz2)
     done
     

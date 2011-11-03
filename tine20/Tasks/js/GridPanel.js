@@ -79,12 +79,12 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initFilterToolbar: function() {
-        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
+        this.filterToolbar = new Tine.widgets.grid.FilterPanel({
             recordClass: this.recordClass,
             filterModels: Tine.Tasks.Task.getFilterModel(),
             defaultFilter: 'query',
             filters: [
-                {field: 'status_id', operator: 'notin', value: Tine.Tasks.status.getClosedStatus()},
+//                {field: 'status', operator: 'notin', value: Tine.Tasks.Task.getClosedStatus()},
                 {field: 'container_id', operator: 'equals', value: {path: Tine.Tinebase.container.getMyNodePath()}}
             ],
             plugins: [
@@ -151,18 +151,20 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 autoExpand: true
             })
         }, {
-            id: 'status_id',
+            id: 'status',
             header: this.app.i18n._("Status"),
             width: 45,
-            dataIndex: 'status_id',
-            renderer: Tine.Tasks.status.getStatusIcon,
-            editor: new Tine.Tasks.status.ComboBox({
-                autoExpand: true,
-                blurOnSelect: true,
-                listClass: 'x-combo-list-small'
-            }),
-            quickaddField: new Tine.Tasks.status.ComboBox({
-                autoExpand: true
+            dataIndex: 'status',
+            renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tasks', 'taskStatus'),
+            editor: {
+                xtype: 'widget-keyfieldcombo',
+                app: 'Tasks',
+                keyFieldName: 'taskStatus'
+            },
+            quickaddField: new Tine.Tinebase.widgets.keyfield.ComboBox({
+                app: 'Tasks',
+                keyFieldName: 'taskStatus',
+                value: 'NEEDS-ACTION'
             })
         }, {
             id: 'creation_time',

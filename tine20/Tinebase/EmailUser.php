@@ -107,7 +107,7 @@ class Tinebase_EmailUser
      * @param string $_configType
      * @return Tinebase_EmailUser_Abstract
      */
-    public static function getInstance($_configType = Tinebase_Model_Config::IMAP) 
+    public static function getInstance($_configType = Tinebase_Config::IMAP) 
     {
         $backendType = self::getConfiguredBackend($_configType);
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Email user backend: ' . $backendType);
@@ -183,7 +183,7 @@ class Tinebase_EmailUser
      * @return string
      * @throws Tinebase_Exception_NotFound
      */
-    public static function getConfiguredBackend($_configType = Tinebase_Model_Config::IMAP)
+    public static function getConfiguredBackend($_configType = Tinebase_Config::IMAP)
     {
         $result = '';        
         
@@ -193,7 +193,7 @@ class Tinebase_EmailUser
         if (isset($config['backend'])) {
             $backend = ucfirst(strtolower($config['backend']));
             switch ($_configType) {
-                case Tinebase_Model_Config::IMAP:
+                case Tinebase_Config::IMAP:
                     if ($backend == self::DBMAIL) {
                         $result = self::DBMAIL;
                     } else if ($backend == self::LDAP_IMAP) {
@@ -204,7 +204,7 @@ class Tinebase_EmailUser
                         $result = self::DOVECOT_IMAP;
                     } 
                     break;
-                case Tinebase_Model_Config::SMTP:
+                case Tinebase_Config::SMTP:
                     if ($backend == self::POSTFIX) {
                         $result = self::POSTFIX;
                     } else if ($backend == self::LDAP_SMTP) {

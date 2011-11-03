@@ -119,14 +119,14 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      */
     protected function _handleCompleted($_task)
     {
-        $allStatus = Tasks_Controller_Status::getInstance()->getAllStatus();
+        $allStatus = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)->records;
         
-        $statusId = $allStatus->getIndexById($_task->status_id);
+        $statusId = $allStatus->getIndexById($_task->status);
         
         if (is_int($statusId)){
             $status = $allStatus[$statusId];
             
-            if($status->status_is_open) {
+            if($status->is_open) {
                 $_task->completed = NULL;
             } elseif (! $_task->completed instanceof DateTime) {
                 $_task->completed = Tinebase_DateTime::now();
@@ -190,7 +190,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      */
     protected function _addAutomaticAlarms(Tinebase_Record_Abstract $_record)
     {
-        $automaticAlarms = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::AUTOMATICALARM, 'Tasks');
+        $automaticAlarms = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::AUTOMATICALARM, 'Tasks');
         if (count($automaticAlarms) == 0) {
             return;
         }

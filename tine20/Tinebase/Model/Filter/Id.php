@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -14,8 +14,6 @@
  * 
  * @package     Tinebase
  * @subpackage  Filter
- * 
- * @todo why don't we extend the textfilter? / what for do we need a seperate idfilter?
  * 
  * filters one or more ids
  */
@@ -38,6 +36,13 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
         'in'         => array('sqlop' => ' IN (?)'),
         'notin'      => array('sqlop' => ' NOT IN (?)'),
     );
+    
+    /**
+     * controller for record resolving
+     * 
+     * @var Tinebase_Controller_Record_Abstract
+     */
+    protected $_controller = NULL;
     
     /**
      * appends sql to given select statement
@@ -64,4 +69,67 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
              $_select->where($field . $action['sqlop'], $this->_value);
          }
      }
+     
+    /**
+     * returns array with the filter settings of this filter
+     *
+     * @param  bool $_valueToJson resolve value for json api?
+     * @return array
+     */
+    public function toArray($_valueToJson = false)
+    {
+        $result = parent::toArray($_valueToJson);
+        
+        if ($_valueToJson) {
+            if (is_array($result['value'])) {
+                foreach ($result['value'] as $key => $value) {
+                    $result['value'][$key] = $this->_resolveRecord($value);
+                }
+            } else {
+                $result['value'] = $this->_resolveRecord($result['value']);
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * get controller
+     * 
+     * @return Tinebase_Controller_Record_Abstract|NULL
+     */
+    protected function _getController()
+    {
+        if ($this->_controller === NULL) {
+            if (! isset($this->_options['modelName'])) {
+                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' No modelName defined in filter options, can not resolve record.');
+                return NULL;
+            }
+            $this->_controller = Tinebase_Core::getApplicationInstance($this->_options['modelName']);
+        }
+        
+        return $this->_controller;
+    }
+    
+    /**
+     * resolves a record
+     * 
+     * @param string $value
+     * @return array|string
+     */
+    protected function _resolveRecord($value)
+    {
+        $controller = $this->_getController();
+        if ($controller === NULL) {
+            return $value;
+        }
+        
+        try {
+            $recordArray = $controller->get($value)->toArray();
+        } catch (Exception $e) {
+            $recordArray = $value;
+        }
+        
+        return $recordArray;
+    }
 }

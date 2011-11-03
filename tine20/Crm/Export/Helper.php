@@ -37,7 +37,7 @@ class Crm_Export_Helper
     public static function getResolvedRecords()
     {
         $result = array();
-        $result['tasksStatus'] = Tasks_Controller_Status::getInstance()->getAllStatus();
+        $result['tasksStatus'] = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)->records;
         
         return $result;
     }
@@ -87,11 +87,11 @@ class Crm_Export_Helper
                 foreach ($_record->relations as $relation) {
                     // check if is task and open
                     if ($relation->type == 'TASK') {
-                        $idx = $_resolvedRecords['tasksStatus']->getIndexById($relation->related_record->status_id);
+                        $idx = $_resolvedRecords['tasksStatus']->getIndexById($relation->related_record->status);
                         if ($idx) {
                             $status = $_resolvedRecords['tasksStatus'][$idx];
                             //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($status->toArray(), TRUE)); 
-                            if ($status->status_is_open) {
+                            if ($status->is_open) {
                                 $value++;
                             }
                         }

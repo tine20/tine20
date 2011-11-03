@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>5.1</version>
+    <version>5.5</version>
     <order>10</order>
     <depends>
         <application>Admin</application>
@@ -11,7 +11,7 @@
             <name>addressbook</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>13</version>
+            <version>15</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -56,6 +56,16 @@
                     <notnull>false</notnull>
                 </field>
                 <field>
+                    <name>adr_one_lon</name>
+                    <type>float</type>
+                    <unsigned>false</unsigned>
+                </field>
+                <field>
+                    <name>adr_one_lat</name>
+                    <type>float</type>
+                    <unsigned>false</unsigned>
+                </field>
+                <field>
                     <name>adr_two_countryname</name>
                     <type>text</type>
                     <length>64</length>
@@ -90,6 +100,16 @@
                     <type>text</type>
                     <length>64</length>
                     <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>adr_two_lon</name>
+                    <type>float</type>
+                    <unsigned>false</unsigned>
+                </field>
+                <field>
+                    <name>adr_two_lat</name>
+                    <type>float</type>
+                    <unsigned>false</unsigned>
                 </field>
                 <field>
                     <name>cat_id</name>
@@ -361,16 +381,6 @@
                     <type>datetime</type>
                 </field>
                 <field>
-                    <name>lon</name>
-                    <type>float</type>
-                    <unsigned>false</unsigned>
-                </field>
-                <field>
-                    <name>lat</name>
-                    <type>float</type>
-                    <unsigned>false</unsigned>
-                </field>
-                <field>
                     <name>type</name>
                     <type>text</type>
                     <length>128</length>
@@ -422,18 +432,6 @@
                     </field>
                 </index>
                 <index>
-                    <name>org_name-n_family-n_given</name>
-                    <field>
-                        <name>n_family</name>
-                    </field>
-                    <field>
-                        <name>n_given</name>
-                    </field>
-                    <field>
-                        <name>org_name</name>
-                    </field>
-                </index>
-                <index>
                     <name>addressbook::container_id--container::id</name>
                     <field>
                         <name>container_id</name>
@@ -454,7 +452,7 @@
         </table>
         <table>
             <name>addressbook_salutations</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -470,10 +468,8 @@
                 </field>
                 <field>
                     <name>gender</name>
-                    <type>enum</type>
-                    <value>male</value>
-                    <value>female</value>
-                    <value>other</value>
+                    <type>text</type>
+                    <length>32</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -530,7 +526,7 @@
         </table>
         <table>
             <name>addressbook_lists</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -563,9 +559,8 @@
                 </field>
                 <field>
                     <name>type</name>
-                    <type>enum</type>
-                    <value>list</value>
-                    <value>group</value>
+                    <type>text</type>
+                    <length>32</length>
                     <notnull>true</notnull>
                     <default>list</default>
                 </field>

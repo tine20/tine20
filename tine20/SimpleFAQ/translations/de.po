@@ -13,110 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/FaqEditDialog.js:108 js/FaqGridPanel.js:120
-#: js/FaqGridDetailsPanel.js:157
-msgid "Question"
-msgstr "Frage"
-
-#: js/FaqEditDialog.js:109
-msgid "Enter a question..."
-msgstr "Frage eingeben"
-
-#: js/FaqEditDialog.js:115 js/FaqGridPanel.js:127
-#: js/FaqGridDetailsPanel.js:163
-msgid "Answer"
-msgstr "Antwort"
-
-#: js/FaqEditDialog.js:116
-msgid "Enter a answer..."
-msgstr "Antwort eingeben"
-
-#: js/FaqEditDialog.js:124 js/FaqGridPanel.js:114
-msgid "Type"
-msgstr "Typ"
-
-#: js/FaqEditDialog.js:136 js/FaqGridPanel.js:108
-msgid "Status"
-msgstr "Status"
-
-#: js/FaqGridPanel.js:94
-msgid "FAQ id"
-msgstr "FAQ Id"
-
-#: js/FaqGridPanel.js:101 js/FaqGridDetailsPanel.js:169
-msgid "Tags"
-msgstr "Tags"
-
-#: js/FaqType.js:26 js/FaqGridDetailsPanel.js:210 js/AdminPanel.js:97
-#: js/AdminPanel.js:132 js/FaqTypeFilterModel.js:27
-msgid "FAQ Type"
-msgid_plural "FAQ Types"
-msgstr[0] "FAQ Typ"
-msgstr[1] "FAQ Typen"
-
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr "Neuen FAQ Typ hinzufügen"
-
-#: js/FaqGridDetailsPanel.js:103 js/FaqGridDetailsPanel.js:188
-msgid "FAQ Infos"
-msgstr "FAQ  Infos"
-
-#: js/FaqGridDetailsPanel.js:195
-msgid "Creation Time"
-msgstr "Angelegt am"
-
-#: js/FaqGridDetailsPanel.js:200
-msgid "Created By"
-msgstr "Angelegt von"
-
-#: js/FaqGridDetailsPanel.js:205 js/AdminPanel.js:93 js/AdminPanel.js:125
-#: js/FaqStatusFilterModel.js:27 js/FaqStatus.js:26
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] "FAQ Status"
-msgstr[1] "FAQ Status"
-
-#: js/FaqGridDetailsPanel.js:232
-msgid "No answer yet"
-msgstr "Noch keine Antwort vorhanden"
-
-#: js/Model.js:33 js/SimpleFAQ.js:19
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] "FAQ"
-msgstr[1] "FAQs"
-
-#: js/Model.js:37
-msgid "FAQ List, "
-msgid_plural "FAQ Lists"
-msgstr[0] "FAQ Liste"
-msgstr[1] "FAQ Listen"
-
-#: js/Model.js:72
-msgid "Quick search"
-msgstr "Schnellsuche"
-
-#: js/AdminPanel.js:105
-msgid "Defaults"
-msgstr "Standardeinstellungen"
-
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr "Neuen FAQ Status hinzufügen"
-
-#: Setup/Initialize.php:35
-msgid "All FAQs of my FAQ Lists"
-msgstr "Alle FAQs meiner FAQ Listen"
-
-#: Setup/Initialize.php:42
-msgid "Last modified by me"
-msgstr "Zuletzt bearbeitet"
-
-#: Setup/Initialize.php:43
-msgid "All FAQs that I have last modified"
-msgstr "Alle FAQs die ich zuletzt bearbeitet habe"
-
 #: Controller.php:109
 #, python-format
 msgid "%s's personal FAQs"
@@ -142,6 +38,102 @@ msgstr "Intern"
 msgid "Public"
 msgstr "Öffentlich"
 
+#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqGridDetailsPanel.js:205
+#: js/FaqStatus.js:26 js/FaqStatusFilterModel.js:27
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "FAQ Status"
+msgstr[1] "FAQ Status"
+
+#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqGridDetailsPanel.js:210
+#: js/FaqType.js:26 js/FaqTypeFilterModel.js:27
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] "FAQ Typ"
+msgstr[1] "FAQ Typen"
+
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Standardeinstellungen"
+
+#: js/FaqEditDialog.js:108 js/FaqGridDetailsPanel.js:157
+#: js/FaqGridPanel.js:120
+msgid "Question"
+msgstr "Frage"
+
+#: js/FaqEditDialog.js:109
+msgid "Enter a question..."
+msgstr "Frage eingeben"
+
+#: js/FaqEditDialog.js:115 js/FaqGridDetailsPanel.js:163
+#: js/FaqGridPanel.js:127
+msgid "Answer"
+msgstr "Antwort"
+
+#: js/FaqEditDialog.js:116
+msgid "Enter a answer..."
+msgstr "Antwort eingeben"
+
+#: js/FaqEditDialog.js:124 js/FaqGridPanel.js:114
+msgid "Type"
+msgstr "Typ"
+
+#: js/FaqEditDialog.js:136 js/FaqGridPanel.js:108
+msgid "Status"
+msgstr "Status"
+
+#: js/FaqGridDetailsPanel.js:103 js/FaqGridDetailsPanel.js:188
+msgid "FAQ Infos"
+msgstr "FAQ  Infos"
+
+#: js/FaqGridDetailsPanel.js:169 js/FaqGridPanel.js:101
+msgid "Tags"
+msgstr "Tags"
+
+#: js/FaqGridDetailsPanel.js:195
+msgid "Creation Time"
+msgstr "Angelegt am"
+
+#: js/FaqGridDetailsPanel.js:200
+msgid "Created By"
+msgstr "Angelegt von"
+
+#: js/FaqGridDetailsPanel.js:232
+msgid "No answer yet"
+msgstr "Noch keine Antwort vorhanden"
+
+#: js/FaqGridPanel.js:94
+msgid "FAQ id"
+msgstr "FAQ Id"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Neuen FAQ Status hinzufügen"
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Neuen FAQ Typ hinzufügen"
+
+#: js/Model.js:33 js/SimpleFAQ.js:19
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "FAQ"
+msgstr[1] "FAQs"
+
+#: js/Model.js:37
+msgid "FAQ List"
+msgid_plural "FAQ Lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:37
+msgid "FAQ Lists"
+msgstr ""
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr "Schnellsuche"
+
 #: Preference.php:28
 msgid "All my FAQs"
 msgstr "Alle meine FAQs"
@@ -161,3 +153,20 @@ msgstr "Standard FAQ List"
 #: Preference.php:75
 msgid "The default FAQ list to create new FAQ in."
 msgstr "Die Standard FAQ Liste, in der neue FAQs angelegt werden."
+
+#: Setup/Initialize.php:33
+msgid "All FAQs of my FAQ Lists"
+msgstr "Alle FAQs meiner FAQ Listen"
+
+#: Setup/Initialize.php:40
+msgid "Last modified by me"
+msgstr "Zuletzt bearbeitet"
+
+#: Setup/Initialize.php:41
+msgid "All FAQs that I have last modified"
+msgstr "Alle FAQs die ich zuletzt bearbeitet habe"
+
+#~ msgid "FAQ List, "
+#~ msgid_plural "FAQ Lists"
+#~ msgstr[0] "FAQ Liste"
+#~ msgstr[1] "FAQ Listen"

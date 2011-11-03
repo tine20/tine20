@@ -67,7 +67,7 @@ Tine.Tasks.TaskArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'organizer' },
     { name: 'originator_tz' },
     { name: 'priority' },
-    { name: 'status_id' },
+    { name: 'status' },
     { name: 'summary' },
     { name: 'url' },
     // ical common fields with multiple appearance
@@ -127,7 +127,7 @@ Tine.Tasks.Task.getDefaultData = function() {
         'class': 'PUBLIC',
         percent: 0,
         organizer: Tine.Tinebase.registry.get('currentAccount'),
-        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainerForNewRecords()
+        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer()
     };
 };
 
@@ -147,7 +147,15 @@ Tine.Tasks.Task.getFilterModel = function() {
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Tasks.Task},
         {label: app.i18n._('Summary'),         field: 'summary' },
         {label: app.i18n._('Due Date'),        field: 'due', valueType: 'date', operators: ['within', 'before', 'after']},
-        {filtertype: 'tasks.status'},
+        {
+            label: app.i18n._('Status'),
+            field: 'status',
+            filtertype: 'tine.widget.keyfield.filter', 
+            app: app, 
+            defaultValue: Tine.Tasks.Task.getClosedStatus(), 
+            keyfieldName: 'taskStatus', 
+            defaultOperator: 'notin'
+        },
         {label: app.i18n._('Responsible'),     field: 'organizer', valueType: 'user'},
         {filtertype: 'tinebase.tag', app: app},
         {label: app.i18n._('Last modified'),   field: 'last_modified_time', valueType: 'date'},
@@ -158,10 +166,49 @@ Tine.Tasks.Task.getFilterModel = function() {
 };
 
 /**
+ * @namespace Tine.Tasks.Task
+ * 
+ * get closed status ids
+ *  
+ * @return {Array} status ids objects
+ * @static
+ */ 
+Tine.Tasks.Task.getClosedStatus = function() {
+    var reqStatus = [];
+        
+    Tine.Tinebase.widgets.keyfield.StoreMgr.get('Tasks', 'taskStatus').each(function(status) {
+        if (! status.get('is_open')) {
+            reqStatus.push(status.get('id'));
+        }
+    }, this);
+    
+    return reqStatus;
+};
+
+/**
  * default tasks backend
  */
 Tine.Tasks.JsonBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Tasks',
     modelName: 'Task',
     recordClass: Tine.Tasks.Task
+});
+
+Ext.ns('Tine.Tasks.Model');
+
+Tine.Tasks.Model.Status = Tine.Tinebase.data.Record.create([
+    { name: 'id' },
+    { name: 'value' },
+    { name: 'icon' },
+    { name: 'system' },
+    { name: 'is_open' },
+    { name: 'i18nValue' }
+], {
+    appName: 'Tasks',
+    modelName: 'Status',
+    idProperty: 'id',
+    titleProperty: 'i18nValue',
+    // ngettext('Status', 'Status', n); gettext('Status');
+    recordName: 'Status',
+    recordsName: 'Status'
 });

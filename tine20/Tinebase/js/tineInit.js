@@ -205,6 +205,8 @@ Tine.Tinebase.tineInit = {
         // todo: find a better place for stuff to do after successfull login
         Tine.Tinebase.tineInit.initAppMgr();
         
+        Tine.Tinebase.tineInit.initUploadMgr();
+        
         /** temporary Tine.onReady for smooth transition to new window handling **/
         if (typeof(Tine.onReady) === 'function') {
             Tine.Tinebase.viewport.destroy();
@@ -225,6 +227,8 @@ Tine.Tinebase.tineInit = {
         card.doLayout();
         
         //var ping = new Tine.Tinebase.sync.Ping({});
+        
+        window.initializationComplete = true;
     },
 
     initAjax: function () {
@@ -489,6 +493,8 @@ Tine.Tinebase.tineInit = {
                         }
                     }
                     
+                    Tine.Tinebase.tineInit.overrideFields();
+                    
                     Tine.Tinebase.tineInit.initList.initRegistry = true;
                 }
             });
@@ -501,8 +507,22 @@ Tine.Tinebase.tineInit = {
                 }
             }
             
+            Tine.Tinebase.tineInit.overrideFields();
+            
             Tine.Tinebase.tineInit.initList.initRegistry = true;
         }
+    },
+    
+    /**
+     * Applying registry entries to Tine classes
+     */
+    overrideFields: function () {
+    	
+    	Ext.override(Ext.ux.file.Upload, {
+            maxFileUploadSize: Tine.Tinebase.registry.get('maxFileUploadSize'),
+            maxPostSize: Tine.Tinebase.registry.get('maxPostSize')
+        });
+            	
     },
     
     /**
@@ -676,6 +696,13 @@ Tine.Tinebase.tineInit = {
     },
     
     /**
+     * initialise upload manager
+     */
+    initUploadMgr: function () {       
+        Tine.Tinebase.uploadManager = new Ext.ux.file.UploadManager();
+    },
+    
+    /**
      * config locales
      */
     initLocale: function () {
@@ -693,7 +720,8 @@ Tine.Tinebase.tineInit = {
      */
     onLangFilesLoad: function () {
     	//Ext.ux.form.DateTimeField.prototype.format = Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium');
-    }
+    }    
+    
 };
 
 Ext.onReady(function () {

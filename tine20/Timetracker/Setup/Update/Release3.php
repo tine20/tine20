@@ -29,7 +29,7 @@ class Timetracker_Setup_Update_Release3 extends Setup_Update_Abstract
      */
     public function update_1()
     {
-        // remove Tinebase_Model_Config::ODSEXPORTCONFIG
+        // remove Tinebase_Config::ODSEXPORTCONFIG
         Tinebase_Config::getInstance()->deleteConfigForApplication('odsexportconfig', 'Timetracker');
         
         // get import export definitions and save them in db

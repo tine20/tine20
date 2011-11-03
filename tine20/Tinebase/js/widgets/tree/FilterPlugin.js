@@ -94,6 +94,11 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
         var sm = this.treePanel.getSelectionModel();
         sm.clearSelections(true);
         
+        // use first OR panel in case of filterPanel
+        if (filters[0].condition == 'OR') {
+            filters = filters[0].filters[0].filters;
+        }
+        
         Ext.each(filters, function(filter) {
             if (filter.field !== this.field) {
                 return;

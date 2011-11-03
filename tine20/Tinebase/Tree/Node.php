@@ -60,8 +60,40 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             );
             
         return $select;
-    }      
-
+    }
+    
+    /**
+     * returns columns to fetch in first query and if an id/value pair is requested 
+     * 
+     * @param array|string $_cols
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
+     * @return array
+     */
+    protected function _getColumnsToFetch($_cols, Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)
+    {
+        $result = parent::_getColumnsToFetch($_cols, $_filter, $_pagination);
+        
+        // sanitize sorting fields
+        $foreignTableSortFields = array(
+            'size'               =>  'tree_filerevisions',
+            'creation_time'      =>  'tree_fileobjects',
+            'created_by'         =>  'tree_fileobjects',
+            'last_modified_time' =>  'tree_fileobjects',
+            'last_modified_by'   =>  'tree_fileobjects',
+            'type'               =>  'tree_fileobjects',
+            'contenttype'        =>  'tree_fileobjects',
+            'revision'           =>  'tree_fileobjects',
+        );
+        foreach ($foreignTableSortFields as $field => $table) {
+            if (isset($result[0][$field])) {
+                $result[0][$field] = $table . '.' . $field;
+            }
+        }
+        
+        return $result;
+    }
+    
     /**
      * return direct children of tree node
      * 
@@ -71,7 +103,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     {
         $nodeId = $_nodeId instanceof Tinebase_Model_Tree_Node ? $_nodeId->getId() : $_nodeId;
         
-        $searchFilter = new Tinebase_Model_Tree_NodeFilter(array(
+        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
             array(
                 'field'     => 'parent_id',
                 'operator'  => 'equals',
@@ -94,9 +126,15 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         return $fullPath[$fullPath->count()-1];
     }
     
+    /**
+     * get object count
+     * 
+     * @param string $_objectId
+     * @return integer
+     */
     public function getObjectCount($_objectId)
     {
-        $searchFilter = new Tinebase_Model_Tree_NodeFilter(array(
+        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
             array(
                 'field'     => 'object_id',
                 'operator'  => 'equals',

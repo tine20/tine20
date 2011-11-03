@@ -32,6 +32,7 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
      */
     private function __construct() {
         $this->_currentAccount = Tinebase_Core::getUser();
+        $this->_applicationName = 'Addressbook';
     }
     
     /**
@@ -87,7 +88,7 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
      */
     public function createPersonalFolder($_account)
     {
-        $translation = Tinebase_Translation::getTranslation('Addressbook');
+        $translation = Tinebase_Translation::getTranslation($this->_applicationName);
         
         $accountId = Tinebase_Model_User::convertUserIdToInt($_account);
         $account = Tinebase_User::getInstance()->getUserById($accountId);
@@ -95,7 +96,7 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
             'name'              => sprintf($translation->_("%s's personal addressbook"), $account->accountFullName),
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId() 
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId() 
         ));
         
         $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer, NULL, FALSE, $accountId);
@@ -134,7 +135,7 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
         
         return new Tinebase_Model_Image($imageInfo + array(
             'id'           => $_identifier,
-            'application'  => 'Addressbook',
+            'application'  => $this->_applicationName,
             'data'         => $image
         ));
     }

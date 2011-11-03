@@ -55,10 +55,10 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         // manage email user settings
-        if (Tinebase_EmailUser::manages(Tinebase_Model_Config::IMAP)) {
+        if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
             $this->_manageImapEmailUser = TRUE; 
         }
-        if (Tinebase_EmailUser::manages(Tinebase_Model_Config::SMTP)) {
+        if (Tinebase_EmailUser::manages(Tinebase_Config::SMTP)) {
             $this->_manageSmtpEmailUser = TRUE; 
         }
     }
@@ -72,12 +72,14 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getRegistryData()
     {   
         $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::SMTP);
         
         $registryData = array(
             'manageSAM'                     => $this->_manageSAM,
             'manageImapEmailUser'           => $this->_manageImapEmailUser,
             'manageSmtpEmailUser'           => $this->_manageSmtpEmailUser,
-            'smtpConfig'                    => Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP),
+            'primarydomain'                 => (array_key_exists('primarydomain', $smtpConfig))     ? $smtpConfig['primarydomain'] : '',
+            'secondarydomains'              => (array_key_exists('secondarydomains', $smtpConfig))  ? $smtpConfig['secondarydomains'] : '',
             'defaultPrimaryGroup'           => Tinebase_Group::getInstance()->getDefaultGroup()->toArray(),
             'defaultInternalAddressbook'    => ($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK] !== NULL) 
                 ? Tinebase_Container::getInstance()->get($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])->toArray() 
@@ -181,7 +183,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $result;
     }
-    
+            
     /********************************** Users *********************************/
     
     /**
@@ -1076,6 +1078,55 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_delete($ids, Admin_Controller_Container::getInstance());
     }    
+    
+    /****************************** Customfield ******************************/
+
+    /**
+     * Search for records matching given arguments
+     *
+     * @param array $filter 
+     * @param array $paging 
+     * @return array
+     */
+    public function searchCustomfields($filter, $paging)
+    {
+        $result = $this->_search($filter, $paging, Admin_Controller_Customfield::getInstance(), 'Tinebase_Model_CustomField_ConfigFilter');
+        
+        return $result;
+    }
+    
+    /**
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
+     */
+    public function getCustomfield($id)
+    {
+        return $this->_get($id, Admin_Controller_Customfield::getInstance());
+    }
+
+    /**
+     * creates/updates a record
+     *
+     * @param  array $recordData
+     * @return array created/updated record
+     */
+    public function saveCustomfield($recordData)
+    {
+        return $this->_save($recordData, Admin_Controller_Customfield::getInstance(), 'Tinebase_Model_CustomField_Config', 'id');
+    }
+    
+    /**
+     * deletes existing records
+     *
+     * @param  array  $ids 
+     * @return array
+     */
+    public function deleteCustomfields($ids)
+    {
+        return $this->_delete($ids, Admin_Controller_Customfield::getInstance());
+    }   
 
     /****************************** common ******************************/
     
@@ -1119,6 +1170,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
                 break;
             case 'Tinebase_Model_Container':
+            case 'Tinebase_Model_CustomField_Config':
                 $applications = Tinebase_Application::getInstance()->getApplications();
                 foreach ($_records as $record) {
                     $idx = $applications->getIndexById($record->application_id);

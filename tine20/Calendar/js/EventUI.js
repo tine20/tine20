@@ -235,11 +235,13 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             });
         }
         
-        var myAttenderRecord = this.event.getMyAttenderRecord();
-        if (myAttenderRecord) {
+        var myAttenderRecord = this.event.getMyAttenderRecord(),
+            myAttenderStatusRecord = myAttenderRecord ? Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus').getById(myAttenderRecord.get('status')) : null;
+            
+        if (myAttenderStatusRecord && myAttenderStatusRecord.get('system')) {
             this.statusIcons.push({
                 status: myAttenderRecord.get('status'),
-                text: Tine.Calendar.Model.Attender.getAttendeeStatusStore().getById(myAttenderRecord.get('status')).get('status_name')
+                text: myAttenderStatusRecord.get('i18nValue')
             });
         }
         
@@ -269,14 +271,14 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         var width = Math.round(offsetWidth * (this.dtEnd.getTime() - this.dtStart.getTime()) / (view.numOfDays * Date.msDAY)) -5;
         var left = Math.round(offsetWidth * (this.dtStart.getTime() - view.startDate.getTime()) / (view.numOfDays * Date.msDAY));
         
-        if (this.startColNum < 0) {
-            width = width - Math.abs(this.startColNum) * (offsetWidth/view.numOfDays);
+        if (left < 0) {
+            width = width + left;
             left = 0;
             extraCls = extraCls + ' cal-daysviewpanel-event-cropleft';
         }
         
-        if (this.endColNum > view.numOfDays) {
-            width = width - Math.abs(this.endColNum - view.numOfDays) * (offsetWidth/view.numOfDays);
+        if (left + width > offsetWidth) {
+            width = offsetWidth - left;
             extraCls = extraCls + ' cal-daysviewpanel-event-cropright';
         }
         

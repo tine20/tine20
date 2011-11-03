@@ -70,33 +70,38 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     
     //private
     initComponent: function(){
-        this.addEvents(
-            /**
-             * @event cancel
-             * Fired when user pressed cancel button
-             */
-            'cancel',
-            /**
-             * @event saveAndClose
-             * Fired when user pressed OK button
-             */
-            'saveAndClose',
-            /**
-             * @event update
-             * @desc  Fired when the record got updated
-             * @param {Json String} data data of the entry
-             */
-            'update'
-        );
-        
-        this.i18n = new Locale.Gettext();
-        this.i18n.textdomain('Tinebase');
-
-        this.initActions();
-        this.initButtons();
-        this.items = this.getItems();
-        
-        Tine.widgets.dialog.Preferences.superclass.initComponent.call(this);
+        try {
+            this.addEvents(
+                /**
+                 * @event cancel
+                 * Fired when user pressed cancel button
+                 */
+                'cancel',
+                /**
+                 * @event saveAndClose
+                 * Fired when user pressed OK button
+                 */
+                'saveAndClose',
+                /**
+                 * @event update
+                 * @desc  Fired when the record got updated
+                 * @param {Json String} data data of the entry
+                 */
+                'update'
+            );
+            
+            this.i18n = new Locale.Gettext();
+            this.i18n.textdomain('Tinebase');
+    
+            this.initActions();
+            this.initButtons();
+            this.items = this.getItems();
+            
+            Tine.widgets.dialog.Preferences.superclass.initComponent.call(this);
+        } catch (e) {
+            Tine.log.err('Tine.widgets.dialog.Preferences::initComponent');
+            Tine.log.err(e.stack ? e.stack : e);
+        }
     },
     
     /**

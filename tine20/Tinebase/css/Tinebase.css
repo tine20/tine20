@@ -123,6 +123,25 @@ html, body {
     background-image:url(../../images/oxygen/32x32/actions/dialog-ok.png) !important;
 }
 
+.action_next {
+    background-image:url(../../images/oxygen/16x16/actions/go-next.png) !important;
+}
+.x-btn-medium .action_next {
+    background-image:url(../../images/oxygen/22x22/actions/go-next.png) !important;
+}
+.x-btn-large .action_next {
+    background-image:url(../../images/oxygen/32x32/actions/go-next.png) !important;
+}
+
+.action_previous {
+    background-image:url(../../images/oxygen/16x16/actions/go-previous.png) !important;
+}
+.x-btn-medium .action_previous {
+    background-image:url(../../images/oxygen/22x22/actions/go-previous.png) !important;
+}
+.x-btn-large .action_previous {
+    background-image:url(../../images/oxygen/32x32/actions/go-previous.png) !important;
+}
 
 .action_managePermissions {
     background-image:url(../../images/oxygen/16x16/actions/password.png) !important;
@@ -366,6 +385,10 @@ html, body {
 
 .tinebase-westpanel-node-favorite img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/actions/knewstuff.png);
+}
+
+.action-tinebase-favorite {
+    background-image:url(../../images/oxygen/16x16/actions/knewstuff.png) !important;
 }
 
 /* ----- login dialog --------------------------------------------------------*/
@@ -682,6 +705,18 @@ html, body {
     background-image:url("../../library/ExtJS/resources/images/default/s.gif");
 }
 
+.tine-duplicateresolve-keepvalue {
+    color: #006600;
+}
+
+.tine-duplicateresolve-discardvalue {
+    color: #660000;
+}
+
+.tine-duplicateresolve-adoptedvalue {
+    color: #666666;
+}
+
 /******** downloads ***********/
 
 .tinebase-download-link{
@@ -695,8 +730,30 @@ span:hover.tinebase-download-link {
 
 /********* uploads ************/
 
+.x-tinebase-uploading {
+    background-image:url(../../library/ExtJS/resources/images/default/grid/wait.gif) !important;
+}
+
 .x-tinebase-uploadrow .x-grid3-cell-inner {
     background-image:url(../../library/ExtJS/resources/images/default/grid/wait.gif);
+    background-repeat: no-repeat;
+    padding-left: 19px;
+}
+
+.x-tinebase-uploadpaused .x-grid3-cell-inner {
+    background-image:url(../../images/oxygen/16x16/actions/media-playback-pause.png);
+    background-repeat: no-repeat;
+    padding-left: 19px;
+}
+
+.x-tinebase-uploading .x-grid3-cell-inner {
+    background-image:url(../../images/oxygen/16x16/actions/media-playback-start.png);
+    background-repeat: no-repeat;
+    padding-left: 19px;
+}
+
+.x-tinebase-uploadcomplete .x-grid3-cell-inner {
+    background-image:url(../../images/oxygen/16x16/actions/dialog-ok-apply.png);
     background-repeat: no-repeat;
     padding-left: 19px;
 }
@@ -724,3 +781,18 @@ span:hover.tinebase-addtocontacts-link {
 span:hover.tinebase-showheaders-link {
     color: #4444ff;
 }
+
+.tine-keyfield-icon {
+    width: 12px;
+    height: 12px;
+    vertical-align: text-bottom;
+    padding-right: 4px;
+}
+
+.x-grid .tine-keyfield-icon {
+    vertical-align: text-top;
+}
+
+/*.x-combo-list-item .tine-keyfield-icon {
+    padding-right: 4px;
+}*/

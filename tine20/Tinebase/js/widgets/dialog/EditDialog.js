@@ -81,6 +81,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     copyRecord: false,
     
     /**
+     * @cfg {Boolean} doDuplicateCheck
+     * do duplicate check when saveing record (mode remote only)
+     */
+    doDuplicateCheck: true,
+    
+    /**
      * required grant for apply/save
      * @type String
      */
@@ -124,6 +130,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
              * @event update
              * @desc  Fired when the record got updated
              * @param {Json String} data data of the entry
+             * @pram  {String} this.mode
              */
             'update',
             /**
@@ -169,6 +176,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             });
         }
         
+        // init cf plugin
+        this.plugins = this.plugins ? this.plugins : [];
+        this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
+        
         // init actions
         this.initActions();
         // init buttons and tbar
@@ -191,6 +202,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             requiredGrant: this.editGrant,
             text: (this.saveAndCloseButtonText != '') ? this.app.i18n._(this.saveAndCloseButtonText) : _('Ok'),
             minWidth: 70,
+            ref: '../btnSaveAndClose',
             scope: this,
             handler: this.onSaveAndClose,
             iconCls: 'action_saveAndClose'
@@ -382,8 +394,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             {
                 key: [10,13], // ctrl + return
                 ctrl: true,
-                fn: this.onSaveAndClose,
-                scope: this
+                scope: this,
+                fn: function() {
+                    // focus ok btn
+                    this.action_saveAndClose.items[0].focus();
+                    this.onSaveAndClose.defer(10, this);
+                }
             }
         ]);
 
@@ -468,7 +484,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                             //       closing of native windows
                             this.onRecordLoad();
                         }
-                        this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
+                        this.fireEvent('update', Ext.util.JSON.encode(this.record.data), this.mode);
                         
                         // free 0 namespace if record got created
                         this.window.rename(this.windowNamePrefix + this.record.id);
@@ -480,10 +496,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     },
                     failure: this.onRequestFailed,
                     timeout: 300000 // 5 minutes
+                }, {
+                    duplicateCheck: this.doDuplicateCheck
                 });
             } else {
                 this.onRecordLoad();
-                this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
+                this.fireEvent('update', Ext.util.JSON.encode(this.record.data), this.mode);
                 
                 // free 0 namespace if record got created
                 this.window.rename(this.windowNamePrefix + this.record.id);
@@ -532,11 +550,72 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     },
     
     /**
+     * doublicate(s) found exception handler
+     * 
+     * @param {Object} exception
+     */
+    onDuplicateException: function(exception) {
+        var resolveGridPanel = new Tine.widgets.dialog.DuplicateResolveGridPanel({
+            app: this.app,
+            store: new Tine.widgets.dialog.DuplicateResolveStore({
+                app: this.app,
+                recordClass: this.recordClass,
+                recordProxy: this.recordProxy,
+                data: {
+                    clientRecord: this.record, //exception.clientRecord,
+                    duplicates: exception.duplicates
+                }
+            }),
+            fbar: [
+                '->',
+                this.action_cancel,
+                this.action_saveAndClose
+           ]
+        });
+        
+        // intercept save handler
+        resolveGridPanel.btnSaveAndClose.setHandler(function(btn, e) {
+            var resolveStrategy = resolveGridPanel.store.resolveStrategy;
+            
+            // action discard -> close window
+            if (resolveStrategy == 'discard') {
+                return this.onCancel();
+            }
+            
+            this.record = resolveGridPanel.store.getResolvedRecord();
+            this.onRecordLoad();
+            
+            mainCardPanel.layout.setActiveItem(this.id);
+            resolveGridPanel.doLayout();
+            
+            this.doDuplicateCheck = false;
+            this.onSaveAndClose(btn, e);
+        }, this);
+        
+        // place in viewport
+        this.window.setTitle(String.format(_('Resolve Duplicate {0} Suspicion'), this.i18nRecordName));
+        var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
+        mainCardPanel.add(resolveGridPanel);
+        mainCardPanel.layout.setActiveItem(resolveGridPanel.id);
+        resolveGridPanel.doLayout();
+        
+        
+        this.loadMask.hide();
+
+        return;
+    },
+    
+    /**
      * generic request exception handler
      * 
      * @param {Object} exception
      */
     onRequestFailed: function(exception) {
+        // Duplicate record(s) found
+        if (exception.code == 629) {
+            return this.onDuplicateException.apply(this, arguments);
+        }
+        
         Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
     }
 });

@@ -50,26 +50,6 @@ msgstr "Vertragsnummer"
 msgid "Status"
 msgstr "Status"
 
-#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
-msgid "Name"
-msgstr "Name"
-
-#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
-msgid "Price"
-msgstr "Preis"
-
-#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
-msgid "Manufacturer"
-msgstr "Hersteller"
-
-#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
-msgid "Category"
-msgstr "Kategorie"
-
-#: js/ProductGridPanel.js:119
-msgid "Tags"
-msgstr "Tags"
-
 #: js/Models.js:40
 msgid "Product"
 msgid_plural "Products"
@@ -98,6 +78,26 @@ msgid_plural "contracts lists"
 msgstr[0] "Vertragsliste"
 msgstr[1] "Vertragslisten"
 
+#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
+msgid "Name"
+msgstr "Name"
+
+#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
+msgid "Price"
+msgstr "Preis"
+
+#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
+msgid "Manufacturer"
+msgstr "Hersteller"
+
+#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
+msgid "Category"
+msgstr "Kategorie"
+
+#: js/ProductGridPanel.js:119
+msgid "Tags"
+msgstr "Tags"
+
 #: js/Sales.js:53
 msgid "Products"
 msgstr "Produkte"
@@ -114,6 +114,5 @@ msgstr "Verträge"
 msgid "All Contracts"
 msgstr "Alle Verträge"
 
-#: Setup/setup.xml:243
-msgid "Shared Contracts"
-msgstr "Gemeinsame Verträge"
+#~ msgid "Shared Contracts"
+#~ msgstr "Gemeinsame Verträge"

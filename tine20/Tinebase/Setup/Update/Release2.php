@@ -156,14 +156,14 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
                 $config['imap']['ssl'] = $config['imap']['secure_connection'];
                 unset($config['imap']['secure_connection']);
             }
-            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::IMAP, Zend_Json::encode($config['imap']));
+            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::IMAP, Zend_Json::encode($config['imap']));
             unset($config['imap']);
         }
         
         // get smtp settings -> tinebase config
         if (isset($config['smtp'])) {
             $config['smtp']['active'] = 1;
-            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::SMTP, Zend_Json::encode($config['smtp']));
+            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::SMTP, Zend_Json::encode($config['smtp']));
             unset($config['smtp']);
         }
         
@@ -180,10 +180,10 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
      */    
     public function update_4()
     {
-        $rawBackendConfiguration = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::USERBACKEND, null, array())->value;
+        $rawBackendConfiguration = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::USERBACKEND, null, array())->value;
         if (substr($rawBackendConfiguration,0, 1) != '{') {
             $decodedConfig = unserialize($rawBackendConfiguration);
-            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::USERBACKEND, Zend_Json::encode($decodedConfig));
+            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::USERBACKEND, Zend_Json::encode($decodedConfig));
         }
         
         $this->setApplicationVersion('Tinebase', '2.5');

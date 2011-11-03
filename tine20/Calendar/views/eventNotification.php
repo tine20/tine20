@@ -50,6 +50,9 @@ if (array_key_exists('attendee', $this->updates)) {
                 case Calendar_Model_Attender::STATUS_NEEDSACTION:
                     echo sprintf($this->translate->_('No response from %1$s'), $attender->getName()) . "\n";
                     break;
+                default:
+                    echo sprintf($this->translate->_('"%2$s" response from %1$s'), $attender->getName(), $attender->status) . "\n";
+                    break;
             }
         }
     }
@@ -69,9 +72,10 @@ foreach($orderedFields as $field) {
 echo $this->translate->plural('Attender', 'Attendee', count($this->event->attendee)). ":\n";
         
 foreach ($this->event->attendee as $attender) {
+    $role = $this->translate->_($attender->getRoleString());
     $status = $this->translate->_($attender->getStatusString());
     
-    echo "    {$attender->getName()} ($status) \n";
+    echo "    {$attender->getName()} ($role, $status) \n";
 }
 ?>
 

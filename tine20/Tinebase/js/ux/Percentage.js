@@ -114,3 +114,93 @@ Ext.ux.PercentRenderer = function(percent) {
     
     return Ext.ux.PercentRenderer.template.apply({percent: percent});
 };
+
+/**
+ * Renders a percentage value to a percentage bar / uploadrow
+ * @constructor
+ */
+Ext.ux.PercentRendererWithName = function(value, metadata, record) {
+  
+    var metaStyle = '';
+    
+    if(record.fileRecord) {
+    	record = record.fileRecord;
+    }
+    
+    if(record.get('type') == 'folder') {
+        metadata.css = 'x-tinebase-typefolder';
+    }
+    else {
+
+        var contenttype =  record.get('contenttype');       
+        if(contenttype) {       
+        	var iconClass = contenttype.replace("/", "-");
+        	metadata.css = iconClass + '_16x16 ';
+        }
+               
+        metadata.css += 'standardFileClass_16x16';
+    }
+    
+    
+    if (!Tine.Tinebase.uploadManager.isHtml5ChunkedUpload()) {
+
+        var fileName = value;
+        if (typeof value == 'object') {
+            fileName = value.name;
+        } 
+    
+        if(record.get('status') == 'uploading') {
+            metadata.css = 'x-tinebase-uploadrow';
+        }
+        
+        return fileName;       
+    }
+    
+    if (! Ext.ux.PercentRendererWithName.template) {
+        Ext.ux.PercentRendererWithName.template = new Ext.XTemplate(
+            '<div class="x-progress-wrap PercentRenderer" style="{display}">',
+            '<div class="x-progress-inner PercentRenderer">',
+                '<div class="x-progress-bar PercentRenderer" style="width:{percent}%;{additionalStyle}">',
+                    '<div class="PercentRendererText PercentRenderer">',
+                         '{fileName}',
+                    '</div>',
+                '</div>',
+                '<div class="x-progress-text x-progress-text-back PercentRenderer">',
+                    '<div>&#160;</div>',
+                '</div>',
+            '</div>',
+        '</div>'
+        ).compile();
+    }
+    
+    if(value == undefined) {
+        return '';
+    }              
+    
+    var fileName = value;
+
+    if (typeof value == 'object') {
+        fileName = value.name;
+    }
+    
+    var percent = record.get('progress');
+
+    var additionalStyle = '';
+    if(record.get('status') == 'paused' && percent < 100) {
+        fileName = _('(paused)') + '&#160;&#160;' + fileName;
+        additionalStyle = 'background-image: url(\'styles/images/tine20/progress/progress-bg-y.gif\') !important;';
+    }
+       
+    var display = 'width:0px';
+    if(percent > -1 && percent < 100) {
+        display = '';
+        var renderedField = Ext.ux.PercentRendererWithName.template.apply({percent: percent, display: display, fileName: fileName
+        	, additionalStyle: additionalStyle}) ;
+        return renderedField;
+    }
+    else {
+        return fileName;
+    }
+    
+
+};

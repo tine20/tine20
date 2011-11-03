@@ -13,13 +13,24 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
+/**
+ * Tinebase_AllTests
+ *
+ * @package     Tinebase
+ */
 class Tinebase_AllTests
 {
+    /**
+     * main
+     */
     public static function main()
     {
         PHPUnit_TextUI_TestRunner::run(self::suite());
     }
 
+    /**
+     * suite
+     */
     public static function suite()
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Tests');
@@ -42,16 +53,19 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_TranslationTest');
         $suite->addTestSuite('Tinebase_AsyncJobTest');
         $suite->addTestSuite('Tinebase_HelperTests');
-        $suite->addTestSuite('Tinebase_Tree_AllTests');
         $suite->addTestSuite('Tinebase_FileSystem_StreamWrapperTest');
         $suite->addTestSuite('Tinebase_FileSystemTest');
         $suite->addTestSuite('Tinebase_ControllerTest');
+        $suite->addTestSuite('Tinebase_NotificationTest');
+        $suite->addTestSuite('Tinebase_Model_Filter_TextTest');
         
         $suite->addTest(Tinebase_User_AllTests::suite());
         $suite->addTest(Tinebase_Group_AllTests::suite());
         $suite->addTest(Tinebase_Timemachine_AllTests::suite());
         $suite->addTest(Tinebase_Frontend_AllTests::suite());
         $suite->addTest(Tinebase_Acl_AllTests::suite());
+        $suite->addTest(Tinebase_Tree_AllTests::suite());
+        $suite->addTest(Tinebase_Scheduler_AllTests::suite());
         
         return $suite;
     }

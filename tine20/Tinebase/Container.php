@@ -848,10 +848,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
 
         $grantsData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-
-        // @todo use _getGrantsFromArray here
         foreach($grantsData as $grantData) {
-        	
             $givenGrants = explode(',', $grantData['account_grants']);
             foreach($givenGrants as $grant) {
                 $grantData[$grant] = TRUE;
@@ -1154,7 +1151,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
         $grantsFields = array(
             'account_id'     => $_accountId,
-            'account_type'   => 'account',
+            'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
         );
         $grantsFields = array_merge($grantsFields, $grants);
         

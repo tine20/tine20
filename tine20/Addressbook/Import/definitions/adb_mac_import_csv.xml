@@ -11,6 +11,9 @@
 http://www.macupdate.com/info.php/id/9312
 with all fields enabled</description>
     <encoding>MAC-CENTRALEUROPE</encoding>
+    <extension>csv</extension>
+    <label>Contact CSV import from mac address book</label>
+    <!-- _("Contact CSV import from mac address book") -->
     <mapping>
         <field>
             <source>Vorname</source>

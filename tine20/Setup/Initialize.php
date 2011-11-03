@@ -29,6 +29,7 @@ class Setup_Initialize
     	$applicationName = $_application->name;
     	$classname = "{$applicationName}_Setup_Initialize"; 	
     	$instance = new $classname;
+    	
     	$instance->_initialize($_application, $_options);
     }
     
@@ -57,7 +58,15 @@ class Setup_Initialize
     protected function _initialize(Tinebase_Model_Application $_application, $_options = null)
     {
         $this->_createInitialRights($_application);
-        $this->_initializeFavorites();
+        
+        $reflectionClass = new ReflectionClass($this);
+        $methods = $reflectionClass->getMethods();
+        foreach ($methods as $method) {
+        	$methodName = $method->name;
+            if (preg_match('/^_initialize.+/', $methodName)) {
+                $this->$methodName($_application, $_options);
+            }
+        }
     }
     
     /**
@@ -101,10 +110,4 @@ class Setup_Initialize
 		}
     }
     
-    /**
-     * init favorites
-     */
-    protected function _initializeFavorites()
-    {
-    }
 }

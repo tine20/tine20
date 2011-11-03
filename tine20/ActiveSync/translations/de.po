@@ -55,14 +55,6 @@ msgstr[1] "Geräte"
 msgid "Devices"
 msgstr "Geräte"
 
-#: Setup/setup.xml:473
-msgid "Default Policy"
-msgstr "Standard Policy"
-
-#: Setup/setup.xml:478
-msgid "Default Policy installed during setup"
-msgstr "Standard Policy aus dem Setup Prozess"
-
 #: Preference.php:74
 msgid "Default Addressbook"
 msgstr "Standard-Adressbuch"
@@ -86,3 +78,11 @@ msgstr "Standard-Aufgabenliste"
 #: Preference.php:83
 msgid "The default task list to create new tasks in."
 msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
+
+#: Setup/setup.xml:473
+msgid "Default Policy"
+msgstr "Standard Policy"
+
+#: Setup/setup.xml:478
+msgid "Default Policy installed during setup"
+msgstr "Standard Policy aus dem Setup Prozess"

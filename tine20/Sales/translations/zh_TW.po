@@ -51,26 +51,6 @@ msgstr "合約編號"
 msgid "Status"
 msgstr "狀態"
 
-#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
-msgid "Name"
-msgstr ""
-
-#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
-msgid "Price"
-msgstr ""
-
-#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
-msgid "Manufacturer"
-msgstr ""
-
-#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
-msgid "Category"
-msgstr ""
-
-#: js/ProductGridPanel.js:119
-msgid "Tags"
-msgstr ""
-
 #: js/Models.js:40
 msgid "Product"
 msgid_plural "Products"
@@ -96,6 +76,26 @@ msgid "contracts list"
 msgid_plural "contracts lists"
 msgstr[0] "合約清單"
 
+#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
+msgid "Name"
+msgstr ""
+
+#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
+msgid "Price"
+msgstr ""
+
+#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
+msgid "Manufacturer"
+msgstr ""
+
+#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
+msgid "Category"
+msgstr ""
+
+#: js/ProductGridPanel.js:119
+msgid "Tags"
+msgstr ""
+
 #: js/Sales.js:53
 msgid "Products"
 msgstr ""
@@ -113,6 +113,5 @@ msgstr "合約"
 msgid "All Contracts"
 msgstr "合約"
 
-#: Setup/setup.xml:243
-msgid "Shared Contracts"
-msgstr "已分享的合約"
+#~ msgid "Shared Contracts"
+#~ msgstr "已分享的合約"

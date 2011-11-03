@@ -189,7 +189,7 @@ Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.Laye
                     xtype: this.xtype,
                     boxLabel: record.get(this.labelField),
                     name: record.get('id')
-                    //icon: record.get('status_icon'),
+                    //icon: record.get('icon'),
                 });
             }, this);
         }

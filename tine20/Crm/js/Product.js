@@ -6,6 +6,7 @@
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
+ * TODO         use Tine.widgets.grid.LinkGridPanel
  */
  
 Ext.ns('Tine.Crm.Product');

@@ -13,6 +13,7 @@
  * Tinebase_Model_Filter_Id
  * 
  * @package     Addressbook
+ * @subpackage  Filter
  * 
  * filters one or more ids
  */
@@ -40,46 +41,19 @@ class Addressbook_Model_ContactIdFilter extends Tinebase_Model_Filter_Id
     }
     
     /**
-     * returns array with the filter settings of this filter
-     *
-     * @param  bool $_valueToJson resolve value for json api?
-     * @return array
-     */
-    public function toArray($_valueToJson = false)
-    {
-        $result = parent::toArray($_valueToJson);
-        
-        if ($_valueToJson) {
-            if (is_array($result['value'])) {
-                foreach ($result['value'] as $key => $value) {
-                    $result['value'][$key] = $this->_resolveContact($value);
-                }
-            } else {
-                $result['value'] = $this->_resolveContact($result['value']);
-            }
-        }
-        
-        return $result;
-    }
-    
-    /**
-     * resolves a contact
+     * resolves a record
      * 
      * @param string $value
-     * @return array
+     * @return array|string
      */
-    protected function _resolveContact($value)
+    protected function _resolveRecord($value)
     {
-            if ($value === Addressbook_Model_Contact::CURRENTCONTACT) {
-                $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId(), TRUE)->toArray();
-            } else {
-                try {
-                    $contact = Addressbook_Controller_Contact::getInstance()->get($value)->toArray();
-                } catch (Exception $e) {
-                    $contact = $value;
-                }
-            }
-            
-            return $contact;
+        if ($value === Addressbook_Model_Contact::CURRENTCONTACT) {
+            $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId(), TRUE)->toArray();
+        } else {
+            $contact = parent::_resolveRecord($value);
+        }
+        
+        return $contact;
     }
 }

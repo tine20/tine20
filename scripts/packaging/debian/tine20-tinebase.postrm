@@ -67,11 +67,9 @@ if [ "$1" = "purge" ]; then
     
 fi
 
-# Automatically added by dh_installdebconf
-if [ "$1" = purge ] && [ -e /usr/share/debconf/confmodule ]; then
+if [ "$1" = "purge" ] && [ -e /usr/share/debconf/confmodule ]; then
 	. /usr/share/debconf/confmodule
 	db_purge
 fi
-# End automatically added section
 
 #DEBHELPER#

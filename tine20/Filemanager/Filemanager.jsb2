@@ -12,7 +12,31 @@
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "Application.js",
+          "text": "GridContextMenu.js",
+          "path": "js/"
+        },
+        {
+          "text": "Model.js",
+          "path": "js/"
+        },
+        {
+          "text": "PathFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "PathFilterPlugin.js",
+          "path": "js/"
+        },
+        {
+          "text": "TreePanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "GridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "Filemanager.js",
           "path": "js/"
         }
       ]

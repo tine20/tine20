@@ -27,7 +27,7 @@ class Crm_Setup_Update_Release2 extends Setup_Update_Abstract
                 'leadsource_id' => (isset($config->crm->defaultsource)) ? Tinebase_Core::getConfig()->crm->defaultsource    : 1,    	    
     	    );
     	    
-    	    Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::APPDEFAULTS, Zend_Json::encode($defaults), 'Crm');
+    	    Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::APPDEFAULTS, Zend_Json::encode($defaults), 'Crm');
     	}
     	
     	$this->setApplicationVersion('Crm', '2.1');

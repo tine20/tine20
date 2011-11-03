@@ -6,11 +6,203 @@ msgstr ""
 msgid "Create new shared folders"
 msgstr ""
 
-#: js/Application.js:29
-msgid "Filemanager"
+#: Controller/Node.php:163
+msgid "My folders"
+msgstr ""
+
+#: Controller/Node.php:170
+msgid "Shared folders"
+msgstr ""
+
+#: Controller/Node.php:177
+msgid "Other users folders"
 msgstr ""
 
 #: Controller.php:95
 #, python-format
 msgid "%s's personal files"
+msgstr ""
+
+#: js/Filemanager.js:29
+msgid "Filemanager"
+msgstr ""
+
+#: js/Filemanager.js:70
+msgid "Files already exists"
+msgstr ""
+
+#: js/Filemanager.js:71
+msgid "Do you want to replace the files?"
+msgstr ""
+
+#: js/Filemanager.js:92
+msgid "Failure on create folder"
+msgstr ""
+
+#: js/Filemanager.js:93
+msgid "Item with this name already exists!"
+msgstr ""
+
+#: js/GridContextMenu.js:36 js/GridPanel.js:470
+msgid "Please enter the new name of the {0}:"
+msgstr ""
+
+#: js/GridContextMenu.js:42 js/GridPanel.js:476
+msgid "Not renamed {0}"
+msgstr ""
+
+#: js/GridContextMenu.js:42 js/GridPanel.js:476 js/GridPanel.js:536
+msgid "You have to supply a {0} name!"
+msgstr ""
+
+#: js/GridContextMenu.js:45 js/GridContextMenu.js:135 js/GridPanel.js:479
+#: js/GridPanel.js:539 js/GridPanel.js:581 js/Model.js:270
+msgid "Please wait"
+msgstr ""
+
+#: js/GridContextMenu.js:45 js/GridPanel.js:479
+msgid "Updating {0} \"{1}\""
+msgstr ""
+
+#: js/GridContextMenu.js:133 js/GridPanel.js:578
+msgid "Confirm"
+msgstr ""
+
+#: js/GridContextMenu.js:133 js/GridPanel.js:578
+msgid "Do you really want to delete \"{0}\"?"
+msgstr ""
+
+#: js/GridContextMenu.js:135
+msgid "Deleting {0} \"{1}\""
+msgstr ""
+
+#: js/GridPanel.js:124
+msgid "Name"
+msgstr ""
+
+#: js/GridPanel.js:131
+msgid "Size"
+msgstr ""
+
+#: js/GridPanel.js:138 js/Model.js:479
+msgid "Contenttype"
+msgstr ""
+
+#: js/GridPanel.js:146
+msgid "Folder"
+msgstr ""
+
+#: js/GridPanel.js:155
+msgid "Revision"
+msgstr ""
+
+#: js/GridPanel.js:170 js/Model.js:480
+msgid "Creation Time"
+msgstr ""
+
+#: js/GridPanel.js:178
+msgid "Created By"
+msgstr ""
+
+#: js/GridPanel.js:185
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/GridPanel.js:192
+msgid "Last Modified By"
+msgstr ""
+
+#: js/GridPanel.js:226
+msgid "Show closed"
+msgstr ""
+
+#: js/GridPanel.js:249
+msgid "Upload"
+msgstr ""
+
+#: js/GridPanel.js:275
+msgid "Create Folder"
+msgstr ""
+
+#: js/GridPanel.js:286
+msgid "Folder Up"
+msgstr ""
+
+#: js/GridPanel.js:297
+msgid "Save locally"
+msgstr ""
+
+#: js/GridPanel.js:308 js/GridPanel.js:309 js/GridPanel.js:311
+msgid "Delete"
+msgstr ""
+
+#: js/GridPanel.js:321 js/GridPanel.js:322 js/GridPanel.js:324
+msgid "Rename"
+msgstr ""
+
+#: js/GridPanel.js:332
+msgid "Pause upload"
+msgstr ""
+
+#: js/GridPanel.js:339
+msgid "Resume upload"
+msgstr ""
+
+#: js/GridPanel.js:462 js/GridPanel.js:529 js/Model.js:481
+msgid "user file folder"
+msgstr ""
+
+#: js/GridPanel.js:531
+msgid "New {0}"
+msgstr ""
+
+#: js/GridPanel.js:531
+msgid "Please enter the name of the new {0}:"
+msgstr ""
+
+#: js/GridPanel.js:536
+msgid "No {0} added"
+msgstr ""
+
+#: js/GridPanel.js:539
+msgid "Creating {0}..."
+msgstr ""
+
+#: js/GridPanel.js:581
+msgid "Deleting {0} "
+msgstr ""
+
+#: js/GridPanel.js:665 js/GridPanel.js:810 js/TreePanel.js:626
+#: js/TreePanel.js:647
+msgid "Upload Failed"
+msgstr ""
+
+#: js/GridPanel.js:666 js/TreePanel.js:627
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr ""
+
+#: js/GridPanel.js:811 js/TreePanel.js:648
+msgid "Dropping on this folder not allowed!"
+msgstr ""
+
+#: js/Model.js:248 js/Model.js:264
+msgid "Copying data .. {0}"
+msgstr ""
+
+#: js/Model.js:251 js/Model.js:266
+msgid "Moving data .. {0}"
+msgstr ""
+
+#: js/Model.js:477
+msgid "Quick search"
+msgstr ""
+
+#: js/Model.js:478
+msgid "Type"
+msgstr ""
+
+#: js/PathFilterModel.js:59
+msgid "path"
 msgstr ""

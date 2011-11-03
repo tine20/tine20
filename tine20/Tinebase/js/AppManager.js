@@ -49,7 +49,13 @@ Tine.Tinebase.AppManager = function() {
          * fired when an application gets deactivated
          * @param {Tine.Aplication} deactivated app
          */
-        'deactivate'
+        'deactivate',
+        /**
+         * @event windowopenexception
+         * windowopenexceptionated 
+         * @param {} Exception
+         */
+        'windowopenexception'
     );
     
     
@@ -134,6 +140,9 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
      * @return {Tine.Application}
      */
     get: function(appName) {
+        if (Ext.isObject(appName) && appName.hasOwnProperty('appName')) {
+            appName = appName.appName;
+        }
         if (! this.isEnabled(appName)) {
             return false;
         }

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ExampleApplication\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-27 17:25+0100\n"
+"PO-Revision-Date: 2011-09-08 20:40+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -13,37 +13,49 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/ExampleApplication.js:25
-msgid "Example Application"
-msgstr "Przykładowa aplikacja"
+#: Config.php:31
+msgid "Status Available"
+msgstr "Dostępny status"
 
-#: js/ExampleRecordGridPanel.js:74
-msgid "Quick search"
-msgstr "Szybkie wyszukiwanie"
+#: Config.php:33
+msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
+msgstr "Możliwy status. Zauważ proszę, że dodatkowy status może wpływać w innych przykładowych aplikacjach na eksport albo synchronizację."
 
-#: js/ExampleRecordGridPanel.js:102 js/ExampleRecordEditDialog.js:104
-msgid "Name"
-msgstr "Nazwa"
+#: Controller.php:74
+#, python-format
+msgid "%s's personal example records"
+msgstr "%s przykładowe, osobiste wiersze"
 
-#: js/ExampleRecordGridPanel.js:108
-msgid "Title"
-msgstr "Tytuł"
-
-#: js/ExampleRecordGridPanel.js:114
-msgid "Status"
-msgstr "Status"
-
-#: js/ExampleRecordGridPanel.js:121
-msgid "Budget"
-msgstr "Budżet"
-
-#: js/ExampleRecordGridPanel.js:145
-msgid "Show closed"
-msgstr "Pokaż zakończone"
+#: js/ExampleApplication.js:24
+msgid "Example Application test"
+msgstr "Test przykładowej aplikacji"
 
 #: js/ExampleRecordEditDialog.js:87
 msgid "ExampleRecord"
 msgstr "Przykładowy wiersz"
+
+#: js/ExampleRecordEditDialog.js:104
+#: js/ExampleRecordGridPanel.js:83
+msgid "Name"
+msgstr "Nazwa"
+
+#: js/ExampleRecordEditDialog.js:110
+#: js/ExampleRecordGridPanel.js:89
+#: js/Model.js:71
+msgid "Status"
+msgstr "Status"
+
+#: js/ExampleRecordGridPanel.js:96
+msgid "Title"
+msgstr "Tytuł"
+
+#: js/ExampleRecordGridPanel.js:102
+msgid "Budget"
+msgstr "Budżet"
+
+#: js/ExampleRecordGridPanel.js:126
+msgid "Show closed"
+msgstr "Pokaż zakończone"
 
 #: js/Model.js:31
 msgid "example record"
@@ -59,14 +71,45 @@ msgstr[0] "Lista przykładowych wierszy"
 msgstr[1] "listy przykładowych wierszy"
 msgstr[2] "listy przykładowych wierszy"
 
-#: Setup/setup.xml:10
+#: js/Model.js:69
+#: js/Model.js:106
+msgid "Quick search"
+msgstr "Szybkie wyszukiwanie"
+
+#: js/Model.js:79
+msgid "Last modified"
+msgstr "Ostatnio modyfikowane"
+
+#: js/Model.js:80
+msgid "Last modifier"
+msgstr "Ostatnio modyfikował/a"
+
+#: js/Model.js:81
+msgid "Creation Time"
+msgstr "Czas utworzenia"
+
+#: js/Model.js:82
+msgid "Creator"
+msgstr "Autor"
+
+#: Setup/Initialize.php:33
+msgid "Completed"
+msgstr "Zakończone"
+
+#: Setup/Initialize.php:34
+msgid "Cancelled"
+msgstr "Anulowane"
+
+#: Setup/Initialize.php:35
+msgid "In process"
+msgstr "W opracowaniu"
+
+#: Setup/setup.xml:4
 msgid "ExampleApplication"
 msgstr "Przykładowa aplikacja"
 
-#: Controller.php:96
-#, python-format
-msgid "%s's personal example records"
-msgstr "%s przykładowe, osobiste wiersze"
+#~ msgid "Example Application"
+#~ msgstr "Przykładowa aplikacja"
 
 #~ msgid "ExampleRecords"
 #~ msgstr "Przykładowe wiersze"
@@ -78,6 +121,7 @@ msgstr "%s przykładowe, osobiste wiersze"
 #~ msgstr "Opis"
 
 #~ msgid "record list"
+
 #~ msgid_plural "record lists"
 #~ msgstr[0] "lista aplikacji"
 #~ msgstr[1] "listy aplikacji"

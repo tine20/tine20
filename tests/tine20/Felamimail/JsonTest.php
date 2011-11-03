@@ -76,6 +76,13 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      * @var boolean
      */
     protected $_oldSieveVacationActiveState = FALSE;
+    
+    /**
+     * old sieve data
+     * 
+     * @var Felamimail_Sieve_Backend_Sql
+     */
+    protected $_oldSieveData = NULL;
 
     /**
      * sieve script name to delete
@@ -119,6 +126,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // get (or create) test accout
         $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         $this->_oldSieveVacationActiveState = $this->_account->sieve_vacation_active;
+        try {
+            $this->_oldSieveData = new Felamimail_Sieve_Backend_Sql($this->_account);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // do nothing
+        }
         
         $this->_json = new Felamimail_Frontend_Json();
         $this->_imap = Felamimail_Backend_ImapFactory::factory($this->_account);
@@ -179,6 +191,10 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
                 // do not delete script if active
             }            
             Felamimail_Controller_Account::getInstance()->setVacationActive($this->_account, $this->_oldSieveVacationActiveState);
+            
+            if ($this->_oldSieveData !== NULL) {
+                $this->_oldSieveData->save();
+            }
         }
         if ($this->_oldActiveSieveScriptName !== NULL) {
             Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_oldActiveSieveScriptName);
@@ -404,7 +420,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $contactIds = Addressbook_Controller_Contact::getInstance()->search($contactFilter, NULL, FALSE, TRUE);
         $contact = Addressbook_Controller_Contact::getInstance()->get($contactIds[0]);
         $contact->email = $this->_account->email;
-        $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
+        $contact = Addressbook_Controller_Contact::getInstance()->update($contact, FALSE);
 
         // send email
         $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain);
@@ -461,7 +477,26 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Felamimail_Exception_IMAPMessageNotFound');
         $message = $this->_json->getMessage($message['id']);
     }
-
+    
+    /**
+     * try to get a message as plain/text
+     */
+    public function testGetPlainTextMessage()
+    {
+        $accountBackend = new Felamimail_Backend_Account();
+        $message = $this->_sendMessage();     
+        
+        // get complete message
+        $this->_account->display_format = Felamimail_Model_Account::DISPLAY_PLAIN;
+        $accountBackend->update($this->_account);
+        $message = $this->_json->getMessage($message['id']);
+        $this->_account->display_format = Felamimail_Model_Account::DISPLAY_HTML;
+        $accountBackend->update($this->_account);
+        
+        // check
+        $this->assertEquals("aaaaaä \n\r\n", $message['body']);
+    }
+    
     /**
      * try search for a message with path filter
      */
@@ -519,6 +554,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(0, $result['totalcount']);
         $accountFilterFound = FALSE;
+        
         foreach ($result['filter'] as $filter) {
             if ($filter['field'] === 'account_id' && empty($filter['value'])) {
                 $accountFilterFound = TRUE;
@@ -712,7 +748,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'account_id'    => $this->_account->getId(),
             'subject'       => $fwdSubject,
             'to'            => array('unittest@' . $this->_mailDomain),
-            'body'          => 'aaaaaä <br>',
+            'body'          => "aaaaaä <br>",
             'headers'       => array('X-Tine20TestMessage' => 'jsontest'),
             'original_id'   => $message['id'],
             'attachments'   => array(new Tinebase_Model_TempFile(array(
@@ -762,7 +798,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'from'                  => $this->_account->from . ' <' . $this->_account->email . '>',
             'days'                  => 7,
             'enabled'               => TRUE,
-            'reason'                => 'unittest vacation message',
+            'reason'                => 'unittest vacation message<br /><br />signature',
             'mime'                  => '',
         );
         
@@ -782,7 +818,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
         if (preg_match('/dbmail/i', $sieveBackend->getImplementation())) {
             $translate = Tinebase_Translation::getTranslation('Felamimail');
-            $vacationData['subject'] = $translate->_('Out of Office reply');
+            $vacationData['subject'] = sprintf($translate->_('Out of Office reply from %1$s'), Tinebase_Core::getUser()->accountFullName);
         }
         
         $this->assertEquals($vacationData, $result);
@@ -799,7 +835,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'from'                  => $this->_account->from . ' <' . $this->_account->email . '>',
             'days'                  => 7,
             'enabled'               => TRUE,
-            'reason'                => "\n<html><body><h1>unittest vacation message</h1></body></html>",
+            'reason'                => "\n<html><body><h1>unittest vacation&nbsp;message</h1></body></html>",
             'mime'                  => NULL,
         );
         
@@ -808,7 +844,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             $vacationData['mime'] = 'text/html';
         }
         
-        $this->_sieveTestHelper($vacationData);
+        $this->_sieveTestHelper($vacationData, TRUE);
     }
     
     /**
@@ -934,6 +970,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'body'          => 'aaaaaä <br>',
             'headers'       => array('X-Tine20TestMessage' => 'jsontest'),
             'from_email'    => $_emailFrom,
+            'content_type'  => Felamimail_Model_Message::CONTENT_TYPE_HTML,
         );
     }
 
@@ -1027,7 +1064,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      * 
      * @param array $_sieveData
      */
-    protected function _sieveTestHelper($_sieveData)
+    protected function _sieveTestHelper($_sieveData, $_isMime = FALSE)
     {
         $this->_oldActiveSieveScriptName = Felamimail_Controller_Sieve::getInstance()->getActiveScriptName($this->_account->getId());
         
@@ -1041,17 +1078,22 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($this->_account->email, $resultSet['addresses'][0]);
             
             $_sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
-            if (! in_array('mime', $_sieveBackend->capability())) {
-                $_sieveData['reason'] = 'unittest vacation message';
-            }
             
             if (preg_match('/dbmail/i', $_sieveBackend->getImplementation())) {
                 $translate = Tinebase_Translation::getTranslation('Felamimail');
-                $this->assertEquals($translate->_('Out of Office reply'), $resultSet['subject']);
+                $this->assertEquals(sprintf(
+                    $translate->_('Out of Office reply from %1$s'), Tinebase_Core::getUser()->accountFullName), 
+                    $resultSet['subject']
+                );
             } else {
                 $this->assertEquals($_sieveData['subject'], $resultSet['subject']);
             }
-            $this->assertContains($_sieveData['reason'], $resultSet['reason']);
+            
+            if ($_isMime) {
+                $this->assertEquals(html_entity_decode('unittest vacation&nbsp;message', ENT_NOQUOTES, 'UTF-8'), $resultSet['reason']);
+            } else {
+                $this->assertEquals($_sieveData['reason'], $resultSet['reason']);
+            }
             
         } else if (array_key_exists('action_type', $_sieveData[0])) {
             $resultSet = $this->_json->saveRules($this->_account->getId(), $_sieveData);

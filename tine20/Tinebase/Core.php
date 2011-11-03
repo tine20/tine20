@@ -113,13 +113,29 @@ class Tinebase_Core
      *
      */
     const PDO_MYSQL = 'Pdo_Mysql';
+    
+    /**
+     * minimal version of MySQL supported
+     */
+    const MYSQL_MINIMAL_VERSION = '5.0.0';
+
+    /**
+     * const PDO_PGSQL
+     *
+     */
+    const PDO_PGSQL = 'Pdo_Pgsql';
+    
+    /**
+     * minimal version of PostgreSQL supported
+     */
+    const PGSQL_MINIMAL_VERSION = '8.4.8';
 
     /**
      * const PDO_OCI
      *
      */
     const PDO_OCI = 'Pdo_Oci';
-
+    
     /**
      * const ORACLE
      * Zend_Db adapter name for the oci8 driver.
@@ -229,20 +245,28 @@ class Tinebase_Core
     /**
      * returns an instance of the controller of an application
      *
-     * @param   string $_applicationName
+     * @param   string $_applicationName appname / modelname
      * @param   string $_modelName
      * @return  Tinebase_Controller_Abstract|Tinebase_Controller_Record_Abstract the controller of the application
      * @throws  Tinebase_Exception_NotFound
-     *
-     * @todo    we should use model name here consistent to other params/vars with the same name (i.e. it should have the format App_Model_Record)
+     * 
+     * @todo    make getApplicationInstance work for Tinebase records (Tinebase_Model_User for example)
      */
-    public static function getApplicationInstance($_applicationName, $_modelName = '')
+    public static function getApplicationInstance($_applicationName, $_modelName = '', $_ignoreACL = FALSE)
     {
-        $controllerName = ucfirst((string) $_applicationName) . '_Controller';
+        if (strpos($_applicationName, '_')) {
+            // got (complete) model name name as first param
+            list($appName, $i, $modelName) = explode('_', $_applicationName, 3);
+        } else {
+            $appName = $_applicationName;
+            $modelName = $_modelName;
+        }
+        
+        $controllerName = ucfirst((string) $appName) . '_Controller';
 
         // check for model controller
-        if (!empty($_modelName)) {
-            $modelName = preg_replace('/^' . $_applicationName . '_' . 'Model_/', '', $_modelName);
+        if (!empty($modelName)) {
+            $modelName = preg_replace('/^' . $appName . '_' . 'Model_/', '', $modelName);
 
             $controllerNameModel = $controllerName . '_' . $modelName;
             if (! class_exists($controllerNameModel)) {
@@ -254,12 +278,14 @@ class Tinebase_Core
             } else {
                 $controllerName = $controllerNameModel;
             }
-        } else {
-            if (!@class_exists($controllerName)) {
-                throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerName . ')!');
-            }
+        } else if (!@class_exists($controllerName)) {
+            throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerName . ')!');
         }
 
+        if (! $_ignoreACL && is_object(Tinebase_Core::getUser()) && ! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN)) {
+            throw new Tinebase_Exception_AccessDenied('No right to access application ' . $appName);
+        }
+        
         $controller = call_user_func(array($controllerName, 'getInstance'));
 
         return $controller;
@@ -274,8 +300,6 @@ class Tinebase_Core
     {
         Tinebase_Core::setupConfig();
         
-        Tinebase_Core::setupTempDir();
-        
         // Server Timezone must be setup before logger, as logger has timehandling!
         Tinebase_Core::setupServerTimezone();
         
@@ -283,6 +307,8 @@ class Tinebase_Core
         
         // Database Connection must be setup before cache because setupCache uses constant "SQL_TABLE_PREFIX" 
         Tinebase_Core::setupDatabaseConnection();
+        
+        Tinebase_Core::setupTempDir();
         
         Tinebase_Core::setupStreamWrapper();
         
@@ -298,7 +324,7 @@ class Tinebase_Core
         Tinebase_Core::set('locale', new Zend_Locale('en_US'));
         Tinebase_Core::set('userTimeZone', 'UTC');
         
-        Tinebase_Core::setupMailer();
+//        Tinebase_Core::setupMailer();
         
         Tinebase_Core::setupUserCredentialCache();
         
@@ -367,14 +393,7 @@ class Tinebase_Core
      */
     public static function setupConfig()
     {
-        $configData = include('config.inc.php');
-        if($configData === false) {
-            die ('central configuration file config.inc.php not found in includepath: ' . get_include_path());
-        }
-
-        $config = new Zend_Config($configData);
-
-        self::set(self::CONFIG, $config);
+        self::set(self::CONFIG, Tinebase_Config::getInstance());
     }
 
     /**
@@ -397,8 +416,8 @@ class Tinebase_Core
     {
         $config = self::getConfig();
 
-        $tmpdir = $config->get('tmpdir', null);
-        if (empty($tmpdir) || !@is_writable($tmpdir)) {
+        $tmpdir = $config->tmpdir;
+        if ($tmpdir == Tinebase_Model_Config::NOTSET || !@is_writable($tmpdir)) {
             $tmpdir = sys_get_temp_dir();
             if (empty($tmpdir) || !@is_writable($tmpdir)) {
                 $tmpdir = session_save_path();
@@ -767,15 +786,30 @@ class Tinebase_Core
                         self::getLogger()->warn('Failed to set "SET SQL_MODE to STRICT_ALL_TABLES or timezone: ' . $e->getMessage());
                     }
                     break;
+                    
                 case self::PDO_OCI:
                     $db = Zend_Db::factory('Pdo_Oci', $dbConfigArray);
                     break;
+                    
                 case self::ORACLE:
                     $db = Zend_Db::factory(self::ORACLE, $dbConfigArray);
                     $db->supportPositionalParameters(true);
                     $db->setLobAsString(true);
                     break;
-
+                    
+                case self::PDO_PGSQL:
+                    unset($dbConfigArray['adapter']);
+                    unset($dbConfigArray['tableprefix']);
+                    $db = Zend_Db::factory('Pdo_Pgsql', $dbConfigArray);
+                    try {
+                        // set mysql timezone to utc and activate strict mode
+                        $db->query("SET timezone ='+0:00';");
+                        // PostgreSQL has always been strict about making sure data is valid before allowing it into the database
+                    } catch (Exception $e) {
+                        self::getLogger()->warn('Failed to set "SET timezone: ' . $e->getMessage());
+                    }
+                    break;
+                    
                 default:
                     throw new Tinebase_Exception_UnexpectedValue('Invalid database adapter defined. Please set adapter to ' . self::PDO_MYSQL . ' or ' . self::PDO_OCI . ' in config.inc.php.');
                     break;
@@ -804,9 +838,15 @@ class Tinebase_Core
         if ((bool) $config->profiler) {
             $profiler = Zend_Db_Table::getDefaultAdapter()->getProfiler();
 
+			if (! empty($config->profilerFilterElapsedSecs)) {
+				$profiler->setFilterElapsedSecs($config->profilerFilterElapsedSecs);	
+			}
+
             $data = array(
                 'totalNumQueries' => $profiler->getTotalNumQueries(),
-                'totalElapsedSec' => $profiler->getTotalElapsedSecs()
+                'totalElapsedSec' => $profiler->getTotalElapsedSecs(),
+                'longestTime'  	  => 0,
+				'longestQuery' 	  => ''
             );
 
             if ((bool) $config->queryProfiles) {
@@ -816,6 +856,11 @@ class Tinebase_Core
                         'query'       => $profile->getQuery(),
                         'elapsedSecs' => $profile->getElapsedSecs(),
                     );
+                    
+                    if ($profile->getElapsedSecs() > $data['longestTime']) {
+				        $data['longestTime']  = $profile->getElapsedSecs();
+				        $data['longestQuery'] = $profile->getQuery();
+				    }
                 }
             }
 
@@ -904,7 +949,8 @@ class Tinebase_Core
 
         } else {
             $timezone = $_timezone;
-
+            $session->timezone = $timezone;
+            
             if ($_saveaspreference) {
                 // save as user preference
                 self::getPreference()->setValue(Tinebase_Preference::TIMEZONE, $timezone);
@@ -916,26 +962,26 @@ class Tinebase_Core
         return $timezone;
     }
 
-    /**
-     * function to initialize the smtp connection
-     *
-     */
-    public static function setupMailer()
-    {
-        $config = self::getConfig();
-
-        if (isset($config->smtp)) {
-            $mailConfig = $config->smtp;
-        } else {
-            $mailConfig = new Zend_Config(array(
-                'hostname' => 'localhost', 
-                'port' => 25
-            ));
-        }
-
-        $transport = new Zend_Mail_Transport_Smtp($mailConfig->hostname,  $mailConfig->toArray());
-        Zend_Mail::setDefaultTransport($transport);
-    }
+//    /**
+//     * function to initialize the smtp connection
+//     *
+//     */
+//    public static function setupMailer()
+//    {
+//        $config = self::getConfig();
+//
+//        if (isset($config->smtp)) {
+//            $mailConfig = $config->smtp;
+//        } else {
+//            $mailConfig = new Zend_Config(array(
+//                'hostname' => 'localhost', 
+//                'port' => 25
+//            ));
+//        }
+//
+//        $transport = new Zend_Mail_Transport_Smtp($mailConfig->hostname,  $mailConfig->toArray());
+//        Zend_Mail::setDefaultTransport($transport);
+//    }
 
     /**
      * set php execution life (max) time

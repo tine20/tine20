@@ -128,14 +128,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     protected function _getCronuserFromConfigOrCreateOnTheFly()
     {
         try {
-            $cronuserId = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::CRONUSERID)->value;
+            $cronuserId = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::CRONUSERID)->value;
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting user with id ' . $cronuserId . ' as cronuser.');
             $cronuser = Tinebase_User::getInstance()->getFullUserById($cronuserId);
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
             
             $cronuser = $this->_createCronuser();
-            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::CRONUSERID, $cronuser->getId());
+            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::CRONUSERID, $cronuser->getId());
         }
         
         return $cronuser;

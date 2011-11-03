@@ -499,6 +499,7 @@ class Tinebase_Application
         $dataToDelete = array(
             'container'     => array('tablename' => ''),
             'config'        => array('tablename' => ''),
+            'customfield'	=> array('tablename' => ''),
             'rights'        => array('tablename' => 'role_rights'),
             'definitions'   => array('tablename' => 'importexport_definition'),
             'filter'        => array('tablename' => 'filter'),
@@ -516,6 +517,9 @@ class Tinebase_Application
                 case 'config':
                     $count = Tinebase_Config::getInstance()->deleteConfigByApplicationId($_application->getId());
                     break;
+              	case 'customfield':
+              		$count = Tinebase_CustomField::getInstance()->deleteCustomFieldsForApplication($_application->getId());
+              		break;
                 default:
                     if (array_key_exists('tablename', $info) && ! empty($info['tablename'])) {
                         $count = $this->_db->delete(SQL_TABLE_PREFIX . $info['tablename'], $where);

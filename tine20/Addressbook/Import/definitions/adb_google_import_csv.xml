@@ -8,6 +8,9 @@
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
     <description>google adb import</description>
+    <label>Contact import from Google address book</label>
+    <!-- _("Contact import from Google address book") -->
+    <extension>csv</extension>
     <mapping>
         <field>
             <source>Given Name</source>

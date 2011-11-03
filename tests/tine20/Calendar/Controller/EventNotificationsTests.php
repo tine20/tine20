@@ -48,7 +48,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         parent::setUp();
         
-        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::SMTP);
         if (empty($smtpConfig)) {
              $this->markTestSkipped('No SMTP config found: this is needed to send notifications.');
         }
@@ -80,19 +80,6 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'cancel');
     }
     
-    /**
-     * flush mailer (send all remaining mails first)
-     */
-    protected function _flushMailer()
-    {
-        // make sure all messages are sent if queue is activated
-        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
-            Tinebase_ActionQueue::getInstance()->processQueue(100);
-        }
-        
-        $this->_mailer->flush();
-    }
-
     /**
      * testUpdateEmpty
      */
@@ -277,6 +264,59 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertTrue($foundPWulfMessage, 'notfication for pwulf not found');
     }
     
+    public function testRecuringAlarm()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getPersonaAttendee('pwulf');
+        $event->organizer = $this->_personasContacts['pwulf']->getId();
+        
+        // lets flush mailer so next flushing ist faster!
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $this->_flushMailer();
+        
+        // make sure next occurence contains now
+        // next occurance now+29min 
+        $event->dtstart = Tinebase_DateTime::now()->subDay(1)->addMinute(28);
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addMinute(30);
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1';
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => 30
+            ), TRUE)
+        ));
+        
+        $persistentEvent = $this->_eventController->create($event);
+
+        // assert alarm
+        $this->_flushMailer();
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $assertString = ' at ' . Tinebase_DateTime::now()->format('M j');
+        $this->_assertMail('pwulf', $assertString);
+
+        // check adjusted alarm time
+        $loadedEvent = $this->_eventController->get($persistentEvent->getId());
+        
+        $orgiginalAlarm = $persistentEvent->alarms->getFirstRecord()->alarm_time;
+        $adjustedAlarm = $loadedEvent->alarms->getFirstRecord()->alarm_time;
+        $this->assertTrue($adjustedAlarm->isLater($orgiginalAlarm), 'alarmtime is not adjusted');
+
+        $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $loadedEvent->alarms->getFirstRecord()->sent_status, 'alarmtime is set to pending');
+    }
+    
+    /**
+     * flush mailer (send all remaining mails first)
+     */
+    protected function _flushMailer()
+    {
+        // make sure all messages are sent if queue is activated
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue(10000);
+        }
+        
+        $this->_mailer->flush();
+    }
+    
     /**
      * checks if mail for persona got send
      * 
@@ -288,7 +328,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         // make sure messages are sent if queue is activated
         if (isset(Tinebase_Core::getConfig()->actionqueue)) {
-            Tinebase_ActionQueue::getInstance()->processQueue();
+            Tinebase_ActionQueue::getInstance()->processQueue(100);
         }
         
         foreach (explode(',', $_personas) as $personaName) {
@@ -307,6 +347,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                 $this->assertEquals(1, count($mailsForPersona), 'One mail should be send for '. $personaName);
                 $subject = $mailsForPersona[0]->getSubject();
                 $this->assertTrue(FALSE !== strpos($subject, $_assertString), 'Mail subject for ' . $personaName . ' should contain "' . $_assertString . '" but '. $subject . ' is given');
+                $this->assertEquals('UTF-8', $mailsForPersona[0]->getCharset());
             }
         }
     }

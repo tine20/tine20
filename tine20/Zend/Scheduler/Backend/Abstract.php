@@ -64,7 +64,7 @@ abstract class Zend_Scheduler_Backend_Abstract
      * 
      * @param array $tasks Remaining tasks
      */ 
-    abstract public function saveQueue(array $tasks = null); 
+    abstract public function saveQueue($tasks = array()); 
  
     /**
      * Gets the remaining tasks to perform.

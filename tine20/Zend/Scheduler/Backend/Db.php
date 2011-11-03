@@ -35,7 +35,6 @@ class Zend_Scheduler_Backend_Db extends Zend_Scheduler_Backend_Abstract
      */
     protected $_tableName = 'scheduler';
 	
-	
 	/**
      * DB ressource
      *
@@ -43,7 +42,6 @@ class Zend_Scheduler_Backend_Db extends Zend_Scheduler_Backend_Abstract
      */
     protected $_dbAdapter = null;
 
-	
 	/**
      * Constructor
      * 
@@ -56,7 +54,6 @@ class Zend_Scheduler_Backend_Db extends Zend_Scheduler_Backend_Abstract
 		}
 	}
 	
-    
 	/**
      * Initialize table name
      *
@@ -67,9 +64,8 @@ class Zend_Scheduler_Backend_Db extends Zend_Scheduler_Backend_Abstract
 		$this->_tableName = $tableName;
 	}
 	
-	
 	/**
-     * 
+     * get table name
      *
      * @return 
      */
@@ -77,7 +73,6 @@ class Zend_Scheduler_Backend_Db extends Zend_Scheduler_Backend_Abstract
 	{
 		return $this->_tableName;
 	}
-	
 	
 	/**
      * Initialize DbAdapter name
@@ -90,9 +85,9 @@ class Zend_Scheduler_Backend_Db extends Zend_Scheduler_Backend_Abstract
 	}
 	
 	/**
-     * 
+     * get db adapter
      *
-     * @return 
+     * @return Zend_Db_Adapter_Abstract
      */
 	public function getDbAdapter()
 	{
@@ -104,34 +99,43 @@ class Zend_Scheduler_Backend_Db extends Zend_Scheduler_Backend_Abstract
      * 
      * @param array $tasks Remaining tasks
      */ 
-    public function saveQueue(array $tasks = null)
+    public function saveQueue($tasks = array())
     {
-        $this->getDbAdapter()->delete($this->getTableName());
+        $db = $this->getDbAdapter();
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
         
-        foreach ($tasks as $name => $task) {
+        try {
+            $db->delete($this->getTableName());
             
-            foreach ($task->getRequests() as $request) {
-                $requests[] = array(
-                    'controller'    => $request->getControllerName(),
-                    'action'        => $request->getActionName(),
-                    'params'        => $request->getUserParams()
-                );
+            foreach ($tasks as $name => $task) {
+                
+                $requests = array();
+                foreach ($task->getRequests() as $request) {
+                    $requests[] = array(
+                        'controller'    => $request->getControllerName(),
+                        'action'        => $request->getActionName(),
+                        'params'        => $request->getUserParams()
+                    );
+                }
+                
+                $data = array(
+                    'months'     =>    $task->getRule('months')->getValue(),
+                    'weekdays'   =>    $task->getRule('weekdays')->getValue(),
+                    'days'       =>    $task->getRule('days')->getValue(),
+                    'hours'      =>    $task->getRule('hours')->getValue(),
+                    'minutes'    =>    $task->getRule('minutes')->getValue(),
+                    'requests'   =>    $requests
+                ); 
+                
+                $db->insert($this->getTableName(), array('name' => $name, 'data' => Zend_Json::encode($data)));
             }
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
-            $data = array(
-                'months'     =>    $task->getRule('months')->getValue(),
-                'weekdays'   =>    $task->getRule('weekdays')->getValue(),
-                'days'       =>    $task->getRule('days')->getValue(),
-                'hours'      =>    $task->getRule('hours')->getValue(),
-                'minutes'    =>    $task->getRule('minutes')->getValue(),
-                'requests'   =>    $requests
-            ); 
-            
-            $this->getDbAdapter()->insert($this->getTableName(), array('name' => $name, 'data' => Zend_Json::encode($data)));
-            $requests = null;
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw $e;
         }
     }
-    
     
     /**
      * Gets the remaining tasks to perform.

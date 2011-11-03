@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ExampleApplication\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-04-23 12:36+0100\n"
+"PO-Revision-Date: 2011-09-06 20:25+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -13,37 +13,47 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/ExampleApplication.js:25
-msgid "Example Application"
-msgstr "Beispielanwendung"
+#: Config.php:31
+msgid "Status Available"
+msgstr "Verfügbare Status"
 
-#: js/ExampleRecordGridPanel.js:74
-msgid "Quick search"
-msgstr "Schnellsuche"
+#: Config.php:33
+msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
+msgstr "Mögliche Statuswerte. Bitte beachten Sie, dass Änderungen an dieser Stelle Auswirkungen auf Export und Synchronisation haben können."
 
-#: js/ExampleRecordGridPanel.js:102 js/ExampleRecordEditDialog.js:104
-msgid "Name"
-msgstr "Name"
+#: Controller.php:74
+#, python-format
+msgid "%s's personal example records"
+msgstr "%s persönliche Beispieleinträge"
 
-#: js/ExampleRecordGridPanel.js:108
-msgid "Title"
-msgstr "Titel"
-
-#: js/ExampleRecordGridPanel.js:114
-msgid "Status"
-msgstr "Status"
-
-#: js/ExampleRecordGridPanel.js:121
-msgid "Budget"
-msgstr "Budget"
-
-#: js/ExampleRecordGridPanel.js:145
-msgid "Show closed"
-msgstr "Zeige geschlossene"
+#: js/ExampleApplication.js:24
+msgid "Example Application test"
+msgstr "Beispiel Anwendung Test"
 
 #: js/ExampleRecordEditDialog.js:87
 msgid "ExampleRecord"
 msgstr "BeispielEintrag"
+
+#: js/ExampleRecordEditDialog.js:104 js/ExampleRecordGridPanel.js:83
+msgid "Name"
+msgstr "Name"
+
+#: js/ExampleRecordEditDialog.js:110 js/ExampleRecordGridPanel.js:89
+#: js/Model.js:71
+msgid "Status"
+msgstr "Status"
+
+#: js/ExampleRecordGridPanel.js:96
+msgid "Title"
+msgstr "Titel"
+
+#: js/ExampleRecordGridPanel.js:102
+msgid "Budget"
+msgstr "Budget"
+
+#: js/ExampleRecordGridPanel.js:126
+msgid "Show closed"
+msgstr "Zeige geschlossene"
 
 #: js/Model.js:31
 msgid "example record"
@@ -57,14 +67,44 @@ msgid_plural "example record lists"
 msgstr[0] "Liste von Beispieleinträgen"
 msgstr[1] "Listen von Beispieleinträgen"
 
-#: Setup/setup.xml:10
+#: js/Model.js:69 js/Model.js:106
+msgid "Quick search"
+msgstr "Schnellsuche"
+
+#: js/Model.js:79
+msgid "Last modified"
+msgstr "Letzte Bearbeitung"
+
+#: js/Model.js:80
+msgid "Last modifier"
+msgstr "Letzter Bearbeiter"
+
+#: js/Model.js:81
+msgid "Creation Time"
+msgstr "Erstelldatum"
+
+#: js/Model.js:82
+msgid "Creator"
+msgstr "Ersteller"
+
+#: Setup/Initialize.php:33
+msgid "Completed"
+msgstr "Abgeschlossen"
+
+#: Setup/Initialize.php:34
+msgid "Cancelled"
+msgstr "Abgebrochen"
+
+#: Setup/Initialize.php:35
+msgid "In process"
+msgstr "In Bearbeitung"
+
+#: Setup/setup.xml:4
 msgid "ExampleApplication"
 msgstr "BeispielAnwendung"
 
-#: Controller.php:96
-#, python-format
-msgid "%s's personal example records"
-msgstr "%s persönliche Beispieleinträge"
+#~ msgid "Example Application"
+#~ msgstr "Beispielanwendung"
 
 #~ msgid "ExampleRecords"
 #~ msgstr "BeispielEinträge"

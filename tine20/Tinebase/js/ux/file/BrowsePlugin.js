@@ -35,6 +35,13 @@ Ext.ux.file.BrowsePlugin.prototype = {
      */
     enableFileDrop: true,
     /**
+     * @cfg {Boolean} enableFileDialog
+     * @see http://www.w3.org/TR/2008/WD-html5-20080610/editing.html
+     * 
+     * enable file dialog on click(defaults to true)
+     */
+    enableFileDialog: true,
+    /**
      * @cfg {String} inputFileName
      * Name to use for the hidden input file DOM element.  Deaults to "file".
      */
@@ -51,21 +58,23 @@ Ext.ux.file.BrowsePlugin.prototype = {
      */
     input_file: null,
     /**
-     * @property originalHandler
+     * @cfg handler
      * @type Function
      * The handler originally defined for the Ext.Button during construction using the "handler" config option.
      * We need to null out the "handler" property so that it is only called when a file is selected.
      * @private
      */
-    originalHandler: null,
+    handler: null,
     /**
-     * @property originalScope
+     * @cfg scope
      * @type Object
      * The scope originally defined for the Ext.Button during construction using the "scope" config option.
-     * While the "scope" property doesn't need to be nulled, to be consistent with originalHandler, we do.
+     * While the "scope" property doesn't need to be nulled, to be consistent with handler, we do.
      * @private
      */
-    originalScope: null,
+    scope: null,
+    
+    currentTreeNodeUI: null,
     
     /*
      * Protected Ext.Button overrides
@@ -74,8 +83,8 @@ Ext.ux.file.BrowsePlugin.prototype = {
      * @see Ext.Button.initComponent
      */
     init: function(cmp){
-        this.originalHandler = cmp.handler || null;
-        this.originalScope = cmp.scope || window;
+        if(cmp.handler) this.handler = cmp.handler;
+        this.scope = cmp.scope || window;
         cmp.handler = null;
         cmp.scope = null;
         
@@ -120,21 +129,23 @@ Ext.ux.file.BrowsePlugin.prototype = {
                 input_file = null;
             }, this);
         }
+        
     },
     
     /**
      * @see Ext.Button.onRender
      */
     onRender: function() {
-        this.button_container = this.buttonCt || this.component.el.child('tbody') || this.component.el;
+       
+    	this.button_container = this.buttonCt || this.component.el.child('tbody') || this.component.el;
         this.button_container.position('relative');
         this.wrap = this.component.el.wrap({cls:'tbody'});
 
-        // NOTE: wrap a button in a toolbar is complex, the toolbar doLayout moves the wrap at the end
-        if (this.component.ownerCt && this.component.ownerCt.el.hasClass('x-toolbar')) {
+        // NOTE: wrap a button is complex, its doLayout moves the wrap
+        if (this.component.ownerCt && this.component.btnEl/* && this.component.ownerCt.el.hasClass('x-toolbar')*/) {
             this.component.ownerCt.on('afterlayout', function() {
                 if (this.wrap.first() !== this.component.el) {
-                    this.wrap.insertBefore(this.component.el)
+                    this.wrap.insertBefore(this.component.el);
                     this.wrap.insertFirst(this.component.el);
                 }
                 this.syncWrap();
@@ -144,9 +155,9 @@ Ext.ux.file.BrowsePlugin.prototype = {
             this.component.ownerCt.on('resize', this.syncWrap, this);
         }
         
-        this.createInputFile();
-        
-        if (this.enableFileDrop) {
+        if (this.enableFileDialog) this.createInputFile();
+      
+        if (this.enableFileDrop && !Ext.isIE) {
             if (! this.dropEl) {
                 if (this.dropElSelector) {
                     this.dropEl = this.wrap.up(this.dropElSelector);
@@ -155,21 +166,25 @@ Ext.ux.file.BrowsePlugin.prototype = {
                 }
             }
             
+            this.dropEl.on('dragleave', function(e) {
+            	e.stopPropagation();
+            	e.preventDefault();
+
+            	this.createMouseEvent(e, 'mouseout');
+            }, this);
+
             // @see http://dev.w3.org/html5/spec/Overview.html#the-dragevent-and-datatransfer-interfaces
             this.dropEl.on('dragover', function(e) {
+
                 e.stopPropagation();
                 e.preventDefault();
+                                         
+                this.createMouseEvent(e, 'mouseover');
                 
-                // try to set the effectAllowed to copy (not all UA's accept this)
-                e.browserEvent.dataTransfer.effectAllowed = 'copy';
-                    
-                // set drop effect to copy if allowed
-                if (e.browserEvent.dataTransfer.effectAllowed.match(/all|copy/i)) {
-                    e.browserEvent.dataTransfer.dropEffect = 'copy';
-                }
             }, this);
             
-            this.dropEl.on('drop', function(e) {
+            this.dropEl.on('drop', function(e, target) {
+               
                 e.stopPropagation();
                 e.preventDefault();
                 
@@ -179,7 +194,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
                 var dt = e.browserEvent.dataTransfer;
                 var files = dt.files;
                 
-                this.onInputFileChange(null, null, null, files);
+                this.onInputFileChange(null, null, null, files, e);
             }, this);
         }
     },
@@ -199,6 +214,8 @@ Ext.ux.file.BrowsePlugin.prototype = {
             name: this.inputFileName || Ext.id(this.component.el),
             style: "position: absolute; display: block; border: none; cursor: pointer;"
         }, this.multiple ? {multiple: true} : {}));
+
+        this.input_file.dom.disabled = this.component.disabled;
         
         var button_box = this.button_container.getBox();
         
@@ -210,12 +227,44 @@ Ext.ux.file.BrowsePlugin.prototype = {
         this.wrap.on('mousemove', function(e) {
             var xy = e.getXY();
             this.input_file.setXY([xy[0] - this.input_file.getWidth()/2, xy[1] - 5]);
+            
+            // if split button
+            if(this.component.btnEl) {
+                var buttonEl = Ext.get(this.wrap.dom);
+                var buttonX = buttonEl.getX(),
+                    buttonWidth = buttonEl.getWidth(),
+                    mouseX = xy[0];
+                
+                if(mouseX - buttonX > this.component.btnEl.dom.clientWidth) {
+                    this.input_file.dom.style.zIndex = -1;
+                }
+                else {
+                    this.input_file.dom.style.zIndex = '';
+                }
+            }
+            
         }, this, {buffer: 20});
+        
         
         // IE
         this.button_container.on('mousemove', function(e) {
             var xy = e.getXY();
             this.input_file.setXY([xy[0] - this.input_file.getWidth()/2, xy[1] - 5]);
+            
+            // if split button
+            if(this.component.btnEl) {
+                var buttonEl = Ext.get(this.button_container.dom);
+                var buttonX = buttonEl.getX(),
+                    buttonWidth = buttonEl.getWidth(),
+                    mouseX = xy[0];
+                
+                if(mouseX - buttonX > this.component.btnEl.dom.clientWidth) {
+                    this.input_file.dom.style.zIndex = -1;
+                }
+                else {
+                    this.input_file.dom.style.zIndex = '';
+                }
+            }
         }, this, {buffer: 30});
         
         this.input_file.setOpacity(0.0);
@@ -235,14 +284,14 @@ Ext.ux.file.BrowsePlugin.prototype = {
             
             this.wrap.on('mouseover', function(e) {
                 this.isMouseOver = true;
-                if (this.component.el.hasClass('x-btn')) {
+                if (this.component.el.hasClass('x-btn') && !this.component.disabled) {
                     this.component.el.addClass('x-btn-over');
                 }
             }, this);
     
             this.wrap.on('mouseout', function(e) {
                 this.isMouseOver = false;
-                if (this.component.el.hasClass('x-btn')) {
+                if (this.component.el.hasClass('x-btn') && !this.component.disabled) {
                     this.component.el.removeClass('x-btn-over');
                 }
             }, this);
@@ -272,7 +321,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
      * @param {FileList} files when input comes from drop...
      * @private
      */
-    onInputFileChange: function(e, target, options, files){
+    onInputFileChange: function(e, target, options, files, e){
         if (window.FileList) { // HTML5 FileList support
             this.files = files ? files : this.input_file.dom.files;
         } else {
@@ -282,8 +331,8 @@ Ext.ux.file.BrowsePlugin.prototype = {
             this.files[0].type = this.getFileCls();
         }
         
-        if (this.originalHandler) {
-            this.originalHandler.call(this.originalScope, this);
+        if (this.handler) {
+            this.handler.call(this.scope, this, e);
         }
     },
     
@@ -340,6 +389,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
      * @return {String} class to use for file type icon
      */
     getFileCls: function() {
+
         var fparts = this.getFileName().split('.');
         if(fparts.length === 1) {
             return '';
@@ -348,9 +398,38 @@ Ext.ux.file.BrowsePlugin.prototype = {
             return fparts.pop().toLowerCase();
         }
     },
+    
     isImage: function() {
         var cls = this.getFileCls();
         return (cls == 'jpg' || cls == 'gif' || cls == 'png' || cls == 'jpeg');
+    },
+    
+    createMouseEvent: function(e, mouseEventType) {
+    	
+    	if(document.createEvent)  {
+            var evObj = document.createEvent('MouseEvents');
+            evObj.initMouseEvent(mouseEventType, true, true, window, e.browserEvent.detail, e.browserEvent.screenX, e.browserEvent.screenY
+                    , e.browserEvent.clientX, e.browserEvent.clientY, e.browserEvent.ctrlKey, e.browserEvent.altKey
+                    , e.browserEvent.shiftKey, e.browserEvent.metaKey, e.browserEvent.button, e.browserEvent.relatedTarget);
+            e.target.dispatchEvent(evObj);
+        }    
+        // TODO: IE problem on drag over tree nodes (not the whole row tracks onmouseout)
+        else if(document.createEventObject) {
+            var evObj = document.createEventObject();
+            evObj.detail = e.browserEvent.detail;
+            evObj.screenX = e.browserEvent.screenX;
+            evObj.screenY = e.browserEvent.screenY;
+            evObj.clientX = e.browserEvent.clientX;
+            evObj.clientY = e.browserEvent.clientY;
+            evObj.ctrlKey = e.browserEvent.ctrlKey;
+            evObj.altKey = e.browserEvent.altKey;
+            evObj.shiftKey = e.browserEvent.shiftKey;
+            evObj.metaKey = e.browserEvent.metaKey;
+            evObj.button = e.browserEvent.button;
+            evObj.relatedTarget = e.browserEvent.relatedTarget;
+            e.getTarget('div').fireEvent('on' + mouseEventType ,evObj);
+        }
+    	
     }
 };
 

@@ -142,6 +142,22 @@
     background-image:url(../../images/oxygen/32x32/places/folder.png) !important;
 }
 
+.admin-node-customfields {
+    background-image:url(../../images/oxygen/16x16/actions/edit-rename.png) !important;
+}
+.admin-action-add-customfield {
+    background-image:url(../../images/oxygen/16x16/actions/edit-rename.png) !important;
+}
+.x-btn-medium .admin-action-add-customfield {
+    background-image:url(../../images/oxygen/22x22/actions/edit-rename.png) !important;
+}
+.x-btn-large .admin-action-add-customfield {
+    background-image:url(../../images/oxygen/32x32/actions/edit_rename.png) !important;
+}
+.admin-node-customfields-store {
+    background-image:url(../../images/oxygen/16x16/apps/kexi.png) !important;
+}
+
 
 .x-tree-node-collapsed .x-tree-node-icon.x-tree-node-leaf-checkbox, 
 .x-tree-node-expanded .x-tree-node-icon.x-tree-node-leaf-checkbox, 

@@ -56,32 +56,13 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.widgets.grid.Gr
         this.recordProxy = Tine.ExampleApplication.recordBackend;
         
         this.gridConfig.cm = this.getColumnModel();
-        this.initFilterToolbar();
-        
+        this.filterToolbar = this.filterToolbar || this.getFilterToolbar();
+
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
         
         Tine.ExampleApplication.ExampleRecordGridPanel.superclass.initComponent.call(this);
     },
-    
-    /**
-     * initialises filter toolbar
-     *  @private
-     */
-    initFilterToolbar: function() {
-        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
-            filterModels: [
-                {label: _('Quick search'),    field: 'query',       operators: ['contains']},
-                {filtertype: 'tine.widget.container.filtermodel', app: this.app, recordClass: this.recordClass},
-                {filtertype: 'tinebase.tag', app: this.app}
-            ],
-            defaultFilter: 'query',
-            filters: [],
-            plugins: [
-                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
-            ]
-        });
-    },    
     
     /**
      * returns cm
@@ -103,6 +84,13 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.widgets.grid.Gr
                 width: 100,
                 sortable: true,
                 dataIndex: 'name'
+            }, {
+                id: 'status',
+                header: this.app.i18n._("Status"),
+                width: 150,
+                sortable: true,
+                dataIndex: 'status',
+                renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('ExampleApplication', 'exampleStatus')
             }/*,{
                 id: 'title',
                 header: this.app.i18n._("Title"),
@@ -110,19 +98,12 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.widgets.grid.Gr
                 sortable: true,
                 dataIndex: 'title'
             },{
-                id: 'status',
-                header: this.app.i18n._("Status"),
-                width: 150,
-                sortable: true,
-                dataIndex: 'status',
-                renderer: this.statusRenderer.createDelegate(this)
-            },{
                 id: 'budget',
                 header: this.app.i18n._("Budget"),
                 width: 100,
                 sortable: true,
                 dataIndex: 'budget'
-            }*/]
+            }*/].concat(this.getModlogColumns())
         });
     },
     

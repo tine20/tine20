@@ -157,6 +157,13 @@
     </target>
     
     <!-- ============================================  -->
+    <!-- Target: mimetypes                                 -->
+    <!-- ============================================  -->
+    <target name="mimetypes">
+        <build-mimetypes appName="${name}" />
+    </target>
+    
+    <!-- ============================================  -->
     <!-- Task: init                                    -->
     <!-- ============================================  -->
     <adhoc-task name="init"><![CDATA[
@@ -226,6 +233,70 @@
             }
         }
     ]]></adhoc-task>
+    
+    
+    <!-- ============================================  -->
+    <!-- Task: build-mimetypes                         -->
+    <!-- ============================================  -->
+    <adhoc-task name="build-mimetypes"><![CDATA[
+        class mimetypeTask extends Task {
+            private $appName;
+        
+            function setAppName($appName) {
+                $this->appName = $appName;
+            }
+                                  
+            function buildMimeTypesStyleFile($resolution, &$styleSheet) {
+            
+            	$relatedImgPath = '/images/oxygen/'.$resolution.'/mimetypes/';
+            	$imgPath = '${project.basedir}'.$relatedImgPath;
+            	if (! file_exists($imgPath) || ! is_dir($imgPath)) {
+            		echo 'Mimetype images no found!';
+            		return;
+                }
+ 
+ 				
+    			// öffnen des Verzeichnisses
+    			if ( $handle = opendir($imgPath) ) {
+                	
+                	fwrite($styleSheet, ".standardFileClass_".$resolution." .x-grid3-cell-inner {\n");
+        			fwrite($styleSheet, "    background-image: url(../..".$relatedImgPath."application-octet-stream.png);\n");
+        			fwrite($styleSheet, "    background-repeat:  no-repeat;\n");
+        			fwrite($styleSheet, "    padding-left: 19px;\n");
+        			fwrite($styleSheet, "}\n\n");
+                
+       			    // einlesen der Verzeichnisses
+        			while (($file = readdir($handle)) !== false)
+        			{	
+        				$fileName = basename($file, '.png');
+        				
+        				$addToStyle = strcmp($fileName, "..") + strcmp($fileName, "..");
+        				if($addToStyle > 0) {
+        				
+        					fwrite($styleSheet, ".".$fileName."_".$resolution." .x-grid3-cell-inner {\n");
+        					fwrite($styleSheet, "    background-image: url(../..".$relatedImgPath.$file.") !important;\n");
+        					fwrite($styleSheet, "    background-repeat:  no-repeat;\n");
+        					fwrite($styleSheet, "    padding-left: 19px;\n");
+        					fwrite($styleSheet, "}\n\n");
+        				}
+			        }
+        			
+        			closedir($handle);
+    			}
+            
+            }
+            
+            function main() {
+    				$styleSheet = fopen('Tinebase/css/mimetypes.css', 'w+');
+            		$this->buildMimeTypesStyleFile('16x16', $styleSheet);
+					$this->buildMimeTypesStyleFile('22x22', $styleSheet);
+					$this->buildMimeTypesStyleFile('32x32', $styleSheet);            	
+					fclose($styleSheet);
+        	}	
+        }
+    ]]></adhoc-task>
+    
+    
     
     <!-- ============================================  -->
     <!-- Task: manifest-build                          -->

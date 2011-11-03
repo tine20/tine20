@@ -13,6 +13,13 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
+#: js/Model.js:41 js/TicketGridPanel.js:41
+msgid "Ticket"
+msgid_plural "Tickets"
+msgstr[0] "Билет"
+msgstr[1] "Билета"
+msgstr[2] "Билетов"
+
 #: js/StatusCombo.js:25
 msgid "New"
 msgstr "Новый"
@@ -48,13 +55,6 @@ msgstr "Удалённый"
 #: js/StatusCombo.js:50 js/TicketGridPanel.js:94
 msgid "Status"
 msgstr "Статус"
-
-#: js/Model.js:41 js/TicketGridPanel.js:41
-msgid "Ticket"
-msgid_plural "Tickets"
-msgstr[0] "Билет"
-msgstr[1] "Билета"
-msgstr[2] "Билетов"
 
 #: js/TicketGridPanel.js:42 js/TicketGridPanel.js:67
 msgid "Ticket ID"

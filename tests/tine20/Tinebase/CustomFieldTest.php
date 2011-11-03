@@ -147,12 +147,17 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
         return new Tinebase_Model_CustomField_Config(array(
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
             'name'              => Tinebase_Record_Abstract::generateUID(),
-            'label'             => Tinebase_Record_Abstract::generateUID(),        
             'model'             => Tinebase_Record_Abstract::generateUID(),
-            'type'              => Tinebase_Record_Abstract::generateUID(),
-            'length'            => 10,
-            'group'             => 'unittest',
-            'order'             => 100,     
+            'definition'        => array(
+                'label' => Tinebase_Record_Abstract::generateUID(),        
+                'type'  => 'string',
+                'uiconfig' => array(
+                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
+                    'length' => 10,
+                    'group'  => 'unittest',
+                    'order'  => 100,
+                )
+            )  
         ));
     }
 }

@@ -190,4 +190,12 @@ class Felamimail_Setup_Update_Release4 extends Setup_Update_Abstract
     {
         $this->setApplicationVersion('Felamimail', '5.0');
     }
+    
+    /**
+    * update to 5.0
+    */
+    public function update_7()
+    {
+        $this->setApplicationVersion('Felamimail', '5.0');
+    }
 }

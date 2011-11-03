@@ -7,6 +7,9 @@
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
     <description>exchange / outlook adb import</description>
+    <extension>csv</extension>
+    <label>Contact CSV import from Outlook address book</label>
+    <!-- _("Contact CSV import from Outlook address book") -->
     <mapping>
         <field>
             <source>Anrede</source>

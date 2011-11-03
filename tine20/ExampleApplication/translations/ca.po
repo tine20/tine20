@@ -14,36 +14,46 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/ExampleApplication.js:25
-msgid "Example Application"
+#: Config.php:31
+msgid "Status Available"
 msgstr ""
 
-#: js/ExampleRecordGridPanel.js:74
-msgid "Quick search"
+#: Config.php:33
+msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
 msgstr ""
 
-#: js/ExampleRecordGridPanel.js:102 js/ExampleRecordEditDialog.js:104
-msgid "Name"
+#: Controller.php:74
+#, python-format
+msgid "%s's personal example records"
 msgstr ""
 
-#: js/ExampleRecordGridPanel.js:108
-msgid "Title"
-msgstr ""
-
-#: js/ExampleRecordGridPanel.js:114
-msgid "Status"
-msgstr ""
-
-#: js/ExampleRecordGridPanel.js:121
-msgid "Budget"
-msgstr ""
-
-#: js/ExampleRecordGridPanel.js:145
-msgid "Show closed"
+#: js/ExampleApplication.js:24
+msgid "Example Application test"
 msgstr ""
 
 #: js/ExampleRecordEditDialog.js:87
 msgid "ExampleRecord"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:104 js/ExampleRecordGridPanel.js:83
+msgid "Name"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:110 js/ExampleRecordGridPanel.js:89
+#: js/Model.js:71
+msgid "Status"
+msgstr ""
+
+#: js/ExampleRecordGridPanel.js:96
+msgid "Title"
+msgstr ""
+
+#: js/ExampleRecordGridPanel.js:102
+msgid "Budget"
+msgstr ""
+
+#: js/ExampleRecordGridPanel.js:126
+msgid "Show closed"
 msgstr ""
 
 #: js/Model.js:31
@@ -58,11 +68,38 @@ msgid_plural "example record lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Setup/setup.xml:10
-msgid "ExampleApplication"
+#: js/Model.js:69 js/Model.js:106
+msgid "Quick search"
 msgstr ""
 
-#: Controller.php:96
-#, python-format
-msgid "%s's personal example records"
+#: js/Model.js:79
+msgid "Last modified"
+msgstr ""
+
+#: js/Model.js:80
+msgid "Last modifier"
+msgstr ""
+
+#: js/Model.js:81
+msgid "Creation Time"
+msgstr ""
+
+#: js/Model.js:82
+msgid "Creator"
+msgstr ""
+
+#: Setup/Initialize.php:33
+msgid "Completed"
+msgstr ""
+
+#: Setup/Initialize.php:34
+msgid "Cancelled"
+msgstr ""
+
+#: Setup/Initialize.php:35
+msgid "In process"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "ExampleApplication"
 msgstr ""

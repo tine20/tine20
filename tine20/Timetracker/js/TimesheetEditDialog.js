@@ -15,7 +15,6 @@ Ext.namespace('Tine.Timetracker');
  */
 Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
-    
     /**
      * @private
      */
@@ -86,9 +85,10 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     	
         this.getForm().findField('billed_in').setDisabled(! checked);
 
+        // open modal window to type in billed in value
         /*
     	if (checked && this.getForm().findField('billed_in').getValue() == '') {
-    		// open modal window to type in billed in value
+    		
             Ext.Msg.prompt(
                 this.app.i18n._('Billed in ...'),
                 this.app.i18n._('Billed in ...'), 
@@ -139,6 +139,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         emptyText: this.app.i18n._('Select Time Account...'),
                         loadingText: this.app.i18n._('Searching...'),
                         allowBlank: false,
+                        forceSelection: true,
                         name: 'timeaccount_id',
                         listeners: {
                             scope: this,
@@ -159,18 +160,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         fieldLabel: this.app.i18n._('Start'),
                         emptyText: this.app.i18n._('not set'),
                         name: 'start_time',
-                        xtype: 'timefield'/*,
-                        listeners: {
-                            scope: this, 
-                            'expand': function(field) {
-                                if (! field.getValue()) {
-                                    var now = new Date().getHours();
-                                    //console.log(field.store.find('text', '18:00'));
-                                    field.select(field.store.find('text', '18:00'));
-                                    
-                                }
-                            }
-                        }*/
+                        xtype: 'timefield'
                     }], [{
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Description'),
@@ -181,6 +171,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         height: 150
                     }], [new Tine.Addressbook.SearchCombo({
                         allowBlank: false,
+                        forceSelection: true,
                         columnWidth: 1,
                         disabled: true,
                         useAccountRecord: true,
@@ -190,14 +181,12 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         name: 'account_id'
                     }), {
                         columnWidth: .25,
-                        //hideLabel: false,
                         disabled: true,
                         boxLabel: this.app.i18n._('Billable'),
                         name: 'is_billable',
                         xtype: 'checkbox'
                     }, {
                         columnWidth: .25,
-                        //hideLabel: true,
                         disabled: true,
                         boxLabel: this.app.i18n._('Cleared'),
                         name: 'is_cleared',
@@ -209,7 +198,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     }, {
                         columnWidth: .5,
                         disabled: true,
-                        //emptyText: this.app.i18n._('not cleared yet...'),
                         fieldLabel: this.app.i18n._('Cleared In'),
                         name: 'billed_in',
                         xtype: 'textfield'
@@ -240,11 +228,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         })
                     ]
                 }]
-            }, new Tine.Tinebase.widgets.customfields.CustomfieldsPanel ({
-                recordClass: this.recordClass,
-                disabled: (Tine[this.appName].registry.get('customfields').length == 0),
-                quickHack: this
-            }), new Tine.widgets.activities.ActivitiesTabPanel({
+            }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: (! this.copyRecord) ? this.record.id : null,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
@@ -258,7 +242,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @param {} response
      * @param {} request
      * @private
-     * 
      */
     onRequestFailed: function(response, request) {
         if (response.code && response.code == 902) {
@@ -267,7 +250,15 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 this.app.i18n._('Failed'), 
                 String.format(this.app.i18n._('Could not save {0}.'), this.i18nRecordName) 
                     + ' ( ' + this.app.i18n._('Booking deadline for this Timeaccount has been exceeded.') /* + ' ' + response.message  */ + ')'
-            ); 
+            );
+        } else if (response.code && response.code == 505) {
+            // validation exception
+            // NOTE: it sometimes happens (ExtJS bug?) that the record is submitted even if no timeaccount_id is set in the picker ...
+            Ext.MessageBox.alert(
+                this.app.i18n._('No Timeaccount set'), 
+                String.format(this.app.i18n._('Could not save {0}.'), this.i18nRecordName) 
+                    + ' ( ' + this.app.i18n._('You need to set a Timeaccount this Timesheet belongs to.') + ')'
+            );
         } else {
             // call default exception handler
             Tine.Tinebase.ExceptionHandler.handleRequestException(response);

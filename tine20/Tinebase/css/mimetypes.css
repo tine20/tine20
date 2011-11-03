@@ -1,0 +1,5034 @@
+.standardFileClass_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-octet-stream.png);
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pdf_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-pdf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-krita_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-krita.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.shellscript_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/shellscript.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-ar_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-ar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-java-applet_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-java-applet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-marble_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-marble.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-portable-bitmap_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-portable-bitmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.database_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.database.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.text_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.text.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-jpeg2000_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-jpeg2000.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-generic_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-mms_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/uri-mms.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-wmf_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-wmf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-patch_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-patch.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.make_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/make.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.tex_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/tex.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.none_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/none.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-aac_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-aac.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-gzpostscript_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-gzpostscript.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-sgml_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-sgml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-kgetlist_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-kgetlist.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-rpm_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-rpm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.message_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/message.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-java_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-java.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-portable-pixmap_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-portable-pixmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-mpegurl_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-mpegurl.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.cdbo-list_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/cdbo-list.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-mp4_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-mp4.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.document_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/document.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.font-bitmap_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/font-bitmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.info_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/info.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-ico_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-ico.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-aiff_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-aiff.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-rtf_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-rtf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-xml_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-pascal_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-pascal.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-matroska_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-x-matroska.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-tzo_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-tzo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-cpio_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-cpio.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-texinfo_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-texinfo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-compress_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-compress.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-xslfo_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-xslfo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.sun.xml.draw_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.sun.xml.draw.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.spreadsheet-template_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.spreadsheet-template.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-java-archive_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-java-archive.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-ldif_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-ldif.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-bibtex_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-bibtex.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-xslt+xml_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-xslt+xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.unknown_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/unknown.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-dtd_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-dtd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.kwordquiz-do_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/kwordquiz-do.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.vcard_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/vcard.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-xsd_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-xsd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-mp2_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-mp2.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-rtspu_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/uri-rtspu.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-objcsrc_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-objcsrc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-midi_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-midi.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-compressed-tar_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-compressed-tar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.stardivision.calc_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.stardivision.calc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-fits_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-fits.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-vcard_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-vcard.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.stardivision.draw_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.stardivision.draw.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-vnd.abc_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-vnd.abc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.txt_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/txt.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-calendar_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-calendar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.tgz_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/tgz.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-flic_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-x-flic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-gzdvi_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-gzdvi.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-chdr_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-chdr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-ruby_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-ruby.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-mswrite_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-mswrite.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-perl_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-perl.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-mpeg_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-mpeg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.presentation-template_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.presentation-template.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-designer_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-designer.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-dcraw_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-dcraw.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-relaxng_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-relaxng.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-bzdvi_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-bzdvi.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.ms-powerpoint_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.ms-powerpoint.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-mimearchive_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-mimearchive.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-csv_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-csv.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-fax-g3_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-fax-g3.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-ttf_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-font-ttf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.chart_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.chart.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.empty_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/empty.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.sound_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/sound.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-address-book_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/x-office-address-book.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-photo-cd_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-photo-cd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-svg+xml_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-svg+xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-media-podcast_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/x-media-podcast.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pgp-keys_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-pgp-keys.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-arc_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-arc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-directory_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-directory.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.news_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/news.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-generic_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.formula_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.formula.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-svg+xml-compressed_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-svg+xml-compressed.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-exr_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-exr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-octet-stream_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-octet-stream.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-sharedlib_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-sharedlib.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-mod_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-mod.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-xmcd_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-xmcd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-psd_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-psd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.sun.xml.calc.template_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.sun.xml.calc.template.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.ascii_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/ascii.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-cgm_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-cgm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-msod_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-msod.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-tar_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-tar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-hdr_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-hdr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-php_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-php.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-objchdr_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-objchdr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-ms-dos-executable_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-ms-dos-executable.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-gnumeric_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-gnumeric.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-jng_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-jng.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.graphics_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.graphics.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-mmsu_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/uri-mmsu.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-bittorrent_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-bittorrent.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pkcs7-mime_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-pkcs7-mime.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-generic_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-illustrator_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-illustrator.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.ms-word_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.ms-word.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-katefilelist_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-katefilelist.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-calendar_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/x-office-calendar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-awk_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-awk.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.ms-excel_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.ms-excel.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-trash_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-trash.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.font-type1_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/font-type1.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-executable-script_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-executable-script.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-enriched_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-enriched.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-musepack_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-musepack.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-bzip-compressed-tar_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-bzip-compressed-tar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-troff_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-troff.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-ms-wmv_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-x-ms-wmv.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-mplayer2_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-mplayer2.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-cda_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-cda.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pgp-signature_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-pgp-signature.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-tex_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-tex.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-adpcm_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-adpcm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-archive_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-archive.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-tga_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-tga.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.vcalendar_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/vcalendar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.font-truetype_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/font-truetype.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.rn-realmedia_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.rn-realmedia.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.package-x-generic_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/package-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-script_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-script.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-cd-image_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-cd-image.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.inode-directory_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/inode-directory.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-python-bytecode_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-python-bytecode.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-csrc_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-csrc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.sun.xml.calc_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.sun.xml.calc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-xhtml+xml_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-xhtml+xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-makefile_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-makefile.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-rss+xml_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-rss+xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-mp4_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-mp4.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-prs.sid_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-prs.sid.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-kcsrc_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-kcsrc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-mmst_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/uri-mmst.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-png_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-png.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-rar_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-rar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-python_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-python.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-snf_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-font-snf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-gif_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-gif.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.tar_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/tar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-msvideo_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-x-msvideo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-monkey_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-monkey.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-executable_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-executable.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-type1_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-font-type1.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-vnd.rn-realaudio_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-vnd.rn-realaudio.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-generic_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-wav_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-wav.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-egon_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-egon.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-7z-compressed_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-7z-compressed.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-zoo_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-zoo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pkcs7-signature_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-pkcs7-signature.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-ogm+ogg_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-x-ogm+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-contact_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/x-office-contact.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.message-rfc822_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/message-rfc822.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-rdf_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-rdf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-scpls_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-scpls.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-java_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-java.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-pcf_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-font-pcf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.presentation_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.presentation.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-cue_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-cue.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-quicktime_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-quicktime.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-rtf_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-rtf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-html_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-html.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-flac+ogg_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-flac+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-spreadsheet_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/x-office-spreadsheet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-nzb_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-nzb.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-dds_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-dds.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-xfig_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-xfig.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.binary_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/binary.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-tiff_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-tiff.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-ms-wma_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-ms-wma.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-adasrc_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-adasrc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-bzip_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-bzip.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-pak_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-pak.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.pdf_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/pdf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-pcx_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-pcx.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-mng_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-x-mng.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-mpeg_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-mpeg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-gzip_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-gzip.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-vnd.wap.wml_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-vnd.wap.wml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-plain_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-plain.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-mswinurl_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-mswinurl.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-flac_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-flac.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-bmp_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-bmp.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-siag_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-siag.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-vnd.rn-realvideo_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-vnd.rn-realvideo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-tcl_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-tcl.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-document_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/x-office-document.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-mathml_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-mathml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-csharp_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-csharp.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-zerosize_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-zerosize.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.xml_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-deb_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-deb.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-pnm_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/uri-pnm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pgp_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-pgp.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.spreadsheet_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/spreadsheet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.vectorgfx_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/vectorgfx.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-bdf_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-font-bdf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-afm_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-font-afm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.cdtrack_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/cdtrack.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-xcf_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-xcf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-matroska_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-matroska.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-xml_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-lha_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-lha.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.spreadsheet_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.spreadsheet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-css_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-css.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-rtspt_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/uri-rtspt.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-quattropro_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-quattropro.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.zip_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/zip.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-vnd.trolltech.qpicture_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-vnd.trolltech.qpicture.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-c++src_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-c++src.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-plasma_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-plasma.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-desktop_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-desktop.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-arj_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-arj.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-kontour_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-kontour.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pgp-encrypted_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-pgp-encrypted.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-vorbis+ogg_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-vorbis+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.html_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/html.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-hex_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-hex.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-ms-asf_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-x-ms-asf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-otf_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-font-otf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-c++hdr_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-x-c++hdr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.message-news_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/message-news.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.odf_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/odf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-portable-graymap_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-portable-graymap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-tgif_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-tgif.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-object_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-object.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-applix-graphics_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-applix-graphics.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-pn-realaudio-plugin_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-pn-realaudio-plugin.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-ac3_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-ac3.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-troff-man_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-troff-man.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.man_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/man.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-ace_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-ace.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-tarz_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-tarz.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-jpeg_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-jpeg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.cdimage_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/cdimage.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.sun.xml.draw.template_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.sun.xml.draw.template.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-vcalendar_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/text-vcalendar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-theora+ogg_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/video-x-theora+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.encrypted_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/encrypted.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-speex+ogg_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-x-speex+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-rgb_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-rgb.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.image_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.image.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-lzop_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-lzop.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-empty_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-empty.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.recycled_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/recycled.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-zip_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-zip.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-xbitmap_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-xbitmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-xpixmap_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-xpixmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-eps_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/image-x-eps.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-applix-spreadsheet_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-applix-spreadsheet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-shellscript_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/application-x-shellscript.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-basic_16x16 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/16x16/mimetypes/audio-basic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.standardFileClass_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-octet-stream.png);
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pdf_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-pdf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-krita_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-krita.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.shellscript_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/shellscript.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-ar_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-ar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-java-applet_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-java-applet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-marble_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-marble.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-portable-bitmap_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-portable-bitmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.database_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.oasis.opendocument.database.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.text_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.oasis.opendocument.text.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-jpeg2000_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-jpeg2000.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-generic_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-mms_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/uri-mms.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-wmf_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-wmf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-patch_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-patch.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.make_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/make.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.tex_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/tex.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.none_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/none.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-aac_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-aac.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-gzpostscript_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-gzpostscript.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-sgml_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-sgml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-kgetlist_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-kgetlist.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-rpm_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-rpm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.message_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/message.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-java_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-java.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-portable-pixmap_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-portable-pixmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-mpegurl_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-x-mpegurl.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.cdbo-list_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/cdbo-list.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-mp4_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/video-mp4.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.document_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/document.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.font-bitmap_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/font-bitmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.info_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/info.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-ico_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-ico.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-javascript_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-javascript.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-aiff_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-x-aiff.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-rtf_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-rtf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-xml_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-pascal_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-pascal.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-matroska_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/video-x-matroska.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-tzo_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-tzo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-cpio_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-cpio.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-texinfo_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-texinfo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-compress_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-compress.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-xslfo_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-xslfo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.sun.xml.draw_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.sun.xml.draw.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.spreadsheet-template_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.oasis.opendocument.spreadsheet-template.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-java-archive_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-java-archive.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-ldif_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-ldif.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-bibtex_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-bibtex.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-xslt+xml_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-xslt+xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.unknown_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/unknown.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-dtd_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-dtd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.kwordquiz-do_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/kwordquiz-do.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.vcard_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/vcard.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-xsd_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-xsd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-mp2_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-x-mp2.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-rtspu_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/uri-rtspu.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-objcsrc_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-objcsrc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-midi_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-midi.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-compressed-tar_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-compressed-tar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.stardivision.calc_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.stardivision.calc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/video.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-fits_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-fits.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-vcard_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-vcard.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.stardivision.draw_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.stardivision.draw.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-vnd.abc_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-vnd.abc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.txt_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/txt.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-calendar_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-calendar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.tgz_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/tgz.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-flic_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/video-x-flic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-gzdvi_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-gzdvi.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-chdr_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-chdr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-ruby_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-ruby.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-mswrite_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-mswrite.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-perl_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-perl.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-mpeg_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-mpeg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.presentation-template_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.oasis.opendocument.presentation-template.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-designer_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-designer.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-dcraw_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-dcraw.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-relaxng_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-relaxng.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-bzdvi_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-bzdvi.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.ms-powerpoint_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.ms-powerpoint.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-mimearchive_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-mimearchive.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-csv_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-csv.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-fax-g3_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-fax-g3.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-ttf_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-font-ttf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.chart_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.oasis.opendocument.chart.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.empty_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/empty.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.sound_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/sound.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-address-book_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/x-office-address-book.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-photo-cd_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-photo-cd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-svg+xml_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-svg+xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-media-podcast_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/x-media-podcast.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pgp-keys_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-pgp-keys.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-arc_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-arc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-directory_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-directory.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.news_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/news.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-generic_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.formula_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.oasis.opendocument.formula.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-svg+xml-compressed_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-svg+xml-compressed.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-exr_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-exr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-octet-stream_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-octet-stream.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-sharedlib_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-sharedlib.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-mod_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-x-mod.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-xmcd_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-xmcd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-psd_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-psd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.sun.xml.calc.template_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.sun.xml.calc.template.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.ascii_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/ascii.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-cgm_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-cgm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-msod_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-msod.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-tar_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-tar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-hdr_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-hdr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-php_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-php.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-objchdr_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-objchdr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-ms-dos-executable_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-ms-dos-executable.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-gnumeric_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-gnumeric.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-jng_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-jng.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.graphics_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.oasis.opendocument.graphics.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-mmsu_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/uri-mmsu.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-bittorrent_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-bittorrent.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pkcs7-mime_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-pkcs7-mime.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-generic_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/video-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-illustrator_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-illustrator.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.ms-word_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.ms-word.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-katefilelist_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-katefilelist.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-calendar_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/x-office-calendar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-awk_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-awk.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.ms-excel_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.ms-excel.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-trash_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-trash.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.font-type1_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/font-type1.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-executable-script_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-executable-script.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-enriched_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-enriched.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-musepack_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-x-musepack.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-bzip-compressed-tar_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-bzip-compressed-tar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-troff_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-troff.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-ms-wmv_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/video-x-ms-wmv.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-mplayer2_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-mplayer2.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-cda_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-cda.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pgp-signature_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-pgp-signature.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-tex_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-tex.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-adpcm_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-x-adpcm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-archive_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-archive.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-tga_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-tga.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.vcalendar_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/vcalendar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.font-truetype_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/font-truetype.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.rn-realmedia_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.rn-realmedia.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.package-x-generic_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/package-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-script_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-script.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-cd-image_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-cd-image.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.inode-directory_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/inode-directory.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-python-bytecode_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-python-bytecode.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-csrc_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-csrc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.sun.xml.calc_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.sun.xml.calc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-xhtml+xml_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-xhtml+xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-makefile_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-makefile.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-rss+xml_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-rss+xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-mp4_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-mp4.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-prs.sid_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-prs.sid.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-postscript_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-postscript.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-kcsrc_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-kcsrc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-mmst_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/uri-mmst.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-png_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-png.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-rar_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-rar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-python_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-python.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-snf_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-font-snf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-gif_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-gif.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.tar_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/tar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-msvideo_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/video-x-msvideo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-monkey_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-x-monkey.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-executable_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-executable.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-type1_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-font-type1.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-vnd.rn-realaudio_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-vnd.rn-realaudio.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-generic_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-wav_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-x-wav.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-egon_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-egon.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-7z-compressed_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-7z-compressed.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-zoo_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-zoo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pkcs7-signature_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-pkcs7-signature.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-ogm+ogg_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/video-x-ogm+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-contact_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/x-office-contact.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.message-rfc822_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/message-rfc822.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-rdf_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-rdf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-scpls_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-x-scpls.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-java_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-java.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-pcf_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-font-pcf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.presentation_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.oasis.opendocument.presentation.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-cue_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-cue.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-quicktime_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/video-quicktime.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-rtf_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-rtf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-html_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-html.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-flac+ogg_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-x-flac+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-spreadsheet_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/x-office-spreadsheet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-nzb_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-nzb.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-dds_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-dds.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-xfig_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-xfig.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.binary_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/binary.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-tiff_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-tiff.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-ms-wma_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-x-ms-wma.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-adasrc_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-adasrc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-bzip_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-bzip.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-pak_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-pak.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.pdf_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/pdf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-pcx_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-pcx.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-mng_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/video-x-mng.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-mpeg_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/video-mpeg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-gzip_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-gzip.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-vnd.wap.wml_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-vnd.wap.wml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-plain_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-plain.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-mswinurl_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-mswinurl.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-flac_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-x-flac.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-bmp_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-bmp.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-siag_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-siag.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-vnd.rn-realvideo_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-vnd.rn-realvideo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-tcl_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-tcl.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-document_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/x-office-document.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-mathml_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-mathml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-csharp_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-csharp.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-zerosize_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-zerosize.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.xml_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-deb_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-deb.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-pnm_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/uri-pnm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pgp_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-pgp.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.spreadsheet_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/spreadsheet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.vectorgfx_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/vectorgfx.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-bdf_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-font-bdf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-afm_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-font-afm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.cdtrack_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/cdtrack.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-xcf_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-xcf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-matroska_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-x-matroska.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-xml_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-lha_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-lha.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.spreadsheet_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.oasis.opendocument.spreadsheet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-css_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-css.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-rtspt_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/uri-rtspt.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-quattropro_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-quattropro.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.zip_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/zip.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-vnd.trolltech.qpicture_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-vnd.trolltech.qpicture.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-c++src_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-c++src.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-plasma_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-plasma.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-desktop_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-desktop.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-arj_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-arj.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-kontour_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-kontour.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pgp-encrypted_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-pgp-encrypted.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-vorbis+ogg_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-x-vorbis+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.html_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/html.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-hex_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-hex.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-ms-asf_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/video-x-ms-asf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-otf_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-font-otf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-c++hdr_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-x-c++hdr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.message-news_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/message-news.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.odf_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/odf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-portable-graymap_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-portable-graymap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-tgif_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-tgif.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-object_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-object.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-applix-graphics_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-applix-graphics.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-pn-realaudio-plugin_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-x-pn-realaudio-plugin.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-ac3_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-ac3.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-troff-man_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-troff-man.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.man_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/man.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-ace_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-ace.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-tarz_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-tarz.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-jpeg_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-jpeg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.cdimage_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/cdimage.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.sun.xml.draw.template_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.sun.xml.draw.template.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-vcalendar_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/text-vcalendar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-theora+ogg_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/video-x-theora+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.encrypted_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/encrypted.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-speex+ogg_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-x-speex+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-rgb_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-rgb.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.image_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-vnd.oasis.opendocument.image.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-lzop_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-lzop.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.recycled_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/recycled.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-zip_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-zip.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-xbitmap_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-xbitmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-xpixmap_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-xpixmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-eps_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/image-x-eps.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-applix-spreadsheet_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-applix-spreadsheet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-shellscript_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/application-x-shellscript.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-basic_22x22 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/22x22/mimetypes/audio-basic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.standardFileClass_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-octet-stream.png);
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pdf_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-pdf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-krita_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-krita.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.shellscript_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/shellscript.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-ar_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-ar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-java-applet_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-java-applet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-marble_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-marble.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-portable-bitmap_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-portable-bitmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.database_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.oasis.opendocument.database.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.text_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.oasis.opendocument.text.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-jpeg2000_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-jpeg2000.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-generic_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-mms_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/uri-mms.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-wmf_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-wmf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-patch_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-patch.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.make_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/make.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.tex_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/tex.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.none_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/none.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-aac_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-aac.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-gzpostscript_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-gzpostscript.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-sgml_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-sgml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-kgetlist_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-kgetlist.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-rpm_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-rpm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.message_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/message.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-java_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-java.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-portable-pixmap_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-portable-pixmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-mpegurl_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-x-mpegurl.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.cdbo-list_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/cdbo-list.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-mp4_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/video-mp4.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.document_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/document.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.font-bitmap_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/font-bitmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.info_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/info.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-ico_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-ico.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-javascript_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-javascript.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-aiff_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-x-aiff.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-rtf_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-rtf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-xml_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-pascal_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-pascal.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-matroska_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/video-x-matroska.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-tzo_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-tzo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-cpio_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-cpio.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-texinfo_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-texinfo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-compress_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-compress.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-xslfo_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-xslfo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.sun.xml.draw_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.sun.xml.draw.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.spreadsheet-template_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.oasis.opendocument.spreadsheet-template.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-java-archive_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-java-archive.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-ldif_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-ldif.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-bibtex_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-bibtex.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-xslt+xml_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-xslt+xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.unknown_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/unknown.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-dtd_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-dtd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.kwordquiz-do_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/kwordquiz-do.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.vcard_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/vcard.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-xsd_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-xsd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-mp2_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-x-mp2.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-rtspu_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/uri-rtspu.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-objcsrc_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-objcsrc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-midi_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-midi.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-compressed-tar_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-compressed-tar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.stardivision.calc_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.stardivision.calc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/video.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-fits_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-fits.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-vcard_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-vcard.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.stardivision.draw_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.stardivision.draw.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-vnd.abc_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-vnd.abc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.txt_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/txt.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-calendar_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-calendar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.tgz_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/tgz.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-flic_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/video-x-flic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-gzdvi_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-gzdvi.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-chdr_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-chdr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-ruby_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-ruby.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-mswrite_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-mswrite.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-perl_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-perl.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-mpeg_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-mpeg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.presentation-template_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.oasis.opendocument.presentation-template.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-designer_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-designer.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-dcraw_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-dcraw.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-relaxng_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-relaxng.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-bzdvi_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-bzdvi.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.ms-powerpoint_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.ms-powerpoint.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-mimearchive_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-mimearchive.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-csv_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-csv.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-fax-g3_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-fax-g3.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-ttf_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-font-ttf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.chart_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.oasis.opendocument.chart.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.empty_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/empty.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.sound_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/sound.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-address-book_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/x-office-address-book.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-photo-cd_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-photo-cd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-svg+xml_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-svg+xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-media-podcast_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/x-media-podcast.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pgp-keys_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-pgp-keys.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-arc_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-arc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-directory_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-directory.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.news_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/news.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-generic_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.formula_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.oasis.opendocument.formula.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-svg+xml-compressed_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-svg+xml-compressed.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-exr_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-exr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-octet-stream_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-octet-stream.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-sharedlib_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-sharedlib.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-mod_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-x-mod.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-xmcd_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-xmcd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-psd_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-psd.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.sun.xml.calc.template_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.sun.xml.calc.template.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.ascii_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/ascii.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-cgm_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-cgm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-msod_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-msod.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-tar_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-tar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-hdr_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-hdr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-php_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-php.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-objchdr_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-objchdr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-ms-dos-executable_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-ms-dos-executable.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-gnumeric_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-gnumeric.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-jng_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-jng.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.graphics_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.oasis.opendocument.graphics.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-mmsu_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/uri-mmsu.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-bittorrent_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-bittorrent.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pkcs7-mime_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-pkcs7-mime.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-generic_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/video-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-illustrator_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-illustrator.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.ms-word_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.ms-word.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-katefilelist_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-katefilelist.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-calendar_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/x-office-calendar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-awk_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-awk.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.ms-excel_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.ms-excel.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-trash_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-trash.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.font-type1_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/font-type1.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-executable-script_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-executable-script.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-enriched_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-enriched.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-musepack_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-x-musepack.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-bzip-compressed-tar_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-bzip-compressed-tar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-troff_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-troff.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-ms-wmv_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/video-x-ms-wmv.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-mplayer2_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-mplayer2.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-cda_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-cda.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pgp-signature_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-pgp-signature.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-tex_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-tex.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-adpcm_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-x-adpcm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-archive_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-archive.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-tga_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-tga.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.vcalendar_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/vcalendar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.font-truetype_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/font-truetype.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.rn-realmedia_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.rn-realmedia.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.package-x-generic_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/package-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-script_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-script.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-cd-image_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-cd-image.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.inode-directory_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/inode-directory.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-python-bytecode_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-python-bytecode.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-csrc_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-csrc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.sun.xml.calc_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.sun.xml.calc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-xhtml+xml_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-xhtml+xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-makefile_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-makefile.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-rss+xml_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-rss+xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-mp4_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-mp4.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-prs.sid_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-prs.sid.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-postscript_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-postscript.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-kcsrc_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-kcsrc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-mmst_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/uri-mmst.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-png_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-png.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-rar_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-rar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-python_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-python.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-snf_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-font-snf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-gif_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-gif.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.tar_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/tar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-msvideo_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/video-x-msvideo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-monkey_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-x-monkey.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-executable_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-executable.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-type1_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-font-type1.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-vnd.rn-realaudio_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-vnd.rn-realaudio.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-generic_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-x-generic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-wav_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-x-wav.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-egon_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-egon.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-7z-compressed_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-7z-compressed.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-zoo_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-zoo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pkcs7-signature_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-pkcs7-signature.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-ogm+ogg_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/video-x-ogm+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-contact_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/x-office-contact.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.message-rfc822_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/message-rfc822.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-rdf_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-rdf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-scpls_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-x-scpls.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-java_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-java.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-pcf_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-font-pcf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.presentation_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.oasis.opendocument.presentation.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-cue_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-cue.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-quicktime_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/video-quicktime.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-rtf_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-rtf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-html_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-html.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-flac+ogg_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-x-flac+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-spreadsheet_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/x-office-spreadsheet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-nzb_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-nzb.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-dds_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-dds.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-xfig_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-xfig.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.binary_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/binary.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-tiff_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-tiff.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-ms-wma_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-x-ms-wma.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-adasrc_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-adasrc.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-bzip_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-bzip.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-pak_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-pak.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.pdf_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/pdf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-pcx_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-pcx.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-mng_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/video-x-mng.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-mpeg_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/video-mpeg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-gzip_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-gzip.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-vnd.wap.wml_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-vnd.wap.wml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-plain_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-plain.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-mswinurl_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-mswinurl.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-flac_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-x-flac.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-bmp_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-bmp.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-siag_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-siag.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-vnd.rn-realvideo_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-vnd.rn-realvideo.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-tcl_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-tcl.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.x-office-document_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/x-office-document.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-mathml_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-mathml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-csharp_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-csharp.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-zerosize_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-zerosize.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.xml_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-deb_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-deb.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-pnm_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/uri-pnm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pgp_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-pgp.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.spreadsheet_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/spreadsheet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.vectorgfx_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/vectorgfx.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-bdf_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-font-bdf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-afm_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-font-afm.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.cdtrack_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/cdtrack.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-xcf_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-xcf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-matroska_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-x-matroska.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-xml_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-xml.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-lha_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-lha.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.spreadsheet_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.oasis.opendocument.spreadsheet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-css_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-css.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.uri-rtspt_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/uri-rtspt.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-quattropro_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-quattropro.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.zip_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/zip.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-vnd.trolltech.qpicture_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-vnd.trolltech.qpicture.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-c++src_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-c++src.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-plasma_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-plasma.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-desktop_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-desktop.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-arj_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-arj.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-kontour_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-kontour.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-pgp-encrypted_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-pgp-encrypted.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-vorbis+ogg_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-x-vorbis+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.html_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/html.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-hex_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-hex.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-ms-asf_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/video-x-ms-asf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-font-otf_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-font-otf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-x-c++hdr_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-x-c++hdr.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.message-news_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/message-news.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.odf_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/odf.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-portable-graymap_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-portable-graymap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-tgif_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-tgif.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-object_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-object.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-applix-graphics_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-applix-graphics.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-pn-realaudio-plugin_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-x-pn-realaudio-plugin.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-ac3_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-ac3.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-troff-man_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-troff-man.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.man_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/man.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-ace_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-ace.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-tarz_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-tarz.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-jpeg_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-jpeg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.cdimage_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/cdimage.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.sun.xml.draw.template_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.sun.xml.draw.template.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.text-vcalendar_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/text-vcalendar.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.video-x-theora+ogg_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/video-x-theora+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.encrypted_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/encrypted.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-x-speex+ogg_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-x-speex+ogg.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-rgb_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-rgb.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-vnd.oasis.opendocument.image_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-vnd.oasis.opendocument.image.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-lzop_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-lzop.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.recycled_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/recycled.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-zip_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-zip.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-xbitmap_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-xbitmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-xpixmap_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-xpixmap.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.image-x-eps_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/image-x-eps.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-applix-spreadsheet_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-applix-spreadsheet.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.application-x-shellscript_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/application-x-shellscript.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+
+.audio-basic_32x32 .x-grid3-cell-inner {
+    background-image: url(../../images/oxygen/32x32/mimetypes/audio-basic.png) !important;
+    background-repeat:  no-repeat;
+    padding-left: 19px;
+}
+

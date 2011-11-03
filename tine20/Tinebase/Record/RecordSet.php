@@ -102,16 +102,17 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * add Tinebase_Record_Interface like object to internal list
      *
      * @param Tinebase_Record_Interface $_record
+     * @param integer $_index
      * @return int index in set of inserted record
      */
-    public function addRecord(Tinebase_Record_Interface $_record)
+    public function addRecord(Tinebase_Record_Interface $_record, $_index = NULL)
     {
         if (! $_record instanceof $this->_recordClass) {
             throw new Tinebase_Exception_Record_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
         }
         $this->_listOfRecords[] = $_record;
         end($this->_listOfRecords);
-        $index = key($this->_listOfRecords);
+        $index = ($_index !== NULL) ? $_index : key($this->_listOfRecords);
         
         // maintain indices
         $recordId = $_record->getId();
@@ -212,6 +213,19 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     public function getIndexById($_id)
     {
         return array_key_exists($_id, $this->_idMap) ? $this->_idMap[$_id] : false;
+    }
+    
+    /**
+     * returns record identified by its id
+     * 
+     * @param  string $_id id of record
+     * @return Tinebase_Record_Abstract::|bool    record or false if not in set
+     */
+    public function getById($_id)
+    {
+        $idx = $this->getIndexById($_id);
+        
+        return $idx !== false ? $this[$idx] : false;
     }
     
     /**

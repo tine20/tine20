@@ -119,6 +119,5 @@ class Admin_Controller_Application extends Tinebase_Controller_Abstract
         $tineApplications = Tinebase_Application::getInstance();
         
         return $tineApplications->setApplicationState($_applicationIds, $_state);
-    }
-            
+    }           
 }

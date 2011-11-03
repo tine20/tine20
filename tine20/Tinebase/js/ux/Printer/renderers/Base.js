@@ -6,10 +6,23 @@
  */
 Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
   /**
+   * @cfg {String} printStrategy window or iframe
+   */
+  printStrategy: 'iframe',
+  
+  /**
    * Prints the component
    * @param {Ext.Component} component The component to print
    */
   print: function(component) {
+    return this[this.printStrategy + 'Print'](component);
+  },
+  
+  /**
+   * Prints the component using the new window strategy
+   * @param {Ext.Component} component The component to print
+   */
+  windowPrint: function(component) {
     var name = component && component.getXType
              ? String.format("print_{0}_{1}", component.getXType(), component.id.replace(/-/g, '_'))
              : "print";
@@ -27,6 +40,47 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
     }
     
     this.doPrintOnStylesheetLoad.defer(10, this, [win]);
+  },
+  
+  /**
+   * Prints the component using the hidden iframe strategy
+   * @param {Ext.Component} component The component to print
+   */
+  iframePrint: function(component) {
+    var id = Ext.id(),
+    doc = document,
+    frame = doc.createElement('iframe');
+        
+    Ext.fly(frame).set({
+      id: id,
+      name: id,
+      style: {
+        position: 'absolute',
+        width: '210mm',
+        height: '297mm',
+        top: '-10000px', 
+        left: '-10000px'
+      }
+    });
+    
+    doc.body.appendChild(frame);
+
+    Ext.fly(frame).set({
+      src : Ext.SSL_SECURE_URL
+    });
+
+    var doc = frame.contentWindow.document || frame.contentDocument || WINDOW.frames[id].document;
+        
+    doc.open();
+    doc.write(this.generateHTML(component));
+    doc.close();
+    
+    this.doPrintOnStylesheetLoad.defer(10, this, [frame.contentWindow]);
+//    frame.contentWindow.focus(); 
+//    frame.contentWindow.print();
+//    
+//    // NOTE: remving frame crashes chrome
+//    setTimeout(function(){Ext.removeNode(frame);}, 100);
   },
   
   /**

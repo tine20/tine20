@@ -3,6 +3,7 @@
  * Tine 2.0
  * 
  * @package     Tasks
+ * @subpackage  Preference
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,13 +14,14 @@
  * Tasks preferences
  *
  * @package     Tasks
+ * @subpackage  Preference
  */
 class Tasks_Preference extends Tinebase_Preference_Abstract
 {
     /**************************** application preferences/settings *****************/
     
     /**
-     * have name of default favorite an a central palce
+     * have name of default favorite on a central place
      * _("All my tasks")
      */
     const DEFAULTPERSISTENTFILTER_NAME = "All my tasks";

@@ -87,7 +87,7 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
             'location'             => 'here and there',
             'organizer'            => 4,
             'priority'             => 2,
-            //'status_id'            => 2,
+            //'status'               => 'NEEDS-ACTION',
             'summary'              => 'our first test task',
             'url'                  => 'http://www.testtask.com',
         ),true, false);
@@ -116,7 +116,7 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
     public function testCompletedNULL()
     {
         $task = new Tasks_Model_Task($this->_minimalDatas['Task']);
-        $task->status_id = $this->_getStatus()->getId();
+        $task->status = $this->_getStatus()->getId();
         $task->completed = Tinebase_DateTime::now();
         
         $pTask = $this->_controller->create($task);
@@ -128,7 +128,7 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
     public function testCompletedViaStatus()
     {
         $task = new Tasks_Model_Task($this->_minimalDatas['Task']);
-        $task->status_id = $this->_getStatus(false)->getId();
+        $task->status = $this->_getStatus(false)->getId();
         //$task->completed = Tinebase_DateTime::now();
         
         $pTask = $this->_controller->create($task);
@@ -144,8 +144,8 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
      */
     protected function _getStatus($_open=true)
     {
-        foreach (Tasks_Controller_Status::getInstance()->getAllStatus() as $idx => $status) {
-            if (! ($status->status_is_open xor $_open)) {
+        foreach (Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)->records as $idx => $status) {
+            if (! ($status->is_open xor $_open)) {
                 return $status;
             }
         }

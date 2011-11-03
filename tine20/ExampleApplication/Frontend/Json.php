@@ -4,8 +4,8 @@
  * @package     ExampleApplication
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -24,6 +24,15 @@ class ExampleApplication_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var ExampleApplication_Controller_ExampleRecord
      */
     protected $_controller = NULL;
+    
+    /**
+     * user fields (created_by, ...) to resolve in _multipleRecordsToJson and _recordToJson
+     *
+     * @var array
+     */
+    protected $_resolveUserFields = array(
+        'ExampleApplication_Model_ExampleRecord' => array('created_by', 'last_modified_by')
+    );
     
     /**
      * the constructor

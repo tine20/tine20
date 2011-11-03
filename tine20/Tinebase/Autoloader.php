@@ -55,18 +55,16 @@ class Tinebase_Autoloader implements Zend_Loader_Autoloader_Interface
      * @param $name
      * @throws Zend_Exception
      */
-    public static function qCal($name)
+    public static function qCal($class)
     {
         $qCalPath = dirname(dirname(__FILE__)) . '/library/qCal/lib/';
-        set_include_path(implode(PATH_SEPARATOR, array($qCalPath, get_include_path())));
-        
         require_once "$qCalPath/qCal/Loader.php";
         
         $autoloader = Zend_Loader_Autoloader::getInstance();
         $autoloader->unregisterNamespace('qCal');
         $autoloader->pushAutoloader(array('qCal_Loader', 'loadClass'), 'qCal');
         
-        qCal_Loader::loadClass($name);
+        qCal_Loader::loadClass($class);
     }
 
     /**

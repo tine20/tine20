@@ -138,11 +138,18 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
     {
         $record = new Tinebase_Model_CustomField_Config(array(
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId(),
-            'name'              => Tinebase_Record_Abstract::generateUID(),
-            'label'             => Tinebase_Record_Abstract::generateUID(),        
             'model'             => 'Timetracker_Model_Timesheet',
-            'type'              => Tinebase_Record_Abstract::generateUID(),
-            'length'            => 10,        
+            'name'              => Tinebase_Record_Abstract::generateUID(),
+            'definition'        => array(
+                'label' => Tinebase_Record_Abstract::generateUID(),        
+                'type'  => 'string',
+                'uiconfig' => array(
+                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
+                    'length' => 10,
+                    'group'  => 'unittest',
+                    'order'  => 100,
+                )
+            )      
         ));
         
         $result = Tinebase_CustomField::getInstance()->addCustomField($record);

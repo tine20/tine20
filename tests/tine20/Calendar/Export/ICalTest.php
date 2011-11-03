@@ -93,7 +93,7 @@ class Calendar_Export_ICalTest extends PHPUnit_Framework_TestCase //extends Cale
         $until = clone $this->_testEvent->dtend;
         $until->addDay(2);
         
-        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($this->_testEvent, $exceptions, $from, $until);
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($this->_testEvent, $exceptions, $from, $until);
         $this->_testEvent->exdate = $recurSet->dtstart;
 
         $exporter = new Calendar_Export_Ical();
@@ -113,7 +113,7 @@ class Calendar_Export_ICalTest extends PHPUnit_Framework_TestCase //extends Cale
         $until = clone $this->_testEvent->dtend;
         $until->addDay(2);
         
-        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($this->_testEvent, $exceptions, $from, $until);
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($this->_testEvent, $exceptions, $from, $until);
         $this->_testEvent->exdate = array($recurSet->dtstart[0]);
         
         $eventSet = new Tinebase_Record_RecordSet('Calendar_Model_Event', array(

@@ -27,27 +27,29 @@ Ext.namespace('Tine.Crm');
  * @constructor
  * Create a new Tine.Crm.LeadGridContactFilter
  */
-Tine.Crm.LeadGridContactFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
-    isForeignFilter: true,
-    foreignField: 'id',
+Tine.Crm.LeadGridContactFilter = Ext.extend(Tine.widgets.grid.ForeignRecordFilter, {
+    
+    /**
+     * @cfg {Record} foreignRecordClass needed for explicit defined filters
+     */
+    foreignRecordClass : Tine.Addressbook.Model.Contact,
+    
+    /**
+     * @cfg {String} ownField for explicit filterRow
+     */
     ownField: 'contact',
     
     /**
      * @private
      */
     initComponent: function() {
-        Tine.widgets.tags.TagFilter.superclass.initComponent.call(this);
-        
-        this.subFilterModels = [];
-        
         this.app = Tine.Tinebase.appMgr.get('Crm');
         this.label = this.app.i18n._("Contact");
-        this.operators = ['equals'];
+        
+        Tine.Crm.LeadGridContactFilter.superclass.initComponent.call(this);
     },
     
     getSubFilters: function() {
-        var filterConfigs = Tine.Addressbook.Model.Contact.getFilterModel();
-        
         var contactRoleFilter = new Tine.widgets.grid.FilterModel({
             label: this.app.i18n._('CRM Role'),
             field: 'relation_type',
@@ -71,43 +73,7 @@ Tine.Crm.LeadGridContactFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
             }
         });
         
-        this.subFilterModels.push(contactRoleFilter);
-        
-        Ext.each(filterConfigs, function(config) {
-            this.subFilterModels.push(Tine.widgets.grid.FilterToolbar.prototype.createFilterModel.call(this, config));
-        }, this);
-        
-        return this.subFilterModels;
-    },
-    
-    /**
-     * value renderer
-     * 
-     * @param {Ext.data.Record} filter line
-     * @param {Ext.Element} element to render to 
-     */
-    valueRenderer: function(filter, el) {
-        // value
-        var value = new Tine.Addressbook.SearchCombo({
-            filter: filter,
-            blurOnSelect: true,
-            width: 200,
-            listWidth: 500,
-            listAlign: 'tr-br',
-            id: 'tw-ftb-frow-valuefield-' + filter.id,
-            value: filter.data.value ? filter.data.value : this.defaultValue,
-            renderTo: el,
-            getValue: function() {
-                return this.selectedRecord ? this.selectedRecord.id : null;
-            }
-        });
-        value.on('specialkey', function(field, e){
-             if(e.getKey() == e.ENTER){
-                 this.onFiltertrigger();
-             }
-        }, this);
-        
-        return value;
+        return [contactRoleFilter];
     }
 });
 Tine.widgets.grid.FilterToolbar.FILTERS['crm.contact'] = Tine.Crm.LeadGridContactFilter;

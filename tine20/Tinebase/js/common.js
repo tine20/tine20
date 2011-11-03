@@ -56,10 +56,46 @@ Tine.Tinebase.common = {
         leftPos = ((w - width) / 2) + y;
         topPos = ((h - height) / 2) + x;
         
-        popup = window.open(url, windowName, 'width=' + width + ',height=' + height + ',top=' + topPos + ',left=' + leftPos +
-        ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
-        
+
+		try {
+			popup = window.open(url, windowName, 'width=' + width + ',height=' + height + ',top=' + topPos + ',left=' + leftPos +
+	        	',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
+	        
+	        return popup;
+		}
+		catch(e) {
+			Tine.log.info('window.open Exception: ');
+			Tine.log.info(e);
+			
+			popup = false;
+			
+		}
+		
+		if (! popup) {
+			openCode = "window.open('http://127.0.0.1/tine20/tine20/" + url + "','" + windowName + "','width=" + width + ",height=" + height + ",top=" + topPos + ",left=" + leftPos +
+			",directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no')";
+		
+			var exception = {
+				openCode: openCode,
+				popup: null
+			};
+			
+			Tine.log.debug('openCode: ' + openCode);
+			popup = openCode;
+			
+//			if(Tine.Tinebase.MainScreen.fireEvent('windowopenexception', exception) !== false){
+//	            // show message 'your popupblocker ... please click here'
+//				// mhh how to make this syncron???
+//				
+//				// todo: review code in Ext.ux.PopupWindow...
+//				popup = window;
+//	        } else {
+//	        	popup = exception.popup;
+//	        }
+		}
+		
         return popup;
+        
     },
     
     showDebugConsole: function () {
@@ -139,6 +175,51 @@ Tine.Tinebase.common = {
                     qtipText += ' | ' + tags[i].description;
                 }
                 result += '<div ext:qtip="' + qtipText + '" class="tb-grid-tags" style="background-color:' + tags[i].color + ';">&#160;</div>';
+            }
+        }
+        
+        return result;
+    },
+    
+    /**
+     * Returns rendered containers
+     * 
+     * @TODO show qtip with grants
+     * 
+     * @param {mixed} container
+     * @return {String} 
+     */
+    containerRenderer: function(container, metaData) {
+        // lazy init tempalte
+        if (! Tine.Tinebase.common.containerRenderer.tpl) {
+            Tine.Tinebase.common.containerRenderer.tpl = new Ext.XTemplate(
+                '<div class="x-tree-node-leaf x-unselectable file">',
+                    '<img class="x-tree-node-icon" unselectable="on" src="', Ext.BLANK_IMAGE_URL, '">',
+                    '<span style="color: {color};">&nbsp;&#9673;&nbsp</span>',
+                    '<span>{name}</span>',
+                '</div>'
+            ).compile();
+        }
+        
+        var result =  _('No Information');
+        
+        // support container records
+        if (container && Ext.isFunction(container.beginEdit)) {
+            container = container.data;
+        }
+        
+        // non objects are treated as ids and -> No Information
+        if (Ext.isObject(container)) {
+            var name = Ext.isFunction(container.beginEdit) ? container.get('name') : container.name,
+                color = Ext.isFunction(container.beginEdit) ? container.get('color') : container.color;
+            
+            if (name) {
+                result = Tine.Tinebase.common.containerRenderer.tpl.apply({
+                    name: Ext.util.Format.htmlEncode(name).replace(/ /g,"&nbsp;"),
+                    color: color ? color : '#808080'
+                });
+            } else if (Ext.isObject(metaData)) {
+                metaData.css = 'x-form-empty-field';
             }
         }
         
@@ -288,22 +369,6 @@ Tine.Tinebase.common = {
     },
     
     /**
-     * custom field renderer
-     * 
-     * @param {Object} customfields of record
-     * @param {} metadata
-     * @param {} record
-     * @param {} rowIndex
-     * @param {} colIndex
-     * @param {} store
-     * @param {String} name of the customfield
-     * @return {String}
-     */
-    customfieldRenderer: function (customfields, metadata, record, rowIndex, colIndex, store, name) {
-        return Ext.util.Format.htmlEncode(customfields[name]); 
-    },
-    
-    /**
      * sorts account/user objects
      * 
      * @param {Object|String} user_id
@@ -376,6 +441,30 @@ Tine.Tinebase.common = {
 	        }
 	    }
 	    return c;
+    },
+    
+    /**
+     * assert that given object is comparable
+     * 
+     * @param {mixed} o
+     * @return {mixed} o
+     */
+    assertComparable: function(o) {
+        // NOTE: Ext estimates Object/Array by a toString operation
+        if (Ext.isObject(o) || Ext.isArray(o)) {
+            Tine.Tinebase.common.applyComparableToString(o);
+        }
+        
+        return o;
+    },
+    
+    /**
+     * apply Ext.encode as toString functino to given object
+     * 
+     * @param {mixed} o
+     */
+    applyComparableToString: function(o) {
+        o.toString = function() {return Ext.encode(o)};
     },
     
     /**

@@ -111,8 +111,7 @@ class Zend_Scheduler
     /**
      * Return used Backend.
      * 
-     * 
-     * @return Zend_Scheduler_Backend
+     * @return Zend_Scheduler_Backend_Abstract
      */
     public function getBackend()
     {
@@ -236,6 +235,15 @@ class Zend_Scheduler
         }
         
         $this->_removedTask[$name] = $name;
+    }
+
+    /**
+     * Removes all tasks
+     */
+    public function removeAllTasks()
+    {
+        $this->_removedTask = array();
+        $this->_tasks = array();
     }
 
     /**

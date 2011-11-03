@@ -1,10 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
-	/**
-	 * $Id$
-	 * Notes: field descriptions may be in Setup_Backend_Schema_Field_Xml 
-	 */
--->
 <application>
     <name>ExampleApplication</name>
     <!-- gettext('ExampleApplication') -->   
@@ -31,6 +25,14 @@
                     <name>name</name>
                     <type>text</type>
                     <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <!-- keyfield 'status' -->
+                <field>
+                    <name>status</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <default>IN-PROCESS</default>
                     <notnull>true</notnull>
                 </field>
                 <!-- add more fields here -->

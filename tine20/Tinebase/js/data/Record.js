@@ -75,6 +75,54 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      */
     containersName: 'containers',
     
+    cfExp: /^#(.+)/,
+    
+    /**
+     * Get the value of the {@link Ext.data.Field#name named field}.
+     * @param {String} name The {@link Ext.data.Field#name name of the field} to get the value of.
+     * @return {Object} The value of the field.
+     */
+    get: function(name) {
+        
+        if (cfName = String(name).match(this.cfExp)) {
+            return this.data.customfields ? this.data.customfields[cfName[1]] : null;
+        }
+        
+        return this.data[name];
+    },
+    
+    /**
+     * Set the value of the {@link Ext.data.Field#name named field}.
+     * @param {String} name The {@link Ext.data.Field#name name of the field} to get the value of.
+     * @return {Object} The value of the field.
+     */
+    set : function(name, value) {
+        var encode = Ext.isPrimitive(value) ? String : Ext.encode,
+            current = this.get(name);
+            
+        if(encode(current) == encode(value)) {
+            return;
+        }        
+        this.dirty = true;
+        if(!this.modified){
+            this.modified = {};
+        }
+        if(this.modified[name] === undefined){
+            this.modified[name] = current;
+        }
+        
+        if (cfName = String(name).match(this.cfExp)) {
+            this.data.customfields = this.data.customfields || {};
+            this.data.customfields[cfName[1]] = value;
+        } else {
+            this.data[name] = value;
+        }
+        
+        if(!this.editing){
+            this.afterEdit();
+        }
+    },
+    
     /**
      * returns title of this record
      * 
@@ -151,5 +199,66 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
         }
         return p.fieldsarray;
     };
+    f.hasField = function(n) {
+        return p.fields.indexOfKey(n) >= 0;
+    };
+    f.getRecordName = function() {
+        return Tine.Tinebase.appMgr.get(p.appName).i18n.n_(p.recordName, p.recordsName, 1);
+    };
+    f.getRecordsName = function() {
+        return Tine.Tinebase.appMgr.get(p.appName).i18n.n_(p.recordName, p.recordsName, 50);
+    };
+    f.getContainerName = function() {
+        return Tine.Tinebase.appMgr.get(p.appName).i18n.n_(p.containerName, p.containersName, 1);
+    };
+    f.getContainersName = function() {
+        return Tine.Tinebase.appMgr.get(p.appName).i18n.n_(p.containerName, p.containersName, 50);
+    };
+    Tine.Tinebase.data.RecordMgr.add(f);
     return f;
 };
+
+Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
+    add: function(record) {
+        if (! Ext.isFunction(record.getMeta)) {
+            throw new Ext.Error('only records of type Tinebase.data.Record could be added');
+        }
+        var appName = record.getMeta('appName')
+            modelName = record.getMeta('modelName');
+            
+        if (! appName && modelName) {
+            throw new Ext.Error('appName and modelName must be in the metadatas');
+        }
+        
+//        console.log('register model "' + appName + '.' + modelName + '"');
+        Tine.Tinebase.data.RecordManager.superclass.add.call(this, appName + '.' + modelName, record);
+    },
+    
+    get: function(appName, modelName) {
+        if (Ext.isFunction(appName.getMeta)) {
+            return appName;
+        }
+        if (! modelName && appName.modelName) {
+            modelName = appName.modelName;
+        }
+        if (appName.appName) {
+            appName = appName.appName;
+        }
+            
+        if (! Ext.isString(appName)) {
+            throw new Ext.Error('appName must be a string');
+        }
+        
+        Ext.each([appName, modelName], function(what) {
+            if (! Ext.isString(what)) return;
+            var parts = what.split(/(?:_Model_)|(?:\.)/);
+            if (parts.length > 1) {
+                appName = parts[0];
+                modelName = parts[1];
+            }
+        });
+        
+        return Tine.Tinebase.data.RecordManager.superclass.get.call(this, appName + '.' + modelName);
+    }
+});
+Tine.Tinebase.data.RecordMgr = new Tine.Tinebase.data.RecordManager(true);

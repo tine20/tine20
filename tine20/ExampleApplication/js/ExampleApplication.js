@@ -2,11 +2,10 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.ExampleApplication');
-
 
 /**
  * @namespace   Tine.ExampleApplication
@@ -22,7 +21,7 @@ Tine.ExampleApplication.Application = Ext.extend(Tine.Tinebase.Application, {
      * @return {String}
      */
     getTitle: function() {
-        return this.i18n.gettext('Example Application');
+        return this.i18n.gettext('Example Application test');
     }
 });
 
@@ -34,10 +33,8 @@ Tine.ExampleApplication.Application = Ext.extend(Tine.Tinebase.Application, {
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 Tine.ExampleApplication.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
-    
     activeContentType: 'ExampleRecord'
 });
-
     
 /**
  * @namespace   Tine.ExampleApplication
@@ -52,3 +49,18 @@ Tine.ExampleApplication.TreePanel = Ext.extend(Tine.widgets.container.TreePanel,
     recordClass: Tine.ExampleApplication.Model.ExampleRecord
 });
 
+/**
+ * favorites panel
+ * 
+ * @class       Tine.ExampleApplication.FilterPanel
+ * @extends     Tine.widgets.persistentfilter.PickerPanel
+ *  
+ * @param {Object} config
+ */
+Tine.ExampleApplication.FilterPanel = function(config) {
+    Ext.apply(this, config);
+    Tine.ExampleApplication.FilterPanel.superclass.constructor.call(this);
+};
+Ext.extend(Tine.ExampleApplication.FilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
+    filter: [{field: 'model', operator: 'equals', value: 'ExampleApplication_Model_ExampleRecordFilter'}]
+});

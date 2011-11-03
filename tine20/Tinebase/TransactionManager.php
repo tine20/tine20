@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  TransactionManager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -82,7 +82,7 @@ class Tinebase_TransactionManager
         if (! in_array($_transactionable, $this->_openTransactionables)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  new transactionable. Starting transaction on this resource");
             if ($_transactionable instanceof Zend_Db_Adapter_Abstract) {
-                $_transactionable->query("SET AUTOCOMMIT=0;");
+                Tinebase_Backend_Sql_Command::setAutocommit($_transactionable,false);
                 $_transactionable->beginTransaction();
             } else {
                 $this->rollBack();
@@ -118,7 +118,7 @@ class Tinebase_TransactionManager
              foreach ($this->_openTransactionables as $transactionableIdx => $transactionable) {
                  if ($transactionable instanceof Zend_Db_Adapter_Abstract) {
                      $transactionable->commit();
-                     $transactionable->query("SET AUTOCOMMIT=1;");
+                     Tinebase_Backend_Sql_Command::setAutocommit($transactionable,true);
                  }
              }
              $this->_openTransactionables = array();
@@ -139,7 +139,7 @@ class Tinebase_TransactionManager
         foreach ($this->_openTransactionables as $transactionable) {
         if ($transactionable instanceof Zend_Db_Adapter_Abstract) {
                 $transactionable->rollBack();
-                $transactionable->query("SET AUTOCOMMIT=1;");
+                Tinebase_Backend_Sql_Command::setAutocommit($transactionable,true);
             }
         }
         $this->_openTransactionables = array();

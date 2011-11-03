@@ -49,7 +49,7 @@ class Tinebase_EmailUser_Imap_LdapDbmailSchema extends Tinebase_EmailUser_Ldap
         'dbmailUser'
     );    
     
-    protected $_backendType = Tinebase_Model_Config::IMAP;
+    protected $_backendType = Tinebase_Config::IMAP;
     
     /**
      * the constructor

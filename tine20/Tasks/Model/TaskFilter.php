@@ -5,7 +5,7 @@
  * @package     Tasks
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -36,14 +36,17 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'id'                   => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'id'                   => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'Tasks_Model_Task')),
         'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('summary', 'description'))),
         'organizer'            => array('filter' => 'Tinebase_Model_Filter_User'),
-        'status_id'            => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'status'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'due'                  => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'description'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'summary'              => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'tasks.id')),
+        'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
+            'idProperty' => 'tasks.id',
+            'applicationName' => 'Tasks',
+        )),
         'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),

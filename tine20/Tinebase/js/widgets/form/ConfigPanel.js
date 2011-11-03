@@ -100,6 +100,29 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
                         }
                     }
                     this.loadMask.hide();
+                },
+                failure: function(response, options) {
+                    this.loadMask.hide();
+                    var responseText = Ext.util.JSON.decode(response.responseText),
+                        exception = responseText.data ? responseText.data : responseText;
+                        
+                    switch (exception.code) {
+                        // Service Unavailable! / configuration problem
+                        case 503:
+                            Ext.MessageBox.show({
+                                title: _('Configuration Problem'), 
+                                msg: exception.message,
+                                buttons: Ext.Msg.OK,
+                                icon: Ext.MessageBox.WARNING,
+                                fn: function() {
+                                    // TODO only reload own config data
+                                    window.location.reload();
+                                }
+                            });
+                            break;
+                        default:
+                            Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+                    }
                 }
             });
         } else {

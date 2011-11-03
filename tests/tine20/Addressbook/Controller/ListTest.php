@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -12,10 +12,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Addressbook_Controller_ListTest::main');
-}
 
 /**
  * Test class for Tinebase_Group
@@ -103,7 +99,7 @@ class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
             'tel_pager'             => '+49TELPAGER',
             'tel_work'              => '+49TELWORK',
         ));
-        $this->objects['contact1'] = Addressbook_Controller_Contact::getInstance()->create($this->objects['contact1']);
+        $this->objects['contact1'] = Addressbook_Controller_Contact::getInstance()->create($this->objects['contact1'], FALSE);
         
         $this->objects['contact2'] = new Addressbook_Model_Contact(array(
             'adr_one_countryname'   => 'DE',
@@ -146,20 +142,13 @@ class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
             'tel_pager'             => '+49TELPAGER',
             'tel_work'              => '+49TELWORK',
         )); 
-        $this->objects['contact2'] = Addressbook_Controller_Contact::getInstance()->create($this->objects['contact2']);
+        $this->objects['contact2'] = Addressbook_Controller_Contact::getInstance()->create($this->objects['contact2'], FALSE);
         
         $this->objects['initialList'] = new Addressbook_Model_List(array(
             'name'	=> 'initial list',
             'container_id' => $container->getId(),
             'members' => array($this->objects['contact1'], $this->objects['contact2'])
         )); 
-        
-        #$this->objects['updatedList'] = new Addressbook_Model_List(array(
-        #    'name'	=> 'updated list',
-        #    'container_id' => $container->getId(),
-        #    'members' => array($this->objects['contact2'], $this->objects['contact2'])
-        #)); 
-            	
     }
 
     /**
@@ -184,7 +173,7 @@ class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
     {
         $list = $this->objects['initialList'];
 
-        $list = Addressbook_Controller_List::getInstance()->create($list);
+        $list = Addressbook_Controller_List::getInstance()->create($list, FALSE);
         
         $GLOBALS['Addressbook_ListControllerTest']['listId'] = $list->getId();
         
@@ -202,7 +191,6 @@ class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->objects['initialList']->name, $list->name);
         $this->assertEquals($GLOBALS['Addressbook_ListControllerTest']['listId'], $list->getId());
     }
-    
     
     /**
      * try to update a list

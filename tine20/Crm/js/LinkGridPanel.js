@@ -31,10 +31,11 @@ Tine.Crm.LinkGridPanel.initActions = function() {
         var recordName = this.recordClass.getMeta('recordName');
     }
 
+    var addActionText = app.addButtonText && app.i18n ? app.i18n._hidden(app.addButtonText) : String.format(this.app.i18n._('Add new {0}'), recordName);
     this.actionAdd = new Ext.Action({
         requiredGrant: 'editGrant',
-        text: String.format(this.app.i18n._('Add new {0}'), recordName),
-        tooltip: String.format(this.app.i18n._('Add new {0}'), recordName),
+        text: addActionText,
+        tooltip: addActionText,
         iconCls: 'action_add',
         disabled: ! (this.record && this.record.get('container_id') 
             && this.record.get('container_id').account_grants 
@@ -192,25 +193,3 @@ Tine.Crm.LinkGridPanel.initGrid = function() {
         }
     }, this);
 };
-
-//  update event handler for related records
-//  
-//  TODO make this generic
-//--
-//Tine.Crm.LinkGridPanel.onUpdate = function(record) {
-//    var response = {
-//        responseText: record
-//    };
-//    record = this.recordProxy.recordReader(response);
-//    
-//    var myRecord = this.store.getById(record.id);
-//    if (myRecord) {
-//        myRecord.beginEdit();
-//        for (var p in record.data) { 
-//            myRecord.set(p, record.get(p));
-//        }
-//        myRecord.endEdit();
-//    } else {
-//        this.store.add(record);
-//    }
-//};

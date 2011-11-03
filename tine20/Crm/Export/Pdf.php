@@ -119,7 +119,12 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                             $content[] = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_lead->$key, NULL, NULL, 'date');
                         } elseif (!empty($_lead->$key) ) {
                             if ( $key === 'turnover' ) {
-                                $content[] = Zend_Locale_Format::toNumber($_lead->$key, array('locale' => $_locale)) . " €";
+                                try {
+                                    $content[] = Zend_Locale_Format::toNumber($_lead->$key, array('locale' => $_locale)) . " €";
+                                } catch (Zend_Locale_Exception $zle) {
+                                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not convert turnover: ' . $zle->getMessage());
+                                    $content[] = 'NaN';
+                                }
                             } elseif ( $key === 'probability' ) {
                                 $content[] = $_lead->$key . " %";
                             } elseif ( $key === 'leadstate_id' ) {
@@ -232,9 +237,9 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                         
                         $taskTitle = $task->summary . " ( " . $task->percent . " % ) ";
                         // @todo add big icon to db or preg_replace? 
-                        if ( !empty($task->status_id) ) {
-                            $status = Tasks_Controller_Status::getInstance()->getTaskStatus($task->status_id);
-                            $icon = "/" . $status['status_icon'];
+                        if ( !empty($task->status) ) {
+                            $status = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)->records->getById($task->status);
+                            $icon = "/" . $status['icon'];
                             $linkedObjects[] = array ($taskTitle, 'separator', $icon);
                         } else {
                             $linkedObjects[] = array ($taskTitle, 'separator');

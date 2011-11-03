@@ -70,7 +70,7 @@ class Sales_Backend_ContractTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($created->title, $contract->title);
         $this->assertGreaterThan(0, $created->number);
-        $this->assertEquals($created->container_id, Tinebase_Container::getInstance()->getContainerByName('Sales', 'Shared Contracts', 'shared')->getId());
+        $this->assertEquals($created->container_id, Sales_Controller_Contract::getSharedContractsContainer()->getId());
         
         $this->_backend->delete($contract);
         $this->_decreaseNumber();

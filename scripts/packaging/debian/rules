@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 # Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+export DH_VERBOSE=1
 
 PACKAGES := $(shell dh_listpackages)
 MODULES = $(filter-out tinebase,$(patsubst tine20-%,%,$(filter tine20-%,$(PACKAGES))))
@@ -12,4 +12,17 @@ MODULES = $(filter-out tinebase,$(patsubst tine20-%,%,$(filter tine20-%,$(PACKAG
 # overwrite dh_installdeb to execute an additional shell script
 override_dh_installdeb:
 	dh_installdeb
+	
+	# generate list of available subpackages
 	(echo -n "tine20:Modules="; for x in $(MODULES); do echo -n "tine20-$$x,"; done; echo "") >> debian/tine20.substvars
+
+# overwrite dh_fixperms to execute an additional shell script
+override_dh_fixperms:
+	dh_fixperms
+	
+	# remove executable bits from all php files as dh_fixperms does not remove them
+	(find $(CURDIR)/debian/tine20-*/usr/share/tine20 -type f -name "*.php" -print0 2>/dev/null | xargs -0r chmod a-x)
+	
+	# make tine20.php executable again
+	chmod 0755 $(CURDIR)/debian/tine20-tinebase/usr/share/tine20/tine20.php
+	

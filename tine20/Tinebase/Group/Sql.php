@@ -53,15 +53,20 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     /**
      * the constructor
      */
-    public function __construct() {
-    	$this->_db = Tinebase_Core::getDb();
-    	
+    public function __construct() 
+    {
+        $this->_db = Tinebase_Core::getDb();
+        
         $this->groupsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . $this->_tableName));
         $this->groupMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
         
         try {
-            $this->_db->describeTable(SQL_TABLE_PREFIX . 'addressbook');
-            $this->_addressBookInstalled = true;
+            // MySQL throws an exception         if the table does not exist
+            // PostgreSQL returns an empty array if the table does not exist
+            $tableDescription = $this->_db->describeTable(SQL_TABLE_PREFIX . 'addressbook');
+            if (!empty($tableDescription)) {
+                $this->_addressBookInstalled = true;
+            }
         } catch (Zend_Db_Statement_Exception $zdse) {
             // nothing to do
         }

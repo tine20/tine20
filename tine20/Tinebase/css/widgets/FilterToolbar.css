@@ -49,6 +49,40 @@
     padding:1px;
 }
 
+/* criteria tabls 
+.tw-ftb-criteria-tabs .x-tab-strip-wrap {
+    background-color: #E5EDF8;
+}
+
+.tw-ftb-criteria-tabs .x-tab-strip-wrap ul {
+    border-bottom-color: #CEDFF5;
+}
+*/
+
+/* structure treepanel
+.tw-ftb-filterstructure-treepanel .x-panel-tbar-noborder .x-toolbar {
+    background-image: none;
+    background-color: #E5EDF8;
+    border-color: #E5EDF8;
+}
+.tw-ftb-filterstructure-treepanel .x-panel-body {
+    background-color: #E5EDF8;
+    border-color: #E5EDF8;
+}
+*/
+
+.tw-ftb-filterstructure-treepanel .x-panel-tbar-noborder .x-toolbar,
+.tw-ftb-filterstructure-treepanel .x-panel-body,
+.tw-ftb-filterpanel .x-panel-body,
+.tw-ftb-filterpanel .x-toolbar {
+    background-image: none;
+    background-color: #E5EDF8;
+    border-bottom: none;
+}
+
+.tw-ftb-filterpanel .ux-arrowcollapse .x-tool-toggle {
+    background-color: #E5EDF8;
+}
 /*
 .tw-filtertoolbar .fw-ftb-actionrow td { 
     padding: 0px 5px 1px;

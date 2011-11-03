@@ -29,7 +29,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
     /**
      * @cfg {Array} tags Initial tags
      */
-    tags: [],
+    tags: null,
     /**
      * @var {Ext.data.JsonStore}
      * Holds tags of the record this panel is displayed for
@@ -319,6 +319,11 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         }];
         Tine.widgets.tags.TagPanel.superclass.initComponent.call(this);
     },
+    
+    getFormField: function() {
+        return this.formField.items;
+    },
+    
     /**
      * @private
      */
@@ -527,6 +532,8 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             searchField.clearValue();
         },this);
     }
+    
+
 });
 
 /**
@@ -554,7 +561,7 @@ Tine.widgets.tags.TagFormField = Ext.extend(Ext.form.Field, {
     getValue: function() {
         var value = [];
         this.recordTagsStore.each(function(tag){
-            if(tag.id.length > 5) {
+            if(tag.id.length > 5 && ! String(tag.id).match(/ext-record/)) {
                 //if we have a valid id we just return the id
                 value.push(tag.id);
             } else {
@@ -568,6 +575,9 @@ Tine.widgets.tags.TagFormField = Ext.extend(Ext.form.Field, {
      * sets tags from an array of tag data objects (not records)
      */
     setValue: function(value){
+        // replace template fields
+        Tine.Tinebase.Model.Tag.replaceTemplateField(value);
+        
         this.recordTagsStore.loadData(value);
     }
 

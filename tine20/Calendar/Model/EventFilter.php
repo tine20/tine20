@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -44,12 +44,15 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'period'                => array('filter' => 'Calendar_Model_PeriodFilter'),
         'attender'              => array('filter' => 'Calendar_Model_AttenderFilter'),
         'attender_status'       => array('filter' => 'Calendar_Model_AttenderStatusFilter'),
+        'attender_role'         => array('filter' => 'Calendar_Model_AttenderRoleFilter'),
         'organizer'             => array('filter' => 'Addressbook_Model_ContactIdFilter'),
         //'class'               => array('filter' => 'Tinebase_Model_Filter_Text'),
-        //'status'              => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tag'                   => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'cal_events.id')),
+        'tag'                   => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
+            'idProperty' => 'cal_events.id',
+            'applicationName' => 'Calendar',
+        )),
         'grants'                => array('filter' => 'Calendar_Model_GrantFilter'),
-        // NOTE using dtdstart and dtend filters may not lead to the desired result. 
+        // NOTE using dtstart and dtend filters may not lead to the desired result. 
         //      you need to use the period filter to filter for events in a given period
         'dtstart'               => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'dtend'                 => array('filter' => 'Tinebase_Model_Filter_DateTime'),

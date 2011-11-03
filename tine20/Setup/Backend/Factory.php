@@ -4,18 +4,12 @@
  * 
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Matthias Greiling <m.greiling@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * backend factory class for the Setup
- * 
- * an instance of the Setup backendclass should be created using this class
- * 
- * $contacts = Setup_Backend::factory(Setup_Backend::$type);
- * 
- * currently implemented backend classes: Setup_Backend::MySql
  * 
  * @package     Setup
  */
@@ -25,27 +19,30 @@ class Setup_Backend_Factory
     /**
      * factory function to return a selected setup backend class
      *
-     * @param string | optional $type
+     * @param string | optional $_type
      * @return object
      */
     static public function factory($_type = null)
     {
         if (empty($_type)) {
             $db = Tinebase_Core::getDb();
-            switch(get_class($db)) {
-                case 'Zend_Db_Adapter_Pdo_Mysql':
-                    return self::factory('Mysql');
-                    
-                case 'Zend_Db_Adapter_Oracle':
-                case 'Zend_Db_Adapter_Pdo_Oci':
-                    return self::factory(Tinebase_Core::ORACLE);
-                    
-                default:
-                    throw new InvalidArgumentException('Invalid database backend type defined.');
-            }
+            $adapterName = get_class($db);
+
+            // get last part of class name
+            $type = array_pop(explode('_',$adapterName));
+            
+            // special handling for Oracle
+            $type = str_replace('Oci', Tinebase_Core::ORACLE, $type);
+            
+            $className = 'Setup_Backend_' . ucfirst($type);
+        } else {
+            $className = 'Setup_Backend_' . ucfirst($_type);
         }
-     
-        $className = 'Setup_Backend_' . ucfirst($_type);
+        
+        if (!class_exists($className)) {
+            throw new InvalidArgumentException('Invalid database backend type defined.');
+        }
+        
         $instance = new $className();
 
         return $instance;

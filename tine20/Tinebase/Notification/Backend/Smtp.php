@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Notification
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -37,7 +37,7 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
      */
     public function __construct()
     {
-        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP, 'Tinebase', array());
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::SMTP, 'Tinebase', array());
         $this->_fromAddress = (isset($smtpConfig['from']) && ! empty($smtpConfig['from'])) ? $smtpConfig['from'] : '';
         
         // try to sanitize sender address
@@ -54,9 +54,9 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
      * @param string                    $_subject the subject
      * @param string                    $_messagePlain the message as plain text
      * @param string                    $_messageHtml the message as html
-     * @param string|array              $_attachements
+     * @param string|array              $_attachments
      */
-    public function send($_updater, Addressbook_Model_Contact $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachements = NULL)
+    public function send($_updater, Addressbook_Model_Contact $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachments = NULL)
     {
         // create mail object
         $mail = new Tinebase_Mail('UTF-8');
@@ -85,38 +85,38 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         }
         
         if($_updater !== NULL && ! empty($_updater->accountEmailAddress)) {
-            $mail->setFrom($_updater->accountEmailAddress, $_updater->accountDisplayName);
+            $mail->setFrom($_updater->accountEmailAddress, $_updater->accountFullName);
             $mail->setSender($this->_fromAddress, $this->_fromName);
         } else {
             $mail->setFrom($this->_fromAddress, $this->_fromName);
         }
         
-        // attachements
-        if (is_array($_attachements)) {
-            $attachements = &$_attachements;
-        } elseif (is_string($_attachements)) {
-            $attachements = array(&$_attachements);
+        // attachments
+        if (is_array($_attachments)) {
+            $attachments = &$_attachments;
+        } elseif (is_string($_attachments)) {
+            $attachments = array(&$_attachments);
         } else {
-            $attachements = array();
+            $attachments = array();
         }
-        foreach ($attachements as $attachement) {
-            if (isset($attachement['filename'])) {
+        foreach ($attachments as $attachment) {
+            if (isset($attachment['filename'])) {
                 $mail->createAttachment(
-                    $attachement['rawdata'], 
+                    $attachment['rawdata'], 
                     Zend_Mime::TYPE_OCTETSTREAM,
                     Zend_Mime::DISPOSITION_ATTACHMENT,
                     Zend_Mime::ENCODING_BASE64,
-                    $attachement['filename']
+                    $attachment['filename']
                 );
             } else {
-                $mail->createAttachment($attachement);
+                $mail->createAttachment($attachment);
             }
         }
         
         // send
         if(! empty($_recipient->email)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Send notification email to ' . $_recipient->email);
-            $mail->addTo($_recipient->email, $_recipient->n_fileas);
+            $mail->addTo($_recipient->email, $_recipient->n_fn);
             Tinebase_Smtp::getInstance()->sendMessage($mail);
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 

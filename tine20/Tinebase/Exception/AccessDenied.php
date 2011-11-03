@@ -18,7 +18,14 @@
  */
 class Tinebase_Exception_AccessDenied extends Tinebase_Exception
 {
-    public function __construct($_message, $_code=403) {
+    /**
+     * the constructor
+     * 
+     * @param string $_message
+     * @param int $_code
+     */
+    public function __construct($_message, $_code = 403)
+    {
         parent::__construct($_message, $_code);
     }
 }

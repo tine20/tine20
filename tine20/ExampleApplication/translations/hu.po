@@ -14,37 +14,47 @@ msgstr ""
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/ExampleApplication.js:25
-msgid "Example Application"
-msgstr "Példa Alkalmazás"
+#: Config.php:31
+msgid "Status Available"
+msgstr ""
 
-#: js/ExampleRecordGridPanel.js:74
-msgid "Quick search"
-msgstr "Gyors keresés"
+#: Config.php:33
+msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
+msgstr ""
 
-#: js/ExampleRecordGridPanel.js:102 js/ExampleRecordEditDialog.js:104
-msgid "Name"
-msgstr "Név"
+#: Controller.php:74
+#, python-format
+msgid "%s's personal example records"
+msgstr "%s személyes példa rekordjai"
 
-#: js/ExampleRecordGridPanel.js:108
-msgid "Title"
-msgstr "Beosztás"
-
-#: js/ExampleRecordGridPanel.js:114
-msgid "Status"
-msgstr "Státusz"
-
-#: js/ExampleRecordGridPanel.js:121
-msgid "Budget"
-msgstr "Költség"
-
-#: js/ExampleRecordGridPanel.js:145
-msgid "Show closed"
-msgstr "Mutasd a lezártakat"
+#: js/ExampleApplication.js:24
+msgid "Example Application test"
+msgstr ""
 
 #: js/ExampleRecordEditDialog.js:87
 msgid "ExampleRecord"
 msgstr "PéldaRekord"
+
+#: js/ExampleRecordEditDialog.js:104 js/ExampleRecordGridPanel.js:83
+msgid "Name"
+msgstr "Név"
+
+#: js/ExampleRecordEditDialog.js:110 js/ExampleRecordGridPanel.js:89
+#: js/Model.js:71
+msgid "Status"
+msgstr "Státusz"
+
+#: js/ExampleRecordGridPanel.js:96
+msgid "Title"
+msgstr "Beosztás"
+
+#: js/ExampleRecordGridPanel.js:102
+msgid "Budget"
+msgstr "Költség"
+
+#: js/ExampleRecordGridPanel.js:126
+msgid "Show closed"
+msgstr "Mutasd a lezártakat"
 
 #: js/Model.js:31
 msgid "example record"
@@ -58,11 +68,41 @@ msgid_plural "example record lists"
 msgstr[0] "példa rekord lista"
 msgstr[1] "példa rekord listák"
 
-#: Setup/setup.xml:10
+#: js/Model.js:69 js/Model.js:106
+msgid "Quick search"
+msgstr "Gyors keresés"
+
+#: js/Model.js:79
+msgid "Last modified"
+msgstr ""
+
+#: js/Model.js:80
+msgid "Last modifier"
+msgstr ""
+
+#: js/Model.js:81
+msgid "Creation Time"
+msgstr ""
+
+#: js/Model.js:82
+msgid "Creator"
+msgstr ""
+
+#: Setup/Initialize.php:33
+msgid "Completed"
+msgstr ""
+
+#: Setup/Initialize.php:34
+msgid "Cancelled"
+msgstr ""
+
+#: Setup/Initialize.php:35
+msgid "In process"
+msgstr ""
+
+#: Setup/setup.xml:4
 msgid "ExampleApplication"
 msgstr "PéldaAlkalmazás"
 
-#: Controller.php:96
-#, python-format
-msgid "%s's personal example records"
-msgstr "%s személyes példa rekordjai"
+#~ msgid "Example Application"
+#~ msgstr "Példa Alkalmazás"

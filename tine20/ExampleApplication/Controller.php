@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -58,28 +58,6 @@ class ExampleApplication_Controller extends Tinebase_Controller_Event implements
         return self::$_instance;
     }
     
-    /**
-     * temporaray function to get a default container]
-     * 
-     * @param string $_referingApplication
-     * @return Tinebase_Model_Container container
-     * 
-     * @todo replace this by Tinebase_Container::getDefaultContainer
-     */
-    public function getDefaultContainer($_referingApplication = 'tasks')
-    {
-        $taskConfig = Tinebase_Core::getConfig()->tasks;
-        $configString = 'defaultcontainer_' . ( empty($_referingApplication) ? 'tasks' : $_referingApplication );
-        
-        if (isset($taskConfig->$configString)) {
-            $defaultContainer = Tinebase_Container::getInstance()->getContainerById((int)$taskConfig->$configString);
-        } else {
-            $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer($this->_currentAccount->accountId, 'ExampleApplication');
-        }
-        
-        return $defaultContainer;
-    }
-        
     /**
      * creates the initial folder for new accounts
      *
