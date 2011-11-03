@@ -46,7 +46,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * @type Tine.widgets.grid.GridPanel
      */
     grid: null,
-
+    
     /**
      * @private
      */
@@ -133,6 +133,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         }, this);
     },
     
+   
     /**
      * reload nodes if filters for this app have changed
      * 
@@ -199,7 +200,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         if (as) {
             items = items.concat(as.getPersistentFilterPickerCtxItems(this, filter));
         }
-        
+                
         return items;
     },
     
@@ -247,8 +248,15 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
             return;
         }
         
-        var record = this.store.getById(node.id),
-            isHidden = record.isShared();
+        var record = this.store.getById(node.id);
+        
+        
+        var im = Tine.Tinebase.common.hasRight('manage_shared_favorites', 'Addressbook');
+        var isHidden = ! ( ((record.isShared()) && (im)) || (!record.isShared()));
+        var shareItemHidden = ((record.data.created_by === null) || (!im)) ? true : false;
+        
+        if (record.isShared()) var shareItemText = _('Remove from shared favorites');
+        else var shareItemText = _('Add to shared favorites');
         
         var menu = new Ext.menu.Menu({
             items: [{
@@ -266,13 +274,20 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                 iconCls: 'action_saveFilter',
                 hidden: isHidden,
                 handler: this.onOverwritePersistentFilter.createDelegate(this, [node, e])
+            }, {
+                text: shareItemText,
+                iconCls: 'action_toggleshared',
+                hidden: shareItemHidden,
+                handler: this.onToggleShared.createDelegate(this, [node, e])
             }].concat(this.getAdditionalCtxItems(record))
         });
+        
         menu.showAt(e.getXY());
+        
     },
     
     /**
-     * handler to deletet filter
+     * handler to delete filter
      * 
      * @param {Ext.tree.TreeNode} node
      */
@@ -330,7 +345,36 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
             }
         }, this, false, node.text);
     },
-        
+
+    /**
+     * handler for toggling shared
+     * 
+     * @param {Ext.tree.TreeNode} node
+     */
+    onToggleShared: function(node) {
+
+    	record = this.store.getById(node.id);
+    	// Record was shared, now is not shared: setting owner = current user
+    	if(record.data.account_id === null) {
+    		record.data.account_id = Tine.Tinebase.registry.get('currentAccount').accountId;
+    		var savingText = String.format(_('Setting favorite "{0}" not shared'), record.data.name);
+    	} else {
+    		var savingText = String.format(_('Setting favorite "{0}" shared'), record.data.name);
+    		record.data.account_id = null;
+    	}
+ 	
+
+    	Ext.MessageBox.wait(_('Please wait'), savingText);
+    	
+    	Tine.widgets.persistentfilter.model.persistentFilterProxy.saveRecord(record, {
+            scope: this,
+            success: function(savedRecord){
+                Ext.Msg.hide();
+            }
+        });
+    	
+    },
+    
     /**
      * save persistent filter
      */
@@ -481,12 +525,17 @@ Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(Tine.widgets.tr
     
     inspectCreateNode: function(attr) {
         var isPersistentFilter = !!attr.model && !!attr.filters;
+
+        var isShared = ((attr.account_id === null) && (attr.created_by !== null)) ? true : false;
+        
+        var addText = '';
+        if(isShared) addText = _(' (shared)'); 
         
         if (isPersistentFilter) {
             Ext.apply(attr, {
                 isPersistentFilter: isPersistentFilter,
                 text: Ext.util.Format.htmlEncode(this.app.i18n._hidden(attr.name)),
-                qtip: Ext.util.Format.htmlEncode(attr.description ? this.app.i18n._hidden(attr.description) : ''),
+                qtip: Ext.util.Format.htmlEncode(attr.description ? this.app.i18n._hidden(attr.description) + addText : addText),
                 selected: attr.id === this.selectedFilterId,
                 id: attr.id,
                 leaf: attr.leaf === false ? attr.leaf : true,

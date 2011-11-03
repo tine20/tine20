@@ -71,6 +71,16 @@ html, body {
     background-image:url(../../images/oxygen/32x32/actions/color-line.png) !important;
 }
 
+.action_toggleshared {
+    background-image:url(../../images/oxygen/16x16/actions/bookmark-new-list.png) !important;
+}
+.x-btn-medium .action_toggleshared {
+    background-image:url(../../images/oxygen/22x22/actions/bookmark-new-list.png) !important;
+}
+.x-btn-large .action_toggleshared {
+    background-image:url(../../images/oxygen/32x32/actions/bookmark-new-list.png) !important;
+}
+
 .action_delete {
     background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
 }
@@ -80,7 +90,6 @@ html, body {
 .x-btn-large .action_delete {
     background-image:url(../../images/oxygen/32x32/actions/edit-delete.png) !important;
 }
-
 
 .action_applyChanges {
     background-image:url(../../images/oxygen/16x16/actions/dialog-ok-apply.png) !important;
