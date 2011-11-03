@@ -92,7 +92,7 @@ class Sabre_VObject_Property extends Sabre_VObject_Element {
      * @param string $delimiter
      * @return array
      */
-    public static function splitCompoundValues($value, $delimiter = ';') {
+    public function splitCompoundValues($value, $delimiter = ';') {
         
         // split by any $delimiter which is NOT prefixed by a slash
         $compoundValues = preg_split("/(?<!\\\)$delimiter/", $value);
@@ -115,7 +115,7 @@ class Sabre_VObject_Property extends Sabre_VObject_Element {
      * @param string $glue
      * @return string
      */
-    public static function concatCompoundValues(array $values, $glue = ';') {
+    public function concatCompoundValues(array $values, $glue = ';') {
         
         // add slashes to all semicolons and commas in the single values
         foreach($values as &$value) {
@@ -160,7 +160,7 @@ class Sabre_VObject_Property extends Sabre_VObject_Element {
      * @param string $value
      * @return string
      */
-    public static function addSlashes($value) {
+    public function addSlashes($value) {
         $search  = array(
             '/\\\(?!,|;)/',
             "/\n/",
@@ -193,7 +193,7 @@ class Sabre_VObject_Property extends Sabre_VObject_Element {
             }
         }
 
-        $str.=':' . self::addSlashes($this->value);
+        $str.=':' . $this->addSlashes($this->value);
 
         $out = '';
         while(strlen($str)>0) {
