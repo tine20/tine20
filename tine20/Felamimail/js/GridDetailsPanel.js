@@ -129,7 +129,7 @@ Ext.namespace('Tine.Felamimail');
 //                layout: 'fit',
                 border: false,
                 items: [
-                    //this.getTopPanel(),
+                    this.getTopPanel(),
                     this.getMessageRecordPanel()
                     //this.getBottomPanel()
                 ]
@@ -149,8 +149,9 @@ Ext.namespace('Tine.Felamimail');
         if (! this.topPanel) {
             this.topPanel = new Ext.Panel({
                 //hidden: true,
-                layout: 'fit',
+                //layout: 'fit',
                 //border: false,
+                html: '',
                 height: 30
                 //tbar: new Ext.Toolbar({
 //                items: [new Ext.Toolbar({
@@ -246,7 +247,7 @@ Ext.namespace('Tine.Felamimail');
             this.refetchBody(record, this.updateDetails.createDelegate(this, [record, body]), 'updateDetails');
             this.defaultTpl.overwrite(body, {msg: ''});
             this.getLoadMask().show();
-            //this.getTopPanel().setVisible(false);
+            this.getTopPanel().setVisible(false);
         } else {
             this.getLoadMask().hide();
         }
@@ -281,7 +282,7 @@ Ext.namespace('Tine.Felamimail');
         if (this.record.get('invitation_event')) {
             this.handleInvitationMessage(record);
         } else {
-            //this.getTopPanel().setVisible(false);
+            this.getTopPanel().setVisible(false);
         }
         
         this.doLayout();
@@ -307,7 +308,7 @@ Ext.namespace('Tine.Felamimail');
 //        var myAttenderRecord = invitationEvent.getMyAttenderRecord();
 //        myAttenderRecord.get('status'),
         
-        //this.getTopPanel().setVisible(true);
+        this.getTopPanel().setVisible(true);
     },
     
     /**
