@@ -225,7 +225,68 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
     {
         if (strpos($this->server->httpRequest->getHeader('Content-Type'), 'text/calendar') !== false) {
         
+            $attendees = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+            
             $vobject = Sabre_VObject_Reader::read($this->server->httpRequest->getBody(true));
+            
+            foreach ($vobject->vfreebusy->attendee as $attendee) {
+                $attendeEmail = substr($attendee->value, 7);
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' attendee ' . $attendeEmail);
+                
+                // resolve email address to contact
+                $filter = new Addressbook_Model_ContactFilter(array(
+                    array(
+                        'field'     => 'containerType',
+                        'operator'  => 'equals',
+                        'value'     => 'all'
+                    ),
+                    array(
+                        'field'     => 'type',
+                        'operator'  => 'equals',
+                        'value'     => Addressbook_Model_Contact::CONTACTTYPE_USER
+                    ),
+                    array('condition' => 'OR', 'filters' => array(
+                        array(
+                            'field'     => 'email',
+                            'operator'  => 'equals',
+                            'value'     => $attendeEmail
+                        ),
+                        array(
+                            'field'     => 'email_home',
+                            'operator'  => 'equals',
+                            'value'     => $attendeEmail
+                        )
+                    ))
+                ));
+
+                $contact = Addressbook_Controller_Contact::getInstance()->search($filter)->getFirstRecord();
+                
+                if ($contact !== null) {
+                    $attendees->addRecord(new Calendar_Model_Attender(array(
+                    	'user_id'   => $contact->getId(),
+                    	'user_type' => Calendar_Model_Attender::USERTYPE_USER
+                    )));
+                }
+            }
+            
+            $dtstart = new Tinebase_DateTime(
+                $vobject->vfreebusy->dtstart->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), 
+                'UTC'
+            );
+            $dtend = new Tinebase_DateTime(
+                $vobject->vfreebusy->dtend->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG),
+                'UTC'
+            );
+            $period = array(array(
+                'from'  => $dtstart,
+                'until' => $dtend
+            ));
+            
+            $freeBusyInfo = Calendar_Controller_Event::getInstance()->getFreeBusyInfo($period, $attendees);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' subscriber ' . print_r($freeBusyInfo->toArray(), true));
+            
             
             $dom = new DOMDocument('1.0','utf-8');
             //$dom->formatOutput = true;
@@ -249,20 +310,27 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
             $requestStatus = $dom->createElement('cal:request-status', '2.0;Success');
             $response->appendChild($requestStatus);
             
-            $calendarData = $dom->createElement('cal:calendar-data', 'BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Example Corp.//CalDAV Server//EN
-METHOD:REPLY
-BEGIN:VFREEBUSY
-UID:' . $vobject->vfreebusy->uid . '
-DTSTAMP:20090602T200733Z
-DTSTART:' . $vobject->vfreebusy->dtstart . '
-DTEND:' . $vobject->vfreebusy->dtend . '
-ATTENDEE;CN="Wilfredo Sanchez Vega":mailto:l.kneschke@metaways.de
-FREEBUSY;FBTYPE=BUSY:20111102T110000Z/20111102T120000Z
-FREEBUSY;FBTYPE=BUSY:20111103T170000Z/20111103T180000Z
-END:VFREEBUSY
-END:VCALENDAR');
+            $vcalendar = new Sabre_VObject_Component('VCALENDAR');
+            $vcalendar->add('VERSION', '2.0');
+            $vcalendar->add('METHOD', 'REPLY');
+            
+            $vfreebusy = new Sabre_VObject_Component('VFREEBUSY');
+            $vfreebusy->add('UID', $vobject->vfreebusy->uid->value);
+            $vfreebusy->add('DTSTAMP', $vobject->vfreebusy->dtstart->value);
+            $vfreebusy->add('DTSTART', $vobject->vfreebusy->dtstart->value);
+            $vfreebusy->add('DTEND', $vobject->vfreebusy->dtend->value);
+            $vfreebusy->add('ATTENDEE', 'mailto:l.kneschke@metaways.de'); // add CN
+            foreach ($freeBusyInfo as $busyInfo) {
+                $busy = $busyInfo->dtstart->format('Ymd\\THis\\Z') . '/' . $busyInfo->dtend->format('Ymd\\THis\\Z');
+                $freebusy = new Sabre_VObject_Property('FREEBUSY', $busy);
+                $freebusy->add('FBTYPE', 'BUSY');
+                
+                $vfreebusy->add($freebusy);
+            }
+            
+            $vcalendar->add($vfreebusy);
+            
+            $calendarData = $dom->createElement('cal:calendar-data', str_replace("\r","", $vcalendar->serialize()));
             
             $response->appendChild($calendarData);
             
