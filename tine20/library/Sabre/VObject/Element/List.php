@@ -18,13 +18,9 @@ class Sabre_VObject_Element_List extends Sabre_VObject_Property {
     const DELIMITER = ',';
     
     /**
-     * add common slashes from values which must be escaped
-     *  \\ => \
-     *  \n => linebreak
-     *  \: => :
-     *  comma and semicolon are not handled here
+     * implode values with ";" after calling parent::addSlashes
      *
-     * @param string $value
+     * @param string|array $value
      * @return string
      */
     public function addSlashes($value) {
@@ -39,7 +35,7 @@ class Sabre_VObject_Element_List extends Sabre_VObject_Property {
     /**
      * Updates the internal value
      *
-     * @param string $value
+     * @param string|array $value
      * @return void
      */
     public function setValue($value) {
@@ -47,8 +43,8 @@ class Sabre_VObject_Element_List extends Sabre_VObject_Property {
         if (!is_array($value)) {
             $value = $this->splitCompoundValues($value, self::DELIMITER);
         }
+        
         $this->value = $value;
-    
     }
     
     /**
@@ -58,8 +54,10 @@ class Sabre_VObject_Element_List extends Sabre_VObject_Property {
      * @param string $delimiter
      * @return array
      */
-    protected function splitCompoundValues($value, $delimiter = ';') {
+    protected function splitCompoundValues($value) {
     
+        $delimiter = self::DELIMITER;
+        
         // split by any $delimiter which is NOT prefixed by a slash
         $compoundValues = preg_split("/(?<!\\\)$delimiter/", $value);
     
@@ -81,8 +79,7 @@ class Sabre_VObject_Element_List extends Sabre_VObject_Property {
      */
     public function __toString() {
     
-        return $this->concatCompoundValues($this->value, self::DELIMITER);
-    
+        return $this->addSlashes($this->value);
     }
     
 }
