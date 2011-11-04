@@ -58,7 +58,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         this.store.on('add', this.onStoreAdd, this);
         
         this.loader = new Tine.widgets.persistentfilter.PickerTreePanelLoader({
-            app: this.app,
+            app : this.app,
             store: this.store
         });
         
@@ -366,7 +366,6 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     		var savingText = String.format(_('Setting favorite "{0}" shared'), record.data.name);
     		record.data.account_id = null;
     	}
- 	
 
     	Ext.MessageBox.wait(_('Please wait'), savingText);
     	
@@ -392,19 +391,34 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         }
         
         var name = '';
-        Ext.MessageBox.prompt(_('save filter'), _('Please enter a name for the favorite'), function(btn, value) {
-            if (btn == 'ok') {
-                if (! value) {
-                    Ext.Msg.alert(_('Favorite not Saved'), _('You have to supply a name for the favorite!'));
-                    return;
-                } else if (value.length > 40) {
-                    Ext.Msg.alert(_('Favorite not Saved'), _('You have to supply a shorter name! Names of favorite can only be up to 40 characters long.'));
-                    return;
-                }
-                Ext.Msg.wait(_('Please Wait'), _('Saving favorite'));
-                this.createOrUpdateFavorite(value, ftb);
-            }
-        }, this, false, name);
+       
+        var newWindow = Tine.WindowFactory.getExtWindow({
+        	
+            title : _('Save Favorite'),
+            width : 200,
+            height : 240,
+            contentPanelConstructor : 'Tine.widgets.persistentfilter.EditPersistentFilter',
+            contentPanelConstructorConfig : null
+        });
+        
+        newWindow.addListener('update',function(){Tine.log.debug('HALLO')});
+        
+//        Tine.log.debug('WINDOW:', newWindow.contentPanelConstructor);
+        
+        
+//        Ext.MessageBox.prompt(_('save filter'), _('Please enter a name for the favorite'), function(btn, value) {
+//            if (btn == 'ok') {
+//                if (! value) {
+//                    Ext.Msg.alert(_('Favorite not Saved'), _('You have to supply a name for the favorite!'));
+//                    return;
+//                } else if (value.length > 40) {
+//                    Ext.Msg.alert(_('Favorite not Saved'), _('You have to supply a shorter name! Names of favorite can only be up to 40 characters long.'));
+//                    return;
+//                }
+//                Ext.Msg.wait(_('Please Wait'), _('Saving favorite'));
+//                this.createOrUpdateFavorite(value, ftb);
+//            }
+//        }, this, false, name);
     },
     
     /**
@@ -416,6 +430,8 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         if (! ftb) {
             ftb = this.getFilterToolbar();
         }
+        
+        Tine.log.debug(name);
         
         var model = this.filterModel;
         if (! model) {
@@ -469,6 +485,165 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         this.onFilterSelect(persistentFilter);
     }
     
+});
+
+/**
+ * @namespace   Tine.widgets.persistentfilter
+ * @class       Tine.widgets.persistentfilter.EditPersistentFilter
+ * @extends     Ext.FormPanel
+ * 
+ * <p>PersistentFilter Edit Dialog</p>
+ * 
+ * @author      Alexander Stintzing <c.weiss@metaways.de>
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * 
+ * @param       {Object} config
+ */
+
+Tine.widgets.persistentfilter.EditPersistentFilter = Ext.extend(Ext.FormPanel, {
+
+    layout : 'fit',
+    border : false,
+    cls : 'tw-editdialog',  
+    
+    bodyStyle : 'padding:5px',
+    labelAlign : 'top',
+
+    anchor : '100% 100%',
+    deferredRender : false,
+    buttonAlign : null,
+    bufferResize : 500, 
+    
+    // private
+    initComponent : function() {
+   	
+        this.addEvents('cancel', 'save', 'close');
+        // init actions
+        
+        this.initActions();
+        // init buttons and tbar
+        
+        this.initButtons();
+        // get items for this dialog
+        this.items = this.getFormItems();
+
+        Tine.widgets.persistentfilter.EditPersistentFilter.superclass.initComponent.call(this);
+    },
+
+    /**
+     * init actions
+     */
+    initActions : function() {
+        this.action_save = new Ext.Action({
+            text : _('OK'),
+            minWidth : 70,
+            scope : this,
+            handler : this.onSave,
+            iconCls : 'action_saveAndClose'
+        });
+        this.action_cancel = new Ext.Action({
+            text : _('Cancel'),
+            minWidth : 70,
+            scope : this,
+            handler : this.onCancel,
+            iconCls : 'action_cancel'
+        });
+    },
+
+    initButtons : function() {
+
+        this.fbar = [ '->', this.action_cancel, this.action_save ];
+
+    },
+
+    onRender : function(ct, position) {
+        Tine.widgets.dialog.EditDialog.superclass.onRender.call(this, ct, position);
+
+        // generalized keybord map for edit dlgs
+        var map = new Ext.KeyMap(this.el, [ {
+            key : [ 13 ],
+            ctrl : false,
+            fn : this.onSave,
+            scope : this
+        } ]);
+
+    },
+
+    onSave : function() {
+    	var rec = {};
+
+    	// Name of the favorite
+    	if(this.inputTitle.getValue()) {
+    	   if(this.inputTitle.getValue().length < 40) {
+    	   	   rec.name = this.inputTitle.getValue();
+    	   } else {
+    	   	   Ext.Msg.alert(_('Favorite not Saved'), _('You have to supply a shorter name! Names of favorite can only be up to 40 characters long.'));
+    	   	   this.onCancel();
+    	   }
+        } else {
+        	Ext.Msg.alert(_('Favorite not Saved'), _('You have to supply a name for the favorite!'));
+            this.onCancel();
+        }
+
+        // Description of the favorite
+        if(this.inputDescription.getValue().length) {
+        	rec.description = this.inputDescription.getValue();
+        }
+        
+        rec.account_id = Tine.Tinebase.registry.get('currentAccount').accountId;
+        
+        // Favorite Checkbox
+        if(Tine.Tinebase.common.hasRight('manage_shared_favorites', 'Addressbook')) {
+            if(this.inputCheck.getValue()) {
+            	rec.account_id = null;        	
+            }
+        }  
+         
+//        this.purgeListeners();
+        this.window.close();
+        this.window.fireEvent('update');
+//        return rec;
+    },
+    
+    onCancel : function() {
+        this.fireEvent('cancel');
+        this.purgeListeners();
+        this.window.close();
+    },
+
+    getFormItems : function() {
+        
+        this.inputTitle = new Ext.form.TextField({
+            allowBlank: false,
+            fieldLabel: _('Title'),
+            regex: /.{1,40}/i        
+        });
+        
+        this.inputDescription = new Ext.form.TextField({
+            allowBlank: false,
+            fieldLabel: _('Description'),
+            regex: /.{1,255}/i        
+        });        
+        
+        this.inputCheck = new Ext.form.Checkbox({
+            fieldLabel: _('Share this Favorite')
+        });
+        
+        return {
+            border : false,
+            frame : true,
+            layout : 'form',
+            items : [ {
+                region : 'center',
+                layout : {
+                    align: 'stretch',
+                    type: 'vbox'
+                }
+
+            }, this.inputTitle, this.inputDescription, this.inputCheck ]
+        };
+    }
+
 });
 
 /**
