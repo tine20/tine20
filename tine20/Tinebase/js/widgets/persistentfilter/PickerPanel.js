@@ -97,8 +97,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         
         if (this.filterMountId !== null) {
             this.getNodeById(this.filterMountId).appendChild(this.filterNode);
-        }
-        
+        }       
         // due to dependencies isues we need to wait after render
         this.getFilterToolbar().on('change', this.onFilterChange, this);
     },
@@ -141,8 +140,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      */
     checkReload: function(record) {
         if (record.get('application_id') === this.app.id && this.filterNode && this.filterNode.rendered) {
-            this.filterNode.reload(function(callback) {
-            });
+            this.filterNode.reload(function(callback){});
             return true;
         }
     },
@@ -251,7 +249,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         var record = this.store.getById(node.id);
         
         
-        var im = Tine.Tinebase.common.hasRight('manage_shared_favorites', 'Addressbook');
+        var im = Tine.Tinebase.common.hasRight('manage_shared_favorites', this.app.name);
         var isHidden = ! ( ((record.isShared()) && (im)) || (!record.isShared()));
         var shareItemHidden = ((record.data.created_by === null) || (!im)) ? true : false;
         
@@ -324,6 +322,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                 
                 var record = this.store.getById(node.id);
                 record.set('name', _newName);
+                
                 Tine.widgets.persistentfilter.model.persistentFilterProxy.saveRecord(record, {
                     scope: this,
                     success: function(updatedRecord){
@@ -375,6 +374,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                 Ext.Msg.hide();
             }
         });
+        this.filterNode.reload();
     	
     },
     
@@ -392,11 +392,13 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         
         var name = '';
        
-        var newWindow = Tine.WindowFactory.getExtWindow({
+        var newWindow = Tine.WindowFactory.getWindow({
+        	modal: true,
+        	app: this.app,
         	rec: null,
             title : _('Save Favorite'),
-            width : 200,
-            height : 240,
+            width : 300,
+            height : 200,
             contentPanelConstructor : 'Tine.widgets.persistentfilter.EditPersistentFilterPanel',
             contentPanelConstructorConfig : null
         });
@@ -416,8 +418,6 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         if (! ftb) {
             ftb = this.getFilterToolbar();
         }
-        
-        Tine.log.debug(rec);
         
         var model = this.filterModel;
         if (! model) {
@@ -502,14 +502,11 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
     bufferResize : 500, 
     
     // private
-    initComponent : function() {
-   	
+    initComponent : function() {  	
         this.addEvents('cancel', 'save', 'close');
         // init actions
-        
         this.initActions();
         // init buttons and tbar
-        
         this.initButtons();
         // get items for this dialog
         this.items = this.getFormItems();
@@ -556,9 +553,11 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
 
     onSave : function() {
     	this.window.rec = {};
+    	
+    	Tine.log.debug(this.inputTitle);
 
     	// Name of the favorite
-    	if(this.inputTitle.getValue()) {
+    	if(this.inputTitle.isValid()) {
     	   if(this.inputTitle.getValue().length < 40) {
     	   	   this.window.rec.name = this.inputTitle.getValue();
     	   } else {
@@ -571,14 +570,14 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
         }
 
         // Description of the favorite
-        if(this.inputDescription.getValue()) {
+        if(this.inputDescription.isValid()) {
         	this.window.rec.description = this.inputDescription.getValue();
         }
         
         this.window.rec.account_id = Tine.Tinebase.registry.get('currentAccount').accountId;
         
         // Favorite Checkbox
-        if(Tine.Tinebase.common.hasRight('manage_shared_favorites', 'Addressbook')) {
+        if(Tine.Tinebase.common.hasRight('manage_shared_favorites', this.window.app.name)) {
             if(this.inputCheck.getValue()) {
             	this.window.rec.account_id = null;        	
             }
@@ -599,13 +598,15 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
         this.inputTitle = new Ext.form.TextField({
             allowBlank: false,
             fieldLabel: _('Title'),
-            regex: /.{1,40}/i        
+            minLength: 1,
+            maxLength: 40        
         });
         
         this.inputDescription = new Ext.form.TextField({
-            allowBlank: true,
+            allowBlank: false,
             fieldLabel: _('Description'),
-            regex: /.{1,255}/i        
+            minLength: 1,
+            maxLength: 255
         });        
         
         this.inputCheck = new Ext.form.Checkbox({
@@ -621,7 +622,7 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
 
             }, this.inputTitle, this.inputDescription ]; 
         
-        if(Tine.Tinebase.common.hasRight('manage_shared_favorites', 'Addressbook')) { items.push(this.inputCheck) }
+        if(Tine.Tinebase.common.hasRight('manage_shared_favorites', this.window.app.name)) { items.push(this.inputCheck) }
         
         return {
             border : false,
@@ -695,7 +696,11 @@ Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(Tine.widgets.tr
         var isShared = ((attr.account_id === null) && (attr.created_by !== null)) ? true : false;
         
         var addText = '';
-        if(isShared) addText = _(' (shared)'); 
+        var addClass = '';
+        if(isShared) {
+        	addText = _(' (shared)');
+        	addClass = '-shared';
+        }
         
         if (isPersistentFilter) {
             Ext.apply(attr, {
@@ -705,7 +710,7 @@ Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(Tine.widgets.tr
                 selected: attr.id === this.selectedFilterId,
                 id: attr.id,
                 leaf: attr.leaf === false ? attr.leaf : true,
-                cls: 'tinebase-westpanel-node-favorite'
+                cls: 'tinebase-westpanel-node-favorite' + addClass
             });
         }
     }
