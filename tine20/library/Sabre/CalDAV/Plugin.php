@@ -178,13 +178,25 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
      * @return bool 
      */
     public function unknownMethod($method, $uri) {
-
-        if ($method!=='MKCALENDAR') return;
-
-        $this->httpMkCalendar($uri);
-        // false is returned to stop the unknownMethod event
-        return false;
-
+        
+        switch ($method) {
+            case 'MKCALENDAR':
+                $this->httpMkCalendar($uri);
+                
+                // false is returned to stop the unknownMethod event
+                return false;
+                
+                break;
+                
+            case 'POST':
+                // returns true, if reuquest got handled by httpPost function
+                if ($this->httpPost($uri) === true) {
+                    // false is returned to stop the unknownMethod event
+                    return false;
+                }
+                
+                break;
+        }
     }
 
     /**
@@ -209,6 +221,64 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
 
     }
 
+    public function httpPost($uri)
+    {
+        if (strpos($this->server->httpRequest->getHeader('Content-Type'), 'text/calendar') !== false) {
+        
+            $vobject = Sabre_VObject_Reader::read($this->server->httpRequest->getBody(true));
+            
+            $dom = new DOMDocument('1.0','utf-8');
+            //$dom->formatOutput = true;
+            $scheduleRespone = $dom->createElement('cal:schedule-response');
+            $dom->appendChild($scheduleRespone);
+            
+            // Adding in default namespaces
+            foreach($this->server->xmlNamespaces as $namespace=>$prefix) {
+                $scheduleRespone->setAttribute('xmlns:' . $prefix,$namespace);
+            }
+
+            $response = $dom->createElement('cal:response');
+            $scheduleRespone->appendChild($response);
+            
+            $recipient = $dom->createElement('cal:recipient');
+            $response->appendChild($recipient);
+            
+            $href = new Sabre_DAV_Property_Href('mailto:l.kneschke@metaways.de', false);
+            $href->serialize($this->server, $recipient);
+            
+            $requestStatus = $dom->createElement('cal:request-status', '2.0;Success');
+            $response->appendChild($requestStatus);
+            
+            $calendarData = $dom->createElement('cal:calendar-data', 'BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Server//EN
+METHOD:REPLY
+BEGIN:VFREEBUSY
+UID:' . $vobject->vfreebusy->uid . '
+DTSTAMP:20090602T200733Z
+DTSTART:' . $vobject->vfreebusy->dtstart . '
+DTEND:' . $vobject->vfreebusy->dtend . '
+ATTENDEE;CN="Wilfredo Sanchez Vega":mailto:l.kneschke@metaways.de
+FREEBUSY;FBTYPE=BUSY:20111102T110000Z/20111102T120000Z
+FREEBUSY;FBTYPE=BUSY:20111103T170000Z/20111103T180000Z
+END:VFREEBUSY
+END:VCALENDAR');
+            
+            $response->appendChild($calendarData);
+            
+            $result = $dom->saveXML();
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' subscriber ' . $result);
+            
+            
+            $this->server->httpResponse->sendStatus(200);
+            $this->server->httpResponse->setHeader('Content-Type', 'application/xml');
+            $this->server->httpResponse->setHeader('Content-Length', strlen($result));
+            $this->server->httpResponse->sendBody($result);
+            
+            return true;
+        }
+    }
+    
     /**
      * This function handles the MKCALENDAR HTTP method, which creates
      * a new calendar.
