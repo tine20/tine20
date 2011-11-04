@@ -63,8 +63,9 @@ class Tinebase_TranslationTest extends PHPUnit_Framework_TestCase
      */
     public function testGetPoTranslationFiles()
     {
-        $locale = Zend_Registry::get('locale');
-        $poTranslationFiles = Tinebase_Translation::getPoTranslationFiles($locale);
+        $poTranslationFiles = Tinebase_Translation::getPoTranslationFiles(array(
+            'locale' => (string) Zend_Registry::get('locale'),
+        ));
         
         $this->assertTrue(isset($poTranslationFiles['Tinebase']), 'Tinebase is missing');
         $this->assertGreaterThan(5, count($poTranslationFiles), 'Not all translationfiles where found');
