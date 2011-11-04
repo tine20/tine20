@@ -72,13 +72,7 @@ html, body {
 }
 
 .action_toggleshared {
-    background-image:url(../../images/oxygen/16x16/actions/bookmark-new-list.png) !important;
-}
-.x-btn-medium .action_toggleshared {
-    background-image:url(../../images/oxygen/22x22/actions/bookmark-new-list.png) !important;
-}
-.x-btn-large .action_toggleshared {
-    background-image:url(../../images/oxygen/32x32/actions/bookmark-new-list.png) !important;
+    background-image:url(../../images/oxygen/16x16/actions/get-hot-new-stuff.png) !important;
 }
 
 .action_delete {
@@ -385,6 +379,10 @@ html, body {
 
 .tinebase-westpanel-node-favorite img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/actions/knewstuff.png);
+}
+
+.tinebase-westpanel-node-favorite-shared img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/actions/get-hot-new-stuff.png);
 }
 
 .action-tinebase-favorite {
