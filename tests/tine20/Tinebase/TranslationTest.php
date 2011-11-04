@@ -153,7 +153,7 @@ class Tinebase_TranslationTest extends PHPUnit_Framework_TestCase
     
     public function testCustomTranslations()
     {
-        $lang = 'en_US';
+        $lang = 'en_GB';
         $translationPath = Tinebase_Core::getTempDir() . "/tine20/translations";
         Tinebase_Config::getInstance()->translations = $translationPath;
         
@@ -197,6 +197,14 @@ msgstr "изпълни"
         $this->assertTrue(isset($customInfo), 'custom translation not in list of available translations');
         $this->assertEquals('My Language', $customInfo['language'], 'custom language param missing');
         $this->assertEquals('MY REGION', $customInfo['region'], 'custom region param missing');
+        
+        // test the translation
+        $translation = Tinebase_Translation::getTranslation('Tinebase', new Zend_Locale($lang));
+        // NOTE: Zent_Translate does not work with .po files
+        //$this->assertEquals("изпълни", $translation->_('run'));
+        
+        $jsTranslations = Tinebase_Translation::getJsTranslations($lang, 'Tinebase');
+        $this->assertEquals(1, preg_match('/изпълни/', $jsTranslations));
         
         Tinebase_Core::setupUserLocale();
         

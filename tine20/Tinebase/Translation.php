@@ -59,7 +59,7 @@ class Tinebase_Translation
      *
      * @todo add test
      */
-    public static function getAvailableTranslations()
+    public static function getAvailableTranslations($_evaluateConfig = FALSE)
     {
         $availableTranslations = array();
 
@@ -75,14 +75,16 @@ class Tinebase_Translation
         }
         
         // lookup/merge custom translations
-        $customTranslationsDir = Tinebase_Config::getInstance()->translations;
-        if ($customTranslationsDir) {
-            foreach((array) scandir($customTranslationsDir) as $dir) {
-                $poFile = "$customTranslationsDir/$dir/Tinebase/translations/$dir.po";
-                if (is_readable($poFile)) {
-                    $availableTranslations[$dir] = array(
-                        'path' => $poFile
-                    );
+        if ($_evaluateConfig === TRUE) {
+            $customTranslationsDir = Tinebase_Config::getInstance()->translations;
+            if ($customTranslationsDir) {
+                foreach((array) scandir($customTranslationsDir) as $dir) {
+                    $poFile = "$customTranslationsDir/$dir/Tinebase/translations/$dir.po";
+                    if (is_readable($poFile)) {
+                        $availableTranslations[$dir] = array(
+                            'path' => $poFile
+                        );
+                    }
                 }
             }
         }
@@ -90,7 +92,8 @@ class Tinebase_Translation
         // compute information
         foreach ($availableTranslations as $localestring => $info) {
             if (! Zend_Locale::isLocale($localestring, TRUE, FALSE)) {
-                Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . " $localestring is not supported, removing translation form list");
+                $logger = Tinebase_Core::getLogger();
+                if ($logger) $logger->WARN(__METHOD__ . '::' . __LINE__ . " $localestring is not supported, removing translation form list");
                 unset($availableTranslations[$localestring]);
                 continue;
             }

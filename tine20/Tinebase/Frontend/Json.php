@@ -44,13 +44,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     /**
      * returns list of all available translations
-     * NOTE available are those, having a Tinebase translation
      * 
      * @return array list of all available translations
      */
     public function getAvailableTranslations()
     {
-        $availableTranslations = Tinebase_Translation::getAvailableTranslations();
+        $availableTranslations = Tinebase_Translation::getAvailableTranslations(TRUE);
         foreach($availableTranslations as &$info) unset($info['path']);
         
         return array(
