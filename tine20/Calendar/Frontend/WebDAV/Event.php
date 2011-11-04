@@ -92,6 +92,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
             }
         }
         
+        // we support only OPAQUE events
+        $event->transp = Calendar_Model_Event::TRANSP_OPAQUE;
         
         $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
         $event->setId($id);
@@ -252,6 +254,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         }
         
         $event = $this->_converter->toTine20Model($cardData, $this->getRecord());
+        
+        // we support only OPAQUE events
+        $event->transp = Calendar_Model_Event::TRANSP_OPAQUE;
         
         $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
         
