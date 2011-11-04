@@ -51,8 +51,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getAvailableTranslations()
     {
         $availableTranslations = Tinebase_Translation::getAvailableTranslations();
+        foreach($availableTranslations as &$info) unset($info['path']);
+        
         return array(
-            'results'    => $availableTranslations,
+            'results'    => array_values($availableTranslations),
             'totalcount' => count($availableTranslations)
         );
     }

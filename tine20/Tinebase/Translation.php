@@ -62,32 +62,56 @@ class Tinebase_Translation
     public static function getAvailableTranslations()
     {
         $availableTranslations = array();
+
+        // look for po files in Tinebase 
+        $officialTranslationsDir = dirname(__FILE__) . '/translations';
+        foreach(scandir($officialTranslationsDir) as $poFile) {
+            list ($localestring, $suffix) = explode('.', $poFile);
+            if ($suffix == 'po') {
+                $availableTranslations[$localestring] = array(
+                    'path' => "$officialTranslationsDir/$poFile" 
+                );
+            }
+        }
         
-        if (TINE20_BUILDTYPE == 'RELEASE') {
-            $list = self::$SUPPORTED_LANGS;
-        } else {
-            // look for po files in Tinebase
-            $dirContents = scandir(dirname(__FILE__) . '/translations');
-            sort($dirContents);
-            $list = array();
-            
-            foreach ($dirContents as $poFile) {
-                list ($localestring, $suffix) = explode('.', $poFile);
-                if ($suffix == 'po') {
-                    $list[] = $localestring;
+        // lookup/merge custom translations
+        $customTranslationsDir = Tinebase_Config::getInstance()->translations;
+        if ($customTranslationsDir) {
+            foreach((array) scandir($customTranslationsDir) as $dir) {
+                $poFile = "$customTranslationsDir/$dir/Tinebase/translations/$dir.po";
+                if (is_readable($poFile)) {
+                    $availableTranslations[$dir] = array(
+                        'path' => $poFile
+                    );
                 }
             }
         }
         
-        foreach ($list as $localestring) {
-            $locale = new Zend_Locale($localestring);
-            $availableTranslations[] = array(
-                'locale'   => $localestring,
-                'language' => Zend_Locale::getTranslation($locale->getLanguage(), 'language', $locale),
-                'region'   => Zend_Locale::getTranslation($locale->getRegion(), 'country', $locale)
-            );
-        }
+        // compute information
+        foreach ($availableTranslations as $localestring => $info) {
+            if (! Zend_Locale::isLocale($localestring, TRUE, FALSE)) {
+                Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . " $localestring is not supported, removing translation form list");
+                unset($availableTranslations[$localestring]);
+                continue;
+            }
             
+            // fetch header grep for X-Poedit-Language, X-Poedit-Country
+            $fh = fopen($info['path'], 'r');
+            $header = fread($fh, 1024);
+            fclose($fh);
+            
+            preg_match('/X-Tine20-Language: (.+)(?:\\\\n?)(?:"?)/', $header, $language);
+            preg_match('/X-Tine20-Country: (.+)(?:\\\\n?)(?:"?)/', $header, $region);
+            
+            $locale = new Zend_Locale($localestring);
+            $availableTranslations[$localestring]['locale'] = $localestring;
+            $availableTranslations[$localestring]['language'] = isset($language[1]) ? 
+                $language[1] : Zend_Locale::getTranslation($locale->getLanguage(), 'language', $locale);
+            $availableTranslations[$localestring]['region'] = isset($region[1]) ? 
+                $region[1] : Zend_Locale::getTranslation($locale->getRegion(), 'country', $locale);
+        }
+
+        ksort($availableTranslations);
         return $availableTranslations;
     }
     
@@ -169,6 +193,7 @@ class Tinebase_Translation
         try {
             $locale = new Zend_Locale($_localeString);
             
+            Tinebase_Core::getLogger()->ERR($locale);
             // check if we suppot the locale
             $supportedLocales = array();
             $availableTranslations = self::getAvailableTranslations();
