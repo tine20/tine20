@@ -378,4 +378,17 @@ abstract class Tinebase_Config_Abstract
         
         return array_key_exists($_name, $properties) ? $properties[$_name] : NULL;
     }
+    
+    /**
+     * check if config system is ready
+     * 
+     * @todo check db setup
+     * @return bool
+     */
+    public static function isReady()
+    {
+        $configFile = file_get_contents('config.inc.php', FILE_USE_INCLUDE_PATH);
+        
+        return !! $configFile;
+    }
 }
