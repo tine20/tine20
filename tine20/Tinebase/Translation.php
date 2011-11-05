@@ -59,7 +59,7 @@ class Tinebase_Translation
      *
      * @todo add test
      */
-    public static function getAvailableTranslations($_evaluateConfig = FALSE)
+    public static function getAvailableTranslations()
     {
         $availableTranslations = array();
 
@@ -75,7 +75,7 @@ class Tinebase_Translation
         }
         
         // lookup/merge custom translations
-        if ($_evaluateConfig === TRUE) {
+        if (Tasks_Config::isReady() === TRUE) {
             $customTranslationsDir = Tinebase_Config::getInstance()->translations;
             if ($customTranslationsDir) {
                 foreach((array) scandir($customTranslationsDir) as $dir) {
@@ -298,7 +298,7 @@ class Tinebase_Translation
     public static function getJsTranslations($_locale, $_appName = 'all')
     {
         $availableTranslations = self::getAvailableTranslations();
-        $info = array_key_exists((string) $_locale, $availableTranslations) ? $availableTranslations[(string) $_locale] : array();
+        $info = array_key_exists((string) $_locale, $availableTranslations) ? $availableTranslations[(string) $_locale] : array('locale' => (string) $_locale);
         $baseDir = (array_key_exists('path', $info) ? dirname($info['path']) . '/..' : dirname(__FILE__)) . '/..';
         
         $defaultDir = dirname(__FILE__) . "/..";
