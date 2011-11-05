@@ -62,9 +62,11 @@ Tine.Sipgate.CallStateWindow = Ext.extend(Ext.FormPanel, {
 	},
 	
 	onCancel : function() {
-		Tine.log.debug('in onCancel csw');
+		Tine.log.debug('in onCancel csw',this.sessionId);
 		if(this.sessionId != false) Tine.Sipgate.closeSession(this.sessionId);
+		Tine.log.debug('in onCancel csw2');
 		this.fireEvent('cancel');
+		
 		this.purgeListeners();
 		this.window.close();
 	},
@@ -147,7 +149,7 @@ Tine.Sipgate.CallStateWindow.openWindow = function(info) {
 		
 
 	});
-	window.addListener('close',function(){	
+	window.addListener('close', function() {	
 		Tine.Sipgate.CallStateWindow.stopTask();
 		});
 
@@ -166,9 +168,9 @@ Tine.Sipgate.CallStateWindow.startTask = function(sessionId,contact) {
 
 
 Tine.Sipgate.CallStateWindow.stopTask = function() {
-	if(CallUpdateWindowTask!=false) {
+	if(CallUpdateWindowTask) {
 		Ext.TaskMgr.stop(CallUpdateWindowTask);		
-		CallUpdateWindowTask = false;
+		CallUpdateWindowTask = null;
 	}
 };
 

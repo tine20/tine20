@@ -23,9 +23,10 @@ Ext.ns('Tine.Sipgate');
  * @constructor
  */
 Tine.Sipgate.AddressbookGridPanelHook = function(config) {
+
     Tine.log.info('initialising sipgate addressbook hooks');
-    Ext.apply(this, config);
     
+    Ext.apply(this, config);
 
     this.callMenu = new Ext.menu.Menu({
     });
