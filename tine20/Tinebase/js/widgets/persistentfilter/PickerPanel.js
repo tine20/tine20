@@ -41,6 +41,10 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     border: false,
     rootVisible: false,
     
+    enableDD: true,
+
+    stateId: 'widgets-persistentfilter-pickerpanel',
+
     /**
      * grid favorites panel belongs to
      * @type Tine.widgets.grid.GridPanel
@@ -62,6 +66,26 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
             store: this.store
         });
         
+        new Ext.tree.TreeSorter(this, {
+            dir: "asc",
+            sortType: function(node) {
+                return 0;
+            }
+        });
+        
+        this.on('nodedrop',function(el) {
+        	var root = this.getRootNode();
+        	state = {};
+        	var i = 0;
+        	root.eachChild(function(el) {
+        		i++;
+        		state[el.id] = i;
+        	});
+
+        	Ext.state.Manager.set(this.stateId, state);
+        });
+        
+
         this.filterNode = this.filterNode || new Ext.tree.AsyncTreeNode({
             text: _('My favorites'),
             id: '_persistentFilters',
@@ -363,7 +387,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     		var savingText = String.format(_('Setting favorite "{0}" not shared'), record.data.name);
     	} else {
     		var savingText = String.format(_('Setting favorite "{0}" shared'), record.data.name);
-    		record.data.account_id = null;
+    		record.data.account_id = '';
     	}
 
     	Ext.MessageBox.wait(_('Please wait'), savingText);
@@ -553,8 +577,6 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
 
     onSave : function() {
     	this.window.rec = {};
-    	
-    	Tine.log.debug(this.inputTitle);
 
     	// Name of the favorite
     	if(this.inputTitle.isValid()) {
@@ -584,6 +606,7 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
         }  
         this.window.fireEvent('update');
         this.purgeListeners();
+        this.window.purgeListeners();
         this.window.close();
     },
     
@@ -698,7 +721,7 @@ Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(Tine.widgets.tr
         var addText = '';
         var addClass = '';
         if(isShared) {
-        	addText = _(' (shared)');
+        	addText = _('(shared)');
         	addClass = '-shared';
         }
         
@@ -706,9 +729,14 @@ Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(Tine.widgets.tr
             Ext.apply(attr, {
                 isPersistentFilter: isPersistentFilter,
                 text: Ext.util.Format.htmlEncode(this.app.i18n._hidden(attr.name)),
-                qtip: Ext.util.Format.htmlEncode(attr.description ? this.app.i18n._hidden(attr.description) + addText : addText),
+                qtip: Ext.util.Format.htmlEncode(attr.description ? this.app.i18n._hidden(attr.description) + ' ' + addText : addText),
                 selected: attr.id === this.selectedFilterId,
                 id: attr.id,
+                
+                sorting: attr.sorting,
+                draggable: true,
+                allowDrop: false,
+                
                 leaf: attr.leaf === false ? attr.leaf : true,
                 cls: 'tinebase-westpanel-node-favorite' + addClass
             });
