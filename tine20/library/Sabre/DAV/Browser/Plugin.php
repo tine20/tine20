@@ -221,6 +221,18 @@ class Sabre_DAV_Browser_Plugin extends Sabre_DAV_ServerPlugin {
                     case '{urn:ietf:params:xml:ns:caldav}calendar' :
                         $type[$k] = 'Calendar';
                         break;
+                    case '{urn:ietf:params:xml:ns:caldav}schedule-inbox' :
+                        $type[$k] = 'Schedule Inbox';
+                        break;
+                    case '{urn:ietf:params:xml:ns:caldav}schedule-outbox' :
+                        $type[$k] = 'Schedule Outbox';
+                        break;
+                    case '{http://calendarserver.org/ns/}calendar-proxy-read' :
+                        $type[$k] = 'Proxy-Read';
+                        break;
+                    case '{http://calendarserver.org/ns/}calendar-proxy-write' :
+                        $type[$k] = 'Proxy-Write';
+                        break;
                 }
 
             }
