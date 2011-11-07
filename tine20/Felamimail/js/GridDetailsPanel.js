@@ -120,13 +120,11 @@ Ext.namespace('Tine.Felamimail');
      */
     getSingleRecordPanel: function() {
         if (! this.singleRecordPanel) {
-            //this.singleRecordPanel = new Ext.Panel(Ext.applyIf(this.defaults, {
             this.singleRecordPanel = new Ext.Panel({
                 layout: 'vbox',
                 layoutConfig: {
                     align:'stretch'
                 },
-//                layout: 'fit',
                 border: false,
                 items: [
                     this.getTopPanel(),
@@ -148,42 +146,35 @@ Ext.namespace('Tine.Felamimail');
     getTopPanel: function() {
         if (! this.topPanel) {
             this.topPanel = new Ext.Panel({
-                //hidden: true,
-                //layout: 'fit',
-                //border: false,
-                html: '',
-                height: 30
-                //tbar: new Ext.Toolbar({
-//                items: [new Ext.Toolbar({
-//                    //height: 30,
-//                    items: [{
-//                        xtype: 'buttongroup',
-//                        columns: 3,
-//                        items: [
-//                            new Ext.Action({
-//                                text: this.app.i18n._('Accept'),
-//                                handler: this.processInvitation.createDelegate(this, ['ACCEPTED']),
-//                                iconCls: 'cal-response-action-ACCEPTED',
-//                                disabled: false,
-//                                scope: this
-//                            }),
-//                            new Ext.Action({
-//                                text: this.app.i18n._('Decline'),
-//                                handler: this.processInvitation.createDelegate(this, ['DECLINED']),
-//                                iconCls: 'cal-response-action-DECLINED',
-//                                disabled: false,
-//                                scope: this
-//                            }),
-//                            new Ext.Action({
-//                                text: this.app.i18n._('Tentative'),
-//                                handler: this.processInvitation.createDelegate(this, ['TENTATIVE']),
-//                                iconCls: 'cal-response-action-TENTATIVE',
-//                                disabled: false,
-//                                scope: this
-//                            })
-//                        ]
-//                    }]
-//                })]
+                hidden: true,
+                layout: 'fit',
+                height: 30,
+                tbar: new Ext.Toolbar({
+                    items: [
+                        '->',
+                        new Ext.Action({
+                            text: this.app.i18n._('Accept'),
+                            handler: this.processInvitation.createDelegate(this, ['ACCEPTED']),
+                            iconCls: 'cal-response-action-ACCEPTED',
+                            disabled: false,
+                            scope: this
+                        }),
+                        new Ext.Action({
+                            text: this.app.i18n._('Decline'),
+                            handler: this.processInvitation.createDelegate(this, ['DECLINED']),
+                            iconCls: 'cal-response-action-DECLINED',
+                            disabled: false,
+                            scope: this
+                        }),
+                        new Ext.Action({
+                            text: this.app.i18n._('Tentative'),
+                            handler: this.processInvitation.createDelegate(this, ['TENTATIVE']),
+                            iconCls: 'cal-response-action-TENTATIVE',
+                            disabled: false,
+                            scope: this
+                        })
+                    ]
+                 })
             });
         }
         return this.topPanel;
@@ -247,7 +238,7 @@ Ext.namespace('Tine.Felamimail');
             this.refetchBody(record, this.updateDetails.createDelegate(this, [record, body]), 'updateDetails');
             this.defaultTpl.overwrite(body, {msg: ''});
             this.getLoadMask().show();
-            this.getTopPanel().setVisible(false);
+            //this.getTopPanel().setVisible(false);
         } else {
             this.getLoadMask().hide();
         }
@@ -280,8 +271,10 @@ Ext.namespace('Tine.Felamimail');
         this.getLoadMask().hide();
 
         if (this.record.get('invitation_event')) {
+            Tine.log.debug('got invitation event');
             this.handleInvitationMessage(record);
         } else {
+            Tine.log.debug('no invitation event');
             this.getTopPanel().setVisible(false);
         }
         
