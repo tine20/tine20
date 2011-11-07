@@ -75,8 +75,8 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
         
         $server->addPlugin(new Sabre_CardDAV_Plugin());
         $server->addPlugin(new Sabre_CalDAV_Plugin());
-        $server->addPlugin(new Sabre_CalDAV_PluginAutoSchedule());
-        $server->addPlugin(new Sabre_DAV_Browser_Plugin(false));
+        $server->addPlugin(new Sabre_CalDAV_Schedule_Plugin());
+        $server->addPlugin(new Sabre_DAV_Browser_Plugin());
         
         $server->exec();
     }
