@@ -127,7 +127,7 @@ Ext.namespace('Tine.Felamimail');
                 border: false,
                 items: [
                     this.getTopPanel(),
-                    this.getMessageRecordPanel()
+                    this.getMessageRecordPanel(),
                     this.getBottomPanel()
                 ]
             });
@@ -208,11 +208,10 @@ Ext.namespace('Tine.Felamimail');
      */
     getBottomPanel: function() {
         if (! this.bottomPanel) {
-            this.bottomPanel = new Ext.Panel({
-                hidden: true,
-                height: 100,
-                items: []
-            });
+            var calendarDetailsPanel = new Tine.Calendar.EventDetailsPanel();
+            this.bottomPanel = calendarDetailsPanel.getSingleRecordPanel();
+            this.bottomPanel.setHeight(150);
+            this.bottomPanel.setVisible(false);
         }
         return this.bottomPanel;
     },
@@ -282,6 +281,7 @@ Ext.namespace('Tine.Felamimail');
         } else {
             Tine.log.debug('no invitation event');
             this.getTopPanel().setVisible(false);
+            this.getBottomPanel().setVisible(false);
         }
         
         this.doLayout();
@@ -291,23 +291,28 @@ Ext.namespace('Tine.Felamimail');
     },
     
     /**
-     * handle invitation messages
+     * handle invitation messages (show top + bottom panels)
      * 
      * @param {Tine.Felamimail.Model.Message} record
      * 
-     * TODO use calendar details panel?
+     * TODO replace email body with event details panel?
      */
     handleInvitationMessage: function(record) {
-        var invitationEvent = new Tine.Calendar.Model.Event(this.record.get('invitation_event')),
+        var invitationEvent = Tine.Calendar.backend.recordReader({
+                responseText: Ext.util.JSON.encode(this.record.get('invitation_event'))
+            }),
             myAttenderRecord = invitationEvent.getMyAttenderRecord(),
             status = myAttenderRecord.get('status');
-        
+
         Tine.log.debug('invitation status: ' + status);
-        this.getTopPanel().setVisible(true);   
         
+        this.getTopPanel().setVisible(true);   
         if (status !== 'NEEDS-ACTION') {
             this.onInvitationStatusUpdate();
         }
+
+        this.getBottomPanel().setVisible(true);
+        this.getBottomPanel().loadRecord.defer(100, this.getBottomPanel(), [invitationEvent]);
     },
     
     /**
