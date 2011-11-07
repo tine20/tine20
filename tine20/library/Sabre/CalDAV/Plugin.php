@@ -178,25 +178,13 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
      * @return bool 
      */
     public function unknownMethod($method, $uri) {
-        
-        switch ($method) {
-            case 'MKCALENDAR':
-                $this->httpMkCalendar($uri);
-                
-                // false is returned to stop the unknownMethod event
-                return false;
-                
-                break;
-                
-            case 'POST':
-                // returns true, if reuquest got handled by httpPost function
-                if ($this->httpPost($uri) === true) {
-                    // false is returned to stop the unknownMethod event
-                    return false;
-                }
-                
-                break;
-        }
+
+        if ($method!=='MKCALENDAR') return;
+
+        $this->httpMkCalendar($uri);
+        // false is returned to stop the unknownMethod event
+        return false;
+
     }
 
     /**
@@ -221,132 +209,6 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
 
     }
 
-    public function httpPost($uri)
-    {
-        if (strpos($this->server->httpRequest->getHeader('Content-Type'), 'text/calendar') !== false) {
-        
-            $attendees = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-            
-            $vobject = Sabre_VObject_Reader::read($this->server->httpRequest->getBody(true));
-            
-            foreach ($vobject->vfreebusy->attendee as $attendee) {
-                $attendeEmail = substr($attendee->value, 7);
-                
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' attendee ' . $attendeEmail);
-                
-                // resolve email address to contact
-                $filter = new Addressbook_Model_ContactFilter(array(
-                    array(
-                        'field'     => 'containerType',
-                        'operator'  => 'equals',
-                        'value'     => 'all'
-                    ),
-                    array(
-                        'field'     => 'type',
-                        'operator'  => 'equals',
-                        'value'     => Addressbook_Model_Contact::CONTACTTYPE_USER
-                    ),
-                    array('condition' => 'OR', 'filters' => array(
-                        array(
-                            'field'     => 'email',
-                            'operator'  => 'equals',
-                            'value'     => $attendeEmail
-                        ),
-                        array(
-                            'field'     => 'email_home',
-                            'operator'  => 'equals',
-                            'value'     => $attendeEmail
-                        )
-                    ))
-                ));
-
-                $contact = Addressbook_Controller_Contact::getInstance()->search($filter)->getFirstRecord();
-                
-                if ($contact !== null) {
-                    $attendees->addRecord(new Calendar_Model_Attender(array(
-                    	'user_id'   => $contact->getId(),
-                    	'user_type' => Calendar_Model_Attender::USERTYPE_USER
-                    )));
-                }
-            }
-            
-            $dtstart = new Tinebase_DateTime(
-                $vobject->vfreebusy->dtstart->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), 
-                'UTC'
-            );
-            $dtend = new Tinebase_DateTime(
-                $vobject->vfreebusy->dtend->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG),
-                'UTC'
-            );
-            $period = array(array(
-                'from'  => $dtstart,
-                'until' => $dtend
-            ));
-            
-            $freeBusyInfo = Calendar_Controller_Event::getInstance()->getFreeBusyInfo($period, $attendees);
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' subscriber ' . print_r($freeBusyInfo->toArray(), true));
-            
-            
-            $dom = new DOMDocument('1.0','utf-8');
-            //$dom->formatOutput = true;
-            $scheduleRespone = $dom->createElement('cal:schedule-response');
-            $dom->appendChild($scheduleRespone);
-            
-            // Adding in default namespaces
-            foreach($this->server->xmlNamespaces as $namespace=>$prefix) {
-                $scheduleRespone->setAttribute('xmlns:' . $prefix,$namespace);
-            }
-
-            $response = $dom->createElement('cal:response');
-            $scheduleRespone->appendChild($response);
-            
-            $recipient = $dom->createElement('cal:recipient');
-            $response->appendChild($recipient);
-            
-            $href = new Sabre_DAV_Property_Href('mailto:l.kneschke@metaways.de', false);
-            $href->serialize($this->server, $recipient);
-            
-            $requestStatus = $dom->createElement('cal:request-status', '2.0;Success');
-            $response->appendChild($requestStatus);
-            
-            $vcalendar = new Sabre_VObject_Component('VCALENDAR');
-            $vcalendar->add('VERSION', '2.0');
-            $vcalendar->add('METHOD', 'REPLY');
-            
-            $vfreebusy = new Sabre_VObject_Component('VFREEBUSY');
-            $vfreebusy->add('UID', $vobject->vfreebusy->uid->value);
-            $vfreebusy->add('DTSTAMP', $vobject->vfreebusy->dtstart->value);
-            $vfreebusy->add('DTSTART', $vobject->vfreebusy->dtstart->value);
-            $vfreebusy->add('DTEND', $vobject->vfreebusy->dtend->value);
-            $vfreebusy->add('ATTENDEE', 'mailto:l.kneschke@metaways.de'); // add CN
-            foreach ($freeBusyInfo as $busyInfo) {
-                $busy = $busyInfo->dtstart->format('Ymd\\THis\\Z') . '/' . $busyInfo->dtend->format('Ymd\\THis\\Z');
-                $freebusy = new Sabre_VObject_Property('FREEBUSY', $busy);
-                $freebusy->add('FBTYPE', 'BUSY');
-                
-                $vfreebusy->add($freebusy);
-            }
-            
-            $vcalendar->add($vfreebusy);
-            
-            $calendarData = $dom->createElement('cal:calendar-data', str_replace("\r","", $vcalendar->serialize()));
-            
-            $response->appendChild($calendarData);
-            
-            $result = $dom->saveXML();
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' subscriber ' . $result);
-            
-            
-            $this->server->httpResponse->sendStatus(200);
-            $this->server->httpResponse->setHeader('Content-Type', 'application/xml');
-            $this->server->httpResponse->setHeader('Content-Length', strlen($result));
-            $this->server->httpResponse->sendBody($result);
-            
-            return true;
-        }
-    }
-    
     /**
      * This function handles the MKCALENDAR HTTP method, which creates
      * a new calendar.
