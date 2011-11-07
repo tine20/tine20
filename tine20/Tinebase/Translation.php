@@ -196,7 +196,6 @@ class Tinebase_Translation
         try {
             $locale = new Zend_Locale($_localeString);
             
-            Tinebase_Core::getLogger()->ERR($locale);
             // check if we suppot the locale
             $supportedLocales = array();
             $availableTranslations = self::getAvailableTranslations();
