@@ -68,32 +68,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         $event = $converter->toTine20Model($vobjectData);
         $event->container_id = $container->getId();
         
-        if (empty($event->organizer)) {
-            $event->organizer = Tinebase_Core::getUser()->contact_id;
-            
-            // got there any attendees added?
-            if(! $event->attendee instanceof Tinebase_Record_RecordSet) {
-                $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-            }
-            
-            $matchingAttendees = $event->attendee 
-                ->filter('user_type', Calendar_Model_Attender::USERTYPE_USER)
-                ->filter('user_id',   $event->organizer);
-            
-            if (count($matchingAttendees) == 0) {
-                $newAttendee = new Calendar_Model_Attender(array(
-                	'user_id'   => $event->organizer,
-                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                    'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
-                    'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
-                ));
-                
-                $event->attendee->addRecord($newAttendee);
-            }
-        }
-        
-        // we support only OPAQUE events
-        $event->transp = Calendar_Model_Event::TRANSP_OPAQUE;
+        self::enforceEventParameters($event);
         
         $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
         $event->setId($id);
@@ -103,6 +78,48 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         $vevent = new self($event);
         
         return $vevent;
+    }
+    
+    public static function enforceEventParameters(Calendar_Model_Event $_event)
+    {
+        // got there any attendees added?
+        if(! $_event->attendee instanceof Tinebase_Record_RecordSet) {
+            $_event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        }
+        
+        if (empty($_event->organizer)) {
+            $_event->organizer = Tinebase_Core::getUser()->contact_id;
+             
+            $matchingAttendees = $_event->attendee
+            ->filter('user_type', Calendar_Model_Attender::USERTYPE_USER)
+            ->filter('user_id',   Tinebase_Core::getUser()->contact_id);
+        
+            if (count($matchingAttendees) == 0) {
+                $newAttendee = new Calendar_Model_Attender(array(
+                	'user_id'   => Tinebase_Core::getUser()->contact_id,
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+                    'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
+                ));
+        
+                $_event->attendee->addRecord($newAttendee);
+            }
+        }
+        
+        if (empty($_event->attendee)) {
+            $newAttendee = new Calendar_Model_Attender(array(
+            	'user_id'   => Tinebase_Core::getUser()->contact_id,
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+                'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
+            ));
+        
+            $_event->attendee->addRecord($newAttendee);
+        }
+        
+        if (empty($_event->transp)) {
+            $_event->transp = Calendar_Model_Event::TRANSP_OPAQUE;
+        }
     }
     
     /**
@@ -252,11 +269,10 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         if (get_class($this->_converter) == 'Calendar_Convert_Event_VCalendar_Generic') {
             throw new Sabre_DAV_Exception_Forbidden('Update denied for unknow client');
         }
-        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' event ' . print_r($this->getRecord()->attendee->toArray(), true));
         $event = $this->_converter->toTine20Model($cardData, $this->getRecord());
-        
-        // we support only OPAQUE events
-        $event->transp = Calendar_Model_Event::TRANSP_OPAQUE;
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' event ' . print_r($event->attendee->toArray(), true));
+        self::enforceEventParameters($event);
         
         $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
         
@@ -307,6 +323,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
             $this->_vevent = $this->_converter->fromTine20Model($this->getRecord());
         }
                 
-        return $this->_vevent;
+        return $this->_vevent->serialize();
     }
 }
