@@ -156,6 +156,6 @@ class Addressbook_Convert_Contact_VCard_Sogo extends Addressbook_Convert_Contact
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' card ' . $card->serialize());
         
-        return $card->serialize();
+        return $card;
     }    
 }

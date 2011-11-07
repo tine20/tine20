@@ -276,6 +276,6 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
             $this->_vcard = $this->_converter->fromTine20Model($this->getRecord());
         }
         
-        return $this->_vcard;
+        return $this->_vcard->serialize();
     }
 }
