@@ -34,26 +34,34 @@ Tine.widgets.persistentfilter.store.PersistentFilterStore = Ext.extend(Ext.data.
  * @singleton
  * @return {PersistentFilterStore}
  */
-Tine.widgets.persistentfilter.store.getPersistentFilterStore = function() {
+Tine.widgets.persistentfilter.store.getPersistentFilterStore = function(stateId) {
     if (! Tine.widgets.persistentfilter.store.persistentFilterStore) {
         
         if (window.isMainWindow) {
         	
         	var fields = Tine.widgets.persistentfilter.model.PersistentFilter.getFieldDefinitions();
         	fields.push('sorting');
-        	
+          	            
+            // get sorting from state
+            var state = Ext.state.Manager.get(stateId, {});
+            var sortField = 'name';
+            
+        	for(var prop in state) {
+                if (state.hasOwnProperty(prop)) {
+                    sortField = 'sorting';
+                       break;
+                    }
+                }
+                
             // create store
             var s = Tine.widgets.persistentfilter.store.persistentFilterStore = new Tine.widgets.persistentfilter.store.PersistentFilterStore({
                 fields: fields,
-                sortInfo: {field: 'sorting', direction: 'ASC'}
+                sortInfo: {field: sortField, direction: 'ASC'}
             });
             
             // populate store
             var persistentFiltersData = Tine.Tinebase.registry.get("persistentFilters").results;
-            
-            // get sorting from state
-            var state = Ext.state.Manager.get('widgets-persistentfilter-pickerpanel', {});
-            
+
             Ext.each(persistentFiltersData, function(data,index) {
             	
             	if(state[data.id]) data.sorting = state[data.id];

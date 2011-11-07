@@ -49,6 +49,15 @@ Tine.widgets.persistentfilter.model.PersistentFilter = Tine.Tinebase.data.Record
     },
     
     /**
+     * is a persistent filter (localized) which is shipped
+     * 
+     * @return {Boolean}
+     */
+    isShipped: function() {
+        return ((this.get('account_id') === null) && (this.get('created_by') === null));
+    },  
+    
+    /**
      * is default of current user
      * 
      * @return {Boolean}
