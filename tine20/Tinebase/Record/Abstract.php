@@ -404,7 +404,6 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             } else {
                 $this->_convertDateTimeToString($recordArray, $this->dateConversionFormat);
             }
-            
         }
         
         if ($_recursive) {
@@ -413,7 +412,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                         (in_array('Tinebase_Record_Interface', class_implements($value)) || 
                         $value instanceof Tinebase_Record_Recordset) ||
                         (is_object($value) && method_exists($value, 'toArray'))) {
-                    $recordArray[$property] = $value->toArray(FALSE);
+                    $recordArray[$property] = $value->toArray();
                 }
             }
         }

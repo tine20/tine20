@@ -23,7 +23,10 @@
  * @property    array   $cc             the cc receipients
  * @property    array   $bcc            the bcc receipients
  * @property    array   $structure      the message structure
+ * @property    array   $attachments    the attachments
  * @property    string  $messageuid     the message uid on the imap server
+ * @property    array   $invitation_event   invitation event object
+ * @property    array   $invitation_status  invitation status
  */
 class Felamimail_Model_Message extends Tinebase_Record_Abstract
 {
@@ -127,6 +130,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'note'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     // Felamimail_Message object
         'message'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    // email invitations
+        'invitation_event'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**

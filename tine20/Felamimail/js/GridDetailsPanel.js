@@ -3,8 +3,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -24,10 +24,6 @@ Ext.namespace('Tine.Felamimail');
  * TODO         add 'download all' button
  * TODO         'from' to contact: check for duplicates
  * 
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * 
  * @param       {Object} config
  * @constructor
  * Create a new Tine.Felamimail.GridDetailsPanel
@@ -38,7 +34,7 @@ Ext.namespace('Tine.Felamimail');
      * config
      * @private
      */
-    defaultHeight: 300,
+    defaultHeight: 350,
     currentId: null,
     record: null,
     app: null,
@@ -51,20 +47,62 @@ Ext.namespace('Tine.Felamimail');
      * @private
      */
     initComponent: function() {
-
-        // init detail template
         this.initTemplate();
+        this.initDefaultTemplate();
+        this.initTopToolbar();
         
-        // use default Tpl for default and multi view
+        Tine.Felamimail.GridDetailsPanel.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * use default Tpl for default and multi view
+     */
+    initDefaultTemplate: function() {
         this.defaultTpl = new Ext.XTemplate(
             '<div class="preview-panel-felamimail">',
                 '<div class="preview-panel-felamimail-body">{[values ? values.msg : ""]}</div>',
             '</div>'
         );
+    },
+    
+    /**
+     * init bottom toolbar (needed for event invitations atm)
+     * 
+     * TODO add buttons (show header, add to addressbook, create filter, show images ...) here
+     */
+    initTopToolbar: function() {
+        this.tbar = new Ext.Toolbar({
+            hidden: true,
+            items: []
+        });
+    },
+    
+    /**
+     * process email invitation
+     * 
+     * @param {String} status
+     */
+    processInvitation: function(status) {
+        Tine.log.debug('Setting event attender status: ' + status);
+
+        var invitationEvent = new Tine.Calendar.Model.Event(this.record.get('invitation_event')),
+            myAttenderRecord = invitationEvent.getMyAttenderRecord();
         
-        Tine.Felamimail.GridDetailsPanel.superclass.initComponent.call(this);
+        myAttenderRecord.set('status', status);
+        Tine.Felamimail.setInvitationStatus(invitationEvent.data, myAttenderRecord.data, this.onInvitationStatusUpdate);
     },
 
+    /**
+     * callback for invitation status update
+     * 
+     * @param {Object} response
+     * 
+     * TODO remove status buttones and show message
+     */
+    onInvitationStatusUpdate: function(response) {
+        
+    },
+    
     /**
      * add on click event after render
      * @private
@@ -73,6 +111,112 @@ Ext.namespace('Tine.Felamimail');
         Tine.Felamimail.GridDetailsPanel.superclass.afterRender.apply(this, arguments);
         
         this.body.on('click', this.onClick, this);
+    },
+    
+    /**
+     * get panel for single record details
+     * 
+     * @return {Ext.Panel}
+     */
+    getSingleRecordPanel: function() {
+        if (! this.singleRecordPanel) {
+            //this.singleRecordPanel = new Ext.Panel(Ext.applyIf(this.defaults, {
+            this.singleRecordPanel = new Ext.Panel({
+                layout: 'vbox',
+                layoutConfig: {
+                    align:'stretch'
+                },
+//                layout: 'fit',
+                border: false,
+                items: [
+                    this.getTopPanel(),
+                    this.getMessageRecordPanel()
+                    //this.getBottomPanel()
+                ]
+            });
+        }
+        return this.singleRecordPanel;
+    },
+
+    /**
+     * get top panel
+     * 
+     * @return {Ext.Panel}
+     * 
+     * TODO add calendar icon and texts
+     */
+    getTopPanel: function() {
+        if (! this.topPanel) {
+            this.topPanel = new Ext.Panel({
+                //hidden: true,
+                //layout: 'fit',
+                //border: false,
+                html: '',
+                height: 30
+                //tbar: new Ext.Toolbar({
+//                items: [new Ext.Toolbar({
+//                    //height: 30,
+//                    items: [{
+//                        xtype: 'buttongroup',
+//                        columns: 3,
+//                        items: [
+//                            new Ext.Action({
+//                                text: this.app.i18n._('Accept'),
+//                                handler: this.processInvitation.createDelegate(this, ['ACCEPTED']),
+//                                iconCls: 'cal-response-action-ACCEPTED',
+//                                disabled: false,
+//                                scope: this
+//                            }),
+//                            new Ext.Action({
+//                                text: this.app.i18n._('Decline'),
+//                                handler: this.processInvitation.createDelegate(this, ['DECLINED']),
+//                                iconCls: 'cal-response-action-DECLINED',
+//                                disabled: false,
+//                                scope: this
+//                            }),
+//                            new Ext.Action({
+//                                text: this.app.i18n._('Tentative'),
+//                                handler: this.processInvitation.createDelegate(this, ['TENTATIVE']),
+//                                iconCls: 'cal-response-action-TENTATIVE',
+//                                disabled: false,
+//                                scope: this
+//                            })
+//                        ]
+//                    }]
+//                })]
+            });
+        }
+        return this.topPanel;
+    },
+    
+    /**
+     * get panel for single record details
+     * 
+     * @return {Ext.Panel}
+     */
+    getMessageRecordPanel: function() {
+        if (! this.messageRecordPanel) {
+            this.messageRecordPanel = new Ext.Panel({
+                flex: 1
+            });
+        }
+        return this.messageRecordPanel;
+    },
+    
+    /**
+     * get bottom panel
+     * 
+     * @return {Ext.Panel}
+     */
+    getBottomPanel: function() {
+        if (! this.bottomPanel) {
+            this.bottomPanel = new Ext.Panel({
+                hidden: true,
+                height: 100,
+                items: []
+            });
+        }
+        return this.bottomPanel;
     },
     
     /**
@@ -85,25 +229,27 @@ Ext.namespace('Tine.Felamimail');
     updateDetails: function(record, body) {
         if (record.id === this.currentId) {
             // nothing to do
-            return;
+        } else if (! record.bodyIsFetched()) {
+            this.waitForContent(record, this.getMessageRecordPanel().body);
+        } else if (record === this.record) {
+            this.setTemplateContent(record, this.getMessageRecordPanel().body);
         }
-        
-        if (! record.bodyIsFetched()) {
-            if (! this.grid || this.grid.getSelectionModel().getCount() == 1) {
-                this.refetchBody(record, this.updateDetails.createDelegate(this, [record, body]), 'updateDetails');
-                this.defaultTpl.overwrite(body, {msg: ''});
-                this.getLoadMask().show();
-            } else {
-                this.getLoadMask().hide();
-            }
-            return;
-        }
-        
-        if (record === this.record) {                
-            this.currentId = record.id;
-            this.tpl.overwrite(body, record.data);
+    },
+    
+    /**
+     * wait for body content
+     * 
+     * @param {Tine.Felamimail.Model.Message} record
+     * @param {String} body
+     */
+    waitForContent: function(record, body) {
+        if (! this.grid || this.grid.getSelectionModel().getCount() == 1) {
+            this.refetchBody(record, this.updateDetails.createDelegate(this, [record, body]), 'updateDetails');
+            this.defaultTpl.overwrite(body, {msg: ''});
+            this.getLoadMask().show();
+            this.getTopPanel().setVisible(false);
+        } else {
             this.getLoadMask().hide();
-            this.getEl().down('div').down('div').scrollTo('top', 0, false);
         }
     },
     
@@ -121,6 +267,48 @@ Ext.namespace('Tine.Felamimail');
             Tine.Felamimail.messageBackend.abort(this.fetchBodyTransactionId);
         }
         this.fetchBodyTransactionId = Tine.Felamimail.messageBackend.fetchBody(record, callback);
+    },
+    
+    /**
+     * overwrite template with (body) content
+     * 
+     * @param {Tine.Felamimail.Model.Message} record
+     * @param {String} body
+     */
+    setTemplateContent: function(record, body) {
+        this.currentId = record.id;
+        this.getLoadMask().hide();
+
+        if (this.record.get('invitation_event')) {
+            this.handleInvitationMessage(record);
+        } else {
+            this.getTopPanel().setVisible(false);
+        }
+        
+        this.doLayout();
+
+        this.tpl.overwrite(body, record.data);
+        this.getEl().down('div').down('div').scrollTo('top', 0, false);
+    },
+    
+    /**
+     * handle invitation messages
+     * 
+     * @param {Tine.Felamimail.Model.Message} record
+     * 
+     * TODO use calendar details panel?
+     * TODO check status
+     */
+    handleInvitationMessage: function(record) {
+        var invitationEvent = new Tine.Calendar.Model.Event(this.record.get('invitation_event'));
+        
+//        Tine.log.debug(this.record.get('invitation_event'));
+//        Tine.log.debug(invitationEvent);
+        
+//        var myAttenderRecord = invitationEvent.getMyAttenderRecord();
+//        myAttenderRecord.get('status'),
+        
+        this.getTopPanel().setVisible(true);
     },
     
     /**
