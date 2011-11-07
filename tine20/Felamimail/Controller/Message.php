@@ -243,7 +243,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @todo use mimetype text/calendar part
      * @todo allow multiple invitations
-     * @todo set message body with event information (use calender notification template?)
      */
     protected function _getInvitationEventFromAttachments(Felamimail_Model_Message $_message)
     {
