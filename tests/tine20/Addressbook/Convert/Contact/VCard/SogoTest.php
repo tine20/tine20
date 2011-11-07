@@ -115,7 +115,7 @@ class Addressbook_Convert_Contact_VCard_SogoTest extends PHPUnit_Framework_TestC
         
         $converter = Addressbook_Convert_Contact_VCard_Factory::factory(Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO);
         
-        $vcard = $converter->fromTine20Model($contact);
+        $vcard = $converter->fromTine20Model($contact)->serialize();
         
         // required fields
         $this->assertContains('VERSION:3.0', $vcard, $vcard);

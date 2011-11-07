@@ -142,7 +142,10 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         
         $vcalendar = stream_get_contents($event->get());
         
+        //var_dump($vcalendar);
+        
         $this->assertContains('SUMMARY:New Event', $vcalendar);
+        $this->assertContains('ORGANIZER;CN=', $vcalendar);
     }
     
     /**
