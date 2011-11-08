@@ -80,7 +80,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' card ' . $vcalendar->serialize());
         
-        return $vcalendar->serialize();
+        return $vcalendar;
     }
     
     /**
@@ -234,6 +234,18 @@ class Calendar_Convert_Event_VCalendar_Abstract
         }
         $vevent->add($dtstart);
         $vevent->add($dtend);
+        
+        // event organizer and attendees
+        try {
+            $organizerContact = Addressbook_Controller_Contact::getInstance()->get($event->organizer);
+            if (!empty($organizerContact->email)) {
+                $organizer = new Sabre_VObject_Property('ORGANIZER', 'mailto:' . $organizerContact->email);
+                $organizer->add('CN', $organizerContact->n_fileas);
+                $vevent->add($organizer);
+            }
+        } catch (Tasks_Exception_NotFound $tenf) {
+            // contact not found
+        }
         
         $this->_addEventAttendee($vevent, $event);
         
@@ -488,6 +500,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
     {
         $event = $_event;
         
+        // save current attendees
         if (isset($event->attendee) && $event->attendee instanceof Tinebase_Record_RecordSet) {
             $oldAttendees = clone $event->attendee;
         }
@@ -496,6 +509,8 @@ class Calendar_Convert_Event_VCalendar_Abstract
         foreach ($this->_supportedFields as $field) {
             $event->$field = null;
         }
+        
+        // initialize attendees
         if(! $event->attendee instanceof Tinebase_Record_RecordSet) {
             $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         }
@@ -516,32 +531,18 @@ class Calendar_Convert_Event_VCalendar_Abstract
                             
                             $newAttendee = $this->_getAttendee($attendee, $contact);
                             
-                            $event->attendee->addRecord($newAttendee);
-                        }
-                    }
-                                        
-                    // merge old and new attendees
-                    if (isset($oldAttendees)) {
-                        foreach ($event->attendee as $id => $attendee) {
-                    
-                            // detect if the contact_id is already attending the event
-                            $matchingAttendees = $oldAttendees
-                                ->filter('user_type', $attendee->user_type)
-                                ->filter('user_id',   $attendee->user_id);
-                    
-                            if(count($matchingAttendees) > 0) {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updating attendee");
-                                $oldAttendee = $matchingAttendees[0];
-                                $oldAttendee->role = $attendee->role;
-                                $oldAttendee->status = $attendee->status;
-                    
-                                $event->attendee[$id] = $oldAttendee;
+                            // check if the attendee got added already
+                            $matchingAttendees = $event->attendee
+                                ->filter('user_type', $newAttendee->user_type)
+                                ->filter('user_id',   $newAttendee->user_id);
+
+                            // add only if not added already
+                            if(count($matchingAttendees) == 0) {
+                                $event->attendee->addRecord($newAttendee);
                             }
                         }
-                    
-                        unset($oldAttendees);
                     }
-                    
+
                     break;
                     
                 case 'CLASS':
@@ -608,9 +609,20 @@ class Calendar_Convert_Event_VCalendar_Abstract
                         
                         $event->organizer = $contact->getId();
                         
-                        $newAttendee = $this->_getAttendee($property, $contact);
+                        // Lightning attaches organizer ATTENDEE properties to ORGANIZER property and does not add an ATTENDEE for the organizer
+                        if (isset($property['PARTSTAT'])) {
+                            $newAttendee = $this->_getAttendee($property, $contact);
                         
-                        $event->attendee->addRecord($newAttendee);
+                            // check if the organizer got added as attendee already
+                            $matchingAttendees = $event->attendee
+                                ->filter('user_type', $newAttendee->user_type)
+                                ->filter('user_id',   $newAttendee->user_id);
+
+                            // add only if not added already
+                            if(count($matchingAttendees) == 0) {
+                                $event->attendee->addRecord($newAttendee);
+                            }
+                        }
                     }
                     
                     break;
@@ -710,6 +722,28 @@ class Calendar_Convert_Event_VCalendar_Abstract
                 
                     break;
             }
+        }
+        
+        // merge old and new attendees
+        if (isset($oldAttendees)) {
+            foreach ($event->attendee as $id => $attendee) {
+        
+                // detect if the contact_id is already attending the event
+                $matchingAttendees = $oldAttendees
+                ->filter('user_type', $attendee->user_type)
+                ->filter('user_id',   $attendee->user_id);
+        
+                if(count($matchingAttendees) > 0) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updating attendee");
+                    $oldAttendee = $matchingAttendees[0];
+                    $oldAttendee->role = $attendee->role;
+                    $oldAttendee->status = $attendee->status;
+        
+                    $event->attendee[$id] = $oldAttendee;
+                }
+            }
+        
+            unset($oldAttendees);
         }
         
         if (empty($event->seq)) {

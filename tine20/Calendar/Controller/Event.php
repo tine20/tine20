@@ -726,8 +726,31 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL)
         )), NULL, TRUE));
         
-        // make shure we have a 'fully featured' event
+        // make sure we have a 'fully featured' event
         return $this->get($baseEventId);
+    }
+
+    /**
+    * lookup existing event by uid
+    *
+    * @param  Calendar_Model_Event $_event
+    * @return Calendar_Model_Event|NULL
+    * 
+    * @todo also add more criteria for lookup (recurid, ...)
+    * @todo sophisticated reccurring event handling
+    */
+    public function lookupExistingEvent($_event)
+    {
+        $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'uid',     'operator' => 'equals', 'value' => $_event->uid),
+            array('field' => 'is_deleted', 'operator' => 'equals', 'value' => '0'),
+            //array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL)
+        )));
+        
+        $event = $events->filter(Tinebase_Model_Grants::GRANT_READ, TRUE)->getFirstRecord();
+    
+        // make sure we have a 'fully featured' event
+        return ($event !== NULL) ? $this->get($event->getId()) : NULL;
     }
     
     /**
@@ -1173,12 +1196,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             $event = $this->get($_event->getId());
             
-            $currentAttender                      = $event->attendee[$event->attendee->getIndexById($_attender->getId())];
+            $index = $event->attendee->getIndexById($_attender->getId());
+            if ($index === FALSE) {
+                throw new Tinebase_Exception_NotFound('Could not find attender in event.');
+            }
+            $currentAttender                      = $event->attendee[$index];
             $currentAttender->status              = $_attender->status;
             $currentAttender->displaycontainer_id = $_attender->displaycontainer_id;
             
             if ($currentAttender->status_authkey == $_authKey) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " update attender status for {$currentAttender->user_type} {$currentAttender->user_id}");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . " update attender status to {$_attender->status} for {$currentAttender->user_type} {$currentAttender->user_id}");
                 $updatedAttender = $this->_backend->updateAttendee($currentAttender);
                 
                 $this->_touch($event, TRUE);

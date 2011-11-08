@@ -328,6 +328,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             // @todo add/use converter to/from calendar
             if ($_record->invitation_event) {
                 Calendar_Model_Attender::resolveAttendee($_record->invitation_event->attendee);
+                if (isset($_record->invitation_event->container_id) && $_record->invitation_event->container_id) {
+                    $_record->invitation_event['container_id'] = $this->_resolveContainer($_record->invitation_event);
+                }
             } 
             
         } else if ($_record instanceof Felamimail_Model_Account) {

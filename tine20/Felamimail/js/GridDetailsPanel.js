@@ -89,18 +89,18 @@ Ext.namespace('Tine.Felamimail');
             myAttenderRecord = invitationEvent.getMyAttenderRecord();
         
         myAttenderRecord.set('status', status);
-        Tine.Felamimail.setInvitationStatus(invitationEvent.data, myAttenderRecord.data, this.onInvitationStatusUpdate);
+        Tine.Felamimail.setInvitationStatus(invitationEvent.data, myAttenderRecord.data, this.onInvitationStatusUpdate.createDelegate(this));
     },
 
     /**
      * callback for invitation status update
      * 
      * @param {Object} response
-     * 
-     * TODO remove status buttones and show message
      */
     onInvitationStatusUpdate: function(response) {
-        
+        this.getTopPanel().getTopToolbar().setVisible(false);
+        this.getTopPanel().setHeight(26);
+        this.getTopPanel().doLayout();
     },
     
     /**
@@ -109,7 +109,6 @@ Ext.namespace('Tine.Felamimail');
      */
     afterRender: function() {
         Tine.Felamimail.GridDetailsPanel.superclass.afterRender.apply(this, arguments);
-        
         this.body.on('click', this.onClick, this);
     },
     
@@ -120,18 +119,16 @@ Ext.namespace('Tine.Felamimail');
      */
     getSingleRecordPanel: function() {
         if (! this.singleRecordPanel) {
-            //this.singleRecordPanel = new Ext.Panel(Ext.applyIf(this.defaults, {
             this.singleRecordPanel = new Ext.Panel({
                 layout: 'vbox',
                 layoutConfig: {
                     align:'stretch'
                 },
-//                layout: 'fit',
                 border: false,
                 items: [
                     this.getTopPanel(),
-                    this.getMessageRecordPanel()
-                    //this.getBottomPanel()
+                    this.getMessageRecordPanel(),
+                    this.getBottomPanel()
                 ]
             });
         }
@@ -142,48 +139,49 @@ Ext.namespace('Tine.Felamimail');
      * get top panel
      * 
      * @return {Ext.Panel}
-     * 
-     * TODO add calendar icon and texts
      */
     getTopPanel: function() {
         if (! this.topPanel) {
             this.topPanel = new Ext.Panel({
-                //hidden: true,
-                //layout: 'fit',
-                //border: false,
-                html: '',
-                height: 30
-                //tbar: new Ext.Toolbar({
-//                items: [new Ext.Toolbar({
-//                    //height: 30,
-//                    items: [{
-//                        xtype: 'buttongroup',
-//                        columns: 3,
-//                        items: [
-//                            new Ext.Action({
-//                                text: this.app.i18n._('Accept'),
-//                                handler: this.processInvitation.createDelegate(this, ['ACCEPTED']),
-//                                iconCls: 'cal-response-action-ACCEPTED',
-//                                disabled: false,
-//                                scope: this
-//                            }),
-//                            new Ext.Action({
-//                                text: this.app.i18n._('Decline'),
-//                                handler: this.processInvitation.createDelegate(this, ['DECLINED']),
-//                                iconCls: 'cal-response-action-DECLINED',
-//                                disabled: false,
-//                                scope: this
-//                            }),
-//                            new Ext.Action({
-//                                text: this.app.i18n._('Tentative'),
-//                                handler: this.processInvitation.createDelegate(this, ['TENTATIVE']),
-//                                iconCls: 'cal-response-action-TENTATIVE',
-//                                disabled: false,
-//                                scope: this
-//                            })
-//                        ]
-//                    }]
-//                })]
+                hidden: true,
+                layout: 'fit',
+                height: 26,
+                border: false,
+                // TODO style this
+                html: this.app.i18n._('This invitation has already been processed.'),
+                tbar: new Ext.Toolbar({
+                    items: [
+                        {
+                            xtype: 'tbitem',
+                            cls: 'CalendarIconCls',
+                            width: 16,
+                            height: 16
+                        },
+                        this.app.i18n._('You received an event invitation. Please select a response.'),
+                        '->',
+                        new Ext.Action({
+                            text: this.app.i18n._('Accept'),
+                            handler: this.processInvitation.createDelegate(this, ['ACCEPTED']),
+                            iconCls: 'cal-response-action-ACCEPTED',
+                            disabled: false,
+                            scope: this
+                        }),
+                        new Ext.Action({
+                            text: this.app.i18n._('Decline'),
+                            handler: this.processInvitation.createDelegate(this, ['DECLINED']),
+                            iconCls: 'cal-response-action-DECLINED',
+                            disabled: false,
+                            scope: this
+                        }),
+                        new Ext.Action({
+                            text: this.app.i18n._('Tentative'),
+                            handler: this.processInvitation.createDelegate(this, ['TENTATIVE']),
+                            iconCls: 'cal-response-action-TENTATIVE',
+                            disabled: false,
+                            scope: this
+                        })
+                    ]
+                 })
             });
         }
         return this.topPanel;
@@ -210,11 +208,10 @@ Ext.namespace('Tine.Felamimail');
      */
     getBottomPanel: function() {
         if (! this.bottomPanel) {
-            this.bottomPanel = new Ext.Panel({
-                hidden: true,
-                height: 100,
-                items: []
-            });
+            var calendarDetailsPanel = new Tine.Calendar.EventDetailsPanel();
+            this.bottomPanel = calendarDetailsPanel.getSingleRecordPanel();
+            this.bottomPanel.setHeight(150);
+            this.bottomPanel.setVisible(false);
         }
         return this.bottomPanel;
     },
@@ -247,7 +244,6 @@ Ext.namespace('Tine.Felamimail');
             this.refetchBody(record, this.updateDetails.createDelegate(this, [record, body]), 'updateDetails');
             this.defaultTpl.overwrite(body, {msg: ''});
             this.getLoadMask().show();
-            this.getTopPanel().setVisible(false);
         } else {
             this.getLoadMask().hide();
         }
@@ -280,9 +276,12 @@ Ext.namespace('Tine.Felamimail');
         this.getLoadMask().hide();
 
         if (this.record.get('invitation_event')) {
+            Tine.log.debug('got invitation event');
             this.handleInvitationMessage(record);
         } else {
+            Tine.log.debug('no invitation event');
             this.getTopPanel().setVisible(false);
+            this.getBottomPanel().setVisible(false);
         }
         
         this.doLayout();
@@ -292,23 +291,28 @@ Ext.namespace('Tine.Felamimail');
     },
     
     /**
-     * handle invitation messages
+     * handle invitation messages (show top + bottom panels)
      * 
      * @param {Tine.Felamimail.Model.Message} record
      * 
-     * TODO use calendar details panel?
-     * TODO check status
+     * TODO replace email body with event details panel?
      */
     handleInvitationMessage: function(record) {
-        var invitationEvent = new Tine.Calendar.Model.Event(this.record.get('invitation_event'));
+        var invitationEvent = Tine.Calendar.backend.recordReader({
+                responseText: Ext.util.JSON.encode(this.record.get('invitation_event'))
+            }),
+            myAttenderRecord = invitationEvent.getMyAttenderRecord(),
+            status = myAttenderRecord.get('status');
+
+        Tine.log.debug('invitation status: ' + status);
         
-//        Tine.log.debug(this.record.get('invitation_event'));
-//        Tine.log.debug(invitationEvent);
-        
-//        var myAttenderRecord = invitationEvent.getMyAttenderRecord();
-//        myAttenderRecord.get('status'),
-        
-        this.getTopPanel().setVisible(true);
+        this.getTopPanel().setVisible(true);   
+        if (status !== 'NEEDS-ACTION') {
+            this.onInvitationStatusUpdate();
+        }
+
+        this.getBottomPanel().setVisible(true);
+        this.getBottomPanel().loadRecord.defer(100, this.getBottomPanel(), [invitationEvent]);
     },
     
     /**

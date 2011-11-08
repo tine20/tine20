@@ -218,7 +218,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
-        $vevent = $converter->fromTine20Model($event);
+        $vevent = $converter->fromTine20Model($event)->serialize();
         // var_dump($vevent);
         // required fields
         $this->assertContains('VERSION:2.0',                                    $vevent, $vevent);
@@ -252,7 +252,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
-        $vevent = $converter->fromTine20Model($event);
+        $vevent = $converter->fromTine20Model($event)->serialize();
         // var_dump($vevent);
         // required fields
         $this->assertContains('VERSION:2.0',                                    $vevent, $vevent);
@@ -288,7 +288,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
-        $vevent = $converter->fromTine20Model($event);
+        $vevent = $converter->fromTine20Model($event)->serialize();
         #var_dump($vevent);
         // required fields
         $this->assertContains('VERSION:2.0', $vevent, $vevent);

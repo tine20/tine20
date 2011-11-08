@@ -31,7 +31,7 @@ interface Tinebase_Convert_Interface
      * converts Tinebase_Record_Abstract to external format
      * 
      * @param  Tinebase_Record_Abstract  $_model
-     * @return string
+     * @return Sabre_VObject_Component
      */
     public function fromTine20Model(Tinebase_Record_Abstract $_model);    
 }
