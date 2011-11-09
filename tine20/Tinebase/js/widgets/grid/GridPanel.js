@@ -245,7 +245,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.i18nRecordsName = this.app.i18n._hidden(this.recordClass.getMeta('recordsName'));
         this.i18nContainerName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1);
         this.i18nContainersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
-        this.i18nEmptyText = this.i18nEmptyText || String.format(Tine.Tinebase.translation._("No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, this.i18nContainersName)
+        this.i18nEmptyText = this.i18nEmptyText || String.format(Tine.Tinebase.translation._("No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, this.i18nContainersName);
         
         this.editDialogConfig = this.editDialogConfig || {};
         
@@ -385,7 +385,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         this.initDeleteAction();
         
-        //if (this.recordClass.getField('tags')) {
         this.action_tagsMassAttach = new Tine.widgets.tags.TagsMassAttachAction({
             hidden:         ! this.recordClass.getField('tags'),
             selectionModel: this.grid.getSelectionModel(),
@@ -393,13 +392,22 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             updateHandler:  this.loadGridData.createDelegate(this),
             app:            this.app
         });
-            
+
+        this.action_tagsMassDetach = new Tine.widgets.tags.TagsMassDetachAction({
+            hidden:         ! this.recordClass.getField('tags'),
+            selectionModel: this.grid.getSelectionModel(),
+            recordClass:    this.recordClass,
+            updateHandler:  this.loadGridData.createDelegate(this),
+            app:            this.app
+        });        
+        
         // add actions to updater
         this.actionUpdater.addActions([
             this.action_addInNewWindow,
             this.action_editInNewWindow,
             this.action_deleteRecord,
             this.action_tagsMassAttach,
+            this.action_tagsMassDetach,
             this.action_editCopyInNewWindow
         ]);
         
@@ -955,7 +963,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             ];
             
             if (! this.action_tagsMassAttach.hidden) {
-                items.push('-'/*, {xtype: 'menutextitem', text: _('Tagging')}*/, this.action_tagsMassAttach);
+                items.push('-', this.action_tagsMassAttach, this.action_tagsMassDetach);
             }
             
             // lookup additional items
