@@ -16,7 +16,7 @@
  * @package     Calendar
  * @subpackage  Frontend
  */
-class Calendar_Frontend_CalDAV_ScheduleOutbox extends Sabre_DAV_Collection implements Sabre_CalDAV_ICalendar, Sabre_CalDAV_Schedule_IOutbox
+class Calendar_Frontend_CalDAV_ScheduleOutbox extends Sabre_DAV_Collection implements Sabre_DAV_IProperties, Sabre_DAVACL_IACL, Sabre_CalDAV_ICalendar, Sabre_CalDAV_Schedule_IOutbox
 {
     /**
      * @var Tinebase_Model_FullUser
@@ -73,6 +73,44 @@ class Calendar_Frontend_CalDAV_ScheduleOutbox extends Sabre_DAV_Collection imple
     }
         
     /**
+     * Returns the list of properties
+     *
+     * @param array $requestedProperties
+     * @return array
+     */
+    public function getProperties($requestedProperties)
+    {
+        $properties = array(
+            '{http://calendarserver.org/ns/}getctag' => round(time()/60),
+            'id'                => 'schedule-outbox',
+            'uri'               => 'schedule-outbox',
+        	'{DAV:}resource-id'	=> 'urn:uuid:schedule-outbox',
+        	'{DAV:}owner'       => new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . $this->_user->contact_id),
+            #'principaluri'      => $principalUri,
+            '{DAV:}displayname' => 'Schedule Outbox',
+            '{http://apple.com/ns/ical/}calendar-color' => '#666666',
+            '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre_CalDAV_Property_SupportedCalendarComponentSet(array('VEVENT')),
+        	'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-data'          => new Sabre_CalDAV_Property_SupportedCalendarData(),
+        	'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-description'		       => 'Calendar schedule outbox',
+			'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-timezone'                => $this->_getCalendarVTimezone()
+        );
+    
+        if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+            $properties['{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-user-address-set'	] = new Sabre_DAV_Property_HrefList(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress), false);
+        }
+    
+        $response = array();
+    
+        foreach($requestedProperties as $prop) {
+            if (isset($properties[$prop])) {
+                $response[$prop] = $properties[$prop];
+            }
+        }
+    
+        return $response;
+    }
+    
+    /**
      * Returns a list of ACE's for this node.
      *
      * Each ACE has the following properties:
@@ -116,5 +154,57 @@ class Calendar_Frontend_CalDAV_ScheduleOutbox extends Sabre_DAV_Collection imple
     public function setACL(array $acl) 
     {
         throw new Sabre_DAV_Exception_MethodNotAllowed('Changing ACL is not yet supported');
+    }
+    
+    /**
+     * Updates properties on this node,
+     *
+     * The properties array uses the propertyName in clark-notation as key,
+     * and the array value for the property value. In the case a property
+     * should be deleted, the property value will be null.
+     *
+     * This method must be atomic. If one property cannot be changed, the
+     * entire operation must fail.
+     *
+     * If the operation was successful, true can be returned.
+     * If the operation failed, false can be returned.
+     *
+     * Deletion of a non-existant property is always succesful.
+     *
+     * Lastly, it is optional to return detailed information about any
+     * failures. In this case an array should be returned with the following
+     * structure:
+     *
+     * array(
+     *   403 => array(
+     *      '{DAV:}displayname' => null,
+     *   ),
+     *   424 => array(
+     *      '{DAV:}owner' => null,
+     *   )
+     * )
+     *
+     * In this example it was forbidden to update {DAV:}displayname.
+     * (403 Forbidden), which in turn also caused {DAV:}owner to fail
+     * (424 Failed Dependency) because the request needs to be atomic.
+     *
+     * @param array $mutations
+     * @return bool|array
+     */
+    public function updateProperties($mutations)
+    {
+        return false;
+    }
+    
+    protected function _getCalendarVTimezone()
+    {
+        $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $this->_user->getId());
+
+        // create vcalendar object with timezone information
+        $vcalendar = new Sabre_VObject_Component('CALENDAR');
+        $vcalendar->add(new Sabre_VObject_Component_VTimezone($timezone));
+        
+        // Taking out \r to not screw up the xml output
+        return str_replace("\r","", $vcalendar->serialize());
     }
 }
