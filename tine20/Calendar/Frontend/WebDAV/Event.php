@@ -125,13 +125,16 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
     /**
      * Deletes the card
      *
+     * @todo improve handling
      * @return void
      */
     public function delete() 
     {
         $id = $this->_event instanceof Calendar_Model_Event ? $this->_event->getId() : $this->_event;
         
-        Calendar_Controller_MSEventFacade::getInstance()->delete($id);
+        if (strpos($_SERVER['REQUEST_URI'], Calendar_Frontend_CalDAV_ScheduleInbox::NAME) === false) {
+            Calendar_Controller_MSEventFacade::getInstance()->delete($id);
+        }
     }
     
     /**
@@ -269,9 +272,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         if (get_class($this->_converter) == 'Calendar_Convert_Event_VCalendar_Generic') {
             throw new Sabre_DAV_Exception_Forbidden('Update denied for unknow client');
         }
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' event ' . print_r($this->getRecord()->attendee->toArray(), true));
+        
         $event = $this->_converter->toTine20Model($cardData, $this->getRecord());
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' event ' . print_r($event->attendee->toArray(), true));
+
         self::enforceEventParameters($event);
         
         $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
