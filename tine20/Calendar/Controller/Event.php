@@ -539,6 +539,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                         }
                     }
                 }
+                
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             } catch (Exception $e) {
                 Tinebase_TransactionManager::getInstance()->rollBack();
                 throw $e;
