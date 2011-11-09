@@ -57,6 +57,8 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         $this->objects['containerToDelete'][] = $this->objects['initialContainer'];
         
         $this->objects['eventsToDelete'] = array();
+        
+        $_SERVER['REQUEST_URI'] = 'lars';
     }
 
     /**
@@ -126,9 +128,10 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         $this->objects['eventsToDelete'][] = $event;
     
         $record = $event->getRecord();
-    
+        #var_dump($record->exdate->toArray());
         $this->assertEquals('New Event', $record->summary);
-    
+        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $record->exdate[0]->organizer);
+        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $record->exdate[0]->attendee[0]->user_id);
         return $event;
     }
     
