@@ -78,6 +78,8 @@ class Calendar_Convert_Event_VCalendar_Abstract
             
         }
         
+        $this->_afterFromTine20Model($vcalendar);
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' card ' . $vcalendar->serialize());
         
         return $vcalendar;
@@ -357,6 +359,16 @@ class Calendar_Convert_Event_VCalendar_Abstract
     }
     
     /**
+     * to be overwriten in extended classes to modify/cleanup $_vcalendar
+     * 
+     * @param Sabre_VObject_Component $_vcalendar
+     */
+    protected function _afterFromTine20Model(Sabre_VObject_Component $_vcalendar)
+    {
+        
+    }
+    
+    /**
      * converts vcalendar to Calendar_Model_Event
      * 
      * @param  mixed                 $_blob   the vcalendar to parse
@@ -593,6 +605,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     
                     break;
                     
+                case 'DESCRIPTION':
                 case 'LOCATION':
                 case 'UID':
                 case 'SEQ':
