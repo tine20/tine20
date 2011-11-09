@@ -162,6 +162,31 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     
     /**
      * test converting vcard with daily repeating event to Calendar_Model_Event
+     * @return Calendar_Model_Event
+     */
+    public function testConvertRepeatingAllDayDailyEventToTine20Model()
+    {
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/apple_caldendar_repeating_allday.ics', 'r');
+    
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+    
+        $event = $converter->toTine20Model($vcalendarStream);
+    
+        #var_dump($event->exdate[3]->recurid->format('hm'));
+        #var_dump($event->dtstart->format('hm'));
+        
+        $this->assertEquals('FREQ=DAILY;INTERVAL=1;UNTIL=2011-11-12 00:00:00', $event->rrule);
+        $this->assertEquals(TRUE, $event->is_all_day_event);
+        $this->assertEquals('TRANSPARENT', $event->transp);
+        $this->assertEquals('PUBLIC', $event->class);
+        $this->assertEquals("2011-11-07 23:00:00",  (string) $event->dtstart   , 'DTEND mismatch');
+        $this->assertEquals("2011-11-08 22:59:59",  (string) $event->dtend , 'DTSTART mismatch');
+        
+        return $event;
+    }
+    
+    /**
+     * test converting vcard with daily repeating event to Calendar_Model_Event
      * and merge with existing event
      * @return Calendar_Model_Event
      */
