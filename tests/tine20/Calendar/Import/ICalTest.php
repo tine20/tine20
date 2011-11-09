@@ -102,4 +102,18 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         $this->setExpectedException('Calendar_Exception_IcalParser');
         $importer->importFile(dirname(__FILE__) . '/files/horde_broken.ics');
     }
+    
+    public function testImportOutlook12()
+    {
+        $importer = new Calendar_Import_Ical(array(
+            'importContainerId' => $this->_testCalendar->getId(),
+        ));
+        
+        $importer->importFile(dirname(__FILE__) . '/files/outlook12.ics');
+        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId())
+        )), NULL);
+        
+        $this->assertEquals(1, $events->count(), 'events where not imported');
+    }
 }
