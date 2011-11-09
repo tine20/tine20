@@ -502,6 +502,52 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
     /**
+     * Deletes a set of records.
+     * 
+     * If one of the records could not be deleted, no record is deleted
+     * 
+     * @param   array array of record identifiers
+     * @return  Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_NotFound|Tinebase_Exception
+     */
+    public function delete($_ids)
+    {
+        if ($_ids instanceof $this->_modelName) {
+            $_ids = (array)$_ids->getId();
+        }
+        
+        $records = $this->_backend->getMultiple((array) $_ids);
+        
+        foreach ($records as $record) {
+            try {
+                $db = $this->_backend->getAdapter();
+                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+                
+                // delete if delte grant is present
+                if ($this->_doContainerACLChecks === FALSE || $record->hasGrant(Tinebase_Model_Grants::GRANT_DELETE)) {
+                    parent::delete($record);
+                }  
+                
+                // otherwise update status for user to DECLINED
+                else if ($record->attendee instanceof Tinebase_Record_RecordSet) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no deleteGrant for event: {$records->id}, updating own status to DECLINED only");
+                    $ownContact = Tinebase_Core::getUser()->contact_id;
+                    foreach ($record->attendee as $attender) {
+                        if ($attender->user_id == $ownContact && in_array($attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
+                            $attender->status = Calendar_Model_Attender::STATUS_DECLINED;
+                            $this->attenderStatusUpdate($record, $attender, $attender->status_authkey);
+                        }
+                    }
+                }
+            } catch (Exception $e) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+                throw $e;
+            }
+        }
+            
+    }
+    
+    /**
      * updates a recur series
      *
      * @param  Calendar_Model_Event $_recurInstance
