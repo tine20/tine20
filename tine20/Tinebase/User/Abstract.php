@@ -301,42 +301,13 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      * account name generation
      *
      * @param Tinebase_Model_FullUser $_account
+     * @param integer $_schema 1 = lastname + 2 chars of firstname / 2 = 1-x chars of firstname + lastname
      * @return string
      */
-    public function generateUserName_version1($_account)
+    public function generateUserName($_account, $_schema = 1)
     {
         if (! empty($_account->accountFirstName)) {
-            
-            for ($i=0; $i<strlen($_account->accountFirstName); $i++) {
-                
-                $userName = strtolower(replaceSpecialChars(substr($_account->accountFirstName, 0, $i+1) . $_account->accountLastName));
-                if (! $this->userNameExists($userName)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName);
-                    return $userName;
-                }
-            }
-        }
-        
-        $numSuffix = 1;
-        while(true) {
-            if (! $this->userNameExists($userName . $numSuffix)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName . $numSuffix);
-                return $userName . $numSuffix;
-            }
-            $numSuffix++;
-        }
-    }
-    
-    /**
-     * account name generation
-     *
-     * @param Tinebase_Model_FullUser $_account
-     * @return string
-     */
-    public function generateUserName($_account)
-    {
-        if (! empty($_account->accountFirstName)) {
-            $userName = strtolower(replaceSpecialChars(substr($_account->accountLastName, 0, 10) . substr($_account->accountFirstName, 0, 2)));
+            $userName = ($_schema === 1) ? $this->_generateUserWithSchema1($_account) : $this->_generateUserWithSchema2($_account);
         } else {
             $userName = strtolower(replaceSpecialChars(substr($_account->accountLastName, 0, 10)));
         }
@@ -346,6 +317,39 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName);
         
         return $userName;
+    }
+    
+    /**
+     * schema 1 = lastname + 2 chars of firstname
+     * 
+     * @param Tinebase_Model_FullUser $_account
+     * @return string
+     */
+    protected function _generateUserWithSchema1($_account)
+    {
+        $result = strtolower(replaceSpecialChars(substr($_account->accountLastName, 0, 10) . substr($_account->accountFirstName, 0, 2)));
+        return $result;
+    }
+    
+    /**
+     * schema 2 = 1-x chars of firstname + lastname
+     * 
+     * @param Tinebase_Model_FullUser $_account
+     * @return string
+     */
+    protected function _generateUserWithSchema2($_account)
+    {
+        $result = $_account->accountLastName;
+        for ($i=0; $i < strlen($_account->accountFirstName); $i++) {
+        
+            $userName = strtolower(replaceSpecialChars(substr($_account->accountFirstName, 0, $i+1) . $_account->accountLastName));
+            if (! $this->userNameExists($userName)) {
+                $result = $userName;
+                break;
+            }
+        }
+        
+        return $result;
     }
     
     /**
