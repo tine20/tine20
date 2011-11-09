@@ -341,24 +341,38 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             $userName = strtolower(replaceSpecialChars(substr($_account->accountLastName, 0, 10)));
         }
         
-        if ($this->userNameExists($userName)) {
-            $numSuffix = 0;
-            
-            while($numSuffix < 100) {
-                $suffix = sprintf('%02d', $numSuffix);
-                
-                if (! $this->userNameExists($userName . $suffix)) {
-                    $userName .= $suffix;
-                    break;
-                }
-                
-                $numSuffix++;
-            }
-        }
+        $userName = $this->_addSuffixToUsernameIfExists($userName);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName);
         
         return $userName;
+    }
+    
+    /**
+     * add a suffix to username if it already exists
+     * 
+     * @param string $_userName
+     * @return string
+     */
+    protected function _addSuffixToUsernameIfExists($_userName)
+    {
+        $result = $_userName;
+        if ($this->userNameExists($_userName)) {
+            $numSuffix = 0;
+        
+            while ($numSuffix < 100) {
+                $suffix = sprintf('%02d', $numSuffix);
+        
+                if (! $this->userNameExists($_userName . $suffix)) {
+                    $result = $_userName . $suffix;
+                    break;
+                }
+        
+                $numSuffix++;
+            }
+        }
+        
+        return $result;
     }
     
     /**
