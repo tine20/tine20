@@ -289,7 +289,7 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
      */
     public function updateProperties($mutations) 
     {
-        throw new Sabre_DAV_Exception_MethodNotAllowed('Changing properties is not yet supported');
+        return false;
         
         return $this->carddavBackend->updateAddressBook($this->addressBookInfo['id'], $mutations); 
     }
