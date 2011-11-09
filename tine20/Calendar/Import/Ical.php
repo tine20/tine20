@@ -97,6 +97,13 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
      */
     public function import($_resource = NULL)
     {
+        // forece correct line ends
+        require_once 'StreamFilter/StringReplace.php';
+        $filter = stream_filter_append($_resource, 'str.replace', STREAM_FILTER_READ, array(
+            'search'    => chr(10),
+            'replace'   => chr(13) . chr(10)
+        ));
+        
         if (! $this->_options['importContainerId']) {
             throw new Tinebase_Exception_InvalidArgument('you need to define a importContainerId');
         }
@@ -114,6 +121,7 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
         try {
             $ical = $parser->parse($icalData);
         } catch (Exception $e) {
+            echo $e;
             // rethrow a mal formated ics
             $isce = new Calendar_Exception_IcalParser();
             $isce->setParseError($e);
