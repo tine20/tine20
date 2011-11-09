@@ -32,16 +32,19 @@ class Addressbook_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
      */
     public function getProperties($requestedProperties) 
     {
+        $displayName = $this->_container->type == Tinebase_Model_Container::TYPE_SHARED ? $this->_container->name . ' (shared)' : $this->_container->name;
+        
         $properties = array(
             '{http://calendarserver.org/ns/}getctag' => round(time()/60),
-            'id'                => $this->_container->getId(),
-            'uri'               => $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name,
-            '{DAV:}resource-id' => 'urn:uuid:' . $this->_container->getId(),
-            '{DAV:}owner'       => new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id), 
+            'id'                                     => $this->_container->getId(),
+            'uri'                                    => $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name,
+            '{DAV:}resource-id'                      => 'urn:uuid:' . $this->_container->getId(),
+            '{DAV:}owner'                            => new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id),
+        	'{DAV:}displayname'                      => $displayName,
+         
             #'principaluri'      => $principalUri,
-            #'{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}addressbook-description' => $this->_container->description,
-            '{DAV:}displayname' => $this->_container->type == Tinebase_Model_Container::TYPE_SHARED && $this->_useIdAsName == true ? $this->_container->name . ' (shared)' : $this->_container->name,
-        	'{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}supported-addressbook-data' => new Sabre_CardDAV_Property_SupportedAddressData(array(array('contentType' => 'text/vcard', 'version' => '3.0')))
+            '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}addressbook-description'    => 'Addressbook ' . $displayName,
+            '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}supported-addressbook-data' => new Sabre_CardDAV_Property_SupportedAddressData(array(array('contentType' => 'text/vcard', 'version' => '3.0')))
         );
         
         $response = array();
@@ -51,8 +54,6 @@ class Addressbook_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
                 $response[$prop] = $properties[$prop];
             }
         }
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($response, true));
         
         return $response;
     }
