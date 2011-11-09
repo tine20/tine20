@@ -113,6 +113,8 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
                 $password = $_recordData['password'];
             }
             
+            $this->_addEmailUser($record, $password);
+            
             //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding record: ' . print_r($record->toArray(), TRUE));
                 
             // try to create record with password
@@ -153,6 +155,24 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
         ));
         
         $_record->sambaSAM = $samUser;
+    }
+    
+    /**
+     * add email users to record (if email set + config exists)
+     * 
+     * @param Tinebase_Model_FullUser $_record
+     * @param string $_password
+     */
+    protected function _addEmailUser(Tinebase_Model_FullUser $_record, $_password)
+    {
+        if (! empty($_record->accountEmailAddress)) {
+            $_record->imapUser = new Tinebase_Model_EmailUser(array(
+                'emailPassword' => $_password
+            ));
+            $_record->smtpUser = new Tinebase_Model_EmailUser(array(
+                'emailPassword' => $_password
+            ));
+        }
     }
     
     /**
