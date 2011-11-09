@@ -31,6 +31,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
         'accountHomeDirectoryPrefix'    => '',
         'accountEmailDomain'            => '',
         'samba'                         => '',
+        'userNameSchema'			    => 1,
     );
     
     /**
@@ -77,7 +78,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
             
             // create valid login name
             if (! isset($record->accountLoginName)) {
-                $record->accountLoginName = Tinebase_User::getInstance()->generateUserName($record);
+                $record->accountLoginName = Tinebase_User::getInstance()->generateUserName($record, $this->_options['userNameSchema']);
             }
             
             // add prefix to login name if given 
