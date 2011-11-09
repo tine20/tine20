@@ -16,12 +16,19 @@
  * @package     Calendar
  * @subpackage  Frontend
  */
-class Calendar_Frontend_CalDAV_ScheduleInbox extends Sabre_DAV_Collection implements Sabre_CalDAV_ICalendar, Sabre_CalDAV_Schedule_IInbox
+class Calendar_Frontend_CalDAV_ScheduleInbox extends Sabre_DAV_Collection implements Sabre_DAV_IProperties, Sabre_DAVACL_IACL, Sabre_CalDAV_ICalendar, Sabre_CalDAV_Schedule_IInbox
 {
     /**
      * @var Tinebase_Model_FullUser
      */
     protected $_user;
+    
+    /**
+     * @var Calendar_Controller_MSEventFacade
+     */
+    protected $_controller;
+    
+    const NAME='schedule-inbox';
     
     public function __construct($_userId)
     {
@@ -29,13 +36,59 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends Sabre_DAV_Collection implem
     }
     
     /**
-     * Returns an array with all the child nodes 
-     * 
-     * @return Sabre_DAV_INode[] 
+     * (non-PHPdoc)
+     * @see Sabre_DAV_Collection::getChild()
      */
-    public function getChildren()
+    public function getChild($_name)
     {
-        return array();
+        $modelName = 'Calendar_Model_Event';
+    
+        try {
+            $object = $_name instanceof $modelName ? $_name : $this->_getController()->get($this->_getIdFromName($_name));
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            throw new Sabre_DAV_Exception_FileNotFound('Object not found');
+        }
+    
+        $objectClass = 'Calendar_Frontend_WebDAV_Event';
+    
+        return new $objectClass($object);
+    }
+    
+    /**
+     * Returns an array with all the child nodes
+     *
+     * @return Sabre_DAV_INode[]
+     */
+    function getChildren()
+    {
+        $filterClass = 'Calendar_Model_EventFilter';
+
+        $filter = new $filterClass(array(
+            array(
+                'field'     => 'attender',
+                'operator'  => 'equals',
+                'value'     => array(
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'user_id'   => $this->_user->contact_id,
+                )
+            ),
+            array(
+                'field'     => 'attender_status',
+                'operator'  => 'equals',
+                'value'     => Calendar_Model_Attender::STATUS_NEEDSACTION
+            ),
+            // period filter
+        ));
+        
+        $objects = $this->_getController()->search($filter);
+        
+        $children = array();
+    
+        foreach ($objects as $object) {
+            $children[] = $this->getChild($object);
+        }
+    
+        return $children;
     }
     
     /**
@@ -57,7 +110,7 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends Sabre_DAV_Collection implem
      */
     public function getName()
     {
-        return 'schedule-inbox';
+        return self::NAME;
     }
     
     /**
@@ -71,7 +124,51 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends Sabre_DAV_Collection implem
     {
         return 'principals/users/' . $this->_user->contact_id;
     }
+    
+    /**
+     * Returns the list of properties
+     *
+     * @param array $requestedProperties
+     * @return array
+     */
+    public function getProperties($requestedProperties)
+    {
+        $properties = array(
+            '{http://calendarserver.org/ns/}getctag' => round(time()/60),
+            'id'                => 'schedule-inbox',
+            'uri'               => 'schedule-inbox',
+        	'{DAV:}resource-id'	=> 'urn:uuid:schedule-inbox',
+        	'{DAV:}owner'       => new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . $this->_user->contact_id),
+            #'principaluri'      => $principalUri,
+            '{DAV:}displayname' => 'Schedule Inbox',
+            '{http://apple.com/ns/ical/}calendar-color' => '#666666',
+            
+            '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre_CalDAV_Property_SupportedCalendarComponentSet(array('VEVENT')),
+        	'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-data'          => new Sabre_CalDAV_Property_SupportedCalendarData(),
+        	'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-description'		       => 'Calendar schedule inbox',
+        	'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-timezone'                => $this->_getCalendarVTimezone()
+        );
+    
+        $defaultCalendarId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $this->_user->getId());
+        if (!empty($defaultCalendarId)) {
+            $properties['{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}schedule-default-calendar-URL'] = new Sabre_DAV_Property_Href('calendars/' . $this->_user->contact_id . '/' . $defaultCalendarId);
+        }
         
+        if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+            $properties['{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-user-address-set'	] = new Sabre_DAV_Property_HrefList(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress), false);
+        }
+    
+        $response = array();
+    
+        foreach($requestedProperties as $prop) {
+            if (isset($properties[$prop])) {
+                $response[$prop] = $properties[$prop];
+            }
+        }
+    
+        return $response;
+    }
+    
     /**
      * Returns a list of ACE's for this node.
      *
@@ -112,5 +209,84 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends Sabre_DAV_Collection implem
     
         throw new Sabre_DAV_Exception_MethodNotAllowed('Changing ACL is not yet supported');
     
+    }
+    
+    /**
+     * Updates properties on this node,
+     *
+     * The properties array uses the propertyName in clark-notation as key,
+     * and the array value for the property value. In the case a property
+     * should be deleted, the property value will be null.
+     *
+     * This method must be atomic. If one property cannot be changed, the
+     * entire operation must fail.
+     *
+     * If the operation was successful, true can be returned.
+     * If the operation failed, false can be returned.
+     *
+     * Deletion of a non-existant property is always succesful.
+     *
+     * Lastly, it is optional to return detailed information about any
+     * failures. In this case an array should be returned with the following
+     * structure:
+     *
+     * array(
+     *   403 => array(
+     *      '{DAV:}displayname' => null,
+     *   ),
+     *   424 => array(
+     *      '{DAV:}owner' => null,
+     *   )
+     * )
+     *
+     * In this example it was forbidden to update {DAV:}displayname.
+     * (403 Forbidden), which in turn also caused {DAV:}owner to fail
+     * (424 Failed Dependency) because the request needs to be atomic.
+     *
+     * @param array $mutations
+     * @return bool|array
+     */
+    public function updateProperties($mutations)
+    {
+        return false;
+    }
+    
+    /**
+     * get controller
+     * 
+     * @return Calendar_Controller_MSEventFacade
+     */
+    protected function _getController()
+    {
+        if ($this->_controller === null) {
+            $this->_controller = Calendar_Controller_MSEventFacade::getInstance();
+        }
+        
+        return $this->_controller;
+    }
+    
+    /**
+     * get id from name => strip of everything after last dot
+     * 
+     * @param  string  $_name  the name for example vcard.vcf
+     * @return string
+     */
+    protected function _getIdFromName($_name)
+    {
+        $id = ($pos = strrpos($_name, '.')) === false ? $_name : substr($_name, 0, $pos);
+        
+        return $id;
+    }
+    
+    protected function _getCalendarVTimezone()
+    {
+        $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $this->_user->getId());
+
+        // create vcalendar object with timezone information
+        $vcalendar = new Sabre_VObject_Component('CALENDAR');
+        $vcalendar->add(new Sabre_VObject_Component_VTimezone($timezone));
+        
+        // Taking out \r to not screw up the xml output
+        return str_replace("\r","", $vcalendar->serialize());
     }
 }
