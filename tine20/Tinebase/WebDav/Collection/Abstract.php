@@ -66,7 +66,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
         $pathParts = explode('/', trim($this->_path, '/'));
         $this->_applicationName = $pathParts[0];
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' part count: ' . count($pathParts) . ' ' . print_r($pathParts, true));
+        Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' part count: ' . count($pathParts) . ' ' . print_r($pathParts, true));
         
         return $pathParts;
     }
