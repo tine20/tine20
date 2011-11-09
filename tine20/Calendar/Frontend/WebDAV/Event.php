@@ -120,6 +120,16 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         if (empty($_event->transp)) {
             $_event->transp = Calendar_Model_Event::TRANSP_OPAQUE;
         }
+        
+        // check also attached exdates
+        if ($_event->exdate instanceof Tinebase_Record_RecordSet) {
+            foreach($_event->exdate as $key => $exdate) {
+                if ($exdate->is_deleted == false) {
+                    self::enforceEventParameters($exdate);
+                    $_event->exdate[$key] = $exdate;
+                }
+            }
+        }
     }
     
     /**
