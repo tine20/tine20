@@ -72,7 +72,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
                 if (isset($_model->last_modified_time)) {
                     $eventException->last_modified_time = $_model->last_modified_time;
                 }
-                $vevent = $this->_convertCalendarModelEvent($eventException);
+                $vevent = $this->_convertCalendarModelEvent($eventException, $_model);
                 $vcalendar->add($vevent);
             }
             
@@ -182,7 +182,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
     }
     
     
-    protected function _convertCalendarModelEvent(Calendar_Model_Event $_event)
+    protected function _convertCalendarModelEvent(Calendar_Model_Event $_event, Calendar_Model_Event $_mainEvent = null)
     {
         // clone the event and change the timezone
         $event = clone $_event;
@@ -212,7 +212,11 @@ class Calendar_Convert_Event_VCalendar_Abstract
             $originalDtStart->setTimezone($_event->originator_tz);
             
             $recurrenceId = new Sabre_VObject_Element_DateTime('RECURRENCE-ID');
-            $recurrenceId->setDateTime($originalDtStart);
+            if ($_mainEvent->is_all_day_event == true) {
+                $recurrenceId->setDateTime($originalDtStart, Sabre_VObject_Element_DateTime::DATE);
+            } else {
+                $recurrenceId->setDateTime($originalDtStart);
+            }
 
             $vevent->add($recurrenceId);
         }
@@ -287,10 +291,13 @@ class Calendar_Convert_Event_VCalendar_Abstract
                 
                 foreach($deleteEvents as $deleteEvent) {
                     $exdate = new Sabre_VObject_Element_DateTime('EXDATE');
+                    $dateTime = $deleteEvent->getOriginalDtStart();
+                    
                     if ($event->is_all_day_event == true) {
-                        $exdate->setDateTime($deleteEvent->getOriginalDtStart(), Sabre_VObject_Element_DateTime::DATE);
+                        $dateTime->setTimezone($event->originator_tz);
+                        $exdate->setDateTime($dateTime, Sabre_VObject_Element_DateTime::DATE);
                     } else {
-                        $exdate->setDateTime($deleteEvent->getOriginalDtStart(), Sabre_VObject_Element_DateTime::UTC);
+                        $exdate->setDateTime($dateTime, Sabre_VObject_Element_DateTime::UTC);
                     }
                     $vevent->add($exdate);
                 }
@@ -672,10 +679,15 @@ class Calendar_Convert_Event_VCalendar_Abstract
                         
                         foreach($_vevent->EXDATE as $exdate) {
                             foreach($exdate->getDateTimes() as $exception) {
-                                $exception->setTimezone(new DateTimeZone('UTC'));
+                                if (isset($exdate['VALUE']) && strtoupper($exdate['VALUE']) == 'DATE') {
+                                    $recurid = new Tinebase_DateTime($exception->format(Tinebase_Record_Abstract::ISO8601LONG), (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                                } else {
+                                    $recurid = new Tinebase_DateTime($exception->format(Tinebase_Record_Abstract::ISO8601LONG), $exception->getTimezone());
+                                }
+                                $recurid->setTimezone(new DateTimeZone('UTC'));
                                                         
                                 $eventException = new Calendar_Model_Event(array(
-                                	'recurid'    => new Tinebase_DateTime($exception->format(Tinebase_Record_Abstract::ISO8601LONG), 'UTC'),
+                                	'recurid'    => $recurid,
                                 	'is_deleted' => true
                                 ));
                         
