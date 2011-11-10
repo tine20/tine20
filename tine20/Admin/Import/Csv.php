@@ -31,6 +31,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
         'accountHomeDirectoryPrefix'    => '',
         'accountEmailDomain'            => '',
         'samba'                         => '',
+        'userNameSchema'			    => 1,
     );
     
     /**
@@ -77,7 +78,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
             
             // create valid login name
             if (! isset($record->accountLoginName)) {
-                $record->accountLoginName = Tinebase_User::getInstance()->generateUserName($record);
+                $record->accountLoginName = Tinebase_User::getInstance()->generateUserName($record, $this->_options['userNameSchema']);
             }
             
             // add prefix to login name if given 
@@ -111,6 +112,8 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
             if (isset($_recordData['password']) && !empty($_recordData['password'])) {
                 $password = $_recordData['password'];
             }
+            
+            $this->_addEmailUser($record, $password);
             
             //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding record: ' . print_r($record->toArray(), TRUE));
                 
@@ -152,6 +155,24 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
         ));
         
         $_record->sambaSAM = $samUser;
+    }
+    
+    /**
+     * add email users to record (if email set + config exists)
+     * 
+     * @param Tinebase_Model_FullUser $_record
+     * @param string $_password
+     */
+    protected function _addEmailUser(Tinebase_Model_FullUser $_record, $_password)
+    {
+        if (! empty($_record->accountEmailAddress)) {
+            $_record->imapUser = new Tinebase_Model_EmailUser(array(
+                'emailPassword' => $_password
+            ));
+            $_record->smtpUser = new Tinebase_Model_EmailUser(array(
+                'emailPassword' => $_password
+            ));
+        }
     }
     
     /**

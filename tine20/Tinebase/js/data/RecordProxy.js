@@ -189,6 +189,9 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         options.params = options.params || {};
         options.params.method = this.appName + '.delete' + this.modelName + 's';
         options.params.ids = this.getRecordIds(records);
+
+        // increase timeout as this can take a long time (2 mins)
+        options.timeout = 120000;
         
         return this.doXHTTPRequest(options);
     },

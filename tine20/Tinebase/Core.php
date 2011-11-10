@@ -900,7 +900,8 @@ class Tinebase_Core
 
         } else {
             $timezone = $_timezone;
-
+            $session->timezone = $timezone;
+            
             if ($_saveaspreference) {
                 // save as user preference
                 self::getPreference()->setValue(Tinebase_Preference::TIMEZONE, $timezone);

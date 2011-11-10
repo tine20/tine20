@@ -97,6 +97,14 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
      */
     public function import($_resource = NULL)
     {
+        // forece correct line ends
+        require_once 'StreamFilter/StringReplace.php';
+        $filter = stream_filter_append($_resource, 'str.replace', STREAM_FILTER_READ, array(
+            'search'            => '/(?<!\r)\n/',
+            'replace'           => "\r\n",
+            'searchIsRegExp'    => TRUE
+        ));
+        
         if (! $this->_options['importContainerId']) {
             throw new Tinebase_Exception_InvalidArgument('you need to define a importContainerId');
         }
