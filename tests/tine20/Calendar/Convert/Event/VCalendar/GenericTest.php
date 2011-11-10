@@ -190,19 +190,19 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      * and merge with existing event
      * @return Calendar_Model_Event
      */
-    public function testConvertRepeatingDailyEventToTine20ModelWithMerge()
+    public function disabled_testConvertRepeatingDailyEventToTine20ModelWithMerge()
     {
         $event = $this->testConvertRepeatingDailyEventToTine20Model();
         
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/lightning_repeating_daily.ics', 'r');
     
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
-    
+        
         $event->exdate[3]->attendee[0]->status_authkey = 'TestMe';
         
         $updatedEvent = $converter->toTine20Model($vcalendarStream, clone $event);
     
-        #var_dump($event->exdate[3]->attendee->toArray());
+        //var_dump($event->exdate->toArray());
         #var_dump($updatedEvent->exdate[3]->attendee->toArray());
         #var_dump($event->dtstart->format('hm'));
     
