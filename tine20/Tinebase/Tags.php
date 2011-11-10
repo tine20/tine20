@@ -535,6 +535,61 @@ class Tinebase_Tags
         $this->_addOccurrence($tagId, count($toAttachIds));
     }
     
+    
+    /**
+     * detach tag from multiple records identified by a filter
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param mixed                             $_tag       string|array|Tinebase_Model_Tag with existing and non-existing tag
+     * @return void
+     */
+    public function detachTagFromMultipleRecords($_filter, $_tag)
+    {
+            	
+        // check/create tag on the fly
+        $tags = $this->_createTagsOnTheFly(array($_tag));
+        if (empty($tags) || count($tags) == 0) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No tags created.');
+            return;
+        }
+        $tagId = $tags->getFirstRecord()->getId();
+        
+        list($appName, $i, $modelName) = explode('_', $_filter->getModelName());
+        $appId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
+        $controller = Tinebase_Core::getApplicationInstance($appName, $modelName);
+        
+        // only get records user has update rights to
+        $controller->checkFilterACL($_filter, 'update');
+        
+        $recordIds = $controller->search($_filter, NULL, FALSE, TRUE);
+        $recordIdList = '\'' . implode('\',\'',$recordIds) . '\'';            
+        
+    	$attachedIds = array();
+        $select = $this->_db->select()
+            ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), 'record_id')
+            ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $appId)
+            ->where($this->_db->quoteIdentifier('tag_id') . ' = ? ', $tagId)
+            ->where('record_id IN ( ' . $recordIdList . ' ) ');
+            
+        foreach ($this->_db->fetchAssoc($select) as $tagArray){
+            $attachedIds[] = $tagArray['record_id'];
+        }
+        
+        if (empty($attachedIds)) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' There are no records we could detach the tag from');
+            return;
+        }
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Detaching 1 Tag from ' . count($attachedIds) . ' records.');
+        foreach ($attachedIds as $recordId) {
+        	$this->_db->delete(SQL_TABLE_PREFIX . 'tagging', 'tag_id=\'' . $tagId . '\' AND record_id=\'' . $recordId. '\' AND application_id=\'' . $appId . '\'');
+        }
+        
+        $this->_deleteOccurrence($tagId, count($attachedIds));
+    }    
+    
+    
+    
     /**
      * Creates missing tags on the fly and returns complete list of tags the current
      * user has use rights for.
@@ -589,6 +644,27 @@ class Tinebase_Tags
         
         $this->_db->update(SQL_TABLE_PREFIX . 'tags', $data, $this->_db->quoteInto('id = ?', $tagId));
     }
+
+    /**
+     * deletes given number from the persistent occurrence property of a given tag
+     * 
+     * @param  Tinbebase_Tags_Model_Tag|string $_tag
+     * @param  int                             $_toDel
+     * @return void
+     */
+    protected function _deleteOccurrence($_tag, $_toDel)
+    {
+        $tagId = $_tag instanceof Tinebase_Model_Tag ? $_tag->getId() : $_tag;
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " decreasing tag occurrence of $tagId by $_toDel");
+       
+        $quotedIdentifier = $this->_db->quoteIdentifier('occurrence');
+        $data = array(
+            'occurrence' => new Zend_Db_Expr('IF((' . $quotedIdentifier . ' - ' . (int)$_toDel . ') >= 0,' . $quotedIdentifier . ' - ' . (int)$_toDel . ', 0)')
+        );
+        
+        $this->_db->update(SQL_TABLE_PREFIX . 'tags', $data, $this->_db->quoteInto('id = ?', $tagId));
+    }    
     
     /**
      * get all rights of a given tag

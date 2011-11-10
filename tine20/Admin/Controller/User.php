@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        catch error (and show alert) if postfix email already exists
  * @todo        extend Tinebase_Controller_Record_Abstract
@@ -29,26 +29,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
 	 * @var Tinebase_SambaSAM_Ldap
 	 */
 	protected $_samBackend = NULL;
-
-    /**
-     * @var bool
-     */
-    protected $_manageImapEmailUser = FALSE;
-    
-    /**
-     * @var bool
-     */
-    protected $_manageSmtpEmailUser = FALSE;
-    
-    /**
-     * @var Tinebase_EmailUser_Abstract
-     */
-    protected $_imapUserBackend = NULL;
-
-    /**
-     * @var Tinebase_EmailUser_Abstract
-     */
-    protected $_smtpUserBackend = NULL;
 
     /**
      * the constructor
@@ -301,12 +281,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
                 $groupsController->removeGroupMember($groupId, $accountId);
             }
             
-            if ($this->_manageImapEmailUser) {
-                $this->_imapUserBackend->deleteUser($accountId);
-            }
-            if ($this->_manageSmtpEmailUser) {
-                $this->_smtpUserBackend->deleteUser($accountId);
-            }
             if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && !empty($oldUser->contact_id)) {
                 $this->_deleteContact($oldUser->contact_id);
             }

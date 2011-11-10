@@ -223,6 +223,9 @@ html, body {
     background-image:url(../../images/oxygen/32x32/actions/rss-tag.png) !important;
 }
 
+.action_tag_delete {
+    background-image:url(../../images/oxygen/16x16/actions/rss-tag-delete.png) !important;
+}
 
 .action_uploadImage {
     background-image:url(../../images/oxygen/16x16/actions/insert-image.png) !important;

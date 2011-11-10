@@ -584,6 +584,10 @@
           "path": "js/widgets/tags/"
         },
         {
+          "text": "TagsMassDetachAction.js",
+          "path": "js/widgets/tags/"
+        },        
+        {
           "text": "WestPanel.js",
           "path": "js/widgets/mainscreen/"
         },
