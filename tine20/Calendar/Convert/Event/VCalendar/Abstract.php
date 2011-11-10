@@ -238,18 +238,20 @@ class Calendar_Convert_Event_VCalendar_Abstract
         $vevent->add($dtend);
         
         // event organizer and attendees
-        try {
-            $organizerContact = Addressbook_Controller_Contact::getInstance()->get($event->organizer);
-            if (!empty($organizerContact->email)) {
-                $organizer = new Sabre_VObject_Property('ORGANIZER', 'mailto:' . $organizerContact->email);
-                $organizer->add('CN', $organizerContact->n_fileas);
-                $vevent->add($organizer);
+        if ((count($event->attendee) > 1) || (count($event->attendee) == 1 && $event->attendee[0]->user_id != $event->organizer)) {
+            try {
+                $organizerContact = Addressbook_Controller_Contact::getInstance()->get($event->organizer);
+                if (!empty($organizerContact->email)) {
+                    $organizer = new Sabre_VObject_Property('ORGANIZER', 'mailto:' . $organizerContact->email);
+                    $organizer->add('CN', $organizerContact->n_fileas);
+                    $vevent->add($organizer);
+                }
+            } catch (Tasks_Exception_NotFound $tenf) {
+                // contact not found
             }
-        } catch (Tasks_Exception_NotFound $tenf) {
-            // contact not found
+            
+            $this->_addEventAttendee($vevent, $event);
         }
-        
-        $this->_addEventAttendee($vevent, $event);
         
         $optionalProperties = array(
             'class',
