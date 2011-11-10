@@ -287,11 +287,11 @@ class Calendar_Convert_Event_VCalendar_Abstract
                 $vevent->add(new Sabre_VObject_Element_MultiValue('RRULE', explode(';', preg_replace('/(UNTIL=)(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', '$1$2$3$4T$5$6$7Z', $event->rrule))));
             }
             if ($event->exdate instanceof Tinebase_Record_RecordSet) {
-                $deleteEvents = $event->exdate->filter('is_deleted', true);
+                $deletedEvents = $event->exdate->filter('is_deleted', true);
                 
-                foreach($deleteEvents as $deleteEvent) {
+                foreach($deletedEvents as $deletedEvent) {
                     $exdate = new Sabre_VObject_Element_DateTime('EXDATE');
-                    $dateTime = $deleteEvent->getOriginalDtStart();
+                    $dateTime = $deletedEvent->getOriginalDtStart();
                     
                     if ($event->is_all_day_event == true) {
                         $dateTime->setTimezone($event->originator_tz);
