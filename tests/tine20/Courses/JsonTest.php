@@ -199,9 +199,11 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('lahmph', $lahm['data']);
         
         // get user and check email
+        $testConfig = Zend_Registry::get('testConfig');
+        $maildomain = ($testConfig->maildomain) ? $testConfig->maildomain : 'school.org';
         $user = Tinebase_User::getInstance()->getFullUserById($lahm['id']);
         $this->assertEquals('lahmph', $user->accountLoginName);
-        $this->assertEquals('lahmph@school.org', $user->accountEmailAddress);
+        $this->assertEquals('lahmph@' . $maildomain, $user->accountEmailAddress);
         $this->assertEquals('//base/school/' . $result['name'] . '/' . $user->accountLoginName, $user->accountHomeDirectory);
     }
     
@@ -286,10 +288,13 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
             $this->assertGreaterThan(0, $result['results']);
             
         } else {
+            $testConfig = Zend_Registry::get('testConfig');
+            $maildomain = ($testConfig->maildomain) ? $testConfig->maildomain : 'school.org';
+            
             $importer = call_user_func($definition->plugin . '::createFromDefinition', $definition, array(
                     'group_id'                  => $courseData['group_id'],
                     'accountHomeDirectoryPrefix' => '//base/school/' . $courseData['name'] . '/',
-                    'accountEmailDomain'        => 'school.org',
+                    'accountEmailDomain'        => $maildomain,
                     'password'                  => $courseData['name'],
                     'samba'                     => array(
                         'homePath'    => '//basehome/',
