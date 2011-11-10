@@ -287,7 +287,11 @@ class Calendar_Convert_Event_VCalendar_Abstract
                 
                 foreach($deleteEvents as $deleteEvent) {
                     $exdate = new Sabre_VObject_Element_DateTime('EXDATE');
-                    $exdate->setDateTime($deleteEvent->getOriginalDtStart(), Sabre_VObject_Element_DateTime::UTC);
+                    if ($event->is_all_day_event == true) {
+                        $exdate->setDateTime($deleteEvent->getOriginalDtStart(), Sabre_VObject_Element_DateTime::DATE);
+                    } else {
+                        $exdate->setDateTime($deleteEvent->getOriginalDtStart(), Sabre_VObject_Element_DateTime::UTC);
+                    }
                     $vevent->add($exdate);
                 }
             }
