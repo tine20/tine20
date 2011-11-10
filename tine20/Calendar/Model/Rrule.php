@@ -691,8 +691,13 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 continue;
             }
             
+            // skip instances begining before the baseEvent
+            if ($_from->compare($recurEvent->dtend) >= 0) {
+                continue;
+            }
+            
             // skip if event equal baseevent
-            if ($_event->dtstart->equals($recurEvent->dtstart)) {
+            if ($recurEvent->dtstart->compare($_event->dtstart) < 0) {
                 continue;
             }
             

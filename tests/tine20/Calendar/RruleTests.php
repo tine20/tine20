@@ -328,6 +328,28 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals('2009-07-26 14:00:00', $recurSet[1]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
+    public function testCalcMonthlyByDaySupressToEarly()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'monthly sencond th',
+            'dtstart'       => '2011-11-24 08:00:00',
+            'dtend'         => '2011-11-24 10:00:00',
+            'rrule'         => 'FREQ=MONTHLY;INTERVAL=1;BYDAY=2TH',
+            'originator_tz' => 'Europe/Berlin',
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        $from = new Tinebase_DateTime('2011-10-31 00:00:00');
+        $until = new Tinebase_DateTime('2011-12-04 23:59:59');
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($event, $exceptions, $from, $until);
+        
+        $this->assertEquals(0, count($recurSet), 'events before baseEvent dtstart must not be included');
+        
+    }
+    
     public function testCalcMonthlyByDayBackwardSkip()
     {
         $event = new Calendar_Model_Event(array(
