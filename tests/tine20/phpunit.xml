@@ -5,4 +5,5 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="false" />
+         syntaxCheck="false"
+         colors="true" />
