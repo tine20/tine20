@@ -98,13 +98,15 @@ class Sabre_VObject_Property extends Sabre_VObject_Element {
     public static function stripSlashes($value) {
         $search  = array(
             '/\\\\/',
-            '/\\\:/',
-            '/\\\n/'
+            '/\\\,/',
+            '/\\\;/',
+        	'/\\\n/'
         );
         $replace = array(
             '\\',
-            ':',
-            "\n"
+            ',',
+            ';',
+        	"\n"
         );
         
         return preg_replace($search, $replace, $value);
