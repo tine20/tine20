@@ -657,7 +657,13 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     
                 case 'RRULE':
                     $event->rrule = preg_replace_callback('/UNTIL=([\dTZ]+);?/', function($matches) {
-                        return 'UNTIL=' . date_create($matches[1])->format(Tinebase_Record_Abstract::ISO8601LONG);
+                        if (strlen($matches[1]) < 10) {
+                            $dtUntil = date_create($matches[1], new DateTimeZone ((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)));
+                        } else {
+                            $dtUntil = date_create($matches[1]);
+                        }
+                        
+                        return 'UNTIL=' . $dtUntil->format(Tinebase_Record_Abstract::ISO8601LONG);
                     }, $property->value);
                     
                     //$event->rrule = preg_replace('/(UNTIL=)(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z/', '$1$2-$3-$4 $5:$6:$7', $property->value);
