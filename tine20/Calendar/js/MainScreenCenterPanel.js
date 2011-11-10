@@ -313,9 +313,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             if (dtStart.format('H:i') === '00:00') {
                 dtStart = dtStart.add(Date.HOUR, 9);
             }
+            console.err(datetime.is_all_day_event);
             addAction = {
                 text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(Tine.Tinebase.translation._hidden('Add {0}'), this.i18nRecordName),
-                handler: this.onEditInNewWindow.createDelegate(this, ["add", {dtStart: dtStart}]),
+                handler: this.onEditInNewWindow.createDelegate(this, ["add", {dtStart: dtStart, is_all_day_event: datetime.is_all_day_event}]),
                 iconCls: 'action_add'
             };
             
@@ -492,6 +493,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      * @param {String} action add|edit
      */
     onEditInNewWindow: function (action, defaults) {
+        console.log(arguments);
         var event = null;
         
         if (action === 'edit') {
@@ -506,7 +508,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         if (! event) {
-            event = new Tine.Calendar.Model.Event(Tine.Calendar.Model.Event.getDefaultData(), 0);
+            event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), defaults), 0);
             if (defaults && Ext.isDate(defaults.dtStart)) {
                 event.set('dtstart', defaults.dtStart);
                 event.set('dtend', defaults.dtStart.add(Date.HOUR, 1));
