@@ -282,7 +282,12 @@ class Calendar_Convert_Event_VCalendar_Abstract
         // repeating event properties
         if ($event->rrule) {
             if ($event->is_all_day_event == true) {
-                $vevent->add(new Sabre_VObject_Element_MultiValue('RRULE', explode(';', preg_replace('/(UNTIL=)(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', '$1$2$3$4', $event->rrule))));
+                $vevent->add(new Sabre_VObject_Element_MultiValue('RRULE', explode(';', preg_replace_callback('/UNTIL=([\d :-]{19});?/', function($matches) {
+                    $dtUntil = new Tinebase_DateTime($matches[1]);
+                    $dtUntil->setTimezone((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                    
+                    return 'UNTIL=' . $dtUntil->format('Ymd');
+                }, $event->rrule))));
             } else {
                 $vevent->add(new Sabre_VObject_Element_MultiValue('RRULE', explode(';', preg_replace('/(UNTIL=)(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', '$1$2$3$4T$5$6$7Z', $event->rrule))));
             }
@@ -670,6 +675,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     $event->rrule = preg_replace_callback('/UNTIL=([\dTZ]+);?/', function($matches) {
                         if (strlen($matches[1]) < 10) {
                             $dtUntil = date_create($matches[1], new DateTimeZone ((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)));
+                            $dtUntil->setTimezone(new DateTimeZone('UTC'));
                         } else {
                             $dtUntil = date_create($matches[1]);
                         }

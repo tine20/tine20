@@ -175,7 +175,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         #var_dump($event->exdate->toArray());
         #var_dump($event->dtstart->format('hm'));
         
-        $this->assertEquals('FREQ=DAILY;INTERVAL=1;UNTIL=2011-11-12 00:00:00', $event->rrule);
+        $this->assertEquals('FREQ=DAILY;INTERVAL=1;UNTIL=2011-11-11 23:00:00', $event->rrule, 'until must be converted');
         $this->assertEquals(TRUE, $event->is_all_day_event);
         $this->assertEquals('TRANSPARENT', $event->transp);
         $this->assertEquals('PUBLIC', $event->class);
@@ -184,6 +184,31 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertEquals("2011-11-10 23:00:00", (string) $event->exdate[0]->recurid, 'RECURID mismatch');
         
         return $event;
+    }
+    
+    /**
+     * test converting vcard with daily repeating event to Calendar_Model_Event
+     * @return Calendar_Model_Event
+     */
+    public function testConvertRepeatingAllDayDailyEventFromTine20Model()
+    {
+        $event = $this->testConvertRepeatingAllDayDailyEventToTine20Model();
+        $event->creation_time      = new Tinebase_DateTime('2011-11-11 11:11', 'UTC');
+        $event->last_modified_time = new Tinebase_DateTime('2011-11-11 12:12', 'UTC');
+        
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        
+        $vevent = $converter->fromTine20Model($event)->serialize();
+        
+        //var_dump($vevent);
+        $this->assertContains('VERSION:2.0',                                    $vevent, $vevent);
+        $this->assertContains('PRODID:-//tine20.org//Tine 2.0 Calendar V',      $vevent, $vevent);
+        $this->assertContains('CREATED;VALUE=DATE-TIME:20111111T111100Z',       $vevent, $vevent);
+        $this->assertContains('LAST-MODIFIED;VALUE=DATE-TIME:20111111T121200Z', $vevent, $vevent);
+        $this->assertContains('DTSTAMP;VALUE=DATE-TIME:20111111T121200Z',       $vevent, $vevent);
+        $this->assertContains('RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20111112',     $vevent, $vevent);
+        $this->assertContains('EXDATE;VALUE=DATE:20111111',                     $vevent, $vevent);
+
     }
     
     /**
