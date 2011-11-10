@@ -172,15 +172,16 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     
         $event = $converter->toTine20Model($vcalendarStream);
     
-        #var_dump($event->exdate[3]->recurid->format('hm'));
+        #var_dump($event->exdate->toArray());
         #var_dump($event->dtstart->format('hm'));
         
         $this->assertEquals('FREQ=DAILY;INTERVAL=1;UNTIL=2011-11-12 00:00:00', $event->rrule);
         $this->assertEquals(TRUE, $event->is_all_day_event);
         $this->assertEquals('TRANSPARENT', $event->transp);
         $this->assertEquals('PUBLIC', $event->class);
-        $this->assertEquals("2011-11-07 23:00:00",  (string) $event->dtstart   , 'DTEND mismatch');
-        $this->assertEquals("2011-11-08 22:59:59",  (string) $event->dtend , 'DTSTART mismatch');
+        $this->assertEquals("2011-11-07 23:00:00", (string) $event->dtstart, 'DTEND mismatch');
+        $this->assertEquals("2011-11-08 22:59:59", (string) $event->dtend,   'DTSTART mismatch');
+        $this->assertEquals("2011-11-10 23:00:00", (string) $event->exdate[0]->recurid, 'RECURID mismatch');
         
         return $event;
     }
