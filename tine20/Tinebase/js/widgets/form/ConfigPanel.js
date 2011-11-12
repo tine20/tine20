@@ -126,8 +126,12 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
                 }
             });
         } else {
-            Ext.Msg.alert(this.app.i18n._('Invalid configuration'), this.app.i18n._('You need to correct the red marked fields before config could be saved'));
+            this.alertInvalidData();
         }
+    },
+    
+    alertInvalidData: function() {
+        Ext.Msg.alert(this.app.i18n._('Invalid configuration'), this.app.i18n._('You need to correct the red marked fields before config could be saved'));
     },
     
     /**
