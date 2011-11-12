@@ -687,7 +687,7 @@ class Setup_Controller
     /**
      * save data to config file
      *
-     * @param array $_data
+     * @param array   $_data
      * @param boolean $_merge
      */
     public function saveConfigData($_data, $_merge = TRUE)
@@ -700,15 +700,6 @@ class Setup_Controller
             throw new Setup_Exception('Config File is not writeable.');
         }
             
-        // merge config data and active config
-        if ($_merge) {
-            $activeConfig = Setup_Core::getConfig();
-            $config = new Zend_Config($activeConfig->toArray(), true);
-            $config->merge(new Zend_Config($_data));
-        } else {
-            $config = new Zend_Config($_data);
-        }
-        
         if (Setup_Core::configFileExists()) {
             $doLogin = FALSE;
             $filename = Setup_Core::getConfigFilePath();
@@ -717,13 +708,7 @@ class Setup_Controller
             $filename = dirname(__FILE__) . '/../config.inc.php';
         }
         
-        // write to file
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating config.inc.php');
-        $writer = new Zend_Config_Writer_Array(array(
-            'config'   => $config,
-            'filename' => $filename,
-        ));
-        $writer->write();
+        $this->writeConfigToFile($_data, $filename, $_merge);
         
         // set as active config
         Setup_Core::set(Setup_Core::CONFIG, $config);
@@ -735,6 +720,26 @@ class Setup_Controller
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Create session for setup user ' . $_data['setupuser']['username']);
             $this->login($_data['setupuser']['username'], $password);
         }
+    }
+    
+    public function writeConfigToFile($_data, $_merge, $_filename)
+    {
+        // merge config data and active config
+        if ($_merge) {
+            $activeConfig = Setup_Core::getConfig();
+            $config = new Zend_Config($activeConfig->toArray(), true);
+            $config->merge(new Zend_Config($_data));
+        } else {
+            $config = new Zend_Config($_data);
+        }
+        
+        // write to file
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating config.inc.php');
+        $writer = new Zend_Config_Writer_Array(array(
+            'config'   => $config,
+            'filename' => $_filename,
+        ));
+        $writer->write();
     }
     
     /**
