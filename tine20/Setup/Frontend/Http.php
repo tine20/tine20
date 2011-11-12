@@ -77,30 +77,27 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     }
     
     /**
-     * authentication
-     *
-     * @param string $_username
-     * @param string $_password
+     * download config as config file
+     * 
+     * @param array $data
      */
-    public function authenticate($_username, $_password)
+    public function downloadConfig($data)
     {
-        return false;
-    }
-    
-    /**
-     * handle request (call -ApplicationName-_Cli.-MethodName- or -ApplicationName-_Cli.getHelp)
-     *
-     * @return boolean success
-     */
-    public function handle()
-    {
-        if (isset($_REQUEST['method']) && $_REQUEST['method'] == 'Tinebase.getJsTranslations') {
-            $locale = Setup_Core::get('locale');
-            $translations = Tinebase_Translation::getJsTranslations($locale);
-            header('Content-Type: application/javascript');
-            die($translations);
+        if (! Setup_Core::configFileExists() || Setup_Core::isRegistered(Setup_Core::USER)) {
+            $data = Zend_Json::decode($data, Zend_Json::TYPE_ARRAY);
+            
+            $tmpFile = tempnam(Tinebase_Core::getTempDir(), 'tine20_');
+            Setup_Controller::getInstance()->writeConfigToFile($data, TRUE, $tmpFile);
+            
+            $configData = file_get_contents($tmpFile);
+            unlink($tmpFile);
+            
+            header("Pragma: public");
+            header("Cache-Control: max-age=0");
+            header("Content-Disposition: attachment; filename=config.inc.php");
+            header("Content-Description: PHP File");  
+            header("Content-type: text/plain");
+            die($configData);
         }
-        
-        return $this->mainScreen();
     }
 }
