@@ -143,10 +143,25 @@
 
 .cal-daysviewpanel-daycolumn-row {
 	margin-left: 3px;
+	text-align: right;
+	font-family:arial,tahoma,helvetica,sans-serif;
+    font-size:10px;
+    font-size-adjust:none;
+    font-style:normal;
+    font-variant:normal;
+    font-weight:normal;
+    line-height:normal;
+    white-space:nowrap;
+    color: #FFFFFF;
+}
+
+.cal-daysviewpanel-body-daycolumn-today .cal-daysviewpanel-daycolumn-row {
+    color: #EBF3FD;
 }
 
 .cal-daysviewpanel-daycolumn-row:hover {
 	background-color:#DFE8F6;
+	color: #999999;
     /*cursor: pointer; see ticket #1484*/
 }
 
