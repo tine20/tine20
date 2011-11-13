@@ -36,8 +36,8 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     typeAhead: true,
     mode: 'remote',
     triggerAction: 'all',
-    displayField:'name',
-    valueField:'id',
+    displayField: 'name',
+    valueField: 'id',
     width: 100,
     minChars: 3,
     
@@ -112,7 +112,7 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
             });
 
             var baseParams = {
-                method:  'Tinebase.searchDistinctTags',
+                method: 'Tinebase.searchDistinctTags',
                 records: ids
             }
         } else {

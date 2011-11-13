@@ -15,7 +15,7 @@ Ext.ns('Tine.widgets', 'Tine.widgets.tags');
  * @extends     Ext.Action
  */
 Tine.widgets.tags.TagsMassDetachAction = function(config) {
-    config.text = config.text ? config.text : _('Remove Tag');
+    config.text = config.text ? config.text : _('Detach tag(s)');
     config.iconCls = 'action_tag_delete';
     config.handler = this.handleClick.createDelegate(this);
     Ext.apply(this, config);
@@ -53,77 +53,45 @@ Ext.extend(Tine.widgets.tags.TagsMassDetachAction, Ext.Action, {
      */
     recordClass: null,
     
-    getFormItems: function() {
-              
-        this.tagSelect = new Tine.widgets.tags.TagCombo({
-            hideLabel: true,
-            anchor: '100%',
-            onlyUsableTags: true,
+    formPanel: null,
+    
+    initFormPanel: function() {
+        this.formPanel = new Tine.widgets.tags.TagToggleBox({
             selectionModel: this.selectionModel,
             recordClass: this.recordClass,
-            app: this.app,
-            listeners: {
-                scope: this,
-                render: function(field){field.focus(false, 500);},
-                select: function() {
-                    this.onOk();
-                }
-            }
+            callingAction: this,
+            mode: 'detach'
         });
         
-        return [{
-            xtype: 'label',
-            text: _('Detach the following tag(s) from all selected items:')
-        }, this.tagSelect
-        ];
+        this.formPanel.on('cancel', function() {
+            this.purgeListeners();
+            this.win.close();
+        });
+        
+        this.formPanel.on('updated', function() {
+            this.callingAction.onSuccess();
+        });
+        
     },
-    
+     
     handleClick: function() {
+        this.initFormPanel();
         this.win = Tine.WindowFactory.getWindow({
             layout: 'fit',
             width: 300,
             height: 150,
-            modal: true,
-            title: _('Select Tag'),
-            items: [{
-                xtype: 'form',
-                buttonAlign: 'right',
-                items: this.getFormItems(),
-                buttons: [{
-                    text: _('Cancel'),
-                    minWidth: 70,
-                    scope: this,
-                    handler: this.onCancel,
-                    iconCls: 'action_cancel'
-                }, {
-                    text: _('Ok'),
-                    minWidth: 70,
-                    scope: this,
-                    handler: this.onOk,
-                    iconCls: 'action_saveAndClose'
-                }]
-            }]
-        });
-    },
-    
-    onCancel: function() {
-        this.win.close();
-    },
-    
-    onOk: function() {
-        
-        var tag = this.tagSelect.getValue();
-        
-        var filter = this.selectionModel.getSelectionFilter();
-        var filterModel = this.recordClass.getMeta('appName') + '_Model_' +  this.recordClass.getMeta('modelName') + 'Filter';
+            modal: true,       
+            title: _('Select Tag(s) to detach'),
+            items: this.formPanel
 
-        Tine.Tinebase.detachTagFromMultipleRecords(filter, filterModel, tag, this.onSuccess.createDelegate(this));
+        });
+        
+        this.formPanel.win = this.win;
+        
     },
-    
+ 
     onSuccess: function() {
-        
         this.updateHandler.call(this.updateHandlerScope || this);
-        
         this.win.close();
     }
 });

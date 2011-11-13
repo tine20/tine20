@@ -80,11 +80,13 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
             layout: 'fit',
             width: 300,
             height: 150,
+            padding: '5px',
             modal: true,
             title: _('Select Tag'),
             items: [{
                 xtype: 'form',
                 buttonAlign: 'right',
+                padding: '5px',
                 items: this.getFormItems(),
                 buttons: [{
                     text: _('Cancel'),

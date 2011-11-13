@@ -576,6 +576,10 @@
           "path": "js/widgets/tags/"
         },
         {
+          "text": "TagToggleBox.js",
+          "path": "js/widgets/tags/"
+        },        
+        {
           "text": "TagFilter.js",
           "path": "js/widgets/tags/"
         },
