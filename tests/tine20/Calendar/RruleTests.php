@@ -344,7 +344,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $from = new Tinebase_DateTime('2011-10-31 00:00:00');
         $until = new Tinebase_DateTime('2011-12-04 23:59:59');
-        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($event, $exceptions, $from, $until);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         
         $this->assertEquals(0, count($recurSet), 'events before baseEvent dtstart must not be included');
         
