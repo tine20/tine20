@@ -344,14 +344,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get Message body of content type ' . $_contentType);
         
-        if ($_messageId instanceof Felamimail_Model_Message) {
-            $message = $_messageId;
-        } else {
-            $message = $this->get($_messageId);
-        }
+        $message = ($_messageId instanceof Felamimail_Model_Message) ? $_messageId : $this->get($_messageId);
         
         $cache = Tinebase_Core::getCache();
-        $cacheId = $this->_getMessageBodyCacheId($_messageId, $_partId, $_contentType, $_account);
+        $cacheId = $this->_getMessageBodyCacheId($message, $_partId, $_contentType, $_account);
         
         if ($cache->test($cacheId)) {
             return $cache->load($cacheId);
