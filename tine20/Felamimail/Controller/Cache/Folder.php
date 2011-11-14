@@ -96,7 +96,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             $this->_updateHasChildren($_accountId, $_folderName, $hasChildren);
             
             if ($_recursive) {
-                $this->_updateRecursive(Felamimail_Model_Account $_account, $result);
+                $this->_updateRecursive($account, $result);
             }
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' IMAP Protocol Exception: ' . $zmpe->getMessage());
