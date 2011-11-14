@@ -77,7 +77,8 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
 			var baseParams = {
 				method : 'Tinebase.searchDistinctTags',
 				records : ids
-			}
+			    };
+                
 		} else {
 			var baseParams = {
 				method : 'Tinebase.searchTags',
