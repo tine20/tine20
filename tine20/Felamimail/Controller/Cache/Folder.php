@@ -88,28 +88,33 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
         $this->_delimiter = $account->delimiter;
         
-        if (empty($_folderName)) {
-            $folders = $this->_getRootFolders($account);
-        } else {
-            $folders = $this->_getSubfolders($account, $_folderName);
-        }
-        
-        $result = $this->_getOrCreateFolders($folders, $account, $_folderName);
-        
-        if (! empty($_folderName)) {
-            $hasChildren = (empty($folders) || count($folders) > 0 && count($result) == 0) ? 0 : 1;
-            $this->_updateHasChildren($_accountId, $_folderName, $hasChildren);
-        }
-        
-        if ($_recursive) {
-            foreach ($result as $folder) {
-                if ($folder->has_children) {
-                    $this->update($account, $folder->globalname, $_recursive);
-                } else {
-                    $this->_removeFromCache($account, $folder->globalname);
-                }
-                $this->_backend->update($folder);
+        try {
+            if (empty($_folderName)) {
+                $folders = $this->_getRootFolders($account);
+            } else {
+                $folders = $this->_getSubfolders($account, $_folderName);
             }
+            
+            $result = $this->_getOrCreateFolders($folders, $account, $_folderName);
+            
+            if (! empty($_folderName)) {
+                $hasChildren = (empty($folders) || count($folders) > 0 && count($result) == 0) ? 0 : 1;
+                $this->_updateHasChildren($_accountId, $_folderName, $hasChildren);
+            }
+            
+            if ($_recursive) {
+                foreach ($result as $folder) {
+                    if ($folder->has_children) {
+                        $this->update($account, $folder->globalname, $_recursive);
+                    } else {
+                        $this->_removeFromCache($account, $folder->globalname);
+                    }
+                    $this->_backend->update($folder);
+                }
+            }
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' IMAP Protocol Exception: ' . $zmpe->getMessage());
+            $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
         }
         
         return $result;
@@ -123,12 +128,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      */
     protected function _getRootFolders(Felamimail_Model_Account $_account)
     {
-        try {
-            $imap = Felamimail_Backend_ImapFactory::factory($_account);
-        } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
-            return array();
-        }
+        $imap = Felamimail_Backend_ImapFactory::factory($_account);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             . ' Get subfolders of root for account ' . $_account->getId());
@@ -159,8 +159,6 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             if (in_array($_folderName, array_keys($result))) {
                 unset($result[$_folderName]);
             }        
-        } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
         } catch (Zend_Mail_Storage_Exception $zmse) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . ' No subfolders of ' . $_folderName . ' found.');
@@ -360,7 +358,9 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             $result->addRecord($folder);
         }
         
-        $this->_removeFromCache($_account, $parentFolder, $result->getArrayOfIds());
+        if (count($_folders) > 0) {
+            $this->_removeFromCache($_account, $parentFolder, $result->getArrayOfIds());
+        }
         
         return $result;
     }
