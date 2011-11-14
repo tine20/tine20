@@ -766,7 +766,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         }
         
         $cacheId = 'getMessageHeaders' . $_message->getId();
-        Tinebase_Core::getCache()->save($_message['header'], $cacheId, array('getMessageHeaders'));
+        Tinebase_Core::getCache()->save($_message->headers, $cacheId, array('getMessageHeaders'));
     
         // prefetch body to cache
         $account = Felamimail_Controller_Account::getInstance()->get($_folder->account_id);
