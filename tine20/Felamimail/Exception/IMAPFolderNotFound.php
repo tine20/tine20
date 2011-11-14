@@ -25,7 +25,8 @@ class Felamimail_Exception_IMAPFolderNotFound extends Felamimail_Exception_IMAP
      * @param integer $_code
      * @return void
      */
-    public function __construct($_message = 'IMAP folder not found.', $_code = 913) {
+    public function __construct($_message = 'IMAP folder not found.', $_code = 913)
+    {
         parent::__construct($_message, $_code);
     }
 }
