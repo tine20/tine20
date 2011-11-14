@@ -169,7 +169,7 @@ Tine.Sipgate.CallStateWindow.startTask = function(sessionId,contact) {
 
 Tine.Sipgate.CallStateWindow.stopTask = function() {
 	if(CallUpdateWindowTask) {
-		Ext.TaskMgr.stop(CallUpdateWindowTask);		
+		Ext.TaskMgr.stop(Tine.Sipgate.CallUpdateWindowTask);		
 		CallUpdateWindowTask = null;
 	}
 };

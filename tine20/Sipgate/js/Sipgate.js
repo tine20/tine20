@@ -175,7 +175,7 @@ Tine.Sipgate.Main = {
 			var number = null;
 			var grid = Ext.getCmp('Sipgate_Callhistory_Grid');
 			if (grid) {
-				record = grid.getSelectionModel().getSelected();
+				var record = grid.getSelectionModel().getSelected();
 				if (record && record.id != 'root') {
 					number = record.data.RemoteNumber;
 				}
@@ -187,7 +187,7 @@ Tine.Sipgate.Main = {
 			var contact = null;
 			var grid = Ext.getCmp('Sipgate_Callhistory_Grid');
 			if (grid) {
-				record = grid.getSelectionModel().getSelected();
+				var record = grid.getSelectionModel().getSelected();
 				if (record && record.id != 'root') {
 					number = record.data.RemoteNumber;
 					contact = { data: record.data.RemoteRecord };
@@ -256,8 +256,8 @@ Tine.Sipgate.Main = {
 
 					var node = Ext.getCmp('sipgate-tree').getSelectionModel().getSelectedNode()	|| null;
 
-					_pstart = options.params.start ? options.params.start : this.paging.start;
-            		_plimit = options.params.limit ? options.params.limit : this.paging.limit;
+					var _pstart = options.params.start ? options.params.start : this.paging.start;
+            		var _plimit = options.params.limit ? options.params.limit : this.paging.limit;
 					
             		
             		this.store.setBaseParam('_pstart', _pstart);
@@ -409,9 +409,9 @@ Tine.Sipgate.Main = {
 					}
 
 					if(_grid.getSelectionModel().getSelected().data.RemoteRecord) {
-						items = [ this.actions.dialNumber ];
+						var items = [ this.actions.dialNumber ];
 					} else {
-						items = [ this.actions.dialNumber, this.actions.addNumber ];
+						var items = [ this.actions.dialNumber, this.actions.addNumber ];
 					}
 					
 					
@@ -423,7 +423,7 @@ Tine.Sipgate.Main = {
 
 		gridPanel.on('rowdblclick', function(obj) {
 			if(obj) {
-				record = obj.getSelectionModel().getSelected();
+				var record = obj.getSelectionModel().getSelected();
 				if (record) {
 					//var contact = null;
 					Tine.log.debug(record);
@@ -543,9 +543,9 @@ Tine.Sipgate.dialPhoneNumber = function(number, contact) {
 		params : { method : 'Sipgate.dialNumber', _number : number },
 		success : function(_result, _request) {
 			Tine.log.debug('RES: ',_result);
-			sessionId = Ext.decode(_result.responseText).state.SessionID;
-			
-			if(win2 = Ext.getCmp('callstate-window')) {
+			var sessionId = Ext.decode(_result.responseText).state.SessionID;
+			var win2 = Ext.getCmp('callstate-window');
+			if(win2) {
 				win2.sessionId = sessionId;
 				Tine.Sipgate.CallStateWindow.startTask(sessionId, contact);
 				Ext.getCmp('call-cancel-button').enable();
@@ -601,10 +601,11 @@ Tine.Sipgate.updateCallStateWindow = function(sessionId, contact) {
 			sessionId : sessionId
 		},
 		success : function(_result, _request) {
-			result = Ext.decode(_result.responseText);
+			var result = Ext.decode(_result.responseText);
 
 			try {
-				if (uC = Ext.getCmp('csw-update-container')) throw uC;
+                var uC = Ext.getCmp('csw-update-container');
+				if (uC) throw uC;
 				else throw false;
 			} catch (e) {
 				if (e != false) {

@@ -113,7 +113,7 @@ Tine.Sipgate.SmsEditDialog = Ext.extend(Ext.FormPanel, {
 				},
 				success : function(_result, _request) {
 					Tine.log.debug('SMS Send Result: ', _result);
-					result = Ext.decode(_result.responseText);
+					var result = Ext.decode(_result.responseText);
 					Tine.log.debug('SMS Send Result2: ', result);
 					if (result.response.StatusCode == 200) {
 						Ext.getCmp('sipgate-sms-form').update('<div class="SipgateSendSms ok">' + result.response.StatusString + '</div>');
@@ -135,10 +135,6 @@ Tine.Sipgate.SmsEditDialog = Ext.extend(Ext.FormPanel, {
 
 		}
 
-		// Tine.log.debug(this.textEditor.getValue());
-		// //Tine.Sipgate.sendSms(this.number);
-		// this.purgeListeners();
-		// this.window.close();
 	},
 
 	onCancel : function() {

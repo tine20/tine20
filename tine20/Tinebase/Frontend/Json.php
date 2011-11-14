@@ -300,14 +300,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * attach tag to multiple records identified by a filter
+     * detach tags to multiple records identified by a filter
      * 
      * @param array  $filterData
      * @param string $filterName
      * @param mixed  $tag       string|array existing and non-existing tag
      * @return void
      */
-    public function detachTagFromMultipleRecords($filterData, $filterName, $tag)
+    public function detachTagsFromMultipleRecords($filterData, $filterName, $tag)
     {
         // NOTE: this function makes a new instance of a class whose name is given by user input.
         //       we need to do some sanitising first!
@@ -330,7 +330,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // at this point we are sure request is save ;-)
         $filterGroup->setFromArray($filterData);
         
-        Tinebase_Tags::getInstance()->detachTagFromMultipleRecords($filterGroup, $tag);
+        Tinebase_Tags::getInstance()->detachTagsFromMultipleRecords($filterGroup, $tag);
         return array('success' => true);
     }    
     

@@ -148,7 +148,7 @@ Tine.Sipgate.SearchAddressDialog = Ext.extend(Ext.FormPanel, {
  		this.searchBox.on('change', function() {
 
  			Tine.log.debug(this.selectedRecord);
- 			newStore = new Ext.data.SimpleStore({
+ 			var newStore = new Ext.data.SimpleStore({
   				id: 'sipgate-addnumber-type',
   				fields: ['value', 'text'],
   				data : [
