@@ -754,6 +754,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     
     /**
      * save message in tinebase cache
+     * - only cache message headers if received during the last day
      * 
      * @param Felamimail_Model_Message $_message
      * @param Felamimail_Model_Folder $_folder
@@ -764,7 +765,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             return;
         }
         
-        // only cache message headers if received during the last day
         $cacheId = 'getMessageHeaders' . $_message->getId();
         Tinebase_Core::getCache()->save($_message['header'], $cacheId, array('getMessageHeaders'));
     
