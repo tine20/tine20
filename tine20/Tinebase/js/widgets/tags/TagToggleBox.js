@@ -18,103 +18,103 @@ Ext.ns('Tine.widgets', 'Tine.widgets.tags');
  */
 Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
 
-	layout : 'fit',
-	border : false,
-	cls : 'tw-editdialog',
-	store : null,
-	buttonAlign : 'right',
+    layout : 'fit',
+    border : false,
+    cls : 'tw-editdialog',
+    store : null,
+    buttonAlign : 'right',
     win: null,
     mode: null,
     
-	anchor : '100% 100%',
+    anchor : '100% 100%',
     
 
-	initComponent : function() {
+    initComponent : function() {
         
-		this.addEvents('cancel', 'update', 'close');
-		this.initStore();
+        this.addEvents('cancel', 'update', 'close');
+        this.initStore();
         this.initTemplate();
         this.initView();
 
-		this.initActions();
+        this.initActions();
 
-		this.initButtons();
+        this.initButtons();
 
-		this.items = this.getFormItems();
+        this.items = this.getFormItems();
 
-		Tine.widgets.tags.TagToggleBox.superclass.initComponent.call(this);
-	},
+        Tine.widgets.tags.TagToggleBox.superclass.initComponent.call(this);
+    },
 
-	initActions : function() {
-		this.action_update = new Ext.Action({
-					text : (this.mode == 'detach') ? _('Detach Tags') : _('Attach Tags'),
-					minWidth : 70,
-					scope : this,
-					handler : this.onUpdate,
-					iconCls : 'action_saveAndClose'
-				});
-		this.action_cancel = new Ext.Action({
-					text : _('Cancel'),
-					minWidth : 70,
-					scope : this,
-					handler : this.onCancel,
-					iconCls : 'action_cancel'
-				});
+    initActions : function() {
+        this.action_update = new Ext.Action({
+                    text : (this.mode == 'detach') ? _('Detach Tags') : _('Attach Tags'),
+                    minWidth : 70,
+                    scope : this,
+                    handler : this.onUpdate,
+                    iconCls : 'action_saveAndClose'
+                });
+        this.action_cancel = new Ext.Action({
+                    text : _('Cancel'),
+                    minWidth : 70,
+                    scope : this,
+                    handler : this.onCancel,
+                    iconCls : 'action_cancel'
+                });
 
-	},
+    },
 
-	initStore : function() {
+    initStore : function() {
 
-		if (this.selectionModel) {
-			var ids = [];
+        if (this.selectionModel) {
+            var ids = [];
 
-			Ext.each(this.selectionModel.getSelections(), function(el) {
-						Ext.each(el.data.tags, function(tag) {
-									ids.push(tag.id);
-								});
-					});
+            Ext.each(this.selectionModel.getSelections(), function(el) {
+                        Ext.each(el.data.tags, function(tag) {
+                                    ids.push(tag.id);
+                                });
+                    });
 
-			var baseParams = {
-				method : 'Tinebase.searchDistinctTags',
-				records : ids
-			    };
+            var baseParams = {
+                method : 'Tinebase.searchDistinctTags',
+                records : ids
+                };
                 
-		} else {
-			var baseParams = {
-				method : 'Tinebase.searchTags',
-				paging : {}
-			};
-		}
+        } else {
+            var baseParams = {
+                method : 'Tinebase.searchTags',
+                paging : {}
+            };
+        }
 
-		this.store = new Ext.data.JsonStore({
-					id : 'id',
-					root : 'results',
-					totalProperty : 'totalCount',
-					fields : Tine.Tinebase.Model.Tag,
-					baseParams : baseParams
-				});
-		this.store.load();
+        this.store = new Ext.data.JsonStore({
+                    id : 'id',
+                    root : 'results',
+                    totalProperty : 'totalCount',
+                    fields : Tine.Tinebase.Model.Tag,
+                    baseParams : baseParams
+                });
+        this.store.load();
 
-	},
+    },
 
-	initButtons : function() {
-		this.fbar = ['->', this.action_cancel, this.action_update];
-	},
+    initButtons : function() {
+        this.fbar = ['->', this.action_cancel, this.action_update];
+    },
     
-	getFormItems : function() {
-		return {
-			border : false,
-			frame : true,
-			layout : 'form',
-			items : [{
-				region : 'center',
-				layout : {
-					align : 'stretch',
-					type : 'vbox'
-				}
-			}, this.view]
-		};
-	},
+    getFormItems : function() {
+        return {
+            border : false,
+            frame : true,
+            layout : 'form',
+            items : [{
+                region : 'center',
+                layout : {
+                    align : 'stretch',
+                    type : 'vbox'
+                }
+            }, this.view]
+        };
+    },
     
     initTemplate: function() {
         this.tpl = new Ext.XTemplate(

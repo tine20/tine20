@@ -386,7 +386,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                     });
                     
                     if (! Ext.isIE) {
-                    	this.el.mask();
+                        this.el.mask();
                     }
                     Ext.Ajax.request({
                         params: {
