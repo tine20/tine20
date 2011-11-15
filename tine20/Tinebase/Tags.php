@@ -83,6 +83,22 @@ class Tinebase_Tags
 	}
 
 	/**
+	* Searches tags according to foreign filter
+	* -> returns the count of tag occurrences in the result set
+	*
+	* @param  Tinebase_Model_Filter_FilterGroup $_filter
+	* @return Tinebase_Record_RecordSet  Set of Tinebase_Model_Tag
+	* 
+	* @todo implement
+	* 
+	*/
+	public function searchTagsByForeignFilter($_filter)
+	{
+	    $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tag');
+	    return $result;
+	}
+	
+	/**
 	 * Returns tags count of a tag search
 	 * @todo automate the count query if paging is active!
 	 *
