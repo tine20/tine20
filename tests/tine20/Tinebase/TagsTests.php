@@ -2,23 +2,19 @@
 /**
  * Tine 2.0
  * 
- * @package     Tasks
+ * @package     Tinebase
  * @subpackage  Tags
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
- * @todo        implement testTagsAcl test and add assertion to testSearchTags
+ * @todo        implement testTagsAcl test
  */
 
 /**
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    Tinebase_TagsTest::main();
-}
 
 /**
  * Test class for Tinebase_Group
@@ -32,6 +28,13 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
     protected $_instance;
     
     /**
+    * tags that should be deleted in tearDown
+    *
+    * @var array
+    */
+    protected $_tagIdsToDelete = array();
+    
+    /**
      * Runs the test methods of this class.
      */
     public static function main()
@@ -40,11 +43,29 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see PHPUnit_Framework_TestCase::setUp()
+     */
     public function setUp()
     {
         $this->_instance = Tinebase_Tags::getInstance();
     }
     
+    /**
+    * Tears down the fixture
+    * This method is called after a test is executed.
+    *
+    * @access protected
+    */
+    protected function tearDown()
+    {
+        $this->_instance->deleteTags($this->_tagIdsToDelete);
+    }
+
+    /**
+     * create tags
+     */
     public function testCreateTags()
     {
         $sharedTag = new Tinebase_Model_Tag(array(
@@ -54,6 +75,7 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
             'color' => '#009B31',
         ));
         $savedSharedTag = $this->_instance->createTag($sharedTag);
+        $this->_tagIdsToDelete[] = $savedSharedTag->getId();
         $this->assertEquals($sharedTag->name, $savedSharedTag->name);
         
         $personalTag = new Tinebase_Model_Tag(array(
@@ -63,14 +85,23 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
             'color' => '#FF0000',
         ));
         $savedPersonalTag = $this->_instance->createTag($personalTag);
+        $this->_tagIdsToDelete[] = $savedPersonalTag->getId();
         $this->assertEquals($personalTag->description, $savedPersonalTag->description);
     }
     
+    /**
+     * test tags acl
+     * 
+     * @todo implement
+     */
     public function testTagsAcl()
     {
         // create tags out of scope for the test user!
     }
     
+    /**
+     * test search tags
+     */
     public function testSearchTags()
     {
         $filter = new Tinebase_Model_TagFilter(array(
@@ -80,8 +111,21 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         $tags = $this->_instance->searchTags($filter, $paging);
         $this->_instance->getSearchTagsCount($filter);
         
+        //print_r($tags->toArray());
+    }
+
+    /**
+    * test search tags with 'attached' filter
+    * 
+    * @todo implement
+    */
+    public function testSearchAttachedTags()
+    {
     }
     
+    /**
+     * attach tags to records
+     */
     public function testAttachTagToMultipleRecords()
     {
         $personas = Zend_Registry::get('personas');
@@ -117,4 +161,3 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         }
     }
 }
-
