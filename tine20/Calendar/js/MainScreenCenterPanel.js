@@ -367,6 +367,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 rightRow.insertFirst(this.changeViewActions[i].getEl().parent().dom);
             }
             this['show' + Ext.util.Format.capitalize(viewParts.period) +  'View'].toggle(true);
+            this['show' + Ext.util.Format.capitalize(viewParts.presentation) +  'View'].toggle(true);
             
             // update actions
             this.updateEventActions();
