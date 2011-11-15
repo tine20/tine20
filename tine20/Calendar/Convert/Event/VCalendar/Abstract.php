@@ -276,20 +276,20 @@ class Calendar_Convert_Event_VCalendar_Abstract
         
         // categories
         if(isset($event->tags) && count($event->tags) > 0) {
-            $vevent->add(new Sabre_VObject_Property('CATEGORIES', Sabre_VObject_Element_List((array) $event->tags->name)));
+            $vevent->add(new Sabre_VObject_Property_List('CATEGORIES', (array) $event->tags->name));
         }
         
         // repeating event properties
         if ($event->rrule) {
             if ($event->is_all_day_event == true) {
-                $vevent->add(new Sabre_VObject_Element_MultiValue('RRULE', explode(';', preg_replace_callback('/UNTIL=([\d :-]{19})(?=;?)/', function($matches) {
+                $vevent->add(new Sabre_VObject_Property_Recure('RRULE', preg_replace_callback('/UNTIL=([\d :-]{19})(?=;?)/', function($matches) {
                     $dtUntil = new Tinebase_DateTime($matches[1]);
                     $dtUntil->setTimezone((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
                     
                     return 'UNTIL=' . $dtUntil->format('Ymd');
-                }, $event->rrule))));
+                }, $event->rrule)));
             } else {
-                $vevent->add(new Sabre_VObject_Element_MultiValue('RRULE', explode(';', preg_replace('/(UNTIL=)(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', '$1$2$3$4T$5$6$7Z', $event->rrule))));
+                $vevent->add(new Sabre_VObject_Property_Recure('RRULE', preg_replace('/(UNTIL=)(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', '$1$2$3$4T$5$6$7Z', $event->rrule)));
             }
             if ($event->exdate instanceof Tinebase_Record_RecordSet) {
                 $deletedEvents = $event->exdate->filter('is_deleted', true);
