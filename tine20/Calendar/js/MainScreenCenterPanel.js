@@ -841,11 +841,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         // this is important for paging and sort header!
         options.params.filter = [];
         
-        // add period filter
-        if (! options.noPeriodFilter) {
-            options.params.filter.push({field: 'period', operator: 'within', value: this.getCalendarPanel(this.activeView).getView().getPeriod() });
-        }
-        
         if (! options.refresh && this.rendered) {
             // defer to have the loadMask centered in case of rendering actions
             this.loadMask.show.defer(50, this.loadMask);
@@ -856,6 +851,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         //calendarSelectionPlugin.onBeforeLoad.call(calendarSelectionPlugin, store, options);
         
         this.filterToolbar.onBeforeLoad.call(this.filterToolbar, store, options);
+        
+        // add period filter as last filter to not conflict with first OR filter
+        if (! options.noPeriodFilter) {
+            options.params.filter.push({field: 'period', operator: 'within', value: this.getCalendarPanel(this.activeView).getView().getPeriod() });
+        }
     },
     
     /**
