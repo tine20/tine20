@@ -17,7 +17,7 @@
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
- * Test class for Tinebase_Group
+ * Test class for Tinebase_Tags
  */
 class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
 {
