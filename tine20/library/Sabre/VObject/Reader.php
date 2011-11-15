@@ -40,6 +40,7 @@ class Sabre_VObject_Reader {
     	'N'             => 'Sabre_VObject_Element_MultiValue',
     	'ORG'			=> 'Sabre_VObject_Element_MultiValue',
     	'RECURRENCE-ID' => 'Sabre_VObject_Element_DateTime',
+    	'RRULE'         => 'Sabre_VObject_Property_Recure'
     );
 
     /**
@@ -137,8 +138,6 @@ class Sabre_VObject_Reader {
         }
 
         $propertyName = strtoupper($matches['name']);
-        $propertyValue = Sabre_VObject_Property::stripSlashes($matches['value']);
-
         if (strpos($propertyName, '.') !== false) {
             list(, $mapName) = explode('.', $propertyName);
         } else {
@@ -150,7 +149,8 @@ class Sabre_VObject_Reader {
         } else {
             $className = 'Sabre_VObject_Property';
         }
-
+        
+        $propertyValue = $className::stripSlashes($matches['value']);
         $obj = new $className($propertyName, $propertyValue);
 
         if ($matches['parameters']) {
