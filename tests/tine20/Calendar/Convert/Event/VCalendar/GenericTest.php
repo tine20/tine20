@@ -80,7 +80,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertEquals("2011-10-04 08:00:00",               (string)$event->dtstart);
         $this->assertEquals("2011-10-04 06:45:00",               (string)$event->alarms[0]->alarm_time);
         $this->assertEquals("75",                                (string)$event->alarms[0]->minutes_before);
-        $this->assertEquals("This is a descpription\nwith a linebreak", $event->description);
+        $this->assertEquals("This is a descpription\nwith a linebreak and a ; , and :", $event->description);
         
         return $event;
     }
