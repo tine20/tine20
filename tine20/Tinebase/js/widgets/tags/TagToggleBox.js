@@ -1,8 +1,9 @@
 /*
  * Tine 2.0
  * 
- * @license http://www.gnu.org/licenses/agpl.html AGPL Version 3 @author
- * Cornelius Weiss <c.weiss@metaways.de> @copyright Copyright (c) 2007-2009
+ * @license http://www.gnu.org/licenses/agpl.html AGPL Version 3 
+ * @author Alexander Stintzing <alex@stintzing.net>
+ * @copyright Copyright (c) 2007-2009
  * Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * TODO use new filter syntax in onBeforeQuery when TagFilter is refactored and
@@ -94,7 +95,12 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
                     baseParams : baseParams
                 });
         this.store.load();
-
+        
+//        this.store.on('load',function(){
+//            Tine.log.debug(this.store);
+//            Tine.log.debug(this.store.getCount());
+//        },this);
+        
     },
 
     initButtons : function() {
@@ -141,8 +147,9 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
                     }
                 }
             }
-        );        
+        );
     },
+    
     
     initView : function() {
         this.view = new Ext.DataView({
@@ -150,7 +157,7 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
             autoScroll : true,
             store : this.store,
             tpl : this.tpl,
-            emptyText : _('No Tags to remove found in the selected records'),
+            emptyText : _('No Tags to detach found in the selected records'),
             loadingText : _('Please Wait...'),
             style : 'background:#fff;'
         });
@@ -159,7 +166,7 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
     onCancel: function() {
         this.fireEvent('cancel');
     },
-    
+    // TODO: formitems could not be fetched by formpanel->getform->getvalues
     onUpdate: function() {
         Ext.MessageBox.wait(_('Please wait'), _('Detaching selected tags'));
         var els = Ext.select('input.tagcheckel');

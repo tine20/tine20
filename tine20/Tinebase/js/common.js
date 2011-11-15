@@ -174,6 +174,9 @@ Tine.Tinebase.common = {
                 if (tags[i].description) {
                     qtipText += ' | ' + tags[i].description;
                 }
+                if(tags[i].occurrence) {
+                    qtipText += ' (' + _('Usage:&#160;') + tags[i].occurrence + ')';
+                }
                 result += '<div ext:qtip="' + qtipText + '" class="tb-grid-tags" style="background-color:' + tags[i].color + ';">&#160;</div>';
             }
         }

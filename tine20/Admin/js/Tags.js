@@ -201,8 +201,8 @@ Tine.Admin.Tags.Main = {
             options = options || {};
             options.params = options.params || {};
             options.params.query = Ext.getCmp('TagsQuickSearchField').getValue();
-        }, this);        
-        
+        }, this); 
+                
         // the paging toolbar
         var pagingToolbar = new Ext.PagingToolbar({
             pageSize: 25,
@@ -219,8 +219,8 @@ Tine.Admin.Tags.Main = {
                 resizable: true
             },
             columns: [
-                { id: 'color', header: this.translation.gettext('Color'), dataIndex: 'color', width: 25, renderer: function (color) { 
-                	return '<div style="width: 8px; height: 8px; background-color:' + color + '; border: 1px solid black;">&#160;</div>';
+                { id: 'color', header: this.translation.gettext('Color'), dataIndex: 'color', width: 25, renderer: function (color,meta,record) {
+                	return '<div style="margin-top:1px;width: 8px; height: 8px; background-color:' + color + '; border-radius:5px;border: 1px solid black;" title="' + record.get('name') + ' (' +  _('Usage:&#160;') + record.get('occurrence') + ')">&#160;</div>';
                 }},
                 { id: 'name', header: this.translation.gettext('Name'), dataIndex: 'name', width: 200 },
                 { id: 'description', header: this.translation.gettext('Description'), dataIndex: 'description', width: 500}
