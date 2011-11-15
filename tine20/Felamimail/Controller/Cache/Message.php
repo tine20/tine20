@@ -684,7 +684,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $cachedMessage = $this->_addMessageToCache($messageToCache);
         
         if ($cachedMessage !== FALSE) { 
-            $this->_saveMessageInTinebaseCache($cachedMessage, $_folder);
+            $this->_saveMessageInTinebaseCache($cachedMessage, $_folder, $_message);
             
             if ($_updateFolderCounter == TRUE) {
                 Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
@@ -758,15 +758,18 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * 
      * @param Felamimail_Model_Message $_message
      * @param Felamimail_Model_Folder $_folder
+     * @param array $_messageData
+     * 
+     * @todo do we need the headers in the Tinebase cache?
      */
-    protected function _saveMessageInTinebaseCache(Felamimail_Model_Message $_message, Felamimail_Model_Folder $_folder)
+    protected function _saveMessageInTinebaseCache(Felamimail_Model_Message $_message, Felamimail_Model_Folder $_folder, $_messageData)
     {
         if (! $_message->received->isLater(Tinebase_DateTime::now()->subDay(3))) {
             return;
         }
         
         $cacheId = 'getMessageHeaders' . $_message->getId();
-        Tinebase_Core::getCache()->save($_message->headers, $cacheId, array('getMessageHeaders'));
+        Tinebase_Core::getCache()->save($_messageData['header'], $cacheId, array('getMessageHeaders'));
     
         // prefetch body to cache
         $account = Felamimail_Controller_Account::getInstance()->get($_folder->account_id);
