@@ -88,6 +88,8 @@ class Tinebase_Tags
 	*
 	* @param  Tinebase_Model_Filter_FilterGroup $_filter
 	* @return Tinebase_Record_RecordSet  Set of Tinebase_Model_Tag
+	* 
+	* @todo add occurrence
 	*/
 	public function searchTagsByForeignFilter($_filter)
 	{
@@ -100,7 +102,18 @@ class Tinebase_Tags
     	    $select = $this->_getSelect($recordIds, $app->getId());
     	    Tinebase_Model_TagRight::applyAclSql($select);
     	    $tagData = $this->_db->fetchAssoc($select);
+//     	    print_r($tagData);
+    	    	
+//     	    foreach ($tagData as $tag) {
+    	        
+//     	    }
+//     	    $countSelect = $this->_getSelect($recordIds, $app->getId(), array('selection_occurrence' => 'COUNT(DISTINCT(tagging.tag_id))'));
+//     	    $countSelect->group('tagging.tag_id');
+//     	    Tinebase_Model_TagRight::applyAclSql($countSelect);
+//     	    $countData = $this->_db->fetchAssoc($countSelect);
+//     	    print_r($countData);
 	    }
+	    
 	    
 	    return new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $tagData);
 	}
@@ -848,14 +861,14 @@ class Tinebase_Tags
 	 * @param string $_applicationId
 	 * @return Zend_Db_Select
 	 */
-	protected function _getSelect($_recordId, $_applicationId)
+	protected function _getSelect($_recordId, $_applicationId, $_cols = '*')
 	{
 		$select = $this->_db->select()
-		->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'))
-		->join(array('tags'    => SQL_TABLE_PREFIX . 'tags'), 'tagging.tag_id = tags.id')
-		->where($this->_db->quoteIdentifier('application_id') . ' = ?', $_applicationId)
-		->where($this->_db->quoteIdentifier('record_id') . ' IN (?) ', (array) $_recordId)
-		->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
+    		->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), $_cols)
+    		->join(array('tags'    => SQL_TABLE_PREFIX . 'tags'), 'tagging.tag_id = tags.id')
+    		->where($this->_db->quoteIdentifier('application_id') . ' = ?', $_applicationId)
+    		->where($this->_db->quoteIdentifier('record_id') . ' IN (?) ', (array) $_recordId)
+    		->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
 
 		return $select;
 	}

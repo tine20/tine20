@@ -143,7 +143,6 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
     /**
     * test search tags with 'attached' filter
     * 
-    * @todo check shared tag in result
     * @todo add occurrence count check
     */
     public function testSearchTagsByForeignFilter()
@@ -154,6 +153,15 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         
         $tags = $this->_instance->searchTagsByForeignFilter($filter);
         $this->assertTrue(count($tags) > 0);
+        $sharedTagInResult = NULL;
+        foreach ($tags as $tag) {
+            if ($tag->getId() === $sharedTag->getId()) {
+                $sharedTagInResult = $tag;
+                break;
+            }
+        }
+        $this->assertTrue($sharedTagInResult instanceof Tinebase_Model_Tag, 'shared tag not found');
+        //$this->assertEquals(Addressbook_Controller_Contact::getInstance()->searchCount($filter), $sharedTagInResult->selection_occurrence);
     }
     
     /**
