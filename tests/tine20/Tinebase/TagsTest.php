@@ -143,10 +143,17 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
     /**
     * test search tags with 'attached' filter
     * 
-    * @todo implement
+    * @todo check shared tag in result
+    * @todo add occurrence count check
     */
-    public function testSearchAttachedTags()
+    public function testSearchTagsByForeignFilter()
     {
+        $sharedTag = $this->_createSharedTag();
+        $filter = new Addressbook_Model_ContactFilter();
+        Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $sharedTag);
+        
+        $tags = $this->_instance->searchTagsByForeignFilter($filter);
+        $this->assertTrue(count($tags) > 0);
     }
     
     /**

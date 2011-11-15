@@ -88,14 +88,21 @@ class Tinebase_Tags
 	*
 	* @param  Tinebase_Model_Filter_FilterGroup $_filter
 	* @return Tinebase_Record_RecordSet  Set of Tinebase_Model_Tag
-	* 
-	* @todo implement
-	* 
 	*/
 	public function searchTagsByForeignFilter($_filter)
 	{
-	    $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tag');
-	    return $result;
+	    $controller = Tinebase_Core::getApplicationInstance($_filter->getApplicationName(), $_filter->getModelName());
+	    $recordIds = $controller->search($_filter, NULL, FALSE, TRUE);
+	    
+	    $tagData = array();
+	    if (! empty($recordIds)) { 
+    	    $app = Tinebase_Application::getInstance()->getApplicationByName($_filter->getApplicationName());
+    	    $select = $this->_getSelect($recordIds, $app->getId());
+    	    Tinebase_Model_TagRight::applyAclSql($select);
+    	    $tagData = $this->_db->fetchAssoc($select);
+	    }
+	    
+	    return new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $tagData);
 	}
 	
 	/**
