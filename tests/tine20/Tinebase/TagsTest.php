@@ -70,24 +70,7 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateTags()
     {
-        $sharedTag = new Tinebase_Model_Tag(array(
-            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
-            'name'  => 'tag::shared',
-            'description' => 'this is a shared tag',
-            'color' => '#009B31',
-        ));
-        $savedSharedTag = $this->_instance->createTag($sharedTag);
-        
-        $right = new Tinebase_Model_TagRight(array(
-            'tag_id'        => $savedSharedTag->getId(),
-            'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-            'account_id'    => Setup_Core::getUser()->getId(),
-            'view_right'    => true,
-            'use_right'     => true,
-        ));
-        $this->_instance->setRights($right);        
-        $this->_tagIdsToDelete[] = $savedSharedTag->getId();
-        $this->assertEquals($sharedTag->name, $savedSharedTag->name);
+        $this->_createSharedTag();
         
         $personalTag = new Tinebase_Model_Tag(array(
             'type'  => Tinebase_Model_Tag::TYPE_PERSONAL,
@@ -98,6 +81,35 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         $savedPersonalTag = $this->_instance->createTag($personalTag);
         $this->_tagIdsToDelete[] = $savedPersonalTag->getId();
         $this->assertEquals($personalTag->description, $savedPersonalTag->description);
+    }
+    
+    /**
+     * create shared tag
+     * 
+     * @return Tinebase_Model_Tag
+     */
+    protected function _createSharedTag()
+    {
+        $sharedTag = new Tinebase_Model_Tag(array(
+                    'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+                    'name'  => 'tag::shared',
+                    'description' => 'this is a shared tag',
+                    'color' => '#009B31',
+        ));
+        $savedSharedTag = $this->_instance->createTag($sharedTag);
+        
+        $right = new Tinebase_Model_TagRight(array(
+                    'tag_id'        => $savedSharedTag->getId(),
+                    'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                    'account_id'    => Setup_Core::getUser()->getId(),
+                    'view_right'    => true,
+                    'use_right'     => true,
+        ));
+        $this->_instance->setRights($right);
+        $this->_tagIdsToDelete[] = $savedSharedTag->getId();
+        $this->assertEquals($sharedTag->name, $savedSharedTag->name);
+        
+        return $savedSharedTag;
     }
     
     /**
@@ -115,14 +127,17 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchTags()
     {
-//         $filter = new Tinebase_Model_TagFilter(array(
-//             'name' => 'tag::%'
-//         ));
-//         $paging = new Tinebase_Model_Pagination();
-//         $tags = $this->_instance->searchTags($filter, $paging);
-//         $this->_instance->getSearchTagsCount($filter);
+        $sharedTag = $this->_createSharedTag();
         
-        //print_r($tags->toArray());
+        $filter = new Tinebase_Model_TagFilter(array(
+            'name' => 'tag::%'
+        ));
+        $paging = new Tinebase_Model_Pagination();
+        $tags = $this->_instance->searchTags($filter, $paging);
+        $count = $this->_instance->getSearchTagsCount($filter);
+        
+        $this->assertTrue($count > 0);
+        $this->assertContains('tag::', $tags->getFirstRecord()->name);
     }
 
     /**
