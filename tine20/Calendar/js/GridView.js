@@ -29,6 +29,13 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
         this.selModel = this.initSM();
         this.view = this.initVIEW();
         
+        this.on('rowcontextmenu', function(grid, row, e) {
+            var selModel = grid.getSelectionModel();
+            if(!selModel.isSelected(row)) {
+                selModel.selectRow(row);
+            }
+        }, this);
+        
         Tine.Calendar.GridView.superclass.initComponent.call(this);
     },
     
@@ -73,6 +80,24 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
             allowMultiple: true,
             getSelectedEvents: function() {
                 return this.getSelections();
+            },
+            /**
+             * Select an event.
+             * 
+             * @param {Tine.Calendar.Model.Event} event The event to select
+             * @param {EventObject} e (optional) An event associated with the selection
+             * @param {Boolean} keepExisting True to retain existing selections
+             * @return {Tine.Calendar.Model.Event} The selected event
+             */
+            select : function(event, e, keepExisting){
+                if (! event || ! event.ui) {
+                    return event;
+                }
+                
+                var idx = this.grid.getStore.indexOf(event);
+                
+                this.selectRow(idx, keepExisting);
+                return event;
             }
         });
     },
@@ -84,9 +109,19 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
             },
             updatePeriod: function() {
                 //this.getStore().load();
+            },
+            getTargetEvent: function(e) {
+                var idx = this.findRowIndex(e.getTarget());
+                
+                return this.grid.getStore().getAt(idx);
+            },
+            getTargetDateTime: Ext.emptyFn,
+            getSelectionModel: function() {
+                return this.grid.getSelectionModel();
             }
         }));
     },
+    
     attendeeStatusRenderer: function(attendee) {
         var store = new Tine.Calendar.Model.Attender.getAttendeeStore(attendee),
         attender = null;
