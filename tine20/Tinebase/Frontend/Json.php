@@ -250,6 +250,58 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+    * search tags by foreign filter
+    *
+    * @param  array $filterData
+    * @param  string $filterName
+    * @return array
+    */
+    public function searchTagsByForeignFilter($filterData, $filterName)
+    {
+        $filter = $this->_getFilterGroup($filterData, $filterName);
+    
+        $result = Tinebase_Tags::getInstance()->searchTagsByForeignFilter($filter)->toArray();
+        return array(
+            'results'    => $result,
+            'totalCount' => count($result)
+        );
+    }
+    
+    /**
+     * get filter group defined by filterName and filterData
+     * 
+     * @param array $_filterData
+     * @param string $_filterName
+     * @return Tinebase_Model_Filter_FilterGroup
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _getFilterGroup($_filterData, $_filterName)
+    {
+        // NOTE: this function makes a new instance of a class whose name is given by user input.
+        //       we need to do some sanitising first!
+        list($appName, $modelString, $filterGroupName) = explode('_', $_filterName);
+        if ($modelString !== 'Model') {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' spoofing attempt detected, affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), TRUE));
+            die('go away!');
+        }
+        
+        if (! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN)) {
+            throw new Tinebase_Exception_AccessDenied('No right to access application');
+        }
+        
+        $filterGroup = new $_filterName(array());
+        if (! $filterGroup instanceof Tinebase_Model_Filter_FilterGroup) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' spoofing attempt detected, affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), TRUE));
+            die('go away!');
+        }
+        
+        // at this point we are sure request is save ;-)
+        $filterGroup->setFromArray($_filterData);
+        
+        return $filterGroup;
+    }
+    
+    /**
      * search tags
      *
      * @param  array $records records array
@@ -274,28 +326,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function attachTagToMultipleRecords($filterData, $filterName, $tag)
     {
-        // NOTE: this function makes a new instance of a class whose name is given by user input.
-        //       we need to do some sanitising first!
-        list($appName, $modelString, $filterGroupName) = explode('_', $filterName);
-        if ($modelString !== 'Model') {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' spoofing attempt detected, affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), TRUE));
-            die('go away!');
-        }
+        $filter = $this->_getFilterGroup($filterData, $filterName);
         
-        if (! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN)) {
-            throw new Tinebase_Exception_AccessDenied('No right to access application');
-        }
-        
-        $filterGroup = new $filterName(array());
-        if (! $filterGroup instanceof Tinebase_Model_Filter_FilterGroup) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' spoofing attempt detected, affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), TRUE));
-            die('go away!');
-        }
-        
-        // at this point we are sure request is save ;-)
-        $filterGroup->setFromArray($filterData);
-        
-        Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filterGroup, $tag);
+        Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $tag);
         return array('success' => true);
     }
 
@@ -309,28 +342,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function detachTagsFromMultipleRecords($filterData, $filterName, $tag)
     {
-        // NOTE: this function makes a new instance of a class whose name is given by user input.
-        //       we need to do some sanitising first!
-        list($appName, $modelString, $filterGroupName) = explode('_', $filterName);
-        if ($modelString !== 'Model') {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' spoofing attempt detected, affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), TRUE));
-            die('go away!');
-        }
+        $filter = $this->_getFilterGroup($filterData, $filterName);
         
-        if (! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN)) {
-            throw new Tinebase_Exception_AccessDenied('No right to access application');
-        }
-        
-        $filterGroup = new $filterName(array());
-        if (! $filterGroup instanceof Tinebase_Model_Filter_FilterGroup) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' spoofing attempt detected, affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), TRUE));
-            die('go away!');
-        }
-        
-        // at this point we are sure request is save ;-)
-        $filterGroup->setFromArray($filterData);
-        
-        Tinebase_Tags::getInstance()->detachTagsFromMultipleRecords($filterGroup, $tag);
+        Tinebase_Tags::getInstance()->detachTagsFromMultipleRecords($filter, $tag);
         return array('success' => true);
     }    
     
