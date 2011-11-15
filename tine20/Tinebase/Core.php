@@ -447,7 +447,7 @@ class Tinebase_Core
                 $logger->addWriter($writer);
             }
         } else {
-            $writer = new Zend_Log_Writer_Null;
+            $writer = new Zend_Log_Writer_Syslog;
             $logger->addWriter($writer);
         }
 

@@ -438,6 +438,10 @@ class Setup_ExtCheck
                         $mysqlVersion = @mysql_get_client_info();
                     }
                     
+                    // some version strings have more than just the version
+                    preg_match('/\d+\.\d+\.\d+/', $mysqlVersion, $matches);
+                    $mysqlVersion = is_array($matches) ? $matches[0] : $mysqlVersion;
+                    
                     $text = $value['attributes']['NAME'];
                     if (version_compare($value['attributes']['VERSION'], $mysqlVersion, '<=')) {
                         $data[] = array($text, 'SUCCESS');
