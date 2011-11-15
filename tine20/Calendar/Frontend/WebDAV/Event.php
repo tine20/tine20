@@ -106,9 +106,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
             }
         }
         
-        if (empty($_event->attendee)) {
+        if (count($_event->attendee) == 0) {
             $newAttendee = new Calendar_Model_Attender(array(
-            	'user_id'   => Tinebase_Core::getUser()->contact_id,
+            	'user_id'   => $_event->organizer,
                 'user_type' => Calendar_Model_Attender::USERTYPE_USER,
                 'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
                 'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
