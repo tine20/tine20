@@ -241,19 +241,20 @@ class Calendar_Convert_Event_VCalendar_Abstract
         $vevent->add($dtstart);
         $vevent->add($dtend);
         
-        // event organizer and attendees
-        if ((count($event->attendee) > 1) || (count($event->attendee) == 1 && $event->attendee[0]->user_id != $event->organizer)) {
-            try {
-                $organizerContact = Addressbook_Controller_Contact::getInstance()->get($event->organizer);
-                if (!empty($organizerContact->email)) {
-                    $organizer = new Sabre_VObject_Property('ORGANIZER', 'mailto:' . $organizerContact->email);
-                    $organizer->add('CN', $organizerContact->n_fileas);
-                    $vevent->add($organizer);
-                }
-            } catch (Tasks_Exception_NotFound $tenf) {
-                // contact not found
+        // event organizer
+        try {
+            $organizerContact = Addressbook_Controller_Contact::getInstance()->get($event->organizer);
+            if (!empty($organizerContact->email)) {
+                $organizer = new Sabre_VObject_Property('ORGANIZER', 'mailto:' . $organizerContact->email);
+                $organizer->add('CN', $organizerContact->n_fileas);
+                $vevent->add($organizer);
             }
-            
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // contact not found
+        }
+        
+        // attendees
+        if ((count($event->attendee) > 1) || (count($event->attendee) == 1 && $event->attendee[0]->user_id != $event->organizer)) {
             $this->_addEventAttendee($vevent, $event);
         }
         
@@ -534,9 +535,14 @@ class Calendar_Convert_Event_VCalendar_Abstract
     {
         $event = $_event;
         
-        // save current attendees
+        // store current attendees
         if (isset($event->attendee) && $event->attendee instanceof Tinebase_Record_RecordSet) {
             $oldAttendees = clone $event->attendee;
+        }
+        
+        // store current organizer
+        if (!empty($event->organizer)) {
+            $oldOrganizer = $event->organizer;
         }
         
         // unset supported fields
@@ -795,6 +801,11 @@ class Calendar_Convert_Event_VCalendar_Abstract
             }
         
             unset($oldAttendees);
+        }
+        
+        // restore old organizer if needed
+        if (isset($oldOrganizer) && empty($event->organizer)) {
+            $event->organizer = $oldOrganizer;
         }
         
         if (empty($event->seq)) {
