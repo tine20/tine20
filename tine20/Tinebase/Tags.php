@@ -88,34 +88,45 @@ class Tinebase_Tags
 	*
 	* @param  Tinebase_Model_Filter_FilterGroup $_filter
 	* @return Tinebase_Record_RecordSet  Set of Tinebase_Model_Tag
-	* 
-	* @todo add occurrence
 	*/
 	public function searchTagsByForeignFilter($_filter)
 	{
 	    $controller = Tinebase_Core::getApplicationInstance($_filter->getApplicationName(), $_filter->getModelName());
 	    $recordIds = $controller->search($_filter, NULL, FALSE, TRUE);
 	    
-	    $tagData = array();
 	    if (! empty($recordIds)) { 
     	    $app = Tinebase_Application::getInstance()->getApplicationByName($_filter->getApplicationName());
     	    $select = $this->_getSelect($recordIds, $app->getId());
     	    Tinebase_Model_TagRight::applyAclSql($select);
-    	    $tagData = $this->_db->fetchAssoc($select);
-//     	    print_r($tagData);
-    	    	
-//     	    foreach ($tagData as $tag) {
-    	        
-//     	    }
-//     	    $countSelect = $this->_getSelect($recordIds, $app->getId(), array('selection_occurrence' => 'COUNT(DISTINCT(tagging.tag_id))'));
-//     	    $countSelect->group('tagging.tag_id');
-//     	    Tinebase_Model_TagRight::applyAclSql($countSelect);
-//     	    $countData = $this->_db->fetchAssoc($countSelect);
-//     	    print_r($countData);
+    	    $tags = $this->_db->fetchAll($select);
+    	    $tagData = $this->_getDistinctTagsAndComputeOccurrence($tags);
+	    } else {
+	        $tagData = array();
 	    }
 	    
-	    
 	    return new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $tagData);
+	}
+	
+	/**
+	 * get distinct tags from result array and compute occurrence of tag in selection
+	 * 
+	 * @param array $_tags
+	 * @return array
+	 */
+	protected function _getDistinctTagsAndComputeOccurrence(array $_tags)
+	{
+	    $tagData = array();
+	    
+	    foreach ($_tags as $tag) {
+	        if (array_key_exists($tag['id'], $tagData)) {
+	            $tagData[$tag['id']]['selection_occurrence']++;
+	        } else {
+	            $tag['selection_occurrence'] = 1;
+	            $tagData[$tag['id']] = $tag;
+	        }
+	    }
+	    
+	    return $tagData;
 	}
 	
 	/**
