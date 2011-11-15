@@ -41,7 +41,6 @@ class Tinebase_Tags
 	 */
 	private static $_instance = NULL;
 
-
 	/**
 	 * the singleton pattern
 	 *
@@ -140,9 +139,9 @@ class Tinebase_Tags
 
 		if (!empty($_id)) {
 			$select = $this->_db->select()
-			->from(SQL_TABLE_PREFIX . 'tags')
-			->where($this->_db->quoteIdentifier('is_deleted') . ' = 0')
-			->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $_id));
+    			->from(SQL_TABLE_PREFIX . 'tags')
+    			->where($this->_db->quoteIdentifier('is_deleted') . ' = 0')
+    			->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $_id));
 			if ($_ignoreAcl !== true) {
 				Tinebase_Model_TagRight::applyAclSql($select, $_right);
 			}
@@ -329,14 +328,13 @@ class Tinebase_Tags
 	 */
 	public function deleteTags($_ids)
 	{
-		$currentAccountId = Tinebase_Core::getUser()->getId();
-		$manageSharedTagsRight = Tinebase_Acl_Roles::getInstance()
-		->hasRight('Admin', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
 		$tags = $this->getTagsById($_ids);
 		if (count($tags) != count((array)$_ids)) {
 			throw new Tinebase_Exception_AccessDenied('You are not allowed to delete the tag(s).');
 		}
 
+		$currentAccountId = Tinebase_Core::getUser()->getId();
+		$manageSharedTagsRight = Tinebase_Acl_Roles::getInstance()->hasRight('Admin', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
 		foreach ($tags as $tag) {
 			if ( ($tag->type == Tinebase_Model_Tag::TYPE_PERSONAL && $tag->owner == $currentAccountId) ||
 			($tag->type == Tinebase_Model_Tag::TYPE_SHARED && $manageSharedTagsRight) ) {
@@ -534,7 +532,6 @@ class Tinebase_Tags
 		}
 		$this->_addOccurrence($tagId, count($toAttachIds));
 	}
-
 
 	/**
 	 * detach tag from multiple records identified by a filter
@@ -820,7 +817,6 @@ class Tinebase_Tags
 	{
 		return 'Sql';
 	}
-
 
 	/**
 	 * get select for tags query
