@@ -298,30 +298,13 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $_record->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $_record->bypassFilters = true;
         
+        if ($_record->has('container_id')) {
+            Tinebase_Model_Container::resolveContainer($_record->container_id);
+        }
+        
         $recordArray = $_record->toArray();
 
-        if ($_record->has('container_id')) {
-            $recordArray['container_id'] = $this->_resolveContainer($_record);
-        }
-
         return $recordArray;
-    }
-    
-    /**
-     * resolve container
-     * 
-     * @param Tinebase_Record_Interface $_record
-     * @return array
-     */
-    protected function _resolveContainer($_record)
-    {
-        $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
-        
-        $result = $container->toArray();
-        $result['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $_record->container_id)->toArray();
-        $result['path'] = $container->getPath();
-        
-        return $result;
     }
 
     /**
