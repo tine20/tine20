@@ -346,8 +346,13 @@ class Tinebase_Translation
             foreach ($poFiles as $appName => $poPath) {
                 if ($_appName !='all' && $_appName != $appName) continue;
                 $poObject = self::po2jsObject($poPath);
-                $jsTranslations  .= "/********************** tine translations of $appName**********************/ \n";
-                $jsTranslations .= "Locale.Gettext.prototype._msgs['./LC_MESSAGES/$appName'] = new Locale.Gettext.PO($poObject); \n";
+                
+                //if (! json_decode($poObject)) {
+                //    $jsTranslations .= "console.err('tanslations for application $appName are broken');";
+                //} else {
+                    $jsTranslations  .= "/********************** tine translations of $appName**********************/ \n";
+                    $jsTranslations .= "Locale.Gettext.prototype._msgs['./LC_MESSAGES/$appName'] = new Locale.Gettext.PO($poObject); \n";
+                //}
             }
             
             if (isset($cache)) {
@@ -439,7 +444,7 @@ class Tinebase_Translation
         $plural = false;
         
         $po = preg_replace('/\r?\n/', "\n", $po);
-        $po = preg_replace('/#.*\n/', '', $po);
+        $po = preg_replace('/^#.*\n/m', '', $po);
         // 2008-08-25 \s -> \n as there are situations when whitespace like space breaks the thing!
         $po = preg_replace('/"(\n+)"/', '', $po);
         $po = preg_replace('/msgid "(.*?)"\nmsgid_plural "(.*?)"/', 'msgid "$1, $2"', $po);
