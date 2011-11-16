@@ -189,9 +189,10 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 }
                 break;
             case 'bymonth':
+            case 'bymonthday':
                 if (! empty($_value)) {
-                    $months = explode(',', $_value);
-                    $this->_properties['bymonth'] = $months[0];
+                    $values = explode(',', $_value);
+                    $this->_properties[$_name] = $values[0];
                 }
                 break;
             default:
