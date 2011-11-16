@@ -54,6 +54,16 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     const CONTENT_TYPE_MULTIPART = 'multipart/alternative';
     
     /**
+     * content type text/calendar
+     */
+    const CONTENT_TYPE_CALENDAR = 'text/calendar';
+    
+    /**
+     * content type text/vcard
+     */
+    const CONTENT_TYPE_VCARD = 'text/vcard';
+    
+    /**
      * attachment filename regexp 
      *
      */
@@ -378,7 +388,9 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_structure, TRUE));
         
         if ($_structure['subType'] == 'alternative') {
-            $alternativeType = $_preferedMimeType == Zend_Mime::TYPE_HTML ? Zend_Mime::TYPE_TEXT : Zend_Mime::TYPE_HTML;
+            $alternativeType = ($_preferedMimeType == Zend_Mime::TYPE_HTML) 
+                ? Zend_Mime::TYPE_TEXT 
+                : (($_preferedMimeType == Zend_Mime::TYPE_TEXT) ? Zend_Mime::TYPE_HTML : '');
             
             foreach ($_structure['parts'] as $part) {
                 $foundParts[$part['contentType']] = $part['partId'];
@@ -387,7 +399,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             if (array_key_exists($_preferedMimeType, $foundParts)) {
                 $result[$foundParts[$_preferedMimeType]] = $_structure['parts'][$foundParts[$_preferedMimeType]];
             } elseif (array_key_exists($alternativeType, $foundParts)) {
-                $result[$foundParts[$alternativeType]]   = $_structure['parts'][$foundParts[$alternativeType]];
+                $result[$foundParts[$alternativeType]] = $_structure['parts'][$foundParts[$alternativeType]];
             }
         } else {
             foreach ($_structure['parts'] as $part) {

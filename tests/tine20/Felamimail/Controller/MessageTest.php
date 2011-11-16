@@ -1079,11 +1079,11 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         //print_r($message->toArray());
         $this->assertEquals(1, count($message->preparedParts));
         // @todo check other properties of preparedParts[0]
-        $event = $message->preparedParts[0]['preparedData'];
-        $this->assertTrue($event instanceof Calendar_Model_Event);
+        $event = $message->preparedParts[0]['preparedData']['event'];
+        $this->assertTrue($event instanceof Calendar_Model_Event, 'is not event');
         $this->assertEquals('testevent', $event->summary);
         $this->assertEquals(2, count($event->attendee));
-        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $event->attendee[1]->user_id);
+        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $event->attendee[1]->user_id->getId());
     }
     
     /********************************* protected helper funcs *************************************/

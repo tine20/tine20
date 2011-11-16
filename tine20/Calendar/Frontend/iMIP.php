@@ -6,18 +6,31 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * 
+ * @todo		add interface or abstract for iMIP classes
  */
 
 /**
  * iMIP (RFC 6047) frontend for calendar
+ * 
  * @package     Calendar
  * @subpackage  Frontend
  */
 class Calendar_Frontend_iMIP
 {
+    /**
+     * user agent string
+     * 
+     * @var string
+     */
     protected $_userAgentString = NULL;
     
+    /**
+     * constructor
+     * 
+     * @param string $_userAgentString
+     */
     public function __construct($_userAgentString = NULL)
     {
         $this->_userAgentString = $_userAgentString;
@@ -26,12 +39,16 @@ class Calendar_Frontend_iMIP
     /**
      * prepares iMIP component for client
      * 
-     * @param  string $_method
      * @param  string $_icalString (UTF8)
+     * @param  array $_parameters
      * @return Calendar_Model_iMIP prepared data
      */
-    public function prepareComponent($_method, $_icalString)
+    public function prepareComponent($_icalString, $_parameters)
     {
+        if (! isset($_parameters['method'])) {
+            throw new Tinebase_Exception_InvalidArgument('method missing in params');
+        }
+        
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($this->_userAgentString);
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
 
@@ -39,15 +56,11 @@ class Calendar_Frontend_iMIP
         $event = $converter->toTine20Model($_icalString);
         
         Calendar_Model_Attender::resolveAttendee($event->attendee);
-        Tinebase_Model_Container::resolveContainer($event->container_id);
-        
-        if (isset($event->container_id) && $event->container_id) {
-            $event->container_id = $this->_resolveContainer($_record->invitation_event);
-        }
+        Tinebase_Model_Container::resolveContainer($event);
         
         return new Calendar_Model_iMIP(array(
             'event'     => $event,
-            'method'    => $_method,
+            'method'    => $_parameters['method'],
             'userAgent' => $this->_userAgentString
         ));
     }

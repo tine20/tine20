@@ -69,6 +69,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     const DEFAULT_FALLBACK_CHARSET = 'iso-8859-15';
     
     /**
+     * foreign application content types
+     * 
+     * @var array
+     */
+    protected $_supportedForeignContentTypes = array(
+        'Calendar'     => Felamimail_Model_Message::CONTENT_TYPE_CALENDAR,
+        'Addressbook'  => Felamimail_Model_Message::CONTENT_TYPE_VCARD,
+    );
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton
@@ -170,7 +180,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             Felamimail_Controller_Message_Flags::getInstance()->setSeenFlag($message);
         }
         
-        $this->_handleInvitation($message);
+        $this->_prepareParts($message);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
         
@@ -221,64 +231,73 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-    * handle invitation attachments and set invitation data / event
-    *
-    * @param Felamimail_Model_Message $_message
-    */
-    protected function _handleInvitation(Felamimail_Model_Message $_message)
+     * prepare message parts that could be interesting for other apps
+     * 
+     * @param Felamimail_Model_Message $_message
+     */
+    protected function _prepareParts(Felamimail_Model_Message $_message)
     {
-        if (! Tinebase_Application::getInstance()->isInstalled('Calendar') || ! Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Calendar not installed or access denied.');
-            return;
+        $preparedParts = new Tinebase_Record_RecordSet('Felamimail_Model_PreparedMessagePart');
+        
+        foreach ($this->_supportedForeignContentTypes as $application => $contentType) {
+            if (! Tinebase_Application::getInstance()->isInstalled($application) || ! Tinebase_Core::getUser()->hasRight($application, Tinebase_Acl_Rights::RUN)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' ' . $application . ' not installed or access denied.');
+                continue;
+            }
+            
+            $parts = $_message->getBodyParts(NULL, $contentType);
+            foreach ($parts as $partId => $partData) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                    . ' ' . $application . '/' . $contentType . ' content found.');
+                
+                $part = $this->getMessagePart($_message, $partId);
+                
+                $userAgent = (isset($_message->headers['user-agent'])) ? $_message->headers['user-agent'] : NULL;
+                $parameters = (isset($partData['parameters'])) ? $partData['parameters'] : array();
+                $preparedPart = $this->_handleForeignMessagePart($application, $part, $userAgent, $parameters);
+                if ($preparedPart) {
+                    $preparedParts->addRecord(new Felamimail_Model_PreparedMessagePart(array(
+                        'id'             => $partId,
+                        'messageId'		 => $_message->getId(),
+                        'contentType'	 => $contentType,
+                        'preparedData'   => $preparedPart,
+                    )));
+                }
+            }
         }
         
-        $this->_getInvitationEventFromAttachments($_message);
-        $this->_checkExistingInvitationEvent($_message);
+        $_message->preparedParts = $preparedParts;
     }
     
     /**
-     * get invitation event from attachment
-     * 
-     * @param Felamimail_Model_Message $_message
-     * 
-     * @todo use mimetype text/calendar part
-     * @todo allow multiple invitations
-     */
-    protected function _getInvitationEventFromAttachments(Felamimail_Model_Message $_message)
+    * handle foreign message parts
+    * 
+    * - calendar invitations
+    * - addressbook vcards
+    * - ...
+    *
+    * @param string $_application
+    * @param Zend_Mime_Part $_part
+    * @param string $_userAgent
+    * @param array $_parameters
+    * @return NULL|mixed prepared data
+    * 
+    * @todo use iMIP factory?
+    */
+    protected function _handleForeignMessagePart($_application, Zend_Mime_Part $_part, $_userAgent = NULL, $_parameters = array())
     {
-        $vcalendar = NULL;
-        foreach ($_message->attachments as $attachment) {
-            if ($this->_attachmentIsVcalendarInvitation($attachment)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' VCalendar invitation attachment found.');
-                
-                $part = Felamimail_Controller_Message::getInstance()->getMessagePart($_message, $attachment['partId']);
-                $vcalendar = $part->getDecodedContent();
-                
-                // use the first one
-                break;
-            }
+        $iMIPFrontendClass = $_application . '_Frontend_iMIP';
+        if (! class_exists($iMIPFrontendClass)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' iMIP class not found in application ' . $_application);
+            return NULL;
         }
         
-        /*
-        $o  new Calendar_Frontend_iMIP($_message->headers['user-agent']);
-        $o->prepareComponent(...) !! convert to UTF8
-         $_message->preparedParts = [
-            {partId: ..., messageId: ..., contentType: (only text/calendar)..., preparedData: ...}
-         ]
-         
-         */
+        $decodedContent = $_part->getDecodedContent();
+        $iMIPFrontend = new $iMIPFrontendClass($_userAgent);
+        $partData = $iMIPFrontend->prepareComponent($decodedContent, $_parameters);
         
-        if ($vcalendar) {
-            if (isset($_message->headers['user-agent'])) {
-                list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_userAgent);
-                $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
-            } else {
-                $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
-            }
-            
-            $event = $converter->toTine20Model($vcalendar);
-            $_message->invitation_event = $event;
-        }
+        return $partData;
     }
     
     /**
@@ -299,6 +318,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param Felamimail_Model_Message $_message
      * 
+     * @todo move to Calendar_Frontend_iMIP
      * @todo get more data from existing event?
      */
     protected function _checkExistingInvitationEvent(Felamimail_Model_Message $_message)
