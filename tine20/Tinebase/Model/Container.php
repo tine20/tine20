@@ -191,14 +191,8 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         return $this->path;
     }
     
-    public static function path2node($_path)
-    {
-        
-    }
-    
     /**
      * returns containerId if given path represents a (single) container
-     * 
      * 
      * @static
      * @param  String path
@@ -215,7 +209,9 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
 
     /**
      * resolves container_id property
-     * @param $_containerId
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @param string $_containerProperty
      */
     public static function resolveContainer($_record, $_containerProperty = 'container_id')
     {
