@@ -170,7 +170,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $from = new Tinebase_DateTime('2011-11-16 00:00:00');
         $until = new Tinebase_DateTime('2011-11-30 23:59:59');
-        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($event, $exceptions, $from, $until);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         
         $this->assertEquals(2, count($recurSet), 'recur set failed');
         $this->assertTrue(array_search('2011-11-23 10:30:00', $recurSet->dtstart) !== FALSE);
@@ -229,7 +229,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $from = new Tinebase_DateTime('2011-12-01 00:00:00');
         $until = new Tinebase_DateTime('2011-12-30 23:59:59');
-        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($event, $exceptions, $from, $until);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         
         $this->assertEquals(1, count($recurSet), 'recur set failed');
         $this->assertTrue(array_search('2011-12-16 10:30:00', $recurSet->dtstart) !== FALSE);
@@ -584,7 +584,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $from = new Tinebase_DateTime('2012-01-01 00:00:00');
         $until = new Tinebase_DateTime('2012-12-31 23:59:59');
-        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($event, $exceptions, $from, $until);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         
         $this->assertEquals(1, count($recurSet), 'recur set failed');
         $this->assertTrue(array_search('2012-06-16 09:30:00', $recurSet->dtstart) !== FALSE);
@@ -606,7 +606,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $from = new Tinebase_DateTime('2012-01-01 00:00:00');
         $until = new Tinebase_DateTime('2012-12-31 23:59:59');
-        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($event, $exceptions, $from, $until);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         
         $this->assertEquals(1, count($recurSet), 'recur set failed');
         $this->assertTrue(array_search('2012-11-16 10:30:00', $recurSet->dtstart) !== FALSE);
