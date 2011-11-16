@@ -84,8 +84,15 @@ Ext.namespace('Tine.Felamimail');
      */
     processInvitation: function(status) {
         Tine.log.debug('Setting event attender status: ' + status);
-
-        var invitationEvent = new Tine.Calendar.Model.Event(this.record.get('invitation_event')),
+        
+        var firstPreparedPart = this.record.get('preparedParts')[0];
+        if (firstPreparedPart.contentType !== 'text/calendar') {
+            return;
+        }
+        
+        var invitationEvent = Tine.Calendar.backend.recordReader({
+                responseText: Ext.util.JSON.encode(firstPreparedPart.preparedData.event)
+            }),
             myAttenderRecord = invitationEvent.getMyAttenderRecord();
         
         myAttenderRecord.set('status', status);
@@ -195,6 +202,7 @@ Ext.namespace('Tine.Felamimail');
     getMessageRecordPanel: function() {
         if (! this.messageRecordPanel) {
             this.messageRecordPanel = new Ext.Panel({
+                autoScroll: true,
                 flex: 1
             });
         }
@@ -275,8 +283,8 @@ Ext.namespace('Tine.Felamimail');
         this.currentId = record.id;
         this.getLoadMask().hide();
 
-        if (this.record.get('invitation_event')) {
-            Tine.log.debug('got invitation event');
+        if (this.record.get('preparedParts') && this.record.get('preparedParts').length > 0) {
+            Tine.log.debug('got preparedParts');
             this.handleInvitationMessage(record);
         } else {
             Tine.log.debug('no invitation event');
@@ -298,8 +306,15 @@ Ext.namespace('Tine.Felamimail');
      * TODO replace email body with event details panel?
      */
     handleInvitationMessage: function(record) {
+        var firstPreparedPart = this.record.get('preparedParts')[0];
+        if (firstPreparedPart.contentType !== 'text/calendar') {
+            return;
+        }
+        
+        console.log(firstPreparedPart);
+        
         var invitationEvent = Tine.Calendar.backend.recordReader({
-                responseText: Ext.util.JSON.encode(this.record.get('invitation_event'))
+                responseText: Ext.util.JSON.encode(firstPreparedPart.preparedData.event)
             }),
             myAttenderRecord = invitationEvent.getMyAttenderRecord(),
             status = myAttenderRecord.get('status');
