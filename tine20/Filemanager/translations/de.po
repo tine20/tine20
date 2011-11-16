@@ -6,10 +6,10 @@ msgstr ""
 "PO-Revision-Date: 2011-09-22 15:25+0100\n"
 "Last-Translator: Martin Jatho <m.jatho@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "X-Poedit-Language: German\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
@@ -18,254 +18,250 @@ msgstr ""
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: Filemanager\n"
 
-#: Filemanager/Controller.php:95
-#, php-format
-msgid "%s's personal files"
-msgstr "Persönliche Dateien von %s"
-
-#: Filemanager/Acl/Rights.php:97
+#: Acl/Rights.php:97
 msgid "manage shared folders"
 msgstr "Gemeinsame Ordner verwalten"
 
-#: Filemanager/Acl/Rights.php:98
+#: Acl/Rights.php:98
 msgid "Create new shared folders"
 msgstr "Neue gemeinsame Ordner anlegen und verwalten"
 
-#: Filemanager/Controller/Node.php:163
+#: Controller/Node.php:163
 msgid "My folders"
 msgstr "Meine Ordner"
 
-#: Filemanager/Controller/Node.php:170
+#: Controller/Node.php:170
 msgid "Shared folders"
 msgstr "Gemeinsame Ordner"
 
-#: Filemanager/Controller/Node.php:177
+#: Controller/Node.php:177
 msgid "Other users folders"
 msgstr "Ordner anderer Benutzer"
 
-#: Filemanager/js/GridContextMenu.js:36
-msgid "Please enter the new name of the {0}:"
-msgstr "Bitte den neuen Namen von {0} eingeben"
+#: Controller.php:95
+#, python-format
+msgid "%s's personal files"
+msgstr "Persönliche Dateien von %s"
 
-#: Filemanager/js/GridContextMenu.js:42
-msgid "Not renamed {0}"
-msgstr "Unbenannter {0}"
-
-#: Filemanager/js/GridContextMenu.js:42
-#: Filemanager/js/GridPanel.js:471
-msgid "You have to supply a {0} name!"
-msgstr "Sie müssen einen {0}-namen angeben!"
-
-#: Filemanager/js/GridContextMenu.js:146
-#: Filemanager/js/GridPanel.js:515
-msgid "Do you really want to delete the following files?"
-msgstr "Möchten Sie folgende Datei(en) löschen?"
-
-#: Filemanager/js/Model.js:37
-msgid "user file"
-msgstr "Datei"
-
-#: Filemanager/js/Model.js:38
-msgid "user files"
-msgstr "Dateien"
-
-#: Filemanager/js/Model.js:40
-#: Filemanager/js/Model.js:511
-#: Filemanager/js/GridPanel.js:464
-msgid "user file folder"
-msgstr "Ordner"
-
-#: Filemanager/js/Model.js:41
-msgid "user file folders"
-msgstr "Ordner"
-
-#: Filemanager/js/Model.js:251
-#: Filemanager/js/Model.js:267
-msgid "Copying data .. {0}"
-msgstr "Kopiere Daten .. {0}"
-
-#: Filemanager/js/Model.js:254
-#: Filemanager/js/Model.js:269
-msgid "Moving data .. {0}"
-msgstr "Verschiebe Daten .. {0}"
-
-#: Filemanager/js/Model.js:273
-msgid "Please wait"
-msgstr "Bitte warten"
-
-#: Filemanager/js/Model.js:507
-msgid "Quick search"
-msgstr "Schnellsuche"
-
-#: Filemanager/js/Model.js:508
-msgid "Type"
-msgstr "Typ"
-
-#: Filemanager/js/Model.js:509
-#: Filemanager/js/GridPanel.js:140
-msgid "Contenttype"
-msgstr "Typ"
-
-#: Filemanager/js/Model.js:510
-#: Filemanager/js/GridPanel.js:172
-msgid "Creation Time"
-msgstr "Erstellt am"
-
-#: Filemanager/js/PathFilterModel.js:59
-msgid "path"
-msgstr "Pfad"
-
-#: Filemanager/js/GridPanel.js:126
-msgid "Name"
-msgstr "Name"
-
-#: Filemanager/js/GridPanel.js:133
-msgid "Size"
-msgstr "Größe"
-
-#: Filemanager/js/GridPanel.js:148
-msgid "Folder"
-msgstr "Ordner"
-
-#: Filemanager/js/GridPanel.js:157
-msgid "Revision"
-msgstr "Version"
-
-#: Filemanager/js/GridPanel.js:180
-msgid "Created By"
-msgstr "Erstellt von"
-
-#: Filemanager/js/GridPanel.js:187
-msgid "Last Modified Time"
-msgstr "Zuletzt geändert"
-
-#: Filemanager/js/GridPanel.js:194
-msgid "Last Modified By"
-msgstr "Zuletzt geändert von"
-
-#: Filemanager/js/GridPanel.js:228
-msgid "Show closed"
-msgstr "Zeige archivierte"
-
-#: Filemanager/js/GridPanel.js:251
-msgid "Upload"
-msgstr "Hochladen"
-
-#: Filemanager/js/GridPanel.js:277
-msgid "Create Folder"
-msgstr "Ordner anlegen"
-
-#: Filemanager/js/GridPanel.js:288
-msgid "Folder Up"
-msgstr "Aufwärts"
-
-#: Filemanager/js/GridPanel.js:299
-msgid "Save locally"
-msgstr "Lokal speichern"
-
-#: Filemanager/js/GridPanel.js:310
-#: Filemanager/js/GridPanel.js:311
-#: Filemanager/js/GridPanel.js:313
-msgid "Delete"
-msgstr "Löschen"
-
-#: Filemanager/js/GridPanel.js:323
-#: Filemanager/js/GridPanel.js:324
-#: Filemanager/js/GridPanel.js:326
-msgid "Rename"
-msgstr "Umbenennen"
-
-#: Filemanager/js/GridPanel.js:334
-msgid "Pause upload"
-msgstr "Upload pausieren"
-
-#: Filemanager/js/GridPanel.js:341
-msgid "Resume upload"
-msgstr "Upload fortsetzen"
-
-#: Filemanager/js/GridPanel.js:466
-msgid "New {0}"
-msgstr "Neuer {0}"
-
-#: Filemanager/js/GridPanel.js:466
-msgid "Please enter the name of the new {0}:"
-msgstr "Bitte geben Sie den Namen des neuen {0} an:"
-
-#: Filemanager/js/GridPanel.js:471
-msgid "No {0} added"
-msgstr "Kein {0} hinzugefügt"
-
-#: Filemanager/js/GridPanel.js:615
-#: Filemanager/js/GridPanel.js:762
-#: Filemanager/js/TreePanel.js:650
-#: Filemanager/js/TreePanel.js:760
-msgid "Upload Failed"
-msgstr "Hochladen fehlgeschlagen"
-
-#: Filemanager/js/GridPanel.js:616
-#: Filemanager/js/TreePanel.js:651
-msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
-msgstr "Die Datei konnte nicht hochgeladen werden. Möglicherweise ist die Datei zu groß. Bitte benachrichtigen Sie Ihren Administrator. Maximale erlaubte Dateigröße:"
-
-#: Filemanager/js/GridPanel.js:763
-msgid "Dropping on this folder not allowed!"
-msgstr "Auf diesen Ordner darf nicht gedropt werden!"
-
-#: Filemanager/js/TreePanel.js:761
-msgid "Putting files in this folder is not allowed!"
-msgstr "In diesem Ordner dürfen keine Dateien abgelegt werden!"
-
-#: Filemanager/js/Filemanager.js:29
+#: js/Filemanager.js:29
 msgid "Filemanager"
 msgstr "Dateimanager"
 
-#: Filemanager/js/Filemanager.js:68
+#: js/Filemanager.js:68
 msgid "Files already exists"
 msgstr "Datei(en) schon vorhanden"
 
-#: Filemanager/js/Filemanager.js:68
+#: js/Filemanager.js:68
 #, fuzzy
 msgid "Do you want to replace the following file(s)?"
 msgstr "Möchten Sie die Datei(en) ersetzen?"
 
-#: Filemanager/js/Filemanager.js:93
+#: js/Filemanager.js:93
 msgid "Failure on create folder"
 msgstr "Fehler beim anlegen des Ordners"
 
-#: Filemanager/js/Filemanager.js:94
+#: js/Filemanager.js:94
 msgid "Item with this name already exists!"
 msgstr "Item(s) mit diesem Namen schon vorhanden!"
 
+#: js/GridContextMenu.js:36
+msgid "Please enter the new name of the {0}:"
+msgstr "Bitte den neuen Namen von {0} eingeben"
+
+#: js/GridContextMenu.js:42
+msgid "Not renamed {0}"
+msgstr "Unbenannter {0}"
+
+#: js/GridContextMenu.js:42 js/GridPanel.js:498
+msgid "You have to supply a {0} name!"
+msgstr "Sie müssen einen {0}-namen angeben!"
+
+#: js/GridContextMenu.js:146 js/GridPanel.js:542
+msgid "Do you really want to delete the following files?"
+msgstr "Möchten Sie folgende Datei(en) löschen?"
+
+#: js/GridPanel.js:132
+msgid "Name"
+msgstr "Name"
+
+#: js/GridPanel.js:139
+msgid "Size"
+msgstr "Größe"
+
+#: js/GridPanel.js:146 js/Model.js:509
+msgid "Contenttype"
+msgstr "Typ"
+
+#: js/GridPanel.js:154
+msgid "Folder"
+msgstr "Ordner"
+
+#: js/GridPanel.js:163
+msgid "Revision"
+msgstr "Version"
+
+#: js/GridPanel.js:178 js/Model.js:510
+msgid "Creation Time"
+msgstr "Erstellt am"
+
+#: js/GridPanel.js:186
+msgid "Created By"
+msgstr "Erstellt von"
+
+#: js/GridPanel.js:193
+msgid "Last Modified Time"
+msgstr "Zuletzt geändert"
+
+#: js/GridPanel.js:200
+msgid "Last Modified By"
+msgstr "Zuletzt geändert von"
+
+#: js/GridPanel.js:234
+msgid "Show closed"
+msgstr "Zeige archivierte"
+
+#: js/GridPanel.js:278
+msgid "Upload"
+msgstr "Hochladen"
+
+#: js/GridPanel.js:304
+msgid "Create Folder"
+msgstr "Ordner anlegen"
+
+#: js/GridPanel.js:315
+msgid "Folder Up"
+msgstr "Aufwärts"
+
+#: js/GridPanel.js:326
+msgid "Save locally"
+msgstr "Lokal speichern"
+
+#: js/GridPanel.js:337 js/GridPanel.js:338 js/GridPanel.js:340
+msgid "Delete"
+msgstr "Löschen"
+
+#: js/GridPanel.js:350 js/GridPanel.js:351 js/GridPanel.js:353
+msgid "Rename"
+msgstr "Umbenennen"
+
+#: js/GridPanel.js:361
+msgid "Pause upload"
+msgstr "Upload pausieren"
+
+#: js/GridPanel.js:368
+msgid "Resume upload"
+msgstr "Upload fortsetzen"
+
+#: js/GridPanel.js:491 js/Model.js:40
+msgid "user file folder"
+msgstr "Ordner"
+
+#: js/GridPanel.js:493
+msgid "New {0}"
+msgstr "Neuer {0}"
+
+#: js/GridPanel.js:493
+msgid "Please enter the name of the new {0}:"
+msgstr "Bitte geben Sie den Namen des neuen {0} an:"
+
+#: js/GridPanel.js:498
+msgid "No {0} added"
+msgstr "Kein {0} hinzugefügt"
+
+#: js/GridPanel.js:642 js/GridPanel.js:798 js/TreePanel.js:650
+#: js/TreePanel.js:760
+msgid "Upload Failed"
+msgstr "Hochladen fehlgeschlagen"
+
+#: js/GridPanel.js:643 js/TreePanel.js:651
+msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
+msgstr "Die Datei konnte nicht hochgeladen werden. Möglicherweise ist die Datei zu groß. Bitte benachrichtigen Sie Ihren Administrator. Maximale erlaubte Dateigröße:"
+
+#: js/GridPanel.js:799 js/TreePanel.js:761
+msgid "Putting files in this folder is not allowed!"
+msgstr "In diesem Ordner dürfen keine Dateien abgelegt werden!"
+
+#: js/Model.js:37
+msgid "user file"
+msgstr "Datei"
+
+#: js/Model.js:38
+msgid "user files"
+msgstr "Dateien"
+
+#: js/Model.js:41
+msgid "user file folders"
+msgstr "Ordner"
+
+#: js/Model.js:251 js/Model.js:267
+msgid "Copying data .. {0}"
+msgstr "Kopiere Daten .. {0}"
+
+#: js/Model.js:254 js/Model.js:269
+msgid "Moving data .. {0}"
+msgstr "Verschiebe Daten .. {0}"
+
+#: js/Model.js:273
+msgid "Please wait"
+msgstr "Bitte warten"
+
+#: js/Model.js:507
+msgid "Quick search"
+msgstr "Schnellsuche"
+
+#: js/Model.js:508
+msgid "Type"
+msgstr "Typ"
+
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "Pfad"
+
+#~ msgid "Dropping on this folder not allowed!"
+#~ msgstr "Auf diesen Ordner darf nicht gedropt werden!"
+
 #~ msgid "Updating {0} \"{1}\""
 #~ msgstr "Update {0} \"{1}\""
+
 #~ msgid "Creating {0}..."
 #~ msgstr "Erstelle {0}..."
+
 #~ msgid "Do you want to replace the files?"
 #~ msgstr "Möchten Sie die Datei(en) ersetzen?"
+
 #~ msgid "Confirm"
 #~ msgstr "Bestätigen"
+
 #~ msgid "Do you really want to delete \"{0}\"?"
 #~ msgstr "Möchten Sie \"{0}\" wirklich löschen? "
+
 #~ msgid "Deleting {0} \"{1}\""
 #~ msgstr "Lösche {0} \"{1}\""
+
 #~ msgid "Deleting {0} "
 #~ msgstr "Lösche {0}"
+
 #~ msgid "File allready exists"
 #~ msgstr "Es existiert bereits eine Datei mit diesem Namen"
+
 #~ msgid "Do you want to replace the file?"
 #~ msgstr "Möchten Sie die Datei ersetzen?"
+
 #~ msgid "Item with this name allready exists!"
 #~ msgstr "Es existiert bereits ein Eintrag mit diesem Namen!"
+
 #~ msgid "example record"
 #~ msgid_plural "example records"
 #~ msgstr[0] "Beispieleintrag"
 #~ msgstr[1] "Beispieleinträge"
+
 #~ msgid "example record list"
 #~ msgid_plural "example record lists"
 #~ msgstr[0] "Beispieleintragliste"
 #~ msgstr[1] "Beispieleintraglisten"
+
 #~ msgid "Description"
 #~ msgstr "Beschreibung"
+
 #~ msgid "progress"
 #~ msgstr "Fortschritt"
-

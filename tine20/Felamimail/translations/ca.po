@@ -29,7 +29,7 @@ msgstr "Afegeix comptes de correu electrònic"
 msgid "Create new email accounts"
 msgstr "Crea noves comptes de correu electrònic"
 
-#: Controller/Message/Flags.php:24 js/GridPanel.js:582
+#: Controller/Message/Flags.php:24 js/GridPanel.js:577
 msgid "Answered"
 msgstr "Contestat"
 
@@ -50,7 +50,7 @@ msgid "Flagged"
 msgstr ""
 
 #: Controller/Message/Send.php:236 js/GridDetailsPanel.js:135
-#: js/GridPanel.js:487 js/MessageEditDialog.js:859 js/Model.js:140
+#: js/GridPanel.js:482 js/MessageEditDialog.js:859 js/Model.js:140
 #: js/sieve/RuleConditionsPanel.js:72
 msgid "Subject"
 msgstr "Assumpte"
@@ -59,7 +59,7 @@ msgstr "Assumpte"
 msgid "Body"
 msgstr "Cos"
 
-#: Controller/Sieve.php:262
+#: Controller/Sieve.php:290
 msgid "Out of Office reply from %1$s"
 msgstr ""
 
@@ -302,7 +302,7 @@ msgstr ""
 msgid "Could not save script on Sieve server."
 msgstr ""
 
-#: js/FolderFilterModel.js:30 js/GridPanel.js:534 js/Model.js:52
+#: js/FolderFilterModel.js:30 js/GridPanel.js:529 js/Model.js:52
 #: js/Model.js:494 js/TreeContextMenu.js:45 js/TreeContextMenu.js:100
 #: js/TreeContextMenu.js:103 js/TreeContextMenu.js:106
 msgid "Folder"
@@ -346,7 +346,7 @@ msgstr "Data"
 msgid "Show or hide header information"
 msgstr "Mostra o amaga la informació de capçalera"
 
-#: js/GridDetailsPanel.js:232 js/GridPanel.js:473 js/MessageEditDialog.js:699
+#: js/GridDetailsPanel.js:232 js/GridPanel.js:468 js/MessageEditDialog.js:699
 msgid "Attachments"
 msgstr "Adjunts"
 
@@ -358,105 +358,105 @@ msgstr "No s'ha trobat cap missatge o bé la cau és buida."
 msgid "Quota usage"
 msgstr ""
 
-#: js/GridPanel.js:239
+#: js/GridPanel.js:241
 msgid "Compose"
 msgstr ""
 
-#: js/GridPanel.js:248 js/MessageDisplayDialog.js:47
+#: js/GridPanel.js:250 js/MessageDisplayDialog.js:47
 msgid "Reply"
 msgstr "Respon"
 
-#: js/GridPanel.js:257 js/MessageDisplayDialog.js:53
+#: js/GridPanel.js:259 js/MessageDisplayDialog.js:53
 msgid "Reply To All"
 msgstr "Respon a tots"
 
-#: js/GridPanel.js:266 js/MessageDisplayDialog.js:59
+#: js/GridPanel.js:268 js/MessageDisplayDialog.js:59
 msgid "Forward"
 msgstr "Reenvia"
 
-#: js/GridPanel.js:274
+#: js/GridPanel.js:276
 msgid "Toggle highlighting"
 msgstr ""
 
-#: js/GridPanel.js:283
+#: js/GridPanel.js:285
 msgid "Mark read/unread"
 msgstr "Marca com a llegit/no llegit"
 
-#: js/GridPanel.js:293 js/GridPanel.js:294 js/GridPanel.js:296
+#: js/GridPanel.js:295 js/GridPanel.js:296 js/GridPanel.js:298
 #: js/MessageDisplayDialog.js:40
 msgid "Delete"
 msgstr "Elimina"
 
-#: js/GridPanel.js:304
+#: js/GridPanel.js:306
 msgid "Add Account"
 msgstr "Afegeix un compte"
 
-#: js/GridPanel.js:312 js/GridPanel.js:1258 js/GridPanel.js:1274
+#: js/GridPanel.js:314 js/GridPanel.js:1257 js/GridPanel.js:1273
 #: js/MessageDisplayDialog.js:78
 msgid "Print Preview"
 msgstr "Previsualitza la impressió"
 
-#: js/GridPanel.js:320 js/MessageDisplayDialog.js:72
+#: js/GridPanel.js:322 js/MessageDisplayDialog.js:72
 msgid "Print Message"
 msgstr "Imprimeix el missatge"
 
-#: js/GridPanel.js:466
+#: js/GridPanel.js:461
 msgid "Id"
 msgstr "Identificador"
 
-#: js/GridPanel.js:480 js/Model.js:146
+#: js/GridPanel.js:475 js/Model.js:146
 msgid "Flags"
 msgstr ""
 
-#: js/GridPanel.js:493 js/Model.js:141 js/sieve/RuleConditionsPanel.js:69
+#: js/GridPanel.js:488 js/Model.js:141 js/sieve/RuleConditionsPanel.js:69
 msgid "From (Email)"
 msgstr ""
 
-#: js/GridPanel.js:499 js/Model.js:142
+#: js/GridPanel.js:494 js/Model.js:142
 msgid "From (Name)"
 msgstr ""
 
-#: js/GridPanel.js:505
+#: js/GridPanel.js:500
 msgid "Sender"
 msgstr ""
 
-#: js/GridPanel.js:512 js/Model.js:143
+#: js/GridPanel.js:507 js/Model.js:143
 msgid "To"
 msgstr "A"
 
-#: js/GridPanel.js:519 js/Model.js:488
+#: js/GridPanel.js:514 js/Model.js:488
 msgid "Sent"
 msgstr "Enviat"
 
-#: js/GridPanel.js:527 js/Model.js:149
+#: js/GridPanel.js:522 js/Model.js:149
 msgid "Received"
 msgstr "Rebut"
 
-#: js/GridPanel.js:542 js/sieve/RuleConditionsPanel.js:73
+#: js/GridPanel.js:537 js/sieve/RuleConditionsPanel.js:73
 msgid "Size"
 msgstr "Mida"
 
-#: js/GridPanel.js:585
+#: js/GridPanel.js:580
 msgid "Forwarded"
 msgstr "Reenviat"
 
-#: js/GridPanel.js:588
+#: js/GridPanel.js:583
 msgid "Recent"
 msgstr "Recent"
 
-#: js/GridPanel.js:1101 js/GridPanel.js:1133
+#: js/GridPanel.js:1096 js/GridPanel.js:1128
 msgid "Quota unknown"
 msgstr ""
 
-#: js/GridPanel.js:1116
+#: js/GridPanel.js:1111
 msgid "{0} %"
 msgstr ""
 
-#: js/GridPanel.js:1124
+#: js/GridPanel.js:1119
 msgid "Your quota"
 msgstr ""
 
-#: js/GridPanel.js:1125
+#: js/GridPanel.js:1120
 msgid "{0} available (total: {1})"
 msgstr ""
 
@@ -762,19 +762,19 @@ msgstr ""
 msgid "Action"
 msgstr ""
 
-#: js/sieve/RulesGridPanel.js:305
+#: js/sieve/RulesGridPanel.js:304
 msgid "is greater than"
 msgstr ""
 
-#: js/sieve/RulesGridPanel.js:305
+#: js/sieve/RulesGridPanel.js:304
 msgid "is less than"
 msgstr ""
 
-#: js/sieve/RulesGridPanel.js:316
+#: js/sieve/RulesGridPanel.js:315
 msgid "Header \"{0}\" contains \"{1}\""
 msgstr ""
 
-#: js/sieve/RulesGridPanel.js:316
+#: js/sieve/RulesGridPanel.js:315
 msgid "Header \"{0}\" matches \"{1}\""
 msgstr ""
 
@@ -870,28 +870,28 @@ msgstr ""
 msgid "Update Folder List"
 msgstr ""
 
-#: js/TreePanel.js:698
+#: js/TreePanel.js:701
 msgid "Total Messages:"
 msgstr ""
 
-#: js/TreePanel.js:702
+#: js/TreePanel.js:705
 msgid "Unread Messages:"
 msgstr ""
 
-#: js/TreePanel.js:706
+#: js/TreePanel.js:709
 msgid "Name on Server:"
 msgstr ""
 
-#: js/TreePanel.js:710
+#: js/TreePanel.js:713
 msgid "Last update:"
 msgstr ""
 
-#: js/TreePanel.js:730
+#: js/TreePanel.js:733
 #, python-format
 msgid "Fetching messages... ({0}% done)"
 msgstr ""
 
-#: js/TreePanel.js:746
+#: js/TreePanel.js:749
 msgid "{0} unread message"
 msgid_plural "{0} unread messages"
 msgstr[0] ""

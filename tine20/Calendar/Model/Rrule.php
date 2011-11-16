@@ -188,6 +188,13 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     }
                 }
                 break;
+            case 'bymonth':
+            case 'bymonthday':
+                if (! empty($_value)) {
+                    $values = explode(',', $_value);
+                    $this->_properties[$_name] = $values[0];
+                }
+                break;
             default:
                 parent::__set($_name, $_value);
                 break;
@@ -377,6 +384,11 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 break;
                 
             case self::FREQ_WEEKLY:
+                // default BYDAY clause
+                if (! $rrule->byday) {
+                    $rrule->byday = array_search($_event->dtstart->format('w'), self::$WEEKDAY_DIGIT_MAP);
+                }
+                
                 $dailyrrule = clone ($rrule);
                 $dailyrrule->freq = self::FREQ_DAILY;
                 $dailyrrule->interval = 7 * $rrule->interval;
@@ -384,7 +396,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 $eventLength = $_event->dtstart->diff($_event->dtend);
                 
                 foreach (explode(',', $rrule->byday) as $recurWeekDay) {
-                    // NOTE: in weecly computation, each wdays base event is a recur instance itself
+                    // NOTE: in weekly computation, each wdays base event is a recur instance itself
                     $baseEvent = clone $_event;
                     
                     // NOTE: skipping must be done in organizer_tz
@@ -407,13 +419,10 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 break;
                 
             case self::FREQ_MONTHLY:
-                if ($rrule->bymonthday) {
-                    self::_computeRecurMonthlyByMonthDay($_event, $rrule, $exceptionRecurIds, $_from, $_until, $recurSet);
-                } else if ($rrule->byday) {
+                if ($rrule->byday) {
                     self::_computeRecurMonthlyByDay($_event, $rrule, $exceptionRecurIds, $_from, $_until, $recurSet);
-                    
                 } else {
-                    throw new Exception('mal formated rrule');
+                    self::_computeRecurMonthlyByMonthDay($_event, $rrule, $exceptionRecurIds, $_from, $_until, $recurSet);
                 }
                 break;
                 
@@ -422,10 +431,32 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 $yearlyrrule->freq = self::FREQ_MONTHLY;
                 $yearlyrrule->interval = 12;
                 
+                $baseEvent = clone $_event;
+                
+                // @TODO respect BYMONTH
+                if ($rrule->bymonth && $rrule->bymonth != $baseEvent->dtstart->format('n')) {
+                    // adopt
+                    
+                    $diff = (12 + $rrule->bymonth - $baseEvent->dtstart->format('n')) % 12;
+                    
+                    // NOTE: skipping must be done in organizer_tz
+                    $baseEvent->dtstart->setTimezone($_event->originator_tz);
+                    $baseEvent->dtstart->addMonth($diff);
+                    $baseEvent->dtend->addMonth($diff);
+                    $baseEvent->dtstart->setTimezone('UTC');
+                    
+                    // check if base event (recur instance) needs to be added to the set
+                    if ($baseEvent->dtstart->isLater($_from) && $baseEvent->dtstart->isEarlier($_until)) {
+                        if (! in_array($baseEvent->setRecurId(), $exceptionRecurIds)) {
+                            $recurSet->addRecord($baseEvent);
+                        }
+                    }
+                }
+                
                 if ($rrule->byday) {
-                    self::_computeRecurMonthlyByDay($_event, $yearlyrrule, $exceptionRecurIds, $_from, $_until, $recurSet);
+                    self::_computeRecurMonthlyByDay($baseEvent, $yearlyrrule, $exceptionRecurIds, $_from, $_until, $recurSet);
                 } else {
-                    self::_computeRecurMonthlyByMonthDay($_event, $yearlyrrule, $exceptionRecurIds, $_from, $_until, $recurSet);
+                    self::_computeRecurMonthlyByMonthDay($baseEvent, $yearlyrrule, $exceptionRecurIds, $_from, $_until, $recurSet);
                 }
 
                 break;

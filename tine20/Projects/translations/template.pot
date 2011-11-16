@@ -64,12 +64,12 @@ msgstr ""
 msgid "Creator"
 msgstr ""
 
-#: js/ProjectAttendeeFilter.js:43
-msgid "Attendee Role"
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:83
+msgid "Attendee"
 msgstr ""
 
-#: js/ProjectEditDialog.js:83
-msgid "Attendee"
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
 msgstr ""
 
 #: js/ProjectEditDialog.js:84
@@ -140,18 +140,18 @@ msgstr ""
 msgid "All my open projects"
 msgstr ""
 
-#: Setup/Initialize.php:94
+#: Setup/Initialize.php:99
 msgid "My projects that I'm responsible for"
 msgstr ""
 
-#: Setup/Initialize.php:95
+#: Setup/Initialize.php:100
 msgid "All my open projects that I am responsible for"
 msgstr ""
 
-#: Setup/Initialize.php:110
+#: Setup/Initialize.php:120
 msgid "My waiting projects"
 msgstr ""
 
-#: Setup/Initialize.php:111
+#: Setup/Initialize.php:121
 msgid "My projects that are on hold"
 msgstr ""

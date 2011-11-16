@@ -80,10 +80,10 @@ msgstr "Default Task List"
 msgid "The default task list to create new tasks in."
 msgstr "The default task list to create new tasks in."
 
-#: Setup/setup.xml:473
+#: Setup/setup.xml:474
 msgid "Default Policy"
 msgstr "Default Policy"
 
-#: Setup/setup.xml:478
+#: Setup/setup.xml:479
 msgid "Default Policy installed during setup"
 msgstr "Default Policy installed during setup"

@@ -684,9 +684,8 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(
 
                 this.inputCheck = new Ext.form.Checkbox({
                            checked: (this.window.record) ? this.window.record.isShared() : false,
-                            fieldLabel : _('Share this Favorite'),
-                            labelStyle : 'float:right;margin-right:148px;margin-top:3px',
-                            labelSeparator: ''
+                           hideLabel: true,
+                           boxLabel: _('Share this Favorite')
                         });
 
                 var items = [{
