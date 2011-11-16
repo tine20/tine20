@@ -870,6 +870,7 @@ class Tinebase_Tags
 	 *
 	 * @param string|array $_recordId
 	 * @param string $_applicationId
+	 * @param mixed $_cols
 	 * @return Zend_Db_Select
 	 */
 	protected function _getSelect($_recordId, $_applicationId, $_cols = '*')
