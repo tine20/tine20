@@ -299,7 +299,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $_record->bypassFilters = true;
         
         if ($_record->has('container_id')) {
-            Tinebase_Model_Container::resolveContainer($_record->container_id);
+            Tinebase_Model_Container::resolveContainer($_record);
         }
         
         $recordArray = $_record->toArray();
