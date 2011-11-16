@@ -278,6 +278,8 @@ Ext.namespace('Tine.Felamimail');
      * 
      * @param {Tine.Felamimail.Model.Message} record
      * @param {String} body
+     * 
+     * TODO allow other prepared parts than email invitations
      */
     setTemplateContent: function(record, body) {
         this.currentId = record.id;
@@ -304,14 +306,13 @@ Ext.namespace('Tine.Felamimail');
      * @param {Tine.Felamimail.Model.Message} record
      * 
      * TODO replace email body with event details panel?
+     * TODO generalize this and delegate toolbar + panel rendering to calendar
      */
     handleInvitationMessage: function(record) {
         var firstPreparedPart = this.record.get('preparedParts')[0];
         if (firstPreparedPart.contentType !== 'text/calendar') {
             return;
         }
-        
-        console.log(firstPreparedPart);
         
         var invitationEvent = Tine.Calendar.backend.recordReader({
                 responseText: Ext.util.JSON.encode(firstPreparedPart.preparedData.event)
