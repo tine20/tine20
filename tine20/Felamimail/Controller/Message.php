@@ -259,6 +259,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
         }
         
+        /*
+        $o  new Calendar_Frontend_iMIP($_message->headers['user-agent']);
+        $o->prepareComponent(...) !! convert to UTF8
+         $_message->preparedParts = [
+            {partId: ..., messageId: ..., contentType: (only text/calendar)..., preparedData: ...}
+         ]
+         
+         */
+        
         if ($vcalendar) {
             if (isset($_message->headers['user-agent'])) {
                 list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_userAgent);
