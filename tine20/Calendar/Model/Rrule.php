@@ -377,6 +377,11 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 break;
                 
             case self::FREQ_WEEKLY:
+                // default BYDAY clause
+                if (! $rrule->byday) {
+                    $rrule->byday = array_search($_event->dtstart->format('w'), self::$WEEKDAY_DIGIT_MAP);
+                }
+                
                 $dailyrrule = clone ($rrule);
                 $dailyrrule->freq = self::FREQ_DAILY;
                 $dailyrrule->interval = 7 * $rrule->interval;
@@ -407,13 +412,15 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 break;
                 
             case self::FREQ_MONTHLY:
+                // apply default BY{MONTHDAY|DAY} clause
+                if (! $rrule->bymonthday && ! $rrule->byday) {
+                    $rrule->bymonthday = $_event->dtstart->format('j');
+                }
+                
                 if ($rrule->bymonthday) {
                     self::_computeRecurMonthlyByMonthDay($_event, $rrule, $exceptionRecurIds, $_from, $_until, $recurSet);
                 } else if ($rrule->byday) {
                     self::_computeRecurMonthlyByDay($_event, $rrule, $exceptionRecurIds, $_from, $_until, $recurSet);
-                    
-                } else {
-                    throw new Exception('mal formated rrule');
                 }
                 break;
                 
