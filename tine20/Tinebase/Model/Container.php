@@ -212,6 +212,23 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         
         return false;
     }
+
+    /**
+     * resolves container_id property
+     * @param $_containerId
+     */
+    public static function resolveContainer($_record, $_containerProperty = 'container_id')
+    {
+        $containerId = $_record->{$_containerProperty};
+        if ($containerId) {
+            $container = Tinebase_Container::getInstance()->getContainerById($containerId);
+            
+            $container->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $containerId)->toArray();
+            $container->path = $container->getPath();
+            
+            $_record->{$_containerProperty} = $container;
+        }
+    }
     
     /**
      * returns owner id if given path represents a personal _node_
