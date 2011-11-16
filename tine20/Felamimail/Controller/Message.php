@@ -248,8 +248,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             
             $parts = $_message->getBodyParts(NULL, $contentType);
             foreach ($parts as $partId => $partData) {
+                if ($partData['contentType'] !== $contentType) {
+                    continue;
+                }
+                
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                    . ' ' . $application . '/' . $contentType . ' content found.');
+                    . ' ' . $application . '[' . $contentType . '] content found.');
                 
                 $part = $this->getMessagePart($_message, $partId);
                 
