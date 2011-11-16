@@ -63,13 +63,13 @@ msgstr "Tervezett vég"
 msgid "End"
 msgstr "Vég"
 
-#: Controller/Lead.php:183 Export/Pdf.php:87 js/LeadGridPanel.js:121
-#: js/LeadGridPanel.js:171
+#: Controller/Lead.php:183 Export/Pdf.php:87 js/LeadGridPanel.js:148
+#: js/Model.js:107
 msgid "Turnover"
 msgstr "Bevétel"
 
 #: Controller/Lead.php:184 Export/Pdf.php:90 js/LeadEditDialog.js:222
-#: js/LeadGridPanel.js:120 js/LeadGridPanel.js:170
+#: js/LeadGridPanel.js:147 js/Model.js:106
 msgid "Probability"
 msgstr "Esély"
 
@@ -107,13 +107,13 @@ msgstr "%s személyes ügyletei"
 
 #: Controller.php:152 js/Contact.js:167 js/Contact.js:354 js/Contact.js:394
 #: js/LeadGridDetailsPanel.js:45 js/LeadGridDetailsPanel.js:512
-#: js/LeadGridPanel.js:168
+#: js/LeadGridPanel.js:145
 msgid "Customer"
 msgstr "Vásárló"
 
 #: Controller.php:153 js/Contact.js:187 js/Contact.js:355 js/Contact.js:398
 #: js/LeadGridDetailsPanel.js:45 js/LeadGridDetailsPanel.js:495
-#: js/LeadGridPanel.js:167
+#: js/LeadGridPanel.js:144
 msgid "Partner"
 msgstr "Partner"
 
@@ -149,11 +149,11 @@ msgstr "elveszítve"
 msgid "Market"
 msgstr "Piac"
 
-#: Controller.php:166 Export/Pdf.php:214
+#: Controller.php:166 Export/Pdf.php:219
 msgid "Email"
 msgstr "Email"
 
-#: Controller.php:167 Export/Pdf.php:213
+#: Controller.php:167 Export/Pdf.php:218
 msgid "Telephone"
 msgstr "Telefon"
 
@@ -166,7 +166,7 @@ msgid "Lead Data"
 msgstr "Ügylet adatok"
 
 #: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadEditDialog.js:337
-#: js/LeadGridPanel.js:169 js/LeadStateFilterModel.js:32
+#: js/LeadGridPanel.js:146 js/LeadStateFilterModel.js:32
 msgid "Leadstate"
 msgstr "Ügylet állapot"
 
@@ -184,43 +184,43 @@ msgstr "Ügylet forrás"
 msgid "End Scheduled"
 msgstr "Tervezett vég"
 
-#: Export/Pdf.php:179
+#: Export/Pdf.php:184
 msgid "Contacts"
 msgstr "Kapcsolatok"
 
-#: Export/Pdf.php:206 js/Contact.js:237
+#: Export/Pdf.php:211 js/Contact.js:237
 msgid "Address"
 msgstr "Cím"
 
-#: Export/Pdf.php:227 js/LeadEditDialog.js:245 js/Task.js:85
+#: Export/Pdf.php:232 js/LeadEditDialog.js:245 js/Task.js:85
 msgid "Tasks"
 msgstr "Feladatok"
 
-#: Export/Pdf.php:247 js/Task.js:178
+#: Export/Pdf.php:252 js/Task.js:178
 msgid "Due Date"
 msgstr "Lejárati idő"
 
-#: Export/Pdf.php:254 js/Task.js:191
+#: Export/Pdf.php:259 js/Task.js:191
 msgid "Priority"
 msgstr "Prioritás"
 
-#: Export/Pdf.php:269 js/LeadEditDialog.js:256 js/Product.js:85
+#: Export/Pdf.php:274 js/LeadEditDialog.js:256 js/Product.js:85
 msgid "Products"
 msgstr "Termékek"
 
-#: Export/Pdf.php:310
+#: Export/Pdf.php:315
 msgid "low"
 msgstr "alacsony"
 
-#: Export/Pdf.php:311
+#: Export/Pdf.php:316
 msgid "normal"
 msgstr "normál"
 
-#: Export/Pdf.php:312
+#: Export/Pdf.php:317
 msgid "high"
 msgstr "magas"
 
-#: Export/Pdf.php:313
+#: Export/Pdf.php:318
 msgid "urgent"
 msgstr "sürgős"
 
@@ -319,11 +319,11 @@ msgstr "Leírás"
 msgid "Enter description"
 msgstr "Leírás megadása"
 
-#: js/LeadGridContactFilter.js:44
+#: js/LeadGridContactFilter.js:47
 msgid "Contact"
 msgstr "Kapcsolat"
 
-#: js/LeadGridContactFilter.js:52
+#: js/LeadGridContactFilter.js:54
 msgid "CRM Role"
 msgstr "CRM szerep"
 
@@ -347,59 +347,39 @@ msgstr "Web"
 msgid "Status"
 msgstr "Állapot"
 
-#: js/LeadGridPanel.js:116
-msgid "Quick search"
-msgstr "Gyors keresés"
-
-#: js/LeadGridPanel.js:118 js/LeadGridPanel.js:166
-msgid "Lead name"
-msgstr "Ügylet név"
-
-#: js/LeadGridPanel.js:123
-msgid "Last modified"
-msgstr "Utoljára módosított"
-
-#: js/LeadGridPanel.js:124
-msgid "Last modifier"
-msgstr "Utolsó módosító"
-
-#: js/LeadGridPanel.js:125
-msgid "Creation Time"
-msgstr "Készítés ideje"
-
-#: js/LeadGridPanel.js:126
-msgid "Creator"
-msgstr "Készítő"
-
-#: js/LeadGridPanel.js:164
+#: js/LeadGridPanel.js:141
 msgid "Lead id"
 msgstr "Ügylet azonosító"
 
-#: js/LeadGridPanel.js:165
+#: js/LeadGridPanel.js:142
 msgid "Tags"
 msgstr "Címkék"
 
-#: js/LeadGridPanel.js:172
+#: js/LeadGridPanel.js:143 js/Model.js:104
+msgid "Lead name"
+msgstr "Ügylet név"
+
+#: js/LeadGridPanel.js:149
 msgid "Probable Turnover"
 msgstr "Lehetséges bevétel"
 
-#: js/LeadGridPanel.js:202
+#: js/LeadGridPanel.js:179
 msgid "Export Lead"
 msgstr "Ügylet exportálása"
 
-#: js/LeadGridPanel.js:211
+#: js/LeadGridPanel.js:188
 msgid "Export as PDF"
 msgstr "Exportálás PDF-be"
 
-#: js/LeadGridPanel.js:218
+#: js/LeadGridPanel.js:195
 msgid "Export as CSV"
 msgstr "Exportálás CSV-be"
 
-#: js/LeadGridPanel.js:225
+#: js/LeadGridPanel.js:202
 msgid "Export as ODS"
 msgstr "Exportálás ODS-be"
 
-#: js/LeadGridPanel.js:232
+#: js/LeadGridPanel.js:209
 msgid "Export as XLS"
 msgstr "Exportálás XLS-be"
 
@@ -437,23 +417,23 @@ msgstr[1] "Ügylet típusok"
 msgid "Add a Leadtype..."
 msgstr "Ügylet típus hozzáadása..."
 
-#: js/LinkGridPanel.js:36 js/LinkGridPanel.js:37
+#: js/LinkGridPanel.js:34
 msgid "Add new {0}"
 msgstr "Új {0} hozzáadása"
 
-#: js/LinkGridPanel.js:55 js/Product.js:185
+#: js/LinkGridPanel.js:56 js/Product.js:185
 msgid "Unlink {0}"
 msgstr "{0} törlése"
 
-#: js/LinkGridPanel.js:56 js/Product.js:186
+#: js/LinkGridPanel.js:57 js/Product.js:186
 msgid "Unlink selected {0}"
 msgstr "Kiválasztott {0} törlése"
 
-#: js/LinkGridPanel.js:71
+#: js/LinkGridPanel.js:72
 msgid "Edit {0}"
 msgstr "{0} szerkesztése"
 
-#: js/LinkGridPanel.js:72
+#: js/LinkGridPanel.js:73
 msgid "Edit selected {0}"
 msgstr "Kiválasztott {0} szerkesztése"
 
@@ -467,13 +447,33 @@ msgstr[1] "ügylet listák"
 msgid "lead lists"
 msgstr "ügylet listák"
 
-#: js/Model.js:115
+#: js/Model.js:102
+msgid "Quick search"
+msgstr "Gyors keresés"
+
+#: js/Model.js:109
+msgid "Last modified"
+msgstr "Utoljára módosított"
+
+#: js/Model.js:110
+msgid "Last modifier"
+msgstr "Utolsó módosító"
+
+#: js/Model.js:111
+msgid "Creation Time"
+msgstr "Készítés ideje"
+
+#: js/Model.js:112
+msgid "Creator"
+msgstr "Készítő"
+
+#: js/Model.js:151
 msgid "Settings"
 msgid_plural "Settings"
 msgstr[0] "Beállítások"
 msgstr[1] "Beállítások"
 
-#: js/Model.js:119
+#: js/Model.js:155
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "adat lista"

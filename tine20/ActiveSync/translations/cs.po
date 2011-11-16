@@ -80,10 +80,10 @@ msgstr ""
 msgid "The default task list to create new tasks in."
 msgstr ""
 
-#: Setup/setup.xml:473
+#: Setup/setup.xml:474
 msgid "Default Policy"
 msgstr "Výchozí politika"
 
-#: Setup/setup.xml:478
+#: Setup/setup.xml:479
 msgid "Default Policy installed during setup"
 msgstr "Výchozí politika nastavená během instalace"

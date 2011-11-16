@@ -34,13 +34,11 @@ msgstr "Test przykładowej aplikacji"
 msgid "ExampleRecord"
 msgstr "Przykładowy wiersz"
 
-#: js/ExampleRecordEditDialog.js:104
-#: js/ExampleRecordGridPanel.js:83
+#: js/ExampleRecordEditDialog.js:104 js/ExampleRecordGridPanel.js:83
 msgid "Name"
 msgstr "Nazwa"
 
-#: js/ExampleRecordEditDialog.js:110
-#: js/ExampleRecordGridPanel.js:89
+#: js/ExampleRecordEditDialog.js:110 js/ExampleRecordGridPanel.js:89
 #: js/Model.js:71
 msgid "Status"
 msgstr "Status"
@@ -72,7 +70,6 @@ msgstr[1] "listy przykładowych wierszy"
 msgstr[2] "listy przykładowych wierszy"
 
 #: js/Model.js:69
-#: js/Model.js:106
 msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
 
@@ -121,7 +118,6 @@ msgstr "Przykładowa aplikacja"
 #~ msgstr "Opis"
 
 #~ msgid "record list"
-
 #~ msgid_plural "record lists"
 #~ msgstr[0] "lista aplikacji"
 #~ msgstr[1] "listy aplikacji"

@@ -32,11 +32,11 @@ msgstr "gérer les favoris des tâches partagées"
 msgid "Create or update shared tasks favorites"
 msgstr "Créer ou mettre a jour les favoris des tâches partagées"
 
-#: Config.php:29
+#: Config.php:31
 msgid "Tasks Status Available"
 msgstr ""
 
-#: Config.php:31
+#: Config.php:33
 msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
 msgstr ""
 
@@ -96,7 +96,7 @@ msgid "Creation Time"
 msgstr "Date de création"
 
 #: js/GridPanel.js:178 js/TaskEditDialog.js:214 Setup/Initialize.php:34
-#: Setup/Update/Release5.php:65
+#: Setup/Update/Release5.php:67
 msgid "Completed"
 msgstr "Terminé"
 
@@ -212,15 +212,15 @@ msgstr "Liste par défaut des Tâches"
 msgid "The default task list to create new tasks in."
 msgstr "La liste de tâches par défaut où créer les nouvelles tâches"
 
-#: Setup/Initialize.php:33 Setup/Update/Release5.php:64
+#: Setup/Initialize.php:33 Setup/Update/Release5.php:66
 msgid "No response"
 msgstr ""
 
-#: Setup/Initialize.php:35 Setup/Update/Release5.php:66
+#: Setup/Initialize.php:35 Setup/Update/Release5.php:68
 msgid "Cancelled"
 msgstr ""
 
-#: Setup/Initialize.php:36 Setup/Update/Release5.php:67
+#: Setup/Initialize.php:36 Setup/Update/Release5.php:69
 msgid "In process"
 msgstr ""
 

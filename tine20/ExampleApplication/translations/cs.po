@@ -69,7 +69,7 @@ msgstr[0] "seznam ukázkových záznamů"
 msgstr[1] "seznamy ukázkových záznamů"
 msgstr[2] "seznamů ukázkových záznamů"
 
-#: js/Model.js:69 js/Model.js:106
+#: js/Model.js:69
 msgid "Quick search"
 msgstr "Rychlé hledání"
 
