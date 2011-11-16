@@ -58,6 +58,7 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_ControllerTest');
         $suite->addTestSuite('Tinebase_NotificationTest');
         $suite->addTestSuite('Tinebase_Model_Filter_TextTest');
+        $suite->addTestSuite('Tinebase_TagsTest');
         
         $suite->addTest(Tinebase_User_AllTests::suite());
         $suite->addTest(Tinebase_Group_AllTests::suite());

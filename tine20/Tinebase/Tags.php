@@ -41,7 +41,6 @@ class Tinebase_Tags
 	 */
 	private static $_instance = NULL;
 
-
 	/**
 	 * the singleton pattern
 	 *
@@ -83,6 +82,53 @@ class Tinebase_Tags
 		return new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $this->_db->fetchAssoc($select));
 	}
 
+	/**
+	* Searches tags according to foreign filter
+	* -> returns the count of tag occurrences in the result set
+	*
+	* @param  Tinebase_Model_Filter_FilterGroup $_filter
+	* @return Tinebase_Record_RecordSet  Set of Tinebase_Model_Tag
+	*/
+	public function searchTagsByForeignFilter($_filter)
+	{
+	    $controller = Tinebase_Core::getApplicationInstance($_filter->getApplicationName(), $_filter->getModelName());
+	    $recordIds = $controller->search($_filter, NULL, FALSE, TRUE);
+	    
+	    if (! empty($recordIds)) { 
+    	    $app = Tinebase_Application::getInstance()->getApplicationByName($_filter->getApplicationName());
+    	    $select = $this->_getSelect($recordIds, $app->getId());
+    	    Tinebase_Model_TagRight::applyAclSql($select);
+    	    $tags = $this->_db->fetchAll($select);
+    	    $tagData = $this->_getDistinctTagsAndComputeOccurrence($tags);
+	    } else {
+	        $tagData = array();
+	    }
+	    
+	    return new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $tagData);
+	}
+	
+	/**
+	 * get distinct tags from result array and compute occurrence of tag in selection
+	 * 
+	 * @param array $_tags
+	 * @return array
+	 */
+	protected function _getDistinctTagsAndComputeOccurrence(array $_tags)
+	{
+	    $tagData = array();
+	    
+	    foreach ($_tags as $tag) {
+	        if (array_key_exists($tag['id'], $tagData)) {
+	            $tagData[$tag['id']]['selection_occurrence']++;
+	        } else {
+	            $tag['selection_occurrence'] = 1;
+	            $tagData[$tag['id']] = $tag;
+	        }
+	    }
+	    
+	    return $tagData;
+	}
+	
 	/**
 	 * Returns tags count of a tag search
 	 * @todo automate the count query if paging is active!
@@ -140,9 +186,9 @@ class Tinebase_Tags
 
 		if (!empty($_id)) {
 			$select = $this->_db->select()
-			->from(SQL_TABLE_PREFIX . 'tags')
-			->where($this->_db->quoteIdentifier('is_deleted') . ' = 0')
-			->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $_id));
+    			->from(SQL_TABLE_PREFIX . 'tags')
+    			->where($this->_db->quoteIdentifier('is_deleted') . ' = 0')
+    			->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $_id));
 			if ($_ignoreAcl !== true) {
 				Tinebase_Model_TagRight::applyAclSql($select, $_right);
 			}
@@ -329,14 +375,13 @@ class Tinebase_Tags
 	 */
 	public function deleteTags($_ids)
 	{
-		$currentAccountId = Tinebase_Core::getUser()->getId();
-		$manageSharedTagsRight = Tinebase_Acl_Roles::getInstance()
-		->hasRight('Admin', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
 		$tags = $this->getTagsById($_ids);
 		if (count($tags) != count((array)$_ids)) {
 			throw new Tinebase_Exception_AccessDenied('You are not allowed to delete the tag(s).');
 		}
 
+		$currentAccountId = Tinebase_Core::getUser()->getId();
+		$manageSharedTagsRight = Tinebase_Acl_Roles::getInstance()->hasRight('Admin', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
 		foreach ($tags as $tag) {
 			if ( ($tag->type == Tinebase_Model_Tag::TYPE_PERSONAL && $tag->owner == $currentAccountId) ||
 			($tag->type == Tinebase_Model_Tag::TYPE_SHARED && $manageSharedTagsRight) ) {
@@ -534,7 +579,6 @@ class Tinebase_Tags
 		}
 		$this->_addOccurrence($tagId, count($toAttachIds));
 	}
-
 
 	/**
 	 * detach tag from multiple records identified by a filter
@@ -821,22 +865,22 @@ class Tinebase_Tags
 		return 'Sql';
 	}
 
-
 	/**
 	 * get select for tags query
 	 *
 	 * @param string|array $_recordId
 	 * @param string $_applicationId
+	 * @param mixed $_cols
 	 * @return Zend_Db_Select
 	 */
-	protected function _getSelect($_recordId, $_applicationId)
+	protected function _getSelect($_recordId, $_applicationId, $_cols = '*')
 	{
 		$select = $this->_db->select()
-		->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'))
-		->join(array('tags'    => SQL_TABLE_PREFIX . 'tags'), 'tagging.tag_id = tags.id')
-		->where($this->_db->quoteIdentifier('application_id') . ' = ?', $_applicationId)
-		->where($this->_db->quoteIdentifier('record_id') . ' IN (?) ', (array) $_recordId)
-		->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
+    		->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), $_cols)
+    		->join(array('tags'    => SQL_TABLE_PREFIX . 'tags'), 'tagging.tag_id = tags.id')
+    		->where($this->_db->quoteIdentifier('application_id') . ' = ?', $_applicationId)
+    		->where($this->_db->quoteIdentifier('record_id') . ' IN (?) ', (array) $_recordId)
+    		->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
 
 		return $select;
 	}

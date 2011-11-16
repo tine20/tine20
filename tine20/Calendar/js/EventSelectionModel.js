@@ -51,6 +51,10 @@ Tine.Calendar.EventSelectionModel = Ext.extend(Ext.tree.MultiSelectionModel, {
         return this.getSelectedNodes();
     },
     
+//    getSelections: function() {
+//        return this.getSelectedEvents();
+//    },
+    
     /**
      * Select an event.
      * 

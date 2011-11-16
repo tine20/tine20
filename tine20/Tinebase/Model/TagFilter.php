@@ -9,12 +9,12 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        add role members and rights
- * @todo        extend Tinebase_Model_Filter_FilterGroup
+ * @todo        extend Tinebase_Model_Filter_FilterGroup (Tinebase_Tags needs to be refactored, too)
  */
 
-
 /**
- * Task Filter Class
+ * Tags Filter Class
+ * 
  * @package    Tinebase
  * @subpackage Tags
  */
@@ -95,8 +95,33 @@ class Tinebase_Model_TagFilter extends Tinebase_Record_Abstract
         return $select;
     }
     
-    //protected $_datetimeFields = array(
-    //);
+    // @todo use this when filter extends Tinebase_Model_Filter_FilterGroup
+//     /**
+//     * @var string class name of this filter group
+//     *      this is needed to overcome the static late binding
+//     *      limitation in php < 5.3
+//     */
+//     protected $_className = 'Tinebase_Model_TagFilter';
     
-
+//     /**
+//      * @var string application of this filter group
+//      */
+//     protected $_applicationName = 'Tinebase';
+    
+//     /**
+//      * @var string name of model this filter group is designed for
+//      */
+//     protected $_modelName = 'Tinebase_Model_Tag';
+    
+//     /**
+//      * @var array filter model fieldName => definition
+//      */
+//     protected $_filterModel = array(
+//             'id'                   => array('filter' => 'Tinebase_Model_Filter_Id'),
+//             'application'          => array('filter' => 'Tinebase_Model_Filter_Id'),
+//             'owner'                => array('filter' => 'Tinebase_Model_Filter_User'),
+//             'type'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
+//             'description'          => array('filter' => 'Tinebase_Model_Filter_Text'),
+//             'grant'                => array('filter' => 'Tinebase_Model_Filter_Text'),
+//     );
 }

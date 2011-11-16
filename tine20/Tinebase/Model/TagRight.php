@@ -82,7 +82,7 @@ class Tinebase_Model_TagRight extends Tinebase_Record_Abstract
      * @param  string         $_idProperty property of tag id in select statement
      * @return void
      */
-    public static function applyAclSql($_select, $_right, $_idProperty='id')
+    public static function applyAclSql($_select, $_right = self::VIEW_RIGHT, $_idProperty = 'id')
     {
         $db = Tinebase_Core::getDb();
         $currentAccountId = Tinebase_Core::getUser()->getId();
