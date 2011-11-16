@@ -12,15 +12,37 @@ Ext.ns('Tine.Calendar');
  * @namespace   Tine.Calendar
  * @class       Tine.Calendar.GridView
  * @extends     Ext.grid.GridPanel
+ * 
  * Calendar grid view representing
+ * 
+ * @TODO generalize renderers and role out to displaypanel/printing etc.
+ * @TODO add organiser and own status
+ * @TODO add generic grid stuff like d&d rows plugin etc.
+ * @TODO make sorting working
+ * 
+ * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @constructor
  * @param {Object} config
  */
 Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
+    /**
+     * record class
+     * @cfg {Tine.Addressbook.Model.Contact} recordClass
+     */
+    recordClass: Tine.Calendar.Model.Event,
+    /**
+     * @cfg {Ext.data.DataProxy} recordProxy
+     */
+    recordProxy: Tine.Calendar.backend,
+    /**
+     * grid specific
+     * @private
+     */ 
+    defaultSortInfo: {field: 'dtstart', direction: 'ASC'},
+    
     layout: 'fit',
     border: false,
-    
     
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
@@ -52,26 +74,66 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
                 resizable: true
             },
             columns: [{
-                id: 'summary',
-                header: this.app.i18n._("Summary"),
-                width: 350,
-                sortable: true,
-                dataIndex: 'summary'
-            } ,{
-                id: 'dtstart',
-                header: this.app.i18n._("Start Time"),
+                id: 'container_id',
+                header: this.recordClass.getContainerName(),
                 width: 150,
-                sortable: true,
+                dataIndex: 'dtstart',
+                renderer: function(value, metaData, record) {
+                    var displayContainer = record.getDisplayContainer();
+                    return Tine.Tinebase.common.containerRenderer(displayContainer);
+                }
+            }, {
+                id: 'class',
+                header: this.app.i18n._("Private"),
+                width: 50,
+                dataIndex: 'class',
+                renderer: function(transp) {
+                    return Tine.Tinebase.common.booleanRenderer(transp == 'PRIVATE');
+                }
+            }, {
+                id: 'date',
+                header: this.app.i18n._("Start Time"),
+                width: 120,
                 dataIndex: 'dtstart',
                 renderer: Tine.Tinebase.common.dateTimeRenderer
-            },{
+            }, {
+                id: 'date',
+                header: this.app.i18n._("End Time"),
+                width: 120,
+                dataIndex: 'dtend',
+                renderer: Tine.Tinebase.common.dateTimeRenderer
+            }, {
+                id: 'is_all_day_event',
+                header: this.app.i18n._("whole day"),
+                width: 50,
+                dataIndex: 'is_all_day_event',
+                renderer: Tine.Tinebase.common.booleanRenderer
+            }, {
+                id: 'transp',
+                header: this.app.i18n._("blocking"),
+                width: 50,
+                dataIndex: 'transp',
+                renderer: function(transp) {
+                    return Tine.Tinebase.common.booleanRenderer(transp == 'OPAQUE');
+                }
+            }, {
+                id: 'summary',
+                header: this.app.i18n._("Summary"),
+                width: 200,
+                dataIndex: 'summary'
+            }, {
+                id: 'location',
+                header: this.app.i18n._("Location"),
+                width: 200,
+                dataIndex: 'location'
+            }/*, {
                 id: 'attendee_status',
                 header: this.app.i18n._("Status"),
                 width: 100,
                 sortable: true,
                 dataIndex: 'attendee',
 //                renderer: this.attendeeStatusRenderer.createDelegate(this)
-            }]
+            }*/]
         });
     },
     
@@ -104,6 +166,8 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
     
     initVIEW: function() {
         return new Ext.grid.GridView(Ext.apply({}, this.viewConfig, {
+            forceFit: true,
+            
             getPeriod: function() {
                 return this.grid.getTopToolbar().periodPicker.getPeriod();
             },

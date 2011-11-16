@@ -72,7 +72,7 @@ Tine.Tinebase.common = {
 		}
 		
 		if (! popup) {
-			openCode = "window.open('http://127.0.0.1/tine20/tine20/" + url + "','" + windowName + "','width=" + width + ",height=" + height + ",top=" + topPos + ",left=" + leftPos +
+			var openCode = "window.open('http://127.0.0.1/tine20/tine20/" + url + "','" + windowName + "','width=" + width + ",height=" + height + ",top=" + topPos + ",left=" + leftPos +
 			",directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no')";
 		
 			var exception = {
