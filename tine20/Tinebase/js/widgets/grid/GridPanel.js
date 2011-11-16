@@ -230,6 +230,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     disableSelectAllPages: false,
     
+    /**
+     * enable if records should be multiple editable
+     * @cfg {Bool} multipleEdit
+     */
+    multipleEdit: false,
+    
     layout: 'border',
     border: false,
     stateful: true,
@@ -343,12 +349,16 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     initActions: function() {
         this.action_editInNewWindow = new Ext.Action({
             requiredGrant: 'readGrant',
-            text: this.i18nEditActionText ? this.app.i18n._hidden(this.i18nEditActionText) : String.format(_('Edit {0}'), this.i18nRecordName),
+            text: this.i18nEditActionText ? this.i18nEditActionText[0] : String.format(_('Edit {0}'), this.i18nRecordName),
+            singularText: this.i18nEditActionText ? this.i18nEditActionText[0] : String.format(_('Edit {0}'), this.i18nRecordName),
+            pluralText:  this.i18nEditActionText ? this.i18nEditActionText[1] : String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 1), this.i18nRecordsName),
             disabled: true,
+            translationObject: this.i18nEditActionText ? this.app.i18n : Tine.Tinebase.translation,
             actionType: 'edit',
             handler: this.onEditInNewWindow,
             iconCls: 'action_edit',
-            scope: this
+            scope: this,
+            allowMultiple: true
         });
         
         this.action_editCopyInNewWindow = new Ext.Action({
@@ -954,6 +964,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @return {Ext.menu.Menu}
      */
     getContextMenu: function() {
+         
+        var multi = ((this.selectionModel.getCount()) > 1 && (this.multipleEdit));
+        
         if (! this.contextMenu) {
             var items = [
                 this.action_addInNewWindow,
@@ -988,6 +1001,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     getContextMenuItems: function() {
         var items = this.contextMenuItems || [];
+        
+       
         
         if (! Ext.isEmpty(items)) {
             // legacy handling! subclasses should register all actions when initializing actions
@@ -1202,6 +1217,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 return false;
             }
             var selectedRows = this.grid.getSelectionModel().getSelections();
+            var selectedRecords = [];
+            
+            Ext.each(selectedRows,function(el){
+                selectedRecords.push(el.data);
+            });
+            //Tine.log.debug('SELBEF',selectedRecords);
+            
             record = selectedRows[0];
         } else {
             record = new this.recordClass(this.recordClass.getDefaultData(), 0);
@@ -1211,13 +1233,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             config = null,
             popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
+                selections: 'DEPP',//Ext.encode(selectedRecords),
                 record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
                 copyRecord: (button.actionType == 'copy'),
                 listeners: {
                     scope: this,
                     'update': this.onUpdateRecord
                 }
-            }, 'record,listeners,copyRecord')
+            }, 'selections,record,listeners,copyRecord')
         );
     },
     

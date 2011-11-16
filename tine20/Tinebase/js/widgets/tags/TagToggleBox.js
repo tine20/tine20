@@ -65,41 +65,20 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
     },
 
     initStore : function() {
-
-        if (this.selectionModel) {
-            var ids = [];
-
-            Ext.each(this.selectionModel.getSelections(), function(el) {
-                        Ext.each(el.data.tags, function(tag) {
-                                    ids.push(tag.id);
-                                });
-                    });
-
-            var baseParams = {
-                method : 'Tinebase.searchDistinctTags',
-                records : ids
-                };
-                
-        } else {
-            var baseParams = {
-                method : 'Tinebase.searchTags',
-                paging : {}
-            };
-        }
-
+            
         this.store = new Ext.data.JsonStore({
                     id : 'id',
                     root : 'results',
                     totalProperty : 'totalCount',
                     fields : Tine.Tinebase.Model.Tag,
-                    baseParams : baseParams
+                    baseParams : {
+                        method : 'Tinebase.searchTagsByForeignFilter',
+                        filterData: this.selectionModel.getSelectionFilter(),
+                        filterName: this.recordClass.getMeta('appName') + '_Model_' +  this.recordClass.getMeta('modelName') + 'Filter'
+                        }
                 });
-        this.store.load();
         
-//        this.store.on('load',function(){
-//            Tine.log.debug(this.store);
-//            Tine.log.debug(this.store.getCount());
-//        },this);
+        this.store.load();
         
     },
 
@@ -133,7 +112,7 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
                         '</i>&nbsp;[{occurrence}]',
                         '<tpl if="description != null && description.length &gt; 1"><hr>{[this.encode(values.description)]}</tpl>" >',
                         
-                        '&nbsp;{[this.encode(values.name)]}',
+                        '&nbsp;{[this.encode(values.name)]}&nbsp;({values.selection_occurrence})',
                         '<tpl if="type == \'personal\' ">&nbsp;<i>(' + _('personal') + ')</i></tpl>',
                     '</div>',
                 '</div>', 

@@ -120,7 +120,6 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
     
     onSuccess: function() {
         this.updateHandler.call(this.updateHandlerScope || this);
-        
         this.win.close();
     }
 });

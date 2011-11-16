@@ -372,6 +372,10 @@
           "path": "js/widgets/dialog/"
         },
         {
+          "text": "MultipleEditDialogPlugin.js",
+          "path": "js/widgets/dialog/"
+        },        
+        {
           "text": "WizardPanel.js",
           "path": "js/widgets/dialog/"
         },
