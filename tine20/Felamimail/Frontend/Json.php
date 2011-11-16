@@ -363,6 +363,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  array         $eventData
      * @param  array         $attenderData
      * @return array         complete event
+     * 
+     * @todo move this to calendar frontend
      */
     public function setInvitationStatus($eventData, $attenderData)
     {
@@ -372,9 +374,17 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         $calendarJson = new Calendar_Frontend_Json();
-        if (! isset($eventData['id'])) {
+        if (! isset($eventData['id']) || empty($eventData['id'])) {
             $eventData = $calendarJson->saveEvent($eventData);
+            // get attender id / data
+            foreach ($eventData['attendee'] as $attender) {
+                if ($attender['user_id']['id'] == $attenderData['user_id']['id']) {
+                    $attenderData = $attender;
+                    break;
+                }
+            }
         }
+        
         return $calendarJson->setAttenderStatus($eventData, $attenderData, $attenderData['status_authkey']);
     }
     
