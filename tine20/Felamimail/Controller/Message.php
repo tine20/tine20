@@ -299,47 +299,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         return $partData;
     }
-    
-    /**
-     * returns TRUE if attachment is event invitation 
-     * 
-     * @param array $_attachment
-     * @return boolean
-     */
-    protected function _attachmentIsVcalendarInvitation($_attachment)
-    {
-        $result = (isset($_attachment['filename']) && $_attachment['filename'] === 'invite.ics');
-        
-        return $result;
-    }
-    
-    /**
-     * check for existing invitation event
-     * 
-     * @param Felamimail_Model_Message $_message
-     * 
-     * @todo move to Calendar_Frontend_iMIP
-     * @todo get more data from existing event?
-     */
-    protected function _checkExistingInvitationEvent(Felamimail_Model_Message $_message)
-    {
-        $existingEvent = Calendar_Controller_Event::getInstance()->lookupExistingEvent($_message->invitation_event);
-        if ($existingEvent) {
-            if ($existingEvent->seq < $_message->invitation_event->seq) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' Invitation is newer than the existing event.');
-                
-                $_message->invitation_event->setId($existingEvent->getId());
-                
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' Invitation is older than or the same as the existing event.');
-                
-                $_message->invitation_event = $existingEvent;
-            }
-        }
-    }
-    
+
     /**
      * get message part
      *

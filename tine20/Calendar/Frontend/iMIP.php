@@ -55,6 +55,8 @@ class Calendar_Frontend_iMIP
         // NOTE: this event is prepared for MSEventFacade (exceptions in exdate property)
         $event = $converter->toTine20Model($_icalString);
         
+        $this->_checkExistingEvent($event);
+        
         Calendar_Model_Attender::resolveAttendee($event->attendee);
         Tinebase_Model_Container::resolveContainer($event);
         
@@ -63,5 +65,31 @@ class Calendar_Frontend_iMIP
             'method'    => $_parameters['method'],
             'userAgent' => $this->_userAgentString
         ));
+    }
+    
+    /**
+    * check for existing event
+    *
+    * @param Calendar_Model_Event $_event
+    *
+    * @todo get more data from existing event?
+    */
+    protected function _checkExistingEvent(Calendar_Model_Event $_event)
+    {
+        $existingEvent = Calendar_Controller_Event::getInstance()->lookupExistingEvent($_event);
+        if ($existingEvent) {
+            if ($existingEvent->seq < $_event->seq) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Invitation is newer than the existing event.');
+    
+                $_event->setId($existingEvent->getId());
+    
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Invitation is older than or the same as the existing event.');
+    
+                $_event = $existingEvent;
+            }
+        }
     }
 }
