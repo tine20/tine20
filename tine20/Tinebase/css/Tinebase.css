@@ -797,3 +797,6 @@ span:hover.tinebase-showheaders-link {
 /*.x-combo-list-item .tine-keyfield-icon {
     padding-right: 4px;
 }*/
+
+.applyToAll {background-color: #d7f4d3;background-image:none}
+.notEdited {background-color: #f4f1d3;background-image:none}

@@ -232,6 +232,21 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+     * Used for updating multiple records
+     * @param string $recordClass
+     * @param array $changes
+     * @param array $recordIds
+     */
+    
+    public function updateMultipleRecords($recordClass, $changes, $selections) {
+    	
+    	var_dump($recordClass, $changes, $selections);
+    	
+    	return array();
+    	
+    }
+    
+    /**
      * search tags
      *
      * @param  array $filter filter array
