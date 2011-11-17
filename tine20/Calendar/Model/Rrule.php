@@ -389,6 +389,13 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     $rrule->byday = array_search($_event->dtstart->format('w'), self::$WEEKDAY_DIGIT_MAP);
                 }
                 
+                if (! $rrule->wkst) {
+                    // @TODO if organizer has an account get its locales wkst
+                    $rrule->wkst = self::WDAY_MONDAY;
+                }
+                $weekDays = array_keys(self::$WEEKDAY_DIGIT_MAP);
+                array_splice($weekDays, 0, 0, array_splice($weekDays, array_search($rrule->wkst, $weekDays)));
+                    
                 $dailyrrule = clone ($rrule);
                 $dailyrrule->freq = self::FREQ_DAILY;
                 $dailyrrule->interval = 7 * $rrule->interval;
@@ -401,7 +408,8 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     
                     // NOTE: skipping must be done in organizer_tz
                     $baseEvent->dtstart->setTimezone($_event->originator_tz);
-                    self::skipWday($baseEvent->dtstart, $recurWeekDay, 1, TRUE);
+                    $direction = array_search($recurWeekDay, $weekDays) >= array_search(array_search($baseEvent->dtstart->format('w'), self::$WEEKDAY_DIGIT_MAP), $weekDays) ? +1 : -1;
+                    self::skipWday($baseEvent->dtstart, $recurWeekDay, $direction, TRUE);
                     $baseEvent->dtstart->setTimezone('UTC');
                     
                     $baseEvent->dtend = clone($baseEvent->dtstart);
