@@ -27,6 +27,8 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
     
     protected $_applicationName;
     
+    protected $_container;
+    
     protected $_controller;
     
     protected $_model;
@@ -146,21 +148,70 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
      */
     public function getACL() 
     {
+        // disable acl for now, until we have group principals in place
         return null;
         
-        return array(
-            array(
-                        'privilege' => '{DAV:}read',
-                        'principal' => $this->addressBookInfo['principaluri'],
-                        'protected' => true,
-            ),
-            array(
-                        'privilege' => '{DAV:}write',
-                        'principal' => $this->addressBookInfo['principaluri'],
-                        'protected' => true,
-            )
-        );
-    
+        $acl    = array();
+        
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container, true);
+        
+        foreach ($grants as $grant) {
+            switch ($grant->account_type) {
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
+                    $principal = 'principals/users/' . Tinebase_Core::getUser()->contact_id;
+                    break;
+                    
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
+                    $principal = 'principals/groups/';
+                    break;
+                    
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
+                    try {
+                        $fulluser = Tinebase_User::getInstance()->getFullUserById($grant->account_id);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        // skip user
+                        continue 2;
+                    }
+                    $principal = 'principals/users/' . $fulluser->contact_id;
+                    break;
+                    
+                default:
+                    throw new Tinebase_Exception_UnexpectedValue('unsupported account type');
+            }
+            
+            if($grant[Tinebase_Model_Grants::GRANT_READ] == true) {
+                $acl[] = array(
+                    'privilege' => '{DAV:}read',
+                    'principal' => $principal,
+                    'protected' => true,
+                );
+            }
+            if($grant[Tinebase_Model_Grants::GRANT_EDIT] == true) {
+                $acl[] = array(
+                    'privilege' => '{DAV:}write-content',
+                    'principal' => $principal,
+                    'protected' => true,
+                );
+            }
+            if($grant[Tinebase_Model_Grants::GRANT_ADD] == true) {
+                $acl[] = array(
+                    'privilege' => '{DAV:}bind',
+                    'principal' => $principal,
+                    'protected' => true,
+                );
+            }
+            if($grant[Tinebase_Model_Grants::GRANT_DELETE] == true) {
+                $acl[] = array(
+                    'privilege' => '{DAV:}unbind',
+                    'principal' => $principal,
+                    'protected' => true,
+                );
+            }
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' webdav acl ' . print_r($acl, true));
+        
+        return $acl;
     }
     
     /**
