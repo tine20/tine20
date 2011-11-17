@@ -238,7 +238,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param array $recordIds
      */
     
+<<<<<<< HEAD
     public function updateMultipleRecords($recordModel, $changes, $selections) {
+=======
+    public function updateMultipleRecords($recordClass, $changes, $selections) {
+>>>>>>> 277a2fe1b814cbaac9883b208be69737d29ae17a
     	
     	var_dump($recordClass, $changes, $selections);
     	
