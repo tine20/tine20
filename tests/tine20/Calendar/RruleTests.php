@@ -563,6 +563,33 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(5, count($recurSet), 'yearlybyday failed');
     }
     
+    /**
+     * skip BYMONTHDAY, shift BYMONTH
+     *  => respect BYMONTH
+     *  => only evaluate first month
+     */
+    public function testCalcYearlyByMonth()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'yearly with BYMONTH shift',
+            'dtstart'       => '2011-11-16 10:30:00',
+            'dtend'         => '2011-11-16 12:30:00',
+            'rrule'         => 'FREQ=YEARLY;INTERVAL=1;BYMONTH=6,12',
+            'originator_tz' => 'Europe/Berlin',
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        $from = new Tinebase_DateTime('2012-01-01 00:00:00');
+        $until = new Tinebase_DateTime('2012-12-31 23:59:59');
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        
+        $this->assertEquals(1, count($recurSet), 'recur set failed');
+        $this->assertTrue(array_search('2012-06-16 09:30:00', $recurSet->dtstart) !== FALSE);
+    }
+    
     public function testCalcYearlyOmmitByClause()
     {
         $event = new Calendar_Model_Event(array(
