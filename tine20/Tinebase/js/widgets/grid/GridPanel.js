@@ -964,9 +964,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @return {Ext.menu.Menu}
      */
     getContextMenu: function() {
-         
-        var multi = ((this.selectionModel.getCount()) > 1 && (this.multipleEdit));
-        
+                
         if (! this.contextMenu) {
             var items = [
                 this.action_addInNewWindow,
@@ -1047,7 +1045,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 //                renderer: Tine.Tinebase.common.customfieldRenderer.createDelegate(this, [allCfs[i].name], true),
                 sortable: false,
                 hidden: true
-            })
+            });
         }, this);
         
         return result;
@@ -1222,7 +1220,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             Ext.each(selectedRows,function(el){
                 selectedRecords.push(el.data);
             });
-            //Tine.log.debug('SELBEF',selectedRecords);
             
             record = selectedRows[0];
         } else {
@@ -1233,14 +1230,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             config = null,
             popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
-                selections: 'DEPP',//Ext.encode(selectedRecords),
+                useMultiple: ((this.selectionModel.getCount() > 1) && (this.multipleEdit)),
+                selections: Ext.encode(selectedRecords),
                 record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
                 copyRecord: (button.actionType == 'copy'),
                 listeners: {
                     scope: this,
                     'update': this.onUpdateRecord
                 }
-            }, 'selections,record,listeners,copyRecord')
+            }, 'useMultiple,selections,record,listeners,copyRecord')
         );
     },
     
@@ -1359,7 +1357,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }
             
             var i18nItems = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), records.length),
-                recordIds = [].concat(records).map(function(v){return v.id});
+                recordIds = [].concat(records).map(function(v){ return v.id; });
 
             if (sm.isFilterSelect && this.filterSelectionDelete) {
                 if (! this.deleteMask) {
