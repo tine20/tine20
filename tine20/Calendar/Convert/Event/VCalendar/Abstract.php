@@ -678,6 +678,9 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     break;
                     
                 case 'RRULE':
+                    $event->rrule = $property->value;
+                    
+                    // convert date format
                     $event->rrule = preg_replace_callback('/UNTIL=([\dTZ]+)(?=;?)/', function($matches) {
                         if (strlen($matches[1]) < 10) {
                             $dtUntil = date_create($matches[1], new DateTimeZone ((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)));
@@ -687,9 +690,10 @@ class Calendar_Convert_Event_VCalendar_Abstract
                         }
                         
                         return 'UNTIL=' . $dtUntil->format(Tinebase_Record_Abstract::ISO8601LONG);
-                    }, $property->value);
-                    
-                    //$event->rrule = preg_replace('/(UNTIL=)(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z/', '$1$2-$3-$4 $5:$6:$7', $property->value);
+                    }, $event->rrule);
+
+                    // remove additional days from BYMONTHDAY property
+                    $event->rrule = preg_replace('/(BYMONTHDAY=)([\d]+)([,\d]+)/', '$1$2', $event->rrule);
                     
                     // process exceptions
                     if (isset($_vevent->EXDATE)) {
