@@ -422,4 +422,18 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         
         return $result;
     }
+    
+    /**
+     * returns TRUE if given event obsoletes this one
+     * 
+     * @param Calendar_Model_Event $_event
+     */
+    public function isObsoletedBy($_event)
+    {
+        if ($_event->seq !== $this->seq) {
+            return $_event->seq > $this->seq;
+        }
+        
+        return $_event->last_modified_time > $this->last_modified_time;
+    }
 }

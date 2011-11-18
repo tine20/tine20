@@ -7,89 +7,154 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @todo		add interface or abstract for iMIP classes
  */
 
 /**
  * iMIP (RFC 6047) frontend for calendar
- * 
  * @package     Calendar
  * @subpackage  Frontend
  */
 class Calendar_Frontend_iMIP
 {
-    /**
-     * user agent string
-     * 
-     * @var string
-     */
-    protected $_userAgentString = NULL;
     
     /**
-     * constructor
+     * auto process given iMIP component 
      * 
-     * @param string $_userAgentString
+     * @TODO autodelete REFRESH mails
+     * 
+     * @param  Calendar_Model_iMIP $_iMIP
      */
-    public function __construct($_userAgentString = NULL)
+    public function autoProcess($_iMIP)
     {
-        $this->_userAgentString = $_userAgentString;
+        if ($_iMIP->method == Calendar_Model_iMIP::METHOD_COUNTER) {
+            // counter request must always be decided manually
+            return;
+        }
+        
+        $exitingEvent = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($_iMIP->getEvent());
+        
+        if (! $exitingEvent) {
+            // no autoprocessing for events not in our backend yet
+            return;
+        }
+        
+        // update existing event details _WITHOUT_ status updates
+        $this->_process($_iMIP, NULL, $exitingEvent);
+        
+    }
+    
+    /**
+     * manual process iMIP component and optionally set status
+     * 
+     * @param  Calendar_Model_iMIP   $_iMIP
+     * @param  string                $_status
+     */
+    public function process($_iMIP, $_status = NULL)
+    {
+        // client spoofing protection
+        $iMIP = Felamimail_Controller_Message::getInstance()->getiMIP($_iMIP->getId());
+        
+        $exitingEvent = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($iMIP->getEvent());
+        $this->_process($_iMIP, $exitingEvent, $_action);
+    }
+    
+    /**
+     * process iMIP component and optionally set status
+     * 
+     * @param  Calendar_Model_iMIP   $_iMIP
+     * @param  string                $_status
+     */
+    protected function _process($iMIP, $_status = NULL, $_existingEvent)
+    {
+    
+        switch ($_iMIP->method) {
+                case Calendar_Model_iMIP::METHOD_PUBLISH:
+                    // add/update event (if outdated) / no status stuff / DANGER of duplicate UIDs
+                    // no notifications!
+                    break;
+                    
+                case Calendar_Model_iMIP::METHOD_REQUEST:
+                    // organizer requests/updates event
+                    // internal organizer:
+                    //  - event is up to date
+                    //  - status change could also be done by calendar method
+                    //  - normal notifications
+                    // external organizer:
+                    //  - update (might have acl problems)
+                    //  - set status
+                    //  - send reply to organizer
+                    $this->_applyUpdate($_iMIP, $exitingEvent);
+                    break;
+                    
+                case Calendar_Model_iMIP::METHOD_REPLY:
+                    // always internal organizer
+                    // some attender replied to my request (I'm Organizer) -> update status (seq++) / send notifications!
+                    break;
+                    
+                case Calendar_Model_iMIP::METHOD_ADD:
+                    // organizer added a meeting/recurrance to an existing event -> update event
+                    // internal organizer:
+                    //  - event is up to date nothing to do
+                    // external organizer:
+                    //  - update event
+                    //  - the iMIP is already the notification mail!
+                    break;
+                    
+                case Calendar_Model_iMIP::METHOD_CANCEL:
+                    // organizer caneled meeting/recurrence of an existing event -> update event
+                    // the iMIP is already the notification mail!
+                    break;
+                    
+                case Calendar_Model_iMIP::METHOD_REFRESH:
+                    // always internal organizer
+                    //  - send message
+                    //  - mark iMIP message ANSWERED
+                    break;
+                    
+                case Calendar_Model_iMIP::METHOD_COUNTER:
+                    // some attendee suggests to change the event
+                    // status: ACCEPT => update event, send notifications to all
+                    // status: DECLINE => send DECLINECOUNTER to originator
+                    // mark message ANSWERED
+                    
+                    
+                case Calendar_Model_iMIP::METHOD_DECLINECOUNTER:
+                    // organizer declined my counter request of an existing event -> update event
+                    break;
+                default:
+                    throw new Tinebase_Exception_UnexpectedValue("method {$_iMIP->method} not supported");
+                    break;
+            }
     }
     
     /**
      * prepares iMIP component for client
      * 
-     * @param  string $_icalString (UTF8)
-     * @param  array $_parameters
-     * @return Calendar_Model_iMIP prepared data
+     * @TODO  move to Calendar_Frontend_Json / Model?
+     *  
+     * @param  Calendar_Model_iMIP $_iMIP
+     * @return Calendar_Model_iMIP
      */
-    public function prepareComponent($_icalString, $_parameters)
+    public function prepareComponent($_iMIP)
     {
-        if (! isset($_parameters['method'])) {
-            throw new Tinebase_Exception_InvalidArgument('method missing in params');
-        }
+        Calendar_Model_Attender::resolveAttendee($_iMIP->event->attendee);
+        Tinebase_Model_Container::resolveContainer($_iMIP->event->container_id);
         
-        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($this->_userAgentString);
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
-
-        // NOTE: this event is prepared for MSEventFacade (exceptions in exdate property)
-        $event = $converter->toTine20Model($_icalString);
-        
-        $this->_checkExistingEvent($event);
-        
-        Calendar_Model_Attender::resolveAttendee($event->attendee);
-        Tinebase_Model_Container::resolveContainer($event);
-        
-        return new Calendar_Model_iMIP(array(
-            'event'     => $event,
-            'method'    => $_parameters['method'],
-            'userAgent' => $this->_userAgentString
-        ));
+        return $_iMIP;
     }
     
     /**
-    * check for existing event
-    *
-    * @param Calendar_Model_Event $_event
-    *
-    * @todo get more data from existing event?
-    */
-    protected function _checkExistingEvent(Calendar_Model_Event $_event)
+     * assemble an iMIP component in the notification flow
+     * 
+     * 
+     */
+    public function assembleComponent()
     {
-        $existingEvent = Calendar_Controller_Event::getInstance()->lookupExistingEvent($_event);
-        if ($existingEvent) {
-            if ($existingEvent->seq < $_event->seq) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Invitation is newer than the existing event.');
-    
-                $_event->setId($existingEvent->getId());
-    
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Invitation is older than or the same as the existing event.');
-    
-                $_event = $existingEvent;
-            }
-        }
+        // cancle normal vs. recur instance
+        
+    }
+    protected function _apply()
+    {
+        //isObsoletedBy
     }
 }
