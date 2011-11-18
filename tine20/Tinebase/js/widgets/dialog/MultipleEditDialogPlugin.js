@@ -52,11 +52,7 @@ Tine.widgets.dialog.MultipleEditDialog.prototype = {
                 // here comes the backend call
                 Ext.Ajax.request({
                     url : 'index.php',
-<<<<<<< HEAD
                     params : { method : 'Tinebase.updateMultipleRecords', recordModel: this.editDialog.recordClass.getMeta('appName') + '_Model_' + this.editDialog.recordClass.getMeta('modelName'), changes: this.changes, selections: this.editDialog.selections },
-=======
-                    params : { method : 'Tinebase.updateMultipleRecords', recordClass: this.editDialog.recordClass.getMeta('modelName'), changes: this.changes, selections: this.editDialog.selections },
->>>>>>> 277a2fe1b814cbaac9883b208be69737d29ae17a
                     success : function(_result, _request) {
                         Ext.MessageBox.hide();
                         this.editDialog.purgeListeners();
