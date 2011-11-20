@@ -100,7 +100,9 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
             $attachements = array();
         }
         foreach ($attachements as $attachement) {
-            if (isset($attachement['filename'])) {
+            if ($attachement instanceof Zend_Mime_Part) {
+                $mail->addAttachment($attachement);
+            } else if (isset($attachement['filename'])) {
                 $mail->createAttachment(
                     $attachement['rawdata'], 
                     Zend_Mime::TYPE_OCTETSTREAM,
