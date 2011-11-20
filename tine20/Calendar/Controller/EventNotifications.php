@@ -264,18 +264,22 @@
                 break;
             case 'created':
                 $messageSubject = sprintf($translate->_('Event invitation "%1$s" at %2$s'), $_event->summary, $startDateString);
+                $method = 'REQUEST';
                 break;
             case 'deleted':
                 $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been canceled' ), $_event->summary, $startDateString);
+                $method = 'CANCEL';
                 break;
             case 'changed':
                 switch ($_notificationLevel) {
                     case self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE:
                         $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been rescheduled' ), $_event->summary, $startDateString);
+                        $method = 'REQUEST';
                         break;
                         
                     case self::NOTIFICATION_LEVEL_EVENT_UPDATE:
                         $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been updated' ), $_event->summary, $startDateString);
+                        $method = 'REQUEST';
                         break;
                         
                     case self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE:
@@ -303,6 +307,7 @@
                         } else {
                             $messageSubject = sprintf($translate->_('Attendee changes for event "%1$s" at %2$s' ), $_event->summary, $startDateString);
                         }
+                        //$method = 'REPLY';
                         break;
                 }
                 break;
@@ -323,6 +328,27 @@
         
         $messageBody = $view->render('eventNotification.php');
         
+        if (isset($method)) {
+            $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+            $vevent = $converter->fromTine20Model($_event);
+            $vevent->METHOD = $method;
+            
+            $calendarPart           = new Zend_Mime_Part($vevent->serialize());
+            $calendarPart->charset  = 'UTF-8';
+            $calendarPart->type     = 'text/calendar; method=' . $method;
+            $calendarPart->encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE;
+            
+            $attachment = new Zend_Mime_Part($vevent->serialize());
+            $attachment->type     = 'application/ics';
+            $attachment->encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE;
+            $attachment->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
+            $attachment->filename = 'event.ics';
+            
+            $attachments = array($attachment);
+        } else {
+            $calendarPart = null;
+            $attachments = null;
+        }
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " receiver: '{$_attender->getEmail()}'");
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " subject: '$messageSubject'");
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " body: $messageBody");
@@ -332,7 +358,7 @@
         $sender = $_action == 'alarm' ? $organizer : $_updater;
         
         try {
-            Tinebase_Notification::getInstance()->send($sender, array($contact), $messageSubject, $messageBody);
+            Tinebase_Notification::getInstance()->send($sender, array($contact), $messageSubject, $messageBody, $calendarPart, $attachments);
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . " could not send notification :" . $e);
             return;
