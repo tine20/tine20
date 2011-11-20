@@ -100,13 +100,15 @@ class Sabre_VObject_Property extends Sabre_VObject_Element {
             '/\\\\/',
             '/\\\,/',
             '/\\\;/',
-        	'/\\\n/'
+        	'/\\\n/',
+        	'/\\\"/'        # Thunderbird 3 hack only see http://forge.tine20.org/mantisbt/view.php?id=5114
         );
         $replace = array(
             '\\',
             ',',
             ';',
-        	"\n"
+        	"\n",
+        	'"'             # Thunderbird 3 hack only see http://forge.tine20.org/mantisbt/view.php?id=5114
         );
         
         return preg_replace($search, $replace, $value);
