@@ -260,7 +260,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
+<<<<<<< HEAD
      * 
+=======
+>>>>>>> b62891b... do not autocorrect postal code
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
@@ -339,7 +342,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 if (empty($_record->{$_address . 'countryname'}) && ! empty($place->country_code)) {
                     $_record->{$_address . 'countryname'} = $place->country_code;
                 }
-                if ((empty($_record->{$_address . 'postalcode'}) || in_array($_address . 'postalcode', $_ommitFields)) && ! empty($place->postcode)) {
+                if (empty($_record->{$_address . 'postalcode'}) && ! empty($place->postcode)) {
                     $_record->{$_address . 'postalcode'} = $place->postcode;
                 }
                 if (empty($_record->{$_address . 'locality'}) && ! empty($place->city)) {
