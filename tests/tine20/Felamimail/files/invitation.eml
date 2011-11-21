@@ -1,10 +1,10 @@
 Received: (Postfix); Tue,  1 Nov 2011 09:03:03 +0100 (CET)
-From: unittest@tine20.org
+From: pwulf@tine20.org
 To: unittest@tine20.org
 Date: Tue, 01 Nov 2011 08:03:02 GMT
 Subject: Event Invitation: testevent
 Message-Id: <20111101080303.30A10409E@asxas.net>
-Return-Path: unittest@tine20.org
+Return-Path: pwulf@tine20.org
 X-Tine20TestMessage: invitation.eml
 MIME-Version: 1.0
 Content-Type: multipart/mixed;

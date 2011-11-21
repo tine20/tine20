@@ -14,8 +14,7 @@
  * 
  * @package     Felamimail
  * @subpackage  Model
- * @property    string  $partId
- * @property    string  $messageId
+ * @property    string  $id
  * @property    string  $contentType
  * @property    string  $preparedData
  */
@@ -44,8 +43,7 @@ class Felamimail_Model_PreparedMessagePart extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true), // part id
-        'messageId'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true), // message id + part id
         'contentType'           => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'preparedData'          => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
     );

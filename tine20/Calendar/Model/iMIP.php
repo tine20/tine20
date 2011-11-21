@@ -15,7 +15,7 @@
  * @property    event        iMIP message event
  * @property    method       method of iMIP transaction
  * @property    userAgent    userAgent origination iMIP transaction
- * @property    originator   originator/sender of iMIP transaction
+ * @property    originator   originator /sender of iMIP transaction
  * @package     Calendar
  * @subpackage  Model
  */
@@ -91,7 +91,7 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
         'id'                   => array('allowEmpty' => true,         ), 
         'ics'                  => array('allowEmpty' => true          ),
         'method'               => array('allowEmpty' => false,        ),
-        'originator'           => array('allowEmpty' => false,        ),
+        'originator'           => array('allowEmpty' => false,        ), // email adddress
         'userAgent'            => array('allowEmpty' => true,         ),
         'event'                => array('allowEmpty' => true          ),
     );

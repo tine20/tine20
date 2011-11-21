@@ -255,15 +255,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                     . ' ' . $application . '[' . $contentType . '] content found.');
                 
-                $part = $this->getMessagePart($_message, $partId);
-                
-                $userAgent = (isset($_message->headers['user-agent'])) ? $_message->headers['user-agent'] : NULL;
-                $parameters = (isset($partData['parameters'])) ? $partData['parameters'] : array();
-                $preparedPart = $this->_handleForeignMessagePart($application, $part, $userAgent, $parameters);
+                $preparedPart = $this->_getForeignMessagePart($_message, $partId, $partData);
                 if ($preparedPart) {
+                    $this->_processForeignMessagePart($application, $preparedPart);
                     $preparedParts->addRecord(new Felamimail_Model_PreparedMessagePart(array(
-                        'id'             => $partId,
-                        'messageId'		 => $_message->getId(),
+                        'id'             => $_message->getId() . '_' . $partId,
                         'contentType'	 => $contentType,
                         'preparedData'   => $preparedPart,
                     )));
@@ -275,21 +271,53 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-    * handle foreign message parts
+    * get foreign message parts
     * 
     * - calendar invitations
     * - addressbook vcards
     * - ...
     *
-    * @param string $_application
-    * @param Zend_Mime_Part $_part
-    * @param string $_userAgent
-    * @param array $_parameters
-    * @return NULL|mixed prepared data
-    * 
-    * @todo use iMIP factory?
+    * @param Felamimail_Model_Message $_message
+    * @param string $_partId
+    * @param array $_partData
+    * @return NULL|Tinebase_Record_Abstract
     */
-    protected function _handleForeignMessagePart($_application, Zend_Mime_Part $_part, $_userAgent = NULL, $_parameters = array())
+    protected function _getForeignMessagePart(Felamimail_Model_Message $_message, $_partId, $_partData)
+    {
+        $part = $this->getMessagePart($_message, $_partId);
+        
+        $userAgent = (isset($_message->headers['user-agent'])) ? $_message->headers['user-agent'] : NULL;
+        $parameters = (isset($_partData['parameters'])) ? $_partData['parameters'] : array();
+        $decodedContent = $part->getDecodedContent();
+        
+        switch ($part->type) {
+            case Felamimail_Model_Message::CONTENT_TYPE_CALENDAR:
+                $partData = new Calendar_Model_iMIP(array(
+                    'id'             => $_message->getId() . '_' . $_partId,
+                	'ics'            => $decodedContent,
+                    'method'         => (isset($parameters['method'])) ? $parameters['method'] : NULL,
+                    'originator'     => $_message->from_email,
+                    'userAgent'      => $userAgent,
+                ));
+                break;
+            default:
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not create iMIP of content type ' . $part->type);
+                $partData = NULL;
+        }
+        
+        return $partData;
+    }
+    
+    /**
+     * process foreign iMIP part
+     * 
+     * @param string $_application
+     * @param Tinebase_Record_Abstract $_iMIP
+     * @return mixed
+     * 
+     * @todo use iMIP factory?
+     */
+    protected function _processForeignMessagePart($_application, $_iMIP)
     {
         $iMIPFrontendClass = $_application . '_Frontend_iMIP';
         if (! class_exists($iMIPFrontendClass)) {
@@ -297,11 +325,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             return NULL;
         }
         
-        $decodedContent = $_part->getDecodedContent();
-        $iMIPFrontend = new $iMIPFrontendClass($_userAgent);
-        $partData = $iMIPFrontend->prepareComponent($decodedContent, $_parameters);
+        $iMIPFrontend = new $iMIPFrontendClass();
+        $result = $iMIPFrontend->autoProcess($_iMIP);
         
-        return $partData;
+        return $result;
     }
 
     /**

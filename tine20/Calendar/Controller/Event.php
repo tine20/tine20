@@ -778,7 +778,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         return $this->get($baseEventId);
     }
 
-    /**
+   /**
     * lookup existing event by uid
     *
     * @param  Calendar_Model_Event $_event
