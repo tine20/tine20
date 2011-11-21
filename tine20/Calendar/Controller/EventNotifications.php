@@ -207,20 +207,6 @@
      */
     public function sendNotificationToAttender($_attender, $_event, $_updater, $_action, $_notificationLevel, $_updates=NULL)
     {
-        if (
-            // 2011-05-26 only send notifications to user accounts!
-            $_attender->getUserAccountId() === NULL
-            
-            // old code + comments follow:
-            //! in_array($_attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))
-            //  - for contacts prefs of organizer is taken, this leads to unpredictable results if notification is send or not!
-            //  - users can not yet configure which user/contact should get notification or not    
-            //|| ! $_attender->getResolvedUser() instanceof Addressbook_Model_Contact
-            
-        ) {
-            return;
-        }
-        
         // find organizer account
         if ($_event->organizer) {
             $organizerContact = Addressbook_Controller_Contact::getInstance()->get($_event->organizer);
@@ -232,26 +218,17 @@
         
         // get prefered language, timezone and notification level
         $prefUser = $_attender->getUserAccountId();
-        // e.g. contacts
-        if (! $prefUser) {
-            $prefUser = $organizer->getId();
-        }
-        $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $prefUser));
-        $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $prefUser);
+        $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $prefUser ? $prefUser : $organizer->getId()));
+        $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $prefUser ? $prefUser : $organizer->getId());
         $translate = Tinebase_Translation::getTranslation('Calendar', $locale);
         
         // check if user wants this notification
-        $sendLevel          = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::NOTIFICATION_LEVEL, $prefUser);
-        $sendOnOwnActions   = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, $prefUser);
-        if ($prefUser == $_updater->getId() && ! $sendOnOwnActions) {
+        $sendLevel          = $prefUser ? Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::NOTIFICATION_LEVEL, $prefUser) : 100;
+        $sendOnOwnActions   = $prefUser ? Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, $prefUser) : 0;
+        
+        // NOTE: organizer gets mails unless she set notificationlevel to NONE
+        if (($prefUser == $_updater->getId() && ! $sendOnOwnActions) || ($sendLevel < $_notificationLevel && ($prefUser != $organizer->getId() || $sendLevel == self::NOTIFICATION_LEVEL_NONE))) {
             return;
-        }
-        if ($sendLevel < $_notificationLevel) {
-            if($prefUser != $organizer->getId()) {
-                return;
-            } else if ($sendLevel == self::NOTIFICATION_LEVEL_NONE) {
-                return;
-            }
         }
 
         // get date strings
@@ -349,6 +326,7 @@
             $calendarPart = null;
             $attachments = null;
         }
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " receiver: '{$_attender->getEmail()}'");
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " subject: '$messageSubject'");
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " body: $messageBody");
