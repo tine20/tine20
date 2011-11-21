@@ -15,7 +15,7 @@
  * @property    event        iMIP message event
  * @property    method       method of iMIP transaction
  * @property    userAgent    userAgent origination iMIP transaction
- * @property    originator   originator/sender of iMIP transaction
+ * @property    originator   originator /sender of iMIP transaction
  * @package     Calendar
  * @subpackage  Model
  */

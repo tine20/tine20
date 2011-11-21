@@ -401,6 +401,16 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
     }
     
+    public static function getOwnAttender($_attendee)
+    {
+        foreach($_attendee->filter('user_id', Tinebase_Core::getUser()->contact_id) as $attender) {
+            if (in_array($attender->user_type, array(self::USERTYPE_USER, self::USERTYPE_GROUPMEMBER))) {
+                return $attender;
+            }
+        }
+        
+    }
+    
     /**
      * resolves given attendee for json representation
      *
