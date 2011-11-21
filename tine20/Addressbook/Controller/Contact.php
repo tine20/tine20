@@ -260,10 +260,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
-<<<<<<< HEAD
      * 
-=======
->>>>>>> b62891b... do not autocorrect postal code
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
