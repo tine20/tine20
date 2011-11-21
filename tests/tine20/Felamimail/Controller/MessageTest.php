@@ -1076,14 +1076,18 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->messageTestHelper('invitation.eml');
     
         $message = $this->_controller->getCompleteMessage($cachedMessage);
+        
         //print_r($message->toArray());
+        
         $this->assertEquals(1, count($message->preparedParts));
-        // @todo check other properties of preparedParts[0]
-        $event = $message->preparedParts[0]['preparedData']['event'];
-        $this->assertTrue($event instanceof Calendar_Model_Event, 'is not event');
+        $preparediMIPPart = $message->preparedParts->getFirstRecord()->preparedData;
+        $this->assertTrue($preparediMIPPart instanceof Calendar_Model_iMIP, 'is no iMIP');
+        $this->assertEquals('unittest@tine20.org', $preparediMIPPart->organizer);
+        $event = $preparediMIPPart->getEvent();
+        $this->assertTrue($event instanceof Calendar_Model_Event, 'is no event');
         $this->assertEquals('testevent', $event->summary);
         $this->assertEquals(2, count($event->attendee));
-        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $event->attendee[1]->user_id->getId());
+        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $event->attendee[1]->user_id);
     }
     
     /********************************* protected helper funcs *************************************/
