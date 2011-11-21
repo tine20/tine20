@@ -56,8 +56,8 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                              },
                     success : function(_result, _request) {
                         Ext.MessageBox.hide();
+                        this.editDialog.fireEvent('update');
                         this.editDialog.purgeListeners();
-                        this.editDialog.fireEvent('save');
                         this.editDialog.window.close();                       
                     }, scope: this
                 });

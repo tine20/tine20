@@ -1236,10 +1236,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 copyRecord: (button.actionType == 'copy'),
                 listeners: {
                     scope: this,
-                    'update': this.onUpdateRecord
+                    'update': ((this.selectionModel.getCount() > 1) && (this.multipleEdit)) ? this.onUpdateMultipleRecords : this.onUpdateRecord
                 }
             }, 'useMultiple,sm,record,listeners,copyRecord')
         );
+    },
+    
+    onUpdateMultipleRecords: function() {
+        this.store.reload();
     },
     
     /**
