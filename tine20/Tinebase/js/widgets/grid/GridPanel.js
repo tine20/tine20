@@ -1231,14 +1231,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
                 useMultiple: ((this.selectionModel.getCount() > 1) && (this.multipleEdit)),
-                selections: Ext.encode(selectedRecords),
+                sm: this.selectionModel,
                 record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
                 copyRecord: (button.actionType == 'copy'),
                 listeners: {
                     scope: this,
                     'update': this.onUpdateRecord
                 }
-            }, 'useMultiple,selections,record,listeners,copyRecord')
+            }, 'useMultiple,sm,record,listeners,copyRecord')
         );
     },
     

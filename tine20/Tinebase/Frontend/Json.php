@@ -233,16 +233,21 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     /**
      * Used for updating multiple records
-     * @param string $recordClass
+     * @param string $recordModel
      * @param array $changes
-     * @param array $recordIds
+     * @param array $filter
      */
 
+    public function updateMultipleRecords($recordModel, $recordController, $changes, $filter)
+    {
 
-    public function updateMultipleRecords($recordModel, $changes, $selections) {
-    	var_dump($recordClass, $changes, $selections);
+        foreach($changes as $f) {
+            $ff[$f['name']] = $f['value'];
+        }
 
-    	return array();
+        $recordController = $recordController::getInstance();
+
+        return $this->_updateMultiple($filter, $ff, $recordController, $recordModel);
 
     }
 

@@ -65,10 +65,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     record: null,
     
     /**
-     * @cfg Array of {Ext.data.Record} selections (json-enc)
+     * @cfg GridPanel SelectionModel
      */
     
-    selections: null,
+    sm: null,
     
     /**
      * @cfg {String} saveAndCloseButtonText
@@ -192,8 +192,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // init cf plugin
         this.plugins = this.plugins ? this.plugins : [];
         this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
-        
-        if(this.useMultiple) this.plugins.push(new Tine.widgets.dialog.MultipleEditDialog({}));
+               
+        if(this.useMultiple) this.plugins.push(new Tine.widgets.dialog.MultipleEditDialogPlugin({}));
         
         // init actions
         this.initActions();

@@ -1,11 +1,11 @@
 
 Ext.ns('Tine.widgets.editDialog');
 
-Tine.widgets.dialog.MultipleEditDialog = function (config) {
+Tine.widgets.dialog.MultipleEditDialogPlugin = function (config) {
     Ext.apply(this, config);
 };
 
-Tine.widgets.dialog.MultipleEditDialog.prototype = {
+Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
     
     app: null,
     
@@ -23,9 +23,9 @@ Tine.widgets.dialog.MultipleEditDialog.prototype = {
         
         this.editDialog = editDialog;
         this.app = Tine.Tinebase.appMgr.get(this.editDialog.app);
-        
-        this.editDialog.selections = Ext.decode(this.editDialog.selections);
         this.form = this.editDialog.getForm();
+      
+//        Tine.log.debug(this.editDialog.sm.getSelections());
         
         this.editDialog.on('load', this.disableFields, this);
         
@@ -41,18 +41,18 @@ Tine.widgets.dialog.MultipleEditDialog.prototype = {
             }
         },this);
         
-        Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to change these {0} records?'), this.editDialog.selections.length), function(_btn) {
+        var filter = this.editDialog.sm.getSelectionFilter();
+        var recordModel = this.editDialog.recordClass.getMeta('appName') + '_Model_' + this.editDialog.recordClass.getMeta('modelName')
+        var recordController = this.editDialog.recordClass.getMeta('appName') + '_Controller_' + this.editDialog.recordClass.getMeta('modelName');
+        
+        Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to change these {0} records?'), this.editDialog.sm.getCount()), function(_btn) {
             if (_btn == 'yes') {
                 Ext.MessageBox.wait(_('Please wait'), _('Applying changes'));
-                
-                Tine.log.debug('RClass',this.editDialog.recordClass);
-                Tine.log.debug('SELECTIONS',this.editDialog.selections);
-                Tine.log.debug('CHANGES',this.changes);
-        
+          
                 // here comes the backend call
                 Ext.Ajax.request({
                     url : 'index.php',
-                    params : { method : 'Tinebase.updateMultipleRecords', recordModel: this.editDialog.recordClass.getMeta('appName') + '_Model_' + this.editDialog.recordClass.getMeta('modelName'), changes: this.changes, selections: this.editDialog.selections },
+                    params : { method : 'Tinebase.updateMultipleRecords', recordModel: recordModel, recordController: recordController, changes: this.changes, filter: filter },
                     success : function(_result, _request) {
                         Ext.MessageBox.hide();
                         this.editDialog.purgeListeners();
@@ -68,7 +68,8 @@ Tine.widgets.dialog.MultipleEditDialog.prototype = {
     disableFields: function() {
         for(fieldName in this.editDialog.record.data) {
             if(typeof(this.editDialog.record.data[fieldName]) == 'object') continue;
-            Ext.each(this.editDialog.selections, function(selection,index) {
+            Ext.each(this.editDialog.sm.getSelections(), function(selection,index) {
+
                 var field = this.form.findField(fieldName);
                 if(field) {
                     field.originalValue = this.editDialog.record.data[fieldName];
@@ -83,7 +84,7 @@ Tine.widgets.dialog.MultipleEditDialog.prototype = {
 //                        }
 //                    });
                     
-                if(selection[fieldName] != this.editDialog.record.data[fieldName]) {
+                if(selection.data[fieldName] != this.editDialog.record.data[fieldName]) {
               
                         
                         field.setReadOnly(true);
