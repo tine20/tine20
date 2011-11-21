@@ -1082,7 +1082,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($message->preparedParts));
         $preparediMIPPart = $message->preparedParts->getFirstRecord()->preparedData;
         $this->assertTrue($preparediMIPPart instanceof Calendar_Model_iMIP, 'is no iMIP');
-        $this->assertEquals('unittest@tine20.org', $preparediMIPPart->organizer);
+        $this->assertEquals('pwulf@tine20.org', $preparediMIPPart->originator);
         $event = $preparediMIPPart->getEvent();
         $this->assertTrue($event instanceof Calendar_Model_Event, 'is no event');
         $this->assertEquals('testevent', $event->summary);
