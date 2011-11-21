@@ -180,6 +180,20 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         return $this->_eventController->searchCount($_filter, $_action);
     }
     
+   /**
+     * (non-PHPdoc)
+     * @see Calendar_Controller_Event::lookupExistingEvent()
+     */
+    public function lookupExistingEvent($_event)
+    {
+        $event = $this->_eventController->lookupExistingEvent($_event);
+        if ($event && $event->rrule) {
+            $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
+        }
+        
+        return $event;
+    }
+    
     /*************** add / update / delete *****************/    
 
     /**
