@@ -440,7 +440,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     public function resolveOrganizer()
     {
         if (! $this->organizer instanceof Addressbook_Model_Contact) {
-            $this->organizer = Addressbook_Controller_Contact::getInstance()->getMultiple($organizer, TRUE)->getFirstRecord();
+            $this->organizer = Addressbook_Controller_Contact::getInstance()->getMultiple($this->organizer, TRUE)->getFirstRecord();
         }
         
         return $this->organizer;
