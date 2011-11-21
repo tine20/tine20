@@ -259,7 +259,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 if ($preparedPart) {
                     $this->_processForeignMessagePart($application, $preparedPart);
                     $preparedParts->addRecord(new Felamimail_Model_PreparedMessagePart(array(
-                        'id'             => $message->getId() . '_' . $partId,
+                        'id'             => $_message->getId() . '_' . $partId,
                         'contentType'	 => $contentType,
                         'preparedData'   => $preparedPart,
                     )));
