@@ -24,8 +24,6 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         this.editDialog = editDialog;
         this.app = Tine.Tinebase.appMgr.get(this.editDialog.app);
         this.form = this.editDialog.getForm();
-      
-//        Tine.log.debug(this.editDialog.sm.getSelections());
         
         this.editDialog.on('load', this.disableFields, this);
         
@@ -42,9 +40,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         },this);
         
         var filter = this.editDialog.sm.getSelectionFilter();
-        var recordModel = this.editDialog.recordClass.getMeta('appName') + '_Model_' + this.editDialog.recordClass.getMeta('modelName')
-        var recordController = this.editDialog.recordClass.getMeta('appName') + '_Controller_' + this.editDialog.recordClass.getMeta('modelName');
-        
+ 
         Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to change these {0} records?'), this.editDialog.sm.getCount()), function(_btn) {
             if (_btn == 'yes') {
                 Ext.MessageBox.wait(_('Please wait'), _('Applying changes'));
@@ -52,12 +48,18 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 // here comes the backend call
                 Ext.Ajax.request({
                     url : 'index.php',
-                    params : { method : 'Tinebase.updateMultipleRecords', recordModel: recordModel, recordController: recordController, changes: this.changes, filter: filter },
+                    params : { method : 'Tinebase.updateMultipleRecords', 
+                               appName: this.editDialog.recordClass.getMeta('appName'), 
+                               modelName: this.editDialog.recordClass.getMeta('modelName'), 
+                               changes: this.changes, 
+                               filter: filter 
+                             },
                     success : function(_result, _request) {
                         Ext.MessageBox.hide();
                         this.editDialog.purgeListeners();
+                        this.editDialog.fireEvent('save');
                         this.editDialog.window.close();                       
-                    }
+                    }, scope: this
                 });
             }
         }, this);
@@ -66,6 +68,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
     },
     
     disableFields: function() {
+        
         for(fieldName in this.editDialog.record.data) {
             if(typeof(this.editDialog.record.data[fieldName]) == 'object') continue;
             Ext.each(this.editDialog.sm.getSelections(), function(selection,index) {
