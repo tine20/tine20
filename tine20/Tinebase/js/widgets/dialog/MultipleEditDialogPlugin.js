@@ -39,6 +39,12 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             }
         },this);
         
+        if(this.changes.length == 0) {
+            this.editDialog.purgeListeners();
+            this.editDialog.window.close(); 
+            return false;
+        }
+        
         var filter = this.editDialog.sm.getSelectionFilter();
  
         Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to change these {0} records?'), this.editDialog.sm.getCount()), function(_btn) {
@@ -70,10 +76,15 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
     disableFields: function() {
         
         for(fieldName in this.editDialog.record.data) {
-            if(typeof(this.editDialog.record.data[fieldName]) == 'object') continue;
+            var field = this.form.findField(fieldName);
+            // TODO: handle fields like image etc.
+            if(typeof(this.editDialog.record.data[fieldName]) == 'object') {
+                if(field) field.disable();
+                continue;
+            }
             Ext.each(this.editDialog.sm.getSelections(), function(selection,index) {
 
-                var field = this.form.findField(fieldName);
+                
                 if(field) {
                     field.originalValue = this.editDialog.record.data[fieldName];
                     
@@ -88,7 +99,6 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
 //                    });
                     
                 if(selection.data[fieldName] != this.editDialog.record.data[fieldName]) {
-              
                         
                         field.setReadOnly(true);
                         field.addClass('notEdited');
@@ -119,7 +129,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                                     }
                                 }
                             });  
-                }
+                    }
                 }
             },this);   
         } 

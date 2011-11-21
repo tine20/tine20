@@ -242,18 +242,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function updateMultipleRecords($appName, $modelName, $changes, $filter)
     {
         $recordController = $appName . '_Controller_' . $modelName;
-//        $recordModel = $appName . '_Model_' . $modelName;
         $filterModel = $appName . '_Model_' . $modelName . 'Filter';
 
         foreach($changes as $f) {
             $data[$f['name']] = $f['value'];
         }
-
-
-
-//        $filter = new $filterModel($filter);
-
-//        print_r($filter);
 
         $recordController = $recordController::getInstance();
 
