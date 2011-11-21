@@ -207,7 +207,7 @@ class Calendar_Frontend_iMIP
         throw new Tinebase_Exception_NotImplemented('processing COUNTER is not supported yet');
     }
     
-    protected function _processCounter($_iMIP, $_existingEvent)
+    protected function _processDeclinecounter($_iMIP, $_existingEvent)
     {
         // organizer declined my counter request of an existing event -> update event
         throw new Tinebase_Exception_NotImplemented('processing DECLINECOUNTER is not supported yet');
