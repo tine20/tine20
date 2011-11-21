@@ -152,12 +152,16 @@ class Calendar_Frontend_iMIP
         
         $iMIPAttenderIdx = array_search($_iMIP->originator, $_iMIP->getEvent()->attendee->getEmail());
         if ($iMIPAttenderIdx === FALSE) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__
+                . ' originator ' . $_iMIP->originator . ' != '. $_existingEvent->attendee->getEmail());
             throw new Calendar_Exception_iMIP('originator is not attendee in iMIP transaction-> spoofing attempt?');
         }
         $iMIPAttender = $_iMIP->getEvent()->attendee[$iMIPAttenderIdx];
         
         $existingAttenderIdx = array_search($_iMIP->originator, $_existingEvent->attendee->getEmail());
         if ($existingAttenderIdx === FALSE) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__
+                . ' originator ' . $_iMIP->originator . ' != '. $_existingEvent->attendee->getEmail());
             throw new Calendar_Exception_iMIP('originator is not attendee in existing event -> party crusher?');
         }
         $existingAttender = $_existingEvent->attendee[$existingAttenderIdx];
@@ -231,7 +235,11 @@ class Calendar_Frontend_iMIP
         }
         if ($_assertOriginator) {
             $contact = $ownAttender->getResolvedUser();
-            if(! in_array($_iMIP->originator, array($contact->email, $contact->email_home))) {
+            $contactEmails = array($contact->email, $contact->email_home);
+            if(! in_array($_iMIP->originator, $contactEmails)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__
+                    . ' originator ' . $_iMIP->originator . ' ! in_array() '. print_r($contactEmails, TRUE));
+                
                 throw new Calendar_Exception_iMIP("own attendee must be the same as originator of iMIP -> spoofing attempt?");
             }
         }
@@ -255,7 +263,11 @@ class Calendar_Frontend_iMIP
             throw new Calendar_Exception_iMIP("processing {$_iMIP->method} without organizer is not possible");
         }
         
-        if ($_assertOriginator && ! in_array($_iMIP->originator, array($organizer->email, $organizer->email_home))) {
+        $organizerEmails =  array($organizer->email, $organizer->email_home);
+        if ($_assertOriginator && ! in_array($_iMIP->originator, $organizerEmails)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__
+                . ' originator ' . $_iMIP->originator . ' ! in_array() '. print_r($organizerEmails, TRUE));
+            
             throw new Calendar_Exception_iMIP("organizer of event must be the same as originator of iMIP -> spoofing attempt?");
         }
         
