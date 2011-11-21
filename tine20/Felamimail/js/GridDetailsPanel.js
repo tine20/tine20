@@ -49,7 +49,7 @@ Ext.namespace('Tine.Felamimail');
     initComponent: function() {
         this.initTemplate();
         this.initDefaultTemplate();
-        this.initTopToolbar();
+        //this.initTopToolbar();
         
         Tine.Felamimail.GridDetailsPanel.superclass.initComponent.call(this);
     },
@@ -70,12 +70,12 @@ Ext.namespace('Tine.Felamimail');
      * 
      * TODO add buttons (show header, add to addressbook, create filter, show images ...) here
      */
-    initTopToolbar: function() {
-        this.tbar = new Ext.Toolbar({
-            hidden: true,
-            items: []
-        });
-    },
+//    initTopToolbar: function() {
+//        this.tbar = new Ext.Toolbar({
+//            hidden: true,
+//            items: []
+//        });
+//    },
     
     /**
      * process email invitation
@@ -202,6 +202,7 @@ Ext.namespace('Tine.Felamimail');
     getMessageRecordPanel: function() {
         if (! this.messageRecordPanel) {
             this.messageRecordPanel = new Ext.Panel({
+                border: false,
                 autoScroll: true,
                 flex: 1
             });
