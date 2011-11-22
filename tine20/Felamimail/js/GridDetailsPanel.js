@@ -5,10 +5,9 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- *
  */
  
-Ext.namespace('Tine.Felamimail');
+Ext.ns('Tine.Felamimail');
 
 /**
  * @namespace   Tine.Felamimail
@@ -78,39 +77,6 @@ Ext.namespace('Tine.Felamimail');
 //    },
     
     /**
-     * process email invitation
-     * 
-     * @param {String} status
-     */
-    processInvitation: function(status) {
-        Tine.log.debug('Setting event attender status: ' + status);
-        
-        var firstPreparedPart = this.record.get('preparedParts')[0];
-        if (firstPreparedPart.contentType !== 'text/calendar') {
-            return;
-        }
-        
-        var invitationEvent = Tine.Calendar.backend.recordReader({
-                responseText: Ext.util.JSON.encode(firstPreparedPart.preparedData.event)
-            }),
-            myAttenderRecord = invitationEvent.getMyAttenderRecord();
-        
-        myAttenderRecord.set('status', status);
-        Tine.Felamimail.setInvitationStatus(invitationEvent.data, myAttenderRecord.data, this.onInvitationStatusUpdate.createDelegate(this));
-    },
-
-    /**
-     * callback for invitation status update
-     * 
-     * @param {Object} response
-     */
-    onInvitationStatusUpdate: function(response) {
-        this.getTopPanel().getTopToolbar().setVisible(false);
-        this.getTopPanel().setHeight(26);
-        this.getTopPanel().doLayout();
-    },
-    
-    /**
      * add on click event after render
      * @private
      */
@@ -133,67 +99,15 @@ Ext.namespace('Tine.Felamimail');
                 },
                 border: false,
                 items: [
-                    this.getTopPanel(),
-                    this.getMessageRecordPanel(),
-                    this.getBottomPanel()
+                    //this.getTopPanel(),
+                    this.getMessageRecordPanel()
+                    //this.getBottomPanel()
                 ]
             });
         }
         return this.singleRecordPanel;
     },
 
-    /**
-     * get top panel
-     * 
-     * @return {Ext.Panel}
-     */
-    getTopPanel: function() {
-        if (! this.topPanel) {
-            this.topPanel = new Ext.Panel({
-                hidden: true,
-                layout: 'fit',
-                height: 26,
-                border: false,
-                // TODO style this
-                html: this.app.i18n._('This invitation has already been processed.'),
-                tbar: new Ext.Toolbar({
-                    items: [
-                        {
-                            xtype: 'tbitem',
-                            cls: 'CalendarIconCls',
-                            width: 16,
-                            height: 16
-                        },
-                        this.app.i18n._('You received an event invitation. Please select a response.'),
-                        '->',
-                        new Ext.Action({
-                            text: this.app.i18n._('Accept'),
-                            handler: this.processInvitation.createDelegate(this, ['ACCEPTED']),
-                            iconCls: 'cal-response-action-ACCEPTED',
-                            disabled: false,
-                            scope: this
-                        }),
-                        new Ext.Action({
-                            text: this.app.i18n._('Decline'),
-                            handler: this.processInvitation.createDelegate(this, ['DECLINED']),
-                            iconCls: 'cal-response-action-DECLINED',
-                            disabled: false,
-                            scope: this
-                        }),
-                        new Ext.Action({
-                            text: this.app.i18n._('Tentative'),
-                            handler: this.processInvitation.createDelegate(this, ['TENTATIVE']),
-                            iconCls: 'cal-response-action-TENTATIVE',
-                            disabled: false,
-                            scope: this
-                        })
-                    ]
-                 })
-            });
-        }
-        return this.topPanel;
-    },
-    
     /**
      * get panel for single record details
      * 
@@ -208,21 +122,6 @@ Ext.namespace('Tine.Felamimail');
             });
         }
         return this.messageRecordPanel;
-    },
-    
-    /**
-     * get bottom panel
-     * 
-     * @return {Ext.Panel}
-     */
-    getBottomPanel: function() {
-        if (! this.bottomPanel) {
-            var calendarDetailsPanel = new Tine.Calendar.EventDetailsPanel();
-            this.bottomPanel = calendarDetailsPanel.getSingleRecordPanel();
-            this.bottomPanel.setHeight(150);
-            this.bottomPanel.setVisible(false);
-        }
-        return this.bottomPanel;
     },
     
     /**
@@ -286,50 +185,46 @@ Ext.namespace('Tine.Felamimail');
         this.currentId = record.id;
         this.getLoadMask().hide();
 
-        if (this.record.get('preparedParts') && this.record.get('preparedParts').length > 0) {
-            Tine.log.debug('got preparedParts');
-            this.handleInvitationMessage(record);
-        } else {
-            Tine.log.debug('no invitation event');
-            this.getTopPanel().setVisible(false);
-            this.getBottomPanel().setVisible(false);
-        }
-        
         this.doLayout();
 
         this.tpl.overwrite(body, record.data);
         this.getEl().down('div').down('div').scrollTo('top', 0, false);
+        
+        if (this.record.get('preparedParts') && this.record.get('preparedParts').length > 0) {
+            Tine.log.debug('Tine.Felamimail.GridDetailsPanel::setTemplateContent about to handle preparedParts');
+            this.handlePreparedParts(record);
+        }
     },
     
     /**
      * handle invitation messages (show top + bottom panels)
      * 
      * @param {Tine.Felamimail.Model.Message} record
-     * 
-     * TODO replace email body with event details panel?
-     * TODO generalize this and delegate toolbar + panel rendering to calendar
      */
-    handleInvitationMessage: function(record) {
-        var firstPreparedPart = this.record.get('preparedParts')[0];
-        if (firstPreparedPart.contentType !== 'text/calendar') {
-            return;
-        }
-        
-        var invitationEvent = Tine.Calendar.backend.recordReader({
-                responseText: Ext.util.JSON.encode(firstPreparedPart.preparedData.event)
-            }),
-            myAttenderRecord = invitationEvent.getMyAttenderRecord(),
-            status = myAttenderRecord.get('status');
+    handlePreparedParts: function(record) {
+        try {
+            var firstPreparedPart = this.record.get('preparedParts')[0],
+                mimeType = String(firstPreparedPart.contentType).split(/[ ;]/)[0],
+                mainType = Tine.Felamimail.MimeDisplayManager.getMainType(mimeType);
+                
+            if (! mainType) {
+                Tine.log.info('Tine.Felamimail.GridDetailsPanel::handlePreparedParts nothing found to handle ' + mimeType);
+                return;
+            }
+            
+            var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0],
+                detailsPanel = Tine.Felamimail.MimeDisplayManager.create(mainType, {
+                    preparedPart: firstPreparedPart
+                });
+                
+            // quick hack till we have a card body here 
+            Ext.fly(bodyEl).update('');
+            detailsPanel.render(bodyEl);
 
-        Tine.log.debug('invitation status: ' + status);
-        
-        this.getTopPanel().setVisible(true);   
-        if (status !== 'NEEDS-ACTION') {
-            this.onInvitationStatusUpdate();
+        } catch (e) {
+            Tine.log.err('Tine.Felamimail.GridDetailsPanel::handlePreparedParts');
+            Tine.log.err(e.stack ? e.stack : e);
         }
-
-        this.getBottomPanel().setVisible(true);
-        this.getBottomPanel().loadRecord.defer(100, this.getBottomPanel(), [invitationEvent]);
     },
     
     /**
@@ -478,7 +373,7 @@ Ext.namespace('Tine.Felamimail');
         
         switch (selector) {
             case 'span[class=tinebase-download-link]':
-                var idx = target.id.split(':')[1];
+                var idx = target.id.split(':')[1],
                     attachment = this.record.get('attachments')[idx];
                     
                 if (! this.record.bodyIsFetched()) {

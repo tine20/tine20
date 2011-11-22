@@ -16,7 +16,6 @@
  */
 class Calendar_Frontend_iMIP
 {
-    
     /**
      * auto process given iMIP component 
      * 
@@ -75,8 +74,6 @@ class Calendar_Frontend_iMIP
     
     /**
      * assemble an iMIP component in the notification flow
-     * 
-     * 
      */
     public function assembleComponent()
     {
@@ -90,6 +87,7 @@ class Calendar_Frontend_iMIP
      * @param  Calendar_Model_iMIP   $_iMIP
      * @param  Calendar_Model_Event  $_event
      * @param  string                $_status
+     * @return mixed
      */
     protected function _process($_iMIP, $_existingEvent, $_status = NULL)
     {
@@ -107,14 +105,28 @@ class Calendar_Frontend_iMIP
         }
     }
     
+    /**
+     * add/update event (if outdated) / no status stuff / DANGER of duplicate UIDs
+     * -  no notifications!
+     * 
+     * @param  Calendar_Model_iMIP   $_iMIP
+     * @param  Calendar_Model_Event  $_existingEvent
+     * 
+     * @todo implement
+     */
     protected function _processPublish($_iMIP, $_existingEvent)
     {
-        // add/update event (if outdated) / no status stuff / DANGER of duplicate UIDs
-        // no notifications!
         throw new Tinebase_Exception_NotImplemented('processing published events is not supported yet');
     }
     
-    protected function _processRequest($_iMIP, $_existingEvent)
+    /**
+     * process request
+     * 
+     * @param  Calendar_Model_iMIP   $_iMIP
+     * @param  Calendar_Model_Event  $_existingEvent
+     * @param  string                $_status
+     */
+    protected function _processRequest($_iMIP, $_existingEvent, $_status)
     {
         $ownAttender = $this->_getOwnAttender($_iMIP, $_existingEvent, TRUE, FALSE);
         $organizer = $this->_getOrganizer($_iMIP, $_existingEvent, TRUE, TRUE);
@@ -139,6 +151,12 @@ class Calendar_Frontend_iMIP
         }
     }
     
+    /**
+     * process reply
+     * 
+     * @param  Calendar_Model_iMIP   $_iMIP
+     * @param  Calendar_Model_Event  $_existingEvent
+     */
     protected function _processReply($_iMIP, $_existingEvent)
     {
         if (! $_existingEvent) {
@@ -176,6 +194,14 @@ class Calendar_Frontend_iMIP
         // some attender replied to my request (I'm Organizer) -> update status (seq++) / send notifications!
     }
     
+    /**
+    * process add
+    *
+    * @param  Calendar_Model_iMIP   $_iMIP
+    * @param  Calendar_Model_Event  $_existingEvent
+    * 
+    * @todo implement
+    */
     protected function _processAdd($_iMIP, $_existingEvent)
     {
         // organizer added a meeting/recurrance to an existing event -> update event
@@ -187,6 +213,14 @@ class Calendar_Frontend_iMIP
         throw new Tinebase_Exception_NotImplemented('processing add requests is not supported yet');
     }
     
+    /**
+    * process cancel
+    *
+    * @param  Calendar_Model_iMIP   $_iMIP
+    * @param  Calendar_Model_Event  $_existingEvent
+    * 
+    * @todo implement
+    */
     protected function _processCancel($_iMIP, $_existingEvent)
     {
         // organizer caneled meeting/recurrence of an existing event -> update event
@@ -194,6 +228,14 @@ class Calendar_Frontend_iMIP
         throw new Tinebase_Exception_NotImplemented('processing CANCEL is not supported yet');
     }
     
+    /**
+    * process refresh
+    *
+    * @param  Calendar_Model_iMIP   $_iMIP
+    * @param  Calendar_Model_Event  $_existingEvent
+    *
+    * @todo implement
+    */
     protected function _processRefresh($_iMIP, $_existingEvent)
     {
         // always internal organizer
@@ -202,6 +244,14 @@ class Calendar_Frontend_iMIP
         throw new Tinebase_Exception_NotImplemented('processing REFRESH is not supported yet');
     }
     
+    /**
+    * process counter
+    *
+    * @param  Calendar_Model_iMIP   $_iMIP
+    * @param  Calendar_Model_Event  $_existingEvent
+    *
+    * @todo implement
+    */
     protected function _processCounter($_iMIP, $_existingEvent)
     {
         // some attendee suggests to change the event
@@ -211,6 +261,14 @@ class Calendar_Frontend_iMIP
         throw new Tinebase_Exception_NotImplemented('processing COUNTER is not supported yet');
     }
     
+    /**
+    * process declinecounter
+    *
+    * @param  Calendar_Model_iMIP   $_iMIP
+    * @param  Calendar_Model_Event  $_existingEvent
+    *
+    * @todo implement
+    */
     protected function _processDeclinecounter($_iMIP, $_existingEvent)
     {
         // organizer declined my counter request of an existing event -> update event

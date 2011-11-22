@@ -29,6 +29,7 @@ class Calendar_Frontend_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar All Frontend Tests');
         $suite->addTest(Calendar_Frontend_WebDAV_AllTests::suite());
         $suite->addTestSuite('Calendar_Frontend_CalDAVTest');
+        $suite->addTestSuite('Calendar_Frontend_iMIPTest');
         return $suite;
     }
 }
