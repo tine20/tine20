@@ -98,6 +98,11 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
     const PRECONDITION_ORGANIZER  = 'ORGANIZER';
     
     /**
+     * precondition that method is supported
+     */
+    const PRECONDITION_SUPPORTED  = 'SUPPORTED';
+    
+    /**
      * (non-PHPdoc)
      * @see Tinebase_Record_Abstract::_identifier
      */
