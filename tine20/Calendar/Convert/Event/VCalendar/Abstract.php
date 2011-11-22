@@ -31,6 +31,12 @@ class Calendar_Convert_Event_VCalendar_Abstract
     protected $_version;
     
     /**
+     * value of METHOD property
+     * @var string
+     */
+    protected $_method;
+    
+    /**
      * @param  string  $_version  the version of the client
      */
     public function __construct($_version = null)
@@ -52,9 +58,12 @@ class Calendar_Convert_Event_VCalendar_Abstract
         
         // required vcalendar fields
         $version = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->version;
-        $vcalendar->add(new Sabre_VObject_Property('PRODID', "-//tine20.org//Tine 2.0 Calendar V$version//EN"));
-        $vcalendar->add(new Sabre_VObject_Property('VERSION', '2.0'));
-        $vcalendar->add(new Sabre_VObject_Property('CALSCALE', 'GREGORIAN'));
+        if (isset($this->_method)) {
+            $vcalendar->METHOD = $this->_method;
+        }
+        $vcalendar->PRODID   = "-//tine20.org//Tine 2.0 Calendar V$version//EN";
+        $vcalendar->VERSION  = '2.0';
+        $vcalendar->CALSCALE = 'GREGORIAN';
         
         $vtimezone = $this->_convertDateTimezone($_model->originator_tz);
         $vcalendar->add($vtimezone);
@@ -389,6 +398,16 @@ class Calendar_Convert_Event_VCalendar_Abstract
     protected function _afterFromTine20Model(Sabre_VObject_Component $_vcalendar)
     {
         
+    }
+    
+    /**
+     * set the METHOD for the generated VCALENDAR
+     *
+     * @param  string  $_method  the method
+     */
+    public function setMethod($_method)
+    {
+        $this->_method = $_method;
     }
     
     /**
