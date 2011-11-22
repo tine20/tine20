@@ -74,11 +74,12 @@ class Calendar_Frontend_iMIP
     
     /**
      * assemble an iMIP component in the notification flow
+     * 
+     * @todo implement
      */
     public function assembleComponent()
     {
-        // cancle normal vs. recur instance
-        
+        // cancel normal vs. recur instance
     }
     
     /**
@@ -103,13 +104,13 @@ class Calendar_Frontend_iMIP
         }
         
         if (method_exists($this, $preconditionMethodName)) {
-            $preconditionCheck = $this->{$preconditionMethodName}($_iMIP, $_existingEvent, $_status);
+            $preconditionCheckSuccessful = $this->{$preconditionMethodName}($_iMIP, $_existingEvent, $_status);
         } else {
-            $preconditionCheck = TRUE;
+            $preconditionCheckSuccessful = TRUE;
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " No preconditions check fn found for method " . $method);
         }
         
-        if ($preconditionCheck) {
+        if ($preconditionCheckSuccessful) {
             $result = $this->{$processMethodName}($_iMIP, $_existingEvent, $_status);
         } else {
             $result = FALSE;
@@ -125,8 +126,7 @@ class Calendar_Frontend_iMIP
     }
     
     /**
-     * add/update event (if outdated) / no status stuff / DANGER of duplicate UIDs
-     * -  no notifications!
+     * publish precondition
      * 
      * @param  Calendar_Model_iMIP   $_iMIP
      * @param  Calendar_Model_Event  $_existingEvent
@@ -154,16 +154,103 @@ class Calendar_Frontend_iMIP
     }
     
     /**
+     * request precondition
+     * 
+     * @param  Calendar_Model_iMIP   $_iMIP
+     * @param  Calendar_Model_Event  $_existingEvent
+     * @return boolean
+     */
+    protected function _checkRequestPreconditions($_iMIP, $_existingEvent)
+    {
+        $result = $this->_assertAttender($_iMIP, $_existingEvent, TRUE, FALSE);
+        $result = ($this->_assertOrganizer($_iMIP, $_existingEvent, TRUE, TRUE) && $result);
+        
+        return $result;
+    }
+    
+    /**
+    * returns and optionally asserts own attendee record
+    *
+    * @param  Calendar_Model_iMIP   $_iMIP
+    * @param  string                $_status
+    * @param  boolean               $_assertExistence
+    * @param  boolean               $_assertOriginator
+    * @return boolean
+    */
+    protected function _assertAttender($_iMIP, $_existingEvent, $_assertExistence, $_assertOriginator)
+    {
+        $result = TRUE;
+        
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($_existingEvent ? $_existingEvent->attendee : $_iMIP->getEvent()->attendee);
+        if ($_assertExistence && ! $ownAttender) {
+            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_SUPPORTED, "processing {$_iMIP->method} for non attendee is not supported");
+            return FALSE;
+        }
+        
+        if ($_assertOriginator) {
+            $result = $this->_assertOriginator($_iMIP, $ownAttender->getResolvedUser(), 'own attendee');
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * assert originator
+     * 
+     * @param Calendar_Model_iMIP $_iMIP
+     * @param Addressbook_Model_Contact $_contact
+     */
+    protected function _assertOriginator(Calendar_Model_iMIP $_iMIP, Addressbook_Model_Contact $_contact, $_who)
+    {
+        $contactEmails = array($_contact->email, $_contact->email_home);
+        if(! in_array($_iMIP->originator, $contactEmails)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__
+            . ' originator ' . $_iMIP->originator . ' ! in_array() '. print_r($contactEmails, TRUE));
+        
+            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORIGINATOR, $_who . " must be the same as originator of iMIP -> spoofing attempt?");
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+    
+    /**
+    * returns and optionally asserts own attendee record
+    *
+    * @param  Calendar_Model_iMIP   $_iMIP
+    * @param  string                $_status
+    * @param  bool                  $_assertExistence
+    * @param  bool                  $_assertOriginator
+    * @return Addressbook_Model_Contact
+    * @throws Calendar_Exception_iMIP
+    */
+    protected function _assertOrganizer($_iMIP, $_existingEvent, $_assertExistence, $_assertOriginator)
+    {
+        $organizer = $_existingEvent ? $_existingEvent->resolveOrganizer() : $_iMIP->getEvent()->resolveOrganizer();
+        if ($_assertExistence && ! $organizer) {
+            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORGANIZER, "processing {$_iMIP->method} without organizer is not possible");
+            return FALSE;
+        }
+        
+        if ($_assertOriginator) {
+            $result = $this->_assertOriginator($_iMIP, $organizer, 'organizer');
+        }
+    
+        return $organizer;
+    }
+    
+    /**
      * process request
      * 
      * @param  Calendar_Model_iMIP   $_iMIP
      * @param  Calendar_Model_Event  $_existingEvent
      * @param  string                $_status
+     * @throws Tinebase_Exception_NotImplemented
      */
     protected function _processRequest($_iMIP, $_existingEvent, $_status)
     {
-        $ownAttender = $this->_getOwnAttender($_iMIP, $_existingEvent, TRUE, FALSE);
-        $organizer = $this->_getOrganizer($_iMIP, $_existingEvent, TRUE, TRUE);
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($_existingEvent ? $_existingEvent->attendee : $_iMIP->getEvent()->attendee);
+        $organizer = $_existingEvent ? $_existingEvent->resolveOrganizer() : $_iMIP->getEvent()->resolveOrganizer();
         
         // internal organizer:
         //  - event is up to date
@@ -315,38 +402,11 @@ class Calendar_Frontend_iMIP
      * @param  Calendar_Model_iMIP   $_iMIP
      * @param  string                $_status
      * @param  bool                  $_assertExistence
-     * @param  bool                  $_assertExistence
-     * @return Calendar_Model_Attender
-     * @throws Calendar_Exception_iMIP
-     */
-    protected function _getOwnAttender($_iMIP, $_existingEvent, $_assertExistence, $_assertOriginator)
-    {
-        $ownAttender = Calendar_Model_Attender::getOwnAttender($_existingEvent ? $_existingEvent->attendee : $_iMIP->getEvent()->attendee);
-        if ($_assertExistence && ! $ownAttender) {
-            throw new Calendar_Exception_iMIP("processing {$_iMIP->method} for non attendee is not supported");
-        }
-        if ($_assertOriginator) {
-            $contact = $ownAttender->getResolvedUser();
-            $contactEmails = array($contact->email, $contact->email_home);
-            if(! in_array($_iMIP->originator, $contactEmails)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__
-                    . ' originator ' . $_iMIP->originator . ' ! in_array() '. print_r($contactEmails, TRUE));
-                
-                throw new Calendar_Exception_iMIP("own attendee must be the same as originator of iMIP -> spoofing attempt?");
-            }
-        }
-        return $ownAttender;
-    }
-    
-    /**
-     * returns and optionally asserts own attendee record
-     * 
-     * @param  Calendar_Model_iMIP   $_iMIP
-     * @param  string                $_status
-     * @param  bool                  $_assertExistence
      * @param  bool                  $_assertOriginator
      * @return Addressbook_Model_Contact
      * @throws Calendar_Exception_iMIP
+     * 
+     * @deprecated
      */
     protected function _getOrganizer($_iMIP, $_existingEvent, $_assertExistence, $_assertOriginator)
     {
