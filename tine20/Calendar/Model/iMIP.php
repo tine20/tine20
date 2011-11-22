@@ -104,6 +104,11 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
     const PRECONDITION_SUPPORTED  = 'SUPPORTED';
     
     /**
+     * precondition that event exists
+     */
+    const PRECONDITION_EVENTEXISTS  = 'EVENTEXISTS';
+    
+    /**
      * (non-PHPdoc)
      * @see Tinebase_Record_Abstract::_identifier
      */
