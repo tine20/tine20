@@ -67,7 +67,7 @@ class Calendar_Frontend_iMIP
     public function prepareComponent($_iMIP)
     {
         Calendar_Model_Attender::resolveAttendee($_iMIP->event->attendee);
-        Tinebase_Model_Container::resolveContainer($_iMIP->event->container_id);
+        Tinebase_Model_Container::resolveContainer($_iMIP->event);
         
         return $_iMIP;
     }
