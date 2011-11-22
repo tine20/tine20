@@ -111,7 +111,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
         
         $result = TRUE;
         if ($_targetFolder === Felamimail_Model_Folder::FOLDER_TRASH) {
-            $result = $this->_moveMessagesToTrash($_messagesInFolder, $_folderId);
+            $result = $this->_moveMessagesToTrash($messagesInFolder, $_folderId);
         } else if ($_folderId === $_targetFolder->getId()) {
             // no need to move
             $result = FALSE;
