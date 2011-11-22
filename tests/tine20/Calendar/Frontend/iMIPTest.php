@@ -6,6 +6,8 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
+ * 
+ * @todo		move files/*.eml to Felamimail tests or remove them?
  */
 
 /**
@@ -56,5 +58,55 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+    }
+    
+    /**
+     * testExternalInvitationRequest
+     * 
+     * @todo implement
+     */
+    public function testExternalInvitationRequest()
+    {
+        
+    }
+
+    /**
+     * testInternalInvitationRequest
+     * 
+     * @todo implement
+     */
+    public function testInternalInvitationRequest()
+    {
+        
+    }
+
+    /**
+     * testInvitationReplyAccepted
+     * 
+     * @todo implement
+     */
+    public function testInvitationReplyAccepted()
+    {
+        
+    }
+
+    /**
+     * testInvitationReplyDeclined
+     * 
+     * @todo implement
+     */
+    public function testInvitationReplyDeclined()
+    {
+        
+    }
+
+    /**
+     * testInvitationCancel
+     * 
+     * @todo implement
+     */
+    public function testInvitationCancel()
+    {
+        
     }
 }
