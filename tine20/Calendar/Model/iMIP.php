@@ -73,6 +73,31 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
     const METHOD_DECLINECOUNTER = 'DECLINECOUNTER';
     
     /**
+     * precondition that originator of iMIP is also:
+     * 
+     * organizer for PUBLISH/REQUEST/ADD/CANCEL/DECLINECOUNTER
+     * attendee  for REPLY/REFRESH/COUNTER
+     */
+    const PRECONDITION_ORIGINATOR = 'ORIGINATOR';
+    
+    /**
+     * precondition iMIP message is more recent than event stored in calendar backend
+     */
+    const PRECONDITION_RECENT     = 'RECENT';
+    
+    /**
+     * precondition that current user is event attendee
+     * 
+     * for REQUEST/DECLINECOUNTER
+     */
+    const PRECONDITION_ATTENDEE   = 'ATTENDEE';
+    
+    /**
+     * precondition that event has an organizer
+     */
+    const PRECONDITION_ORGANIZER  = 'ORGANIZER';
+    
+    /**
      * (non-PHPdoc)
      * @see Tinebase_Record_Abstract::_identifier
      */
@@ -94,6 +119,7 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
         'originator'           => array('allowEmpty' => false,        ), // email adddress
         'userAgent'            => array('allowEmpty' => true,         ),
         'event'                => array('allowEmpty' => true          ),
+        'preconditions'        => array('allowEmpty' => true          ),
     );
     
     /**
