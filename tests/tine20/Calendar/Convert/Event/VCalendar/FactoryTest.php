@@ -60,14 +60,36 @@ class Calendar_Convert_Event_VCalendar_FactoryTest extends PHPUnit_Framework_Tes
     }
     
     /**
-     * test factory with useragent string from MacOS X 
+     * test factory with useragent string from iPhone OS 3
      */
-    public function testUserAgentIPhone()
+    public function testUserAgentIPhoneOS3()
     {
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent('DAVKit/4.0 (728.4); iCalendar/1 (42.1); iPhone/3.1.3 7E18');
         
         $this->assertEquals(Calendar_Convert_Event_VCalendar_Factory::CLIENT_IPHONE, $backend);
-        $this->assertEquals('42.1', $version);
+        $this->assertEquals('3.1.3', $version);
+    }            
+    
+    /**
+     * test factory with useragent string from iPhone OS 4
+     */
+    public function testUserAgentIPhoneOS4()
+    {
+        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent('DAVKit/5.0 (767); iCalendar/5.0 (79); iPhone/4.2.1 8C148');
+        
+        $this->assertEquals(Calendar_Convert_Event_VCalendar_Factory::CLIENT_IPHONE, $backend);
+        $this->assertEquals('4.2.1', $version);
+    }            
+    
+    /**
+     * test factory with useragent string from iPhone OS 5
+     */
+    public function testUserAgentIPhoneOS5()
+    {
+        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent('iOS/5.0.1 (9A405) dataaccessd/1.0');
+        
+        $this->assertEquals(Calendar_Convert_Event_VCalendar_Factory::CLIENT_IPHONE, $backend);
+        $this->assertEquals('5.0.1', $version);
     }            
     
     /**
