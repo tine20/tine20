@@ -12,20 +12,15 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
     editDialog: null,
     
     form: null,
-    
-    disabledFields: [],
-    
     changes: null,
     
     init: function(editDialog) {
-        
-        this.disabledFields = {};
         
         this.editDialog = editDialog;
         this.app = Tine.Tinebase.appMgr.get(this.editDialog.app);
         this.form = this.editDialog.getForm();
         
-        this.editDialog.on('load', this.disableFields, this);
+        this.editDialog.on('render', this.handleFields, this);
         
         this.editDialog.onRecordUpdate = this.editDialog.onRecordUpdate.createInterceptor(this.onRecordUpdate, this);
         this.editDialog.onApplyChanges = function(button, event, closeWindow) { this.onRecordUpdate(); }       
@@ -64,7 +59,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                         Ext.MessageBox.hide();
                         this.editDialog.fireEvent('update');
                         this.editDialog.purgeListeners();
-                        this.editDialog.window.close();                       
+//                        this.editDialog.window.close();                       
                     }, scope: this
                 });
             }
@@ -73,64 +68,95 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         return false;
     },
     
-    disableFields: function() {
-        
-        for(fieldName in this.editDialog.record.data) {
-            var field = this.form.findField(fieldName);
-            // TODO: handle fields like image etc.
-            if(typeof(this.editDialog.record.data[fieldName]) == 'object') {
-                continue;
-            }
-            Ext.each(this.editDialog.sm.getSelections(), function(selection,index) {
+    handleFields: function() {
+        // Default Fields    
+        Ext.each(this.editDialog.record.store.fields.keys, function(fieldKey) {
+            var field = this.form.findField(fieldKey);
 
-                
+            Ext.each(this.editDialog.sm.getSelections(), function(selection,index) {          
                 if(field) {
-                    field.originalValue = this.editDialog.record.data[fieldName];
-                    
-                    // set back??
-//                    field.on('dblclick',function(){
-//                        this.setValue(this.originalValue);
-//                        this.edited = false;
-//                        this.removeClass('applyToAll');
-//                        if(this.multi) {
-//                            this.addClass('notEdited');
-//                        }
-//                    });
-                    
-                if(selection.data[fieldName] != this.editDialog.record.data[fieldName]) {
-                        
-                        field.setReadOnly(true);
-                        field.addClass('notEdited');
-                        field.multi = true;
-                        field.edited = false;
-                        field.on('focus',function() {
-                            this.setReadOnly(false);
-                            this.on('blur',function() {
-                                if(this.originalValue != this.getValue()) {
-                                    this.removeClass('notEdited');
-                                    this.addClass('applyToAll');
-                                    this.edited = true;
-                                }
-                            });
-                        });
-                                       
-                } else {
-                  
-                  field.on('blur',function() {
-                                if(this.originalValue != this.getValue()) {
-                                    this.addClass('applyToAll');
-                                    this.edited = true;
-                                } else {
-                                    this.edited = false;
-                                    this.removeClass('applyToAll');
-                                    if(this.multi) {
-                                        this.addClass('notEdited');
-                                    }
-                                }
-                            });  
+                   field.originalValue = this.editDialog.record.data[fieldKey];
+
+                   if(selection.data[fieldKey] != field.originalValue) {
+                        this.handleField(field,fieldKey,false);
+                        return false;
+                    } else {
+                        if(index == this.editDialog.sm.selections.length-1) {
+                             this.handleField(field,fieldKey,true);
+                             return false;
+                        }
                     }
+                     
                 }
             },this);   
-        } 
+        },this);
+       
+        // Customfields
+        Ext.each(this.editDialog.cfConfigs, function(el) {
+            var fieldKey = el.data.name;
+            var field = this.form.findField('customfield_' + fieldKey);
+            field.originalValue = this.editDialog.record.data.customfields[fieldKey];
+             Ext.each(this.editDialog.sm.getSelections(), function(selection,index) {
+                if(field) { 
+                    
+                    if(selection.data.customfields[fieldKey] != field.originalValue) {
+                        this.handleField(field,fieldKey,false);
+                        return false;
+                    } else {
+                    if(index == this.editDialog.sm.selections.length-1) {
+                             this.handleField(field,fieldKey,true);
+                             return false;
+                        }
+                    }
+
+                }
+            },this);            
+            
+            
+        },this);
+        
+    },
+    
+    handleField: function(field,fieldKey,samevalue) {
+        if(!samevalue) {
+            field.setReadOnly(true);
+            field.addClass('notEdited');
+            field.multi = true;
+            field.edited = false;
+                        
+            field.on('focus', function() {
+                if(this.readOnly) this.originalValue = this.startValue;
+                this.setReadOnly(false);
+            });
+                        
+            field.on('blur', function() {
+                if(this.originalValue != this.getValue()) {
+                    this.removeClass('notEdited');
+                    this.addClass('applyToAll');
+                    this.edited = true;
+                } else {
+                    this.edited = false;
+                    this.removeClass('applyToAll');
+                    
+                    if(this.multi) {
+                        this.setReadOnly(true);
+                        this.addClass('notEdited');
+                    }
+                }
+            });
+        } else {                  
+            field.on('blur',function() {
+                if(this.originalValue != this.getValue()) {
+                    this.addClass('applyToAll');
+                    this.edited = true;
+                } else {
+                    this.edited = false;
+                    this.removeClass('applyToAll');
+                    if(this.multi) {
+                        this.addClass('notEdited');
+                    }
+                }
+            });  
+        }
     }
 }
