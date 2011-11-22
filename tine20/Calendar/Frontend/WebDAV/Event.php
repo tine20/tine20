@@ -61,12 +61,26 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     public static function create(Tinebase_Model_Container $container, $name, $vobjectData)
     {
+        if (is_resource($vobjectData)) {
+            $vobjectData = stream_get_contents($vobjectData);
+        }
+        // Converting to UTF-8, if needed
+        $vobjectData = Sabre_DAV_StringUtil::ensureUTF8($vobjectData);
+        
+        Sabre_CalDAV_ICalendarUtil::validateICalendarObject($vobjectData, array('VEVENT', 'VFREEBUSY'));
+        
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
         
         $event = $converter->toTine20Model($vobjectData);
         $event->container_id = $container->getId();
+        
+        #$existingEvent = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($event);
+        #
+        #if ($existingEvent !== null) {
+        #    throw new Sabre_CalDAV_Exception_UniqueSchedulingObjectResource();
+        #}
         
         self::enforceEventParameters($event);
         
