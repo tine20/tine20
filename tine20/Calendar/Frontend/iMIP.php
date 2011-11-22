@@ -11,6 +11,7 @@
 
 /**
  * iMIP (RFC 6047) frontend for calendar
+ * 
  * @package     Calendar
  * @subpackage  Frontend
  */
@@ -59,7 +60,7 @@ class Calendar_Frontend_iMIP
     /**
      * prepares iMIP component for client
      * 
-     * @TODO  move to Calendar_Frontend_Json / Model?
+     * @TODO  move to Calendar_Frontend_Json / Model / Convert?
      *  
      * @param  Calendar_Model_iMIP $_iMIP
      * @return Calendar_Model_iMIP
@@ -131,6 +132,8 @@ class Calendar_Frontend_iMIP
      * @param  Calendar_Model_iMIP   $_iMIP
      * @param  Calendar_Model_Event  $_existingEvent
      * @return boolean
+     * 
+     * @todo implement
      */
     protected function _checkPublishPreconditions($_iMIP, $_existingEvent)
     {
@@ -140,8 +143,7 @@ class Calendar_Frontend_iMIP
     }
     
     /**
-     * add/update event (if outdated) / no status stuff / DANGER of duplicate UIDs
-     * -  no notifications!
+     * process publish
      * 
      * @param  Calendar_Model_iMIP   $_iMIP
      * @param  Calendar_Model_Event  $_existingEvent
@@ -150,7 +152,8 @@ class Calendar_Frontend_iMIP
      */
     protected function _processPublish($_iMIP, $_existingEvent)
     {
-        throw new Tinebase_Exception_NotImplemented('processing published events is not supported yet');
+        // add/update event (if outdated) / no status stuff / DANGER of duplicate UIDs
+        // -  no notifications!
     }
     
     /**
@@ -348,6 +351,22 @@ class Calendar_Frontend_iMIP
     }
     
     /**
+    * add precondition
+    *
+    * @param  Calendar_Model_iMIP   $_iMIP
+    * @param  Calendar_Model_Event  $_existingEvent
+    * @return boolean
+    *
+    * @todo implement
+    */
+    protected function _checkAddPreconditions($_iMIP, $_existingEvent)
+    {
+        $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_SUPPORTED, 'processing add requests is not supported yet');
+    
+        return FALSE;
+    }
+    
+    /**
     * process add
     *
     * @param  Calendar_Model_iMIP   $_iMIP
@@ -363,7 +382,22 @@ class Calendar_Frontend_iMIP
         // external organizer:
         //  - update event
         //  - the iMIP is already the notification mail!
-        throw new Tinebase_Exception_NotImplemented('processing add requests is not supported yet');
+    }
+    
+    /**
+    * cancel precondition
+    *
+    * @param  Calendar_Model_iMIP   $_iMIP
+    * @param  Calendar_Model_Event  $_existingEvent
+    * @return boolean
+    *
+    * @todo implement
+    */
+    protected function _checkCancelPreconditions($_iMIP, $_existingEvent)
+    {
+        $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_SUPPORTED, 'processing CANCEL is not supported yet');
+    
+        return FALSE;
     }
     
     /**
@@ -378,7 +412,22 @@ class Calendar_Frontend_iMIP
     {
         // organizer caneled meeting/recurrence of an existing event -> update event
         // the iMIP is already the notification mail!
-        throw new Tinebase_Exception_NotImplemented('processing CANCEL is not supported yet');
+    }
+    
+    /**
+    * refresh precondition
+    *
+    * @param  Calendar_Model_iMIP   $_iMIP
+    * @param  Calendar_Model_Event  $_existingEvent
+    * @return boolean
+    *
+    * @todo implement
+    */
+    protected function _checkRefreshPreconditions($_iMIP, $_existingEvent)
+    {
+        $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_SUPPORTED, 'processing REFRESH is not supported yet');
+    
+        return FALSE;
     }
     
     /**
@@ -394,7 +443,22 @@ class Calendar_Frontend_iMIP
         // always internal organizer
         //  - send message
         //  - mark iMIP message ANSWERED
-        throw new Tinebase_Exception_NotImplemented('processing REFRESH is not supported yet');
+    }
+    
+    /**
+    * counter precondition
+    *
+    * @param  Calendar_Model_iMIP   $_iMIP
+    * @param  Calendar_Model_Event  $_existingEvent
+    * @return boolean
+    *
+    * @todo implement
+    */
+    protected function _checkCounterPreconditions($_iMIP, $_existingEvent)
+    {
+        $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_SUPPORTED, 'processing COUNTER is not supported yet');
+    
+        return FALSE;
     }
     
     /**
@@ -411,7 +475,22 @@ class Calendar_Frontend_iMIP
         // status: ACCEPT => update event, send notifications to all
         // status: DECLINE => send DECLINECOUNTER to originator
         // mark message ANSWERED
-        throw new Tinebase_Exception_NotImplemented('processing COUNTER is not supported yet');
+    }
+    
+    /**
+    * declinecounter precondition
+    *
+    * @param  Calendar_Model_iMIP   $_iMIP
+    * @param  Calendar_Model_Event  $_existingEvent
+    * @return boolean
+    *
+    * @todo implement
+    */
+    protected function _checkDeclinecounterPreconditions($_iMIP, $_existingEvent)
+    {
+        $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_SUPPORTED, 'processing DECLINECOUNTER is not supported yet');
+    
+        return FALSE;
     }
     
     /**
@@ -425,36 +504,5 @@ class Calendar_Frontend_iMIP
     protected function _processDeclinecounter($_iMIP, $_existingEvent)
     {
         // organizer declined my counter request of an existing event -> update event
-        throw new Tinebase_Exception_NotImplemented('processing DECLINECOUNTER is not supported yet');
-    }
-    
-    /**
-     * returns and optionally asserts own attendee record
-     * 
-     * @param  Calendar_Model_iMIP   $_iMIP
-     * @param  string                $_status
-     * @param  bool                  $_assertExistence
-     * @param  bool                  $_assertOriginator
-     * @return Addressbook_Model_Contact
-     * @throws Calendar_Exception_iMIP
-     * 
-     * @deprecated
-     */
-    protected function _getOrganizer($_iMIP, $_existingEvent, $_assertExistence, $_assertOriginator)
-    {
-        $organizer = $_existingEvent ? $_existingEvent->resolveOrganizer() : $_iMIP->getEvent()->resolveOrganizer();
-        if ($_assertExistence && ! $organizer) {
-            throw new Calendar_Exception_iMIP("processing {$_iMIP->method} without organizer is not possible");
-        }
-        
-        $organizerEmails =  array($organizer->email, $organizer->email_home);
-        if ($_assertOriginator && ! in_array($_iMIP->originator, $organizerEmails)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__
-                . ' originator ' . $_iMIP->originator . ' ! in_array() '. print_r($organizerEmails, TRUE));
-            
-            throw new Calendar_Exception_iMIP("organizer of event must be the same as originator of iMIP -> spoofing attempt?");
-        }
-        
-        return $organizer;
     }
 }
