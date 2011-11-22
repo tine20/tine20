@@ -109,8 +109,13 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
                 'value'     => $this->_container->getId()
             )
         ));
-        
-        $objects = $this->_getController()->search($filter);
+
+        /*
+         * see http://forge.tine20.org/mantisbt/view.php?id=5122
+         * we must use action 'sync' and not 'get' as 
+         * otherwise the calendar also return events the user only can see because of freebusy
+         */        
+        $objects = $this->_getController()->search($filter, null, false, false, 'sync');
         
         $children = array();
         
@@ -148,9 +153,6 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
      */
     public function getACL() 
     {
-        // disable acl for now, until we have group principals in place
-        return null;
-        
         $acl    = array();
         
         $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container, true);
@@ -162,7 +164,13 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
                     break;
                     
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
-                    $principal = 'principals/groups/';
+                    try {
+                        $group = Tinebase_Group::getInstance()->getGroupById($grant->account_id);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        // skip group
+                        continue 2;
+                    }
+                    $principal = 'principals/groups/' . $group->list_id;
                     break;
                     
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
