@@ -10,12 +10,13 @@
 /**
  * Model of an iMIP (RFC 6047) Message
  * 
- * @property    id           message <id>_<part> of iMIP mail part
- * @property    ics          ical string in UTF8
- * @property    event        iMIP message event
- * @property    method       method of iMIP transaction
- * @property    userAgent    userAgent origination iMIP transaction
- * @property    originator   originator /sender of iMIP transaction
+ * @property    id           	message <id>_<part> of iMIP mail part
+ * @property    ics          	ical string in UTF8
+ * @property    event        	iMIP message event
+ * @property    method       	method of iMIP transaction
+ * @property    userAgent    	userAgent origination iMIP transaction
+ * @property    originator   	originator /sender of iMIP transaction
+ * @property	preconditions 	array of checked processing preconditions
  * @package     Calendar
  * @subpackage  Model
  */
@@ -186,4 +187,48 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
         return $this->_converter;
     }
     
+    /**
+     * add failed precondtion check
+     * 
+     * @param string $_preconditionName
+     * @param string $_message
+     */
+    public function addFailedPrecondition($_preconditionName, $_message)
+    {
+        $this->_addPrecondition($_preconditionName, FALSE, $_message);
+    }
+    
+    /**
+     * add failed precondtion check
+     * 
+     * @param string $_preconditionName
+     * @param string $_message
+     */
+    public function addSuccessfulPrecondition($_preconditionName)
+    {
+        $this->_addPrecondition($_preconditionName, TRUE);
+    }
+    
+    /**
+     * add precondition
+     * 
+     * @param string $_preconditionName
+     * @param boolean $_check
+     * @param string $_message
+     */
+    protected function _addPrecondition($_preconditionName, $_check, $_message = NULL)
+    {
+        $preconditions = (is_array($this->preconditions)) ? $this->preconditions : array();
+        
+        if (! isset($preconditions[$_preconditionName])) {
+            $preconditions[$_preconditionName] = array();
+        }
+        
+        $preconditions[$_preconditionName][] = array(
+            'check'     => $_check,
+            'message'	=> $_message,
+        );
+        
+        $this->preconditions = $preconditions;
+    }
 }
