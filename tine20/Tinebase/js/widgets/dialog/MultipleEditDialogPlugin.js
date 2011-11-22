@@ -79,7 +79,6 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             var field = this.form.findField(fieldName);
             // TODO: handle fields like image etc.
             if(typeof(this.editDialog.record.data[fieldName]) == 'object') {
-                if(field) field.disable();
                 continue;
             }
             Ext.each(this.editDialog.sm.getSelections(), function(selection,index) {
