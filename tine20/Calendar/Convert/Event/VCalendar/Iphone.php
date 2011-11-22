@@ -19,7 +19,9 @@
 class Calendar_Convert_Event_VCalendar_Iphone extends Calendar_Convert_Event_VCalendar_Abstract
 {
     // DAVKit/4.0 (728.4); iCalendar/1 (42.1); iPhone/3.1.3 7E18
-    const HEADER_MATCH = '/iCalendar\/1 \((?P<version>\S+)\)\; iPhone/';
+    // DAVKit/5.0 (767); iCalendar/5.0 (79); iPhone/4.2.1 8C148
+    // iOS/5.0.1 (9A405) dataaccessd/1.0
+    const HEADER_MATCH = '/(iPhone|iOS)\/(?P<version>\S+)/';
     
     protected $_supportedFields = array(
         'seq',
