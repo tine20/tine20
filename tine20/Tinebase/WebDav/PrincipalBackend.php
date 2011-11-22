@@ -98,6 +98,17 @@ class Tinebase_WebDav_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend
     {
         $result = array();
         
+        list(, $contactId) = Sabre_DAV_URLUtil::splitPath($principal);
+        
+        $user = Tinebase_User::getInstance()->getUserByProperty('contactId', $contactId);
+        
+        $groupIds = Tinebase_Group::getInstance()->getGroupMemberships($user);
+        $groups   = Tinebase_Group::getInstance()->getMultiple($groupIds);
+        
+        foreach ($groups as $group) {
+            $result[] = 'principals/groups/' . $group->list_id;
+        }
+        
         return $result;
     }
     
