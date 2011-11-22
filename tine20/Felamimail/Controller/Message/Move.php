@@ -62,7 +62,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
      *
      * @param  mixed  $_messages
      * @param  mixed  $_targetFolder can be one of: folder_id, Felamimail_Model_Folder or Felamimail_Model_Folder::FOLDER_TRASH (constant)
-     * @return Tinebase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      */
     public function moveMessages($_messages, $_targetFolder)
     {
@@ -74,7 +74,11 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
             $targetFolder = ($_targetFolder instanceof Felamimail_Model_Folder) ? $_targetFolder : Felamimail_Controller_Folder::getInstance()->get($_targetFolder);
         }
         
+        $move_messages = false;
         foreach (array_unique($messages->folder_id) as $folderId) {
+            if ($folderId == $targetFolder->id) continue;
+            $move_messages = true;
+            
             $messagesInFolder = $messages->filter('folder_id', $folderId);
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' moving messages: ' . print_r($messagesInFolder->getArrayOfIds(), TRUE));
             
@@ -96,12 +100,19 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
                 $this->_moveMessagesToAnotherAccount($messagesInFolder, $targetFolder);
             }
         }
-
-        // delete messages in local cache
-        $number = $this->_backend->delete($messages->getArrayOfIds());
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $number .' messages from cache');
         
-        return $this->_updateCountsAfterMove($messages);
+        if (! $move_messages) {
+            // no messages have been moved -> return empty record set
+            $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
+        } else {
+            // delete messages in local cache
+            $number = $this->_backend->delete($messages->getArrayOfIds());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $number .' messages from cache');
+            
+            $result = $this->_updateCountsAfterMove($messages);
+        }
+        
+        return $result;
     }
     
     /**
