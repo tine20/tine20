@@ -166,7 +166,7 @@ class Calendar_Frontend_iMIP
     protected function _checkRequestPreconditions($_iMIP, $_existingEvent)
     {
         $result = $this->_assertOwnAttender($_iMIP, $_existingEvent, TRUE, FALSE);
-        $result = ($this->_assertOrganizer($_iMIP, $_existingEvent, TRUE, TRUE) && $result);
+        $result = ($this->_assertOrganizer($_iMIP, $_existingEvent, TRUE, TRUE, TRUE) && $result);
         
         return $result;
     }
@@ -186,7 +186,7 @@ class Calendar_Frontend_iMIP
         
         $ownAttender = Calendar_Model_Attender::getOwnAttender($_existingEvent ? $_existingEvent->attendee : $_iMIP->getEvent()->attendee);
         if ($_assertExistence && ! $ownAttender) {
-            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_SUPPORTED, "processing {$_iMIP->method} for non attendee is not supported");
+            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ATTENDEE, "processing {$_iMIP->method} for non attendee is not supported");
             return FALSE;
         }
         
@@ -276,9 +276,7 @@ class Calendar_Frontend_iMIP
         //  - update (might have acl problems)
         //  - set status
         //  - send reply to organizer
-        else {
-            throw new Tinebase_Exception_NotImplemented('processing external requests is not supported yet');
-        }
+        //  - remove $_assertAccount precondition
     }
     
     /**
