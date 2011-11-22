@@ -62,12 +62,35 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     
     /**
      * testExternalInvitationRequest
+     */
+    public function testExternalInvitationRequestAutoProcess()
+    {
+        $ics = file_get_contents(dirname(__FILE__) . '/files/invitation_request_external.ics' );
+        $iMIP = new Calendar_Model_iMIP(array(
+            'id'             => Tinebase_Record_Abstract::generateUID(),
+        	'ics'            => $ics,
+            'method'         => 'REQUEST',
+            'originator'     => 'l.kneschke@caldav.org',
+        ));
+        
+        $event = $iMIP->getEvent();
+        $this->assertEquals(3, count($event->attendee));
+        $this->assertEquals('test mit extern', $event->summary);
+        
+        $this->_iMIPFrontend->autoProcess($iMIP);
+        return $iMIP;
+    }
+    
+    /**
+     * testExternalInvitationRequestProcess
      * 
      * @todo implement
      */
-    public function testExternalInvitationRequest()
+    public function testExternalInvitationRequestProcess()
     {
-        
+        // -- handle message with fmail (add to cache)
+        // -- get $iMIP from message
+        // -- test this->_iMIPFrontend->process($iMIP, $status);
     }
 
     /**
@@ -77,7 +100,9 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
      */
     public function testInternalInvitationRequest()
     {
-        
+        // -- create event
+        // -- get iMIP invitation for event
+        // -- autoProcess
     }
 
     /**
