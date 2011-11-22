@@ -70,14 +70,10 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
         $messages = $this->_convertToRecordSet($_messages, TRUE);
         $messages->addIndices(array('folder_id'));
         
-        if ($_targetFolder !== Felamimail_Model_Folder::FOLDER_TRASH) {
-            $targetFolder = ($_targetFolder instanceof Felamimail_Model_Folder) ? $_targetFolder : Felamimail_Controller_Folder::getInstance()->get($_targetFolder);
-        }
-        
         $movedMessages = false;
         foreach (array_unique($messages->folder_id) as $folderId) {
             if ($folderId == $targetFolder->id) continue;
-            $movedMessages = ($this->_moveMessagesByFolder($messages, $folderId) || $movedMessages);
+            $movedMessages = ($this->_moveMessagesByFolder($messages, $folderId, $_targetFolder) || $movedMessages);
         }
         
         if (! $movedMessages) {
@@ -98,11 +94,16 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
      * move messages in folder
      * 
      * @param Tinebase_Record_RecordSet $_messages
-     * @param unknown_type $_folderId
+     * @param string $_folderId
+     * @param Felamimail_Model_Folder|string $_targetFolder
      * @return boolean did we move messages?
      */
-    protected function _moveMessagesByFolder(Tinebase_Record_RecordSet $_messages, $_folderId)
+    protected function _moveMessagesByFolder(Tinebase_Record_RecordSet $_messages, $_folderId, $_targetFolder)
     {
+        if ($_targetFolder !== Felamimail_Model_Folder::FOLDER_TRASH) {
+            $targetFolder = ($_targetFolder instanceof Felamimail_Model_Folder) ? $_targetFolder : Felamimail_Controller_Folder::getInstance()->get($_targetFolder);
+        }
+        
         $messagesInFolder = $_messages->filter('folder_id', $_folderId);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Moving messages: ' . print_r($messagesInFolder->getArrayOfIds(), TRUE));
