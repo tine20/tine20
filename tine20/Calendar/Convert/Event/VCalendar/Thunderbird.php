@@ -19,7 +19,8 @@
 class Calendar_Convert_Event_VCalendar_Thunderbird extends Calendar_Convert_Event_VCalendar_Abstract
 {
     // Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13
-    const HEADER_MATCH = '/ Thunderbird\/(?P<version>.*)/';
+    // Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.2.24) Gecko/20111103 Lightning/1.0b2 Thunderbird/3.1.16
+    const HEADER_MATCH = '/ Lightning\/(?P<version>\S+)/';
     
     protected $_supportedFields = array(
         'seq',
