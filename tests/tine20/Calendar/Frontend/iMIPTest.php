@@ -71,7 +71,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * testExternalInvitationRequest
+     * testExternalInvitationRequestAutoProcess
      */
     public function testExternalInvitationRequestAutoProcess()
     {
@@ -89,11 +89,29 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(3, count($prepared->event->attendee));
         $this->assertEquals('test mit extern', $prepared->event->summary);
     }
+
+    /**
+    * testSupportedPrecondition
+    */
+    public function testUnsupportedPrecondition()
+    {
+        $iMIP = $this->_getiMIP('PUBLISH');
+            
+        $this->_iMIPFrontend->autoProcess($iMIP);
+        $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
+    
+        $this->assertEquals(1, count($prepared->preconditions));
+        $this->assertEquals('processing published events is not supported yet', $prepared->preconditions[Calendar_Model_iMIP::PRECONDITION_SUPPORTED][0]['message']);
+        $this->assertFalse($prepared->preconditions[Calendar_Model_iMIP::PRECONDITION_SUPPORTED][0]['check']);
+    }
     
     /**
-     * testInternalInvitationRequestAutoProcess
+     * get iMIP record from internal event
+     * 
+     * @param string $_method
+     * @return Calendar_Model_iMIP
      */
-    public function testInternalInvitationRequestAutoProcess()
+    protected function _getiMIP($_method)
     {
         $event = $this->_getEvent();
         $event = Calendar_Controller_Event::getInstance()->create($event);
@@ -102,15 +120,24 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         // get iMIP invitation for event
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         $vevent = $converter->fromTine20Model($event);
-        //$vevent->METHOD = $method;
         $ics = $vevent->serialize();
         
         $iMIP = new Calendar_Model_iMIP(array(
             'id'             => Tinebase_Record_Abstract::generateUID(),
         	'ics'            => $ics,
-            'method'         => 'REQUEST',
+            'method'         => $_method,
             'originator'     => 'unittest@tine20.org',
         ));
+        
+        return $iMIP;
+    }
+    
+    /**
+     * testInternalInvitationRequestAutoProcess
+     */
+    public function testInternalInvitationRequestAutoProcess()
+    {
+        $iMIP = $this->_getiMIP('REQUEST');
         
         $this->_iMIPFrontend->autoProcess($iMIP);
         $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
