@@ -237,8 +237,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $modelName
      * @param array $changes
      * @param array $filter
+     * 
+     * @todo use Tinebase_Core::getApplicationInstance($appName, $modelName); to get record controller
      */
-
     public function updateMultipleRecords($appName, $modelName, $changes, $filter)
     {
         $recordController = $appName . '_Controller_' . $modelName;
