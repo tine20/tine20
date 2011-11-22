@@ -54,9 +54,14 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
         )));
         
+        Tinebase_Container::getInstance()->addGrants($this->objects['initialContainer'], Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, Tinebase_Core::getUser()->accountPrimaryGroup, array(Tinebase_Model_Grants::GRANT_READ));
+        
         $this->objects['containerToDelete'][] = $this->objects['initialContainer'];
         
         $this->objects['eventsToDelete'] = array();
+        
+        // must be defined for Calendar/Frontend/WebDAV/Event.php
+        $_SERVER['REQUEST_URI'] = 'foobar';
     }
 
     /**
@@ -92,6 +97,20 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         $result = $container->getName();
         
         $this->assertEquals($this->objects['initialContainer']->name, $result);
+    }
+    
+    /**
+     * assert that name of folder is container name
+     */
+    public function testGetACL()
+    {
+        $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
+        
+        $result = $container->getACL();
+        
+        //var_dump($result);
+        
+        $this->assertEquals(5, count($result));
     }
     
     /**
