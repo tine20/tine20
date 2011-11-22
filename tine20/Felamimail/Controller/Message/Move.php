@@ -78,7 +78,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
         
         $movedMessages = FALSE;
         foreach (array_unique($messages->folder_id) as $folderId) {
-            $movedMessages = ($this->_moveMessagesByFolder($messages, $folderId, $_targetFolder) || $movedMessages);
+            $movedMessages = ($this->_moveMessagesByFolder($messages, $folderId, $targetFolder) || $movedMessages);
         }
         
         if (! $movedMessages) {
@@ -96,7 +96,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
     }
     
     /**
-     * move messages in folder
+     * move messages from one folder to another
      * 
      * @param Tinebase_Record_RecordSet $_messages
      * @param string $_folderId
@@ -112,13 +112,13 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
         $result = TRUE;
         if ($_targetFolder === Felamimail_Model_Folder::FOLDER_TRASH) {
             $result = $this->_moveMessagesToTrash($_messagesInFolder, $_folderId);
-        } else if ($_folderId === $targetFolder->getId()) {
+        } else if ($_folderId === $_targetFolder->getId()) {
             // no need to move
             $result = FALSE;
-        } else if ($messagesInFolder->getFirstRecord()->account_id == $targetFolder->account_id) {
-            $this->_moveMessagesInFolderOnSameAccount($messagesInFolder, $targetFolder);
+        } else if ($messagesInFolder->getFirstRecord()->account_id == $_targetFolder->account_id) {
+            $this->_moveMessagesInFolderOnSameAccount($messagesInFolder, $_targetFolder);
         } else {
-            $this->_moveMessagesToAnotherAccount($messagesInFolder, $targetFolder);
+            $this->_moveMessagesToAnotherAccount($messagesInFolder, $_targetFolder);
         }
         
         if (! $result) {
