@@ -307,8 +307,8 @@
         
         if (isset($method)) {
             $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+            $converter->setMethod($method);
             $vevent = $converter->fromTine20Model($_event);
-            $vevent->METHOD = $method;
             
             $calendarPart           = new Zend_Mime_Part($vevent->serialize());
             $calendarPart->charset  = 'UTF-8';
