@@ -74,34 +74,13 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
             $targetFolder = ($_targetFolder instanceof Felamimail_Model_Folder) ? $_targetFolder : Felamimail_Controller_Folder::getInstance()->get($_targetFolder);
         }
         
-        $move_messages = false;
+        $movedMessages = false;
         foreach (array_unique($messages->folder_id) as $folderId) {
             if ($folderId == $targetFolder->id) continue;
-            $move_messages = true;
-            
-            $messagesInFolder = $messages->filter('folder_id', $folderId);
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' moving messages: ' . print_r($messagesInFolder->getArrayOfIds(), TRUE));
-            
-            if ($_targetFolder === Felamimail_Model_Folder::FOLDER_TRASH) {
-                // messages should be moved to trash -> need to determine the trash folder for the account of the folder that contains the messages
-                try {
-                    $targetFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder(
-                        $messagesInFolder->getFirstRecord()->account_id,
-                        Felamimail_Model_Folder::FOLDER_TRASH
-                    );
-                    $this->_moveMessagesInFolderOnSameAccount($messagesInFolder, $targetFolder);
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No trash folder found - skipping messages in this folder.');
-                    $messages->removeRecords($messagesInFolder);
-                }
-            } else if ($messagesInFolder->getFirstRecord()->account_id == $targetFolder->account_id) {
-                $this->_moveMessagesInFolderOnSameAccount($messagesInFolder, $targetFolder);
-            } else {
-                $this->_moveMessagesToAnotherAccount($messagesInFolder, $targetFolder);
-            }
+            $movedMessages = ($this->_moveMessagesByFolder($messages, $folderId) || $movedMessages);
         }
         
-        if (! $move_messages) {
+        if (! $movedMessages) {
             // no messages have been moved -> return empty record set
             $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
         } else {
@@ -113,6 +92,43 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
         }
         
         return $result;
+    }
+    
+    /**
+     * move messages in folder
+     * 
+     * @param Tinebase_Record_RecordSet $_messages
+     * @param unknown_type $_folderId
+     * @return boolean did we move messages?
+     */
+    protected function _moveMessagesByFolder(Tinebase_Record_RecordSet $_messages, $_folderId)
+    {
+        $messagesInFolder = $_messages->filter('folder_id', $_folderId);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Moving messages: ' . print_r($messagesInFolder->getArrayOfIds(), TRUE));
+        
+        if ($_targetFolder === Felamimail_Model_Folder::FOLDER_TRASH) {
+            // messages should be moved to trash -> need to determine the trash folder for the account of the folder that contains the messages
+            try {
+                $targetFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder(
+                    $messagesInFolder->getFirstRecord()->account_id,
+                    Felamimail_Model_Folder::FOLDER_TRASH
+                );
+                $this->_moveMessagesInFolderOnSameAccount($messagesInFolder, $targetFolder);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                    . ' No trash folder found - skipping messages in this folder.');
+                
+                $_messages->removeRecords($messagesInFolder);
+                return FALSE;
+            }
+        } else if ($messagesInFolder->getFirstRecord()->account_id == $targetFolder->account_id) {
+            $this->_moveMessagesInFolderOnSameAccount($messagesInFolder, $targetFolder);
+        } else {
+            $this->_moveMessagesToAnotherAccount($messagesInFolder, $targetFolder);
+        }
+        
+        return TRUE;
     }
     
     /**
