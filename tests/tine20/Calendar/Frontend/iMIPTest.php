@@ -21,6 +21,13 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * event ids that should be deleted in tearDown
+     * 
+     * @var unknown_type
+     */
+    protected $_eventIdsToDelete = array();
+    
+    /**
      * iMIP frontent to be tested
      * 
      * @var Calendar_Frontend_iMIP
@@ -58,10 +65,13 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        if (! empty($this->_eventIdsToDelete)) {
+            Calendar_Controller_Event::getInstance()->delete($this->_eventIdsToDelete);
+        }
     }
     
     /**
-     * testExternalInvitationRequest
+     * testExternalInvitationRequestAutoProcess
      */
     public function testExternalInvitationRequestAutoProcess()
     {
@@ -73,14 +83,115 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
             'originator'     => 'l.kneschke@caldav.org',
         ));
         
-        $event = $iMIP->getEvent();
-        $this->assertEquals(3, count($event->attendee));
-        $this->assertEquals('test mit extern', $event->summary);
-        
         $this->_iMIPFrontend->autoProcess($iMIP);
+        $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
+
+        $this->assertEquals(3, count($prepared->event->attendee));
+        $this->assertEquals('test mit extern', $prepared->event->summary);
+    }
+
+    /**
+    * testSupportedPrecondition
+    */
+    public function testUnsupportedPrecondition()
+    {
+        $iMIP = $this->_getiMIP('PUBLISH');
+            
+        $this->_iMIPFrontend->autoProcess($iMIP);
+        $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
+    
+        $this->assertEquals(1, count($prepared->preconditions));
+        $this->assertEquals('processing published events is not supported yet', $prepared->preconditions[Calendar_Model_iMIP::PRECONDITION_SUPPORTED][0]['message']);
+        $this->assertFalse($prepared->preconditions[Calendar_Model_iMIP::PRECONDITION_SUPPORTED][0]['check']);
+    }
+    
+    /**
+     * get iMIP record from internal event
+     * 
+     * @param string $_method
+     * @return Calendar_Model_iMIP
+     */
+    protected function _getiMIP($_method)
+    {
+        $event = $this->_getEvent();
+        $event = Calendar_Controller_Event::getInstance()->create($event);
+        $this->_eventIdsToDelete[] = $event->getId();
+        
+        // get iMIP invitation for event
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $vevent = $converter->fromTine20Model($event);
+        $ics = $vevent->serialize();
+        
+        $iMIP = new Calendar_Model_iMIP(array(
+            'id'             => Tinebase_Record_Abstract::generateUID(),
+        	'ics'            => $ics,
+            'method'         => $_method,
+            'originator'     => 'unittest@tine20.org',
+        ));
+        
         return $iMIP;
     }
     
+    /**
+     * testInternalInvitationRequestAutoProcess
+     */
+    public function testInternalInvitationRequestAutoProcess()
+    {
+        $iMIP = $this->_getiMIP('REQUEST');
+        
+        $this->_iMIPFrontend->autoProcess($iMIP);
+        $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
+        
+        $this->assertEquals(2, count($prepared->event->attendee));
+        $this->assertEquals('Sleep very long', $prepared->event->summary);
+        $this->assertTrue(empty($prepared->preconditions));
+    }
+    
+    /**
+    * returns a simple event
+    *
+    * @return Calendar_Model_Event
+    */
+    protected function _getEvent()
+    {
+        return new Calendar_Model_Event(array(
+            'summary'     => 'Sleep very long',
+            'dtstart'     => '2012-03-25 01:00:00',
+            'dtend'       => '2012-03-25 11:15:00',
+            'description' => 'Early to bed and early to rise, makes a men healthy, wealthy and wise ... not.',
+            'attendee'    => $this->_getAttendee(),
+            'organizer'    => Tinebase_Core::getUser()->contact_id,
+            'uid'          => Calendar_Model_Event::generateUID(),
+        ));
+    }
+    
+    /**
+     * get test attendee
+     *
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _getAttendee()
+    {
+        $personas = Zend_Registry::get('personas');
+        $sclever = $personas['sclever'];
+        
+        return new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array(
+                'user_id'        => Tinebase_Core::getUser()->contact_id,
+                'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
+                'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
+                'status_authkey' => Tinebase_Record_Abstract::generateUID(),
+            ),
+            array(
+                'user_id'        => $sclever->contact_id,
+                'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
+                'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
+                'status_authkey' => Tinebase_Record_Abstract::generateUID(),
+            ),
+        ));
+    }
+    
+
     /**
      * testExternalInvitationRequestProcess
      * 
@@ -91,18 +202,6 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         // -- handle message with fmail (add to cache)
         // -- get $iMIP from message
         // -- test this->_iMIPFrontend->process($iMIP, $status);
-    }
-
-    /**
-     * testInternalInvitationRequest
-     * 
-     * @todo implement
-     */
-    public function testInternalInvitationRequest()
-    {
-        // -- create event
-        // -- get iMIP invitation for event
-        // -- autoProcess
     }
 
     /**

@@ -67,7 +67,7 @@ class Calendar_Frontend_iMIP
     public function prepareComponent($_iMIP)
     {
         Calendar_Model_Attender::resolveAttendee($_iMIP->event->attendee);
-        Tinebase_Model_Container::resolveContainer($_iMIP->event->container_id);
+        Tinebase_Model_Container::resolveContainer($_iMIP->event);
         
         return $_iMIP;
     }
@@ -88,21 +88,55 @@ class Calendar_Frontend_iMIP
      * @param  Calendar_Model_Event  $_event
      * @param  string                $_status
      * @return mixed
+     * 
+     * @todo what to do with obsolete check?
+     * @todo call process method even if preconditions fail? 
      */
     protected function _process($_iMIP, $_existingEvent, $_status = NULL)
     {
-        $methodName = '_process' . ucfirst(strtolower($_iMIP->method));
-        if (! method_exists($this, $methodName)) {
-            throw new Tinebase_Exception_UnexpectedValue("method {$_iMIP->method} not supported");
+        $method                  = ucfirst(strtolower($_iMIP->method));
+        $processMethodName       = '_process'   . $method;
+        $preconditionMethodName  = '_check'     . $method . 'Preconditions';
+        
+        if (! method_exists($this, $processMethodName)) {
+            throw new Tinebase_Exception_UnexpectedValue("Method {$_iMIP->method} not supported");
         }
         
-        return $this->{$methodName}($_iMIP, $_existingEvent, $_status);
+        if (method_exists($this, $preconditionMethodName)) {
+            $preconditionCheck = $this->{$preconditionMethodName}($_iMIP, $_existingEvent, $_status);
+        } else {
+            $preconditionCheck = TRUE;
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " No preconditions check fn found for method " . $method);
+        }
+        
+        if ($preconditionCheck) {
+            $result = $this->{$processMethodName}($_iMIP, $_existingEvent, $_status);
+        } else {
+            $result = FALSE;
+        }
+        
+        return $result;
         
         // not adequate for all methods
-        if ($_existingEvent && ! $_iMIP->obsoletes($_existingEvent->getEvent())) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " skip processing of an old iMIP component");
-            return;
-        }
+//         if ($_existingEvent && ! $_iMIP->obsoletes($_existingEvent->getEvent())) {
+//             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " skip processing of an old iMIP component");
+//             return;
+//         }
+    }
+    
+    /**
+     * add/update event (if outdated) / no status stuff / DANGER of duplicate UIDs
+     * -  no notifications!
+     * 
+     * @param  Calendar_Model_iMIP   $_iMIP
+     * @param  Calendar_Model_Event  $_existingEvent
+     * @return boolean
+     */
+    protected function _checkPublishPreconditions($_iMIP, $_existingEvent)
+    {
+        $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_SUPPORTED, 'processing published events is not supported yet');
+        
+        return FALSE;
     }
     
     /**
