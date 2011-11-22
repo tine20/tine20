@@ -114,7 +114,7 @@ class Calendar_Frontend_iMIP
         throw new Tinebase_Exception_NotImplemented('processing published events is not supported yet');
     }
     
-    protected function _processRequest($_iMIP, $_existingEvent)
+    protected function _processRequest($_iMIP, $_existingEvent, $_status)
     {
         $ownAttender = $this->_getOwnAttender($_iMIP, $_existingEvent, TRUE, FALSE);
         $organizer = $this->_getOrganizer($_iMIP, $_existingEvent, TRUE, TRUE);

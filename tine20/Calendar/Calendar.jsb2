@@ -118,6 +118,10 @@
         {
           "text": "MonthView.js",
           "path": "js/Printer/"
+        },
+        {
+          "text": "iMIPDetailsPanel.js",
+          "path": "js/"
         }
       ]
     },

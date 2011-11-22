@@ -64,6 +64,10 @@
           "path": "js/"
         },
         {
+          "text": "MimeDisplayManager.js",
+          "path": "js/"
+        },
+        {
           "text": "GridDetailsPanel.js",
           "path": "js/"
         },
