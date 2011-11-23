@@ -93,7 +93,6 @@ class Calendar_Frontend_iMIP
      * @param  string                $_status
      * @return mixed
      * 
-     * @todo what to do with obsolete check?
      * @todo throw exception if precondition(s) failed
      */
     protected function _process($_iMIP, $_existingEvent, $_status = NULL)
@@ -120,12 +119,6 @@ class Calendar_Frontend_iMIP
         }
         
         return $result;
-        
-        // not adequate for all methods
-//         if ($_existingEvent && ! $_iMIP->obsoletes($_existingEvent->getEvent())) {
-//             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " skip processing of an old iMIP component");
-//             return;
-//         }
     }
     
     /**
@@ -174,7 +167,7 @@ class Calendar_Frontend_iMIP
         
          if (! $_iMIP->getEvent()->obsoletes($_existingEvent)) {
              $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
-             return FALSE;
+             $result = FALSE;
          }
         
         return $result;
@@ -196,11 +189,11 @@ class Calendar_Frontend_iMIP
         $ownAttender = Calendar_Model_Attender::getOwnAttender($_existingEvent ? $_existingEvent->attendee : $_iMIP->getEvent()->attendee);
         if ($_assertExistence && ! $ownAttender) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ATTENDEE, "processing {$_iMIP->method} for non attendee is not supported");
-            return FALSE;
+            $result = FALSE;
         }
         
         if ($_assertOriginator) {
-            $result = $this->_assertOriginator($_iMIP, $ownAttender->getResolvedUser(), 'own attendee');
+            $result &= $this->_assertOriginator($_iMIP, $ownAttender->getResolvedUser(), 'own attendee');
         }
         
         return $result;
@@ -239,14 +232,16 @@ class Calendar_Frontend_iMIP
     */
     protected function _assertOrganizer($_iMIP, $_existingEvent, $_assertExistence, $_assertOriginator, $_assertAccount = FALSE)
     {
+        $result = TRUE;
+        
         $organizer = $_existingEvent ? $_existingEvent->resolveOrganizer() : $_iMIP->getEvent()->resolveOrganizer();
         if ($_assertExistence && ! $organizer) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORGANIZER, "processing {$_iMIP->method} without organizer is not possible");
-            return FALSE;
+            $result = FALSE;
         }
         
         if ($_assertOriginator) {
-            $result = $this->_assertOriginator($_iMIP, $organizer, 'organizer');
+            $result &= $this->_assertOriginator($_iMIP, $organizer, 'organizer');
         }
         
         if ($_assertAccount && ! $organizer->account_id) {
@@ -294,37 +289,36 @@ class Calendar_Frontend_iMIP
     * @param  Calendar_Model_iMIP   $_iMIP
     * @param  Calendar_Model_Event  $_existingEvent
     * @return boolean
-    * 
-    * @todo collect preconditions?
-    * @todo use isObsoletedBy ?
     */
     protected function _checkReplyPreconditions($_iMIP, $_existingEvent)
     {
+        $result = TRUE;
+        
         if (! $_existingEvent) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_EVENTEXISTS, "cannot process REPLY to non existent/invisible event");
-            return FALSE;
+            $result = FALSE;
         }
         
-         if ($_iMIP->getEvent()->isObsoletedBy($_existingEvent)) {
-             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
-             return FALSE;
-         }
+        if ($_iMIP->getEvent()->isObsoletedBy($_existingEvent)) {
+            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
+            $result = FALSE;
+        }
         
         if (! $this->_assertOriginatorIsAttender($_iMIP, $_iMIP->getEvent())) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORIGINATOR, "originator is not attendee in iMIP transaction -> spoofing attempt?");
-            return FALSE;
+            $result = FALSE;
         }
         
         if (! $this->_assertOriginatorIsAttender($_iMIP, $_existingEvent)) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORIGINATOR, "originator is not attendee in existing event -> party crusher?");
-            return FALSE;
+            $result = FALSE;
         }
         
         if (! $this->_assertOrganizer($_iMIP, $_existingEvent, TRUE, FALSE, TRUE)) {
-            return FALSE;
+            $result = FALSE;
         }
         
-        return TRUE;
+        return $result;
     }
     
     /**
@@ -418,7 +412,7 @@ class Calendar_Frontend_iMIP
     */
     protected function _processCancel($_iMIP, $_existingEvent)
     {
-        // organizer caneled meeting/recurrence of an existing event -> update event
+        // organizer cancelled meeting/recurrence of an existing event -> update event
         // the iMIP is already the notification mail!
     }
     
