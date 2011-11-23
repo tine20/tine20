@@ -25,10 +25,35 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
     preparedPart: null,
     
     /**
+     * @property actionToolbar
+     * @type Ext.Toolbar
+     */
+    actionToolbar: null,
+    
+    /**
+     * @property iMIPrecord
+     * @type Tine.Calendar.Model.iMIP
+     */
+    iMIPrecord: null,
+    
+    /**
+     * @property statusActions
+     * @type Array
+     */
+    statusActions:[],
+    
+    /**
      * init this component
      */
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
+        
+        
+        this.iMIPrecord = new Tine.Calendar.Model.iMIP(this.preparedPart.preparedData);
+        this.iMIPrecord.set('event', Tine.Calendar.backend.recordReader({
+            responseText: Ext.util.JSON.encode(this.preparedPart.preparedData.event)
+        }));
+        
         this.initIMIPToolbar();
         
         this.on('afterrender', this.showIMIP, this);
@@ -36,50 +61,63 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         Tine.Calendar.iMIPDetailsPanel.superclass.initComponent.call(this);
     },
     
-//    /**
-//     * process email invitation
-//     * 
-//     * @param {String} status
-//     */
-//    processInvitation: function(status) {
-//        Tine.log.debug('Setting event attender status: ' + status);
-//        
-//        var firstPreparedPart = this.record.get('preparedParts')[0];
-//        if (firstPreparedPart.contentType !== 'text/calendar') {
-//            return;
-//        }
-//        
-//        var invitationEvent = Tine.Calendar.backend.recordReader({
-//                responseText: Ext.util.JSON.encode(firstPreparedPart.preparedData.event)
-//            }),
-//            myAttenderRecord = invitationEvent.getMyAttenderRecord();
-//        
-//        myAttenderRecord.set('status', status);
-//        Tine.Felamimail.setInvitationStatus(invitationEvent.data, myAttenderRecord.data, this.onInvitationStatusUpdate.createDelegate(this));
-//    },
-//    
-    setResponseStatus: Ext.emptyFn,
+    /**
+     * process email invitation
+     * 
+     * @param {String} status
+     */
+    processIMIP: function(status) {
+        Tine.log.debug('Tine.Calendar.iMIPDetailsPanel::processIMIP status: ' + status);
+        
+        Tine.Calendar.iMIPProcess(this.iMIPrecord.data, status, function(result, response) {
+            if (response.error) {
+                // why did it fail? ->  prepared part in exception data?
+                console.log(response);
+            }
+            
+            else {
+                console.log(result);
+                
+                // load result
+                this.iMIPrecord = new Tine.Calendar.Model.iMIP(result);
+                this.iMIPrecord.set('event', Tine.Calendar.backend.recordReader({
+                    responseText: Ext.util.JSON.encode(result.event)
+                }));
+                
+                console.log(this.iMIPrecord);
+                this.showIMIP();
+            }
+        }, this);
+    },
     
+    /**
+     * iMIP actino toolbar
+     */
     initIMIPToolbar: function() {
         var singleRecordPanel = this.getSingleRecordPanel();
         
+        this.actions = [];
         this.statusActions = [];
         
         Tine.Calendar.Model.Attender.getAttendeeStatusStore().each(function(status) {
             // NEEDS-ACTION is not appropriate in iMIP context
             if (status.id == 'NEEDS-ACTION') return;
             
-            this.statusActions.push({
+            this.statusActions.push(new Ext.Action({
                 text: status.get('status_name'),
-                handler: this.setResponseStatus.createDelegate(this, [status.id]),
+                handler: this.processIMIP.createDelegate(this, [status.id]),
                 iconCls: 'cal-response-action-' + status.id
-            });
+            }));
         }, this);
         
+        this.actions = this.actions.concat(this.statusActions);
+        
+        // add more actions here (no spam / apply / crush / send event / ...)
+        
         this.iMIPclause = new Ext.Toolbar.TextItem({
-            text: this.app.i18n._('You received an event invitation. Please select a response.')
+            text: ''
         });
-        this.tbar = {
+        this.tbar = this.actionToolbar = new Ext.Toolbar({
             items: [{
                     xtype: 'tbitem',
                     cls: 'CalendarIconCls',
@@ -89,9 +127,8 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
                 },
                 this.iMIPclause,
                 '->'
-            ].concat(this.statusActions)
-        };
-        
+            ].concat(this.actions)
+        });
     },
     
     /**
@@ -100,21 +137,74 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
     showIMIP: function() {
         
         var singleRecordPanel = this.getSingleRecordPanel(),
-            invitationEvent = Tine.Calendar.backend.recordReader({
-                responseText: Ext.util.JSON.encode(this.preparedPart.preparedData.event)
-            }),
-            myAttenderRecord = invitationEvent.getMyAttenderRecord(),
-            myAttenderstatus = myAttenderRecord.get('status');
-    
-        Tine.log.debug('Tine.Calendar.iMIPDetailsPanel::showIMIP invitation status: ' + myAttenderstatus);
+            preconditions = this.iMIPrecord.get('preconditions'),
+            method = this.iMIPrecord.get('method'),
+            event = this.iMIPrecord.get('event'),
+            myAttenderRecord = event.getMyAttenderRecord(),
+            myAttenderstatus = myAttenderRecord ? myAttenderRecord.get('status') : null;
+            
         
-        if (myAttenderstatus !== 'NEEDS-ACTION') {
-//            this.onInvitationStatusUpdate();
+        // reset actions
+        Ext.each(this.actions, function(action) {action.setHidden(true)});
+        
+        // check preconditions
+        if (preconditions) {
+            if (preconditions.hasOwnProperty('ORIGINATOR')) {
+                // display spam box -> might be accepted by user?
+                this.iMIPclause.setText(this.app.i18n._("The event of this message can't be processed as the sender ought be differnet."));
+            }
+            
+            else if (preconditions.hasOwnProperty('RECENT')) {
+                this.iMIPclause.setText(this.app.i18n._("This message is already processed"));
+            }
+            
+            else if (preconditions.hasOwnProperty('ATTENDEE')) {
+                // party crush button?
+                this.iMIPclause.setText(this.app.i18n._("You are not an attendee of this event"));
+            } 
+            
+            else {
+                this.iMIPclause.setText(this.app.i18n._("Unsupported message"));
+            }
+        } 
+        
+        // method specific text / actions
+        else {
+            switch (method) {
+                case 'REQUEST':
+                    if (! myAttenderRecord) {
+                        // might happen in shared folders -> we might want to become a party crusher?
+                        this.iMIPclause.setText(this.app.i18n._("This is an event invitation for someone else."));
+                    } else if (myAttenderstatus !== 'NEEDS-ACTION') {
+                        this.iMIPclause.setText(this.app.i18n._("You have already replied to this event invitation."));
+                    } else {
+                        this.iMIPclause.setText(this.app.i18n._('You received an event invitation. Set your response to:'));
+                        Ext.each(this.statusActions, function(action) {action.setHidden(false)});
+                    }
+                    break;
+                    
+                    
+                case 'REPLY':
+                    // Someone replied => autoprocessing atm.
+                    this.iMIPclause.setText(this.app.i18n._('An invited attendee responded to the invitation.'));
+                    break;
+                    
+                default:            
+                    this.iMIPclause.setText(this.app.i18n._("Unsupported method"));
+                    break;
+            }
         }
+        
         
         singleRecordPanel.setVisible(true);
         singleRecordPanel.setHeight(150);
         
-        singleRecordPanel.loadRecord.defer(100, singleRecordPanel, [invitationEvent]);
+        try {
+            singleRecordPanel.loadRecord(event);
+        } catch (e) {
+            singleRecordPanel.setVisible(false);
+        }
+        
     }
+
 });
