@@ -446,7 +446,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $sendNotifications = $this->sendNotifications(FALSE);
                 
                 parent::update($_record);
-                $this->_saveAttendee($_record);
+                $this->_saveAttendee($_record, $_record->isRescheduled($event));
                 
                 $this->sendNotifications($sendNotifications);
                 
@@ -921,7 +921,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        // if dtstart of an event changes, we update the originator_tz, alarm times and reset attendee responses
+        // if dtstart of an event changes, we update the originator_tz, alarm times
         if (! $_oldRecord->dtstart->equals($_record->dtstart)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart changed -> adopting organizer_tz');
             $_record->originator_tz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
@@ -958,15 +958,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     $exception->setRecurId();
                     $this->_backend->update($exception);
                 }
-            }
-            
-            foreach($_record->attendee as $attender) {
-                if ($attender->user_id == Tinebase_Core::getUser()->contact_id && in_array($attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
-                    // don't touch current users status
-                    continue;
-                }
-                
-                $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
             }
         }
         
@@ -1285,8 +1276,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @todo add support for resources
      * 
      * @param Calendar_Model_Event $_event
+     * @param bool                 $_isRescheduled event got rescheduled reset all attendee status
      */
-    protected function _saveAttendee($_event)
+    protected function _saveAttendee($_event, $_isRescheduled=FALSE)
     {
         $attendee = $_event->attendee instanceof Tinebase_Record_RecordSet ? 
             $_event->attendee : 
@@ -1309,7 +1301,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             if ($idx !== FALSE) {
                 $currentAttender = $currentAttendee[$idx];
-                $this->_updateAttender($attender, $currentAttender, $calendar);
+                $this->_updateAttender($attender, $currentAttender, $calendar, $_isRescheduled);
                 
             } else {
                 $this->_createAttender($attender, $calendar);
@@ -1370,16 +1362,24 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param Calendar_Model_Attender  $_attender
      * @param Calendar_Model_Attender  $_currentAttender
      * @param Tinebase_Model_Container $_calendar
+     * @param bool                     $_isRescheduled event got rescheduled reset all attendee status
      */
-    protected function _updateAttender($_attender, $_currentAttender, $_calendar) {
-        
+    protected function _updateAttender($_attender, $_currentAttender, $_calendar, $_isRescheduled)
+    {
+        //echo  "save: ". (int) $_isRescheduled . "\n";
+            
         $userAccountId = $_currentAttender->getUserAccountId();
         
         // reset status if attender != currentuser and wrong authkey
         if ($_attender->user_type == Calendar_Model_Attender::USERTYPE_GROUP
                 || $userAccountId != Tinebase_Core::getUser()->getId()) {
             
-            if ($_attender->status_authkey != $_currentAttender->status_authkey) {
+            if ($_isRescheduled) {
+                $_attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+            }
+            
+            
+            else  if ($_attender->status_authkey != $_currentAttender->status_authkey) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " wrong authkey -> resetting status ");
                 $_attender->status = $_currentAttender->status;
             }
