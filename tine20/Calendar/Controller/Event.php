@@ -1244,6 +1244,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             $event = $this->get($_event->getId());
             
+            if (! $event->attendee) {
+                throw new Tinebase_Exception_NotFound('Could not find any attendee of event.');
+            }
+            
             $index = $event->attendee->getIndexById($_attender->getId());
             if ($index === FALSE) {
                 throw new Tinebase_Exception_NotFound('Could not find attender in event.');
