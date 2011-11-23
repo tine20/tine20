@@ -185,8 +185,6 @@ class Calendar_Frontend_iMIP
      * @param  Calendar_Model_iMIP   $_iMIP
      * @param  Calendar_Model_Event  $_existingEvent
      * @return boolean
-     * 
-     * @todo do obsolete check?
      */
     protected function _checkRequestPreconditions($_iMIP, $_existingEvent)
     {
@@ -257,6 +255,8 @@ class Calendar_Frontend_iMIP
     * @param  bool                  $_assertAccount
     * @return Addressbook_Model_Contact
     * @throws Calendar_Exception_iMIP
+    * 
+    * @todo this needs to be splitted into assertExternalOrganizer / assertInternalOrganizer
     */
     protected function _assertOrganizer($_iMIP, $_existingEvent, $_assertExistence, $_assertOriginator, $_assertAccount = FALSE)
     {
