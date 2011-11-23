@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-09-08 20:53+0100\n"
+"PO-Revision-Date: 2011-11-23 20:39+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -48,7 +48,7 @@ msgstr "Te pliki już istnieją"
 
 #: js/Filemanager.js:68
 msgid "Do you want to replace the following file(s)?"
-msgstr ""
+msgstr "Czy chcesz zastąpić następujące pliki?"
 
 #: js/Filemanager.js:93
 msgid "Failure on create folder"
@@ -66,13 +66,15 @@ msgstr "Proszę wpisać nową nazwę dla {0}:"
 msgid "Not renamed {0}"
 msgstr "Nazwa {0} nie została zmieniona"
 
-#: js/GridContextMenu.js:42 js/GridPanel.js:498
+#: js/GridContextMenu.js:42
+#: js/GridPanel.js:498
 msgid "You have to supply a {0} name!"
 msgstr "Musisz wprowadzić nazwę {0}!"
 
-#: js/GridContextMenu.js:146 js/GridPanel.js:542
+#: js/GridContextMenu.js:146
+#: js/GridPanel.js:542
 msgid "Do you really want to delete the following files?"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć następujące pliki?"
 
 #: js/GridPanel.js:132
 msgid "Name"
@@ -82,7 +84,8 @@ msgstr "Nazwa"
 msgid "Size"
 msgstr "Rozmiar"
 
-#: js/GridPanel.js:146 js/Model.js:509
+#: js/GridPanel.js:146
+#: js/Model.js:509
 msgid "Contenttype"
 msgstr "Typ zawartości"
 
@@ -94,7 +97,8 @@ msgstr "Katalog"
 msgid "Revision"
 msgstr "Rewizja"
 
-#: js/GridPanel.js:178 js/Model.js:510
+#: js/GridPanel.js:178
+#: js/Model.js:510
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
@@ -130,11 +134,15 @@ msgstr "Katalog nadrzędny"
 msgid "Save locally"
 msgstr "Zapisz lokalnie"
 
-#: js/GridPanel.js:337 js/GridPanel.js:338 js/GridPanel.js:340
+#: js/GridPanel.js:337
+#: js/GridPanel.js:338
+#: js/GridPanel.js:340
 msgid "Delete"
 msgstr "Usuń"
 
-#: js/GridPanel.js:350 js/GridPanel.js:351 js/GridPanel.js:353
+#: js/GridPanel.js:350
+#: js/GridPanel.js:351
+#: js/GridPanel.js:353
 msgid "Rename"
 msgstr "Zmień nazwę"
 
@@ -146,7 +154,8 @@ msgstr "Zatrzymaj przesyłanie"
 msgid "Resume upload"
 msgstr "Kontynuuj przesyłanie"
 
-#: js/GridPanel.js:491 js/Model.js:40
+#: js/GridPanel.js:491
+#: js/Model.js:40
 msgid "user file folder"
 msgstr "katalog pliku użytkownika"
 
@@ -162,36 +171,42 @@ msgstr "Proszę wpisać nazwę nowego {0}:"
 msgid "No {0} added"
 msgstr "{0} nie został dodany"
 
-#: js/GridPanel.js:642 js/GridPanel.js:798 js/TreePanel.js:650
+#: js/GridPanel.js:642
+#: js/GridPanel.js:798
+#: js/TreePanel.js:650
 #: js/TreePanel.js:760
 msgid "Upload Failed"
 msgstr "Przesyłanie zakończone niepowodzeniem"
 
-#: js/GridPanel.js:643 js/TreePanel.js:651
+#: js/GridPanel.js:643
+#: js/TreePanel.js:651
 msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
 msgstr "Plik nie został przesłany. Być może jego rozmiar jest za duży. Proszę powiadomić swojego administratora. Maksymalny rozmiar przesyłanego pliku:"
 
-#: js/GridPanel.js:799 js/TreePanel.js:761
+#: js/GridPanel.js:799
+#: js/TreePanel.js:761
 msgid "Putting files in this folder is not allowed!"
-msgstr ""
+msgstr "Wstawianie plików do tego katalogu jest niedozwolone!"
 
 #: js/Model.js:37
 msgid "user file"
-msgstr ""
+msgstr "plik użytkownika"
 
 #: js/Model.js:38
 msgid "user files"
-msgstr ""
+msgstr "pliki użytkownika"
 
 #: js/Model.js:41
 msgid "user file folders"
-msgstr ""
+msgstr "katalogi plików użytkownika"
 
-#: js/Model.js:251 js/Model.js:267
+#: js/Model.js:251
+#: js/Model.js:267
 msgid "Copying data .. {0}"
 msgstr "Kopiowanie danych .. {0}"
 
-#: js/Model.js:254 js/Model.js:269
+#: js/Model.js:254
+#: js/Model.js:269
 msgid "Moving data .. {0}"
 msgstr "Przenoszenie danych .. {0}"
 
