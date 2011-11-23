@@ -130,9 +130,10 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
      * get iMIP record from internal event
      * 
      * @param string $_method
+     * @param boolean $_addEventToiMIP
      * @return Calendar_Model_iMIP
      */
-    protected function _getiMIP($_method)
+    protected function _getiMIP($_method, $_addEventToiMIP = FALSE)
     {
         $event = $this->_getEvent();
         $event = Calendar_Controller_Event::getInstance()->create($event);
@@ -149,6 +150,10 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
             'method'         => $_method,
             'originator'     => 'unittest@tine20.org',
         ));
+        
+        if ($_addEventToiMIP) {
+            $iMIP->event = $event;
+        }
         
         return $iMIP;
     }
@@ -173,10 +178,15 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     */
     public function testInternalInvitationRequestPreconditionOwnStatusAlreadySet()
     {
-//         $iMIP = $this->_getiMIP('REQUEST');
-        // -- set own status
-//         $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
-        // -- assert RECENT precondition fail?
+        $iMIP = $this->_getiMIP('REQUEST', TRUE);
+        // set own status
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($iMIP->getEvent()->attendee);
+        $ownAttender->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        Calendar_Controller_Event::getInstance()->attenderStatusUpdate($iMIP->getEvent(), $ownAttender, $ownAttender->status_authkey);
+        
+        $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
+        $this->assertFalse(empty($prepared->preconditions));
+        $this->assertTrue(array_key_exists(Calendar_Model_iMIP::PRECONDITION_RECENT, $prepared->preconditions));
     }
     
     /**
@@ -225,6 +235,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     
     /**
      * testExternalInvitationRequestProcess
+     * - uses felamimail to cache external invitation message
      * 
      * -> external invitation requests are not supported atm
      */
