@@ -97,7 +97,6 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     {
         $iMIP = $this->_getiMIP('PUBLISH');
             
-        $this->_iMIPFrontend->autoProcess($iMIP);
         $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
     
         $this->assertEquals(1, count($prepared->preconditions));
