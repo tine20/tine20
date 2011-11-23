@@ -53,8 +53,8 @@ class Calendar_Frontend_iMIP
         // client spoofing protection
         $iMIP = Felamimail_Controller_Message::getInstance()->getiMIP($_iMIP->getId());
         
-        $exitingEvent = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($iMIP->getEvent());
-        return $this->_process($_iMIP, $exitingEvent, $_status);
+        $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($iMIP->getEvent());
+        return $this->_process($_iMIP, $existingEvent, $_status);
     }
     
     /**
