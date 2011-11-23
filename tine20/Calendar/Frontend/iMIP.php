@@ -93,11 +93,11 @@ class Calendar_Frontend_iMIP
             if (empty($_iMIP->preconditions) || ! $_throwException) {
                 return;
             } else {
-                throw new Calendar_Exception_iMIP('iMIP preconditions failed.'); 
+                throw new Calendar_Exception_iMIP('iMIP preconditions failed: ' . implode(', ', array_keys($_iMIP->preconditions))); 
             }
         }
         
-        $method = $_iMIP->method;
+        $method = ucfirst(strtolower($_iMIP->method));
         $preconditionMethodName  = '_check'     . $method . 'Preconditions';
         if (method_exists($this, $preconditionMethodName)) {
             $existingEvent = ($_existingEvent !== NULL) ? $_existingEvent : Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($_iMIP->getEvent());
@@ -110,7 +110,7 @@ class Calendar_Frontend_iMIP
         $_iMIP->preconditionsChecked = TRUE;
         
         if ($_throwException && ! $preconditionCheckSuccessful) {
-            throw new Calendar_Exception_iMIP('iMIP preconditions failed.');
+            throw new Calendar_Exception_iMIP('iMIP preconditions failed: ' . implode(', ', array_keys($_iMIP->preconditions)));
         }
         
         return $preconditionCheckSuccessful;
@@ -191,7 +191,7 @@ class Calendar_Frontend_iMIP
         $result  = $this->_assertOwnAttender($_iMIP, $_existingEvent, TRUE, FALSE);
         $result &= $this->_assertOrganizer($_iMIP, $_existingEvent, TRUE, TRUE, TRUE);
         
-         if (! $_iMIP->getEvent()->obsoletes($_existingEvent)) {
+         if ($_existingEvent && $_iMIP->getEvent()->isObsoletedBy($_existingEvent)) {
              $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
              $result = FALSE;
          }
