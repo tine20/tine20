@@ -146,6 +146,17 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Sleep very long', $prepared->event->summary);
         $this->assertTrue(empty($prepared->preconditions));
     }
+
+    /**
+    * testInternalInvitationRequestAutoProcessOwnStatusAlreadySet
+    */
+    public function testInternalInvitationRequestPreconditionOwnStatusAlreadySet()
+    {
+//         $iMIP = $this->_getiMIP('REQUEST');
+        // -- set own status
+//         $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
+        // -- assert RECENT precondition fail?
+    }
     
     /**
     * returns a simple event
@@ -191,7 +202,6 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         ));
     }
     
-
     /**
      * testExternalInvitationRequestProcess
      * 
@@ -205,23 +215,24 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testInvitationReplyAccepted
+     * testInvitationInternalReply
      * 
      * @todo implement
      */
-    public function testInvitationReplyAccepted()
+    public function testInvitationInternalReply()
     {
-        
+        // -- auto process / should do nothing
     }
 
     /**
-     * testInvitationReplyDeclined
+     * testInvitationExternalReply
      * 
      * @todo implement
      */
-    public function testInvitationReplyDeclined()
+    public function testInvitationExternalReply()
     {
-        
+        // -- auto process / should process
+        // -- prepareComponent / assert recent precondition
     }
 
     /**
