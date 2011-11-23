@@ -6,8 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * 
- * @todo		move files/*.eml to Felamimail tests or remove them?
  */
 
 /**
