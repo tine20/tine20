@@ -8,9 +8,6 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
-/***************** NOTE: not yet active *****************/
-
-
 /**
  * Test helper
  */
@@ -27,6 +24,26 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  */
 class Calendar_Model_AttenderTests extends Calendar_TestCase
 {
+    protected $_testEmailContacts = array();
+    
+    /**
+     * tear down tests
+     *
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+        
+        foreach($this->_testEmailContacts as $email) {
+            $contactIdsToDelete = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(array(
+        	    array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
+                array('field' => 'email',      'operator'  => 'equals', 'value' => $email)
+        	)), null, false, true);
+            
+            Addressbook_Controller_Contact::getInstance()->delete($contactIdsToDelete);
+        }
+    }
+    
     /**
      * @todo test tine side deleted user
      * 
@@ -35,18 +52,44 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
     public function testEmailsToAttendee()
     {
     	$event = $this->_getEvent();
-        $persitentEvent = $this->_controller->create($event);
+    	
+        $persistentEvent = Calendar_Controller_Event::getInstance()->create($event);
         
-        $sclever = Addressbook_Controller_Contact::getInstance()->get(Tinebase_User::getInstance()->getUserByLoginName('sclever')->contact_id);
+        $sclever = Tinebase_User::getInstance()->getUserByLoginName('sclever', 'Tinebase_Model_FullUser');
         $newEmail = Tinebase_Record_Abstract::generateUID() . '@unittest.com';
         
-        $emails = array(
-            $sclever->email,
-            $newEmail
+        // delete newly created contact in tearDown()
+        $this->_testEmailContacts[] = $newEmail;
+        
+        $newAttendees = array(
+            array(
+            	'userType'    => Calendar_Model_Attender::USERTYPE_USER,
+                'firstName'   => $this->_testUser->accountFirstName,
+        		'lastName'    => $this->_testUser->accountLastName,
+                'partStat'    => Calendar_Model_Attender::STATUS_TENTATIVE,
+                'role'        => Calendar_Model_Attender::ROLE_REQUIRED,
+                'email'       => $this->_testUser->accountEmailAddress
+            ),
+            array(
+                'userType'    => Calendar_Model_Attender::USERTYPE_USER,
+                'displayName' => $sclever->accountDisplayName,
+                'partStat'    => Calendar_Model_Attender::STATUS_TENTATIVE,
+                'role'        => Calendar_Model_Attender::ROLE_REQUIRED,
+                'email'       => $sclever->accountEmailAddress
+            ),
+            array(
+            	'userType'    => Calendar_Model_Attender::USERTYPE_USER,
+                'firstName'   => 'Lars',
+        		'lastName'    => 'Kneschke',
+                'partStat'    => Calendar_Model_Attender::STATUS_TENTATIVE,
+                'role'        => Calendar_Model_Attender::ROLE_REQUIRED,
+                'email'       => $newEmail
+            )
         );
         
-        Calendar_Model_Attender::emailsToAttendee($persitentEvent, $emails, TRUE);
+        Calendar_Model_Attender::emailsToAttendee($persistentEvent, $newAttendees, TRUE);
         
+        $this->assertEquals(3, count($persistentEvent->attendee));
     }
 }
     
