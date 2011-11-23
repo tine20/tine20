@@ -169,13 +169,13 @@ class Calendar_Frontend_iMIP
      */
     protected function _checkRequestPreconditions($_iMIP, $_existingEvent)
     {
-        $result = $this->_assertOwnAttender($_iMIP, $_existingEvent, TRUE, FALSE);
-        $result = ($this->_assertOrganizer($_iMIP, $_existingEvent, TRUE, TRUE, TRUE) && $result);
+        $result  = $this->_assertOwnAttender($_iMIP, $_existingEvent, TRUE, FALSE)
+                && $this->_assertOrganizer($_iMIP, $_existingEvent, TRUE, TRUE, TRUE);
         
-//         if ($_iMIP->getEvent()->obsoletes($_existingEvent)) {
-//             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
-//             return FALSE;
-//         }
+         if (! $_iMIP->getEvent()->obsoletes($_existingEvent)) {
+             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
+             return FALSE;
+         }
         
         return $result;
     }
@@ -305,10 +305,10 @@ class Calendar_Frontend_iMIP
             return FALSE;
         }
         
-//         if ($_existingEvent->obsoletes($_iMIP->getEvent())) {
-//             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
-//             return FALSE;
-//         }
+         if ($_iMIP->getEvent()->isObsoletedBy($_existingEvent)) {
+             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
+             return FALSE;
+         }
         
         if (! $this->_assertOriginatorIsAttender($_iMIP, $_iMIP->getEvent())) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORIGINATOR, "originator is not attendee in iMIP transaction -> spoofing attempt?");
