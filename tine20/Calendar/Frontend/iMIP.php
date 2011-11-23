@@ -169,8 +169,8 @@ class Calendar_Frontend_iMIP
      */
     protected function _checkRequestPreconditions($_iMIP, $_existingEvent)
     {
-        $result  = $this->_assertOwnAttender($_iMIP, $_existingEvent, TRUE, FALSE)
-                && $this->_assertOrganizer($_iMIP, $_existingEvent, TRUE, TRUE, TRUE);
+        $result  = $this->_assertOwnAttender($_iMIP, $_existingEvent, TRUE, FALSE);
+        $result &= $this->_assertOrganizer($_iMIP, $_existingEvent, TRUE, TRUE, TRUE);
         
          if (! $_iMIP->getEvent()->obsoletes($_existingEvent)) {
              $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
