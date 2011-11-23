@@ -241,10 +241,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         foreach ($this->_supportedForeignContentTypes as $application => $contentType) {
             if (! Tinebase_Application::getInstance()->isInstalled($application) || ! Tinebase_Core::getUser()->hasRight($application, Tinebase_Acl_Rights::RUN)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                     . ' ' . $application . ' not installed or access denied.');
                 continue;
             }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Looking for ' . $application . '[' . $contentType . '] content ...');
             
             $parts = $_message->getBodyParts(NULL, $contentType);
             foreach ($parts as $partId => $partData) {
