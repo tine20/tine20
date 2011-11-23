@@ -243,59 +243,77 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     public static function emailsToAttendee(Calendar_Model_Event $_event, $_emails, $_ImplicitAddMissingContacts = TRUE)
     {
-    	$currentAttendee = $event->getId() ? 
-    	   Calendar_Controller_Event::getInstance()->get($event->getId())->attendee :
-    	   new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-       
+        if (! $_event->attendee instanceof Tinebase_Record_RecordSet) {
+            $_event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        }
+        
+    	$_event->attendee = $_event->attendee;
+    	
         // resolve current attendee
-        self::resolveAttendee($currentAttendee);
+        self::resolveAttendee($_event->attendee, false);
         
         // build currentMailMap
         // NOTE: non resolvable attendee will be discarded in the map
         //       this is _important_ for the calculation of migration as it
         //       saves us from deleting attendee out of current users scope
-        $currentEmailMap = array();
-        foreach ($currentAttendee as $currentAttender) {
-        	$currentAttenderEmailAdress = $currentAttender->getEmail();
-        	if ($currentAttenderEmailAdress) {
-        	    $currentEmailMap[$currentAttenderEmailAdress] = $currentAttender->getId();
+        $emailsOfCurrentAttendees = array();
+        foreach ($_event->attendee as $currentAttendee) {
+        	if ($currentAttendeeEmailAddress = $currentAttendee->getEmail()) {
+        	    $emailsOfCurrentAttendees[$currentAttendeeEmailAddress] = $currentAttendee;
         	}
         }
         
-        // initialize convertEmailMap
-        $convertEmailMap = array();
-        foreach ($_emails as $email) {
-            $convertEmailMap[$email] = '';
+        // collect emails of new attendees
+        $emailsOfNewAttendees = array();
+        foreach ($_emails as $newAttendee) {
+            $emailsOfNewAttendees[$newAttendee['email']] = $newAttendee;
         }
         
-        // calculate migration
-        $toAdd    = array_diff_key($convertEmailMap, $currentEmailMap);
-        $toDelete = array_diff_key($currentEmailMap, $convertEmailMap);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee to add " . print_r($toAdd, true));
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee to delete " . print_r($toAdd, true));
+        // attendees to remove
+        $attendeesToDelete = array_diff_key($emailsOfCurrentAttendees, $emailsOfNewAttendees);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendees to delete " . print_r(array_keys($attendeesToDelete), true));
         
-        // delete attendee from set
-        foreach ($toDelete as $email => $attenderId) {
-        	unset($currentAttendee[$attenderId]);
+        // delete attendees no longer attending from recordset
+        foreach ($attendeesToDelete as $attendeeToDelete) {
+            unset($_event->attendee[$_event->attendee->getIndexById($attendeeToDelete->getId())]);
         }
+        
+        
+        // attendees to keep and update
+        $attendeesToKeep   = array_diff_key($emailsOfCurrentAttendees, $attendeesToDelete);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendees to keep " . print_r(array_keys($attendeesToKeep), true));
+        
+        foreach($attendeesToKeep as $emailAddress => $attendeeToKeep) {
+            $newSettings = $emailsOfNewAttendees[$emailAddress];
+            
+            $attendeeToKeep->status = $newSettings['partStat'];
+            $attendeeToKeep->role   = $newSettings['role'];
+            
+            $_event->attendee[$_event->attendee->getIndexById($attendeeToKeep->getId())] = $attendeeToKeep;
+        }
+        
+        // new attendess to add to event
+        $attendeesToAdd    = array_diff_key($emailsOfNewAttendees,     $emailsOfCurrentAttendees);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendees to add " . print_r(array_keys($attendeesToAdd), true));
         
         // add attendee identified by their emailAdress
-        foreach (array_keys($toAdd) as $email) {
-        	$contacts = $addressbook->search(new Addressbook_Model_ContactFilter(array(
+        foreach ($attendeesToAdd as $newAttendee) {
+        	$contacts = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(array(
         	    array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
                 array('condition' => 'OR', 'filters' => array(
-                    array('field' => 'email',      'operator'  => 'equals', 'value' => (string) $email),
-                    array('field' => 'email_home', 'operator'  => 'equals', 'value' => (string) $email),
+                    array('field' => 'email',      'operator'  => 'equals', 'value' => $newAttendee['email']),
+                    array('field' => 'email_home', 'operator'  => 'equals', 'value' => $newAttendee['email'])
                 )),
         	)));
         	
-            if(count($contacts) > 0) {
+            $contactId = NULL;
+            
+        	if(count($contacts) > 0) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of contacts " . count($contacts));
                 
-                $contactId = NULL;
                 $accountIdMap = $contacts->account_id;
                 
-                // prefer account over contact
+                // prefer user over contact
                 foreach ($accountIdMap as $contactMapId => $accountMapId) {
                     $contactId = $accountMapId;
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " taking contact with account with id " . $accountMapId);
@@ -307,35 +325,35 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     
                 }
                 
-                
-                $contactId = $contacts->getFirstRecord()->getId();
-                
-            } else if ($_ImplicitAddMissingContacts) {
+            } else if ($_ImplicitAddMissingContacts == true) {
             	$translation = Tinebase_Translation::getTranslation('Calendar');
             	$i18nNote = $translation->_('This contact has been automatically added by the system as an event attender');
                 $contactData = array(
                     'note'        => $i18nNote,
-                    'email'       => (string) $email,
-                    'n_family'    => array_value(0, explode('@', (string) $email)),
+                    'email'       => $newAttendee['email'],
+                    'n_family'    => $newAttendee['lastName'],
+                    'n_given'     => $newAttendee['firstName'],
                 );
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . print_r($contactData, true));
                 $contact = new Addressbook_Model_Contact($contactData);
                 
-                $contactId = $addressbook->create($contact)->getId();
-            } else {
-            	if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " discarding attender " . $email);
-            	
-            	$contactId = NULL;
+                $contactId = Addressbook_Controller_Contact::getInstance()->create($contact)->getId();
+            }
+
+            if ($contactId === NULL) {
+                continue;
             }
             
             // finally add to attendee
-            $currentAttendee->addRecord(new Calendar_Model_Attender(array(
+            $_event->attendee->addRecord(new Calendar_Model_Attender(array(
                 'user_id'   => $contactId,
-                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_type' => $newAttendee['userType'],
+                'part_stat' => $newAttendee['partStat'],
+                'role'      => $newAttendee['role']
             )));
         }
         
-        return $currentAttendee;
+        //var_dump($_event->attendee->toArray());
     }
     
     /**
