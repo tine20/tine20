@@ -424,23 +424,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     }
     
     /**
-     * returns TRUE if this event obsoletes given one
-     * 
-     * @param Calendar_Model_Event $_event
-     */
-    public function obsoletes($_event)
-    {
-        if ($_event->seq != $this->seq) {
-            return $this->seq > $_event->seq;
-        }
-        
-        return $this->last_modified_time > $_event->last_modified_time;
-    }
-    
-    /**
      * returns TRUE if given event obsoletes this one
      * 
-     * @param Calendar_Model_Event $_event
+     * @param  Calendar_Model_Event $_event
+     * @return bool
      */
     public function isObsoletedBy($_event)
     {
@@ -450,7 +437,20 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         
         return $_event->last_modified_time > $this->last_modified_time;
     }
-
+    
+    /**
+     * returns TRUE if comparison detects a resechedule / significant change
+     * 
+     * @param  Calendar_Model_Event $_event
+     * @return bool
+     */
+    public function isRescheduled($_event)
+    {
+        return $this->dtstart != $_event->dtstart
+            || $this->dtend != $_event->dtend
+            || $this->rrule != $_event->rrule;
+    }
+    
     public function resolveOrganizer()
     {
         if (! $this->organizer instanceof Addressbook_Model_Contact) {
