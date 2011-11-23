@@ -131,6 +131,7 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
         'userAgent'            => array('allowEmpty' => true,         ),
         'event'                => array('allowEmpty' => true          ),
         'preconditions'        => array('allowEmpty' => true          ),
+        'preconditionsChecked' => array('allowEmpty' => true          ),
     );
     
     /**
