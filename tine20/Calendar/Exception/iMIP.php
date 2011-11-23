@@ -5,6 +5,8 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * 
+ * @todo		extend new Data exception and add iMIP record to exception if available
  */
 
 /**
@@ -15,7 +17,6 @@
  */
 class Calendar_Exception_iMIP extends Exception
 {
-    
     /**
      * construct
      * 
@@ -23,8 +24,8 @@ class Calendar_Exception_iMIP extends Exception
      * @param integer $_code
      * @return void
      */
-    public function __construct($_message = 'generic iMIP exception', $_code = 920) {
+    public function __construct($_message = 'generic iMIP exception', $_code = 920)
+    {
         parent::__construct($_message, $_code);
     }
-    
 }

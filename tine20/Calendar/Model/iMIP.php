@@ -104,6 +104,11 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
     const PRECONDITION_SUPPORTED  = 'SUPPORTED';
     
     /**
+     * precondition that event exists
+     */
+    const PRECONDITION_EVENTEXISTS  = 'EVENTEXISTS';
+    
+    /**
      * (non-PHPdoc)
      * @see Tinebase_Record_Abstract::_identifier
      */
@@ -126,6 +131,7 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
         'userAgent'            => array('allowEmpty' => true,         ),
         'event'                => array('allowEmpty' => true          ),
         'preconditions'        => array('allowEmpty' => true          ),
+        'preconditionsChecked' => array('allowEmpty' => true          ),
     );
     
     /**
@@ -195,6 +201,9 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
      */
     public function addFailedPrecondition($_preconditionName, $_message)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . " Preconditions check failed for " . $_preconditionName . ' with message: ' . $_message);
+        
         $this->_addPrecondition($_preconditionName, FALSE, $_message);
     }
     

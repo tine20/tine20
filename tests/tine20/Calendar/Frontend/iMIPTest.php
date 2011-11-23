@@ -35,6 +35,13 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     protected $_iMIPFrontend = NULL;
     
     /**
+    * email test class
+    *
+    * @var Felamimail_Controller_MessageTest
+    */
+    protected $_emailTestClass;
+        
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -55,6 +62,9 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_iMIPFrontend = new Calendar_Frontend_iMIP();
+        
+        $this->_emailTestClass = new Felamimail_Controller_MessageTest();
+        $this->_emailTestClass->setup();
     }
 
     /**
@@ -67,6 +77,10 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     {
         if (! empty($this->_eventIdsToDelete)) {
             Calendar_Controller_Event::getInstance()->delete($this->_eventIdsToDelete);
+        }
+        
+        if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
+            $this->_emailTestClass->tearDown();
         }
     }
     
@@ -97,7 +111,6 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     {
         $iMIP = $this->_getiMIP('PUBLISH');
             
-        $this->_iMIPFrontend->autoProcess($iMIP);
         $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
     
         $this->assertEquals(1, count($prepared->preconditions));
@@ -146,6 +159,17 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Sleep very long', $prepared->event->summary);
         $this->assertTrue(empty($prepared->preconditions));
     }
+
+    /**
+    * testInternalInvitationRequestAutoProcessOwnStatusAlreadySet
+    */
+    public function testInternalInvitationRequestPreconditionOwnStatusAlreadySet()
+    {
+//         $iMIP = $this->_getiMIP('REQUEST');
+        // -- set own status
+//         $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
+        // -- assert RECENT precondition fail?
+    }
     
     /**
     * returns a simple event
@@ -191,37 +215,59 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         ));
     }
     
-
     /**
      * testExternalInvitationRequestProcess
      * 
-     * @todo implement
+     * -> external invitation requests are not supported atm
      */
     public function testExternalInvitationRequestProcess()
     {
-        // -- handle message with fmail (add to cache)
-        // -- get $iMIP from message
-        // -- test this->_iMIPFrontend->process($iMIP, $status);
+        // handle message with fmail (add to cache)
+        $message = $this->_emailTestClass->messageTestHelper('calendar_request.eml');
+        $complete = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
+        
+        $iMIP = $complete->preparedParts->getFirstRecord()->preparedData;
+        
+        $this->setExpectedException('Calendar_Exception_iMIP', 'iMIP preconditions failed: ORGANIZER');
+        $result = $this->_iMIPFrontend->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
     }
 
     /**
-     * testInvitationReplyAccepted
-     * 
-     * @todo implement
+     * testInternalInvitationRequestProcess
      */
-    public function testInvitationReplyAccepted()
+    public function testInternalInvitationRequestProcess()
     {
+        // -- create event and get notification from fmail
         
+        // handle message with fmail (add to cache)
+//         $complete = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
+        
+//         $iMIP = $complete->preparedParts->getFirstRecord()->preparedData;
+        
+//         $result = $this->_iMIPFrontend->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+        
+        // -- check attender status
     }
 
     /**
-     * testInvitationReplyDeclined
+     * testInvitationInternalReply
      * 
      * @todo implement
      */
-    public function testInvitationReplyDeclined()
+    public function testInvitationInternalReply()
     {
-        
+        // -- auto process / should do nothing
+    }
+
+    /**
+     * testInvitationExternalReply
+     * 
+     * @todo implement
+     */
+    public function testInvitationExternalReply()
+    {
+        // -- auto process / should process
+        // -- prepareComponent / assert recent precondition
     }
 
     /**

@@ -419,6 +419,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
     }
     
+    /**
+     * get own attender
+     * 
+     * @param Tinebase_Record_RecordSet $_attendee
+     * @return Calendar_Model_Attender|NULL
+     */
     public static function getOwnAttender($_attendee)
     {
         foreach($_attendee->filter('user_id', Tinebase_Core::getUser()->contact_id) as $attender) {
@@ -427,6 +433,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             }
         }
         
+        return NULL;
     }
     
     /**
