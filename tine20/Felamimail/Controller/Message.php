@@ -335,6 +335,32 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * get iMIP by message and part id
+     * 
+     * @param string $_iMIPId
+     * @throws Tinebase_Exception_InvalidArgument
+     * @return Tinebase_Record_Abstract
+     */
+    public function getiMIP($_iMIPId)
+    {
+        if (strpos($_iMIPId, '_') === FALSE) {
+            throw new Tinebase_Exception_InvalidArgument('messageId_partId expecetd.');
+        }
+        
+        list($messageId, $partId) = explode('_', $_iMIPId);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Fetching ' . $messageId . '[' . $partId . '] part with iMIP data ...');
+        
+        $message = $this->get($messageId);
+        
+        $iMIPPartStructure = $message->getPartStructure($partId);
+        $iMIP = $this->_getForeignMessagePart($message, $partId, $iMIPPartStructure);
+        
+        return $iMIP;
+    }
+    
+    /**
      * get message part
      *
      * @param string|Felamimail_Model_Message $_id
