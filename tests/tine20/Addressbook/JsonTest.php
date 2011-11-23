@@ -312,7 +312,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->_instance->deleteContacts($contact['id']);
         
-        $this->setExpectedException('Exception');
+        $this->setExpectedException('Tinebase_Exception_NotFound');
         $contact = $this->_instance->getContact($contact['id']);
     }
     
