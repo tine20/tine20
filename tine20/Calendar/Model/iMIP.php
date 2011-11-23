@@ -201,6 +201,9 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
      */
     public function addFailedPrecondition($_preconditionName, $_message)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . " Preconditions check failed for " . $_preconditionName . ' with message: ' . $_message);
+        
         $this->_addPrecondition($_preconditionName, FALSE, $_message);
     }
     
