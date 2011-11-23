@@ -430,7 +430,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function obsoletes($_event)
     {
-        if ($_event->seq !== $this->seq) {
+        if ($_event->seq != $this->seq) {
             return $this->seq > $_event->seq;
         }
         
@@ -444,10 +444,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function isObsoletedBy($_event)
     {
-        if ($_event->seq !== $this->seq) {
-           return $_event->seq > $this->seq;
+        if ($_event->seq != $this->seq) {
+            return $_event->seq > $this->seq;
         }
-         
+        
         return $_event->last_modified_time > $this->last_modified_time;
     }
 
