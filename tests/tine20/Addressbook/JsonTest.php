@@ -386,6 +386,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+<<<<<<< HEAD
      * test import
      */
     public function testImport()
@@ -874,5 +875,41 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Addressbook_Model_Contact', $options['model']);
         $this->assertTrue(is_array($options['autotags']));
         $this->assertEquals('Import list (###CURRENTDATE###)', $options['autotags'][0]['name']);
+    }
+        
+    /**
+     * testSearchContactsWithTagIsNotFilter
+     */
+    public function testSearchContactsWithTagIsNotFilter()
+    {
+        $allContacts = $this->_instance->searchContacts(array(), array());
+        
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array(
+                'field'    => 'n_fileas',
+                'operator' => 'equals',
+                'value'    =>  Tinebase_Core::getUser()->accountDisplayName
+            )
+        ));
+        $sharedTagName = Tinebase_Record_Abstract::generateUID();
+        $tag = new Tinebase_Model_Tag(array(
+            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+            'name'  => $sharedTagName,
+            'description' => 'testImport',
+            'color' => '#009B31',
+        ));
+        $tag = Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $tag);
+        
+        $filter = array(array(
+            'field'    => 'tag',
+            'operator' => 'not',
+            'value'    => $tag->getId()
+        ));
+        $allContactsWithoutTheTag = $this->_instance->searchContacts($filter, array());
+        
+        $this->assertTrue(count($allContactsWithoutTheTag['totalcount']) > 0);
+        $this->assertEquals($allContacts['totalcount']-1, $allContactsWithoutTheTag['totalcount']);
+        
+        $sharedTagToDelete = Tinebase_Tags::getInstance()->getTagByName($sharedTagName);
     }
 }
