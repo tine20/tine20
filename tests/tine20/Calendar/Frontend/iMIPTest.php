@@ -35,6 +35,13 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     protected $_iMIPFrontend = NULL;
     
     /**
+     * iMIP frontent to be tested
+     * 
+     * @var Calendar_Frontend_iMIPMock
+     */
+    protected $_iMIPFrontendMock = NULL;
+    
+    /**
     * email test class
     *
     * @var Felamimail_Controller_MessageTest
@@ -62,6 +69,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_iMIPFrontend = new Calendar_Frontend_iMIP();
+        $this->_iMIPFrontendMock = new Calendar_Frontend_iMIPMock();
         
         $this->_emailTestClass = new Felamimail_Controller_MessageTest();
         $this->_emailTestClass->setup();
@@ -237,16 +245,13 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
      */
     public function testInternalInvitationRequestProcess()
     {
-        // -- create event and get notification from fmail
+        $iMIP = $this->_getiMIP('REQUEST');
+        $result = $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_TENTATIVE);
         
-        // handle message with fmail (add to cache)
-//         $complete = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
+        $event = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($iMIP->getEvent());
         
-//         $iMIP = $complete->preparedParts->getFirstRecord()->preparedData;
-        
-//         $result = $this->_iMIPFrontend->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
-        
-        // -- check attender status
+        $attender = Calendar_Model_Attender::getOwnAttender($event->attendee);
+        $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $attender->status);
     }
 
     /**
