@@ -15,6 +15,7 @@ From: "Tine 2.0 Admin Account" <l.kneschke@caldav.org>
 Sender: "Tine 2.0 notification service" <notifications@caldav.org>
 To: "Caldav External" <tine20admin@caldav.net>
 Date: Mon, 21 Nov 2011 11:59:10 +0000
+X-Tine20TestMessage: calendar_request.eml
 Content-Type: multipart/mixed; charset=UTF-8;
  boundary="=_a4f4a43c473722a1d83ea9d75a3ccb06"
 MIME-Version: 1.0
