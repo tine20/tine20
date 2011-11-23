@@ -287,6 +287,8 @@ class Calendar_Frontend_iMIP
      * @param  Calendar_Model_Event  $_existingEvent
      * @param  string                $_status
      * @throws Tinebase_Exception_NotImplemented
+     * 
+     * @todo handle external organizers
      */
     protected function _processRequest($_iMIP, $_existingEvent, $_status)
     {
@@ -297,7 +299,13 @@ class Calendar_Frontend_iMIP
         //  - event is up to date
         //  - status change could also be done by calendar method
         //  - normal notifications
-        if ($_existingEvent && $organizer->account_id) {
+        if ($organizer->account_id) {
+            if (! $_existingEvent) {
+                // organizer has an account but no event exists, it seems that event was created from a non-caldav client
+                // @todo create event if it did not exist before + do not send notifications in this case + create event in context of organizer
+                // $_existingEvent = Calendar_Controller_Event::getInstance()->create($_iMIP->getEvent());
+            }
+            
             if ($_status && $_status != $ownAttender->status) {
                 $ownAttender->status = $_status;
                 Calendar_Controller_Event::getInstance()->attenderStatusUpdate($_existingEvent, $ownAttender, $ownAttender->status_authkey);
