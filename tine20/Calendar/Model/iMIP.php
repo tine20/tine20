@@ -159,6 +159,10 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
             }
             
             $this->event = $this->_getConverter()->toTine20Model($this->ics);
+            
+            if (! $this->method) {
+                $this->method = $this->_getConverter()->getMethod($this->ics);
+            }
         }
         
         return $this->event;
