@@ -622,7 +622,10 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     {
         if ($_attendee->user_id instanceof Addressbook_Model_Contact) {
             $_attendee->user_id = $_attendee->user_id->getId();
+        } else if ($_attendee->user_id instanceof Addressbook_Model_List) {
+            $_attendee->user_id = $_attendee->user_id->group_id;
         }
+        
         if ($_attendee->displaycontainer_id instanceof Tinebase_Model_Container) {
             $_attendee->displaycontainer_id = $_attendee->displaycontainer_id->getId();
         }
@@ -640,7 +643,10 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     {
         if ($_attendee->user_id instanceof Addressbook_Model_Contact) {
             $_attendee->user_id = $_attendee->user_id->getId();
+        } else if ($_attendee->user_id instanceof Addressbook_Model_List) {
+            $_attendee->user_id = $_attendee->user_id->group_id;
         }
+        
         if ($_attendee->displaycontainer_id instanceof Tinebase_Model_Container) {
             $_attendee->displaycontainer_id = $_attendee->displaycontainer_id->getId();
         }
