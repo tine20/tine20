@@ -324,7 +324,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         if (array_key_exists('parts', $structure)) {
             $bodyParts = $bodyParts + $this->_parseMultipart($structure, $_preferedMimeType);
         } else {
-            $bodyParts = $bodyParts + $this->_parseSinglePart($structure);
+            $bodyParts = $bodyParts + $this->_parseSinglePart($structure, in_array($_preferedMimeType, array(Zend_Mime::TYPE_HTML, Zend_Mime::TYPE_TEXT)));
         }
         
         return $bodyParts;
@@ -336,7 +336,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      * @param array $_structure
      * @return array
      */
-    protected function _parseSinglePart(array $_structure)
+    protected function _parseSinglePart(array $_structure, $_onlyGetNonAttachmentParts = TRUE)
     {
         $result = array();
         
@@ -345,7 +345,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             return $result;
         }
         
-        if ($this->_partIsAttachment($_structure)) {
+        if ($_onlyGetNonAttachmentParts && $this->_partIsAttachment($_structure)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Part is attachment: ' . $_structure['disposition']);
             return $result;
         }
@@ -385,7 +385,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     {
         $result = array();
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_structure, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_structure, TRUE));
         
         if ($_structure['subType'] == 'alternative') {
             $alternativeType = ($_preferedMimeType == Zend_Mime::TYPE_HTML) 
@@ -398,8 +398,10 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             
             if (array_key_exists($_preferedMimeType, $foundParts)) {
                 $result[$foundParts[$_preferedMimeType]] = $_structure['parts'][$foundParts[$_preferedMimeType]];
-            } elseif (array_key_exists($alternativeType, $foundParts)) {
+            } else if (array_key_exists($alternativeType, $foundParts)) {
                 $result[$foundParts[$alternativeType]] = $_structure['parts'][$foundParts[$alternativeType]];
+            } else if (array_key_exists('multipart/mixed', $foundParts)) {
+                $result = $result + $this->getBodyParts($_structure['parts'][$foundParts['multipart/mixed']], $_preferedMimeType);
             }
         } else {
             foreach ($_structure['parts'] as $part) {
