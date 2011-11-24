@@ -276,24 +276,51 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      * updates an attender status of a event
      *
      * @param  Calendar_Model_Event    $_event
-     * @param  Calendar_Model_Attender $_attender
-     * @param  string                  $_authKey
+     * @param  Calendar_Model_Attender $_attendee
      * @return Calendar_Model_Event    updated event
      */
     public function attenderStatusUpdate($_event, $_attendee)
     {
-        foreach($_event->attendee as $attendee) {
-            $contactId = $attendee->user_id instanceof Addressbook_Model_Contact ? $attendee->user_id->getId() : $attendee->user_id;
-            if ($contactId == $_attendee->user_id) {
-                $attendeeFound = $attendee;
+        if ($_event->recurid) {
+            throw new Tinebase_Exception_UnexpectedValue('recur event instances must be saved as part of the base event');
+        }
+        
+        $exceptions = $_event->exdate instanceof Tinebase_Record_RecordSet ? $_event->exdate : new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $_event->exdate = $exceptions->getOriginalDtStart();
+        
+        // update base event status
+        $attendeeFound = Calendar_Model_Attender::getAttendee($_event->attendee, $_attendee);
+        if (!isset($attendeeFound)) {
+            throw new Tinebase_Exception_UnexpectedValue('not an attendee');
+        }
+        Calendar_Controller_Event::getInstance()->attenderStatusUpdate($_event, $attendeeFound, $attendeeFound->status_authkey);
+        
+        // update exceptions
+        foreach($exceptions as $exception) {
+            // do not attemt to set status of an deleted instance
+            if ($exception->is_deleted) continue;
+            
+            $exceptionAttendee = Calendar_Model_Attender::getAttendee($exception->attendee, $_attendee);
+            
+            if (! $exception->getId()) {
+                if (! $exceptionAttendee) {
+                    // set user status to DECLINED
+                    $exceptionAttendee = clone $attendeeFound;
+                    $exceptionAttendee->status = Calendar_Model_Attender::STATUS_DECLINED;
+                }
+                
+                Calendar_Controller_Event::getInstance()->attenderStatusCreateRecurException($exception, $exceptionAttendee, $exceptionAttendee->status_authkey);
+            } else {
+                if (! $exceptionAttendee) {
+                    // we would need to find out the users authkey to decline him -> not allowed!?
+                    if (!isset($attendeeFound)) {
+                        throw new Tinebase_Exception_UnexpectedValue('not an attendee');
+                    }
+                }
+                
+                Calendar_Controller_Event::getInstance()->attenderStatusUpdate($exception, $exceptionAttendee, $exceptionAttendee->status_authkey);
             }
         }
-         // current user does not attend
-        if (!isset($attendeeFound)) {
-            throw new Tinebase_Exception_AccessDenied('not allowed to update event');
-        }
-            
-        Calendar_Controller_Event::getInstance()->attenderStatusUpdate($_event, $attendeeFound, $attendeeFound->status_authkey);
         
         return $this->get($_event->getId());
     }
