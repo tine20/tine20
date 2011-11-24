@@ -62,7 +62,28 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
     },
     
     /**
-     * process email invitation
+     * (re) prepare IMIP
+     */
+    prepareIMIP: function() {
+        this.iMIPclause.setText(this.app.i18n._('Checking Calendar Data...'));
+        
+        Tine.Calendar.iMIPPrepare(this.iMIPrecord.data, function(result, response) {
+            if (response.error) {
+                // give up!
+                this.iMIPrecord.set('preconditions', {'GENERIC': 'generic problem'});
+            } else {
+                this.iMIPrecord = new Tine.Calendar.Model.iMIP(result);
+                this.iMIPrecord.set('event', Tine.Calendar.backend.recordReader({
+                    responseText: Ext.util.JSON.encode(result.event)
+                }));
+            }
+            
+            this.showIMIP();
+        }, this);
+    },
+    
+    /**
+     * process IMIP
      * 
      * @param {String} status
      */
@@ -71,27 +92,22 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         
         Tine.Calendar.iMIPProcess(this.iMIPrecord.data, status, function(result, response) {
             if (response.error) {
-                // why did it fail? ->  prepared part in exception data?
-                console.log(response);
+                // precondition changed?  
+                return this.prepareIMIP();
             }
             
-            else {
-                console.log(result);
-                
-                // load result
-                this.iMIPrecord = new Tine.Calendar.Model.iMIP(result);
-                this.iMIPrecord.set('event', Tine.Calendar.backend.recordReader({
-                    responseText: Ext.util.JSON.encode(result.event)
-                }));
-                
-                console.log(this.iMIPrecord);
-                this.showIMIP();
-            }
+            // load result
+            this.iMIPrecord = new Tine.Calendar.Model.iMIP(result);
+            this.iMIPrecord.set('event', Tine.Calendar.backend.recordReader({
+                responseText: Ext.util.JSON.encode(result.event)
+            }));
+            
+            this.showIMIP();
         }, this);
     },
     
     /**
-     * iMIP actino toolbar
+     * iMIP action toolbar
      */
     initIMIPToolbar: function() {
         var singleRecordPanel = this.getSingleRecordPanel();
@@ -143,7 +159,6 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
             myAttenderRecord = event.getMyAttenderRecord(),
             myAttenderstatus = myAttenderRecord ? myAttenderRecord.get('status') : null;
             
-        
         // reset actions
         Ext.each(this.actions, function(action) {action.setHidden(true)});
         
