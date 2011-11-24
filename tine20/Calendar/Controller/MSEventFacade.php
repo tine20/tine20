@@ -273,6 +273,32 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     }
     
     /**
+     * updates an attender status of a event
+     *
+     * @param  Calendar_Model_Event    $_event
+     * @param  Calendar_Model_Attender $_attender
+     * @param  string                  $_authKey
+     * @return Calendar_Model_Event    updated event
+     */
+    public function attenderStatusUpdate($_event, $_attendee)
+    {
+        foreach($event->attendee as $attendee) {
+            $contactId = $attendee->user_id instanceof Addressbook_Model_Contact ? $attendee->user_id->getId() : $attendee->user_id;
+            if ($contactId == $_attendee->user_id) {
+                $attendeeFound = $attendee;
+            }
+        }
+         // current user does not attend
+        if (!isset($attendeeFound)) {
+            throw new Tinebase_Exception_AccessDenied('not allowed to update event');
+        }
+            
+        Calendar_Controller_Event::getInstance()->attenderStatusUpdate($_event, $attendeeFound, $attendeeFound->status_authkey);
+        
+        return $this->get($_event->getId());
+    }
+    
+    /**
      * update multiple records
      * 
      * @param   Tinebase_Model_Filter_FilterGroup $_filter
