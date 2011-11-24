@@ -374,13 +374,15 @@ class Calendar_Convert_Event_VCalendar_Abstract
         foreach($_event->attendee as $eventAttendee) {
             $attendeeEmail = $eventAttendee->getEmail();
             if ($attendeeEmail) {
-                $attendee = new Sabre_VObject_Property('ATTENDEE', "mailto:$attendeeEmail");
+                $attendee = new Sabre_VObject_Property('ATTENDEE', (strpos($attendeeEmail, '@') !== false ? 'mailto:' : 'urn:uuid:') . $attendeeEmail);
                 $attendee->add('CN',       $eventAttendee->getName());
                 $attendee->add('CUTYPE',   Calendar_Convert_Event_VCalendar_Abstract::$cutypeMap[$eventAttendee->user_type]);
-                $attendee->add('EMAIL',    $attendeeEmail);
                 $attendee->add('PARTSTAT', $eventAttendee->status);
                 $attendee->add('ROLE',     "{$eventAttendee->role}-PARTICIPANT");
                 $attendee->add('RSVP',     'FALSE');
+                if (strpos($attendeeEmail, '@') !== false) {
+                    $attendee->add('EMAIL',    $attendeeEmail);
+                }
 
                 $_vevent->add($attendee);
             }
@@ -540,6 +542,12 @@ class Calendar_Convert_Event_VCalendar_Abstract
      */
     protected function _getAttendee(Sabre_VObject_Property $_attendee)
     {
+        if (isset($_attendee['CUTYPE']) && in_array($_attendee['CUTYPE']->value, array('INDIVIDUAL', Calendar_Model_Attender::USERTYPE_GROUP, Calendar_Model_Attender::USERTYPE_RESOURCE))) {
+            $type = $_attendee['CUTYPE']->value == 'INDIVIDUAL' ? Calendar_Model_Attender::USERTYPE_USER : $_attendee['CUTYPE']->value;
+        } else {
+            $type = Calendar_Model_Attender::USERTYPE_USER;
+        }
+        
         if (isset($_attendee['ROLE']) && in_array($_attendee['ROLE']->value, array(Calendar_Model_Attender::ROLE_OPTIONAL, Calendar_Model_Attender::ROLE_REQUIRED))) {
             $role = $_attendee['ROLE']->value;
         } else {
@@ -556,7 +564,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
             $status = Calendar_Model_Attender::STATUS_NEEDSACTION;
         }
         
-        preg_match('/mailto:(?P<email>.*)/', $_attendee->value, $matches);
+        preg_match('/(?P<protocol>mailto:|urn:uuid:)(?P<email>.*)/', $_attendee->value, $matches);
         $email = $matches['email'];
         
         $fullName = isset($_attendee['CN']) ? $_attendee['CN'] : $email;
@@ -568,10 +576,9 @@ class Calendar_Convert_Event_VCalendar_Abstract
             $firstName = null;
             $lastName  = $fullName;
         }
-        
+
         $attendee = array(
-            #'userType'  => isset($property['CUTYPE'])   ? (string) $property['CUTYPE']   : 'INDIVIDUAL',
-            'userType'  => Calendar_Model_Attender::USERTYPE_USER,
+            'userType'  => $type,
             'firstName' => $firstName,
         	'lastName'  => $lastName,
             'partStat'  => $status,
@@ -607,9 +614,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     break;
                     
                 case 'ATTENDEE':
-                    if (preg_match('/mailto:(?P<email>.*)/', $property->value)) {
-                        $newAttendees[] = $this->_getAttendee($property);
-                    }
+                    $newAttendees[] = $this->_getAttendee($property);
                     
                     break;
                     
