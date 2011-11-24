@@ -131,7 +131,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
      * @param boolean $_addEventToiMIP
      * @return Calendar_Model_iMIP
      */
-    protected function _getiMIP($_method, $_addEventToiMIP = FALSE)
+    protected function _getiMIP($_method, $_addEventToiMIP = FALSE, $_testEmptyMethod = FALSE)
     {
         $event = $this->_getEvent();
         $event = Calendar_Controller_Event::getInstance()->create($event);
@@ -140,12 +140,13 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         // get iMIP invitation for event
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         $vevent = $converter->fromTine20Model($event);
+        $vevent->METHOD = $_method;
         $ics = $vevent->serialize();
         
         $iMIP = new Calendar_Model_iMIP(array(
             'id'             => Tinebase_Record_Abstract::generateUID(),
         	'ics'            => $ics,
-            'method'         => $_method,
+            'method'         => ($_testEmptyMethod) ? NULL : $_method,
             'originator'     => 'unittest@tine20.org',
         ));
         
@@ -263,6 +264,15 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $attender->status);
     }
 
+    public function testEmptyMethod()
+    {
+        $iMIP = $this->_getiMIP('REQUEST', FALSE, TRUE);
+        $this->assertEmpty($iMIP->method);
+        $event = $iMIP->getEvent();
+        
+        $this->assertEquals('REQUEST', $iMIP->method);
+    }
+    
     /**
      * testInvitationInternalReplyPreconditions
      * 

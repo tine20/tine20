@@ -126,7 +126,7 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                   => array('allowEmpty' => true,         ), 
         'ics'                  => array('allowEmpty' => true          ),
-        'method'               => array('allowEmpty' => false,        ),
+        'method'               => array('allowEmpty' => true,         ),
         'originator'           => array('allowEmpty' => false,        ), // email adddress
         'userAgent'            => array('allowEmpty' => true,         ),
         'event'                => array('allowEmpty' => true          ),
@@ -159,6 +159,10 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
             }
             
             $this->event = $this->_getConverter()->toTine20Model($this->ics);
+            
+            if (! $this->method) {
+                $this->method = $this->_getConverter()->getMethod($this->ics);
+            }
         }
         
         return $this->event;

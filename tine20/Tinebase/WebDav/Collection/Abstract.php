@@ -97,6 +97,9 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
                     }
+                    if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ) || !Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_SYNC)) {
+                        throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
+                    }
                     
                     $objectClass = $this->_applicationName . '_Frontend_WebDAV_Container';
                     
@@ -119,6 +122,9 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
                 try {
                     $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerByName($this->_applicationName, $_name, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
                 } catch (Tinebase_Exception_NotFound $tenf) {
+                    throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
+                }
+                if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ) || !Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_SYNC)) {
                     throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
                 }
                 
@@ -158,7 +164,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
             # path == Applicationname/{personal|shared}
             case 2:
                 if ($this->_pathParts[1] == Tinebase_Model_Container::TYPE_SHARED) {
-                    $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_READ);
+                    $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_applicationName, array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_SYNC));
                     foreach ($containers as $container) {
                         $children[] = $this->getChild($container);
                     }
@@ -171,7 +177,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
             # path == Applicationname/personal/accountLoginName
             # return personal folders
             case 3:
-                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_READ);
+                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_SYNC));
                 foreach ($containers as $container) {
                     $children[] = $this->getChild($container);
                 }

@@ -1089,6 +1089,21 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($event->attendee));
         $this->assertEquals(Tinebase_Core::getUser()->contact_id, $event->attendee[1]->user_id);
     }
+
+    /**
+    * validate email invitation from mac
+    */
+    public function testEmailInvitationFromMac()
+    {
+        $cachedMessage = $this->messageTestHelper('mac_invitation.eml');
+    
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+    
+        $this->assertEquals(1, count($message->preparedParts));
+        $preparediMIPPart = $message->preparedParts->getFirstRecord()->preparedData;
+        $this->assertTrue($preparediMIPPart instanceof Calendar_Model_iMIP, 'is no iMIP');
+        $this->assertEquals('pwulf@tine20.org', $preparediMIPPart->originator);
+    }
     
     /********************************* protected helper funcs *************************************/
     

@@ -286,10 +286,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         
         $exceptions = $_event->exdate instanceof Tinebase_Record_RecordSet ? $_event->exdate : new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        //$currentPersistentExceptions = $_event->rrule ? $this->_eventController->getRecurExceptions($_event, FALSE) : new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $_event->exdate = $exceptions->getOriginalDtStart();
-        
-        // @TODO create DECLINE exception for new exdate w.o the attendee?
         
         // update base event status
         $attendeeFound = Calendar_Model_Attender::getAttendee($_event->attendee, $_attendee);

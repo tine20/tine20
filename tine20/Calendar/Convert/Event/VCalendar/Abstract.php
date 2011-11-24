@@ -416,14 +416,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
      */
     public function toTine20Model($_blob, Tinebase_Record_Abstract $_model = null)
     {
-        if ($_blob instanceof Sabre_VObject_Component) {
-            $vcalendar = $_blob;
-        } else {
-            if (is_resource($_blob)) {
-                $_blob = stream_get_contents($_blob);
-            }
-            $vcalendar = Sabre_VObject_Reader::read($_blob);
-        }
+        $vcalendar = $this->_getVcal($_blob);
         
         // contains the VCALENDAR any VEVENTS
         if (!isset($vcalendar->VEVENT)) {
@@ -442,6 +435,10 @@ class Calendar_Convert_Event_VCalendar_Abstract
             $oldExdates = $event->exdate->filter('is_deleted', false);
         } else {
             $oldExdates = new Tinebase_Record_RecordSet('Calendar_Model_Events');
+        }
+        
+        if (!isset($vcalendar->METHOD)) {
+            $this->_method = $vcalendar->METHOD;
         }
                 
         // find the main event - the main event has no RECURRENCE-ID
@@ -481,6 +478,33 @@ class Calendar_Convert_Event_VCalendar_Abstract
         return $event;
     }
     
+    protected function _getVcal($_blob)
+    {
+        if ($_blob instanceof Sabre_VObject_Component) {
+            $vcalendar = $_blob;
+        } else {
+            if (is_resource($_blob)) {
+                $_blob = stream_get_contents($_blob);
+            }
+            $vcalendar = Sabre_VObject_Reader::read($_blob);
+        }
+        
+        return $vcalendar;
+    }
+    
+    public function getMethod($_blob = NULL)
+    {
+        $result = NULL;
+        
+        if ($this->_method) {
+            $result = $this->_method;
+        } else if ($_blob !== NULL) {
+            $vcalendar = $this->_getVcal($_blob);
+            $result = $vcalendar->METHOD;
+        }
+        
+        return $result;
+    }
 
     /**
      * find a matching exdate or return an empty event record
@@ -516,7 +540,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
      */
     protected function _getAttendee(Sabre_VObject_Property $_attendee)
     {
-        if (in_array($_attendee['ROLE']->value, array(Calendar_Model_Attender::ROLE_OPTIONAL, Calendar_Model_Attender::ROLE_REQUIRED))) {
+        if (isset($_attendee['ROLE']) && in_array($_attendee['ROLE']->value, array(Calendar_Model_Attender::ROLE_OPTIONAL, Calendar_Model_Attender::ROLE_REQUIRED))) {
             $role = $_attendee['ROLE']->value;
         } else {
             $role = Calendar_Model_Attender::ROLE_REQUIRED;

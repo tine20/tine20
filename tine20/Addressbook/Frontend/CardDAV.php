@@ -68,6 +68,9 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
                 }
+                if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ) || !Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_SYNC)) {
+                    throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
+                }
                 
                 $objectClass = $this->_application->name . '_Frontend_WebDAV_Container';
                 
@@ -101,12 +104,12 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
             # path == /account->contact_id
             # list container
             case 1:
-                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_application->name, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_READ);
+                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_application->name, Tinebase_Core::getUser(), array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_SYNC));
                 foreach ($containers as $container) {
                     $children[] = $this->getChild($container);
                 }
             
-                $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_application->name, Tinebase_Model_Grants::GRANT_READ);
+                $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_application->name, array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_SYNC));
                 foreach ($containers as $container) {
                     $children[] = $this->getChild($container);
                 }
