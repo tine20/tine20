@@ -282,7 +282,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     public function attenderStatusUpdate($_event, $_attendee)
     {
-        foreach($event->attendee as $attendee) {
+        foreach($_event->attendee as $attendee) {
             $contactId = $attendee->user_id instanceof Addressbook_Model_Contact ? $attendee->user_id->getId() : $attendee->user_id;
             if ($contactId == $_attendee->user_id) {
                 $attendeeFound = $attendee;
