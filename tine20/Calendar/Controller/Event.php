@@ -1243,7 +1243,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if ($index === FALSE) {
                 throw new Tinebase_Exception_NotFound('Could not find attender in event.');
             }
-            $currentAttender                      = $event->attendee[$index];
+            
+            $currentAttender = $event->attendee[$index];
+            
+            if ($currentAttender->status == $_attender->status) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . "no status change -> do nothing");
+                return $currentAttender;
+            }
+            
             $currentAttender->status              = $_attender->status;
             $currentAttender->displaycontainer_id = $_attender->displaycontainer_id;
             
@@ -1262,6 +1269,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
+        }
+        
+        // send notifications
+        if ($this->_sendNotifications) {
+            $updatedEvent = $this->get($event->getId());
+            $this->doSendNotifications($updatedEvent, $this->_currentAccount, 'changed', $event);
         }
         
         return $updatedAttender;

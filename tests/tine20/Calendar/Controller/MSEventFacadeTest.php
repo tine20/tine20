@@ -188,8 +188,6 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         Calendar_Model_Attender::getAttendee($newException->attendee, $testAttendee)->status = Calendar_Model_Attender::STATUS_DECLINED;
         $updatedEvent = $this->_uit->attenderStatusUpdate($updatedEvent, $testAttendee);
         
-        print_r($updatedEvent->toArray());
-        
         $this->assertEquals(3, count($updatedEvent->exdate), 'new exdate num exdate mismatch');
     }
     
