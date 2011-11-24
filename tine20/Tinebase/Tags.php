@@ -527,7 +527,7 @@ class Tinebase_Tags
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param mixed                             $_tag       string|array|Tinebase_Model_Tag with existing and non-existing tag
-     * @return void
+     * @return Tinebase_Model_Tag
      */
     public function attachTagToMultipleRecords($_filter, $_tag)
     {
@@ -575,7 +575,8 @@ class Tinebase_Tags
                 'record_id'      => $recordId,
             // backend property not supported by record yet
                 'record_backend_id' => ''
-                ));
+                )
+            );
         }
         $this->_addOccurrence($tagId, count($toAttachIds));
         
