@@ -386,7 +386,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-<<<<<<< HEAD
      * test import
      */
     public function testImport()
