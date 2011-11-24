@@ -43,13 +43,19 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     
     /**
      * record class
-     * @cfg {} recordClass
+     * @cfg {Tine.Tinebase.data.Record} recordClass
      */
     recordClass: null,
     
     /**
+     * defaults for new records of this.recordClass
+     * @cfg {Object} recordClass
+     */
+    recordDefaults: null,
+    
+    /**
      * record class
-     * @cfg {} recordClass
+     * @cfg {Tine.Tinebase.data.Record} recordClass
      */
     searchRecordClass: null,
     
@@ -181,6 +187,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             blurOnSelect: true,
             recordClass: (this.searchRecordClass !== null) ? this.searchRecordClass : this.recordClass,
             newRecordClass: this.recordClass,
+            newRecordDefaults: this.recordDefaults,
             emptyText: _('Search for records ...'),
             onSelect: this.onAddRecordFromCombo
         });        
@@ -192,7 +199,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * TODO make reset work correctly -> show emptyText again
      */
     onAddRecordFromCombo: function(recordToAdd) {
-        var record = new this.newRecordClass(recordToAdd, recordToAdd.id);
+        var record = new this.newRecordClass(Ext.applyIf(recordToAdd, this.newRecordDefaults), recordToAdd.id);
         
         // check if already in
         if (! this.recordStore.getById(record.id)) {

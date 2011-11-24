@@ -46,6 +46,12 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
     initComponent: function () {
         this.initColumns();
         
+        this.recordDefaults = {
+            readGrant: true,
+            exportGrant: true,
+            syncGrant: true
+        };
+        
         Tine.widgets.container.GrantsGrid.superclass.initComponent.call(this);
     },
     
