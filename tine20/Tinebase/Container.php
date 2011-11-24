@@ -974,8 +974,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         // get container ids
         $containers = array();
+        
         foreach ($_records as $record) {
-            if (isset($record[$_containerProperty]) && !isset($containers[$record[$_containerProperty]])) {
+            if (isset($record[$_containerProperty]) && !isset($containers[Tinebase_Model_Container::convertContainerIdToInt($record[$_containerProperty])])) {
                 $containers[Tinebase_Model_Container::convertContainerIdToInt($record[$_containerProperty])] = array();
             }
         }
