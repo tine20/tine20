@@ -266,7 +266,6 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $iMIPMessage = new Calendar_Model_iMIP($iMIP);
         $iMIPFrontend = new Calendar_Frontend_iMIP();
-        return $iMIPMessage->toArray();
         
         $iMIPFrontend->process($iMIPMessage, $status);
         

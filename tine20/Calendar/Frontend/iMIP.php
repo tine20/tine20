@@ -308,6 +308,8 @@ class Calendar_Frontend_iMIP
             
             if ($_status && $_status != $ownAttender->status) {
                 $ownAttender->status = $_status;
+                // @todo  attenderStatusUpdate does not send notifications. But we have to send them here!
+                //        -> set status in existing event and update it
                 Calendar_Controller_Event::getInstance()->attenderStatusUpdate($_existingEvent, $ownAttender, $ownAttender->status_authkey);
             }
         }
