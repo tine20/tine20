@@ -126,7 +126,7 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                   => array('allowEmpty' => true,         ), 
         'ics'                  => array('allowEmpty' => true          ),
-        'method'               => array('allowEmpty' => false,        ),
+        'method'               => array('allowEmpty' => true,         ),
         'originator'           => array('allowEmpty' => false,        ), // email adddress
         'userAgent'            => array('allowEmpty' => true,         ),
         'event'                => array('allowEmpty' => true          ),
