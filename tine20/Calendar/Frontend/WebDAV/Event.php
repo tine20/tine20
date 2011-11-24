@@ -74,7 +74,13 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
         
         $event = $converter->toTine20Model($vobjectData);
+        
         $event->container_id = $container->getId();
+        if ($event->exdate instanceof Tinebase_Record_RecordSet) {
+            foreach($event->exdate as $exdate) {
+                $exdate->container_id = $container->getId();
+            }
+        }
         
         #$existingEvent = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($event);
         #
@@ -298,6 +304,15 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         }
 
         $event = $this->_converter->toTine20Model($cardData, $this->getRecord());
+        
+        if ($event->exdate instanceof Tinebase_Record_RecordSet) {
+            foreach($event->exdate as $exdate) {
+                if (empty($exdate->container_id)) {
+                    $exdate->container_id = $container->getId();
+                }
+            }
+        }
+        
 
         self::enforceEventParameters($event);
         
