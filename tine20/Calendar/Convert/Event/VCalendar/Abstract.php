@@ -516,7 +516,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
      */
     protected function _getAttendee(Sabre_VObject_Property $_attendee)
     {
-        if (in_array($_attendee['ROLE']->value, array(Calendar_Model_Attender::ROLE_OPTIONAL, Calendar_Model_Attender::ROLE_REQUIRED))) {
+        if (isset($_attendee['ROLE']) && in_array($_attendee['ROLE']->value, array(Calendar_Model_Attender::ROLE_OPTIONAL, Calendar_Model_Attender::ROLE_REQUIRED))) {
             $role = $_attendee['ROLE']->value;
         } else {
             $role = Calendar_Model_Attender::ROLE_REQUIRED;
