@@ -81,6 +81,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertEquals("2011-10-04 06:45:00",               (string)$event->alarms[0]->alarm_time);
         $this->assertEquals("75",                                (string)$event->alarms[0]->minutes_before);
         $this->assertEquals("This is a descpription\nwith a linebreak and a ; , and :", $event->description);
+        $this->assertEquals(2, count($event->attendee));
         
         return $event;
     }
@@ -248,14 +249,14 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
         $event = $converter->toTine20Model($vcalendarStream);
-
+        
         // status_authkey must be kept after second convert
-        $event->attendee[0]->status_authkey = 'FooBar';
+        $event->attendee[0]->quantity = 10;
         
         rewind($vcalendarStream);
         $event = $converter->toTine20Model($vcalendarStream, $event);
-        
-        $this->assertEquals('FooBar', $event->attendee[0]->status_authkey);
+
+        $this->assertEquals(10, $event->attendee[0]->quantity);
     }    
 
     /**

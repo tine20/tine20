@@ -85,7 +85,7 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends Sabre_DAV_Collection implem
         $children = array();
     
         foreach ($objects as $object) {
-            $children[] = $this->getChild($object);
+            #$children[] = $this->getChild($object);
         }
     
         return $children;

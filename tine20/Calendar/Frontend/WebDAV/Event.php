@@ -296,12 +296,32 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         if (get_class($this->_converter) == 'Calendar_Convert_Event_VCalendar_Generic') {
             throw new Sabre_DAV_Exception_Forbidden('Update denied for unknow client');
         }
-        
+
         $event = $this->_converter->toTine20Model($cardData, $this->getRecord());
 
         self::enforceEventParameters($event);
         
-        $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
+        if ($this->getRecord()->organizer == Tinebase_Core::getUser()->contact_id) {
+            $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " current user is not organizer => update attendee status only ");
+            
+            foreach($event->attendee as $attendee) {
+                $contactId = $attendee->user_id instanceof Addressbook_Model_Contact ? $attendee->user_id->getId() : $attendee->user_id;
+                if ($contactId == Tinebase_Core::getUser()->contact_id) {
+                    $attendeeFound = $attendee;
+                }
+            }
+            
+            if (!isset($attendeeFound)) {
+                throw new Sabre_DAV_Exception_Forbidden('not allowed to update event');
+            }
+            
+            Calendar_Controller_Event::getInstance()->attenderStatusUpdate($event, $attendeeFound, $attendeeFound->status_authkey);
+            
+            $this->_event = Calendar_Controller_MSEventFacade::getInstance()->get($event->getId());
+        }
         
         // avoid sending headers during unit tests
         if (php_sapi_name() != 'cli') {

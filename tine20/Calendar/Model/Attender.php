@@ -243,14 +243,14 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     public static function emailsToAttendee(Calendar_Model_Event $_event, $_emails, $_ImplicitAddMissingContacts = TRUE)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " new attendees list " . print_r($_emails, true));
+        
         if (! $_event->attendee instanceof Tinebase_Record_RecordSet) {
             $_event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         }
-        
-    	$_event->attendee = $_event->attendee;
-    	
+                
         // resolve current attendee
-        self::resolveAttendee($_event->attendee, false);
+        self::resolveAttendee($_event->attendee);
         
         // build currentMailMap
         // NOTE: non resolvable attendee will be discarded in the map
@@ -271,30 +271,32 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         // attendees to remove
         $attendeesToDelete = array_diff_key($emailsOfCurrentAttendees, $emailsOfNewAttendees);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendees to delete " . print_r(array_keys($attendeesToDelete), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " attendees to delete " . print_r(array_keys($attendeesToDelete), true));
         
         // delete attendees no longer attending from recordset
         foreach ($attendeesToDelete as $attendeeToDelete) {
-            unset($_event->attendee[$_event->attendee->getIndexById($attendeeToDelete->getId())]);
+            //unset($_event->attendee[$_event->attendee->getIndexById($attendeeToDelete->getId())]);
+            $_event->attendee->removeRecord($attendeeToDelete);
         }
         
         
         // attendees to keep and update
         $attendeesToKeep   = array_diff_key($emailsOfCurrentAttendees, $attendeesToDelete);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendees to keep " . print_r(array_keys($attendeesToKeep), true));
-        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " attendees to keep " . print_r(array_keys($attendeesToKeep), true));
+        //var_dump($attendeesToKeep);
         foreach($attendeesToKeep as $emailAddress => $attendeeToKeep) {
             $newSettings = $emailsOfNewAttendees[$emailAddress];
             
             $attendeeToKeep->status = $newSettings['partStat'];
             $attendeeToKeep->role   = $newSettings['role'];
             
-            $_event->attendee[$_event->attendee->getIndexById($attendeeToKeep->getId())] = $attendeeToKeep;
+            #$_event->attendee[$_event->attendee->getIndexById($attendeeToKeep->getId())] = $attendeeToKeep;
         }
         
+
         // new attendess to add to event
         $attendeesToAdd    = array_diff_key($emailsOfNewAttendees,     $emailsOfCurrentAttendees);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendees to add " . print_r(array_keys($attendeesToAdd), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " attendees to add " . print_r(array_keys($attendeesToAdd), true));
         
         // add attendee identified by their emailAdress
         foreach ($attendeesToAdd as $newAttendee) {
@@ -310,20 +312,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             
         	if(count($contacts) > 0) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of contacts " . count($contacts));
-                
-                $accountIdMap = $contacts->account_id;
-                
-                // prefer user over contact
-                foreach ($accountIdMap as $contactMapId => $accountMapId) {
-                    $contactId = $accountMapId;
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " taking contact with account with id " . $accountMapId);
-                }
-                
-                if (! $contactId) {
-                	$contactId = $contacts->getFirstRecord()->getId();
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " taking contact with id " . $contactId);
-                    
-                }
+
+                $contactId = $contacts->getFirstRecord()->getId();
                 
             } else if ($_ImplicitAddMissingContacts == true) {
             	$translation = Tinebase_Translation::getTranslation('Calendar');

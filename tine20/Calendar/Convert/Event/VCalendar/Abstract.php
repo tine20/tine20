@@ -262,10 +262,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
             // contact not found
         }
         
-        // attendees
-        if ((count($event->attendee) > 1) || (count($event->attendee) == 1 && $event->attendee[0]->user_id != $event->organizer)) {
-            $this->_addEventAttendee($vevent, $event);
-        }
+        $this->_addEventAttendee($vevent, $event);
         
         $optionalProperties = array(
             'class',
@@ -446,7 +443,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
         } else {
             $oldExdates = new Tinebase_Record_RecordSet('Calendar_Model_Events');
         }
-        
+                
         // find the main event - the main event has no RECURRENCE-ID
         foreach($vcalendar->VEVENT as $vevent) {
             // "-" is not allowed in property names
@@ -515,33 +512,50 @@ class Calendar_Convert_Event_VCalendar_Abstract
      * get attendee object for given contact
      * 
      * @param Sabre_VObject_Property     $_attendee  the attendee row from the vevent object
-     * @param Addressbook_Model_Contact  $_contact   the contact for the given attendee
-     * @return Calendar_Model_Attender
+     * @return array
      */
-    protected function _getAttendee(Sabre_VObject_Property $_attendee, Addressbook_Model_Contact $_contact)
+    protected function _getAttendee(Sabre_VObject_Property $_attendee)
     {
-        $newAttendee = new Calendar_Model_Attender(array(
-        	'user_id'   => $_contact->getId(),
-            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-        ));
-        
-        if (in_array($_attendee['ROLE'], array(Calendar_Model_Attender::ROLE_OPTIONAL, Calendar_Model_Attender::ROLE_REQUIRED))) {
-            $newAttendee->role = $_attendee['ROLE'];
+        if (in_array($_attendee['ROLE']->value, array(Calendar_Model_Attender::ROLE_OPTIONAL, Calendar_Model_Attender::ROLE_REQUIRED))) {
+            $role = $_attendee['ROLE']->value;
         } else {
-            $newAttendee->role = Calendar_Model_Attender::ROLE_REQUIRED;
+            $role = Calendar_Model_Attender::ROLE_REQUIRED;
         }
         
-        if (in_array($_attendee['PARTSTAT'], array(Calendar_Model_Attender::STATUS_ACCEPTED,
+        if (in_array($_attendee['PARTSTAT']->value, array(Calendar_Model_Attender::STATUS_ACCEPTED,
             Calendar_Model_Attender::STATUS_DECLINED,
             Calendar_Model_Attender::STATUS_NEEDSACTION,
             Calendar_Model_Attender::STATUS_TENTATIVE)
         )) {
-            $newAttendee->status = $_attendee['PARTSTAT']->value;
+            $status = $_attendee['PARTSTAT']->value;
         } else {
-            $newAttendee->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+            $status = Calendar_Model_Attender::STATUS_NEEDSACTION;
         }
         
-        return $newAttendee;
+        preg_match('/mailto:(?P<email>.*)/', $_attendee->value, $matches);
+        $email = $matches['email'];
+        
+        $fullName = isset($_attendee['CN']) ? $_attendee['CN'] : $email;
+        
+        if (preg_match('/(?P<firstName>\S*) (?P<lastNameName>\S*)/', $fullName, $matches)) {
+            $firstName = $matches['firstName'];
+            $lastName  = $matches['lastNameName'];
+        } else {
+            $firstName = null;
+            $lastName  = $fullName;
+        }
+        
+        $attendee = array(
+            #'userType'  => isset($property['CUTYPE'])   ? (string) $property['CUTYPE']   : 'INDIVIDUAL',
+            'userType'  => Calendar_Model_Attender::USERTYPE_USER,
+            'firstName' => $firstName,
+        	'lastName'  => $lastName,
+            'partStat'  => $status,
+            'role'      => $role,
+            'email'     => $email
+        );
+        
+        return $attendee;
     }
     
     /**
@@ -553,25 +567,11 @@ class Calendar_Convert_Event_VCalendar_Abstract
     protected function _convertVevent(Sabre_VObject_Component $_vevent, Calendar_Model_Event $_event)
     {
         $event = $_event;
-        
-        // store current attendees
-        if (isset($event->attendee) && $event->attendee instanceof Tinebase_Record_RecordSet) {
-            $oldAttendees = clone $event->attendee;
-        }
-        
-        // store current organizer
-        if (!empty($event->organizer)) {
-            $oldOrganizer = $event->organizer;
-        }
+        $newAttendees = array();
         
         // unset supported fields
         foreach ($this->_supportedFields as $field) {
             $event->$field = null;
-        }
-        
-        // initialize attendees
-        if(! $event->attendee instanceof Tinebase_Record_RecordSet) {
-            $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         }
         
         foreach($_vevent->children() as $property) {
@@ -583,25 +583,10 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     break;
                     
                 case 'ATTENDEE':
-                    foreach($property as $attendee) {
-                        if (preg_match('/mailto:(?P<email>.*)/', $attendee->value, $matches)) {
-                            $name    = isset($attendee['CN']) ? $attendee['CN'] : $matches['email'];
-                            $contact = $this->_resolveEmailToContact($matches['email'], $name);
-                            
-                            $newAttendee = $this->_getAttendee($attendee, $contact);
-                            
-                            // check if the attendee got added already
-                            $matchingAttendees = $event->attendee
-                                ->filter('user_type', $newAttendee->user_type)
-                                ->filter('user_id',   $newAttendee->user_id);
-
-                            // add only if not added already
-                            if(count($matchingAttendees) == 0) {
-                                $event->attendee->addRecord($newAttendee);
-                            }
-                        }
+                    if (preg_match('/mailto:(?P<email>.*)/', $property->value)) {
+                        $newAttendees[] = $this->_getAttendee($property);
                     }
-
+                    
                     break;
                     
                 case 'CLASS':
@@ -667,21 +652,14 @@ class Calendar_Convert_Event_VCalendar_Abstract
                         $name = isset($property['CN']) ? $property['CN'] : $matches['email'];
                         $contact = $this->_resolveEmailToContact($matches['email'], $name);
                         
-                        $event->organizer = $contact->getId();
+                        // it's not possible to change the organizer by spec
+                        if (empty($event->organizer)) {
+                            $event->organizer = $contact->getId();
+                        }
                         
                         // Lightning attaches organizer ATTENDEE properties to ORGANIZER property and does not add an ATTENDEE for the organizer
                         if (isset($property['PARTSTAT'])) {
-                            $newAttendee = $this->_getAttendee($property, $contact);
-                        
-                            // check if the organizer got added as attendee already
-                            $matchingAttendees = $event->attendee
-                                ->filter('user_type', $newAttendee->user_type)
-                                ->filter('user_id',   $newAttendee->user_id);
-
-                            // add only if not added already
-                            if(count($matchingAttendees) == 0) {
-                                $event->attendee->addRecord($newAttendee);
-                            }
+                            $newAttendees[] = $this->_getAttendee($property);
                         }
                     }
                     
@@ -750,6 +728,16 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     
                     break;
                     
+                case 'UID':
+                    // it's not possible to change the uid by spec
+                    if (!empty($event->uid)) {
+                        continue;
+                    }
+                    
+                    $event->uid = $property->value;
+                
+                    break;
+                    
                 case 'VALARM':
                     $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
                     
@@ -805,35 +793,12 @@ class Calendar_Convert_Event_VCalendar_Abstract
         }
         
         // merge old and new attendees
-        if (isset($oldAttendees)) {
-            foreach ($event->attendee as $id => $attendee) {
-        
-                // detect if the contact_id is already attending the event
-                $matchingAttendees = $oldAttendees
-                ->filter('user_type', $attendee->user_type)
-                ->filter('user_id',   $attendee->user_id);
-        
-                if(count($matchingAttendees) > 0) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updating attendee");
-                    $oldAttendee = $matchingAttendees[0];
-                    $oldAttendee->role = $attendee->role;
-                    $oldAttendee->status = $attendee->status;
-        
-                    $event->attendee[$id] = $oldAttendee;
-                }
-            }
-        
-            unset($oldAttendees);
-        }
-        
-        // restore old organizer if needed
-        if (isset($oldOrganizer) && empty($event->organizer)) {
-            $event->organizer = $oldOrganizer;
-        }
+        Calendar_Model_Attender::emailsToAttendee($event, $newAttendees);
         
         if (empty($event->seq)) {
             $event->seq = 0;
         }
+        
         if (empty($event->class)) {
             $event->class = Calendar_Model_Event::CLASS_PUBLIC;
         }

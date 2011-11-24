@@ -264,13 +264,16 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testInvitationInternalReply
+     * testInvitationInternalReplyPreconditions
      * 
-     * @todo implement
+     * @todo create REPLY ics for this case?
+     * @todo test autoProcess?
      */
-    public function testInvitationInternalReply()
+    public function testInvitationInternalReplyPreconditions()
     {
-        // -- auto process / should do nothing
+        $iMIP = $this->_getiMIP('REPLY');
+        $result = $this->_iMIPFrontend->prepareComponent($iMIP);
+        $this->assertTrue(empty($prepared->preconditions));
     }
 
     /**
@@ -280,6 +283,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
      */
     public function testInvitationExternalReply()
     {
+        // -- create external reply for internal event?
         // -- auto process / should process
         // -- prepareComponent / assert recent precondition
     }
