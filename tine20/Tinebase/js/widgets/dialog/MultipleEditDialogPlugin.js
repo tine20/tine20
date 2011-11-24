@@ -20,19 +20,106 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         this.app = Tine.Tinebase.appMgr.get(this.editDialog.app);
         this.form = this.editDialog.getForm();
         
-        this.editDialog.on('render', this.handleFields, this);
+        this.editDialog.on('render', function() {
+        	this.onAfterRender();
+        },this);
         
+        this.editDialog.onRecordLoad = this.editDialog.onRecordLoad.createInterceptor(this.onRecordLoad, this);
         this.editDialog.onRecordUpdate = this.editDialog.onRecordUpdate.createInterceptor(this.onRecordUpdate, this);
-        this.editDialog.onApplyChanges = function(button, event, closeWindow) { this.onRecordUpdate(); }       
+        this.editDialog.onApplyChanges = function(button, event, closeWindow) { this.onRecordUpdate() }
+        
+        
     },
+    
+    onRecordLoad: function() {
+        
+    	if (! this.editDialog.rendered) {
+            this.onRecordLoad.defer(250, this);
+            return;
+        }
+    	
+    	this.editDialog.getForm().loadRecord(this.editDialog.record);
+    	
+        Tine.log.debug('loading of the following record completed:');
+        Tine.log.debug(this.editDialog.record);
+    	
+    	this.editDialog.getForm().clearInvalid();
+    	
+        this.editDialog.window.setTitle(String.format(_('Edit {0} {1}'), this.editDialog.sm.getCount(), this.editDialog.i18nRecordsName ));
+
+    	
+    	Ext.each(this.form.record.store.fields.keys, function(fieldKey) {
+    		var field = this.form.findField(fieldKey);
+    		
+    		if(field) {
+    			Ext.each(this.editDialog.sm.getSelections(), function(selection,index) {          
+
+                    field.originalValue = this.editDialog.record.data[fieldKey];
+
+                    if(selection.data[fieldKey] != field.originalValue) {
+                 	    
+                         this.handleField(field, fieldKey, false);
+                         return false;
+                     } else {
+                         if(index == this.editDialog.sm.selections.length-1) {
+                              this.handleField(field, fieldKey, true);
+                              return false;
+                         }
+                     }
+             },this);       
+    		}
+    		
+    		Tine.log.debug(fieldKey,field);
+    	}, this);
+
+    	Ext.each(this.editDialog.cfConfigs, function(el) {
+            var fieldKey = el.data.name;
+            var field = this.form.findField('customfield_' + fieldKey);
+            Tine.log.debug('CF ' + fieldKey, this.editDialog.record.data.customfields[fieldKey]);
+            if(field) {
+            	field.setValue(this.editDialog.record.data.customfields[fieldKey]);
+            	Ext.each(this.editDialog.sm.getSelections(), function(selection,index) {
+            		          
+                    if(selection.data.customfields[fieldKey] != this.editDialog.record.data.customfields[fieldKey]) {
+                        this.handleField(field,fieldKey,false);
+                        return false;
+                    } else {
+                        if(index == this.editDialog.sm.selections.length-1) {
+                             this.handleField(field,fieldKey,true);
+                             return false;
+                        }
+                    }
+            	},this);
+            }
+        },this);    	
+    	
+        this.editDialog.updateToolbars(this.editDialog.record, this.editDialog.recordClass.getMeta('containerProperty'));
+        this.editDialog.loadMask.hide();
+        
+        this.editDialog.tbar.hide();
+
+    	return false;
+    },
+    
+    onAfterRender: function() {
+        this.form.items.each(function(item){
+        	if ((!(item instanceof Ext.form.TextField)) && (!(item instanceof Ext.form.Checkbox))) {
+        		item.disable();
+        	}
+        });
+    },
+    
     
     onRecordUpdate: function() {
         this.changes = [];
+        this.changedHuman = _('<br /><ul style="padding:10px;border:1px">');
         this.form.items.each(function(item){
             if(item.edited) {
                 this.changes.push({ name: item.getName(),  value: item.getValue() });
+                this.changedHuman += '<li style="padding: 3px 0 3px 15px">' + item.fieldLabel + ': '+ item.getValue() + '</li>';
             }
         },this);
+        this.changedHuman += '</ul>';
         
         if(this.changes.length == 0) {
             this.editDialog.purgeListeners();
@@ -42,7 +129,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         
         var filter = this.editDialog.sm.getSelectionFilter();
  
-        Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to change these {0} records?'), this.editDialog.sm.getCount()), function(_btn) {
+        Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to change these {0} records?') + this.changedHuman, this.editDialog.sm.getCount()), function(_btn) {
             if (_btn == 'yes') {
                 Ext.MessageBox.wait(_('Please wait'), _('Applying changes'));
           
@@ -67,63 +154,16 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         
         return false;
     },
-    
-    handleFields: function() {
-        // Default Fields    
-        Ext.each(this.editDialog.record.store.fields.keys, function(fieldKey) {
-            var field = this.form.findField(fieldKey);
-
-            Ext.each(this.editDialog.sm.getSelections(), function(selection,index) {          
-                if(field) {
-                   field.originalValue = this.editDialog.record.data[fieldKey];
-
-                   if(selection.data[fieldKey] != field.originalValue) {
-                        this.handleField(field,fieldKey,false);
-                        return false;
-                    } else {
-                        if(index == this.editDialog.sm.selections.length-1) {
-                             this.handleField(field,fieldKey,true);
-                             return false;
-                        }
-                    }
-                     
-                }
-            },this);   
-        },this);
        
-        // Customfields
-        Ext.each(this.editDialog.cfConfigs, function(el) {
-            var fieldKey = el.data.name;
-            var field = this.form.findField('customfield_' + fieldKey);
-            field.originalValue = this.editDialog.record.data.customfields[fieldKey];
-             Ext.each(this.editDialog.sm.getSelections(), function(selection,index) {
-                if(field) { 
-                    
-                    if(selection.data.customfields[fieldKey] != field.originalValue) {
-                        this.handleField(field,fieldKey,false);
-                        return false;
-                    } else {
-                    if(index == this.editDialog.sm.selections.length-1) {
-                             this.handleField(field,fieldKey,true);
-                             return false;
-                        }
-                    }
-
-                }
-            },this);            
-            
-            
-        },this);
-        
-    },
-    
     handleField: function(field,fieldKey,samevalue) {
+    	
         if(!samevalue) {
             field.setReadOnly(true);
             field.addClass('notEdited');
             field.multi = true;
             field.edited = false;
-                        
+            field.setValue('');
+            
             field.on('focus', function() {
                 if(this.readOnly) this.originalValue = this.startValue;
                 this.setReadOnly(false);
@@ -144,7 +184,12 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                     }
                 }
             });
-        } else {                  
+        } else {
+        	
+        	field.on('focus', function(){
+        		if(!this.edited) this.originalValue = this.startValue;
+        	});
+        	
             field.on('blur',function() {
                 if(this.originalValue != this.getValue()) {
                     this.addClass('applyToAll');
