@@ -43,6 +43,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     gridConfig: {
         clicksToEdit: 'auto',
         quickaddMandatory: 'summary',
+        resetAllOnNew: true,
         autoExpandColumn: 'summary',
         // drag n drop
         enableDragDrop: true,
@@ -94,6 +95,25 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
+     * Set default time for date time field
+     * 
+     * @param {Ext.ux.form.DateTimeField} field
+     * @param {Date} newValue
+     * @param {Date} oldValue
+     */
+    setDueDateDefaultTime: function (field, newValue, oldValue) {
+    	if (newValue.getHours() === 0 && newValue.getMinutes() === 0) {
+			var newDate = newValue.clone(),
+				now     = new Date();
+			
+			newDate.setHours(now.getHours());
+			newDate.setMinutes(now.getMinutes());
+				
+			field.setValue(newDate);
+		}
+    },
+    
+    /**
      * returns cm
      * @return Ext.grid.ColumnModel
      * @private
@@ -116,17 +136,35 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 emptyText: this.app.i18n._('Add a task...')
             })
         }, {
-            id: 'due',
+//            id: 'due',
+//            header: this.app.i18n._("Due Date"),
+//            width: 60,
+//            dataIndex: 'due',
+//            renderer: Tine.Tinebase.common.dateRenderer,
+//            editor: new Ext.ux.form.ClearableDateField({}),
+//            quickaddField: new Ext.ux.form.ClearableDateField({})
+        	
+        	id: 'due',
             header: this.app.i18n._("Due Date"),
-            width: 60,
+			width: 145,
             dataIndex: 'due',
-            renderer: Tine.Tinebase.common.dateRenderer,
-            editor: new Ext.ux.form.ClearableDateField({}),
-            quickaddField: new Ext.ux.form.ClearableDateField({})
+            renderer: Tine.Tinebase.common.dateTimeRenderer,
+            editor: new Ext.ux.form.DateTimeField({
+            	allowBlank: true,
+            	listeners: {
+            		'change': this.setDueDateDefaultTime
+            	}
+            }),
+            quickaddField: new Ext.ux.form.DateTimeField({
+            	allowBlank: true,
+            	listeners: {
+            		'change': this.setDueDateDefaultTime
+            	}
+            })
         }, {
             id: 'priority',
             header: this.app.i18n._("Priority"),
-            width: 45,
+            width: 65,
             dataIndex: 'priority',
             renderer: Tine.widgets.Priority.renderer,
             editor: new Tine.widgets.Priority.Combo({
@@ -153,7 +191,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }, {
             id: 'status',
             header: this.app.i18n._("Status"),
-            width: 45,
+            width: 85,
             dataIndex: 'status',
             renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tasks', 'taskStatus'),
             editor: {
@@ -183,7 +221,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }, {
             id: 'organizer',
             header: this.app.i18n._('Responsible'),
-            width: 150,
+            width: 200,
             dataIndex: 'organizer',
             renderer: Tine.Tinebase.common.accountRenderer,
             quickaddField: new Tine.Addressbook.SearchCombo({

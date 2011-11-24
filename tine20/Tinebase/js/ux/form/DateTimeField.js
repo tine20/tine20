@@ -115,7 +115,9 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
             listeners: {
                 scope: this,
                 change: this.onDateChange,
-                select: this.onDateChange
+                select: this.onDateChange,
+                focus: this.onDateFocus,
+                blur: this.onDateBlur
             }
         });
         
@@ -133,10 +135,22 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
             listeners: {
                 scope: this,
                 change: this.onTimeChange,
-                select: this.onTimeChange
+                select: this.onTimeChange,
+                focus: this.onDateFocus,
+                blur: this.onDateBlur
             }
         });
         
+    },
+    
+    onDateFocus: function () {
+    	this.hasFocus = true;
+    	this.fireEvent('focus', this);
+    },
+    
+    onDateBlur: function () {
+    	this.hasFocus = false;
+    	this.fireEvent('blur', this);
     },
     
     onDateChange: function () {
@@ -149,7 +163,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         Ext.ux.form.DateTimeField.superclass.onResize.apply(this, arguments);
         
         // needed for readonly
-        this.el.setHeight(16);
+        this.el.setHeight(20);
         
         this.el.setStyle({'position': 'relative'});
         
@@ -178,6 +192,16 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         
         if (what !== 'date' && this.timeField) {
             this.timeField.setDisabled(bool);
+        }
+    },
+    
+    setReadOnly: function (bool, what) {
+    	if (what !== 'time' && this.dateField) {
+            this.dateField.setReadOnly(bool);
+        }
+        
+        if (what !== 'date' && this.timeField) {
+            this.timeField.setReadOnly(bool);
         }
     },
     
