@@ -95,10 +95,10 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
             $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
         }
         
-        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
+        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
         
         $id = Tinebase_Record_Abstract::generateUID();
-        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendarStream);
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
         
         $this->objects['eventsToDelete'][] = $event;
         
@@ -120,8 +120,8 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
             $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
         }
     
-        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning_repeating_daily.ics', 'r');
-    
+        $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning_repeating_daily.ics');
+        
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendarStream);
     
@@ -158,7 +158,7 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
     {
         $event = $this->testCreateRepeatingEvent();
     
-        $event = new Calendar_Frontend_WebDAV_Event($event->getRecord()->getId());
+        $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], $event->getRecord()->getId());
         
         $vcalendar = stream_get_contents($event->get());
         #var_dump($vcalendar);
@@ -234,5 +234,20 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         $record = $event->getRecord();
         
         $this->assertEquals($event->getName(), $record->getId() . '.ics');
+    }
+    
+    /**
+     * return vcalendar as string and replace organizers email address with emailaddess of current user
+     * 
+     * @param string $_filename  file to open
+     * @return string
+     */
+    protected function _getVCalendar($_filename)
+    {
+        $vcalendar = file_get_contents($_filename);
+        
+        $vcalendar = preg_replace('/l.kneschke@metaway\n s.de/', Tinebase_Core::getUser()->accountEmailAddress, $vcalendar);
+        
+        return $vcalendar;
     }
 }
