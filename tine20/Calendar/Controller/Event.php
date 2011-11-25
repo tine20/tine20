@@ -1244,7 +1244,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 throw new Tinebase_Exception_NotFound('Could not find attender in event.');
             }
             
-            $currentAttender = $event->attendee[$index];
+            $currentAttender = clone $event->attendee[$index];
             
             if ($currentAttender->status == $_attender->status) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . "no status change -> do nothing");
