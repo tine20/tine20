@@ -42,7 +42,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      * 
      * @param  string|Addressbook_Model_Contact  $_contact  the id of a contact or the contact itself 
      */
-    public function __construct($_contact = null) 
+    public function __construct(Tinebase_Model_Container $_container, $_contact = null) 
     {
         $this->_contact = $_contact;
 
@@ -73,7 +73,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
         
         $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
         
-        $card = new self($contact);
+        $card = new self($container, $contact);
                 
         return $card;
     }
