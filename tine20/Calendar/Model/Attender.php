@@ -243,7 +243,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     public static function emailsToAttendee(Calendar_Model_Event $_event, $_emails, $_ImplicitAddMissingContacts = TRUE)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " new attendees list " . print_r($_emails, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " list of new attendees " . print_r($_emails, true));
         
         if (! $_event->attendee instanceof Tinebase_Record_RecordSet) {
             $_event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
@@ -354,7 +355,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             }
         }
         
-        //var_dump($_event->attendee->toArray());
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " updated attendees list " . print_r($_event->attendee->toArray(), true));
     }
     
     /**
@@ -467,6 +469,14 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             ->filter('user_type', $_attendee->user_type)
             ->filter('user_id', $attendeeUserId)
             ->getFirstRecord();
+        
+        // search for groupmember if no user got found
+        if ($foundAttendee === null && $_attendee->user_type == Calendar_Model_Attender::USERTYPE_USER) {
+            $foundAttendee = $attendeeSet
+                ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
+                ->filter('user_id', $attendeeUserId)
+                ->getFirstRecord();
+        }
             
         return $foundAttendee ? $_attendeeSet[$attendeeSet->indexOf($foundAttendee)] : NULL;
         
