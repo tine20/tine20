@@ -305,14 +305,14 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
 
         $event = $this->_converter->toTine20Model($cardData, $this->getRecord());
         
+        // set container_id for newly created exdates to the container_id of the main event
         if ($event->exdate instanceof Tinebase_Record_RecordSet) {
             foreach($event->exdate as $exdate) {
                 if (empty($exdate->container_id)) {
-                    $exdate->container_id = $container->getId();
+                    $exdate->container_id = $this->_event->container_id;
                 }
             }
         }
-        
 
         self::enforceEventParameters($event);
         
