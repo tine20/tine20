@@ -42,7 +42,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      * 
      * @param  string|Calendar_Model_Event  $_event  the id of a event or the event itself 
      */
-    public function __construct($_event = null) 
+    public function __construct(Tinebase_Model_Container $_container, $_event = null) 
     {
         $this->_event = $_event;
         
@@ -71,31 +71,29 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
-        
-        $event = $converter->toTine20Model($vobjectData);
-        
+        $event = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version)->toTine20Model($vobjectData);
         $event->container_id = $container->getId();
-        if ($event->exdate instanceof Tinebase_Record_RecordSet) {
-            foreach($event->exdate as $exdate) {
-                $exdate->container_id = $container->getId();
-            }
-        }
-        
-        #$existingEvent = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($event);
-        #
-        #if ($existingEvent !== null) {
-        #    throw new Sabre_CalDAV_Exception_UniqueSchedulingObjectResource();
-        #}
         
         self::enforceEventParameters($event);
+        
+        if ($_event->organizer != Tinebase_Core::getUser()->contact_id) {
+            throw new Sabre_DAV_Exception_PreconditionFailed('invalid organizer provided');
+        }
+        
+        if ($event->exdate instanceof Tinebase_Record_RecordSet) {
+            foreach($event->exdate as $exdate) {
+                if ($exdate->is_deleted == false && $exdate->organizer != Tinebase_Core::getUser()->contact_id) {
+                    throw new Sabre_DAV_Exception_PreconditionFailed('Organizer for exdate must be the same like base event');
+                }
+            }
+        }
         
         $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
         $event->setId($id);
         
         $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
         
-        $vevent = new self($event);
+        $vevent = new self($container, $event);
         
         return $vevent;
     }
@@ -143,10 +141,12 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         
         // check also attached exdates
         if ($_event->exdate instanceof Tinebase_Record_RecordSet) {
-            foreach($_event->exdate as $key => $exdate) {
+            foreach($_event->exdate as $exdate) {
                 if ($exdate->is_deleted == false) {
+                    if (empty($exdate->container_id)) {
+                        $exdate->container_id = $_event->container_id;
+                    }
                     self::enforceEventParameters($exdate);
-                    $_event->exdate[$key] = $exdate;
                 }
             }
         }
@@ -302,18 +302,17 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         if (get_class($this->_converter) == 'Calendar_Convert_Event_VCalendar_Generic') {
             throw new Sabre_DAV_Exception_Forbidden('Update denied for unknow client');
         }
-
+        
+        if (is_resource($cardData)) {
+            $cardData = stream_get_contents($cardData);
+        }
+        // Converting to UTF-8, if needed
+        $cardData = Sabre_DAV_StringUtil::ensureUTF8($cardData);
+        
+        Sabre_CalDAV_ICalendarUtil::validateICalendarObject($cardData, array('VEVENT', 'VFREEBUSY'));
+        
         $event = $this->_converter->toTine20Model($cardData, $this->getRecord());
         
-        // set container_id for newly created exdates to the container_id of the main event
-        if ($event->exdate instanceof Tinebase_Record_RecordSet) {
-            foreach($event->exdate as $exdate) {
-                if (empty($exdate->container_id)) {
-                    $exdate->container_id = $this->_event->container_id;
-                }
-            }
-        }
-
         self::enforceEventParameters($event);
         
         if ($this->getRecord()->organizer == Tinebase_Core::getUser()->contact_id) {
