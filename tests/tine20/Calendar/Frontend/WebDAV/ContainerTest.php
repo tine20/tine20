@@ -152,7 +152,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $GLOBALS['_SERVER']['HTTP_USER_AGENT'] = 'FooBar User Agent';
         
-        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
+        $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
         
         $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
         
@@ -184,5 +184,20 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(1, count($children));
         $this->assertInstanceOf('Calendar_Frontend_WebDAV_Event', $children[0]);
+    }
+    
+    /**
+     * return vcalendar as string and replace organizers email address with emailaddess of current user
+     * 
+     * @param string $_filename  file to open
+     * @return string
+     */
+    protected function _getVCalendar($_filename)
+    {
+        $vcalendar = file_get_contents($_filename);
+        
+        $vcalendar = preg_replace('/l.kneschke@metaway\n s.de/', Tinebase_Core::getUser()->accountEmailAddress, $vcalendar);
+        
+        return $vcalendar;
     }
 }
