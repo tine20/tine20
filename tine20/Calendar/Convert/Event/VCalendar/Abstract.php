@@ -464,6 +464,21 @@ class Calendar_Convert_Event_VCalendar_Abstract
             if(isset($vevent->$RECURRENCEID) && $event->uid == $vevent->UID) {
                 $recurException = $this->_getRecurException($oldExdates, $vevent);
                 
+                // initialize attendee with attendee from base events for new exceptions
+                // this way we can keep attendee extra values like groupmember type
+                // attendees which do not attend to the new exception will be removed in _convertVevent
+                if (! $recurException->attendee instanceof Tinebase_Record_RecordSet) {
+                    $recurException->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+                    foreach ($event->attendee as $attendee) {
+                        $recurException->attendee->addRecord(new Calendar_Model_Attender(array(
+                            'user_id'   => $attendee->user_id,
+                        	'user_type' => $attendee->user_type,
+                        	'role'      => $attendee->role,
+                        	'status'    => $attendee->status
+                        )));
+                    }
+                }
+                
                 $this->_convertVevent($vevent, $recurException);
                     
                 if(! $event->exdate instanceof Tinebase_Record_RecordSet) {
