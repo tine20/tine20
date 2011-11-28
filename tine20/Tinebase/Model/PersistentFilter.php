@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  PersistentFilter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -119,10 +119,15 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
      * @param  $_fromUserTime   filterData is in user time
      * @return Tinebase_Model_Filter_FilterGroup
      * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
     public static function getFilterGroup($_filterModel, $_filterData, $_fromUserTime = FALSE)
     {
         $filter = new $_filterModel(array());
+        
+        if (! class_exists($filter)) {
+            throw new Tinebase_Exception_NotFound('Did not find filter class.');
+        }
         
         if (! is_subclass_of($filter, 'Tinebase_Model_Filter_FilterGroup')) {
             throw new Tinebase_Exception_InvalidArgument('Filter Model has to be subclass of Tinebase_Model_Filter_FilterGroup.');
