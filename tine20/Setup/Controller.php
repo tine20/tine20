@@ -254,7 +254,14 @@ class Setup_Controller
         // create Tinebase tables first
         $applications = array('Tinebase' => $this->getSetupXml('Tinebase'));
         
-        foreach (new DirectoryIterator($this->_baseDir) as $item) {
+        try {
+            $dirIterator = new DirectoryIterator($this->_baseDir);
+        } catch (Exception $e) {
+            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not open base dir: ' . $this->_baseDir);
+            throw new Tinebase_Exception_AccessDenied('Could not open Tine 2.0 root directory.');
+        }
+        
+        foreach ($dirIterator as $item) {
             $appName = $item->getFileName();
             if($appName{0} != '.' && $appName != 'Tinebase' && $item->isDir()) {
                 $fileName = $this->_baseDir . $item->getFileName() . '/Setup/setup.xml' ;
@@ -543,7 +550,11 @@ class Setup_Controller
                 if (empty($applicationTable)) {
 					$result = TRUE;
 				}
-            } catch (Zend_Db_Statement_Exception $e) {
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+                $result = TRUE;
+            } catch (Zend_Db_Adapter_Exception $zdae) {
+                Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdae->getMessage());
                 $result = TRUE;
             }
         }
@@ -1171,6 +1182,7 @@ class Setup_Controller
      * @param  array | optional $_options
      * @return void
      * @throws Setup_Exception
+     * @throws Tinebase_Exception_Backend_Database
      */
     protected function _installApplication($_xml, $_options = null)
     {
@@ -1185,7 +1197,11 @@ class Setup_Controller
                     $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
                     $currentTable = $table->name;
                     
-                    $this->_backend->createTable($table);
+                    try {
+                        $this->_backend->createTable($table);
+                    } catch (Zend_Db_Statement_Exception $zdse) {
+                        throw new Tinebase_Exception_Backend_Database('Could not create table: ' . $zdse->getMessage());
+                    }
                     $createdTables[] = $table;
                 }
             }
