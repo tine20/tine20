@@ -25,6 +25,61 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     protected $_suffix = '.ics';
     
     /**
+     * (non-PHPdoc)
+     * @see Sabre_DAV_Collection::getChild()
+     */
+    public function getChild($_name)
+    {
+        $modelName = $this->_application->name . '_Model_' . $this->_model;
+        
+        if ($_name instanceof $modelName) {
+            $object = $_name;
+        } else {
+            $filterClass = $this->_application->name . '_Model_' . $this->_model . 'Filter';
+            $filter = new $filterClass(array(
+                array(
+                    'field'     => 'container_id',
+                    'operator'  => 'equals',
+                    'value'     => $this->_container->getId()
+                ),
+                array('condition' => 'OR', 'filters' => array(
+                    array(
+                        'field'     => 'id',
+                        'operator'  => 'equals',
+                        'value'     => $this->_getIdFromName($_name)
+                    ),
+                    array(
+                        'field'     => 'uid',
+                        'operator'  => 'equals',
+                        'value'     => $this->_getIdFromName($_name)
+                    )
+                ))
+            ));
+            $object = $this->_getController()->search($filter, null, false, false, 'sync')->getFirstRecord();
+        
+            if ($object == null) {
+                throw new Sabre_DAV_Exception_FileNotFound('Object not found');
+            }
+        }
+        
+        $httpRequest = new Sabre_HTTP_Request();
+        
+        // lie about existance of event of request is a PUT request from an ATTENDEE for an already existing event 
+        if ($httpRequest->getMethod() == 'PUT' && $httpRequest->getHeader('If-None-Match') === '*') {
+            if (
+                $object->organizer != Tinebase_Core::getUser()->contact_id && 
+                Calendar_Model_Attender::getOwnAttender($object->attendee) !== null
+            ) {
+                throw new Sabre_DAV_Exception_FileNotFound('Object not found');
+            }
+        }
+        
+        $objectClass = $this->_application->name . '_Frontend_WebDAV_' . $this->_model;
+        
+        return new $objectClass($this->_container, $object);
+    }
+    
+    /**
      * Returns the list of properties
      *
      * @param array $requestedProperties
