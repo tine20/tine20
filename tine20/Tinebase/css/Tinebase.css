@@ -798,5 +798,8 @@ span:hover.tinebase-showheaders-link {
     padding-right: 4px;
 }*/
 
-.applyToAll {background-color: #d7f4d3;background-image:none}
-.notEdited {background-color: #f4f1d3;background-image:none}
+.applyToAll, textarea.applyToAll, input.applyToAll {background-color: #d7f4d3;background-image:none!important}
+.notEdited, input.notEdited, textarea.notEdited {background-color: #f4f1d3;background-image:none!important}
+.clearableTrigger {background: transparent url(../../images/clear-text-icon.gif) left top no-repeat;height:12px;width:12px;display:block;position:absolute;z-index:9;bottom:3px}
+
+.clearableTrigger.over {background-position: 0 -24px}

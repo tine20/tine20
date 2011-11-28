@@ -26,7 +26,12 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         
         this.editDialog.onRecordLoad = this.editDialog.onRecordLoad.createInterceptor(this.onRecordLoad, this);
         this.editDialog.onRecordUpdate = this.editDialog.onRecordUpdate.createInterceptor(this.onRecordUpdate, this);
+        this.editDialog.isValid = this.editDialog.isValid.createInterceptor(this.isValid, this);
         this.editDialog.onApplyChanges = function(button, event, closeWindow) { this.onRecordUpdate(); }       
+    },
+    
+    isValid: function() {
+        return true;
     },
     
     onRecordLoad: function() {
@@ -48,18 +53,23 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
     	
     	Ext.each(this.form.record.store.fields.keys, function(fieldKey) {
     		var field = this.form.findField(fieldKey);
-//    		Tine.log.debug('RECData',this.editDialog.record.data);
+//    		Tine.log.debug('REC',this.editDialog.record);
     		if(field) {
+                
+                field.validationTask = null;
+                field.allowBlankOrig = field.allowBlank;
+                field.allowBlank = true;
+                
     			Ext.each(this.editDialog.sm.getSelections(), function(selection,index) {          
 
                     field.originalValue = this.editDialog.record.data[fieldKey];
-//                    Tine.log.debug('OV',field.originalValue);
+//                    Tine.log.debug('Field',field);
 //                    Tine.log.debug('FK',selection.data[fieldKey]);
                     
-                    if(typeof this.editDialog.record.data[fieldKey] == 'object') {
-                        field.disable();
-                        return false;
-                    } else {
+//                    if(typeof this.editDialog.record.data[fieldKey] == 'object') {
+//                        field.disable();
+//                        return false;
+//                    } else {
                     
                         if(selection.data[fieldKey] != field.originalValue) {
                             this.handleField(field, fieldKey, false);
@@ -70,7 +80,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                               return false;
                          }
                      }
-                    }
+//                    }
     			},this);       
     		}
     		
@@ -110,10 +120,50 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
     },
     
     onAfterRender: function() {
-        this.form.items.each(function(item){
+        this.form.items.each(function(item) {
         	if ((!(item instanceof Ext.form.TextField)) && (!(item instanceof Ext.form.Checkbox))) {
         		item.disable();
-        	}
+        	} else if (item instanceof Ext.form.TextField) {
+                var subLeft = 0;
+                if (item instanceof Ext.form.TriggerField) subLeft = 17;
+                if (item instanceof Ext.form.DateField) subLeft += 17;
+                item.on('focus',function() {
+//                    if(!(this.el.dom instanceof HTMLInputElement)) return;
+                    
+                    var el = this.el.parent().select('.clearableTrigger');
+                    if(el.elements.length > 0) {
+                        el.setStyle({display:'block'});
+                        return;
+                    }
+                    
+                    var width = this.getWidth();
+                    var span = new Ext.Element(document.createElement('span'));
+
+                    span.addClass('clearableTrigger');
+                    span.addClassOnOver('over');
+                    span.setStyle({left: (width - 16 - subLeft) + 'px'});
+                    
+                    span.on('click',function() {
+                        Tine.log.debug(this);
+                        this.setValue('');
+                        this.addClass('applyToAll');
+                        this.removeClass('notEdited');
+                        this.edited = true;
+                        span.setStyle({display: 'none'});
+                    },this);
+                    
+                    
+                    
+                    this.el.setStyle({position:'relative'});
+                    this.el.insertSibling(span);
+//                    this.un('focus');
+                });
+                item.on('blur',function() {
+                        var el = this.el.parent().parent().select('.clearableTrigger');
+                        if(el) el.setStyle({display:'none'});
+                    });
+                
+            }
         });
     },
     
