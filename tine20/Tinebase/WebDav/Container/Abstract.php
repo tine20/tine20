@@ -51,14 +51,14 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
     }
     
     /**
-    * Creates a new file
-    *
-    * The contents of the new file must be a valid VCARD
-    *
-    * @param string $name
-    * @param resource $vcardData
-    * @return Sabre_DAV_File
-    */
+     * Creates a new file
+     *
+     * The contents of the new file must be a valid VCARD
+     *
+     * @param string $name
+     * @param resource $vcardData
+     * @return Sabre_DAV_File
+     */
     public function createFile($name, $vobjectData = null) 
     {
         $objectClass = $this->_application->name . '_Frontend_WebDAV_' . $this->_model;
@@ -83,10 +83,27 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
     {
         $modelName = $this->_application->name . '_Model_' . $this->_model;
         
-        try {
-            $object = $_name instanceof $modelName ? $_name : $this->_getController()->get($this->_getIdFromName($_name));
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new Sabre_DAV_Exception_FileNotFound('Object not found');
+        if ($_name instanceof $modelName) {
+            $object = $_name;
+        } else {
+            $filterClass = $this->_application->name . '_Model_' . $this->_model . 'Filter';
+            $filter = new $filterClass(array(
+                array(
+                    'field'     => 'container_id',
+                    'operator'  => 'equals',
+                    'value'     => $this->_container->getId()
+                ),
+                array(
+                    'field'     => 'id',
+                    'operator'  => 'equals',
+                    'value'     => $this->_getIdFromName($_name)
+                )
+            ));
+            $object = $this->_getController()->search($filter, null, false, false, 'sync')->getFirstRecord();
+            
+            if ($object == null) {
+                throw new Sabre_DAV_Exception_FileNotFound('Object not found');
+            }
         }
         
         $objectClass = $this->_application->name . '_Frontend_WebDAV_' . $this->_model;
