@@ -261,7 +261,9 @@ abstract class Tinebase_Config_Abstract
         
         if ($cache && $cache->test($cacheId)) {
             $result = $cache->load($cacheId);
-            return $result;
+            if (is_object($result)) {
+                return $result;
+            }
         }
         
         $filter = new Tinebase_Model_ConfigFilter(array(
