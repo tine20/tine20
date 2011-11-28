@@ -195,7 +195,14 @@ class Setup_Controller
         // create Tinebase tables first
         $applications = array('Tinebase' => $this->getSetupXml('Tinebase'));
         
-        foreach (new DirectoryIterator($this->_baseDir) as $item) {
+        try {
+            $dirIterator = new DirectoryIterator($this->_baseDir);
+        } catch (Exception $e) {
+            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not open base dir: ' . $this->_baseDir);
+            throw new Tinebase_Exception_AccessDenied('Could not open Tine 2.0 root directory.');
+        }
+        
+        foreach ($dirIterator as $item) {
             $appName = $item->getFileName();
             if($appName{0} != '.' && $appName != 'Tinebase' && $item->isDir()) {
                 $fileName = $this->_baseDir . $item->getFileName() . '/Setup/setup.xml' ;
