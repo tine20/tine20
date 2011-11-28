@@ -543,7 +543,11 @@ class Setup_Controller
                 if (empty($applicationTable)) {
 					$result = TRUE;
 				}
-            } catch (Zend_Db_Statement_Exception $e) {
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+                $result = TRUE;
+            } catch (Zend_Db_Adapter_Exception $zdae) {
+                Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdae->getMessage());
                 $result = TRUE;
             }
         }
