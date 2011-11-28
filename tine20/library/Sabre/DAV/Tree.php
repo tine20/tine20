@@ -98,8 +98,12 @@ abstract class Sabre_DAV_Tree {
      */
     public function delete($path) {
 
-        $node = $this->getNodeForPath($path);
-        $node->delete();
+        try {
+            $node = $this->getNodeForPath($path);
+            $node->delete();
+        } catch (Sabre_DAV_Exception_FileNotFound $sdavefnf) {
+            // node is deleted already
+        }
         
         list($parent) = Sabre_DAV_URLUtil::splitPath($path);
         $this->markDirty($parent);
