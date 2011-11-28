@@ -353,7 +353,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             account     = accountId ? this.getAccountStore().getById(accountId): null,
             imapStatus  = account ? account.get('imap_status') : null;
             
-        if (exception.code == 404) {
+        if (exception.code == 913) {
             // folder not found -> remove folder from store and tree panel
             var treePanel = this.getMainScreen().getTreePanel(),
                 node = treePanel.getNodeById(currentRequestFolder.id);
