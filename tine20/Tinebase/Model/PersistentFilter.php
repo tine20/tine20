@@ -123,11 +123,11 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
      */
     public static function getFilterGroup($_filterModel, $_filterData, $_fromUserTime = FALSE)
     {
-        $filter = new $_filterModel(array());
-        
-        if (! class_exists($filter)) {
+        if (! class_exists($_filterModel)) {
             throw new Tinebase_Exception_NotFound('Did not find filter class.');
         }
+        
+        $filter = new $_filterModel(array());
         
         if (! is_subclass_of($filter, 'Tinebase_Model_Filter_FilterGroup')) {
             throw new Tinebase_Exception_InvalidArgument('Filter Model has to be subclass of Tinebase_Model_Filter_FilterGroup.');
