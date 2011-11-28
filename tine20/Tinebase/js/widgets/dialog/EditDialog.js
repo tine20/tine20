@@ -18,6 +18,7 @@ Ext.ns('Tine.widgets.dialog');
  * @constructor
  * @param {Object} config The configuration options.
  */
+
 Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     /**
      * @cfg {Tine.Tinebase.Application} app

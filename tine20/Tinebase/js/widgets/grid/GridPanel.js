@@ -1230,7 +1230,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             config = null,
             popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
-                useMultiple: ((this.selectionModel.getCount() > 1) && (this.multipleEdit)),
+                useMultiple: ((this.selectionModel.getCount() > 1) && (this.multipleEdit) && (button.actionType == 'edit')),
                 sm: this.selectionModel,
                 record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
                 copyRecord: (button.actionType == 'copy'),

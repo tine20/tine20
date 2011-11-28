@@ -23,7 +23,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     recordClass: Tine.Timetracker.Model.Timesheet,
     recordProxy: Tine.Timetracker.timesheetBackend,
     loadRecord: false,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    tbarItems: null,
     evalGrants: false,
     
     /**
@@ -103,6 +103,12 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     		this.getForm().findField('billed_in').setValue('');
     	}
     	*/
+    },
+    
+    initComponent: function() {
+        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});  
+        this.tbarItems = [addNoteButton];
+        this.supr().initComponent.apply(this, arguments);    
     },
     
     /**

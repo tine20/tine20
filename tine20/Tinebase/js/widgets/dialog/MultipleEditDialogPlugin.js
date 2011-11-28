@@ -26,9 +26,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         
         this.editDialog.onRecordLoad = this.editDialog.onRecordLoad.createInterceptor(this.onRecordLoad, this);
         this.editDialog.onRecordUpdate = this.editDialog.onRecordUpdate.createInterceptor(this.onRecordUpdate, this);
-        this.editDialog.onApplyChanges = function(button, event, closeWindow) { this.onRecordUpdate() }
-        
-        
+        this.editDialog.onApplyChanges = function(button, event, closeWindow) { this.onRecordUpdate(); }       
     },
     
     onRecordLoad: function() {
@@ -50,32 +48,39 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
     	
     	Ext.each(this.form.record.store.fields.keys, function(fieldKey) {
     		var field = this.form.findField(fieldKey);
-    		
+//    		Tine.log.debug('RECData',this.editDialog.record.data);
     		if(field) {
     			Ext.each(this.editDialog.sm.getSelections(), function(selection,index) {          
 
                     field.originalValue = this.editDialog.record.data[fieldKey];
-
-                    if(selection.data[fieldKey] != field.originalValue) {
-                 	    
-                         this.handleField(field, fieldKey, false);
-                         return false;
+//                    Tine.log.debug('OV',field.originalValue);
+//                    Tine.log.debug('FK',selection.data[fieldKey]);
+                    
+                    if(typeof this.editDialog.record.data[fieldKey] == 'object') {
+                        field.disable();
+                        return false;
+                    } else {
+                    
+                        if(selection.data[fieldKey] != field.originalValue) {
+                            this.handleField(field, fieldKey, false);
+                            return false;
                      } else {
                          if(index == this.editDialog.sm.selections.length-1) {
                               this.handleField(field, fieldKey, true);
                               return false;
                          }
                      }
-             },this);       
+                    }
+    			},this);       
     		}
     		
-    		Tine.log.debug(fieldKey,field);
+    		
     	}, this);
 
     	Ext.each(this.editDialog.cfConfigs, function(el) {
             var fieldKey = el.data.name;
             var field = this.form.findField('customfield_' + fieldKey);
-            Tine.log.debug('CF ' + fieldKey, this.editDialog.record.data.customfields[fieldKey]);
+            
             if(field) {
             	field.setValue(this.editDialog.record.data.customfields[fieldKey]);
             	Ext.each(this.editDialog.sm.getSelections(), function(selection,index) {
@@ -94,9 +99,12 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         },this);    	
     	
         this.editDialog.updateToolbars(this.editDialog.record, this.editDialog.recordClass.getMeta('containerProperty'));
-        this.editDialog.loadMask.hide();
+
+        Ext.each(this.editDialog.tbarItems, function(el) {
+        	el.disable();
+        });
         
-        this.editDialog.tbar.hide();
+        this.editDialog.loadMask.hide();
 
     	return false;
     },
@@ -121,11 +129,27 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         },this);
         this.changedHuman += '</ul>';
         
+//        Tine.log.debug(this.changes); return false;
+        
         if(this.changes.length == 0) {
             this.editDialog.purgeListeners();
             this.editDialog.window.close(); 
             return false;
         }
+        
+//        if(!this.editDialog.isValid()) {
+//        	
+//        	Ext.MessageBox.alert(_('Errors'), this.editDialog.getValidationErrorMessage());
+//        	
+//        	this.form.items.each(function(item){
+//        		if(item.activeError) {
+//        			if(!item.edited) item.activeError = null;
+//        		}
+//        			Tine.log.debug(item);
+//        	});        	
+//        	
+//        	return false;
+//        } else {
         
         var filter = this.editDialog.sm.getSelectionFilter();
  
@@ -153,16 +177,21 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         }, this);
         
         return false;
+
     },
        
     handleField: function(field,fieldKey,samevalue) {
     	
+    	Tine.log.debug(field.name,field);
+    	
         if(!samevalue) {
+        	
             field.setReadOnly(true);
             field.addClass('notEdited');
             field.multi = true;
             field.edited = false;
             field.setValue('');
+            field.originalValue = '';
             
             field.on('focus', function() {
                 if(this.readOnly) this.originalValue = this.startValue;
