@@ -148,17 +148,17 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
      */
     public function getACL() 
     {
-        return null;
+        $principal = 'principals/users/' . Tinebase_Core::getUser()->contact_id;
         
         return array(
             array(
                         'privilege' => '{DAV:}read',
-                        'principal' => $this->addressBookInfo['principaluri'],
+                        'principal' => $principal,
                         'protected' => true,
             ),
             array(
                         'privilege' => '{DAV:}write',
-                        'principal' => $this->addressBookInfo['principaluri'],
+                        'principal' => $principal,
                         'protected' => true,
             )
         );
