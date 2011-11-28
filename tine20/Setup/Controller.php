@@ -1175,6 +1175,7 @@ class Setup_Controller
      * @param  array | optional $_options
      * @return void
      * @throws Setup_Exception
+     * @throws Tinebase_Exception_Backend_Database
      */
     protected function _installApplication($_xml, $_options = null)
     {
@@ -1189,7 +1190,11 @@ class Setup_Controller
                     $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
                     $currentTable = $table->name;
                     
-                    $this->_backend->createTable($table);
+                    try {
+                        $this->_backend->createTable($table);
+                    } catch (Zend_Db_Statement_Exception $zdse) {
+                        throw new Tinebase_Exception_Backend_Database('Could not create table: ' . $zdse->getMessage());
+                    }
                     $createdTables[] = $table;
                 }
             }
