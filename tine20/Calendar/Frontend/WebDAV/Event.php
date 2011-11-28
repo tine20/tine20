@@ -21,6 +21,11 @@
 class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_CalDAV_ICalendarObject, Sabre_DAVACL_IACL
 {
     /**
+     * @var Tinebase_Model_Container
+     */
+    protected $_container;
+    
+    /**
      * @var Calendar_Model_Event
      */
     protected $_event;
@@ -44,7 +49,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     public function __construct(Tinebase_Model_Container $_container, $_event = null) 
     {
-        $this->_event = $_event;
+        $this->_container = $_container;
+        $this->_event     = $_event;
         
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         
@@ -73,27 +79,68 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         
         $event = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version)->toTine20Model($vobjectData);
         $event->container_id = $container->getId();
+        $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
+        $event->setId($id);
         
         self::enforceEventParameters($event);
         
-        if ($event->organizer != Tinebase_Core::getUser()->contact_id) {
-            throw new Sabre_DAV_Exception_PreconditionFailed('invalid organizer provided');
-        }
-        
         if ($event->exdate instanceof Tinebase_Record_RecordSet) {
             foreach($event->exdate as $exdate) {
-                if ($exdate->is_deleted == false && $exdate->organizer != Tinebase_Core::getUser()->contact_id) {
+                if ($exdate->is_deleted == false && $exdate->organizer != $event->organizer) {
                     throw new Sabre_DAV_Exception_PreconditionFailed('Organizer for exdate must be the same like base event');
                 }
             }
         }
         
-        $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
-        $event->setId($id);
+        // check if there is already an existing event with this ID
+        // this can happen when the invitation email is faster then the caldav update or
+        // or when an event gets moved to another container
         
-        $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
+        $filter = new Calendar_Model_EventFilter(array(
+            array(
+            	'field' => 'containerType', 
+            	'operator' => 'equals', 
+            	'value' => 'all'
+        	),
+            array(
+            	'field' => 'dtstart', 
+            	'operator' => 'equals', 
+            	'value' => $event->dtstart
+        	),
+            array(
+            	'field' => 'dtend', 
+            	'operator' => 'equals', 
+            	'value' => $event->dtend
+        	),
+            array('condition' => 'OR', 'filters' => array(
+                array(
+                    'field'     => 'id',
+                    'operator'  => 'equals',
+                    'value'     => $id
+                ),
+                array(
+                    'field'     => 'uid',
+                    'operator'  => 'equals',
+                    'value'     => $id
+                )
+            ))
+        ));
+        $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->search($filter, null, false, false, 'sync')->getFirstRecord();
         
-        $vevent = new self($container, $event);
+        if ($existingEvent === null) {
+            if ($event->organizer != Tinebase_Core::getUser()->contact_id) {
+                throw new Sabre_DAV_Exception_PreconditionFailed('invalid organizer provided');
+            }
+            
+            $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
+            
+            $vevent = new self($container, $event);
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update existing event');
+            $vevent = new self($container, $existingEvent);
+            $vevent->put($vobjectData);
+        }
         
         return $vevent;
     }
@@ -143,9 +190,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         if ($_event->exdate instanceof Tinebase_Record_RecordSet) {
             foreach($_event->exdate as $exdate) {
                 if ($exdate->is_deleted == false) {
-                    if (empty($exdate->container_id)) {
-                        $exdate->container_id = $_event->container_id;
-                    }
+                    $exdate->container_id = $_event->container_id;
                     self::enforceEventParameters($exdate);
                 }
             }
@@ -312,6 +357,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         Sabre_CalDAV_ICalendarUtil::validateICalendarObject($cardData, array('VEVENT', 'VFREEBUSY'));
         
         $event = $this->_converter->toTine20Model($cardData, $this->getRecord());
+        $event->container_id = $this->_container->getId();
         
         self::enforceEventParameters($event);
         
@@ -323,8 +369,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
             
             try {
                 $this->_event = Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($event, new Calendar_Model_Attender(array(
-                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                    'user_id'   => Tinebase_Core::getUser()->contact_id
+                    'user_type'           => Calendar_Model_Attender::USERTYPE_USER,
+                    'user_id'             => Tinebase_Core::getUser()->contact_id,
+                    'displaycontainer_id' => $this->_container->getId()
                 )));
             } catch (Tinebase_Exception_AccessDenied $tead) {
                 throw new Sabre_DAV_Exception_Forbidden($tead->getMessage());
