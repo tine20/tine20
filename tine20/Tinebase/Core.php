@@ -752,7 +752,7 @@ class Tinebase_Core
 
             switch($dbBackend) {
                 case self::PDO_MYSQL:
-                    if (! defined(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY)) {
+                    if (! defined('PDO::MYSQL_ATTR_USE_BUFFERED_QUERY')) {
                         throw new Tinebase_Exception_Backend_Database('PDO::MYSQL_ATTR_USE_BUFFERED_QUERY is not defined. Please check PDO extension.');
                     }
                     
