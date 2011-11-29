@@ -290,8 +290,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             return true;
         }
 
-        // jump to subject if we are in the last row and it is empty
-        if (value == '' && this.store.getCount() == this.activeEditor.row + 1) {
+        // jump to subject if we are in the last row and it is empty OR TAB was pressed
+        if (e.getKey() == e.TAB || (value == '' && this.store.getCount() == this.activeEditor.row + 1)) {
             this.fireEvent('specialkey', combo, e);
             if (this.activeEditor.row == 0) {
                 return false;
