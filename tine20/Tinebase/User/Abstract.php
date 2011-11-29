@@ -292,7 +292,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             $data['accountPrimaryGroup'] = $defaultUserGroup->getId();
         }
         
-        $result = new $_accountClass($data);
+        $result = new $_accountClass($data, TRUE);
         
         return $result;
     }

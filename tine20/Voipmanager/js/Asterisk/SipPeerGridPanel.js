@@ -115,7 +115,7 @@ Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.widgets.grid.GridPan
 	            header: this.app.i18n._('context'), 
 	            dataIndex: 'context',
 	            width: 50,
-                sortable: true
+                sortable: false
             },{ 
 	            id: 'defaultip', 
 	            header: this.app.i18n._('default ip'), 

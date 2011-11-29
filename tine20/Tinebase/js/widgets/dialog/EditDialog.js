@@ -450,6 +450,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         return this.getTopToolbar();
     },
     
+    /**
+     * is form valid?
+     * 
+     * @return {Boolean}
+     */
     isValid: function() {
         return this.getForm().isValid();
     },

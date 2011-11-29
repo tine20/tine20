@@ -105,7 +105,7 @@ class Tinebase_EmailUser
      * the singleton pattern
      *
      * @param string $_configType
-     * @return Tinebase_EmailUser_Abstract
+     * @return Tinebase_User_Plugin_Abstract
      */
     public static function getInstance($_configType = Tinebase_Config::IMAP) 
     {
@@ -119,7 +119,7 @@ class Tinebase_EmailUser
      * return an instance of the current backend
      *
      * @param   string $_type name of the backend
-     * @return  Tinebase_EmailUser_Abstract
+     * @return  Tinebase_User_Plugin_Abstract
      * @throws  Tinebase_Exception_InvalidArgument
      */
     public static function factory($_type = NULL) 

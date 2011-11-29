@@ -163,5 +163,22 @@ abstract class Tinebase_Group_Abstract
         }
         return $this->getGroupByName($defaultGroupName);        
     }
+    
+    /**
+    * get dummy group record
+    *
+    * @param integer $_id [optional]
+    * @return Tinebase_Model_Group
+    */
+    public function getNonExistentGroup($_id = NULL)
+    {
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
+    
+        $result = new Tinebase_Model_Group(array(
+                'id'        => $_id,
+                'name'      => $translate->_('unknown'),
+        ), TRUE);
+    
+        return $result;
+    }
 }
- 
