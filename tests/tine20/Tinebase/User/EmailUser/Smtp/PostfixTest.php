@@ -22,7 +22,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
     /**
      * email user backend
      *
-     * @var Tinebase_EmailUser_Abstract
+     * @var Tinebase_User_Plugin_Abstract
      */
     protected $_backend = NULL;
         
