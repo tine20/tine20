@@ -74,21 +74,23 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
 
         Ext.each(this.form.record.store.fields.keys, function(fieldKey) {
             var field = this.form.findField(fieldKey);
+            
             if (field) {
-                var referenceSelectionData = false; 
 
+                var referenceSelectionData = false; 
+                field.isClearable = true;
                 return Ext.each(this.editDialog.sm.getSelections(), function(selection, index) {
                     if(!referenceSelectionData) {
                         referenceSelectionData = selection.data[fieldKey];
-
+                        if(referenceSelectionData) {
                         if(typeof referenceSelectionData == 'object') {
                             if(fieldKey == 'account_id') {
                                 field.originalValue = referenceSelectionData.accountId;
-//                                field.isClearable = false;
+                                field.isClearable = false;
                             }
                             else if(referenceSelectionData.hasOwnProperty('id')) {
                                 field.originalValue = referenceSelectionData.id;
-                                
+                                if(field.allowBlank === false) field.isClearable = false;
                             }
                             else {
                                 // TODO: handle DateFields
@@ -97,7 +99,12 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                             }
                         } else {
                             field.originalValue = referenceSelectionData;
-                        }  
+                        } 
+                        
+                        
+                        } else {
+                            return true;
+                        }
                         return true;
                     }
 
@@ -157,7 +164,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             
 //            if (item.disabled) return true; 
             // datefields already have a clearer
-//            if (item instanceof Ext.form.DateField)    return;
+            
             // disable others
             if ((!(item instanceof Ext.form.TextField)) && (!(item instanceof Ext.form.Checkbox))) {
                 item.disable();
@@ -166,7 +173,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             if (item instanceof Ext.form.TextField) {
                 
                 item.on('focus', function() {
-//                    if (!(item instanceof Ext.form.DateField)) {
+                    if (!(item instanceof Ext.form.DateField) && (item.isClearable !== false)) {
                     var subLeft = 0;
                     if (item instanceof Ext.form.TriggerField) subLeft += 17;
 
@@ -193,22 +200,29 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                     button.addClassOnClick('click');
 
                     button.on('click', function() {
-                        if (this.multi)    this.cleared = true;
-                        this.setValue('');
-                        this.addClass('tinebase-editmultipledialog-apply');
-                        this.removeClass('tinebase-editmultipledialog-noneedit');
-                        this.edited = true;
-
+                        if(button.hasClass('undo')) {
+                            this.setValue(this.originalValue)
+                            button.set({title: _('Delete value from all selected records')});
+                            if (this.multi) this.cleared = false;
+                        } else {
+                            if (this.multi) this.cleared = true;
+                            this.setValue('');
+                            button.set({title: _('Undo delete value from all selected records')});
+                        }
                         this.fireEvent('blur',this);
                     }, this);
                     
                     this.el.insertSibling(button);
-//                }
+                }
                     this.on('blur', function() {
-                        if ((this.originalValue != this.getValue())    || this.cleared) {
+                        var el = this.el.parent().select('.tinebase-editmultipledialog-clearer');
+
+                        if ((this.originalValue != this.getValue()) || this.cleared) {
                             this.removeClass('tinebase-editmultipledialog-noneedit');
                             this.addClass('tinebase-editmultipledialog-apply');
                             this.edited = true;
+                            el.addClass('undo');
+                            el.removeClass('hidden');
                         } else {
                             this.edited = false;
                             this.removeClass('tinebase-editmultipledialog-apply');
@@ -217,9 +231,10 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                                 this.setReadOnly(true);
                                 this.addClass('tinebase-editmultipledialog-noneedit');
                             }
+                            el.removeClass('undo');
+                            el.addClass('hidden');
                         }
-                        var el = this.el.parent().select('.tinebase-editmultipledialog-clearer');
-                        el.addClass('hidden');
+                        
                     });
                     this.un('focus');
                 });
