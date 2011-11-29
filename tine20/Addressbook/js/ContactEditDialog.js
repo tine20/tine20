@@ -92,15 +92,15 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 triggerAction: 'all',
                                 forceSelection: true,
                                 listeners: {
-                                	scope: this,
-                                	'select': function (combo, record, index) {
-                                		var jpegphoto = this.getForm().findField('jpegphoto');
-                                		
-                                		// set new empty photo depending on chosen salutation only if user doesn't have own image
-                                		if (Ext.isEmpty(jpegphoto.getValue()) && ! Ext.isEmpty(record.get('image_path'))) {
-                                			jpegphoto.setDefaultImage(record.get('image_path'));
-                                		}
-                                	}
+                                    scope: this,
+                                    'select': function (combo, record, index) {
+                                        var jpegphoto = this.getForm().findField('jpegphoto');
+                                        
+                                        // set new empty photo depending on chosen salutation only if user doesn't have own image
+                                        if (Ext.isEmpty(jpegphoto.getValue()) && ! Ext.isEmpty(record.get('image_path'))) {
+                                            jpegphoto.setDefaultImage(record.get('image_path'));
+                                        }
+                                    }
                                 }
                             }, {
                                 columnWidth: 0.65,
@@ -444,7 +444,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         // NOTE: it comes again and again till 
         if (this.rendered) {
             var container;
-        	        	
+                        
             // handle default container
             if (! this.record.id) {
                 if (this.forceContainer) {
@@ -460,7 +460,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             }
             
             if (this.mapPanel instanceof Tine.Addressbook.MapPanel) {
-            	this.mapPanel.onRecordLoad(this.record);
+                this.mapPanel.onRecordLoad(this.record);
             }
         }
         
@@ -476,7 +476,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
  * @return {Ext.ux.Window}
  */
 Tine.Addressbook.ContactEditDialog.openWindow = function (config) {
-	
+    
     // if a container is selected in the tree, take this as default container
     var treeNode = Ext.getCmp('Addressbook_Tree') ? Ext.getCmp('Addressbook_Tree').getSelectionModel().getSelectedNode() : null;
     if (treeNode && treeNode.attributes && treeNode.attributes.container.type) {

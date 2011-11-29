@@ -191,5 +191,4 @@ class Tinebase_Group
         ));
         Tinebase_Group::getInstance()->addGroup($userGroup);
     }
-    
 }

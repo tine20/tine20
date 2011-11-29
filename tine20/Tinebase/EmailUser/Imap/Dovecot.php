@@ -439,6 +439,12 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
      */
     protected function _addUser(Tinebase_Model_FullUser $_addedUser, Tinebase_Model_FullUser $_newUserProperties)
     {
+        if (! $_addedUser->accountEmailAddress) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+            . ' User ' . $_addedUser->accountDisplayName . ' has no email address defined. Skipping dovecot user creation.');
+            return;
+        }
+         
         $imapSettings = $this->_recordToRawData($_addedUser, $_newUserProperties);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding new dovecot user ' . $imapSettings[$this->_propertyMapping['emailUsername']]);
