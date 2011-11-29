@@ -4,18 +4,14 @@
  * 
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Timetracker_ExportTest::main');
-}
 
 /**
  * Test class for Timetracker_Export
