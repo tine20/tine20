@@ -15,6 +15,8 @@
  * 
  * @package    Tinebase
  * @subpackage EmailUser
+ * 
+ * @todo generalize some logic and move it to abstract parent class
  */
 class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
 {
@@ -236,9 +238,16 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
      */
     protected function _addUser(Tinebase_Model_FullUser $_addedUser, Tinebase_Model_FullUser $_newUserProperties)
 	{
+	    if (! $_addedUser->accountEmailAddress) {
+	        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+	            . ' User ' . $_addedUser->accountDisplayName . ' has no email address defined. Skipping dbmail user creation.');
+	        return;
+	    }
+	    
         $imapSettings = $this->_recordToRawData($_addedUser, $_newUserProperties);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding Dbmail user ' . $imapSettings[$this->_propertyMapping['emailUsername']]);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Adding Dbmail user ' . $imapSettings[$this->_propertyMapping['emailUsername']]);
         
         // generate random password if not set
         if (empty($imapSettings[$this->_propertyMapping['emailPassword']])) {
