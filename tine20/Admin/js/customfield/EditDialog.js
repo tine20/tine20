@@ -641,7 +641,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     isValid: function() {
         var result = Tine.Admin.UserEditDialog.superclass.isValid.call(this);
 
-        if (! this.checkCustomFieldExistance()) {
+        if (this.customFieldExists()) {
             result = false;
             this.getForm().markInvalid([{
                 id: 'name',
@@ -657,23 +657,23 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * 
      * @return {Boolean}
      */
-    checkCustomFieldExistance: function() {
+    customFieldExists: function() {
         var applicationField = this.getForm().findField('application_id'),
             store = applicationField.getStore(),
             app = store.getById(applicationField.getValue()),
             cfName = this.getForm().findField('name').getValue(),
-            cfDoesNotExist = true;
+            cfExists = false;
         
         if (app && cfName) {
             var customfieldsOfApp = Tine[app.get('name')].registry.get('customfields');
             Ext.each(customfieldsOfApp, function(cfConfig) {
                 if (cfName === cfConfig.name) {
-                    cfDoesNotExist = false;
+                    cfExists = true;
                 }
             }, this);
         }
         
-        return cfDoesNotExist;
+        return cfExists;
     }
 });
 
