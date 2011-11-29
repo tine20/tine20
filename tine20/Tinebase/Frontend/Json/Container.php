@@ -191,7 +191,12 @@ class Tinebase_Frontend_Json_Container
                     $value['account_name'] = $account->toArray();
                     break;
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
-                    $value['account_name'] = Tinebase_Group::getInstance()->getGroupById($value['account_id'])->toArray();
+                    try {
+                        $group = Tinebase_Group::getInstance()->getGroupById($value['account_id']);
+                    } catch (Tinebase_Exception_NotFound $e) {
+                        $group = Tinebase_Group::getInstance()->getNonExistentGroup();
+                    }
+                    $value['account_name'] = $group->toArray();
                     break;
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
                     $value['account_name'] = array('accountDisplayName' => 'Anyone');
