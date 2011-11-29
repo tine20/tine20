@@ -45,6 +45,16 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
     const BODY_TYPE_HTML                                = 2;
     const BODY_TYPE_RTF                                 = 3;
     const BODY_TYPE_MIME                                = 4;
+    
+    const TRUNCATE_ALL                                  = 0;
+    const TRUNCATE_4096                                 = 1;
+    const TRUNCATE_5120                                 = 2;
+    const TRUNCATE_7168                                 = 3;
+    const TRUNCATE_10240                                = 4;
+    const TRUNCATE_20480                                = 5;
+    const TRUNCATE_51200                                = 6;
+    const TRUNCATE_102400                               = 7;
+    const TRUNCATE_NOTHING                              = 8;
 
 
     protected $_defaultNameSpace    = 'uri:AirSync';
@@ -147,7 +157,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 'toBeFetched'     => array(),
                 'filterType'      => 0,
                 'mimeSupport'     => self::MIMESUPPORT_DONT_SEND_MIME,
-                'mimeTruncation'  => 8,
+                'mimeTruncation'  => ActiveSync_Command_Sync::TRUNCATE_NOTHING,
                 'bodyPreferences' => array()
             );
             
