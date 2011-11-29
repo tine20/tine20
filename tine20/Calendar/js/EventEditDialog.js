@@ -88,12 +88,14 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 name: 'summary',
                                 listeners: {render: function(field){field.focus(false, 250);}},
                                 allowBlank: false,
-                                requiredGrant: 'editGrant'
+                                requiredGrant: 'editGrant',
+                                maxLength: 255
                             }], [{
                                 columnWidth: 1,
                                 fieldLabel: this.app.i18n._('Location'),
                                 name: 'location',
-                                requiredGrant: 'editGrant'
+                                requiredGrant: 'editGrant',
+                                maxLength: 255
                             }], [{
                                 xtype: 'datetimefield',
                                 fieldLabel: this.app.i18n._('Start Time'),
