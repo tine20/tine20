@@ -97,7 +97,7 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
      */
     public function import($_resource = NULL)
     {
-        // forece correct line ends
+        // force correct line ends
         require_once 'StreamFilter/StringReplace.php';
         $filter = stream_filter_append($_resource, 'str.replace', STREAM_FILTER_READ, array(
             'search'            => '/(?<!\r)\n/',
@@ -129,7 +129,9 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
         }
         
         $events = $result['results'] = $this->_getEvents($ical);
-//        print_r($events->toArray());
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($events) . ' events for import.');
+        //print_r($events->toArray());
         
         // set container
         $events->container_id = $this->_options['importContainerId'];
