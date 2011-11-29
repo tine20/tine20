@@ -798,8 +798,11 @@ span:hover.tinebase-showheaders-link {
     padding-right: 4px;
 }*/
 
-.applyToAll, textarea.applyToAll, input.applyToAll {background-color: #d7f4d3;background-image:none!important}
-.notEdited, input.notEdited, textarea.notEdited {background-color: #f4f1d3;background-image:none!important}
-.clearableTrigger {background: transparent url(../../images/clear-text-icon.gif) left top no-repeat;height:12px;width:12px;display:block;position:absolute;z-index:9;bottom:3px}
+/* multiple edit dialog */
 
-.clearableTrigger.over {background-position: 0 -24px}
+.tinebase-editmultipledialog-apply, textarea.tinebase-editmultipledialog-apply, input.tinebase-editmultipledialog-apply {background-color: #d7f4d3;background-image:none!important}
+.tinebase-editmultipledialog-noneedit, input.tinebase-editmultipledialog-noneedit, textarea.tinebase-editmultipledialog-noneedit {background-color: #f4f1d3;background-image:none!important}
+.tinebase-editmultipledialog-clearer {background: transparent url(../../styles/images/tine20/form/clear-trigger.gif) -50px top no-repeat;border-bottom:1px solid #7eadd9; height:18px;width:18px;display:block;position:absolute;z-index:9}
+.tinebase-editmultipledialog-clearer.hidden {border-bottom:none; height:18px; background-image: url(../../library/ExtJS/resources/images/default/s.gif)}
+.tinebase-editmultipledialog-clearer.click {background-position: -33px 0}
+.tinebase-editmultipledialog-clearer.over {background-position: -67px 0}
