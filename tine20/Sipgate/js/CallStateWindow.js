@@ -158,7 +158,7 @@ Tine.Sipgate.CallStateWindow.openWindow = function(info) {
 
 Tine.Sipgate.CallStateWindow.startTask = function(sessionId,contact) {
 
-	CallUpdateWindowTask = Ext.TaskMgr.start({
+	Tine.Sipgate.CallUpdateWindowTask = Ext.TaskMgr.start({
 		interval : 2000,
 		run : function() {
 			Tine.Sipgate.updateCallStateWindow(sessionId,contact);
@@ -168,9 +168,9 @@ Tine.Sipgate.CallStateWindow.startTask = function(sessionId,contact) {
 
 
 Tine.Sipgate.CallStateWindow.stopTask = function() {
-	if(CallUpdateWindowTask) {
+	if(Tine.Sipgate.CallUpdateWindowTask) {
 		Ext.TaskMgr.stop(Tine.Sipgate.CallUpdateWindowTask);		
-		CallUpdateWindowTask = null;
+		Tine.Sipgate.CallUpdateWindowTask = null;
 	}
 };
 

@@ -33,9 +33,6 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         var form = this.editDialog.getForm();
         var isValid = true;
         
-        // you need to fill in one of: n_given n_family org_name
-        // @todo required fields should depend on salutation ('company' -> org_name, etc.) 
-        //       and not required fields should be disabled (n_given, n_family, etc.)
         if(this.app.appName == 'Addressbook') {
         if (   ((form.findField('n_family').getValue() === '') && (form.findField('n_family').edited)) 
             && ((form.findField('org_name').getValue() === '') && (form.findField('org_name').edited))) {
@@ -45,7 +42,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             form.findField('org_name').markInvalid(invalidString);
             
             isValid = false;
-        }
+            }
         } else if (this.app.appName == 'Timetracker') {
             if((form.findField('description').getValue() === '') && (form.findField('description').edited)) {
                 form.findField('description').markInvalid(this.app.i18n._('Field "Description" must not be empty'));
