@@ -366,37 +366,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_recordToJson($folder);
     }
     
-    /**
-     * sets attendee status for an attender on the given event invitation
-     *
-     * @param  array         $eventData
-     * @param  array         $attenderData
-     * @return array         complete event
-     * 
-     * @todo move this to calendar frontend
-     */
-    public function setInvitationStatus($eventData, $attenderData)
-    {
-        if (! Tinebase_Application::getInstance()->isInstalled('Calendar') || ! Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Calendar not installed or access denied.');
-            return array();
-        }
-        
-        $calendarJson = new Calendar_Frontend_Json();
-        if (! isset($eventData['id']) || empty($eventData['id'])) {
-            $eventData = $calendarJson->saveEvent($eventData);
-            // get attender id / data
-            foreach ($eventData['attendee'] as $attender) {
-                if ($attender['user_id']['id'] == $attenderData['user_id']['id']) {
-                    $attenderData = $attender;
-                    break;
-                }
-            }
-        }
-        
-        return $calendarJson->setAttenderStatus($eventData, $attenderData, $attenderData['status_authkey']);
-    }
-    
     /***************************** accounts funcs *******************************/
     
     /**
