@@ -367,6 +367,12 @@ class Calendar_Frontend_iMIP
      */
     protected function _assertOriginatorIsAttender($_iMIP, $_event)
     {
+        if (! $_event->attendee) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__
+                . ' no attendee found.');
+            return FALSE;
+        }
+        
         $iMIPAttenderIdx = array_search($_iMIP->originator, $_event->attendee->getEmail());
         if ($iMIPAttenderIdx === FALSE) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__
