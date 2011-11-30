@@ -104,6 +104,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     useMultiple: false,
     
     /**
+     * holds items to disable on multiple edit
+     * @type Array
+     */
+    disableOnEditMultiple: null,
+    
+    /**
      * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
      */
     /**
@@ -635,5 +641,17 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
         
         Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+    },
+    
+    addToDisableOnEditMultiple: function(item) {
+        Tine.log.debug(item);
+        if(!this.disableOnEditMultiple) this.disableOnEditMultiple = new Array();
+        this.disableOnEditMultiple.push(item);
+    },
+    
+    getDisableOnEditMultiple: function() {
+        if(!this.disableOnEditMultiple) this.disableOnEditMultiple = new Array();
+        return this.disableOnEditMultiple;
+       
     }
 });

@@ -64,7 +64,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
 
         Tine.log.debug('loading of the following record completed:');
         Tine.log.debug(this.editDialog.record);
-Tine.log.debug(this.editDialog.getForm());
+
         this.editDialog.getForm().clearInvalid();
 
         this.editDialog.window.setTitle(String.format(_('Edit {0} {1}'), this.editDialog.sm.getCount(), this.editDialog.i18nRecordsName));
@@ -157,22 +157,26 @@ Tine.log.debug(this.editDialog.getForm());
 
     onAfterRender : function() {
         
-        if(this.editDialog.linkPanel) this.editDialog.linkPanel.setDisabled(true);
-        if(this.editDialog.mapPanel) this.editDialog.mapPanel.setDisabled(true);
+//        if(this.editDialog.linkPanel) this.editDialog.linkPanel.setDisabled(true);
+//        if(this.editDialog.mapPanel) this.editDialog.mapPanel.setDisabled(true);
+//        
+//        if(this.editDialog.descriptionPanel) this.editDialog.descriptionPanel.disable();
+//        if(this.editDialog.activitiesPanel) this.editDialog.activitiesPanel.disable();
+//        if(this.editDialog.tagPanel) this.editDialog.tagPanel.disable();
         
-        if(this.editDialog.descriptionPanel) this.editDialog.descriptionPanel.disable();
-        if(this.editDialog.activitiesPanel) this.editDialog.activitiesPanel.disable();
-        if(this.editDialog.tagPanel) this.editDialog.tagPanel.disable();
-        
+//        this.editDialog.getDisableOnEditMultiple().each(function(item) {
+//            item.disable();
+//        });
+
+        Ext.each(this.editDialog.getDisableOnEditMultiple(),function(item){
+            item.disable();
+        });
+
+//Tine.log.err();
         
         this.form.items.each(function(item) {
             
-            // disable others
-            
-            if((item.getName() == 'note') || (item.getName() == 'notes') || (item.getName() == 'tags') ) {
-                item.disable();
-                return true;
-            }
+
             
             
             if ((!(item instanceof Ext.form.TextField)) && (!(item instanceof Ext.form.Checkbox))) {
@@ -228,14 +232,32 @@ Tine.log.debug(this.editDialog.getForm());
 
                         if ((this.originalValue != this.getValue()) || this.cleared) {
                             this.removeClass('tinebase-editmultipledialog-noneedit');
-                            this.addClass('tinebase-editmultipledialog-apply');
+                            //this.addClass('tinebase-editmultipledialog-apply');
+                            
+                            var ar = this.el.parent().select('.tinebase-editmultipledialog-dirty');
+                            if(ar.elements.length > 0) {
+                                ar.setStyle('display','block');
+                            } else {
+                                var arrow = new Ext.Element(document.createElement('img'));
+                                arrow.set({
+                                    src: '../../library/ExtJS/resources/images/default/grid/dirty.gif',
+                                    class: 'tinebase-editmultipledialog-dirty'
+                                });
+                                this.el.insertSibling(arrow);
+                            }
+                            
                             this.edited = true;
                             el.addClass('undo');
                             el.removeClass('hidden');
                         } else {
                             this.edited = false;
-                            this.removeClass('tinebase-editmultipledialog-apply');
+//                            this.removeClass('tinebase-editmultipledialog-apply');
 
+                            var ar = this.el.parent().select('.tinebase-editmultipledialog-dirty');
+                            if(ar.elements.length > 0) {
+                                ar.setStyle('display','none');
+                            }
+                            
                             if (this.multi) {
                                 this.setReadOnly(true);
                                 this.addClass('tinebase-editmultipledialog-noneedit');

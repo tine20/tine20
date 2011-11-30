@@ -31,7 +31,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      */
     updateToolbars: function(record) {
         this.onTimeaccountUpdate();
-    	Tine.Timetracker.TimesheetEditDialog.superclass.updateToolbars.call(this, record, 'timeaccount_id');
+        Tine.Timetracker.TimesheetEditDialog.superclass.updateToolbars.call(this, record, 'timeaccount_id');
     },
     
     /**
@@ -41,9 +41,9 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @param {} timeaccount
      */
     onTimeaccountUpdate: function(field, timeaccount) {
-    	// check for manage_timeaccounts right
-    	var manageRight = Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts');
-    	
+        // check for manage_timeaccounts right
+        var manageRight = Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts');
+        
         var notBillable = false;
         var notClearable = false;
 
@@ -67,10 +67,10 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         this.getForm().findField('is_billable').setDisabled(notBillable);
         this.getForm().findField('is_cleared').setDisabled(notClearable);
         
-    	if (this.record.id == 0 && timeaccount) {
-    	    // set is_billable for new records according to the timeaccount setting
-    	    this.getForm().findField('is_billable').setValue(timeaccount.data.is_billable);
-    	}
+        if (this.record.id == 0 && timeaccount) {
+            // set is_billable for new records according to the timeaccount setting
+            this.getForm().findField('is_billable').setValue(timeaccount.data.is_billable);
+        }
     },
 
     /**
@@ -82,13 +82,13 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @todo    add prompt later?
      */
     onClearedUpdate: function(field, checked) {
-    	
+        
         this.getForm().findField('billed_in').setDisabled(! checked);
 
         // open modal window to type in billed in value
         /*
-    	if (checked && this.getForm().findField('billed_in').getValue() == '') {
-    		
+        if (checked && this.getForm().findField('billed_in').getValue() == '') {
+            
             Ext.Msg.prompt(
                 this.app.i18n._('Billed in ...'),
                 this.app.i18n._('Billed in ...'), 
@@ -98,11 +98,11 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     }
                 },
                 this
-            );                		
-    	} else {
-    		this.getForm().findField('billed_in').setValue('');
-    	}
-    	*/
+            );                        
+        } else {
+            this.getForm().findField('billed_in').setValue('');
+        }
+        */
     },
     
     initComponent: function() {
@@ -116,27 +116,14 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
      */
-    getFormItems: function() {   
-        
-        this.activitiesPanel = new Tine.widgets.activities.ActivitiesPanel({
-                            app: 'Timetracker',
-                            showAddNoteForm: false,
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        });
-        this.tagPanel = new Tine.widgets.tags.TagPanel({
-                            app: 'Timetracker',
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        });
-        
+    getFormItems: function() {        
         return {
             xtype: 'tabpanel',
             border: false,
             plain:true,
             activeTab: 0,
             items:[
-                {            	
+                {                
                 title: this.app.i18n.ngettext('Timesheet', 'Timesheets', 1),
                 autoScroll: true,
                 border: false,
@@ -234,12 +221,33 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     margins: '0 5 0 5',
                     border: true,
                     items: [
-                        this.activitiesPanel,
-                        this.tagPanel
+                        new Tine.widgets.activities.ActivitiesPanel({
+                            app: 'Timetracker',
+                            listeners: {
+                                'add': this.addToDisableOnEditMultiple,
+                                scope: this
+                            },
+                            showAddNoteForm: false,
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;'
+                        }),
+                        new Tine.widgets.tags.TagPanel({
+                            app: 'Timetracker',
+                            listeners: {
+                                'add': this.addToDisableOnEditMultiple,
+                                scope: this
+                            },
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;'
+                        })
                     ]
                 }]
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
+                listeners: {
+                    'add': this.addToDisableOnEditMultiple,
+                    scope: this
+                },
                 record_id: (! this.copyRecord) ? this.record.id : null,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             })]
