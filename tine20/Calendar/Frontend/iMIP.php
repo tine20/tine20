@@ -347,7 +347,7 @@ class Calendar_Frontend_iMIP
             $result = FALSE;
         }
         
-        if (! $this->_assertOriginatorIsAttender($_iMIP, $_existingEvent)) {
+        if ($_existingEvent && ! $this->_assertOriginatorIsAttender($_iMIP, $_existingEvent)) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORIGINATOR, "originator is not attendee in existing event -> party crusher?");
             $result = FALSE;
         }
