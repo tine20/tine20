@@ -126,7 +126,7 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
      */
     public static function addCacheCleanupTask(Zend_Scheduler $_scheduler)
     {
-        $task = self::getPreparedTask(self::TASK_TYPE_HOURLY, array(
+        $task = self::getPreparedTask(self::TASK_TYPE_DAILY, array(
             'controller'    => 'Tinebase_Controller',
             'action'        => 'cleanupCache',
         ));
