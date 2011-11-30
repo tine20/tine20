@@ -245,6 +245,9 @@ class Tinebase_Frontend_Cli_Abstract
             }
             
             echo "Imported " . $result['totalcount'] . " records. Import failed for " . $result['failcount'] . " records. \n";
+            if (isset($result['duplicatecount']) && ! empty($result['duplicatecount'])) {
+                echo "Found " . $result['duplicatecount'] . " duplicates.\n";
+            }
                         
             // import (check if dry run)
             if ($_opts->d) {

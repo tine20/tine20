@@ -576,6 +576,28 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             }            
         }
         return this.i18n;
+    },
+    
+    /**
+     * show error if request fails
+     * 
+     * @param {} response
+     * @param {} request
+     * @private
+     */
+    onRequestFailed: function(response, request) {
+        if (response.code && response.code == 505) {
+            // validation (duplicate) exception
+            Ext.MessageBox.alert(
+                this.app.i18n._('Failed'), 
+                String.format(this.app.i18n._('Could not save {0}.'), this.i18nRecordName) 
+                    + ' (' + this.app.i18n._('Duplicate MAC address detected') /* + ' ' + response.message  */ + ')'
+            );
+        } else {
+            // call default exception handler
+            Tine.Tinebase.ExceptionHandler.handleRequestException(response);
+        }
+        this.loadMask.hide();
     }
 });
 

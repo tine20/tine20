@@ -562,7 +562,12 @@ class Tinebase_Core
      */
     public static function setupUserCredentialCache()
     {
-        $cache = Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->getCache();
+        try {
+            $cache = Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->getCache();
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // could not get credential cache adapter, perhaps Tine 2.0 is not installed yet
+            $cache = NULL;
+        }
         if ($cache !== NULL) {
             self::set(self::USERCREDENTIALCACHE, $cache);
         }
@@ -748,6 +753,10 @@ class Tinebase_Core
 
             switch($dbBackend) {
                 case self::PDO_MYSQL:
+                    if (! defined('PDO::MYSQL_ATTR_USE_BUFFERED_QUERY')) {
+                        throw new Tinebase_Exception_Backend_Database('PDO::MYSQL_ATTR_USE_BUFFERED_QUERY is not defined. Please check PDO extension.');
+                    }
+                    
                     // force some driver options
                     $dbConfigArray['driver_options'] = array(
                         PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE,

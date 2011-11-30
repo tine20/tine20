@@ -31,15 +31,15 @@ class Calendar_Frontend_iMIP
             return;
         }
         
-        $exitingEvent = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($_iMIP->getEvent());
+        $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($_iMIP->getEvent());
         
-        if (! $exitingEvent) {
+        if (! $existingEvent) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " skip auto processing of iMIP component whose event is not in our db yet");
             return;
         }
         
         // update existing event details _WITHOUT_ status updates
-        return $this->_process($_iMIP, $exitingEvent);
+        return $this->_process($_iMIP, $existingEvent);
     }
     
     /**
@@ -347,7 +347,7 @@ class Calendar_Frontend_iMIP
             $result = FALSE;
         }
         
-        if (! $this->_assertOriginatorIsAttender($_iMIP, $_existingEvent)) {
+        if ($_existingEvent && ! $this->_assertOriginatorIsAttender($_iMIP, $_existingEvent)) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORIGINATOR, "originator is not attendee in existing event -> party crusher?");
             $result = FALSE;
         }
@@ -367,6 +367,12 @@ class Calendar_Frontend_iMIP
      */
     protected function _assertOriginatorIsAttender($_iMIP, $_event)
     {
+        if (! $_event->attendee) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__
+                . ' no attendee found.');
+            return FALSE;
+        }
+        
         $iMIPAttenderIdx = array_search($_iMIP->originator, $_event->attendee->getEmail());
         if ($iMIPAttenderIdx === FALSE) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__

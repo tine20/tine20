@@ -351,6 +351,9 @@ Tine.Calendar.RrulePanel.WEEKLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
         if (! rrule.byday) {
             rrule.byday = this.byDayValue;
         }
+        
+        rrule.wkst = this.wkst || Tine.Calendar.RrulePanel.prototype.wkdays[Ext.DatePicker.prototype.startDay];
+        
         return rrule;
     },
     
@@ -382,6 +385,7 @@ Tine.Calendar.RrulePanel.WEEKLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
     
     setRule: function(rrule) {
         Tine.Calendar.RrulePanel.WEEKLYcard.superclass.setRule.call(this, rrule);
+        this.wkst = rrule.wkst;
         
         if (rrule.byday) {
             this.byDayValue = rrule.byday;

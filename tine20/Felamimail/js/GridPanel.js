@@ -1289,7 +1289,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var result = '';
         for (header in headers) {
             if (headers.hasOwnProperty(header) && 
-                    (! onlyImportant || header == 'from' || header == 'to' || header == 'subject' || header == 'date')) 
+                    (! onlyImportant || header == 'from' || header == 'to' || header == 'cc' || header == 'subject' || header == 'date')) 
             {
                 result += '<b>' + header + ':</b> ' 
                     + Ext.util.Format.htmlEncode(

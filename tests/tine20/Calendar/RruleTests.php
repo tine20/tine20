@@ -151,6 +151,34 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * BYDAY are meant in the week of baseEvent -> WKST
+     * 
+     */
+    public function testCalcWeeklyWKST()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'weekly with BYDAY and WKST',
+            'dtstart'       => '2011-11-16 10:30:00',
+            'dtend'         => '2011-11-16 12:30:00',
+            'rrule'         => 'FREQ=WEEKLY;INTERVAL=2;BYDAY=MO,TH;WKST=MO',
+            'originator_tz' => 'Europe/Berlin',
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        $from = new Tinebase_DateTime('2011-11-14 00:00:00');
+        $until = new Tinebase_DateTime('2011-12-04 23:59:59');
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        
+        $this->assertEquals(3, count($recurSet), 'recur set failed');
+        $this->assertTrue(array_search('2011-11-17 10:30:00', $recurSet->dtstart) !== FALSE);
+        $this->assertTrue(array_search('2011-11-28 10:30:00', $recurSet->dtstart) !== FALSE);
+        $this->assertTrue(array_search('2011-12-01 10:30:00', $recurSet->dtstart) !== FALSE);
+    }
+    
+    /**
      * RRULE:FREQ=WEEKLY
      * => treat like INTERVAL=1;BYDAY=SU
      */
