@@ -180,7 +180,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             Felamimail_Controller_Message_Flags::getInstance()->setSeenFlag($message);
         }
         
-        $this->_prepareParts($message);
+        $this->prepareAndProcessParts($message);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
         
@@ -235,7 +235,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param Felamimail_Model_Message $_message
      */
-    protected function _prepareParts(Felamimail_Model_Message $_message)
+    public function prepareAndProcessParts(Felamimail_Model_Message $_message)
     {
         $preparedParts = new Tinebase_Record_RecordSet('Felamimail_Model_PreparedMessagePart');
         
@@ -465,6 +465,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             . implode('', $this->_purifyElements);
         
         if ($cache->test($cacheId)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting Message from cache.');
             return $cache->load($cacheId);
         }
         
