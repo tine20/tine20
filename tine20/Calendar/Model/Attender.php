@@ -349,7 +349,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 $_event->attendee->addRecord(new Calendar_Model_Attender(array(
                     'user_id'   => $attendeeId,
                     'user_type' => $newAttendee['userType'],
-                    'part_stat' => $newAttendee['partStat'],
+                    'status'    => $newAttendee['partStat'],
                     'role'      => $newAttendee['role']
                 )));
             }
