@@ -77,9 +77,7 @@ Tine.Sipgate.SmsEditDialog = Ext.extend(Ext.FormPanel, {
     },
 
     initButtons : function() {
-
-        this.fbar = [ '->', this.action_cancel, this.action_send, this.action_close, ];
-
+        this.fbar = [ '->', this.action_cancel, this.action_send, this.action_close ];
     },
 
     onRender : function(ct, position) {

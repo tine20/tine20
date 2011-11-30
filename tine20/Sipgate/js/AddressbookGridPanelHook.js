@@ -235,8 +235,7 @@ Ext.apply(Tine.Sipgate.AddressbookGridPanelHook.prototype, {
      * @param {Object} records
      */
     updateCallAction: function(action, grants, records) {
-               
-        
+
         if (action.isHidden()) {
             return;
         }
