@@ -29,6 +29,7 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
     
     anchor : '100% 100%',
     
+    loadMask: null,
 
     initComponent : function() {
         
@@ -147,22 +148,25 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
     },
     // TODO: formitems could not be fetched by formpanel->getform->getvalues
     onUpdate: function() {
-        Ext.MessageBox.wait(_('Please wait'), _('Detaching selected tags'));
+        
+        this.loadMask = new Ext.LoadMask(this.getEl(), {msg: _('Detaching Tags')});
+        this.loadMask.show();
+        
         var els = Ext.select('input.tagcheckel');
         var checked = [];
         els.each(function(el){
             if(el.dom.checked) checked.push(el.id); 
         });
-        
+
         var filter = this.selectionModel.getSelectionFilter();
         var filterModel = this.recordClass.getMeta('appName') + '_Model_' +  this.recordClass.getMeta('modelName') + 'Filter';
         
         Tine.Tinebase.detachTagsFromMultipleRecords(filter, filterModel, checked, this.onUpdated.createDelegate(this));
-        Ext.MessageBox.hide();
 
     },
     
     onUpdated: function() {
+        this.loadMask.hide();
         this.fireEvent('updated');
     }
     
