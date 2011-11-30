@@ -75,9 +75,10 @@ class Tinebase_Relation_Backend_Sql
     	$_relation->setId($relId);
 
 		// check if relation is already set (with is_deleted=1)
-		if ($deletedId = $this->_checkExistance($_relation)) {
+		if ($deletedRelId = $this->_checkExistance($_relation)) {
+		    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removing existing relation (rel_id): ' . $deletedRelId);
 		    $where = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $deletedId)
+		        $this->_db->quoteInto($this->_db->quoteIdentifier('rel_id') . ' = ?', $deletedRelId)
             );
             $this->_dbTable->delete($where);
 		} 
@@ -98,7 +99,6 @@ class Tinebase_Relation_Backend_Sql
 		$this->_dbTable->insert($swappedData);		
 				
 		return $this->getRelation($relId, $_relation['own_model'], $_relation['own_backend'], $_relation['own_id']);
-    		
     }
     
     /**
@@ -347,7 +347,7 @@ class Tinebase_Relation_Backend_Sql
         $relationRow = $this->_dbTable->fetchRow($where);
         
         if ($relationRow) {
-            return $relationRow->id;
+            return $relationRow->rel_id;
         } else {
             return FALSE;
         }

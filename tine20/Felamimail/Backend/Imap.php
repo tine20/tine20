@@ -78,15 +78,23 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     public function connectAndLogin($_params)
     {
+        $timeStartConnect = microtime(true);
         try {
             $this->_protocol->connect($_params->host, $_params->port, $_params->ssl);
         } catch (Exception $e) {
             throw new Felamimail_Exception_IMAPServiceUnavailable($e->getMessage());
         }
+        $timeEndConnect = microtime(true);
+        $connectTime = $timeEndConnect - $timeStartConnect;
         
         if (! $this->_protocol->login($_params->user, $_params->password)) {
             throw new Felamimail_Exception_IMAPInvalidCredentials('Cannot login, user or password wrong.');
-        }        
+        }
+        $timeEndLogin = microtime(true);
+        $loginTime = $timeEndLogin - $timeEndConnect;
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' CONNECT TIME: ' . $connectTime . ' seconds');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' LOGIN TIME: ' . $loginTime . ' seconds');
     }    
     
     /**

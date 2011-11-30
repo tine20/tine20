@@ -258,8 +258,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
-     * 
-     * @todo    check if address changes before setting new geodata
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
@@ -326,13 +324,13 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 $_record->lon = $place->lon;
                 $_record->lat = $place->lat;
                 
-                if (empty($_record->adr_one_countryname) && !empty($place->country_code)) {
+                if (empty($_record->adr_one_countryname) && ! empty($place->country_code)) {
                     $_record->adr_one_countryname = $place->country_code;
                 }
-                if ((empty($_record->adr_one_postalcode) || in_array('adr_one_postalcode', $_ommitFields)) && !empty($place->postcode)) {
+                if (empty($_record->adr_one_postalcode) && ! empty($place->postcode)) {
                     $_record->adr_one_postalcode = $place->postcode;
                 }
-                if (empty($_record->adr_one_locality) && !empty($place->city)) {
+                if (empty($_record->adr_one_locality) && ! empty($place->city)) {
                     $_record->adr_one_locality = $place->city;
                 }
                 

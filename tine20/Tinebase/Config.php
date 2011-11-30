@@ -96,7 +96,9 @@ class Tinebase_Config
         
         if ($this->_cache->test($cacheId)) {
             $result = $this->_cache->load($cacheId);
-            return $result;
+            if (is_object($result)) {
+                return $result;
+            }
         }
             
         $filter = new Tinebase_Model_ConfigFilter(array(

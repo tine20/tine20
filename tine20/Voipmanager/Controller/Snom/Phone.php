@@ -100,7 +100,15 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
      */
     public function create(Tinebase_Record_Interface $_phone)
     {
-        // auto generate random http client username and password        
+        // check first if mac address is already used
+        try {
+            $this->getByMacAddress($_phone->macaddress);
+            throw new Voipmanager_Exception_Validation('A phone with this mac address already exists.');
+        } catch (Voipmanager_Exception_NotFound $venf) {
+            // everything ok
+        }
+        
+        // auto generate random http client username and password
         // limit length because of Snom phone limitations
         $_phone->http_client_user = Tinebase_Record_Abstract::generateUID(30);
         $_phone->http_client_pass = Tinebase_Record_Abstract::generateUID(20);

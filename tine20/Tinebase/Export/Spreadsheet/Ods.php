@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage	Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add alternating row styles again?
  */
@@ -103,8 +103,6 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
     {
         $this->_createDocument();
         
-        $records = $this->_getRecords();
-        
         // build export table (use current table if using template)
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating export for ' . $this->_modelName . ' . ' . $this->_getDataTableName());
         
@@ -123,7 +121,19 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
         }
             
         // body
-        $this->_addBody($table, $records);
+        $start = 0;
+        $limit = 100;
+        $records = $this->_getRecords($start, $limit);
+        $totalcount = count($records);
+        while (count($records) > 0) {
+            $this->_addBody($table, $records);
+            
+            $start += $limit;
+            $records = $this->_getRecords($start, $limit);
+            $totalcount += count($records);
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exported ' . $totalcount . ' records to ODS file.');
         
         // create file
         $result = $this->_openDocumentObject->getDocument();        
