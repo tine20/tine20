@@ -93,4 +93,20 @@ class ActiveSync_Backend_SyncState
         
         return $result;
     }
+    
+    public function deleteOther(ActiveSync_Model_SyncState $_syncState)
+    {
+        // remove all other synckeys
+        $where = array(
+            $this->_db->quoteInto('device_id = ?', $_syncState->device_id),
+            $this->_db->quoteInto('type = ?',      $_syncState->type),
+            $this->_db->quoteInto('counter != ?',  $_syncState->counter)
+        );
+        
+        $this->_db->delete(SQL_TABLE_PREFIX . 'acsync_synckey', $where);
+        
+        return true;
+        
+    }
+    
 }
