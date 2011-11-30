@@ -116,7 +116,20 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
      */
-    getFormItems: function() {    	
+    getFormItems: function() {   
+        
+        this.activitiesPanel = new Tine.widgets.activities.ActivitiesPanel({
+                            app: 'Timetracker',
+                            showAddNoteForm: false,
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;'
+                        });
+        this.tagPanel = new Tine.widgets.tags.TagPanel({
+                            app: 'Timetracker',
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;'
+                        });
+        
         return {
             xtype: 'tabpanel',
             border: false,
@@ -221,17 +234,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     margins: '0 5 0 5',
                     border: true,
                     items: [
-                        new Tine.widgets.activities.ActivitiesPanel({
-                            app: 'Timetracker',
-                            showAddNoteForm: false,
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        }),
-                        new Tine.widgets.tags.TagPanel({
-                            app: 'Timetracker',
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        })
+                        this.activitiesPanel,
+                        this.tagPanel
                     ]
                 }]
             }, new Tine.widgets.activities.ActivitiesTabPanel({

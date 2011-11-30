@@ -24,7 +24,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         this.editDialog.onRecordLoad = this.editDialog.onRecordLoad.createInterceptor(this.onRecordLoad, this);
         this.editDialog.onRecordUpdate = this.editDialog.onRecordUpdate.createInterceptor(this.onRecordUpdate, this);
         this.editDialog.isValid = this.editDialog.isValid.createInterceptor(this.isValid, this);
-        this.editDialog.onApplyChanges = function(button, event, closeWindow) {    this.onRecordUpdate();    }
+        this.editDialog.onApplyChanges = function(button, event, closeWindow) { this.onRecordUpdate(); }
     },
 
     isValid : function() {
@@ -64,7 +64,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
 
         Tine.log.debug('loading of the following record completed:');
         Tine.log.debug(this.editDialog.record);
-
+Tine.log.debug(this.editDialog.getForm());
         this.editDialog.getForm().clearInvalid();
 
         this.editDialog.window.setTitle(String.format(_('Edit {0} {1}'), this.editDialog.sm.getCount(), this.editDialog.i18nRecordsName));
@@ -80,24 +80,23 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                     if(!referenceSelectionData) {
                         referenceSelectionData = selection.data[fieldKey];
                         if(referenceSelectionData) {
-                        if(typeof referenceSelectionData == 'object') {
-                            if(fieldKey == 'account_id') {
-                                field.originalValue = referenceSelectionData.accountId;
-                                field.isClearable = false;
-                            }
-                            else if(referenceSelectionData.hasOwnProperty('id')) {
-                                field.originalValue = referenceSelectionData.id;
-                                if(field.allowBlank === false) field.isClearable = false;
-                            }
-                            else {
-                                // TODO: handle DateFields
-                                field.disable();
-                                return true;
-                            }
-                        } else {
-                            field.originalValue = referenceSelectionData;
-                        } 
-                        
+                           if(typeof referenceSelectionData == 'object') {
+                                if(fieldKey == 'account_id') {
+                                    field.originalValue = referenceSelectionData.accountId;
+                                    field.isClearable = false;
+                                }
+                                else if(referenceSelectionData.hasOwnProperty('id')) {
+                                    field.originalValue = referenceSelectionData.id;
+                                    if(field.allowBlank === false) field.isClearable = false;
+                                }
+                                else {
+                                    // TODO: handle DateFields
+                                    field.disable();
+                                    return true;
+                                }
+                            } else {
+                                field.originalValue = referenceSelectionData;
+                            } 
                         
                         } else {
                             return true;
@@ -157,17 +156,33 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
     },
 
     onAfterRender : function() {
+        
+        if(this.editDialog.linkPanel) this.editDialog.linkPanel.setDisabled(true);
+        if(this.editDialog.mapPanel) this.editDialog.mapPanel.setDisabled(true);
+        
+        if(this.editDialog.descriptionPanel) this.editDialog.descriptionPanel.disable();
+        if(this.editDialog.activitiesPanel) this.editDialog.activitiesPanel.disable();
+        if(this.editDialog.tagPanel) this.editDialog.tagPanel.disable();
+        
+        
         this.form.items.each(function(item) {
             
             // disable others
+            
+            if((item.getName() == 'note') || (item.getName() == 'notes') || (item.getName() == 'tags') ) {
+                item.disable();
+                return true;
+            }
+            
+            
             if ((!(item instanceof Ext.form.TextField)) && (!(item instanceof Ext.form.Checkbox))) {
                 item.disable();
-                return;
+                return true;
             }
             if (item instanceof Ext.form.TextField) {
                 
                 item.on('focus', function() {
-                    if (!(item instanceof Ext.form.DateField) && (item.isClearable !== false)) {
+                  if (!(item instanceof Ext.form.DateField) && (item.isClearable !== false)) {
                     var subLeft = 0;
                     if (item instanceof Ext.form.TriggerField) subLeft += 17;
 
@@ -207,7 +222,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                     }, this);
                     
                     this.el.insertSibling(button);
-                }
+                  }
                     this.on('blur', function() {
                         var el = this.el.parent().select('.tinebase-editmultipledialog-clearer');
 
