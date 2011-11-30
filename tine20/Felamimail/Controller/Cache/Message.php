@@ -690,6 +690,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                 Felamimail_Controller_Message::getInstance()->getMessageBody($messageToCache, null, $mimeType, $account);
             }
             
+            Felamimail_Controller_Message::getInstance()->prepareAndProcessParts($result);
+            
             if ($_updateFolderCounter == TRUE) {
                 Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
                     'cache_totalcount'  => '+1',
