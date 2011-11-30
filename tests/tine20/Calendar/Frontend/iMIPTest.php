@@ -201,8 +201,8 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
             'dtend'       => '2012-03-25 11:15:00',
             'description' => 'Early to bed and early to rise, makes a men healthy, wealthy and wise ... not.',
             'attendee'    => $this->_getAttendee(),
-            'organizer'    => Tinebase_Core::getUser()->contact_id,
-            'uid'          => Calendar_Model_Event::generateUID(),
+            'organizer'   => Tinebase_Core::getUser()->contact_id,
+            'uid'         => Calendar_Model_Event::generateUID(),
         ));
     }
     
@@ -288,14 +288,35 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
 
     /**
      * testInvitationExternalReply
-     * 
-     * @todo implement
      */
     public function testInvitationExternalReply()
     {
-        // -- create external reply for internal event?
-        // -- auto process / should process
-        // -- prepareComponent / assert recent precondition
+        $ics = file_get_contents(dirname(__FILE__) . '/files/invitation_reply_external_accepted.ics' );
+        $iMIP = new Calendar_Model_iMIP(array(
+            'id'             => Tinebase_Record_Abstract::generateUID(),
+        	'ics'            => $ics,
+            'method'         => 'REPLY',
+            'originator'     => 'sclever@tine20.org',
+        ));
+        
+        // create matching event
+        $event = new Calendar_Model_Event(array(
+            'summary'     => 'TEST7',
+            'dtstart'     => '2011-11-30 14:00:00',
+            'dtend'       => '2011-11-30 15:00:00',
+            'description' => 'Early to bed and early to rise, makes a men healthy, wealthy and wise ...',
+            'attendee'    => $this->_getAttendee(),
+            'organizer'   => Tinebase_Core::getUser()->contact_id,
+            'uid'         => 'a8d10369e051094ae9322bd65e8afecac010bfc8',
+        ));
+        $event = Calendar_Controller_Event::getInstance()->create($event);
+        $this->_eventIdsToDelete[] = $event->getId();
+        
+        $this->_iMIPFrontend->autoProcess($iMIP);
+        
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($event->getId());
+        
+        // @todo check ACCEPTED status of sclever
     }
 
     /**
