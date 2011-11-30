@@ -206,7 +206,7 @@ Ext.apply(Tine.Sipgate.AddressbookGridPanelHook.prototype, {
         }
         
         var popUpWindow = Tine.Sipgate.SmsEditDialog.openWindow({
-        	number: number
+            number: number
         });
         
     },    
@@ -216,7 +216,7 @@ Ext.apply(Tine.Sipgate.AddressbookGridPanelHook.prototype, {
      */
     onRender: function() {
         var actionUpdater = this.getContactGridPanel().actionUpdater,
-        	registeredActions = actionUpdater.actions;
+            registeredActions = actionUpdater.actions;
             
         if (registeredActions.indexOf(this.callContactAction) < 0) {
             actionUpdater.addActions([this.callContactAction]);
@@ -235,8 +235,8 @@ Ext.apply(Tine.Sipgate.AddressbookGridPanelHook.prototype, {
      * @param {Object} records
      */
     updateCallAction: function(action, grants, records) {
-    	   	
-    	
+               
+        
         if (action.isHidden()) {
             return;
         }
