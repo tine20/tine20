@@ -47,7 +47,8 @@ class ActiveSync_Backend_ContentState extends Tinebase_Backend_Sql_Abstract
             $this->_db->quoteInto($this->_db->quoteIdentifier('collectionid') . ' = ?', $_collectionId)
         );
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " reset sync state " . print_r($where, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " reset content state");
         
         $this->_db->delete(SQL_TABLE_PREFIX . $this->_tableName, $where);
     }
