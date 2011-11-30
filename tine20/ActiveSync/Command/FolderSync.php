@@ -97,7 +97,8 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
         $xml = simplexml_import_dom($this->_inputDom);
         $this->_syncKey = (int)$xml->SyncKey;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " synckey is $this->_syncKey");        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " synckey is $this->_syncKey");        
     }
     
     /**
@@ -111,7 +112,7 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
     {
         $folderSync = $this->_outputDom->documentElement;
         
-        if($this->_syncKey > '0' && $this->_controller->validateSyncKey($this->_device, $this->_syncKey, 'FolderSync') !== true) {
+        if($this->_syncKey > '0' && $this->_controller->validateSyncKey($this->_device, $this->_syncKey, 'FolderSync') === false) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " INVALID synckey provided");
             $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', self::STATUS_INVALID_SYNC_KEY));
         } else {

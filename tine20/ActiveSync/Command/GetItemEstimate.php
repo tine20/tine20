@@ -85,7 +85,7 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " synckey is $clientSyncKey class: $class collectionid: $collectionId filtertype: $filterType");
             
-            if($clientSyncKey === 0 || $controller->validateSyncKey($this->_device, $clientSyncKey, $class, $collectionId) !== true) {
+            if($clientSyncKey === 0 || $controller->validateSyncKey($this->_device, $clientSyncKey, $class, $collectionId) === false) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey $clientSyncKey provided");
                 $this->_collections[$class][$collectionId]['syncKeyValid'] = false;
             }
@@ -134,7 +134,7 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
                         
                         $syncState = $controller->getSyncState($this->_device, $collectionData['class'], $collectionData['collectionId'], $collectionData['syncKey']);
                     
-                        if($controller->validateSyncKey($this->_device, $collectionData['syncKey'], $collectionData['class'], $collectionData['collectionId'])) {
+                        if($controller->validateSyncKey($this->_device, $collectionData['syncKey'], $collectionData['class'], $collectionData['collectionId']) !== false) {
                             $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Status', self::STATUS_SUCCESS));
                             $collection = $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Collection'));
                             $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Class', $collectionData['class']));
@@ -188,8 +188,12 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
                     )
                 ));
                 $folderState = $this->_folderStateBackend->search($filter)->getFirstRecord();
-                $folderState->lastfiltertype = $collectionData['filterType'];
-                $this->_folderStateBackend->update($folderState);
+                
+                // folderState can be NULL in case of not existing folder
+                if ($folderState instanceof ActiveSync_Model_FolderState) {
+                    $folderState->lastfiltertype = $collectionData['filterType'];
+                    $this->_folderStateBackend->update($folderState);
+                }
             }
         }
                 
