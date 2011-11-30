@@ -45,9 +45,7 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
     }
     
     /**
-     * @todo test tine side deleted user
-     * 
-     * @return unknown_type
+     * @return void
      */
     public function testEmailsToAttendee()
     {
@@ -90,6 +88,65 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
         Calendar_Model_Attender::emailsToAttendee($persistentEvent, $newAttendees, TRUE);
         
         $this->assertEquals(3, count($persistentEvent->attendee));
+    }
+    
+    /**
+     * @return void
+     */
+    public function testEmailsToAttendeeWithGroups()
+    {
+    	$event = $this->_getEvent();
+    	
+        $persistentEvent = Calendar_Controller_Event::getInstance()->create($event);
+        
+        $primaryGroup = Tinebase_Group::getInstance()->getGroupById(Tinebase_Core::getUser()->accountPrimaryGroup);
+        
+        $newAttendees = array(
+            array(
+            	'userType'    => Calendar_Model_Attender::USERTYPE_USER,
+                'firstName'   => $this->_testUser->accountFirstName,
+        		'lastName'    => $this->_testUser->accountLastName,
+                'partStat'    => Calendar_Model_Attender::STATUS_TENTATIVE,
+                'role'        => Calendar_Model_Attender::ROLE_REQUIRED,
+                'email'       => $this->_testUser->accountEmailAddress
+            ),
+            array(
+                'userType'    => Calendar_Model_Attender::USERTYPE_GROUP,
+                'displayName' => $primaryGroup->name,
+                'partStat'    => Calendar_Model_Attender::STATUS_NEEDSACTION,
+                'role'        => Calendar_Model_Attender::ROLE_REQUIRED,
+                'email'       => 'foobar@example.org'
+            )
+        );
+        
+        Calendar_Model_Attender::emailsToAttendee($persistentEvent, $newAttendees, TRUE);
+        
+        $persistentEvent = Calendar_Controller_Event::getInstance()->update($persistentEvent);
+
+        $attendees = clone $persistentEvent->attendee;
+        
+        Calendar_Model_Attender::resolveAttendee($attendees);
+        
+        $newAttendees = array();
+        
+        foreach ($attendees as $attendee) {
+            $newAttendees[] = array(
+            	'userType'    => $attendee->user_type == 'group' ? Calendar_Model_Attender::USERTYPE_GROUP : Calendar_Model_Attender::USERTYPE_USER,
+            	'partStat'    => Calendar_Model_Attender::STATUS_TENTATIVE,
+            	'role'        => Calendar_Model_Attender::ROLE_REQUIRED,
+            	'email'       => $attendee->user_type == 'group' ? $attendee->user_id->getId() : $attendee->user_id->email,
+            	'displayName' => $attendee->user_type == 'group' ? $attendee->user_id->name : $attendee->user_id->n_fileas
+            ); 
+        }
+        
+        Calendar_Model_Attender::emailsToAttendee($persistentEvent, $newAttendees, TRUE);
+        
+        $persistentEvent = Calendar_Controller_Event::getInstance()->update($persistentEvent);
+        
+        //var_dump($persistentEvent->attendee->toArray());
+        
+        // there must be more than 2 attendees the user, the group + the groupmembers
+        $this->assertGreaterThan(2, count($persistentEvent->attendee));
     }
 }
     
