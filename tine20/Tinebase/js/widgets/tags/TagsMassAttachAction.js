@@ -39,6 +39,8 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
      */
     updateHandlerScope: null,
     
+    loadMask: null,
+    
     /**
      * @cfg {mixed} selectionModel
      * 
@@ -110,6 +112,10 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
     },
     
     onOk: function() {
+        
+        this.loadMask = new Ext.LoadMask(this.win.getEl(), {msg: _('Attaching Tag')});
+        this.loadMask.show();
+        
         var tag = this.tagSelect.getValue();
         
         var filter = this.selectionModel.getSelectionFilter();
@@ -120,6 +126,8 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
     
     onSuccess: function() {
         this.updateHandler.call(this.updateHandlerScope || this);
+        this.loadMask.hide();
+
         this.win.close();
     }
 });
