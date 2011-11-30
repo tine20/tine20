@@ -316,7 +316,18 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         
         $updatedEvent = Calendar_Controller_Event::getInstance()->get($event->getId());
         
-        // @todo check ACCEPTED status of sclever
+        $this->assertEquals(2, count($updatedEvent->attendee));
+        
+        $personas = Zend_Registry::get('personas');
+        $sclever = $personas['sclever'];
+        $scleverFound = FALSE;
+        foreach ($updatedEvent->attendee as $attender) {
+            if ($sclever->contact_id === $attender->user_id) {
+                $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $attender->status);
+                $sclever = TRUE;
+            }
+        }
+        $this->assertTrue($scleverFound);
     }
 
     /**
