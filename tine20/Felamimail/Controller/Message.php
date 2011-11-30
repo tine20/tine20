@@ -329,7 +329,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         $iMIPFrontend = new $iMIPFrontendClass();
-        $result = $iMIPFrontend->autoProcess($_iMIP);
+        try {
+            $result = $iMIPFrontend->autoProcess($_iMIP);
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Processing failed: ' . $e->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+            $result = NULL;
+        }
         
         return $result;
     }
