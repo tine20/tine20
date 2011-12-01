@@ -70,8 +70,8 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $this->_iMIPFrontendMock = new Calendar_Frontend_iMIPMock();
         
         try {
-            $this->_emailTestClass = new Felamimail_Controller_MessageTest();
-            $this->_emailTestClass->setup();
+            //$this->_emailTestClass = new Felamimail_Controller_MessageTest();
+            //$this->_emailTestClass->setup();
         } catch (Exception $e) {
             // do nothing
         }
@@ -284,8 +284,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     /**
      * testInvitationInternalReplyPreconditions
      * 
-     * @todo create REPLY ics for this case?
-     * @todo test autoProcess?
+     * @todo test silence/void of autoProcess?
      */
     public function testInvitationInternalReplyPreconditions()
     {
@@ -329,17 +328,39 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $event = Calendar_Controller_Event::getInstance()->create($event);
         $this->_eventIdsToDelete[] = $event->getId();
         
+        // TEST NORMAL REPLY
         try {
             $this->_iMIPFrontend->autoProcess($iMIP);
         } catch (Exception $e) {
-            $this->fail('autoProcess throwed Exception');
+            $this->fail('TEST NORMAL REPLY autoProcess throwed Exception');
         }
         
         $updatedEvent = Calendar_Controller_Event::getInstance()->get($event->getId());
+        $updatedExternalAttendee = Calendar_Model_Attender::getAttendee($updatedEvent->attendee, $externalAttendee);
         
         $this->assertEquals(3, count($updatedEvent->attendee));
-        $externalAttendee = Calendar_Model_Attender::getAttendee($updatedEvent->attendee, $externalAttendee);
-        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $externalAttendee->status, 'status not updated');
+        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedExternalAttendee->status, 'status not updated');
+    
+        // TEST ACCEPTABLE NON RECENT REPLY
+        $updatedExternalAttendee->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+        Calendar_Controller_Event::getInstance()->attenderStatusUpdate($updatedEvent, $updatedExternalAttendee, $updatedExternalAttendee->status_authkey);
+        try {
+            $iMIP->preconditionsChecked = false;
+            $this->_iMIPFrontend->autoProcess($iMIP);
+        } catch (Exception $e) {
+            $this->fail('TEST ACCEPTABLE NON RECENT REPLY autoProcess throwed Exception');
+        }
+        
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($event->getId());
+        $updatedExternalAttendee = Calendar_Model_Attender::getAttendee($updatedEvent->attendee, $externalAttendee);
+        
+        $this->assertEquals(3, count($updatedEvent->attendee));
+        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedExternalAttendee->status, 'status not updated');
+    
+        // TEST NON ACCEPTABLE NON RECENT REPLY
+        $this->setExpectedException('Calendar_Exception_iMIP', 'iMIP preconditions failed: RECENT');
+        $iMIP->preconditionsChecked = false;
+        $this->_iMIPFrontend->autoProcess($iMIP);
     }
 
     /**

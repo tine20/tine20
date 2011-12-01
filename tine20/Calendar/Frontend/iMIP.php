@@ -338,8 +338,14 @@ class Calendar_Frontend_iMIP
         }
         
         if ($_iMIP->getEvent()->isObsoletedBy($_existingEvent)) {
-            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
-            $result = FALSE;
+            $iMIPAttenderIdx = array_search($_iMIP->originator, $_existingEvent->attendee->getEmail());
+            $status = $iMIPAttenderIdx ? $_existingEvent->attendee[$iMIPAttenderIdx]->status : NULL;
+            
+            // allow non RECENT replies if no reschedule and STATUS_NEEDSACTION
+            if ($status != Calendar_Model_Attender::STATUS_NEEDSACTION || $_existingEvent->isRescheduled($_iMIP->getEvent())) {
+                $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
+                $result = FALSE;
+            }
         }
         
         if (! $this->_assertOriginatorIsAttender($_iMIP, $_iMIP->getEvent())) {
@@ -382,9 +388,7 @@ class Calendar_Frontend_iMIP
      * some attender replied to my request (I'm Organizer) -> update status (seq++) / send notifications!
      * 
      * NOTE: only external replies should be processed here
-     * @todo allow status updates on old events if no scheduling change took place
-     *       mhh problematic with mail order -> how to persist that a reply got applied than?
-     *       => only NEEDS-ACTON to somthing else transistions allowed for old replies!
+     *       @todo check silence for internal replies
      *       
      * @param  Calendar_Model_iMIP   $_iMIP
      * @param  Calendar_Model_Event  $_existingEvent
