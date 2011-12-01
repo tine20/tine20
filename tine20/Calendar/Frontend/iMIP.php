@@ -31,15 +31,15 @@ class Calendar_Frontend_iMIP
             return;
         }
         
-        $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($_iMIP->getEvent());
+        $exitingEvent = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($_iMIP->getEvent());
         
-        if (! $existingEvent) {
+        if (! $exitingEvent) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " skip auto processing of iMIP component whose event is not in our db yet");
             return;
         }
         
         // update existing event details _WITHOUT_ status updates
-        return $this->_process($_iMIP, $existingEvent);
+        return $this->_process($_iMIP, $exitingEvent);
     }
     
     /**
@@ -347,7 +347,7 @@ class Calendar_Frontend_iMIP
             $result = FALSE;
         }
         
-        if ($_existingEvent && ! $this->_assertOriginatorIsAttender($_iMIP, $_existingEvent)) {
+        if (! $this->_assertOriginatorIsAttender($_iMIP, $_existingEvent)) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORIGINATOR, "originator is not attendee in existing event -> party crusher?");
             $result = FALSE;
         }
@@ -367,12 +367,6 @@ class Calendar_Frontend_iMIP
      */
     protected function _assertOriginatorIsAttender($_iMIP, $_event)
     {
-        if (! $_event->attendee) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__
-                . ' no attendee found.');
-            return FALSE;
-        }
-        
         $iMIPAttenderIdx = array_search($_iMIP->originator, $_event->attendee->getEmail());
         if ($iMIPAttenderIdx === FALSE) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__
@@ -385,15 +379,25 @@ class Calendar_Frontend_iMIP
     /**
      * process reply
      * 
+     * some attender replied to my request (I'm Organizer) -> update status (seq++) / send notifications!
+     * 
+     * NOTE: only external replies should be processed here
+     * @todo allow status updates on old events if no scheduling change took place
+     *       mhh problematic with mail order -> how to persist that a reply got applied than?
+     *       => only NEEDS-ACTON to somthing else transistions allowed for old replies!
+     *       
      * @param  Calendar_Model_iMIP   $_iMIP
      * @param  Calendar_Model_Event  $_existingEvent
      * 
-     * @todo implement
      */
     protected function _processReply($_iMIP, $_existingEvent)
     {
-        // status update 
-        // some attender replied to my request (I'm Organizer) -> update status (seq++) / send notifications!
+        // merge ics into existing event
+        $event = $_iMIP->mergeEvent($_existingEvent);
+        $attendee = $event->attendee[array_search($_iMIP->originator, $_existingEvent->attendee->getEmail())];
+        
+        // NOTE: if current user has no rights to the calendar, status update is not applied
+        Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($event, $attendee);
     }
     
     /**
