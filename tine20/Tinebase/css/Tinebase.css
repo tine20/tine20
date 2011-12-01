@@ -831,12 +831,15 @@ textarea.tinebase-editmultipledialog-noneedit {
     }
     
 .tinebase-editmultipledialog-clearer.undo {    
-    background: transparent url(../../images/oxygen/16x16/actions/edit-undo-grey.png) 0 3px no-repeat;   
+    background: transparent url(../../images/oxygen/16x16/actions/edit-undo-grey.png) 0 3px no-repeat;
+    border-bottom: none;   
     }
 
 .tinebase-editmultipledialog-clearer.undo.over {
     background: transparent url(../../images/oxygen/16x16/actions/edit-undo.png) 0 3px no-repeat;
     }
+    
+.tinebase-editmultipledialog-dirty {position:absolute;left:0}    
     
 .tinebase-editmultipledialog-clearer.click {background-position: -33px 0}
 
