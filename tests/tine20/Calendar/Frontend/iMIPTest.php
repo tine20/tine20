@@ -69,8 +69,12 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $this->_iMIPFrontend = new Calendar_Frontend_iMIP();
         $this->_iMIPFrontendMock = new Calendar_Frontend_iMIPMock();
         
-        $this->_emailTestClass = new Felamimail_Controller_MessageTest();
-        $this->_emailTestClass->setup();
+        try {
+            $this->_emailTestClass = new Felamimail_Controller_MessageTest();
+            $this->_emailTestClass->setup();
+        } catch (Exception $e) {
+            // do nothing
+        }
     }
 
     /**
@@ -201,8 +205,8 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
             'dtend'       => '2012-03-25 11:15:00',
             'description' => 'Early to bed and early to rise, makes a men healthy, wealthy and wise ... not.',
             'attendee'    => $this->_getAttendee(),
-            'organizer'    => Tinebase_Core::getUser()->contact_id,
-            'uid'          => Calendar_Model_Event::generateUID(),
+            'organizer'   => Tinebase_Core::getUser()->contact_id,
+            'uid'         => Calendar_Model_Event::generateUID(),
         ));
     }
     
@@ -240,6 +244,10 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
      */
     public function testExternalInvitationRequestProcess()
     {
+        if (! $this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
+            $this->markTestSkipped('IMAP backend not configured');
+        }
+        
         // handle message with fmail (add to cache)
         $message = $this->_emailTestClass->messageTestHelper('calendar_request.eml');
         $complete = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
@@ -275,27 +283,110 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     
     /**
      * testInvitationInternalReplyPreconditions
-     * 
-     * @todo create REPLY ics for this case?
-     * @todo test autoProcess?
      */
     public function testInvitationInternalReplyPreconditions()
     {
         $iMIP = $this->_getiMIP('REPLY');
-        $result = $this->_iMIPFrontend->prepareComponent($iMIP);
-        $this->assertTrue(empty($prepared->preconditions));
+        $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
+        
+        $this->assertFalse(empty($prepared->preconditions), 'empty preconditions');
+        $this->assertTrue(array_key_exists(Calendar_Model_iMIP::PRECONDITION_TOPROCESS, $prepared->preconditions), 'missing PRECONDITION_TOPROCESS');
     }
-
+    
+    /**
+     * test no seq update
+     * test no notifications
+     *
+    public function testInvitationInternalReplyAutoProcess()
+    {
+        // flush mailer
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue(10000);
+        }
+        Tinebase_Smtp::getDefaultTransport()->flush();
+        
+        $iMIP = $this->_getiMIP('REPLY', TRUE);
+        $event = $iMIP->getEvent();
+        
+        print_r($event->getId());
+        try {
+            $this->_iMIPFrontend->autoProcess($iMIP);
+        } catch (Exception $e) {
+            $this->fail('autoProcess throwed Exception');
+        }
+        
+        
+    }
+    */
+    
     /**
      * testInvitationExternalReply
-     * 
-     * @todo implement
      */
     public function testInvitationExternalReply()
     {
-        // -- create external reply for internal event?
-        // -- auto process / should process
-        // -- prepareComponent / assert recent precondition
+        $ics = file_get_contents(dirname(__FILE__) . '/files/invitation_reply_external_accepted.ics' );
+        $iMIP = new Calendar_Model_iMIP(array(
+            'id'             => Tinebase_Record_Abstract::generateUID(),
+        	'ics'            => $ics,
+            'method'         => 'REPLY',
+            'originator'     => 'mail@corneliusweiss.de',
+        ));
+        
+        // force creation of external attendee
+        $iMIP->getEvent();
+        $externalAttendee = new Calendar_Model_Attender(array(
+            'user_type'     => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'       => $iMIP->getEvent()->attendee->getFirstRecord()->user_id,
+            'status'        => Calendar_Model_Attender::STATUS_NEEDSACTION
+        ));
+        
+        // create matching event
+        $event = new Calendar_Model_Event(array(
+            'summary'     => 'TEST7',
+            'dtstart'     => '2011-11-30 14:00:00',
+            'dtend'       => '2011-11-30 15:00:00',
+            'description' => 'Early to bed and early to rise, makes a men healthy, wealthy and wise ...',
+            'attendee'    => $this->_getAttendee(),
+            'organizer'   => Tinebase_Core::getUser()->contact_id,
+            'uid'         => 'a8d10369e051094ae9322bd65e8afecac010bfc8',
+        ));
+        $event->attendee->addRecord($externalAttendee);
+        $event = Calendar_Controller_Event::getInstance()->create($event);
+        $this->_eventIdsToDelete[] = $event->getId();
+        
+        // TEST NORMAL REPLY
+        try {
+            $this->_iMIPFrontend->autoProcess($iMIP);
+        } catch (Exception $e) {
+            $this->fail('TEST NORMAL REPLY autoProcess throwed Exception');
+        }
+        
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($event->getId());
+        $updatedExternalAttendee = Calendar_Model_Attender::getAttendee($updatedEvent->attendee, $externalAttendee);
+        
+        $this->assertEquals(3, count($updatedEvent->attendee));
+        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedExternalAttendee->status, 'status not updated');
+    
+        // TEST ACCEPTABLE NON RECENT REPLY
+        $updatedExternalAttendee->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+        Calendar_Controller_Event::getInstance()->attenderStatusUpdate($updatedEvent, $updatedExternalAttendee, $updatedExternalAttendee->status_authkey);
+        try {
+            $iMIP->preconditionsChecked = false;
+            $this->_iMIPFrontend->autoProcess($iMIP);
+        } catch (Exception $e) {
+            $this->fail('TEST ACCEPTABLE NON RECENT REPLY autoProcess throwed Exception');
+        }
+        
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($event->getId());
+        $updatedExternalAttendee = Calendar_Model_Attender::getAttendee($updatedEvent->attendee, $externalAttendee);
+        
+        $this->assertEquals(3, count($updatedEvent->attendee));
+        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedExternalAttendee->status, 'status not updated');
+    
+        // TEST NON ACCEPTABLE NON RECENT REPLY
+        $this->setExpectedException('Calendar_Exception_iMIP', 'iMIP preconditions failed: RECENT');
+        $iMIP->preconditionsChecked = false;
+        $this->_iMIPFrontend->autoProcess($iMIP);
     }
 
     /**

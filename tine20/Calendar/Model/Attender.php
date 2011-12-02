@@ -549,12 +549,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         // sort entries in
         foreach ($eventAttendee as $attendee) {
             foreach ($attendee as $attender) {
-                // remove status_authkey when editGrant for displaycontainer_id is missing
-                if (! isset($attender['displaycontainer_id']) || is_scalar($attender['displaycontainer_id']) || ! array_key_exists(Tinebase_Model_Grants::GRANT_EDIT, $attender['displaycontainer_id']['account_grants']) || ! (bool) $attender['displaycontainer_id']['account_grants'][Tinebase_Model_Grants::GRANT_EDIT]) {
-                    //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug('clearing status_authkey for '. print_r($attender->toArray(), TRUE));
-                    $attender->status_authkey = NULL;
-                }
-                
                 if ($attender->user_id instanceof Tinebase_Record_Abstract) {
                     // allready resolved from cache
                     continue;
@@ -586,6 +580,23 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     
                     $attender->user_id = $attendeeTypeSet[$idx];
                 }
+            }
+        }
+        
+        
+        foreach ($eventAttendee as $attendee) {
+            foreach ($attendee as $attender) {
+                // keep authkey if user has editGrant to displaycontainer
+                if (isset($attender['displaycontainer_id']) && !is_scalar($attender['displaycontainer_id']) && array_key_exists(Tinebase_Model_Grants::GRANT_EDIT, $attender['displaycontainer_id']['account_grants']) &&  $attender['displaycontainer_id']['account_grants'][Tinebase_Model_Grants::GRANT_EDIT]) {
+                    continue;
+                }
+                
+                // keep authkey if attender is not an account and user has editGrant for event
+                if ($attender->user_id instanceof Tinebase_Record_Abstract && (!$attender->user_id->has('account_id') || !$attender->user_id->account_id)) {
+                    continue;
+                }
+                
+                $attender->status_authkey = NULL;
             }
         }
     }

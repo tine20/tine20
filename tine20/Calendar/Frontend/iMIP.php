@@ -31,15 +31,15 @@ class Calendar_Frontend_iMIP
             return;
         }
         
-        $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($_iMIP->getEvent());
+        $exitingEvent = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($_iMIP->getEvent());
         
-        if (! $existingEvent) {
+        if (! $exitingEvent) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " skip auto processing of iMIP component whose event is not in our db yet");
             return;
         }
         
         // update existing event details _WITHOUT_ status updates
-        return $this->_process($_iMIP, $existingEvent);
+        return $this->_process($_iMIP, $exitingEvent);
     }
     
     /**
@@ -302,14 +302,15 @@ class Calendar_Frontend_iMIP
         if ($organizer->account_id) {
             if (! $_existingEvent) {
                 // organizer has an account but no event exists, it seems that event was created from a non-caldav client
-                // @todo create event if it did not exist before + do not send notifications in this case + create event in context of organizer
-                // $_existingEvent = Calendar_Controller_Event::getInstance()->create($_iMIP->getEvent());
+                // do not send notifications in this case + create event in context of organizer
+                return; // not clear how to create in the orginizers context...
+                $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(FALSE);
+                $_existingEvent = Calendar_Controller_MSEventFacade::getInstance()->create($_iMIP->getEvent());
+                Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications);
             }
             
             if ($_status && $_status != $ownAttender->status) {
                 $ownAttender->status = $_status;
-                // @todo  attenderStatusUpdate does not send notifications. But we have to send them here!
-                //        -> set status in existing event and update it
                 Calendar_Controller_Event::getInstance()->attenderStatusUpdate($_existingEvent, $ownAttender, $ownAttender->status_authkey);
             }
         }
@@ -324,6 +325,9 @@ class Calendar_Frontend_iMIP
     /**
     * reply precondition
     *
+    * @TODO an internal reply should trigge a RECENT precondition
+    * @TODO distinguish RECENT and PROCESSED preconditions?
+    * 
     * @param  Calendar_Model_iMIP   $_iMIP
     * @param  Calendar_Model_Event  $_existingEvent
     * @return boolean
@@ -337,18 +341,34 @@ class Calendar_Frontend_iMIP
             $result = FALSE;
         }
         
+        $iMIPAttenderIdx = array_search($_iMIP->originator, $_iMIP->getEvent()->attendee->getEmail());
+        $iMIPAttender = $iMIPAttenderIdx !== FALSE ? $_iMIP->getEvent()->attendee[$iMIPAttenderIdx] : NULL;
+        $iMIPAttenderStatus = $iMIPAttender ? $iMIPAttender->status : NULL;
+        $eventAttenderIdx = array_search($_iMIP->originator, $_existingEvent->attendee->getEmail());
+        $eventAttender = $eventAttenderIdx !== FALSE ? $_existingEvent->attendee[$eventAttenderIdx] : NULL;
+        $eventAttenderStatus = $eventAttender ? $eventAttender->status : NULL;
+        
         if ($_iMIP->getEvent()->isObsoletedBy($_existingEvent)) {
-            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
+            
+            // allow non RECENT replies if no reschedule and STATUS_NEEDSACTION
+            if ($eventAttenderStatus != Calendar_Model_Attender::STATUS_NEEDSACTION || $_existingEvent->isRescheduled($_iMIP->getEvent())) {
+                $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
+                $result = FALSE;
+            }
+        }
+        
+        if (! is_null($iMIPAttenderStatus) && $iMIPAttenderStatus == $eventAttenderStatus) {
+            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_TOPROCESS, "this REPLY was already processed");
             $result = FALSE;
         }
         
-        if (! $this->_assertOriginatorIsAttender($_iMIP, $_iMIP->getEvent())) {
-            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORIGINATOR, "originator is not attendee in iMIP transaction -> spoofing attempt?");
-            $result = FALSE;
-        }
-        
-        if ($_existingEvent && ! $this->_assertOriginatorIsAttender($_iMIP, $_existingEvent)) {
+        if (! $eventAttender) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORIGINATOR, "originator is not attendee in existing event -> party crusher?");
+            $result = FALSE;
+        }
+        
+        if (! $iMIPAttender) {
+            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORIGINATOR, "originator is not attendee in iMIP transaction -> spoofing attempt?");
             $result = FALSE;
         }
         
@@ -360,40 +380,25 @@ class Calendar_Frontend_iMIP
     }
     
     /**
-     * assert originator is attender in event
-     * 
-     * @param Calendar_Model_iMIP $_iMIP
-     * @param Calendar_Model_Event $_event
-     */
-    protected function _assertOriginatorIsAttender($_iMIP, $_event)
-    {
-        if (! $_event->attendee) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__
-                . ' no attendee found.');
-            return FALSE;
-        }
-        
-        $iMIPAttenderIdx = array_search($_iMIP->originator, $_event->attendee->getEmail());
-        if ($iMIPAttenderIdx === FALSE) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__
-                . ' originator ' . $_iMIP->originator . ' != '. print_r($_event->attendee->getEmail(), TRUE));
-            return FALSE;
-        }
-        return TRUE; 
-    }
-    
-    /**
      * process reply
      * 
+     * some attender replied to my request (I'm Organizer) -> update status (seq++) / send notifications!
+     * 
+     * NOTE: only external replies should be processed here
+     *       @todo check silence for internal replies
+     *       
      * @param  Calendar_Model_iMIP   $_iMIP
      * @param  Calendar_Model_Event  $_existingEvent
      * 
-     * @todo implement
      */
     protected function _processReply($_iMIP, $_existingEvent)
     {
-        // status update 
-        // some attender replied to my request (I'm Organizer) -> update status (seq++) / send notifications!
+        // merge ics into existing event
+        $event = $_iMIP->mergeEvent($_existingEvent);
+        $attendee = $event->attendee[array_search($_iMIP->originator, $_existingEvent->attendee->getEmail())];
+        
+        // NOTE: if current user has no rights to the calendar, status update is not applied
+        Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($event, $attendee);
     }
     
     /**

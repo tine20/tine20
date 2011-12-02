@@ -166,7 +166,7 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         if (preconditions) {
             if (preconditions.hasOwnProperty('ORIGINATOR')) {
                 // display spam box -> might be accepted by user?
-                this.iMIPclause.setText(this.app.i18n._("The event of this message can't be processed as the sender ought be differnet."));
+                this.iMIPclause.setText(this.app.i18n._("The sender is not authorised to update the event"));
             }
             
             else if (preconditions.hasOwnProperty('RECENT')) {

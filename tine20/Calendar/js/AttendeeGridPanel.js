@@ -217,6 +217,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     o.record.reject();
                     this.startEditing(o.row, o.column);
                 } else if (o.value) {
+                    // set a status authkey for contacts and recources so user can edit status directly
+                    // NOTE: we can't compute if the user has editgrant to the displaycontainer of an account here!
+                    if (! o.value.account_id ) {
+                        o.record.set('status_authkey', 1);
+                    }
+                    
                     var newAttender = new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() );
                     this.store.add([newAttender]);
                     this.startEditing(o.row +1, o.column);
@@ -240,9 +246,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     
     onBeforeAttenderEdit: function(o) {
         if (o.field == 'status') {
-            // allow status setting if current user has editGrant to displaycontainer
-            var dispContainer = o.record.get('displaycontainer_id');
-            o.cancel = ! (dispContainer && dispContainer.account_grants && dispContainer.account_grants.editGrant);
+            // allow status setting if status authkey is present
+            o.cancel = ! o.record.get('status_authkey');
             return;
         }
         
@@ -511,7 +516,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             return '';
         }
         
-        if (attender.get('displaycontainer_id')) {
+        if (attender.get('status_authkey')) {
             metadata.attr = 'style = "cursor:pointer;"';
         } else {
             metadata.css = 'x-form-empty-field';
