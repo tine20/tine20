@@ -565,7 +565,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $from = new Tinebase_DateTime('2011-10-31 23:00:00');
         $until = new Tinebase_DateTime('2011-12-04 23:00:00');
-        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($event, $exceptions, $from, $until);
         $this->assertEquals(0, count($recurSet));
     }
     
