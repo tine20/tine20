@@ -341,10 +341,10 @@ class Calendar_Frontend_iMIP
             $result = FALSE;
         }
         
-        $iMIPAttenderIdx = array_search($_iMIP->originator, $_iMIP->getEvent()->attendee->getEmail());
+        $iMIPAttenderIdx = $_iMIP->getEvent()->attendee instanceof Tinebase_Record_RecordSet ? array_search($_iMIP->originator, $_iMIP->getEvent()->attendee->getEmail()) : FALSE;
         $iMIPAttender = $iMIPAttenderIdx !== FALSE ? $_iMIP->getEvent()->attendee[$iMIPAttenderIdx] : NULL;
         $iMIPAttenderStatus = $iMIPAttender ? $iMIPAttender->status : NULL;
-        $eventAttenderIdx = array_search($_iMIP->originator, $_existingEvent->attendee->getEmail());
+        $eventAttenderIdx = $_existingEvent->attendee instanceof Tinebase_Record_RecordSet ? array_search($_iMIP->originator, $_existingEvent->attendee->getEmail()) : FALSE;
         $eventAttender = $eventAttenderIdx !== FALSE ? $_existingEvent->attendee[$eventAttenderIdx] : NULL;
         $eventAttenderStatus = $eventAttender ? $eventAttender->status : NULL;
         

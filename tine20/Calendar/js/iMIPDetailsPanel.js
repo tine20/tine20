@@ -164,12 +164,17 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         
         // check preconditions
         if (preconditions) {
-            if (preconditions.hasOwnProperty('ORIGINATOR')) {
+            if (preconditions.hasOwnProperty('EVENTEXISTS')) {
+                this.iMIPclause.setText(this.app.i18n._("The event of this message does not exist"));
+            }
+            
+            else if (preconditions.hasOwnProperty('ORIGINATOR')) {
                 // display spam box -> might be accepted by user?
                 this.iMIPclause.setText(this.app.i18n._("The sender is not authorised to update the event"));
             }
             
             else if (preconditions.hasOwnProperty('RECENT')) {
+//            else if (preconditions.hasOwnProperty('TOPROCESS')) {
                 this.iMIPclause.setText(this.app.i18n._("This message is already processed"));
             }
             
