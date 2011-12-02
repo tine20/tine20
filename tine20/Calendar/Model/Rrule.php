@@ -440,18 +440,21 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 $yearlyrrule->interval = 12;
                 
                 $baseEvent = clone $_event;
+                $originatorsDtstart = clone $baseEvent->dtstart;
+                $originatorsDtstart->setTimezone($_event->originator_tz);
                 
                 // @TODO respect BYMONTH
-                if ($rrule->bymonth && $rrule->bymonth != $baseEvent->dtstart->format('n')) {
+                if ($rrule->bymonth && $rrule->bymonth != $originatorsDtstart->format('n')) {
                     // adopt
-                    
-                    $diff = (12 + $rrule->bymonth - $baseEvent->dtstart->format('n')) % 12;
+                    $diff = (12 + $rrule->bymonth - $originatorsDtstart->format('n')) % 12;
                     
                     // NOTE: skipping must be done in organizer_tz
                     $baseEvent->dtstart->setTimezone($_event->originator_tz);
+                    $baseEvent->dtend->setTimezone($_event->originator_tz);
                     $baseEvent->dtstart->addMonth($diff);
                     $baseEvent->dtend->addMonth($diff);
                     $baseEvent->dtstart->setTimezone('UTC');
+                    $baseEvent->dtend->setTimezone('UTC');
                     
                     // check if base event (recur instance) needs to be added to the set
                     if ($baseEvent->dtstart->isLater($_from) && $baseEvent->dtstart->isEarlier($_until)) {

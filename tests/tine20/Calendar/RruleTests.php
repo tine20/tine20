@@ -545,6 +545,30 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals('2010-07-10 10:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
+    /**
+     * @see #5170
+     */
+    public function testCalcYearlyByMonthDayAllDayEvent()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'               => Tinebase_Record_Abstract::generateUID(),
+            'summary'           => 'yearly by day',
+            'dtstart'           => '2011-10-31 23:00:00',
+            'dtend'             => '2011-11-01 22:59:00',
+            'is_all_day_event'  => 1,
+            'rrule'             => 'FREQ=YEARLY;INTERVAL=1;BYMONTH=11;BYMONTHDAY=1',
+            'originator_tz'     => 'Europe/Berlin',
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        $from = new Tinebase_DateTime('2011-10-31 23:00:00');
+        $until = new Tinebase_DateTime('2011-12-04 23:00:00');
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        $this->assertEquals(0, count($recurSet));
+    }
+    
     public function testCalcYearlyByMonthDayLeapYear()
     {
         $event = new Calendar_Model_Event(array(
