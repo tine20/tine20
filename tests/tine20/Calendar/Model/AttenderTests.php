@@ -64,14 +64,14 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
             	'userType'    => Calendar_Model_Attender::USERTYPE_USER,
                 'firstName'   => $this->_testUser->accountFirstName,
         		'lastName'    => $this->_testUser->accountLastName,
-                'partStat'    => Calendar_Model_Attender::STATUS_TENTATIVE,
+                'partStat'    => Calendar_Model_Attender::STATUS_ACCEPTED,
                 'role'        => Calendar_Model_Attender::ROLE_REQUIRED,
                 'email'       => $this->_testUser->accountEmailAddress
             ),
             array(
                 'userType'    => Calendar_Model_Attender::USERTYPE_USER,
                 'displayName' => $sclever->accountDisplayName,
-                'partStat'    => Calendar_Model_Attender::STATUS_TENTATIVE,
+                'partStat'    => Calendar_Model_Attender::STATUS_DECLINED,
                 'role'        => Calendar_Model_Attender::ROLE_REQUIRED,
                 'email'       => $sclever->accountEmailAddress
             ),
@@ -88,6 +88,9 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
         Calendar_Model_Attender::emailsToAttendee($persistentEvent, $newAttendees, TRUE);
         
         $this->assertEquals(3, count($persistentEvent->attendee));
+        $this->assertEquals(1, count($persistentEvent->attendee->filter('status', Calendar_Model_Attender::STATUS_ACCEPTED)));
+        $this->assertEquals(1, count($persistentEvent->attendee->filter('status', Calendar_Model_Attender::STATUS_DECLINED)));
+        $this->assertEquals(1, count($persistentEvent->attendee->filter('status', Calendar_Model_Attender::STATUS_TENTATIVE)));
     }
     
     /**
