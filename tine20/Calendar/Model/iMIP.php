@@ -94,6 +94,11 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
     const PRECONDITION_ATTENDEE   = 'ATTENDEE';
     
     /**
+     * precondition that iMIP message is not already processed
+     */
+    const PRECONDITION_TOPROCESS = 'TOPROCESS';
+    
+    /**
      * precondition that event has an organizer
      */
     const PRECONDITION_ORGANIZER  = 'ORGANIZER';

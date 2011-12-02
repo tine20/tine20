@@ -70,8 +70,8 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $this->_iMIPFrontendMock = new Calendar_Frontend_iMIPMock();
         
         try {
-            //$this->_emailTestClass = new Felamimail_Controller_MessageTest();
-            //$this->_emailTestClass->setup();
+            $this->_emailTestClass = new Felamimail_Controller_MessageTest();
+            $this->_emailTestClass->setup();
         } catch (Exception $e) {
             // do nothing
         }
@@ -283,16 +283,42 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     
     /**
      * testInvitationInternalReplyPreconditions
-     * 
-     * @todo test silence/void of autoProcess?
      */
     public function testInvitationInternalReplyPreconditions()
     {
         $iMIP = $this->_getiMIP('REPLY');
-        $result = $this->_iMIPFrontend->prepareComponent($iMIP);
-        $this->assertTrue(empty($prepared->preconditions));
+        $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
+        
+        $this->assertFalse(empty($prepared->preconditions), 'empty preconditions');
+        $this->assertTrue(array_key_exists(Calendar_Model_iMIP::PRECONDITION_TOPROCESS, $prepared->preconditions), 'missing PRECONDITION_TOPROCESS');
     }
-
+    
+    /**
+     * test no seq update
+     * test no notifications
+     *
+    public function testInvitationInternalReplyAutoProcess()
+    {
+        // flush mailer
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue(10000);
+        }
+        Tinebase_Smtp::getDefaultTransport()->flush();
+        
+        $iMIP = $this->_getiMIP('REPLY', TRUE);
+        $event = $iMIP->getEvent();
+        
+        print_r($event->getId());
+        try {
+            $this->_iMIPFrontend->autoProcess($iMIP);
+        } catch (Exception $e) {
+            $this->fail('autoProcess throwed Exception');
+        }
+        
+        
+    }
+    */
+    
     /**
      * testInvitationExternalReply
      */
