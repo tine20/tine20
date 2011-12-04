@@ -103,8 +103,6 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
      */
     protected $_controller;
     
-    protected $_session;
-    
     /**
      * @var ActiveSync_Model_SyncState
      */
@@ -121,13 +119,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
         
         $this->_contentStateBackend  = new ActiveSync_Backend_ContentState();
         $this->_folderStateBackend   = new ActiveSync_Backend_FolderState();
-        $this->_session              = new Zend_Session_Namespace('moreData');
         $this->_controller           = ActiveSync_Controller::getInstance();
-
-        // continue sync / MoreAvailable sent in previous repsonse
-        if(isset($this->_session->syncTimeStamp)) {
-            $this->_syncTimeStamp = $this->_session->syncTimeStamp;
-        }
     }
     
     /**
@@ -485,10 +477,12 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                             $serverDeletes = array();
                         } else {
                             // continue sync session
-                            if(isset($this->_session->syncTimeStamp)) {
-                                $serverAdds = $this->_session->serverAdds[$collectionData['class']];
-                                $serverChanges = $this->_session->serverChanges[$collectionData['class']];
-                                $serverDeletes = $this->_session->serverDeletes[$collectionData['class']];
+                            if(is_array($collectionData['syncState']->pendingdata)) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " restored from sync state ");
+                                $serverAdds    = $collectionData['syncState']->pendingdata['serverAdds'];
+                                $serverChanges = $collectionData['syncState']->pendingdata['serverChanges'];
+                                $serverDeletes = $collectionData['syncState']->pendingdata['serverDeletes'];
                             } else {
                                 // fetch entries added since last sync
                                 
@@ -628,7 +622,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                                 $delete = $this->_outputDom->createElementNS('uri:AirSync', 'Delete');
                                 $delete->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
                                 
-                                $this->_controller->_markContentStateAsDeleted($collectionData['class'], $collectionData['collectionId'], $serverId);
+                                $this->_markContentStateAsDeleted($collectionData['class'], $collectionData['collectionId'], $serverId);
                                 $commands->appendChild($delete);
                                 
                                 $this->_totalCount++;
@@ -643,24 +637,28 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " new synckey is ". $collectionData['syncState']->counter);                
                 }
                 
-                // save data to session if more data available
+                // save data to sync state if more data available
                 if($this->_moreAvailable === true) {
-                    $this->_session->syncTimeStamp = $this->_syncTimeStamp;
-                    $this->_session->serverAdds[$collectionData['class']]    = (array)$serverAdds;
-                    $this->_session->serverChanges[$collectionData['class']] = (array)$serverChanges;
-                    $this->_session->serverDeletes[$collectionData['class']] = (array)$serverDeletes;
+                    $collectionData['syncState']->pendingdata = array(
+                        'serverAdds'    => (array)$serverAdds,
+                        'serverChanges' => (array)$serverChanges,
+                        'serverDeletes' => (array)$serverDeletes
+                    );
+                } else {
+                    $collectionData['syncState']->pendingdata = null;
                 }
                 
                 if ($class != 'collectionNotFound') {
                     $keepPreviousSyncKey = true;
                     // increment sync timestamp by 1 second
                     $this->_syncTimeStamp->add('1', Tinebase_DateTime::MODIFIER_SECOND);
-                    if (!empty($collectionData['added']) || !empty($collectionData['changed']) || !empty($collectionData['deleted'])) {
+                    if (!empty($collectionData['added'])) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " remove previous synckey as client sent changes");
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " remove previous synckey as client added new entries");
                         $keepPreviousSyncKey = false;
                     }
-                    $this->_controller->updateSyncKey($this->_device, $collectionData['syncState']->counter, $this->_syncTimeStamp, $collectionData['class'], $collectionData['collectionId'], $keepPreviousSyncKey);
+                    $collectionData['syncState']->lastsync = $this->_syncTimeStamp;
+                    $this->_controller->updateSyncState($collectionData['syncState'], $keepPreviousSyncKey);
                     
                     // store current filter type
                     try {
@@ -726,7 +724,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
      * @param string $_collectionId the collection id from the xml
      * @param string $_contentId the Tine 2.0 id of the entry
      */
-    protected function _markContentStateAsDelete($_class, $_collectionId, $_contentId)
+    protected function _markContentStateAsDeleted($_class, $_collectionId, $_contentId)
     {
         $contentState = new ActiveSync_Model_ContentState(array(
                 'device_id'     => $this->_device->getId(),
