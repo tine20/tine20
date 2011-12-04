@@ -371,9 +371,6 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
             foreach($classCollections as $collectionId => $collectionData) {
                 if ($class == 'collectionNotFound') {
                     $status = self::STATUS_FOLDER_HIERARCHY_HAS_CHANGED;
-                    // @todo is this needed? delete all folders in folderState?
-                    $this->_folderStateBackend->resetState($this->_device);
-                    $this->_controller->updateSyncKey($this->_device, 0, $this->_syncTimeStamp, 'FolderSync');
                     
                     // send back current SyncKey
                     $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
@@ -382,8 +379,6 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $collectionData['collectionId']));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', $status));
                     
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
                 } elseif ($collectionData['syncState']->counter === 0) {
                     $status = $collectionData['syncKey'] == 0 ? self::STATUS_SUCCESS : self::STATUS_INVALID_SYNC_KEY;
                     $collectionData['syncState']->counter++;
