@@ -194,6 +194,10 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
         
         $syncState = $this->_syncStateBackend->get($syncState);
         
+        if (!empty($syncState->pendingdata)) {
+            $syncState->pendingdata = Zend_Json::decode($syncState->pendingdata);
+        }
+        
         return $syncState;
     }
     
@@ -239,7 +243,7 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
         $state = $this->_contentStateBackend->search($contentStateFilter)->getFirstRecord();
     
         if($state != null) {
-            $state->creation_time = null;
+            $state->is_deleted = 1;
             $this->_contentStateBackend->update($state);
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
@@ -365,8 +369,8 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
             return false;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . print_r($syncState->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($syncState->toArray(), true));
 
         // check if this was the latest syncKey
         try {
@@ -396,15 +400,15 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
                     'value'     => $_collectionId
                 ),
                 array(
-                    'field'     => 'creation_time',
-                    'operator'  => 'isnull',
-                    'value'     => null
+                    'field'     => 'is_deleted',
+                    'operator'  => 'equals',
+                    'value'     => true
                 )
             ));
             $stateIds = $this->_contentStateBackend->search($contentStateFilter, null, true);
-            $this->_contentStateBackend->updateMultiple($stateIds, array('creation_time' => $syncState->lastsync));
+            $this->_contentStateBackend->updateMultiple($stateIds, array('is_deleted' => 0));
                         
-            // remove entries added during recent sync
+            // remove entries added during latest sync
             $contentStateFilter = new ActiveSync_Model_ContentStateFilter(array(
                 array(
                     'field'     => 'device_id',
@@ -449,9 +453,9 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
                     'value'     => $_collectionId
                 ),
                 array(
-                    'field'     => 'creation_time',
-                    'operator'  => 'isnull',
-                    'value'     => null 
+                    'field'     => 'is_deleted',
+                    'operator'  => 'equals',
+                    'value'     => true
                 )
             ));
             $stateIds = $this->_contentStateBackend->search($contentStateFilter, null, true);
@@ -462,6 +466,10 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
         
         // remove all other synckeys
         $this->_syncStateBackend->deleteOther($syncState);
+        
+        if (!empty($syncState->pendingdata)) {
+            $syncState->pendingdata = Zend_Json::decode($syncState->pendingdata);
+        }
         
         return $syncState;
     }
@@ -474,6 +482,7 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
      * @param $_timeStamp
      * @param $_class
      * @param $_collectionId
+     * @deprecated
      * @return void
      */
     public function updateSyncKey(ActiveSync_Model_Device $_device, $_counter, Tinebase_DateTime $_timeStamp, $_class, $_collectionId = NULL, $_keepPreviousSyncKey = true)
@@ -505,5 +514,40 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
         }
         
         return $newSyncState;
+    }
+    
+    /**
+     * update sync state
+     * 
+     * @param ActiveSync_Model_SyncState $_state
+     * @package bool $_keepPreviousSyncState
+     * @return ActiveSync_Model_SyncState
+     */
+    public function updateSyncState(ActiveSync_Model_SyncState $_state, $_keepPreviousSyncState = true)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update synckey to ' . $_state->counter . ' for type: ' . $_state->type);
+        
+        $state = clone $_state;
+        
+        if (is_array($state->pendingdata)) {
+            $state->pendingdata = Zend_Json::encode($state->pendingdata);
+        }
+        
+        try {
+            // check if we need to update synckey timestamps
+            $this->_syncStateBackend->get($state);
+            $this->_syncStateBackend->update($state);
+        } catch (ActiveSync_Exception_SyncStateNotFound $asessnf) {
+            // otherwise add new synckey
+            $this->_syncStateBackend->create($state);
+        }
+        
+        if ($_keepPreviousSyncState !== true) {
+            // remove all other synckeys
+            $this->_syncStateBackend->deleteOther($state);
+        }
+        
+        return $_state;
     }
 }
