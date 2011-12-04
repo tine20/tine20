@@ -127,9 +127,7 @@ abstract class ActiveSync_Command_Wbxml
      */
     public function getResponse($_keepSession = FALSE)
     {
-        if($_keepSession !== true) {
-            Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
-        }
+        Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_outputDom->saveXML());
         
