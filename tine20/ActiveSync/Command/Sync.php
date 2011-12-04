@@ -637,18 +637,18 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " new synckey is ". $collectionData['syncState']->counter);                
                 }
                 
-                // save data to sync state if more data available
-                if($this->_moreAvailable === true) {
-                    $collectionData['syncState']->pendingdata = array(
-                        'serverAdds'    => (array)$serverAdds,
-                        'serverChanges' => (array)$serverChanges,
-                        'serverDeletes' => (array)$serverDeletes
-                    );
-                } else {
-                    $collectionData['syncState']->pendingdata = null;
-                }
-                
                 if ($class != 'collectionNotFound') {
+                    // save data to sync state if more data available
+                    if($this->_moreAvailable === true) {
+                        $collectionData['syncState']->pendingdata = array(
+                            'serverAdds'    => (array)$serverAdds,
+                            'serverChanges' => (array)$serverChanges,
+                            'serverDeletes' => (array)$serverDeletes
+                        );
+                    } else {
+                        $collectionData['syncState']->pendingdata = null;
+                    }
+                
                     $keepPreviousSyncKey = true;
                     // increment sync timestamp by 1 second
                     $this->_syncTimeStamp->add('1', Tinebase_DateTime::MODIFIER_SECOND);
