@@ -48,6 +48,7 @@ class ActiveSync_Model_ContentState extends Tinebase_Record_Abstract
         'collectionid'      => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'contentid'         => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'creation_time'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    	'is_deleted'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
