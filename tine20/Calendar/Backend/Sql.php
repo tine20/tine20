@@ -92,6 +92,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         if ($_record->rrule) {
             $_record->rrule = (string) $_record->rrule;
         }
+        $_record->rrule   = !empty($_record->rrule)   ? $_record->rrule   : NULL;
         $_record->recurid = !empty($_record->recurid) ? $_record->recurid : NULL;
         
         $event = parent::create($_record);
@@ -289,6 +290,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         if ($_record->rrule) {
             $_record->rrule = (string) $_record->rrule;
         }
+        $_record->rrule   = !empty($_record->rrule)   ? $_record->rrule   : NULL;
         $_record->recurid = !empty($_record->recurid) ? $_record->recurid : NULL;
         
         $event = parent::update($_record);
