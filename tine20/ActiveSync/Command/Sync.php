@@ -209,7 +209,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 
                 $collectionData['syncState']    = new ActiveSync_Model_SyncState(array(
                     'device_id' => $this->_device->getId(),
-                    'counter'   => $collectionData['syncKey'],
+                    'counter'   => 0,
                     'type'      => $collectionData['class'] . '-' . $collectionData['collectionId'],
                     'lastsync'  => $this->_syncTimeStamp
                 ));
