@@ -1136,6 +1136,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             $baseEvent = $this->getRecurBaseEvent($_recurInstance);
+            $baseEventAttendee = Calendar_Model_Attender::getAttendee($baseEvent->attendee, $_attender);
             
             if ($baseEvent->getId() == $_recurInstance->getId()) {
                 // exception to the first occurence
@@ -1147,13 +1148,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 throw new Exception('recurid must be present to create exceptions!');
             }
             
-            // check authkey on series
-            $baseEvent->attendee = $baseEvent->attendee instanceof Tinebase_Record_RecordSet ? $baseEvent->attendee : new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-            $attender = $baseEvent->attendee->filter('status_authkey', $_authKey)->getFirstRecord();
-            if ($attender->user_type != $_attender->user_type || $attender->user_id != $_attender->user_id) {
-                throw new Tinebase_Exception_AccessDenied('Attender authkey mismatch');
-            }
-            
             // check if this intance takes place
             if (in_array($_recurInstance->dtstart, (array)$baseEvent->exdate)) {
                 throw new Tinebase_Exception_AccessDenied('Event instance is deleted and may not be recreated via status setting!');
@@ -1162,9 +1156,34 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             try {
                 // check if we already have a persistent exception for this event
                 $eventInsance = $this->_backend->getByProperty($_recurInstance->recurid, $_property = 'recurid');
-            } catch (Exception $e) {
+                
+                // NOTE: the user must exist (added by someone with appropriate rights by createRecurException)
+                $exceptionAttender = Calendar_Model_Attender::getAttendee($eventInsance->attendee, $_attender);
+                if (! $exceptionAttender) {
+                    throw new Tinebase_Exception_AccessDenied('not an attendee');
+                }
+                
+                if ($exceptionAttender->status_authkey != $_authKey) {
+                    // NOTE: it might happen, that the user set her status from the base event without knowing about 
+                    //       an existing exception. In this case the base event authkey is also valid
+                    if (! $baseEventAttendee || $baseEventAttendee->status_authkey != $_authKey) {
+                        throw new Tinebase_Exception_AccessDenied('Attender authkey mismatch');
+                    }
+                }
+                
+            } catch (Tinebase_Exception_NotFound $e) {
                 // otherwise create it implicilty
+                
+                if (! $baseEventAttendee) {
+                    throw new Tinebase_Exception_AccessDenied('not an attendee');
+                }
+                
+                if ($baseEventAttendee->status_authkey != $_authKey) {
+                    throw new Tinebase_Exception_AccessDenied('Attender authkey mismatch');
+                }
+                
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating recur exception for a exceptional attendee status");
+                
                 $doContainerAclChecks = $this->doContainerACLChecks(FALSE);
                 // NOTE: the user might have no edit grants, so let's be carefull
                 $diff = $baseEvent->dtstart->diff($baseEvent->dtend);
@@ -1190,12 +1209,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     $attender = $this->_backend->createAttendee($attender);
                     $eventInsance->attendee->addRecord($attender);
                 }
+                
+                $exceptionAttender = Calendar_Model_Attender::getAttendee($eventInsance->attendee, $_attender);
             }
             
-            // set attender to the newly created exception attender
-            $exceptionAttender = $eventInsance->attendee->filter('status_authkey', $_authKey)->getFirstRecord();
             $exceptionAttender->status = $_attender->status;
-            
             $updatedAttender = $this->attenderStatusUpdate($eventInsance, $exceptionAttender, $exceptionAttender->status_authkey);
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
