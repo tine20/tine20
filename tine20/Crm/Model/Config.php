@@ -20,21 +20,21 @@
 class Crm_Model_Config extends Tinebase_Record_Abstract 
 {   
     /**
-     * ods export config
+     * lead states config
      * 
      * @var string
      */
     const LEADSTATES = 'leadstates';
     
     /**
-     * app defaults
+     * lead types config
      * 
      * @var string
      */
     const LEADTYPES = 'leadtypes';
     
     /**
-     * logout redirect url
+     * lead sources config
      * 
      * @var string
      */
