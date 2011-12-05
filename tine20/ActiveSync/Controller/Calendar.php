@@ -58,24 +58,15 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     const RECUR_DOW_SATURDAY    = 64;
     
     /**
-     * filter types
-     */
-    const FILTER_NOTHING        = 0;
-    const FILTER_2_WEEKS_BACK   = 4;
-    const FILTER_1_MONTH_BACK   = 5;
-    const FILTER_3_MONTHS_BACK  = 6;
-    const FILTER_6_MONTHS_BACK  = 7;
-    
-    /**
      * available filters
      * 
      * @var array
      */
     protected $_filterArray = array(
-        self::FILTER_2_WEEKS_BACK,
-        self::FILTER_1_MONTH_BACK,
-        self::FILTER_3_MONTHS_BACK,
-        self::FILTER_6_MONTHS_BACK
+        ActiveSync_Command_Sync::FILTER_2_WEEKS_BACK,
+        ActiveSync_Command_Sync::FILTER_1_MONTH_BACK,
+        ActiveSync_Command_Sync::FILTER_3_MONTHS_BACK,
+        ActiveSync_Command_Sync::FILTER_6_MONTHS_BACK
     );
     
     /**
@@ -850,16 +841,16 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     {
         if(in_array($_filterType, $this->_filterArray)) {
             switch($_filterType) {
-                case self::FILTER_2_WEEKS_BACK:
+                case ActiveSync_Command_Sync::FILTER_2_WEEKS_BACK:
                     $from = Tinebase_DateTime::now()->subWeek(2);
                     break;
-                case self::FILTER_1_MONTH_BACK:
+                case ActiveSync_Command_Sync::FILTER_1_MONTH_BACK:
                     $from = Tinebase_DateTime::now()->subMonth(2);
                     break;
-                case self::FILTER_3_MONTHS_BACK:
+                case ActiveSync_Command_Sync::FILTER_3_MONTHS_BACK:
                     $from = Tinebase_DateTime::now()->subMonth(3);
                     break;
-                case self::FILTER_6_MONTHS_BACK:
+                case ActiveSync_Command_Sync::FILTER_6_MONTHS_BACK:
                     $from = Tinebase_DateTime::now()->subMonth(6);
                     break;
             }

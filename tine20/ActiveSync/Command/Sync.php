@@ -46,6 +46,9 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
     const BODY_TYPE_RTF                                 = 3;
     const BODY_TYPE_MIME                                = 4;
     
+    /**
+     * truncate types
+     */
     const TRUNCATE_ALL                                  = 0;
     const TRUNCATE_4096                                 = 1;
     const TRUNCATE_5120                                 = 2;
@@ -56,6 +59,19 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
     const TRUNCATE_102400                               = 7;
     const TRUNCATE_NOTHING                              = 8;
 
+    /**
+     * filter types
+     */
+    const FILTER_NOTHING        = 0;
+    const FILTER_1_DAY_BACK     = 1;
+    const FILTER_3_DAYS_BACK    = 2;
+    const FILTER_1_WEEK_BACK    = 3;
+    const FILTER_2_WEEKS_BACK   = 4;
+    const FILTER_1_MONTH_BACK   = 5;
+    const FILTER_3_MONTHS_BACK  = 6;
+    const FILTER_6_MONTHS_BACK  = 7;
+    const FILTER_INCOMPLETE     = 8;
+    
 
     protected $_defaultNameSpace    = 'uri:AirSync';
     protected $_documentElement     = 'Sync';

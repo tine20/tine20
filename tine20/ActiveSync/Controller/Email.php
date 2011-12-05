@@ -31,26 +31,16 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     );
     
     /**
-     * filter types
-     */
-    const FILTER_NOTHING        = 0;
-    const FILTER_1_DAY_BACK     = 1;
-    const FILTER_3_DAYS_BACK    = 2;
-    const FILTER_1_WEEK_BACK    = 3;
-    const FILTER_2_WEEKS_BACK   = 4;
-    const FILTER_1_MONTH_BACK   = 5;
-    
-    /**
      * available filters
      * 
      * @var array
      */
     protected $_filterArray = array(
-        self::FILTER_1_DAY_BACK,
-        self::FILTER_3_DAYS_BACK,
-        self::FILTER_1_WEEK_BACK,
-        self::FILTER_2_WEEKS_BACK,
-        self::FILTER_1_MONTH_BACK,
+        ActiveSync_Command_Sync::FILTER_1_DAY_BACK,
+        ActiveSync_Command_Sync::FILTER_3_DAYS_BACK,
+        ActiveSync_Command_Sync::FILTER_1_WEEK_BACK,
+        ActiveSync_Command_Sync::FILTER_2_WEEKS_BACK,
+        ActiveSync_Command_Sync::FILTER_1_MONTH_BACK,
     );
     
     /**
@@ -649,19 +639,19 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             $today = Tinebase_DateTime::now()->setTime(0,0,0);
                 
             switch($_filterType) {
-                case self::FILTER_1_DAY_BACK:
+                case ActiveSync_Command_Sync::FILTER_1_DAY_BACK:
                     $received = $today->subDay(1);
                     break;
-                case self::FILTER_3_DAYS_BACK:
+                case ActiveSync_Command_Sync::FILTER_3_DAYS_BACK:
                     $received = $today->subDay(3);
                     break;
-                case self::FILTER_1_WEEK_BACK:
+                case ActiveSync_Command_Sync::FILTER_1_WEEK_BACK:
                     $received = $today->subWeek(1);
                     break;
-                case self::FILTER_2_WEEKS_BACK:
+                case ActiveSync_Command_Sync::FILTER_2_WEEKS_BACK:
                     $received = $today->subWeek(2);
                     break;
-                case self::FILTER_1_MONTH_BACK:
+                case ActiveSync_Command_Sync::FILTER_1_MONTH_BACK:
                     $received = $today->subMonth(2);
                     break;
             }
