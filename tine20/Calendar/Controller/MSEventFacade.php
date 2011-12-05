@@ -145,14 +145,23 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
-        if (! $_filter) {
-            $_filter = new Calendar_Model_EventFilter();
-        }
-        $_filter->addFilter(new Tinebase_Model_Filter_Text('recurid', 'isnull', null));
+        $eventIds = $this->_getEventIds($_filter, $_action);
         
-        $events = $this->_eventController->search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
+        if ($_pagination instanceof Tinebase_Model_Pagination) {
+            $numEvents = count($eventIds);
+            
+            $offset = min($_pagination->start, $numEvents);
+            $length = min($_pagination->limit, $offset+$numEvents);
+            
+            $eventIds = array_slice($eventIds, $offset, $length);
+        }
         
         if (! $_onlyIds) {
+            
+            $events =  $this->_eventController->search(new Calendar_Model_EventFilter(array(
+                array('field' => 'id', 'operator' => 'in', 'value' => $eventIds)
+            )), NULL, FALSE, FALSE, $_action);
+            
             foreach($events as $event) {
                 if ($event->rrule) {
                     $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
@@ -160,24 +169,57 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             }
         }
         
-        return $events;
+        return $_onlyIds ? $events : $events;
     }
     
     /**
      * Gets total count of search with $_filter
      * 
+     * NOTE: we don't count exceptions where the user has no access to base event here
+     *       so the result might not be precise
+     *       
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action for right/acl check
      * @return int
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get') 
     {
-        if (! $_filter) {
+        $eventIds = $this->_getEventIds($_filter, $_action);
+        
+        return count ($eventIds);
+    }
+    
+    /**
+     * fetches all eventids for given filter
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string                            $action
+     */
+    protected function _getEventIds($_filter, $_action)
+    {
+        if (! $_filter instanceof Calendar_Model_EventFilter) {
             $_filter = new Calendar_Model_EventFilter();
         }
-        $_filter->addFilter(new Tinebase_Model_Filter_Text('recurid', 'isnull', null));
         
-        return $this->_eventController->searchCount($_filter, $_action);
+        $recurIdFilter = new Tinebase_Model_Filter_Text('recurid', 'isnull', null);
+        $_filter->addFilter($recurIdFilter);
+        $baseEventIds = $this->_eventController->search($_filter, NULL, FALSE, TRUE, $_action);
+        $_filter->removeFilter($recurIdFilter);
+
+        $baseEventUIDs =  $this->_eventController->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => $baseEventIds)
+        )), NULL, FALSE, 'uid', $_action);
+        
+        // add exceptions where the user has no access to the base event as baseEvents
+        $uidFilter = new Tinebase_Model_Filter_Text('uid', 'notin', $baseEventUIDs);
+        $recurIdFilter = new Tinebase_Model_Filter_Text('recurid', 'notnull', null);
+        $_filter->addFilter($uidFilter);
+        $_filter->addFilter($recurIdFilter);
+        $baselessExceptionIds = $this->_eventController->search($_filter, NULL, FALSE, TRUE, $_action);
+        $_filter->removeFilter($uidFilter);
+        $_filter->removeFilter($recurIdFilter);
+        
+        return array_unique(array_merge($baseEventIds, $baselessExceptionIds));
     }
     
    /**

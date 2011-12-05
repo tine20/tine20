@@ -224,9 +224,10 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
         if ($_onlyIds) {
+            $identifier = is_bool($_onlyIds) ? $this->_getRecordIdentifier() : $_onlyIds;
             $result = array();
             foreach ($rows as $row) {
-                $result[] = $row[$this->_getRecordIdentifier()];
+                $result[] = $row[$identifier];
             }
         } else {
             foreach ($rows as &$row) {

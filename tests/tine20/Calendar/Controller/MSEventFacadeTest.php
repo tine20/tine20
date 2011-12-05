@@ -97,6 +97,23 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $this->_assertTestEvent($events->getFirstRecord());
     }
     
+    public function testSearchBaselessExceptions()
+    {
+        $event = $this->testCreate();
+        
+        // move baseEvent out of scope
+        $cbe = new Calendar_Backend_Sql();
+        $cbe->delete($event->getId());
+        
+        $events = $this->_uit->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_testCalendars->getId()),
+        )));
+        
+        $this->assertEquals(1, $events->count());
+        $this->assertEquals('exception', $events->getFirstRecord()->summary);
+        
+    }
+    
     public function testUpdateRemoveExceptions()
     {
         $event = $this->testCreate();
