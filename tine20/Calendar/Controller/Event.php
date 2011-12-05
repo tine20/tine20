@@ -1148,7 +1148,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
             
             // check authkey on series
-            $baseEvent->attendee = $baseEvent->attendee instanceof Tinebase_Record_RecordSet ? $baseEvent->attendee : new Tinebase_Record_RecordSet(Calendar_Model_Attender);
+            $baseEvent->attendee = $baseEvent->attendee instanceof Tinebase_Record_RecordSet ? $baseEvent->attendee : new Tinebase_Record_RecordSet('Calendar_Model_Attender');
             $attender = $baseEvent->attendee->filter('status_authkey', $_authKey)->getFirstRecord();
             if ($attender->user_type != $_attender->user_type || $attender->user_id != $_attender->user_id) {
                 throw new Tinebase_Exception_AccessDenied('Attender authkey mismatch');
