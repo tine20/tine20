@@ -103,6 +103,21 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test import of a customfield
+     * 
+     * @todo implement
+     */
+    public function testImportCustomField()
+    {
+        // create customfield
+        //$customField = $this->_getCustomField();
+        
+        //-- create new import/export definition with customfield
+        //-- $result = $this->_doImport(array('dryrun' => TRUE), 'adb_google_import_csv');
+        //-- check result
+    }
+    
+    /**
      * import helper
      * 
      * @param array $_options
@@ -125,5 +140,26 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
         $result = $this->_instance->importFile($this->_filename);
         
         return $result;
+    }
+    
+    /**
+    * get custom field record
+    *
+    * @return Tinebase_Model_CustomField_Config
+    */
+    protected function _getCustomField()
+    {
+        $cfData = new Tinebase_Model_CustomField_Config(array(
+                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+                'name'              => 'Yomi Name',
+            	'label'             => 'Yomi Name',
+                'model'             => Tinebase_Record_Abstract::generateUID(),
+                'type'              => Tinebase_Record_Abstract::generateUID(),
+                'length'            => 10,
+                'group'             => 'unittest',
+                'order'             => 100,     
+        ));
+        
+        return Tinebase_CustomField::getInstance()->addCustomField($cfData);
     }
 }
