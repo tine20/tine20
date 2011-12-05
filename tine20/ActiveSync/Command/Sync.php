@@ -285,8 +285,10 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 $changes = $xmlCollection->Commands->Change;
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($changes) . " entries to be updated on server");
+                
                 foreach ($changes as $change) {
                     $serverId = (string)$change->ServerId;
+                    
                     try {
                         $changed = $dataController->change($collectionData['collectionId'], $serverId, $change->ApplicationData);
                         $collectionData['changed'][$serverId] = self::STATUS_SUCCESS;
@@ -306,22 +308,35 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
             }
         
             // handle deletes, but only if not first sync
-            if($collectionData['syncKey'] > 1 && isset($xmlCollection->Commands->Delete)) {
+            if(isset($xmlCollection->Commands->Delete)) {
                 $deletes = $xmlCollection->Commands->Delete;
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($deletes) . " entries to be deleted on server");
+                
                 foreach ($deletes as $delete) {
                     $serverId = (string)$delete->ServerId;
+                    
                     try {
-                        $dataController->delete($collectionData['collectionId'], $serverId, $collectionData);
-                    } catch(Tinebase_Exception_NotFound $e) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::CRIT))
-                            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but entry was not found');
-                    } catch (Tinebase_Exception $e) {
+                        // check if we have send this entry to the phone
+                        $this->_controller->getContentState($this->_device, $collectionData['class'], $collectionData['collectionId'], $serverId);
+                        
+                        try {
+                            $dataController->delete($collectionData['collectionId'], $serverId, $collectionData);
+                        } catch(Tinebase_Exception_NotFound $e) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT))
+                                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but entry was not found');
+                        } catch (Tinebase_Exception $e) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but a error occured: ' . $e->getMessage());
+                            $collectionData['forceAdd'][$serverId] = $serverId;
+                        }
+                    } catch (Tinebase_Exception_NotFound $tenf) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but permission was denied');
-                        $collectionData['forceAdd'][$serverId] = $serverId;
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $serverId . ' should have been removed from client already');
+                        // should we send a special status???
+                        //$collectionData['deleted'][$serverId] = self::STATUS_SUCCESS;
                     }
+                    
                     $collectionData['deleted'][$serverId] = self::STATUS_SUCCESS;
                     $this->_deleteContentState($collectionData['class'], $collectionData['collectionId'], $serverId);
                 }
@@ -643,7 +658,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                     } else {
                         $collectionData['syncState']->pendingdata = null;
                     }
-                
+                    
                     $keepPreviousSyncKey = true;
                     // increment sync timestamp by 1 second
                     $this->_syncTimeStamp->add('1', Tinebase_DateTime::MODIFIER_SECOND);
