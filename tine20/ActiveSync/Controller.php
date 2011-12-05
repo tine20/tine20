@@ -166,9 +166,39 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " no contentstate found for " . print_r($contentStateFilter->toArray(), true));
         }
+    }
+    
+    public function getContentState(ActiveSync_Model_Device $_device, $_class, $_collectionId, $_contentId)
+    {
+        $contentStateFilter = new ActiveSync_Model_ContentStateFilter(array(
+            array(
+                'field'     => 'device_id',
+                'operator'  => 'equals',
+                'value'     => $_device->getId()
+            ),
+            array(
+                'field'     => 'class',
+                'operator'  => 'equals',
+                'value'     => $_class
+            ),
+            array(
+                'field'     => 'collectionid',
+                'operator'  => 'equals',
+                'value'     => $_collectionId
+            ),
+            array(
+                'field'     => 'contentid',
+                'operator'  => 'equals',
+        		'value'     => $_contentId
+            )
+        ));
+        $state = $this->_contentStateBackend->search($contentStateFilter)->getFirstRecord();
+    
+        if (! $state instanceof ActiveSync_Model_ContentState) {
+            throw new Tinebase_Exception_NotFound('state not found');
+        }
         
-        
-        
+        return $state;
     }
     
     /**
