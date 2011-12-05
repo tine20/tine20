@@ -993,6 +993,21 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertTrue(in_array($persitentException->dtstart, $dtstarts), 'exception instance missing');
     }
     
+    public function testPeriodFilter()
+    {
+        $persistentEvent = $this->testCreateEvent();
+        
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'period', 'operator' => 'within', 'value' => array(
+                'from'  => '2009-04-07',
+                'until' => '2010-04-07'
+            ))
+        )), NULL, FALSE, FALSE);
+        
+        $this->assertEquals(0, count($events));
+    }
+    
     /**
      * returns a simple event
      *
