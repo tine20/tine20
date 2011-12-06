@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-04-26 04:14+0100\n"
+"PO-Revision-Date: 2011-11-23 20:35+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -21,7 +21,8 @@ msgstr "edytowanie kont godzin"
 msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
 msgstr "Dodaj, edytuj i usuń konta godzin (razem ze wszystkimi uprawnieniami do kart godzin)"
 
-#: Acl/Rights.php:109 Acl/Rights.php:110
+#: Acl/Rights.php:109
+#: Acl/Rights.php:110
 msgid "Add timeaccounts"
 msgstr "Dodaj konta godzin"
 
@@ -37,11 +38,13 @@ msgstr "Utwórz albo uaktualnij wspólne ulubione z kart godzin"
 msgid "{0}"
 msgstr "{0}"
 
-#: js/DurationSpinner.js:62 js/DurationSpinner.js:72
+#: js/DurationSpinner.js:62
+#: js/DurationSpinner.js:72
 msgid "Not a valid time"
 msgstr "Nieprawidłowy czas"
 
-#: js/Models.js:45 js/TimesheetEditDialog.js:121
+#: js/Models.js:45
+#: js/TimesheetEditDialog.js:121
 msgid "Timesheet"
 msgid_plural "Timesheets"
 msgstr[0] "kartę godzin"
@@ -55,52 +58,88 @@ msgstr[0] "Lista kart godzin"
 msgstr[1] "listy kart godzin"
 msgstr[2] "listy kart godzin"
 
-#: js/Models.js:108 js/TimeaccountEditDialog.js:66 js/TimeaccountSelect.js:156
-#: js/TimesheetEditDialog.js:138 js/TimesheetGridPanel.js:213
+#: js/Models.js:78
+#: js/Models.js:147
+msgid "Quick search"
+msgstr "Szybkie wyszukiwanie"
+
+#: js/Models.js:79
+#: js/TimesheetEditDialog.js:180
+#: js/TimesheetGridPanel.js:215
+msgid "Account"
+msgstr "Konto"
+
+#: js/Models.js:80
+#: js/TimesheetEditDialog.js:155
+#: js/TimesheetGridPanel.js:201
+msgid "Date"
+msgstr "Data"
+
+#: js/Models.js:81
+#: js/Models.js:150
+#: js/TimeaccountEditDialog.js:92
+#: js/TimeaccountEditDialog.js:168
+#: js/TimesheetEditDialog.js:166
+#: js/TimesheetGridPanel.js:209
+#: js/TimesheetGridPanel.js:357
+msgid "Description"
+msgstr "Opis"
+
+#: js/Models.js:82
+#: js/TimesheetEditDialog.js:185
+#: js/TimesheetGridPanel.js:210
+#: js/TimesheetGridPanel.js:496
+msgid "Billable"
+msgstr "Do przeliczenia"
+
+#: js/Models.js:83
+#: js/TimesheetEditDialog.js:191
+#: js/TimesheetGridPanel.js:212
+#: js/TimesheetGridPanel.js:501
+msgid "Cleared"
+msgstr "Przeliczone"
+
+#: js/Models.js:125
+#: js/TimeaccountEditDialog.js:66
+#: js/TimesheetEditDialog.js:138
+#: js/TimesheetGridPanel.js:205
 msgid "Time Account"
 msgid_plural "Time Accounts"
 msgstr[0] "konto godzin"
 msgstr[1] "konta godzin"
 msgstr[2] "konta godzin"
 
-#: js/Models.js:112
+#: js/Models.js:129
 msgid "timeaccount list"
 msgid_plural "timeaccount lists"
 msgstr[0] "Lista kont godzin"
 msgstr[1] "listy kont godzin"
 msgstr[2] "listy kont godzin"
 
-#: js/Models.js:130 js/TimesheetGridPanel.js:182
-msgid "Quick search"
-msgstr "Szybkie wyszukiwanie"
-
-#: js/Models.js:131 js/TimeaccountEditDialog.js:82
+#: js/Models.js:148
+#: js/TimeaccountEditDialog.js:82
 #: js/TimeaccountGridPanel.js:94
 msgid "Number"
 msgstr "Numer"
 
-#: js/Models.js:132 js/TimeaccountEditDialog.js:87
+#: js/Models.js:149
+#: js/TimeaccountEditDialog.js:87
 #: js/TimeaccountGridPanel.js:99
 msgid "Title"
 msgstr "Tytuł"
 
-#: js/Models.js:133 js/TimeaccountEditDialog.js:92
-#: js/TimeaccountEditDialog.js:168 js/TimesheetEditDialog.js:166
-#: js/TimesheetGridPanel.js:185 js/TimesheetGridPanel.js:217
-#: js/TimesheetGridPanel.js:365
-msgid "Description"
-msgstr "Opis"
-
-#: js/Models.js:134
+#: js/Models.js:151
 msgid "Created By"
 msgstr "Utworzone przez"
 
-#: js/Models.js:135 js/TimeaccountEditDialog.js:109
+#: js/Models.js:152
+#: js/TimeaccountEditDialog.js:109
 #: js/TimeaccountGridPanel.js:104
 msgid "Status"
 msgstr "Status"
 
-#: js/Models.js:136 js/TimeaccountEditDialog.js:136
+#: js/Models.js:153
+#: js/TimeaccountEditDialog.js:136
 #: js/TimeaccountGridPanel.js:122
 msgid "Booking deadline"
 msgstr "Ostateczny termin rezerwacji"
@@ -113,11 +152,13 @@ msgstr "Jednostka"
 msgid "Unit Price"
 msgstr "Cena jednostkowa"
 
-#: js/TimeaccountEditDialog.js:106 js/TimeaccountGridPanel.js:110
+#: js/TimeaccountEditDialog.js:106
+#: js/TimeaccountGridPanel.js:110
 msgid "Budget"
 msgstr "Budżet"
 
-#: js/TimeaccountEditDialog.js:115 js/TimeaccountSelect.js:72
+#: js/TimeaccountEditDialog.js:115
+#: js/TimeaccountSelect.js:71
 msgid "closed"
 msgstr "zakończone"
 
@@ -129,17 +170,20 @@ msgstr "otwarte"
 msgid "Billed"
 msgstr "Przeliczone"
 
-#: js/TimeaccountEditDialog.js:125 js/TimeaccountSelect.js:235
+#: js/TimeaccountEditDialog.js:125
+#: js/TimeAccountStatusFilterModel.js:47
 #: Setup/setup.xml:81
 msgid "not yet billed"
 msgstr "jeszcze nieprzeliczone"
 
-#: js/TimeaccountEditDialog.js:126 js/TimeaccountSelect.js:236
+#: js/TimeaccountEditDialog.js:126
+#: js/TimeAccountStatusFilterModel.js:48
 #: Setup/setup.xml:82
 msgid "to bill"
 msgstr "przelicz"
 
-#: js/TimeaccountEditDialog.js:127 js/TimeaccountSelect.js:237
+#: js/TimeaccountEditDialog.js:127
+#: js/TimeAccountStatusFilterModel.js:49
 #: Setup/setup.xml:83
 msgid "billed"
 msgstr "przeliczone"
@@ -148,7 +192,8 @@ msgstr "przeliczone"
 msgid "not cleared yet..."
 msgstr "jeszcze nieprzeliczone..."
 
-#: js/TimeaccountEditDialog.js:132 js/TimesheetEditDialog.js:201
+#: js/TimeaccountEditDialog.js:132
+#: js/TimesheetEditDialog.js:201
 msgid "Cleared In"
 msgstr "Przeliczone w"
 
@@ -204,7 +249,8 @@ msgstr "Edytuj przeliczalne"
 msgid "The grant to manage clearing of Timesheets"
 msgstr "Uprawnienia do czyszczenia kart godzin"
 
-#: js/TimeaccountEditDialog.js:245 js/TimeaccountGridPanel.js:143
+#: js/TimeaccountEditDialog.js:245
+#: js/TimeaccountGridPanel.js:143
 msgid "Export"
 msgstr "Eksportuj"
 
@@ -224,20 +270,24 @@ msgstr "Zawiera wszystkie inne uprawnienia"
 msgid "Permissions"
 msgstr "Uprawnienia"
 
-#: js/TimeaccountGridPanel.js:91 js/TimesheetGridPanel.js:207
+#: js/TimeaccountGridPanel.js:91
+#: js/TimesheetGridPanel.js:199
 msgid "Tags"
 msgstr "Znaczniki"
 
-#: js/TimeaccountGridPanel.js:116 js/TimesheetGridPanel.js:222
-#: js/TimesheetGridPanel.js:514
+#: js/TimeaccountGridPanel.js:116
+#: js/TimesheetGridPanel.js:214
+#: js/TimesheetGridPanel.js:506
 msgid "Cleared in"
 msgstr "Przeliczone w"
 
-#: js/TimeaccountGridPanel.js:152 js/TimesheetGridPanel.js:439
+#: js/TimeaccountGridPanel.js:152
+#: js/TimesheetGridPanel.js:431
 msgid "Export as ODS"
 msgstr "Eksportuj jako ODS"
 
-#: js/TimeaccountGridPanel.js:159 js/TimesheetGridPanel.js:446
+#: js/TimeaccountGridPanel.js:159
+#: js/TimesheetGridPanel.js:438
 msgid "Export as CSV"
 msgstr "Eksportuj jako CSV"
 
@@ -245,11 +295,12 @@ msgstr "Eksportuj jako CSV"
 msgid "Show closed"
 msgstr "Pokaż zakończone"
 
-#: js/TimeaccountSelect.js:212
+#: js/TimeAccountStatusFilterModel.js:24
 msgid "Time Account - Status"
 msgstr "Status konta godzin"
 
-#: js/TimesheetEditDialog.js:93 js/TimesheetEditDialog.js:94
+#: js/TimesheetEditDialog.js:93
+#: js/TimesheetEditDialog.js:94
 msgid "Billed in ..."
 msgstr "Przeliczone w ..."
 
@@ -261,14 +312,10 @@ msgstr "Zaznacz konto godzin..."
 msgid "Searching..."
 msgstr "Wyszukiwanie..."
 
-#: js/TimesheetEditDialog.js:150 js/TimesheetGridPanel.js:225
+#: js/TimesheetEditDialog.js:150
+#: js/TimesheetGridPanel.js:217
 msgid "Duration"
 msgstr "Czas trwania"
-
-#: js/TimesheetEditDialog.js:155 js/TimesheetGridPanel.js:184
-#: js/TimesheetGridPanel.js:209
-msgid "Date"
-msgstr "Data"
 
 #: js/TimesheetEditDialog.js:160
 msgid "Start"
@@ -282,32 +329,26 @@ msgstr "nieustawiony"
 msgid "Enter description..."
 msgstr "Wprowadź opis..."
 
-#: js/TimesheetEditDialog.js:180 js/TimesheetGridPanel.js:183
-#: js/TimesheetGridPanel.js:223
-msgid "Account"
-msgstr "Konto"
-
-#: js/TimesheetEditDialog.js:185 js/TimesheetGridPanel.js:186
-#: js/TimesheetGridPanel.js:218 js/TimesheetGridPanel.js:504
-msgid "Billable"
-msgstr "Do przeliczenia"
-
-#: js/TimesheetEditDialog.js:191 js/TimesheetGridPanel.js:187
-#: js/TimesheetGridPanel.js:220 js/TimesheetGridPanel.js:509
-msgid "Cleared"
-msgstr "Przeliczone"
-
-#: js/TimesheetEditDialog.js:251
+#: js/TimesheetEditDialog.js:250
 msgid "Failed"
 msgstr "Próba nieudana"
 
-#: js/TimesheetEditDialog.js:252
+#: js/TimesheetEditDialog.js:251
+#: js/TimesheetEditDialog.js:259
 msgid "Could not save {0}."
 msgstr "Zapisanie {0} było niemożliwe."
 
-#: js/TimesheetEditDialog.js:253
+#: js/TimesheetEditDialog.js:252
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr "Ostateczny termin rezerwacji dla niniejszego konta godzin został przekroczony."
+
+#: js/TimesheetEditDialog.js:258
+msgid "No Timeaccount set"
+msgstr "Brak konta godzin"
+
+#: js/TimesheetEditDialog.js:260
+msgid "You need to set a Timeaccount this Timesheet belongs to."
+msgstr "Należy ustawić konto godzin, do którego należy ta karta godzin."
 
 #: js/TimesheetGridPanel.js:116
 msgid "Update {0} records"
@@ -329,55 +370,55 @@ msgstr "Zakończone sukcesem"
 msgid "Updated {0} records"
 msgstr "Zaktualizowano {0} wierszy"
 
-#: js/TimesheetGridPanel.js:211
+#: js/TimesheetGridPanel.js:203
 msgid "Start time"
 msgstr "Czas rozpoczęcia"
 
-#: js/TimesheetGridPanel.js:215
+#: js/TimesheetGridPanel.js:207
 msgid "Time Account closed"
 msgstr "Konto godzin zamknięte"
 
-#: js/TimesheetGridPanel.js:278
+#: js/TimesheetGridPanel.js:270
 msgid "timeframe"
 msgstr "przedział czasu"
 
-#: js/TimesheetGridPanel.js:302
+#: js/TimesheetGridPanel.js:294
 msgid "summary"
 msgstr "streszczenie"
 
-#: js/TimesheetGridPanel.js:305
+#: js/TimesheetGridPanel.js:297
 msgid "Total Timesheets"
 msgstr "Wszystkie karty godzin"
 
-#: js/TimesheetGridPanel.js:306
+#: js/TimesheetGridPanel.js:298
 msgid "Billable Timesheets"
 msgstr "Karty godz. do przeliczenia"
 
-#: js/TimesheetGridPanel.js:307
+#: js/TimesheetGridPanel.js:299
 msgid "Total Time"
 msgstr "Łączny czas"
 
-#: js/TimesheetGridPanel.js:308
+#: js/TimesheetGridPanel.js:300
 msgid "Time of Billable Timesheets"
 msgstr "Czas z kart godzin gotowych do przeliczenia"
 
-#: js/TimesheetGridPanel.js:379
+#: js/TimesheetGridPanel.js:371
 msgid "Detail"
 msgstr "Szczegół"
 
-#: js/TimesheetGridPanel.js:430
+#: js/TimesheetGridPanel.js:422
 msgid "Export Timesheets"
 msgstr "Eksportuj karty godzin"
 
-#: js/TimesheetGridPanel.js:453
+#: js/TimesheetGridPanel.js:445
 msgid "Export as ..."
 msgstr "Eksportuj jako ..."
 
-#: js/TimesheetGridPanel.js:496
+#: js/TimesheetGridPanel.js:488
 msgid "Mass Update"
 msgstr "Aktualizacja całości"
 
-#: js/TimesheetGridPanel.js:502
+#: js/TimesheetGridPanel.js:494
 msgid "Update field:"
 msgstr "Aktualizacja zakończona niepowodzeniem"
 

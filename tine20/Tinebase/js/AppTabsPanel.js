@@ -210,7 +210,7 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
      * @return {}
      */
     getTargetFromEvent: function(e) {
-        var target = e.getTarget('ul[class^=x-tab]', 10)
+        var target = e.getTarget('ul[class^=x-tab]', 10),
             li = this.findTargets(e);
             
         if (li.el && li.el == this.menuTabEl.dom) {

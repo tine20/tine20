@@ -95,20 +95,29 @@ class Tinebase_Export_Csv extends Tinebase_Export_Abstract
      */
     public function generate()
     {
-        $records = $this->_getRecords();
-        $records->setTimezone(Tinebase_Core::get('userTimeZone'));
+        $start = 0;
+        $limit = 100;
+        $records = $this->_getRecords($start, $limit);
         if (count($records) < 1) {
             return FALSE;
         }
-                        
+        
         $filename = $this->_getFilename();
         $filehandle = ($this->_toStdout) ? STDOUT : fopen($filename, 'w');
         
         $fields = $this->_getFields($records->getFirstRecord());
         self::fputcsv($filehandle, $fields);
-        $this->_addBody($filehandle, $records, $fields);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exported ' . count($records) . ' records to csv file.');
+        $totalcount = count($records);
+        while (count($records) > 0) {
+            $this->_addBody($filehandle, $records, $fields);
+            
+            $start += $limit;
+            $records = $this->_getRecords($start, $limit);
+            $totalcount += count($records);
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exported ' . $totalcount . ' records to csv file.');
         
         if (!$this->_toStdout) {
             fclose($filehandle);

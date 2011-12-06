@@ -29,10 +29,7 @@
 .SipgateCallStateList.accepted {background-image:url("../../images/../Sipgate/res/call_accepted.png") !important}
 .SipgateCallStateList.outgoing {background-image:url("../../images/../Sipgate/res/call_outgoing.png") !important}
 
-/* .SipgateCallStateLine {background: transparent url(../../images/../Sipgate/res/line-normal.png) bottom left no-repeat !important;}
-.connecting .SipgateCallStateLine {background: transparent url(../../images/../Sipgate/res/line-connecting.gif) bottom left no-repeat !important;}
-.connected .SipgateCallStateLine {background: transparent url(../../images/../Sipgate/res/line-connected.png) bottom left no-repeat  !important;}
- */
+
 #csw-my-phone, #csw-line {float:left}
 #csw-other-phone {float:right;}
 #csw-line {}

@@ -48,6 +48,10 @@
           "path": "js/"
         },
         {
+          "text": "GridView.js",
+          "path": "js/"
+        },
+        {
           "text": "PagingToolbar.js",
           "path": "js/"
         },

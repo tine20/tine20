@@ -34,6 +34,12 @@ class Tinebase_TranslationTest extends PHPUnit_Framework_TestCase
         Tinebase_Core::setupUserLocale();
     }
     
+    public function tearDown()
+    {
+        //Some tests may have changed the User Locale => restore defaults
+        Tinebase_Core::setupUserLocale();
+    }
+    
     /**
      * test Tinebase_Translation::getTranslationDirs()
      * 
@@ -57,8 +63,9 @@ class Tinebase_TranslationTest extends PHPUnit_Framework_TestCase
      */
     public function testGetPoTranslationFiles()
     {
-        $locale = Zend_Registry::get('locale');
-        $poTranslationFiles = Tinebase_Translation::getPoTranslationFiles($locale);
+        $poTranslationFiles = Tinebase_Translation::getPoTranslationFiles(array(
+            'locale' => (string) Zend_Registry::get('locale'),
+        ));
         
         $this->assertTrue(isset($poTranslationFiles['Tinebase']), 'Tinebase is missing');
         $this->assertGreaterThan(5, count($poTranslationFiles), 'Not all translationfiles where found');
@@ -143,5 +150,64 @@ class Tinebase_TranslationTest extends PHPUnit_Framework_TestCase
         Tinebase_Core::setupUserLocale('en_US');
         $this->assertEquals('DE', Tinebase_Translation::getRegionCodeByCountryName('Germany'));
         $this->assertEquals('US', Tinebase_Translation::getRegionCodeByCountryName('United States'));
+    }
+    
+    public function testCustomTranslations()
+    {
+        $lang = 'en_GB';
+        $translationPath = Tinebase_Core::getTempDir() . "/tine20/translations";
+        Tinebase_Config::getInstance()->translations = $translationPath;
+        
+        
+        $translationDir = "$translationPath/$lang/Tinebase/translations";
+        @mkdir($translationDir, 0777, TRUE);
+        
+        $poFile = "$translationDir/$lang.po";
+        $poData = 
+'msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Tinebase\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-Country: US\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Tine20-Language: My Language\n"
+"X-Tine20-Country: MY REGION\n"
+
+#: Acl/Rights/Abstract.php:75
+msgid "run"
+msgstr "изпълни"
+';
+        file_put_contents($poFile, $poData);
+        
+        $availableTranslations = Tinebase_Translation::getAvailableTranslations();
+        foreach($availableTranslations as $langInfo) {
+            if ($langInfo['locale'] == $lang) {
+                $customInfo = $langInfo;
+            }
+        }
+        
+        // assert cutom lang is available
+        $this->assertTrue(isset($customInfo), 'custom translation not in list of available translations');
+        $this->assertEquals('My Language', $customInfo['language'], 'custom language param missing');
+        $this->assertEquals('MY REGION', $customInfo['region'], 'custom region param missing');
+        
+        // test the translation
+        $translation = Tinebase_Translation::getTranslation('Tinebase', new Zend_Locale($lang));
+        // NOTE: Zent_Translate does not work with .po files
+        //$this->assertEquals("изпълни", $translation->_('run'));
+        
+        $jsTranslations = Tinebase_Translation::getJsTranslations($lang, 'Tinebase');
+        $this->assertEquals(1, preg_match('/изпълни/', $jsTranslations));
+        
+        Tinebase_Core::setupUserLocale();
+        
     }
 }

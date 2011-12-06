@@ -176,7 +176,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('admin_user_import_csv');
         $result = $this->_importHelper(dirname(dirname(__FILE__)) . '/Admin/files/testHeadline.csv', $definition);
 
-        $this->assertEquals(4, count($result['members']));
+        $this->assertEquals(4, count($result['members']), print_r($result, TRUE));
     }
 
     /**
@@ -186,7 +186,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     {
         $result = $this->_importHelper(dirname(__FILE__) . '/files/import.txt');
         
-        $this->assertEquals(5, count($result['members']));
+        $this->assertEquals(5, count($result['members']), print_r($result, TRUE));
         
         // find philipp lahm
         $lahm = array();
@@ -199,9 +199,11 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('lahmph', $lahm['data']);
         
         // get user and check email
+        $testConfig = Zend_Registry::get('testConfig');
+        $maildomain = ($testConfig->maildomain) ? $testConfig->maildomain : 'school.org';
         $user = Tinebase_User::getInstance()->getFullUserById($lahm['id']);
         $this->assertEquals('lahmph', $user->accountLoginName);
-        $this->assertEquals('lahmph@school.org', $user->accountEmailAddress);
+        $this->assertEquals('lahmph@' . $maildomain, $user->accountEmailAddress);
         $this->assertEquals('//base/school/' . $result['name'] . '/' . $user->accountLoginName, $user->accountHomeDirectory);
     }
     
@@ -286,10 +288,13 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
             $this->assertGreaterThan(0, $result['results']);
             
         } else {
+            $testConfig = Zend_Registry::get('testConfig');
+            $maildomain = ($testConfig->maildomain) ? $testConfig->maildomain : 'school.org';
+            
             $importer = call_user_func($definition->plugin . '::createFromDefinition', $definition, array(
                     'group_id'                  => $courseData['group_id'],
                     'accountHomeDirectoryPrefix' => '//base/school/' . $courseData['name'] . '/',
-                    'accountEmailDomain'        => 'school.org',
+                    'accountEmailDomain'        => $maildomain,
                     'password'                  => $courseData['name'],
                     'samba'                     => array(
                         'homePath'    => '//basehome/',

@@ -43,7 +43,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         autoExpandColumn: 'description'
     },
     copyEditAction: true,
-    
+    multipleEdit: true,
     /**
      * @private
      */

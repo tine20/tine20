@@ -28,7 +28,7 @@ Ext.ux.file.Download = function(config) {
 };
 
 Ext.extend(Ext.ux.file.Download, Ext.util.Observable, {    
-    url: null,
+    url: 'index.php',
     method: 'POST',
     params: null,
     timeout: 1800000, // 30 minutes
@@ -66,7 +66,7 @@ Ext.extend(Ext.ux.file.Download, Ext.util.Observable, {
             scope: this,
             success: this.onSuccess,
             failure: this.onFailure,
-            url: 'index.php',
+            url: this.url,
             timeout: this.timeout
         });
     },

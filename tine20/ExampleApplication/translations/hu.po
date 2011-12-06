@@ -68,7 +68,7 @@ msgid_plural "example record lists"
 msgstr[0] "példa rekord lista"
 msgstr[1] "példa rekord listák"
 
-#: js/Model.js:69 js/Model.js:106
+#: js/Model.js:69
 msgid "Quick search"
 msgstr "Gyors keresés"
 

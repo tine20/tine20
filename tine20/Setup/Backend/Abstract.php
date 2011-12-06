@@ -355,7 +355,15 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     {
         $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) 
             . " DROP FOREIGN KEY `" . $_name . "`" ;
-        $this->execQueryVoid($statement);    
+        
+        try {
+            $this->execQueryVoid($statement);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // try it again with table prefix
+            $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) 
+                . " DROP FOREIGN KEY `" . SQL_TABLE_PREFIX . $_name . "`" ;
+            $this->execQueryVoid($statement);
+        }
     }
     
     /**

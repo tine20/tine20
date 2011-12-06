@@ -39,7 +39,6 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Filter
         'account_id'     => array('filter' => 'Tinebase_Model_Filter_Id'),
         'name'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'model'          => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'is_default'     => array('filter' => 'Tinebase_Model_Filter_Bool'),
     );
     
     /**
@@ -63,7 +62,7 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Filter
     }
     
     /**
-     * add account id to filter (only if is_default == 0)
+     * add account id to filter
      *
      * @param Zend_Db_Select $_select
      */

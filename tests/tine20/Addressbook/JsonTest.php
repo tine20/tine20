@@ -313,7 +313,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             $this->assertEquals('16.3419589',   $updatedContact['adr_one_lon'], 'wrong geodata (lon)');
             $this->assertEquals('48.2147964',   $updatedContact['adr_one_lat'], 'wrong geodata (lat)');
             $this->assertEquals('AT',           $updatedContact['adr_one_countryname'], 'wrong country');
-            $this->assertEquals('1080',         $updatedContact['adr_one_postalcode'], 'wrong postalcode');
         }
     }
     
@@ -327,7 +326,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->_instance->deleteContacts($contact['id']);
         
-        $this->setExpectedException('Exception');
+        $this->setExpectedException('Tinebase_Exception_NotFound');
         $contact = $this->_instance->getContact($contact['id']);
     }
     
@@ -400,6 +399,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_importHelper(array('dryrun' => 0));
         $this->assertEquals(2, $result['totalcount'], 'Didn\'t import anything.');
         $klaus = $result['results'][0];
+        $this->assertEquals('Import list (' . Tinebase_Translation::dateToStringInTzAndLocaleFormat(Tinebase_DateTime::now(), NULL, NULL, 'date') . ')', $klaus['tags'][0]['name']);
 
         // import with duplicates
         $result = $this->_importHelper(array('dryrun' => 0));
@@ -874,5 +874,41 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Addressbook_Model_Contact', $options['model']);
         $this->assertTrue(is_array($options['autotags']));
         $this->assertEquals('Import list (###CURRENTDATE###)', $options['autotags'][0]['name']);
+    }
+        
+    /**
+     * testSearchContactsWithTagIsNotFilter
+     */
+    public function testSearchContactsWithTagIsNotFilter()
+    {
+        $allContacts = $this->_instance->searchContacts(array(), array());
+        
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array(
+                'field'    => 'n_fileas',
+                'operator' => 'equals',
+                'value'    =>  Tinebase_Core::getUser()->accountDisplayName
+            )
+        ));
+        $sharedTagName = Tinebase_Record_Abstract::generateUID();
+        $tag = new Tinebase_Model_Tag(array(
+            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+            'name'  => $sharedTagName,
+            'description' => 'testImport',
+            'color' => '#009B31',
+        ));
+        $tag = Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $tag);
+        
+        $filter = array(array(
+            'field'    => 'tag',
+            'operator' => 'not',
+            'value'    => $tag->getId()
+        ));
+        $allContactsWithoutTheTag = $this->_instance->searchContacts($filter, array());
+        
+        $this->assertTrue(count($allContactsWithoutTheTag['totalcount']) > 0);
+        $this->assertEquals($allContacts['totalcount']-1, $allContactsWithoutTheTag['totalcount']);
+        
+        $sharedTagToDelete = Tinebase_Tags::getInstance()->getTagByName($sharedTagName);
     }
 }

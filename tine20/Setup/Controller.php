@@ -254,7 +254,14 @@ class Setup_Controller
         // create Tinebase tables first
         $applications = array('Tinebase' => $this->getSetupXml('Tinebase'));
         
-        foreach (new DirectoryIterator($this->_baseDir) as $item) {
+        try {
+            $dirIterator = new DirectoryIterator($this->_baseDir);
+        } catch (Exception $e) {
+            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not open base dir: ' . $this->_baseDir);
+            throw new Tinebase_Exception_AccessDenied('Could not open Tine 2.0 root directory.');
+        }
+        
+        foreach ($dirIterator as $item) {
             $appName = $item->getFileName();
             if($appName{0} != '.' && $appName != 'Tinebase' && $item->isDir()) {
                 $fileName = $this->_baseDir . $item->getFileName() . '/Setup/setup.xml' ;
@@ -543,7 +550,11 @@ class Setup_Controller
                 if (empty($applicationTable)) {
 					$result = TRUE;
 				}
-            } catch (Zend_Db_Statement_Exception $e) {
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+                $result = TRUE;
+            } catch (Zend_Db_Adapter_Exception $zdae) {
+                Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdae->getMessage());
                 $result = TRUE;
             }
         }
@@ -687,7 +698,7 @@ class Setup_Controller
     /**
      * save data to config file
      *
-     * @param array $_data
+     * @param array   $_data
      * @param boolean $_merge
      */
     public function saveConfigData($_data, $_merge = TRUE)
@@ -700,15 +711,6 @@ class Setup_Controller
             throw new Setup_Exception('Config File is not writeable.');
         }
             
-        // merge config data and active config
-        if ($_merge) {
-            $activeConfig = Setup_Core::getConfig();
-            $config = new Zend_Config($activeConfig->toArray(), true);
-            $config->merge(new Zend_Config($_data));
-        } else {
-            $config = new Zend_Config($_data);
-        }
-        
         if (Setup_Core::configFileExists()) {
             $doLogin = FALSE;
             $filename = Setup_Core::getConfigFilePath();
@@ -717,13 +719,7 @@ class Setup_Controller
             $filename = dirname(__FILE__) . '/../config.inc.php';
         }
         
-        // write to file
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating config.inc.php');
-        $writer = new Zend_Config_Writer_Array(array(
-            'config'   => $config,
-            'filename' => $filename,
-        ));
-        $writer->write();
+        $this->writeConfigToFile($_data, $filename, $_merge);
         
         // set as active config
         Setup_Core::set(Setup_Core::CONFIG, $config);
@@ -735,6 +731,26 @@ class Setup_Controller
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Create session for setup user ' . $_data['setupuser']['username']);
             $this->login($_data['setupuser']['username'], $password);
         }
+    }
+    
+    public function writeConfigToFile($_data, $_merge, $_filename)
+    {
+        // merge config data and active config
+        if ($_merge) {
+            $activeConfig = Setup_Core::getConfig();
+            $config = new Zend_Config($activeConfig->toArray(), true);
+            $config->merge(new Zend_Config($_data));
+        } else {
+            $config = new Zend_Config($_data);
+        }
+        
+        // write to file
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating config.inc.php');
+        $writer = new Zend_Config_Writer_Array(array(
+            'config'   => $config,
+            'filename' => $_filename,
+        ));
+        $writer->write();
     }
     
     /**
@@ -1166,6 +1182,7 @@ class Setup_Controller
      * @param  array | optional $_options
      * @return void
      * @throws Setup_Exception
+     * @throws Tinebase_Exception_Backend_Database
      */
     protected function _installApplication($_xml, $_options = null)
     {
@@ -1180,7 +1197,11 @@ class Setup_Controller
                     $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
                     $currentTable = $table->name;
                     
-                    $this->_backend->createTable($table);
+                    try {
+                        $this->_backend->createTable($table);
+                    } catch (Zend_Db_Statement_Exception $zdse) {
+                        throw new Tinebase_Exception_Backend_Database('Could not create table: ' . $zdse->getMessage());
+                    }
                     $createdTables[] = $table;
                 }
             }

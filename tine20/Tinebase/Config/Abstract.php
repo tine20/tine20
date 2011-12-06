@@ -261,7 +261,9 @@ abstract class Tinebase_Config_Abstract
         
         if ($cache && $cache->test($cacheId)) {
             $result = $cache->load($cacheId);
-            return $result;
+            if (is_object($result)) {
+                return $result;
+            }
         }
         
         $filter = new Tinebase_Model_ConfigFilter(array(
@@ -377,5 +379,18 @@ abstract class Tinebase_Config_Abstract
         $properties = $this->getProperties();
         
         return array_key_exists($_name, $properties) ? $properties[$_name] : NULL;
+    }
+    
+    /**
+     * check if config system is ready
+     * 
+     * @todo check db setup
+     * @return bool
+     */
+    public static function isReady()
+    {
+        $configFile = @file_get_contents('config.inc.php', FILE_USE_INCLUDE_PATH);
+        
+        return !! $configFile;
     }
 }

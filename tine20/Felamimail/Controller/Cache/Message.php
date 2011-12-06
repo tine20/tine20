@@ -681,21 +681,10 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         }
         
         $messageToCache = $this->_createMessageToCache($_message, $_folder);
-        $result = $this->_addMessageToCache($messageToCache);
+        $cachedMessage = $this->_addMessageToCache($messageToCache);
         
-        if ($result !== FALSE) { 
-            if ($messageToCache->received->isLater(Tinebase_DateTime::now()->subDay(3))) {
-                // only cache message headers if received during the last day
-                $cacheId = 'getMessageHeaders' . $result->getId();
-                Tinebase_Core::getCache()->save($_message['header'], $cacheId, array('getMessageHeaders'));      
-
-                // prefetch body to cache
-                $account = Felamimail_Controller_Account::getInstance()->get($_folder->account_id);
-                $mimeType = ($account->display_format == Felamimail_Model_Account::DISPLAY_HTML || $account->display_format == Felamimail_Model_Account::DISPLAY_CONTENT_TYPE)
-                    ? Zend_Mime::TYPE_HTML
-                    : Zend_Mime::TYPE_TEXT;
-                Felamimail_Controller_Message::getInstance()->getMessageBody($messageToCache, null, $mimeType, $account);
-            }
+        if ($cachedMessage !== FALSE) { 
+            $this->_saveMessageInTinebaseCache($cachedMessage, $_folder, $_message);
             
             if ($_updateFolderCounter == TRUE) {
                 Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
@@ -705,7 +694,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             }
         }
         
-        return $result;
+        return $cachedMessage;
     }
     
     /**
@@ -761,7 +750,34 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         }
         
         return $result;
-    }   
+    }
+    
+    /**
+     * save message in tinebase cache
+     * - only cache message headers if received during the last day
+     * 
+     * @param Felamimail_Model_Message $_message
+     * @param Felamimail_Model_Folder $_folder
+     * @param array $_messageData
+     * 
+     * @todo do we need the headers in the Tinebase cache?
+     */
+    protected function _saveMessageInTinebaseCache(Felamimail_Model_Message $_message, Felamimail_Model_Folder $_folder, $_messageData)
+    {
+        if (! $_message->received->isLater(Tinebase_DateTime::now()->subDay(3))) {
+            return;
+        }
+        
+        $cacheId = 'getMessageHeaders' . $_message->getId();
+        Tinebase_Core::getCache()->save($_messageData['header'], $cacheId, array('getMessageHeaders'));
+    
+        // prefetch body to cache
+        $account = Felamimail_Controller_Account::getInstance()->get($_folder->account_id);
+        $mimeType = ($account->display_format == Felamimail_Model_Account::DISPLAY_HTML || $account->display_format == Felamimail_Model_Account::DISPLAY_CONTENT_TYPE)
+            ? Zend_Mime::TYPE_HTML
+            : Zend_Mime::TYPE_TEXT;
+        Felamimail_Controller_Message::getInstance()->getMessageBody($_message, null, $mimeType, $account);
+    }
     
     /**
      * update folder status and counters

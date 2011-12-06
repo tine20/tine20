@@ -28,9 +28,14 @@ class Setup_Server_Http implements Tinebase_Server_Interface
     {
         Setup_Core::initFramework();
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is http request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
+
+        $server = new Tinebase_Http_Server();
+        $server->setClass('Setup_Frontend_Http', 'Setup');
         
-        $setupServer = new Setup_Frontend_Http();
-        #$setupServer->authenticate($opts->username, $opts->password);
-        return $setupServer->handle();        
+        if (empty($_REQUEST['method'])) {
+            $_REQUEST['method'] = 'Setup.mainScreen';
+        }
+            
+        $server->handle($_REQUEST);
     }
 }

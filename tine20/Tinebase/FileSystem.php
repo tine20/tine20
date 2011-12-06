@@ -44,7 +44,6 @@ class Tinebase_FileSystem
     
     /**
      * the constructor
-     *
      */
     public function __construct() 
     {
@@ -53,7 +52,7 @@ class Tinebase_FileSystem
         $this->_treeNodeBackend    = new Tinebase_Tree_Node();
         
         if (empty(Tinebase_Core::getConfig()->filesdir) || !is_writeable(Tinebase_Core::getConfig()->filesdir)) {
-            throw new Tinebase_Exception_InvalidArgument('no base path(filesdir) configured or path not writeable');
+            throw new Tinebase_Exception_Backend('No base path (filesdir) configured or path not writeable');
         }
         
         $this->_basePath = Tinebase_Core::getConfig()->filesdir;

@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  PersistentFilter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -51,7 +51,6 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
         'filters'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'presence'=>'required'),
         'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'is_default'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -120,9 +119,14 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
      * @param  $_fromUserTime   filterData is in user time
      * @return Tinebase_Model_Filter_FilterGroup
      * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
     public static function getFilterGroup($_filterModel, $_filterData, $_fromUserTime = FALSE)
     {
+        if (! class_exists($_filterModel)) {
+            throw new Tinebase_Exception_NotFound('Did not find filter class.');
+        }
+        
         $filter = new $_filterModel(array());
         
         if (! is_subclass_of($filter, 'Tinebase_Model_Filter_FilterGroup')) {

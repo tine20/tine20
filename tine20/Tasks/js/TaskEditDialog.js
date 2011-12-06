@@ -181,39 +181,65 @@ Ext.namespace('Tine.Tasks');
                         name: 'summary',
                         listeners: {render: function(field){field.focus(false, 250);}},
                         allowBlank: false
-                    }], [ new Ext.ux.form.ClearableDateField({
-                        fieldLabel: this.app.i18n._('Due date'),
-                        name: 'due'
-                    }), new Tine.widgets.Priority.Combo({
-                        fieldLabel: this.app.i18n._('Priority'),
-                        name: 'priority'
-                    }), new Tine.Addressbook.SearchCombo({
+                    }], [ 
+//	                    new Ext.ux.form.ClearableDateField({
+//	                        fieldLabel: this.app.i18n._('Due date'),
+//	                        name: 'due'
+//	                    }), 
+                    	new Ext.ux.form.DateTimeField({
+                        	fieldLabel: this.app.i18n._('Due date'),
+                        	name: 'due',
+                        	listeners: {
+                        		'change': function (f, newValue, oldValue) {
+                        			// if no time is set, get current time
+                        			if (newValue.getHours() === 0 && newValue.getMinutes() === 0) {
+                        				var newDate = newValue.clone(),
+                        					now     = new Date();
+                        				
+                        				newDate.setHours(now.getHours());
+                        				newDate.setMinutes(now.getMinutes());
+                        					
+                        				f.setValue(newDate);
+                        			}
+                        		}
+                        	}
+                    	}), 
+						new Tine.widgets.Priority.Combo({
+	                        fieldLabel: this.app.i18n._('Priority'),
+	                        name: 'priority'
+	                    }), 
+	                    new Tine.Addressbook.SearchCombo({
                             emptyText: _('Add Responsible ...'),
                             userOnly: true,
                             name: 'organizer',
                             nameField: 'n_fileas',
                             useAccountRecord: true
-                    })], [{
+                    	})
+                    ], [{
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Notes'),
                         emptyText: this.app.i18n._('Enter description...'),
                         name: 'description',
                         xtype: 'textarea',
                         height: 200
-                    }], [new Ext.ux.PercentCombo({
-                        fieldLabel: this.app.i18n._('Percentage'),
-                        editable: false,
-                        name: 'percent'
-                    }), new Tine.Tinebase.widgets.keyfield.ComboBox({
-                        app: 'Tasks',
-                        keyFieldName: 'taskStatus',
-                        fieldLabel: this.app.i18n._('Status'),
-                        name: 'status',
-                        listeners: {scope: this, 'change': this.handleCompletedDate}
-                    }), new Ext.form.DateField({
-                        fieldLabel: this.app.i18n._('Completed'),
-                        name: 'completed'
-                    })]]
+                    }], [
+	                    new Ext.ux.PercentCombo({
+	                        fieldLabel: this.app.i18n._('Percentage'),
+	                        editable: false,
+	                        name: 'percent'
+	                    }), 
+	                    new Tine.Tinebase.widgets.keyfield.ComboBox({
+	                        app: 'Tasks',
+	                        keyFieldName: 'taskStatus',
+	                        fieldLabel: this.app.i18n._('Status'),
+	                        name: 'status',
+	                        listeners: {scope: this, 'change': this.handleCompletedDate}
+	                    }), 
+	                    new Ext.form.DateField({
+	                        fieldLabel: this.app.i18n._('Completed'),
+	                        name: 'completed'
+                    	})
+                    ]]
                 }, {
                     // activities and tags
                     layout: 'accordion',

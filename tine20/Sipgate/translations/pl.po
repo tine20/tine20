@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Sipgate\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-09-08 21:11+0100\n"
+"PO-Revision-Date: 2011-11-23 20:36+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -13,29 +13,29 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/AddressbookGridPanelHook.js:37
+#: js/AddressbookGridPanelHook.js:38
 msgid "Call contact"
 msgstr "Wybierz numer"
 
-#: js/AddressbookGridPanelHook.js:60
+#: js/AddressbookGridPanelHook.js:61
 msgid "Compose SMS"
 msgstr "Napisz SMSa"
 
-#: js/AddressbookGridPanelHook.js:255
+#: js/AddressbookGridPanelHook.js:256
 msgid "Work"
 msgstr "Praca"
 
-#: js/AddressbookGridPanelHook.js:265
+#: js/AddressbookGridPanelHook.js:266
 msgid "Home"
 msgstr "Dom"
 
-#: js/AddressbookGridPanelHook.js:275
-#: js/AddressbookGridPanelHook.js:320
+#: js/AddressbookGridPanelHook.js:276
+#: js/AddressbookGridPanelHook.js:321
 msgid "Cell"
 msgstr "Komórka"
 
-#: js/AddressbookGridPanelHook.js:285
-#: js/AddressbookGridPanelHook.js:330
+#: js/AddressbookGridPanelHook.js:286
+#: js/AddressbookGridPanelHook.js:331
 msgid "Cell private"
 msgstr "Komórka prywatna"
 
@@ -46,11 +46,11 @@ msgstr "Komórka prywatna"
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: js/CallStateWindow.js:104
+#: js/CallStateWindow.js:106
 msgid "connecting..."
 msgstr "nawiązywanie połączenia..."
 
-#: js/CallStateWindow.js:142
+#: js/CallStateWindow.js:144
 msgid "Connecting to: "
 msgstr "Łączę z:"
 
@@ -141,101 +141,109 @@ msgstr "Sipgate"
 msgid "Devices"
 msgstr "Urządzenia końcowe"
 
-#: js/Sipgate.js:153
+#: js/Sipgate.js:154
 msgid "Dial number"
 msgstr "Numer telefonu"
 
-#: js/Sipgate.js:154
+#: js/Sipgate.js:155
 msgid "Initiates a new outgoing call"
 msgstr "Zestaw nowe połączenie wychodzące"
 
-#: js/Sipgate.js:161
+#: js/Sipgate.js:162
 msgid "Add Number to Addressbook"
 msgstr "Dodaj numer do książki adresowej"
 
-#: js/Sipgate.js:162
+#: js/Sipgate.js:163
 msgid "Adds this number to the Addressbook"
 msgstr "Dodaje numer do książki adresowej"
 
-#: js/Sipgate.js:281
+#: js/Sipgate.js:282
 msgid "Calls from"
 msgstr "Telefony od"
 
-#: js/Sipgate.js:292
+#: js/Sipgate.js:293
 msgid "Calls to"
 msgstr "Telefony do"
 
-#: js/Sipgate.js:311
+#: js/Sipgate.js:312
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Wyświetl połączenia {0} - {1} z {2}"
 
-#: js/Sipgate.js:312
-#: js/Sipgate.js:397
+#: js/Sipgate.js:313
+#: js/Sipgate.js:398
 msgid "No calls to display"
 msgstr "Brak połączeń do wyświetlenia"
 
-#: js/Sipgate.js:324
+#: js/Sipgate.js:325
 msgid "Status"
 msgstr "Status"
 
-#: js/Sipgate.js:334
+#: js/Sipgate.js:335
 msgid "Remote Party"
 msgstr "Rozmówca"
 
-#: js/Sipgate.js:339
+#: js/Sipgate.js:340
 msgid "Remote Number"
 msgstr "Zdalny numer"
 
-#: js/Sipgate.js:344
+#: js/Sipgate.js:345
 msgid "Local Uri"
 msgstr "Lokalny URI"
 
-#: js/Sipgate.js:349
+#: js/Sipgate.js:350
 msgid "Remote Uri"
 msgstr "Zdalny URI"
 
-#: js/Sipgate.js:356
+#: js/Sipgate.js:357
 msgid "Call started"
 msgstr "Połączenie nawiązane"
 
-#: js/Sipgate.js:366
+#: js/Sipgate.js:367
 msgid "Call ID"
 msgstr "ID połączenia"
 
-#: js/Sipgate.js:527
+#: js/Sipgate.js:534
 msgid "unknown Person"
 msgstr "osoba nieznana"
 
-#: js/Sipgate.js:605
+#: js/Sipgate.js:555
+msgid "Configuration not set"
+msgstr "Brak konfiguracji"
+
+#: js/Sipgate.js:555
+msgid "Please configure the Sipgate application"
+msgstr "Proszę skonfiguruj aplikację Sipgate"
+
+#: js/Sipgate.js:620
 msgid "first dial"
 msgstr "Aby połączyć się z rozmówcą, podnieś słuchawkę."
 
-#: js/Sipgate.js:610
+#: js/Sipgate.js:625
 msgid "second dial"
 msgstr "Połączenie nawiązane"
 
-#: js/Sipgate.js:617
+#: js/Sipgate.js:632
 msgid "established"
 msgstr "Połączono z"
 
-#: js/Sipgate.js:622
+#: js/Sipgate.js:637
 msgid "call 1 busy"
 msgstr "Zajęty telefon, proszę sprawdzić, czy słuchawka jest odłożona."
 
-#: js/Sipgate.js:629
+#: js/Sipgate.js:644
 msgid "call 2 busy"
 msgstr "Albo zajęte lub Twoje połączenie zostało odrzucone"
 
-#: js/Sipgate.js:636
+#: js/Sipgate.js:651
 msgid "hungup before other called"
 msgstr "Słuchawka odłożona przed nawiązaniem połączenia"
 
-#: js/Sipgate.js:639
+#: js/Sipgate.js:654
 msgid "hungup"
 msgstr "Rozmowa zakończona"
 
 #: js/SmsEditDialog.js:52
-#: js/SmsEditDialog.js:187
+#: js/SmsEditDialog.js:183
 msgid "Send"
 msgstr "Wyślij"
 

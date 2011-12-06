@@ -371,11 +371,30 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
         this.action_downloadConfig = new Ext.Action({
             text: this.app.i18n._('Download config file'),
             iconCls: 'setup_action_download_config',
-            disabled: true
+            scope: this,
+            handler: this.onDownloadConfig
+            //disabled: true
         });
         
         this.actionToolbarItems = [this.action_downloadConfig];
         
         Tine.Setup.ConfigManagerPanel.superclass.initActions.apply(this, arguments);
+    },
+    
+    onDownloadConfig: function() {
+        if (this.isValid()) {
+            var configData = this.form2config();
+            
+            var downloader = new Ext.ux.file.Download({
+                url: Tine.Tinebase.tineInit.requestUrl,
+                params: {
+                    method: 'Setup.downloadConfig',
+                    data: Ext.encode(configData)
+                }
+            });
+            downloader.start();
+        } else {
+            this.alertInvalidData();
+        }
     }
 });

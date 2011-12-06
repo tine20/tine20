@@ -74,13 +74,13 @@ msgstr "Erstelldatum"
 msgid "Creator"
 msgstr "Ersteller"
 
-#: js/ProjectAttendeeFilter.js:43
-msgid "Attendee Role"
-msgstr "Teilnehmerrolle"
-
-#: js/ProjectEditDialog.js:83
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:83
 msgid "Attendee"
 msgstr "Teilnehmer"
+
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
+msgstr "Teilnehmerrolle"
 
 #: js/ProjectEditDialog.js:84
 msgid "Role"
@@ -150,19 +150,19 @@ msgstr "Projektleiter"
 msgid "All my open projects"
 msgstr "Alle meine offenen Projekte"
 
-#: Setup/Initialize.php:94
+#: Setup/Initialize.php:99
 msgid "My projects that I'm responsible for"
 msgstr "Alle Projekte für die ich verantwortlich bin"
 
-#: Setup/Initialize.php:95
+#: Setup/Initialize.php:100
 msgid "All my open projects that I am responsible for"
 msgstr "Alle offenen Projekte für die ich verantwortlich bin"
 
-#: Setup/Initialize.php:110
+#: Setup/Initialize.php:120
 msgid "My waiting projects"
 msgstr "Meine wartenden Projekte"
 
-#: Setup/Initialize.php:111
+#: Setup/Initialize.php:121
 msgid "My projects that are on hold"
 msgstr "Meine wartenden Projekte"
 

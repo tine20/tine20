@@ -372,6 +372,10 @@
           "path": "js/widgets/dialog/"
         },
         {
+          "text": "MultipleEditDialogPlugin.js",
+          "path": "js/widgets/dialog/"
+        },        
+        {
           "text": "WizardPanel.js",
           "path": "js/widgets/dialog/"
         },
@@ -576,6 +580,10 @@
           "path": "js/widgets/tags/"
         },
         {
+          "text": "TagToggleBox.js",
+          "path": "js/widgets/tags/"
+        },        
+        {
           "text": "TagFilter.js",
           "path": "js/widgets/tags/"
         },
@@ -583,6 +591,10 @@
           "text": "TagsMassAttachAction.js",
           "path": "js/widgets/tags/"
         },
+        {
+          "text": "TagsMassDetachAction.js",
+          "path": "js/widgets/tags/"
+        },        
         {
           "text": "WestPanel.js",
           "path": "js/widgets/mainscreen/"
@@ -700,6 +712,10 @@
         },
         {
           "text": "ArrowCollapse.css",
+          "path": "css/ux/"
+        },
+        {
+          "text": "SubFormPanel.css",
           "path": "css/ux/"
         },
         {

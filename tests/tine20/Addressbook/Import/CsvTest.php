@@ -33,6 +33,8 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     protected $_deleteImportFile = TRUE; 
     
+    protected $_deletePersonalContacts = FALSE;
+    
     /**
      * Runs the test methods of this class.
      *
@@ -66,6 +68,12 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
         // cleanup
         if (file_exists($this->_filename) && $this->_deleteImportFile) {
             unlink($this->_filename);
+        }
+        
+        if ($this->_deletePersonalContacts) {
+            Addressbook_Controller_Contact::getInstance()->deleteByFilter(new Addressbook_Model_ContactFilter(array(array(
+                'field' => 'container_id', 'operator' => 'equals', 'value' => Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook()->getId()
+            ))));
         }
     }
     
@@ -103,16 +111,44 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test import of a customfield
+     */
+    public function testImportCustomField()
+    {
+        $customField = $this->_createCustomField();
+        
+        // create/get new import/export definition with customfield
+        $filename = dirname(__FILE__) . '/files/adb_google_import_csv_test.xml';
+        $applicationId = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId();
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile($filename, $applicationId);
+        
+        $this->_filename = dirname(__FILE__) . '/files/google_contacts.csv';
+        $this->_deleteImportFile = FALSE;
+        
+        $result = $this->_doImport(array(), $definition);
+        $this->_deletePersonalContacts = TRUE;
+        $this->assertEquals(5, $result['totalcount']);
+        
+        $contacts = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook()->getId()),
+            array('field' => 'n_given', 'operator' => 'equals', 'value' => 'Ando'),
+        )));
+        $this->assertEquals(1, count($contacts));
+        $ando = $contacts->getFirstRecord();
+        $this->assertEquals(array('Yomi Name' => 'yomi'), $ando->customfields);
+    }
+    
+    /**
      * import helper
      * 
      * @param array $_options
-     * @param string $_definitionName
+     * @param string|Tinebase_Model_ImportExportDefinition $_definition
      * @param Addressbook_Model_ContactFilter $_exportFilter
      * @return array
      */
-    protected function _doImport(array $_options, $_definitionName, Addressbook_Model_ContactFilter $_exportFilter = NULL)
+    protected function _doImport(array $_options, $_definition, Addressbook_Model_ContactFilter $_exportFilter = NULL)
     {
-        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($_definitionName);
+        $definition = ($_definition instanceof Tinebase_Model_ImportExportDefinition) ? $_definition : Tinebase_ImportExportDefinition::getInstance()->getByName($_definition);
         $this->_instance = Addressbook_Import_Csv::createFromDefinition($definition, $_options);
         
         // export first
@@ -123,6 +159,40 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
         
         // then import
         $result = $this->_instance->importFile($this->_filename);
+        
+        return $result;
+    }
+    
+    /**
+    * get custom field record
+    *
+    * @return Tinebase_Model_CustomField_Config
+    */
+    protected function _createCustomField()
+    {
+        $cfData = new Tinebase_Model_CustomField_Config(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'name'              => 'Yomi Name',
+            'model'             => 'Addressbook_Model_Contact',
+            'definition'        => array(
+                'label' => Tinebase_Record_Abstract::generateUID(),        
+                'type'  => 'string',
+                'uiconfig' => array(
+                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
+                    'length' => 10,
+                    'group'  => 'unittest',
+                    'order'  => 100,
+                )
+            )
+        ));
+        
+        try {
+            $result = Tinebase_CustomField::getInstance()->addCustomField($cfData);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // customfield already exists
+            // @todo should search for existing cf to return
+            $result = NULL;
+        }
         
         return $result;
     }

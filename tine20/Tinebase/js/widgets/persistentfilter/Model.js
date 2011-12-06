@@ -35,7 +35,7 @@ Tine.widgets.persistentfilter.model.PersistentFilter = Tine.Tinebase.data.Record
     modelName: 'PersistentFilter',
     idProperty: 'id',
     titleProperty: 'name',
-    // ngettext('Favorite', 'Favorites', n); gettext('Events');
+
     recordName: 'Favorite',
     recordsName: 'Favorites',
     
@@ -49,13 +49,21 @@ Tine.widgets.persistentfilter.model.PersistentFilter = Tine.Tinebase.data.Record
     },
     
     /**
+     * is a persistent filter (localized) which is shipped
+     * 
+     * @return {Boolean}
+     */
+    isShipped: function() {
+        return ((this.get('account_id') === null) && (this.get('created_by') === null));
+    },  
+    
+    /**
      * is default of current user
      * 
      * @return {Boolean}
      */
     isDefault: function() {
         var app = Tine.Tinebase.appMgr.getById(this.get('application_id'));
-        
         return this.app && this.get('id') === app.getRegistry().get('preferences').get('defaultpersistentfilter');
     }
 });

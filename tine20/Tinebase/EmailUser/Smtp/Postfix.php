@@ -346,6 +346,12 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
      */
     protected function _addUser(Tinebase_Model_FullUser $_addedUser, Tinebase_Model_FullUser $_newUserProperties)
     {
+        if (! $_addedUser->accountEmailAddress) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+            . ' User ' . $_addedUser->accountDisplayName . ' has no email address defined. Skipping postfix user creation.');
+            return;
+        }
+         
         $smtpSettings = $this->_recordToRawData($_addedUser, $_newUserProperties);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating postfix user ' . $smtpSettings[$this->_propertyMapping['emailUsername']]);

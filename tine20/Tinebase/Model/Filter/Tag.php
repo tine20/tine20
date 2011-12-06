@@ -73,19 +73,19 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
         $db = Tinebase_Core::getDb();
         $idProperty = $db->quoteIdentifier($this->_options['idProperty']);
         
+        $app = Tinebase_Application::getInstance()->getApplicationByName($this->_options['applicationName']);
+
         $correlationName = Tinebase_Record_Abstract::generateUID() . $this->_value . 'tag';
-        
         // per left join we add a tag column named as the tag and filter this joined column
         // NOTE: we name the column we join like the tag, to be able to join multiple tag criteria (multiple invocations of this function)
         $_select->joinLeft(
             /* what */    array($correlationName => SQL_TABLE_PREFIX . 'tagging'), 
-            /* on   */    $db->quoteIdentifier("{$correlationName}.record_id") . " = $idProperty AND " . $db->quoteIdentifier("{$correlationName}.tag_id") . " = " . $db->quote($this->_value),
-            /* select */  array());
+            /* on   */    $db->quoteIdentifier("{$correlationName}.record_id") . " = $idProperty " .
+                " AND " . $db->quoteIdentifier("{$correlationName}.application_id") . " = " . $db->quote($app->getId()) .
+                " AND " . $db->quoteIdentifier("{$correlationName}.tag_id") . " = " . $db->quote($this->_value),
+        /* select */  array());
         
         $_select->where($db->quoteIdentifier("{$correlationName}.tag_id") .  $this->_opSqlMap[$this->_operator]['sqlop']);
-        
-        $app = Tinebase_Application::getInstance()->getApplicationByName($this->_options['applicationName']);
-        $_select->where($db->quoteIdentifier("{$correlationName}.application_id") . ' = ?', $app->getId());
     }
     
     /**

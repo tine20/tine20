@@ -1,0 +1,58 @@
+.ux-subformpanel {
+    /*position:relative;*/
+    padding-bottom:5px;
+    overflow:hidden;
+}
+
+.ux-subformpanel .x-tool-toggle {
+    background:#fff url(../../../library/ExtJS/resources/images/default/tree/arrows.gif) no-repeat -18px 0;
+    position: relative;
+    top: 8px;
+    float: left;
+}
+
+.ux-subformpanel-plain .x-tool-toggle {
+    background-color: #DFE8F6;
+}
+
+.x-panel-collapsed .ux-subformpanel-header .x-tool-toggle {
+    background-position: -2px 0;
+}
+
+.x-panel-collapsed .ux-subformpanel-header .x-tool-toggle-over {
+    background-position: -34px 0;
+}
+
+.ux-subformpanel-header .x-tool-toggle-over {
+    background-position: -50px 0;
+}
+
+.ux-subformpanel .ux-subformpanel-header {
+    line-height: 24px;
+    padding:0;
+    /*border-bottom:1px solid #c3daf9;*/
+}
+ 
+.ux-subformpanel .ux-subformpanel-header-text {
+	color: #a0a0a0;
+    font-size: 18px;
+    position: absolute;
+    font-weight: bold;
+    /*font-family:tahoma,arial,sans-serif*/;
+    /*line-height:13px*/;
+    /*text-transform:uppercase*/;
+    position:relative;
+    /*left:5px*/;
+    /*top:5px*/;
+    /*padding:1px 5px 1px 20px;*/
+    /*color:#4e79b2*/;
+    }
+ 
+.ux-subformpanel-body {
+    overflow:hidden;
+}
+ 
+.ux-subformpanel-bwrap {
+    overflow:hidden;
+    zoom:1;
+}

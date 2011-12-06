@@ -18,27 +18,27 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Sipgate\n"
 
-#: js/AddressbookGridPanelHook.js:37
+#: js/AddressbookGridPanelHook.js:38
 msgid "Call contact"
 msgstr "Kontakt anrufen"
 
-#: js/AddressbookGridPanelHook.js:60
+#: js/AddressbookGridPanelHook.js:61
 msgid "Compose SMS"
 msgstr "Verfasse SMS"
 
-#: js/AddressbookGridPanelHook.js:255
+#: js/AddressbookGridPanelHook.js:256
 msgid "Work"
 msgstr "Arbeit"
 
-#: js/AddressbookGridPanelHook.js:265
+#: js/AddressbookGridPanelHook.js:266
 msgid "Home"
 msgstr "zu Hause"
 
-#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:320
+#: js/AddressbookGridPanelHook.js:276 js/AddressbookGridPanelHook.js:321
 msgid "Cell"
 msgstr "Handy"
 
-#: js/AddressbookGridPanelHook.js:285 js/AddressbookGridPanelHook.js:330
+#: js/AddressbookGridPanelHook.js:286 js/AddressbookGridPanelHook.js:331
 msgid "Cell private"
 msgstr "Handy privat"
 
@@ -47,12 +47,12 @@ msgstr "Handy privat"
 msgid "Cancel"
 msgstr "abbrechen"
 
-#: js/CallStateWindow.js:104
+#: js/CallStateWindow.js:106
 #, fuzzy
 msgid "connecting..."
 msgstr "Verbinde zu:"
 
-#: js/CallStateWindow.js:142
+#: js/CallStateWindow.js:144
 msgid "Connecting to: "
 msgstr "Verbinde zu:"
 
@@ -139,102 +139,110 @@ msgstr "Sipgate"
 msgid "Devices"
 msgstr "Endgeräte"
 
-#: js/Sipgate.js:153
+#: js/Sipgate.js:154
 msgid "Dial number"
 msgstr "wählen"
 
-#: js/Sipgate.js:154
+#: js/Sipgate.js:155
 #, fuzzy
 msgid "Initiates a new outgoing call"
 msgstr "Neuer Telefonanruf"
 
-#: js/Sipgate.js:161
+#: js/Sipgate.js:162
 msgid "Add Number to Addressbook"
 msgstr "Telefonnummer zum Adressbuch hinzufügen"
 
-#: js/Sipgate.js:162
+#: js/Sipgate.js:163
 #, fuzzy
 msgid "Adds this number to the Addressbook"
 msgstr "Fügt die Telefonnummer zum Adressbuch hinzu"
 
-#: js/Sipgate.js:281
+#: js/Sipgate.js:282
 msgid "Calls from"
 msgstr "Anrufe vom"
 
-#: js/Sipgate.js:292
+#: js/Sipgate.js:293
 #, fuzzy
 msgid "Calls to"
 msgstr "Anruf Id"
 
-#: js/Sipgate.js:311
+#: js/Sipgate.js:312
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Zeige Anrufe {0} - {1} of {2}"
 
-#: js/Sipgate.js:312 js/Sipgate.js:397
+#: js/Sipgate.js:313 js/Sipgate.js:398
 msgid "No calls to display"
 msgstr "Heute keine Anrufe"
 
-#: js/Sipgate.js:324
+#: js/Sipgate.js:325
 msgid "Status"
 msgstr "Status"
 
-#: js/Sipgate.js:334
+#: js/Sipgate.js:335
 msgid "Remote Party"
 msgstr "Gesprächspartner"
 
-#: js/Sipgate.js:339
+#: js/Sipgate.js:340
 msgid "Remote Number"
 msgstr "Nummer des Gesprächspartners"
 
-#: js/Sipgate.js:344
+#: js/Sipgate.js:345
 msgid "Local Uri"
 msgstr "lokale Uri"
 
-#: js/Sipgate.js:349
+#: js/Sipgate.js:350
 msgid "Remote Uri"
 msgstr "Entfernte Uri"
 
-#: js/Sipgate.js:356
+#: js/Sipgate.js:357
 msgid "Call started"
 msgstr "Zeitpunkt"
 
-#: js/Sipgate.js:366
+#: js/Sipgate.js:367
 msgid "Call ID"
 msgstr "Anruf Id"
 
-#: js/Sipgate.js:527
+#: js/Sipgate.js:534
 msgid "unknown Person"
 msgstr "unbekannte Person"
 
-#: js/Sipgate.js:605
+#: js/Sipgate.js:555
+msgid "Configuration not set"
+msgstr ""
+
+#: js/Sipgate.js:555
+msgid "Please configure the Sipgate application"
+msgstr ""
+
+#: js/Sipgate.js:620
 msgid "first dial"
 msgstr "Heben Sie ab, um mit Ihrem Gesprächspartner verbunden zu werden!"
 
-#: js/Sipgate.js:610
+#: js/Sipgate.js:625
 msgid "second dial"
 msgstr "Verbindungsaufbau zu"
 
-#: js/Sipgate.js:617
+#: js/Sipgate.js:632
 msgid "established"
 msgstr "Verbunden mit"
 
-#: js/Sipgate.js:622
+#: js/Sipgate.js:637
 msgid "call 1 busy"
 msgstr "Ihr Telefon ist belegt. Bitte überprüfen Sie, ob es aufgelegt ist"
 
-#: js/Sipgate.js:629
+#: js/Sipgate.js:644
 msgid "call 2 busy"
 msgstr "telefoniert selber gerade, oder hat Ihren Anruf abgewiesen"
 
-#: js/Sipgate.js:636
+#: js/Sipgate.js:651
 msgid "hungup before other called"
 msgstr "Sie haben aufgelegt, bevor Ihr Gesprächspartner antworten hat können"
 
-#: js/Sipgate.js:639
+#: js/Sipgate.js:654
 msgid "hungup"
 msgstr "Gespräch beendet"
 
-#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:187
+#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:183
 msgid "Send"
 msgstr "SMS verschicken"
 

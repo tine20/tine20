@@ -38,7 +38,6 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected $_omitModLog = true;
     
-    
     /**
      * the constructor
      *
@@ -87,11 +86,35 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     public function addListMember($_listId, $_newMembers)
     {
-        $list = $this->get($_listId);
+        try {
+            $list = $this->get($_listId);
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            $list = $this->_fixEmptyContainerId($_listId);
+            $list = $this->get($_listId);
+        }
         
         $this->_checkGrant($list, 'update', TRUE, 'No permission to add list member.');
         
         $list = $this->_backend->addListMember($_listId, $_newMembers);
+        
+        return $list;
+    }
+    
+    /**
+     * fixes empty container ids / perhaps this can be removed later as all lists should have a container id!
+     * 
+     * @param  mixed  $_listId
+     * @return Addressbook_Model_List
+     */
+    protected function _fixEmptyContainerId($_listId)
+    {
+        $list = $this->_backend->get($_listId);
+        
+        if (empty($list->container_id)) {
+            $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
+            $list->container_id = $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK];
+            $list = $this->_backend->update($list);
+        }
         
         return $list;
     }
