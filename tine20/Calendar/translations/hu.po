@@ -165,7 +165,7 @@ msgid "Name"
 msgstr "Név"
 
 #: js/AttendeeGridPanel.js:186 js/ContactEventsGridPanel.js:125
-#: js/GridView.js:131 Model/Event.php:237
+#: js/GridView.js:142 Model/Event.php:237
 msgid "Status"
 msgstr "Állapot"
 
@@ -201,12 +201,12 @@ msgid "Events"
 msgstr "Események"
 
 #: js/ContactEventsGridPanel.js:112 js/EventDetailsPanel.js:175
-#: js/EventEditDialog.js:87 js/GridView.js:121 Model/Event.php:238
+#: js/EventEditDialog.js:87 js/GridView.js:132 Model/Event.php:238
 msgid "Summary"
 msgstr "Összegzés"
 
 #: js/ContactEventsGridPanel.js:118 js/EventDetailsPanel.js:211
-#: js/EventEditDialog.js:99 js/GridView.js:95 Preference.php:79
+#: js/EventEditDialog.js:101 js/GridView.js:106 Preference.php:79
 msgid "Start Time"
 msgstr "Kezdési idő"
 
@@ -218,7 +218,7 @@ msgstr "{2} {1}., {0}"
 msgid "{0} {1} o'clock"
 msgstr "{0} {1} óra"
 
-#: js/EventDetailsPanel.js:216 js/EventEditDialog.js:114 js/GridView.js:101
+#: js/EventDetailsPanel.js:216 js/EventEditDialog.js:116 js/GridView.js:112
 msgid "End Time"
 msgstr "Befejezési idő"
 
@@ -226,7 +226,7 @@ msgstr "Befejezési idő"
 msgid "Blocking"
 msgstr "Blokkolva"
 
-#: js/EventDetailsPanel.js:226 js/EventEditDialog.js:94 js/GridView.js:126
+#: js/EventDetailsPanel.js:226 js/EventEditDialog.js:95 js/GridView.js:137
 #: js/ResourcesGridPanel.js:52 Model/Event.php:234
 msgid "Location"
 msgstr "Hely"
@@ -235,35 +235,35 @@ msgstr "Hely"
 msgid "Organizer"
 msgstr "Szervező"
 
-#: js/EventEditDialog.js:122 js/GridView.js:107 js/Printer/Base.js:66
+#: js/EventEditDialog.js:124 js/GridView.js:118 js/Printer/Base.js:66
 msgid "whole day"
 msgstr "egész nap"
 
-#: js/EventEditDialog.js:130
+#: js/EventEditDialog.js:132
 msgid "non-blocking"
 msgstr "nem-blokkolt"
 
-#: js/EventEditDialog.js:155 js/GridView.js:87
+#: js/EventEditDialog.js:157 js/GridView.js:98
 msgid "Private"
 msgstr "Privát"
 
-#: js/EventEditDialog.js:196 js/ResourceEditDialog.js:72 Model/Event.php:233
+#: js/EventEditDialog.js:198 js/ResourceEditDialog.js:72 Model/Event.php:233
 msgid "Description"
 msgstr "Leírás"
 
-#: js/EventEditDialog.js:210
+#: js/EventEditDialog.js:212
 msgid "Enter description"
 msgstr "Leírás bevitele..."
 
-#: js/EventEditDialog.js:340
+#: js/EventEditDialog.js:342
 msgid "End date is not valid"
 msgstr "Befejező időpont érvénytelen"
 
-#: js/EventEditDialog.js:343
+#: js/EventEditDialog.js:345
 msgid "End date must be after start date"
 msgstr "Befejező időpontnak a kezdő időpont után kell lennie"
 
-#: js/EventEditDialog.js:356
+#: js/EventEditDialog.js:358
 msgid "Start date is not valid"
 msgstr "Kezdő időpont érvénytelen"
 
@@ -280,7 +280,7 @@ msgstr "ismétlődő esemény"
 msgid "has alarm"
 msgstr "riasztást tartalmaz"
 
-#: js/GridView.js:113
+#: js/GridView.js:124
 msgid "blocking"
 msgstr ""
 
@@ -522,44 +522,44 @@ msgstr "Az esemény indulása utánig"
 msgid "Every {0}. Day"
 msgstr "Minden {0}. napon"
 
-#: js/RrulePanel.js:360
+#: js/RrulePanel.js:363
 msgid "Every {0}. Week at"
 msgstr "Minden {0}. héten ekkor:"
 
-#: js/RrulePanel.js:429
+#: js/RrulePanel.js:433
 msgid "Every {0}. Month"
 msgstr "Minden {0}. hónapban"
 
-#: js/RrulePanel.js:435 js/RrulePanel.js:484 js/RrulePanel.js:615
-#: js/RrulePanel.js:665
+#: js/RrulePanel.js:439 js/RrulePanel.js:488 js/RrulePanel.js:619
+#: js/RrulePanel.js:669
 msgid "at the"
 msgstr "ekkor:"
 
-#: js/RrulePanel.js:454 js/RrulePanel.js:634
+#: js/RrulePanel.js:458 js/RrulePanel.js:638
 msgid "first"
 msgstr "első"
 
-#: js/RrulePanel.js:455 js/RrulePanel.js:635
+#: js/RrulePanel.js:459 js/RrulePanel.js:639
 msgid "second"
 msgstr "második"
 
-#: js/RrulePanel.js:456 js/RrulePanel.js:636
+#: js/RrulePanel.js:460 js/RrulePanel.js:640
 msgid "third"
 msgstr "harmadik"
 
-#: js/RrulePanel.js:457 js/RrulePanel.js:637
+#: js/RrulePanel.js:461 js/RrulePanel.js:641
 msgid "fourth"
 msgstr "negyedik"
 
-#: js/RrulePanel.js:458 js/RrulePanel.js:638
+#: js/RrulePanel.js:462 js/RrulePanel.js:642
 msgid "last"
 msgstr "utolsó"
 
-#: js/RrulePanel.js:608
+#: js/RrulePanel.js:612
 msgid "Every {0}. Year"
 msgstr "Minden {0}. évben"
 
-#: js/RrulePanel.js:705 js/RrulePanel.js:717
+#: js/RrulePanel.js:709 js/RrulePanel.js:721
 msgid "of"
 msgstr "hónap"
 

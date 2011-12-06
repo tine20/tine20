@@ -47,61 +47,61 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "%s 的个人任务"
 
-#: js/GridPanel.js:53
+#: js/GridPanel.js:54
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "你确实想删除选中的任务？"
 
-#: js/GridPanel.js:108
+#: js/GridPanel.js:128
 #, fuzzy
 msgid "Tags"
 msgstr "任务"
 
-#: js/GridPanel.js:109 Model/Task.php:194
+#: js/GridPanel.js:129 Model/Task.php:194
 msgid "Lead"
 msgstr ""
 
-#: js/GridPanel.js:112 js/TaskEditDialog.js:180 js/Tasks.js:148
+#: js/GridPanel.js:132 js/TaskEditDialog.js:180 js/Tasks.js:148
 msgid "Summary"
 msgstr "摘要"
 
-#: js/GridPanel.js:116
+#: js/GridPanel.js:136
 msgid "Add a task..."
 msgstr "添加任务"
 
-#: js/GridPanel.js:120 js/Tasks.js:149
+#: js/GridPanel.js:140 js/GridPanel.js:148 js/Tasks.js:149
 msgid "Due Date"
 msgstr "过期日期"
 
-#: js/GridPanel.js:128 js/TaskEditDialog.js:188 Model/Task.php:185
+#: js/GridPanel.js:166 js/TaskEditDialog.js:208 Model/Task.php:185
 msgid "Priority"
 msgstr "优先"
 
-#: js/GridPanel.js:142 Model/Task.php:187
+#: js/GridPanel.js:180 Model/Task.php:187
 msgid "Percent"
 msgstr "百分比"
 
-#: js/GridPanel.js:155 js/TaskEditDialog.js:210 js/Tasks.js:151
+#: js/GridPanel.js:193 js/TaskEditDialog.js:234 js/Tasks.js:151
 #: js/Tasks.js:211 Model/Task.php:186
 #, fuzzy
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "状态"
 
-#: js/GridPanel.js:171 js/Tasks.js:163
+#: js/GridPanel.js:209 js/Tasks.js:163
 msgid "Creation Time"
 msgstr "创建时间"
 
-#: js/GridPanel.js:178 js/TaskEditDialog.js:214 Setup/Initialize.php:34
+#: js/GridPanel.js:216 js/TaskEditDialog.js:239 Setup/Initialize.php:34
 #: Setup/Update/Release5.php:67
 msgid "Completed"
 msgstr "完成的"
 
-#: js/GridPanel.js:185 js/Tasks.js:159
+#: js/GridPanel.js:223 js/Tasks.js:159
 msgid "Responsible"
 msgstr "有责任的"
 
-#: js/GridPanel.js:234
+#: js/GridPanel.js:272
 msgid "Show closed"
 msgstr "显示关闭的"
 
@@ -109,24 +109,24 @@ msgstr "显示关闭的"
 msgid "You have to supply a due date, because an alarm ist set!"
 msgstr ""
 
-#: js/TaskEditDialog.js:185
+#: js/TaskEditDialog.js:186 js/TaskEditDialog.js:190
 msgid "Due date"
 msgstr "过期日期"
 
-#: js/TaskEditDialog.js:191
+#: js/TaskEditDialog.js:212
 #, fuzzy
 msgid "Add Responsible ..."
 msgstr "有责任的"
 
-#: js/TaskEditDialog.js:198
+#: js/TaskEditDialog.js:220
 msgid "Notes"
 msgstr "注释"
 
-#: js/TaskEditDialog.js:199
+#: js/TaskEditDialog.js:221
 msgid "Enter description..."
 msgstr "输入描述"
 
-#: js/TaskEditDialog.js:204
+#: js/TaskEditDialog.js:227
 msgid "Percentage"
 msgstr "百分比"
 

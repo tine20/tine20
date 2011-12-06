@@ -59,7 +59,7 @@ msgstr "Организация / Отделение"
 msgid "Business Address"
 msgstr "Рабочий адрес"
 
-#: Export/Pdf.php:52 js/ContactGrid.js:124
+#: Export/Pdf.php:52 js/ContactGrid.js:125
 msgid "Email"
 msgstr "Электронная почта"
 
@@ -91,7 +91,7 @@ msgstr "URL"
 msgid "Role"
 msgstr "Роль"
 
-#: Export/Pdf.php:76 js/ContactEditDialog.js:170 js/ContactGrid.js:113
+#: Export/Pdf.php:76 js/ContactEditDialog.js:179 js/ContactGrid.js:114
 #: js/Model.js:33
 msgid "Room"
 msgstr "Помещение"
@@ -108,7 +108,7 @@ msgstr "Телефон помощника"
 msgid "Private Contact Data"
 msgstr "Личные данные контактов"
 
-#: Export/Pdf.php:88 js/ContactEditDialog.js:287 js/Model.js:43
+#: Export/Pdf.php:88 js/ContactEditDialog.js:296 js/Model.js:43
 #: js/Model.js:155 js/Model.js:156 js/Model.js:157 js/Model.js:158
 #: js/Model.js:159
 msgid "Private Address"
@@ -138,12 +138,12 @@ msgstr "Домашний URL"
 msgid "Other Data"
 msgstr "Другие данные"
 
-#: Export/Pdf.php:114 js/ContactEditDialog.js:158 js/ContactGrid.js:139
+#: Export/Pdf.php:114 js/ContactEditDialog.js:167 js/ContactGrid.js:140
 #: js/Model.js:26 js/Model.js:149
 msgid "Birthday"
 msgstr "Дата рождения"
 
-#: Export/Pdf.php:117 js/ContactEditDialog.js:152 js/ContactGrid.js:111
+#: Export/Pdf.php:117 js/ContactEditDialog.js:161 js/ContactGrid.js:112
 #: js/Model.js:30 js/Model.js:144
 msgid "Job Title"
 msgstr "Профессия"
@@ -188,157 +188,157 @@ msgstr[0] "Адресная книга"
 msgstr[1] "Адресная книга"
 msgstr[2] "Адресная книга"
 
-#: js/ContactEditDialog.js:34 js/ContactEditDialog.js:40 js/MapPanel.js:40
+#: js/ContactEditDialog.js:39 js/ContactEditDialog.js:45 js/MapPanel.js:40
 msgid "Map"
 msgstr "Карта"
 
-#: js/ContactEditDialog.js:63
+#: js/ContactEditDialog.js:68
 msgid "Personal Information"
 msgstr "Личная  информация"
 
-#: js/ContactEditDialog.js:84 js/Model.js:29
+#: js/ContactEditDialog.js:93 js/Model.js:29
 msgid "Salutation"
 msgstr "Приветствие"
 
-#: js/ContactEditDialog.js:106 js/Model.js:22
+#: js/ContactEditDialog.js:115 js/Model.js:22
 msgid "Title"
 msgstr "Название"
 
-#: js/ContactEditDialog.js:114 js/ContactGrid.js:106 js/Model.js:20
+#: js/ContactEditDialog.js:123 js/ContactGrid.js:107 js/Model.js:20
 #: js/Model.js:139
 msgid "First Name"
 msgstr "Имя"
 
-#: js/ContactEditDialog.js:119 js/Model.js:21
+#: js/ContactEditDialog.js:128 js/Model.js:21
 msgid "Middle Name"
 msgstr "Второе имя"
 
-#: js/ContactEditDialog.js:124 js/ContactEditDialog.js:415
-#: js/ContactGrid.js:105 js/Model.js:19 js/Model.js:140
+#: js/ContactEditDialog.js:133 js/ContactEditDialog.js:440
+#: js/ContactGrid.js:106 js/Model.js:19 js/Model.js:140
 msgid "Last Name"
 msgstr "Фамилия"
 
-#: js/ContactEditDialog.js:133 js/ContactEditDialog.js:415
-#: js/ContactGrid.js:109 js/ContactGridDetailsPanel.js:131 js/Model.js:27
+#: js/ContactEditDialog.js:142 js/ContactEditDialog.js:440
+#: js/ContactGrid.js:110 js/ContactGridDetailsPanel.js:131 js/Model.js:27
 #: js/Model.js:141 Setup/setup.xml:755
 msgid "Company"
 msgstr "Фирма"
 
-#: js/ContactEditDialog.js:138 js/ContactGrid.js:110 js/Model.js:28
+#: js/ContactEditDialog.js:147 js/ContactGrid.js:111 js/Model.js:28
 #: js/Model.js:142
 msgid "Unit"
 msgstr "Отделение"
 
-#: js/ContactEditDialog.js:147 js/ContactGrid.js:108 js/Model.js:24
+#: js/ContactEditDialog.js:156 js/ContactGrid.js:109 js/Model.js:24
 msgid "Display Name"
 msgstr "Отображать как"
 
-#: js/ContactEditDialog.js:162 js/Model.js:23
+#: js/ContactEditDialog.js:171 js/Model.js:23
 msgid "Suffix"
 msgstr "Дополнение имени"
 
-#: js/ContactEditDialog.js:166 js/ContactGrid.js:112 js/Model.js:31
+#: js/ContactEditDialog.js:175 js/ContactGrid.js:113 js/Model.js:31
 #: js/Model.js:145
 msgid "Job Role"
 msgstr "Рабочая роль"
 
-#: js/ContactEditDialog.js:177
+#: js/ContactEditDialog.js:186
 msgid "Contact Information"
 msgstr "Информация контакта"
 
-#: js/ContactEditDialog.js:182 js/ContactGrid.js:125
+#: js/ContactEditDialog.js:191 js/ContactGrid.js:126
 #: js/ContactGridDetailsPanel.js:139 js/ContactGridDetailsPanel.js:163
 #: js/Model.js:51 js/Model.js:143
 msgid "Phone"
 msgstr "Телефон"
 
-#: js/ContactEditDialog.js:187 js/ContactGrid.js:126
+#: js/ContactEditDialog.js:196 js/ContactGrid.js:127
 #: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
 #: js/Model.js:52
 msgid "Mobile"
 msgstr "Мобильный телефон"
 
-#: js/ContactEditDialog.js:192 js/ContactGrid.js:127
+#: js/ContactEditDialog.js:201 js/ContactGrid.js:128
 #: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
 #: js/Model.js:53
 msgid "Fax"
 msgstr "Факс"
 
-#: js/ContactEditDialog.js:197 js/ContactGrid.js:130 js/Model.js:57
+#: js/ContactEditDialog.js:206 js/ContactGrid.js:131 js/Model.js:57
 msgid "Phone (private)"
 msgstr "Телефон (личный)"
 
-#: js/ContactEditDialog.js:202 js/ContactGrid.js:132 js/Model.js:59
+#: js/ContactEditDialog.js:211 js/ContactGrid.js:133 js/Model.js:59
 msgid "Mobile (private)"
 msgstr "Мобильный телефон (личный)"
 
-#: js/ContactEditDialog.js:207 js/ContactGrid.js:131 js/Model.js:58
+#: js/ContactEditDialog.js:216 js/ContactGrid.js:132 js/Model.js:58
 msgid "Fax (private)"
 msgstr "Факс (личный)"
 
-#: js/ContactEditDialog.js:212 js/ContactGridDetailsPanel.js:142
+#: js/ContactEditDialog.js:221 js/ContactGridDetailsPanel.js:142
 #: js/ContactGridDetailsPanel.js:166 js/Model.js:62 js/Model.js:147
 msgid "E-Mail"
 msgstr "Электронная почта"
 
-#: js/ContactEditDialog.js:218 js/Model.js:63
+#: js/ContactEditDialog.js:227 js/Model.js:63
 msgid "E-Mail (private)"
 msgstr "Электронная почта (личная)"
 
-#: js/ContactEditDialog.js:225 js/ContactGrid.js:134
+#: js/ContactEditDialog.js:234 js/ContactGrid.js:135
 #: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
 #: js/Model.js:64
 msgid "Web"
 msgstr "Интернет"
 
-#: js/ContactEditDialog.js:258 js/Model.js:34 js/Model.js:150 js/Model.js:151
+#: js/ContactEditDialog.js:267 js/Model.js:34 js/Model.js:150 js/Model.js:151
 #: js/Model.js:152 js/Model.js:153 js/Model.js:154
 msgid "Company Address"
 msgstr "Адрес фирмы"
 
-#: js/ContactEditDialog.js:261 js/ContactEditDialog.js:290
-#: js/ContactGrid.js:114 js/Model.js:150 js/Model.js:155
+#: js/ContactEditDialog.js:270 js/ContactEditDialog.js:299
+#: js/ContactGrid.js:115 js/Model.js:150 js/Model.js:155
 msgid "Street"
 msgstr "Улица"
 
-#: js/ContactEditDialog.js:265 js/ContactEditDialog.js:294
+#: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303
 msgid "Street 2"
 msgstr "Следующая улица"
 
-#: js/ContactEditDialog.js:269 js/ContactEditDialog.js:298
-#: js/ContactGrid.js:116 js/Model.js:151 js/Model.js:156
+#: js/ContactEditDialog.js:278 js/ContactEditDialog.js:307
+#: js/ContactGrid.js:117 js/Model.js:151 js/Model.js:156
 msgid "Region"
 msgstr "Область"
 
-#: js/ContactEditDialog.js:273 js/ContactEditDialog.js:302 js/Model.js:152
+#: js/ContactEditDialog.js:282 js/ContactEditDialog.js:311 js/Model.js:152
 #: js/Model.js:157
 msgid "Postal Code"
 msgstr "Почтовый индекс"
 
-#: js/ContactEditDialog.js:277 js/ContactEditDialog.js:306
-#: js/ContactGrid.js:115 js/Model.js:153 js/Model.js:158
+#: js/ContactEditDialog.js:286 js/ContactEditDialog.js:315
+#: js/ContactGrid.js:116 js/Model.js:153 js/Model.js:158
 msgid "City"
 msgstr "Город"
 
-#: js/ContactEditDialog.js:282 js/ContactEditDialog.js:311
-#: js/ContactGrid.js:118 js/Model.js:154 js/Model.js:159
+#: js/ContactEditDialog.js:291 js/ContactEditDialog.js:320
+#: js/ContactGrid.js:119 js/Model.js:154 js/Model.js:159
 msgid "Country"
 msgstr "Страна"
 
-#: js/ContactEditDialog.js:332 js/Model.js:68
+#: js/ContactEditDialog.js:341 js/Model.js:68
 msgid "Description"
 msgstr "Описание"
 
-#: js/ContactEditDialog.js:346
+#: js/ContactEditDialog.js:355
 msgid "Enter description"
 msgstr "Введите описание"
 
-#: js/ContactEditDialog.js:390
+#: js/ContactEditDialog.js:415
 #, fuzzy
 msgid "Export as pdf"
 msgstr "экспортировать как pdf"
 
-#: js/ContactEditDialog.js:415
+#: js/ContactEditDialog.js:440
 msgid "Either {0} or {1} must be given"
 msgstr ""
 
@@ -349,100 +349,100 @@ msgstr[0] "Контакт"
 msgstr[1] "Контакта"
 msgstr[2] "Контактов"
 
-#: js/ContactGrid.js:103 js/Model.js:160
+#: js/ContactGrid.js:104 js/Model.js:160
 msgid "Type"
 msgstr "Тип"
 
-#: js/ContactGrid.js:104
+#: js/ContactGrid.js:105
 msgid "Tags"
 msgstr "Тэги"
 
-#: js/ContactGrid.js:107
+#: js/ContactGrid.js:108
 msgid "Full Name"
 msgstr "Полное имя"
 
-#: js/ContactGrid.js:117
+#: js/ContactGrid.js:118
 msgid "Postalcode"
 msgstr "Почтовый индекс"
 
-#: js/ContactGrid.js:119
+#: js/ContactGrid.js:120
 msgid "Street (private)"
 msgstr "Улица (личная)"
 
-#: js/ContactGrid.js:120
+#: js/ContactGrid.js:121
 msgid "City (private)"
 msgstr "Город (личный)"
 
-#: js/ContactGrid.js:121
+#: js/ContactGrid.js:122
 msgid "Region (private)"
 msgstr "Область (личная)"
 
-#: js/ContactGrid.js:122
+#: js/ContactGrid.js:123
 msgid "Postalcode (private)"
 msgstr "Почтовый индекс (личный)"
 
-#: js/ContactGrid.js:123
+#: js/ContactGrid.js:124
 msgid "Country (private)"
 msgstr "Страна (личная)"
 
-#: js/ContactGrid.js:128
+#: js/ContactGrid.js:129
 msgid "Car phone"
 msgstr "Автомобильный телефон"
 
-#: js/ContactGrid.js:129
+#: js/ContactGrid.js:130
 msgid "Pager"
 msgstr "Пейджер"
 
-#: js/ContactGrid.js:133
+#: js/ContactGrid.js:134
 msgid "Email (private)"
 msgstr "Электронная почта (личная)"
 
-#: js/ContactGrid.js:135
+#: js/ContactGrid.js:136
 msgid "URL (private)"
 msgstr "Личный веб-сайт"
 
-#: js/ContactGrid.js:136 js/Model.js:146
+#: js/ContactGrid.js:137 js/Model.js:146
 msgid "Note"
 msgstr "Заметка"
 
-#: js/ContactGrid.js:137
+#: js/ContactGrid.js:138
 msgid "Timezone"
 msgstr "Часовой пояс"
 
-#: js/ContactGrid.js:138
+#: js/ContactGrid.js:139
 msgid "Geo"
 msgstr "Координаты"
 
-#: js/ContactGrid.js:149
+#: js/ContactGrid.js:150
 #, fuzzy
 msgid "Export Contact"
 msgstr "Контакт"
 
-#: js/ContactGrid.js:157
+#: js/ContactGrid.js:158
 msgid "Export as PDF"
 msgstr "Экспортировать как PDF"
 
-#: js/ContactGrid.js:164
+#: js/ContactGrid.js:165
 msgid "Export as CSV"
 msgstr "Экспортировать как CSV"
 
-#: js/ContactGrid.js:171
+#: js/ContactGrid.js:172
 msgid "Export as ODS"
 msgstr ""
 
-#: js/ContactGrid.js:178
+#: js/ContactGrid.js:179
 msgid "Export as XLS"
 msgstr ""
 
-#: js/ContactGrid.js:185
+#: js/ContactGrid.js:186
 msgid "Export as ..."
 msgstr ""
 
-#: js/ContactGrid.js:197
+#: js/ContactGrid.js:198
 msgid "Import contacts"
 msgstr ""
 
-#: js/ContactGrid.js:286
+#: js/ContactGrid.js:287
 #, fuzzy
 msgid "Internal Contact"
 msgstr "Внутренние контакты"
