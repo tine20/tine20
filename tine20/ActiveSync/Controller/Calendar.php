@@ -813,8 +813,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 
                 $event->exdate = $exdates;
             }
+        } else {
+            $event->rrule  = null;
+            $event->exdate = null;
         }
-        
         
         if(empty($event->organizer)) {
             $event->organizer = Tinebase_Core::getUser()->contact_id;
