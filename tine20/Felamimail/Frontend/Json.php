@@ -124,6 +124,19 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_multipleRecordsToJson($result);
     }
     
+    /**
+     * get folder status
+     *
+     * @param array  $filterData
+     * @return array of folder status
+     */
+    public function getFolderStatus($filterData)
+    {
+        $filter = new Felamimail_Model_FolderFilter($filterData);
+        $result = Felamimail_Controller_Cache_Message::getInstance()->getFolderStatus($filter);
+        return $this->_multipleRecordsToJson($result);
+    }
+    
     /***************************** messages funcs *******************************/
     
     /**
