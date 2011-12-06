@@ -208,6 +208,33 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $this->assertEquals(3, count($updatedEvent->exdate), 'new exdate num exdate mismatch');
     }
     
+    /**
+     * sclever declines event exception.
+     * => from her iTIP perspective this is an fallout than
+     */
+    public function testPerspectiveExceptionFallout()
+    {
+        $event = $this->testCreate();
+        
+        $persistentException = $event->exdate->filter('is_deleted', 0)->getFirstRecord();
+        
+        $sclever = new Calendar_Model_Attender(array(
+            'user_id'        => $this->_personasContacts['sclever']->getId(),
+            'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
+        ));
+        
+        $persistentSClever = Calendar_Model_Attender::getAttendee($persistentException->attendee, $sclever);
+        $persistentSClever->status = Calendar_Model_Attender::STATUS_DECLINED;
+        
+        $this->_uit->attenderStatusUpdate($event, $persistentSClever);
+        
+        $this->_uit->setCalendarUser($sclever);
+        
+        $event = $this->_uit->get($event->getId());
+        $persistentException = $event->exdate->filter('is_deleted', 0)->getFirstRecord();
+        $this->assertNull($persistentException);
+    }
+    
     protected function _assertTestEvent($persistentEvent)
     {
         $this->assertEquals(2, $persistentEvent->exdate->count());

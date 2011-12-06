@@ -56,10 +56,10 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     private function __construct() {
         $this->_eventController = Calendar_Controller_Event::getInstance();
-        $this->_calendarUser = new Calendar_Model_Attender(array(
+        $this->setCalendarUser(new Calendar_Model_Attender(array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
             'user_id'   => Tinebase_Core::getUser()->contact_id
-        ));
+        )));
     }
 
     /**
@@ -396,6 +396,26 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     }
     
     /**
+     * sets current calendar user
+     * 
+     * @param Calendar_Model_Attender $_calUser
+     */
+    public function setCalendarUser(Calendar_Model_Attender $_calUser)
+    {
+        $this->_calendarUser = $_calUser;
+    }
+    
+    /**
+     * get current calendar user
+     * 
+     * @return Calendar_Model_Attender
+     */
+    public function getCalendarUser()
+    {
+        return $this->_calendarUser;
+    }
+    
+    /**
      * filters given eventset for events with matching dtstart
      * 
      * @param Tinebase_Record_RecordSet $_events
@@ -445,9 +465,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         
         // mark any exdates as deleted if the CU does not attend and is not organizer
         if ($_event->exdate instanceof Tinebase_Record_RecordSet && $_event->organizer != $this->_calendarUser->user_id) {
-            foreach ($this->_event->exdate as $exdate) {
+            foreach ($_event->exdate as $exdate) {
                 $CUAttendee = Calendar_Model_Attender::getAttendee($exdate->attendee, $this->_calendarUser);
-                if ($exdate->is_deleted == false && $CUAttendee == null) {
+                if ($exdate->is_deleted == false && (! $CUAttendee || $CUAttendee->status == Calendar_Model_Attender::STATUS_DECLINED)) {
                     $exdate->is_deleted = true;
                 }
             }
