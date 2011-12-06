@@ -427,6 +427,11 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 $_xmlNode->appendChild($attendees);
             }
             
+            // set own status
+            if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($data->attendee)) !== null && ($busyType = array_search($ownAttendee->status, $this->_busyStatusMapping)) !== false) {
+                $_xmlNode->appendChild(new DOMElement('BusyStatus', $busyType, 'uri:Calendar'));
+            }
+        
         }
         
         $timeZoneConverter = ActiveSync_TimezoneConverter::getInstance(
@@ -437,9 +442,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         $_xmlNode->appendChild(new DOMElement('Timezone', $timeZoneConverter->encodeTimezone(
             Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)
         ), 'uri:Calendar'));
+
         
         $_xmlNode->appendChild(new DOMElement('MeetingStatus', 1, 'uri:Calendar'));
-        $_xmlNode->appendChild(new DOMElement('BusyStatus', 2, 'uri:Calendar'));
         $_xmlNode->appendChild(new DOMElement('Sensitivity', 0, 'uri:Calendar'));
         $_xmlNode->appendChild(new DOMElement('DtStamp', $data->creation_time->format('Ymd\THis') . 'Z', 'uri:Calendar'));
         $_xmlNode->appendChild(new DOMElement('UID', $data->uid, 'uri:Calendar'));
@@ -714,6 +719,14 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     'role'      => Calendar_Model_Attender::ROLE_REQUIRED
                 ));
                 $event->attendee->addRecord($newAttender);
+            }
+        }
+        
+        if (isset($xmlData->BusyStatus) && ($ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee)) !== null) {
+            if (isset($this->_busyStatusMapping[(string)$xmlData->BusyStatus])) {
+                $ownAttendee->status = $this->_busyStatusMapping[(string)$xmlData->BusyStatus];
+            } else {
+                $ownAttendee->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
             }
         }
         
