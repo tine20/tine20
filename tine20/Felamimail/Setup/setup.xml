@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>5.3</version>
+    <version>5.4</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
@@ -229,7 +229,7 @@
         </table>
         <table>
             <name>felamimail_folder</name>
-            <version>9</version>
+            <version>10</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -327,7 +327,7 @@
                     <length>64</length>
                 </field>
                 <field>
-                    <name>cache_job_actions_estimate</name>
+                    <name>cache_job_actions_est</name>
                     <type>integer</type>
                 </field>
                 <field>

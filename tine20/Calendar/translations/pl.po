@@ -106,9 +106,7 @@ msgstr "Zmiana składu uczestników dotycząca terminu \"%1$s\" o %2$s"
 msgid "%s's personal calendar"
 msgstr "%s's kalendarz osobisty"
 
-#: js/AddressbookGridPanelHook.js:35
-#: js/Calendar.js:29
-#: js/DaysView.js:88
+#: js/AddressbookGridPanelHook.js:35 js/Calendar.js:29 js/DaysView.js:88
 #: js/MonthView.js:81
 msgid "New Event"
 msgstr "Nowy termin"
@@ -117,10 +115,8 @@ msgstr "Nowy termin"
 msgid "Manage Resources"
 msgstr "Zarządzaj zasobami"
 
-#: js/AttendeeFilterModel.js:35
-#: js/AttendeeGridPanel.js:76
-#: js/EventDetailsPanel.js:248
-#: js/Model.js:355
+#: js/AttendeeFilterModel.js:35 js/AttendeeGridPanel.js:76
+#: js/EventDetailsPanel.js:248 js/Model.js:355
 msgid "Attendee"
 msgstr "Uczestnik"
 
@@ -152,8 +148,7 @@ msgstr "Użytkownik"
 msgid "Group"
 msgstr "Grupa"
 
-#: js/AttendeeGridPanel.js:170
-#: js/Model.js:510
+#: js/AttendeeGridPanel.js:170 js/Model.js:510
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Zasób"
@@ -164,16 +159,13 @@ msgstr[2] "zasoby"
 msgid "Member of group"
 msgstr "Uczestnik grupy"
 
-#: js/AttendeeGridPanel.js:178
-#: js/ResourceEditDialog.js:56
+#: js/AttendeeGridPanel.js:178 js/ResourceEditDialog.js:56
 #: js/ResourcesGridPanel.js:41
 msgid "Name"
 msgstr "Nazwa"
 
-#: js/AttendeeGridPanel.js:186
-#: js/ContactEventsGridPanel.js:125
-#: js/GridView.js:131
-#: Model/Event.php:237
+#: js/AttendeeGridPanel.js:186 js/ContactEventsGridPanel.js:125
+#: js/GridView.js:142 Model/Event.php:237
 msgid "Status"
 msgstr "Status"
 
@@ -185,11 +177,8 @@ msgstr "Usuń uczestnika"
 msgid "Click here to invite another attender..."
 msgstr "Aby zaprosić innego uczestnika, kliknij tutaj..."
 
-#: js/AttendeeGridPanel.js:444
-#: js/AttendeeGridPanel.js:462
-#: js/AttendeeGridPanel.js:479
-#: js/AttendeeGridPanel.js:491
-#: js/Model.js:371
+#: js/AttendeeGridPanel.js:444 js/AttendeeGridPanel.js:462
+#: js/AttendeeGridPanel.js:479 js/AttendeeGridPanel.js:491 js/Model.js:371
 msgid "No Information"
 msgstr "Brak informacji"
 
@@ -197,9 +186,7 @@ msgstr "Brak informacji"
 msgid "(as a group member)"
 msgstr "(jako uczestnik grupy)"
 
-#: js/Calendar.js:39
-#: js/Model.js:67
-#: Setup/setup.xml:4
+#: js/Calendar.js:39 js/Model.js:67 Setup/setup.xml:4
 msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] "Kalendarz"
@@ -210,25 +197,17 @@ msgstr[2] "kalendarze"
 msgid "Originally"
 msgstr "Pierwotny kalendarz"
 
-#: js/ContactEventsGridPanel.js:50
-#: js/Model.js:63
-#: js/Model.js:359
+#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:359
 msgid "Events"
 msgstr "Terminy"
 
-#: js/ContactEventsGridPanel.js:112
-#: js/EventDetailsPanel.js:175
-#: js/EventEditDialog.js:87
-#: js/GridView.js:121
-#: Model/Event.php:238
+#: js/ContactEventsGridPanel.js:112 js/EventDetailsPanel.js:175
+#: js/EventEditDialog.js:87 js/GridView.js:132 Model/Event.php:238
 msgid "Summary"
 msgstr "Streszczenie"
 
-#: js/ContactEventsGridPanel.js:118
-#: js/EventDetailsPanel.js:211
-#: js/EventEditDialog.js:99
-#: js/GridView.js:95
-#: Preference.php:79
+#: js/ContactEventsGridPanel.js:118 js/EventDetailsPanel.js:211
+#: js/EventEditDialog.js:101 js/GridView.js:106 Preference.php:79
 msgid "Start Time"
 msgstr "Początek"
 
@@ -240,65 +219,52 @@ msgstr "{0}, {1} z {2}"
 msgid "{0} {1} o'clock"
 msgstr "godzina {0} {1}"
 
-#: js/EventDetailsPanel.js:216
-#: js/EventEditDialog.js:114
-#: js/GridView.js:101
+#: js/EventDetailsPanel.js:216 js/EventEditDialog.js:116 js/GridView.js:112
 msgid "End Time"
 msgstr "Koniec"
 
-#: js/EventDetailsPanel.js:221
-#: Model/Event.php:231
+#: js/EventDetailsPanel.js:221 Model/Event.php:231
 msgid "Blocking"
 msgstr "Blokowanie"
 
-#: js/EventDetailsPanel.js:226
-#: js/EventEditDialog.js:94
-#: js/GridView.js:126
-#: js/ResourcesGridPanel.js:52
-#: Model/Event.php:234
+#: js/EventDetailsPanel.js:226 js/EventEditDialog.js:95 js/GridView.js:137
+#: js/ResourcesGridPanel.js:52 Model/Event.php:234
 msgid "Location"
 msgstr "Miejsce"
 
-#: js/EventDetailsPanel.js:230
-#: js/Model.js:212
-#: Model/Event.php:235
+#: js/EventDetailsPanel.js:230 js/Model.js:212 Model/Event.php:235
 msgid "Organizer"
 msgstr "Notes"
 
-#: js/EventEditDialog.js:122
-#: js/GridView.js:107
-#: js/Printer/Base.js:66
+#: js/EventEditDialog.js:124 js/GridView.js:118 js/Printer/Base.js:66
 msgid "whole day"
 msgstr "cały dzień"
 
-#: js/EventEditDialog.js:130
+#: js/EventEditDialog.js:132
 msgid "non-blocking"
 msgstr "nie blokuj"
 
-#: js/EventEditDialog.js:155
-#: js/GridView.js:87
+#: js/EventEditDialog.js:157 js/GridView.js:98
 msgid "Private"
 msgstr "Osobiste"
 
-#: js/EventEditDialog.js:196
-#: js/ResourceEditDialog.js:72
-#: Model/Event.php:233
+#: js/EventEditDialog.js:198 js/ResourceEditDialog.js:72 Model/Event.php:233
 msgid "Description"
 msgstr "Opis"
 
-#: js/EventEditDialog.js:210
+#: js/EventEditDialog.js:212
 msgid "Enter description"
 msgstr "Wprowadź opis"
 
-#: js/EventEditDialog.js:340
+#: js/EventEditDialog.js:342
 msgid "End date is not valid"
 msgstr "Nieprawidłowa data zakończenia"
 
-#: js/EventEditDialog.js:343
+#: js/EventEditDialog.js:345
 msgid "End date must be after start date"
 msgstr "Data zakończenia musi przypadać po dacie rozpoczęcia"
 
-#: js/EventEditDialog.js:356
+#: js/EventEditDialog.js:358
 msgid "Start date is not valid"
 msgstr "Nieprawidłowa data rozpoczęcia"
 
@@ -314,7 +280,7 @@ msgstr "termin wielokrotny"
 msgid "has alarm"
 msgstr "z alarmem"
 
-#: js/GridView.js:113
+#: js/GridView.js:124
 msgid "blocking"
 msgstr "blokowanie"
 
@@ -338,8 +304,7 @@ msgstr "Kratka"
 msgid "Day"
 msgstr "Dzień"
 
-#: js/MainScreenCenterPanel.js:198
-#: js/PagingToolbar.js:275
+#: js/MainScreenCenterPanel.js:198 js/PagingToolbar.js:275
 msgid "Week"
 msgstr "Tydzień"
 
@@ -438,13 +403,11 @@ msgstr "Anuluj akcję"
 msgid "Mini Calendar"
 msgstr "Mini kalendarz"
 
-#: js/MainScreenWestPanel.js:52
-#: js/MonthView.js:86
+#: js/MainScreenWestPanel.js:52 js/MonthView.js:86
 msgid "WK"
 msgstr "TK"
 
-#: js/Model.js:63
-#: js/Model.js:359
+#: js/Model.js:63 js/Model.js:359
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "termin"
@@ -494,13 +457,11 @@ msgstr "i jeszcze {0} ..."
 msgid "Week {0} :"
 msgstr "Tydzień {0}:"
 
-#: js/ResourceEditDialog.js:61
-#: js/ResourcesGridPanel.js:47
+#: js/ResourceEditDialog.js:61 js/ResourcesGridPanel.js:47
 msgid "Email"
 msgstr "E-mail"
 
-#: js/ResourceEditDialog.js:67
-#: js/ResourceEditDialog.js:68
+#: js/ResourceEditDialog.js:67 js/ResourceEditDialog.js:68
 msgid "Is a location"
 msgstr "Jest miejscem"
 
@@ -564,52 +525,44 @@ msgstr "Termin zakończenia musi przypadać po terminie rozpoczęcia"
 msgid "Every {0}. Day"
 msgstr "co {0} dzień"
 
-#: js/RrulePanel.js:360
+#: js/RrulePanel.js:363
 msgid "Every {0}. Week at"
 msgstr "co {0} tydzień w"
 
-#: js/RrulePanel.js:429
+#: js/RrulePanel.js:433
 msgid "Every {0}. Month"
 msgstr "co {0} miesiąc"
 
-#: js/RrulePanel.js:435
-#: js/RrulePanel.js:484
-#: js/RrulePanel.js:615
-#: js/RrulePanel.js:665
+#: js/RrulePanel.js:439 js/RrulePanel.js:488 js/RrulePanel.js:619
+#: js/RrulePanel.js:669
 msgid "at the"
 msgstr "dzień:"
 
-#: js/RrulePanel.js:454
-#: js/RrulePanel.js:634
+#: js/RrulePanel.js:458 js/RrulePanel.js:638
 msgid "first"
 msgstr "pierwszy(a)"
 
-#: js/RrulePanel.js:455
-#: js/RrulePanel.js:635
+#: js/RrulePanel.js:459 js/RrulePanel.js:639
 msgid "second"
 msgstr "drugi(a)"
 
-#: js/RrulePanel.js:456
-#: js/RrulePanel.js:636
+#: js/RrulePanel.js:460 js/RrulePanel.js:640
 msgid "third"
 msgstr "trzeci(a)"
 
-#: js/RrulePanel.js:457
-#: js/RrulePanel.js:637
+#: js/RrulePanel.js:461 js/RrulePanel.js:641
 msgid "fourth"
 msgstr "czwarty(a)"
 
-#: js/RrulePanel.js:458
-#: js/RrulePanel.js:638
+#: js/RrulePanel.js:462 js/RrulePanel.js:642
 msgid "last"
 msgstr "ostatni(a)"
 
-#: js/RrulePanel.js:608
+#: js/RrulePanel.js:612
 msgid "Every {0}. Year"
 msgstr "co {0} rok"
 
-#: js/RrulePanel.js:705
-#: js/RrulePanel.js:717
+#: js/RrulePanel.js:709 js/RrulePanel.js:721
 msgid "of"
 msgstr "miesiąc:"
 
@@ -721,8 +674,7 @@ msgstr "Przy aktualizacjach za wyjątkiem odpowiedzi uczestnika"
 msgid "On attendee responses too"
 msgstr "Także w przypadku odpowiedzi uczestnika"
 
-#: Setup/Initialize.php:34
-#: Setup/Update/Release3.php:164
+#: Setup/Initialize.php:34 Setup/Update/Release3.php:164
 msgid "All events I attend"
 msgstr "Wszystkie terminy dodane przeze mnie"
 
@@ -750,33 +702,27 @@ msgstr "Jestem organizatorem"
 msgid "Events I'm the organizer of"
 msgstr "Terminy, które organizuję"
 
-#: Setup/Initialize.php:98
-#: Setup/Update/Release5.php:75
+#: Setup/Initialize.php:98 Setup/Update/Release5.php:75
 msgid "Required"
 msgstr "Obowiązkowy"
 
-#: Setup/Initialize.php:99
-#: Setup/Update/Release5.php:76
+#: Setup/Initialize.php:99 Setup/Update/Release5.php:76
 msgid "Optional"
 msgstr "Dobrowolny"
 
-#: Setup/Initialize.php:112
-#: Setup/Update/Release5.php:89
+#: Setup/Initialize.php:112 Setup/Update/Release5.php:89
 msgid "No response"
 msgstr "Brak odpowiedzi"
 
-#: Setup/Initialize.php:113
-#: Setup/Update/Release5.php:90
+#: Setup/Initialize.php:113 Setup/Update/Release5.php:90
 msgid "Accepted"
 msgstr "Zaakceptowany"
 
-#: Setup/Initialize.php:114
-#: Setup/Update/Release5.php:91
+#: Setup/Initialize.php:114 Setup/Update/Release5.php:91
 msgid "Declined"
 msgstr "Odrzucony"
 
-#: Setup/Initialize.php:115
-#: Setup/Update/Release5.php:92
+#: Setup/Initialize.php:115 Setup/Update/Release5.php:92
 msgid "Tentative"
 msgstr "Brak ostatecznej decyzji"
 
@@ -944,7 +890,6 @@ msgstr "Szczegóły terminu"
 #~ msgstr "Konto nauczyciela"
 
 #~ msgid "Course"
-
 #~ msgid_plural "Courses"
 #~ msgstr[0] "Kurs"
 #~ msgstr[1] "kursy"
@@ -1005,14 +950,12 @@ msgstr "Szczegóły terminu"
 #~ msgstr "Wszystkie kursy"
 
 #~ msgid "record list"
-
 #~ msgid_plural "record lists"
 #~ msgstr[0] "lista kursów"
 #~ msgstr[1] "listy kursów"
 #~ msgstr[2] "list kursów"
 
 #~ msgid "Course Type"
-
 #~ msgid_plural "Course Types"
 #~ msgstr[0] "Rodzaj kursu"
 #~ msgstr[1] "rodzaje kursu"

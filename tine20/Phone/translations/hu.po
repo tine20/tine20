@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2010-09-14 20:03+0100\n"
-"Last-Translator: Gump <gump@gump.hu>\n"
+"PO-Revision-Date: 2011-12-05 11:30+0100\n"
+"Last-Translator: Faragó Tamás <tamas@kemenyfem.hu>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,27 +12,27 @@ msgstr ""
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: js/AddressbookGridPanelHook.js:35
 msgid "Call contact"
-msgstr ""
+msgstr "Kapcsolat hívása"
 
 #: js/AddressbookGridPanelHook.js:172
 msgid "Work"
-msgstr ""
+msgstr "Munkahelyi"
 
 #: js/AddressbookGridPanelHook.js:181
 msgid "Home"
-msgstr ""
+msgstr "Otthoni"
 
 #: js/AddressbookGridPanelHook.js:190
 msgid "Cell"
-msgstr ""
+msgstr "Mobil"
 
 #: js/AddressbookGridPanelHook.js:199
 msgid "Cell private"
-msgstr ""
+msgstr "Mobil privát"
 
 #: js/Models.js:69 js/Phone.js:59 js/Phone.js:254
 msgid "Phone"

@@ -182,7 +182,7 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         ));
         $this->_backend->addCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
             '<field>
-                    <name>cache_job_actions_estimate</name>
+                    <name>cache_job_actions_est</name>
                     <type>integer</type>
                 </field>'
         ));

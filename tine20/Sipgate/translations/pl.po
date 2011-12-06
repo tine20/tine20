@@ -21,28 +21,24 @@ msgstr "Wybierz numer"
 msgid "Compose SMS"
 msgstr "Napisz SMSa"
 
-#: js/AddressbookGridPanelHook.js:256
+#: js/AddressbookGridPanelHook.js:255
 msgid "Work"
 msgstr "Praca"
 
-#: js/AddressbookGridPanelHook.js:266
+#: js/AddressbookGridPanelHook.js:265
 msgid "Home"
 msgstr "Dom"
 
-#: js/AddressbookGridPanelHook.js:276
-#: js/AddressbookGridPanelHook.js:321
+#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:320
 msgid "Cell"
 msgstr "Komórka"
 
-#: js/AddressbookGridPanelHook.js:286
-#: js/AddressbookGridPanelHook.js:331
+#: js/AddressbookGridPanelHook.js:285 js/AddressbookGridPanelHook.js:330
 msgid "Cell private"
 msgstr "Komórka prywatna"
 
-#: js/CallStateWindow.js:50
-#: js/DialNumberDialog.js:64
-#: js/SearchAddressDialog.js:64
-#: js/SmsEditDialog.js:60
+#: js/CallStateWindow.js:50 js/DialNumberDialog.js:64
+#: js/SearchAddressDialog.js:64 js/SmsEditDialog.js:60
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -54,13 +50,11 @@ msgstr "nawiązywanie połączenia..."
 msgid "Connecting to: "
 msgstr "Łączę z:"
 
-#: js/DialNumberDialog.js:56
-#: js/DialNumberDialog.js:152
+#: js/DialNumberDialog.js:56 js/DialNumberDialog.js:152
 msgid "Dial Number"
 msgstr "Numer telefonu"
 
-#: js/DialNumberDialog.js:72
-#: js/SearchAddressDialog.js:72
+#: js/DialNumberDialog.js:72 js/SearchAddressDialog.js:72
 #: js/SmsEditDialog.js:68
 msgid "Close"
 msgstr "Zamknij"
@@ -73,43 +67,35 @@ msgstr "Numer rozmówcy"
 msgid "Add Number"
 msgstr "Dodaj numer"
 
-#: js/SearchAddressDialog.js:133
-#: js/SearchAddressDialog.js:155
+#: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
 msgid "Phone"
 msgstr "Telefon"
 
-#: js/SearchAddressDialog.js:134
-#: js/SearchAddressDialog.js:156
+#: js/SearchAddressDialog.js:134 js/SearchAddressDialog.js:156
 msgid "Mobile"
 msgstr "Komórka"
 
-#: js/SearchAddressDialog.js:135
-#: js/SearchAddressDialog.js:157
+#: js/SearchAddressDialog.js:135 js/SearchAddressDialog.js:157
 msgid "Fax"
 msgstr "Faks"
 
-#: js/SearchAddressDialog.js:136
-#: js/SearchAddressDialog.js:158
+#: js/SearchAddressDialog.js:136 js/SearchAddressDialog.js:158
 msgid "Car phone"
 msgstr "Telefon w samochodzie"
 
-#: js/SearchAddressDialog.js:137
-#: js/SearchAddressDialog.js:159
+#: js/SearchAddressDialog.js:137 js/SearchAddressDialog.js:159
 msgid "Pager"
 msgstr "Pager"
 
-#: js/SearchAddressDialog.js:138
-#: js/SearchAddressDialog.js:160
+#: js/SearchAddressDialog.js:138 js/SearchAddressDialog.js:160
 msgid "Phone (private)"
 msgstr "Telefon (prywatny)"
 
-#: js/SearchAddressDialog.js:139
-#: js/SearchAddressDialog.js:161
+#: js/SearchAddressDialog.js:139 js/SearchAddressDialog.js:161
 msgid "Fax (private)"
 msgstr "Faks (prywatny)"
 
-#: js/SearchAddressDialog.js:140
-#: js/SearchAddressDialog.js:162
+#: js/SearchAddressDialog.js:140 js/SearchAddressDialog.js:162
 msgid "Mobile (private)"
 msgstr "Komórka (prywatna)"
 
@@ -169,8 +155,7 @@ msgstr "Telefony do"
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Wyświetl połączenia {0} - {1} z {2}"
 
-#: js/Sipgate.js:313
-#: js/Sipgate.js:398
+#: js/Sipgate.js:313 js/Sipgate.js:398
 msgid "No calls to display"
 msgstr "Brak połączeń do wyświetlenia"
 
@@ -242,8 +227,7 @@ msgstr "Słuchawka odłożona przed nawiązaniem połączenia"
 msgid "hungup"
 msgstr "Rozmowa zakończona"
 
-#: js/SmsEditDialog.js:52
-#: js/SmsEditDialog.js:183
+#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:181
 msgid "Send"
 msgstr "Wyślij"
 

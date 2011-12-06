@@ -467,6 +467,10 @@ msgid_plural "Groups"
 msgstr[0] ""
 msgstr[1] ""
 
+#: js/customfield/EditDialog.js:648
+msgid "Customfield already exists. Please choose another name."
+msgstr ""
+
 #: js/customfield/GridPanel.js:131 js/Groups.js:52 js/Roles.js:47
 #: js/Tags.js:64
 msgid "Confirm"
@@ -716,6 +720,10 @@ msgstr "Mostrando etiquetas {0} - {1} of {2}"
 #: js/Tags.js:212 js/Tags.js:268
 msgid "No tags to display"
 msgstr "No hay etiquetas para mostrar"
+
+#: js/Tags.js:223
+msgid "Usage:&#160;"
+msgstr ""
 
 #: js/user/EditDialog.js:180
 msgid "Domain is not allowed. Check your SMTP domain configuration."
