@@ -502,7 +502,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         
         if ($entry->exdate instanceof Tinebase_Record_RecordSet) {
             foreach ($entry->exdate as $exdate) {
-                $exdate->container_id = $entry->container_id;
+                if ($exdate->is_deleted == false) {
+                    $exdate->container_id = $entry->container_id;
+                }
             }
         }
 
