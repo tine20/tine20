@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-09 21:48+0100\n"
-"Last-Translator: Faragó Tamás <admin@kemenyfem.hu>\n"
+"PO-Revision-Date: 2011-12-06 00:12+0100\n"
+"Last-Translator: Faragó Tamás <tamas@kemenyfem.hu>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,10 @@ msgstr ""
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: Addresssbook\n"
 
 #: Acl/Rights.php:98
 msgid "manage shared addressbooks"
@@ -32,11 +35,11 @@ msgstr "Kedvenc megosztott címjegyzék készítése vagy frissítése"
 
 #: Config.php:31
 msgid "Contact duplicate check fields"
-msgstr ""
+msgstr "Kapcsolat mezőinek duplikálási ellenőrzése"
 
 #: Config.php:33
 msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
-msgstr ""
+msgstr "Ezeket a mezőket ellenőrzi egy új kapcsolat felvételekor. Ha egy rekordt egyforma mező adatokkal megtalál, a duplikált kivételt eldobja."
 
 #: Controller.php:96
 #, python-format
@@ -146,35 +149,35 @@ msgstr "Beosztás"
 
 #: Import/definitions/adb_google_import_csv.xml:12
 msgid "Contact import from Google address book"
-msgstr ""
+msgstr "Kapcsolatok importálása a Google címjegyzékből"
 
 #: Import/definitions/adb_import_vcard.xml:13
 msgid "Contact VCARD import"
-msgstr ""
+msgstr "Kapcsolat VCARD importja"
 
 #: Import/definitions/adb_mac_import_csv.xml:16
 msgid "Contact CSV import from mac address book"
-msgstr ""
+msgstr "Kapcsolat CSV importja mac címjegyzékből"
 
 #: Import/definitions/adb_outlook_import_csv.xml:12
 msgid "Contact CSV import from Outlook address book"
-msgstr ""
+msgstr "Kapcsolat CSV importja Outlook címjegyzékből"
 
 #: Import/definitions/adb_tine_import_csv.xml:11
 msgid "Contact CSV import"
-msgstr ""
+msgstr "Kapcsolat CSV importja"
 
 #: Import/definitions/adb_tine_import_csv.xml:18
 msgid "Import list (###CURRENTDATE###)"
-msgstr ""
+msgstr "Import lista (###CURRENTDATE###)"
 
 #: Import/definitions/adb_tine_import_csv.xml:20
 msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr ""
+msgstr "Kapcsolatokat importálta ###USERFULLNAME### ekkor: ###CURRENTDATE###  ###CURRENTTIME###"
 
 #: js/Addressbook.js:22
 msgid "New Contact"
-msgstr ""
+msgstr "Új kapcsolat"
 
 #: js/Addressbook.js:32 js/Model.js:98 js/Model.js:215
 msgid "Addressbook"
@@ -463,19 +466,19 @@ msgstr "Kérlek ellenőrizd ezt a linket a szerkesztő ablakban."
 
 #: js/ListMemberFilterModel.js:37
 msgid "Member of List"
-msgstr ""
+msgstr "Lista tagja"
 
 #: js/MapPanel.js:58
 msgid "Company address"
-msgstr ""
+msgstr "Céges cím"
 
 #: js/MapPanel.js:65
 msgid "Private address"
-msgstr ""
+msgstr "Privát cím"
 
 #: js/Model.js:19
 msgid "Name"
-msgstr ""
+msgstr "Név"
 
 #: js/Model.js:34
 msgid "Street (Company Address)"
@@ -527,11 +530,11 @@ msgstr "Ország (Privát cím)"
 
 #: js/Model.js:51
 msgid "Company Communication"
-msgstr ""
+msgstr "Céges kapcsolatok"
 
 #: js/Model.js:57
 msgid "Private Communication"
-msgstr ""
+msgstr "Privát kapcsolatok"
 
 #: js/Model.js:65
 msgid "Web (private)"

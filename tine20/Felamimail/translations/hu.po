@@ -3,13 +3,13 @@ msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Faragó Tamás <admin@kemenyfem.hu>\n"
+"Last-Translator: Faragó Tamás <tamas@kemenyfem.hu>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -36,7 +36,7 @@ msgstr "Megválaszolt"
 
 #: Controller/Message/Flags.php:25
 msgid "Seen"
-msgstr ""
+msgstr "Olvasott"
 
 #: Controller/Message/Flags.php:26
 msgid "Deleted"
@@ -62,7 +62,7 @@ msgstr "Üzenet"
 
 #: Controller/Sieve.php:290
 msgid "Out of Office reply from %1$s"
-msgstr ""
+msgstr "Házon kívül válasz érkezett: %1$s"
 
 #: js/AccountEditDialog.js:83
 msgid "Signature"
@@ -205,7 +205,7 @@ msgstr "Tartalom típusától függő (kísérleti)"
 
 #: js/AddressbookGridPanelHook.js:33
 msgid "Compose email"
-msgstr ""
+msgstr "Email írása"
 
 #: js/ContactGrid.js:254
 msgid "Add as \"To\""
@@ -225,11 +225,11 @@ msgstr "Eltávolítás a címzettek kzül"
 
 #: js/ContactGrid.js:341 js/MessageEditDialog.js:454
 msgid "Loading Mail Addresses"
-msgstr ""
+msgstr "Üzenet címek betöltése"
 
 #: js/Felamimail.js:33
 msgid "New Mail"
-msgstr ""
+msgstr "Új levél"
 
 #: js/Felamimail.js:83
 msgid "Email"
@@ -249,7 +249,7 @@ msgstr "Új levelek"
 
 #: js/Felamimail.js:452
 msgid "You got {0} new mail(s) in folder {1} ({2})."
-msgstr ""
+msgstr "{0} új üzeneted van a {1} mappában ({2})."
 
 #: js/Felamimail.js:573
 msgid "IMAP Credentials for {0}"
@@ -269,15 +269,15 @@ msgstr "Nincs kapcsolat az IMAP szerverrel."
 
 #: js/Felamimail.js:745
 msgid "IMAP Credentials Error"
-msgstr ""
+msgstr "IMAP belépési adatok hibásak"
 
 #: js/Felamimail.js:746
 msgid "Your email credentials are wrong. Please contact your administrator"
-msgstr ""
+msgstr "Az email belépési adataid rosszak. Lépj kapcsolatba a rendszergazdával."
 
 #: js/Felamimail.js:762
 msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
-msgstr ""
+msgstr "Az egyik mappádat egy másik kliens törölte vagy átnevezte. Kérlek frissítsd a mappa listát."
 
 #: js/Felamimail.js:791
 msgid "SMTP Error"
@@ -297,11 +297,11 @@ msgstr "Nincs kapcsolat a Sieve szerverrel."
 
 #: js/Felamimail.js:809
 msgid "Save Sieve Script Error"
-msgstr ""
+msgstr "Sieve script hiba mentése"
 
 #: js/Felamimail.js:810
 msgid "Could not save script on Sieve server."
-msgstr ""
+msgstr "Nem menthető  script a Sieve szerveren."
 
 #: js/FolderFilterModel.js:30 js/GridPanel.js:529 js/Model.js:52
 #: js/Model.js:494 js/TreeContextMenu.js:45 js/TreeContextMenu.js:100
@@ -357,11 +357,11 @@ msgstr "Nincs üzenet vagy a gyorsítótár üres."
 
 #: js/GridPanel.js:144
 msgid "Quota usage"
-msgstr ""
+msgstr "Kvóta használat"
 
 #: js/GridPanel.js:241
 msgid "Compose"
-msgstr ""
+msgstr "Írás"
 
 #: js/GridPanel.js:250 js/MessageDisplayDialog.js:47
 msgid "Reply"
@@ -447,23 +447,23 @@ msgstr "Legújabb"
 
 #: js/GridPanel.js:1096 js/GridPanel.js:1128
 msgid "Quota unknown"
-msgstr ""
+msgstr "Kvóta ismeretlen"
 
 #: js/GridPanel.js:1111
 msgid "{0} %"
-msgstr ""
+msgstr "{0} %"
 
 #: js/GridPanel.js:1119
 msgid "Your quota"
-msgstr ""
+msgstr "Kvótád"
 
 #: js/GridPanel.js:1120
 msgid "{0} available (total: {1})"
-msgstr ""
+msgstr "{0} elérhető (összesen: {1})"
 
 #: js/MessageDisplayDialog.js:65
 msgid "Save"
-msgstr ""
+msgstr "Mentés"
 
 #: js/MessageEditDialog.js:133
 msgid "Send"
@@ -482,9 +482,8 @@ msgid "Save As Template"
 msgstr "Mentés sablonként"
 
 #: js/MessageEditDialog.js:166
-#, fuzzy
 msgid "Save Email Note"
-msgstr "Email Megjegyzés mentése"
+msgstr "Email Megjegyzésként mentése"
 
 #: js/MessageEditDialog.js:174
 msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
@@ -495,8 +494,9 @@ msgid "Click to search for and add recipients from the Addressbook."
 msgstr "Kattints a címzettek kereséséhez és hozzáadásához a Címjegyzékből."
 
 #: js/MessageEditDialog.js:270
+#, fuzzy
 msgid "On {0}, {1} wrote"
-msgstr ""
+msgstr "{0}-ből, {1} írott"
 
 #: js/MessageEditDialog.js:276
 msgid "Original message"
@@ -552,11 +552,11 @@ msgstr "Hiba: "
 
 #: js/MessageEditDialog.js:893
 msgid "Files are still uploading."
-msgstr ""
+msgstr "Fileok éppen feltöltés alatt állnak."
 
 #: js/MessageEditDialog.js:913
 msgid "No recipients set."
-msgstr ""
+msgstr "Nincsenek címzettek beállítva."
 
 #: js/Model.js:48 js/TreeContextMenu.js:24
 msgid "Message"
@@ -662,23 +662,23 @@ msgstr "Válassz ki címzetteket ehhez: \"{0}\""
 
 #: js/RecipientPickerFavoritePanel.js:43
 msgid "Recipient filter"
-msgstr ""
+msgstr "Címzettek szűrése"
 
 #: js/RecipientPickerFavoritePanel.js:54
 msgid "All recipients"
-msgstr ""
+msgstr "Minden címzett"
 
 #: js/RecipientPickerFavoritePanel.js:57
 msgid "\"{0}\" recipients"
-msgstr ""
+msgstr "\"{0}\" címzettek"
 
 #: js/sieve/RuleConditionsPanel.js:70
 msgid "From (Email and Name)"
-msgstr ""
+msgstr "Feladó (Email és Név)"
 
 #: js/sieve/RuleConditionsPanel.js:71
 msgid "To (Email)"
-msgstr ""
+msgstr "Címzett (Email)"
 
 #: js/sieve/RuleConditionsPanel.js:74
 msgid "Header contains"
@@ -690,11 +690,11 @@ msgstr "Fejléc neve"
 
 #: js/sieve/RuleConditionsPanel.js:75 js/sieve/RuleConditionsPanel.js:77
 msgid "Header value"
-msgstr ""
+msgstr "Fejléc érték"
 
 #: js/sieve/RuleConditionsPanel.js:76
 msgid "Header regex"
-msgstr ""
+msgstr "Fejléc regex"
 
 #: js/sieve/RuleEditDialog.js:96
 msgid "Edit Filter Rule"
@@ -778,7 +778,7 @@ msgstr "Fejléc \"{0}\" \"{1}\" tartalmaz"
 
 #: js/sieve/RulesGridPanel.js:315
 msgid "Header \"{0}\" matches \"{1}\""
-msgstr ""
+msgstr "Fejléc \"{0}\" \"{1}\" tartalmaz"
 
 #: js/sieve/VacationEditDialog.js:76
 msgid "Vacation Message for {0}"
@@ -896,8 +896,8 @@ msgstr "Üzenetek lekérdezése... ({0}% done) "
 #: js/TreePanel.js:749
 msgid "{0} unread message"
 msgid_plural "{0} unread messages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} olvasatlan levél"
+msgstr[1] "{0} olvasatlan levél"
 
 #: Preference.php:59
 msgid "All inboxes"
@@ -974,12 +974,15 @@ msgstr "Összes levél piszkozat zászlóval"
 #~ msgid "One of your folders was deleted from an other client, please reload you browser"
 #~ msgstr "Egy a mappáid közül egy másik kliensen törölve lett, kérlek töltsd újra a böngésződet"
 
+#~ msgid "You got {0} new mail(s) in Folder {1}."
+#~ msgstr "{0} új üzeneted van a {1} mappában."
+
+#~ msgid "Recipients"
+#~ msgstr "Címzettek"
+
 #, fuzzy
 #~ msgid "wrote"
 #~ msgstr "írt"
-
-#~ msgid "You got {0} new mail(s) in Folder {1}."
-#~ msgstr "{0} új üzeneted van a {1} mappában."
 
 #~ msgid "Write"
 #~ msgstr "Új üzenet"
@@ -1016,9 +1019,6 @@ msgstr "Összes levél piszkozat zászlóval"
 
 #~ msgid "Toggle Flag"
 #~ msgstr "Megjelölés"
-
-#~ msgid "Recipients"
-#~ msgstr "Címzettek"
 
 #~ msgid "Save contact note"
 #~ msgstr "Kapcsolat megjegyzés mentése"

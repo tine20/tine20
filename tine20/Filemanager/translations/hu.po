@@ -2,16 +2,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-09 21:05+0100\n"
-"Last-Translator: Faragó Tamás <admin@kemenyfem.hu>\n"
-"Language-Team: Tine 2.0 Translators\n"
+"PO-Revision-Date: 2011-12-06 00:58+0100\n"
+"Last-Translator: Faragó Tamás <tamas@kemenyfem.hu>\n"
+"Language-Team: Gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: HUNGARY\n"
 
 #: Acl/Rights.php:97
 msgid "manage shared folders"
@@ -23,15 +24,15 @@ msgstr "Új megosztott könyvtár létrehozása"
 
 #: Controller/Node.php:163
 msgid "My folders"
-msgstr ""
+msgstr "Saját könyvtárak"
 
 #: Controller/Node.php:170
 msgid "Shared folders"
-msgstr ""
+msgstr "Megosztott könyvtárak"
 
 #: Controller/Node.php:177
 msgid "Other users folders"
-msgstr ""
+msgstr "Többi felhasználó megosztott könyvtárai"
 
 #: Controller.php:95
 #, python-format
@@ -44,169 +45,169 @@ msgstr "Filekezelő"
 
 #: js/Filemanager.js:68
 msgid "Files already exists"
-msgstr ""
+msgstr "File már létezik"
 
 #: js/Filemanager.js:68
 msgid "Do you want to replace the following file(s)?"
-msgstr ""
+msgstr "Szeretnéd cserélni a következő file(oka)t?"
 
 #: js/Filemanager.js:93
 msgid "Failure on create folder"
-msgstr ""
+msgstr "Hiba a könyvtár létrehozásakor"
 
 #: js/Filemanager.js:94
 msgid "Item with this name already exists!"
-msgstr ""
+msgstr "Ezen a néven már létezik adat!"
 
 #: js/GridContextMenu.js:36
 msgid "Please enter the new name of the {0}:"
-msgstr ""
+msgstr "Kérlek írd be a {0} új nevét:"
 
 #: js/GridContextMenu.js:42
 msgid "Not renamed {0}"
-msgstr ""
+msgstr "{0} átnevezése sikertelen"
 
 #: js/GridContextMenu.js:42 js/GridPanel.js:498
 msgid "You have to supply a {0} name!"
-msgstr ""
+msgstr "Biztosítanos kell egy {0} nevet!"
 
 #: js/GridContextMenu.js:146 js/GridPanel.js:542
 msgid "Do you really want to delete the following files?"
-msgstr ""
+msgstr "Biztosan szeretnéd törölni a következő filokat?"
 
 #: js/GridPanel.js:132
 msgid "Name"
-msgstr ""
+msgstr "Név"
 
 #: js/GridPanel.js:139
 msgid "Size"
-msgstr ""
+msgstr "Méret"
 
 #: js/GridPanel.js:146 js/Model.js:509
 msgid "Contenttype"
-msgstr ""
+msgstr "Tartalomtípus"
 
 #: js/GridPanel.js:154
 msgid "Folder"
-msgstr ""
+msgstr "Könyvtár"
 
 #: js/GridPanel.js:163
 msgid "Revision"
-msgstr ""
+msgstr "Javítás"
 
 #: js/GridPanel.js:178 js/Model.js:510
 msgid "Creation Time"
-msgstr ""
+msgstr "Készítés ideje"
 
 #: js/GridPanel.js:186
 msgid "Created By"
-msgstr ""
+msgstr "Készítő"
 
 #: js/GridPanel.js:193
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Utolsó módosítás ideje"
 
 #: js/GridPanel.js:200
 msgid "Last Modified By"
-msgstr ""
+msgstr "Utolsó módosító"
 
 #: js/GridPanel.js:234
 msgid "Show closed"
-msgstr ""
+msgstr "Bezártak mutatása"
 
 #: js/GridPanel.js:278
 msgid "Upload"
-msgstr ""
+msgstr "Feltöltés"
 
 #: js/GridPanel.js:304
 msgid "Create Folder"
-msgstr ""
+msgstr "Könyvtár létrehozása"
 
 #: js/GridPanel.js:315
 msgid "Folder Up"
-msgstr ""
+msgstr "Könyvtárat fel"
 
 #: js/GridPanel.js:326
 msgid "Save locally"
-msgstr ""
+msgstr "Mentés helyileg"
 
 #: js/GridPanel.js:337 js/GridPanel.js:338 js/GridPanel.js:340
 msgid "Delete"
-msgstr ""
+msgstr "Törlés"
 
 #: js/GridPanel.js:350 js/GridPanel.js:351 js/GridPanel.js:353
 msgid "Rename"
-msgstr ""
+msgstr "Átnevezés"
 
 #: js/GridPanel.js:361
 msgid "Pause upload"
-msgstr ""
+msgstr "Feltöltés szünetelése"
 
 #: js/GridPanel.js:368
 msgid "Resume upload"
-msgstr ""
+msgstr "Feltöltés folytatása"
 
 #: js/GridPanel.js:491 js/Model.js:40
 msgid "user file folder"
-msgstr ""
+msgstr "felhasználó file könyvtára"
 
 #: js/GridPanel.js:493
 msgid "New {0}"
-msgstr ""
+msgstr "Új {0}"
 
 #: js/GridPanel.js:493
 msgid "Please enter the name of the new {0}:"
-msgstr ""
+msgstr "Kérlek ad meg az új {0} nevét:"
 
 #: js/GridPanel.js:498
 msgid "No {0} added"
-msgstr ""
+msgstr "{0} hozzáadása sikertelen"
 
 #: js/GridPanel.js:642 js/GridPanel.js:798 js/TreePanel.js:650
 #: js/TreePanel.js:760
 msgid "Upload Failed"
-msgstr ""
+msgstr "Feltöltés sikertelen"
 
 #: js/GridPanel.js:643 js/TreePanel.js:651
 msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
-msgstr ""
+msgstr "File nem tölthető fel. Fileméret túl nagy lehet. Kérlek értesítsd a rendszergazdádat. Max. feltöltési méret:"
 
 #: js/GridPanel.js:799 js/TreePanel.js:761
 msgid "Putting files in this folder is not allowed!"
-msgstr ""
+msgstr "Fileok ebbe a könyvtárba helyezése nem engedélyezett!"
 
 #: js/Model.js:37
 msgid "user file"
-msgstr ""
+msgstr "felhasználói file"
 
 #: js/Model.js:38
 msgid "user files"
-msgstr ""
+msgstr "felhasználói fileok"
 
 #: js/Model.js:41
 msgid "user file folders"
-msgstr ""
+msgstr "felhasználó file könyvtárai"
 
 #: js/Model.js:251 js/Model.js:267
 msgid "Copying data .. {0}"
-msgstr ""
+msgstr "Adat másolása.. {0}"
 
 #: js/Model.js:254 js/Model.js:269
 msgid "Moving data .. {0}"
-msgstr ""
+msgstr "Adat áthelyezése.. {0}"
 
 #: js/Model.js:273
 msgid "Please wait"
-msgstr ""
+msgstr "Kérlek várj"
 
 #: js/Model.js:507
 msgid "Quick search"
-msgstr ""
+msgstr "Gyors keresés"
 
 #: js/Model.js:508
 msgid "Type"
-msgstr ""
+msgstr "Típus"
 
 #: js/PathFilterModel.js:50
 msgid "path"
-msgstr ""
+msgstr "elérési út"

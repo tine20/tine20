@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Gump <gump@gump.hu>\n"
+"Last-Translator: Faragó Tamás <tamas@kemenyfem.hu>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,104 +12,104 @@ msgstr ""
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: js/ApplicationGridPanel.js:63
 msgid "Name"
-msgstr ""
+msgstr "Név"
 
 #: js/ApplicationGridPanel.js:64
 msgid "Enabled"
-msgstr ""
+msgstr "Engedélyezett"
 
 #: js/ApplicationGridPanel.js:65
 msgid "Order"
-msgstr ""
+msgstr "Sorrend"
 
 #: js/ApplicationGridPanel.js:66
 msgid "Installed Version"
-msgstr ""
+msgstr "Telepített verzió"
 
 #: js/ApplicationGridPanel.js:67
 msgid "Available Version"
-msgstr ""
+msgstr "Elérhető verzió"
 
 #: js/ApplicationGridPanel.js:68
 msgid "Status"
-msgstr ""
+msgstr "Állapot"
 
 #: js/ApplicationGridPanel.js:69
 msgid "Depends on"
-msgstr ""
+msgstr "Függőségek"
 
 #: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
 msgid "Install application"
-msgstr ""
+msgstr "Program telepítése"
 
 #: js/ApplicationGridPanel.js:87
 msgid "Uninstall application"
-msgstr ""
+msgstr "Program eltávolítása"
 
 #: js/ApplicationGridPanel.js:96
 msgid "Update application"
-msgstr ""
+msgstr "Program frissítése"
 
 #: js/ApplicationGridPanel.js:105
 msgid "Go to {0} login"
-msgstr ""
+msgstr "{0} bejelentkezéshez ugrás"
 
 #: js/ApplicationGridPanel.js:168
 msgid "uninstall"
-msgstr ""
+msgstr "eltávolítás"
 
 #: js/ApplicationGridPanel.js:168
 msgid "Do you really want to uninstall the application(s)?"
-msgstr ""
+msgstr "Biztosan el szeretnéd távolítani a programo(ka)t?"
 
 #: js/ApplicationGridPanel.js:228
 msgid "This may take a while"
-msgstr ""
+msgstr "Ez eltarthat egy ideig"
 
 #: js/ApplicationGridPanel.js:260
 msgid "Dependency Violation"
-msgstr ""
+msgstr "Függőségek megszegése"
 
 #: js/AuthenticationPanel.js:127
 msgid "Delete all existing users and groups"
-msgstr ""
+msgstr "Minden meglévő csoport és felhasználó törlése"
 
 #: js/AuthenticationPanel.js:127
 msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
-msgstr ""
+msgstr "SQL-ről LDAP-ra váltás törölni fogja az összes meglévő Felhasználói fiókokat, Csoportokat és Szabályokat. Biztosan szeretnéd váltani az azonsítók tárolási hátterét LDAP-ra?"
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
 #: js/ConfigManagerPanel.js:132 js/EmailPanel.js:146
 msgid "Backend"
-msgstr ""
+msgstr "Háttér"
 
 #: js/AuthenticationPanel.js:233
 msgid "Initial Admin User"
-msgstr ""
+msgstr "Kezdő Admin felhasználó"
 
 #: js/AuthenticationPanel.js:246
 msgid "Initial admin login name"
-msgstr ""
+msgstr "Kezdő Admin felhasználónév"
 
 #: js/AuthenticationPanel.js:251
 msgid "Initial admin Password"
-msgstr ""
+msgstr "Kezdő Admin jelszó"
 
 #: js/AuthenticationPanel.js:255
 msgid "Password confirmation"
-msgstr ""
+msgstr "Jelszó megerősítés"
 
 #: js/AuthenticationPanel.js:263
 msgid "Authentication provider"
-msgstr ""
+msgstr "Azonsítási szolgáltató"
 
 #: js/AuthenticationPanel.js:284 js/AuthenticationPanel.js:391
 msgid "Try to split username"
-msgstr ""
+msgstr "Próbáld kettéválasztani a felhasználónevet"
 
 #: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
 #: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:484
@@ -117,7 +117,7 @@ msgstr ""
 #: js/AuthenticationPanel.js:575 js/AuthenticationPanel.js:581
 #: js/EmailPanel.js:207
 msgid "Yes"
-msgstr ""
+msgstr "Igen"
 
 #: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
 #: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:484
@@ -125,497 +125,497 @@ msgstr ""
 #: js/AuthenticationPanel.js:575 js/AuthenticationPanel.js:581
 #: js/EmailPanel.js:207
 msgid "No"
-msgstr ""
+msgstr "Nem"
 
 #: js/AuthenticationPanel.js:290 js/AuthenticationPanel.js:341
 #: js/AuthenticationPanel.js:405
 msgid "Account canonical form"
-msgstr ""
+msgstr "Azonosító kanonikus forma"
 
 #: js/AuthenticationPanel.js:296 js/AuthenticationPanel.js:347
 #: js/AuthenticationPanel.js:409
 msgid "Account domain name "
-msgstr ""
+msgstr "Azonosító domain név"
 
 #: js/AuthenticationPanel.js:299 js/AuthenticationPanel.js:350
 #: js/AuthenticationPanel.js:414
 msgid "Account domain short name"
-msgstr ""
+msgstr "Azonosító rövid domain név"
 
 #: js/AuthenticationPanel.js:313 js/AuthenticationPanel.js:472
 msgid "Host"
-msgstr ""
+msgstr "Gép"
 
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
 #: js/ConfigManagerPanel.js:192 js/ConfigManagerPanel.js:310
 #: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:384
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 #: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:475
 msgid "Login name"
-msgstr ""
+msgstr "Felhasználó név"
 
 #: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:478
 #: js/ConfigManagerPanel.js:172 js/ConfigManagerPanel.js:203
 #: js/EmailPanel.js:190
 msgid "Password"
-msgstr ""
+msgstr "Jelszó"
 
 #: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:483
 msgid "Bind requires DN"
-msgstr ""
+msgstr "Bindnek szükséges a DN"
 
 #: js/AuthenticationPanel.js:334
 msgid "Base DN"
-msgstr ""
+msgstr "Alap DN"
 
 #: js/AuthenticationPanel.js:337
 msgid "Search filter"
-msgstr ""
+msgstr "Keresési szűrő"
 
 #: js/AuthenticationPanel.js:363 js/ConfigManagerPanel.js:187
 #: js/ConfigManagerPanel.js:306 js/EmailPanel.js:182 js/EmailPanel.js:286
 #: js/EmailPanel.js:380
 msgid "Hostname"
-msgstr ""
+msgstr "Gépnév"
 
 #: js/AuthenticationPanel.js:370 js/EmailPanel.js:199 js/EmailPanel.js:294
 #: js/EmailPanel.js:388
 msgid "Secure Connection"
-msgstr ""
+msgstr "Biztonságos kapcsolat"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
 #: js/EmailPanel.js:303 js/EmailPanel.js:391
 msgid "None"
-msgstr ""
+msgstr "Semmi"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
 #: js/EmailPanel.js:391
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
 #: js/EmailPanel.js:391
 msgid "SSL"
-msgstr ""
+msgstr "SSL"
 
 #: js/AuthenticationPanel.js:377 js/EmailPanel.js:212
 msgid "Append domain to login name"
-msgstr ""
+msgstr "Domain csatolása a felhasználónévhez"
 
 #: js/AuthenticationPanel.js:426
 msgid "Accounts storage"
-msgstr ""
+msgstr "Azonsítók tárolása"
 
 #: js/AuthenticationPanel.js:448 js/AuthenticationPanel.js:545
 msgid "Default user group name"
-msgstr ""
+msgstr "Alapértelmezett felhasználói csoport neve"
 
 #: js/AuthenticationPanel.js:452 js/AuthenticationPanel.js:548
 msgid "Default admin group name"
-msgstr ""
+msgstr "Alapértelmezett admin csoport neve"
 
 #: js/AuthenticationPanel.js:457
 msgid "User can change password"
-msgstr ""
+msgstr "Felhasználó változtathat jelszót"
 
 #: js/AuthenticationPanel.js:489
 msgid "User DN"
-msgstr ""
+msgstr "Felhasználó DN"
 
 #: js/AuthenticationPanel.js:492
 msgid "User Filter"
-msgstr ""
+msgstr "Felhasználó szűrő"
 
 #: js/AuthenticationPanel.js:496
 msgid "User Search Scope"
-msgstr ""
+msgstr "Felhasználó keresési kör"
 
 #: js/AuthenticationPanel.js:502
 msgid "Groups DN"
-msgstr ""
+msgstr "Csoportok DN"
 
 #: js/AuthenticationPanel.js:505
 msgid "Group Filter"
-msgstr ""
+msgstr "Csoport szűrő"
 
 #: js/AuthenticationPanel.js:509
 msgid "Group Search Scope"
-msgstr ""
+msgstr "Csoport keresési kör"
 
 #: js/AuthenticationPanel.js:515
 msgid "Password encoding"
-msgstr ""
+msgstr "Jelszó kódolás"
 
 #: js/AuthenticationPanel.js:521
 msgid "Use Rfc 2307 bis"
-msgstr ""
+msgstr "RFC 2307 használata"
 
 #: js/AuthenticationPanel.js:527
 msgid "Min User Id"
-msgstr ""
+msgstr "Min felhasználó Id"
 
 #: js/AuthenticationPanel.js:530
 msgid "Max User Id"
-msgstr ""
+msgstr "Max felhasználó Id"
 
 #: js/AuthenticationPanel.js:533
 msgid "Min Group Id"
-msgstr ""
+msgstr "Min csoport Id"
 
 #: js/AuthenticationPanel.js:536
 msgid "Max Group Id"
-msgstr ""
+msgstr "Max csoport Id"
 
 #: js/AuthenticationPanel.js:539
 msgid "Group UUID Attribute name"
-msgstr ""
+msgstr "Csoport UUID tulajdonság név"
 
 #: js/AuthenticationPanel.js:542
 msgid "User UUID Attribute name"
-msgstr ""
+msgstr "Felhasználó UUID tulajdonság név"
 
 #: js/AuthenticationPanel.js:552
 msgid "Allow user to change her password?"
-msgstr ""
+msgstr "Engedélyezett a felhasználónak a jelszócsere?"
 
 #: js/AuthenticationPanel.js:562
 msgid "Redirect Settings"
-msgstr ""
+msgstr "Átirányítási beállítások"
 
 #: js/AuthenticationPanel.js:570
 msgid "Redirect Url (redirect to login screen if empty)"
-msgstr ""
+msgstr "Átirányítási URL (átirányítás a belépő oldalra ha üres)"
 
 #: js/AuthenticationPanel.js:574
 msgid "Redirect Always (if No, only redirect after logout)"
-msgstr ""
+msgstr "Átirányítás mindig (ha Nem, átirányítás csak kilépés után)"
 
 #: js/AuthenticationPanel.js:580
 msgid "Redirect to referring site, if exists"
-msgstr ""
+msgstr "Átirányítás a hivatkozó oldalra, ha létezik"
 
 #: js/AuthenticationPanel.js:594
 msgid "Save config and install"
-msgstr ""
+msgstr "Beállítás elmentése és telepítés"
 
 #: js/AuthenticationPanel.js:596 js/ConfigManagerPanel.js:356
 msgid "Save config"
-msgstr ""
+msgstr "Beállítás elmentése"
 
 #: js/AuthenticationPanel.js:621
 msgid "Passwords don't match"
-msgstr ""
+msgstr "Jelszó nem egyezik"
 
 #: js/AuthenticationPanel.js:631 js/AuthenticationPanel.js:638
 #: js/AuthenticationPanel.js:642 js/AuthenticationPanel.js:654
 #: js/AuthenticationPanel.js:665
 msgid "Should not be empty"
-msgstr ""
+msgstr "Nem lehet üres"
 
 #: js/ConfigManagerPanel.js:135
 msgid "File"
-msgstr ""
+msgstr "File"
 
 #: js/ConfigManagerPanel.js:145
 msgid "Adapter"
-msgstr ""
+msgstr "Adapter"
 
 #: js/ConfigManagerPanel.js:156
 msgid "Setup Authentication"
-msgstr ""
+msgstr "Telepítési azonosítás"
 
 #: js/ConfigManagerPanel.js:163 js/EmailPanel.js:186
 msgid "Username"
-msgstr ""
+msgstr "Felhasználónév"
 
 #: js/ConfigManagerPanel.js:177 js/ConfigManagerPanel.js:195
 msgid "Database"
-msgstr ""
+msgstr "Adatbázis"
 
 #: js/ConfigManagerPanel.js:199
 msgid "User"
-msgstr ""
+msgstr "Felhasználó"
 
 #: js/ConfigManagerPanel.js:207
 msgid "Prefix"
-msgstr ""
+msgstr "Előképző"
 
 #: js/ConfigManagerPanel.js:211
 msgid "Logging"
-msgstr ""
+msgstr "Naplózás"
 
 #: js/ConfigManagerPanel.js:221
 msgid "Filename"
-msgstr ""
+msgstr "Filenév"
 
 #: js/ConfigManagerPanel.js:224
 msgid "Priority"
-msgstr ""
+msgstr "Prioritás"
 
 #: js/ConfigManagerPanel.js:228
 msgid "Caching"
-msgstr ""
+msgstr "Gyorsítótárazás"
 
 #: js/ConfigManagerPanel.js:238 js/ConfigManagerPanel.js:292
 msgid "Path"
-msgstr ""
+msgstr "Elérési út"
 
 #: js/ConfigManagerPanel.js:242 js/ConfigManagerPanel.js:267
 msgid "Lifetime (seconds)"
-msgstr ""
+msgstr "Élettartam (másodperc)"
 
 #: js/ConfigManagerPanel.js:247
 msgid "Temporary files"
-msgstr ""
+msgstr "Ideiglenes fileok"
 
 #: js/ConfigManagerPanel.js:255
 msgid "Temporary Files Path"
-msgstr ""
+msgstr "Ideiglenes filok elérési útja"
 
 #: js/ConfigManagerPanel.js:259
 msgid "Session"
-msgstr ""
+msgstr "Munkafázis"
 
 #: js/ConfigManagerPanel.js:319
 msgid "Filestore directory"
-msgstr ""
+msgstr "Filetárolási könyvtár"
 
 #: js/ConfigManagerPanel.js:327
 msgid "Filestore Path"
-msgstr ""
+msgstr "Filetárolás elérési útja"
 
 #: js/ConfigManagerPanel.js:332
 msgid "Addressbook Map panel"
-msgstr ""
+msgstr "Címjegyzék Térkép fül"
 
 #: js/ConfigManagerPanel.js:340
 msgid "Map panel"
-msgstr ""
+msgstr "Térkép fül"
 
 #: js/ConfigManagerPanel.js:342
 msgid "disabled"
-msgstr ""
+msgstr "letiltva"
 
 #: js/ConfigManagerPanel.js:342
 msgid "enabled"
-msgstr ""
+msgstr "engedélyezve"
 
 #: js/ConfigManagerPanel.js:354
 msgid "Config file is not writable"
-msgstr ""
+msgstr "Beállítási file nem írható"
 
 #: js/ConfigManagerPanel.js:372
 msgid "Download config file"
-msgstr ""
+msgstr "Beállítási file letöltése"
 
 #: js/EmailPanel.js:150
 msgid "Standard IMAP"
-msgstr ""
+msgstr "Standard IMAP"
 
 #: js/EmailPanel.js:160
 msgid "Standard SMTP"
-msgstr ""
+msgstr "Standard SMTP"
 
 #: js/EmailPanel.js:174
 msgid "Imap"
-msgstr ""
+msgstr "Imap"
 
 #: js/EmailPanel.js:206
 msgid "Use system account"
-msgstr ""
+msgstr "Rendszer azonosító használata"
 
 #: js/EmailPanel.js:258
 msgid "Cyrus Admin"
-msgstr ""
+msgstr "Cyrus Admin"
 
 #: js/EmailPanel.js:261
 msgid "Cyrus Admin Password"
-msgstr ""
+msgstr "Cyrus Admin jelszó"
 
 #: js/EmailPanel.js:278
 msgid "Smtp"
-msgstr ""
+msgstr "Smtp"
 
 #: js/EmailPanel.js:300
 msgid "Authentication"
-msgstr ""
+msgstr "Azonosítás"
 
 #: js/EmailPanel.js:303
 msgid "Login"
-msgstr ""
+msgstr "Felhasználónév"
 
 #: js/EmailPanel.js:303
 msgid "Plain"
-msgstr ""
+msgstr "Egyszerű"
 
 #: js/EmailPanel.js:307
 msgid "Primary Domain"
-msgstr ""
+msgstr "Elsődleges Domain"
 
 #: js/EmailPanel.js:311
 msgid "Secondary Domains (comma separated)"
-msgstr ""
+msgstr "Másodlagos Domainek (vesszővel elválasztva)"
 
 #: js/EmailPanel.js:315
 msgid "Notifications service address"
-msgstr ""
+msgstr "Értesítési szolgáltatás címe"
 
 #: js/EmailPanel.js:319
 msgid "Notification Username"
-msgstr ""
+msgstr "Értesítés felhasználóneve"
 
 #: js/EmailPanel.js:323
 msgid "Notification Password"
-msgstr ""
+msgstr "Értesítés jelszava"
 
 #: js/EmailPanel.js:374
 msgid "SIEVE"
-msgstr ""
+msgstr "SIEVE"
 
 #: js/EmailPanel.js:415
 msgid "MySql Hostname"
-msgstr ""
+msgstr "MySql gépnév"
 
 #: js/EmailPanel.js:418
 msgid "MySql Database"
-msgstr ""
+msgstr "MySql adatbázis"
 
 #: js/EmailPanel.js:421
 msgid "MySql User"
-msgstr ""
+msgstr "MySql felhasználónév"
 
 #: js/EmailPanel.js:424
 msgid "MySql Password"
-msgstr ""
+msgstr "MySql jelszó"
 
 #: js/EmailPanel.js:428
 msgid "MySql Port"
-msgstr ""
+msgstr "MySql Port"
 
 #: js/EmailPanel.js:444
 msgid "User or UID"
-msgstr ""
+msgstr "Felhasználónév vagy UID"
 
 #: js/EmailPanel.js:447
 msgid "Group or GID"
-msgstr ""
+msgstr "Csoport vagy GID"
 
 #: js/EmailPanel.js:450
 msgid "Home Template"
-msgstr ""
+msgstr "Home sablon"
 
 #: js/EmailPanel.js:452
 msgid "Password Scheme"
-msgstr ""
+msgstr "Jelszó séma"
 
 #: js/EmailPanel.js:463
 msgid "PLAIN-MD5"
-msgstr ""
+msgstr "Alap-MD5"
 
 #: js/EmailPanel.js:464
 msgid "MD5-CRYPT"
-msgstr ""
+msgstr "MD5-Kódolt"
 
 #: js/EmailPanel.js:465
 msgid "SHA1"
-msgstr ""
+msgstr "SHA1"
 
 #: js/EmailPanel.js:466
 msgid "SHA256"
-msgstr ""
+msgstr "SHA256"
 
 #: js/EmailPanel.js:467
 msgid "SSHA256"
-msgstr ""
+msgstr "SSHA256"
 
 #: js/EmailPanel.js:468
 msgid "SHA512"
-msgstr ""
+msgstr "SHA512"
 
 #: js/EmailPanel.js:469
 msgid "SSHA512"
-msgstr ""
+msgstr "SSHA512"
 
 #: js/EmailPanel.js:470
 msgid "PLAIN"
-msgstr ""
+msgstr "Egyszerű"
 
 #: js/EnvCheckGridPanel.js:89
 msgid "Performing Environment Checks..."
-msgstr ""
+msgstr "Környezeti ellenörzés végrehajtása..."
 
 #: js/EnvCheckGridPanel.js:130
 msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr ""
+msgstr "{0} nem található. Kérlek változtass a szűrési feltételeken, nézeti opciókon vagy a {1} amiben kerestél."
 
 #: js/EnvCheckGridPanel.js:160
 msgid "Check"
-msgstr ""
+msgstr "Ellenörzés"
 
 #: js/EnvCheckGridPanel.js:161
 msgid "Result"
-msgstr ""
+msgstr "Eredmény"
 
 #: js/EnvCheckGridPanel.js:162
 msgid "Error"
-msgstr ""
+msgstr "Hiba"
 
 #: js/EnvCheckGridPanel.js:180
 msgid "Run setup tests"
-msgstr ""
+msgstr "Telepítési tesztek futtatása"
 
 #: js/EnvCheckGridPanel.js:189
 msgid "Ignore setup tests"
-msgstr ""
+msgstr "Telepítési tesztek figyelmen kívül hagyása"
 
 #: js/Setup.js:53
 msgid "Terms and Conditions"
-msgstr ""
+msgstr "Kikötések és feltételek"
 
 #: js/Setup.js:58
 msgid "Setup Checks"
-msgstr ""
+msgstr "Telepítési ellenörzések"
 
 #: js/Setup.js:64
 msgid "Config Manager"
-msgstr ""
+msgstr "Beállítások kezelése"
 
 #: js/Setup.js:70
 msgid "Authentication/Accounts"
-msgstr ""
+msgstr "Azonosítás/Belépések"
 
 #: js/Setup.js:76
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: js/Setup.js:82
 msgid "Application Manager"
-msgstr ""
+msgstr "Programok kezelése"
 
 #: js/Setup.js:185
 msgid "Application"
 msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Program"
+msgstr[1] "Programok"
 
 #: js/TermsPanel.js:30
 msgid "I have read the license agreement and accept it"
-msgstr ""
+msgstr "Elolvastam a licensz megállapodást és elfogadtam"
 
 #: js/TermsPanel.js:37
 msgid "License Agreement"
-msgstr ""
+msgstr "Licensz megállapodás"
 
 #: js/TermsPanel.js:56
 msgid "I have read the privacy agreement and accept it"
-msgstr ""
+msgstr "Elolvastam a titoktartási megállapodást és elfogadtam"
 
 #: js/TermsPanel.js:63
 msgid "Privacy Agreement"
-msgstr ""
+msgstr "Titoktartási megállapodás"
 
 #: js/TermsPanel.js:80
 msgid "Accept Terms and Conditions"
-msgstr ""
+msgstr "Kikötések és feltételek elfogadása"

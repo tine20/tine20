@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-09 21:03+0100\n"
-"Last-Translator: Faragó Tamás <admin@kemenyfem.hu>\n"
+"PO-Revision-Date: 2011-12-05 11:32+0100\n"
+"Last-Translator: Faragó Tamás <tamas@kemenyfem.hu>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: Acl/Rights.php:106
 msgid "manage leads"
@@ -98,7 +98,7 @@ msgstr "Ügylet %s megváltozott"
 #: Controller/Lead.php:196
 #, python-format
 msgid "Lead %s has been created"
-msgstr ""
+msgstr "Ügylet %s elkészült"
 
 #: Controller.php:112
 #, python-format
@@ -226,7 +226,7 @@ msgstr "sürgős"
 
 #: js/AddressbookGridPanelHook.js:35 js/Crm.js:24
 msgid "New Lead"
-msgstr ""
+msgstr "Új ügylet"
 
 #: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:218
 #: js/LeadGridDetailsPanel.js:251

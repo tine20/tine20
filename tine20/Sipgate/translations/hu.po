@@ -2,256 +2,256 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Sipgate\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2011-12-05 11:28+0100\n"
+"Last-Translator: Faragó Tamás <tamas@kemenyfem.hu>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Hungarian\n"
-"X-Poedit-Country: \n"
+"X-Poedit-Language: en\n"
+"X-Poedit-Country: GB\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: js/AddressbookGridPanelHook.js:38
 msgid "Call contact"
-msgstr ""
+msgstr "Kapcsolat hívása"
 
 #: js/AddressbookGridPanelHook.js:61
 msgid "Compose SMS"
-msgstr ""
+msgstr "SMS írása"
 
 #: js/AddressbookGridPanelHook.js:255
 msgid "Work"
-msgstr ""
+msgstr "Munkahelyi"
 
 #: js/AddressbookGridPanelHook.js:265
 msgid "Home"
-msgstr ""
+msgstr "Otthoni"
 
 #: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:320
 msgid "Cell"
-msgstr ""
+msgstr "Mobil"
 
 #: js/AddressbookGridPanelHook.js:285 js/AddressbookGridPanelHook.js:330
 msgid "Cell private"
-msgstr ""
+msgstr "Mobil privát"
 
 #: js/CallStateWindow.js:50 js/DialNumberDialog.js:64
 #: js/SearchAddressDialog.js:64 js/SmsEditDialog.js:60
 msgid "Cancel"
-msgstr ""
+msgstr "Megszakítás"
 
 #: js/CallStateWindow.js:106
 msgid "connecting..."
-msgstr ""
+msgstr "kapcsolódás..."
 
 #: js/CallStateWindow.js:144
 msgid "Connecting to: "
-msgstr ""
+msgstr "Kapcsolódás ide: "
 
 #: js/DialNumberDialog.js:56 js/DialNumberDialog.js:152
 msgid "Dial Number"
-msgstr ""
+msgstr "Szám tárcsázása"
 
 #: js/DialNumberDialog.js:72 js/SearchAddressDialog.js:72
 #: js/SmsEditDialog.js:68
 msgid "Close"
-msgstr ""
+msgstr "Bezárás"
 
 #: js/DialNumberDialog.js:120
 msgid "Number to call"
-msgstr ""
+msgstr "Hívandó szám"
 
 #: js/SearchAddressDialog.js:56
 msgid "Add Number"
-msgstr ""
+msgstr "Szám hozzáadása"
 
 #: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
 msgid "Phone"
-msgstr ""
+msgstr "Telefon"
 
 #: js/SearchAddressDialog.js:134 js/SearchAddressDialog.js:156
 msgid "Mobile"
-msgstr ""
+msgstr "Mobil"
 
 #: js/SearchAddressDialog.js:135 js/SearchAddressDialog.js:157
 msgid "Fax"
-msgstr ""
+msgstr "Fax"
 
 #: js/SearchAddressDialog.js:136 js/SearchAddressDialog.js:158
 msgid "Car phone"
-msgstr ""
+msgstr "Autó telefon"
 
 #: js/SearchAddressDialog.js:137 js/SearchAddressDialog.js:159
 msgid "Pager"
-msgstr ""
+msgstr "Személyhívó"
 
 #: js/SearchAddressDialog.js:138 js/SearchAddressDialog.js:160
 msgid "Phone (private)"
-msgstr ""
+msgstr "Telefon (privát)"
 
 #: js/SearchAddressDialog.js:139 js/SearchAddressDialog.js:161
 msgid "Fax (private)"
-msgstr ""
+msgstr "Fax (privát)"
 
 #: js/SearchAddressDialog.js:140 js/SearchAddressDialog.js:162
 msgid "Mobile (private)"
-msgstr ""
+msgstr "Mobil (privát)"
 
 #: js/SearchAddressDialog.js:145
 msgid "-- create new --"
-msgstr ""
+msgstr "-- új létrehozása --"
 
 #: js/SearchAddressDialog.js:146
 msgid "Select existing contact or create a new one"
-msgstr ""
+msgstr "Meglévő kapcsolat kiválasztása vagy egy új létrehozása"
 
 #: js/SearchAddressDialog.js:181
 msgid "Choose Device"
-msgstr ""
+msgstr "Eszköz kiválasztása"
 
 #: js/SearchAddressDialog.js:214
 msgid "Choose Address"
-msgstr ""
+msgstr "Cím kiválasztása"
 
 #: js/Sipgate.js:30
 msgid "Edit phone settings"
-msgstr ""
+msgstr "Telefon beállítások szerkesztése"
 
 #: js/Sipgate.js:44
 msgid "Sipgate"
-msgstr ""
+msgstr "Sipgate"
 
 #: js/Sipgate.js:55
 msgid "Devices"
-msgstr ""
+msgstr "Eszközök"
 
 #: js/Sipgate.js:154
 msgid "Dial number"
-msgstr ""
+msgstr "Szám tárcsázása"
 
 #: js/Sipgate.js:155
 msgid "Initiates a new outgoing call"
-msgstr ""
+msgstr "Új kimenő hívás létrehozása"
 
 #: js/Sipgate.js:162
 msgid "Add Number to Addressbook"
-msgstr ""
+msgstr "Szám Címjegyzékhez adása"
 
 #: js/Sipgate.js:163
 msgid "Adds this number to the Addressbook"
-msgstr ""
+msgstr "Adja hozzá ezt a számot a Címjegyzékhez"
 
 #: js/Sipgate.js:282
 msgid "Calls from"
-msgstr ""
+msgstr "Hívás innen:"
 
 #: js/Sipgate.js:293
 msgid "Calls to"
-msgstr ""
+msgstr "Hívás ide:"
 
 #: js/Sipgate.js:312
 msgid "Displaying calls {0} - {1} of {2}"
-msgstr ""
+msgstr "Hívások kijelzése {0} - {1} / {2}"
 
 #: js/Sipgate.js:313 js/Sipgate.js:398
 msgid "No calls to display"
-msgstr ""
+msgstr "Nincs kijelzendő hívás"
 
 #: js/Sipgate.js:325
 msgid "Status"
-msgstr ""
+msgstr "Állapot"
 
 #: js/Sipgate.js:335
 msgid "Remote Party"
-msgstr ""
+msgstr "Távoli ügyfél"
 
 #: js/Sipgate.js:340
 msgid "Remote Number"
-msgstr ""
+msgstr "Távoli szám"
 
 #: js/Sipgate.js:345
 msgid "Local Uri"
-msgstr ""
+msgstr "Helyi URI"
 
 #: js/Sipgate.js:350
 msgid "Remote Uri"
-msgstr ""
+msgstr "Távoli URI"
 
 #: js/Sipgate.js:357
 msgid "Call started"
-msgstr ""
+msgstr "Hívás elindult"
 
 #: js/Sipgate.js:367
 msgid "Call ID"
-msgstr ""
+msgstr "Hívás ID"
 
 #: js/Sipgate.js:534
 msgid "unknown Person"
-msgstr ""
+msgstr "ismeretlen Személy"
 
 #: js/Sipgate.js:555
 msgid "Configuration not set"
-msgstr ""
+msgstr "Nincs érvényes beállítás"
 
 #: js/Sipgate.js:555
 msgid "Please configure the Sipgate application"
-msgstr ""
+msgstr "Kérlek állítsd be a Sipgate programot"
 
 #: js/Sipgate.js:620
 msgid "first dial"
-msgstr ""
+msgstr "első tárcsázás"
 
 #: js/Sipgate.js:625
 msgid "second dial"
-msgstr ""
+msgstr "második tárcsázás"
 
 #: js/Sipgate.js:632
 msgid "established"
-msgstr ""
+msgstr "létrehozva"
 
 #: js/Sipgate.js:637
 msgid "call 1 busy"
-msgstr ""
+msgstr "1 hívás foglalt"
 
 #: js/Sipgate.js:644
 msgid "call 2 busy"
-msgstr ""
+msgstr "2 hívás foglalt"
 
 #: js/Sipgate.js:651
 msgid "hungup before other called"
-msgstr ""
+msgstr "megszakítás másik hívás előtt"
 
 #: js/Sipgate.js:654
 msgid "hungup"
-msgstr ""
+msgstr "megszakítás"
 
 #: js/SmsEditDialog.js:52 js/SmsEditDialog.js:181
 msgid "Send"
-msgstr ""
+msgstr "Send"
 
 #: Preference.php:72
 msgid "Your phone"
-msgstr ""
+msgstr "Telefonod"
 
 #: Preference.php:73
 msgid "This is your phone"
-msgstr ""
+msgstr "Ez a te telefonod"
 
 #: Preference.php:76
 msgid "Your fax"
-msgstr ""
+msgstr "Faxod"
 
 #: Preference.php:77
 msgid "This is your fax"
-msgstr ""
+msgstr "Ez a te faxod"
 
 #: Preference.php:80
 msgid "Your mobile number"
-msgstr ""
+msgstr "Mobilszámod"
 
 #: Preference.php:81
 msgid "Used when sending SMS"
-msgstr ""
+msgstr "Használata SMS küldéskor"

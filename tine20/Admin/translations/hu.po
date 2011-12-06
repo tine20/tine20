@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-09 21:56+0100\n"
-"Last-Translator: Faragó Tamás <admin@kemenyfem.hu>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2011-12-05 11:34+0100\n"
+"Last-Translator: Faragó Tamás <tamas@kemenyfem.hu>\n"
+"Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12,7 +12,7 @@ msgstr ""
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: Acl/Rights.php:185
 msgid "manage access log"
@@ -64,11 +64,11 @@ msgstr "számítógép (samba) hozzáadása, szerkesztése, törlése"
 
 #: Acl/Rights.php:209
 msgid "manage containers"
-msgstr ""
+msgstr "konténerek kezelése"
 
 #: Acl/Rights.php:210
 msgid "add, delete and edit containers and manage container grants"
-msgstr ""
+msgstr "konténerek hozzáadása, szerkesztése, törlése és konténer jogok kezelése"
 
 #: Acl/Rights.php:213
 msgid "view access log"
@@ -112,19 +112,19 @@ msgstr "számítógépek és részletek listája"
 
 #: Acl/Rights.php:233
 msgid "view containers"
-msgstr ""
+msgstr "konténerek megtekintése"
 
 #: Acl/Rights.php:234
 msgid "view personal and shared containers"
-msgstr ""
+msgstr "személyes és megosztott konténerek megtekintése"
 
 #: Controller/Container.php:185
 msgid "Your container has been changed"
-msgstr ""
+msgstr "Konténered megváltozott"
 
 #: Controller/Container.php:186
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr ""
+msgstr "Konténeredet megváltozotta %1$s %2$sFeljegyzés: %3$s"
 
 #: js/AccessLog.js:105 js/Admin.js:87 js/Models.js:51
 msgid "Access Log"
@@ -228,11 +228,11 @@ msgstr "Megosztott címkék"
 
 #: js/Admin.js:113
 msgid "Containers"
-msgstr ""
+msgstr "Konténerek"
 
 #: js/Admin.js:125
 msgid "Customfields"
-msgstr ""
+msgstr "Egyedi mezők"
 
 #: js/Admin.js:161
 msgid "Admin"
@@ -248,8 +248,8 @@ msgstr "Alapértelmezett Címjegyzék új kapcsolatokhoz és csoportokhoz"
 #: js/Models.js:128
 msgid "Application"
 msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Alkalmazás"
+msgstr[1] "Alkalmazások"
 
 #: js/Applications.js:43
 msgid "{0} Settings"
@@ -306,22 +306,22 @@ msgstr "Verzió"
 #: js/container/Container.js:46 js/container/GridPanel.js:103
 msgid "Container"
 msgid_plural "Containers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Konténer"
+msgstr[1] "Konténerek"
 
 #: js/container/EditDialog.js:143 js/container/GridPanel.js:73
 #: js/container/GridPanel.js:104 js/customfield/EditDialog.js:583
 #: js/customfield/GridPanel.js:73
 msgid "Type"
-msgstr ""
+msgstr "Típus"
 
 #: js/container/EditDialog.js:144
 msgid "personal"
-msgstr ""
+msgstr "személyes"
 
 #: js/container/EditDialog.js:144
 msgid "shared"
-msgstr ""
+msgstr "megosztott"
 
 #: js/container/EditDialog.js:158 js/TagEditDialog.js:231 js/Tags.js:222
 msgid "Color"
@@ -329,7 +329,7 @@ msgstr "Szín"
 
 #: js/container/EditDialog.js:163
 msgid "Note for Owner"
-msgstr ""
+msgstr "Feljegyzés a tulajdonosnak"
 
 #: js/container/GridPanel.js:70 js/customfield/EditDialog.js:283
 #: js/customfield/GridPanel.js:70 js/Groups.js:234 js/Roles.js:237
@@ -339,13 +339,13 @@ msgstr "ID"
 
 #: js/container/GridPanel.js:71
 msgid "Container Name"
-msgstr ""
+msgstr "Konténer Név"
 
 #: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:115
 msgid "Customfield"
 msgid_plural "Customfields"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Egyedi mező"
+msgstr[1] "Egyedi mezők"
 
 #: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
 #: js/GroupEditDialog.js:77 js/RoleEditDialog.js:113 js/TagEditDialog.js:87
@@ -354,47 +354,47 @@ msgstr "Hibák"
 
 #: js/customfield/EditDialog.js:137
 msgid "Please configure store for this field type"
-msgstr ""
+msgstr "Kérlek állítsd be ennek a mező típusnak a tárolását"
 
 #: js/customfield/EditDialog.js:244
 msgid "Default"
-msgstr ""
+msgstr "Alapértelmezett"
 
 #: js/customfield/EditDialog.js:288
 msgid "Add a New ID..."
-msgstr ""
+msgstr "Új ID hozzáadása..."
 
 #: js/customfield/EditDialog.js:292
 msgid "Value"
-msgstr ""
+msgstr "Érték"
 
 #: js/customfield/EditDialog.js:297
 msgid "Add a New Value..."
-msgstr ""
+msgstr "Új érték hozzáadása..."
 
 #: js/customfield/EditDialog.js:307 js/customfield/EditDialog.js:313
 msgid "Error"
-msgstr ""
+msgstr "Hiba"
 
 #: js/customfield/EditDialog.js:307
 msgid "ID already exists"
-msgstr ""
+msgstr "ID már létezik"
 
 #: js/customfield/EditDialog.js:313
 msgid "Value already exists"
-msgstr ""
+msgstr "Érték már létezik"
 
 #: js/customfield/EditDialog.js:407
 msgid "Record Class"
-msgstr ""
+msgstr "Adat osztály"
 
 #: js/customfield/EditDialog.js:432
 msgid "Given record class not found"
-msgstr ""
+msgstr "Megadott adat osztály nem találató"
 
 #: js/customfield/EditDialog.js:464
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: js/customfield/EditDialog.js:470 js/user/EditDialog.js:683
 msgid "Cancel"
@@ -402,63 +402,64 @@ msgstr "Megszakítás"
 
 #: js/customfield/EditDialog.js:503
 msgid "Configure store"
-msgstr ""
+msgstr "Tárolás beállítása"
 
 #: js/customfield/EditDialog.js:549 js/customfield/GridPanel.js:75
 msgid "Model"
-msgstr ""
+msgstr "Modell"
 
 #: js/customfield/EditDialog.js:560
 msgid "Custom field definition"
-msgstr ""
+msgstr "Egyedi mező leírás"
 
 #: js/customfield/EditDialog.js:571
 msgid "Text"
-msgstr ""
+msgstr "Szöveg"
 
 #: js/customfield/EditDialog.js:572
 msgid "Number"
-msgstr ""
+msgstr "Szám"
 
 #: js/customfield/EditDialog.js:573
 msgid "Date"
-msgstr ""
+msgstr "Dátum"
 
 #: js/customfield/EditDialog.js:574
 msgid "DateTime"
-msgstr ""
+msgstr "DátumIdő"
 
 #: js/customfield/EditDialog.js:575
 msgid "Time"
-msgstr ""
+msgstr "Idő"
 
 #: js/customfield/EditDialog.js:576
 msgid "Boolean"
-msgstr ""
+msgstr "Logikai"
 
 #: js/customfield/EditDialog.js:577
+#, fuzzy
 msgid "Search Combo"
-msgstr ""
+msgstr "Kombó keresés"
 
 #: js/customfield/EditDialog.js:578
 msgid "Key Field"
-msgstr ""
+msgstr "Kulcs mező"
 
 #: js/customfield/EditDialog.js:579
 msgid "Record"
-msgstr ""
+msgstr "Adat"
 
 #: js/customfield/EditDialog.js:601 js/customfield/GridPanel.js:71
 msgid "Label"
-msgstr ""
+msgstr "Osztályozás"
 
 #: js/customfield/EditDialog.js:607
 msgid "Length"
-msgstr ""
+msgstr "Hossz"
 
 #: js/customfield/EditDialog.js:615
 msgid "Custom field additional properties"
-msgstr ""
+msgstr "Egyedi mező további beállításai"
 
 #: js/customfield/EditDialog.js:620 js/GroupEditDialog.js:215 js/Models.js:87
 msgid "Group"
@@ -477,7 +478,7 @@ msgstr "Megerősít"
 
 #: js/customfield/GridPanel.js:131
 msgid "Restart application to apply new cusomfields?"
-msgstr ""
+msgstr "Újraindítsam az alkalmazást, hogy az új egyedi mezők életbe lépjenek?"
 
 #: js/GroupEditDialog.js:37 js/RoleEditDialog.js:69 js/TagEditDialog.js:37
 msgid "Please wait"
@@ -726,7 +727,7 @@ msgstr ""
 
 #: js/user/EditDialog.js:180
 msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr ""
+msgstr "Domain nem engedélyezett. Nézd meg az SMTP domain konfigurációt."
 
 #: js/user/EditDialog.js:227 js/user/EditDialog.js:230
 #: js/user/EditDialog.js:680

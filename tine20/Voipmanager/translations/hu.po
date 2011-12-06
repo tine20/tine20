@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Gump <gump@gump.hu>\n"
+"Last-Translator: Faragó Tamás <tamas@kemenyfem.hu>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: js/Asterisk/ContextEditDialog.js:40 js/Asterisk/ContextGridPanel.js:74
 #: js/Asterisk/SipPeerEditDialog.js:67 js/Asterisk/SipPeerGridPanel.js:49
@@ -20,7 +20,7 @@ msgstr ""
 #: js/Snom/LocationGridPanel.js:129 js/Snom/PhoneEditDialog.js:277
 #: js/Snom/TemplateEditDialog.js:41
 msgid "Name"
-msgstr ""
+msgstr "Név"
 
 #: js/Asterisk/ContextEditDialog.js:48 js/Asterisk/ContextGridPanel.js:83
 #: js/Snom/LocationEditDialog.js:48 js/Snom/LocationGridPanel.js:135
@@ -28,7 +28,7 @@ msgstr ""
 #: js/Snom/SoftwareGridPanel.js:80 js/Snom/TemplateEditDialog.js:48
 #: js/Snom/TemplateGridPanel.js:80
 msgid "Description"
-msgstr ""
+msgstr "Leírás"
 
 #: js/Asterisk/ContextGridPanel.js:49 js/Asterisk/MeetmeGridPanel.js:49
 #: js/Asterisk/SipPeerGridPanel.js:48 js/Asterisk/VoicemailGridPanel.js:49
@@ -36,88 +36,88 @@ msgstr ""
 #: js/Snom/SettingGridPanel.js:49 js/Snom/SoftwareGridPanel.js:49
 #: js/Snom/TemplateGridPanel.js:49
 msgid "Quick search"
-msgstr ""
+msgstr "Gyors keresés"
 
 #: js/Asterisk/ContextGridPanel.js:67 js/Asterisk/MeetmeGridPanel.js:67
 #: js/Asterisk/VoicemailGridPanel.js:67 js/Snom/LocationGridPanel.js:122
 #: js/Snom/SoftwareGridPanel.js:67 js/Snom/TemplateGridPanel.js:67
 msgid "id"
-msgstr ""
+msgstr "id"
 
 #: js/Asterisk/MeetmeEditDialog.js:40 js/Asterisk/MeetmeGridPanel.js:74
 msgid "confno"
-msgstr ""
+msgstr "konferencia szám"
 
 #: js/Asterisk/MeetmeEditDialog.js:48 js/Asterisk/MeetmeGridPanel.js:83
 msgid "pin"
-msgstr ""
+msgstr "pin"
 
 #: js/Asterisk/MeetmeEditDialog.js:56 js/Asterisk/MeetmeGridPanel.js:92
 msgid "adminpin"
-msgstr ""
+msgstr "admin pin"
 
 #: js/Asterisk/SipPeerEditDialog.js:49
 msgid "Call Forwards"
-msgstr ""
+msgstr "Hívás átirányítás"
 
 #: js/Asterisk/SipPeerEditDialog.js:60 js/Asterisk/VoicemailEditDialog.js:41
 msgid "General"
-msgstr ""
+msgstr "Általános"
 
 #: js/Asterisk/SipPeerEditDialog.js:75 js/Asterisk/VoicemailEditDialog.js:55
 #: js/Models.js:464 js/Voipmanager.js:52
 msgid "Context"
 msgid_plural "Contexts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Összefüggés"
+msgstr[1] "Összefüggések"
 
 #: js/Asterisk/SipPeerEditDialog.js:88
 msgid "Type"
-msgstr ""
+msgstr "Típus"
 
 #: js/Asterisk/SipPeerEditDialog.js:97
 msgid "friend"
-msgstr ""
+msgstr "barát"
 
 #: js/Asterisk/SipPeerEditDialog.js:98
 msgid "user"
-msgstr ""
+msgstr "felhasználó"
 
 #: js/Asterisk/SipPeerEditDialog.js:99
 msgid "peer"
-msgstr ""
+msgstr "társ"
 
 #: js/Asterisk/SipPeerEditDialog.js:103
 msgid "Secret"
-msgstr ""
+msgstr "Titkos"
 
 #: js/Asterisk/SipPeerEditDialog.js:110
 msgid "Callerid"
-msgstr ""
+msgstr "Hívóazonosító"
 
 #: js/Asterisk/SipPeerEditDialog.js:117 js/Asterisk/VoicemailEditDialog.js:47
 msgid "Mailbox"
-msgstr ""
+msgstr "Postafiók"
 
 #: js/Asterisk/SipPeerEditDialog.js:124
 msgid "Callgroup"
-msgstr ""
+msgstr "Hívócsoport"
 
 #: js/Asterisk/SipPeerEditDialog.js:131
 msgid "Pickup group"
-msgstr ""
+msgstr "Felvevő csoport"
 
 #: js/Asterisk/SipPeerEditDialog.js:138
 msgid "Accountcode"
-msgstr ""
+msgstr "Azonosítókód"
 
 #: js/Asterisk/SipPeerEditDialog.js:145
 msgid "Language"
-msgstr ""
+msgstr "Nyelv"
 
 #: js/Asterisk/SipPeerEditDialog.js:152
 msgid "NAT"
-msgstr ""
+msgstr "NAT"
 
 #: js/Asterisk/SipPeerEditDialog.js:160 js/Asterisk/SipPeerEditDialog.js:171
 #: js/Asterisk/VoicemailEditDialog.js:113 js/Snom/LocationEditDialog.js:163
@@ -129,7 +129,7 @@ msgstr ""
 #: js/Snom/SettingEditDialog.js:279 js/Snom/SettingEditDialog.js:292
 #: js/Snom/SettingEditDialog.js:305
 msgid "off"
-msgstr ""
+msgstr "ki"
 
 #: js/Asterisk/SipPeerEditDialog.js:160 js/Asterisk/SipPeerEditDialog.js:171
 #: js/Asterisk/VoicemailEditDialog.js:112 js/Snom/LocationEditDialog.js:162
@@ -141,586 +141,586 @@ msgstr ""
 #: js/Snom/SettingEditDialog.js:278 js/Snom/SettingEditDialog.js:291
 #: js/Snom/SettingEditDialog.js:304
 msgid "on"
-msgstr ""
+msgstr "be"
 
 #: js/Asterisk/SipPeerEditDialog.js:163
 msgid "Qualify"
-msgstr ""
+msgstr "Minősítés"
 
 #: js/Asterisk/SipPeerGridPanel.js:68 js/Snom/PhoneGridPanel.js:83
 #: js/Snom/SettingGridPanel.js:67
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 #: js/Asterisk/SipPeerGridPanel.js:75 js/Snom/PhoneEditDialog.js:452
 #: js/Snom/SettingEditDialog.js:110 js/Snom/SettingEditDialog.js:182
 #: js/Snom/SettingGridPanel.js:74 js/Snom/SoftwareEditDialog.js:60
 #: js/Snom/SoftwareGridPanel.js:74 js/Snom/TemplateGridPanel.js:74
 msgid "name"
-msgstr ""
+msgstr "név"
 
 #: js/Asterisk/SipPeerGridPanel.js:81
 msgid "account code"
-msgstr ""
+msgstr "azonosító kód"
 
 #: js/Asterisk/SipPeerGridPanel.js:88
 msgid "ama flags"
-msgstr ""
+msgstr "AMA jelzések"
 
 #: js/Asterisk/SipPeerGridPanel.js:95
 msgid "call group"
-msgstr ""
+msgstr "hívó csoport"
 
 #: js/Asterisk/SipPeerGridPanel.js:102
 msgid "caller id"
-msgstr ""
+msgstr "hívó Id"
 
 #: js/Asterisk/SipPeerGridPanel.js:108
 msgid "can reinvite"
-msgstr ""
+msgstr "újra meghívhat"
 
 #: js/Asterisk/SipPeerGridPanel.js:115 js/Asterisk/VoicemailGridPanel.js:80
 msgid "context"
-msgstr ""
+msgstr "összefüggés"
 
 #: js/Asterisk/SipPeerGridPanel.js:121
 msgid "default ip"
-msgstr ""
+msgstr "alapértelmezett Ip"
 
 #: js/Asterisk/SipPeerGridPanel.js:128
 msgid "dtmf mode"
-msgstr ""
+msgstr "dtmf mód"
 
 #: js/Asterisk/SipPeerGridPanel.js:135
 msgid "from user"
-msgstr ""
+msgstr "felhasználótól"
 
 #: js/Asterisk/SipPeerGridPanel.js:142
 msgid "from domain"
-msgstr ""
+msgstr "domaintől"
 
 #: js/Asterisk/SipPeerGridPanel.js:149
 msgid "full contact"
-msgstr ""
+msgstr "teljes kapcsolat"
 
 #: js/Asterisk/SipPeerGridPanel.js:156
 msgid "host"
-msgstr ""
+msgstr "gép"
 
 #: js/Asterisk/SipPeerGridPanel.js:163
 msgid "insecure"
-msgstr ""
+msgstr "nem biztonságos"
 
 #: js/Asterisk/SipPeerGridPanel.js:170 js/Snom/PhoneEditDialog.js:422
 #: js/Snom/SettingEditDialog.js:145 js/Snom/SettingGridPanel.js:93
 msgid "language"
-msgstr ""
+msgstr "nyelv"
 
 #: js/Asterisk/SipPeerGridPanel.js:177 js/Asterisk/VoicemailGridPanel.js:74
 msgid "mailbox"
-msgstr ""
+msgstr "postaláda"
 
 #: js/Asterisk/SipPeerGridPanel.js:183
 msgid "md5 secret"
-msgstr ""
+msgstr "md5 titkosítás"
 
 #: js/Asterisk/SipPeerGridPanel.js:190
 msgid "nat"
-msgstr ""
+msgstr "Nat"
 
 #: js/Asterisk/SipPeerGridPanel.js:197
 msgid "deny"
-msgstr ""
+msgstr "tiltás"
 
 #: js/Asterisk/SipPeerGridPanel.js:204
 msgid "permit"
-msgstr ""
+msgstr "engedés"
 
 #: js/Asterisk/SipPeerGridPanel.js:211
 msgid "mask"
-msgstr ""
+msgstr "maszk"
 
 #: js/Asterisk/SipPeerGridPanel.js:218
 msgid "pickup group"
-msgstr ""
+msgstr "felvevő csoport"
 
 #: js/Asterisk/SipPeerGridPanel.js:224
 msgid "port"
-msgstr ""
+msgstr "port"
 
 #: js/Asterisk/SipPeerGridPanel.js:231
 msgid "qualify"
-msgstr ""
+msgstr "Minősítés"
 
 #: js/Asterisk/SipPeerGridPanel.js:238
 msgid "restrict cid"
-msgstr ""
+msgstr "hivóazonosító korlátozása"
 
 #: js/Asterisk/SipPeerGridPanel.js:245
 msgid "rtp timeout"
-msgstr ""
+msgstr "újrahívás szünet"
 
 #: js/Asterisk/SipPeerGridPanel.js:252
 msgid "rtp hold timeout"
-msgstr ""
+msgstr "újrahívás tartás szünet"
 
 #: js/Asterisk/SipPeerGridPanel.js:259
 msgid "secret"
-msgstr ""
+msgstr "titkos"
 
 #: js/Asterisk/SipPeerGridPanel.js:266
 msgid "type"
-msgstr ""
+msgstr "típis"
 
 #: js/Asterisk/SipPeerGridPanel.js:272
 msgid "defaultuser"
-msgstr ""
+msgstr "alapértelmezett felhasználó"
 
 #: js/Asterisk/SipPeerGridPanel.js:279
 msgid "disallow"
-msgstr ""
+msgstr "helytelen"
 
 #: js/Asterisk/SipPeerGridPanel.js:286
 msgid "allow"
-msgstr ""
+msgstr "helyes"
 
 #: js/Asterisk/SipPeerGridPanel.js:293
 msgid "music on hold"
-msgstr ""
+msgstr "zene tartás közben"
 
 #: js/Asterisk/SipPeerGridPanel.js:300
 msgid "reg seconds"
-msgstr ""
+msgstr "reg. másodperc"
 
 #: js/Asterisk/SipPeerGridPanel.js:307
 msgid "ip address"
-msgstr ""
+msgstr "ip cím"
 
 #: js/Asterisk/SipPeerGridPanel.js:314
 msgid "reg exten"
-msgstr ""
+msgstr "reg. mellék"
 
 #: js/Asterisk/SipPeerGridPanel.js:321
 msgid "can call forward"
-msgstr ""
+msgstr "hívást átirányíthat"
 
 #: js/Asterisk/SipPeerGridPanel.js:328
 msgid "set var"
-msgstr ""
+msgstr "változó beállítás"
 
 #: js/Asterisk/SipPeerGridPanel.js:335
 msgid "notify ringing"
-msgstr ""
+msgstr "csörgéskor értesítés"
 
 #: js/Asterisk/SipPeerGridPanel.js:342
 msgid "use client code"
-msgstr ""
+msgstr "kliens kód használata"
 
 #: js/Asterisk/SipPeerGridPanel.js:349
 msgid "auth user"
-msgstr ""
+msgstr "azonosított felhasználó"
 
 #: js/Asterisk/SipPeerGridPanel.js:356
 msgid "call limit"
-msgstr ""
+msgstr "hívás korlát"
 
 #: js/Asterisk/SipPeerGridPanel.js:363
 msgid "busy level"
-msgstr ""
+msgstr "foglaltásági szint"
 
 #: js/Asterisk/VoicemailEditDialog.js:75
 msgid "Password"
-msgstr ""
+msgstr "Jelszó"
 
 #: js/Asterisk/VoicemailEditDialog.js:83 js/Asterisk/VoicemailGridPanel.js:92
 msgid "email"
-msgstr ""
+msgstr "email"
 
 #: js/Asterisk/VoicemailEditDialog.js:89 js/Asterisk/VoicemailGridPanel.js:98
 msgid "pager"
-msgstr ""
+msgstr "személyhívó"
 
 #: js/Asterisk/VoicemailEditDialog.js:95
 msgid "Additional"
-msgstr ""
+msgstr "További"
 
 #: js/Asterisk/VoicemailEditDialog.js:119
 #: js/Asterisk/VoicemailGridPanel.js:104
 msgid "tz"
-msgstr ""
+msgstr "időzóna"
 
 #: js/Asterisk/VoicemailEditDialog.js:125
 #: js/Asterisk/VoicemailGridPanel.js:125
 msgid "dialout"
-msgstr ""
+msgstr "kitárcsázás"
 
 #: js/Asterisk/VoicemailEditDialog.js:131
 #: js/Asterisk/VoicemailGridPanel.js:132
 msgid "callback"
-msgstr ""
+msgstr "visszahívás"
 
 #: js/Asterisk/VoicemailEditDialog.js:137
 #: js/Asterisk/VoicemailGridPanel.js:160
 msgid "sayduration"
-msgstr ""
+msgstr "üzenethossz mondása"
 
 #: js/Asterisk/VoicemailEditDialog.js:141
 #: js/Asterisk/VoicemailGridPanel.js:167
 msgid "saydurationm"
-msgstr ""
+msgstr "üzenethossz mondása perc"
 
 #: js/Asterisk/VoicemailEditDialog.js:146
 #: js/Asterisk/VoicemailGridPanel.js:111
 msgid "attach"
-msgstr ""
+msgstr "csatolás"
 
 #: js/Asterisk/VoicemailEditDialog.js:150
 #: js/Asterisk/VoicemailGridPanel.js:118
 msgid "saycid"
-msgstr ""
+msgstr "hívószám felolvasása"
 
 #: js/Asterisk/VoicemailEditDialog.js:154
 #: js/Asterisk/VoicemailGridPanel.js:139
 msgid "review"
-msgstr ""
+msgstr "áttekintés"
 
 #: js/Asterisk/VoicemailEditDialog.js:158
 #: js/Asterisk/VoicemailGridPanel.js:146
 msgid "operator"
-msgstr ""
+msgstr "operátor"
 
 #: js/Asterisk/VoicemailEditDialog.js:162
 #: js/Asterisk/VoicemailGridPanel.js:153
 msgid "envelope"
-msgstr ""
+msgstr "időbélyeg"
 
 #: js/Asterisk/VoicemailEditDialog.js:166
 #: js/Asterisk/VoicemailGridPanel.js:174
 msgid "sendvoicemail"
-msgstr ""
+msgstr "hangüzenet levélben küldése"
 
 #: js/Asterisk/VoicemailEditDialog.js:170
 #: js/Asterisk/VoicemailGridPanel.js:181
 msgid "delete"
-msgstr ""
+msgstr "törlés"
 
 #: js/Asterisk/VoicemailEditDialog.js:174
 #: js/Asterisk/VoicemailGridPanel.js:188
 msgid "nextaftercmd"
-msgstr ""
+msgstr "következő üzenet a parancs után"
 
 #: js/Asterisk/VoicemailEditDialog.js:178
 #: js/Asterisk/VoicemailGridPanel.js:195
 msgid "forcename"
-msgstr ""
+msgstr "név szükséges"
 
 #: js/Asterisk/VoicemailEditDialog.js:182
 #: js/Asterisk/VoicemailGridPanel.js:202
 msgid "forcegreetings"
-msgstr ""
+msgstr "üdvözlet szükséges"
 
 #: js/Asterisk/VoicemailEditDialog.js:186
 #: js/Asterisk/VoicemailGridPanel.js:209
 msgid "hidefromdir"
-msgstr ""
+msgstr "elrejtés a mappából"
 
 #: js/Asterisk/VoicemailGridPanel.js:86
 msgid "fullname"
-msgstr ""
+msgstr "teljes név"
 
 #: js/CallForwardPanel.js:84
 msgid "Forward immediately"
-msgstr ""
+msgstr "Átirányítás azonnal"
 
 #: js/CallForwardPanel.js:94 js/CallForwardPanel.js:137
 #: js/CallForwardPanel.js:179
 msgid "Mode"
-msgstr ""
+msgstr "Mód"
 
 #: js/CallForwardPanel.js:118 js/CallForwardPanel.js:160
 #: js/CallForwardPanel.js:203
 msgid "Number"
-msgstr ""
+msgstr "Szám"
 
 #: js/CallForwardPanel.js:127
 msgid "Forward busy"
-msgstr ""
+msgstr "Átirányítás ha foglalt"
 
 #: js/CallForwardPanel.js:169
 msgid "Forward delayed"
-msgstr ""
+msgstr "Késleltetett átirányítás"
 
 #: js/CallForwardPanel.js:212
 msgid "Delay time"
-msgstr ""
+msgstr "Késleltetési idő"
 
 #: js/Models.js:78 js/Snom/PhoneEditDialog.js:262
 msgid "Phone"
 msgid_plural "Phones"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Telefon"
+msgstr[1] "Telefonok"
 
 #: js/Models.js:82
 msgid "phones list"
 msgid_plural "phones lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "telefon lista"
+msgstr[1] "telefon listák"
 
 #: js/Models.js:129 js/Snom/PhoneGridPanel.js:101 js/Voipmanager.js:115
 msgid "Location"
 msgid_plural "Locations"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Elhelyezkedés"
+msgstr[1] "Elhelyezkedések"
 
 #: js/Models.js:133
 msgid "locations list"
 msgid_plural "locations lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "elhelyezkedési lista"
+msgstr[1] "elhelyezkedési listák"
 
 #: js/Models.js:166 js/Snom/PhoneGridPanel.js:110
 msgid "Template"
 msgid_plural "Templates"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sablon"
+msgstr[1] "Sablonok"
 
 #: js/Models.js:170
 msgid "templates list"
 msgid_plural "templates lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "sablon lista"
+msgstr[1] "sablon listák"
 
 #: js/Models.js:204 js/Snom/PhoneGridPanel.js:125 js/Voipmanager.js:156
 msgid "Software"
 msgid_plural "Softwares"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Szoftver"
+msgstr[1] "Szoftverek"
 
 #: js/Models.js:208
 msgid "softwares list"
 msgid_plural "softwares lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "szoftver lista"
+msgstr[1] "szoftver listák"
 
 #: js/Models.js:237
 msgid "SoftwareImage"
 msgid_plural "SoftwareImages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Szoftverkép"
+msgstr[1] "Szoftverképek"
 
 #: js/Models.js:241
 msgid "softwareImages list"
 msgid_plural "softwareImages lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "szoftverkép lista"
+msgstr[1] "szoftverkép listák"
 
 #: js/Models.js:278 js/Snom/LineGridPanel.js:235
 msgid "Line"
 msgid_plural "Lines"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Vonal"
+msgstr[1] "Vonalak"
 
 #: js/Models.js:282
 msgid "lines list"
 msgid_plural "lines lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "vonal lista"
+msgstr[1] "vonal listák"
 
 #: js/Models.js:335 js/Voipmanager.js:146
 msgid "Setting"
 msgid_plural "Settings"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Beállítás"
+msgstr[1] "Beállítások"
 
 #: js/Models.js:339
 msgid "setting list"
 msgid_plural "settings lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "beállítás lista"
+msgstr[1] "beállítás listák"
 
 #: js/Models.js:430 js/Voipmanager.js:31
 msgid "SipPeer"
 msgid_plural "SipPeers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "SipPeer"
+msgstr[1] "SipPeers"
 
 #: js/Models.js:434
 msgid "sipPeers list"
 msgid_plural "sipPeers lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "sipPeer lista"
+msgstr[1] "sipPeer listák"
 
 #: js/Models.js:468
 msgid "contexts list"
 msgid_plural "contexts lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "összefüggés lista"
+msgstr[1] "összefüggés listák"
 
 #: js/Models.js:520 js/Voipmanager.js:62
 msgid "Voicemail"
 msgid_plural "Voicemails"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Hangposta"
+msgstr[1] "Hangposták"
 
 #: js/Models.js:524
 msgid "voicemails list"
 msgid_plural "voicemails lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "hangposta lista"
+msgstr[1] "hangposta listák"
 
 #: js/Models.js:555 js/Voipmanager.js:72
 msgid "Meetme"
 msgid_plural "Meetmes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Konferencia"
+msgstr[1] "Konferenciák"
 
 #: js/Models.js:559
 msgid "meetmes list"
 msgid_plural "meetmes lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "konferencia lista"
+msgstr[1] "konferencia listák"
 
 #: js/Snom/LineGridPanel.js:236
 msgid "Idle Text"
-msgstr ""
+msgstr "Szünetelő szöveg"
 
 #: js/Snom/LocationEditDialog.js:54 js/Snom/LocationGridPanel.js:80
 msgid "Registrar"
-msgstr ""
+msgstr "Regisztráló"
 
 #: js/Snom/LocationEditDialog.js:61
 msgid "Base Download URL"
-msgstr ""
+msgstr "Alap letöltési URL"
 
 #: js/Snom/LocationEditDialog.js:76 js/Snom/LocationGridPanel.js:73
 msgid "Update Policy"
-msgstr ""
+msgstr "Frissítési szabály"
 
 #: js/Snom/LocationEditDialog.js:97
 msgid "Firmware Interval"
-msgstr ""
+msgstr "Firmware intervallum"
 
 #: js/Snom/LocationEditDialog.js:115
 msgid "tone_scheme"
-msgstr ""
+msgstr "tárcsahang séma"
 
 #: js/Snom/LocationEditDialog.js:152
 msgid "date_us_format"
-msgstr ""
+msgstr "USA dátum formátum"
 
 #: js/Snom/LocationEditDialog.js:173
 msgid "time_24_format"
-msgstr ""
+msgstr "24 órás idő formátum"
 
 #: js/Snom/LocationEditDialog.js:193 js/Snom/LocationGridPanel.js:94
 msgid "NTP Server"
-msgstr ""
+msgstr "NTP szerver"
 
 #: js/Snom/LocationEditDialog.js:210
 msgid "NTP Server Address"
-msgstr ""
+msgstr "NTP szerver cím"
 
 #: js/Snom/LocationEditDialog.js:223
 msgid "NTP Refresh"
-msgstr ""
+msgstr "NTP frissítés"
 
 #: js/Snom/LocationEditDialog.js:230
 msgid "Timezone"
-msgstr ""
+msgstr "Időzóna"
 
 #: js/Snom/LocationEditDialog.js:255
 msgid "Enable admin mode"
-msgstr ""
+msgstr "Admin mód engedélyezése"
 
 #: js/Snom/LocationEditDialog.js:267
 msgid "Admin Mode Password"
-msgstr ""
+msgstr "Admin mód jelszó"
 
 #: js/Snom/LocationEditDialog.js:277
 msgid "Enable webserver"
-msgstr ""
+msgstr "Webszerver engedélyezése"
 
 #: js/Snom/LocationEditDialog.js:304 js/Snom/LocationGridPanel.js:101
 msgid "Webserver Type"
-msgstr ""
+msgstr "Webszerver típus"
 
 #: js/Snom/LocationEditDialog.js:351
 msgid "HTTP Port"
-msgstr ""
+msgstr "HTTP port"
 
 #: js/Snom/LocationEditDialog.js:365 js/Snom/LocationGridPanel.js:108
 msgid "HTTPS Port"
-msgstr ""
+msgstr "HTTPS port"
 
 #: js/Snom/LocationEditDialog.js:386 js/Snom/LocationGridPanel.js:115
 msgid "HTTP User"
-msgstr ""
+msgstr "HTTP felhasználó"
 
 #: js/Snom/LocationEditDialog.js:398
 msgid "HTTP Password"
-msgstr ""
+msgstr "HTTP jelszó"
 
 #: js/Snom/LocationGridPanel.js:66
 msgid "FW Interval"
-msgstr ""
+msgstr "FW intervallum"
 
 #: js/Snom/LocationGridPanel.js:87
 msgid "Admin Mode"
-msgstr ""
+msgstr "Admin mód"
 
 #: js/Snom/LocationGridPanel.js:141
 msgid "Filter Registrar"
-msgstr ""
+msgstr "Regisztráló szűrő "
 
 #: js/Snom/LocationGridPanel.js:148
 msgid "CP Dialoginfo"
-msgstr ""
+msgstr "CP Párbeszédinfó"
 
 #: js/Snom/LocationGridPanel.js:155
 msgid "Pickup Indic."
-msgstr ""
+msgstr "Felvétel jelzés"
 
 #: js/Snom/PhoneEditDialog.js:224
 msgid "Lines"
-msgstr ""
+msgstr "Vonalak"
 
 #: js/Snom/PhoneEditDialog.js:281
 msgid "Phone Model"
-msgstr ""
+msgstr "Telefon modell"
 
 #: js/Snom/PhoneEditDialog.js:293
 msgid "MAC Address"
-msgstr ""
+msgstr "MAC cím"
 
 #: js/Snom/PhoneEditDialog.js:329
 msgid "infos"
-msgstr ""
+msgstr "infók"
 
 #: js/Snom/PhoneEditDialog.js:344
 msgid "Current IP Address"
-msgstr ""
+msgstr "Aktuális IP cím"
 
 #: js/Snom/PhoneEditDialog.js:351
 msgid "Firmware last checked at"
-msgstr ""
+msgstr "Firmware utolsó ellenőrzése ekkor volt:"
 
 #: js/Snom/PhoneEditDialog.js:359
 msgid "Current Software Version"
-msgstr ""
+msgstr "Aktuális szoftver verzió"
 
 #: js/Snom/PhoneEditDialog.js:366
 msgid "Settings Loaded at"
-msgstr ""
+msgstr "Beállítások betöltődtek ekkor:"
 
 #: js/Snom/PhoneEditDialog.js:386 js/Snom/SettingEditDialog.js:90
 #: js/Snom/TemplateEditDialog.js:68
 msgid "Settings"
-msgstr ""
+msgstr "Beállítások"
 
 #: js/Snom/PhoneEditDialog.js:404 js/Snom/SettingEditDialog.js:123
 #: js/Snom/SettingGridPanel.js:86
 msgid "web_language"
-msgstr ""
+msgstr "web nyelv"
 
 #: js/Snom/PhoneEditDialog.js:408 js/Snom/PhoneEditDialog.js:426
 #: js/Snom/PhoneEditDialog.js:450 js/Snom/PhoneEditDialog.js:462
@@ -735,113 +735,113 @@ msgstr ""
 #: js/Snom/SettingEditDialog.js:264 js/Snom/SettingEditDialog.js:277
 #: js/Snom/SettingEditDialog.js:290 js/Snom/SettingEditDialog.js:303
 msgid "- factory default -"
-msgstr ""
+msgstr "- gyári alapértelmezés - "
 
 #: js/Snom/PhoneEditDialog.js:446 js/Snom/SettingEditDialog.js:173
 #: js/Snom/SettingGridPanel.js:100
 msgid "display_method"
-msgstr ""
+msgstr "kijelzési mód"
 
 #: js/Snom/PhoneEditDialog.js:451 js/Snom/SettingEditDialog.js:181
 msgid "whole url"
-msgstr ""
+msgstr "egység url"
 
 #: js/Snom/PhoneEditDialog.js:453 js/Snom/SettingEditDialog.js:183
 msgid "number"
-msgstr ""
+msgstr "szám"
 
 #: js/Snom/PhoneEditDialog.js:454 js/Snom/SettingEditDialog.js:184
 msgid "name + number"
-msgstr ""
+msgstr "név + szám"
 
 #: js/Snom/PhoneEditDialog.js:455 js/Snom/SettingEditDialog.js:185
 msgid "number + name"
-msgstr ""
+msgstr "szám + név"
 
 #: js/Snom/PhoneEditDialog.js:458 js/Snom/SettingEditDialog.js:189
 #: js/Snom/SettingGridPanel.js:163
 msgid "call_waiting"
-msgstr ""
+msgstr "hívás várakoztatás"
 
 #: js/Snom/PhoneEditDialog.js:464 js/Snom/SettingEditDialog.js:198
 msgid "visual"
-msgstr ""
+msgstr "vizuális"
 
 #: js/Snom/PhoneEditDialog.js:465 js/Snom/SettingEditDialog.js:199
 msgid "ringer"
-msgstr ""
+msgstr "csengetés"
 
 #: js/Snom/PhoneEditDialog.js:469 js/Snom/SettingEditDialog.js:204
 #: js/Snom/SettingGridPanel.js:107
 msgid "mwi_notification"
-msgstr ""
+msgstr "mwi értesítés"
 
 #: js/Snom/PhoneEditDialog.js:474 js/Snom/SettingEditDialog.js:212
 msgid "silent"
-msgstr ""
+msgstr "néma"
 
 #: js/Snom/PhoneEditDialog.js:475 js/Snom/SettingEditDialog.js:213
 msgid "beep"
-msgstr ""
+msgstr "beep"
 
 #: js/Snom/PhoneEditDialog.js:476 js/Snom/SettingEditDialog.js:214
 msgid "reminder"
-msgstr ""
+msgstr "emlékeztető"
 
 #: js/Snom/PhoneEditDialog.js:479 js/Snom/SettingEditDialog.js:218
 #: js/Snom/SettingGridPanel.js:114
 msgid "mwi_dialtone"
-msgstr ""
+msgstr "mwi tárcsahang"
 
 #: js/Snom/PhoneEditDialog.js:484 js/Snom/SettingEditDialog.js:226
 msgid "normal"
-msgstr ""
+msgstr "normál"
 
 #: js/Snom/PhoneEditDialog.js:485 js/Snom/SettingEditDialog.js:227
 msgid "stutter"
-msgstr ""
+msgstr "dadogó"
 
 #: js/Snom/PhoneEditDialog.js:488 js/Snom/SettingEditDialog.js:231
 #: js/Snom/SettingGridPanel.js:121
 msgid "headset_device"
-msgstr ""
+msgstr "headset eszköz"
 
 #: js/Snom/PhoneEditDialog.js:493 js/Snom/SettingEditDialog.js:239
 msgid "none"
-msgstr ""
+msgstr "semmi"
 
 #: js/Snom/PhoneEditDialog.js:494 js/Snom/SettingEditDialog.js:240
 msgid "headset_rj"
-msgstr ""
+msgstr "rj headset"
 
 #: js/Snom/PhoneEditDialog.js:497 js/Snom/SettingEditDialog.js:244
 #: js/Snom/SettingGridPanel.js:128
 msgid "message_led_other"
-msgstr ""
+msgstr "másik üzenet led"
 
 #: js/Snom/PhoneEditDialog.js:506 js/Snom/SettingEditDialog.js:257
 #: js/Snom/SettingGridPanel.js:135
 msgid "global_missed_counter"
-msgstr ""
+msgstr "összes nem fogadott számláló"
 
 #: js/Snom/PhoneEditDialog.js:515 js/Snom/SettingEditDialog.js:270
 #: js/Snom/SettingGridPanel.js:142
 msgid "scroll_outgoing"
-msgstr ""
+msgstr "kimenő görgetés"
 
 #: js/Snom/PhoneEditDialog.js:524 js/Snom/SettingEditDialog.js:283
 #: js/Snom/SettingGridPanel.js:149
 msgid "show_local_line"
-msgstr ""
+msgstr "helyi vonal mutatása"
 
 #: js/Snom/PhoneEditDialog.js:533 js/Snom/SettingEditDialog.js:296
 #: js/Snom/SettingGridPanel.js:156
 msgid "show_call_status"
-msgstr ""
+msgstr "hívás állapot mutatása"
 
 #: js/Snom/PhoneEditDialog.js:553
 msgid "Users"
-msgstr ""
+msgstr "Felhasználók"
 
 #: js/Snom/PhoneEditDialog.js:592
 msgid "Failed"
@@ -857,88 +857,88 @@ msgstr ""
 
 #: js/Snom/PhoneGridPanel.js:41
 msgid "reset phones HTTP authentication"
-msgstr ""
+msgstr "telefon HTTP hitelesítésének visszaállítása"
 
 #: js/Snom/PhoneGridPanel.js:48
 msgid "Open phones web gui"
-msgstr ""
+msgstr "Telefon web-es felületének megnyitása"
 
 #: js/Snom/PhoneGridPanel.js:90
 msgid "MAC address"
-msgstr ""
+msgstr "MAC cím"
 
 #: js/Snom/PhoneGridPanel.js:96 js/Snom/SettingGridPanel.js:80
 msgid "description"
-msgstr ""
+msgstr "leírás"
 
 #: js/Snom/PhoneGridPanel.js:119
 msgid "IP Address"
-msgstr ""
+msgstr "IP cím"
 
 #: js/Snom/PhoneGridPanel.js:131
 msgid "current model"
-msgstr ""
+msgstr "aktuális modell"
 
 #: js/Snom/PhoneGridPanel.js:138
 msgid "redirect event"
-msgstr ""
+msgstr "esemény átirányítása"
 
 #: js/Snom/PhoneGridPanel.js:145
 msgid "redirect number"
-msgstr ""
+msgstr "szám átirányítása"
 
 #: js/Snom/PhoneGridPanel.js:152
 msgid "redirect time"
-msgstr ""
+msgstr "idő átirányítása"
 
 #: js/Snom/PhoneGridPanel.js:159
 msgid "settings loaded at"
-msgstr ""
+msgstr "beállítások betöltve ekkor:"
 
 #: js/Snom/PhoneGridPanel.js:167
 msgid "last modified"
-msgstr ""
+msgstr "utoljára módosítva"
 
 #: js/Snom/TemplateEditDialog.js:55
 msgid "Software Version"
-msgstr ""
+msgstr "Szoftver verzió "
 
 #: js/Snom/TemplateEditDialog.js:80 js/Voipmanager.js:135
 msgid "Keylayout"
-msgstr ""
+msgstr "Gombkiosztás"
 
 #: js/Snom/TemplateGridPanel.js:86
 msgid "Keylayout Id"
-msgstr ""
+msgstr "Gombkiosztás Id"
 
 #: js/Snom/TemplateGridPanel.js:93
 msgid "Settings Id"
-msgstr ""
+msgstr "Beállítás Id"
 
 #: js/Snom/TemplateGridPanel.js:100
 msgid "Software Id"
-msgstr ""
+msgstr "Szoftver Id"
 
 #: js/Voipmanager.js:24
 msgid "Asterisk"
-msgstr ""
+msgstr "Asterisk"
 
 #: js/Voipmanager.js:41
 msgid "Dialplan"
-msgstr ""
+msgstr "Tárcsázási terv"
 
 #: js/Voipmanager.js:82
 msgid "Queues"
-msgstr ""
+msgstr "Sorok"
 
 #: js/Voipmanager.js:98
 msgid "Snom"
-msgstr ""
+msgstr "Snom"
 
 #: js/Voipmanager.js:105
 msgid "Phones"
-msgstr ""
+msgstr "Telefonok"
 
 #: js/Voipmanager.js:125
 msgid "Templates"
-msgstr ""
+msgstr "Sablonok"

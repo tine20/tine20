@@ -3,13 +3,13 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Faragó Tamás <admin@kemenyfem.hu>\n"
+"Last-Translator: Faragó Tamás <tamas@kemenyfem.hu>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -40,27 +40,28 @@ msgstr "Minden jog a rendszergazdai forrásokhoz"
 
 #: Config.php:45
 msgid "Fixed Calendars"
-msgstr ""
+msgstr "Fix Naptárak"
 
 #: Config.php:47
+#, fuzzy
 msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
-msgstr ""
+msgstr "A naptárak minden szűrő paramétertől függetlenül mindig kiválasztva maradnak. Egy érvényes használati eset megjelenésre kényszeríthet egy bizonyos vakációs naptárat."
 
 #: Config.php:55
 msgid "Attendee Status Available"
-msgstr ""
+msgstr "Résztvevők állapota elérhető"
 
 #: Config.php:57
 msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation."
-msgstr ""
+msgstr "Lehetséges esemény résztvevő állapotok. Kérlek jegyezd meg, hogy a további résztvevő állapotok ütközhetnek a más naptár rendszerekkel exportálások vagy szinkronizáláskor."
 
 #: Config.php:65
 msgid "Attendee Roles Available"
-msgstr ""
+msgstr "Résztvevő szabályok elérhetőek"
 
 #: Config.php:67
 msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation."
-msgstr ""
+msgstr "Lehetséges esemény résztvevő szerepek. Kérlek jegyezd meg, hogy a további résztvevő szerepek ütközhetnek a más naptár rendszerekkel exportálások vagy szinkronizáláskor."
 
 #: Controller/EventNotifications.php:263
 msgid "Alarm for event \"%1$s\" at %2$s"
@@ -157,7 +158,7 @@ msgstr[1] "Források"
 
 #: js/AttendeeGridPanel.js:171
 msgid "Member of group"
-msgstr ""
+msgstr "Csoport tagja"
 
 #: js/AttendeeGridPanel.js:178 js/ResourceEditDialog.js:56
 #: js/ResourcesGridPanel.js:41
@@ -276,13 +277,13 @@ msgid "recurring event"
 msgstr "ismétlődő esemény"
 
 #: js/EventUI.js:234
-#, fuzzy
 msgid "has alarm"
 msgstr "riasztást tartalmaz"
 
 #: js/GridView.js:124
+#, fuzzy
 msgid "blocking"
-msgstr ""
+msgstr "Blokkolva"
 
 #: js/MainScreenCenterPanel.js:28
 msgid "Loading events, please wait..."
@@ -294,11 +295,11 @@ msgstr "Oldal nyomtatása"
 
 #: js/MainScreenCenterPanel.js:165
 msgid "Sheet"
-msgstr ""
+msgstr "Naptár"
 
 #: js/MainScreenCenterPanel.js:179
 msgid "Grid"
-msgstr ""
+msgstr "Táblázat"
 
 #: js/MainScreenCenterPanel.js:189
 msgid "Day"
@@ -326,7 +327,7 @@ msgstr "Mostani esemény frissítése"
 
 #: js/MainScreenCenterPanel.js:522
 msgid "Update this and all future events"
-msgstr ""
+msgstr "Mostani és az összes jövőbeni esemény frissítése"
 
 #: js/MainScreenCenterPanel.js:523
 msgid "Update whole series"
@@ -362,7 +363,7 @@ msgstr "Egész sorozat törlése"
 
 #: js/MainScreenCenterPanel.js:646
 msgid "Delete nothing"
-msgstr ""
+msgstr "Semmi törlése"
 
 #: js/MainScreenCenterPanel.js:689
 msgid "Do you really want to delete this event?"
@@ -396,7 +397,7 @@ msgstr "Esemény szerkesztése"
 
 #: js/MainScreenCenterPanel.js:981
 msgid "Cancel this action"
-msgstr ""
+msgstr "Esemény megszakítása"
 
 #: js/MainScreenWestPanel.js:30
 msgid "Mini Calendar"
@@ -425,16 +426,19 @@ msgid "Attendee Status"
 msgstr "Résztvevők állapota"
 
 #: js/Model.js:222
+#, fuzzy
 msgid "Event (as attendee)"
-msgstr ""
+msgstr "Minden esemény, amiben résztveszek"
 
 #: js/Model.js:229
+#, fuzzy
 msgid "Event (as organizer)"
-msgstr ""
+msgstr "Események amiket én szerveztem"
 
 #: js/Model.js:239
+#, fuzzy
 msgid "Event attendee"
-msgstr ""
+msgstr "Résztvevők kiválasztása"
 
 #: js/Model.js:355
 msgid "Attender"
@@ -496,7 +500,7 @@ msgstr "Éves"
 
 #: js/RrulePanel.js:179
 msgid "Exceptions of reccuring events can't have recurrences themselves."
-msgstr ""
+msgstr "Az ismétlődő események kivétele nem tartalmaz ismétlődést."
 
 #: js/RrulePanel.js:237
 msgid "forever"
@@ -616,7 +620,6 @@ msgid "All my events"
 msgstr "Minden eseményem"
 
 #: Preference.php:80
-#, fuzzy
 msgid "Position on the left time axis, day and week view should start with"
 msgstr "Pozíció a bal időtengelyen, amivel a napi és a heti nézet kezdődjön"
 
@@ -654,23 +657,23 @@ msgstr "Értesítő emailek fogadása saját magadnak készített tevékenysége
 
 #: Preference.php:149
 msgid "Never"
-msgstr ""
+msgstr "Sosem"
 
 #: Preference.php:149
 msgid "On invitation and cancellation only"
-msgstr ""
+msgstr "Csak meghíváskor és lemondáskor"
 
 #: Preference.php:149
 msgid "On time changes"
-msgstr ""
+msgstr "Időpont változtatáskor"
 
 #: Preference.php:149
 msgid "On all updates but attendee responses"
-msgstr ""
+msgstr "Minden frissítéskor de résztvevő visszajelzéskor nem"
 
 #: Preference.php:149
 msgid "On attendee responses too"
-msgstr ""
+msgstr "Résztvevő visszajelzésekor is"
 
 #: Setup/Initialize.php:34 Setup/Update/Release3.php:164
 msgid "All events I attend"
@@ -682,7 +685,7 @@ msgstr "Visszajelzésre vár"
 
 #: Setup/Initialize.php:48
 msgid "Events I have not yet responded to"
-msgstr ""
+msgstr "Események amire még nem jeleztem vissza"
 
 #: Setup/Initialize.php:63
 msgid "Declined events"
@@ -758,11 +761,14 @@ msgstr "Nincs válasz tőle: %1$s"
 
 #: views/eventNotification.php:54
 msgid "\"%2$s\" response from %1$s"
-msgstr ""
+msgstr "\"%2$s\" válasz tőle: %1$s"
 
 #: views/eventNotification.php:63
 msgid "Event details"
 msgstr "Esemény részletei"
+
+#~ msgid "Events I have not yet respondet to"
+#~ msgstr "Események amire még jeleztem vissza"
 
 #~ msgid "Unknown calendar"
 #~ msgstr "Ismeretlen naptár"
@@ -781,6 +787,3 @@ msgstr "Esemény részletei"
 
 #~ msgid "Do you really want to delete all events of this recurring event series?"
 #~ msgstr "Biztosan törlöd ennek az ismétlődő esemény sorozatnak az összes eseményét?"
-
-#~ msgid "Events I have not yet respondet to"
-#~ msgstr "Események amire még jeleztem vissza"

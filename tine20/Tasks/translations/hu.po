@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-09 21:17+0100\n"
-"Last-Translator: Faragó Tamás <admin@kemenyfem.hu>\n"
+"PO-Revision-Date: 2011-12-05 11:26+0100\n"
+"Last-Translator: Faragó Tamás <tamas@kemenyfem.hu>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
@@ -32,11 +32,11 @@ msgstr "Kedvenc megosztott feladatok készítése vagy frissítése"
 
 #: Config.php:31
 msgid "Tasks Status Available"
-msgstr ""
+msgstr "Feladat állapot elérhető"
 
 #: Config.php:33
 msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
-msgstr ""
+msgstr "Lehetséges feladat állapot. Kérlek jegyezd meg, hogy a további résztvevő állapot hatással lehet másik Feladat rendszerre exportáláskor vagy szinkronizáláskor."
 
 #: Controller/Task.php:165
 msgid "Notification for Task "
@@ -83,7 +83,6 @@ msgstr "Százalék"
 
 #: js/GridPanel.js:193 js/TaskEditDialog.js:234 js/Tasks.js:151
 #: js/Tasks.js:211 Model/Task.php:186
-#, fuzzy
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "Állapot"
@@ -132,7 +131,7 @@ msgstr "Százalék"
 
 #: js/Tasks.js:24
 msgid "New Task"
-msgstr ""
+msgstr "Új feladat"
 
 #: js/Tasks.js:107
 msgid "Task"
@@ -212,15 +211,15 @@ msgstr "Az alapértelmezett feladat lista amiben az új feladatokat létrehozom.
 
 #: Setup/Initialize.php:33 Setup/Update/Release5.php:66
 msgid "No response"
-msgstr ""
+msgstr "Nincs válasz"
 
 #: Setup/Initialize.php:35 Setup/Update/Release5.php:68
 msgid "Cancelled"
-msgstr ""
+msgstr "Lemondva"
 
 #: Setup/Initialize.php:36 Setup/Update/Release5.php:69
 msgid "In process"
-msgstr ""
+msgstr "Folyamatban"
 
 #: Setup/Initialize.php:64 Setup/Update/Release3.php:65
 msgid "All tasks of my taskslists"
@@ -236,7 +235,7 @@ msgstr "Nyitott feladataim erre a hétre"
 
 #: Setup/Initialize.php:91
 msgid "All tasks for me"
-msgstr ""
+msgstr "Minden feladataim"
 
 #: Setup/Initialize.php:92
 msgid "All tasks that I am responsible for"
