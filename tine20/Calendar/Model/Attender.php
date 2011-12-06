@@ -288,7 +288,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             $newSettings = $emailsOfNewAttendees[$emailAddress];
 
             // update object by reference
-            $attendeeToKeep->status = $newSettings['partStat'];
+            $attendeeToKeep->status = isset($newSettings['partStat']) ? $newSettings['partStat'] : $attendeeToKeep->status;
             $attendeeToKeep->role   = $newSettings['role'];
         }
         
@@ -349,7 +349,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 $_event->attendee->addRecord(new Calendar_Model_Attender(array(
                     'user_id'   => $attendeeId,
                     'user_type' => $newAttendee['userType'],
-                    'status'    => $newAttendee['partStat'],
+                    'status'    => isset($newAttendee['partStat']) ? $newAttendee['partStat'] : self::STATUS_NEEDSACTION,
                     'role'      => $newAttendee['role']
                 )));
             }
@@ -439,13 +439,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     public static function getOwnAttender($_attendee)
     {
-        foreach($_attendee->filter('user_id', Tinebase_Core::getUser()->contact_id) as $attender) {
-            if (in_array($attender->user_type, array(self::USERTYPE_USER, self::USERTYPE_GROUPMEMBER))) {
-                return $attender;
-            }
-        }
-        
-        return NULL;
+        return self::getAttendee($_attendee, new Calendar_Model_Attender(array(
+            'user_id'   => Tinebase_Core::getUser()->contact_id,
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER
+        )));
     }
     
     /**
