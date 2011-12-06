@@ -188,7 +188,11 @@ class Felamimail_Setup_Update_Release5 extends Setup_Update_Abstract
                 <name>cache_job_actions_est</name>
                 <type>integer</type>
             </field>');
-        $this->_backend->alterCol('felamimail_folder', $declaration, 'cache_job_actions_estimate');
+        try {
+            $this->_backend->alterCol('felamimail_folder', $declaration, 'cache_job_actions_estimate');
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // already done
+        }
         
         $this->setTableVersion('felamimail_folder', 10);
         $this->setApplicationVersion('Felamimail', '5.4');
