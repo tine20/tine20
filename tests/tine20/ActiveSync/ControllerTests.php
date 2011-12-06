@@ -79,11 +79,49 @@ class ActiveSync_ControllerTests extends PHPUnit_Framework_TestCase
         $deviceBackend->delete($this->_device->getId());
     }
     
-    
     /**
      * @return ActiveSync_Model_SyncState
      */
     public function testCreateMultipleSyncStates()
+    {
+        $syncState = new ActiveSync_Model_SyncState(array(
+        	'device_id'	=> $this->_device->getId(),
+        	'type'      => 'class-collectiondId',
+        	'counter'   => 1,
+        	'lastsync'  => Tinebase_DateTime::now()->subMinute(2),
+        	'pendingdata' => array('serverAdds' => array('1111', '2222'))
+        ));
+        $this->_controller->updateSyncState($syncState);
+        
+        $syncState->counter++;
+        $syncState->lastsync = Tinebase_DateTime::now();
+        $syncState->pendingdata = NULL;
+        $this->_controller->updateSyncState($syncState);
+    
+        $syncState = $this->_controller->getSyncState($this->_device, 'class', 'collectiondId', 1);
+        
+        $this->assertEquals('class-collectiondId', $syncState->type);
+        $this->assertEquals(1,                     $syncState->counter);
+        $this->assertContains('1111',              $syncState->pendingdata['serverAdds']);
+    
+        $syncState = $this->_controller->getSyncState($this->_device, 'class', 'collectiondId', 2);
+    
+        $this->assertEquals('class-collectiondId', $syncState->type);
+        $this->assertEquals(2,                     $syncState->counter);
+        $this->assertEquals(null,                  $syncState->pendingdata);
+    
+        $syncState = $this->_controller->getSyncState($this->_device, 'class', 'collectiondId');
+    
+        $this->assertEquals('class-collectiondId', $syncState->type);
+        $this->assertEquals(2,          $syncState->counter);
+    
+        return $syncState;
+    }
+    
+    /**
+     * @return ActiveSync_Model_SyncState
+     */
+    public function testCreateMultipleSyncStatesDeprecated()
     {
         $this->_controller->updateSyncKey($this->_device, 1, Tinebase_DateTime::now()->subMinute(2), 'class', 'collectiondId');
         $this->_controller->updateSyncKey($this->_device, 2, Tinebase_DateTime::now(), 'class', 'collectiondId');
@@ -112,12 +150,12 @@ class ActiveSync_ControllerTests extends PHPUnit_Framework_TestCase
         
         $syncState = $this->_controller->validateSyncKey($this->_device, 2, 'class', 'collectiondId');
         
-        $this->assertInstanceOf('ActiveSync_Model_SyncState', $syncState);
+        $this->assertTrue($syncState instanceof ActiveSync_Model_SyncState);
         
         // latest synckey must still exists
         $syncState = $this->_controller->getSyncState($this->_device, 'class', 'collectiondId', 2);
         
-        $this->assertInstanceOf('ActiveSync_Model_SyncState', $syncState);
+        $this->assertTrue($syncState instanceof ActiveSync_Model_SyncState);
         
         // previous synckey must be delete
         $this->setExpectedException('ActiveSync_Exception_SyncStateNotFound');
@@ -131,12 +169,12 @@ class ActiveSync_ControllerTests extends PHPUnit_Framework_TestCase
         
         $syncState = $this->_controller->validateSyncKey($this->_device, 1, 'class', 'collectiondId');
         
-        $this->assertInstanceOf('ActiveSync_Model_SyncState', $syncState);
+        $this->assertTrue($syncState instanceof ActiveSync_Model_SyncState);
         
         // previous synckey must still exists
         $syncState = $this->_controller->getSyncState($this->_device, 'class', 'collectiondId', 1);
         
-        $this->assertInstanceOf('ActiveSync_Model_SyncState', $syncState);
+        $this->assertTrue($syncState instanceof ActiveSync_Model_SyncState);
         
         // latest synckey must be delete
         $this->setExpectedException('ActiveSync_Exception_SyncStateNotFound');

@@ -176,4 +176,25 @@ class Felamimail_Setup_Update_Release5 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('Felamimail', '5.3');
     }
+
+    /**
+     * update to 5.4
+     * - cache_job_actions_estimate -> cache_job_actions_est
+     */
+    public function update_3()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>cache_job_actions_est</name>
+                <type>integer</type>
+            </field>');
+        try {
+            $this->_backend->alterCol('felamimail_folder', $declaration, 'cache_job_actions_estimate');
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // already done
+        }
+        
+        $this->setTableVersion('felamimail_folder', 10);
+        $this->setApplicationVersion('Felamimail', '5.4');
+    }
 }

@@ -47,42 +47,42 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "%s's лични задачи"
 
-#: js/GridPanel.js:53
+#: js/GridPanel.js:54
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Наистина ли желаете да изтриете селектираната задача?"
 msgstr[1] "Наистина ли желаете да изтриете селектираните задачи?"
 
-#: js/GridPanel.js:108
+#: js/GridPanel.js:128
 #, fuzzy
 msgid "Tags"
 msgstr "Задачa"
 
-#: js/GridPanel.js:109 Model/Task.php:194
+#: js/GridPanel.js:129 Model/Task.php:194
 msgid "Lead"
 msgstr ""
 
-#: js/GridPanel.js:112 js/TaskEditDialog.js:180 js/Tasks.js:148
+#: js/GridPanel.js:132 js/TaskEditDialog.js:180 js/Tasks.js:148
 msgid "Summary"
 msgstr "Общо"
 
-#: js/GridPanel.js:116
+#: js/GridPanel.js:136
 msgid "Add a task..."
 msgstr "Добави задача"
 
-#: js/GridPanel.js:120 js/Tasks.js:149
+#: js/GridPanel.js:140 js/GridPanel.js:148 js/Tasks.js:149
 msgid "Due Date"
 msgstr "Краен срок"
 
-#: js/GridPanel.js:128 js/TaskEditDialog.js:188 Model/Task.php:185
+#: js/GridPanel.js:166 js/TaskEditDialog.js:208 Model/Task.php:185
 msgid "Priority"
 msgstr "Приоритет"
 
-#: js/GridPanel.js:142 Model/Task.php:187
+#: js/GridPanel.js:180 Model/Task.php:187
 msgid "Percent"
 msgstr "Процент"
 
-#: js/GridPanel.js:155 js/TaskEditDialog.js:210 js/Tasks.js:151
+#: js/GridPanel.js:193 js/TaskEditDialog.js:234 js/Tasks.js:151
 #: js/Tasks.js:211 Model/Task.php:186
 #, fuzzy
 msgid "Status"
@@ -90,20 +90,20 @@ msgid_plural "Status"
 msgstr[0] "Статус"
 msgstr[1] "Статус"
 
-#: js/GridPanel.js:171 js/Tasks.js:163
+#: js/GridPanel.js:209 js/Tasks.js:163
 msgid "Creation Time"
 msgstr "Създаден на"
 
-#: js/GridPanel.js:178 js/TaskEditDialog.js:214 Setup/Initialize.php:34
+#: js/GridPanel.js:216 js/TaskEditDialog.js:239 Setup/Initialize.php:34
 #: Setup/Update/Release5.php:67
 msgid "Completed"
 msgstr "Завършен"
 
-#: js/GridPanel.js:185 js/Tasks.js:159
+#: js/GridPanel.js:223 js/Tasks.js:159
 msgid "Responsible"
 msgstr "Отговорник"
 
-#: js/GridPanel.js:234
+#: js/GridPanel.js:272
 msgid "Show closed"
 msgstr "Покажи приключени задачи"
 
@@ -111,24 +111,24 @@ msgstr "Покажи приключени задачи"
 msgid "You have to supply a due date, because an alarm ist set!"
 msgstr ""
 
-#: js/TaskEditDialog.js:185
+#: js/TaskEditDialog.js:186 js/TaskEditDialog.js:190
 msgid "Due date"
 msgstr "Краен срок"
 
-#: js/TaskEditDialog.js:191
+#: js/TaskEditDialog.js:212
 #, fuzzy
 msgid "Add Responsible ..."
 msgstr "Отговорник"
 
-#: js/TaskEditDialog.js:198
+#: js/TaskEditDialog.js:220
 msgid "Notes"
 msgstr "Бележки"
 
-#: js/TaskEditDialog.js:199
+#: js/TaskEditDialog.js:221
 msgid "Enter description..."
 msgstr "Напиши описание"
 
-#: js/TaskEditDialog.js:204
+#: js/TaskEditDialog.js:227
 msgid "Percentage"
 msgstr "Процент"
 

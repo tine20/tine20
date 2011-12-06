@@ -213,7 +213,7 @@ msgstr "Vytvořil(a)"
 msgid "Activities"
 msgstr "Činnosti"
 
-#: Export/Spreadsheet/Ods.php:277
+#: Export/Spreadsheet/Ods.php:287
 msgid "Data"
 msgstr "Data"
 
@@ -233,6 +233,12 @@ msgstr "Abnormální ukončení"
 msgid "An error occurred, the program ended abnormal."
 msgstr "Došlo k chybě, program se neukončil korektně."
 
+#: Group/Abstract.php:179 js/ux/ConnectionStatus.js:58 User/Abstract.php:283
+#: User/Abstract.php:284 User/Abstract.php:285 User/Abstract.php:286
+#: User/Abstract.php:287
+msgid "unknown"
+msgstr "neznámý"
+
 #: js/AboutDialog.js:40 js/MainMenu.js:112
 msgid "About {0}"
 msgstr "O {0}"
@@ -240,10 +246,10 @@ msgstr "O {0}"
 #: js/AboutDialog.js:59 js/PasswordChangeDialog.js:66
 #: js/ux/form/LayerCombo.js:186 js/widgets/ActivitiesPanel.js:311
 #: js/widgets/container/ContainerSelect.js:459
-#: js/widgets/dialog/EditDialog.js:203
+#: js/widgets/dialog/EditDialog.js:222
 #: js/widgets/dialog/MultiOptionsDialog.js:102
 #: js/widgets/dialog/PreferencesDialog.js:114 js/widgets/EditRecord.js:157
-#: js/widgets/tags/TagsMassAttachAction.js:98
+#: js/widgets/tags/TagsMassAttachAction.js:100
 msgid "Ok"
 msgstr "OK"
 
@@ -251,7 +257,7 @@ msgstr "OK"
 msgid "Profile Information"
 msgstr ""
 
-#: js/AdminPanel.js:79 js/widgets/dialog/EditDialog.js:213
+#: js/AdminPanel.js:79 js/widgets/dialog/EditDialog.js:232
 #: js/widgets/EditRecord.js:168
 msgid "Apply"
 msgstr "Použít"
@@ -289,32 +295,36 @@ msgstr "Chybějící aplikace"
 msgid "There are no applications enabled for you. Please contact your administrator."
 msgstr "Nemáte povoleny žádné aplikace. Kontaktujte prosím administrátora."
 
-#: js/common.js:204
+#: js/common.js:178
+msgid "Usage:&#160;"
+msgstr ""
+
+#: js/common.js:207
 msgid "No Information"
 msgstr ""
 
-#: js/common.js:253
+#: js/common.js:256
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} minuta"
 msgstr[1] "{0} minuty"
 msgstr[2] "{0} minut"
 
-#: js/common.js:254
+#: js/common.js:257
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} hodina"
 msgstr[1] "{0} hodiny"
 msgstr[2] "{0} hodin"
 
-#: js/common.js:255
+#: js/common.js:258
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} pracovní den"
 msgstr[1] "{0} pracovní dny"
 msgstr[2] "{0} pracovních dní"
 
-#: js/common.js:282
+#: js/common.js:285
 msgid "{0} second"
 msgid_plural "{0} seconds"
 msgstr[0] ""
@@ -354,13 +364,13 @@ msgstr[2] "seznamů úkolů"
 #: js/ExceptionDialog.js:58 js/PasswordChangeDialog.js:60
 #: js/ux/form/LayerCombo.js:193 js/widgets/ActivitiesPanel.js:303
 #: js/widgets/container/ContainerSelect.js:450
-#: js/widgets/dialog/EditDialog.js:221
+#: js/widgets/dialog/EditDialog.js:240
 #: js/widgets/dialog/MultiOptionsDialog.js:109
 #: js/widgets/dialog/PreferencesDialog.js:122
 #: js/widgets/dialog/WizardPanel.js:187 js/widgets/EditRecord.js:178
 #: js/widgets/persistentfilter/PickerPanel.js:592
-#: js/widgets/tags/TagsMassAttachAction.js:92
-#: js/widgets/tags/TagToggleBox.js:57
+#: js/widgets/tags/TagsMassAttachAction.js:94
+#: js/widgets/tags/TagToggleBox.js:59
 msgid "Cancel"
 msgstr "Storno"
 
@@ -442,8 +452,8 @@ msgid "Service Unavailable"
 msgstr "Služba je nedostupná"
 
 #: js/ExceptionHandler.js:190
-msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
-msgstr "Server momentálně není schopen požadavek zpracovat kvůli dočasnému přetížení nebo údržbě serveru. Zkuste prosím znovu nebo kontaktujte svého administrátora."
+msgid "The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator."
+msgstr ""
 
 #: js/ExceptionHandler.js:204 js/LoginPanel.js:362
 msgid "Connection lost, please check your network!"
@@ -558,11 +568,12 @@ msgid "Logging you in..."
 msgstr "Přihlašuji Vás..."
 
 #: js/LoginPanel.js:341 js/widgets/container/GrantsDialog.js:95
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:317
 #: js/widgets/persistentfilter/PickerPanel.js:332
 #: js/widgets/persistentfilter/PickerPanel.js:374
 #: js/widgets/persistentfilter/PickerPanel.js:404
 #: js/widgets/persistentfilter/PickerPanel.js:458
-#: js/widgets/tags/TagToggleBox.js:164 js/widgets/tree/ContextMenu.js:170
+#: js/widgets/tree/ContextMenu.js:170
 msgid "Please wait"
 msgstr "Čekejte prosím"
 
@@ -583,14 +594,16 @@ msgid "Your username and/or your password are wrong!!!"
 msgstr "Vaše uživatelské jméno a/nebo heslo je chybné!!!"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
-#: js/widgets/dialog/EditDialog.js:515 js/widgets/dialog/ExportDialog.js:140
+#: js/widgets/dialog/EditDialog.js:539 js/widgets/dialog/ExportDialog.js:140
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:303
 #: js/widgets/dialog/PreferencesDialog.js:250
 #: js/widgets/dialog/PreferencesDialog.js:279
 msgid "Errors"
 msgstr "Chyby"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
-#: js/widgets/dialog/EditDialog.js:525 js/widgets/dialog/ExportDialog.js:140
+#: js/widgets/dialog/EditDialog.js:549 js/widgets/dialog/ExportDialog.js:140
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:342
 msgid "Please fix the errors noted."
 msgstr "Opravte prosím uvedené chyby."
 
@@ -642,8 +655,9 @@ msgstr ""
 msgid "Install Tine 2.0 as web app in your browser."
 msgstr ""
 
-#: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:532
-#: js/widgets/grid/GridPanel.js:1311
+#: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:556
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:314
+#: js/widgets/grid/GridPanel.js:1336
 #: js/widgets/persistentfilter/PickerPanel.js:330
 #: js/widgets/tree/ContextMenu.js:321
 msgid "Confirm"
@@ -661,14 +675,14 @@ msgstr "Odhlašuji Vás..."
 msgid "Your password expired. Please enter a new user password:"
 msgstr ""
 
-#: js/Models.js:270
+#: js/Models.js:271
 msgid "Import"
 msgid_plural "Imports"
 msgstr[0] "Import"
 msgstr[1] "Importy"
 msgstr[2] "Importů"
 
-#: js/Models.js:297 js/widgets/container/GrantsGrid.js:79
+#: js/Models.js:298 js/widgets/container/GrantsGrid.js:79
 #: js/widgets/dialog/ExportDialog.js:46
 #, fuzzy
 msgid "Export"
@@ -677,40 +691,40 @@ msgstr[0] "Exportovat"
 msgstr[1] "Exportovat"
 msgstr[2] "Exportovat"
 
-#: js/Models.js:335
+#: js/Models.js:336
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] "Přihlašovací údaje"
 msgstr[1] "Přihlašovací údaje"
 msgstr[2] "Přihlašovací údaje"
 
-#: js/Models.js:362 js/widgets/relation/FilterModel.js:32
+#: js/Models.js:363 js/widgets/relation/FilterModel.js:32
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "Vztah"
 msgstr[1] "Vztahy"
 msgstr[2] "Vztahů"
 
-#: js/Models.js:384
+#: js/Models.js:385
 msgid "Department"
 msgid_plural "Departments"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Models.js:392 js/widgets/account/PickerGridPanel.js:252
+#: js/Models.js:393 js/widgets/account/PickerGridPanel.js:252
 #: js/widgets/grid/LinkGridPanel.js:103
 msgid "Name"
 msgstr "Jméno"
 
-#: js/Models.js:411
+#: js/Models.js:412
 msgid "Config"
 msgid_plural "Configs"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Models.js:411
+#: js/Models.js:412
 msgid "Configs"
 msgstr ""
 
@@ -806,11 +820,6 @@ msgstr "online"
 #: js/ux/ConnectionStatus.js:57
 msgid "offline"
 msgstr "offline"
-
-#: js/ux/ConnectionStatus.js:58 User/Abstract.php:283 User/Abstract.php:284
-#: User/Abstract.php:285 User/Abstract.php:286 User/Abstract.php:287
-msgid "unknown"
-msgstr "neznámý"
 
 #: js/ux/form/ImageField.js:72
 msgid "Loading"
@@ -958,7 +967,7 @@ msgstr "Přidat {0} poznámku..."
 msgid "Type"
 msgstr "Typ"
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1008
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1021
 msgid "Created By"
 msgstr "Vytvořil(a)"
 
@@ -1115,11 +1124,11 @@ msgstr "Nedostatečná oprávnění"
 msgid "Select a country..."
 msgstr ""
 
-#: js/widgets/customfields/EditDialogPlugin.js:136
+#: js/widgets/customfields/EditDialogPlugin.js:137
 msgid "General"
 msgstr "Obecné"
 
-#: js/widgets/customfields/EditDialogPlugin.js:147
+#: js/widgets/customfields/EditDialogPlugin.js:148
 msgid "Custom Fields"
 msgstr "Uživatelské položky"
 
@@ -1215,50 +1224,50 @@ msgstr ""
 msgid "Keep both records"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:230 js/widgets/EditRecord.js:188
+#: js/widgets/dialog/EditDialog.js:249 js/widgets/EditRecord.js:188
 msgid "delete"
 msgstr "smazat"
 
-#: js/widgets/dialog/EditDialog.js:270 js/widgets/dialog/EditDialog.js:283
+#: js/widgets/dialog/EditDialog.js:289 js/widgets/dialog/EditDialog.js:302
 #: js/widgets/EditRecord.js:131
 msgid "Saved in"
 msgstr "Uloženo v"
 
-#: js/widgets/dialog/EditDialog.js:358 js/widgets/grid/GridPanel.js:357
+#: js/widgets/dialog/EditDialog.js:377 js/widgets/grid/GridPanel.js:367
 msgid "Copy {0}"
 msgstr "Kopírovat {0}"
 
-#: js/widgets/dialog/EditDialog.js:361
+#: js/widgets/dialog/EditDialog.js:380
 msgid "Add New {0}"
 msgstr "Přidat nový {0}"
 
-#: js/widgets/dialog/EditDialog.js:363
+#: js/widgets/dialog/EditDialog.js:382
 msgid "Edit {0} \"{1}\""
 msgstr "Editovat {0} \"{1}\""
 
-#: js/widgets/dialog/EditDialog.js:409
+#: js/widgets/dialog/EditDialog.js:428
 msgid "Transferring {0}..."
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:532
+#: js/widgets/dialog/EditDialog.js:556
 msgid "Do you really want to delete this {0}?"
 msgstr "Opravdu chcete smazat {0}?"
 
-#: js/widgets/dialog/EditDialog.js:534 js/widgets/grid/GridPanel.js:1344
+#: js/widgets/dialog/EditDialog.js:558 js/widgets/grid/GridPanel.js:1369
 msgid "Deleting {0}"
 msgstr "Mažu {0}"
 
-#: js/widgets/dialog/EditDialog.js:544 js/widgets/grid/GridPanel.js:1361
+#: js/widgets/dialog/EditDialog.js:568 js/widgets/grid/GridPanel.js:1386
 #: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:406
 #: js/widgets/tags/TagsPanel.js:439
 msgid "Failed"
 msgstr "Nepodařilo se"
 
-#: js/widgets/dialog/EditDialog.js:544 js/widgets/grid/GridPanel.js:1361
+#: js/widgets/dialog/EditDialog.js:568 js/widgets/grid/GridPanel.js:1386
 msgid "Could not delete {0}."
 msgstr "Nepodařilo se smazat {0}."
 
-#: js/widgets/dialog/EditDialog.js:596
+#: js/widgets/dialog/EditDialog.js:620
 msgid "Resolve Duplicate {0} Suspicion"
 msgstr ""
 
@@ -1437,6 +1446,48 @@ msgstr ""
 #: js/widgets/dialog/LinkPanel.js:46
 msgid "Links"
 msgstr "Odkazy"
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:39
+msgid "Either {0} or {1} must be given"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:39
+#, fuzzy
+msgid "Last Name"
+msgstr "Jméno"
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:39
+msgid "Company"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:48
+msgid "Field \"Description\" must not be empty"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:70
+msgid "Edit {0} {1}"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:207
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:218
+msgid "Delete value from all selected records"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:223
+msgid "Undo delete value from all selected records"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:281
+msgid "<br /><ul style=\"padding:10px;border:1px\">"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:314
+msgid "Do you really want to change these {0} records?"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:317
+msgid "Applying changes"
+msgstr ""
 
 #: js/widgets/dialog/PreferencesDialog.js:130
 msgid "Admin Mode"
@@ -1774,66 +1825,71 @@ msgstr ""
 msgid "Related to"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:248
+#: js/widgets/grid/GridPanel.js:254
 msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr "Nebyly nalezeny žádné {0}. Zkuste prosím změnit kritéria filtru, volby zobrazování nebo {1} ve kterém hledáte."
 
-#: js/widgets/grid/GridPanel.js:346
+#: js/widgets/grid/GridPanel.js:352 js/widgets/grid/GridPanel.js:353
+#: js/widgets/grid/GridPanel.js:354
+#, fuzzy
 msgid "Edit {0}"
-msgstr "Editovat {0}"
+msgid_plural "Edit {0}"
+msgstr[0] "Editovat {0}"
+msgstr[1] "Editovat {0}"
+msgstr[2] "Editovat {0}"
 
-#: js/widgets/grid/GridPanel.js:368
+#: js/widgets/grid/GridPanel.js:378
 msgid "Add {0}"
 msgstr "Přidat {0}"
 
-#: js/widgets/grid/GridPanel.js:376
+#: js/widgets/grid/GridPanel.js:386
 msgid "Print Page"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:423 js/widgets/grid/GridPanel.js:424
-#: js/widgets/grid/GridPanel.js:426
+#: js/widgets/grid/GridPanel.js:433 js/widgets/grid/GridPanel.js:434
+#: js/widgets/grid/GridPanel.js:436
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Smazat {0}"
 msgstr[1] "Smazat {0}"
 msgstr[2] "Smazat {0}"
 
-#: js/widgets/grid/GridPanel.js:766
+#: js/widgets/grid/GridPanel.js:776
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Zobrazuji záznamy {0} - {1} z {2}"
 
-#: js/widgets/grid/GridPanel.js:767
+#: js/widgets/grid/GridPanel.js:777
 msgid "No {0} to display"
 msgstr "Žádné {0} ke zobrazení"
 
-#: js/widgets/grid/GridPanel.js:1007
+#: js/widgets/grid/GridPanel.js:1020
 msgid "Creation Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1009
+#: js/widgets/grid/GridPanel.js:1022
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1010
+#: js/widgets/grid/GridPanel.js:1023
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1285
+#: js/widgets/grid/GridPanel.js:1310
 msgid "Not Allowed"
 msgstr "Není povoleno"
 
-#: js/widgets/grid/GridPanel.js:1286
+#: js/widgets/grid/GridPanel.js:1311
 msgid "You are not allowed to delete all pages at once"
 msgstr "Nemáte oprávnění smazat všechny stránky najednou."
 
-#: js/widgets/grid/GridPanel.js:1309
+#: js/widgets/grid/GridPanel.js:1334
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/widgets/grid/GridPanel.js:1344
+#: js/widgets/grid/GridPanel.js:1369
 msgid " ... This may take a long time!"
 msgstr "... Toto může trvat dlouho!"
 
@@ -2006,8 +2062,8 @@ msgstr "název štítku"
 
 #: js/widgets/tags/TagCombo.js:145 js/widgets/tags/TagCombo.js:150
 #: js/widgets/tags/TagsPanel.js:140 js/widgets/tags/TagsPanel.js:454
-#: js/widgets/tags/TagsPanel.js:458 js/widgets/tags/TagToggleBox.js:126
-#: js/widgets/tags/TagToggleBox.js:131
+#: js/widgets/tags/TagsPanel.js:458 js/widgets/tags/TagToggleBox.js:112
+#: js/widgets/tags/TagToggleBox.js:117
 msgid "personal"
 msgstr "osobní"
 
@@ -2019,13 +2075,17 @@ msgstr "Štítek"
 msgid "Add Tag"
 msgstr "Přídat štítek"
 
-#: js/widgets/tags/TagsMassAttachAction.js:73
+#: js/widgets/tags/TagsMassAttachAction.js:75
 msgid "Attach the following tag to all selected items:"
 msgstr "Připojit následující štítek ke všem vybraným položkám:"
 
-#: js/widgets/tags/TagsMassAttachAction.js:85
+#: js/widgets/tags/TagsMassAttachAction.js:87
 msgid "Select Tag"
 msgstr "Vybrat štítek"
+
+#: js/widgets/tags/TagsMassAttachAction.js:116
+msgid "Attaching Tag"
+msgstr ""
 
 #: js/widgets/tags/TagsMassDetachAction.js:18
 msgid "Detach tag(s)"
@@ -2150,24 +2210,24 @@ msgstr "Zadejte název štítku"
 msgid "Color"
 msgstr "Barva"
 
-#: js/widgets/tags/TagToggleBox.js:50
+#: js/widgets/tags/TagToggleBox.js:52
 msgid "Detach Tags"
 msgstr ""
 
-#: js/widgets/tags/TagToggleBox.js:50
+#: js/widgets/tags/TagToggleBox.js:52
 msgid "Attach Tags"
 msgstr ""
 
-#: js/widgets/tags/TagToggleBox.js:153
-msgid "No Tags to remove found in the selected records"
+#: js/widgets/tags/TagToggleBox.js:140
+msgid "No Tags to detach found in the selected records"
 msgstr ""
 
-#: js/widgets/tags/TagToggleBox.js:154
+#: js/widgets/tags/TagToggleBox.js:141
 msgid "Please Wait..."
 msgstr ""
 
-#: js/widgets/tags/TagToggleBox.js:164
-msgid "Detaching selected tags"
+#: js/widgets/tags/TagToggleBox.js:152
+msgid "Detaching Tags"
 msgstr ""
 
 #: js/widgets/TimezoneChooser.js:37 Preference.php:87
@@ -2341,6 +2401,9 @@ msgstr ""
 #: views/update.php:24
 msgid "Please wait or contact your administrator"
 msgstr ""
+
+#~ msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
+#~ msgstr "Server momentálně není schopen požadavek zpracovat kvůli dočasnému přetížení nebo údržbě serveru. Zkuste prosím znovu nebo kontaktujte svého administrátora."
 
 #~ msgid "Files"
 #~ msgstr "Soubory"
@@ -2571,10 +2634,6 @@ msgstr ""
 #~ msgstr[0] "smazat"
 #~ msgstr[1] "smazat"
 #~ msgstr[2] "smazat"
-
-#, fuzzy
-#~ msgid "Last Name"
-#~ msgstr "Jméno"
 
 #, fuzzy
 #~ msgid "Displaying contacts {0} - {1} of {2}"

@@ -210,7 +210,7 @@ msgstr "Auteur"
 msgid "Activities"
 msgstr "Activités"
 
-#: Export/Spreadsheet/Ods.php:277
+#: Export/Spreadsheet/Ods.php:287
 msgid "Data"
 msgstr "Donnée"
 
@@ -230,6 +230,12 @@ msgstr "Fin anormale"
 msgid "An error occurred, the program ended abnormal."
 msgstr "Une erreur s'est produite, le programme s'est terminé de façon inattendue"
 
+#: Group/Abstract.php:179 js/ux/ConnectionStatus.js:58 User/Abstract.php:283
+#: User/Abstract.php:284 User/Abstract.php:285 User/Abstract.php:286
+#: User/Abstract.php:287
+msgid "unknown"
+msgstr "inconnu"
+
 #: js/AboutDialog.js:40 js/MainMenu.js:112
 msgid "About {0}"
 msgstr "A propos de {0}"
@@ -237,10 +243,10 @@ msgstr "A propos de {0}"
 #: js/AboutDialog.js:59 js/PasswordChangeDialog.js:66
 #: js/ux/form/LayerCombo.js:186 js/widgets/ActivitiesPanel.js:311
 #: js/widgets/container/ContainerSelect.js:459
-#: js/widgets/dialog/EditDialog.js:203
+#: js/widgets/dialog/EditDialog.js:222
 #: js/widgets/dialog/MultiOptionsDialog.js:102
 #: js/widgets/dialog/PreferencesDialog.js:114 js/widgets/EditRecord.js:157
-#: js/widgets/tags/TagsMassAttachAction.js:98
+#: js/widgets/tags/TagsMassAttachAction.js:100
 msgid "Ok"
 msgstr "Ok"
 
@@ -248,7 +254,7 @@ msgstr "Ok"
 msgid "Profile Information"
 msgstr "Informations du profile"
 
-#: js/AdminPanel.js:79 js/widgets/dialog/EditDialog.js:213
+#: js/AdminPanel.js:79 js/widgets/dialog/EditDialog.js:232
 #: js/widgets/EditRecord.js:168
 msgid "Apply"
 msgstr "Appliquer"
@@ -286,29 +292,33 @@ msgstr "Applications manquantes"
 msgid "There are no applications enabled for you. Please contact your administrator."
 msgstr "Vous n'avez pas d'application, veuillez contacter l'administrateur."
 
-#: js/common.js:204
+#: js/common.js:178
+msgid "Usage:&#160;"
+msgstr ""
+
+#: js/common.js:207
 msgid "No Information"
 msgstr ""
 
-#: js/common.js:253
+#: js/common.js:256
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} minute"
 msgstr[1] "{0} minutes"
 
-#: js/common.js:254
+#: js/common.js:257
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} heure"
 msgstr[1] "{0} heures"
 
-#: js/common.js:255
+#: js/common.js:258
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} Jour ouvré"
 msgstr[1] "{0} Jours ouvrés"
 
-#: js/common.js:282
+#: js/common.js:285
 msgid "{0} second"
 msgid_plural "{0} seconds"
 msgstr[0] "{0} seconde"
@@ -345,13 +355,13 @@ msgstr[1] "listes \"à faire\""
 #: js/ExceptionDialog.js:58 js/PasswordChangeDialog.js:60
 #: js/ux/form/LayerCombo.js:193 js/widgets/ActivitiesPanel.js:303
 #: js/widgets/container/ContainerSelect.js:450
-#: js/widgets/dialog/EditDialog.js:221
+#: js/widgets/dialog/EditDialog.js:240
 #: js/widgets/dialog/MultiOptionsDialog.js:109
 #: js/widgets/dialog/PreferencesDialog.js:122
 #: js/widgets/dialog/WizardPanel.js:187 js/widgets/EditRecord.js:178
 #: js/widgets/persistentfilter/PickerPanel.js:592
-#: js/widgets/tags/TagsMassAttachAction.js:92
-#: js/widgets/tags/TagToggleBox.js:57
+#: js/widgets/tags/TagsMassAttachAction.js:94
+#: js/widgets/tags/TagToggleBox.js:59
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -433,8 +443,8 @@ msgid "Service Unavailable"
 msgstr "Service inaccessible"
 
 #: js/ExceptionHandler.js:190
-msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
-msgstr "Le serveur ne peut répondre à votre requête pour cause de surcharge temporaire ou de maintenance. Veuillez réessayer ou contacter votre administrateur."
+msgid "The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator."
+msgstr ""
 
 #: js/ExceptionHandler.js:204 js/LoginPanel.js:362
 msgid "Connection lost, please check your network!"
@@ -549,11 +559,12 @@ msgid "Logging you in..."
 msgstr "Connexion..."
 
 #: js/LoginPanel.js:341 js/widgets/container/GrantsDialog.js:95
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:317
 #: js/widgets/persistentfilter/PickerPanel.js:332
 #: js/widgets/persistentfilter/PickerPanel.js:374
 #: js/widgets/persistentfilter/PickerPanel.js:404
 #: js/widgets/persistentfilter/PickerPanel.js:458
-#: js/widgets/tags/TagToggleBox.js:164 js/widgets/tree/ContextMenu.js:170
+#: js/widgets/tree/ContextMenu.js:170
 msgid "Please wait"
 msgstr "Veuillez patienter"
 
@@ -574,14 +585,16 @@ msgid "Your username and/or your password are wrong!!!"
 msgstr "Erreur de nom d'utilisateur et/ou mot de passe!!!"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
-#: js/widgets/dialog/EditDialog.js:515 js/widgets/dialog/ExportDialog.js:140
+#: js/widgets/dialog/EditDialog.js:539 js/widgets/dialog/ExportDialog.js:140
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:303
 #: js/widgets/dialog/PreferencesDialog.js:250
 #: js/widgets/dialog/PreferencesDialog.js:279
 msgid "Errors"
 msgstr "Erreurs"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
-#: js/widgets/dialog/EditDialog.js:525 js/widgets/dialog/ExportDialog.js:140
+#: js/widgets/dialog/EditDialog.js:549 js/widgets/dialog/ExportDialog.js:140
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:342
 msgid "Please fix the errors noted."
 msgstr "Veuillez corriger les erreurs."
 
@@ -633,8 +646,9 @@ msgstr ""
 msgid "Install Tine 2.0 as web app in your browser."
 msgstr ""
 
-#: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:532
-#: js/widgets/grid/GridPanel.js:1311
+#: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:556
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:314
+#: js/widgets/grid/GridPanel.js:1336
 #: js/widgets/persistentfilter/PickerPanel.js:330
 #: js/widgets/tree/ContextMenu.js:321
 msgid "Confirm"
@@ -652,49 +666,49 @@ msgstr "Déconnexion..."
 msgid "Your password expired. Please enter a new user password:"
 msgstr "Votre mot de passe est obsolète. Veuillez en indiquer un nouveau :"
 
-#: js/Models.js:270
+#: js/Models.js:271
 msgid "Import"
 msgid_plural "Imports"
 msgstr[0] "Import"
 msgstr[1] "Imports"
 
-#: js/Models.js:297 js/widgets/container/GrantsGrid.js:79
+#: js/Models.js:298 js/widgets/container/GrantsGrid.js:79
 #: js/widgets/dialog/ExportDialog.js:46
 msgid "Export"
 msgid_plural "Export"
 msgstr[0] "Exporter"
 msgstr[1] "Exporter"
 
-#: js/Models.js:335
+#: js/Models.js:336
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] "Identifiant"
 msgstr[1] "Identifiants"
 
-#: js/Models.js:362 js/widgets/relation/FilterModel.js:32
+#: js/Models.js:363 js/widgets/relation/FilterModel.js:32
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "Relation"
 msgstr[1] "Relations"
 
-#: js/Models.js:384
+#: js/Models.js:385
 msgid "Department"
 msgid_plural "Departments"
 msgstr[0] "Département"
 msgstr[1] "Départements"
 
-#: js/Models.js:392 js/widgets/account/PickerGridPanel.js:252
+#: js/Models.js:393 js/widgets/account/PickerGridPanel.js:252
 #: js/widgets/grid/LinkGridPanel.js:103
 msgid "Name"
 msgstr "Nom"
 
-#: js/Models.js:411
+#: js/Models.js:412
 msgid "Config"
 msgid_plural "Configs"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:411
+#: js/Models.js:412
 msgid "Configs"
 msgstr ""
 
@@ -790,11 +804,6 @@ msgstr "en ligne"
 #: js/ux/ConnectionStatus.js:57
 msgid "offline"
 msgstr "hors ligne"
-
-#: js/ux/ConnectionStatus.js:58 User/Abstract.php:283 User/Abstract.php:284
-#: User/Abstract.php:285 User/Abstract.php:286 User/Abstract.php:287
-msgid "unknown"
-msgstr "inconnu"
 
 #: js/ux/form/ImageField.js:72
 msgid "Loading"
@@ -942,7 +951,7 @@ msgstr "{0}"
 msgid "Type"
 msgstr "Type"
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1008
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1021
 msgid "Created By"
 msgstr "Auteur"
 
@@ -1099,11 +1108,11 @@ msgstr "Droits insuffisants"
 msgid "Select a country..."
 msgstr ""
 
-#: js/widgets/customfields/EditDialogPlugin.js:136
+#: js/widgets/customfields/EditDialogPlugin.js:137
 msgid "General"
 msgstr "Général"
 
-#: js/widgets/customfields/EditDialogPlugin.js:147
+#: js/widgets/customfields/EditDialogPlugin.js:148
 msgid "Custom Fields"
 msgstr "Champs personnalisés"
 
@@ -1199,50 +1208,50 @@ msgstr ""
 msgid "Keep both records"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:230 js/widgets/EditRecord.js:188
+#: js/widgets/dialog/EditDialog.js:249 js/widgets/EditRecord.js:188
 msgid "delete"
 msgstr "Supprimer"
 
-#: js/widgets/dialog/EditDialog.js:270 js/widgets/dialog/EditDialog.js:283
+#: js/widgets/dialog/EditDialog.js:289 js/widgets/dialog/EditDialog.js:302
 #: js/widgets/EditRecord.js:131
 msgid "Saved in"
 msgstr "Sauvegardé"
 
-#: js/widgets/dialog/EditDialog.js:358 js/widgets/grid/GridPanel.js:357
+#: js/widgets/dialog/EditDialog.js:377 js/widgets/grid/GridPanel.js:367
 msgid "Copy {0}"
 msgstr "Copier {0}"
 
-#: js/widgets/dialog/EditDialog.js:361
+#: js/widgets/dialog/EditDialog.js:380
 msgid "Add New {0}"
 msgstr "Créer {0}"
 
-#: js/widgets/dialog/EditDialog.js:363
+#: js/widgets/dialog/EditDialog.js:382
 msgid "Edit {0} \"{1}\""
 msgstr "Editer {0} \"{1}\""
 
-#: js/widgets/dialog/EditDialog.js:409
+#: js/widgets/dialog/EditDialog.js:428
 msgid "Transferring {0}..."
 msgstr "Transmission de {0}..."
 
-#: js/widgets/dialog/EditDialog.js:532
+#: js/widgets/dialog/EditDialog.js:556
 msgid "Do you really want to delete this {0}?"
 msgstr "Êtes-vous sûr de vouloir supprimer {0}?"
 
-#: js/widgets/dialog/EditDialog.js:534 js/widgets/grid/GridPanel.js:1344
+#: js/widgets/dialog/EditDialog.js:558 js/widgets/grid/GridPanel.js:1369
 msgid "Deleting {0}"
 msgstr "Suppression de {0}"
 
-#: js/widgets/dialog/EditDialog.js:544 js/widgets/grid/GridPanel.js:1361
+#: js/widgets/dialog/EditDialog.js:568 js/widgets/grid/GridPanel.js:1386
 #: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:406
 #: js/widgets/tags/TagsPanel.js:439
 msgid "Failed"
 msgstr "Échoué"
 
-#: js/widgets/dialog/EditDialog.js:544 js/widgets/grid/GridPanel.js:1361
+#: js/widgets/dialog/EditDialog.js:568 js/widgets/grid/GridPanel.js:1386
 msgid "Could not delete {0}."
 msgstr "Impossible de supprimer {0}."
 
-#: js/widgets/dialog/EditDialog.js:596
+#: js/widgets/dialog/EditDialog.js:620
 msgid "Resolve Duplicate {0} Suspicion"
 msgstr ""
 
@@ -1421,6 +1430,47 @@ msgstr ""
 #: js/widgets/dialog/LinkPanel.js:46
 msgid "Links"
 msgstr "Liens"
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:39
+msgid "Either {0} or {1} must be given"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:39
+msgid "Last Name"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:39
+msgid "Company"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:48
+msgid "Field \"Description\" must not be empty"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:70
+msgid "Edit {0} {1}"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:207
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:218
+msgid "Delete value from all selected records"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:223
+msgid "Undo delete value from all selected records"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:281
+msgid "<br /><ul style=\"padding:10px;border:1px\">"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:314
+msgid "Do you really want to change these {0} records?"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:317
+msgid "Applying changes"
+msgstr ""
 
 #: js/widgets/dialog/PreferencesDialog.js:130
 msgid "Admin Mode"
@@ -1755,64 +1805,68 @@ msgstr ""
 msgid "Related to"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:248
+#: js/widgets/grid/GridPanel.js:254
 msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr "Aucun {0} trouvé. Changez vos critères de recherche, les options d'affichage ou votre recherche de {1}."
 
-#: js/widgets/grid/GridPanel.js:346
+#: js/widgets/grid/GridPanel.js:352 js/widgets/grid/GridPanel.js:353
+#: js/widgets/grid/GridPanel.js:354
+#, fuzzy
 msgid "Edit {0}"
-msgstr "Éditer {0}"
+msgid_plural "Edit {0}"
+msgstr[0] "Éditer {0}"
+msgstr[1] "Éditer {0}"
 
-#: js/widgets/grid/GridPanel.js:368
+#: js/widgets/grid/GridPanel.js:378
 msgid "Add {0}"
 msgstr "Ajouter {0}"
 
-#: js/widgets/grid/GridPanel.js:376
+#: js/widgets/grid/GridPanel.js:386
 msgid "Print Page"
 msgstr "Imprimer la page"
 
-#: js/widgets/grid/GridPanel.js:423 js/widgets/grid/GridPanel.js:424
-#: js/widgets/grid/GridPanel.js:426
+#: js/widgets/grid/GridPanel.js:433 js/widgets/grid/GridPanel.js:434
+#: js/widgets/grid/GridPanel.js:436
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Supprimer {0}"
 msgstr[1] "Supprimer {0}"
 
-#: js/widgets/grid/GridPanel.js:766
+#: js/widgets/grid/GridPanel.js:776
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Affiche les enregistrements {0} - {1} sur {2}"
 
-#: js/widgets/grid/GridPanel.js:767
+#: js/widgets/grid/GridPanel.js:777
 msgid "No {0} to display"
 msgstr "Aucun {0} à afficher"
 
-#: js/widgets/grid/GridPanel.js:1007
+#: js/widgets/grid/GridPanel.js:1020
 msgid "Creation Time"
 msgstr "Heure de création"
 
-#: js/widgets/grid/GridPanel.js:1009
+#: js/widgets/grid/GridPanel.js:1022
 msgid "Last Modified Time"
 msgstr "Heure de la dernière édition"
 
-#: js/widgets/grid/GridPanel.js:1010
+#: js/widgets/grid/GridPanel.js:1023
 msgid "Last Modified By"
 msgstr "Dernier éditeur"
 
-#: js/widgets/grid/GridPanel.js:1285
+#: js/widgets/grid/GridPanel.js:1310
 msgid "Not Allowed"
 msgstr "Non autorisé"
 
-#: js/widgets/grid/GridPanel.js:1286
+#: js/widgets/grid/GridPanel.js:1311
 msgid "You are not allowed to delete all pages at once"
 msgstr "Vous ne pouvez pas supprimer toutes les pages d'un coup"
 
-#: js/widgets/grid/GridPanel.js:1309
+#: js/widgets/grid/GridPanel.js:1334
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:1344
+#: js/widgets/grid/GridPanel.js:1369
 msgid " ... This may take a long time!"
 msgstr "...Cela peut être long!"
 
@@ -1984,8 +2038,8 @@ msgstr "nom du marqueur"
 
 #: js/widgets/tags/TagCombo.js:145 js/widgets/tags/TagCombo.js:150
 #: js/widgets/tags/TagsPanel.js:140 js/widgets/tags/TagsPanel.js:454
-#: js/widgets/tags/TagsPanel.js:458 js/widgets/tags/TagToggleBox.js:126
-#: js/widgets/tags/TagToggleBox.js:131
+#: js/widgets/tags/TagsPanel.js:458 js/widgets/tags/TagToggleBox.js:112
+#: js/widgets/tags/TagToggleBox.js:117
 msgid "personal"
 msgstr "Personnel"
 
@@ -1997,13 +2051,17 @@ msgstr "Marqueur"
 msgid "Add Tag"
 msgstr "Ajouter un marqueur"
 
-#: js/widgets/tags/TagsMassAttachAction.js:73
+#: js/widgets/tags/TagsMassAttachAction.js:75
 msgid "Attach the following tag to all selected items:"
 msgstr "Attacher le marqueur à tous les éléments séléctionnés:"
 
-#: js/widgets/tags/TagsMassAttachAction.js:85
+#: js/widgets/tags/TagsMassAttachAction.js:87
 msgid "Select Tag"
 msgstr "Sélectionner un marqueur"
+
+#: js/widgets/tags/TagsMassAttachAction.js:116
+msgid "Attaching Tag"
+msgstr ""
 
 #: js/widgets/tags/TagsMassDetachAction.js:18
 msgid "Detach tag(s)"
@@ -2123,24 +2181,24 @@ msgstr "Saisissez le nom du marqueur"
 msgid "Color"
 msgstr "Couleur"
 
-#: js/widgets/tags/TagToggleBox.js:50
+#: js/widgets/tags/TagToggleBox.js:52
 msgid "Detach Tags"
 msgstr ""
 
-#: js/widgets/tags/TagToggleBox.js:50
+#: js/widgets/tags/TagToggleBox.js:52
 msgid "Attach Tags"
 msgstr ""
 
-#: js/widgets/tags/TagToggleBox.js:153
-msgid "No Tags to remove found in the selected records"
+#: js/widgets/tags/TagToggleBox.js:140
+msgid "No Tags to detach found in the selected records"
 msgstr ""
 
-#: js/widgets/tags/TagToggleBox.js:154
+#: js/widgets/tags/TagToggleBox.js:141
 msgid "Please Wait..."
 msgstr ""
 
-#: js/widgets/tags/TagToggleBox.js:164
-msgid "Detaching selected tags"
+#: js/widgets/tags/TagToggleBox.js:152
+msgid "Detaching Tags"
 msgstr ""
 
 #: js/widgets/TimezoneChooser.js:37 Preference.php:87
@@ -2314,6 +2372,9 @@ msgstr "Tine 2.0 doit être mis à jour ou n'est pas encore installé."
 #: views/update.php:24
 msgid "Please wait or contact your administrator"
 msgstr "Veuillez patienter ou contacter votre administrateur"
+
+#~ msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
+#~ msgstr "Le serveur ne peut répondre à votre requête pour cause de surcharge temporaire ou de maintenance. Veuillez réessayer ou contacter votre administrateur."
 
 #~ msgid "Files"
 #~ msgstr "Fichiers"

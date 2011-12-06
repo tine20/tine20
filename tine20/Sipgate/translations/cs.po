@@ -22,19 +22,19 @@ msgstr ""
 msgid "Compose SMS"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:256
+#: js/AddressbookGridPanelHook.js:255
 msgid "Work"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:266
+#: js/AddressbookGridPanelHook.js:265
 msgid "Home"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:276 js/AddressbookGridPanelHook.js:321
+#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:320
 msgid "Cell"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:286 js/AddressbookGridPanelHook.js:331
+#: js/AddressbookGridPanelHook.js:285 js/AddressbookGridPanelHook.js:330
 msgid "Cell private"
 msgstr ""
 
@@ -228,7 +228,7 @@ msgstr ""
 msgid "hungup"
 msgstr ""
 
-#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:183
+#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:181
 msgid "Send"
 msgstr ""
 

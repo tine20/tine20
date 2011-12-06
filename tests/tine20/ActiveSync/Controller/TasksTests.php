@@ -158,7 +158,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         $this->objects['tasks'][] = $_record;
         
         $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
-        $records = $controller->getServerEntries($this->_specialFolderName, ActiveSync_Controller_Tasks::FILTER_NOTHING);
+        $records = $controller->getServerEntries($this->_specialFolderName, ActiveSync_Command_Sync::FILTER_NOTHING);
         
         $this->assertContains($_record->getId(), $records);
         #$this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);

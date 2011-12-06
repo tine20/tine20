@@ -148,8 +148,11 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
         'cache_timestamp'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'cache_job_lowestuid'    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'cache_job_startuid'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'cache_job_actions_estimate' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+    // estimated number of actions when updating cache
+        'cache_job_actions_est'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+    // number of actions done when updating cache
         'cache_job_actions_done' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+    // quota information
         'quota_usage'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'quota_limit'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );

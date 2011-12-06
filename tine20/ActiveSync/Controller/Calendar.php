@@ -481,6 +481,42 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     }
     
     /**
+     * update existing entry
+     *
+     * @param unknown_type $_collectionId
+     * @param string $_id
+     * @param SimpleXMLElement $_data
+     * @return Tinebase_Record_Abstract
+     */
+    public function change($_folderId, $_id, SimpleXMLElement $_data)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_folderId Id: $_id");
+    
+        $oldEntry = $this->_contentController->get($_id);
+    
+        $entry = $this->toTineModel($_data, $oldEntry);
+        $entry->last_modified_time = $this->_syncTimeStamp;
+        $entry->container_id = $_folderId;
+        
+        if ($entry->exdate instanceof Tinebase_Record_RecordSet) {
+            foreach ($entry->exdate as $exdate) {
+                $exdate->container_id = $entry->container_id;
+            }
+        }
+
+        #if ($oldEntry->organizer == Tinebase_Core::getUser()->contact_id) {
+            $entry = $this->_contentController->update($entry);
+        #} else {
+        #    echo "I'm attendee";
+        #}
+    
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updated entry id " . $entry->getId());
+    
+        return $entry;
+    }
+    
+    /**
      * convert string of days (TU,TH) to bitmask used by ActiveSync
      *  
      * @param $_days

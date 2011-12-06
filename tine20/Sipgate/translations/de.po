@@ -26,19 +26,19 @@ msgstr "Kontakt anrufen"
 msgid "Compose SMS"
 msgstr "Verfasse SMS"
 
-#: js/AddressbookGridPanelHook.js:256
+#: js/AddressbookGridPanelHook.js:255
 msgid "Work"
 msgstr "Arbeit"
 
-#: js/AddressbookGridPanelHook.js:266
+#: js/AddressbookGridPanelHook.js:265
 msgid "Home"
 msgstr "zu Hause"
 
-#: js/AddressbookGridPanelHook.js:276 js/AddressbookGridPanelHook.js:321
+#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:320
 msgid "Cell"
 msgstr "Handy"
 
-#: js/AddressbookGridPanelHook.js:286 js/AddressbookGridPanelHook.js:331
+#: js/AddressbookGridPanelHook.js:285 js/AddressbookGridPanelHook.js:330
 msgid "Cell private"
 msgstr "Handy privat"
 
@@ -242,7 +242,7 @@ msgstr "Sie haben aufgelegt, bevor Ihr Gesprächspartner antworten hat können"
 msgid "hungup"
 msgstr "Gespräch beendet"
 
-#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:183
+#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:181
 msgid "Send"
 msgstr "SMS verschicken"
 

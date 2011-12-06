@@ -67,7 +67,10 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
     protected function setUp()
     {   	
         parent::setUp();	
-            	
+
+        // replace email to make current user organizer and attendee
+        $this->_testXMLInput = str_replace('lars@kneschke.de', Tinebase_Core::getUser()->accountEmailAddress, $this->_testXMLInput);
+        
         $event = new Calendar_Model_Event(array(
             'uid'           => Tinebase_Record_Abstract::generateUID(),
             'summary'       => 'SyncTest',
@@ -76,11 +79,32 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
             'originator_tz' => 'Europe/Berlin',
             'container_id'  => $this->_getContainerWithSyncGrant()->getId(),
             Tinebase_Model_Grants::GRANT_EDIT     => true,
+            'attendee'      => new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+                array(
+                    'user_id' => Tinebase_Core::getUser()->contact_id,
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'status' => Calendar_Model_Attender::STATUS_ACCEPTED
+                )
+            ))
         ));
         
         $event = Calendar_Controller_Event::getInstance()->create($event);
         
         $this->objects['event'] = $event;
+        
+        $event2MonthsBack = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'SyncTest',
+            'dtstart'       => Tinebase_DateTime::now()->subMonth(2)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-04-25 18:00:00',
+            'dtend'         => Tinebase_DateTime::now()->subMonth(2)->addHour(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-04-25 18:30:00',
+            'originator_tz' => 'Europe/Berlin',
+            'container_id'  => $this->_getContainerWithSyncGrant()->getId(),
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+        
+        $event = Calendar_Controller_Event::getInstance()->create($event2MonthsBack);
+        
+        $this->objects['event2MonthsBack'] = $event;
         
         $eventDaily = new Calendar_Model_Event(array(
             'uid'           => Tinebase_Record_Abstract::generateUID(),
@@ -177,8 +201,8 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         parent::tearDown();
         
         Calendar_Controller_Event::getInstance()->delete(array($this->objects['event']->getId()));
+        Calendar_Controller_Event::getInstance()->delete(array($this->objects['event2MonthsBack']->getId()));
         Calendar_Controller_Event::getInstance()->delete(array($this->objects['eventDaily']->getId()));
-        #Calendar_Controller_Event::getInstance()->delete(array($this->objects['eventWeekly']->getId()));
         
         ActiveSync_Controller_Device::getInstance()->delete($this->objects['devicePalm']);
         ActiveSync_Controller_Device::getInstance()->delete($this->objects['deviceIPhone']);
@@ -198,7 +222,6 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         $testDom               = $imp->createDocument('uri:AirSync', 'Sync', $dtd);
         $testDom->formatOutput = true;
         $testDom->encoding     = 'utf-8';
-        $testDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:Calendar', 'uri:Calendar');
         
         $collections    = $testDom->documentElement->appendChild($testDom->createElementNS('uri:AirSync', 'Collections'));
         $collection     = $collections->appendChild($testDom->createElementNS('uri:AirSync', 'Collection'));
@@ -297,6 +320,37 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
     }
     
     /**
+     * test update of record
+     * 
+     * @return Tinebase_Record_Abstract
+     */
+    public function testChangeEntryInBackend()
+    {
+        $record = $this->testAddEntryToBackend();
+        
+        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
+    
+        $xml = simplexml_import_dom($this->_getInputDOMDocument());
+        $record = $controller->change($this->_getContainerWithSyncGrant()->getId(), $record->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+    
+        $this->_validateAddEntryToBackend($record);
+    
+        return $record;
+    }
+        
+    /**
+     * test get list all record ids not older than 2 weeks back
+     */
+    public function testGetServerEntries2WeeksBack()
+    {
+        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
+    
+        $records = $controller->getServerEntries($this->_specialFolderName, ActiveSync_Command_Sync::FILTER_2_WEEKS_BACK);
+
+        $this->assertNotContains($this->objects['event2MonthsBack']->getId(), $records, 'found event 2 months back');
+    }
+    
+    /**
      * (non-PHPdoc)
      * @see ActiveSync/ActiveSync_TestCase::_validateGetServerEntries()
      */
@@ -305,10 +359,9 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         $this->objects['events'][] = $_record;
         
         $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
-        $records = $controller->getServerEntries($this->_specialFolderName, ActiveSync_Controller_Calendar::FILTER_NOTHING);
+        $records = $controller->getServerEntries($this->_specialFolderName, ActiveSync_Command_Sync::FILTER_NOTHING);
         
         $this->assertContains($_record->getId(), $records, 'event not found');
-        #$this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
     }
     
     /**
@@ -316,6 +369,10 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
      */
     public function testConvertToTine20Model()
     {
+        if (empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+            $this->markTestSkipped('current user has no email address');
+        }
+        
         $xml = simplexml_import_dom($this->_getInputDOMDocument());
         
         $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));

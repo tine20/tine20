@@ -733,6 +733,13 @@ class Setup_Controller
         }
     }
     
+    /**
+     * write config to a file
+     * 
+     * @param array $_data
+     * @param boolean $_merge
+     * @param string $_filename
+     */
     public function writeConfigToFile($_data, $_merge, $_filename)
     {
         // merge config data and active config

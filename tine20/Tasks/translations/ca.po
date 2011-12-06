@@ -46,41 +46,41 @@ msgstr "Notificació de tasca"
 msgid "%s's personal tasks"
 msgstr "tasques personals de %s"
 
-#: js/GridPanel.js:53
+#: js/GridPanel.js:54
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Esteu segur que voleu eliminar la tasca seleccionada?"
 msgstr[1] "Esteu segur que voleu eliminar les tasques seleccionades?"
 
-#: js/GridPanel.js:108
+#: js/GridPanel.js:128
 msgid "Tags"
 msgstr "Etiquetes"
 
-#: js/GridPanel.js:109 Model/Task.php:194
+#: js/GridPanel.js:129 Model/Task.php:194
 msgid "Lead"
 msgstr "Client potencial"
 
-#: js/GridPanel.js:112 js/TaskEditDialog.js:180 js/Tasks.js:148
+#: js/GridPanel.js:132 js/TaskEditDialog.js:180 js/Tasks.js:148
 msgid "Summary"
 msgstr "Resum"
 
-#: js/GridPanel.js:116
+#: js/GridPanel.js:136
 msgid "Add a task..."
 msgstr "Afegeix una tasca..."
 
-#: js/GridPanel.js:120 js/Tasks.js:149
+#: js/GridPanel.js:140 js/GridPanel.js:148 js/Tasks.js:149
 msgid "Due Date"
 msgstr "Data de venciment"
 
-#: js/GridPanel.js:128 js/TaskEditDialog.js:188 Model/Task.php:185
+#: js/GridPanel.js:166 js/TaskEditDialog.js:208 Model/Task.php:185
 msgid "Priority"
 msgstr "Prioritat"
 
-#: js/GridPanel.js:142 Model/Task.php:187
+#: js/GridPanel.js:180 Model/Task.php:187
 msgid "Percent"
 msgstr "Percentatge"
 
-#: js/GridPanel.js:155 js/TaskEditDialog.js:210 js/Tasks.js:151
+#: js/GridPanel.js:193 js/TaskEditDialog.js:234 js/Tasks.js:151
 #: js/Tasks.js:211 Model/Task.php:186
 #, fuzzy
 msgid "Status"
@@ -88,20 +88,20 @@ msgid_plural "Status"
 msgstr[0] "Estat"
 msgstr[1] "Estat"
 
-#: js/GridPanel.js:171 js/Tasks.js:163
+#: js/GridPanel.js:209 js/Tasks.js:163
 msgid "Creation Time"
 msgstr "Data de creació"
 
-#: js/GridPanel.js:178 js/TaskEditDialog.js:214 Setup/Initialize.php:34
+#: js/GridPanel.js:216 js/TaskEditDialog.js:239 Setup/Initialize.php:34
 #: Setup/Update/Release5.php:67
 msgid "Completed"
 msgstr "Completada"
 
-#: js/GridPanel.js:185 js/Tasks.js:159
+#: js/GridPanel.js:223 js/Tasks.js:159
 msgid "Responsible"
 msgstr "Responsable"
 
-#: js/GridPanel.js:234
+#: js/GridPanel.js:272
 msgid "Show closed"
 msgstr "Mostra les tancades"
 
@@ -109,23 +109,23 @@ msgstr "Mostra les tancades"
 msgid "You have to supply a due date, because an alarm ist set!"
 msgstr "Heu de proporcionar una data de venciment, perquè s'estableix una alarma!"
 
-#: js/TaskEditDialog.js:185
+#: js/TaskEditDialog.js:186 js/TaskEditDialog.js:190
 msgid "Due date"
 msgstr "Data de venciment"
 
-#: js/TaskEditDialog.js:191
+#: js/TaskEditDialog.js:212
 msgid "Add Responsible ..."
 msgstr "Afegeix un responsable ..."
 
-#: js/TaskEditDialog.js:198
+#: js/TaskEditDialog.js:220
 msgid "Notes"
 msgstr "Notes"
 
-#: js/TaskEditDialog.js:199
+#: js/TaskEditDialog.js:221
 msgid "Enter description..."
 msgstr "Introduïu una descripció"
 
-#: js/TaskEditDialog.js:204
+#: js/TaskEditDialog.js:227
 msgid "Percentage"
 msgstr "Percentatge"
 
