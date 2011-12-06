@@ -1084,7 +1084,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if (! this.calendarPanels[which]) {
             Tine.log.debug('Tine.Calendar.MainScreenCenterPanel::getCalendarPanel creating new calender panel for view ' + which);
             
-            var store = new Ext.data.Store({
+            var store = new Ext.data.JsonStore({
                 //autoLoad: true,
                 id: 'id',
                 fields: Tine.Calendar.Model.Event,

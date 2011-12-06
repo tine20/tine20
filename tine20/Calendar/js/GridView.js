@@ -17,8 +17,6 @@ Ext.ns('Tine.Calendar');
  * 
  * @TODO generalize renderers and role out to displaypanel/printing etc.
  * @TODO add organiser and own status
- * @TODO add generic grid stuff like d&d rows plugin etc.
- * @TODO make sorting working
  * 
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -43,9 +41,15 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
     
     layout: 'fit',
     border: false,
+    stateful: true,
+    stateId: 'Calendar-Event-GridPanel-Grid',
+    enableDragDrop: true,
+    ddGroup: 'cal-event',
     
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
+        
+        this.store.sort(this.defaultSortInfo.field, this.defaultSortInfo.direction);
         
         this.cm = this.initCM();
         this.selModel = this.initSM();
@@ -57,6 +61,13 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
                 selModel.selectRow(row);
             }
         }, this);
+        
+        this.on('rowclick', Tine.widgets.grid.GridPanel.prototype.onRowClick, this);
+        
+        // activate grid header menu for column selection
+        this.plugins = this.plugins ? this.plugins : [];
+        this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
+        this.enableHdMenu = false;
         
         Tine.Calendar.GridView.superclass.initComponent.call(this);
     },
