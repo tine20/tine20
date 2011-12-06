@@ -21,18 +21,12 @@
 class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract 
 {
     /**
-     * filter types
-     */
-    const FILTER_NOTHING    = 0;
-    const FILTER_INCOMPLETE = 8;
-    
-    /**
      * available filters
      * 
      * @var array
      */
     protected $_filterArray = array(
-        self::FILTER_INCOMPLETE
+        ActiveSync_Command_Sync::FILTER_INCOMPLETE
     );
     
     protected $_mapping = array(
@@ -322,7 +316,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
     {
         if(in_array($_filterType, $this->_filterArray)) {
             switch($_filterType) {
-                case self::FILTER_INCOMPLETE:
+                case ActiveSync_Command_Sync::FILTER_INCOMPLETE:
                     $_filter->removeFilter('status_id');
                     
                     $status = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)

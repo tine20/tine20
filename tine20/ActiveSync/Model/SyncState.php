@@ -42,10 +42,11 @@ class ActiveSync_Model_SyncState extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'device_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'type'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'counter'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'lastsync'              => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'device_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'type'       => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'counter'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'lastsync'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'pendingdata' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**

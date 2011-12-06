@@ -40,15 +40,17 @@ class ActiveSync_Backend_SyncState
     {
         $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'acsync_synckey')
             ->where('device_id = ?', $_syncState->device_id)
-            ->where('type = ?', $_syncState->type);
+            ->where('type = ?', $_syncState->type)
+            ->order('counter DESC')
+            ->limit(1);
             
-        if(isset($_syncState->counter)) {
+        if(!empty($_syncState->counter)) {
             $select->where('counter = ?', $_syncState->counter);
         }
 
         $row = $this->_db->fetchRow($select);
         if (! $row) {
-            throw new ActiveSync_Exception_SyncStateNotFound('syncState  not found: ' . $select);
+            throw new ActiveSync_Exception_SyncStateNotFound('syncState not found: ' . $select);
         }
 
         $result = new ActiveSync_Model_SyncState($row);
@@ -69,11 +71,11 @@ class ActiveSync_Backend_SyncState
     {
         $where = array(
             $this->_db->quoteInto('device_id = ?', $_syncState->device_id), 
-            $this->_db->quoteInto('type = ?', $_syncState->type)
+            $this->_db->quoteInto('type = ?',      $_syncState->type),
+            $this->_db->quoteInto('counter = ?',   $_syncState->counter)
         );
         
         $newData = array(
-            'counter' => $_syncState->counter,
             'lastsync' => $_syncState->lastsync
         );
         
@@ -93,4 +95,20 @@ class ActiveSync_Backend_SyncState
         
         return $result;
     }
+    
+    public function deleteOther(ActiveSync_Model_SyncState $_syncState)
+    {
+        // remove all other synckeys
+        $where = array(
+            $this->_db->quoteInto('device_id = ?', $_syncState->device_id),
+            $this->_db->quoteInto('type = ?',      $_syncState->type),
+            $this->_db->quoteInto('counter != ?',  $_syncState->counter)
+        );
+        
+        $this->_db->delete(SQL_TABLE_PREFIX . 'acsync_synckey', $where);
+        
+        return true;
+        
+    }
+    
 }

@@ -51,12 +51,18 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
     protected $_deviceBackend;
     
     /**
+     * @var ActiveSync_Backend_ContentState
+     */
+    protected $_contentStateBackend;
+    
+    /**
      * constructor (get current user)
      */
     private function __construct() {
         #$this->_currentAccount   = Tinebase_Core::getUser();
         $this->_syncStateBackend    = new ActiveSync_Backend_SyncState();
         $this->_deviceBackend       = new ActiveSync_Backend_Device();
+        $this->_contentStateBackend = new ActiveSync_Backend_ContentState();
     }
     
     /**
@@ -113,6 +119,88 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
         return $backend;
     }
     
+    public function addContentState(ActiveSync_Model_ContentState $_state)
+    {
+        /**
+         * if the entry got added earlier, and there was an error, the entry gets added again
+         */
+        try {
+            $this->_contentStateBackend->create($_state);
+        } catch (Zend_Db_Statement_Exception $e) {
+            $this->deleteContentState($_state);
+            $this->_contentStateBackend->create($_state);
+        }
+    }
+    
+    public function deleteContentState(ActiveSync_Model_ContentState $_state)
+    {
+        // finaly delete all entries marked for removal
+        $contentStateFilter = new ActiveSync_Model_ContentStateFilter(array(
+            array(
+                'field'     => 'device_id',
+                'operator'  => 'equals',
+                'value'     => $_state->device_id
+                #'value'     => $_state->device_id instanceof ActiveSync_Model_Device ? $_state->device_id->getId() : $_state->device_id
+            ),
+            array(
+                'field'     => 'class',
+                'operator'  => 'equals',
+                'value'     => $_state->class
+            ),
+            array(
+                'field'     => 'collectionid',
+                'operator'  => 'equals',
+                'value'     => $_state->collectionid
+            ),
+            array(
+                'field'     => 'contentid',
+                'operator'  => 'equals',
+        		'value'     => $_state->contentid
+            )
+        ));
+        $stateIds = $this->_contentStateBackend->search($contentStateFilter, null, true);
+        
+        if(count($stateIds) > 0) {
+            $this->_contentStateBackend->delete($stateIds);
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " no contentstate found for " . print_r($contentStateFilter->toArray(), true));
+        }
+    }
+    
+    public function getContentState(ActiveSync_Model_Device $_device, $_class, $_collectionId, $_contentId)
+    {
+        $contentStateFilter = new ActiveSync_Model_ContentStateFilter(array(
+            array(
+                'field'     => 'device_id',
+                'operator'  => 'equals',
+                'value'     => $_device->getId()
+            ),
+            array(
+                'field'     => 'class',
+                'operator'  => 'equals',
+                'value'     => $_class
+            ),
+            array(
+                'field'     => 'collectionid',
+                'operator'  => 'equals',
+                'value'     => $_collectionId
+            ),
+            array(
+                'field'     => 'contentid',
+                'operator'  => 'equals',
+        		'value'     => $_contentId
+            )
+        ));
+        $state = $this->_contentStateBackend->search($contentStateFilter)->getFirstRecord();
+    
+        if (! $state instanceof ActiveSync_Model_ContentState) {
+            throw new Tinebase_Exception_NotFound('state not found');
+        }
+        
+        return $state;
+    }
+    
     /**
      * get sync state
      *
@@ -121,9 +209,9 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
      * @param string|optional $_counter
      * @return ActiveSync_Model_SyncState
      */
-    public function getSyncState(ActiveSync_Model_Device $_device, $_class, $_collectionId, $_counter = NULL)
+    public function getSyncState(ActiveSync_Model_Device $_device, $_class, $_collectionId = null, $_counter = NULL)
     {
-        $type = $_class . '-' . $_collectionId;
+        $type = $_collectionId !== NULL ? $_class . '-' . $_collectionId : $_class;
         
         $syncState = new ActiveSync_Model_SyncState(array(
             'device_id'  => $_device->getId(),
@@ -136,7 +224,61 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
         
         $syncState = $this->_syncStateBackend->get($syncState);
         
+        if (!empty($syncState->pendingdata)) {
+            $syncState->pendingdata = Zend_Json::decode($syncState->pendingdata);
+        }
+        
         return $syncState;
+    }
+    
+    public function resetSyncState(ActiveSync_Model_SyncState $_syncState)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " reset sync state");
+        
+        $this->_syncStateBackend->delete($_syncState);
+    }
+    
+    /**
+     * delete contentstate (aka: forget that we have sent the entry to the client)
+     *
+     * @param string $_class the class from the xml
+     * @param string $_collectionId the collection id from the xml
+     * @param string $_contentId the Tine 2.0 id of the entry
+     */
+    public function markContentStateAsDeleted(ActiveSync_Model_ContentState $_state)
+    {
+        $contentStateFilter = new ActiveSync_Model_ContentStateFilter(array(
+            array(
+                'field'     => 'device_id',
+                'operator'  => 'equals',
+                'value'     => $_state->device_id instanceof ActiveSync_Model_Device ? $_state->device_id->getId() : $_state->device_id
+            ),
+            array(
+                'field'     => 'class',
+                'operator'  => 'equals',
+                'value'     => $_state->class
+            ),
+            array(
+                'field'     => 'collectionid',
+                'operator'  => 'equals',
+                'value'     => $_state->collectionid
+            ),
+            array(
+                'field'     => 'contentid',
+                'operator'  => 'equals',
+                'value'     => $_state->contentid
+            )
+        ));
+        $state = $this->_contentStateBackend->search($contentStateFilter)->getFirstRecord();
+    
+        if($state != null) {
+            $state->is_deleted = 1;
+            $this->_contentStateBackend->update($state);
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " no contentstate found for " . print_r($contentStateFilter->toArray(), true));
+        }
     }
     
     /**
@@ -250,14 +392,116 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
             'counter'   => $_counter,
             'type'      => $type
         ));
-                
+
         try {
             $syncState = $this->_syncStateBackend->get($syncState);
-            return true;
-        } catch (ActiveSync_Exception_SyncStateNotFound $e) {
-            // syncKey not found
+        } catch (ActiveSync_Exception_SyncStateNotFound $asessnf) {
             return false;
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($syncState->toArray(), true));
+
+        // check if this was the latest syncKey
+        try {
+            $otherSyncState = clone $syncState;
+            $otherSyncState->counter++;
+            $otherSyncState = $this->_syncStateBackend->get($otherSyncState);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' found more recent synckey');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . print_r($otherSyncState->toArray(), true));
+            
+            // undelete marked entries 
+            $contentStateFilter = new ActiveSync_Model_ContentStateFilter(array(
+                array(
+                    'field'     => 'device_id',
+                    'operator'  => 'equals',
+                    'value'     => $_device->getId()
+                ),
+                array(
+                    'field'     => 'class',
+                    'operator'  => 'equals',
+                    'value'     => $_class
+                ),
+                array(
+                    'field'     => 'collectionid',
+                    'operator'  => 'equals',
+                    'value'     => $_collectionId
+                ),
+                array(
+                    'field'     => 'is_deleted',
+                    'operator'  => 'equals',
+                    'value'     => true
+                )
+            ));
+            $stateIds = $this->_contentStateBackend->search($contentStateFilter, null, true);
+            $this->_contentStateBackend->updateMultiple($stateIds, array('is_deleted' => 0));
+                        
+            // remove entries added during latest sync
+            $contentStateFilter = new ActiveSync_Model_ContentStateFilter(array(
+                array(
+                    'field'     => 'device_id',
+                    'operator'  => 'equals',
+                    'value'     => $_device->getId()
+                ),
+                array(
+                    'field'     => 'class',
+                    'operator'  => 'equals',
+                    'value'     => $_class
+                ),
+                array(
+                    'field'     => 'collectionid',
+                    'operator'  => 'equals',
+                    'value'     => $_collectionId
+                ),
+                array(
+                    'field'     => 'creation_time',
+                    'operator'  => 'after',
+                    'value'     => $syncState->lastsync
+                )
+            ));
+            $stateIds = $this->_contentStateBackend->search($contentStateFilter, null, true);
+            $this->_contentStateBackend->delete($stateIds);
+            
+        } catch (ActiveSync_Exception_SyncStateNotFound $asessnf) {
+            // finaly delete all entries marked for removal 
+            $contentStateFilter = new ActiveSync_Model_ContentStateFilter(array(
+                array(
+                    'field'     => 'device_id',
+                    'operator'  => 'equals',
+                    'value'     => $_device->getId()
+                ),
+                array(
+                    'field'     => 'class',
+                    'operator'  => 'equals',
+                    'value'     => $_class
+                ),
+                array(
+                    'field'     => 'collectionid',
+                    'operator'  => 'equals',
+                    'value'     => $_collectionId
+                ),
+                array(
+                    'field'     => 'is_deleted',
+                    'operator'  => 'equals',
+                    'value'     => true
+                )
+            ));
+            $stateIds = $this->_contentStateBackend->search($contentStateFilter, null, true);
+            
+            $this->_contentStateBackend->delete($stateIds);
+            
+        }
+        
+        // remove all other synckeys
+        $this->_syncStateBackend->deleteOther($syncState);
+        
+        if (!empty($syncState->pendingdata)) {
+            $syncState->pendingdata = Zend_Json::decode($syncState->pendingdata);
+        }
+        
+        return $syncState;
     }
         
     /**
@@ -268,15 +512,17 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
      * @param $_timeStamp
      * @param $_class
      * @param $_collectionId
+     * @deprecated
      * @return void
      */
-    public function updateSyncKey(ActiveSync_Model_Device $_device, $_counter, Tinebase_DateTime $_timeStamp, $_class, $_collectionId = NULL)
+    public function updateSyncKey(ActiveSync_Model_Device $_device, $_counter, Tinebase_DateTime $_timeStamp, $_class, $_collectionId = NULL, $_keepPreviousSyncKey = true)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update synckey to ' . $_counter);
-        
         $type = $_collectionId !== NULL ? $_class . '-' . $_collectionId : $_class;
         
-        $syncState = new ActiveSync_Model_SyncState(array(
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update synckey to ' . $_counter . ' for type: ' . $type);
+        
+        $newSyncState = new ActiveSync_Model_SyncState(array(
             'device_id' => $_device->getId(),
             'counter'   => $_counter,
             'type'      => $type,
@@ -284,15 +530,54 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
         ));
                 
         try {
-            // try to read current syncState
-            $this->_syncStateBackend->get($syncState);
-            // update syncState
-            $this->_syncStateBackend->update($syncState);
-        } catch (Exception $e) {
-            // delete all old syncStates
-            $this->_syncStateBackend->delete($syncState);
-            // add new syncState
-            $this->_syncStateBackend->create($syncState);
+            // check if we need to update synckey timestamps
+            $this->_syncStateBackend->get($newSyncState);
+            $this->_syncStateBackend->update($newSyncState);
+        } catch (ActiveSync_Exception_SyncStateNotFound $asessnf) {
+            // otherwise add new synckey
+            $this->_syncStateBackend->create($newSyncState);
         }
+        
+        if ($_keepPreviousSyncKey !== true) {
+            // remove all other synckeys
+            $this->_syncStateBackend->deleteOther($newSyncState);
+        }
+        
+        return $newSyncState;
+    }
+    
+    /**
+     * update sync state
+     * 
+     * @param ActiveSync_Model_SyncState $_state
+     * @package bool $_keepPreviousSyncState
+     * @return ActiveSync_Model_SyncState
+     */
+    public function updateSyncState(ActiveSync_Model_SyncState $_state, $_keepPreviousSyncState = true)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update synckey to ' . $_state->counter . ' for type: ' . $_state->type);
+        
+        $state = clone $_state;
+        
+        if (is_array($state->pendingdata)) {
+            $state->pendingdata = Zend_Json::encode($state->pendingdata);
+        }
+        
+        try {
+            // check if we need to update synckey timestamps
+            $this->_syncStateBackend->get($state);
+            $this->_syncStateBackend->update($state);
+        } catch (ActiveSync_Exception_SyncStateNotFound $asessnf) {
+            // otherwise add new synckey
+            $this->_syncStateBackend->create($state);
+        }
+        
+        if ($_keepPreviousSyncState !== true) {
+            // remove all other synckeys
+            $this->_syncStateBackend->deleteOther($state);
+        }
+        
+        return $_state;
     }
 }

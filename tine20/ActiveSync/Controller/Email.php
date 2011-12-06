@@ -31,26 +31,16 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     );
     
     /**
-     * filter types
-     */
-    const FILTER_NOTHING        = 0;
-    const FILTER_1_DAY_BACK     = 1;
-    const FILTER_3_DAYS_BACK    = 2;
-    const FILTER_1_WEEK_BACK    = 3;
-    const FILTER_2_WEEKS_BACK   = 4;
-    const FILTER_1_MONTH_BACK   = 5;
-    
-    /**
      * available filters
      * 
      * @var array
      */
     protected $_filterArray = array(
-        self::FILTER_1_DAY_BACK,
-        self::FILTER_3_DAYS_BACK,
-        self::FILTER_1_WEEK_BACK,
-        self::FILTER_2_WEEKS_BACK,
-        self::FILTER_1_MONTH_BACK,
+        ActiveSync_Command_Sync::FILTER_1_DAY_BACK,
+        ActiveSync_Command_Sync::FILTER_3_DAYS_BACK,
+        ActiveSync_Command_Sync::FILTER_1_WEEK_BACK,
+        ActiveSync_Command_Sync::FILTER_2_WEEKS_BACK,
+        ActiveSync_Command_Sync::FILTER_1_MONTH_BACK,
     );
     
     /**
@@ -267,28 +257,28 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         if ($_neverTruncate === false) {
             if (isset($_options['mimeTruncation']) && $_options['mimeTruncation'] < 8) {
                 switch($_options['mimeTruncation']) {
-                    case 0:
+                    case ActiveSync_Command_Sync::TRUNCATE_ALL:
                         $truncateAt = 0;
                         break;
-                    case 1:
+                    case ActiveSync_Command_Sync::TRUNCATE_4096:
                         $truncateAt = 4096;
                         break;
-                    case 2:
+                    case ActiveSync_Command_Sync::TRUNCATE_5120:
                         $truncateAt = 5120;
                         break;
-                    case 3:
+                    case ActiveSync_Command_Sync::TRUNCATE_7168:
                         $truncateAt = 7168;
                         break;
-                    case 4:
+                    case ActiveSync_Command_Sync::TRUNCATE_10240:
                         $truncateAt = 10240;
                         break;
-                    case 5:
+                    case ActiveSync_Command_Sync::TRUNCATE_20480:
                         $truncateAt = 20480;
                         break;
-                    case 6:
+                    case ActiveSync_Command_Sync::TRUNCATE_51200:
                         $truncateAt = 51200;
                         break;
-                    case 7:
+                    case ActiveSync_Command_Sync::TRUNCATE_102400:
                         $truncateAt = 102400;
                         break;
                 }
@@ -311,19 +301,21 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             $messageBody = $this->_contentController->getMessageBody($_serverId, null, $airSyncBaseType == 2 ? Zend_Mime::TYPE_HTML : Zend_Mime::TYPE_TEXT, NULL, true);
         }
         
-        // remove control chars
-        $messageBody = $this->removeControlChars($messageBody);
         
         if($truncateAt !== null && strlen($messageBody) > $truncateAt) {
             $messageBody  = substr($messageBody, 0, $truncateAt);
-            // maybe the last character is no unicode character anymore
-            $messageBody  = @iconv('utf-8', 'utf-8//IGNORE', $messageBody);
             $isTruncacted = 1;
         } else {
             $isTruncacted = 0;
         }
         
         if (strlen($messageBody) > 0) {
+            // remove control chars
+            $messageBody = $this->removeControlChars($messageBody);
+            
+            // strip out any non utf-8 characters
+            $messageBody  = @iconv('utf-8', 'utf-8//IGNORE', $messageBody);
+            
             if (version_compare($this->_device->acsversion, '12.0', '>=')) {
                 $body = $_xmlNode->appendChild(new DOMElement('Body', null, 'uri:AirSyncBase'));
                 $body->appendChild(new DOMElement('Type', $airSyncBaseType, 'uri:AirSyncBase'));
@@ -532,7 +524,8 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             return array();
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " accountData " . print_r($account->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " accountData " . print_r($account->toArray(), true));
         
         // update folder cache
         Felamimail_Controller_Cache_Folder::getInstance()->update($account);
@@ -646,19 +639,19 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             $today = Tinebase_DateTime::now()->setTime(0,0,0);
                 
             switch($_filterType) {
-                case self::FILTER_1_DAY_BACK:
+                case ActiveSync_Command_Sync::FILTER_1_DAY_BACK:
                     $received = $today->subDay(1);
                     break;
-                case self::FILTER_3_DAYS_BACK:
+                case ActiveSync_Command_Sync::FILTER_3_DAYS_BACK:
                     $received = $today->subDay(3);
                     break;
-                case self::FILTER_1_WEEK_BACK:
+                case ActiveSync_Command_Sync::FILTER_1_WEEK_BACK:
                     $received = $today->subWeek(1);
                     break;
-                case self::FILTER_2_WEEKS_BACK:
+                case ActiveSync_Command_Sync::FILTER_2_WEEKS_BACK:
                     $received = $today->subWeek(2);
                     break;
-                case self::FILTER_1_MONTH_BACK:
+                case ActiveSync_Command_Sync::FILTER_1_MONTH_BACK:
                     $received = $today->subMonth(2);
                     break;
             }

@@ -66,29 +66,44 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
         #$xml = simplexml_import_dom($this->_inputDom);
         
         foreach ($xml->Collections->Collection as $xmlCollection) {
-            $class          = (string)$xmlCollection->Class;
-            $collectionId   = (string)$xmlCollection->CollectionId;
             
             // fetch values from a different namespace
             $airSyncValues  = $xmlCollection->children('uri:AirSync');
-            $clientSyncKey  = (string)$airSyncValues->SyncKey;
-            $filterType     = isset($airSyncValues->FilterType) ? (int)$airSyncValues->FilterType : 0;
             
             $collectionData = array(
-                'syncKey'       => $clientSyncKey,
+                'syncKey'       => (int)$airSyncValues->SyncKey,
                 'syncKeyValid'  => true,
-                'class'         => $class,
-                'collectionId'  => $collectionId,
-                'filterType'    => $filterType
+                'class'         => (string) $xmlCollection->Class,
+                'collectionId'  => (string) $xmlCollection->CollectionId,
+                'filterType'    => isset($airSyncValues->FilterType) ? (int)$airSyncValues->FilterType : 0
             );
-            $this->_collections[$class][$collectionId] = $collectionData;
             
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " synckey is $clientSyncKey class: $class collectionid: $collectionId filtertype: $filterType");
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " synckey is {$collectionData['syncKey']} class: {$collectionData['class']} collectionid: {$collectionData['collectionId']} filtertype: {$collectionData['filterType']}");
             
-            if($clientSyncKey === 0 || $controller->validateSyncKey($this->_device, $clientSyncKey, $class, $collectionId) !== true) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey $clientSyncKey provided");
-                $this->_collections[$class][$collectionId]['syncKeyValid'] = false;
+            if($collectionData['syncKey'] === 0) {
+                $collectionData['syncState']    = new ActiveSync_Model_SyncState(array(
+                    'device_id' => $this->_device->getId(),
+                    'counter'   => 0,
+                    'type'      => $collectionData['class'] . '-' . $collectionData['collectionId'],
+                    'lastsync'  => $this->_syncTimeStamp
+                ));
             }
+            
+            if(($collectionData['syncState'] = $controller->validateSyncKey($this->_device, $collectionData['syncKey'], $collectionData['class'], $collectionData['collectionId'])) === false) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey {$collectionData['syncKey']} provided");
+                $collectionData['syncKeyValid'] = false;
+                
+                $collectionData['syncState']    = new ActiveSync_Model_SyncState(array(
+                    'device_id' => $this->_device->getId(),
+                    'counter'   => 0,
+                    'type'      => $collectionData['class'] . '-' . $collectionData['collectionId'],
+                    'lastsync'  => $this->_syncTimeStamp
+                ));
+            }
+            
+            $this->_collections[$collectionData['class']][$collectionData['collectionId']] = $collectionData;
         }
     }    
     
@@ -102,11 +117,29 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
         
         $itemEstimate = $this->_outputDom->documentElement;
         
-        foreach($this->_collections as $class => $collections) {
-            foreach($collections as $collectionId => $collectionData) {
+        foreach($this->_collections as $collections) {
+            foreach($collections as $collectionData) {
                 $response = $itemEstimate->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Response'));
                 
-                if($collectionData['syncKeyValid'] !== true) {
+                $dataController = ActiveSync_Controller::dataFactory($collectionData['class'], $this->_device, $this->_syncTimeStamp);
+                
+                try {
+                    // does the folder exist?
+                    $dataController->getFolder($collectionData['collectionId']);
+                    $folderExists = true;
+                } catch (ActiveSync_Exception_FolderNotFound $asefnf) {
+                    $folderExists = false;
+                }
+                
+                if ($folderExists !== true) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " folder does not exist");
+                    $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Status', self::STATUS_INVALID_COLLECTION));
+                    $collection = $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Collection'));
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Class', $collectionData['class']));
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'CollectionId', $collectionData['collectionId']));
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', 0));
+                    
+                } elseif ($collectionData['syncKeyValid'] !== true) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey ${collectionData['syncKey']} provided");
                     /*
                      * Android phones (and maybe others) don't take care about status 4(INVALID_SYNC_KEY)
@@ -125,48 +158,19 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
                     $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Class', $collectionData['class']));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'CollectionId', $collectionData['collectionId']));  
                     $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', 1));                                              
-            } else {
-                    $dataController = ActiveSync_Controller::dataFactory($collectionData['class'], $this->_device, $this->_syncTimeStamp);
+                } else {
                     
-                    try {
-                        // does the folder exist?
-                        $dataController->getFolder($collectionData['collectionId']);
-                        
-                        $syncState = $controller->getSyncState($this->_device, $collectionData['class'], $collectionData['collectionId'], $collectionData['syncKey']);
-                    
-                        if($controller->validateSyncKey($this->_device, $collectionData['syncKey'], $collectionData['class'], $collectionData['collectionId'])) {
-                            $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Status', self::STATUS_SUCCESS));
-                            $collection = $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Collection'));
-                            $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Class', $collectionData['class']));
-                            $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'CollectionId', $collectionData['collectionId']));
-                            if($collectionData['syncKey'] == 1) {
-                                // this is the first sync. in most cases there are data on the server.
-                                $count = count($dataController->getServerEntries($collectionData['collectionId'], $collectionData['filterType']));
-                            } else {
-                                $count = $this->_getItemEstimate(
-                                    $dataController,
-                                    $collectionData,
-                                    $syncState->lastsync
-                                );
-                            }
-                            $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', $count));
-                        } else {
-                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey ${collectionData['syncKey']} provided");
-                            $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Status', self::STATUS_INVALID_SYNC_KEY));
-                            $collection = $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Collection'));
-                            $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Class', $collectionData['class']));
-                            $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'CollectionId', $collectionData['collectionId']));
-                            $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', 0));              
-                        }
-                    } catch (ActiveSync_Exception_FolderNotFound $e) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " folder not found");
-                        $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Status', self::STATUS_INVALID_COLLECTION));
-                        $collection = $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Collection'));
-                        $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Class', $collectionData['class']));
-                        $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'CollectionId', $collectionData['collectionId']));                
-                        $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', 0));              
+                    $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Status', self::STATUS_SUCCESS));
+                    $collection = $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Collection'));
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Class', $collectionData['class']));
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'CollectionId', $collectionData['collectionId']));
+                    if($collectionData['syncKey'] <= 1) {
+                        // this is the first sync. in most cases there are data on the server.
+                        $count = count($dataController->getServerEntries($collectionData['collectionId'], $collectionData['filterType']));
+                    } else {
+                        $count = $this->_getItemEstimate($dataController, $collectionData);
                     }
-                    
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', $count));
                 }
                 
                 // store current filter type
@@ -188,8 +192,12 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
                     )
                 ));
                 $folderState = $this->_folderStateBackend->search($filter)->getFirstRecord();
-                $folderState->lastfiltertype = $collectionData['filterType'];
-                $this->_folderStateBackend->update($folderState);
+                
+                // folderState can be NULL in case of not existing folder
+                if ($folderState instanceof ActiveSync_Model_FolderState) {
+                    $folderState->lastfiltertype = $collectionData['filterType'];
+                    $this->_folderStateBackend->update($folderState);
+                }
             }
         }
                 
@@ -204,7 +212,7 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
      * @param $_lastSyncTimeStamp
      * @return int number of changed entries
      */
-    private function _getItemEstimate($_dataController, $_collectionData, $_lastSyncTimeStamp)
+    protected function _getItemEstimate($_dataController, $_collectionData)
     {
         $contentStateBackend  = new ActiveSync_Backend_ContentState();
         
@@ -215,7 +223,7 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
         
         $addedEntries       = array_diff($allServerEntries, $allClientEntries);
         $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
-        $changedEntries     = $_dataController->getChanged($_collectionData['collectionId'], $_lastSyncTimeStamp, $this->_syncTimeStamp);
+        $changedEntries     = $_dataController->getChanged($_collectionData['collectionId'], $_collectionData['syncState']->lastsync, $this->_syncTimeStamp);
         
         return count($addedEntries) + count($deletedEntries) + count($changedEntries);
     }

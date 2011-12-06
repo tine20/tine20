@@ -45,7 +45,33 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
     const BODY_TYPE_HTML                                = 2;
     const BODY_TYPE_RTF                                 = 3;
     const BODY_TYPE_MIME                                = 4;
+    
+    /**
+     * truncate types
+     */
+    const TRUNCATE_ALL                                  = 0;
+    const TRUNCATE_4096                                 = 1;
+    const TRUNCATE_5120                                 = 2;
+    const TRUNCATE_7168                                 = 3;
+    const TRUNCATE_10240                                = 4;
+    const TRUNCATE_20480                                = 5;
+    const TRUNCATE_51200                                = 6;
+    const TRUNCATE_102400                               = 7;
+    const TRUNCATE_NOTHING                              = 8;
 
+    /**
+     * filter types
+     */
+    const FILTER_NOTHING        = 0;
+    const FILTER_1_DAY_BACK     = 1;
+    const FILTER_3_DAYS_BACK    = 2;
+    const FILTER_1_WEEK_BACK    = 3;
+    const FILTER_2_WEEKS_BACK   = 4;
+    const FILTER_1_MONTH_BACK   = 5;
+    const FILTER_3_MONTHS_BACK  = 6;
+    const FILTER_6_MONTHS_BACK  = 7;
+    const FILTER_INCOMPLETE     = 8;
+    
 
     protected $_defaultNameSpace    = 'uri:AirSync';
     protected $_documentElement     = 'Sync';
@@ -93,7 +119,10 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
      */
     protected $_controller;
     
-    protected $_session;
+    /**
+     * @var ActiveSync_Model_SyncState
+     */
+    protected $_syncState;
     
     /**
      * the constructor
@@ -106,13 +135,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
         
         $this->_contentStateBackend  = new ActiveSync_Backend_ContentState();
         $this->_folderStateBackend   = new ActiveSync_Backend_FolderState();
-        $this->_session              = new Zend_Session_Namespace('moreData');
         $this->_controller           = ActiveSync_Controller::getInstance();
-
-        // continue sync / MoreAvailable sent in previous repsonse
-        if(isset($this->_session->syncTimeStamp)) {
-            $this->_syncTimeStamp = $this->_session->syncTimeStamp;
-        }
     }
     
     /**
@@ -128,14 +151,11 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
         #$xml = simplexml_import_dom($this->_inputDom);
         
         foreach ($xml->Collections->Collection as $xmlCollection) {
-            $clientSyncKey  = (int)$xmlCollection->SyncKey;
-            $collectionId   = (string)$xmlCollection->CollectionId;
-
             $collectionData = array(
-                'syncKey'         => $clientSyncKey,
+                'syncKey'         => (int)$xmlCollection->SyncKey,
                 'syncKeyValid'    => true,
                 'class'           => isset($xmlCollection->Class) ? (string)$xmlCollection->Class : null,
-                'collectionId'    => $collectionId,
+                'collectionId'    => (string)$xmlCollection->CollectionId,
                 'windowSize'      => isset($xmlCollection->WindowSize) ? (int)$xmlCollection->WindowSize : 100,
                 'deletesAsMoves'  => isset($xmlCollection->DeletesAsMoves) ? true : false,
                 'getChanges'      => isset($xmlCollection->GetChanges) ? true : false,
@@ -147,8 +167,8 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 'toBeFetched'     => array(),
                 'filterType'      => 0,
                 'mimeSupport'     => self::MIMESUPPORT_DONT_SEND_MIME,
-                'mimeTruncation'  => 8,
-                'bodyPreferences' => array()
+                'mimeTruncation'  => ActiveSync_Command_Sync::TRUNCATE_NOTHING,
+                'bodyPreferences' => array(),
             );
             
             // process options
@@ -185,129 +205,180 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
             
             // does the folder exist for this device
             try {
-                $folder         = $this->getFolderState($this->_device, $collectionId);
+                $folder         = $this->getFolderState($this->_device, $collectionData['collectionId']);
                 // newer clients don't send the class tag anymore
                 $collectionData['class'] = $folder->class;
             } catch (Tinebase_Exception_NotFound $e) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " folder $collectionId not found");
-                $this->_collections['collectionNotFound'][$collectionId] = $collectionData;
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " folder {$collectionData['collectionId']} not found");
+                $this->_collections['collectionNotFound'][$collectionData['collectionId']] = $collectionData;
                 continue;
             }
             
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " SyncKey is $clientSyncKey Class: $folder->class CollectionId: $collectionId");
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " SyncKey is {$collectionData['syncKey']} Class: {$collectionData['class']} CollectionId: {$collectionData['collectionId']}");
             
-            
-            $this->_collections[$collectionData['class']][$collectionId] = $collectionData;
-            
-            if($clientSyncKey === 0) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " client synckey $clientSyncKey provided");
-                $this->_collections[$folder->class][$collectionId]['syncKeyValid'] = false;
+            // initial synckey
+            if($collectionData['syncKey'] === 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " initial client synckey 0 provided");
+                
+                $collectionData['syncState']    = new ActiveSync_Model_SyncState(array(
+                    'device_id' => $this->_device->getId(),
+                    'counter'   => 0,
+                    'type'      => $collectionData['class'] . '-' . $collectionData['collectionId'],
+                    'lastsync'  => $this->_syncTimeStamp
+                ));
+                
+                $this->_collections[$collectionData['class']][$collectionData['collectionId']] = $collectionData;
+                
                 continue;
             }
-            if($this->_controller->validateSyncKey($this->_device, $clientSyncKey, $folder->class, $collectionId) !== true) {
-                Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . " invalid synckey $clientSyncKey provided");
-                $this->_collections[$folder->class][$collectionId]['syncKeyValid'] = false;
+            
+            // check for invalid sycnkey
+            if(($collectionData['syncState'] = $this->_controller->validateSyncKey($this->_device, $collectionData['syncKey'], $collectionData['class'], $collectionData['collectionId'])) === false) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey {$collectionData['syncKey']} provided");
+                
+                $collectionData['syncKeyValid'] = false;
+                $collectionData['syncState']    = new ActiveSync_Model_SyncState(array(
+                    'device_id' => $this->_device->getId(),
+                    'counter'   => 0,
+                    'type'      => $collectionData['class'] . '-' . $collectionData['collectionId'],
+                    'lastsync'  => $this->_syncTimeStamp
+                ));
+                
+                $this->_collections[$collectionData['class']][$collectionData['collectionId']] = $collectionData;
+                
                 continue;
             }
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
-            $dataController = ActiveSync_Controller::dataFactory($folder->class, $this->_device, $this->_syncTimeStamp);
+            
+            $dataController = ActiveSync_Controller::dataFactory( $collectionData['class'] , $this->_device, $this->_syncTimeStamp);
             
             // handle incoming data
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
             if(isset($xmlCollection->Commands->Add)) {
                 $adds = $xmlCollection->Commands->Add;
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($adds) . " entries to be added to server");
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($adds) . " entries to be added to server");
                 
                 foreach ($adds as $add) {
-                	if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add entry with clientId " . (string) $add->ClientId);
+                	if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                	    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add entry with clientId " . (string) $add->ClientId);
                     // search for existing entries if first sync
-                    if($clientSyncKey == 1) {
-                        $existing = $dataController->search($collectionId, $add->ApplicationData);
+                    // @todo: maybe this can be removed
+                    // good phones don't send entries at synckey 1
+                    // and if they sent, maybe they also send entries at synckey 2 too
+                    if($collectionData['syncKey'] == 1) {
+                        $existing = $dataController->search($collectionData['collectionId'], $add->ApplicationData);
                     } else {
                         $existing = array(); // count() == 0
                     }
                     
                     try {
                         if(count($existing) === 0) {
-                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " entry not found. adding as new");
-                            $added = $dataController->add($collectionId, $add->ApplicationData);
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " entry not found. adding as new");
+                            $added = $dataController->add($collectionData['collectionId'], $add->ApplicationData);
                         } else {
-                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found matching entry. reuse existing entry");
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found matching entry. reuse existing entry");
                             // use the first found entry
                             $added = $existing[0];
                         }
-                        $this->_collections[$folder->class][$collectionId]['added'][(string)$add->ClientId]['serverId'] = $added->getId(); 
-                        $this->_collections[$folder->class][$collectionId]['added'][(string)$add->ClientId]['status'] = self::STATUS_SUCCESS;
+                        $collectionData['added'][(string)$add->ClientId]['serverId'] = $added->getId(); 
+                        $collectionData['added'][(string)$add->ClientId]['status'] = self::STATUS_SUCCESS;
                         $this->_addContentState($collectionData['class'], $collectionData['collectionId'], $added->getId());
                     } catch (Exception $e) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " failed to add entry " . $e->getMessage());
-                        $this->_collections[$folder->class][$collectionId]['added'][(string)$add->ClientId]['status'] = self::STATUS_SERVER_ERROR;
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " failed to add entry " . $e->getMessage());
+                        $collectionData['added'][(string)$add->ClientId]['status'] = self::STATUS_SERVER_ERROR;
                     }
                 }
             }
         
             // handle changes, but only if not first sync
-            if($clientSyncKey > 1 && isset($xmlCollection->Commands->Change)) {
+            if($collectionData['syncKey'] > 1 && isset($xmlCollection->Commands->Change)) {
                 $changes = $xmlCollection->Commands->Change;
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($changes) . " entries to be updated on server");
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($changes) . " entries to be updated on server");
+                
                 foreach ($changes as $change) {
                     $serverId = (string)$change->ServerId;
+                    
                     try {
-                        $changed = $dataController->change($collectionId, $serverId, $change->ApplicationData);
-                        $this->_collections[$folder->class][$collectionId]['changed'][$serverId] = self::STATUS_SUCCESS;
+                        $changed = $dataController->change($collectionData['collectionId'], $serverId, $change->ApplicationData);
+                        $collectionData['changed'][$serverId] = self::STATUS_SUCCESS;
                     } catch (Tinebase_Exception_AccessDenied $e) {
-                        $this->_collections[$folder->class][$collectionId]['changed'][$serverId] = self::STATUS_CONFLICT_MATCHING_THE_CLIENT_AND_SERVER_OBJECT;
-                        $this->_collections[$folder->class][$collectionId]['forceChange'][$serverId] = $serverId;
+                        $collectionData['changed'][$serverId] = self::STATUS_CONFLICT_MATCHING_THE_CLIENT_AND_SERVER_OBJECT;
+                        $collectionData['forceChange'][$serverId] = $serverId;
                     } catch (Tinebase_Exception_NotFound $e) {
-                        // entry does not exist anymore, will get deleted automaticly
-                        $this->_collections[$folder->class][$collectionId]['changed'][$serverId] = self::STATUS_OBJECT_NOT_FOUND;
+                        // entry does not exist anymore, will get deleted automaticaly
+                        $collectionData['changed'][$serverId] = self::STATUS_OBJECT_NOT_FOUND;
                     } catch (Exception $e) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " failed to update entry " . $e);
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " failed to update entry " . $e);
                         // something went wrong while trying to update the entry
-                        $this->_collections[$folder->class][$collectionId]['changed'][$serverId] = self::STATUS_SERVER_ERROR;
+                        $collectionData['changed'][$serverId] = self::STATUS_SERVER_ERROR;
                     }
                 }
             }
         
             // handle deletes, but only if not first sync
-            if($clientSyncKey > 1 && isset($xmlCollection->Commands->Delete)) {
+            if(isset($xmlCollection->Commands->Delete)) {
                 $deletes = $xmlCollection->Commands->Delete;
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($deletes) . " entries to be deleted on server");
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($deletes) . " entries to be deleted on server");
+                
                 foreach ($deletes as $delete) {
                     $serverId = (string)$delete->ServerId;
+                    
                     try {
-                        $dataController->delete($collectionId, $serverId, $collectionData);
-                    } catch(Tinebase_Exception_NotFound $e) {
-                        Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but entry was not found');
-                    } catch (Tinebase_Exception $e) {
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but permission was denied');
-                        $this->_collections[$folder->class][$collectionId]['forceAdd'][$serverId] = $serverId;
+                        // check if we have send this entry to the phone
+                        $this->_controller->getContentState($this->_device, $collectionData['class'], $collectionData['collectionId'], $serverId);
+                        
+                        try {
+                            $dataController->delete($collectionData['collectionId'], $serverId, $collectionData);
+                        } catch(Tinebase_Exception_NotFound $e) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT))
+                                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but entry was not found');
+                        } catch (Tinebase_Exception $e) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but a error occured: ' . $e->getMessage());
+                            $collectionData['forceAdd'][$serverId] = $serverId;
+                        }
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $serverId . ' should have been removed from client already');
+                        // should we send a special status???
+                        //$collectionData['deleted'][$serverId] = self::STATUS_SUCCESS;
                     }
-                    $this->_collections[$folder->class][$collectionId]['deleted'][$serverId] = self::STATUS_SUCCESS;
+                    
+                    $collectionData['deleted'][$serverId] = self::STATUS_SUCCESS;
                     $this->_deleteContentState($collectionData['class'], $collectionData['collectionId'], $serverId);
                 }
             }
                         
-            // handle deletes, but only if not first sync
-            if($clientSyncKey > 1 && isset($xmlCollection->Commands->Fetch)) {
+            // handle fetches, but only if not first sync
+            if($collectionData['syncKey'] > 1 && isset($xmlCollection->Commands->Fetch)) {
                 // the default value for GetChanges is 1. If the phone don't want the changes it must set GetChanges to 0
                 // unfortunately the iPhone dont set GetChanges to 0 when fetching email body, but is confused when we send
                 // changes
                 if (! isset($xmlCollection->GetChanges)) {
-                    $this->_collections[$folder->class][$collectionId]['getChanges'] = false;
+                    $collectionData['getChanges'] = false;
                 }
                 
                 $fetches = $xmlCollection->Commands->Fetch;
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($fetches) . " entries to be fetched from server");
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($fetches) . " entries to be fetched from server");
                 foreach ($fetches as $fetch) {
                     $serverId = (string)$fetch->ServerId;
                     
-                    $this->_collections[$folder->class][$collectionId]['toBeFetched'][$serverId] = $serverId;
+                    $collectionData['toBeFetched'][$serverId] = $serverId;
                 }
             }            
             
+            $this->_collections[$collectionData['class']][$collectionData['collectionId']] = $collectionData;
         }  
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);       
     }    
     
     /**
@@ -326,53 +397,45 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
         $sync = $this->_outputDom->documentElement;
         
         $collections = $sync->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collections'));
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
+
         foreach($this->_collections as $class => $classCollections) {
             foreach($classCollections as $collectionId => $collectionData) {
                 if ($class == 'collectionNotFound') {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
-                    $newSyncKey = $collectionData['syncKey'];
-                    
                     $status = self::STATUS_FOLDER_HIERARCHY_HAS_CHANGED;
-                    $this->_folderStateBackend->resetState($this->_device);
-                    $this->_controller->updateSyncKey($this->_device, 0, $this->_syncTimeStamp, 'FolderSync');
                     
-                    // Sync 0
-                    // send back a new SyncKey only
+                    // send back current SyncKey
                     $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData['class']));
-                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey', $newSyncKey));
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey', $collectionData['syncKey']));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $collectionData['collectionId']));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', $status));
                     
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
-                } elseif ($collectionData['syncKeyValid'] !== true) {
-                    $newSyncKey = 1;
+                } elseif ($collectionData['syncState']->counter === 0) {
                     $status = $collectionData['syncKey'] == 0 ? self::STATUS_SUCCESS : self::STATUS_INVALID_SYNC_KEY;
+                    $collectionData['syncState']->counter++;
     
                     // Sync 0
                     // send back a new SyncKey only
                     $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData['class']));
-                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey', $newSyncKey));
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey', $collectionData['syncState']->counter));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $collectionData['collectionId']));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', $status));
                     
                     $this->_contentStateBackend->resetState($this->_device, $collectionData['class'], $collectionData['collectionId']);
+                    $this->_controller->resetSyncState($collectionData['syncState']);
+                    
                 } else {
-                    #if ($collectionData['getChanges'] === false && !empty($collectionData['toBeFetched'])) {
                     if (empty($collectionData['added']) && empty($collectionData['changed']) && empty($collectionData['deleted']) && $collectionData['getChanges'] === false) {
                         // keep synckey during fetch requests
-                        $newSyncKey = $collectionData['syncKey'];
                     } else {
-                        $newSyncKey = $collectionData['syncKey'] + 1;
+                        $collectionData['syncState']->counter++;
                     }
-                    
                     
                     // collection header
                     $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData['class']));
-                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey', $newSyncKey));
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey', $collectionData['syncState']->counter));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $collectionData['collectionId']));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_SUCCESS));
                     
@@ -425,28 +488,29 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                                 
                                 $fetch->appendChild($applicationData);
                             } catch (Exception $e) {
-                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
+                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
                                 $fetch->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_OBJECT_NOT_FOUND));
                             }
                         }
                     }
                     
                     if($collectionData['getChanges'] === true) {
-                        if($newSyncKey === 1) {
+                        if($collectionData['syncState']->counter === 1) {
                             // all entries available
                             $serverAdds    = $dataController->getServerEntries($collectionData['collectionId'], $collectionData['filterType']);
                             $serverChanges = array();
                             $serverDeletes = array();
                         } else {
                             // continue sync session
-                            if(isset($this->_session->syncTimeStamp)) {
-                                $serverAdds = $this->_session->serverAdds[$collectionData['class']];
-                                $serverChanges = $this->_session->serverChanges[$collectionData['class']];
-                                $serverDeletes = $this->_session->serverDeletes[$collectionData['class']];
+                            if(is_array($collectionData['syncState']->pendingdata)) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " restored from sync state ");
+                                $serverAdds    = $collectionData['syncState']->pendingdata['serverAdds'];
+                                $serverChanges = $collectionData['syncState']->pendingdata['serverChanges'];
+                                $serverDeletes = $collectionData['syncState']->pendingdata['serverDeletes'];
                             } else {
                                 // fetch entries added since last sync
-                                
-                                #$serverAdds = $dataController->getSince('added', $syncState->lastsync, $this->_syncTimeStamp);
                                 
                                 $allClientEntries = $this->_contentStateBackend->getClientState($this->_device, $collectionData['class'], $collectionData['collectionId']);
                                 $allServerEntries = $dataController->getServerEntries($collectionData['collectionId'], $collectionData['filterType']);
@@ -460,8 +524,10 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                                 
                                 foreach($serverAdds as $id => $serverId) {
                                     // skip entries added by client during this sync session
+                                    // @todo $this->_collections[$class][$collectionId] should be equal to $collectionData ???
                                     if(isset($collectionData['added'][$serverId]) && !isset($this->_collections[$class][$collectionId]['forceAdd'][$serverId])) {
-                                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " skipped added entry: " . $serverId);
+                                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " skipped added entry: " . $serverId);
                                         unset($serverAdds[$id]);
                                     }
                                 }
@@ -470,14 +536,15 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                                 $serverDeletes = array_diff($allClientEntries, $allServerEntries);
                                 
                                 // fetch entries changed since last sync
-                                $syncState  = $this->_controller->getSyncState($this->_device, $collectionData['class'], $collectionData['collectionId'], $collectionData['syncKey']);
-                                $serverChanges = $dataController->getChanged($collectionData['collectionId'], $syncState->lastsync, $this->_syncTimeStamp);
+                                $serverChanges = $dataController->getChanged($collectionData['collectionId'], $collectionData['syncState']->lastsync, $this->_syncTimeStamp);
                                 $serverChanges = array_merge($serverChanges, $this->_collections[$class][$collectionId]['forceChange']);
                                 
                                 foreach($serverChanges as $id => $serverId) {
-                                    // skip entry, was changed by client
+                                    // skip entry, if it got changed by client during current sync
+                                    // @todo $this->_collections[$class][$collectionId] should be equal to $collectionData ???
                                     if(isset($collectionData['changed'][$serverId]) && !isset($this->_collections[$class][$collectionId]['forceChange'][$serverId])) {
-                                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " skipped changed entry: " . $serverId);
+                                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " skipped changed entry: " . $serverId);
                                         unset($serverChanges[$id]);
                                     }
                                 }
@@ -488,7 +555,8 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                             }                        
                         }
                         
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found (added/changed/deleted) " . count($serverAdds) . '/' . count($serverChanges) . '/' . count($serverDeletes)  . ' entries for sync from server to client');
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found (added/changed/deleted) " . count($serverAdds) . '/' . count($serverChanges) . '/' . count($serverDeletes)  . ' entries for sync from server to client');
     
                         if ((count($serverAdds) + count($serverChanges) + count($serverDeletes)) > $collectionData['windowSize'] ) {
                             $this->_moreAvailable = true;
@@ -529,7 +597,8 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                                 
                                 $this->_totalCount++;
                             } catch (Exception $e) {
-                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
+                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
                             }
                             // mark as send to the client, even the conversion to xml might have failed                 
                             $this->_addContentState($collectionData['class'], $collectionData['collectionId'], $serverId);
@@ -559,7 +628,8 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                                 
                                 $this->_totalCount++;
                             } catch (Exception $e) {
-                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
+                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
                             }
                             if ($serverEntriy instanceof Tinebase_Record_Abstract) $serverEntries->removeRecord($serverEntriy);
                             unset($serverChanges[$id]);    
@@ -578,33 +648,43 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                                 $delete = $this->_outputDom->createElementNS('uri:AirSync', 'Delete');
                                 $delete->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
                                 
-                                $this->_deleteContentState($collectionData['class'], $collectionData['collectionId'], $serverId);
-        
+                                $this->_markContentStateAsDeleted($collectionData['class'], $collectionData['collectionId'], $serverId);
                                 $commands->appendChild($delete);
                                 
                                 $this->_totalCount++;
                             } catch (Exception $e) {
-                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
+                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
                             }
                             unset($serverDeletes[$id]);    
                         }
                     }
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " new synckey is $newSyncKey");                
-                }
-                
-                // save data to session if more data available
-                if($this->_moreAvailable === true) {
-                    $this->_session->syncTimeStamp = $this->_syncTimeStamp;
-                    $this->_session->serverAdds[$collectionData['class']]    = (array)$serverAdds;
-                    $this->_session->serverChanges[$collectionData['class']] = (array)$serverChanges;
-                    $this->_session->serverDeletes[$collectionData['class']] = (array)$serverDeletes;
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " new synckey is ". $collectionData['syncState']->counter);                
                 }
                 
                 if ($class != 'collectionNotFound') {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
+                    // save data to sync state if more data available
+                    if($this->_moreAvailable === true) {
+                        $collectionData['syncState']->pendingdata = array(
+                            'serverAdds'    => (array)$serverAdds,
+                            'serverChanges' => (array)$serverChanges,
+                            'serverDeletes' => (array)$serverDeletes
+                        );
+                    } else {
+                        $collectionData['syncState']->pendingdata = null;
+                    }
+                    
+                    $keepPreviousSyncKey = true;
                     // increment sync timestamp by 1 second
                     $this->_syncTimeStamp->add('1', Tinebase_DateTime::MODIFIER_SECOND);
-                    $this->_controller->updateSyncKey($this->_device, $newSyncKey, $this->_syncTimeStamp, $collectionData['class'], $collectionData['collectionId']);
+                    if (!empty($collectionData['added'])) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " remove previous synckey as client added new entries");
+                        $keepPreviousSyncKey = false;
+                    }
+                    $collectionData['syncState']->lastsync = $this->_syncTimeStamp;
+                    $this->_controller->updateSyncState($collectionData['syncState'], $keepPreviousSyncKey);
                     
                     // store current filter type
                     try {
@@ -613,10 +693,10 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                         $this->_folderStateBackend->update($folderState);
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         // failed to get folderstate => should not happen but is also no problem in this state
-                        if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' failed to get content state for: ' . $collectionData['collectionId']);
+                        if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) 
+                            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' failed to get content state for: ' . $collectionData['collectionId']);
                     }
                 }
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
             }
         }
         
@@ -640,16 +720,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
             'creation_time' => $this->_syncTimeStamp
         ));
         
-        /**
-         * if the entry got added earlier, and there was an error, the entry gets added again
-         * @todo it's better to wrap the whole process into a transation
-         */
-        try {
-            $this->_contentStateBackend->create($contentState);
-        } catch (Zend_Db_Statement_Exception $e) {
-            $this->_deleteContentState($_class, $_collectionId, $_contentId);
-            $this->_contentStateBackend->create($contentState);
-        }
+        $this->_controller->addContentState($contentState);
     }
     
     /**
@@ -661,36 +732,36 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
      */
     protected function _deleteContentState($_class, $_collectionId, $_contentId)
     {
-        $contentStateFilter = new ActiveSync_Model_ContentStateFilter(array(
-            array(
-                    'field'     => 'device_id',
-                    'operator'  => 'equals',
-                    'value'     => $this->_device->getId()
-            ),
-            array(
-                    'field'     => 'class',
-                    'operator'  => 'equals',
-                    'value'     => $_class
-            ),
-            array(
-                    'field'     => 'collectionid',
-                    'operator'  => 'equals',
-                    'value'     => $_collectionId
-            ),
-            array(
-                    'field'     => 'contentid',
-                    'operator'  => 'equals',
-                    'value'     => $_contentId
-            )
+        $contentState = new ActiveSync_Model_ContentState(array(
+            'device_id'     => $this->_device->getId(),
+            'class'         => $_class,
+            'collectionid'  => $_collectionId,
+            'contentid'     => $_contentId,
+            'creation_time' => $this->_syncTimeStamp
         ));
-        $state = $this->_contentStateBackend->search($contentStateFilter, NULL, true);
         
-        if(count($state) > 0) {
-            $this->_contentStateBackend->delete($state[0]);
-        } else {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " no contentstate found for " . print_r($contentStateFilter->toArray(), true));
-        }
-    }    
+        $this->_controller->deleteContentState($contentState);
+    }
+        
+    /**
+     * delete contentstate (aka: forget that we have sent the entry to the client)
+     *
+     * @param string $_class the class from the xml
+     * @param string $_collectionId the collection id from the xml
+     * @param string $_contentId the Tine 2.0 id of the entry
+     */
+    protected function _markContentStateAsDeleted($_class, $_collectionId, $_contentId)
+    {
+        $contentState = new ActiveSync_Model_ContentState(array(
+                'device_id'     => $this->_device->getId(),
+                'class'         => $_class,
+                'collectionid'  => $_collectionId,
+                'contentid'     => $_contentId,
+                'creation_time' => $this->_syncTimeStamp
+        ));
+    
+        $this->_controller->markContentStateAsDeleted($contentState);
+    }
     
     /**
      * @param unknown_type $_deviceId

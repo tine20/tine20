@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>5.0</version>
+    <version>5.2</version>
     <order>90</order>
     <depends>
         <application>Addressbook</application>
@@ -256,7 +256,7 @@
             <name>acsync_synckey</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>device_id</name>
@@ -279,14 +279,21 @@
                     <name>lastsync</name>
                     <type>datetime</type>
                 </field>
+                <field>
+                    <name>pendingdata</name>
+                    <type>blob</type>
+                </field>
                 <index>
-                    <name>device_id--type</name>
+                    <name>device_id--type--counter</name>
                     <primary>true</primary>
                     <field>
                         <name>device_id</name>
                     </field>
                     <field>
                         <name>type</name>
+                    </field>
+                    <field>
+                        <name>counter</name>
                     </field>
                 </index>
                 <index>
@@ -298,8 +305,9 @@
                     <reference>
                         <table>acsync_device</table>
                         <field>id</field>
+                        <ondelete>cascade</ondelete>
+                        <onupdate>cascade</onupdate>
                     </reference>
-                    <ondelete>cascade</ondelete>
                 </index>   
             </declaration>
         </table>
@@ -307,7 +315,7 @@
             <name>acsync_content</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -343,6 +351,11 @@
                     <name>creation_time</name>
                     <type>datetime</type>
                 </field> 
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -376,9 +389,9 @@
                     <reference>
                         <table>acsync_device</table>
                         <field>id</field>
+                        <ondelete>cascade</ondelete>
+                        <onupdate>cascade</onupdate>
                     </reference>
-                    <ondelete>cascade</ondelete>
-                    <onupdate>cascade</onupdate>
                 </index>   
             </declaration>
         </table>
