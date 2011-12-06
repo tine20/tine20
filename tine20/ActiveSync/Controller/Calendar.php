@@ -404,17 +404,13 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             
         }
 
-        
         if(count($data->attendee) > 0) {
             // fill attendee cache
             Calendar_Model_Attender::resolveAttendee($data->attendee, FALSE);
             
-            $attendees = null;
+            $attendees = $_xmlNode->ownerDocument->createElementNS('uri:Calendar', 'Attendees');
             
             foreach($data->attendee as $attenderObject) {
-                if($attendees === null) {
-                    $attendees = $_xmlNode->appendChild(new DOMElement('Attendees', null, 'uri:Calendar'));
-                }
                 $attendee = $attendees->appendChild(new DOMElement('Attendee', null, 'uri:Calendar'));
                 $attendee->appendChild(new DOMElement('Name', $attenderObject->getName(), 'uri:Calendar'));
                 $attendee->appendChild(new DOMElement('Email', $attenderObject->getEmail(), 'uri:Calendar'));
@@ -426,6 +422,11 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     $attendee->appendChild(new DOMElement('AttendeeStatus', $acsStatus ? $acsStatus : self::ATTENDEE_STATUS_UNKNOWN, 'uri:Calendar'));
                 }
             }
+            
+            if ($attendees->hasChildNodes()) {
+                $_xmlNode->appendChild($attendees);
+            }
+            
         }
         
         $timeZoneConverter = ActiveSync_TimezoneConverter::getInstance(
