@@ -323,6 +323,11 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
 	                fieldLabel: this.app.i18n._('Notification Password'),
 	                inputType: 'password',
 	                xtype: 'textfield'
+                }, {
+                    name: 'smtp_name',
+                    fieldLabel: this.app.i18n._('Notifications local client (hostname or IP address)'),
+                    xtype: 'textfield',
+                    value: 'localhost'
 	            }, {
 	                id: this.smtpBackendIdPrefix + 'CardLayout',
 	                layout: 'card',
