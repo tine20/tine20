@@ -505,13 +505,21 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
         }
 
-        #if ($oldEntry->organizer == Tinebase_Core::getUser()->contact_id) {
+        if ($oldEntry->organizer == Tinebase_Core::getUser()->contact_id) {
             $entry = $this->_contentController->update($entry);
-        #} else {
-        #    echo "I'm attendee";
-        #}
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " current user is not organizer => update attendee status only ");
+            
+            $this->_event = Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($event, new Calendar_Model_Attender(array(
+                'user_type'           => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'             => Tinebase_Core::getUser()->contact_id,
+                'displaycontainer_id' => $_folderId
+            )));
+        }
     
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updated entry id " . $entry->getId());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updated entry id " . $entry->getId());
     
         return $entry;
     }
