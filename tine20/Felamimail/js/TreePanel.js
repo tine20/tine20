@@ -619,7 +619,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     updateFolderStatus: function(folder) {
         var unreadcount = folder.get('cache_unreadcount'),
-            progress    = Math.round(folder.get('cache_job_actions_done') / folder.get('cache_job_actions_estimate') * 10) * 10,
+            progress    = Math.round(folder.get('cache_job_actions_done') / folder.get('cache_job_actions_est') * 10) * 10,
             node        = this.getNodeById(folder.id),
             ui = node ? node.getUI() : null,
             nodeEl = ui ? ui.getEl() : null,
@@ -728,7 +728,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     updateProgressTip: function(tip) {
         var folderId = this.getElsParentsNodeId(tip.triggerElement),
             folder = this.app.getFolderStore().getById(folderId),
-            progress = Math.round(folder.get('cache_job_actions_done') / folder.get('cache_job_actions_estimate') * 100);
+            progress = Math.round(folder.get('cache_job_actions_done') / folder.get('cache_job_actions_est') * 100);
         if (! this.isDropSensitive) {
             tip.body.dom.innerHTML = String.format(this.app.i18n._('Fetching messages... ({0}% done)'), progress);
         } else {

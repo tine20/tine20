@@ -206,7 +206,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         // reset cache counter when transitioning from Felamimail_Model_Folder::CACHE_STATUS_COMPLETE or 
         if ($_folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE || $_folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_EMPTY) {
-            $_folder->cache_job_actions_estimate = 0;
+            $_folder->cache_job_actions_est = 0;
             $_folder->cache_job_actions_done     = 0;
             $_folder->cache_job_startuid         = 0;
         }
@@ -364,7 +364,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             $messagesToRemoveFromCache = $this->_cacheMessageSequence - $this->_imapMessageSequence;
             
             if ($this->_initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE || $this->_initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_EMPTY) {
-                $_folder->cache_job_actions_estimate += $messagesToRemoveFromCache;
+                $_folder->cache_job_actions_est += $messagesToRemoveFromCache;
             }        
             
             $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
@@ -417,7 +417,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Cache status cache total count: {$_folder->cache_totalcount} imap total count: {$_folder->imap_totalcount} cache sequence: $this->_cacheMessageSequence imap sequence: $this->_imapMessageSequence");
                 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache status: ' . $_folder->cache_status);      
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache actions to be done yet: ' . ($_folder->cache_job_actions_estimate - $_folder->cache_job_actions_done));        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache actions to be done yet: ' . ($_folder->cache_job_actions_est - $_folder->cache_job_actions_done));        
     }
     
     /**
@@ -508,7 +508,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         if ($_folder->imap_totalcount > 0 && $this->_imapMessageSequence < $_folder->imap_totalcount) {
                         
             if ($this->_initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE || $this->_initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_EMPTY) {
-                $_folder->cache_job_actions_estimate += ($_folder->imap_totalcount - $this->_imapMessageSequence);
+                $_folder->cache_job_actions_est += ($_folder->imap_totalcount - $this->_imapMessageSequence);
             }
             
             $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
@@ -615,7 +615,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         if ($_folder->imap_totalcount > 0 && $_folder->cache_totalcount < $_folder->imap_totalcount) {
             
             if ($this->_initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE || $this->_initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_EMPTY) {
-                $_folder->cache_job_actions_estimate += ($_folder->imap_totalcount - $_folder->cache_totalcount);
+                $_folder->cache_job_actions_est += ($_folder->imap_totalcount - $_folder->cache_totalcount);
             }
             
             $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
@@ -788,7 +788,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     {
         if ($_folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING) {
             $_folder->cache_status               = Felamimail_Model_Folder::CACHE_STATUS_COMPLETE;
-            $_folder->cache_job_actions_estimate = 0;
+            $_folder->cache_job_actions_est = 0;
             $_folder->cache_job_actions_done     = 0;
             $_folder->cache_job_lowestuid        = 0;
             $_folder->cache_job_startuid         = 0;
@@ -862,7 +862,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         $folder->cache_timestamp        = Tinebase_DateTime::now();
         $folder->cache_status           = Felamimail_Model_Folder::CACHE_STATUS_EMPTY;
-        $folder->cache_job_actions_estimate = 0;
+        $folder->cache_job_actions_est = 0;
         $folder->cache_job_actions_done = 0;
         
         Felamimail_Controller_Folder::getInstance()->updateFolderCounter($folder, array(
