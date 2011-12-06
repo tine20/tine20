@@ -455,7 +455,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         var downloader = new Ext.ux.file.Download({
             params: {
                 method: 'Addressbook.exportContacts',
-                filter: this.record.id,
+                filter: Ext.encode([{field: 'id', operator: 'in', value: this.record.id}]),
                 options: Ext.util.JSON.encode({
                     format: 'pdf'
                 })
