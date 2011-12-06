@@ -169,7 +169,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             }
         }
         
-        return $_onlyIds ? $events : $events;
+        return $_onlyIds ? $eventIds : $events;
     }
     
     /**
