@@ -67,7 +67,10 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
     protected function setUp()
     {   	
         parent::setUp();	
-            	
+
+        // replace email to make current user organizer and attendee
+        $this->_testXMLInput = str_replace('lars@kneschke.de', Tinebase_Core::getUser()->accountEmailAddress, $this->_testXMLInput);
+        
         $event = new Calendar_Model_Event(array(
             'uid'           => Tinebase_Record_Abstract::generateUID(),
             'summary'       => 'SyncTest',
@@ -317,8 +320,27 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
     }
     
     /**
-    * test get list all record ids not older than 2 weeks back
-    */
+     * test update of record
+     * 
+     * @return Tinebase_Record_Abstract
+     */
+    public function testChangeEntryInBackend()
+    {
+        $record = $this->testAddEntryToBackend();
+        
+        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
+    
+        $xml = simplexml_import_dom($this->_getInputDOMDocument());
+        $record = $controller->change($this->_getContainerWithSyncGrant()->getId(), $record->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+    
+        $this->_validateAddEntryToBackend($record);
+    
+        return $record;
+    }
+        
+    /**
+     * test get list all record ids not older than 2 weeks back
+     */
     public function testGetServerEntries2WeeksBack()
     {
         $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
