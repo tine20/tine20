@@ -497,8 +497,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     
         $entry = $this->toTineModel($_data, $oldEntry);
         $entry->last_modified_time = $this->_syncTimeStamp;
-        $entry->container_id = $_folderId;
-        
+        if ($_folderId != $this->_specialFolderName) {
+            $entry->container_id = $_folderId;
+        }
+                
         if ($entry->exdate instanceof Tinebase_Record_RecordSet) {
             foreach ($entry->exdate as $exdate) {
                 if ($exdate->is_deleted == false) {
@@ -513,11 +515,13 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " current user is not organizer => update attendee status only ");
             
-            $this->_event = Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($event, new Calendar_Model_Attender(array(
-                'user_type'           => Calendar_Model_Attender::USERTYPE_USER,
-                'user_id'             => Tinebase_Core::getUser()->contact_id,
-                'displaycontainer_id' => $_folderId
-            )));
+            $ownAttendee = Calendar_Model_Attender::getOwnAttender($entry->attendee);
+            
+            if ($_folderId != $this->_specialFolderName) {
+                $ownAttendee->displaycontainer_id = $_folderId;
+            }
+            
+            $entry = Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($entry, $ownAttendee);
         }
     
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
