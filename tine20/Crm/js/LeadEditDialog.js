@@ -340,7 +340,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         store: Tine.Crm.LeadState.getStore(),
                                         displayField:'leadstate',
                                         lazyInit: false,
-                                        value: Tine.Crm.LeadState.getStore().getAt(0).id,
+                                        value: (Tine.Crm.LeadState.getStore().getCount() > 0) ? Tine.Crm.LeadState.getStore().getAt(0).id : null,
                                         listeners: {
                                             'select': function(combo, record, index) {
                                                 if (this.record.data.probability !== null) {
@@ -357,14 +357,14 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         id:'leadtype',
                                         name:'leadtype_id',
                                         store: Tine.Crm.LeadType.getStore(),
-                                        value: Tine.Crm.LeadType.getStore().getAt(0).id,
+                                        value: (Tine.Crm.LeadType.getStore().getCount() > 0) ? Tine.Crm.LeadType.getStore().getAt(0).id : null,
                                         displayField:'leadtype'
                                     }, {
                                         fieldLabel: this.app.i18n._('Leadsource'), 
                                         id:'leadsource',
                                         name:'leadsource_id',
                                         store: Tine.Crm.LeadSource.getStore(),
-                                        value: Tine.Crm.LeadSource.getStore().getAt(0).id,
+                                        value: (Tine.Crm.LeadSource.getStore().getCount() > 0) ? Tine.Crm.LeadSource.getStore().getAt(0).id : null,
                                         displayField:'leadsource'
                                     }]
                                 }]

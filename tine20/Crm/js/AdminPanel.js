@@ -159,21 +159,21 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     store: Tine.Crm.LeadState.getStore(),
                     displayField:'leadstate',
                     lazyInit: false,
-                    value: Tine.Crm.LeadState.getStore().getAt(0).id
+                    value: (Tine.Crm.LeadState.getStore().getCount() > 0) ? Tine.Crm.LeadState.getStore().getAt(0).id : null
                 }, {
                     fieldLabel: this.app.i18n._('Leadsource'), 
                     name:'default_leadsource_id',
                     store: Tine.Crm.LeadSource.getStore(),
                     displayField:'leadsource',
                     lazyInit: false,
-                    value: Tine.Crm.LeadSource.getStore().getAt(0).id
+                    value: (Tine.Crm.LeadSource.getStore().getCount() > 0) ? Tine.Crm.LeadSource.getStore().getAt(0).id : null
                 }, {
                     fieldLabel: this.app.i18n._('Leadtype'), 
                     name:'default_leadtype_id',
                     store: Tine.Crm.LeadType.getStore(),
                     displayField:'leadtype',
                     lazyInit: false,
-                    value: Tine.Crm.LeadType.getStore().getAt(0).id
+                    value: (Tine.Crm.LeadType.getStore().getCount() > 0) ? Tine.Crm.LeadType.getStore().getAt(0).id : null
                 }]]
             }, 
                 this.leadstatePanel,
