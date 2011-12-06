@@ -178,7 +178,7 @@ class Felamimail_Setup_Update_Release5 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 5.3
+     * update to 5.4
      * - cache_job_actions_estimate -> cache_job_actions_est
      */
     public function update_3()
@@ -191,6 +191,6 @@ class Felamimail_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->_backend->alterCol('felamimail_folder', $declaration, 'cache_job_actions_estimate');
         
         $this->setTableVersion('felamimail_folder', 10);
-        $this->setApplicationVersion('Felamimail', '5.3');
+        $this->setApplicationVersion('Felamimail', '5.4');
     }
 }
