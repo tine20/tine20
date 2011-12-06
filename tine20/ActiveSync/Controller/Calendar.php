@@ -56,7 +56,13 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     const RECUR_DOW_THURSDAY    = 16;
     const RECUR_DOW_FRIDAY      = 32;
     const RECUR_DOW_SATURDAY    = 64;
-    
+
+    /**
+     * busy status constants
+     */
+    const BUSY_STATUS_FREE      = 0;
+    const BUSY_STATUS_TENATTIVE = 1;
+    const BUSY_STATUS_BUSY      = 2;
     /**
      * available filters
      * 
@@ -81,6 +87,18 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         self::ATTENDEE_STATUS_ACCEPTED      => Calendar_Model_Attender::STATUS_ACCEPTED,
         self::ATTENDEE_STATUS_DECLINED      => Calendar_Model_Attender::STATUS_DECLINED,
         //self::ATTENDEE_STATUS_NOTRESPONDED  => Calendar_Model_Attender::STATUS_NEEDSACTION
+    );
+    
+    /**
+     * mapping of busy status
+     *
+     * NOTE: not surjektive
+     * @var array
+     */
+    protected $_busyStatusMapping = array(
+        self::BUSY_STATUS_FREE      => Calendar_Model_Attender::STATUS_DECLINED,
+        self::BUSY_STATUS_TENATTIVE => Calendar_Model_Attender::STATUS_TENTATIVE,
+        self::BUSY_STATUS_BUSY      => Calendar_Model_Attender::STATUS_ACCEPTED
     );
     
     /**
