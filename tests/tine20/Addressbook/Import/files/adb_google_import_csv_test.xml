@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>adb_google_import_csv_test</name>
+    <model>Addressbook_Model_Contact</model>
+    <plugin>Addressbook_Import_Csv</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>,</delimiter>
+    <description>google adb import</description>
+    <mapping>
+        <field>
+            <source>Given Name</source>
+            <destination>n_given</destination>
+        </field>
+        <field>
+            <source>Additional Name</source>
+            <destination>n_middle</destination>
+        </field>
+        <field>
+            <source>Yomi Name</source>
+            <destination>Yomi Name</destination>
+        </field>
+        <field>
+            <source>Family Name</source>
+            <destination>n_family</destination>
+        </field>
+        <field>
+            <source>Title</source>
+            <destination>title</destination>
+        </field>        
+        <field>
+            <source>Name Suffix</source>
+            <destination>n_suffix</destination>
+        </field>        
+        <field>
+            <source>Web Page</source>
+            <destination>url</destination>
+        </field>        
+        <field>
+            <source>Birthday</source>
+            <destination>bday</destination>
+        </field>        
+        <field>
+            <source>Notes</source>
+            <destination>note</destination>
+        </field>        
+        <field>
+            <source>E-mail 1 - Value</source>
+            <destination>email</destination>
+        </field>        
+        <field>
+            <source>E-mail 2 - Value</source>
+            <destination>email_home</destination>
+        </field>        
+        <field>
+            <source>Phone 2 - Value</source>
+            <destination>tel_home</destination>
+        </field>        
+        <field>
+            <source>Address 2 - Fax</source>
+            <destination>tel_fax_home</destination>
+        </field>        
+        <field>
+            <source>Address 2 - Street</source>
+            <destination>adr_two_street</destination>
+        </field>        
+        <field>
+            <source>Address 2 - City</source>
+            <destination>adr_two_locality</destination>
+        </field>        
+        <field>
+            <source>Address 2 - State</source>
+            <destination>adr_two_region</destination>
+        </field>        
+        <field>
+            <source>Address 2 - Postal Code</source>
+            <destination>adr_two_postalcode</destination>
+        </field>        
+        <field>
+            <source>Address 2 - Country</source>
+            <destination>adr_two_countryname</destination>
+        </field>        
+        <field>
+            <source>Phone 1 - Value</source>
+            <destination>tel_work</destination>
+        </field>
+        <field>
+            <source>Address 1 - Fax</source>
+            <destination>tel_fax</destination>
+        </field>
+        <field>
+            <source>Company</source>
+            <destination>org_name</destination>
+        </field>
+        <field>
+            <source>Job Title</source>
+            <destination>role</destination>
+        </field>
+        <field>
+            <source>Department</source>
+            <destination>org_unit</destination>
+        </field>
+        <field>
+            <source>Address 1 - Street</source>
+            <destination>adr_one_street</destination>
+        </field>
+        <field>
+            <source>Address 1 - City</source>
+            <destination>adr_one_locality</destination>
+        </field>
+        <field>
+            <source>Address 1 - State</source>
+            <destination>adr_one_region</destination>
+        </field>
+        <field>
+            <source>Address 1 - Postal Code</source>
+            <destination>adr_one_postalcode</destination>
+        </field>
+        <field>
+            <source>Address 1 - Country</source>
+            <destination>adr_one_countryname</destination>
+        </field>
+        <field>
+            <source>Private</source>
+            <destination>tags</destination>
+            <separator>;</separator>
+        </field>
+        <field>
+            <source>Categories</source>
+            <destination>tags</destination>
+            <separator>;</separator>
+        </field>
+    </mapping>
+</config>
