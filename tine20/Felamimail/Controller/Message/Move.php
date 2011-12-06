@@ -62,46 +62,99 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
      *
      * @param  mixed  $_messages
      * @param  mixed  $_targetFolder can be one of: folder_id, Felamimail_Model_Folder or Felamimail_Model_Folder::FOLDER_TRASH (constant)
-     * @return Tinebase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      */
     public function moveMessages($_messages, $_targetFolder)
     {
         // we always need to read the messages from cache to get the current flags
         $messages = $this->_convertToRecordSet($_messages, TRUE);
         $messages->addIndices(array('folder_id'));
-        
+
         if ($_targetFolder !== Felamimail_Model_Folder::FOLDER_TRASH) {
             $targetFolder = ($_targetFolder instanceof Felamimail_Model_Folder) ? $_targetFolder : Felamimail_Controller_Folder::getInstance()->get($_targetFolder);
+        } else {
+            $targetFolder = $_targetFolder;
         }
         
+        $movedMessages = FALSE;
         foreach (array_unique($messages->folder_id) as $folderId) {
-            $messagesInFolder = $messages->filter('folder_id', $folderId);
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' moving messages: ' . print_r($messagesInFolder->getArrayOfIds(), TRUE));
-            
-            if ($_targetFolder === Felamimail_Model_Folder::FOLDER_TRASH) {
-                // messages should be moved to trash -> need to determine the trash folder for the account of the folder that contains the messages
-                try {
-                    $targetFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder(
-                        $messagesInFolder->getFirstRecord()->account_id,
-                        Felamimail_Model_Folder::FOLDER_TRASH
-                    );
-                    $this->_moveMessagesInFolderOnSameAccount($messagesInFolder, $targetFolder);
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No trash folder found - skipping messages in this folder.');
-                    $messages->removeRecords($messagesInFolder);
-                }
-            } else if ($messagesInFolder->getFirstRecord()->account_id == $targetFolder->account_id) {
-                $this->_moveMessagesInFolderOnSameAccount($messagesInFolder, $targetFolder);
-            } else {
-                $this->_moveMessagesToAnotherAccount($messagesInFolder, $targetFolder);
-            }
+            $movedMessages = ($this->_moveMessagesByFolder($messages, $folderId, $targetFolder) || $movedMessages);
         }
-
-        // delete messages in local cache
-        $number = $this->_backend->delete($messages->getArrayOfIds());
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $number .' messages from cache');
         
-        return $this->_updateCountsAfterMove($messages);
+        if (! $movedMessages) {
+            // no messages have been moved -> return empty record set
+            $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
+        } else {
+            // delete messages in local cache
+            $number = $this->_backend->delete($messages->getArrayOfIds());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $number .' messages from cache');
+            
+            $result = $this->_updateCountsAfterMove($messages);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * move messages from one folder to another
+     * 
+     * @param Tinebase_Record_RecordSet $_messages
+     * @param string $_folderId
+     * @param Felamimail_Model_Folder|string $_targetFolder
+     * @return boolean did we move messages?
+     */
+    protected function _moveMessagesByFolder(Tinebase_Record_RecordSet $_messages, $_folderId, $_targetFolder)
+    {
+        $messagesInFolder = $_messages->filter('folder_id', $_folderId);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Moving messages: ' . print_r($messagesInFolder->getArrayOfIds(), TRUE));
+        
+        $result = TRUE;
+        if ($_targetFolder === Felamimail_Model_Folder::FOLDER_TRASH) {
+            $result = $this->_moveMessagesToTrash($messagesInFolder, $_folderId);
+        } else if ($_folderId === $_targetFolder->getId()) {
+            // no need to move
+            $result = FALSE;
+        } else if ($messagesInFolder->getFirstRecord()->account_id == $_targetFolder->account_id) {
+            $this->_moveMessagesInFolderOnSameAccount($messagesInFolder, $_targetFolder);
+        } else {
+            $this->_moveMessagesToAnotherAccount($messagesInFolder, $_targetFolder);
+        }
+        
+        if (! $result) {
+            $_messages->removeRecords($messagesInFolder);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * move messages to trash
+     * 
+     * @param Tinebase_Record_RecordSet $_messagesInFolder
+     * @param string $_folderId
+     * @return boolean did we move messages?
+     */
+    protected function _moveMessagesToTrash(Tinebase_Record_RecordSet $_messagesInFolder, $_folderId)
+    {
+        // messages should be moved to trash -> need to determine the trash folder for the account of the folder that contains the messages
+        $targetFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder(
+            $_messagesInFolder->getFirstRecord()->account_id,
+            Felamimail_Model_Folder::FOLDER_TRASH
+        );
+        if ($_folderId === $targetFolder->id) {
+            return FALSE;
+        }
+        
+        try {
+            $this->_moveMessagesInFolderOnSameAccount($_messagesInFolder, $targetFolder);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' No trash folder found - skipping messages in this folder.');
+            return FALSE;
+        }
+        
+        return TRUE;
     }
     
     /**

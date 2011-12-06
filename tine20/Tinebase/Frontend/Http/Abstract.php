@@ -33,6 +33,9 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _export(Tinebase_Model_Filter_FilterGroup $_filter, $_options, Tinebase_Controller_Record_Abstract $_controller = NULL)
     { 
+        // extend execution time to 30 minutes
+        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(1800);
+        
         // get export object
         $export = Tinebase_Export::factory($_filter, $_options, $_controller);
         $format = $export->getFormat();
@@ -99,6 +102,8 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 readfile($result);
                 unlink($result);
         }
-    }        
-
+        
+        // reset max execution time to old value
+        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
+    }
 }

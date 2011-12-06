@@ -631,6 +631,49 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 value: 0
             }]            
         };
+    },
+    
+    /**
+     * is form valid?
+     * 
+     * @return {Boolean}
+     */
+    isValid: function() {
+        var result = Tine.Admin.UserEditDialog.superclass.isValid.call(this);
+
+        if (this.customFieldExists()) {
+            result = false;
+            this.getForm().markInvalid([{
+                id: 'name',
+                msg: this.app.i18n._("Customfield already exists. Please choose another name.")
+            }]);
+        }
+        
+        return result;
+    },
+    
+    /**
+     * check if customfield name already exists for this app
+     * 
+     * @return {Boolean}
+     */
+    customFieldExists: function() {
+        var applicationField = this.getForm().findField('application_id'),
+            store = applicationField.getStore(),
+            app = store.getById(applicationField.getValue()),
+            cfName = this.getForm().findField('name').getValue(),
+            cfExists = false;
+        
+        if (app && cfName) {
+            var customfieldsOfApp = Tine[app.get('name')].registry.get('customfields');
+            Ext.each(customfieldsOfApp, function(cfConfig) {
+                if (cfName === cfConfig.name) {
+                    cfExists = true;
+                }
+            }, this);
+        }
+        
+        return cfExists;
     }
 });
 

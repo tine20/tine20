@@ -14,27 +14,27 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: js/AddressbookGridPanelHook.js:37
+#: js/AddressbookGridPanelHook.js:38
 msgid "Call contact"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:60
+#: js/AddressbookGridPanelHook.js:61
 msgid "Compose SMS"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:255
+#: js/AddressbookGridPanelHook.js:256
 msgid "Work"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:265
+#: js/AddressbookGridPanelHook.js:266
 msgid "Home"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:320
+#: js/AddressbookGridPanelHook.js:276 js/AddressbookGridPanelHook.js:321
 msgid "Cell"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:285 js/AddressbookGridPanelHook.js:330
+#: js/AddressbookGridPanelHook.js:286 js/AddressbookGridPanelHook.js:331
 msgid "Cell private"
 msgstr ""
 
@@ -43,11 +43,11 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: js/CallStateWindow.js:104
+#: js/CallStateWindow.js:106
 msgid "connecting..."
 msgstr ""
 
-#: js/CallStateWindow.js:142
+#: js/CallStateWindow.js:144
 msgid "Connecting to: "
 msgstr ""
 
@@ -128,99 +128,107 @@ msgstr ""
 msgid "Devices"
 msgstr ""
 
-#: js/Sipgate.js:153
+#: js/Sipgate.js:154
 msgid "Dial number"
 msgstr ""
 
-#: js/Sipgate.js:154
+#: js/Sipgate.js:155
 msgid "Initiates a new outgoing call"
 msgstr ""
 
-#: js/Sipgate.js:161
+#: js/Sipgate.js:162
 msgid "Add Number to Addressbook"
 msgstr ""
 
-#: js/Sipgate.js:162
+#: js/Sipgate.js:163
 msgid "Adds this number to the Addressbook"
 msgstr ""
 
-#: js/Sipgate.js:281
+#: js/Sipgate.js:282
 msgid "Calls from"
 msgstr ""
 
-#: js/Sipgate.js:292
+#: js/Sipgate.js:293
 msgid "Calls to"
 msgstr ""
 
-#: js/Sipgate.js:311
+#: js/Sipgate.js:312
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr ""
 
-#: js/Sipgate.js:312 js/Sipgate.js:397
+#: js/Sipgate.js:313 js/Sipgate.js:398
 msgid "No calls to display"
 msgstr ""
 
-#: js/Sipgate.js:324
+#: js/Sipgate.js:325
 msgid "Status"
 msgstr ""
 
-#: js/Sipgate.js:334
+#: js/Sipgate.js:335
 msgid "Remote Party"
 msgstr ""
 
-#: js/Sipgate.js:339
+#: js/Sipgate.js:340
 msgid "Remote Number"
 msgstr ""
 
-#: js/Sipgate.js:344
+#: js/Sipgate.js:345
 msgid "Local Uri"
 msgstr ""
 
-#: js/Sipgate.js:349
+#: js/Sipgate.js:350
 msgid "Remote Uri"
 msgstr ""
 
-#: js/Sipgate.js:356
+#: js/Sipgate.js:357
 msgid "Call started"
 msgstr ""
 
-#: js/Sipgate.js:366
+#: js/Sipgate.js:367
 msgid "Call ID"
 msgstr ""
 
-#: js/Sipgate.js:527
+#: js/Sipgate.js:534
 msgid "unknown Person"
 msgstr ""
 
-#: js/Sipgate.js:605
+#: js/Sipgate.js:555
+msgid "Configuration not set"
+msgstr ""
+
+#: js/Sipgate.js:555
+msgid "Please configure the Sipgate application"
+msgstr ""
+
+#: js/Sipgate.js:620
 msgid "first dial"
 msgstr ""
 
-#: js/Sipgate.js:610
+#: js/Sipgate.js:625
 msgid "second dial"
 msgstr ""
 
-#: js/Sipgate.js:617
+#: js/Sipgate.js:632
 msgid "established"
 msgstr ""
 
-#: js/Sipgate.js:622
+#: js/Sipgate.js:637
 msgid "call 1 busy"
 msgstr ""
 
-#: js/Sipgate.js:629
+#: js/Sipgate.js:644
 msgid "call 2 busy"
 msgstr ""
 
-#: js/Sipgate.js:636
+#: js/Sipgate.js:651
 msgid "hungup before other called"
 msgstr ""
 
-#: js/Sipgate.js:639
+#: js/Sipgate.js:654
 msgid "hungup"
 msgstr ""
 
-#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:187
+#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:183
 msgid "Send"
 msgstr ""
 

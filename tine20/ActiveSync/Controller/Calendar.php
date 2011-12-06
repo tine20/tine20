@@ -56,7 +56,13 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     const RECUR_DOW_THURSDAY    = 16;
     const RECUR_DOW_FRIDAY      = 32;
     const RECUR_DOW_SATURDAY    = 64;
-    
+
+    /**
+     * busy status constants
+     */
+    const BUSY_STATUS_FREE      = 0;
+    const BUSY_STATUS_TENATTIVE = 1;
+    const BUSY_STATUS_BUSY      = 2;
     /**
      * available filters
      * 
@@ -81,6 +87,18 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         self::ATTENDEE_STATUS_ACCEPTED      => Calendar_Model_Attender::STATUS_ACCEPTED,
         self::ATTENDEE_STATUS_DECLINED      => Calendar_Model_Attender::STATUS_DECLINED,
         //self::ATTENDEE_STATUS_NOTRESPONDED  => Calendar_Model_Attender::STATUS_NEEDSACTION
+    );
+    
+    /**
+     * mapping of busy status
+     *
+     * NOTE: not surjektive
+     * @var array
+     */
+    protected $_busyStatusMapping = array(
+        self::BUSY_STATUS_FREE      => Calendar_Model_Attender::STATUS_DECLINED,
+        self::BUSY_STATUS_TENATTIVE => Calendar_Model_Attender::STATUS_TENTATIVE,
+        self::BUSY_STATUS_BUSY      => Calendar_Model_Attender::STATUS_ACCEPTED
     );
     
     /**
@@ -219,6 +237,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " calendar data " . print_r($data->toArray(), true));
+        
+        // add calendar namespace
+        $_xmlNode->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:Calendar', 'uri:Calendar');
         
         foreach($this->_mapping as $key => $value) {
             $nodeContent = null;
@@ -383,17 +404,13 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             
         }
 
-        
         if(count($data->attendee) > 0) {
             // fill attendee cache
             Calendar_Model_Attender::resolveAttendee($data->attendee, FALSE);
             
-            $attendees = null;
+            $attendees = $_xmlNode->ownerDocument->createElementNS('uri:Calendar', 'Attendees');
             
             foreach($data->attendee as $attenderObject) {
-                if($attendees === null) {
-                    $attendees = $_xmlNode->appendChild(new DOMElement('Attendees', null, 'uri:Calendar'));
-                }
                 $attendee = $attendees->appendChild(new DOMElement('Attendee', null, 'uri:Calendar'));
                 $attendee->appendChild(new DOMElement('Name', $attenderObject->getName(), 'uri:Calendar'));
                 $attendee->appendChild(new DOMElement('Email', $attenderObject->getEmail(), 'uri:Calendar'));
@@ -405,6 +422,16 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     $attendee->appendChild(new DOMElement('AttendeeStatus', $acsStatus ? $acsStatus : self::ATTENDEE_STATUS_UNKNOWN, 'uri:Calendar'));
                 }
             }
+            
+            if ($attendees->hasChildNodes()) {
+                $_xmlNode->appendChild($attendees);
+            }
+            
+            // set own status
+            if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($data->attendee)) !== null && ($busyType = array_search($ownAttendee->status, $this->_busyStatusMapping)) !== false) {
+                $_xmlNode->appendChild(new DOMElement('BusyStatus', $busyType, 'uri:Calendar'));
+            }
+        
         }
         
         $timeZoneConverter = ActiveSync_TimezoneConverter::getInstance(
@@ -415,9 +442,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         $_xmlNode->appendChild(new DOMElement('Timezone', $timeZoneConverter->encodeTimezone(
             Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)
         ), 'uri:Calendar'));
+
         
         $_xmlNode->appendChild(new DOMElement('MeetingStatus', 1, 'uri:Calendar'));
-        $_xmlNode->appendChild(new DOMElement('BusyStatus', 2, 'uri:Calendar'));
         $_xmlNode->appendChild(new DOMElement('Sensitivity', 0, 'uri:Calendar'));
         $_xmlNode->appendChild(new DOMElement('DtStamp', $data->creation_time->format('Ymd\THis') . 'Z', 'uri:Calendar'));
         $_xmlNode->appendChild(new DOMElement('UID', $data->uid, 'uri:Calendar'));
@@ -426,7 +453,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             try {
                 $contact = Addressbook_Controller_Contact::getInstance()->get($data->organizer);
                 
-                $_xmlNode->appendChild(new DOMElement('OrganizerName', $contact->n_fn, 'uri:Calendar'));
+                $_xmlNode->appendChild(new DOMElement('OrganizerName', $contact->n_fileas, 'uri:Calendar'));
                 $_xmlNode->appendChild(new DOMElement('OrganizerEmail', $contact->email, 'uri:Calendar'));
             } catch (Tinebase_Exception_AccessDenied $e) {
                 // set the current account as organizer
@@ -638,6 +665,14 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
         }
         
+        if (isset($xmlData->BusyStatus) && ($ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee)) !== null) {
+            if (isset($this->_busyStatusMapping[(string)$xmlData->BusyStatus])) {
+                $ownAttendee->status = $this->_busyStatusMapping[(string)$xmlData->BusyStatus];
+            } else {
+                $ownAttendee->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+            }
+        }
+        
         // handle recurrence
         if(isset($xmlData->Recurrence) && isset($xmlData->Recurrence->Type)) {
             $rrule = new Calendar_Model_Rrule();
@@ -721,8 +756,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 
                 $event->exdate = $exdates;
             }
+        } else {
+            $event->rrule  = null;
+            $event->exdate = null;
         }
-        
         
         if(empty($event->organizer)) {
             $event->organizer = Tinebase_Core::getUser()->contact_id;

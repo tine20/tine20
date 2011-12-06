@@ -46,6 +46,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     copyEditAction: true,
     felamimail: false,
+    multipleEdit: true,
     
     /**
      * @cfg {Bool} hasDetailsPanel 

@@ -28,6 +28,25 @@
     background-image:url(../../images/oxygen/32x32/actions/go-jump-today.png) !important;
 }
 
+.cal-sheet-view-type {
+	background-image:url(../../images/oxygen/16x16/actions/view-calendar-week.png) !important;
+}
+.x-btn-medium .cal-sheet-view-type {
+    background-image:url(../../images/oxygen/22x22/actions/view-calendar-week.png) !important;
+}
+.x-btn-large .cal-sheet-view-type {
+    background-image:url(../../images/oxygen/32x32/actions/view-calendar-week.png) !important;
+}
+
+.cal-grid-view-type {
+    background-image:url(../../images/oxygen/16x16/actions/view-calendar-list.png) !important;
+}
+.x-btn-medium .cal-grid-view-type {
+    background-image:url(../../images/oxygen/22x22/actions/view-calendar-list.png) !important;
+}
+.x-btn-large .cal-grid-view-type {
+    background-image:url(../../images/oxygen/32x32/actions/view-calendar-list.png) !important;
+}
 
 .cal-day-view {
     background-image:url(../../images/oxygen/16x16/actions/view-calendar-day.png) !important;

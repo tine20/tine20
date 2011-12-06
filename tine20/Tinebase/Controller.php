@@ -195,6 +195,10 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
                 Tinebase_Core::setupUserLocale($userPrefLocaleString);
             }
             
+            // need to set userTimeZone again
+            $userTimezone = Tinebase_Core::getPreference()->getValue(Tinebase_Preference::TIMEZONE);
+            Tinebase_Core::setupUserTimezone($userTimezone);
+            
             $_user->setLoginTime($_accessLog->ip);
             
             $_accessLog->sessionid = session_id();

@@ -67,6 +67,7 @@ class Tinebase_Model_Tag extends Tinebase_Record_Abstract
         'description'            => array('allowEmpty' => true),
         'color'                  => array('allowEmpty' => true, array('regex', '/^#[0-9a-fA-F]{6}$/')),
         'occurrence'             => array('allowEmpty' => true),
+        'selection_occurrence'   => array('allowEmpty' => true), // not persistent
         'account_grants'         => array('allowEmpty' => true),
         'created_by'             => array('allowEmpty' => true),
         'creation_time'          => array('allowEmpty' => true),

@@ -121,7 +121,8 @@ Tine.Tinebase.Model.Tag = Ext.data.Record.create([
     {name: 'color'      },
     {name: 'occurrence' },
     {name: 'rights'     },
-    {name: 'contexts'   }
+    {name: 'contexts'   },
+    {name: 'selection_occurrence', type: 'number'}
 ]);
 
 /**

@@ -88,31 +88,40 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
         $this->_delimiter = $account->delimiter;
         
-        if (empty($_folderName)) {
-            $folders = $this->_getRootFolders($account);
-        } else {
-            $folders = $this->_getSubfolders($account, $_folderName);
-        }
-        
-        $result = $this->_getOrCreateFolders($folders, $account, $_folderName);
-        
-        if (! empty($_folderName)) {
+        try {
+            $folders = $this->_getFoldersFromIMAP($account, $_folderName);
+            $result = $this->_getOrCreateFolders($folders, $account, $_folderName);
+            
             $hasChildren = (empty($folders) || count($folders) > 0 && count($result) == 0) ? 0 : 1;
             $this->_updateHasChildren($_accountId, $_folderName, $hasChildren);
-        }
-        
-        if ($_recursive) {
-            foreach ($result as $folder) {
-                if ($folder->has_children) {
-                    $this->update($account, $folder->globalname, $_recursive);
-                } else {
-                    $this->_removeFromCache($account, $folder->globalname);
-                }
-                $this->_backend->update($folder);
+            
+            if ($_recursive) {
+                $this->_updateRecursive($account, $result);
             }
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' IMAP Protocol Exception: ' . $zmpe->getMessage());
+            $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
         }
         
         return $result;
+    }
+    
+    /**
+     * get folders from imap
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @param string $_folderName
+     * @return array
+     */
+    protected function _getFoldersFromIMAP(Felamimail_Model_Account $_account, $_folderName)
+    {
+        if (empty($_folderName)) {
+            $folders = $this->_getRootFolders($_account);
+        } else {
+            $folders = $this->_getSubfolders($_account, $_folderName);
+        }
+        
+        return $folders;
     }
     
     /**
@@ -123,12 +132,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      */
     protected function _getRootFolders(Felamimail_Model_Account $_account)
     {
-        try {
-            $imap = Felamimail_Backend_ImapFactory::factory($_account);
-        } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
-            return array();
-        }
+        $imap = Felamimail_Backend_ImapFactory::factory($_account);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             . ' Get subfolders of root for account ' . $_account->getId());
@@ -159,8 +163,6 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             if (in_array($_folderName, array_keys($result))) {
                 unset($result[$_folderName]);
             }        
-        } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
         } catch (Zend_Mail_Storage_Exception $zmse) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . ' No subfolders of ' . $_folderName . ' found.');
@@ -178,12 +180,34 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      */
     protected function _updateHasChildren($_accountId, $_folderName, $_hasChildren)
     {
+        if (empty($_folderName)) {
+            return;
+        }
+        
         $parentFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_accountId, $_folderName);
         if ($_hasChildren != $parentFolder->has_children) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Update has_children = ' . $_hasChildren . ' for folder ' . $parentFolder->globalname);
             $parentFolder->has_children = $_hasChildren;
             $this->_backend->update($parentFolder);
+        }
+    }
+    
+    /**
+     * do recursive update
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @param Tinebase_Record_RecordSet $_folderResult
+     */
+    protected function _updateRecursive(Felamimail_Model_Account $_account, Tinebase_Record_RecordSet $_folderResult)
+    {
+        foreach ($_folderResult as $folder) {
+            if ($folder->has_children) {
+                $this->update($_account, $folder->globalname, TRUE);
+            } else {
+                $this->_removeFromCache($_account, $folder->globalname);
+            }
+            $this->_backend->update($folder);
         }
     }
     
@@ -360,7 +384,9 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             $result->addRecord($folder);
         }
         
-        $this->_removeFromCache($_account, $parentFolder, $result->getArrayOfIds());
+        if (count($_folders) > 0) {
+            $this->_removeFromCache($_account, $parentFolder, $result->getArrayOfIds());
+        }
         
         return $result;
     }

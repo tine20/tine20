@@ -12,7 +12,7 @@ Ext.ns('Tine', 'Tine.Tinebase');
 /**
  * @namespace Tine.Tinebase
  * @class Tine.Tinebase.ExceptionHandler
- * @sigleton
+ * @singleton
  * 
  * IE NOTE: http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnscrpt/html/WebErrors2.asp
  *    "A common problem that bites many developers occurs when their onerror handler is not 
@@ -183,11 +183,11 @@ Tine.Tinebase.ExceptionHandler = function() {
                 break;
             
             // Service Unavailable!
-            // Use this error code for generic problems like missconfig we don't want to see bugreports for
+            // Use this error code for generic problems like misconfig we don't want to see bugreports for
             case 503:
                 Ext.MessageBox.show({
                     title: _('Service Unavailable'), 
-                    msg: _('The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator.'),
+                    msg: _('The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator.'),
                     buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.WARNING
                 });

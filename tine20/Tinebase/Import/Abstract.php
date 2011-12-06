@@ -455,7 +455,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $newTag = new Tinebase_Model_Tag(array(
             'name'          => $_tagData['name'],
             'description'   => $description,
-            'type'          => $type,
+            'type'          => strtolower($type),
             'color'         => $color,
         ));
         
@@ -490,12 +490,45 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         
         $tags = ($_record->tags instanceof Tinebase_Record_RecordSet) ? $_record->tags : new Tinebase_Record_RecordSet('Tinebase_Model_Tag');
         foreach ($autotags as $tagData) {
+            $tagData = $this->_doAutoTagReplacements($tagData);
             $tag = $this->_getSingleTag($tagData['name'], $tagData);
             if ($tag !== NULL) {
                 $tags->addRecord($tag);
             }
         }
         $_record->tags = $tags;
+    }
+    
+    /**
+     * replace some strings in autotags (name + description)
+     * 
+     * @param array $_tagData
+     * @return array
+     */
+    protected function _doAutoTagReplacements($_tagData)
+    {
+        $result = $_tagData;
+        
+        $search = array(
+        	'###CURRENTDATE###', 
+        	'###CURRENTTIME###', 
+        	'###USERFULLNAME###'
+        );
+        $now = Tinebase_DateTime::now();
+        $replacements = array(
+            Tinebase_Translation::dateToStringInTzAndLocaleFormat($now, NULL, NULL, 'date'),
+            Tinebase_Translation::dateToStringInTzAndLocaleFormat($now, NULL, NULL, 'time'),
+            Tinebase_Core::getUser()->accountDisplayName
+        );
+        $fields = array('name', 'description');
+        
+        foreach ($fields as $field) {
+            if (isset($result[$field])) {
+                $result[$field] = str_replace($search, $replacements, $result[$field]);
+            }
+        }
+        
+        return $result;
     }
     
     /**

@@ -38,27 +38,27 @@ msgstr "管理资源"
 msgid "All Rights to administrate resources"
 msgstr ""
 
-#: Config.php:43
+#: Config.php:45
 msgid "Fixed Calendars"
 msgstr ""
 
-#: Config.php:45
-msgid "Calendars always selected regardles of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
-msgstr ""
-
-#: Config.php:53
-msgid "Attendee Status Available"
+#: Config.php:47
+msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
 msgstr ""
 
 #: Config.php:55
+msgid "Attendee Status Available"
+msgstr ""
+
+#: Config.php:57
 msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation."
 msgstr ""
 
-#: Config.php:63
+#: Config.php:65
 msgid "Attendee Roles Available"
 msgstr ""
 
-#: Config.php:65
+#: Config.php:67
 msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation."
 msgstr ""
 
@@ -117,7 +117,7 @@ msgid "Manage Resources"
 msgstr "管理资源"
 
 #: js/AttendeeFilterModel.js:35 js/AttendeeGridPanel.js:76
-#: js/EventDetailsPanel.js:251 js/Model.js:329
+#: js/EventDetailsPanel.js:248 js/Model.js:355
 msgid "Attendee"
 msgstr "参加者"
 
@@ -149,7 +149,7 @@ msgstr "用户"
 msgid "Group"
 msgstr "组"
 
-#: js/AttendeeGridPanel.js:170 js/Model.js:484
+#: js/AttendeeGridPanel.js:170 js/Model.js:510
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "资源"
@@ -164,7 +164,7 @@ msgid "Name"
 msgstr "名字"
 
 #: js/AttendeeGridPanel.js:186 js/ContactEventsGridPanel.js:125
-#: Model/Event.php:232
+#: js/GridView.js:131 Model/Event.php:237
 msgid "Status"
 msgstr "状态"
 
@@ -177,7 +177,7 @@ msgid "Click here to invite another attender..."
 msgstr ""
 
 #: js/AttendeeGridPanel.js:444 js/AttendeeGridPanel.js:462
-#: js/AttendeeGridPanel.js:479 js/AttendeeGridPanel.js:491 js/Model.js:345
+#: js/AttendeeGridPanel.js:479 js/AttendeeGridPanel.js:491 js/Model.js:371
 msgid "No Information"
 msgstr "没有信息"
 
@@ -190,65 +190,21 @@ msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] "日历"
 
-#: js/CalendarPanel.js:51
-msgid "Loading events, please wait..."
-msgstr "加载事件，请等待 ..."
-
-#: js/CalendarPanel.js:275
-msgid "Scheduling Conflict"
-msgstr ""
-
-#: js/CalendarPanel.js:277
-msgid "The following attendee are busy at the requested time:"
-msgstr ""
-
-#: js/CalendarPanel.js:281
-msgid "Ignore Conflict"
-msgstr ""
-
-#: js/CalendarPanel.js:282
-msgid "Edit Event"
-msgstr "编辑事件"
-
-#: js/CalendarPanel.js:283
-msgid "Cancel this action"
-msgstr ""
-
-#: js/CalendarPanel.js:325
-msgid "Update Event"
-msgstr "更新事件"
-
-#: js/CalendarPanel.js:329
-msgid "Update this event only"
-msgstr ""
-
-#: js/CalendarPanel.js:330
-msgid "Update this and all future events"
-msgstr ""
-
-#: js/CalendarPanel.js:331
-msgid "Update whole series"
-msgstr "更新整个系列"
-
-#: js/CalendarPanel.js:332
-msgid "Update nothing"
-msgstr ""
-
 #: js/CalendarSelectWidget.js:124
 msgid "Originally"
 msgstr ""
 
-#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:333
+#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:359
 msgid "Events"
 msgstr "事件"
 
-#: js/ContactEventsGridPanel.js:112 js/EventDetailsPanel.js:178
-#: js/EventEditDialog.js:87 Model/Event.php:233
+#: js/ContactEventsGridPanel.js:112 js/EventDetailsPanel.js:175
+#: js/EventEditDialog.js:87 js/GridView.js:121 Model/Event.php:238
 msgid "Summary"
 msgstr "摘要"
 
-#: js/ContactEventsGridPanel.js:118 js/EventDetailsPanel.js:214
-#: js/EventEditDialog.js:99 Preference.php:79
+#: js/ContactEventsGridPanel.js:118 js/EventDetailsPanel.js:211
+#: js/EventEditDialog.js:99 js/GridView.js:95 Preference.php:79
 msgid "Start Time"
 msgstr "开始时间"
 
@@ -256,32 +212,28 @@ msgstr "开始时间"
 msgid "{0}, the {1}. of {2}"
 msgstr ""
 
-#: js/EventDetailsPanel.js:50
-msgid "Unknown calendar"
-msgstr "未知日历"
-
-#: js/EventDetailsPanel.js:61
+#: js/EventDetailsPanel.js:58
 msgid "{0} {1} o'clock"
 msgstr ""
 
-#: js/EventDetailsPanel.js:219 js/EventEditDialog.js:114
+#: js/EventDetailsPanel.js:216 js/EventEditDialog.js:114 js/GridView.js:101
 msgid "End Time"
 msgstr "结束时间"
 
-#: js/EventDetailsPanel.js:224 Model/Event.php:226
+#: js/EventDetailsPanel.js:221 Model/Event.php:231
 msgid "Blocking"
 msgstr ""
 
-#: js/EventDetailsPanel.js:229 js/EventEditDialog.js:94
-#: js/ResourcesGridPanel.js:52 Model/Event.php:229
+#: js/EventDetailsPanel.js:226 js/EventEditDialog.js:94 js/GridView.js:126
+#: js/ResourcesGridPanel.js:52 Model/Event.php:234
 msgid "Location"
 msgstr "位置"
 
-#: js/EventDetailsPanel.js:233 js/Model.js:212 Model/Event.php:230
+#: js/EventDetailsPanel.js:230 js/Model.js:212 Model/Event.php:235
 msgid "Organizer"
 msgstr "组织者"
 
-#: js/EventEditDialog.js:122 js/Printer/Base.js:66
+#: js/EventEditDialog.js:122 js/GridView.js:107 js/Printer/Base.js:66
 msgid "whole day"
 msgstr "整天"
 
@@ -289,11 +241,11 @@ msgstr "整天"
 msgid "non-blocking"
 msgstr ""
 
-#: js/EventEditDialog.js:155
+#: js/EventEditDialog.js:155 js/GridView.js:87
 msgid "Private"
 msgstr ""
 
-#: js/EventEditDialog.js:196 js/ResourceEditDialog.js:72 Model/Event.php:228
+#: js/EventEditDialog.js:196 js/ResourceEditDialog.js:72 Model/Event.php:233
 msgid "Description"
 msgstr "描述"
 
@@ -325,65 +277,121 @@ msgstr ""
 msgid "has alarm"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:118
+#: js/GridView.js:113
+msgid "blocking"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:28
+msgid "Loading events, please wait..."
+msgstr "加载事件，请等待 ..."
+
+#: js/MainScreenCenterPanel.js:153
 msgid "Print Page"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:126
+#: js/MainScreenCenterPanel.js:165
+msgid "Sheet"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:179
+msgid "Grid"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:189
 msgid "Day"
 msgstr "日期"
 
-#: js/MainScreenCenterPanel.js:135 js/PagingToolbar.js:275
+#: js/MainScreenCenterPanel.js:198 js/PagingToolbar.js:275
 msgid "Week"
 msgstr "星期"
 
-#: js/MainScreenCenterPanel.js:144
+#: js/MainScreenCenterPanel.js:207
 msgid "Month"
 msgstr "月"
 
-#: js/MainScreenCenterPanel.js:330
+#: js/MainScreenCenterPanel.js:441
 msgid "Set my response"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:382
+#: js/MainScreenCenterPanel.js:517
+msgid "Update Event"
+msgstr "更新事件"
+
+#: js/MainScreenCenterPanel.js:521
+msgid "Update this event only"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:522
+msgid "Update this and all future events"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:523
+msgid "Update whole series"
+msgstr "更新整个系列"
+
+#: js/MainScreenCenterPanel.js:524
+msgid "Update nothing"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:624
 msgid "Please Change Selection"
 msgstr "请修改选择"
 
-#: js/MainScreenCenterPanel.js:383
+#: js/MainScreenCenterPanel.js:625
 msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:397
+#: js/MainScreenCenterPanel.js:639
 msgid "Delete Event"
 msgstr "删除事件"
 
-#: js/MainScreenCenterPanel.js:401
+#: js/MainScreenCenterPanel.js:643
 msgid "Delete this event only"
 msgstr "只删除该事件"
 
-#: js/MainScreenCenterPanel.js:402
+#: js/MainScreenCenterPanel.js:644
 msgid "Delete this and all future events"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:403
+#: js/MainScreenCenterPanel.js:645
 msgid "Delete whole series"
 msgstr "删除整个系列"
 
-#: js/MainScreenCenterPanel.js:404
+#: js/MainScreenCenterPanel.js:646
 msgid "Delete nothing"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:448
+#: js/MainScreenCenterPanel.js:689
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] ""
 
-#: js/MainScreenCenterPanel.js:587
+#: js/MainScreenCenterPanel.js:828
 msgid "Could not Print"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:587
+#: js/MainScreenCenterPanel.js:828
 msgid "Sorry, your current view does not support printing."
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:973
+msgid "Scheduling Conflict"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:975
+msgid "The following attendee are busy at the requested time:"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:979
+msgid "Ignore Conflict"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:980
+msgid "Edit Event"
+msgstr "编辑事件"
+
+#: js/MainScreenCenterPanel.js:981
+msgid "Cancel this action"
 msgstr ""
 
 #: js/MainScreenWestPanel.js:30
@@ -394,7 +402,7 @@ msgstr ""
 msgid "WK"
 msgstr ""
 
-#: js/Model.js:63 js/Model.js:333
+#: js/Model.js:63 js/Model.js:359
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "事件"
@@ -411,12 +419,24 @@ msgstr ""
 msgid "Attendee Status"
 msgstr ""
 
-#: js/Model.js:329
+#: js/Model.js:222
+msgid "Event (as attendee)"
+msgstr ""
+
+#: js/Model.js:229
+msgid "Event (as organizer)"
+msgstr ""
+
+#: js/Model.js:239
+msgid "Event attendee"
+msgstr ""
+
+#: js/Model.js:355
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] ""
 
-#: js/Model.js:484
+#: js/Model.js:510
 msgid "Resources"
 msgstr "资源"
 
@@ -545,43 +565,43 @@ msgstr "不知道"
 msgid "This contact has been automatically added by the system as an event attender"
 msgstr ""
 
-#: Model/Event.php:224
+#: Model/Event.php:229
 msgid "Start"
 msgstr "开始"
 
-#: Model/Event.php:225
+#: Model/Event.php:230
 msgid "End"
 msgstr "结束"
 
-#: Model/Event.php:227
+#: Model/Event.php:232
 msgid "Classification"
 msgstr ""
 
-#: Model/Event.php:231
+#: Model/Event.php:236
 msgid "Priority"
 msgstr ""
 
-#: Model/Event.php:234
+#: Model/Event.php:239
 msgid "Url"
 msgstr ""
 
-#: Model/Event.php:235
+#: Model/Event.php:240
 msgid "Recurrance rule"
 msgstr ""
 
-#: Model/Event.php:236
+#: Model/Event.php:241
 msgid "Is all day event"
 msgstr "是整日事件"
 
-#: Model/Event.php:237
+#: Model/Event.php:242
 msgid "Organizer timezone"
 msgstr "组织者时区"
 
-#: Model/Event.php:262
+#: Model/Event.php:267
 msgid "Yes"
 msgstr "是"
 
-#: Model/Event.php:262
+#: Model/Event.php:267
 msgid "No"
 msgstr "不"
 
@@ -736,6 +756,9 @@ msgstr ""
 #: views/eventNotification.php:63
 msgid "Event details"
 msgstr "事件细节"
+
+#~ msgid "Unknown calendar"
+#~ msgstr "未知日历"
 
 #~ msgid "Event \"%1$s\" at %s has been canceled"
 #~ msgstr "事件 \"%1$s\" at %s 被取消了"

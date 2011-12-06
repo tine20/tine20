@@ -556,7 +556,12 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                     $filesToWatch[] = "{$application}/js/{$application}-FAT"  . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js.inc';
                     break;
                 case 'lang':
-                    $filesToWatch[] = "{$application}/js/{$application}-lang-" . Tinebase_Core::getLocale() . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
+                    $fileName = "{$application}/js/{$application}-lang-" . Tinebase_Core::getLocale() . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
+                    $lang = Tinebase_Core::getLocale();
+                    $customPath = Tinebase_Config::getInstance()->translations;
+                    $basePath = is_readable("$customPath/$lang/$fileName") ?  "$customPath/$lang" : '.';
+                    
+                    $filesToWatch[] = "{$basePath}/{$application}/js/{$application}-lang-" . Tinebase_Core::getLocale() . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
                     break;
                 default:
                     throw new Exception('no such fileType');

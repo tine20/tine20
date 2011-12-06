@@ -274,6 +274,67 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     }
     
     /**
+     * 
+     */
+    
+    public function saveMultipleCustomFields($_modelName, $_recordIds, $_customFieldValues) 
+    {
+        
+        $app = array_shift(explode('_', $_modelName));
+        $app = Tinebase_Application::getInstance()->getApplicationByName($app);
+        
+        $cF = $this->getCustomFieldsForApplication($app->getId(), $_modelName, Tinebase_Model_CustomField_Grant::GRANT_WRITE);
+        $fA = array();
+         
+        foreach($cF as $field) {
+            $fA[$field->__get('name')] = $field->__get('id');    
+        }
+        
+        unset($cF);
+        
+        foreach($_recordIds as $recId) {
+            foreach($_customFieldValues as $cfKey => $cfValue) {             
+                $filterValues = array(
+                    array(
+                        'field'     => 'record_id',
+                        'operator'  => 'in',
+                        'value'     => (array) $recId
+                        ),
+                    array(
+                        'field'     => 'customfield_id',
+                        'operator'  => 'in',
+                        'value'     => (array) $fA[$cfKey]
+                        )
+                    );
+                
+                $filter = new Tinebase_Model_CustomField_ValueFilter($filterValues);
+                
+                $record = $this->_backendValue->search($filter)->getFirstRecord();
+                
+                if($record) {
+                    // DELETE
+                    if(empty($_customFieldValues[$cfKey])) {
+                        $this->_backendValue->delete($record);
+                    } else { // UPDATE
+                        $record->value = $_customFieldValues[$cfKey];
+                        $this->_backendValue->update($record);
+                    }
+                } else {
+                    if(!empty($_customFieldValues[$cfKey])) {
+                        $record = new Tinebase_Model_CustomField_Value(array(
+                                'record_id'         => $recId,
+                                'customfield_id'    => $fA[$cfKey],
+                                'value'             =>  $_customFieldValues[$cfKey]
+                            ));
+                        $this->_backendValue->create($record);
+                    }
+                }
+            }
+        }
+        $this->_clearCache();
+      }
+    
+    /**
      * save custom fields of record in its custom fields table
      *
      * @param Tinebase_Record_Interface $_record

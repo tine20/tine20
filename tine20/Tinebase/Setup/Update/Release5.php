@@ -261,4 +261,16 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->setTableVersion('async_job', '3');
         $this->setApplicationVersion('Tinebase', '5.4');
     }
+
+    /**
+     * update to 5.5
+     * - removed is_default from filters
+     */
+    public function update_4()
+    {
+        $this->_backend->dropCol('filter', 'is_default');
+        
+        $this->setTableVersion('filter', '3');
+        $this->setApplicationVersion('Tinebase', '5.5');
+    }
 }

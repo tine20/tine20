@@ -1174,6 +1174,13 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.focusEl.swallowEvent("contextmenu", true);
     },
     
+    /**
+     * @TODO this returns wrong cols on DST boundaries:
+     *  e.g. on DST switch form +2 to +1 an all day event is 25 hrs. long
+     * 
+     * @param {} date
+     * @return {}
+     */
     getColumnNumber: function(date) {
         return Math.floor((date.add(Date.SECOND, 1).getTime() - this.startDate.getTime()) / Date.msDAY);
     },
@@ -1340,7 +1347,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             html += this.templates.overRow.applyTemplate({
                 id: baseId + ':' + dayIndex + ':' + index,
                 cls: 'cal-daysviewpanel-daycolumn-row-' + (index%2 ? 'off' : 'on'),
-                height: this.granularityUnitHeights + 'px'
+                height: this.granularityUnitHeights + 'px',
+                time: time.get('time')
             });
         }, this);
         
@@ -1409,7 +1417,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         ts.overRow = new Ext.XTemplate(
             '<div class="cal-daysviewpanel-daycolumn-row" style="height: {height};">' +
-                '<div id="{id}" class="{cls}" >&#160;</div>'+
+                '<div id="{id}" class="{cls}" >{time}</div>'+
             '</div>'
         );
         

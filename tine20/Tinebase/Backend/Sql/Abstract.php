@@ -546,7 +546,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         foreach((array) $_pagination->sort as $sort) {
             if (! array_key_exists($sort, $colsToFetch)) {
-                $colsToFetch[$sort] = $this->_tableName . '.' . $sort;
+                $colsToFetch[$sort] = (substr_count($sort, $this->_tableName) === 0) ? $this->_tableName . '.' . $sort : $sort;
             }
         }
         
@@ -581,7 +581,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected function _addSecondarySort(Tinebase_Model_Pagination $_pagination)
     {
         if (! empty($this->_defaultSecondarySort)) {
-            $_pagination->sort = array_merge((array)$_pagination->sort, array($this->_defaultSecondarySort));
+            if (! is_array($_pagination->sort) || ! in_array($this->_defaultSecondarySort, $_pagination->sort)) {
+                $_pagination->sort = array_merge((array)$_pagination->sort, array($this->_defaultSecondarySort));
+            }
         }
     }
     
@@ -997,15 +999,36 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
      */
     public function updateMultiple($_ids, $_data) 
-    {
-
+    {   
         if (empty($_ids)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No records updated.');
             return 0;
-        }
-        $identifier = $this->_getRecordIdentifier();
+        }        
         
-        $recordArray = $_data;
+        // separate CustomFields
+        
+    	$myFields = array();
+    	$customFields = array();
+    	
+    	foreach($_data as $key => $value) {
+    		if(stristr($key, '#')) $customFields[substr($key,1)] = $value; 
+    		else $myFields[$key] = $value; 
+    	}
+    	
+    	// handle CustomFields
+    	
+    	if(count($customFields)) {
+    		if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' CustomFields found.');
+    		Tinebase_CustomField::getInstance()->saveMultipleCustomFields($this->_modelName, $_ids, $customFields);    		
+    	}
+    	
+    	// handle StdFields
+    	
+    	if(!count($myFields)) { return 0; } 
+
+    	$identifier = $this->_getRecordIdentifier();
+  
+        $recordArray = $myFields;
         $recordArray = array_intersect_key($recordArray, $this->_schema);
         
         $this->_prepareData($recordArray);

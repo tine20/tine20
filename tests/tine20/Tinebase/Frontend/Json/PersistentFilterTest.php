@@ -62,6 +62,20 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
     }
     
     /**
+     * test to save a shared persistent filter
+     */
+    public function testSaveSharedFilter()
+    {
+        $exampleFilterData = self::getPersistentFilterData();
+        $exampleFilterData['account_id'] = NULL;
+        $savedFilterData = $this->_uit->savePersistentFilter($exampleFilterData);
+        
+        $this->_assertSavedFilterData($exampleFilterData, $savedFilterData);
+        
+        return $savedFilterData;
+    }
+    
+    /**
      * testGetSimpleFilter
      */
     public function testGetSimpleFilter()

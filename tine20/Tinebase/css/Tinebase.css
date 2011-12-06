@@ -1,10 +1,10 @@
 html, body {
-	font:normal 12px verdana;
-	margin:0;
-	padding:0;
-	border:0 none;
-	overflow:hidden;
-	height:100%;
+    font:normal 12px verdana;
+    margin:0;
+    padding:0;
+    border:0 none;
+    overflow:hidden;
+    height:100%;
 }
 
 /* ----- actions -------------------------------------------------------------*/
@@ -71,6 +71,10 @@ html, body {
     background-image:url(../../images/oxygen/32x32/actions/color-line.png) !important;
 }
 
+.action_toggleshared {
+    background-image:url(../../images/oxygen/16x16/actions/get-hot-new-stuff.png) !important;
+}
+
 .action_delete {
     background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
 }
@@ -80,7 +84,6 @@ html, body {
 .x-btn-large .action_delete {
     background-image:url(../../images/oxygen/32x32/actions/edit-delete.png) !important;
 }
-
 
 .action_applyChanges {
     background-image:url(../../images/oxygen/16x16/actions/dialog-ok-apply.png) !important;
@@ -220,6 +223,9 @@ html, body {
     background-image:url(../../images/oxygen/32x32/actions/rss-tag.png) !important;
 }
 
+.action_tag_delete {
+    background-image:url(../../images/oxygen/16x16/actions/rss-tag-delete.png) !important;
+}
 
 .action_uploadImage {
     background-image:url(../../images/oxygen/16x16/actions/insert-image.png) !important;
@@ -233,7 +239,7 @@ html, body {
 
 
 .action_cropImage {
-	background-image:url(../../images/oxygen/16x16/actions/select-rectangular.png) !important;
+    background-image:url(../../images/oxygen/16x16/actions/select-rectangular.png) !important;
 }
 .x-btn-medium .action_cropImage {
     background-image:url(../../images/oxygen/22x22/actions/select-rectangular.png) !important;
@@ -378,6 +384,10 @@ html, body {
     background-image:url(../../images/oxygen/16x16/actions/knewstuff.png);
 }
 
+.tinebase-westpanel-node-favorite-shared img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/actions/get-hot-new-stuff.png);
+}
+
 .action-tinebase-favorite {
     background-image:url(../../images/oxygen/16x16/actions/knewstuff.png) !important;
 }
@@ -388,7 +398,7 @@ html, body {
 }
 
 .tb-login-lobobox {
-	text-align:right;
+    text-align:right;
     height: 60px;
 }
 
@@ -403,11 +413,11 @@ html, body {
  }
 
 .tb-login-button-spacer {
-	height: 30px;
+    height: 30px;
 }
 
 .tb-login-infosection {
-	padding-left: 20px;
+    padding-left: 20px;
 }
 
 .tb-login-infosection {
@@ -417,7 +427,7 @@ html, body {
 }
 
 .tb-login-infosection a {
-	text-decoration: none;
+    text-decoration: none;
     font-style: normal;
     color: #1E78AD;
 }
@@ -594,7 +604,7 @@ html, body {
 }
 
 .tine-favicon {
-	background-image:url(../../images/favicon.png) !important;
+    background-image:url(../../images/favicon.png) !important;
 }
 
 .tine-mainscreen-apptabs .x-tab-strip-wrap ul.x-tab-strip-top {
@@ -605,12 +615,12 @@ html, body {
 }
 
 .tine-mainscreen-apptabs .x-tab-panel-header {
-	border: none;
+    border: none;
 }
 
 /*
 .tine-mainscreen-apptabs .x-tab-strip-wrap {
-	padding-top: 2px;
+    padding-top: 2px;
 }
 */
 
@@ -662,8 +672,8 @@ html, body {
 
 /******* grid row classes *********/
 .grid_row_enabled td{
-	font-weight: bold;
-	/* background-color: '#b5efc8'; */
+    font-weight: bold;
+    /* background-color: '#b5efc8'; */
 }
 
 .grid_row_disabled td{
@@ -685,11 +695,11 @@ html, body {
 /******* grid cell classes *********/
 
 .tine-grid-cell-hint {
-	background-image:url("../../library/ExtJS/resources/images/default/button/arrow.gif");
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	width: 10px;
+    background-image:url("../../library/ExtJS/resources/images/default/button/arrow.gif");
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 10px;
 }
 
 .tine-grid-cell-no-dirty {
@@ -711,8 +721,8 @@ html, body {
 /******** downloads ***********/
 
 .tinebase-download-link{
-	cursor: pointer;
-	color: blue;
+    cursor: pointer;
+    color: blue;
 }
 
 span:hover.tinebase-download-link {
@@ -787,3 +797,50 @@ span:hover.tinebase-showheaders-link {
 /*.x-combo-list-item .tine-keyfield-icon {
     padding-right: 4px;
 }*/
+
+/* multiple edit dialog */
+
+.tinebase-editmultipledialog-apply, 
+textarea.tinebase-editmultipledialog-apply, 
+input.tinebase-editmultipledialog-apply {
+    background-color: #d7f4d3;
+    background-image:none!important;
+    }
+    
+.tinebase-editmultipledialog-noneedit, 
+input.tinebase-editmultipledialog-noneedit, 
+textarea.tinebase-editmultipledialog-noneedit {
+    background-color: #f4f1d3;
+    background-image:none!important;
+    }
+    
+.tinebase-editmultipledialog-clearer {
+    background: transparent url(../../styles/images/tine20/form/clear-trigger.gif) -16px top no-repeat;
+    border-bottom:1px solid #7eadd9; 
+    height:18px;
+    width:18px;
+    display:block;
+    position:absolute;
+    z-index:9;
+    }
+    
+.tinebase-editmultipledialog-clearer.hidden {
+    border-bottom:none; 
+    height:18px; 
+    background-image: url(../../library/ExtJS/resources/images/default/s.gif);
+    }
+    
+.tinebase-editmultipledialog-clearer.undo {    
+    background: transparent url(../../images/oxygen/16x16/actions/edit-undo-grey.png) 0 3px no-repeat;
+    border-bottom: none;   
+    }
+
+.tinebase-editmultipledialog-clearer.undo.over {
+    background: transparent url(../../images/oxygen/16x16/actions/edit-undo.png) 0 3px no-repeat;
+    }
+    
+.tinebase-editmultipledialog-dirty {position:absolute;left:0}    
+    
+.tinebase-editmultipledialog-clearer.click {background-position: -33px 0}
+
+.tinebase-editmultipledialog-clearer.over {background-position: -67px 0}

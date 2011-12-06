@@ -274,7 +274,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
             }
         } else {
             // value is a record
-            if (typeof(value.get) === 'function') {
+             if (value && typeof(value.get) === 'function') {
                 if (this.store.indexOf(value) < 0) {
                     this.store.addSorted(value);
                 }
@@ -282,7 +282,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
             }
             
             // value is a js object
-            else if (value[this.nameField]) {
+            else if (value && value[this.nameField]) {
                 if (! this.store.getById(value)) {
                     this.store.addSorted(new Tine.Addressbook.Model.Contact(value));
                 }

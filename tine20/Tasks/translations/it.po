@@ -30,11 +30,11 @@ msgstr ""
 msgid "Create or update shared tasks favorites"
 msgstr ""
 
-#: Config.php:29
+#: Config.php:31
 msgid "Tasks Status Available"
 msgstr ""
 
-#: Config.php:31
+#: Config.php:33
 msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
 msgstr ""
 
@@ -94,7 +94,7 @@ msgid "Creation Time"
 msgstr "Data di creazione"
 
 #: js/GridPanel.js:178 js/TaskEditDialog.js:214 Setup/Initialize.php:34
-#: Setup/Update/Release5.php:65
+#: Setup/Update/Release5.php:67
 msgid "Completed"
 msgstr "Completato"
 
@@ -210,15 +210,15 @@ msgstr ""
 msgid "The default task list to create new tasks in."
 msgstr ""
 
-#: Setup/Initialize.php:33 Setup/Update/Release5.php:64
+#: Setup/Initialize.php:33 Setup/Update/Release5.php:66
 msgid "No response"
 msgstr ""
 
-#: Setup/Initialize.php:35 Setup/Update/Release5.php:66
+#: Setup/Initialize.php:35 Setup/Update/Release5.php:68
 msgid "Cancelled"
 msgstr ""
 
-#: Setup/Initialize.php:36 Setup/Update/Release5.php:67
+#: Setup/Initialize.php:36 Setup/Update/Release5.php:69
 msgid "In process"
 msgstr ""
 

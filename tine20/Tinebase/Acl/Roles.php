@@ -93,7 +93,7 @@ class Tinebase_Acl_Roles
      * check if one of the roles the user is in has a given right for a given application
      * - admin right includes all other rights
      *
-     * @param   string $_application the name of the application
+     * @param   string|Tinebase_Model_Application $_application the application (one of: app name, id or record)
      * @param   int $_accountId the numeric id of a user account
      * @param   int $_right the right to check for
      * @return  bool

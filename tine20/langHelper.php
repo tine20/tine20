@@ -53,7 +53,7 @@ try {
         'mo'              => 'Build mo files',
         'newlang=s'       => 'Add new language',
         'overwrite'       => '  overwrite existing lang files',
-        'svn'             => '  add new lang files to svn',
+        'git'             => '  add new lang files to git',
         'help|h'          => 'Display this help Message',
         //'filter=s'        => 'Filter for applications'
     ));
@@ -95,8 +95,8 @@ if ($opts->newlang) {
     generateNewTranslationFiles($opts->newlang, $opts->v, $opts->overwrite);
     potmerge($opts->v);
     msgfmt($opts->v);
-    if($opts->svn) {
-        svnAdd($opts->newlang);
+    if($opts->git) {
+        gitAdd($opts->newlang);
     }
     $opts->c = true;
 }
@@ -659,16 +659,16 @@ function getPluralForm($_languageName)
     return $pluralForm;
 }
 
-function svnAdd($_locale)
+function gitAdd($_locale)
 {
     foreach (Tinebase_Translation::getTranslationDirs() as $dir) {
         if (file_exists("$dir/$_locale.po")) {
             `cd "$dir"
-            svn add "$dir/$_locale.po"`;
+            git add "$dir/$_locale.po"`;
         }
         if (file_exists("$dir/$_locale.mo")) {
             `cd "$dir"
-            svn add "$dir/$_locale.mo"`;
+            git add "$dir/$_locale.mo"`;
         }
     }
 }

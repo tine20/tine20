@@ -344,19 +344,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get Message body of content type ' . $_contentType);
         
-        if ($_messageId instanceof Felamimail_Model_Message) {
-            $message = $_messageId;
-        } else {
-            $message = $this->get($_messageId);
-        }
+        $message = ($_messageId instanceof Felamimail_Model_Message) ? $_messageId : $this->get($_messageId);
         
         $cache = Tinebase_Core::getCache();
-        $cacheId = 'getMessageBody_' 
-            . $message->getId() 
-            . str_replace('.', '', $_partId) 
-            . substr($_contentType, -4) 
-            . (($_account !== NULL) ? 'acc' : '')
-            . implode('', $this->_purifyElements);
+        $cacheId = $this->_getMessageBodyCacheId($message, $_partId, $_contentType, $_account);
         
         if ($cache->test($cacheId)) {
             return $cache->load($cacheId);
@@ -364,9 +355,31 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $messageBody = $this->_getAndDecodeMessageBody($message, $_partId, $_contentType, $_account);
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Put message body into Tinebase cache (for 24 hours).');
         $cache->save($messageBody, $cacheId, array('getMessageBody'), 86400);
         
         return $messageBody;
+    }
+    
+    /**
+     * get message body cache id
+     * 
+     * @param string|Felamimail_Model_Message $_messageId
+     * @param string $_partId
+     * @param string $_contentType
+     * @param Felamimail_Model_Account $_account
+     * @return string
+     */
+    protected function _getMessageBodyCacheId($_message, $_partId, $_contentType, $_account)
+    {
+        $cacheId = 'getMessageBody_'
+            . $_message->getId()
+            . str_replace('.', '', $_partId)
+            . substr($_contentType, -4)
+            . (($_account !== NULL) ? 'acc' : '')
+            . implode('', $this->_purifyElements);
+                                    
+        return $cacheId;
     }
     
     /**

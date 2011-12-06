@@ -18,4 +18,13 @@ class Calendar_Setup_Update_Release4 extends Setup_Update_Abstract
     {
         $this->setApplicationVersion('Calendar', '5.0');
     }
+    
+    /**
+     * update to 5.0
+     * @return void
+     */
+    public function update_1()
+    {
+        $this->setApplicationVersion('Calendar', '5.0');
+    }
 }

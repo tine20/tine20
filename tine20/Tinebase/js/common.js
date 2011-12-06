@@ -72,7 +72,7 @@ Tine.Tinebase.common = {
 		}
 		
 		if (! popup) {
-			openCode = "window.open('http://127.0.0.1/tine20/tine20/" + url + "','" + windowName + "','width=" + width + ",height=" + height + ",top=" + topPos + ",left=" + leftPos +
+			var openCode = "window.open('http://127.0.0.1/tine20/tine20/" + url + "','" + windowName + "','width=" + width + ",height=" + height + ",top=" + topPos + ",left=" + leftPos +
 			",directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no')";
 		
 			var exception = {
@@ -173,6 +173,9 @@ Tine.Tinebase.common = {
                 var qtipText = tags[i].name;
                 if (tags[i].description) {
                     qtipText += ' | ' + tags[i].description;
+                }
+                if(tags[i].occurrence) {
+                    qtipText += ' (' + _('Usage:&#160;') + tags[i].occurrence + ')';
                 }
                 result += '<div ext:qtip="' + qtipText + '" class="tb-grid-tags" style="background-color:' + tags[i].color + ';">&#160;</div>';
             }

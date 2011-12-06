@@ -235,65 +235,74 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             
         return {
             title: _('Choose File and Format'),
-            layout: 'fit',
+            layout: 'vbox',
             border: false,
-            xtype: 'form',
+            xtype: 'ux.displaypanel',
             frame: true,
             ref: '../filePanel',
             items: [{
-                xtype: 'label',
-                html: '<p>' + String.format(_('Please choose the file that contains the {0} you want to add to Tine 2.0'), this.recordClass.getRecordsName()).replace(/Tine 2\.0/g, Tine.title) + '</p>'
+                xtype: 'panel',
+                baseCls: 'ux-subformpanel',
+                title: _('Choose Import File'),
+                height: 100,
+                items: [{
+                    xtype: 'label',
+                    html: '<p>' + String.format(_('Please choose the file that contains the {0} you want to add to Tine 2.0'), this.recordClass.getRecordsName()).replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                }, {
+                    xtype: 'tw.uploadbutton',
+                    ref: '../../uploadButton',
+                    text: String.format(_('Select file containing your {0}'), this.recordClass.getRecordsName()),
+                    handler: this.onFileReady,
+                    allowedTypes: this.allowedFileExtensions,
+                    scope: this
+                }]
             }, {
-                xtype: 'tw.uploadbutton',
-                ref: '../uploadButton',
-                text: String.format(_('Select file containing your {0}'), this.recordClass.getRecordsName()),
-                handler: this.onFileReady,
-                allowedTypes: this.allowedFileExtensions,
-                scope: this
-            }, {
-                xtype: 'label',
-                cls: 'tb-login-big-label',
-                html: _('What should the file you upload look like?') + '<br />'
-            }, {
-                xtype: 'label',
-                html: '<p>' + _('Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
-            }, {
-                xtype: 'label',
-                html: '<p>' + _('Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
-            }, {
-                xtype: 'label',
-                html: '<p>' + _('Please select the import format of the file you want to upload').replace(/Tine 2\.0/g, Tine.title) + '</p>'
-            }, {
-                xtype: 'combo',
-                ref: '../definitionCombo',
-                store: this.definitionsStore,
-                displayField:'label',
-                valueField:'id',
-                mode: 'local',
-                triggerAction: 'all',
-                editable: false,
-                allowBlank: false,
-                forceSelection: true,
-                value: this.selectedDefinition ? this.selectedDefinition.id : null,
-                listeners: {
-                    scope: this,
-                    'select': this.onDefinitionSelect
-                }
-            }, {
-                xtype: 'label',
-                ref: '../exampleLink',
-                html: example ? ('<p><a href="' + example + '">' + _('Download example file') + '</a></p>') : '<p>&nbsp;</p>'
-            }, {
-                xtype: 'displayfield',
-                fieldLabel: _('Import description'),
-                ref: '../definitionDescription',
-                height: 70,
-                value: description,
-                style: {
-                    border: 'silver 1px solid',
-                    padding: '3px',
-                    height: '11px'
-                }
+                xtype: 'panel',
+                baseCls: 'ux-subformpanel',
+                title: _('What should the file you upload look like?'),
+                flex: 1,
+                items: [/*{
+                    xtype: 'label',
+                    cls: 'tb-login-big-label',
+                    html: _('What should the file you upload look like?') + '<br />'
+                },*/ {
+                    xtype: 'label',
+                    html: '<p>' + _('Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                }, {
+                    xtype: 'label',
+                    html: '<p>' + _('Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                }, {
+                    xtype: 'label',
+                    html: '<p>' + _('Please select the import format of the file you want to upload').replace(/Tine 2\.0/g, Tine.title) + '</p>'
+                }, {
+                    xtype: 'combo',
+                    ref: '../../definitionCombo',
+                    store: this.definitionsStore,
+                    displayField:'label',
+                    valueField:'id',
+                    mode: 'local',
+                    triggerAction: 'all',
+                    editable: false,
+                    allowBlank: false,
+                    forceSelection: true,
+                    value: this.selectedDefinition ? this.selectedDefinition.id : null,
+                    listeners: {
+                        scope: this,
+                        'select': this.onDefinitionSelect
+                    }
+                }, {
+                    xtype: 'label',
+                    ref: '../../exampleLink',
+                    html: example ? ('<p><a href="' + example + '">' + _('Download example file') + '</a></p>') : '<p>&nbsp;</p>'
+                }, {
+                    xtype: 'displayfield',
+//                    fieldLabel: _('Import description'),
+                    ref: '../../definitionDescription',
+                    height: 70,
+                    value: description,
+                    cls: 'x-ux-display-background-border',
+                    style: 'padding-left: 5px;'
+                }]
             }],
             nextIsAllowed: (function() {
                 return this.definitionCombo && this.definitionCombo.getValue() && this.uploadButton && this.uploadButton.fileRecord;

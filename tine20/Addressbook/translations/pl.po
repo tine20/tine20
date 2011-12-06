@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-09-08 21:49+0100\n"
+"PO-Revision-Date: 2011-11-23 20:53+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -33,6 +33,14 @@ msgstr "zarządzanie ulubionymi ze wspólnej książki adresowej"
 #: Acl/Rights.php:103
 msgid "Create or update shared addressbook favorites"
 msgstr "Utwórz albo uaktualnij ulubione ze wspólnej książki adresowej"
+
+#: Config.php:31
+msgid "Contact duplicate check fields"
+msgstr "Pola sprawdzane pod kątem powtarzalności danych"
+
+#: Config.php:33
+msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
+msgstr "Niniejsze pola są sprawdzane, gdy tworzony jest nowy kontakt. Jeśli znaleziony zostanie wiersz z polami zawierającymi takie same dane, zostanie wyświetlony wyjątek - duplikat."
 
 #: Controller.php:96
 #, python-format
@@ -89,7 +97,7 @@ msgid "Role"
 msgstr "Funkcja"
 
 #: Export/Pdf.php:76
-#: js/ContactEditDialog.js:171
+#: js/ContactEditDialog.js:170
 #: js/ContactGrid.js:113
 #: js/Model.js:33
 msgid "Room"
@@ -108,7 +116,8 @@ msgid "Private Contact Data"
 msgstr "Prywatne dane kontaktowe"
 
 #: Export/Pdf.php:88
-#: js/ContactEditDialog.js:288
+#: js/ContactEditDialog.js:287
+#: js/Model.js:43
 #: js/Model.js:155
 #: js/Model.js:156
 #: js/Model.js:157
@@ -142,7 +151,7 @@ msgid "Other Data"
 msgstr "Inne dane"
 
 #: Export/Pdf.php:114
-#: js/ContactEditDialog.js:159
+#: js/ContactEditDialog.js:158
 #: js/ContactGrid.js:139
 #: js/Model.js:26
 #: js/Model.js:149
@@ -150,12 +159,40 @@ msgid "Birthday"
 msgstr "Urodziny"
 
 #: Export/Pdf.php:117
-#: js/ContactEditDialog.js:153
+#: js/ContactEditDialog.js:152
 #: js/ContactGrid.js:111
 #: js/Model.js:30
 #: js/Model.js:144
 msgid "Job Title"
 msgstr "Stanowisko"
+
+#: Import/definitions/adb_google_import_csv.xml:12
+msgid "Contact import from Google address book"
+msgstr "Import kontaktów z książki adresowej Google"
+
+#: Import/definitions/adb_import_vcard.xml:13
+msgid "Contact VCARD import"
+msgstr "Import kontaktów z VCARD"
+
+#: Import/definitions/adb_mac_import_csv.xml:16
+msgid "Contact CSV import from mac address book"
+msgstr "Import kontaktów z CSV książki adresowej Mac"
+
+#: Import/definitions/adb_outlook_import_csv.xml:12
+msgid "Contact CSV import from Outlook address book"
+msgstr "Import kontaktów CSW z książki adresowej Outlook"
+
+#: Import/definitions/adb_tine_import_csv.xml:11
+msgid "Contact CSV import"
+msgstr "Import kontaktów z CSV"
+
+#: Import/definitions/adb_tine_import_csv.xml:18
+msgid "Import list (###CURRENTDATE###)"
+msgstr "Lista importu (###CURRENTDATE###)"
+
+#: Import/definitions/adb_tine_import_csv.xml:20
+msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr "Kontakty zaimportowane ###CURRENTDATE### o ###CURRENTTIME### przez ###USERFULLNAME###"
 
 #: js/Addressbook.js:22
 msgid "New Contact"
@@ -170,75 +207,75 @@ msgstr[0] "Książka adresowa"
 msgstr[1] "książki adresowe"
 msgstr[2] "książki adresowe"
 
-#: js/ContactEditDialog.js:35
-#: js/ContactEditDialog.js:41
-#: js/MapPanel.js:31
+#: js/ContactEditDialog.js:34
+#: js/ContactEditDialog.js:40
+#: js/MapPanel.js:40
 msgid "Map"
 msgstr "Mapowanie"
 
-#: js/ContactEditDialog.js:64
+#: js/ContactEditDialog.js:63
 msgid "Personal Information"
 msgstr "Informacje osobiste"
 
-#: js/ContactEditDialog.js:85
+#: js/ContactEditDialog.js:84
 #: js/Model.js:29
 msgid "Salutation"
 msgstr "Forma grzecznościowa"
 
-#: js/ContactEditDialog.js:107
+#: js/ContactEditDialog.js:106
 #: js/Model.js:22
 msgid "Title"
 msgstr "Tytuł"
 
-#: js/ContactEditDialog.js:115
+#: js/ContactEditDialog.js:114
 #: js/ContactGrid.js:106
 #: js/Model.js:20
 #: js/Model.js:139
 msgid "First Name"
 msgstr "Imię"
 
-#: js/ContactEditDialog.js:120
+#: js/ContactEditDialog.js:119
 #: js/Model.js:21
 msgid "Middle Name"
 msgstr "Drugie imię"
 
-#: js/ContactEditDialog.js:125
-#: js/ContactEditDialog.js:416
+#: js/ContactEditDialog.js:124
+#: js/ContactEditDialog.js:415
 #: js/ContactGrid.js:105
 #: js/Model.js:19
 #: js/Model.js:140
 msgid "Last Name"
 msgstr "Nazwisko"
 
-#: js/ContactEditDialog.js:134
-#: js/ContactEditDialog.js:416
+#: js/ContactEditDialog.js:133
+#: js/ContactEditDialog.js:415
 #: js/ContactGrid.js:109
 #: js/ContactGridDetailsPanel.js:131
 #: js/Model.js:27
 #: js/Model.js:141
-#: Setup/setup.xml:767
+#: Setup/setup.xml:755
 msgid "Company"
 msgstr "Firma"
 
-#: js/ContactEditDialog.js:139
+#: js/ContactEditDialog.js:138
 #: js/ContactGrid.js:110
 #: js/Model.js:28
 #: js/Model.js:142
 msgid "Unit"
 msgstr "Jednostka"
 
-#: js/ContactEditDialog.js:148
+#: js/ContactEditDialog.js:147
 #: js/ContactGrid.js:108
 #: js/Model.js:24
 msgid "Display Name"
 msgstr "Wyświetlana nazwa"
 
-#: js/ContactEditDialog.js:163
+#: js/ContactEditDialog.js:162
 #: js/Model.js:23
 msgid "Suffix"
 msgstr "Dopełnienie nazwiska (sufiks)"
 
-#: js/ContactEditDialog.js:167
+#: js/ContactEditDialog.js:166
 #: js/ContactGrid.js:112
 #: js/Model.js:31
 #: js/Model.js:145
@@ -247,11 +284,11 @@ msgstr "Pełniona funkcja"
 
 # I think, it would be better, if we use the plural form "Informacje" instead of "Informacja".
 # Ich denke, es waere besser, wenn wir die Pluralform "Informacje" anstatt von "Informacja" verwenden.
-#: js/ContactEditDialog.js:178
+#: js/ContactEditDialog.js:177
 msgid "Contact Information"
 msgstr "Informacje kontaktowe"
 
-#: js/ContactEditDialog.js:183
+#: js/ContactEditDialog.js:182
 #: js/ContactGrid.js:125
 #: js/ContactGridDetailsPanel.js:139
 #: js/ContactGridDetailsPanel.js:163
@@ -260,7 +297,7 @@ msgstr "Informacje kontaktowe"
 msgid "Phone"
 msgstr "Telefon"
 
-#: js/ContactEditDialog.js:188
+#: js/ContactEditDialog.js:187
 #: js/ContactGrid.js:126
 #: js/ContactGridDetailsPanel.js:140
 #: js/ContactGridDetailsPanel.js:164
@@ -268,7 +305,7 @@ msgstr "Telefon"
 msgid "Mobile"
 msgstr "Komórka"
 
-#: js/ContactEditDialog.js:193
+#: js/ContactEditDialog.js:192
 #: js/ContactGrid.js:127
 #: js/ContactGridDetailsPanel.js:141
 #: js/ContactGridDetailsPanel.js:165
@@ -276,25 +313,25 @@ msgstr "Komórka"
 msgid "Fax"
 msgstr "Faks"
 
-#: js/ContactEditDialog.js:198
+#: js/ContactEditDialog.js:197
 #: js/ContactGrid.js:130
 #: js/Model.js:57
 msgid "Phone (private)"
 msgstr "Telefon (prywatny)"
 
-#: js/ContactEditDialog.js:203
+#: js/ContactEditDialog.js:202
 #: js/ContactGrid.js:132
 #: js/Model.js:59
 msgid "Mobile (private)"
 msgstr "Komórka (prywatna)"
 
-#: js/ContactEditDialog.js:208
+#: js/ContactEditDialog.js:207
 #: js/ContactGrid.js:131
 #: js/Model.js:58
 msgid "Fax (private)"
 msgstr "Faks (prywatny)"
 
-#: js/ContactEditDialog.js:213
+#: js/ContactEditDialog.js:212
 #: js/ContactGridDetailsPanel.js:142
 #: js/ContactGridDetailsPanel.js:166
 #: js/Model.js:62
@@ -302,12 +339,12 @@ msgstr "Faks (prywatny)"
 msgid "E-Mail"
 msgstr "E-mail"
 
-#: js/ContactEditDialog.js:219
+#: js/ContactEditDialog.js:218
 #: js/Model.js:63
 msgid "E-Mail (private)"
 msgstr "E-mail (prywatny)"
 
-#: js/ContactEditDialog.js:226
+#: js/ContactEditDialog.js:225
 #: js/ContactGrid.js:134
 #: js/ContactGridDetailsPanel.js:144
 #: js/ContactGridDetailsPanel.js:168
@@ -315,7 +352,8 @@ msgstr "E-mail (prywatny)"
 msgid "Web"
 msgstr "WWW"
 
-#: js/ContactEditDialog.js:259
+#: js/ContactEditDialog.js:258
+#: js/Model.js:34
 #: js/Model.js:150
 #: js/Model.js:151
 #: js/Model.js:152
@@ -324,64 +362,64 @@ msgstr "WWW"
 msgid "Company Address"
 msgstr "Adres firmy"
 
-#: js/ContactEditDialog.js:262
-#: js/ContactEditDialog.js:291
+#: js/ContactEditDialog.js:261
+#: js/ContactEditDialog.js:290
 #: js/ContactGrid.js:114
 #: js/Model.js:150
 #: js/Model.js:155
 msgid "Street"
 msgstr "Ulica"
 
-#: js/ContactEditDialog.js:266
-#: js/ContactEditDialog.js:295
+#: js/ContactEditDialog.js:265
+#: js/ContactEditDialog.js:294
 msgid "Street 2"
 msgstr "Ulica 2"
 
-#: js/ContactEditDialog.js:270
-#: js/ContactEditDialog.js:299
+#: js/ContactEditDialog.js:269
+#: js/ContactEditDialog.js:298
 #: js/ContactGrid.js:116
 #: js/Model.js:151
 #: js/Model.js:156
 msgid "Region"
 msgstr "Województwo"
 
-#: js/ContactEditDialog.js:274
-#: js/ContactEditDialog.js:303
+#: js/ContactEditDialog.js:273
+#: js/ContactEditDialog.js:302
 #: js/Model.js:152
 #: js/Model.js:157
 msgid "Postal Code"
 msgstr "Kod pocztowy"
 
-#: js/ContactEditDialog.js:278
-#: js/ContactEditDialog.js:307
+#: js/ContactEditDialog.js:277
+#: js/ContactEditDialog.js:306
 #: js/ContactGrid.js:115
 #: js/Model.js:153
 #: js/Model.js:158
 msgid "City"
 msgstr "Miasto"
 
-#: js/ContactEditDialog.js:283
-#: js/ContactEditDialog.js:312
+#: js/ContactEditDialog.js:282
+#: js/ContactEditDialog.js:311
 #: js/ContactGrid.js:118
 #: js/Model.js:154
 #: js/Model.js:159
 msgid "Country"
 msgstr "Kraj"
 
-#: js/ContactEditDialog.js:333
+#: js/ContactEditDialog.js:332
 #: js/Model.js:68
 msgid "Description"
 msgstr "Opis"
 
-#: js/ContactEditDialog.js:347
+#: js/ContactEditDialog.js:346
 msgid "Enter description"
 msgstr "Wprowadź opis"
 
-#: js/ContactEditDialog.js:391
+#: js/ContactEditDialog.js:390
 msgid "Export as pdf"
 msgstr "Eksportuj jako PDF"
 
-#: js/ContactEditDialog.js:416
+#: js/ContactEditDialog.js:415
 msgid "Either {0} or {1} must be given"
 msgstr "Należy wprowadzić {0} albo {1}"
 
@@ -492,7 +530,7 @@ msgstr "Eksportuj jako ..."
 msgid "Import contacts"
 msgstr "Importuj kontakty"
 
-#: js/ContactGrid.js:288
+#: js/ContactGrid.js:286
 msgid "Internal Contact"
 msgstr "Kontakty wewnętrzne"
 
@@ -525,13 +563,17 @@ msgstr "Proszę sprawdzić link w oknie dialogowym"
 msgid "Member of List"
 msgstr "Uczestnik listy"
 
-#: js/MapPanel.js:49
+#: js/MapPanel.js:58
 msgid "Company address"
 msgstr "Adres firmy"
 
-#: js/MapPanel.js:56
+#: js/MapPanel.js:65
 msgid "Private address"
 msgstr "Adres prywatny"
+
+#: js/Model.js:19
+msgid "Name"
+msgstr "Nazwa"
 
 #: js/Model.js:34
 msgid "Street (Company Address)"
@@ -580,6 +622,14 @@ msgstr "Kod pocztowy (adres prywatny)"
 #: js/Model.js:48
 msgid "Country (Private Address)"
 msgstr "Państwo (adres prywatny)"
+
+#: js/Model.js:51
+msgid "Company Communication"
+msgstr "Komunikacja firmowa"
+
+#: js/Model.js:57
+msgid "Private Communication"
+msgstr "Komunikacja prywatna"
 
 #: js/Model.js:65
 msgid "Web (private)"
@@ -678,15 +728,15 @@ msgstr "Ostatnio zmienione przeze mnie"
 msgid "All contacts that I have last modified"
 msgstr "Wszystkie kontakty ostatnio zmienione przeze mnie"
 
-#: Setup/setup.xml:697
+#: Setup/setup.xml:685
 msgid "Internal Contacts"
 msgstr "Kontakty wewnętrzne"
 
-#: Setup/setup.xml:723
+#: Setup/setup.xml:711
 msgid "Mr"
 msgstr "Pan"
 
-#: Setup/setup.xml:745
+#: Setup/setup.xml:733
 msgid "Ms"
 msgstr "Pani"
 

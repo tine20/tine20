@@ -51,6 +51,7 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
         $stmt = $this->_db->query($select);
         $totalCount = $stmt->fetchColumn(0);
         $stmt->closeCursor();
+        $stmt = NULL;
         
         // get seen count
         $select = $this->_db->select()
@@ -64,6 +65,7 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
         $stmt = $this->_db->query($select);
         $seenCount = $stmt->fetchColumn(0);
         $stmt->closeCursor();
+        $stmt = NULL;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' totalcount:' . $totalCount . ' / seencount:' . $seenCount);

@@ -69,7 +69,7 @@ Tine.widgets.tree.ContextMenu = {
         });
         
         this.action_changecolor = new Ext.Action({     
-            text: String.format(_('Set color')),
+            text: _('Set color'),
             iconCls: 'action_changecolor',
 //            requiredGrant: 'deleteGrant',
             allowMultiple: true,
@@ -390,14 +390,14 @@ Tine.widgets.tree.ContextMenu = {
                 Ext.Ajax.request({
                     params: {
                         method: this.backend + '.set' + this.backendModel + 'Color',
-                        containerId: node.attributes.nodeRecord.data.id,
+                        containerId: node.attributes.container.id,
                         color: '#' + color
                     },
                     scope: this,
                     success: function(_result, _request){
                         var nodeData = Ext.util.JSON.decode(_result.responseText);
                         node.getUI().colorNode.setStyle({color: nodeData.color});
-                        node.attributes.nodeRecord.data.color = nodeData.color;
+                        node.attributes.color = nodeData.color;
                         this.scope.fireEvent('containercolorset', nodeData);
                         node.getUI().removeClass("x-tree-node-loading");
                     },

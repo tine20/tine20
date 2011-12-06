@@ -30,6 +30,14 @@ msgstr ""
 msgid "Create or update shared addressbook favorites"
 msgstr ""
 
+#: Config.php:31
+msgid "Contact duplicate check fields"
+msgstr ""
+
+#: Config.php:33
+msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
+msgstr ""
+
 #: Controller.php:96
 #, python-format
 msgid "%s's personal addressbook"
@@ -79,7 +87,7 @@ msgstr "URL"
 msgid "Role"
 msgstr "角色"
 
-#: Export/Pdf.php:76 js/ContactEditDialog.js:171 js/ContactGrid.js:113
+#: Export/Pdf.php:76 js/ContactEditDialog.js:170 js/ContactGrid.js:113
 #: js/Model.js:33
 msgid "Room"
 msgstr "房间"
@@ -96,8 +104,9 @@ msgstr "助理电话"
 msgid "Private Contact Data"
 msgstr "个人联系人数据"
 
-#: Export/Pdf.php:88 js/ContactEditDialog.js:288 js/Model.js:155
-#: js/Model.js:156 js/Model.js:157 js/Model.js:158 js/Model.js:159
+#: Export/Pdf.php:88 js/ContactEditDialog.js:287 js/Model.js:43
+#: js/Model.js:155 js/Model.js:156 js/Model.js:157 js/Model.js:158
+#: js/Model.js:159
 msgid "Private Address"
 msgstr "个人地址"
 
@@ -125,15 +134,43 @@ msgstr "家里 URL"
 msgid "Other Data"
 msgstr "其它数据"
 
-#: Export/Pdf.php:114 js/ContactEditDialog.js:159 js/ContactGrid.js:139
+#: Export/Pdf.php:114 js/ContactEditDialog.js:158 js/ContactGrid.js:139
 #: js/Model.js:26 js/Model.js:149
 msgid "Birthday"
 msgstr "生日"
 
-#: Export/Pdf.php:117 js/ContactEditDialog.js:153 js/ContactGrid.js:111
+#: Export/Pdf.php:117 js/ContactEditDialog.js:152 js/ContactGrid.js:111
 #: js/Model.js:30 js/Model.js:144
 msgid "Job Title"
 msgstr "工作头衔"
+
+#: Import/definitions/adb_google_import_csv.xml:12
+msgid "Contact import from Google address book"
+msgstr ""
+
+#: Import/definitions/adb_import_vcard.xml:13
+msgid "Contact VCARD import"
+msgstr ""
+
+#: Import/definitions/adb_mac_import_csv.xml:16
+msgid "Contact CSV import from mac address book"
+msgstr ""
+
+#: Import/definitions/adb_outlook_import_csv.xml:12
+msgid "Contact CSV import from Outlook address book"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:11
+msgid "Contact CSV import"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:18
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:20
+msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr ""
 
 #: js/Addressbook.js:22
 msgid "New Contact"
@@ -145,156 +182,156 @@ msgid "Addressbook"
 msgid_plural "Addressbooks"
 msgstr[0] "地址本"
 
-#: js/ContactEditDialog.js:35 js/ContactEditDialog.js:41 js/MapPanel.js:31
+#: js/ContactEditDialog.js:34 js/ContactEditDialog.js:40 js/MapPanel.js:40
 msgid "Map"
 msgstr "地图"
 
-#: js/ContactEditDialog.js:64
+#: js/ContactEditDialog.js:63
 msgid "Personal Information"
 msgstr "个人信息"
 
-#: js/ContactEditDialog.js:85 js/Model.js:29
+#: js/ContactEditDialog.js:84 js/Model.js:29
 msgid "Salutation"
 msgstr "称呼"
 
-#: js/ContactEditDialog.js:107 js/Model.js:22
+#: js/ContactEditDialog.js:106 js/Model.js:22
 msgid "Title"
 msgstr "头衔"
 
-#: js/ContactEditDialog.js:115 js/ContactGrid.js:106 js/Model.js:20
+#: js/ContactEditDialog.js:114 js/ContactGrid.js:106 js/Model.js:20
 #: js/Model.js:139
 msgid "First Name"
 msgstr "名"
 
-#: js/ContactEditDialog.js:120 js/Model.js:21
+#: js/ContactEditDialog.js:119 js/Model.js:21
 msgid "Middle Name"
 msgstr "中间名"
 
-#: js/ContactEditDialog.js:125 js/ContactEditDialog.js:416
+#: js/ContactEditDialog.js:124 js/ContactEditDialog.js:415
 #: js/ContactGrid.js:105 js/Model.js:19 js/Model.js:140
 msgid "Last Name"
 msgstr "姓"
 
-#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:416
+#: js/ContactEditDialog.js:133 js/ContactEditDialog.js:415
 #: js/ContactGrid.js:109 js/ContactGridDetailsPanel.js:131 js/Model.js:27
-#: js/Model.js:141 Setup/setup.xml:767
+#: js/Model.js:141 Setup/setup.xml:755
 msgid "Company"
 msgstr "公司"
 
-#: js/ContactEditDialog.js:139 js/ContactGrid.js:110 js/Model.js:28
+#: js/ContactEditDialog.js:138 js/ContactGrid.js:110 js/Model.js:28
 #: js/Model.js:142
 msgid "Unit"
 msgstr "单位"
 
-#: js/ContactEditDialog.js:148 js/ContactGrid.js:108 js/Model.js:24
+#: js/ContactEditDialog.js:147 js/ContactGrid.js:108 js/Model.js:24
 msgid "Display Name"
 msgstr "显示名字"
 
-#: js/ContactEditDialog.js:163 js/Model.js:23
+#: js/ContactEditDialog.js:162 js/Model.js:23
 msgid "Suffix"
 msgstr "后缀"
 
-#: js/ContactEditDialog.js:167 js/ContactGrid.js:112 js/Model.js:31
+#: js/ContactEditDialog.js:166 js/ContactGrid.js:112 js/Model.js:31
 #: js/Model.js:145
 msgid "Job Role"
 msgstr "工作职责"
 
-#: js/ContactEditDialog.js:178
+#: js/ContactEditDialog.js:177
 msgid "Contact Information"
 msgstr "联系人信息"
 
-#: js/ContactEditDialog.js:183 js/ContactGrid.js:125
+#: js/ContactEditDialog.js:182 js/ContactGrid.js:125
 #: js/ContactGridDetailsPanel.js:139 js/ContactGridDetailsPanel.js:163
 #: js/Model.js:51 js/Model.js:143
 msgid "Phone"
 msgstr "电话"
 
-#: js/ContactEditDialog.js:188 js/ContactGrid.js:126
+#: js/ContactEditDialog.js:187 js/ContactGrid.js:126
 #: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
 #: js/Model.js:52
 msgid "Mobile"
 msgstr "手机"
 
-#: js/ContactEditDialog.js:193 js/ContactGrid.js:127
+#: js/ContactEditDialog.js:192 js/ContactGrid.js:127
 #: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
 #: js/Model.js:53
 msgid "Fax"
 msgstr "传真"
 
-#: js/ContactEditDialog.js:198 js/ContactGrid.js:130 js/Model.js:57
+#: js/ContactEditDialog.js:197 js/ContactGrid.js:130 js/Model.js:57
 msgid "Phone (private)"
 msgstr "电话（个人）"
 
-#: js/ContactEditDialog.js:203 js/ContactGrid.js:132 js/Model.js:59
+#: js/ContactEditDialog.js:202 js/ContactGrid.js:132 js/Model.js:59
 msgid "Mobile (private)"
 msgstr "手机（个人）"
 
-#: js/ContactEditDialog.js:208 js/ContactGrid.js:131 js/Model.js:58
+#: js/ContactEditDialog.js:207 js/ContactGrid.js:131 js/Model.js:58
 msgid "Fax (private)"
 msgstr "传真（个人）"
 
-#: js/ContactEditDialog.js:213 js/ContactGridDetailsPanel.js:142
+#: js/ContactEditDialog.js:212 js/ContactGridDetailsPanel.js:142
 #: js/ContactGridDetailsPanel.js:166 js/Model.js:62 js/Model.js:147
 msgid "E-Mail"
 msgstr "电子邮件"
 
-#: js/ContactEditDialog.js:219 js/Model.js:63
+#: js/ContactEditDialog.js:218 js/Model.js:63
 msgid "E-Mail (private)"
 msgstr "电子邮件（个人）"
 
-#: js/ContactEditDialog.js:226 js/ContactGrid.js:134
+#: js/ContactEditDialog.js:225 js/ContactGrid.js:134
 #: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
 #: js/Model.js:64
 msgid "Web"
 msgstr "网址"
 
-#: js/ContactEditDialog.js:259 js/Model.js:150 js/Model.js:151 js/Model.js:152
-#: js/Model.js:153 js/Model.js:154
+#: js/ContactEditDialog.js:258 js/Model.js:34 js/Model.js:150 js/Model.js:151
+#: js/Model.js:152 js/Model.js:153 js/Model.js:154
 msgid "Company Address"
 msgstr "公司地址"
 
-#: js/ContactEditDialog.js:262 js/ContactEditDialog.js:291
+#: js/ContactEditDialog.js:261 js/ContactEditDialog.js:290
 #: js/ContactGrid.js:114 js/Model.js:150 js/Model.js:155
 msgid "Street"
 msgstr "街道"
 
-#: js/ContactEditDialog.js:266 js/ContactEditDialog.js:295
+#: js/ContactEditDialog.js:265 js/ContactEditDialog.js:294
 msgid "Street 2"
 msgstr "街道 2"
 
-#: js/ContactEditDialog.js:270 js/ContactEditDialog.js:299
+#: js/ContactEditDialog.js:269 js/ContactEditDialog.js:298
 #: js/ContactGrid.js:116 js/Model.js:151 js/Model.js:156
 msgid "Region"
 msgstr "省/自治区/直辖市"
 
-#: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303 js/Model.js:152
+#: js/ContactEditDialog.js:273 js/ContactEditDialog.js:302 js/Model.js:152
 #: js/Model.js:157
 msgid "Postal Code"
 msgstr "邮政编码"
 
-#: js/ContactEditDialog.js:278 js/ContactEditDialog.js:307
+#: js/ContactEditDialog.js:277 js/ContactEditDialog.js:306
 #: js/ContactGrid.js:115 js/Model.js:153 js/Model.js:158
 msgid "City"
 msgstr "城市"
 
-#: js/ContactEditDialog.js:283 js/ContactEditDialog.js:312
+#: js/ContactEditDialog.js:282 js/ContactEditDialog.js:311
 #: js/ContactGrid.js:118 js/Model.js:154 js/Model.js:159
 msgid "Country"
 msgstr "国家"
 
-#: js/ContactEditDialog.js:333 js/Model.js:68
+#: js/ContactEditDialog.js:332 js/Model.js:68
 msgid "Description"
 msgstr "描述"
 
-#: js/ContactEditDialog.js:347
+#: js/ContactEditDialog.js:346
 msgid "Enter description"
 msgstr "输入描述"
 
-#: js/ContactEditDialog.js:391
+#: js/ContactEditDialog.js:390
 msgid "Export as pdf"
 msgstr "导出 pdf 文件"
 
-#: js/ContactEditDialog.js:416
+#: js/ContactEditDialog.js:415
 msgid "Either {0} or {1} must be given"
 msgstr "必须给出{0}或者{1}"
 
@@ -395,7 +432,7 @@ msgstr ""
 msgid "Import contacts"
 msgstr ""
 
-#: js/ContactGrid.js:288
+#: js/ContactGrid.js:286
 #, fuzzy
 msgid "Internal Contact"
 msgstr "内部联系人"
@@ -428,12 +465,16 @@ msgstr ""
 msgid "Member of List"
 msgstr ""
 
-#: js/MapPanel.js:49
+#: js/MapPanel.js:58
 msgid "Company address"
 msgstr ""
 
-#: js/MapPanel.js:56
+#: js/MapPanel.js:65
 msgid "Private address"
+msgstr ""
+
+#: js/Model.js:19
+msgid "Name"
 msgstr ""
 
 #: js/Model.js:34
@@ -482,6 +523,14 @@ msgstr ""
 
 #: js/Model.js:48
 msgid "Country (Private Address)"
+msgstr ""
+
+#: js/Model.js:51
+msgid "Company Communication"
+msgstr ""
+
+#: js/Model.js:57
+msgid "Private Communication"
 msgstr ""
 
 #: js/Model.js:65
@@ -577,15 +626,15 @@ msgstr ""
 msgid "All contacts that I have last modified"
 msgstr ""
 
-#: Setup/setup.xml:697
+#: Setup/setup.xml:685
 msgid "Internal Contacts"
 msgstr "内部联系人"
 
-#: Setup/setup.xml:723
+#: Setup/setup.xml:711
 msgid "Mr"
 msgstr "先生"
 
-#: Setup/setup.xml:745
+#: Setup/setup.xml:733
 msgid "Ms"
 msgstr "女士"
 

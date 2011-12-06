@@ -101,4 +101,17 @@ class Calendar_Setup_Update_Release5 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Calendar', '5.2');
     }
+    
+    /**
+     * update to 5.3
+     * - empty rrule -> NULL
+     */
+    public function update_2()
+    {
+        $tablePrefix = SQL_TABLE_PREFIX;
+        
+        $this->_db->query("UPDATE {$tablePrefix}cal_events SET `rrule`=NULL WHERE `rrule` LIKE ''");
+        
+        $this->setApplicationVersion('Calendar', '5.3');
+    }
 }

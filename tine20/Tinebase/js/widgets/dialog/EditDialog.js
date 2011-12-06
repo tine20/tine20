@@ -18,6 +18,7 @@ Ext.ns('Tine.widgets.dialog');
  * @constructor
  * @param {Object} config The configuration options.
  */
+
 Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     /**
      * @cfg {Tine.Tinebase.Application} app
@@ -64,6 +65,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     record: null,
     /**
+     * @cfg GridPanel SelectionModel
+     */
+    sm: null,
+    /**
      * @cfg {String} saveAndCloseButtonText
      * text of save and close button
      */
@@ -92,6 +97,18 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     editGrant: 'editGrant',
 
+    /**
+     * Shall the MultipleEditDialogPlugin be aplied?
+     * @type Boolean
+     */
+    useMultiple: false,
+    
+    /**
+     * holds items to disable on multiple edit
+     * @type Array
+     */
+    disableOnEditMultiple: null,
+    
     /**
      * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
      */
@@ -179,6 +196,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // init cf plugin
         this.plugins = this.plugins ? this.plugins : [];
         this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
+               
+        if(this.useMultiple) this.plugins.push(new Tine.widgets.dialog.MultipleEditDialogPlugin({}));
         
         // init actions
         this.initActions();
@@ -437,6 +456,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         return this.getTopToolbar();
     },
     
+    /**
+     * is form valid?
+     * 
+     * @return {Boolean}
+     */
     isValid: function() {
         return this.getForm().isValid();
     },
@@ -617,5 +641,17 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
         
         Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+    },
+    
+    addToDisableOnEditMultiple: function(item) {
+        Tine.log.debug(item);
+        if(!this.disableOnEditMultiple) this.disableOnEditMultiple = new Array();
+        this.disableOnEditMultiple.push(item);
+    },
+    
+    getDisableOnEditMultiple: function() {
+        if(!this.disableOnEditMultiple) this.disableOnEditMultiple = new Array();
+        return this.disableOnEditMultiple;
+       
     }
 });
