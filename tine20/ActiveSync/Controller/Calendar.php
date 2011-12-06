@@ -428,10 +428,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
             
             // set own status
-            // @todo enable after Calendar_Model_Attender merge from CalDAV branch
-            #if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($data->attendee)) !== null && ($busyType = array_search($ownAttendee->status, $this->_busyStatusMapping)) !== false) {
-            #    $_xmlNode->appendChild(new DOMElement('BusyStatus', $busyType, 'uri:Calendar'));
-            #}
+            if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($data->attendee)) !== null && ($busyType = array_search($ownAttendee->status, $this->_busyStatusMapping)) !== false) {
+                $_xmlNode->appendChild(new DOMElement('BusyStatus', $busyType, 'uri:Calendar'));
+            }
         
         }
         
@@ -666,14 +665,13 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
         }
         
-        // @todo enable after Calendar_Model_Attender merge from CalDAV branch
-        #if (isset($xmlData->BusyStatus) && ($ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee)) !== null) {
-        #    if (isset($this->_busyStatusMapping[(string)$xmlData->BusyStatus])) {
-        #        $ownAttendee->status = $this->_busyStatusMapping[(string)$xmlData->BusyStatus];
-        #    } else {
-        #        $ownAttendee->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
-        #    }
-        #}
+        if (isset($xmlData->BusyStatus) && ($ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee)) !== null) {
+            if (isset($this->_busyStatusMapping[(string)$xmlData->BusyStatus])) {
+                $ownAttendee->status = $this->_busyStatusMapping[(string)$xmlData->BusyStatus];
+            } else {
+                $ownAttendee->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+            }
+        }
         
         // handle recurrence
         if(isset($xmlData->Recurrence) && isset($xmlData->Recurrence->Type)) {
