@@ -12,19 +12,22 @@
 /**
  * Facade for Calendar_Controller_Event
  * 
- * hides the complexity of getting / storing recuring events exceptions which 
- * is conceptually different in the iCal world (tine 2.0 native) and the MS world.
+ * Adopts Tine 2.0 internal event representation to the iTIP (RFC 5546) representations
  * 
- * In the MS world event exceptions are a property of an event. So with this facade
- * you also handle the event exceptions as a event property:
+ * In iTIP event exceptions are tranfered together/supplement with/to their baseEvents.
+ * So with this facade event exceptions are part of the baseEvent and stored in their exdate property:
  * -> Tinebase_Record_RecordSet Calendar_Model_Event::exdate
  * 
  * deleted recur event instances (fall outs) have the property:
- * -> Calendar_Model_Event::is_deleted set to TRUE
+ * -> Calendar_Model_Event::is_deleted set to TRUE (MSEvents)
  * 
  * when creating/updating events, make sure to have the original start time (ExceptionStartTime)
  * of recur event instances stored in the property:
  * -> Calendar_Model_Event::recurid
+ * 
+ * In iTIP Event handling is based on the perspective of a certain user. This user is the 
+ * current user per default, but can be switched with
+ * Calendar_Controller_MSEventFacade::setCalendarUser(Calendar_Model_Attendee $_calUser)
  * 
  * @package     Calendar
  * @subpackage  Controller
@@ -35,6 +38,11 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      * @var Calendar_Controller_Event
      */
     protected $_eventController = NULL;
+    
+    /**
+     * @var Calendar_Model_Attender
+     */
+    protected $_calendarUser = NULL;
     
     /**
      * @var Calendar_Controller_MSEventFacade
@@ -48,6 +56,10 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     private function __construct() {
         $this->_eventController = Calendar_Controller_Event::getInstance();
+        $this->_calendarUser = new Calendar_Model_Attender(array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'   => Tinebase_Core::getUser()->contact_id
+        ));
     }
 
     /**
@@ -81,11 +93,8 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     public function get($_id)
     {
         $event = $this->_eventController->get($_id);
-        if ($event->rrule) {
-            $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
-        }
         
-        return $event;
+        return $this->_toiTIP($event);
     }
     
     /**
@@ -97,20 +106,8 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     public function getMultiple($_ids)
     {
         $events = $this->_eventController->getMultiple($_ids);
-        foreach ($events as $event) {
-            try {
-                if ($event->rrule) {
-                    $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
-                }
-            } catch (Tinebase_Exception_AccessDenied $ade) {
-                // if we don't have permissions for the exdates, this is likely a freebusy info only -> remove from set
-                $events->removeRecord($event);
-            } catch (Exception $e) {
-                $event->exdate = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-            }
-        }
         
-        return $events;
+        return $this->_toiTIP($events);
     }  
     
     /**
@@ -124,13 +121,8 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     public function getAll($_orderBy = 'id', $_orderDirection = 'ASC')
     {
         $events = $this->_eventController->getAll($_orderBy, $_orderDirection);
-        foreach ($events as $event) {
-            if ($event->rrule) {
-                $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
-            }
-        }
         
-        return $events;
+        return $this->_toiTIP($events);
     }
     
     /**
@@ -162,14 +154,10 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                 array('field' => 'id', 'operator' => 'in', 'value' => $eventIds)
             )), NULL, FALSE, FALSE, $_action);
             
-            foreach($events as $event) {
-                if ($event->rrule) {
-                    $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
-                }
-            }
+            $events = $this->_toiTIP($events);
         }
         
-        return $_onlyIds ? $events : $events;
+        return $_onlyIds ? $eventIds : $events;
     }
     
     /**
@@ -229,11 +217,8 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     public function lookupExistingEvent($_event)
     {
         $event = $this->_eventController->lookupExistingEvent($_event);
-        if ($event && $event->rrule) {
-            $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
-        }
         
-        return $event;
+        return $this->_toiTIP($event);
     }
     
     /*************** add / update / delete *****************/    
@@ -264,11 +249,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             }
         }
         
-        if ($savedEvent->rrule) {
-            $savedEvent->exdate = $this->_eventController->getRecurExceptions($savedEvent, TRUE);
-        }
-        
-        return $savedEvent;
+        return $this->_toiTIP($savedEvent);
     }
     
     /**
@@ -307,11 +288,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         
         $updatedBaseEvent = $this->_eventController->update($_event, $_checkBusyConficts);
         
-        if ($updatedBaseEvent->rrule) {
-            $updatedBaseEvent->exdate = $this->_eventController->getRecurExceptions($updatedBaseEvent, TRUE);
-        }
-            
-        return $updatedBaseEvent;
+        return $this->_toiTIP($updatedBaseEvent);
     }
     
     /**
@@ -438,6 +415,47 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         return $filteredSet;
     }
 
+    /**
+     * converts a tine20 event to an iTIP event
+     * 
+     * @param  Calendar_Model_Event $_event
+     * @return Calendar_Model_Event 
+     */
+    protected function _toiTIP($_event)
+    {
+        if ($_event instanceof Tinebase_Record_RecordSet) {
+            foreach($_event as $idx => $event) {
+                try {
+                    $_event[$idx] = $this->_toiTIP($event);
+                } catch (Tinebase_Exception_AccessDenied $ade) {
+                    // if we don't have permissions for the exdates, this is likely a freebusy info only -> remove from set
+                    $_event->removeRecord($event);
+                } catch (Exception $e) {
+                    $event->exdate = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+                }
+            }
+            
+            return $_event;
+        }
+        
+        // get exdates
+        if ($_event->rrule) {
+            $_event->exdate = $this->_eventController->getRecurExceptions($_event, TRUE);
+        }
+        
+        // mark any exdates as deleted if the CU does not attend and is not organizer
+        if ($_event->exdate instanceof Tinebase_Record_RecordSet && $_event->organizer != $this->_calendarUser->user_id) {
+            foreach ($this->_event->exdate as $exdate) {
+                $CUAttendee = Calendar_Model_Attender::getAttendee($exdate->attendee, $this->_calendarUser);
+                if ($exdate->is_deleted == false && $CUAttendee == null) {
+                    $exdate->is_deleted = true;
+                }
+            }
+        }
+        
+        return $_event;
+    }
+    
     /**
      * computes an returns the migration for event exceptions
      * 

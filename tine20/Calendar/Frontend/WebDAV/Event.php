@@ -410,20 +410,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
             
             $this->_event = Calendar_Controller_MSEventFacade::getInstance()->get($id);
         }
-
-        // if not organizer of this event, mark any exdates as deleted if the current user does not attend
-        if ($this->_event->exdate instanceof Tinebase_Record_RecordSet && $this->_event->organizer != Tinebase_Core::getUser()->contact_id) {
-            foreach ($this->_event->exdate as $exdate) {
-                if ($exdate->is_deleted == false && 
-                    Calendar_Model_Attender::getAttendee(
-                        $exdate->attendee,
-                        new Calendar_Model_Attender(array('user_type' =>  Calendar_Model_Attender::USERTYPE_USER,'user_id'   => Tinebase_Core::getUser()->contact_id))
-                    ) == null
-                ) {
-                    $exdate->is_deleted = true;
-                }
-            }
-        }
         
         return $this->_event;
     }
