@@ -238,6 +238,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " calendar data " . print_r($data->toArray(), true));
         
+        // add calendar namespace
+        $_xmlNode->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:Calendar', 'uri:Calendar');
+        
         foreach($this->_mapping as $key => $value) {
             $nodeContent = null;
             
