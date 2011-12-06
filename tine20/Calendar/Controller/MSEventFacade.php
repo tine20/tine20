@@ -533,6 +533,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             throw new Tinebase_Exception_InvalidArgument('base event has no uid');
         }
         
+        $_exception->container_id = $_baseEvent->container_id;
         $_exception->uid = $_baseEvent->uid;
         $_exception->recurid = $_baseEvent->uid . '-' . $_exception->getOriginalDtStart()->format(Tinebase_Record_Abstract::ISO8601LONG);
     }
