@@ -171,14 +171,19 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
     protected function _createCustomField()
     {
         $cfData = new Tinebase_Model_CustomField_Config(array(
-                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-                'name'              => 'Yomi Name',
-            	'label'             => 'Yomi Name',
-                'model'             => 'Addressbook_Model_Contact',
-                'type'              => 'textfield',
-                'length'            => 10,
-                'group'             => 'unittest',
-                'order'             => 100,     
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'name'              => 'Yomi Name',
+            'model'             => 'Addressbook_Model_Contact',
+            'definition'        => array(
+                'label' => Tinebase_Record_Abstract::generateUID(),        
+                'type'  => 'string',
+                'uiconfig' => array(
+                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
+                    'length' => 10,
+                    'group'  => 'unittest',
+                    'order'  => 100,
+                )
+            )
         ));
         
         try {
