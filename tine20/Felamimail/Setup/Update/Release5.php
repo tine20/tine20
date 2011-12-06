@@ -181,7 +181,7 @@ class Felamimail_Setup_Update_Release5 extends Setup_Update_Abstract
      * update to 5.3
      * - cache_job_actions_estimate -> cache_job_actions_est
      */
-    public function update_1()
+    public function update_3()
     {
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
