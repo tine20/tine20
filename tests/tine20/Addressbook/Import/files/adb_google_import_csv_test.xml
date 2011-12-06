@@ -20,7 +20,6 @@
         <field>
             <source>Yomi Name</source>
             <destination>Yomi Name</destination>
-            <type>customfield</type>
         </field>
         <field>
             <source>Family Name</source>
