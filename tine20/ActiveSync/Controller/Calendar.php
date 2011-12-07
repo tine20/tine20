@@ -679,7 +679,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     $lastName  = $matches['lastNameName'];
                 } else {
                     $firstName = null;
-                    $lastName  = $fullName;
+                    $lastName  = $attendee->Name;
                 }
                 
                 // @todo handle resources
