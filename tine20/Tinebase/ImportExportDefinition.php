@@ -182,7 +182,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             
         } catch (Tinebase_Exception_NotFound $tenf) {
             // does not exist
-            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating import/export definion from file: ' . $_filename);
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating import/export definion from file: ' . $_filename);
             $result = $this->create($definition);
         }
         
