@@ -169,6 +169,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
             $_record->originator_tz = $_record->originator_tz ? $_record->originator_tz : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+            $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->contact_id;
             
             // we need to resolve groupmembers before free/busy checking
             Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
