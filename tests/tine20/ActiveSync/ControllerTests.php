@@ -238,6 +238,10 @@ class ActiveSync_ControllerTests extends PHPUnit_Framework_TestCase
         $allClientEntries = $contentStateBackend->getClientState($this->_device, 'class', 'collectiondId');
         
         $this->assertEquals(1, count($allClientEntries));
+        
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        
+        $this->_controller->getContentState($this->_device, $contentState->class, $contentState->collectionid, $contentState->contentid);
     }
     
     public function testCleanUpWithRecentSyncKey()
