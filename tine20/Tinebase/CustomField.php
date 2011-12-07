@@ -274,13 +274,16 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     }
     
     /**
-     * 
+     * saves multiple Custom Fields
+     * @param String $_modelName
+     * @param Array $_recordIds
+     * @param Array $_customFieldValues
      */
     
     public function saveMultipleCustomFields($_modelName, $_recordIds, $_customFieldValues) 
     {
-        
-        $app = array_shift(explode('_', $_modelName));
+        $expModelName = explode('_', $_modelName);
+        $app = array_shift($expModelName);
         $app = Tinebase_Application::getInstance()->getApplicationByName($app);
         
         $cF = $this->getCustomFieldsForApplication($app->getId(), $_modelName, Tinebase_Model_CustomField_Grant::GRANT_WRITE);

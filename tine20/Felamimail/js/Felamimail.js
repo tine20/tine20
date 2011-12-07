@@ -68,6 +68,8 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      */
     updateMessageCacheTransactionId: null,
     
+    getFolderStatusTransactionInProgress: false, 
+    
     /**
      * unreadcount in default account inbox
      * @type Number
@@ -307,13 +309,29 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         
         // check for incompletes
         var incompletes = this.folderStore.queryBy(function(folder) {
-            return (folder.get('cache_status') !== 'complete' && folder.get('is_selectable'));
+            return (['complete', 'updating', 'disconnect'].indexOf(folder.get('cache_status')) === -1 && folder.get('is_selectable'));
         }, this);
         if (incompletes.getCount() > 0) {
+            Tine.log.debug('Got ' + incompletes.getCount() + ' incomplete folders.');
+            Tine.log.debug(incompletes.first());
             return incompletes.first();
         }
         
         // check for outdated
+        if (! this.getFolderStatusTransactionInProgress) {
+            this.getStatusOfOutdatedFolders();
+        } else {
+            Tine.log.debug('getFolderStatus() already running ... wait a little more.');
+        }
+        
+        // nothing to update
+        return null;
+    },
+    
+    /**
+     * collects outdated folders and calls getFolderStatus on server to fetch all folders that need to be updated
+     */
+    getStatusOfOutdatedFolders: function() {
         var outdated = this.folderStore.queryBy(function(folder) {
             if (! folder.get('is_selectable')) {
                 return false;
@@ -331,13 +349,41 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             }
             return false;
         }, this);
-        if (outdated.getCount() > 0) {
-            Tine.log.debug('still got ' + outdated.getCount() + ' outdated folders to update ...');
-            return outdated.first();
-        }
         
-        // nothing to update
-        return null;
+        if (outdated.getCount() > 0) {
+            Tine.log.debug('Still got ' + outdated.getCount() + ' outdated folders to update ...');
+            
+            // call Felamimail.getFolderStatus() with ids of outdated folders -> update folder store on success
+            var ids = [];
+            outdated.each(function(folder) {
+                ids.push(folder.id);
+            });
+            var filter = [{field: 'id', operator: 'in', value: ids}];
+            Tine.Felamimail.getFolderStatus(filter, this.onGetFolderStatusSuccess.createDelegate(this));
+            this.getFolderStatusTransactionInProgress = true;
+        }
+    },
+    
+    /**
+     * get folder status returned -> set folders that need an update to pending status
+     * 
+     * @param {Array} response
+     */
+    onGetFolderStatusSuccess: function(response) {
+        this.getFolderStatusTransactionInProgress = false;
+        
+        if (response && response.length > 0) {
+            Tine.log.debug('Got ' + response.length + ' folders that need an update ...');
+            
+            Ext.each(response, function(folder) {
+                var folderToUpdate = this.folderStore.getById(folder.id);
+                folderToUpdate.set('cache_status', 'pending');
+            }, this);
+            
+            this.checkMailsDelayedTask.delay(1000);
+        } else {
+            Tine.log.debug('No folders for update found ...');
+        }
     },
     
     /**
