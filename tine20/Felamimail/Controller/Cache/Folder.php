@@ -445,11 +445,12 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      * check if folder cache is updating atm
      * 
      * @param Felamimail_Model_Folder $_folder
+     * @param boolean $_lockFolder
      * @return boolean
      * 
      * @todo we should check the time of the last update to dynamically decide if process could have died
      */
-    public function updateAllowed(Felamimail_Model_Folder $_folder)
+    public function updateAllowed(Felamimail_Model_Folder $_folder, $_lockFolder = TRUE)
     {
         // if cache status is CACHE_STATUS_UPDATING and timestamp is less than 5 minutes ago, don't update
         if ($_folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING &&
@@ -461,8 +462,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         ) {
             return false;
         }
-                        
-        $result = $this->_backend->lockFolder($_folder);
+
+        $result = ($_lockFolder) ? $this->_backend->lockFolder($_folder) : TRUE;
         
         return $result;
     }
