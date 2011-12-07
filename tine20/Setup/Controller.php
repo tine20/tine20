@@ -1259,7 +1259,7 @@ class Setup_Controller
         
         foreach (array('Import', 'Export') as $type) {
             $path = 
-                $this->_baseDir . DIRECTORY_SEPARATOR . $_application->name . 
+                $this->_baseDir . $_application->name . 
                 DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . 'definitions';
     
             if (file_exists($path)) {
@@ -1267,7 +1267,7 @@ class Setup_Controller
                 $modlogActive = Tinebase_ImportExportDefinition::getInstance()->modlogActive(FALSE);
                 
                 foreach (new DirectoryIterator($path) as $item) {
-                    $filename = $path . $item->getFileName();
+                    $filename = $path . DIRECTORY_SEPARATOR . $item->getFileName();
                     if (preg_match("/\.xml/", $filename)) {
                         try {
                             Tinebase_ImportExportDefinition::getInstance()->updateOrCreateFromFilename($filename, $_application);
