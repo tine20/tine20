@@ -1417,6 +1417,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
         }
         
+        // reset alarm ack and snooze times
+        if ($_isRescheduled) {
+            $_attender->alarm_ack_time = null;
+            $_attender->alarm_snooze_time = null;
+        }
+        
         // preserv old authkey
         $_attender->status_authkey = $_currentAttender->status_authkey;
         
