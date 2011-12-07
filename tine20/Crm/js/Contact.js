@@ -34,26 +34,20 @@ Tine.Crm.Contact.Combo = Ext.extend(Tine.Addressbook.SearchCombo, {
      */
     contactsStore: null,
     
-    //private
-    initComponent: function(){
-        this.contactFields = Tine.Addressbook.Model.ContactArray;
-        this.contactFields.push({name: 'relation'});   // the relation object           
-        this.contactFields.push({name: 'relation_type'});
-        
-        Tine.Crm.Contact.Combo.superclass.initComponent.call(this);        
-    },
-    
     /**
      * override default onSelect
      * 
      * TODO add some logic to determine if contact is customer or partner
      */
     onSelect: function(record) {
-        record.data.relation_type = (record.get('type') == 'user') ? 'responsible' : 'customer';
+        var data = {
+            relation_type: (record.get('type') == 'user') ? 'responsible' : 'customer'
+        };
         
         // check if already in
         if (! this.contactsStore.getById(record.id)) {
-            this.contactsStore.add([record]);
+            var recordToAdd = new this.contactsStore.recordType(Ext.apply(data, record.data), record.id);
+            this.contactsStore.add([recordToAdd]);
         }
             
         this.collapse();

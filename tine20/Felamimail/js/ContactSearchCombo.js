@@ -87,20 +87,52 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
      * @param {} options
      */
     onStoreLoad: function(store, records, options) {
+        this.addAlternativeEmail(store, records);
+        this.removeDuplicates(store);
+    },
+    
+    /**
+     * add alternative email addresses
+     * 
+     * @param {} store
+     * @param {} records
+     */
+    addAlternativeEmail: function(store, records) {
         var index = 0,
             newRecord,
             recordData;
             
         Ext.each(records, function(record) {
-            if (record.get('email') && record.get('email_home')) {
+            if (record.get('email') && record.get('email_home') && record.get('email') !== record.get('email_home')) {
                 index++;
                 recordData = Ext.copyTo({}, record.data, ['email_home', 'n_fileas']);
                 newRecord = Tine.Addressbook.contactBackend.recordReader({responseText: Ext.util.JSON.encode(recordData)});
                 newRecord.id = Ext.id();
+                
+                Tine.log.debug('add alternative: ' + Tine.Felamimail.getEmailStringFromContact(newRecord));
                 store.insert(index, [newRecord]);
             }
             index++;
         });
-    }
+    },
+    
+    /**
+     * remove duplicate contacts
+     * 
+     * @param {} store
+     */
+    removeDuplicates: function(store) {
+        var duplicates = null;
+        
+        store.each(function(record) {
+            duplicates = store.queryBy(function(contact) {
+                return record.id !== contact.id && Tine.Felamimail.getEmailStringFromContact(record) == Tine.Felamimail.getEmailStringFromContact(contact);
+            });
+            if (duplicates.getCount() > 0) {
+                Tine.log.debug('remove duplicate: ' + Tine.Felamimail.getEmailStringFromContact(record));
+                store.remove(record);
+            }
+        });
+    }    
 });
 Ext.reg('felamimailcontactcombo', Tine.Felamimail.ContactSearchCombo);
