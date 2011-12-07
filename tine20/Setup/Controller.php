@@ -1190,7 +1190,7 @@ class Setup_Controller
                 $modlogActive = Tinebase_ImportExportDefinition::getInstance()->modlogActive(FALSE);
                 
                 foreach (new DirectoryIterator($path) as $item) {
-                    $filename = $path . DIRECTORY_SEPARATOR . $item->getFileName();
+                    $filename = $path . $item->getFileName();
                     if (preg_match("/\.xml/", $filename)) {
                         try {
                             Tinebase_ImportExportDefinition::getInstance()->updateOrCreateFromFilename($filename, $_application);
