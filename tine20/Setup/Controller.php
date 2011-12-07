@@ -1134,7 +1134,10 @@ class Setup_Controller
                     $this->_backend->createTable($table);
                 } catch (Zend_Db_Statement_Exception $zdse) {
                     throw new Tinebase_Exception_Backend_Database('Could not create table: ' . $zdse->getMessage());
+                } catch (Zend_Db_Adapter_Exception $zdae) {
+                    throw new Tinebase_Exception_Backend_Database('Could not create table: ' . $zdae->getMessage());
                 }
+                
                 $createdTables[] = $table;
             }
         }
