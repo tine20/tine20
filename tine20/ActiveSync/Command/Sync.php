@@ -211,6 +211,14 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
             } catch (Tinebase_Exception_NotFound $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " folder {$collectionData['collectionId']} not found");
+                
+                $collectionData['syncState']    = new ActiveSync_Model_SyncState(array(
+                    'device_id' => $this->_device->getId(),
+                    'counter'   => 0,
+                    'type'      => $collectionData['collectionId'], // this is not the complete type the class is missing, but thats ok in this case
+                    'lastsync'  => $this->_syncTimeStamp
+                ));
+                
                 $this->_collections['collectionNotFound'][$collectionData['collectionId']] = $collectionData;
                 continue;
             }
@@ -225,7 +233,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 
                 $collectionData['syncState']    = new ActiveSync_Model_SyncState(array(
                     'device_id' => $this->_device->getId(),
-                    'counter'   => 0,
+                    'counter'   => $collectionData['syncKey'],
                     'type'      => $collectionData['class'] . '-' . $collectionData['collectionId'],
                     'lastsync'  => $this->_syncTimeStamp
                 ));
@@ -243,7 +251,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 $collectionData['syncKeyValid'] = false;
                 $collectionData['syncState']    = new ActiveSync_Model_SyncState(array(
                     'device_id' => $this->_device->getId(),
-                    'counter'   => 0,
+                    'counter'   => $collectionData['syncKey'],
                     'type'      => $collectionData['class'] . '-' . $collectionData['collectionId'],
                     'lastsync'  => $this->_syncTimeStamp
                 ));
@@ -401,26 +409,35 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
         foreach($this->_collections as $class => $classCollections) {
             foreach($classCollections as $collectionId => $collectionData) {
                 if ($class == 'collectionNotFound') {
-                    $status = self::STATUS_FOLDER_HIERARCHY_HAS_CHANGED;
-                    
-                    // send back current SyncKey
                     $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData['class']));
-                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey', $collectionData['syncKey']));
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey', 0));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $collectionData['collectionId']));
-                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', $status));
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_FOLDER_HIERARCHY_HAS_CHANGED));
+                    
+                } elseif ($collectionData['syncKeyValid'] !== true) {
+                    $collectionData['syncState']->counter = 0;
+    
+                    // set synckey to 0
+                    $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData['class']));
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey', $collectionData['syncState']->counter));
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $collectionData['collectionId']));
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_INVALID_SYNC_KEY));
+                    
+                    $this->_contentStateBackend->resetState($this->_device, $collectionData['class'], $collectionData['collectionId']);
+                    $this->_controller->resetSyncState($collectionData['syncState']);
                     
                 } elseif ($collectionData['syncState']->counter === 0) {
-                    $status = $collectionData['syncKey'] == 0 ? self::STATUS_SUCCESS : self::STATUS_INVALID_SYNC_KEY;
                     $collectionData['syncState']->counter++;
     
-                    // Sync 0
+                    // initial sync
                     // send back a new SyncKey only
                     $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData['class']));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey', $collectionData['syncState']->counter));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $collectionData['collectionId']));
-                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', $status));
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_SUCCESS));
                     
                     $this->_contentStateBackend->resetState($this->_device, $collectionData['class'], $collectionData['collectionId']);
                     $this->_controller->resetSyncState($collectionData['syncState']);
