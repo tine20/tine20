@@ -178,6 +178,62 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testDetachTagsFromMultipleRecords()
+    {
+        $personas = Zend_Registry::get('personas');
+        $personasContactIds = array();
+        foreach ($personas as $persona) {
+            $personasContactIds[] = $persona->contact_id;
+        }
+
+        $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($personasContactIds);
+        foreach ($contacts as $contact) {
+            $contact->tags = array();
+            $this->_instance->setTagsOfRecord($contact);
+        }
+
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => $personasContactIds)
+        ));
+
+        $tagData1 = array(
+            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+            'name'  => 'tagMulti::test1',
+            'description' => 'testDetachTagToMultipleRecords1',
+            'color' => '#009B31',
+        );
+        $tag1 = $this->_instance->attachTagToMultipleRecords($filter, $tagData1);
+        $tagIds[] = $tag1->getId();
+
+        $tagData2 = array(
+            'type'  => Tinebase_Model_Tag::TYPE_PERSONAL,
+            'name'  => 'tagMulti::test2',
+            'description' => 'testDetachTagToMultipleRecords2',
+            'color' => '#ff9B31',
+        );
+        $tag2 = $this->_instance->attachTagToMultipleRecords($filter, $tagData2);
+        $tagIds[] = $tag2->getId();
+
+        $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($personasContactIds);
+
+        $this->_instance->getMultipleTagsOfRecords($contacts);
+        foreach ($contacts as $contact) {
+            $this->assertEquals(2, count($contact->tags), 'Tags not found in contact ' . $contact->n_fn);
+        }
+
+        // Try to remove the created Tags
+
+        $this->_instance->detachTagsFromMultipleRecords($filter,$tagIds);
+
+        $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($personasContactIds);
+
+        $this->_instance->getMultipleTagsOfRecords($contacts);
+        foreach ($contacts as $contact) {
+            $this->assertEquals(0, count($contact->tags), 'Tags should not be found not found in contact ' . $contact->n_fn);
+        }
+
+    }
+
     /**
      * detach tags from records
      */
