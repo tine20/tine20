@@ -39,6 +39,12 @@ Tine.Projects.ProjectGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     evalGrants: true,
     
     /**
+     * optional additional filterToolbar configs
+     * @cfg {Object} ftbConfig
+     */
+    ftbConfig: null,
+    
+    /**
      * grid specific
      * @private
      */
@@ -55,7 +61,7 @@ Tine.Projects.ProjectGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.recordProxy = Tine.Projects.recordBackend;
         
         this.gridConfig.cm = this.getColumnModel();
-        this.filterToolbar = this.filterToolbar || this.getFilterToolbar();
+        this.filterToolbar = this.filterToolbar || this.getFilterToolbar(this.ftbConfig);
         
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
