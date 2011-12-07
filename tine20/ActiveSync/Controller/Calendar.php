@@ -498,8 +498,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     
         $entry = $this->toTineModel($_data, $oldEntry);
         $entry->last_modified_time = $this->_syncTimeStamp;
-        $entry->container_id = $_folderId;
-        
+        if ($_folderId != $this->_specialFolderName) {
+            $entry->container_id = $_folderId;
+        }
+                
         if ($entry->exdate instanceof Tinebase_Record_RecordSet) {
             foreach ($entry->exdate as $exdate) {
                 if ($exdate->is_deleted == false) {
@@ -514,7 +516,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         #    echo "I'm attendee";
         #}
     
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updated entry id " . $entry->getId());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updated entry id " . $entry->getId());
     
         return $entry;
     }
