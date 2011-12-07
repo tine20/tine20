@@ -1263,6 +1263,9 @@ class Setup_Controller
                 DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . 'definitions';
     
             if (file_exists($path)) {
+                // disabling modlog when calling from Setup
+                $modlogActive = Tinebase_ImportExportDefinition::getInstance()->modlogActive(FALSE);
+                
                 foreach (new DirectoryIterator($path) as $item) {
                     $filename = $path . DIRECTORY_SEPARATOR . $item->getFileName();
                     if (preg_match("/\.xml/", $filename)) {
@@ -1275,6 +1278,7 @@ class Setup_Controller
                         }
                     }
                 }
+                Tinebase_ImportExportDefinition::getInstance()->modlogActive($modlogActive);
             }
         }
         
