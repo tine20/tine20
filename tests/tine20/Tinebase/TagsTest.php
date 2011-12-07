@@ -178,9 +178,6 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * detach tags from records
-     */
     public function testDetachTagsFromMultipleRecords()
     {
         $personas = Zend_Registry::get('personas');
@@ -232,7 +229,7 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
 
         $this->_instance->getMultipleTagsOfRecords($contacts);
         foreach ($contacts as $contact) {
-            $this->assertEquals(0, count($contact->tags), 'Tags should not be found in contact ' . $contact->n_fn);
+            $this->assertEquals(0, count($contact->tags), 'Tags should not be found not found in contact ' . $contact->n_fn);
         }
 
     }
