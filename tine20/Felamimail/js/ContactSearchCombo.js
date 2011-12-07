@@ -87,6 +87,16 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
      * @param {} options
      */
     onStoreLoad: function(store, records, options) {
+        this.addAlternativeEmail(store, records);
+    },
+    
+    /**
+     * add alternative email addresses
+     * 
+     * @param {} store
+     * @param {} records
+     */
+    addAlternativeEmail: function(store, records) {
         var index = 0,
             newRecord,
             recordData;
