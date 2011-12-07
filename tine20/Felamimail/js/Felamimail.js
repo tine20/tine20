@@ -313,8 +313,9 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         }, this);
         if (incompletes.getCount() > 0) {
             Tine.log.debug('Got ' + incompletes.getCount() + ' incomplete folders.');
-            Tine.log.debug(incompletes.first());
-            return incompletes.first();
+            var firstIncomplete = incompletes.first();
+            Tine.log.debug('First ' + firstIncomplete.get('cache_status') + ' folder to check: ' + firstIncomplete.get('globalname'));
+            return firstIncomplete;
         }
         
         // check for outdated
@@ -351,14 +352,20 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         }, this);
         
         if (outdated.getCount() > 0) {
-            Tine.log.debug('Still got ' + outdated.getCount() + ' outdated folders to update ...');
+            Tine.log.debug('Still got ' + outdated.getCount() + ' outdated folders to update');
             
             // call Felamimail.getFolderStatus() with ids of outdated folders -> update folder store on success
-            var ids = [];
-            outdated.each(function(folder) {
+            // get only max 50 folders at once
+            var rangeOfFolders = (outdated.getCount() > 50) ? outdated.getRange(0, 49) : outdated.getRange(),
+                ids = [],
+                now = new Date();
+            Ext.each(rangeOfFolders, function(folder) {
+                folder.set('client_access_time', now);
                 ids.push(folder.id);
             });
+            
             var filter = [{field: 'id', operator: 'in', value: ids}];
+            Tine.log.debug('Requesting folder status of ' + rangeOfFolders.length + ' folders ...');
             Tine.Felamimail.getFolderStatus(filter, this.onGetFolderStatusSuccess.createDelegate(this));
             this.getFolderStatusTransactionInProgress = true;
         }
@@ -373,7 +380,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         this.getFolderStatusTransactionInProgress = false;
         
         if (response && response.length > 0) {
-            Tine.log.debug('Got ' + response.length + ' folders that need an update ...');
+            Tine.log.debug('Got ' + response.length + ' folders that need an update.');
             
             Ext.each(response, function(folder) {
                 var folderToUpdate = this.folderStore.getById(folder.id);
@@ -382,7 +389,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             
             this.checkMailsDelayedTask.delay(1000);
         } else {
-            Tine.log.debug('No folders for update found ...');
+            Tine.log.debug('No folders for update found.');
         }
     },
     
