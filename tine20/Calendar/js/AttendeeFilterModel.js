@@ -21,7 +21,7 @@ Tine.Calendar.AttendeeFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
     app: null,
     
     field: 'attender',
-    defaultOperator: 'equals',
+    defaultOperator: 'in',
     
     /**
      * @private
