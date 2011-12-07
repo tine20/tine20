@@ -286,7 +286,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 echo "\nCould not get schema (" . $zdse->getMessage() ."). Skipping table $table";
                 continue;
             }
-            if (! array_key_exists('is_deleted', $schema)) {
+            if (! array_key_exists('is_deleted', $schema) || ! array_key_exists('deleted_time', $schema)) {
                 continue;
             }
             

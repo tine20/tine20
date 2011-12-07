@@ -35,6 +35,13 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     protected $_contactIdsToDelete = array();
     
     /**
+     * customfields that should be deleted later
+     * 
+     * @var array
+     */
+    protected $_customfieldIdsToDelete = array();
+    
+    /**
      * @var array test objects
      */
     protected $objects = array();
@@ -99,6 +106,10 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
 	    $this->_instance->deleteContacts($this->_contactIdsToDelete);
+	    
+	    foreach($this->_customfieldIdsToDelete as $cfd) {
+            Tinebase_CustomField::getInstance()->deleteCustomField($cfd);	        
+	    }
     }
     
     /**
@@ -230,6 +241,59 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'tel_cell_private'  => '+49TELCELLPRIVATE',
         );
     }
+    
+    /*
+     * this test is for Tinebase_Frontend_Json updateMultipleRecords with contact data in the addressbook app
+     */
+    /*
+    public function testUpdateMultipleRecords()
+    {
+        
+        $companies = array('Janes', 'Johns', 'Bobs');
+        $contacts = array();
+        
+        // create customfield
+        $cfName = Tinebase_Record_Abstract::generateUID();
+        
+        $cfc = new Tinebase_Model_CustomField_Config(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'name'              => $cfName,
+            'model'             => 'Addressbook_Model_Contact',
+            'definition'        => array(
+                'label' => Tinebase_Record_Abstract::generateUID(),
+                'type'  => 'string',
+                'uiconfig' => array(
+                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
+                    'length' => 10,
+                    'group'  => 'unittest',
+                    'order'  => 100,
+                )
+            )  
+        ));
+        
+        $createdCustomField = Tinebase_CustomField::getInstance()->addCustomField($cfc);
+        
+        $this->_customfieldIdsToDelete[] = $createdCustomField->getId();
+        
+        $changes = array(array('name' => 'url', 'value' => "http://www.phpunit.de"), array('name' => "adr_one_region", 'value' => 'PHPUNIT'), array('name' => 'customfield_' . $cfName, 'value' => 'PHPUNIT' ));
+        
+        foreach($companies as $company) {
+            $contact = $this->_addContact($company);
+            $contacts[] = $contact['id']; 
+        }
+        
+        $filter = array('field' => 'id','operator' => 'in', 'value' => $contacts);
+        $filterModel = 'Addressbook_Model_ContactFilter';
+        $json = new Tinebase_Frontend_Json();
+        
+        $result = $json->updateMultipleRecords('Addressbook', 'Contact', $changes, $filter);
+
+        // look if all 3 contacts are updated
+        $this->assertEquals(3, $result['count']);
+
+    }
+    */
+    
     
     /**
      * try to get contacts by owner
@@ -787,13 +851,13 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'dtend'       => '2009-03-25 06:15:00',
             'description' => 'Early to bed and early to rise, makes a men healthy, wealthy and wise',
             'attendee'    => new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-                array(
+                array (
                     'user_id'        => Tinebase_Core::getUser()->contact_id,
                     'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
                     'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
                     'status_authkey' => Tinebase_Record_Abstract::generateUID(),
                 ),
-                array(
+                array (
                     'user_id'        => $_contact['id'],
                     'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
                     'role'           => Calendar_Model_Attender::ROLE_OPTIONAL,

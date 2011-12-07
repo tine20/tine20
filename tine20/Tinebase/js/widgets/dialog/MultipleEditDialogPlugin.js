@@ -157,27 +157,11 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
 
     onAfterRender : function() {
         
-//        if(this.editDialog.linkPanel) this.editDialog.linkPanel.setDisabled(true);
-//        if(this.editDialog.mapPanel) this.editDialog.mapPanel.setDisabled(true);
-//        
-//        if(this.editDialog.descriptionPanel) this.editDialog.descriptionPanel.disable();
-//        if(this.editDialog.activitiesPanel) this.editDialog.activitiesPanel.disable();
-//        if(this.editDialog.tagPanel) this.editDialog.tagPanel.disable();
-        
-//        this.editDialog.getDisableOnEditMultiple().each(function(item) {
-//            item.disable();
-//        });
-
         Ext.each(this.editDialog.getDisableOnEditMultiple(),function(item){
             item.disable();
         });
-
-//Tine.log.err();
         
         this.form.items.each(function(item) {
-            
-
-            
             
             if ((!(item instanceof Ext.form.TextField)) && (!(item instanceof Ext.form.Checkbox))) {
                 item.disable();
@@ -282,7 +266,6 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         
         this.form.items.each(function(item) {
             if (item.edited) {
-                Tine.log.debug(item);
                 this.changes.push({    name: item.getName(), value: item.getValue()});
                 this.changedHuman += '<li style="padding: 3px 0 3px 15px">' + ((item.fieldLabel) ? item.fieldLabel : item.boxLabel) + ': ';
                 this.changedHuman += (item.lastSelectionText) ? item.lastSelectionText : item.getValue();  
