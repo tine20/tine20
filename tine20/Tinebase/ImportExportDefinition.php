@@ -11,9 +11,9 @@
  */
 
 /**
- * backend for persistent filters
+ * backend for import/export definitions
  *
- * @package     Timetracker
+ * @package     Tinebase
  * @subpackage  Controller
  */
 class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstract
@@ -156,6 +156,8 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
     
     /**
      * update existing definition or create new from file
+     * - use backend functions (create/update) directly because we do not want any default controller handling here
+     * - calling function needs to make sure that user has admin right!
      * 
      * @param string $_filename
      * @param Tinebase_Model_Application $_application
@@ -178,12 +180,12 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             foreach ($copyFields as $field) {
                 $existing->{$field} = $definition->{$field};
             }
-            $result = $this->update($existing);
+            $result = $this->_backend->update($existing);
             
         } catch (Tinebase_Exception_NotFound $tenf) {
             // does not exist
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating import/export definion from file: ' . $_filename);
-            $result = $this->create($definition);
+            $result = $this->_backend->create($definition);
         }
         
         return $result;
