@@ -799,13 +799,6 @@ span:hover.tinebase-showheaders-link {
 }*/
 
 /* multiple edit dialog */
-
-.tinebase-editmultipledialog-apply, 
-textarea.tinebase-editmultipledialog-apply, 
-input.tinebase-editmultipledialog-apply {
-    background-color: #d7f4d3;
-    background-image:none!important;
-    }
     
 .tinebase-editmultipledialog-noneedit, 
 input.tinebase-editmultipledialog-noneedit, 
