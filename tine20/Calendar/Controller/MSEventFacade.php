@@ -467,7 +467,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         if ($_event->exdate instanceof Tinebase_Record_RecordSet && $_event->organizer != $this->_calendarUser->user_id) {
             foreach ($_event->exdate as $exdate) {
                 $CUAttendee = Calendar_Model_Attender::getAttendee($exdate->attendee, $this->_calendarUser);
-                if ($exdate->is_deleted == false && (! $CUAttendee || $CUAttendee->status == Calendar_Model_Attender::STATUS_DECLINED)) {
+                if ($exdate->is_deleted == false && ! $CUAttendee) {
                     $exdate->is_deleted = true;
                 }
             }

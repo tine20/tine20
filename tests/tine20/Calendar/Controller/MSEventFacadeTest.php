@@ -224,9 +224,12 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         ));
         
         $persistentSClever = Calendar_Model_Attender::getAttendee($persistentException->attendee, $sclever);
-        $persistentSClever->status = Calendar_Model_Attender::STATUS_DECLINED;
+        $persistentException->attendee->removeRecord($persistentSClever);
         
-        $this->_uit->attenderStatusUpdate($event, $persistentSClever);
+        $event = $this->_uit->update($event);
+        
+        //$persistentSClever->status = Calendar_Model_Attender::STATUS_DECLINED;
+        //$this->_uit->attenderStatusUpdate($event, $persistentSClever);
         
         $this->_uit->setCalendarUser($sclever);
         
