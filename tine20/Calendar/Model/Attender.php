@@ -10,6 +10,9 @@
  * Model of an attendee
  *
  * @package Calendar
+ * @property Tinebase_DateTime alarm_ack_time
+ * @property Tinebase_DateTime alarm_snooze_time
+ * @property string transp
  */
 class Calendar_Model_Attender extends Tinebase_Record_Abstract
 {
@@ -97,6 +100,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         'status'               => array('allowEmpty' => true,  'InArray' => array(self::STATUS_NEEDSACTION, self::STATUS_TENTATIVE, self::STATUS_ACCEPTED, self::STATUS_DECLINED)),
         'status_authkey'       => array('allowEmpty' => true, 'Alnum' ),
         'displaycontainer_id'  => array('allowEmpty' => true, 'Int'   ),
+        'alarm_ack_time'       => array('allowEmpty' => true),
+    	'alarm_snooze_time'    => array('allowEmpty' => true),
+    	'transp'               => array('allowEmpty' => true,  'InArray' => array(Calendar_Model_Event::TRANSP_TRANSP, Calendar_Model_Event::TRANSP_OPAQUE)),
     );
     
     /**
@@ -104,7 +110,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      *
      * @var array
      */
-    protected $_datetimeFields = array();
+    protected $_datetimeFields = array(
+        'alarm_ack_time',
+    	'alarm_snoze_time'
+    );
     
     /**
      * returns accountId of this attender if present
