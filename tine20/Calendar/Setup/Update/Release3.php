@@ -399,10 +399,87 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
     }
     
     /**
-     * update to 4.0
+     * update to 3.10
      * @return void
      */
     public function update_9()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>user_type</name>
+                <type>text</type>
+                <length>32</length>
+                <default>user</default>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('cal_attendee', $declaration);
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>role</name>
+                <type>text</type>
+                <length>32</length>
+                <default>REQ</default>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('cal_attendee', $declaration);
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>status</name>
+                <type>text</type>
+                <length>32</length>
+                <default>NEEDS-ACTION</default>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('cal_attendee', $declaration);
+        $this->setTableVersion('cal_attendee', 2);
+        
+        $this->setApplicationVersion('Calendar', '3.10');
+    }
+    
+    /**
+     * update to 3.11
+     * @return void
+     */
+    public function update_10()
+    {
+        $this->validateTableVersion('cal_attendee', 2);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>transp</name>
+                <type>text</type>
+                <length>40</length>
+                <default>OPAQUE</default>
+            </field>
+        ');
+        $this->_backend->addCol('cal_attendee', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>alarm_ack_time</name>
+                <type>datetime</type>
+            </field>
+        ');
+        $this->_backend->addCol('cal_attendee', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>alarm_snooze_time</name>
+                <type>datetime</type>
+            </field>
+        ');
+        $this->_backend->addCol('cal_attendee', $declaration);
+        
+        $this->setTableVersion('cal_attendee', 3);
+    
+        $this->setApplicationVersion('Calendar', '3.11');
+    }
+    
+    /**
+     * update to 4.0
+     * @return void
+     */
+    public function update_11()
     {
         $this->setApplicationVersion('Calendar', '4.0');
     }
