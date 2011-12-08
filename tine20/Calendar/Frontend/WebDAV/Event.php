@@ -354,15 +354,18 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " current user is not organizer => update attendee status only ");
             
-            try {
-                $this->_event = Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($event, new Calendar_Model_Attender(array(
-                    'user_type'           => Calendar_Model_Attender::USERTYPE_USER,
-                    'user_id'             => Tinebase_Core::getUser()->contact_id,
-                    'displaycontainer_id' => $this->_container->getId()
-                )));
-            } catch (Tinebase_Exception_AccessDenied $tead) {
-                throw new Sabre_DAV_Exception_Forbidden($tead->getMessage());
+            if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($this->getRecord()->attendee)) !== null) {
+                $ownAttendee->displaycontainer_id = $this->_container->getId();
+                
+                try {
+                    $this->_event = Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($event, $ownAttendee);
+                } catch (Tinebase_Exception_AccessDenied $tead) {
+                    throw new Sabre_DAV_Exception_Forbidden($tead->getMessage());
+                }
+            } else {
+                throw new Sabre_DAV_Exception_Forbidden('not attendee of this event');
             }
+            
         }
         
         // avoid sending headers during unit tests
