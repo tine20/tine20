@@ -357,10 +357,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                             }]
                         }),
                         new Tine.widgets.activities.ActivitiesPanel({
-                            listeners: {
-                                'add': this.addToDisableOnEditMultiple,
-                                scope: this
-                            },
                             app: 'Addressbook',
                             showAddNoteForm: false,
                             border: false,

@@ -648,10 +648,25 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
     },
     
+    /**
+     * add given item disable registry for multiple edit
+     * 
+     * NOTE: this function can be called from any child's scope also
+     * 
+     * @param {Ext.Component} item
+     */
     addToDisableOnEditMultiple: function(item) {
-        Tine.log.debug(item);
-        if(!this.disableOnEditMultiple) this.disableOnEditMultiple = new Array();
-        this.disableOnEditMultiple.push(item);
+        
+        var mgrCmpTest = function(p) {return Ext.isFunction(p.addToDisableOnEditMultiple);},
+            me = mgrCmpTest(this) ? this : this.findParentBy(mgrCmpTest);
+            
+        if (me) {
+            me.disableOnEditMultiple = me.disableOnEditMultiple || [];
+            if (me.disableOnEditMultiple.indexOf(item) < 0) {
+                Tine.log.debug('Tine.widgets.dialog.EditDialog::addToDisableOnEditMultiple ' + item.id);
+                me.disableOnEditMultiple.push(item);
+            }
+        }
     },
     
     getDisableOnEditMultiple: function() {
@@ -660,3 +675,5 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
        
     }
 });
+
+Ext.reg('test', Tine.widgets.dialog.EditDialog);
