@@ -151,7 +151,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         if(! $_event->attendee instanceof Tinebase_Record_RecordSet) {
             $_event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         }
-        
+
+        // can happen only during create not on update
         if (empty($_event->organizer)) {
             $_event->organizer = Tinebase_Core::getUser()->contact_id;
              
