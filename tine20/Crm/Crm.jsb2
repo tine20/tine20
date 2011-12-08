@@ -64,10 +64,6 @@
           "path": "js/"
         },
         {
-          "text": "SearchCombo.js",
-          "path": "../Addressbook/js/"
-        },
-        {
           "text": "Contact.js",
           "path": "js/"
         },

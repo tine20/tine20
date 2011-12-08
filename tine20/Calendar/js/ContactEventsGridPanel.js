@@ -90,7 +90,7 @@ Tine.Calendar.ContactEventsGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             defaultFilter: 'query',
             filters: [
                 {field: 'query', operator: 'contains', value: ''},
-                {field: 'attender', operator: 'equals', value: {user_type: 'user', user_id: this.record.data}}
+                {field: 'attender', operator: 'in', value: [{user_type: 'user', user_id: this.record.data}]}
             ]
         });
     },

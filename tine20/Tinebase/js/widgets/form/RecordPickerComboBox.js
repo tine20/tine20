@@ -51,6 +51,12 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
      */
     selectedRecord: null,
     
+    /**
+     * @type string
+     * @property lastStoreTransactionId
+     */
+    lastStoreTransactionId: null,
+    
     triggerAction: 'all',
     pageSize: 10,
     minChars: 3,
@@ -68,6 +74,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
         }, this, 'totalProperty,root,recordClass'));
         
         this.on('beforequery', this.onBeforeQuery, this);
+        this.store.on('beforeloadrecords', this.onStoreBeforeLoadRecords, this);
         
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.initComponent.call(this);
     },
@@ -81,10 +88,29 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
     onBeforeLoad: function (store, options) {
     	Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.onBeforeLoad.call(this, store, options);
     	
+        this.lastStoreTransactionId = options.transactionId = Ext.id();
+        
         options.params.paging = {
             start: options.params.start,
-            limit: options.params.limit
+            limit: options.params.limit,
+            sort: this.valueField,
+            dir: 'ASC'
         };
+    },
+    
+    /**
+     * onStoreBeforeLoadRecords
+     * 
+     * @param {Object} o
+     * @param {Object} options
+     * @param {Boolean} success
+     * @param {Ext.data.Store} store
+     */
+    onStoreBeforeLoadRecords: function(o, options, success, store) {
+        if (! this.lastStoreTransactionId || options.transactionId && this.lastStoreTransactionId !== options.transactionId) {
+            Tine.log.debug('Tine.Tinebase.widgets.form.RecordPickerComboBox::onStoreBeforeLoadRecords cancelling old transaction request.');
+            return false;
+        }
     },
     
     /**
@@ -96,6 +122,26 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
         this.store.baseParams.filter = [
             {field: 'query', operator: 'contains', value: qevent.query }
         ];
+    },
+    
+    /**
+     * relay contextmenu events
+     * 
+     * @param {Ext.Container} ct
+     * @param {Number} position
+     * @private
+     */
+    onRender : function(ct, position){
+        Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.onRender.call(this, ct, position);
+        
+        var c = this.getEl();
+ 
+        this.mon(c, {
+            scope: this,
+            contextmenu: Ext.emptyFn
+        });
+ 
+        this.relayEvents(c, ['contextmenu']);        
     },
     
     /**

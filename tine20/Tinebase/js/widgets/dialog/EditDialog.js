@@ -132,85 +132,90 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     
     //private
     initComponent: function(){
-        this.addEvents(
-            /**
-             * @event cancel
-             * Fired when user pressed cancel button
-             */
-            'cancel',
-            /**
-             * @event saveAndClose
-             * Fired when user pressed OK button
-             */
-            'saveAndClose',
-            /**
-             * @event update
-             * @desc  Fired when the record got updated
-             * @param {Json String} data data of the entry
-             * @pram  {String} this.mode
-             */
-            'update',
-            /**
-             * @event apply
-             * Fired when user pressed apply button
-             */
-            'apply',
-            /**
-             * @event load
-             * Fired when record is loaded
-             */
-            'load',
-            /**
-             * @event save
-             * Fired when remote record is saving
-             */
-            'save'
-        );
+        try {
+            this.addEvents(
+                /**
+                 * @event cancel
+                 * Fired when user pressed cancel button
+                 */
+                'cancel',
+                /**
+                 * @event saveAndClose
+                 * Fired when user pressed OK button
+                 */
+                'saveAndClose',
+                /**
+                 * @event update
+                 * @desc  Fired when the record got updated
+                 * @param {Json String} data data of the entry
+                 * @pram  {String} this.mode
+                 */
+                'update',
+                /**
+                 * @event apply
+                 * Fired when user pressed apply button
+                 */
+                'apply',
+                /**
+                 * @event load
+                 * Fired when record is loaded
+                 */
+                'load',
+                /**
+                 * @event save
+                 * Fired when remote record is saving
+                 */
+                'save'
+            );
+            
+            if (this.recordClass) {
+                this.appName    = this.appName    ? this.appName    : this.recordClass.getMeta('appName');
+                this.modelName  = this.modelName  ? this.modelName  : this.recordClass.getMeta('modelName');
+            }
+            
+            if (! this.app) {
+                this.app = Tine.Tinebase.appMgr.get(this.appName);
+            }
+            
+            Tine.log.debug('initComponent: appName: ', this.appName);
+            Tine.log.debug('initComponent: modelName: ', this.modelName);
+            Tine.log.debug('initComponent: app: ', this.app);
+            
+            // init some translations
+            if (this.app.i18n && this.recordClass !== null) {
+                this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
+                this.i18nRecordsName = this.app.i18n._hidden(this.recordClass.getMeta('recordsName'));
+            }
         
-        if (this.recordClass) {
-            this.appName    = this.appName    ? this.appName    : this.recordClass.getMeta('appName');
-            this.modelName  = this.modelName  ? this.modelName  : this.recordClass.getMeta('modelName');
+            if (! this.recordProxy && this.recordClass) {
+                Tine.log.debug('no record proxy given, creating a new one...');
+                this.recordProxy = new Tine.Tinebase.data.RecordProxy({
+                    recordClass: this.recordClass
+                });
+            }
+            
+            // init cf plugin
+            this.plugins = this.plugins ? this.plugins : [];
+            this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
+                   
+            if(this.useMultiple) this.plugins.push(new Tine.widgets.dialog.MultipleEditDialogPlugin({}));
+            
+            // init actions
+            this.initActions();
+            // init buttons and tbar
+            this.initButtons();
+            // init container selector
+            this.initContainerSelector();
+            // init record 
+            this.initRecord();
+            // get items for this dialog
+            this.items = this.getFormItems();
+            
+            Tine.widgets.dialog.EditDialog.superclass.initComponent.call(this);
+        } catch (e) {
+            Tine.log.error('Tine.widgets.dialog.EditDialog::initComponent');
+            Tine.log.error(e.stack ? e.stack : e);
         }
-        
-        if (! this.app) {
-            this.app = Tine.Tinebase.appMgr.get(this.appName);
-        }
-        
-        Tine.log.debug('initComponent: appName: ', this.appName);
-        Tine.log.debug('initComponent: modelName: ', this.modelName);
-        Tine.log.debug('initComponent: app: ', this.app);
-        
-        // init some translations
-        if (this.app.i18n && this.recordClass !== null) {
-            this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
-            this.i18nRecordsName = this.app.i18n._hidden(this.recordClass.getMeta('recordsName'));
-        }
-    
-        if (! this.recordProxy && this.recordClass) {
-            Tine.log.debug('no record proxy given, creating a new one...');
-            this.recordProxy = new Tine.Tinebase.data.RecordProxy({
-                recordClass: this.recordClass
-            });
-        }
-        
-        // init cf plugin
-        this.plugins = this.plugins ? this.plugins : [];
-        this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
-               
-        if(this.useMultiple) this.plugins.push(new Tine.widgets.dialog.MultipleEditDialogPlugin({}));
-        
-        // init actions
-        this.initActions();
-        // init buttons and tbar
-        this.initButtons();
-        // init container selector
-        this.initContainerSelector();
-        // init record 
-        this.initRecord();
-        // get items for this dialog
-        this.items = this.getFormItems();
-        
-        Tine.widgets.dialog.EditDialog.superclass.initComponent.call(this);
     },
     
     /**
