@@ -399,6 +399,12 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
             $id = ($pos = strpos($this->_event, '.')) === false ? $this->_event : substr($this->_event, 0, $pos);
             
             $this->_event = Calendar_Controller_MSEventFacade::getInstance()->get($id);
+            
+        }
+
+        // resolve alarms
+        if (empty($this->_event->alarms)) {
+            Calendar_Controller_MSEventFacade::getInstance()->getAlarms($this->_event);
         }
         
         return $this->_event;
