@@ -151,35 +151,22 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         if(! $_event->attendee instanceof Tinebase_Record_RecordSet) {
             $_event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         }
-        
+
+        // can happen only during create not on update
         if (empty($_event->organizer)) {
             $_event->organizer = Tinebase_Core::getUser()->contact_id;
-             
-            $matchingAttendees = $_event->attendee
-            ->filter('user_type', Calendar_Model_Attender::USERTYPE_USER)
-            ->filter('user_id',   Tinebase_Core::getUser()->contact_id);
-        
-            if (count($matchingAttendees) == 0) {
-                $newAttendee = new Calendar_Model_Attender(array(
-                	'user_id'   => Tinebase_Core::getUser()->contact_id,
-                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                    'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
-                    'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
-                ));
-        
-                $_event->attendee->addRecord($newAttendee);
-            }
         }
         
-        if (count($_event->attendee) == 0) {
-            $newAttendee = new Calendar_Model_Attender(array(
-            	'user_id'   => $_event->organizer,
+        // the organizer must always be an attendee
+        if ($_event->organizer === Tinebase_Core::getUser()->contact_id && ($ownAttendee = Calendar_Model_Attender::getOwnAttender($_event->attendee)) == null) {
+            $_event->attendee->addRecord(new Calendar_Model_Attender(array(
+            	'user_id'   => Tinebase_Core::getUser()->contact_id,
                 'user_type' => Calendar_Model_Attender::USERTYPE_USER,
                 'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
                 'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
-            ));
-        
-            $_event->attendee->addRecord($newAttendee);
+            )));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " added organizer as attendee ");            
         }
         
         if (empty($_event->transp)) {
@@ -367,15 +354,18 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " current user is not organizer => update attendee status only ");
             
-            try {
-                $this->_event = Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($event, new Calendar_Model_Attender(array(
-                    'user_type'           => Calendar_Model_Attender::USERTYPE_USER,
-                    'user_id'             => Tinebase_Core::getUser()->contact_id,
-                    'displaycontainer_id' => $this->_container->getId()
-                )));
-            } catch (Tinebase_Exception_AccessDenied $tead) {
-                throw new Sabre_DAV_Exception_Forbidden($tead->getMessage());
+            if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($this->getRecord()->attendee)) !== null) {
+                $ownAttendee->displaycontainer_id = $this->_container->getId();
+                
+                try {
+                    $this->_event = Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($event, $ownAttendee);
+                } catch (Tinebase_Exception_AccessDenied $tead) {
+                    throw new Sabre_DAV_Exception_Forbidden($tead->getMessage());
+                }
+            } else {
+                throw new Sabre_DAV_Exception_Forbidden('not attendee of this event');
             }
+            
         }
         
         // avoid sending headers during unit tests
@@ -409,6 +399,12 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
             $id = ($pos = strpos($this->_event, '.')) === false ? $this->_event : substr($this->_event, 0, $pos);
             
             $this->_event = Calendar_Controller_MSEventFacade::getInstance()->get($id);
+            
+        }
+
+        // resolve alarms
+        if (empty($this->_event->alarms)) {
+            Calendar_Controller_MSEventFacade::getInstance()->getAlarms($this->_event);
         }
         
         return $this->_event;

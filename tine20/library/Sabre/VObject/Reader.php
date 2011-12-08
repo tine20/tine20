@@ -40,7 +40,9 @@ class Sabre_VObject_Reader {
     	'N'             => 'Sabre_VObject_Element_MultiValue',
     	'ORG'			=> 'Sabre_VObject_Element_MultiValue',
     	'RECURRENCE-ID' => 'Sabre_VObject_Element_DateTime',
-    	'RRULE'         => 'Sabre_VObject_Property_Recure'
+    	'RRULE'         => 'Sabre_VObject_Property_Recure',
+    	'X-MOZ-LASTACK'      => 'Sabre_VObject_Element_DateTime',
+    	'X-MOZ-SNOOZE-TIME'  => 'Sabre_VObject_Element_DateTime'
     );
 
     /**

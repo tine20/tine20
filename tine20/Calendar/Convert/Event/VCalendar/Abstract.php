@@ -357,11 +357,18 @@ class Calendar_Convert_Event_VCalendar_Abstract
                 $vevent->add($valarm);
             }
             
-            // @todo this is a ugly hack for Ligthning to avoid the event notifier 
-            // see http://forge.tine20.org/mantisbt/view.php?id=5016
-            $xMozLastAck = new Sabre_VObject_Element_DateTime('X-MOZ-LASTACK');
-            $xMozLastAck->setDateTime(new DateTime(), Sabre_VObject_Element_DateTime::UTC);
-            $vevent->add($xMozLastAck);
+            if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee)) !== null) {
+                if ($ownAttendee->alarm_ack_time instanceof Tinebase_DateTime) {
+                    $xMozLastAck = new Sabre_VObject_Element_DateTime('X-MOZ-LASTACK');
+                    $xMozLastAck->setDateTime(Tinebase_DateTime::now(), Sabre_VObject_Element_DateTime::UTC);
+                    $vevent->add($xMozLastAck);
+                }
+                if ($ownAttendee->alarm_snooze_time instanceof Tinebase_DateTime) {
+                    $xMozSnoozeTime = new Sabre_VObject_Element_DateTime('X-MOZ-SNOOZE-TIME');
+                    $xMozSnoozeTime->setDateTime(Tinebase_DateTime::now(), Sabre_VObject_Element_DateTime::UTC);
+                    $vevent->add($xMozSnoozeTime);
+                }
+            }
         }
         
         return $vevent;
@@ -830,6 +837,14 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     // @todo handle categories
                     break;
                     
+                case 'X-MOZ-LASTACK':
+                    $lastAck = new Tinebase_DateTime($property->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), $property->getDateTime()->getTimezone());
+                    break;
+                    
+                case 'X-MOZ-SNOOZE-TIME':
+                    $snoozeTime = new Tinebase_DateTime($property->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), $property->getDateTime()->getTimezone());
+                    break;
+                    
                 default:
                 
                     break;
@@ -838,6 +853,15 @@ class Calendar_Convert_Event_VCalendar_Abstract
         
         // merge old and new attendees
         Calendar_Model_Attender::emailsToAttendee($event, $newAttendees);
+        
+        if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee)) !== null) {
+            if (isset($lastAck)) {
+                $ownAttendee->alarm_ack_time = $lastAck;
+            }
+            if (isset($snoozeTime)) {
+                $ownAttendee->alarm_snooze_time = $snoozeTime;
+            }
+        }
         
         if (empty($event->seq)) {
             $event->seq = 0;

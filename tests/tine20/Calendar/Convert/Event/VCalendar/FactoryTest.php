@@ -123,5 +123,16 @@ class Calendar_Convert_Event_VCalendar_FactoryTest extends PHPUnit_Framework_Tes
         
         $this->assertEquals(Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD, $backend);
         $this->assertEquals('1.0b2', $version);
+    }
+                
+    /**
+     * test factory with useragent string from thunderbird 
+     */
+    public function testUserAgentIceowl()
+    {
+        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent('Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.1.16) Gecko/20111110 Iceowl/1.0b1 Icedove/3.0.11');
+        
+        $this->assertEquals(Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD, $backend);
+        $this->assertEquals('1.0b1', $version);
     }            
 }
