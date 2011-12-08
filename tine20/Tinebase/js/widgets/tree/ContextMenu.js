@@ -218,7 +218,20 @@ Tine.widgets.tree.ContextMenu = {
                     });
                 }
             },
-            
+            /**
+             * manage properties
+             * 
+             */
+            manageProperties: function() {
+                if (this.ctxNode) {
+                    var node = this.ctxNode;
+                    var window = Tine.widgets.container.PropertiesDialog.openWindow({
+                        title: String.format(_('Properties for {0} "{1}"'), config.nodeName, Ext.util.Format.htmlEncode(node.attributes.container.name)),
+                        containerName: config.nodeName,
+                        grantContainer: node.attributes.container
+                    });
+                }
+            },
             /**
              * reload node
              */
@@ -292,6 +305,14 @@ Tine.widgets.tree.ContextMenu = {
                         text: String.format(_('Reload {0}'), config.nodeName),
                         iconCls: 'x-tbar-loading',
                         handler: handler.reloadNode,
+                        scope: config.scope
+                    }));
+                    break;
+                case 'properties':
+                    items.push(new Ext.Action({
+                        text: _('Properties'),
+                        iconCls: 'action_manageProperties',
+                        handler: handler.manageProperties,
                         scope: config.scope
                     }));
                     break;

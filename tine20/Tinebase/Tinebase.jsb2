@@ -484,6 +484,10 @@
           "path": "js/widgets/container/"
         },
         {
+          "text": "PropertiesDialog.js",
+          "path": "js/widgets/container/"
+        },
+        {
           "text": "ContainerTree.js",
           "path": "js/widgets/container/"
         },

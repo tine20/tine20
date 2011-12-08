@@ -122,6 +122,10 @@
         {
           "text": "iMIPDetailsPanel.js",
           "path": "js/"
+        },
+        {
+          "text": "CalDAVContainerPropertiesHookField.js",
+          "path": "js/"
         }
       ]
     },
