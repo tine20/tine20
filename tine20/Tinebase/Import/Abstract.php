@@ -124,7 +124,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     {
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_recordData, true));
         
-        $record = new $this->_options['model']($_recordData, TRUE);
+        $record = $this->_createRecordToImport($_recordData);
         
         if ($record->isValid()) {
             if (! $this->_options['dryrun']) {
@@ -157,6 +157,20 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
             throw new Tinebase_Exception_Record_Validation('Imported record is invalid (' . print_r($record->getValidationErrors(), TRUE) . ')');
         }
+    }
+    
+    /**
+    * create record from record data
+    *
+    * @param array $_recordData
+    * @return Tinebase_Record_Abstract
+    */
+    protected function _createRecordToImport($_recordData)
+    {
+        $record = new $this->_options['model'](array(), TRUE);
+        $record->setFromJsonInUsersTimezone($_recordData);
+    
+        return $record;
     }
     
     /**
