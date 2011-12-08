@@ -155,32 +155,18 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         // can happen only during create not on update
         if (empty($_event->organizer)) {
             $_event->organizer = Tinebase_Core::getUser()->contact_id;
-             
-            $matchingAttendees = $_event->attendee
-            ->filter('user_type', Calendar_Model_Attender::USERTYPE_USER)
-            ->filter('user_id',   Tinebase_Core::getUser()->contact_id);
-        
-            if (count($matchingAttendees) == 0) {
-                $newAttendee = new Calendar_Model_Attender(array(
-                	'user_id'   => Tinebase_Core::getUser()->contact_id,
-                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                    'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
-                    'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
-                ));
-        
-                $_event->attendee->addRecord($newAttendee);
-            }
         }
         
-        if (count($_event->attendee) == 0) {
-            $newAttendee = new Calendar_Model_Attender(array(
-            	'user_id'   => $_event->organizer,
+        // the organizer must always be an attendee
+        if ($_event->organizer === Tinebase_Core::getUser()->contact_id && ($ownAttendee = Calendar_Model_Attender::getOwnAttender($_event->attendee)) == null) {
+            $_event->attendee->addRecord(new Calendar_Model_Attender(array(
+            	'user_id'   => Tinebase_Core::getUser()->contact_id,
                 'user_type' => Calendar_Model_Attender::USERTYPE_USER,
                 'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
                 'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
-            ));
-        
-            $_event->attendee->addRecord($newAttendee);
+            )));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " added organizer as attendee ");            
         }
         
         if (empty($_event->transp)) {
