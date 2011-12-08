@@ -33,5 +33,5 @@ interface Tinebase_Convert_Interface
      * @param  Tinebase_Record_Abstract  $_model
      * @return Sabre_VObject_Component
      */
-    public function fromTine20Model(Tinebase_Record_Abstract $_model);    
+    public function fromTine20Model(Tinebase_Record_Abstract $_model, $_parent = null);    
 }
