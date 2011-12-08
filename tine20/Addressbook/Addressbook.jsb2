@@ -42,6 +42,10 @@
         {
           "text": "SearchCombo.js",
           "path": "js/"
+        },
+        {
+          "text": "CardDAVContainerPropertiesHookField.js",
+          "path": "js/"
         }
       ]
     },
