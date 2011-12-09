@@ -1249,42 +1249,52 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param  string                  $_authKey
      * @return Calendar_Model_Attender updated attender
      */
-    public function attenderStatusUpdate($_event, $_attender, $_authKey)
+    public function attenderStatusUpdate(Calendar_Model_Event $_event, Calendar_Model_Attender $_attender, $_authKey)
     {
         try {
-            $db = $this->_backend->getAdapter();
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-            
             $event = $this->get($_event->getId());
             
             if (! $event->attendee) {
                 throw new Tinebase_Exception_NotFound('Could not find any attendee of event.');
             }
             
-            $index = $event->attendee->getIndexById($_attender->getId());
-            if ($index === FALSE) {
+            if (($currentAttender = Calendar_Model_Attender::getAttendee($event->attendee, $_attender)) == null) {
                 throw new Tinebase_Exception_NotFound('Could not find attender in event.');
             }
             
-            $currentAttender = clone $event->attendee[$index];
+            $updatedAttender = clone $currentAttender;
             
-            if ($currentAttender->status == $_attender->status) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . "no status change -> do nothing");
-                return $currentAttender;
+            if ($currentAttender->status_authkey !== $_authKey) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " no permissions to update status for {$currentAttender->user_type} {$currentAttender->user_id}");
+                return $updatedAttender;
             }
             
-            $currentAttender->status              = $_attender->status;
-            $currentAttender->displaycontainer_id = $_attender->displaycontainer_id;
+            // check if something what can be set as user has changed
+            if ($currentAttender->status == $_attender->status &&
+                $currentAttender->displaycontainer_id == $_attender->displaycontainer_id &&
+                $currentAttender->alarm_ack_time == $_attender->alarm_ack_time &&
+                $currentAttender->alarm_snooze_time == $_attender->alarm_snooze_time
+            ) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                    Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . "no status change -> do nothing");
+                return $updatedAttender;
+            }
             
-            if ($currentAttender->status_authkey == $_authKey) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . " update attender status to {$_attender->status} for {$currentAttender->user_type} {$currentAttender->user_id}");
-                $updatedAttender = $this->_backend->updateAttendee($currentAttender);
-                
+            $updatedAttender->status              = $_attender->status;
+            $updatedAttender->displaycontainer_id = $_attender->displaycontainer_id;
+            $updatedAttender->alarm_ack_time      = isset($_attender->alarm_ack_time) ? $_attender->alarm_ack_time : $updatedAttender->alarm_ack_time;
+            $updatedAttender->alarm_snooze_time   = isset($_attender->alarm_snooze_time) ? $_attender->alarm_snooze_time : $updatedAttender->alarm_snooze_time;
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " update attender status to {$_attender->status} for {$currentAttender->user_type} {$currentAttender->user_id}");
+            
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+            
+            $updatedAttender = $this->_backend->updateAttendee($updatedAttender);
+
+            if ($currentAttender->status != $updatedAttender->status) {
                 $this->_touch($event, TRUE);
-            } else {
-                $updatedAttender = $currentAttender;
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " no permissions to update status for {$currentAttender->user_type} {$currentAttender->user_id}");
             }
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -1294,7 +1304,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         // send notifications
-        if ($this->_sendNotifications) {
+        if ($currentAttender->status != $updatedAttender->status && $this->_sendNotifications) {
             $updatedEvent = $this->get($event->getId());
             $this->doSendNotifications($updatedEvent, $this->_currentAccount, 'changed', $event);
         }
