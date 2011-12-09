@@ -81,6 +81,46 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     }
     
     /**
+     * Returns an array with all the child nodes
+     *
+     * @return Sabre_DAV_INode[]
+     */
+    function getChildren()
+    {
+        $filterClass = $this->_application->name . '_Model_' . $this->_model . 'Filter';
+        $filter = new $filterClass(array(
+            array(
+                'field'     => 'container_id',
+                'operator'  => 'equals',
+                'value'     => $this->_container->getId()
+            ),
+            array(
+        		'fielde'    => 'period', 
+        		'operator'  => 'within', 
+        		'value'     => array(
+        			'from'  => Tinebase_DateTime::now()->subWeek(4),
+        			'until' => Tinebase_DateTime::now()->addYear(4)
+    			)
+            )
+        ));
+    
+        /*
+         * see http://forge.tine20.org/mantisbt/view.php?id=5122
+        * we must use action 'sync' and not 'get' as
+        * otherwise the calendar also return events the user only can see because of freebusy
+        */
+        $objects = $this->_getController()->search($filter, null, false, false, 'sync');
+    
+        $children = array();
+    
+        foreach ($objects as $object) {
+            $children[] = $this->getChild($object);
+        }
+    
+        return $children;
+    }
+    
+    /**
      * Returns the list of properties
      *
      * @param array $requestedProperties
