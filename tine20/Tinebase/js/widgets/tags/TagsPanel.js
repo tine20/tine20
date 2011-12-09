@@ -79,7 +79,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             }
         });
         
-        this.initSearchField();
+        this.initSearchField();     
         
         this.bottomBar = new Ext.Container({
             layout: 'column',
@@ -317,6 +317,9 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                 this.formField
             ]
         }];
+        
+        this.on('added', Tine.widgets.dialog.EditDialog.prototype.addToDisableOnEditMultiple, this);
+        
         Tine.widgets.tags.TagPanel.superclass.initComponent.call(this);
     },
     

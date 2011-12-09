@@ -50,7 +50,9 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             dropElSelector: 'div[class^=x-panel-body]'
         });
         this.plugins.push(this.browsePlugin);
-        
+
+        this.on('added', Tine.widgets.dialog.EditDialog.prototype.addToDisableOnEditMultiple, this);
+
         Ext.ux.form.ImageField.superclass.initComponent.call(this);
         this.imageSrc = this.defaultImage;
         if (this.border === true) {

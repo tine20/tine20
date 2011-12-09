@@ -222,21 +222,12 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     border: true,
                     items: [
                         new Tine.widgets.activities.ActivitiesPanel({
-                            app: 'Timetracker',
-                            listeners: {
-                                'add': this.addToDisableOnEditMultiple,
-                                scope: this
-                            },
                             showAddNoteForm: false,
                             border: false,
                             bodyStyle: 'border:1px solid #B5B8C8;'
                         }),
                         new Tine.widgets.tags.TagPanel({
                             app: 'Timetracker',
-                            listeners: {
-                                'add': this.addToDisableOnEditMultiple,
-                                scope: this
-                            },
                             border: false,
                             bodyStyle: 'border:1px solid #B5B8C8;'
                         })
@@ -244,10 +235,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 }]
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
-                listeners: {
-                    'add': this.addToDisableOnEditMultiple,
-                    scope: this
-                },
                 record_id: (! this.copyRecord) ? this.record.id : null,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             })]

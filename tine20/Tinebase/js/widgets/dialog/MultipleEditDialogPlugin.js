@@ -162,7 +162,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         });
         
         this.form.items.each(function(item) {
-            
+
             if ((!(item instanceof Ext.form.TextField)) && (!(item instanceof Ext.form.Checkbox))) {
                 item.disable();
                 return true;
@@ -198,7 +198,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
 
                     button.on('click', function() {
                         if(button.hasClass('undo')) {
-                            this.setValue(this.originalValue)
+                            this.setValue(this.originalValue);
                             button.set({title: _('Delete value from all selected records')});
                             if (this.multi) this.cleared = false;
                         } else {
@@ -254,7 +254,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                     this.un('focus');
                 });
             } else {
-                item.on('render', function() { this.on('check', function() { this.edited = true })});
+                item.on('render', function() { this.on('check', function() { this.edited = true; })});
             }
         });
     },
@@ -327,6 +327,8 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
     
     handleField: function(field, fieldKey, samevalue) {
 
+        if(field.disabled) return true;
+        
         if (!samevalue) {
             field.setReadOnly(true);
             field.addClass('tinebase-editmultipledialog-noneedit');
