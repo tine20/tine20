@@ -196,6 +196,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $event = $this->testConvertRepeatingAllDayDailyEventToTine20Model();
         $event->creation_time      = new Tinebase_DateTime('2011-11-11 11:11', 'UTC');
         $event->last_modified_time = new Tinebase_DateTime('2011-11-11 12:12', 'UTC');
+        $event->organizer          = Tinebase_Core::getUser()->contact_id;
         
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
@@ -209,6 +210,8 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertContains('DTSTAMP;VALUE=DATE-TIME:20111111T121200Z',       $vevent, $vevent);
         $this->assertContains('RRULE:FREQ=DAILY;UNTIL=20111112;INTERVAL=1',     $vevent, $vevent);
         $this->assertContains('EXDATE;VALUE=DATE:20111111',                     $vevent, $vevent);
+        $this->assertContains('ORGANIZER;CN="' . Tinebase_Core::getUser()->accountDisplayName . '":mailto:' . Tinebase_Core::getUser()->accountEmailAddress, $vevent, $vevent);
+        
 
     }
     
