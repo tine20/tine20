@@ -13,59 +13,43 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/AddressbookGridPanelHook.js:38
-msgid "Call contact"
-msgstr "Wybierz numer"
+#: Preference.php:72
+msgid "Your phone"
+msgstr "Twój numer telefonu"
 
-#: js/AddressbookGridPanelHook.js:61
-msgid "Compose SMS"
-msgstr "Napisz SMSa"
+#: Preference.php:73
+msgid "This is your phone"
+msgstr "Wychodzący numer telefonu wybierany z poziomu aplikacji"
 
-#: js/AddressbookGridPanelHook.js:255
-msgid "Work"
-msgstr "Praca"
+#: Preference.php:76
+msgid "Your fax"
+msgstr "Numer faksu"
 
-#: js/AddressbookGridPanelHook.js:265
-msgid "Home"
-msgstr "Dom"
+#: Preference.php:77
+msgid "This is your fax"
+msgstr "Twój faks"
 
-#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:320
-msgid "Cell"
-msgstr "Komórka"
+#: Preference.php:80
+msgid "Your mobile number"
+msgstr "Numer tel. komórkowego"
 
-#: js/AddressbookGridPanelHook.js:285 js/AddressbookGridPanelHook.js:330
-msgid "Cell private"
-msgstr "Komórka prywatna"
-
-#: js/CallStateWindow.js:50 js/DialNumberDialog.js:64
-#: js/SearchAddressDialog.js:64 js/SmsEditDialog.js:60
-msgid "Cancel"
-msgstr "Anuluj"
-
-#: js/CallStateWindow.js:106
-msgid "connecting..."
-msgstr "nawiązywanie połączenia..."
-
-#: js/CallStateWindow.js:144
-msgid "Connecting to: "
-msgstr "Łączę z:"
-
-#: js/DialNumberDialog.js:56 js/DialNumberDialog.js:152
-msgid "Dial Number"
-msgstr "Numer telefonu"
-
-#: js/DialNumberDialog.js:72 js/SearchAddressDialog.js:72
-#: js/SmsEditDialog.js:68
-msgid "Close"
-msgstr "Zamknij"
-
-#: js/DialNumberDialog.js:120
-msgid "Number to call"
-msgstr "Numer rozmówcy"
+#: Preference.php:81
+msgid "Used when sending SMS"
+msgstr "Używany podczas wysyłania SMSa z poziomu aplikacji"
 
 #: js/SearchAddressDialog.js:56
 msgid "Add Number"
 msgstr "Dodaj numer"
+
+#: js/SearchAddressDialog.js:64 js/SmsEditDialog.js:60
+#: js/CallStateWindow.js:50 js/DialNumberDialog.js:64
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: js/SearchAddressDialog.js:72 js/SmsEditDialog.js:68
+#: js/DialNumberDialog.js:72
+msgid "Close"
+msgstr "Zamknij"
 
 #: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
 msgid "Phone"
@@ -114,6 +98,18 @@ msgstr "Wybierz urządzenie"
 #: js/SearchAddressDialog.js:214
 msgid "Choose Address"
 msgstr "Wybierz adres"
+
+#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:181
+msgid "Send"
+msgstr "Wyślij"
+
+#: js/CallStateWindow.js:106
+msgid "connecting..."
+msgstr "nawiązywanie połączenia..."
+
+#: js/CallStateWindow.js:144
+msgid "Connecting to: "
+msgstr "Łączę z:"
 
 #: js/Sipgate.js:30
 msgid "Edit phone settings"
@@ -227,33 +223,37 @@ msgstr "Słuchawka odłożona przed nawiązaniem połączenia"
 msgid "hungup"
 msgstr "Rozmowa zakończona"
 
-#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:181
-msgid "Send"
-msgstr "Wyślij"
+#: js/DialNumberDialog.js:56 js/DialNumberDialog.js:152
+msgid "Dial Number"
+msgstr "Numer telefonu"
 
-#: Preference.php:72
-msgid "Your phone"
-msgstr "Twój numer telefonu"
+#: js/DialNumberDialog.js:120
+msgid "Number to call"
+msgstr "Numer rozmówcy"
 
-#: Preference.php:73
-msgid "This is your phone"
-msgstr "Wychodzący numer telefonu wybierany z poziomu aplikacji"
+#: js/AddressbookGridPanelHook.js:38
+msgid "Call contact"
+msgstr "Wybierz numer"
 
-#: Preference.php:76
-msgid "Your fax"
-msgstr "Numer faksu"
+#: js/AddressbookGridPanelHook.js:61
+msgid "Compose SMS"
+msgstr "Napisz SMSa"
 
-#: Preference.php:77
-msgid "This is your fax"
-msgstr "Twój faks"
+#: js/AddressbookGridPanelHook.js:255
+msgid "Work"
+msgstr "Praca"
 
-#: Preference.php:80
-msgid "Your mobile number"
-msgstr "Numer tel. komórkowego"
+#: js/AddressbookGridPanelHook.js:265
+msgid "Home"
+msgstr "Dom"
 
-#: Preference.php:81
-msgid "Used when sending SMS"
-msgstr "Używany podczas wysyłania SMSa z poziomu aplikacji"
+#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:320
+msgid "Cell"
+msgstr "Komórka"
+
+#: js/AddressbookGridPanelHook.js:285 js/AddressbookGridPanelHook.js:330
+msgid "Cell private"
+msgstr "Komórka prywatna"
 
 #~ msgid "Initiate a new outgoing call"
 #~ msgstr "Rozpocznij połączenie wychodzące"

@@ -14,6 +14,48 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: Setup/setup.xml:487
+msgid "Default Policy"
+msgstr "Alapértelmezett szabály"
+
+#: Setup/setup.xml:492
+msgid "Default Policy installed during setup"
+msgstr "Alapértelmezett szabály beállításra került a telepítés közben"
+
+#: Preference.php:74
+msgid "Default Addressbook"
+msgstr "Alapértelmezett Címjegyzék"
+
+#: Preference.php:75
+msgid "The default addressbook to create new contacts in."
+msgstr "Alapértelmezett Címjegyzék új kapcsolatok létrehozására."
+
+#: Preference.php:78
+msgid "Default Calendar"
+msgstr "Alapértelmezett Naptár"
+
+#: Preference.php:79
+msgid "The default calendar to create new events in."
+msgstr "Alapértelmezett Naptár új események létrehozására."
+
+#: Preference.php:82
+msgid "Default Task List"
+msgstr "Alapértelmezett Feladat Lista"
+
+#: Preference.php:83
+msgid "The default task list to create new tasks in."
+msgstr "Alapértelmezett Feladat Lista új feladatok létrehozására."
+
+#: js/Model.js:45
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Eszköz"
+msgstr[1] "Eszközök"
+
+#: js/Model.js:45
+msgid "Devices"
+msgstr "Eszközök"
+
 #: js/Application.js:30
 msgid "Active Sync"
 msgstr "Active Sync"
@@ -45,45 +87,3 @@ msgstr "újraállított"
 #: js/Application.js:105
 msgid "Set Sync Filter"
 msgstr "Sync szűrő beállítása"
-
-#: js/Model.js:45
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Eszköz"
-msgstr[1] "Eszközök"
-
-#: js/Model.js:45
-msgid "Devices"
-msgstr "Eszközök"
-
-#: Preference.php:74
-msgid "Default Addressbook"
-msgstr "Alapértelmezett Címjegyzék"
-
-#: Preference.php:75
-msgid "The default addressbook to create new contacts in."
-msgstr "Alapértelmezett Címjegyzék új kapcsolatok létrehozására."
-
-#: Preference.php:78
-msgid "Default Calendar"
-msgstr "Alapértelmezett Naptár"
-
-#: Preference.php:79
-msgid "The default calendar to create new events in."
-msgstr "Alapértelmezett Naptár új események létrehozására."
-
-#: Preference.php:82
-msgid "Default Task List"
-msgstr "Alapértelmezett Feladat Lista"
-
-#: Preference.php:83
-msgid "The default task list to create new tasks in."
-msgstr "Alapértelmezett Feladat Lista új feladatok létrehozására."
-
-#: Setup/setup.xml:474
-msgid "Default Policy"
-msgstr "Alapértelmezett szabály"
-
-#: Setup/setup.xml:479
-msgid "Default Policy installed during setup"
-msgstr "Alapértelmezett szabály beállításra került a telepítés közben"

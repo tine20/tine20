@@ -18,61 +18,46 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Sipgate\n"
 
-#: js/AddressbookGridPanelHook.js:38
-msgid "Call contact"
-msgstr "Kontakt anrufen"
-
-#: js/AddressbookGridPanelHook.js:61
-msgid "Compose SMS"
-msgstr "Verfasse SMS"
-
-#: js/AddressbookGridPanelHook.js:255
-msgid "Work"
-msgstr "Arbeit"
-
-#: js/AddressbookGridPanelHook.js:265
-msgid "Home"
-msgstr "zu Hause"
-
-#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:320
-msgid "Cell"
-msgstr "Handy"
-
-#: js/AddressbookGridPanelHook.js:285 js/AddressbookGridPanelHook.js:330
-msgid "Cell private"
-msgstr "Handy privat"
-
-#: js/CallStateWindow.js:50 js/DialNumberDialog.js:64
-#: js/SearchAddressDialog.js:64 js/SmsEditDialog.js:60
-msgid "Cancel"
-msgstr "abbrechen"
-
-#: js/CallStateWindow.js:106
+#: Preference.php:72
 #, fuzzy
-msgid "connecting..."
-msgstr "Verbinde zu:"
+msgid "Your phone"
+msgstr "Ihre Telefonnummer"
 
-#: js/CallStateWindow.js:144
-msgid "Connecting to: "
-msgstr "Verbinde zu:"
-
-#: js/DialNumberDialog.js:56 js/DialNumberDialog.js:152
+#: Preference.php:73
 #, fuzzy
-msgid "Dial Number"
-msgstr "wählen"
+msgid "This is your phone"
+msgstr "Das ist die ausgehende Rufnummer beim Wählen aus der Anwendung heraus"
 
-#: js/DialNumberDialog.js:72 js/SearchAddressDialog.js:72
-#: js/SmsEditDialog.js:68
-msgid "Close"
-msgstr "Schließen"
+#: Preference.php:76
+#, fuzzy
+msgid "Your fax"
+msgstr "Ihre Faxnummer"
 
-#: js/DialNumberDialog.js:120
-msgid "Number to call"
-msgstr "Telefonnummer"
+#: Preference.php:77
+msgid "This is your fax"
+msgstr "Das ist Ihr Faxgerät"
+
+#: Preference.php:80
+msgid "Your mobile number"
+msgstr "Ihre Handynummer"
+
+#: Preference.php:81
+msgid "Used when sending SMS"
+msgstr "Wird benutzt beim Verschicken einer SMS aus der Anwendung heraus"
 
 #: js/SearchAddressDialog.js:56
 msgid "Add Number"
 msgstr "Nummer hinzufügen"
+
+#: js/SearchAddressDialog.js:64 js/SmsEditDialog.js:60
+#: js/CallStateWindow.js:50 js/DialNumberDialog.js:64
+msgid "Cancel"
+msgstr "abbrechen"
+
+#: js/SearchAddressDialog.js:72 js/SmsEditDialog.js:68
+#: js/DialNumberDialog.js:72
+msgid "Close"
+msgstr "Schließen"
 
 #: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
 msgid "Phone"
@@ -126,6 +111,19 @@ msgstr "Endgeräte"
 #: js/SearchAddressDialog.js:214
 msgid "Choose Address"
 msgstr "Nummer zu Kontakt hinzufügen"
+
+#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:181
+msgid "Send"
+msgstr "SMS verschicken"
+
+#: js/CallStateWindow.js:106
+#, fuzzy
+msgid "connecting..."
+msgstr "Verbinde zu:"
+
+#: js/CallStateWindow.js:144
+msgid "Connecting to: "
+msgstr "Verbinde zu:"
 
 #: js/Sipgate.js:30
 msgid "Edit phone settings"
@@ -242,36 +240,38 @@ msgstr "Sie haben aufgelegt, bevor Ihr Gesprächspartner antworten hat können"
 msgid "hungup"
 msgstr "Gespräch beendet"
 
-#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:181
-msgid "Send"
-msgstr "SMS verschicken"
-
-#: Preference.php:72
+#: js/DialNumberDialog.js:56 js/DialNumberDialog.js:152
 #, fuzzy
-msgid "Your phone"
-msgstr "Ihre Telefonnummer"
+msgid "Dial Number"
+msgstr "wählen"
 
-#: Preference.php:73
-#, fuzzy
-msgid "This is your phone"
-msgstr "Das ist die ausgehende Rufnummer beim Wählen aus der Anwendung heraus"
+#: js/DialNumberDialog.js:120
+msgid "Number to call"
+msgstr "Telefonnummer"
 
-#: Preference.php:76
-#, fuzzy
-msgid "Your fax"
-msgstr "Ihre Faxnummer"
+#: js/AddressbookGridPanelHook.js:38
+msgid "Call contact"
+msgstr "Kontakt anrufen"
 
-#: Preference.php:77
-msgid "This is your fax"
-msgstr "Das ist Ihr Faxgerät"
+#: js/AddressbookGridPanelHook.js:61
+msgid "Compose SMS"
+msgstr "Verfasse SMS"
 
-#: Preference.php:80
-msgid "Your mobile number"
-msgstr "Ihre Handynummer"
+#: js/AddressbookGridPanelHook.js:255
+msgid "Work"
+msgstr "Arbeit"
 
-#: Preference.php:81
-msgid "Used when sending SMS"
-msgstr "Wird benutzt beim Verschicken einer SMS aus der Anwendung heraus"
+#: js/AddressbookGridPanelHook.js:265
+msgid "Home"
+msgstr "zu Hause"
+
+#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:320
+msgid "Cell"
+msgstr "Handy"
+
+#: js/AddressbookGridPanelHook.js:285 js/AddressbookGridPanelHook.js:330
+msgid "Cell private"
+msgstr "Handy privat"
 
 #~ msgid "Body"
 #~ msgstr "Text"

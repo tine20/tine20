@@ -14,53 +14,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: Acl/Rights/Abstract.php:71
-msgid "admin"
-msgstr "admin"
-
-#: Acl/Rights/Abstract.php:72
-msgid "admin right description"
-msgstr "admin jogok leírása"
-
-#: Acl/Rights/Abstract.php:75
-msgid "run"
-msgstr "futtatás"
-
-#: Acl/Rights/Abstract.php:76
-msgid "run right description"
-msgstr "futtatási jogok leírása"
-
-#: Acl/Rights.php:147
-msgid "Report bugs"
-msgstr "Hibák jelentése"
-
-#: Acl/Rights.php:148
-msgid "Report bugs to the software vendor directly when they occur."
-msgstr "Hibák jelentése a szoftver gyártójának közvetlenül előforduláskor."
-
-#: Acl/Rights.php:151
-msgid "Check version"
-msgstr "Verzió ellenőrzése"
-
-#: Acl/Rights.php:152
-msgid "Check for new versions of this software."
-msgstr "Szoftver új verziójának keresése."
-
-#: Acl/Rights.php:155
-msgid "Manage own profile"
-msgstr "Saját profil kezelése"
-
-#: Acl/Rights.php:156
-msgid "The right to manage the own profile (selected contact data)."
-msgstr "Saját profil kezelésének joga (kiválasztott kapcsolati adatok)."
-
-#: Acl/Rights.php:159
-msgid "Manage own client state"
-msgstr "Saját kliens státusz kezelése"
-
-#: Acl/Rights.php:160
-msgid "The right to manage the own client state."
-msgstr "Saját kliens státusz kezelésének joga"
+#: Group/Abstract.php:179 User/Abstract.php:283 User/Abstract.php:284
+#: User/Abstract.php:285 User/Abstract.php:286 User/Abstract.php:287
+#: js/ux/ConnectionStatus.js:58
+msgid "unknown"
+msgstr "ismeretlen"
 
 #: Config.php:167
 msgid "System IMAP"
@@ -198,22 +156,6 @@ msgstr "Fileok könyvtára"
 msgid "Directory with web server write access for user files."
 msgstr "Felhasználói fileok könyvtára, ahol a web kiszolgáló írás joggal rendelkezik."
 
-#: Export/Pdf.php:216 js/widgets/tags/TagsPanel.js:57
-msgid "Tags"
-msgstr "Címkék"
-
-#: Export/Pdf.php:437
-msgid "Created by"
-msgstr "Készítette"
-
-#: Export/Pdf.php:483
-msgid "Activities"
-msgstr "Tevékenységek"
-
-#: Export/Spreadsheet/Ods.php:287
-msgid "Data"
-msgstr "Adat"
-
 #: Frontend/Http.php:357 js/ExceptionHandler.js:140
 msgid "Authorisation Required"
 msgstr "Azonosítás szükséges"
@@ -230,67 +172,137 @@ msgstr "Nem normális befejezés"
 msgid "An error occurred, the program ended abnormal."
 msgstr "Hiba keletkezett, a program futása megszakadt."
 
-#: Group/Abstract.php:179 js/ux/ConnectionStatus.js:58 User/Abstract.php:283
-#: User/Abstract.php:284 User/Abstract.php:285 User/Abstract.php:286
-#: User/Abstract.php:287
-msgid "unknown"
-msgstr "ismeretlen"
+#: Preference/Abstract.php:481
+msgid "default"
+msgstr "alapértelmezett"
 
-#: js/AboutDialog.js:40 js/MainMenu.js:112
-msgid "About {0}"
-msgstr "Erről: {0}"
+#: Setup/setup.xml:3014
+msgid "note"
+msgstr "megjegyzés"
 
-#: js/AboutDialog.js:59 js/PasswordChangeDialog.js:66
-#: js/ux/form/LayerCombo.js:186 js/widgets/ActivitiesPanel.js:311
-#: js/widgets/container/ContainerSelect.js:459
-#: js/widgets/dialog/EditDialog.js:222
-#: js/widgets/dialog/MultiOptionsDialog.js:102
-#: js/widgets/dialog/PreferencesDialog.js:114 js/widgets/EditRecord.js:157
-#: js/widgets/tags/TagsMassAttachAction.js:100
-msgid "Ok"
-msgstr "Rendben"
+#: Setup/setup.xml:3019
+msgid "default note type"
+msgstr "alapértelmezett megjegyzés típus"
 
-#: js/AdminPanel.js:75
-msgid "Profile Information"
-msgstr "Profil információk"
+#: Setup/setup.xml:3045
+msgid "telephone"
+msgstr "telefon"
 
-#: js/AdminPanel.js:79 js/widgets/dialog/EditDialog.js:232
-#: js/widgets/EditRecord.js:168
-msgid "Apply"
-msgstr "Alkalmaz"
+#: Setup/setup.xml:3050
+msgid "telephone call"
+msgstr "telefon hívás"
 
-#: js/AdminPanel.js:94 js/widgets/LangChooser.js:69
-#: js/widgets/TimezoneChooser.js:77
-msgid "Please Wait"
-msgstr "Kérlek várj"
+#: Setup/setup.xml:3076
+msgid "email"
+msgstr "email"
 
-#: js/AdminPanel.js:156 js/widgets/container/GrantsGrid.js:55
-msgid "Read"
-msgstr "Olvasás"
+#: Setup/setup.xml:3081
+msgid "email contact"
+msgstr "email kapcsolat"
 
-#: js/AdminPanel.js:157
-msgid "The field is readable part of the profile"
-msgstr "A mező a profil olvasható része"
+#: Setup/setup.xml:3107
+msgid "created"
+msgstr "készítette"
 
-#: js/AdminPanel.js:161 js/widgets/container/GrantsGrid.js:67
-msgid "Edit"
-msgstr "Szerkesztés"
+#: Setup/setup.xml:3112
+msgid "record created"
+msgstr "adatot készítette"
 
-#: js/AdminPanel.js:162
-msgid "The field is editable part of the profile"
-msgstr "A mező a profil szerkeszthető része"
+#: Setup/setup.xml:3138
+msgid "changed"
+msgstr "változtatta"
 
-#: js/AdminPanel.js:175 js/widgets/dialog/DuplicateResolveGridPanel.js:139
-msgid "Field Name"
-msgstr "Mező név"
+#: Setup/setup.xml:3143
+msgid "record changed"
+msgstr "adatot változtatta"
 
-#: js/AppManager.js:204
-msgid "Missing Applications"
-msgstr "Hiányzó alkalmazás"
+#: Preference.php:87 js/widgets/TimezoneChooser.js:37
+msgid "Timezone"
+msgstr "Időzóna"
 
-#: js/AppManager.js:205
-msgid "There are no applications enabled for you. Please contact your administrator."
-msgstr "Nincs engedélyezett alkalmazásod. Kérlek keresd a rendszergazdádat."
+#: Preference.php:88
+msgid "The timezone in which dates are shown in Tine 2.0."
+msgstr "A Tine 2.0 dátumainak időzónája."
+
+#: Preference.php:91 js/widgets/LangChooser.js:36
+msgid "Language"
+msgstr "Nyelv"
+
+#: Preference.php:92
+msgid "The language of the Tine 2.0 GUI."
+msgstr "Tine 2.0 felhasználói felületének nyelve."
+
+#: Preference.php:95
+msgid "Default Application"
+msgstr "Default Application"
+
+#: Preference.php:96
+msgid "The default application to show after login."
+msgstr "Bejelentkezés utáni alapértelmezett alkalmazás."
+
+#: Preference.php:99
+msgid "Window Type"
+msgstr "Ablak típus"
+
+#: Preference.php:100
+msgid "You can choose between ExtJs style windows or normal Browser popup windows."
+msgstr "Választhatsz az ExtJs stílus vagy a normál Böngésző felugró ablakai között."
+
+#: Preference.php:103
+msgid "Confirm Logout"
+msgstr "Kijelentkezés megerősítése"
+
+#: Preference.php:104
+msgid "Show confirmation dialog on logout."
+msgstr "Megerősítő ablak muitatása kijelentkezéskor."
+
+#: Acl/Rights.php:147
+msgid "Report bugs"
+msgstr "Hibák jelentése"
+
+#: Acl/Rights.php:148
+msgid "Report bugs to the software vendor directly when they occur."
+msgstr "Hibák jelentése a szoftver gyártójának közvetlenül előforduláskor."
+
+#: Acl/Rights.php:151
+msgid "Check version"
+msgstr "Verzió ellenőrzése"
+
+#: Acl/Rights.php:152
+msgid "Check for new versions of this software."
+msgstr "Szoftver új verziójának keresése."
+
+#: Acl/Rights.php:155
+msgid "Manage own profile"
+msgstr "Saját profil kezelése"
+
+#: Acl/Rights.php:156
+msgid "The right to manage the own profile (selected contact data)."
+msgstr "Saját profil kezelésének joga (kiválasztott kapcsolati adatok)."
+
+#: Acl/Rights.php:159
+msgid "Manage own client state"
+msgstr "Saját kliens státusz kezelése"
+
+#: Acl/Rights.php:160
+msgid "The right to manage the own client state."
+msgstr "Saját kliens státusz kezelésének joga"
+
+#: Acl/Rights/Abstract.php:71
+msgid "admin"
+msgstr "admin"
+
+#: Acl/Rights/Abstract.php:72
+msgid "admin right description"
+msgstr "admin jogok leírása"
+
+#: Acl/Rights/Abstract.php:75
+msgid "run"
+msgstr "futtatás"
+
+#: Acl/Rights/Abstract.php:76
+msgid "run right description"
+msgstr "futtatási jogok leírása"
 
 #: js/common.js:178
 msgid "Usage:&#160;"
@@ -324,287 +336,13 @@ msgid_plural "{0} seconds"
 msgstr[0] "{0} másodperc"
 msgstr[1] "{0} másodperc"
 
-#: js/Container.js:123
-msgid "All {0}"
-msgstr "Minden {0}"
-
-#: js/Container.js:124
-msgid "Shared {0}"
-msgstr "Megosztott {0}"
-
-#: js/Container.js:125
-msgid "Other Users {0}"
-msgstr "Többi felhasználó {0}"
-
-#: js/Container.js:130
-msgid "My {0}"
-msgstr "Saját {0}"
-
-#: js/data/Record.js:162
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Feladat"
-msgstr[1] "Feladatok"
-
-#: js/data/Record.js:166
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "tennivaló lista"
-msgstr[1] "tennivaló listák"
-
-#: js/ExceptionDialog.js:58 js/PasswordChangeDialog.js:60
-#: js/ux/form/LayerCombo.js:193 js/widgets/ActivitiesPanel.js:303
-#: js/widgets/container/ContainerSelect.js:450
-#: js/widgets/dialog/EditDialog.js:240
-#: js/widgets/dialog/MultiOptionsDialog.js:109
-#: js/widgets/dialog/PreferencesDialog.js:122
-#: js/widgets/dialog/WizardPanel.js:187 js/widgets/EditRecord.js:178
-#: js/widgets/persistentfilter/PickerPanel.js:592
-#: js/widgets/tags/TagsMassAttachAction.js:94
-#: js/widgets/tags/TagToggleBox.js:59
-msgid "Cancel"
-msgstr "Mégse"
-
-#: js/ExceptionDialog.js:66
-msgid "Send Report"
-msgstr "Jelentés küldése"
-
-#: js/ExceptionDialog.js:76
-msgid "The last action you made was potentially not performed correctly."
-msgstr "Az utolsó tevékenységed nem teljesült megfelelően."
-
-#: js/ExceptionDialog.js:77
-msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
-msgstr "Segíts tökéletesíteni ezt a szoftvert és értsesítsd a gyártót. Mellékelj egy leírást arról, hogy mit csináltál amikor a hiba keletkezett."
-
-#: js/ExceptionDialog.js:83 js/widgets/persistentfilter/PickerPanel.js:679
-#: js/widgets/tags/TagsPanel.js:609
-msgid "Description"
-msgstr "Leírás"
-
-#: js/ExceptionDialog.js:91
-msgid "Send Contact Information"
-msgstr "Kapcsolati információk küldése"
-
-#: js/ExceptionDialog.js:108
-msgid "Details:"
-msgstr "Részletek:"
-
-#: js/ExceptionDialog.js:136
-msgid "Sending report..."
-msgstr "Jelentés küldése..."
-
-#: js/ExceptionDialog.js:136
-msgid "Please wait a moment"
-msgstr "Várj egy pillanatot"
-
-#: js/ExceptionDialog.js:178
-msgid "Transmission Completed"
-msgstr "Átvitel befejezve"
-
-#: js/ExceptionDialog.js:179
-msgid "Your report has been sent. Thanks for your contribution"
-msgstr "Jelentésed elküldve. Köszönjük a részvételt"
-
-#: js/ExceptionDialog.js:179
-msgid "Please restart your browser now!"
-msgstr "Kérlek indítsd újra a böngésződet most!"
-
-#: js/ExceptionHandler.js:141
-msgid "Your session timed out. You need to login again."
-msgstr "Időtúllépés. Újra be kell jelentkezned."
-
-#: js/ExceptionHandler.js:158
-msgid "Insufficient Rights"
-msgstr "Nincs elegendő jogod"
-
-#: js/ExceptionHandler.js:159
-msgid "Sorry, you are not permitted to perform this action"
-msgstr "Bocsánat, de nem vagy jogosult erre a tevékenységre"
-
-#: js/ExceptionHandler.js:168
-msgid "Not Found"
-msgstr "Nem található"
-
-#: js/ExceptionHandler.js:169
-msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
-msgstr "Bocsánat, kérésed nem teljesíthető, mert a kért adat nem található. Legtöbb esetben ez azt jelenti, hogy valaki már törölte az adatot. Frissítsd az aktuális nézetedet."
-
-#: js/ExceptionHandler.js:178
-msgid "Concurrent Updates"
-msgstr "Megegyező frissítések"
-
-#: js/ExceptionHandler.js:179
-msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
-msgstr "Valaki más elmentette ezt a tételt miközben te szerkesztetted. Töltsd be újra és csináld újra a változtatásokat."
-
-#: js/ExceptionHandler.js:189
-msgid "Service Unavailable"
-msgstr "Szolgáltatás nem elérhető"
-
-#: js/ExceptionHandler.js:190
-msgid "The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:204 js/LoginPanel.js:362
-msgid "Connection lost, please check your network!"
-msgstr "Kapcsolat elveszett, ellenőrizd a hálózatod!"
-
-#: js/ExceptionHandler.js:210
-msgid "Timeout"
-msgstr "Időtúllépés"
-
-#: js/ExceptionHandler.js:211
-msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
-msgstr "Bocsánat, időtúllépés történt a kérésed feldolgozása közben. Töltsd újra a böngésződet, próbáld újra vagy lépj kapcsolatba a rendszergazdával."
-
-#: js/ExceptionHandler.js:220
-msgid "No Response"
-msgstr "Nincs válasz"
-
-#: js/ExceptionHandler.js:221
-msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
-msgstr "Bocsánat, a szerver nem adott vissza adatot. Töltsd újra a böngésződet, próbáld újra vagy lépj kapcsolatba a rendszergazdával."
-
-#: js/ExceptionHandler.js:230
-msgid "Out of Resources"
-msgstr "Erőforrások elfogytak"
-
-#: js/ExceptionHandler.js:231
-msgid "Sorry, the Server stated a \"memory exhausted\" condition. Please contact your administrator."
-msgstr "Elnézést, a Szerver egy \"memory exhausted\" állapotba került. Lépj kapcsolatba a rendszergazdával."
-
-#: js/ExceptionHandler.js:240
-msgid "No Role Memberships"
-msgstr "Nincsenek Szerep tagságok"
-
-#: js/ExceptionHandler.js:241
-msgid "Your user account has no role memberships. Please contact your administrator."
-msgstr "A felhasználó nevedhez nem tartoznak szerep tagságok. Lépj kapcsolatba a rendszergazdával."
-
-#: js/LoginPanel.js:80 js/LoginPanel.js:118
-msgid "Login"
-msgstr "Bejelentkezés"
-
-#: js/LoginPanel.js:90 js/widgets/dialog/CredentialsDialog.js:60
-msgid "Username"
-msgstr "Felhasználónév"
-
-#: js/LoginPanel.js:107 js/widgets/dialog/CredentialsDialog.js:64
-msgid "Password"
-msgstr "Jelszó"
-
-#: js/LoginPanel.js:137
-msgid "Tine 2.0 is made for you"
-msgstr "Tine 2.0 Neked készült"
-
-#: js/LoginPanel.js:139
-msgid "Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
-msgstr "Tine 2.0 szeretné az üzleti együttműködést könnyebbé és élvezhetőbbé tenni - a szükségleteid szerint! Ezért melegen üdvözöljük a megbeszéléseket, az ötleteket és a segítség nyújtást."
-
-#: js/LoginPanel.js:145
-msgid "Tine 2.0 Homepage"
-msgstr "Tine 2.0 Honlap"
-
-#: js/LoginPanel.js:146
-msgid "Tine 2.0 Forum"
-msgstr "Tine 2.0 Fórum"
-
-#: js/LoginPanel.js:191
-msgid "about {0} minutes"
-msgstr "kb. {0} perc"
-
-#: js/LoginPanel.js:196 js/LoginPanel.js:421
-msgid "Tine 2.0 needs your help"
-msgstr "Tine 2.0-nek szüksége van a segítségedre"
-
-#: js/LoginPanel.js:198 js/LoginPanel.js:423
-msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
-msgstr "Rendszeresen szükségünk van a visszajelzésedre, hogy a Tine 2.0 következő kiadása az igényeidet minnél jobban kielégítse. Segíts nekünk és magadnak ezekben résztvéve:"
-
-#: js/LoginPanel.js:204
-msgid "participate!"
-msgstr "közreműködés!"
-
-#: js/LoginPanel.js:226
-msgid "Languages"
-msgstr "Nyelvek"
-
-#: js/LoginPanel.js:227
-msgid "Duration"
-msgstr "Időtartam"
-
-#: js/LoginPanel.js:268
-msgid "Browser incompatible"
-msgstr "Böngésző nem kompatibilis"
-
-#: js/LoginPanel.js:270
-msgid "Your browser is not supported by Tine 2.0."
-msgstr "A böngésződet nem támogatja a Tine 2.0."
-
-#: js/LoginPanel.js:275
-msgid "Browser incompatible?"
-msgstr "Böngésző nem kompatibilis?"
-
-#: js/LoginPanel.js:277
-msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
-msgstr "Ismeretlen böngészőt használsz. Ez ismeretlen viselkedést okozhat."
-
-#: js/LoginPanel.js:283
-msgid "You might try one of these browsers:"
-msgstr "Az alábbi böngészőket kell megpróbálnod:"
-
-#: js/LoginPanel.js:341
-msgid "Logging you in..."
-msgstr "Bejelentkezés..."
-
-#: js/LoginPanel.js:341 js/widgets/container/GrantsDialog.js:95
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:317
-#: js/widgets/persistentfilter/PickerPanel.js:332
-#: js/widgets/persistentfilter/PickerPanel.js:374
-#: js/widgets/persistentfilter/PickerPanel.js:404
-#: js/widgets/persistentfilter/PickerPanel.js:458
-#: js/widgets/tree/ContextMenu.js:170
-msgid "Please wait"
-msgstr "Kérlek várj"
-
-#: js/LoginPanel.js:354
-msgid "Login successful. Loading {0}..."
-msgstr "Bejelentkezés sikeres. {0} betöltése..."
-
-#: js/LoginPanel.js:354 js/MainMenu.js:227
-msgid "Please wait!"
-msgstr "Kérlek várj!"
-
-#: js/LoginPanel.js:366
-msgid "Login failure"
-msgstr "Hibás bejelentkezés"
-
-#: js/LoginPanel.js:367
-msgid "Your username and/or your password are wrong!!!"
-msgstr "A felhasználóneved és/vagy a jelszavad hibás!!!"
-
-#: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
-#: js/widgets/dialog/EditDialog.js:539 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:303
-#: js/widgets/dialog/PreferencesDialog.js:250
-#: js/widgets/dialog/PreferencesDialog.js:279
-msgid "Errors"
-msgstr "Hibák"
-
-#: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
-#: js/widgets/dialog/EditDialog.js:549 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:342
-msgid "Please fix the errors noted."
-msgstr "Javítsd a jegyzett hibákat."
-
-#: js/LoginPanel.js:394
-msgid "Please enter your login data"
-msgstr "Írd be a bejelentkezési adataidat"
-
 #: js/MainMenu.js:62
 msgid "User: {0}"
 msgstr "Felhasználó: {0}"
+
+#: js/MainMenu.js:112 js/AboutDialog.js:40
+msgid "About {0}"
+msgstr "Erről: {0}"
 
 #: js/MainMenu.js:118
 msgid "Debug Console (Ctrl + F11)"
@@ -646,11 +384,10 @@ msgstr "Web program telepítése"
 msgid "Install Tine 2.0 as web app in your browser."
 msgstr "Tine 2.0 telepítése web programként a böngésződben."
 
-#: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:556
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:314
-#: js/widgets/grid/GridPanel.js:1336
-#: js/widgets/persistentfilter/PickerPanel.js:330
-#: js/widgets/tree/ContextMenu.js:321
+#: js/MainMenu.js:213 js/widgets/persistentfilter/PickerPanel.js:330
+#: js/widgets/dialog/EditDialog.js:561
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:297
+#: js/widgets/tree/ContextMenu.js:329 js/widgets/grid/GridPanel.js:1336
 msgid "Confirm"
 msgstr "Confirm"
 
@@ -662,232 +399,80 @@ msgstr "Biztosan ki akarsz jelentkezni?"
 msgid "Logging you out..."
 msgstr "Kijelentkezés..."
 
-#: js/MainScreen.js:192
-msgid "Your password expired. Please enter a new user password:"
-msgstr "Lejárt a jelszód. Írj be egy új jelszót:"
+#: js/MainMenu.js:227 js/LoginPanel.js:354
+msgid "Please wait!"
+msgstr "Kérlek várj!"
 
-#: js/Models.js:271
-msgid "Import"
-msgid_plural "Imports"
-msgstr[0] "Importálás"
-msgstr[1] "Importálások"
+#: js/AdminPanel.js:75
+msgid "Profile Information"
+msgstr "Profil információk"
 
-#: js/Models.js:298 js/widgets/container/GrantsGrid.js:79
-#: js/widgets/dialog/ExportDialog.js:46
-msgid "Export"
-msgid_plural "Export"
-msgstr[0] "Exportálás"
-msgstr[1] "Exportálás"
+#: js/AdminPanel.js:79 js/widgets/dialog/EditDialog.js:237
+#: js/widgets/EditRecord.js:168
+msgid "Apply"
+msgstr "Alkalmaz"
 
-#: js/Models.js:336
-msgid "Credentials"
-msgid_plural "Credentials"
-msgstr[0] "Belépési adat"
-msgstr[1] "Belépési adatok"
+#: js/AdminPanel.js:94 js/widgets/TimezoneChooser.js:77
+#: js/widgets/LangChooser.js:69
+msgid "Please Wait"
+msgstr "Kérlek várj"
 
-#: js/Models.js:363 js/widgets/relation/FilterModel.js:32
-msgid "Relation"
-msgid_plural "Relations"
-msgstr[0] "Kapcsolat"
-msgstr[1] "Kapcsolatok"
+#: js/AdminPanel.js:156 js/widgets/container/GrantsGrid.js:43
+msgid "Read"
+msgstr "Olvasás"
 
-#: js/Models.js:385
-msgid "Department"
-msgid_plural "Departments"
-msgstr[0] "Osztály"
-msgstr[1] "Osztályok"
+#: js/AdminPanel.js:157
+msgid "The field is readable part of the profile"
+msgstr "A mező a profil olvasható része"
 
-#: js/Models.js:393 js/widgets/account/PickerGridPanel.js:252
-#: js/widgets/grid/LinkGridPanel.js:103
-msgid "Name"
-msgstr "Név"
+#: js/AdminPanel.js:161 js/widgets/container/GrantsGrid.js:47
+msgid "Edit"
+msgstr "Szerkesztés"
 
-#: js/Models.js:412
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] "Beállítás"
-msgstr[1] "Beállítások"
+#: js/AdminPanel.js:162
+msgid "The field is editable part of the profile"
+msgstr "A mező a profil szerkeszthető része"
 
-#: js/Models.js:412
-msgid "Configs"
-msgstr "Beállítások"
+#: js/AdminPanel.js:175 js/widgets/dialog/DuplicateResolveGridPanel.js:139
+msgid "Field Name"
+msgstr "Mező név"
 
-#: js/PasswordChangeDialog.js:32
-msgid "Change Password For \"{0}\""
-msgstr " \"{0}\" jelszavának megváltoztatása"
+#: js/widgets/form/FileUploadButton.js:65
+msgid "Wrong File Type"
+msgstr "Rossz file típus"
 
-#: js/PasswordChangeDialog.js:48
-msgid "Old Password"
-msgstr "Régi jelszó"
+#: js/widgets/form/FileUploadButton.js:65
+msgid "Please select a file with one of the following extensions:"
+msgstr "Kérlek válassz egy filet az alábbi kiterjesztésekkel:"
 
-#: js/PasswordChangeDialog.js:52
-msgid "New Password"
-msgstr "Új jelszó"
+#: js/widgets/form/RecordPickerComboBox.js:69 js/widgets/tags/TagsPanel.js:474
+msgid "Searching..."
+msgstr "Keresés..."
 
-#: js/PasswordChangeDialog.js:56
-msgid "Repeat new Password"
-msgstr "Jelszó megismétlése"
+#: js/widgets/form/ConfigPanel.js:113
+msgid "Configuration Problem"
+msgstr "Beállítási probléma"
 
-#: js/PasswordChangeDialog.js:75
-msgid "Please Wait!"
-msgstr "Kérem várjon!"
+#: js/widgets/form/ConfigPanel.js:134
+msgid "Invalid configuration"
+msgstr "Érvénytelen konfiguráció"
 
-#: js/PasswordChangeDialog.js:76
-msgid "changing password..."
-msgstr "jelszó megváltoztatása..."
+#: js/widgets/form/ConfigPanel.js:134
+#: js/widgets/dialog/PreferencesDialog.js:250
+msgid "You need to correct the red marked fields before config could be saved"
+msgstr "A pirossal jelzett mezőket mentés előtt ki kell javítanod"
 
-#: js/PasswordChangeDialog.js:87
-msgid "Success"
-msgstr "Sikerült"
+#: js/widgets/form/ConfigPanel.js:158
+msgid "Transferring Configuration..."
+msgstr "Beállítások átvitele..."
 
-#: js/PasswordChangeDialog.js:88
-msgid "Your password has been changed."
-msgstr "Jelszavad megváltozott."
+#: js/widgets/form/ConfigPanel.js:254
+msgid "Save config"
+msgstr "Konfiguráció mentése"
 
-#: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
-#: js/widgets/dialog/ImportDialog.js:661
-msgid "Failure"
-msgstr "Hiba"
-
-#: js/PasswordChangeDialog.js:111
-msgid "The new passwords mismatch, please correct them."
-msgstr "Az új jelszavak nem egyezznek, javítsd őket."
-
-#: js/prototypeTranslations.js:20 js/prototypeTranslations.js:21
-msgid "Outdent Text"
-msgstr "Nem behúzott szöveg"
-
-#: js/prototypeTranslations.js:22 js/prototypeTranslations.js:23
-msgid "Indent Text"
-msgstr "Behúzott szöveg"
-
-#: js/prototypeTranslations.js:24 js/prototypeTranslations.js:25
-msgid "Remove Formatting"
-msgstr "Formázás eltávolítása"
-
-#: js/tineInit.js:588
-msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
-msgstr "Végeztes hiba: A kliens önfrissítése hibás, lépj kapcsolatba a rendszergazdával és/vagy indítsd/töltsd újra a böngésződet."
-
-#: js/UserRegistration.js:37
-msgid "Registration Wizard"
-msgstr "Regisztrációs varázsló"
-
-#: js/UserRegistration.js:90
-msgid "Given name"
-msgstr "Keresztnév"
-
-#: js/UserRegistration.js:101
-msgid "Family name"
-msgstr "Családi név"
-
-#: js/UserRegistration.js:112
-msgid "Login name"
-msgstr "Bejelentkezési név"
-
-#: js/UserRegistration.js:125
-msgid "Emailaddress"
-msgstr "E-mail cím"
-
-#: js/UserRegistration.js:171
-msgid "Congratulations!"
-msgstr "Gratulálunk!"
-
-#: js/UserRegistration.js:171
-msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
-msgstr "Beírtál minden szükséges információt. Ha megnyomod a Befejezés gombot, elküldjük a regisztrációs e-mailt."
-
-#: js/ux/ConnectionStatus.js:56
-msgid "online"
-msgstr "online"
-
-#: js/ux/ConnectionStatus.js:57
-msgid "offline"
-msgstr "offline"
-
-#: js/ux/form/ImageField.js:72
-msgid "Loading"
-msgstr "Betöltés"
-
-#: js/ux/form/ImageField.js:75
-msgid "Click to edit"
-msgstr "Kattints a szerkesztéshez"
-
-#: js/ux/form/ImageField.js:124
-msgid "Not An Image"
-msgstr "Ez nem egy kép"
-
-#: js/ux/form/ImageField.js:124
-msgid "Please select an image file (gif/png/jpeg)"
-msgstr "Kérem válasszon egy kép file-t (gif/png/jpeg)"
-
-#: js/ux/form/ImageField.js:162 js/widgets/grid/FileUploadGrid.js:115
-msgid "Upload Failed"
-msgstr "Hibás feltöltés"
-
-#: js/ux/form/ImageField.js:162
-msgid "Could not upload image. Please notify your Administrator"
-msgstr "A kép feltöltése sikertelen. Értesítse a rendszergazdáját"
-
-#: js/ux/form/ImageField.js:174
-msgid "Change Image"
-msgstr "Kép cseréje"
-
-#: js/ux/form/ImageField.js:183 js/ux/form/ImageField.js:201
-msgid "Crop Image"
-msgstr "Kép kivágása"
-
-#: js/ux/form/ImageField.js:207
-msgid "Delete Image"
-msgstr "Kép törlése"
-
-#: js/ux/form/ImageField.js:216
-msgid "Show Original Image"
-msgstr "Eredeti kép mutatása"
-
-#: js/ux/form/ImageField.js:278
-msgid "Image Failed"
-msgstr "Hibás kép"
-
-#: js/ux/form/ImageField.js:278
-msgid "Could not load image. Please notify your Administrator"
-msgstr "Kép betöltése sikertelen. Értesítse a redszergazdáját"
-
-#: js/ux/form/RecordsComboBox.js:26
-msgid "Software Version"
-msgstr "Szoftver verzió"
-
-#: js/ux/grid/PagingToolbar.js:53
-msgid "{0} selected"
-msgstr "{0} választva"
-
-#: js/ux/grid/PagingToolbar.js:54
-msgid "Unselect all"
-msgstr "Összes kiválasztás visszavonása"
-
-#: js/ux/grid/PagingToolbar.js:55
-msgid "Select all visible ({0} records)"
-msgstr "Összes látható ({0} adat) kiválasztása"
-
-#: js/ux/grid/PagingToolbar.js:56
-msgid "Select all pages ({0} records)"
-msgstr "Összes oldal ({0} adat) kiválasztása"
-
-#: js/ux/grid/PagingToolbar.js:57
-msgid "Toggle selection"
-msgstr "Kiválasztás átváltása"
-
-#: js/ux/Percentage.js:190
-msgid "(paused)"
-msgstr "(szüneteletve)"
-
-#: js/ux/PopupWindowManager.js:166
-msgid "The window you want to work with is backgrounded. Your browser does't support to forground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"
-msgstr "Az az ablak amivel dolgozni szeretnél a háttérben van. A böngésződ nem támogatja az ablak előtérbe kerülését, ezért az operációr rendszered ablak váltási tulajdonságát kell használnod. Küldj visszajelzést a böngésződ gyártójának!"
-
-#: js/ux/SearchField.js:44
-msgid "enter searchfilter"
-msgstr "keresőszűrő megadása"
+#: js/widgets/form/ConfigPanel.js:264
+msgid "Reload config"
+msgstr "Konfigurácó újratöltése"
 
 #: js/widgets/account/PickerGridPanel.js:149
 msgid "Search User"
@@ -901,32 +486,58 @@ msgstr "Csoport keresése"
 msgid "Add Anyone"
 msgstr "Bárki hozzáadása"
 
-#: js/widgets/account/PickerGridPanel.js:169
+#: js/widgets/account/PickerGridPanel.js:170
 msgid "Anyone"
 msgstr "Bárki"
 
-#: js/widgets/account/PickerGridPanel.js:217
+#: js/widgets/account/PickerGridPanel.js:218
 msgid "Search for users ..."
 msgstr "Felhasználók keresése..."
 
-#: js/widgets/account/PickerGridPanel.js:236
+#: js/widgets/account/PickerGridPanel.js:239
 msgid "Search for groups ..."
 msgstr "Csoportok keresése..."
+
+#: js/widgets/account/PickerGridPanel.js:255
+#: js/widgets/grid/LinkGridPanel.js:103
+#: js/widgets/container/PropertiesDialog.js:104 js/Models.js:393
+msgid "Name"
+msgstr "Név"
+
+#: js/widgets/TimezoneChooser.js:77
+msgid "setting new timezone..."
+msgstr "új időzóna beállítása..."
+
+#: js/widgets/Priority.js:20
+msgid "low"
+msgstr "alacsony"
+
+#: js/widgets/Priority.js:21
+msgid "normal"
+msgstr "normális"
+
+#: js/widgets/Priority.js:22
+msgid "high"
+msgstr "magas"
+
+#: js/widgets/Priority.js:23
+msgid "urgent"
+msgstr "sürgős"
 
 #: js/widgets/ActivitiesPanel.js:147
 msgid "Add a Note..."
 msgstr "Megjegyzés hozzáadása..."
 
 #: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:174
-#: js/widgets/container/GrantsGrid.js:61 js/widgets/tree/ContextMenu.js:35
+#: js/widgets/tree/ContextMenu.js:35 js/widgets/container/GrantsGrid.js:45
 msgid "Add"
 msgstr "Hozzáadás"
 
-#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:463
+#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:466
 msgid "Note"
 msgstr "Mejegyzés"
 
-#: js/widgets/ActivitiesPanel.js:175 js/widgets/ActivitiesPanel.js:385
+#: js/widgets/ActivitiesPanel.js:175 js/widgets/ActivitiesPanel.js:388
 msgid "Add new note"
 msgstr "Új megjegyzés hozzáadása"
 
@@ -934,238 +545,305 @@ msgstr "Új megjegyzés hozzáadása"
 msgid "Notes"
 msgstr "Megjegyzések"
 
-#: js/widgets/ActivitiesPanel.js:282
+#: js/widgets/ActivitiesPanel.js:285
 msgid "Enter new note:"
 msgstr "Új megjegyzés megadása:"
 
-#: js/widgets/ActivitiesPanel.js:319 js/widgets/ActivitiesPanel.js:384
+#: js/widgets/ActivitiesPanel.js:306
+#: js/widgets/persistentfilter/PickerPanel.js:592
+#: js/widgets/dialog/EditDialog.js:245
+#: js/widgets/dialog/PreferencesDialog.js:122
+#: js/widgets/dialog/MultiOptionsDialog.js:109
+#: js/widgets/dialog/WizardPanel.js:187 js/widgets/EditRecord.js:178
+#: js/widgets/container/ContainerSelect.js:450
+#: js/widgets/tags/TagsMassAttachAction.js:94
+#: js/widgets/tags/TagToggleBox.js:59 js/ux/form/LayerCombo.js:193
+#: js/PasswordChangeDialog.js:60 js/ExceptionDialog.js:58
+msgid "Cancel"
+msgstr "Mégse"
+
+#: js/widgets/ActivitiesPanel.js:314 js/widgets/dialog/EditDialog.js:227
+#: js/widgets/dialog/PreferencesDialog.js:114
+#: js/widgets/dialog/MultiOptionsDialog.js:102 js/widgets/EditRecord.js:157
+#: js/widgets/container/ContainerSelect.js:459
+#: js/widgets/tags/TagsMassAttachAction.js:100 js/ux/form/LayerCombo.js:186
+#: js/PasswordChangeDialog.js:66 js/AboutDialog.js:59
+msgid "Ok"
+msgstr "Rendben"
+
+#: js/widgets/ActivitiesPanel.js:322 js/widgets/ActivitiesPanel.js:387
 msgid "Add Note"
 msgstr "Megjegyzés hozzáadása"
 
-#: js/widgets/ActivitiesPanel.js:371
+#: js/widgets/ActivitiesPanel.js:374
 msgid "Add a {0} Note"
 msgstr "{0} megjegyzés hozzáadása"
 
-#: js/widgets/ActivitiesPanel.js:461 js/widgets/ActivitiesPanel.js:598
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/ActivitiesPanel.js:601
 #: js/widgets/grid/LinkGridPanel.js:105
 msgid "Type"
 msgstr "Típus"
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1021
+#: js/widgets/ActivitiesPanel.js:467 js/widgets/grid/GridPanel.js:1021
 msgid "Created By"
 msgstr "Létrehozta"
 
-#: js/widgets/ActivitiesPanel.js:465
+#: js/widgets/ActivitiesPanel.js:468
 msgid "Timestamp"
 msgstr "Időbélyeg"
 
-#: js/widgets/ActivitiesPanel.js:479
+#: js/widgets/ActivitiesPanel.js:482
 msgid "Displaying history records {0} - {1} of {2}"
 msgstr "Előzmény adatok megjelenítése {0} - {1} / {2}"
 
-#: js/widgets/ActivitiesPanel.js:480
+#: js/widgets/ActivitiesPanel.js:483
 msgid "No history to display"
 msgstr "Nincs megjeleníthető előzmény"
 
-#: js/widgets/ActivitiesPanel.js:580
+#: js/widgets/ActivitiesPanel.js:583
 msgid "History"
 msgstr "Előzmények"
 
-#: js/widgets/ActivitiesPanel.js:592
+#: js/widgets/ActivitiesPanel.js:595
 msgid "Quick search"
 msgstr "Gyors keresés"
 
-#: js/widgets/ActivitiesPanel.js:593 js/widgets/ActivitiesPanel.js:594
+#: js/widgets/ActivitiesPanel.js:596 js/widgets/ActivitiesPanel.js:597
 msgid "Time"
 msgstr "Idő"
 
-#: js/widgets/ActivitiesPanel.js:596
+#: js/widgets/ActivitiesPanel.js:599
 msgid "User"
 msgstr "Felhasználó"
 
-#: js/widgets/container/ContainerSelect.js:107
-msgid "choose other {0}..."
-msgstr "másik {0} választása..."
+#: js/widgets/persistentfilter/PickerPanel.js:94
+msgid "My favorites"
+msgstr "Kedvenceim"
 
-#: js/widgets/container/ContainerSelect.js:110
-msgid "Select a {0}"
-msgstr "Válassz egy {0}"
+#: js/widgets/persistentfilter/PickerPanel.js:291
+msgid "Remove from shared favorites"
+msgstr "Eltávolítás a megosztott kedvencek közül"
 
-#: js/widgets/container/ContainerSelect.js:130
-msgid "Recently used {0}:"
-msgstr "Legtöbbet használt {0}:"
+#: js/widgets/persistentfilter/PickerPanel.js:293
+msgid "Add to shared favorites"
+msgstr "Hozzáadás a megosztott kedvencekhez"
 
-#: js/widgets/container/ContainerSelect.js:447
-msgid "please select a {0}"
-msgstr "kérlek válassz egy {0}"
+#: js/widgets/persistentfilter/PickerPanel.js:297
+msgid "Delete Favorite"
+msgstr "Kedvenc törlése"
 
-#: js/widgets/container/FilterModel.js:130
-msgid "is personal of"
-msgstr "személyes"
+#: js/widgets/persistentfilter/PickerPanel.js:302
+#: js/widgets/persistentfilter/PickerPanel.js:440
+msgid "Edit Favorite"
+msgstr "Kedvenc szerkesztése"
 
-#: js/widgets/container/FilterModel.js:130
-#: js/widgets/container/FilterModel.js:134 js/widgets/grid/FilterModel.js:170
-msgid "is equal to"
-msgstr "egyforma ezzel:"
+#: js/widgets/persistentfilter/PickerPanel.js:307
+msgid "Overwrite Favorite"
+msgstr "Kedvenc felülírása"
 
-#: js/widgets/container/FilterModel.js:237
-#: js/widgets/grid/FilterModelMultiSelect.js:211
-msgid "Selected  {0}"
-msgstr "Kiválasztott {0}"
+#: js/widgets/persistentfilter/PickerPanel.js:330
+msgid "Do you really want to delete the favorite \"{0}\"?"
+msgstr "Biztosan szeretnéd törölni ezt a kedvencet: \"{0}\"?"
 
-#: js/widgets/container/GrantsDialog.js:52
-msgid "Folder"
-msgstr "Mappa"
+#: js/widgets/persistentfilter/PickerPanel.js:332
+#: js/widgets/persistentfilter/PickerPanel.js:374
+#: js/widgets/persistentfilter/PickerPanel.js:404
+#: js/widgets/persistentfilter/PickerPanel.js:458
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:300
+#: js/widgets/tree/ContextMenu.js:178 js/widgets/container/GrantsDialog.js:95
+#: js/LoginPanel.js:341
+msgid "Please wait"
+msgstr "Kérlek várj"
 
-#: js/widgets/container/GrantsDialog.js:95
-msgid "Updating Grants"
-msgstr "Engedélyek frissítése"
+#: js/widgets/persistentfilter/PickerPanel.js:333
+msgid "Deleting Favorite \"{0}\""
+msgstr "Kedvenc törlése: \"{0}\""
 
-#: js/widgets/container/GrantsDialog.js:126
-msgid "Error"
-msgstr "Hiba"
+#: js/widgets/persistentfilter/PickerPanel.js:370
+msgid "Overwrite?"
+msgstr "Felülírás?"
 
-#: js/widgets/container/GrantsDialog.js:127
-msgid "You are not allowed to remove all admins for this container!"
-msgstr "Nem távolíthatod el az összed admint ebből a konténerből!"
+#: js/widgets/persistentfilter/PickerPanel.js:371
+msgid "Do you want to overwrite the favorite \"{0}\"?"
+msgstr "Biztosan szeretnéd felülírni ezt a kedvencet: \"{0}\"?"
 
-#: js/widgets/container/GrantsGrid.js:56
-msgid "The grant to read records of this container"
-msgstr "Ezen konténer adatolvásásának engedélyezése"
+#: js/widgets/persistentfilter/PickerPanel.js:375
+msgid "Overwriting Favorite \"{0}\""
+msgstr "Kedvenc felülírása: \"{0}\""
 
-#: js/widgets/container/GrantsGrid.js:62
-msgid "The grant to add records to this container"
-msgstr "Ezen konténer adathozzáadásának engedélyezése"
+#: js/widgets/persistentfilter/PickerPanel.js:398
+msgid "Setting favorite \"{0}\" not shared"
+msgstr "\"{0}\" kedvenc beállítása nem megosztottként"
 
-#: js/widgets/container/GrantsGrid.js:68
-msgid "The grant to edit records in this container"
-msgstr "Ezen konténer adatszerkesztésének engedélyezése"
+#: js/widgets/persistentfilter/PickerPanel.js:400
+msgid "Setting favorite \"{0}\" shared"
+msgstr "\"{0}\" kedvenc beállítása megosztottként"
 
-#: js/widgets/container/GrantsGrid.js:73 js/widgets/tree/ContextMenu.js:55
-msgid "Delete"
-msgstr "Törlés"
+#: js/widgets/persistentfilter/PickerPanel.js:429
+msgid "Could not save Favorite"
+msgstr "Nem lehet a kedvencet elmenteni"
 
-#: js/widgets/container/GrantsGrid.js:74
-msgid "The grant to delete records in this container"
-msgstr "Ezen konténer adattörlésének engedélyezése"
+#: js/widgets/persistentfilter/PickerPanel.js:429
+msgid "Your current view does not support favorites"
+msgstr "A jelenlegi nézeted nem támogatja a kedvenceket"
 
-#: js/widgets/container/GrantsGrid.js:80
-msgid "The grant to export records from this container"
-msgstr "Ezen konténer adatexportálásának engedélyezése"
+#: js/widgets/persistentfilter/PickerPanel.js:438
+msgid "Create Favorite"
+msgstr "Kedvenc készítése"
 
-#: js/widgets/container/GrantsGrid.js:85
-msgid "Sync"
-msgstr "Szinkronizálás"
+#: js/widgets/persistentfilter/PickerPanel.js:458
+msgid "Saving Favorite \"{0}\""
+msgstr "\"{0}\" kedvenc mentése"
 
-#: js/widgets/container/GrantsGrid.js:86
-msgid "The grant to synchronise records with this container"
-msgstr "Ezen konténer adatszinkronizálásának engedélyezése"
+#: js/widgets/persistentfilter/PickerPanel.js:585
+msgid "OK"
+msgstr "OK"
 
-#: js/widgets/container/GrantsGrid.js:94
-msgid "Admin"
-msgstr "Admin"
+#: js/widgets/persistentfilter/PickerPanel.js:629
+#: js/widgets/persistentfilter/PickerPanel.js:634
+msgid "Favorite not Saved"
+msgstr "Kedvenc nincs mentve"
 
-#: js/widgets/container/GrantsGrid.js:95
-msgid "The grant to administrate this container"
-msgstr "Ezen konténer adminisztrálásának engedélyezése"
+#: js/widgets/persistentfilter/PickerPanel.js:630
+msgid "You have to supply a shorter name! Names of favorite can only be up to 40 characters long."
+msgstr "Rövidebb nevet kell megadnod. A kedvencek nevének hossza 40 karakter hosszó lehet."
 
-#: js/widgets/container/GrantsGrid.js:112
-msgid "Free Busy"
-msgstr "Szabad-Foglalt"
+#: js/widgets/persistentfilter/PickerPanel.js:635
+msgid "You have to supply a name for the favorite!"
+msgstr "Biztosítanod kell egy nevet a kedvencnek!"
 
-#: js/widgets/container/GrantsGrid.js:113
-msgid "The grant to access free busy information of events in this calendar"
-msgstr "Ezen naptár szabad-foglalt információhoz való hozzáférés engedélyezése"
+#: js/widgets/persistentfilter/PickerPanel.js:670
+msgid "Title"
+msgstr "Tárgy"
 
-#: js/widgets/container/GrantsGrid.js:121
-msgid "Private"
-msgstr "Személyes"
+#: js/widgets/persistentfilter/PickerPanel.js:679
+#: js/widgets/tags/TagsPanel.js:609 js/ExceptionDialog.js:83
+msgid "Description"
+msgstr "Leírás"
 
-#: js/widgets/container/GrantsGrid.js:122
-msgid "The grant to access records marked as private in this container"
-msgstr "Ezen konténer személyesként megjelölt adataihoz való hozzáférés engedélyezése"
+#: js/widgets/persistentfilter/PickerPanel.js:688
+msgid "Share this Favorite"
+msgstr "Kedvenc megosztása"
 
-#: js/widgets/container/TreePanel.js:136
-msgid "container"
-msgid_plural "containers"
-msgstr[0] "konténer"
-msgstr[1] "konténerek"
+#: js/widgets/persistentfilter/PickerPanel.js:786
+msgid "(shared)"
+msgstr "(megosztott)"
 
-#: js/widgets/container/TreePanel.js:494
-msgid "You are not allowed to select the {0} '{1}':"
-msgstr "Nem választhatod a {0} '{1}':"
+#: js/widgets/dialog/PreferencesTreePanel.js:67
+msgid "General Preferences"
+msgstr "Általános tulajdonságok"
 
-#: js/widgets/container/TreePanel.js:495
-msgid "{0} grant is required for desired action"
-msgstr "{0} engedély szükséges a kívánt tevékenységhez"
+#: js/widgets/dialog/PreferencesTreePanel.js:87
+msgid "My Profile"
+msgstr "Saját profilom"
 
-#: js/widgets/container/TreePanel.js:496
-msgid "Insufficient Grants"
-msgstr "Elégtelen engedélyek"
+#: js/widgets/dialog/EditDialog.js:254 js/widgets/EditRecord.js:188
+msgid "delete"
+msgstr "törlés"
 
-#: js/widgets/CountryCombo.js:34
-msgid "Select a country..."
-msgstr "Ország kiválasztása..."
+#: js/widgets/dialog/EditDialog.js:294 js/widgets/dialog/EditDialog.js:307
+#: js/widgets/EditRecord.js:131
+msgid "Saved in"
+msgstr "Mentve ide:"
 
-#: js/widgets/customfields/EditDialogPlugin.js:137
-msgid "General"
-msgstr "Általános"
+#: js/widgets/dialog/EditDialog.js:382 js/widgets/grid/GridPanel.js:367
+msgid "Copy {0}"
+msgstr "{0} másolása"
 
-#: js/widgets/customfields/EditDialogPlugin.js:148
-msgid "Custom Fields"
-msgstr "Egyedi mezők"
+#: js/widgets/dialog/EditDialog.js:385
+msgid "Add New {0}"
+msgstr "Új {0} hozzáadása"
 
-#: js/widgets/dialog/AdminPanel.js:59
-msgid "Change settings for application {0}"
-msgstr "{0} alkalmazás beállításainak megváltoztatása"
+#: js/widgets/dialog/EditDialog.js:387
+msgid "Edit {0} \"{1}\""
+msgstr "{0} \"{1}\" szerkesztése"
 
-#: js/widgets/dialog/AdminPanel.js:107
-msgid "Defaults"
-msgstr "Alapértelmezések"
+#: js/widgets/dialog/EditDialog.js:433
+msgid "Transferring {0}..."
+msgstr "{0} átvitele..."
 
-#: js/widgets/dialog/AlarmPanel.js:32
-msgid "Alarms"
-msgstr "Riasztások"
+#: js/widgets/dialog/EditDialog.js:544
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:286
+#: js/widgets/dialog/CredentialsDialog.js:128
+#: js/widgets/dialog/PreferencesDialog.js:250
+#: js/widgets/dialog/PreferencesDialog.js:279
+#: js/widgets/dialog/ExportDialog.js:140 js/LoginPanel.js:379
+msgid "Errors"
+msgstr "Hibák"
 
-#: js/widgets/dialog/AlarmPanel.js:41 js/widgets/dialog/AlarmPanel.js:68
-msgid "Custom Datetime"
-msgstr "Egyedi időpont"
+#: js/widgets/dialog/EditDialog.js:554
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:325
+#: js/widgets/dialog/CredentialsDialog.js:128
+#: js/widgets/dialog/ExportDialog.js:140 js/LoginPanel.js:379
+msgid "Please fix the errors noted."
+msgstr "Javítsd a jegyzett hibákat."
 
-#: js/widgets/dialog/AlarmPanel.js:51
-msgid "Send Alarm"
-msgstr "Riasztás küldése"
+#: js/widgets/dialog/EditDialog.js:561
+msgid "Do you really want to delete this {0}?"
+msgstr "Biztosan töröld ezt: {0}?"
 
-#: js/widgets/dialog/AlarmPanel.js:61
-msgid "None"
-msgstr "Nincs"
+#: js/widgets/dialog/EditDialog.js:563 js/widgets/grid/GridPanel.js:1369
+msgid "Deleting {0}"
+msgstr "{0} törlése"
 
-#: js/widgets/dialog/AlarmPanel.js:62
-msgid "0 minutes before"
-msgstr "0 perccel előtte"
+#: js/widgets/dialog/EditDialog.js:573 js/widgets/grid/GridPanel.js:1386
+#: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:406
+#: js/widgets/tags/TagsPanel.js:439
+msgid "Failed"
+msgstr "Sikertelen"
 
-#: js/widgets/dialog/AlarmPanel.js:63
-msgid "15 minutes before"
-msgstr "15 perccel előtte"
+#: js/widgets/dialog/EditDialog.js:573 js/widgets/grid/GridPanel.js:1386
+msgid "Could not delete {0}."
+msgstr "{0} nem törölhető."
 
-#: js/widgets/dialog/AlarmPanel.js:64
-msgid "30 minutes before"
-msgstr "30 perccel előtte"
+#: js/widgets/dialog/EditDialog.js:625
+msgid "Resolve Duplicate {0} Suspicion"
+msgstr "Duplikált {0} gyanú megoldása"
 
-#: js/widgets/dialog/AlarmPanel.js:65
-msgid "1 hour before"
-msgstr "1 órával előtte"
+#: js/widgets/dialog/PreferencesPanel.js:154
+msgid "There are no preferences for this application."
+msgstr "Nincs tulajdonság ehhez az alkalmazáshoz."
 
-#: js/widgets/dialog/AlarmPanel.js:66
-msgid "2 hours before"
-msgstr "2 órával előtte"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:39
+msgid "Either {0} or {1} must be given"
+msgstr ""
 
-#: js/widgets/dialog/AlarmPanel.js:67
-msgid "1 day before"
-msgstr "1 nappal előtte"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:39
+msgid "Last Name"
+msgstr ""
 
-#: js/widgets/dialog/CredentialsDialog.js:83
-msgid "Please enter your credentials"
-msgstr "Kérlek írd be az azonosítóidat"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:39
+msgid "Company"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:48
+msgid "Field \"Description\" must not be empty"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:70
+msgid "Edit {0} {1}"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:191
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:202
+msgid "Delete value from all selected records"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:207
+msgid "Undo delete value from all selected records"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:265
+msgid "<br /><ul style=\"padding:10px;border:1px\">"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:297
+msgid "Do you really want to change these {0} records?"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:300
+msgid "Applying changes"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateResolveGridPanel.js:41
 msgid "The record you try to add might already exist."
@@ -1207,84 +885,29 @@ msgstr "Létező rekord megtartása és az enyém eldobása"
 msgid "Keep both records"
 msgstr "Mindkét rekord megtartása"
 
-#: js/widgets/dialog/EditDialog.js:249 js/widgets/EditRecord.js:188
-msgid "delete"
-msgstr "törlés"
+#: js/widgets/dialog/AdminPanel.js:59
+msgid "Change settings for application {0}"
+msgstr "{0} alkalmazás beállításainak megváltoztatása"
 
-#: js/widgets/dialog/EditDialog.js:289 js/widgets/dialog/EditDialog.js:302
-#: js/widgets/EditRecord.js:131
-msgid "Saved in"
-msgstr "Mentve ide:"
+#: js/widgets/dialog/AdminPanel.js:107
+msgid "Defaults"
+msgstr "Alapértelmezések"
 
-#: js/widgets/dialog/EditDialog.js:377 js/widgets/grid/GridPanel.js:367
-msgid "Copy {0}"
-msgstr "{0} másolása"
+#: js/widgets/dialog/CredentialsDialog.js:60 js/LoginPanel.js:90
+msgid "Username"
+msgstr "Felhasználónév"
 
-#: js/widgets/dialog/EditDialog.js:380
-msgid "Add New {0}"
-msgstr "Új {0} hozzáadása"
+#: js/widgets/dialog/CredentialsDialog.js:64 js/LoginPanel.js:107
+msgid "Password"
+msgstr "Jelszó"
 
-#: js/widgets/dialog/EditDialog.js:382
-msgid "Edit {0} \"{1}\""
-msgstr "{0} \"{1}\" szerkesztése"
+#: js/widgets/dialog/CredentialsDialog.js:83
+msgid "Please enter your credentials"
+msgstr "Kérlek írd be az azonosítóidat"
 
-#: js/widgets/dialog/EditDialog.js:428
-msgid "Transferring {0}..."
-msgstr "{0} átvitele..."
-
-#: js/widgets/dialog/EditDialog.js:556
-msgid "Do you really want to delete this {0}?"
-msgstr "Biztosan töröld ezt: {0}?"
-
-#: js/widgets/dialog/EditDialog.js:558 js/widgets/grid/GridPanel.js:1369
-msgid "Deleting {0}"
-msgstr "{0} törlése"
-
-#: js/widgets/dialog/EditDialog.js:568 js/widgets/grid/GridPanel.js:1386
-#: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:406
-#: js/widgets/tags/TagsPanel.js:439
-msgid "Failed"
-msgstr "Sikertelen"
-
-#: js/widgets/dialog/EditDialog.js:568 js/widgets/grid/GridPanel.js:1386
-msgid "Could not delete {0}."
-msgstr "{0} nem törölhető."
-
-#: js/widgets/dialog/EditDialog.js:620
-msgid "Resolve Duplicate {0} Suspicion"
-msgstr "Duplikált {0} gyanú megoldása"
-
-#: js/widgets/dialog/ExportDialog.js:74
-msgid "Export {0} {1}"
-msgstr "{0} {1} exportálása"
-
-#: js/widgets/dialog/ExportDialog.js:101
-msgid "Export definition"
-msgstr "Exportálás meghatározásai"
-
-#: js/widgets/dialog/ExportDialog.js:110
-msgid "Select Export Definition ..."
-msgstr "Exportálás meghatározásainak kiválasztása ..."
-
-#: js/widgets/dialog/FileListDialog.js:28
-#: js/widgets/dialog/MultiOptionsDialog.js:28
-#: js/widgets/dialog/MultiOptionsDialog.js:81
-msgid "What would you like to do?"
-msgstr "Mit szeretnél csinálni?"
-
-#: js/widgets/dialog/FileListDialog.js:32
-#: js/widgets/dialog/MultiOptionsDialog.js:32
-#: js/widgets/dialog/MultiOptionsDialog.js:141
-msgid "You need to select an option!"
-msgstr "Egy opciót választanod kell!"
-
-#: js/widgets/dialog/FileListDialog.js:91
-msgid "No"
-msgstr "Nem"
-
-#: js/widgets/dialog/FileListDialog.js:99
-msgid "Yes"
-msgstr "Igen"
+#: js/widgets/dialog/LinkPanel.js:46
+msgid "Links"
+msgstr "Linkek"
 
 #: js/widgets/dialog/ImportDialog.js:237
 msgid "Choose File and Format"
@@ -1397,6 +1020,11 @@ msgstr "Összegzés"
 msgid "Index"
 msgstr "Index"
 
+#: js/widgets/dialog/ImportDialog.js:661 js/PasswordChangeDialog.js:100
+#: js/PasswordChangeDialog.js:110
+msgid "Failure"
+msgstr "Hiba"
+
 #: js/widgets/dialog/ImportDialog.js:676
 msgid "Importing {0}"
 msgstr "{0} Importálása"
@@ -1429,51 +1057,6 @@ msgstr "Minden rekordhoz hozzáadja ezt: \"{0}\", így könnyen megtalálhatod."
 msgid "{0} records have failures and will be discarded."
 msgstr "{0} rekordnak van hibája és eldobásra kerülnek."
 
-#: js/widgets/dialog/LinkPanel.js:46
-msgid "Links"
-msgstr "Linkek"
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:39
-msgid "Either {0} or {1} must be given"
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:39
-msgid "Last Name"
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:39
-msgid "Company"
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:48
-msgid "Field \"Description\" must not be empty"
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:70
-msgid "Edit {0} {1}"
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:207
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:218
-msgid "Delete value from all selected records"
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:223
-msgid "Undo delete value from all selected records"
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:281
-msgid "<br /><ul style=\"padding:10px;border:1px\">"
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:314
-msgid "Do you really want to change these {0} records?"
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:317
-msgid "Applying changes"
-msgstr ""
-
 #: js/widgets/dialog/PreferencesDialog.js:130
 msgid "Admin Mode"
 msgstr "Admin Mód"
@@ -1490,26 +1073,21 @@ msgstr "Tulajdonságok szerkesztése"
 msgid "Loading ..."
 msgstr "Betöltés..."
 
-#: js/widgets/dialog/PreferencesDialog.js:250
-#: js/widgets/form/ConfigPanel.js:134
-msgid "You need to correct the red marked fields before config could be saved"
-msgstr "A pirossal jelzett mezőket mentés előtt ki kell javítanod"
-
 #: js/widgets/dialog/PreferencesDialog.js:279
 msgid "Saving of preferences failed."
 msgstr "Tulajdonságok mentése sikertelen."
 
-#: js/widgets/dialog/PreferencesPanel.js:154
-msgid "There are no preferences for this application."
-msgstr "Nincs tulajdonság ehhez az alkalmazáshoz."
+#: js/widgets/dialog/MultiOptionsDialog.js:28
+#: js/widgets/dialog/MultiOptionsDialog.js:81
+#: js/widgets/dialog/FileListDialog.js:28
+msgid "What would you like to do?"
+msgstr "Mit szeretnél csinálni?"
 
-#: js/widgets/dialog/PreferencesTreePanel.js:67
-msgid "General Preferences"
-msgstr "Általános tulajdonságok"
-
-#: js/widgets/dialog/PreferencesTreePanel.js:87
-msgid "My Profile"
-msgstr "Saját profilom"
+#: js/widgets/dialog/MultiOptionsDialog.js:32
+#: js/widgets/dialog/MultiOptionsDialog.js:141
+#: js/widgets/dialog/FileListDialog.js:32
+msgid "You need to select an option!"
+msgstr "Egy opciót választanod kell!"
 
 #: js/widgets/dialog/WizardPanel.js:173
 msgid "Back"
@@ -1523,69 +1101,285 @@ msgstr "Következő"
 msgid "Finish"
 msgstr "Befejezés"
 
-#: js/widgets/form/ConfigPanel.js:113
-msgid "Configuration Problem"
-msgstr "Beállítási probléma"
+#: js/widgets/dialog/ExportDialog.js:46 js/widgets/container/GrantsGrid.js:51
+#: js/Models.js:298
+msgid "Export"
+msgid_plural "Export"
+msgstr[0] "Exportálás"
+msgstr[1] "Exportálás"
 
-#: js/widgets/form/ConfigPanel.js:134
-msgid "Invalid configuration"
-msgstr "Érvénytelen konfiguráció"
+#: js/widgets/dialog/ExportDialog.js:74
+msgid "Export {0} {1}"
+msgstr "{0} {1} exportálása"
 
-#: js/widgets/form/ConfigPanel.js:158
-msgid "Transferring Configuration..."
-msgstr "Beállítások átvitele..."
+#: js/widgets/dialog/ExportDialog.js:101
+msgid "Export definition"
+msgstr "Exportálás meghatározásai"
 
-#: js/widgets/form/ConfigPanel.js:254
-msgid "Save config"
-msgstr "Konfiguráció mentése"
+#: js/widgets/dialog/ExportDialog.js:110
+msgid "Select Export Definition ..."
+msgstr "Exportálás meghatározásainak kiválasztása ..."
 
-#: js/widgets/form/ConfigPanel.js:264
-msgid "Reload config"
-msgstr "Konfigurácó újratöltése"
+#: js/widgets/dialog/FileListDialog.js:91
+msgid "No"
+msgstr "Nem"
 
-#: js/widgets/form/FileUploadButton.js:65
-msgid "Wrong File Type"
-msgstr "Rossz file típus"
+#: js/widgets/dialog/FileListDialog.js:99
+msgid "Yes"
+msgstr "Igen"
 
-#: js/widgets/form/FileUploadButton.js:65
-msgid "Please select a file with one of the following extensions:"
-msgstr "Kérlek válassz egy filet az alábbi kiterjesztésekkel:"
+#: js/widgets/dialog/AlarmPanel.js:32
+msgid "Alarms"
+msgstr "Riasztások"
 
-#: js/widgets/form/RecordPickerComboBox.js:63 js/widgets/tags/TagsPanel.js:474
-msgid "Searching..."
-msgstr "Keresés..."
+#: js/widgets/dialog/AlarmPanel.js:41 js/widgets/dialog/AlarmPanel.js:68
+msgid "Custom Datetime"
+msgstr "Egyedi időpont"
 
-#: js/widgets/grid/FileUploadGrid.js:116
-msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
-msgstr "A file-t nem lehet feltölteni. Fileméret túl nagy lehet. Értesítsd a Rendszergazdádat. Max. feltöltési méret: "
+#: js/widgets/dialog/AlarmPanel.js:51
+msgid "Send Alarm"
+msgstr "Riasztás küldése"
 
-#: js/widgets/grid/FileUploadGrid.js:180
-msgid "Remove file"
-msgstr "File törlése"
+#: js/widgets/dialog/AlarmPanel.js:61
+msgid "None"
+msgstr "Nincs"
 
-#: js/widgets/grid/FileUploadGrid.js:188 js/widgets/tree/ContextMenu.js:101
-msgid "Pause upload"
-msgstr "Feltöltés szüneteltetése"
+#: js/widgets/dialog/AlarmPanel.js:62
+msgid "0 minutes before"
+msgstr "0 perccel előtte"
 
-#: js/widgets/grid/FileUploadGrid.js:197 js/widgets/tree/ContextMenu.js:93
+#: js/widgets/dialog/AlarmPanel.js:63
+msgid "15 minutes before"
+msgstr "15 perccel előtte"
+
+#: js/widgets/dialog/AlarmPanel.js:64
+msgid "30 minutes before"
+msgstr "30 perccel előtte"
+
+#: js/widgets/dialog/AlarmPanel.js:65
+msgid "1 hour before"
+msgstr "1 órával előtte"
+
+#: js/widgets/dialog/AlarmPanel.js:66
+msgid "2 hours before"
+msgstr "2 órával előtte"
+
+#: js/widgets/dialog/AlarmPanel.js:67
+msgid "1 day before"
+msgstr "1 nappal előtte"
+
+#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
+msgid "New version of Tine 2.0 available"
+msgstr "Tine 2.0 új verziója elérhető"
+
+#: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
+msgid "Version \"{0}\" of Tine 2.0 is available."
+msgstr "Tine 2.0 \"{0}\" verziója elérhető."
+
+#: js/widgets/VersionCheck.js:46
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr "Ez egy kritikus frissítés, amit minnél hamarabb telepíteni kell!"
+
+#: js/widgets/VersionCheck.js:55
+msgid "Please consider updating!"
+msgstr "Kérlek fontold meg a frissítést!"
+
+#: js/widgets/LangChooser.js:69
+msgid "setting new language..."
+msgstr "új nyelv beállítása..."
+
+#: js/widgets/CountryCombo.js:34
+msgid "Select a country..."
+msgstr "Ország kiválasztása..."
+
+#: js/widgets/tree/ContextMenu.js:43
+msgid "Rename"
+msgstr "Átnevezés"
+
+#: js/widgets/tree/ContextMenu.js:55 js/widgets/container/GrantsGrid.js:49
+msgid "Delete"
+msgstr "Törlés"
+
+#: js/widgets/tree/ContextMenu.js:64
+msgid "Manage permissions"
+msgstr "Jogosultságok kezelése"
+
+#: js/widgets/tree/ContextMenu.js:72
+#: js/widgets/container/PropertiesDialog.js:87
+msgid "Properties"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:80
+msgid "Set color"
+msgstr "Szín beállítás"
+
+#: js/widgets/tree/ContextMenu.js:94
+msgid "Reload"
+msgstr "Újratöltés"
+
+#: js/widgets/tree/ContextMenu.js:101 js/widgets/grid/FileUploadGrid.js:197
 msgid "Resume upload"
 msgstr "Feltöltés folytatása"
 
-#: js/widgets/grid/FileUploadGrid.js:244
-msgid "Add file"
-msgstr "File hozzáadása"
+#: js/widgets/tree/ContextMenu.js:109 js/widgets/grid/FileUploadGrid.js:188
+msgid "Pause upload"
+msgstr "Feltöltés szüneteltetése"
 
-#: js/widgets/grid/FileUploadGrid.js:286
-msgid "name"
-msgstr "név"
+#: js/widgets/tree/ContextMenu.js:117
+msgid "Download"
+msgstr "Letöltés"
 
-#: js/widgets/grid/FileUploadGrid.js:293
-msgid "size"
-msgstr "méret"
+#: js/widgets/tree/ContextMenu.js:172
+msgid "New {0}"
+msgstr "Új {0}"
 
-#: js/widgets/grid/FileUploadGrid.js:300
-msgid "type"
-msgstr "típus"
+#: js/widgets/tree/ContextMenu.js:172
+msgid "Please enter the name of the new {0}:"
+msgstr "Kérem adja meg az új {0} nevét:"
+
+#: js/widgets/tree/ContextMenu.js:175
+msgid "No {0} added"
+msgstr "{0} hozzáadása sikertelen"
+
+#: js/widgets/tree/ContextMenu.js:175 js/widgets/tree/ContextMenu.js:258
+msgid "You have to supply a {0} name!"
+msgstr "Neked kell adni egy {0} nevet!"
+
+#: js/widgets/tree/ContextMenu.js:178
+msgid "Creating {0}..."
+msgstr "{0} készítése..."
+
+#: js/widgets/tree/ContextMenu.js:252
+msgid "Please enter the new name of the {0}:"
+msgstr "Kérem adja meg a(z) {0} új nevét:"
+
+#: js/widgets/tree/ContextMenu.js:258
+msgid "Not renamed {0}"
+msgstr "Sikertelenül átnevezett {0}"
+
+#: js/widgets/tree/ContextMenu.js:329
+msgid "Do you really want to delete the {0} \"{1}\"?"
+msgstr "Biztosan törölni akarod a {0} \"{1}\"?"
+
+#: js/widgets/tree/ContextMenu.js:443
+msgid "Manage Permissions for {0} \"{1}\""
+msgstr "{0} \"{1}\" jogosultságainak kezelése"
+
+#: js/widgets/tree/ContextMenu.js:469
+msgid "Properties for {0} \"{1}\""
+msgstr ""
+
+#: js/widgets/mainscreen/WestPanel.js:191
+msgid "containers"
+msgstr "konténerek"
+
+#: js/widgets/mainscreen/WestPanel.js:218
+msgid "Favorites"
+msgstr "Kedvencek"
+
+#: js/widgets/mainscreen/WestPanel.js:226
+msgid "Save current view as favorite"
+msgstr "Jelenlegi nézet mentése kedvencként"
+
+#: js/widgets/relation/FilterModel.js:32 js/Models.js:363
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] "Kapcsolat"
+msgstr[1] "Kapcsolatok"
+
+#: js/widgets/relation/FilterModel.js:72
+msgid "Defined by ..."
+msgstr "Meghatározta ..."
+
+#: js/widgets/relation/FilterModel.js:91 js/widgets/grid/FilterModel.js:223
+#: js/widgets/grid/ForeignRecordFilter.js:397
+msgid "select a operator"
+msgstr "válassz egy operátort"
+
+#: js/widgets/relation/FilterModel.js:118
+msgid "Define ..."
+msgstr "Meghatároz ..."
+
+#: js/widgets/grid/GridPanel.js:254
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "{0} nem található. Kérlek változtasd meg a szűrő-feltételeket, nézet-beállításokat vagy amiben keresel: {1}."
+
+#: js/widgets/grid/GridPanel.js:352 js/widgets/grid/GridPanel.js:353
+#: js/widgets/grid/GridPanel.js:354
+#, fuzzy
+msgid "Edit {0}"
+msgid_plural "Edit {0}"
+msgstr[0] "{0} szerkesztése"
+msgstr[1] "{0} szerkesztése"
+
+#: js/widgets/grid/GridPanel.js:378
+msgid "Add {0}"
+msgstr "{0} hozzáadása"
+
+#: js/widgets/grid/GridPanel.js:386
+msgid "Print Page"
+msgstr "Oldal nyomtatása"
+
+#: js/widgets/grid/GridPanel.js:433 js/widgets/grid/GridPanel.js:434
+#: js/widgets/grid/GridPanel.js:436
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] "{0} törlése"
+msgstr[1] "{0} törlése"
+
+#: js/widgets/grid/GridPanel.js:776
+msgid "Displaying records {0} - {1} of {2}"
+msgstr "Adatok kijelzése {0} - {1} / {2}"
+
+#: js/widgets/grid/GridPanel.js:777
+msgid "No {0} to display"
+msgstr "Nincs kijelezhető {0}"
+
+#: js/widgets/grid/GridPanel.js:1020
+msgid "Creation Time"
+msgstr "Készítés ideje"
+
+#: js/widgets/grid/GridPanel.js:1022
+msgid "Last Modified Time"
+msgstr "Utolsó módosítás ideje"
+
+#: js/widgets/grid/GridPanel.js:1023
+msgid "Last Modified By"
+msgstr "Utolsó módosító"
+
+#: js/widgets/grid/GridPanel.js:1310
+msgid "Not Allowed"
+msgstr "Nem megengedett"
+
+#: js/widgets/grid/GridPanel.js:1311
+msgid "You are not allowed to delete all pages at once"
+msgstr "Nincs engedélyed az összes lap egyszerre törléséhez"
+
+#: js/widgets/grid/GridPanel.js:1334
+msgid "Do you really want to delete the selected record ({0})?"
+msgid_plural "Do you really want to delete the selected records ({0})?"
+msgstr[0] "Biztosan törlöd a kiválasztott adatot ({0})?"
+msgstr[1] "Biztosan törlöd a kiválasztott adatokat ({0})?"
+
+#: js/widgets/grid/GridPanel.js:1369
+msgid " ... This may take a long time!"
+msgstr " ... Ez hosszabb időt vehet igénybe!"
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
+#: js/widgets/grid/FilterPanel.js:256
+msgid "show details"
+msgstr "részletek mutatása"
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
+#: js/widgets/grid/FilterPanel.js:257
+msgid "Always show advanced filters"
+msgstr "Részletes szűrők mindig láthatóak"
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:368
+msgid "Your view is limited by {0} criteria:"
+msgid_plural "Your view is limited by {0} criterias:"
+msgstr[0] "Nézetedet {0} feltétel limitálja:"
+msgstr[1] "Nézetedet {0} feltétel limitálja:"
 
 #: js/widgets/grid/FilterModel.js:168
 msgid "contains"
@@ -1594,6 +1388,11 @@ msgstr "tartalmaz"
 #: js/widgets/grid/FilterModel.js:169
 msgid "reg. exp."
 msgstr "reg. lejárt"
+
+#: js/widgets/grid/FilterModel.js:170 js/widgets/container/FilterModel.js:130
+#: js/widgets/container/FilterModel.js:134
+msgid "is equal to"
+msgstr "egyforma ezzel:"
 
 #: js/widgets/grid/FilterModel.js:171
 msgid "is greater than"
@@ -1642,12 +1441,6 @@ msgstr "végződik ekkor:"
 #: js/widgets/grid/FilterModel.js:182
 msgid "defined by"
 msgstr "meghatározta"
-
-#: js/widgets/grid/FilterModel.js:223
-#: js/widgets/grid/ForeignRecordFilter.js:397
-#: js/widgets/relation/FilterModel.js:91
-msgid "select a operator"
-msgstr "válassz egy operátort"
 
 #: js/widgets/grid/FilterModel.js:339
 msgid "Search Account ..."
@@ -1717,23 +1510,33 @@ msgstr "jövő negyedév"
 msgid "next year"
 msgstr "jövő év"
 
-#: js/widgets/grid/FilterPanel.js:79
-msgid "Attention: There are more filters active!"
-msgstr "Vigyázat: Több szűrő aktív!"
+#: js/widgets/grid/FileUploadGrid.js:115 js/ux/form/ImageField.js:162
+msgid "Upload Failed"
+msgstr "Hibás feltöltés"
 
-#: js/widgets/grid/FilterPanel.js:175 js/widgets/grid/FilterPanel.js:457
-msgid "Criteria {0}"
-msgstr "{0} kritérium"
+#: js/widgets/grid/FileUploadGrid.js:116
+msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
+msgstr "A file-t nem lehet feltölteni. Fileméret túl nagy lehet. Értesítsd a Rendszergazdádat. Max. feltöltési méret: "
 
-#: js/widgets/grid/FilterPanel.js:256
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
-msgid "show details"
-msgstr "részletek mutatása"
+#: js/widgets/grid/FileUploadGrid.js:180
+msgid "Remove file"
+msgstr "File törlése"
 
-#: js/widgets/grid/FilterPanel.js:257
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
-msgid "Always show advanced filters"
-msgstr "Részletes szűrők mindig láthatóak"
+#: js/widgets/grid/FileUploadGrid.js:244
+msgid "Add file"
+msgstr "File hozzáadása"
+
+#: js/widgets/grid/FileUploadGrid.js:286
+msgid "name"
+msgstr "név"
+
+#: js/widgets/grid/FileUploadGrid.js:293
+msgid "size"
+msgstr "méret"
+
+#: js/widgets/grid/FileUploadGrid.js:300
+msgid "type"
+msgstr "típus"
 
 #: js/widgets/grid/FilterStructureTreePanel.js:35
 #: js/widgets/grid/FilterStructureTreePanel.js:52
@@ -1752,6 +1555,14 @@ msgstr "Alternatív szűrő hozzáadása"
 #: js/widgets/grid/FilterStructureTreePanel.js:61
 msgid "Remove Filter"
 msgstr "Szűrő eltávolítása"
+
+#: js/widgets/grid/PickerGridPanel.js:159
+msgid "Remove record"
+msgstr "Adat törlése"
+
+#: js/widgets/grid/PickerGridPanel.js:254
+msgid "Search for records ..."
+msgstr "Adatok keresése ..."
 
 #: js/widgets/grid/FilterToolbar.js:85 js/widgets/grid/FilterToolbar.js:545
 msgid "Show"
@@ -1789,11 +1600,25 @@ msgstr "Töröld ezt a szűrőt"
 msgid "and"
 msgstr "és"
 
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:368
-msgid "Your view is limited by {0} criteria:"
-msgid_plural "Your view is limited by {0} criterias:"
-msgstr[0] "Nézetedet {0} feltétel limitálja:"
-msgstr[1] "Nézetedet {0} feltétel limitálja:"
+#: js/widgets/grid/RendererManager.js:54
+msgid "has notes"
+msgstr "vannak megjegyzések"
+
+#: js/widgets/grid/RendererManager.js:57
+msgid "has relations"
+msgstr "vannak kapcsolatok"
+
+#: js/widgets/grid/FilterPanel.js:79
+msgid "Attention: There are more filters active!"
+msgstr "Vigyázat: Több szűrő aktív!"
+
+#: js/widgets/grid/FilterPanel.js:175 js/widgets/grid/FilterPanel.js:457
+msgid "Criteria {0}"
+msgstr "{0} kritérium"
+
+#: js/widgets/grid/QuickaddGridPanel.js:97
+msgid "Remove"
+msgstr "Törlés"
 
 #: js/widgets/grid/ForeignRecordFilter.js:61
 msgid "Edit definition"
@@ -1807,232 +1632,125 @@ msgstr "Meghatározás indítása"
 msgid "Related to"
 msgstr "Összefügg ezzel:"
 
-#: js/widgets/grid/GridPanel.js:254
-msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr "{0} nem található. Kérlek változtasd meg a szűrő-feltételeket, nézet-beállításokat vagy amiben keresel: {1}."
+#: js/widgets/grid/FilterModelMultiSelect.js:211
+#: js/widgets/container/FilterModel.js:237
+msgid "Selected  {0}"
+msgstr "Kiválasztott {0}"
 
-#: js/widgets/grid/GridPanel.js:352 js/widgets/grid/GridPanel.js:353
-#: js/widgets/grid/GridPanel.js:354
-#, fuzzy
-msgid "Edit {0}"
-msgid_plural "Edit {0}"
-msgstr[0] "{0} szerkesztése"
-msgstr[1] "{0} szerkesztése"
+#: js/widgets/container/FilterModel.js:130
+msgid "is personal of"
+msgstr "személyes"
 
-#: js/widgets/grid/GridPanel.js:378
-msgid "Add {0}"
-msgstr "{0} hozzáadása"
+#: js/widgets/container/GrantsDialog.js:52
+msgid "Folder"
+msgstr "Mappa"
 
-#: js/widgets/grid/GridPanel.js:386
-msgid "Print Page"
-msgstr "Oldal nyomtatása"
+#: js/widgets/container/GrantsDialog.js:95
+msgid "Updating Grants"
+msgstr "Engedélyek frissítése"
 
-#: js/widgets/grid/GridPanel.js:433 js/widgets/grid/GridPanel.js:434
-#: js/widgets/grid/GridPanel.js:436
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] "{0} törlése"
-msgstr[1] "{0} törlése"
+#: js/widgets/container/GrantsDialog.js:126
+msgid "Error"
+msgstr "Hiba"
 
-#: js/widgets/grid/GridPanel.js:776
-msgid "Displaying records {0} - {1} of {2}"
-msgstr "Adatok kijelzése {0} - {1} / {2}"
+#: js/widgets/container/GrantsDialog.js:127
+msgid "You are not allowed to remove all admins for this container!"
+msgstr "Nem távolíthatod el az összed admint ebből a konténerből!"
 
-#: js/widgets/grid/GridPanel.js:777
-msgid "No {0} to display"
-msgstr "Nincs kijelezhető {0}"
+#: js/widgets/container/PropertiesDialog.js:110
+#: js/widgets/tags/TagsPanel.js:613
+msgid "Color"
+msgstr "Szín"
 
-#: js/widgets/grid/GridPanel.js:1020
-msgid "Creation Time"
-msgstr "Készítés ideje"
+#: js/widgets/container/PropertiesDialog.js:116
+msgid "My Grants"
+msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1022
-msgid "Last Modified Time"
-msgstr "Utolsó módosítás ideje"
+#: js/widgets/container/TreePanel.js:136
+msgid "container"
+msgid_plural "containers"
+msgstr[0] "konténer"
+msgstr[1] "konténerek"
 
-#: js/widgets/grid/GridPanel.js:1023
-msgid "Last Modified By"
-msgstr "Utolsó módosító"
+#: js/widgets/container/TreePanel.js:494
+msgid "You are not allowed to select the {0} '{1}':"
+msgstr "Nem választhatod a {0} '{1}':"
 
-#: js/widgets/grid/GridPanel.js:1310
-msgid "Not Allowed"
-msgstr "Nem megengedett"
+#: js/widgets/container/TreePanel.js:495
+msgid "{0} grant is required for desired action"
+msgstr "{0} engedély szükséges a kívánt tevékenységhez"
 
-#: js/widgets/grid/GridPanel.js:1311
-msgid "You are not allowed to delete all pages at once"
-msgstr "Nincs engedélyed az összes lap egyszerre törléséhez"
+#: js/widgets/container/TreePanel.js:496
+msgid "Insufficient Grants"
+msgstr "Elégtelen engedélyek"
 
-#: js/widgets/grid/GridPanel.js:1334
-msgid "Do you really want to delete the selected record ({0})?"
-msgid_plural "Do you really want to delete the selected records ({0})?"
-msgstr[0] "Biztosan törlöd a kiválasztott adatot ({0})?"
-msgstr[1] "Biztosan törlöd a kiválasztott adatokat ({0})?"
+#: js/widgets/container/ContainerSelect.js:107
+msgid "choose other {0}..."
+msgstr "másik {0} választása..."
 
-#: js/widgets/grid/GridPanel.js:1369
-msgid " ... This may take a long time!"
-msgstr " ... Ez hosszabb időt vehet igénybe!"
+#: js/widgets/container/ContainerSelect.js:110
+msgid "Select a {0}"
+msgstr "Válassz egy {0}"
 
-#: js/widgets/grid/PickerGridPanel.js:153
-msgid "Remove record"
-msgstr "Adat törlése"
+#: js/widgets/container/ContainerSelect.js:130
+msgid "Recently used {0}:"
+msgstr "Legtöbbet használt {0}:"
 
-#: js/widgets/grid/PickerGridPanel.js:247
-msgid "Search for records ..."
-msgstr "Adatok keresése ..."
+#: js/widgets/container/ContainerSelect.js:447
+msgid "please select a {0}"
+msgstr "kérlek válassz egy {0}"
 
-#: js/widgets/grid/QuickaddGridPanel.js:97
-msgid "Remove"
-msgstr "Törlés"
+#: js/widgets/container/GrantsGrid.js:44
+msgid "The grant to read records of this container"
+msgstr "Ezen konténer adatolvásásának engedélyezése"
 
-#: js/widgets/grid/RendererManager.js:54
-msgid "has notes"
-msgstr "vannak megjegyzések"
+#: js/widgets/container/GrantsGrid.js:46
+msgid "The grant to add records to this container"
+msgstr "Ezen konténer adathozzáadásának engedélyezése"
 
-#: js/widgets/grid/RendererManager.js:57
-msgid "has relations"
-msgstr "vannak kapcsolatok"
+#: js/widgets/container/GrantsGrid.js:48
+msgid "The grant to edit records in this container"
+msgstr "Ezen konténer adatszerkesztésének engedélyezése"
 
-#: js/widgets/LangChooser.js:36 Preference.php:91
-msgid "Language"
-msgstr "Nyelv"
+#: js/widgets/container/GrantsGrid.js:50
+msgid "The grant to delete records in this container"
+msgstr "Ezen konténer adattörlésének engedélyezése"
 
-#: js/widgets/LangChooser.js:69
-msgid "setting new language..."
-msgstr "új nyelv beállítása..."
+#: js/widgets/container/GrantsGrid.js:52
+msgid "The grant to export records from this container"
+msgstr "Ezen konténer adatexportálásának engedélyezése"
 
-#: js/widgets/mainscreen/WestPanel.js:191
-msgid "containers"
-msgstr "konténerek"
+#: js/widgets/container/GrantsGrid.js:53
+msgid "Sync"
+msgstr "Szinkronizálás"
 
-#: js/widgets/mainscreen/WestPanel.js:218
-msgid "Favorites"
-msgstr "Kedvencek"
+#: js/widgets/container/GrantsGrid.js:54 js/widgets/container/GrantsGrid.js:56
+msgid "The grant to synchronise records with this container"
+msgstr "Ezen konténer adatszinkronizálásának engedélyezése"
 
-#: js/widgets/mainscreen/WestPanel.js:226
-msgid "Save current view as favorite"
-msgstr "Jelenlegi nézet mentése kedvencként"
+#: js/widgets/container/GrantsGrid.js:55
+msgid "Admin"
+msgstr "Admin"
 
-#: js/widgets/persistentfilter/PickerPanel.js:94
-msgid "My favorites"
-msgstr "Kedvenceim"
+#: js/widgets/container/GrantsGrid.js:58
+msgid "Free Busy"
+msgstr "Szabad-Foglalt"
 
-#: js/widgets/persistentfilter/PickerPanel.js:291
-msgid "Remove from shared favorites"
-msgstr "Eltávolítás a megosztott kedvencek közül"
+#: js/widgets/container/GrantsGrid.js:59
+msgid "The grant to access free busy information of events in this calendar"
+msgstr "Ezen naptár szabad-foglalt információhoz való hozzáférés engedélyezése"
 
-#: js/widgets/persistentfilter/PickerPanel.js:293
-msgid "Add to shared favorites"
-msgstr "Hozzáadás a megosztott kedvencekhez"
+#: js/widgets/container/GrantsGrid.js:60
+msgid "Private"
+msgstr "Személyes"
 
-#: js/widgets/persistentfilter/PickerPanel.js:297
-msgid "Delete Favorite"
-msgstr "Kedvenc törlése"
+#: js/widgets/container/GrantsGrid.js:61
+msgid "The grant to access records marked as private in this container"
+msgstr "Ezen konténer személyesként megjelölt adataihoz való hozzáférés engedélyezése"
 
-#: js/widgets/persistentfilter/PickerPanel.js:302
-#: js/widgets/persistentfilter/PickerPanel.js:440
-msgid "Edit Favorite"
-msgstr "Kedvenc szerkesztése"
-
-#: js/widgets/persistentfilter/PickerPanel.js:307
-msgid "Overwrite Favorite"
-msgstr "Kedvenc felülírása"
-
-#: js/widgets/persistentfilter/PickerPanel.js:330
-msgid "Do you really want to delete the favorite \"{0}\"?"
-msgstr "Biztosan szeretnéd törölni ezt a kedvencet: \"{0}\"?"
-
-#: js/widgets/persistentfilter/PickerPanel.js:333
-msgid "Deleting Favorite \"{0}\""
-msgstr "Kedvenc törlése: \"{0}\""
-
-#: js/widgets/persistentfilter/PickerPanel.js:370
-msgid "Overwrite?"
-msgstr "Felülírás?"
-
-#: js/widgets/persistentfilter/PickerPanel.js:371
-msgid "Do you want to overwrite the favorite \"{0}\"?"
-msgstr "Biztosan szeretnéd felülírni ezt a kedvencet: \"{0}\"?"
-
-#: js/widgets/persistentfilter/PickerPanel.js:375
-msgid "Overwriting Favorite \"{0}\""
-msgstr "Kedvenc felülírása: \"{0}\""
-
-#: js/widgets/persistentfilter/PickerPanel.js:398
-msgid "Setting favorite \"{0}\" not shared"
-msgstr "\"{0}\" kedvenc beállítása nem megosztottként"
-
-#: js/widgets/persistentfilter/PickerPanel.js:400
-msgid "Setting favorite \"{0}\" shared"
-msgstr "\"{0}\" kedvenc beállítása megosztottként"
-
-#: js/widgets/persistentfilter/PickerPanel.js:429
-msgid "Could not save Favorite"
-msgstr "Nem lehet a kedvencet elmenteni"
-
-#: js/widgets/persistentfilter/PickerPanel.js:429
-msgid "Your current view does not support favorites"
-msgstr "A jelenlegi nézeted nem támogatja a kedvenceket"
-
-#: js/widgets/persistentfilter/PickerPanel.js:438
-msgid "Create Favorite"
-msgstr "Kedvenc készítése"
-
-#: js/widgets/persistentfilter/PickerPanel.js:458
-msgid "Saving Favorite \"{0}\""
-msgstr "\"{0}\" kedvenc mentése"
-
-#: js/widgets/persistentfilter/PickerPanel.js:585
-msgid "OK"
-msgstr "OK"
-
-#: js/widgets/persistentfilter/PickerPanel.js:629
-#: js/widgets/persistentfilter/PickerPanel.js:634
-msgid "Favorite not Saved"
-msgstr "Kedvenc nincs mentve"
-
-#: js/widgets/persistentfilter/PickerPanel.js:630
-msgid "You have to supply a shorter name! Names of favorite can only be up to 40 characters long."
-msgstr "Rövidebb nevet kell megadnod. A kedvencek nevének hossza 40 karakter hosszó lehet."
-
-#: js/widgets/persistentfilter/PickerPanel.js:635
-msgid "You have to supply a name for the favorite!"
-msgstr "Biztosítanod kell egy nevet a kedvencnek!"
-
-#: js/widgets/persistentfilter/PickerPanel.js:670
-msgid "Title"
-msgstr "Tárgy"
-
-#: js/widgets/persistentfilter/PickerPanel.js:688
-msgid "Share this Favorite"
-msgstr "Kedvenc megosztása"
-
-#: js/widgets/persistentfilter/PickerPanel.js:786
-msgid "(shared)"
-msgstr "(megosztott)"
-
-#: js/widgets/Priority.js:20
-msgid "low"
-msgstr "alacsony"
-
-#: js/widgets/Priority.js:21
-msgid "normal"
-msgstr "normális"
-
-#: js/widgets/Priority.js:22
-msgid "high"
-msgstr "magas"
-
-#: js/widgets/Priority.js:23
-msgid "urgent"
-msgstr "sürgős"
-
-#: js/widgets/relation/FilterModel.js:72
-msgid "Defined by ..."
-msgstr "Meghatározta ..."
-
-#: js/widgets/relation/FilterModel.js:118
-msgid "Define ..."
-msgstr "Meghatároz ..."
+#: js/widgets/tags/TagFilter.js:33
+msgid "Tag"
+msgstr "Címke"
 
 #: js/widgets/tags/TagCombo.js:48
 msgid "tag name"
@@ -2045,26 +1763,6 @@ msgstr "címke név"
 msgid "personal"
 msgstr "személyes"
 
-#: js/widgets/tags/TagFilter.js:33
-msgid "Tag"
-msgstr "Címke"
-
-#: js/widgets/tags/TagsMassAttachAction.js:18
-msgid "Add Tag"
-msgstr "Címke hozzáadása"
-
-#: js/widgets/tags/TagsMassAttachAction.js:75
-msgid "Attach the following tag to all selected items:"
-msgstr "Az alábbi címke csatolása az összes kiválasztott elemhez:"
-
-#: js/widgets/tags/TagsMassAttachAction.js:87
-msgid "Select Tag"
-msgstr "Címke kiválasztása"
-
-#: js/widgets/tags/TagsMassAttachAction.js:116
-msgid "Attaching Tag"
-msgstr ""
-
 #: js/widgets/tags/TagsMassDetachAction.js:18
 msgid "Detach tag(s)"
 msgstr "Címke(ék) eltávolítása"
@@ -2072,6 +1770,10 @@ msgstr "Címke(ék) eltávolítása"
 #: js/widgets/tags/TagsMassDetachAction.js:84
 msgid "Select Tag(s) to detach"
 msgstr "Címke(ék) kiválasztása az eltávolításhoz"
+
+#: js/widgets/tags/TagsPanel.js:57 Export/Pdf.php:216
+msgid "Tags"
+msgstr "Címkék"
 
 #: js/widgets/tags/TagsPanel.js:92 js/widgets/tags/TagsPanel.js:117
 msgid "Add a new personal tag"
@@ -2179,9 +1881,21 @@ msgstr "Címke nem frissíthető."
 msgid "Enter tag name"
 msgstr "Címke nevének megadása"
 
-#: js/widgets/tags/TagsPanel.js:613
-msgid "Color"
-msgstr "Szín"
+#: js/widgets/tags/TagsMassAttachAction.js:18
+msgid "Add Tag"
+msgstr "Címke hozzáadása"
+
+#: js/widgets/tags/TagsMassAttachAction.js:75
+msgid "Attach the following tag to all selected items:"
+msgstr "Az alábbi címke csatolása az összes kiválasztott elemhez:"
+
+#: js/widgets/tags/TagsMassAttachAction.js:87
+msgid "Select Tag"
+msgstr "Címke kiválasztása"
+
+#: js/widgets/tags/TagsMassAttachAction.js:116
+msgid "Attaching Tag"
+msgstr ""
 
 #: js/widgets/tags/TagToggleBox.js:52
 msgid "Detach Tags"
@@ -2203,85 +1917,465 @@ msgstr "Kérlek várj..."
 msgid "Detaching Tags"
 msgstr ""
 
-#: js/widgets/TimezoneChooser.js:37 Preference.php:87
-msgid "Timezone"
-msgstr "Időzóna"
+#: js/widgets/customfields/EditDialogPlugin.js:137
+msgid "General"
+msgstr "Általános"
 
-#: js/widgets/TimezoneChooser.js:77
-msgid "setting new timezone..."
-msgstr "új időzóna beállítása..."
+#: js/widgets/customfields/EditDialogPlugin.js:148
+msgid "Custom Fields"
+msgstr "Egyedi mezők"
 
-#: js/widgets/tree/ContextMenu.js:43
-msgid "Rename"
-msgstr "Átnevezés"
+#: js/ux/form/ImageField.js:72
+msgid "Loading"
+msgstr "Betöltés"
 
-#: js/widgets/tree/ContextMenu.js:64
-msgid "Manage permissions"
-msgstr "Jogosultságok kezelése"
+#: js/ux/form/ImageField.js:75
+msgid "Click to edit"
+msgstr "Kattints a szerkesztéshez"
 
-#: js/widgets/tree/ContextMenu.js:72
-msgid "Set color"
-msgstr "Szín beállítás"
+#: js/ux/form/ImageField.js:124
+msgid "Not An Image"
+msgstr "Ez nem egy kép"
 
-#: js/widgets/tree/ContextMenu.js:86
-msgid "Reload"
-msgstr "Újratöltés"
+#: js/ux/form/ImageField.js:124
+msgid "Please select an image file (gif/png/jpeg)"
+msgstr "Kérem válasszon egy kép file-t (gif/png/jpeg)"
 
-#: js/widgets/tree/ContextMenu.js:109
-msgid "Download"
-msgstr "Letöltés"
+#: js/ux/form/ImageField.js:162
+msgid "Could not upload image. Please notify your Administrator"
+msgstr "A kép feltöltése sikertelen. Értesítse a rendszergazdáját"
 
-#: js/widgets/tree/ContextMenu.js:164
-msgid "New {0}"
-msgstr "Új {0}"
+#: js/ux/form/ImageField.js:174
+msgid "Change Image"
+msgstr "Kép cseréje"
 
-#: js/widgets/tree/ContextMenu.js:164
-msgid "Please enter the name of the new {0}:"
-msgstr "Kérem adja meg az új {0} nevét:"
+#: js/ux/form/ImageField.js:183 js/ux/form/ImageField.js:201
+msgid "Crop Image"
+msgstr "Kép kivágása"
 
-#: js/widgets/tree/ContextMenu.js:167
-msgid "No {0} added"
-msgstr "{0} hozzáadása sikertelen"
+#: js/ux/form/ImageField.js:207
+msgid "Delete Image"
+msgstr "Kép törlése"
 
-#: js/widgets/tree/ContextMenu.js:167 js/widgets/tree/ContextMenu.js:250
-msgid "You have to supply a {0} name!"
-msgstr "Neked kell adni egy {0} nevet!"
+#: js/ux/form/ImageField.js:216
+msgid "Show Original Image"
+msgstr "Eredeti kép mutatása"
 
-#: js/widgets/tree/ContextMenu.js:170
-msgid "Creating {0}..."
-msgstr "{0} készítése..."
+#: js/ux/form/ImageField.js:278
+msgid "Image Failed"
+msgstr "Hibás kép"
 
-#: js/widgets/tree/ContextMenu.js:244
-msgid "Please enter the new name of the {0}:"
-msgstr "Kérem adja meg a(z) {0} új nevét:"
+#: js/ux/form/ImageField.js:278
+msgid "Could not load image. Please notify your Administrator"
+msgstr "Kép betöltése sikertelen. Értesítse a redszergazdáját"
 
-#: js/widgets/tree/ContextMenu.js:250
-msgid "Not renamed {0}"
-msgstr "Sikertelenül átnevezett {0}"
+#: js/ux/form/RecordsComboBox.js:26
+msgid "Software Version"
+msgstr "Szoftver verzió"
 
-#: js/widgets/tree/ContextMenu.js:321
-msgid "Do you really want to delete the {0} \"{1}\"?"
-msgstr "Biztosan törölni akarod a {0} \"{1}\"?"
+#: js/ux/PopupWindowManager.js:166
+msgid "The window you want to work with is backgrounded. Your browser does't support to forground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"
+msgstr "Az az ablak amivel dolgozni szeretnél a háttérben van. A böngésződ nem támogatja az ablak előtérbe kerülését, ezért az operációr rendszered ablak váltási tulajdonságát kell használnod. Küldj visszajelzést a böngésződ gyártójának!"
 
-#: js/widgets/tree/ContextMenu.js:435
-msgid "Manage Permissions for {0} \"{1}\""
-msgstr "{0} \"{1}\" jogosultságainak kezelése"
+#: js/ux/ConnectionStatus.js:56
+msgid "online"
+msgstr "online"
 
-#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
-msgid "New version of Tine 2.0 available"
-msgstr "Tine 2.0 új verziója elérhető"
+#: js/ux/ConnectionStatus.js:57
+msgid "offline"
+msgstr "offline"
 
-#: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
-msgid "Version \"{0}\" of Tine 2.0 is available."
-msgstr "Tine 2.0 \"{0}\" verziója elérhető."
+#: js/ux/SearchField.js:44
+msgid "enter searchfilter"
+msgstr "keresőszűrő megadása"
 
-#: js/widgets/VersionCheck.js:46
-msgid "It's a critical update and must be installed as soon as possible!"
-msgstr "Ez egy kritikus frissítés, amit minnél hamarabb telepíteni kell!"
+#: js/ux/Percentage.js:190
+msgid "(paused)"
+msgstr "(szüneteletve)"
 
-#: js/widgets/VersionCheck.js:55
-msgid "Please consider updating!"
-msgstr "Kérlek fontold meg a frissítést!"
+#: js/ux/grid/PagingToolbar.js:53
+msgid "{0} selected"
+msgstr "{0} választva"
+
+#: js/ux/grid/PagingToolbar.js:54
+msgid "Unselect all"
+msgstr "Összes kiválasztás visszavonása"
+
+#: js/ux/grid/PagingToolbar.js:55
+msgid "Select all visible ({0} records)"
+msgstr "Összes látható ({0} adat) kiválasztása"
+
+#: js/ux/grid/PagingToolbar.js:56
+msgid "Select all pages ({0} records)"
+msgstr "Összes oldal ({0} adat) kiválasztása"
+
+#: js/ux/grid/PagingToolbar.js:57
+msgid "Toggle selection"
+msgstr "Kiválasztás átváltása"
+
+#: js/Container.js:123
+msgid "All {0}"
+msgstr "Minden {0}"
+
+#: js/Container.js:124
+msgid "Shared {0}"
+msgstr "Megosztott {0}"
+
+#: js/Container.js:125
+msgid "Other Users {0}"
+msgstr "Többi felhasználó {0}"
+
+#: js/Container.js:130
+msgid "My {0}"
+msgstr "Saját {0}"
+
+#: js/PasswordChangeDialog.js:32
+msgid "Change Password For \"{0}\""
+msgstr " \"{0}\" jelszavának megváltoztatása"
+
+#: js/PasswordChangeDialog.js:48
+msgid "Old Password"
+msgstr "Régi jelszó"
+
+#: js/PasswordChangeDialog.js:52
+msgid "New Password"
+msgstr "Új jelszó"
+
+#: js/PasswordChangeDialog.js:56
+msgid "Repeat new Password"
+msgstr "Jelszó megismétlése"
+
+#: js/PasswordChangeDialog.js:75
+msgid "Please Wait!"
+msgstr "Kérem várjon!"
+
+#: js/PasswordChangeDialog.js:76
+msgid "changing password..."
+msgstr "jelszó megváltoztatása..."
+
+#: js/PasswordChangeDialog.js:87
+msgid "Success"
+msgstr "Sikerült"
+
+#: js/PasswordChangeDialog.js:88
+msgid "Your password has been changed."
+msgstr "Jelszavad megváltozott."
+
+#: js/PasswordChangeDialog.js:111
+msgid "The new passwords mismatch, please correct them."
+msgstr "Az új jelszavak nem egyezznek, javítsd őket."
+
+#: js/Models.js:271
+msgid "Import"
+msgid_plural "Imports"
+msgstr[0] "Importálás"
+msgstr[1] "Importálások"
+
+#: js/Models.js:336
+msgid "Credentials"
+msgid_plural "Credentials"
+msgstr[0] "Belépési adat"
+msgstr[1] "Belépési adatok"
+
+#: js/Models.js:385
+msgid "Department"
+msgid_plural "Departments"
+msgstr[0] "Osztály"
+msgstr[1] "Osztályok"
+
+#: js/Models.js:412
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] "Beállítás"
+msgstr[1] "Beállítások"
+
+#: js/Models.js:412
+msgid "Configs"
+msgstr "Beállítások"
+
+#: js/AppManager.js:204
+msgid "Missing Applications"
+msgstr "Hiányzó alkalmazás"
+
+#: js/AppManager.js:205
+msgid "There are no applications enabled for you. Please contact your administrator."
+msgstr "Nincs engedélyezett alkalmazásod. Kérlek keresd a rendszergazdádat."
+
+#: js/prototypeTranslations.js:20 js/prototypeTranslations.js:21
+msgid "Outdent Text"
+msgstr "Nem behúzott szöveg"
+
+#: js/prototypeTranslations.js:22 js/prototypeTranslations.js:23
+msgid "Indent Text"
+msgstr "Behúzott szöveg"
+
+#: js/prototypeTranslations.js:24 js/prototypeTranslations.js:25
+msgid "Remove Formatting"
+msgstr "Formázás eltávolítása"
+
+#: js/LoginPanel.js:80 js/LoginPanel.js:118
+msgid "Login"
+msgstr "Bejelentkezés"
+
+#: js/LoginPanel.js:137
+msgid "Tine 2.0 is made for you"
+msgstr "Tine 2.0 Neked készült"
+
+#: js/LoginPanel.js:139
+msgid "Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
+msgstr "Tine 2.0 szeretné az üzleti együttműködést könnyebbé és élvezhetőbbé tenni - a szükségleteid szerint! Ezért melegen üdvözöljük a megbeszéléseket, az ötleteket és a segítség nyújtást."
+
+#: js/LoginPanel.js:145
+msgid "Tine 2.0 Homepage"
+msgstr "Tine 2.0 Honlap"
+
+#: js/LoginPanel.js:146
+msgid "Tine 2.0 Forum"
+msgstr "Tine 2.0 Fórum"
+
+#: js/LoginPanel.js:191
+msgid "about {0} minutes"
+msgstr "kb. {0} perc"
+
+#: js/LoginPanel.js:196 js/LoginPanel.js:421
+msgid "Tine 2.0 needs your help"
+msgstr "Tine 2.0-nek szüksége van a segítségedre"
+
+#: js/LoginPanel.js:198 js/LoginPanel.js:423
+msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
+msgstr "Rendszeresen szükségünk van a visszajelzésedre, hogy a Tine 2.0 következő kiadása az igényeidet minnél jobban kielégítse. Segíts nekünk és magadnak ezekben résztvéve:"
+
+#: js/LoginPanel.js:204
+msgid "participate!"
+msgstr "közreműködés!"
+
+#: js/LoginPanel.js:226
+msgid "Languages"
+msgstr "Nyelvek"
+
+#: js/LoginPanel.js:227
+msgid "Duration"
+msgstr "Időtartam"
+
+#: js/LoginPanel.js:268
+msgid "Browser incompatible"
+msgstr "Böngésző nem kompatibilis"
+
+#: js/LoginPanel.js:270
+msgid "Your browser is not supported by Tine 2.0."
+msgstr "A böngésződet nem támogatja a Tine 2.0."
+
+#: js/LoginPanel.js:275
+msgid "Browser incompatible?"
+msgstr "Böngésző nem kompatibilis?"
+
+#: js/LoginPanel.js:277
+msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
+msgstr "Ismeretlen böngészőt használsz. Ez ismeretlen viselkedést okozhat."
+
+#: js/LoginPanel.js:283
+msgid "You might try one of these browsers:"
+msgstr "Az alábbi böngészőket kell megpróbálnod:"
+
+#: js/LoginPanel.js:341
+msgid "Logging you in..."
+msgstr "Bejelentkezés..."
+
+#: js/LoginPanel.js:354
+msgid "Login successful. Loading {0}..."
+msgstr "Bejelentkezés sikeres. {0} betöltése..."
+
+#: js/LoginPanel.js:362 js/ExceptionHandler.js:204
+msgid "Connection lost, please check your network!"
+msgstr "Kapcsolat elveszett, ellenőrizd a hálózatod!"
+
+#: js/LoginPanel.js:366
+msgid "Login failure"
+msgstr "Hibás bejelentkezés"
+
+#: js/LoginPanel.js:367
+msgid "Your username and/or your password are wrong!!!"
+msgstr "A felhasználóneved és/vagy a jelszavad hibás!!!"
+
+#: js/LoginPanel.js:394
+msgid "Please enter your login data"
+msgstr "Írd be a bejelentkezési adataidat"
+
+#: js/ExceptionHandler.js:141
+msgid "Your session timed out. You need to login again."
+msgstr "Időtúllépés. Újra be kell jelentkezned."
+
+#: js/ExceptionHandler.js:158
+msgid "Insufficient Rights"
+msgstr "Nincs elegendő jogod"
+
+#: js/ExceptionHandler.js:159
+msgid "Sorry, you are not permitted to perform this action"
+msgstr "Bocsánat, de nem vagy jogosult erre a tevékenységre"
+
+#: js/ExceptionHandler.js:168
+msgid "Not Found"
+msgstr "Nem található"
+
+#: js/ExceptionHandler.js:169
+msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
+msgstr "Bocsánat, kérésed nem teljesíthető, mert a kért adat nem található. Legtöbb esetben ez azt jelenti, hogy valaki már törölte az adatot. Frissítsd az aktuális nézetedet."
+
+#: js/ExceptionHandler.js:178
+msgid "Concurrent Updates"
+msgstr "Megegyező frissítések"
+
+#: js/ExceptionHandler.js:179
+msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
+msgstr "Valaki más elmentette ezt a tételt miközben te szerkesztetted. Töltsd be újra és csináld újra a változtatásokat."
+
+#: js/ExceptionHandler.js:189
+msgid "Service Unavailable"
+msgstr "Szolgáltatás nem elérhető"
+
+#: js/ExceptionHandler.js:190
+msgid "The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:210
+msgid "Timeout"
+msgstr "Időtúllépés"
+
+#: js/ExceptionHandler.js:211
+msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
+msgstr "Bocsánat, időtúllépés történt a kérésed feldolgozása közben. Töltsd újra a böngésződet, próbáld újra vagy lépj kapcsolatba a rendszergazdával."
+
+#: js/ExceptionHandler.js:220
+msgid "No Response"
+msgstr "Nincs válasz"
+
+#: js/ExceptionHandler.js:221
+msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
+msgstr "Bocsánat, a szerver nem adott vissza adatot. Töltsd újra a böngésződet, próbáld újra vagy lépj kapcsolatba a rendszergazdával."
+
+#: js/ExceptionHandler.js:230
+msgid "Out of Resources"
+msgstr "Erőforrások elfogytak"
+
+#: js/ExceptionHandler.js:231
+msgid "Sorry, the Server stated a \"memory exhausted\" condition. Please contact your administrator."
+msgstr "Elnézést, a Szerver egy \"memory exhausted\" állapotba került. Lépj kapcsolatba a rendszergazdával."
+
+#: js/ExceptionHandler.js:240
+msgid "No Role Memberships"
+msgstr "Nincsenek Szerep tagságok"
+
+#: js/ExceptionHandler.js:241
+msgid "Your user account has no role memberships. Please contact your administrator."
+msgstr "A felhasználó nevedhez nem tartoznak szerep tagságok. Lépj kapcsolatba a rendszergazdával."
+
+#: js/UserRegistration.js:37
+msgid "Registration Wizard"
+msgstr "Regisztrációs varázsló"
+
+#: js/UserRegistration.js:90
+msgid "Given name"
+msgstr "Keresztnév"
+
+#: js/UserRegistration.js:101
+msgid "Family name"
+msgstr "Családi név"
+
+#: js/UserRegistration.js:112
+msgid "Login name"
+msgstr "Bejelentkezési név"
+
+#: js/UserRegistration.js:125
+msgid "Emailaddress"
+msgstr "E-mail cím"
+
+#: js/UserRegistration.js:171
+msgid "Congratulations!"
+msgstr "Gratulálunk!"
+
+#: js/UserRegistration.js:171
+msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
+msgstr "Beírtál minden szükséges információt. Ha megnyomod a Befejezés gombot, elküldjük a regisztrációs e-mailt."
+
+#: js/MainScreen.js:192
+msgid "Your password expired. Please enter a new user password:"
+msgstr "Lejárt a jelszód. Írj be egy új jelszót:"
+
+#: js/ExceptionDialog.js:66
+msgid "Send Report"
+msgstr "Jelentés küldése"
+
+#: js/ExceptionDialog.js:76
+msgid "The last action you made was potentially not performed correctly."
+msgstr "Az utolsó tevékenységed nem teljesült megfelelően."
+
+#: js/ExceptionDialog.js:77
+msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
+msgstr "Segíts tökéletesíteni ezt a szoftvert és értsesítsd a gyártót. Mellékelj egy leírást arról, hogy mit csináltál amikor a hiba keletkezett."
+
+#: js/ExceptionDialog.js:91
+msgid "Send Contact Information"
+msgstr "Kapcsolati információk küldése"
+
+#: js/ExceptionDialog.js:108
+msgid "Details:"
+msgstr "Részletek:"
+
+#: js/ExceptionDialog.js:136
+msgid "Sending report..."
+msgstr "Jelentés küldése..."
+
+#: js/ExceptionDialog.js:136
+msgid "Please wait a moment"
+msgstr "Várj egy pillanatot"
+
+#: js/ExceptionDialog.js:178
+msgid "Transmission Completed"
+msgstr "Átvitel befejezve"
+
+#: js/ExceptionDialog.js:179
+msgid "Your report has been sent. Thanks for your contribution"
+msgstr "Jelentésed elküldve. Köszönjük a részvételt"
+
+#: js/ExceptionDialog.js:179
+msgid "Please restart your browser now!"
+msgstr "Kérlek indítsd újra a böngésződet most!"
+
+#: js/tineInit.js:588
+msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
+msgstr "Végeztes hiba: A kliens önfrissítése hibás, lépj kapcsolatba a rendszergazdával és/vagy indítsd/töltsd újra a böngésződet."
+
+#: js/data/Record.js:162
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Feladat"
+msgstr[1] "Feladatok"
+
+#: js/data/Record.js:166
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "tennivaló lista"
+msgstr[1] "tennivaló listák"
+
+#: Export/Pdf.php:437
+msgid "Created by"
+msgstr "Készítette"
+
+#: Export/Pdf.php:483
+msgid "Activities"
+msgstr "Tevékenységek"
+
+#: Export/Spreadsheet/Ods.php:287
+msgid "Data"
+msgstr "Adat"
+
+#: views/update.php:23
+msgid "Tine 2.0 needs to be updated or is not installed yet."
+msgstr "Tine 2.0 frissítése szükséges vagy még nincs telepítve."
+
+#: views/update.php:24
+msgid "Please wait or contact your administrator"
+msgstr "Kérlek várj vagy lépj kapcsolatba a rendszergazdával"
 
 #: Notes.php:362
 msgid "by"
@@ -2291,89 +2385,8 @@ msgstr "-"
 msgid "Changed fields:"
 msgstr "Változtatott mezők:"
 
-#: Preference/Abstract.php:481
-msgid "default"
-msgstr "alapértelmezett"
-
-#: Preference.php:88
-msgid "The timezone in which dates are shown in Tine 2.0."
-msgstr "A Tine 2.0 dátumainak időzónája."
-
-#: Preference.php:92
-msgid "The language of the Tine 2.0 GUI."
-msgstr "Tine 2.0 felhasználói felületének nyelve."
-
-#: Preference.php:95
-msgid "Default Application"
-msgstr "Default Application"
-
-#: Preference.php:96
-msgid "The default application to show after login."
-msgstr "Bejelentkezés utáni alapértelmezett alkalmazás."
-
-#: Preference.php:99
-msgid "Window Type"
-msgstr "Ablak típus"
-
-#: Preference.php:100
-msgid "You can choose between ExtJs style windows or normal Browser popup windows."
-msgstr "Választhatsz az ExtJs stílus vagy a normál Böngésző felugró ablakai között."
-
-#: Preference.php:103
-msgid "Confirm Logout"
-msgstr "Kijelentkezés megerősítése"
-
-#: Preference.php:104
-msgid "Show confirmation dialog on logout."
-msgstr "Megerősítő ablak muitatása kijelentkezéskor."
-
-#: Setup/setup.xml:3014
-msgid "note"
-msgstr "megjegyzés"
-
-#: Setup/setup.xml:3019
-msgid "default note type"
-msgstr "alapértelmezett megjegyzés típus"
-
-#: Setup/setup.xml:3045
-msgid "telephone"
-msgstr "telefon"
-
-#: Setup/setup.xml:3050
-msgid "telephone call"
-msgstr "telefon hívás"
-
-#: Setup/setup.xml:3076
-msgid "email"
-msgstr "email"
-
-#: Setup/setup.xml:3081
-msgid "email contact"
-msgstr "email kapcsolat"
-
-#: Setup/setup.xml:3107
-msgid "created"
-msgstr "készítette"
-
-#: Setup/setup.xml:3112
-msgid "record created"
-msgstr "adatot készítette"
-
-#: Setup/setup.xml:3138
-msgid "changed"
-msgstr "változtatta"
-
-#: Setup/setup.xml:3143
-msgid "record changed"
-msgstr "adatot változtatta"
-
-#: views/update.php:23
-msgid "Tine 2.0 needs to be updated or is not installed yet."
-msgstr "Tine 2.0 frissítése szükséges vagy még nincs telepítve."
-
-#: views/update.php:24
-msgid "Please wait or contact your administrator"
-msgstr "Kérlek várj vagy lépj kapcsolatba a rendszergazdával"
+#~ msgid "The grant to administrate this container"
+#~ msgstr "Ezen konténer adminisztrálásának engedélyezése"
 
 #~ msgid "Import into {0}"
 #~ msgstr "Importálás ebbe a {0}be"

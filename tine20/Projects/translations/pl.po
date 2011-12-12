@@ -34,95 +34,9 @@ msgstr "Rola uczestnika projektu: Możliwa. Zauważ proszę, że dodatkowe role 
 msgid "%s's personal Projects"
 msgstr "%s's projekty osobiste"
 
-#: js/Model.js:33 js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "projekt"
-msgstr[1] "Projekty"
-msgstr[2] "Projekty"
-
-#: js/Model.js:37
-msgid "Project list"
-msgid_plural "Project lists"
-msgstr[0] "Lista projektów"
-msgstr[1] "listy projektów"
-msgstr[2] "listy projektów"
-
-#: js/Model.js:40
-msgid "Project lists"
-msgstr "Listy projektów"
-
-#: js/Model.js:72
-msgid "Quick search"
-msgstr "Szybkie wyszukiwanie"
-
-#: js/Model.js:74 js/ProjectEditDialog.js:141 js/ProjectGridPanel.js:95
-msgid "Status"
-msgstr "Status"
-
-#: js/Model.js:83
-msgid "Last modified"
-msgstr "Ostatnio zmodyfikowany"
-
-#: js/Model.js:84
-msgid "Last modifier"
-msgstr "Ostatnio zmodyfikował/a"
-
-#: js/Model.js:85
-msgid "Creation Time"
-msgstr "Czas utworzenia"
-
-#: js/Model.js:86
-msgid "Creator"
-msgstr "Utworzone przez"
-
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:83
-msgid "Attendee"
-msgstr "Uczestnik"
-
-#: js/ProjectAttendeeFilter.js:49
-msgid "Attendee Role"
-msgstr "Rola uczestnika"
-
-#: js/ProjectEditDialog.js:84
-msgid "Role"
-msgstr "Rola"
-
-#: js/ProjectEditDialog.js:130 js/ProjectGridPanel.js:89
-msgid "Title"
-msgstr "Tytuł"
-
-#: js/ProjectEditDialog.js:135 js/ProjectGridPanel.js:82
-msgid "Number"
-msgstr "Ilość"
-
-#: js/ProjectEditDialog.js:171
-msgid "Description"
-msgstr "Opis"
-
-#: js/ProjectEditDialog.js:185
-msgid "Enter description"
-msgstr "Wprowadź opis"
-
-#: js/ProjectGridPanel.js:79
-msgid "Tags"
-msgstr "Znaczniki"
-
-#: js/Projects.js:24 Setup/setup.xml:4
+#: Setup/setup.xml:4 js/Projects.js:24
 msgid "Projects"
 msgstr "Projekty"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "Wszystkie moje projekty"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "Domyślny ulubiony"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Domyślny ulubiony ładowany podczas uruchamiania projektów"
 
 #: Setup/Initialize.php:34
 msgid "On hold"
@@ -167,6 +81,92 @@ msgstr "Moje, oczekujące projekty"
 #: Setup/Initialize.php:121
 msgid "My projects that are on hold"
 msgstr "Moje, wstrzymane projekty"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Wszystkie moje projekty"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Domyślny ulubiony"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Domyślny ulubiony ładowany podczas uruchamiania projektów"
+
+#: js/ProjectGridPanel.js:85
+msgid "Tags"
+msgstr "Znaczniki"
+
+#: js/ProjectGridPanel.js:88 js/ProjectEditDialog.js:135
+msgid "Number"
+msgstr "Ilość"
+
+#: js/ProjectGridPanel.js:95 js/ProjectEditDialog.js:130
+msgid "Title"
+msgstr "Tytuł"
+
+#: js/ProjectGridPanel.js:101 js/ProjectEditDialog.js:141 js/Model.js:74
+msgid "Status"
+msgstr "Status"
+
+#: js/ProjectEditDialog.js:83 js/ProjectAttendeeFilter.js:38
+msgid "Attendee"
+msgstr "Uczestnik"
+
+#: js/ProjectEditDialog.js:84
+msgid "Role"
+msgstr "Rola"
+
+#: js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118 js/Model.js:33
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "projekt"
+msgstr[1] "Projekty"
+msgstr[2] "Projekty"
+
+#: js/ProjectEditDialog.js:171
+msgid "Description"
+msgstr "Opis"
+
+#: js/ProjectEditDialog.js:185
+msgid "Enter description"
+msgstr "Wprowadź opis"
+
+#: js/Model.js:37
+msgid "Project list"
+msgid_plural "Project lists"
+msgstr[0] "Lista projektów"
+msgstr[1] "listy projektów"
+msgstr[2] "listy projektów"
+
+#: js/Model.js:40
+msgid "Project lists"
+msgstr "Listy projektów"
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr "Szybkie wyszukiwanie"
+
+#: js/Model.js:83
+msgid "Last modified"
+msgstr "Ostatnio zmodyfikowany"
+
+#: js/Model.js:84
+msgid "Last modifier"
+msgstr "Ostatnio zmodyfikował/a"
+
+#: js/Model.js:85
+msgid "Creation Time"
+msgstr "Czas utworzenia"
+
+#: js/Model.js:86
+msgid "Creator"
+msgstr "Utworzone przez"
+
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
+msgstr "Rola uczestnika"
 
 #~ msgid "Example Application"
 #~ msgstr "Przykładowa aplikacja"

@@ -14,58 +14,42 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: js/AddressbookGridPanelHook.js:38
-msgid "Call contact"
+#: Preference.php:72
+msgid "Your phone"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:61
-msgid "Compose SMS"
+#: Preference.php:73
+msgid "This is your phone"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:255
-msgid "Work"
+#: Preference.php:76
+msgid "Your fax"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:265
-msgid "Home"
+#: Preference.php:77
+msgid "This is your fax"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:320
-msgid "Cell"
+#: Preference.php:80
+msgid "Your mobile number"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:285 js/AddressbookGridPanelHook.js:330
-msgid "Cell private"
-msgstr ""
-
-#: js/CallStateWindow.js:50 js/DialNumberDialog.js:64
-#: js/SearchAddressDialog.js:64 js/SmsEditDialog.js:60
-msgid "Cancel"
-msgstr ""
-
-#: js/CallStateWindow.js:106
-msgid "connecting..."
-msgstr ""
-
-#: js/CallStateWindow.js:144
-msgid "Connecting to: "
-msgstr ""
-
-#: js/DialNumberDialog.js:56 js/DialNumberDialog.js:152
-msgid "Dial Number"
-msgstr ""
-
-#: js/DialNumberDialog.js:72 js/SearchAddressDialog.js:72
-#: js/SmsEditDialog.js:68
-msgid "Close"
-msgstr ""
-
-#: js/DialNumberDialog.js:120
-msgid "Number to call"
+#: Preference.php:81
+msgid "Used when sending SMS"
 msgstr ""
 
 #: js/SearchAddressDialog.js:56
 msgid "Add Number"
+msgstr ""
+
+#: js/SearchAddressDialog.js:64 js/SmsEditDialog.js:60
+#: js/CallStateWindow.js:50 js/DialNumberDialog.js:64
+msgid "Cancel"
+msgstr ""
+
+#: js/SearchAddressDialog.js:72 js/SmsEditDialog.js:68
+#: js/DialNumberDialog.js:72
+msgid "Close"
 msgstr ""
 
 #: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
@@ -114,6 +98,18 @@ msgstr ""
 
 #: js/SearchAddressDialog.js:214
 msgid "Choose Address"
+msgstr ""
+
+#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:181
+msgid "Send"
+msgstr ""
+
+#: js/CallStateWindow.js:106
+msgid "connecting..."
+msgstr ""
+
+#: js/CallStateWindow.js:144
+msgid "Connecting to: "
 msgstr ""
 
 #: js/Sipgate.js:30
@@ -228,30 +224,34 @@ msgstr ""
 msgid "hungup"
 msgstr ""
 
-#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:181
-msgid "Send"
+#: js/DialNumberDialog.js:56 js/DialNumberDialog.js:152
+msgid "Dial Number"
 msgstr ""
 
-#: Preference.php:72
-msgid "Your phone"
+#: js/DialNumberDialog.js:120
+msgid "Number to call"
 msgstr ""
 
-#: Preference.php:73
-msgid "This is your phone"
+#: js/AddressbookGridPanelHook.js:38
+msgid "Call contact"
 msgstr ""
 
-#: Preference.php:76
-msgid "Your fax"
+#: js/AddressbookGridPanelHook.js:61
+msgid "Compose SMS"
 msgstr ""
 
-#: Preference.php:77
-msgid "This is your fax"
+#: js/AddressbookGridPanelHook.js:255
+msgid "Work"
 msgstr ""
 
-#: Preference.php:80
-msgid "Your mobile number"
+#: js/AddressbookGridPanelHook.js:265
+msgid "Home"
 msgstr ""
 
-#: Preference.php:81
-msgid "Used when sending SMS"
+#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:320
+msgid "Cell"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:285 js/AddressbookGridPanelHook.js:330
+msgid "Cell private"
 msgstr ""

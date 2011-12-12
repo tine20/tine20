@@ -14,6 +14,88 @@ msgstr ""
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: Config.php:31
+msgid "Tasks Status Available"
+msgstr ""
+
+#: Config.php:33
+msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
+msgstr ""
+
+#: Controller.php:96
+#, python-format
+msgid "%s's personal tasks"
+msgstr "Tareas personales de %s"
+
+#: Setup/Update/Release3.php:65 Setup/Initialize.php:64
+msgid "All tasks of my taskslists"
+msgstr ""
+
+#: Setup/Update/Release5.php:66 Setup/Initialize.php:33
+msgid "No response"
+msgstr ""
+
+#: Setup/Update/Release5.php:67 Setup/Initialize.php:34 js/GridPanel.js:216
+#: js/TaskEditDialog.js:239
+msgid "Completed"
+msgstr "Completado"
+
+#: Setup/Update/Release5.php:68 Setup/Initialize.php:35
+msgid "Cancelled"
+msgstr ""
+
+#: Setup/Update/Release5.php:69 Setup/Initialize.php:36
+msgid "In process"
+msgstr ""
+
+#: Setup/Initialize.php:73
+msgid "My open tasks"
+msgstr ""
+
+#: Setup/Initialize.php:82
+msgid "My open tasks this week"
+msgstr ""
+
+#: Setup/Initialize.php:91
+msgid "All tasks for me"
+msgstr ""
+
+#: Setup/Initialize.php:92
+msgid "All tasks that I am responsible for"
+msgstr ""
+
+#: Setup/Initialize.php:99
+msgid "Last modified by me"
+msgstr ""
+
+#: Setup/Initialize.php:100
+msgid "All tasks that I have last modified"
+msgstr ""
+
+#: Setup/Initialize.php:109
+msgid "Tasks without responsible"
+msgstr ""
+
+#: Preference.php:25
+msgid "All my tasks"
+msgstr ""
+
+#: Preference.php:67
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:68
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr ""
+
+#: Preference.php:71
+msgid "Default Task List"
+msgstr ""
+
+#: Preference.php:72
+msgid "The default task list to create new tasks in."
+msgstr ""
+
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
 msgstr "administrar lista de tareas compartidas"
@@ -29,23 +111,6 @@ msgstr ""
 #: Acl/Rights.php:94
 msgid "Create or update shared tasks favorites"
 msgstr ""
-
-#: Config.php:31
-msgid "Tasks Status Available"
-msgstr ""
-
-#: Config.php:33
-msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
-msgstr ""
-
-#: Controller/Task.php:165
-msgid "Notification for Task "
-msgstr "Notificación por Tarea"
-
-#: Controller.php:96
-#, python-format
-msgid "%s's personal tasks"
-msgstr "Tareas personales de %s"
 
 #: js/GridPanel.js:54
 msgid "Do you really want to delete the selected task?"
@@ -92,11 +157,6 @@ msgstr[1] "Estado"
 #: js/GridPanel.js:209 js/Tasks.js:163
 msgid "Creation Time"
 msgstr "Fecha de Creación"
-
-#: js/GridPanel.js:216 js/TaskEditDialog.js:239 Setup/Initialize.php:34
-#: Setup/Update/Release5.php:67
-msgid "Completed"
-msgstr "Completado"
 
 #: js/GridPanel.js:223 js/Tasks.js:159
 msgid "Responsible"
@@ -190,69 +250,9 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: Preference.php:25
-msgid "All my tasks"
-msgstr ""
-
-#: Preference.php:67
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:68
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr ""
-
-#: Preference.php:71
-msgid "Default Task List"
-msgstr ""
-
-#: Preference.php:72
-msgid "The default task list to create new tasks in."
-msgstr ""
-
-#: Setup/Initialize.php:33 Setup/Update/Release5.php:66
-msgid "No response"
-msgstr ""
-
-#: Setup/Initialize.php:35 Setup/Update/Release5.php:68
-msgid "Cancelled"
-msgstr ""
-
-#: Setup/Initialize.php:36 Setup/Update/Release5.php:69
-msgid "In process"
-msgstr ""
-
-#: Setup/Initialize.php:64 Setup/Update/Release3.php:65
-msgid "All tasks of my taskslists"
-msgstr ""
-
-#: Setup/Initialize.php:73
-msgid "My open tasks"
-msgstr ""
-
-#: Setup/Initialize.php:82
-msgid "My open tasks this week"
-msgstr ""
-
-#: Setup/Initialize.php:91
-msgid "All tasks for me"
-msgstr ""
-
-#: Setup/Initialize.php:92
-msgid "All tasks that I am responsible for"
-msgstr ""
-
-#: Setup/Initialize.php:99
-msgid "Last modified by me"
-msgstr ""
-
-#: Setup/Initialize.php:100
-msgid "All tasks that I have last modified"
-msgstr ""
-
-#: Setup/Initialize.php:109
-msgid "Tasks without responsible"
-msgstr ""
+#: Controller/Task.php:165
+msgid "Notification for Task "
+msgstr "Notificación por Tarea"
 
 #~ msgid "NEEDS-ACTION"
 #~ msgstr "NECESITAN-ATENCION"

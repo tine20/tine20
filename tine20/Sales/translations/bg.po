@@ -21,34 +21,30 @@ msgstr ""
 msgid "add, edit and delete products"
 msgstr ""
 
-#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:85
-msgid "Title"
-msgstr "Име"
+#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
+msgid "Name"
+msgstr ""
 
-#: js/ContractEditDialog.js:100 js/ProductEditDialog.js:123
+#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
+msgid "Price"
+msgstr ""
+
+#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
+msgid "Manufacturer"
+msgstr ""
+
+#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
+msgid "Category"
+msgstr ""
+
+#: js/ProductEditDialog.js:123 js/ContractEditDialog.js:100
 #: js/ProductGridPanel.js:123
 msgid "Description"
 msgstr "Описание"
 
-#: js/ContractEditDialog.js:101 js/ProductEditDialog.js:124
+#: js/ProductEditDialog.js:124 js/ContractEditDialog.js:101
 msgid "Enter description..."
 msgstr "Моля эадайте описание..."
-
-#: js/ContractGridPanel.js:59 js/Models.js:78
-msgid "Quick search"
-msgstr ""
-
-#: js/ContractGridPanel.js:60
-msgid "Summary"
-msgstr "Заключение"
-
-#: js/ContractGridPanel.js:79
-msgid "Contract number"
-msgstr "Номер на договора"
-
-#: js/ContractGridPanel.js:91
-msgid "Status"
-msgstr "Статус"
 
 #: js/Models.js:40
 msgid "Product"
@@ -62,6 +58,10 @@ msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "списък на договори"
 msgstr[1] "списъка на договори"
+
+#: js/Models.js:78 js/ContractGridPanel.js:59
+msgid "Quick search"
+msgstr ""
 
 #: js/Models.js:79
 msgid "Product name"
@@ -79,25 +79,21 @@ msgid_plural "contracts lists"
 msgstr[0] "списък на договори"
 msgstr[1] "списъка на договори"
 
-#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
-msgid "Name"
-msgstr ""
+#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:85
+msgid "Title"
+msgstr "Име"
 
-#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
-msgid "Price"
-msgstr ""
+#: js/ContractGridPanel.js:60
+msgid "Summary"
+msgstr "Заключение"
 
-#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
-msgid "Manufacturer"
-msgstr ""
+#: js/ContractGridPanel.js:79
+msgid "Contract number"
+msgstr "Номер на договора"
 
-#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
-msgid "Category"
-msgstr ""
-
-#: js/ProductGridPanel.js:119
-msgid "Tags"
-msgstr ""
+#: js/ContractGridPanel.js:91
+msgid "Status"
+msgstr "Статус"
 
 #: js/Sales.js:53
 msgid "Products"
@@ -115,6 +111,10 @@ msgstr "Договори"
 #, fuzzy
 msgid "All Contracts"
 msgstr "Договори"
+
+#: js/ProductGridPanel.js:119
+msgid "Tags"
+msgstr ""
 
 #~ msgid "Shared Contracts"
 #~ msgstr "Общи договори"
