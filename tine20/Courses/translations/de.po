@@ -13,17 +13,15 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller/Course.php:107
-msgid "teacher"
-msgstr "lehrer"
+#: Frontend/Json.php:254 js/Models.js:41 js/CourseEditDialog.js:137
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Klasse"
+msgstr[1] "Klassen"
 
-#: Controller/Course.php:115
-msgid "Teacher"
-msgstr "Lehrer"
-
-#: Controller/Course.php:116
-msgid "Teacher Account"
-msgstr "Lehrer Zugang"
+#: Setup/setup.xml:4 js/Courses.js:32
+msgid "Courses"
+msgstr "Klassen"
 
 #: js/CourseGridPanel.js:49
 msgid "Quick search"
@@ -69,15 +67,25 @@ msgstr "Fehlgeschlagen"
 msgid "Some error occured while trying to update the courses."
 msgstr "Beim aktualisieren der Klasse(n) trat ein Fehler auf."
 
+#: js/Models.js:45
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "Liste"
+msgstr[1] "Listen"
+
+#: js/Models.js:74
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Klassentyp"
+msgstr[1] "Klassentypen"
+
+#: js/Courses.js:37
+msgid "All Courses"
+msgstr "Alle Klassen"
+
 #: js/CourseEditDialog.js:31
 msgid "Import course members"
 msgstr "Klassenmitglieder importieren"
-
-#: js/CourseEditDialog.js:137 js/Models.js:41 Frontend/Json.php:254
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Klasse"
-msgstr[1] "Klassen"
 
 #: js/CourseEditDialog.js:153
 msgid "Course Name"
@@ -115,22 +123,14 @@ msgstr "Neues Passwort setzen"
 msgid "Please enter the new password:"
 msgstr "Bitte das neue Passwort eingeben:"
 
-#: js/Courses.js:32 Setup/setup.xml:4
-msgid "Courses"
-msgstr "Klassen"
+#: Controller/Course.php:107
+msgid "teacher"
+msgstr "lehrer"
 
-#: js/Courses.js:37
-msgid "All Courses"
-msgstr "Alle Klassen"
+#: Controller/Course.php:115
+msgid "Teacher"
+msgstr "Lehrer"
 
-#: js/Models.js:45
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "Liste"
-msgstr[1] "Listen"
-
-#: js/Models.js:74
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] "Klassentyp"
-msgstr[1] "Klassentypen"
+#: Controller/Course.php:116
+msgid "Teacher Account"
+msgstr "Lehrer Zugang"

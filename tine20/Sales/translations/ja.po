@@ -22,35 +22,6 @@ msgstr ""
 msgid "add, edit and delete products"
 msgstr ""
 
-#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:85
-msgid "Title"
-msgstr ""
-
-#: js/ContractEditDialog.js:100 js/ProductEditDialog.js:123
-#: js/ProductGridPanel.js:123
-msgid "Description"
-msgstr ""
-
-#: js/ContractEditDialog.js:101 js/ProductEditDialog.js:124
-msgid "Enter description..."
-msgstr ""
-
-#: js/ContractGridPanel.js:59 js/Models.js:78
-msgid "Quick search"
-msgstr ""
-
-#: js/ContractGridPanel.js:60
-msgid "Summary"
-msgstr ""
-
-#: js/ContractGridPanel.js:79
-msgid "Contract number"
-msgstr ""
-
-#: js/ContractGridPanel.js:91
-msgid "Status"
-msgstr ""
-
 #: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
 msgid "Name"
 msgstr ""
@@ -67,8 +38,13 @@ msgstr ""
 msgid "Category"
 msgstr ""
 
-#: js/ProductGridPanel.js:119
-msgid "Tags"
+#: js/ProductEditDialog.js:123 js/ContractEditDialog.js:100
+#: js/ProductGridPanel.js:123
+msgid "Description"
+msgstr ""
+
+#: js/ProductEditDialog.js:124 js/ContractEditDialog.js:101
+msgid "Enter description..."
 msgstr ""
 
 #: js/Models.js:40
@@ -80,6 +56,10 @@ msgstr[0] ""
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] ""
+
+#: js/Models.js:78 js/ContractGridPanel.js:59
+msgid "Quick search"
+msgstr ""
 
 #: js/Models.js:79
 msgid "Product name"
@@ -94,6 +74,22 @@ msgstr[0] ""
 msgid "contracts list"
 msgid_plural "contracts lists"
 msgstr[0] ""
+
+#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:85
+msgid "Title"
+msgstr ""
+
+#: js/ContractGridPanel.js:60
+msgid "Summary"
+msgstr ""
+
+#: js/ContractGridPanel.js:79
+msgid "Contract number"
+msgstr ""
+
+#: js/ContractGridPanel.js:91
+msgid "Status"
+msgstr ""
 
 #: js/Sales.js:53
 msgid "Products"
@@ -111,6 +107,6 @@ msgstr ""
 msgid "All Contracts"
 msgstr ""
 
-#: Setup/setup.xml:243
-msgid "Shared Contracts"
+#: js/ProductGridPanel.js:119
+msgid "Tags"
 msgstr ""

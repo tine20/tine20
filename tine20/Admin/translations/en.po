@@ -14,14 +14,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller/Container.php:185
-msgid "Your container has been changed"
-msgstr "Your container has been changed"
-
-#: Controller/Container.php:186
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr "Your container has been changed by %1$s %2$sNote: %3$s"
-
 #: Acl/Rights.php:185
 msgid "manage access log"
 msgstr "manage access log"
@@ -126,135 +118,143 @@ msgstr "view containers"
 msgid "view personal and shared containers"
 msgstr "view personal and shared containers"
 
-#: js/SambaMachineGrid.js:61 js/SambaMachineEditDialog.js:42
+#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:61
 msgid "Computer Name"
 msgstr "Computer Name"
 
-#: js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92 js/Groups.js:236
-#: js/RoleEditDialog.js:291 js/user/GridPanel.js:99 js/GroupEditDialog.js:135
-#: js/TagEditDialog.js:225 js/Roles.js:239 js/Tags.js:226
-msgid "Description"
-msgstr "Description"
+#: js/Admin.js:23 js/user/GridPanel.js:98 js/user/Users.js:72
+#: js/AccessLog.js:107
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "User"
+msgstr[1] "Users"
 
-#: js/SambaMachineGrid.js:79 js/container/GridPanel.js:70 js/Groups.js:234
-#: js/user/GridPanel.js:175 js/Roles.js:237
-msgid "ID"
-msgstr "ID"
+#: js/Admin.js:36 js/Models.js:87
+msgid "Groups"
+msgstr "Groups"
 
-#: js/SambaMachineGrid.js:86 js/container/EditDialog.js:122 js/Groups.js:235
-#: js/user/EditDialog.js:278 js/user/EditDialog.js:314 js/Applications.js:278
-#: js/Roles.js:238 js/Tags.js:225 js/AccessLog.js:131
-msgid "Name"
-msgstr "Name"
+#: js/Admin.js:49
+msgid "Roles"
+msgstr "Roles"
 
-#: js/container/Container.js:46 js/container/GridPanel.js:103
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] "Container"
-msgstr[1] "Containers"
+#: js/Admin.js:61
+msgid "Computers"
+msgstr "Computers"
 
-#: js/container/GridPanel.js:71
-msgid "Container Name"
-msgstr "Container Name"
+#: js/Admin.js:74 js/Models.js:128
+msgid "Applications"
+msgstr "Applications"
 
-#: js/container/GridPanel.js:72 js/container/EditDialog.js:134
-#: js/ApplicationFilter.js:33 js/Models.js:128
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Application"
-msgstr[1] "Applications"
+#: js/Admin.js:87 js/Models.js:51 js/AccessLog.js:105
+msgid "Access Log"
+msgid_plural "Access Logs"
+msgstr[0] "Access Log"
+msgstr[1] "Access Logs"
 
-#: js/container/GridPanel.js:73 js/container/GridPanel.js:104
-#: js/container/EditDialog.js:141
-msgid "Type"
-msgstr "Type"
+#: js/Admin.js:100
+msgid "Shared Tags"
+msgstr "Shared Tags"
 
-#: js/container/EditDialog.js:142
-msgid "personal"
-msgstr "personal"
+#: js/Admin.js:113
+msgid "Containers"
+msgstr "Containers"
 
-#: js/container/EditDialog.js:142
-msgid "shared"
-msgstr "shared"
+#: js/Admin.js:149
+msgid "Admin"
+msgstr "Admin"
 
-#: js/container/EditDialog.js:154 js/TagEditDialog.js:231 js/Tags.js:222
-msgid "Color"
-msgstr "Color"
-
-#: js/container/EditDialog.js:159
-msgid "Note for Owner"
-msgstr "Note for Owner"
-
-#: js/Groups.js:52 js/Roles.js:47 js/Tags.js:64
-msgid "Confirm"
-msgstr "Confirm"
-
-#: js/Groups.js:52
-msgid "Do you really want to delete the selected groups?"
-msgstr "Do you really want to delete the selected groups?"
-
-#: js/Groups.js:69
-msgid "Deleting group(s)..."
-msgstr "Deleting group(s)..."
-
-#: js/Groups.js:74 js/RoleEditDialog.js:106 js/RoleEditDialog.js:134
-#: js/GroupEditDialog.js:72 js/TagEditDialog.js:82 js/Roles.js:69
-msgid "Failed"
-msgstr "Failed"
-
-#: js/Groups.js:74
-msgid "Some error occurred while trying to delete the group."
-msgstr "Some error occurred while trying to delete the group."
-
-#: js/Groups.js:104
-msgid "add group"
-msgstr "add group"
-
-#: js/Groups.js:112
-msgid "edit group"
-msgstr "edit group"
-
-#: js/Groups.js:120
-msgid "delete group"
-msgstr "delete group"
-
-#: js/Groups.js:176 js/Applications.js:183 js/Roles.js:176 js/Tags.js:169
-msgid "Search:"
-msgstr "Search:"
-
-#: js/Groups.js:223
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Displaying groups {0} - {1} of {2}"
-
-#: js/Groups.js:224 js/Groups.js:278
-msgid "No groups to display"
-msgstr "No groups to display"
-
-#: js/SambaMachineModel.js:39
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Computer"
-msgstr[1] "Computers"
-
-#: js/RoleEditDialog.js:69 js/GroupEditDialog.js:37 js/TagEditDialog.js:37
+#: js/GroupEditDialog.js:37 js/RoleEditDialog.js:69 js/TagEditDialog.js:37
 msgid "Please wait"
 msgstr "Please wait"
 
-#: js/RoleEditDialog.js:69 js/GroupEditDialog.js:37
+#: js/GroupEditDialog.js:37 js/RoleEditDialog.js:69
 msgid "Updating Memberships"
 msgstr "Updating Memberships"
+
+#: js/GroupEditDialog.js:72 js/RoleEditDialog.js:106 js/RoleEditDialog.js:134
+#: js/Groups.js:74 js/TagEditDialog.js:82 js/Roles.js:69
+msgid "Failed"
+msgstr "Failed"
+
+#: js/GroupEditDialog.js:72
+msgid "Could not save group."
+msgstr "Could not save group."
+
+#: js/GroupEditDialog.js:77 js/RoleEditDialog.js:113 js/TagEditDialog.js:87
+msgid "Errors"
+msgstr "Errors"
+
+#: js/GroupEditDialog.js:77 js/RoleEditDialog.js:113 js/TagEditDialog.js:87
+msgid "Please fix the errors noted."
+msgstr "Please fix the errors noted."
+
+#: js/GroupEditDialog.js:108
+msgid "Group Members"
+msgstr "Group Members"
+
+#: js/GroupEditDialog.js:127
+msgid "Group Name"
+msgstr "Group Name"
+
+#: js/GroupEditDialog.js:135 js/SambaMachineGrid.js:62
+#: js/SambaMachineGrid.js:92 js/RoleEditDialog.js:291 js/user/GridPanel.js:99
+#: js/Groups.js:236 js/TagEditDialog.js:225 js/Tags.js:226 js/Roles.js:239
+msgid "Description"
+msgstr "Description"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:837
+msgid "Visibility"
+msgstr "Visibility"
+
+#: js/GroupEditDialog.js:149 js/user/EditDialog.js:843
+msgid "Display in addressbook"
+msgstr "Display in addressbook"
+
+#: js/GroupEditDialog.js:149 js/user/EditDialog.js:843
+msgid "Hide from addressbook"
+msgstr "Hide from addressbook"
+
+#: js/GroupEditDialog.js:160 js/user/EditDialog.js:857
+msgid "Saved in Addressbook"
+msgstr "Saved in Addressbook"
+
+#: js/GroupEditDialog.js:215 js/RoleEditDialog.js:358 js/TagEditDialog.js:289
+msgid "Transferring {0}..."
+msgstr "Transferring {0}..."
+
+#: js/GroupEditDialog.js:215 js/Models.js:87
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Group"
+msgstr[1] "Groups"
+
+#: js/GroupEditDialog.js:220 js/GroupEditDialog.js:231
+msgid "Add new group"
+msgstr "Add new group"
+
+#: js/GroupEditDialog.js:233
+msgid "Edit Group \"{0}\""
+msgstr "Edit Group \"{0}\""
+
+#: js/SambaMachineGrid.js:79 js/user/GridPanel.js:175 js/Groups.js:234
+#: js/container/GridPanel.js:70 js/Roles.js:237
+msgid "ID"
+msgstr "ID"
+
+#: js/SambaMachineGrid.js:86 js/user/EditDialog.js:278
+#: js/user/EditDialog.js:314 js/Groups.js:235 js/Applications.js:278
+#: js/AccessLog.js:131 js/Tags.js:225 js/container/EditDialog.js:122
+#: js/Roles.js:238
+msgid "Name"
+msgstr "Name"
+
+#: js/AdminPanel.js:46
+msgid "Default Addressbook for new contacts and groups"
+msgstr "Default Addressbook for new contacts and groups"
 
 #: js/RoleEditDialog.js:106
 msgid "Could not save role."
 msgstr "Could not save role."
-
-#: js/RoleEditDialog.js:113 js/GroupEditDialog.js:77 js/TagEditDialog.js:87
-msgid "Errors"
-msgstr "Errors"
-
-#: js/RoleEditDialog.js:113 js/GroupEditDialog.js:77 js/TagEditDialog.js:87
-msgid "Please fix the errors noted."
-msgstr "Please fix the errors noted."
 
 #: js/RoleEditDialog.js:126
 msgid "Deleting role..."
@@ -276,10 +276,6 @@ msgstr "Members"
 msgid "Role Name"
 msgstr "Role Name"
 
-#: js/RoleEditDialog.js:358 js/GroupEditDialog.js:215 js/TagEditDialog.js:289
-msgid "Transferring {0}..."
-msgstr "Transferring {0}..."
-
 #: js/RoleEditDialog.js:358
 msgid "Role"
 msgstr "Role"
@@ -292,6 +288,13 @@ msgstr "Add New Role"
 msgid "Edit Role \"{0}\""
 msgstr "Edit Role \"{0}\""
 
+#: js/Models.js:128 js/container/GridPanel.js:72
+#: js/container/EditDialog.js:134 js/ApplicationFilter.js:33
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Application"
+msgstr[1] "Applications"
+
 #: js/user/GridPanel.js:56
 msgid "enable account"
 msgstr "enable account"
@@ -303,13 +306,6 @@ msgstr "disable account"
 #: js/user/GridPanel.js:76
 msgid "reset password"
 msgstr "reset password"
-
-#: js/user/GridPanel.js:98 js/user/Users.js:72 js/Admin.js:23
-#: js/AccessLog.js:107
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "User"
-msgstr[1] "Users"
 
 #: js/user/GridPanel.js:176 js/user/EditDialog.js:823 js/Applications.js:279
 msgid "Status"
@@ -362,18 +358,6 @@ msgstr "Set new password"
 #: js/user/GridPanel.js:243
 msgid "Please enter the new password:"
 msgstr "Please enter the new password:"
-
-#: js/user/Users.js:118
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "Samba User"
-msgstr[1] "Samba Users"
-
-#: js/user/Users.js:144
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] "Email User"
-msgstr[1] "Email Users"
 
 #: js/user/EditDialog.js:180
 msgid "Domain is not allowed. Check your SMTP domain configuration."
@@ -579,22 +563,6 @@ msgstr "expired"
 msgid "blocked"
 msgstr "blocked"
 
-#: js/user/EditDialog.js:837 js/GroupEditDialog.js:143
-msgid "Visibility"
-msgstr "Visibility"
-
-#: js/user/EditDialog.js:843 js/GroupEditDialog.js:149
-msgid "Display in addressbook"
-msgstr "Display in addressbook"
-
-#: js/user/EditDialog.js:843 js/GroupEditDialog.js:149
-msgid "Hide from addressbook"
-msgstr "Hide from addressbook"
-
-#: js/user/EditDialog.js:857 js/GroupEditDialog.js:160
-msgid "Saved in Addressbook"
-msgstr "Saved in Addressbook"
-
 #: js/user/EditDialog.js:886 js/user/EditDialog.js:890
 msgid "don't know"
 msgstr "don't know"
@@ -623,39 +591,57 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
-#: js/Admin.js:36 js/Models.js:87
-msgid "Groups"
-msgstr "Groups"
+#: js/user/Users.js:118
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "Samba User"
+msgstr[1] "Samba Users"
 
-#: js/Admin.js:49
-msgid "Roles"
-msgstr "Roles"
+#: js/user/Users.js:144
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "Email User"
+msgstr[1] "Email Users"
 
-#: js/Admin.js:61
-msgid "Computers"
-msgstr "Computers"
+#: js/Groups.js:52 js/Tags.js:64 js/Roles.js:47
+msgid "Confirm"
+msgstr "Confirm"
 
-#: js/Admin.js:74 js/Models.js:128
-msgid "Applications"
-msgstr "Applications"
+#: js/Groups.js:52
+msgid "Do you really want to delete the selected groups?"
+msgstr "Do you really want to delete the selected groups?"
 
-#: js/Admin.js:87 js/Models.js:51 js/AccessLog.js:105
-msgid "Access Log"
-msgid_plural "Access Logs"
-msgstr[0] "Access Log"
-msgstr[1] "Access Logs"
+#: js/Groups.js:69
+msgid "Deleting group(s)..."
+msgstr "Deleting group(s)..."
 
-#: js/Admin.js:100
-msgid "Shared Tags"
-msgstr "Shared Tags"
+#: js/Groups.js:74
+msgid "Some error occurred while trying to delete the group."
+msgstr "Some error occurred while trying to delete the group."
 
-#: js/Admin.js:113
-msgid "Containers"
-msgstr "Containers"
+#: js/Groups.js:104
+msgid "add group"
+msgstr "add group"
 
-#: js/Admin.js:149
-msgid "Admin"
-msgstr "Admin"
+#: js/Groups.js:112
+msgid "edit group"
+msgstr "edit group"
+
+#: js/Groups.js:120
+msgid "delete group"
+msgstr "delete group"
+
+#: js/Groups.js:176 js/Applications.js:183 js/Tags.js:169 js/Roles.js:176
+msgid "Search:"
+msgstr "Search:"
+
+#: js/Groups.js:223
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Displaying groups {0} - {1} of {2}"
+
+#: js/Groups.js:224 js/Groups.js:278
+msgid "No groups to display"
+msgstr "No groups to display"
 
 #: js/Applications.js:43
 msgid "{0} Settings"
@@ -693,36 +679,6 @@ msgstr "Order"
 msgid "Version"
 msgstr "Version"
 
-#: js/AdminPanel.js:46
-msgid "Default Addressbook for new contacts and groups"
-msgstr "Default Addressbook for new contacts and groups"
-
-#: js/GroupEditDialog.js:72
-msgid "Could not save group."
-msgstr "Could not save group."
-
-#: js/GroupEditDialog.js:108
-msgid "Group Members"
-msgstr "Group Members"
-
-#: js/GroupEditDialog.js:127
-msgid "Group Name"
-msgstr "Group Name"
-
-#: js/GroupEditDialog.js:215 js/Models.js:87
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "Group"
-msgstr[1] "Groups"
-
-#: js/GroupEditDialog.js:220 js/GroupEditDialog.js:231
-msgid "Add new group"
-msgstr "Add new group"
-
-#: js/GroupEditDialog.js:233
-msgid "Edit Group \"{0}\""
-msgstr "Edit Group \"{0}\""
-
 #: js/TagEditDialog.js:37
 msgid "Updating Tag"
 msgstr "Updating Tag"
@@ -755,6 +711,10 @@ msgstr "Use"
 msgid "Tag Name"
 msgstr "Tag Name"
 
+#: js/TagEditDialog.js:231 js/Tags.js:222 js/container/EditDialog.js:158
+msgid "Color"
+msgstr "Color"
+
 #: js/TagEditDialog.js:289
 msgid "Tag"
 msgstr "Tag"
@@ -767,61 +727,11 @@ msgstr "Add New Tag"
 msgid "Edit Tag \"{0}\""
 msgstr "Edit Tag \"{0}\""
 
-#: js/Roles.js:47
-msgid "Do you really want to delete the selected roles?"
-msgstr "Do you really want to delete the selected roles?"
-
-#: js/Roles.js:64
-msgid "Deleting role(s)..."
-msgstr "Deleting role(s)..."
-
-#: js/Roles.js:102
-msgid "add role"
-msgstr "add role"
-
-#: js/Roles.js:110
-msgid "edit role"
-msgstr "edit role"
-
-#: js/Roles.js:118
-msgid "delete role"
-msgstr "delete role"
-
-#: js/Roles.js:226
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Displaying roles {0} - {1} of {2}"
-
-#: js/Roles.js:227 js/Roles.js:281
-msgid "No roles to display"
-msgstr "No roles to display"
-
-#: js/Tags.js:64
-msgid "Do you really want to delete the selected tags?"
-msgstr "Do you really want to delete the selected tags?"
-
-#: js/Tags.js:82
-msgid "Deleting tag(s)..."
-msgstr "Deleting tag(s)..."
-
-#: js/Tags.js:97
-msgid "add tag"
-msgstr "add tag"
-
-#: js/Tags.js:105
-msgid "edit tag"
-msgstr "edit tag"
-
-#: js/Tags.js:113
-msgid "delete tag"
-msgstr "delete tag"
-
-#: js/Tags.js:211
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Displaying tags {0} - {1} of {2}"
-
-#: js/Tags.js:212 js/Tags.js:268
-msgid "No tags to display"
-msgstr "No tags to display"
+#: js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Computer"
+msgstr[1] "Computers"
 
 #: js/AccessLog.js:106 js/AccessLog.js:132
 msgid "IP Address"
@@ -878,3 +788,94 @@ msgstr "failure"
 #: js/AccessLog.js:184
 msgid "success"
 msgstr "success"
+
+#: js/Tags.js:64
+msgid "Do you really want to delete the selected tags?"
+msgstr "Do you really want to delete the selected tags?"
+
+#: js/Tags.js:82
+msgid "Deleting tag(s)..."
+msgstr "Deleting tag(s)..."
+
+#: js/Tags.js:97
+msgid "add tag"
+msgstr "add tag"
+
+#: js/Tags.js:105
+msgid "edit tag"
+msgstr "edit tag"
+
+#: js/Tags.js:113
+msgid "delete tag"
+msgstr "delete tag"
+
+#: js/Tags.js:211
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Displaying tags {0} - {1} of {2}"
+
+#: js/Tags.js:212 js/Tags.js:268
+msgid "No tags to display"
+msgstr "No tags to display"
+
+#: js/container/GridPanel.js:71
+msgid "Container Name"
+msgstr "Container Name"
+
+#: js/container/GridPanel.js:73 js/container/GridPanel.js:104
+#: js/container/EditDialog.js:143
+msgid "Type"
+msgstr "Type"
+
+#: js/container/GridPanel.js:103 js/container/Container.js:46
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] "Container"
+msgstr[1] "Containers"
+
+#: js/container/EditDialog.js:144
+msgid "personal"
+msgstr "personal"
+
+#: js/container/EditDialog.js:144
+msgid "shared"
+msgstr "shared"
+
+#: js/container/EditDialog.js:163
+msgid "Note for Owner"
+msgstr "Note for Owner"
+
+#: js/Roles.js:47
+msgid "Do you really want to delete the selected roles?"
+msgstr "Do you really want to delete the selected roles?"
+
+#: js/Roles.js:64
+msgid "Deleting role(s)..."
+msgstr "Deleting role(s)..."
+
+#: js/Roles.js:102
+msgid "add role"
+msgstr "add role"
+
+#: js/Roles.js:110
+msgid "edit role"
+msgstr "edit role"
+
+#: js/Roles.js:118
+msgid "delete role"
+msgstr "delete role"
+
+#: js/Roles.js:226
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Displaying roles {0} - {1} of {2}"
+
+#: js/Roles.js:227 js/Roles.js:281
+msgid "No roles to display"
+msgstr "No roles to display"
+
+#: Controller/Container.php:185
+msgid "Your container has been changed"
+msgstr "Your container has been changed"
+
+#: Controller/Container.php:186
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr "Your container has been changed by %1$s %2$sNote: %3$s"

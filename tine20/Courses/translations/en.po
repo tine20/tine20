@@ -14,17 +14,15 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller/Course.php:107
-msgid "teacher"
-msgstr "teacher"
+#: Frontend/Json.php:254 js/Models.js:41 js/CourseEditDialog.js:137
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Course"
+msgstr[1] "Courses"
 
-#: Controller/Course.php:115
-msgid "Teacher"
-msgstr "Teacher"
-
-#: Controller/Course.php:116
-msgid "Teacher Account"
-msgstr "Teacher Account"
+#: Setup/setup.xml:4 js/Courses.js:32
+msgid "Courses"
+msgstr "Courses"
 
 #: js/CourseGridPanel.js:49
 msgid "Quick search"
@@ -70,15 +68,25 @@ msgstr "Failed"
 msgid "Some error occured while trying to update the courses."
 msgstr "Some error occured while trying to update the courses."
 
+#: js/Models.js:45
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "record list"
+msgstr[1] "record lists"
+
+#: js/Models.js:74
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Course Type"
+msgstr[1] "Course Types"
+
+#: js/Courses.js:37
+msgid "All Courses"
+msgstr "All Courses"
+
 #: js/CourseEditDialog.js:31
 msgid "Import course members"
 msgstr "Import course members"
-
-#: js/CourseEditDialog.js:137 js/Models.js:41 Frontend/Json.php:254
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Course"
-msgstr[1] "Courses"
 
 #: js/CourseEditDialog.js:153
 msgid "Course Name"
@@ -116,22 +124,14 @@ msgstr "Set new password"
 msgid "Please enter the new password:"
 msgstr "Please enter the new password:"
 
-#: js/Courses.js:32 Setup/setup.xml:4
-msgid "Courses"
-msgstr "Courses"
+#: Controller/Course.php:107
+msgid "teacher"
+msgstr "teacher"
 
-#: js/Courses.js:37
-msgid "All Courses"
-msgstr "All Courses"
+#: Controller/Course.php:115
+msgid "Teacher"
+msgstr "Teacher"
 
-#: js/Models.js:45
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "record list"
-msgstr[1] "record lists"
-
-#: js/Models.js:74
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] "Course Type"
-msgstr[1] "Course Types"
+#: Controller/Course.php:116
+msgid "Teacher Account"
+msgstr "Teacher Account"

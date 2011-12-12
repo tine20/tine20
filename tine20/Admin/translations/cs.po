@@ -17,14 +17,6 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Admin\n"
 
-#: Controller/Container.php:185
-msgid "Your container has been changed"
-msgstr ""
-
-#: Controller/Container.php:186
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr ""
-
 #: Acl/Rights.php:185
 msgid "manage access log"
 msgstr "spravovat přístupový log"
@@ -129,138 +121,148 @@ msgstr ""
 msgid "view personal and shared containers"
 msgstr ""
 
-#: js/SambaMachineGrid.js:61 js/SambaMachineEditDialog.js:42
+#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:61
 msgid "Computer Name"
 msgstr "Název počítače"
 
-#: js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92 js/Groups.js:236
-#: js/RoleEditDialog.js:291 js/user/GridPanel.js:99 js/GroupEditDialog.js:135
-#: js/TagEditDialog.js:225 js/Roles.js:239 js/Tags.js:226
-msgid "Description"
-msgstr "Popis"
+#: js/Admin.js:23 js/user/GridPanel.js:98 js/user/Users.js:72
+#: js/AccessLog.js:107
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Uživatel"
+msgstr[1] "Uživatelé"
+msgstr[2] "Uživatelů"
 
-#: js/SambaMachineGrid.js:79 js/container/GridPanel.js:70 js/Groups.js:234
-#: js/user/GridPanel.js:175 js/Roles.js:237
-msgid "ID"
-msgstr "ID"
+#: js/Admin.js:36 js/Models.js:87
+msgid "Groups"
+msgstr "Skupiny"
 
-#: js/SambaMachineGrid.js:86 js/container/EditDialog.js:122 js/Groups.js:235
-#: js/user/EditDialog.js:278 js/user/EditDialog.js:314 js/Applications.js:278
-#: js/Roles.js:238 js/Tags.js:225 js/AccessLog.js:131
-msgid "Name"
-msgstr "Jméno"
+#: js/Admin.js:49
+msgid "Roles"
+msgstr "Role"
 
-#: js/container/Container.js:46 js/container/GridPanel.js:103
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+#: js/Admin.js:61
+msgid "Computers"
+msgstr "Počítače"
 
-#: js/container/GridPanel.js:71
-msgid "Container Name"
+#: js/Admin.js:74 js/Models.js:128
+msgid "Applications"
+msgstr "Aplikace"
+
+#: js/Admin.js:87 js/Models.js:51 js/AccessLog.js:105
+#, fuzzy
+msgid "Access Log"
+msgid_plural "Access Logs"
+msgstr[0] "Přístupový log"
+msgstr[1] "Přístupový log"
+msgstr[2] "Přístupový log"
+
+#: js/Admin.js:100
+msgid "Shared Tags"
+msgstr "Sdílené štítky"
+
+#: js/Admin.js:113
+msgid "Containers"
 msgstr ""
 
-#: js/container/GridPanel.js:72 js/container/EditDialog.js:134
-#: js/ApplicationFilter.js:33 js/Models.js:128
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+#: js/Admin.js:149
+msgid "Admin"
+msgstr "Administrátor"
 
-#: js/container/GridPanel.js:73 js/container/GridPanel.js:104
-#: js/container/EditDialog.js:141
-msgid "Type"
-msgstr ""
-
-#: js/container/EditDialog.js:142
-msgid "personal"
-msgstr ""
-
-#: js/container/EditDialog.js:142
-msgid "shared"
-msgstr ""
-
-#: js/container/EditDialog.js:154 js/TagEditDialog.js:231 js/Tags.js:222
-msgid "Color"
-msgstr "Barva"
-
-#: js/container/EditDialog.js:159
-msgid "Note for Owner"
-msgstr ""
-
-#: js/Groups.js:52 js/Roles.js:47 js/Tags.js:64
-msgid "Confirm"
-msgstr "Potvrdit"
-
-#: js/Groups.js:52
-msgid "Do you really want to delete the selected groups?"
-msgstr "Opravdu chcete smazat vybrané skupiny?"
-
-#: js/Groups.js:69
-msgid "Deleting group(s)..."
-msgstr "Mažu skupinu(y)..."
-
-#: js/Groups.js:74 js/RoleEditDialog.js:106 js/RoleEditDialog.js:134
-#: js/GroupEditDialog.js:72 js/TagEditDialog.js:82 js/Roles.js:69
-msgid "Failed"
-msgstr "Nepodařilo se"
-
-#: js/Groups.js:74
-msgid "Some error occurred while trying to delete the group."
-msgstr "Během mazání skupiny došlo k chybě."
-
-#: js/Groups.js:104
-msgid "add group"
-msgstr "přidat skupinu"
-
-#: js/Groups.js:112
-msgid "edit group"
-msgstr "editovat skupinu"
-
-#: js/Groups.js:120
-msgid "delete group"
-msgstr "smazat skupinu"
-
-#: js/Groups.js:176 js/Applications.js:183 js/Roles.js:176 js/Tags.js:169
-msgid "Search:"
-msgstr "Hledat:"
-
-#: js/Groups.js:223
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Zobrazuji skupiny {0} - {1} z {2}"
-
-#: js/Groups.js:224 js/Groups.js:278
-msgid "No groups to display"
-msgstr "Žádné skupiny ke zobrazení"
-
-#: js/SambaMachineModel.js:39
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Počítač"
-msgstr[1] "Počítače"
-msgstr[2] "Počítačů"
-
-#: js/RoleEditDialog.js:69 js/GroupEditDialog.js:37 js/TagEditDialog.js:37
+#: js/GroupEditDialog.js:37 js/RoleEditDialog.js:69 js/TagEditDialog.js:37
 msgid "Please wait"
 msgstr "Čekejte prosím"
 
-#: js/RoleEditDialog.js:69 js/GroupEditDialog.js:37
+#: js/GroupEditDialog.js:37 js/RoleEditDialog.js:69
 msgid "Updating Memberships"
 msgstr "Aktualizuji členství"
+
+#: js/GroupEditDialog.js:72 js/RoleEditDialog.js:106 js/RoleEditDialog.js:134
+#: js/Groups.js:74 js/TagEditDialog.js:82 js/Roles.js:69
+msgid "Failed"
+msgstr "Nepodařilo se"
+
+#: js/GroupEditDialog.js:72
+msgid "Could not save group."
+msgstr "Nepodařilo se uložit skupinu."
+
+#: js/GroupEditDialog.js:77 js/RoleEditDialog.js:113 js/TagEditDialog.js:87
+msgid "Errors"
+msgstr "Chyby"
+
+#: js/GroupEditDialog.js:77 js/RoleEditDialog.js:113 js/TagEditDialog.js:87
+msgid "Please fix the errors noted."
+msgstr "Opravte prosím vyznačené chyby."
+
+#: js/GroupEditDialog.js:108
+msgid "Group Members"
+msgstr "Členové skupiny"
+
+#: js/GroupEditDialog.js:127
+msgid "Group Name"
+msgstr "Název skupiny"
+
+#: js/GroupEditDialog.js:135 js/SambaMachineGrid.js:62
+#: js/SambaMachineGrid.js:92 js/RoleEditDialog.js:291 js/user/GridPanel.js:99
+#: js/Groups.js:236 js/TagEditDialog.js:225 js/Tags.js:226 js/Roles.js:239
+msgid "Description"
+msgstr "Popis"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:837
+msgid "Visibility"
+msgstr "Viditelnost"
+
+#: js/GroupEditDialog.js:149 js/user/EditDialog.js:843
+msgid "Display in addressbook"
+msgstr "Zobrazit v adresáři"
+
+#: js/GroupEditDialog.js:149 js/user/EditDialog.js:843
+msgid "Hide from addressbook"
+msgstr "Nezobrazovat v adresáři"
+
+#: js/GroupEditDialog.js:160 js/user/EditDialog.js:857
+msgid "Saved in Addressbook"
+msgstr ""
+
+#: js/GroupEditDialog.js:215 js/RoleEditDialog.js:358 js/TagEditDialog.js:289
+msgid "Transferring {0}..."
+msgstr ""
+
+#: js/GroupEditDialog.js:215 js/Models.js:87
+#, fuzzy
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Skupina"
+msgstr[1] "Skupina"
+msgstr[2] "Skupina"
+
+#: js/GroupEditDialog.js:220 js/GroupEditDialog.js:231
+msgid "Add new group"
+msgstr "Přídat novou skupinu"
+
+#: js/GroupEditDialog.js:233
+msgid "Edit Group \"{0}\""
+msgstr "Editovat skupinu \"{0}\""
+
+#: js/SambaMachineGrid.js:79 js/user/GridPanel.js:175 js/Groups.js:234
+#: js/container/GridPanel.js:70 js/Roles.js:237
+msgid "ID"
+msgstr "ID"
+
+#: js/SambaMachineGrid.js:86 js/user/EditDialog.js:278
+#: js/user/EditDialog.js:314 js/Groups.js:235 js/Applications.js:278
+#: js/AccessLog.js:131 js/Tags.js:225 js/container/EditDialog.js:122
+#: js/Roles.js:238
+msgid "Name"
+msgstr "Jméno"
+
+#: js/AdminPanel.js:46
+msgid "Default Addressbook for new contacts and groups"
+msgstr ""
 
 #: js/RoleEditDialog.js:106
 msgid "Could not save role."
 msgstr "Nepodařilo se uložit roli."
-
-#: js/RoleEditDialog.js:113 js/GroupEditDialog.js:77 js/TagEditDialog.js:87
-msgid "Errors"
-msgstr "Chyby"
-
-#: js/RoleEditDialog.js:113 js/GroupEditDialog.js:77 js/TagEditDialog.js:87
-msgid "Please fix the errors noted."
-msgstr "Opravte prosím vyznačené chyby."
 
 #: js/RoleEditDialog.js:126
 msgid "Deleting role..."
@@ -282,10 +284,6 @@ msgstr "Členové"
 msgid "Role Name"
 msgstr "Název role"
 
-#: js/RoleEditDialog.js:358 js/GroupEditDialog.js:215 js/TagEditDialog.js:289
-msgid "Transferring {0}..."
-msgstr ""
-
 #: js/RoleEditDialog.js:358
 msgid "Role"
 msgstr "Role"
@@ -298,6 +296,14 @@ msgstr "Přidat novou roli"
 msgid "Edit Role \"{0}\""
 msgstr "Editovat roli \"{0}\""
 
+#: js/Models.js:128 js/container/GridPanel.js:72
+#: js/container/EditDialog.js:134 js/ApplicationFilter.js:33
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
 #: js/user/GridPanel.js:56
 msgid "enable account"
 msgstr "povolit účet"
@@ -309,14 +315,6 @@ msgstr "zakázat účet"
 #: js/user/GridPanel.js:76
 msgid "reset password"
 msgstr "resetovat heslo"
-
-#: js/user/GridPanel.js:98 js/user/Users.js:72 js/Admin.js:23
-#: js/AccessLog.js:107
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "Uživatel"
-msgstr[1] "Uživatelé"
-msgstr[2] "Uživatelů"
 
 #: js/user/GridPanel.js:176 js/user/EditDialog.js:823 js/Applications.js:279
 msgid "Status"
@@ -369,20 +367,6 @@ msgstr "Nastavit nové heslo"
 #: js/user/GridPanel.js:243
 msgid "Please enter the new password:"
 msgstr "Zadejte prosím nové heslo:"
-
-#: js/user/Users.js:118
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "Uživatel Samby"
-msgstr[1] "Uživatelé Samby"
-msgstr[2] "Uživatelů Samby"
-
-#: js/user/Users.js:144
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] "Uživatel emailu"
-msgstr[1] "Uživatelé emailu"
-msgstr[2] "Uživatelů emailu"
 
 #: js/user/EditDialog.js:180
 msgid "Domain is not allowed. Check your SMTP domain configuration."
@@ -588,22 +572,6 @@ msgstr "vypršel"
 msgid "blocked"
 msgstr ""
 
-#: js/user/EditDialog.js:837 js/GroupEditDialog.js:143
-msgid "Visibility"
-msgstr "Viditelnost"
-
-#: js/user/EditDialog.js:843 js/GroupEditDialog.js:149
-msgid "Display in addressbook"
-msgstr "Zobrazit v adresáři"
-
-#: js/user/EditDialog.js:843 js/GroupEditDialog.js:149
-msgid "Hide from addressbook"
-msgstr "Nezobrazovat v adresáři"
-
-#: js/user/EditDialog.js:857 js/GroupEditDialog.js:160
-msgid "Saved in Addressbook"
-msgstr ""
-
 #: js/user/EditDialog.js:886 js/user/EditDialog.js:890
 msgid "don't know"
 msgstr "nevím"
@@ -632,41 +600,59 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
-#: js/Admin.js:36 js/Models.js:87
-msgid "Groups"
-msgstr "Skupiny"
+#: js/user/Users.js:118
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "Uživatel Samby"
+msgstr[1] "Uživatelé Samby"
+msgstr[2] "Uživatelů Samby"
 
-#: js/Admin.js:49
-msgid "Roles"
-msgstr "Role"
+#: js/user/Users.js:144
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "Uživatel emailu"
+msgstr[1] "Uživatelé emailu"
+msgstr[2] "Uživatelů emailu"
 
-#: js/Admin.js:61
-msgid "Computers"
-msgstr "Počítače"
+#: js/Groups.js:52 js/Tags.js:64 js/Roles.js:47
+msgid "Confirm"
+msgstr "Potvrdit"
 
-#: js/Admin.js:74 js/Models.js:128
-msgid "Applications"
-msgstr "Aplikace"
+#: js/Groups.js:52
+msgid "Do you really want to delete the selected groups?"
+msgstr "Opravdu chcete smazat vybrané skupiny?"
 
-#: js/Admin.js:87 js/Models.js:51 js/AccessLog.js:105
-#, fuzzy
-msgid "Access Log"
-msgid_plural "Access Logs"
-msgstr[0] "Přístupový log"
-msgstr[1] "Přístupový log"
-msgstr[2] "Přístupový log"
+#: js/Groups.js:69
+msgid "Deleting group(s)..."
+msgstr "Mažu skupinu(y)..."
 
-#: js/Admin.js:100
-msgid "Shared Tags"
-msgstr "Sdílené štítky"
+#: js/Groups.js:74
+msgid "Some error occurred while trying to delete the group."
+msgstr "Během mazání skupiny došlo k chybě."
 
-#: js/Admin.js:113
-msgid "Containers"
-msgstr ""
+#: js/Groups.js:104
+msgid "add group"
+msgstr "přidat skupinu"
 
-#: js/Admin.js:149
-msgid "Admin"
-msgstr "Administrátor"
+#: js/Groups.js:112
+msgid "edit group"
+msgstr "editovat skupinu"
+
+#: js/Groups.js:120
+msgid "delete group"
+msgstr "smazat skupinu"
+
+#: js/Groups.js:176 js/Applications.js:183 js/Tags.js:169 js/Roles.js:176
+msgid "Search:"
+msgstr "Hledat:"
+
+#: js/Groups.js:223
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Zobrazuji skupiny {0} - {1} z {2}"
+
+#: js/Groups.js:224 js/Groups.js:278
+msgid "No groups to display"
+msgstr "Žádné skupiny ke zobrazení"
 
 #: js/Applications.js:43
 msgid "{0} Settings"
@@ -704,38 +690,6 @@ msgstr "Pořadí"
 msgid "Version"
 msgstr "Verze"
 
-#: js/AdminPanel.js:46
-msgid "Default Addressbook for new contacts and groups"
-msgstr ""
-
-#: js/GroupEditDialog.js:72
-msgid "Could not save group."
-msgstr "Nepodařilo se uložit skupinu."
-
-#: js/GroupEditDialog.js:108
-msgid "Group Members"
-msgstr "Členové skupiny"
-
-#: js/GroupEditDialog.js:127
-msgid "Group Name"
-msgstr "Název skupiny"
-
-#: js/GroupEditDialog.js:215 js/Models.js:87
-#, fuzzy
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "Skupina"
-msgstr[1] "Skupina"
-msgstr[2] "Skupina"
-
-#: js/GroupEditDialog.js:220 js/GroupEditDialog.js:231
-msgid "Add new group"
-msgstr "Přídat novou skupinu"
-
-#: js/GroupEditDialog.js:233
-msgid "Edit Group \"{0}\""
-msgstr "Editovat skupinu \"{0}\""
-
 #: js/TagEditDialog.js:37
 msgid "Updating Tag"
 msgstr "Aktualizuji štítek..."
@@ -768,6 +722,10 @@ msgstr "Používat"
 msgid "Tag Name"
 msgstr "Název štítku"
 
+#: js/TagEditDialog.js:231 js/Tags.js:222 js/container/EditDialog.js:158
+msgid "Color"
+msgstr "Barva"
+
 #: js/TagEditDialog.js:289
 msgid "Tag"
 msgstr "Štítek"
@@ -780,61 +738,12 @@ msgstr "Přidat nový štítek"
 msgid "Edit Tag \"{0}\""
 msgstr "Editovat štítek \"{0}\""
 
-#: js/Roles.js:47
-msgid "Do you really want to delete the selected roles?"
-msgstr "Určitě chcete smazat vybrané role?"
-
-#: js/Roles.js:64
-msgid "Deleting role(s)..."
-msgstr "Mažu roli(e)..."
-
-#: js/Roles.js:102
-msgid "add role"
-msgstr "přidat roli"
-
-#: js/Roles.js:110
-msgid "edit role"
-msgstr "editovat roli"
-
-#: js/Roles.js:118
-msgid "delete role"
-msgstr "smazat roli"
-
-#: js/Roles.js:226
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Zobrazuji role  {0} - {1} z {2}"
-
-#: js/Roles.js:227 js/Roles.js:281
-msgid "No roles to display"
-msgstr "Žádné role ke zobrazení"
-
-#: js/Tags.js:64
-msgid "Do you really want to delete the selected tags?"
-msgstr "Opravdu chcete smazat vybrané štítky?"
-
-#: js/Tags.js:82
-msgid "Deleting tag(s)..."
-msgstr "Mažu štítek(ky)..."
-
-#: js/Tags.js:97
-msgid "add tag"
-msgstr "přidat štítek"
-
-#: js/Tags.js:105
-msgid "edit tag"
-msgstr "editovat štítek"
-
-#: js/Tags.js:113
-msgid "delete tag"
-msgstr "smazat štítek"
-
-#: js/Tags.js:211
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Zobrazuji štítky {0} - {1} of {2}"
-
-#: js/Tags.js:212 js/Tags.js:268
-msgid "No tags to display"
-msgstr "Žádné štítky ke zobrazení"
+#: js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Počítač"
+msgstr[1] "Počítače"
+msgstr[2] "Počítačů"
 
 #: js/AccessLog.js:106 js/AccessLog.js:132
 msgid "IP Address"
@@ -891,6 +800,98 @@ msgstr "chyba"
 #: js/AccessLog.js:184
 msgid "success"
 msgstr "úspěch"
+
+#: js/Tags.js:64
+msgid "Do you really want to delete the selected tags?"
+msgstr "Opravdu chcete smazat vybrané štítky?"
+
+#: js/Tags.js:82
+msgid "Deleting tag(s)..."
+msgstr "Mažu štítek(ky)..."
+
+#: js/Tags.js:97
+msgid "add tag"
+msgstr "přidat štítek"
+
+#: js/Tags.js:105
+msgid "edit tag"
+msgstr "editovat štítek"
+
+#: js/Tags.js:113
+msgid "delete tag"
+msgstr "smazat štítek"
+
+#: js/Tags.js:211
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Zobrazuji štítky {0} - {1} of {2}"
+
+#: js/Tags.js:212 js/Tags.js:268
+msgid "No tags to display"
+msgstr "Žádné štítky ke zobrazení"
+
+#: js/container/GridPanel.js:71
+msgid "Container Name"
+msgstr ""
+
+#: js/container/GridPanel.js:73 js/container/GridPanel.js:104
+#: js/container/EditDialog.js:143
+msgid "Type"
+msgstr ""
+
+#: js/container/GridPanel.js:103 js/container/Container.js:46
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/container/EditDialog.js:144
+msgid "personal"
+msgstr ""
+
+#: js/container/EditDialog.js:144
+msgid "shared"
+msgstr ""
+
+#: js/container/EditDialog.js:163
+msgid "Note for Owner"
+msgstr ""
+
+#: js/Roles.js:47
+msgid "Do you really want to delete the selected roles?"
+msgstr "Určitě chcete smazat vybrané role?"
+
+#: js/Roles.js:64
+msgid "Deleting role(s)..."
+msgstr "Mažu roli(e)..."
+
+#: js/Roles.js:102
+msgid "add role"
+msgstr "přidat roli"
+
+#: js/Roles.js:110
+msgid "edit role"
+msgstr "editovat roli"
+
+#: js/Roles.js:118
+msgid "delete role"
+msgstr "smazat roli"
+
+#: js/Roles.js:226
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Zobrazuji role  {0} - {1} z {2}"
+
+#: js/Roles.js:227 js/Roles.js:281
+msgid "No roles to display"
+msgstr "Žádné role ke zobrazení"
+
+#: Controller/Container.php:185
+msgid "Your container has been changed"
+msgstr ""
+
+#: Controller/Container.php:186
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr ""
 
 #~ msgid "Quota (MB)"
 #~ msgstr "Kvóta (MB)"

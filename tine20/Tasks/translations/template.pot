@@ -1,5 +1,74 @@
-#: Controller/Task.php:165
-msgid "Notification for Task "
+#: Controller.php:96
+#, python-format
+msgid "%s's personal tasks"
+msgstr ""
+
+#: Setup/setup.xml:295
+msgid "NEEDS-ACTION"
+msgstr ""
+
+#: Setup/setup.xml:317
+msgid "COMPLETED"
+msgstr ""
+
+#: Setup/setup.xml:339
+msgid "IN-PROCESS"
+msgstr ""
+
+#: Setup/setup.xml:361
+msgid "CANCELLED"
+msgstr ""
+
+#: Setup/Update/Release3.php:65 Setup/Initialize.php:36
+msgid "All tasks of my taskslists"
+msgstr ""
+
+#: Setup/Initialize.php:45
+msgid "My open tasks"
+msgstr ""
+
+#: Setup/Initialize.php:54
+msgid "My open tasks this week"
+msgstr ""
+
+#: Setup/Initialize.php:63
+msgid "All tasks for me"
+msgstr ""
+
+#: Setup/Initialize.php:64
+msgid "All tasks that I am responsible for"
+msgstr ""
+
+#: Setup/Initialize.php:71
+msgid "Last modified by me"
+msgstr ""
+
+#: Setup/Initialize.php:72
+msgid "All tasks that I have last modified"
+msgstr ""
+
+#: Setup/Initialize.php:81
+msgid "Tasks without responsible"
+msgstr ""
+
+#: Preference.php:23
+msgid "All my tasks"
+msgstr ""
+
+#: Preference.php:65
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:66
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr ""
+
+#: Preference.php:69
+msgid "Default Task List"
+msgstr ""
+
+#: Preference.php:70
+msgid "The default task list to create new tasks in."
 msgstr ""
 
 #: Acl/Rights.php:89
@@ -16,6 +85,11 @@ msgstr ""
 
 #: Acl/Rights.php:94
 msgid "Create or update shared tasks favorites"
+msgstr ""
+
+#: js/Status.js:31 js/GridPanel.js:155 js/TaskEditDialog.js:206
+#: Model/Task.php:186
+msgid "Status"
 msgstr ""
 
 #: js/GridPanel.js:53
@@ -50,11 +124,6 @@ msgstr ""
 
 #: js/GridPanel.js:142 Model/Task.php:187
 msgid "Percent"
-msgstr ""
-
-#: js/GridPanel.js:155 js/TaskEditDialog.js:206 js/Status.js:31
-#: Model/Task.php:186
-msgid "Status"
 msgstr ""
 
 #: js/GridPanel.js:169 js/Tasks.js:155
@@ -137,59 +206,6 @@ msgstr ""
 msgid "Creator"
 msgstr ""
 
-#: Setup/Initialize.php:36 Setup/Update/Release3.php:65
-msgid "All tasks of my taskslists"
-msgstr ""
-
-#: Setup/Initialize.php:45
-msgid "My open tasks"
-msgstr ""
-
-#: Setup/Initialize.php:54
-msgid "My open tasks this week"
-msgstr ""
-
-#: Setup/Initialize.php:63
-msgid "All tasks for me"
-msgstr ""
-
-#: Setup/Initialize.php:64
-msgid "All tasks that I am responsible for"
-msgstr ""
-
-#: Setup/Initialize.php:71
-msgid "Last modified by me"
-msgstr ""
-
-#: Setup/Initialize.php:72
-msgid "All tasks that I have last modified"
-msgstr ""
-
-#: Setup/Initialize.php:81
-msgid "Tasks without responsible"
-msgstr ""
-
-#: Setup/setup.xml:295
-msgid "NEEDS-ACTION"
-msgstr ""
-
-#: Setup/setup.xml:317
-msgid "COMPLETED"
-msgstr ""
-
-#: Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr ""
-
-#: Setup/setup.xml:361
-msgid "CANCELLED"
-msgstr ""
-
-#: Controller.php:96
-#, python-format
-msgid "%s's personal tasks"
-msgstr ""
-
 #: Model/Task.php:182
 msgid "Due"
 msgstr ""
@@ -210,22 +226,6 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: Preference.php:23
-msgid "All my tasks"
-msgstr ""
-
-#: Preference.php:65
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:66
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr ""
-
-#: Preference.php:69
-msgid "Default Task List"
-msgstr ""
-
-#: Preference.php:70
-msgid "The default task list to create new tasks in."
+#: Controller/Task.php:165
+msgid "Notification for Task "
 msgstr ""

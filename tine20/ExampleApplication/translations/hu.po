@@ -14,9 +14,14 @@ msgstr ""
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/ExampleApplication.js:25
-msgid "Example Application"
-msgstr "Példa Alkalmazás"
+#: Controller.php:96
+#, python-format
+msgid "%s's personal example records"
+msgstr "%s személyes példa rekordjai"
+
+#: Setup/setup.xml:10
+msgid "ExampleApplication"
+msgstr "PéldaAlkalmazás"
 
 #: js/ExampleRecordGridPanel.js:74
 msgid "Quick search"
@@ -46,6 +51,10 @@ msgstr "Mutasd a lezártakat"
 msgid "ExampleRecord"
 msgstr "PéldaRekord"
 
+#: js/ExampleApplication.js:25
+msgid "Example Application"
+msgstr "Példa Alkalmazás"
+
 #: js/Model.js:31
 msgid "example record"
 msgid_plural "example records"
@@ -57,12 +66,3 @@ msgid "example record list"
 msgid_plural "example record lists"
 msgstr[0] "példa rekord lista"
 msgstr[1] "példa rekord listák"
-
-#: Setup/setup.xml:10
-msgid "ExampleApplication"
-msgstr "PéldaAlkalmazás"
-
-#: Controller.php:96
-#, python-format
-msgid "%s's personal example records"
-msgstr "%s személyes példa rekordjai"

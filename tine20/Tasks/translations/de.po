@@ -14,9 +14,78 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller/Task.php:165
-msgid "Notification for Task "
-msgstr "Benachrichtigung für Aufgabe"
+#: Controller.php:96
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%ss persönliche Aufgaben"
+
+#: Setup/setup.xml:295
+msgid "NEEDS-ACTION"
+msgstr "ZU BEARBEITEN"
+
+#: Setup/setup.xml:317
+msgid "COMPLETED"
+msgstr "ERLEDIGT"
+
+#: Setup/setup.xml:339
+msgid "IN-PROCESS"
+msgstr "IN BEARBEITUNG"
+
+#: Setup/setup.xml:361
+msgid "CANCELLED"
+msgstr "ZURÜCKGESTELLT"
+
+#: Setup/Update/Release3.php:65 Setup/Initialize.php:36
+msgid "All tasks of my taskslists"
+msgstr "Alle Aufgaben auf meinen Aufgabenlisten"
+
+#: Setup/Initialize.php:45
+msgid "My open tasks"
+msgstr "Offene Aufgaben für mich"
+
+#: Setup/Initialize.php:54
+msgid "My open tasks this week"
+msgstr "Offene Aufgaben für mich (diese Woche)"
+
+#: Setup/Initialize.php:63
+msgid "All tasks for me"
+msgstr "Alle Aufgaben für mich"
+
+#: Setup/Initialize.php:64
+msgid "All tasks that I am responsible for"
+msgstr "Alle Aufgaben, für die ich verantwortlich bin"
+
+#: Setup/Initialize.php:71
+msgid "Last modified by me"
+msgstr "Zuletzt von mir bearbeitet"
+
+#: Setup/Initialize.php:72
+msgid "All tasks that I have last modified"
+msgstr "Alle Aufgaben, die ich zuletzt bearbeitet habe"
+
+#: Setup/Initialize.php:81
+msgid "Tasks without responsible"
+msgstr "Aufgaben ohne Verantwortlichen"
+
+#: Preference.php:23
+msgid "All my tasks"
+msgstr "Alle meine Aufgaben"
+
+#: Preference.php:65
+msgid "Default Favorite"
+msgstr "Standard Favorit"
+
+#: Preference.php:66
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "Der Standart Favorit der beim öffnen der Aufgabenlisten geladen wird"
+
+#: Preference.php:69
+msgid "Default Task List"
+msgstr "Standard-Aufgabenliste"
+
+#: Preference.php:70
+msgid "The default task list to create new tasks in."
+msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
 
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
@@ -33,6 +102,11 @@ msgstr "Gemeinsame Aufgaben Favoriten verwalten"
 #: Acl/Rights.php:94
 msgid "Create or update shared tasks favorites"
 msgstr "Gemeinsame Aufgaben Favoriten erstellen oder bearbeiten"
+
+#: js/Status.js:31 js/GridPanel.js:155 js/TaskEditDialog.js:206
+#: Model/Task.php:186
+msgid "Status"
+msgstr "Status"
 
 #: js/GridPanel.js:53
 msgid "Do you really want to delete the selected task?"
@@ -67,11 +141,6 @@ msgstr "Priorität"
 #: js/GridPanel.js:142 Model/Task.php:187
 msgid "Percent"
 msgstr "Prozent"
-
-#: js/GridPanel.js:155 js/TaskEditDialog.js:206 js/Status.js:31
-#: Model/Task.php:186
-msgid "Status"
-msgstr "Status"
 
 #: js/GridPanel.js:169 js/Tasks.js:155
 msgid "Creation Time"
@@ -153,59 +222,6 @@ msgstr "Letzter Bearbeiter"
 msgid "Creator"
 msgstr "Ersteller"
 
-#: Setup/Initialize.php:36 Setup/Update/Release3.php:65
-msgid "All tasks of my taskslists"
-msgstr "Alle Aufgaben auf meinen Aufgabenlisten"
-
-#: Setup/Initialize.php:45
-msgid "My open tasks"
-msgstr "Offene Aufgaben für mich"
-
-#: Setup/Initialize.php:54
-msgid "My open tasks this week"
-msgstr "Offene Aufgaben für mich (diese Woche)"
-
-#: Setup/Initialize.php:63
-msgid "All tasks for me"
-msgstr "Alle Aufgaben für mich"
-
-#: Setup/Initialize.php:64
-msgid "All tasks that I am responsible for"
-msgstr "Alle Aufgaben, für die ich verantwortlich bin"
-
-#: Setup/Initialize.php:71
-msgid "Last modified by me"
-msgstr "Zuletzt von mir bearbeitet"
-
-#: Setup/Initialize.php:72
-msgid "All tasks that I have last modified"
-msgstr "Alle Aufgaben, die ich zuletzt bearbeitet habe"
-
-#: Setup/Initialize.php:81
-msgid "Tasks without responsible"
-msgstr "Aufgaben ohne Verantwortlichen"
-
-#: Setup/setup.xml:295
-msgid "NEEDS-ACTION"
-msgstr "ZU BEARBEITEN"
-
-#: Setup/setup.xml:317
-msgid "COMPLETED"
-msgstr "ERLEDIGT"
-
-#: Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr "IN BEARBEITUNG"
-
-#: Setup/setup.xml:361
-msgid "CANCELLED"
-msgstr "ZURÜCKGESTELLT"
-
-#: Controller.php:96
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%ss persönliche Aufgaben"
-
 #: Model/Task.php:182
 msgid "Due"
 msgstr "Fälligkeit"
@@ -226,25 +242,9 @@ msgstr "Telefon"
 msgid "Email"
 msgstr "Email"
 
-#: Preference.php:23
-msgid "All my tasks"
-msgstr "Alle meine Aufgaben"
-
-#: Preference.php:65
-msgid "Default Favorite"
-msgstr "Standard Favorit"
-
-#: Preference.php:66
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "Der Standart Favorit der beim öffnen der Aufgabenlisten geladen wird"
-
-#: Preference.php:69
-msgid "Default Task List"
-msgstr "Standard-Aufgabenliste"
-
-#: Preference.php:70
-msgid "The default task list to create new tasks in."
-msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
+#: Controller/Task.php:165
+msgid "Notification for Task "
+msgstr "Benachrichtigung für Aufgabe"
 
 #~ msgid "Failed"
 #~ msgstr "Fehlgeschlagen"

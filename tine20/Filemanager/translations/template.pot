@@ -1,3 +1,8 @@
+#: Controller.php:95
+#, python-format
+msgid "%s's personal files"
+msgstr ""
+
 #: Acl/Rights.php:97
 msgid "manage shared folders"
 msgstr ""
@@ -8,9 +13,4 @@ msgstr ""
 
 #: js/Application.js:29
 msgid "Filemanager"
-msgstr ""
-
-#: Controller.php:95
-#, python-format
-msgid "%s's personal files"
 msgstr ""

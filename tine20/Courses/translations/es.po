@@ -14,17 +14,15 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller/Course.php:107
-msgid "teacher"
-msgstr "profesor"
+#: Frontend/Json.php:254 js/Models.js:41 js/CourseEditDialog.js:137
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Curso"
+msgstr[1] "Cursos"
 
-#: Controller/Course.php:115
-msgid "Teacher"
-msgstr "Profesor"
-
-#: Controller/Course.php:116
-msgid "Teacher Account"
-msgstr "Cuenta de Profesor"
+#: Setup/setup.xml:4 js/Courses.js:32
+msgid "Courses"
+msgstr "Cursos"
 
 #: js/CourseGridPanel.js:49
 msgid "Quick search"
@@ -70,15 +68,25 @@ msgstr "Falló"
 msgid "Some error occured while trying to update the courses."
 msgstr "Algún error ocurrió mientras intentaba actualizar los cursos."
 
+#: js/Models.js:45
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "listado de registro"
+msgstr[1] "listado de registros"
+
+#: js/Models.js:74
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Tipo de Curso"
+msgstr[1] "Tipo de Cursos"
+
+#: js/Courses.js:37
+msgid "All Courses"
+msgstr "Todos los Cursos"
+
 #: js/CourseEditDialog.js:31
 msgid "Import course members"
 msgstr "Importar integrantes del curso"
-
-#: js/CourseEditDialog.js:137 js/Models.js:41 Frontend/Json.php:254
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Curso"
-msgstr[1] "Cursos"
 
 #: js/CourseEditDialog.js:153
 msgid "Course Name"
@@ -116,22 +124,14 @@ msgstr "Establecer nueva contraseña"
 msgid "Please enter the new password:"
 msgstr "Por favor escriba su nueva contraseña:"
 
-#: js/Courses.js:32 Setup/setup.xml:4
-msgid "Courses"
-msgstr "Cursos"
+#: Controller/Course.php:107
+msgid "teacher"
+msgstr "profesor"
 
-#: js/Courses.js:37
-msgid "All Courses"
-msgstr "Todos los Cursos"
+#: Controller/Course.php:115
+msgid "Teacher"
+msgstr "Profesor"
 
-#: js/Models.js:45
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "listado de registro"
-msgstr[1] "listado de registros"
-
-#: js/Models.js:74
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] "Tipo de Curso"
-msgstr[1] "Tipo de Cursos"
+#: Controller/Course.php:116
+msgid "Teacher Account"
+msgstr "Cuenta de Profesor"

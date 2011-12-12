@@ -127,6 +127,12 @@ msgstr "Sonant"
 msgid "Call ID"
 msgstr "Identificador de trucada"
 
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "llista de telèfons"
+msgstr[1] "llistes de telèfons"
+
 #: js/AddressbookGridPanelHook.js:35
 msgid "Call contact"
 msgstr ""
@@ -146,9 +152,3 @@ msgstr ""
 #: js/AddressbookGridPanelHook.js:199
 msgid "Cell private"
 msgstr ""
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "llista de telèfons"
-msgstr[1] "llistes de telèfons"

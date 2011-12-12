@@ -14,9 +14,78 @@ msgstr ""
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller/Task.php:165
-msgid "Notification for Task "
-msgstr "Notificación por Tarea"
+#: Controller.php:96
+#, python-format
+msgid "%s's personal tasks"
+msgstr "Tareas personales de %s"
+
+#: Setup/setup.xml:295
+msgid "NEEDS-ACTION"
+msgstr "NECESITAN-ATENCION"
+
+#: Setup/setup.xml:317
+msgid "COMPLETED"
+msgstr "COMPLETADO"
+
+#: Setup/setup.xml:339
+msgid "IN-PROCESS"
+msgstr "EN-PROCESO"
+
+#: Setup/setup.xml:361
+msgid "CANCELLED"
+msgstr "CANCELADO"
+
+#: Setup/Update/Release3.php:65 Setup/Initialize.php:36
+msgid "All tasks of my taskslists"
+msgstr ""
+
+#: Setup/Initialize.php:45
+msgid "My open tasks"
+msgstr ""
+
+#: Setup/Initialize.php:54
+msgid "My open tasks this week"
+msgstr ""
+
+#: Setup/Initialize.php:63
+msgid "All tasks for me"
+msgstr ""
+
+#: Setup/Initialize.php:64
+msgid "All tasks that I am responsible for"
+msgstr ""
+
+#: Setup/Initialize.php:71
+msgid "Last modified by me"
+msgstr ""
+
+#: Setup/Initialize.php:72
+msgid "All tasks that I have last modified"
+msgstr ""
+
+#: Setup/Initialize.php:81
+msgid "Tasks without responsible"
+msgstr ""
+
+#: Preference.php:23
+msgid "All my tasks"
+msgstr ""
+
+#: Preference.php:65
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:66
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr ""
+
+#: Preference.php:69
+msgid "Default Task List"
+msgstr ""
+
+#: Preference.php:70
+msgid "The default task list to create new tasks in."
+msgstr ""
 
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
@@ -33,6 +102,11 @@ msgstr ""
 #: Acl/Rights.php:94
 msgid "Create or update shared tasks favorites"
 msgstr ""
+
+#: js/Status.js:31 js/GridPanel.js:155 js/TaskEditDialog.js:206
+#: Model/Task.php:186
+msgid "Status"
+msgstr "Estado"
 
 #: js/GridPanel.js:53
 msgid "Do you really want to delete the selected task?"
@@ -67,11 +141,6 @@ msgstr "Prioridad"
 #: js/GridPanel.js:142 Model/Task.php:187
 msgid "Percent"
 msgstr "Porcentaje"
-
-#: js/GridPanel.js:155 js/TaskEditDialog.js:206 js/Status.js:31
-#: Model/Task.php:186
-msgid "Status"
-msgstr "Estado"
 
 #: js/GridPanel.js:169 js/Tasks.js:155
 msgid "Creation Time"
@@ -153,59 +222,6 @@ msgstr ""
 msgid "Creator"
 msgstr ""
 
-#: Setup/Initialize.php:36 Setup/Update/Release3.php:65
-msgid "All tasks of my taskslists"
-msgstr ""
-
-#: Setup/Initialize.php:45
-msgid "My open tasks"
-msgstr ""
-
-#: Setup/Initialize.php:54
-msgid "My open tasks this week"
-msgstr ""
-
-#: Setup/Initialize.php:63
-msgid "All tasks for me"
-msgstr ""
-
-#: Setup/Initialize.php:64
-msgid "All tasks that I am responsible for"
-msgstr ""
-
-#: Setup/Initialize.php:71
-msgid "Last modified by me"
-msgstr ""
-
-#: Setup/Initialize.php:72
-msgid "All tasks that I have last modified"
-msgstr ""
-
-#: Setup/Initialize.php:81
-msgid "Tasks without responsible"
-msgstr ""
-
-#: Setup/setup.xml:295
-msgid "NEEDS-ACTION"
-msgstr "NECESITAN-ATENCION"
-
-#: Setup/setup.xml:317
-msgid "COMPLETED"
-msgstr "COMPLETADO"
-
-#: Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr "EN-PROCESO"
-
-#: Setup/setup.xml:361
-msgid "CANCELLED"
-msgstr "CANCELADO"
-
-#: Controller.php:96
-#, python-format
-msgid "%s's personal tasks"
-msgstr "Tareas personales de %s"
-
 #: Model/Task.php:182
 msgid "Due"
 msgstr "Apta"
@@ -226,25 +242,9 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: Preference.php:23
-msgid "All my tasks"
-msgstr ""
-
-#: Preference.php:65
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:66
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr ""
-
-#: Preference.php:69
-msgid "Default Task List"
-msgstr ""
-
-#: Preference.php:70
-msgid "The default task list to create new tasks in."
-msgstr ""
+#: Controller/Task.php:165
+msgid "Notification for Task "
+msgstr "Notificación por Tarea"
 
 #~ msgid "Failed"
 #~ msgstr "Falló"

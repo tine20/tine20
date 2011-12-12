@@ -13,8 +13,13 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/ExampleApplication.js:25
-msgid "Example Application"
+#: Controller.php:96
+#, python-format
+msgid "%s's personal example records"
+msgstr "%s przykładowe, osobiste wiersze"
+
+#: Setup/setup.xml:10
+msgid "ExampleApplication"
 msgstr "Przykładowa aplikacja"
 
 #: js/ExampleRecordGridPanel.js:74
@@ -45,6 +50,10 @@ msgstr "Pokaż zakończone"
 msgid "ExampleRecord"
 msgstr "Przykładowy wiersz"
 
+#: js/ExampleApplication.js:25
+msgid "Example Application"
+msgstr "Przykładowa aplikacja"
+
 #: js/Model.js:31
 msgid "example record"
 msgid_plural "example records"
@@ -58,15 +67,6 @@ msgid_plural "example record lists"
 msgstr[0] "Lista przykładowych wierszy"
 msgstr[1] "listy przykładowych wierszy"
 msgstr[2] "listy przykładowych wierszy"
-
-#: Setup/setup.xml:10
-msgid "ExampleApplication"
-msgstr "Przykładowa aplikacja"
-
-#: Controller.php:96
-#, python-format
-msgid "%s's personal example records"
-msgstr "%s przykładowe, osobiste wiersze"
 
 #~ msgid "ExampleRecords"
 #~ msgstr "Przykładowe wiersze"

@@ -13,8 +13,13 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: js/ExampleApplication.js:25
-msgid "Example Application"
+#: Controller.php:96
+#, python-format
+msgid "%s's personal example records"
+msgstr "Osobní ukázkové záznamy uživatele %s"
+
+#: Setup/setup.xml:10
+msgid "ExampleApplication"
 msgstr "Ukázková aplikace"
 
 #: js/ExampleRecordGridPanel.js:74
@@ -45,6 +50,10 @@ msgstr "Zobrazit uzavřené"
 msgid "ExampleRecord"
 msgstr "Ukázkový záznam"
 
+#: js/ExampleApplication.js:25
+msgid "Example Application"
+msgstr "Ukázková aplikace"
+
 #: js/Model.js:31
 msgid "example record"
 msgid_plural "example records"
@@ -58,15 +67,6 @@ msgid_plural "example record lists"
 msgstr[0] "seznam ukázkových záznamů"
 msgstr[1] "seznamy ukázkových záznamů"
 msgstr[2] "seznamů ukázkových záznamů"
-
-#: Setup/setup.xml:10
-msgid "ExampleApplication"
-msgstr "Ukázková aplikace"
-
-#: Controller.php:96
-#, python-format
-msgid "%s's personal example records"
-msgstr "Osobní ukázkové záznamy uživatele %s"
 
 #~ msgid "ExampleRecords"
 #~ msgstr "Ukázkové záznamy"

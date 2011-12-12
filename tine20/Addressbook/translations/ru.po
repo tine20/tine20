@@ -17,6 +17,78 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: Addressbook\n"
 
+#: Controller.php:95
+#, python-format
+msgid "%s's personal addressbook"
+msgstr "%s личная адресная книга"
+
+#: Setup/setup.xml:690
+msgid "Internal Contacts"
+msgstr "Внутренние контакты"
+
+#: Setup/setup.xml:716
+msgid "Mr"
+msgstr "Господин"
+
+#: Setup/setup.xml:738
+msgid "Ms"
+msgstr "Госпожа"
+
+#: Setup/setup.xml:760 js/ContactEditDialog.js:135 js/ContactEditDialog.js:422
+#: js/ContactGridDetailsPanel.js:131 js/ContactGrid.js:109 js/Model.js:27
+#: js/Model.js:139
+msgid "Company"
+msgstr "Фирма"
+
+#: Setup/Update/Release3.php:37 Setup/Initialize.php:112
+msgid "All contacts I have read grants for"
+msgstr ""
+
+#: Setup/Initialize.php:117
+msgid "My company"
+msgstr ""
+
+#: Setup/Initialize.php:118
+msgid "All coworkers in my company"
+msgstr ""
+
+#: Setup/Initialize.php:131
+msgid "My contacts"
+msgstr ""
+
+#: Setup/Initialize.php:132
+msgid "All contacts in my Addressbooks"
+msgstr ""
+
+#: Setup/Initialize.php:144
+msgid "Last modified by me"
+msgstr ""
+
+#: Setup/Initialize.php:145
+msgid "All contacts that I have last modified"
+msgstr ""
+
+#: Preference.php:28
+msgid "All contacts"
+msgstr ""
+
+#: Preference.php:65
+#, fuzzy
+msgid "Default Addressbook"
+msgstr "Адресная книга"
+
+#: Preference.php:66
+msgid "The default addressbook for new contacts"
+msgstr ""
+
+#: Preference.php:69
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:70
+msgid "The default favorite which is loaded on addressbook startup"
+msgstr ""
+
 #: Acl/Rights.php:98
 #, fuzzy
 msgid "manage shared addressbooks"
@@ -34,105 +106,9 @@ msgstr ""
 msgid "Create or update shared addressbook favorites"
 msgstr ""
 
-#: Export/Pdf.php:37
-msgid "Business Contact Data"
-msgstr "Деловые данные контактов"
-
-#: Export/Pdf.php:39
-msgid "Organisation / Unit"
-msgstr "Организация / Отделение"
-
-#: Export/Pdf.php:44
-msgid "Business Address"
-msgstr "Рабочий адрес"
-
-#: Export/Pdf.php:52 js/ContactGrid.js:124
-msgid "Email"
-msgstr "Электронная почта"
-
-#: Export/Pdf.php:55
-msgid "Telephone Work"
-msgstr "Телефон (рабочий)"
-
-#: Export/Pdf.php:58
-msgid "Telephone Cellphone"
-msgstr "Телефон (мобильный)"
-
-#: Export/Pdf.php:61
-msgid "Telephone Car"
-msgstr "Телефон (автомобильный)"
-
-#: Export/Pdf.php:64
-msgid "Telephone Fax"
-msgstr "Телефон (факс)"
-
-#: Export/Pdf.php:67
-msgid "Telephone Page"
-msgstr "Пейджер"
-
-#: Export/Pdf.php:70
-msgid "URL"
-msgstr "URL"
-
-#: Export/Pdf.php:73
-msgid "Role"
-msgstr "Роль"
-
-#: Export/Pdf.php:76 js/ContactEditDialog.js:172 js/ContactGrid.js:113
-#: js/Model.js:33
-msgid "Room"
-msgstr "Помещение"
-
-#: Export/Pdf.php:79
-msgid "Assistant"
-msgstr "Помощник"
-
-#: Export/Pdf.php:82
-msgid "Assistant Telephone"
-msgstr "Телефон помощника"
-
-#: Export/Pdf.php:86
-msgid "Private Contact Data"
-msgstr "Личные данные контактов"
-
-#: Export/Pdf.php:88 js/ContactEditDialog.js:289 js/Model.js:153
-#: js/Model.js:154 js/Model.js:155 js/Model.js:156 js/Model.js:157
-msgid "Private Address"
-msgstr "Личный адрес"
-
-#: Export/Pdf.php:96
-msgid "Email Home"
-msgstr "Электронная почта"
-
-#: Export/Pdf.php:99
-msgid "Telephone Home"
-msgstr "Телефон"
-
-#: Export/Pdf.php:102
-msgid "Telephone Cellphone Private"
-msgstr "Личный сотовый телефон"
-
-#: Export/Pdf.php:105
-msgid "Telephone Fax Home"
-msgstr "Факс (домашний)"
-
-#: Export/Pdf.php:108
-msgid "URL Home"
-msgstr "Домашний URL"
-
-#: Export/Pdf.php:112
-msgid "Other Data"
-msgstr "Другие данные"
-
-#: Export/Pdf.php:114 js/ContactEditDialog.js:160 js/ContactGrid.js:139
-#: js/Model.js:26 js/Model.js:147
-msgid "Birthday"
-msgstr "Дата рождения"
-
-#: Export/Pdf.php:117 js/ContactEditDialog.js:154 js/ContactGrid.js:111
-#: js/Model.js:30 js/Model.js:142
-msgid "Job Title"
-msgstr "Профессия"
+#: js/SearchCombo.js:95
+msgid "Searching..."
+msgstr "Поиск..."
 
 #: js/ContactEditDialog.js:35 js/ContactEditDialog.js:42
 msgid "Map"
@@ -164,12 +140,6 @@ msgstr "Второе имя"
 msgid "Last Name"
 msgstr "Фамилия"
 
-#: js/ContactEditDialog.js:135 js/ContactEditDialog.js:422
-#: js/ContactGridDetailsPanel.js:131 js/ContactGrid.js:109 js/Model.js:27
-#: js/Model.js:139 Setup/setup.xml:760
-msgid "Company"
-msgstr "Фирма"
-
 #: js/ContactEditDialog.js:140 js/ContactGrid.js:110 js/Model.js:28
 #: js/Model.js:140
 msgid "Unit"
@@ -179,6 +149,16 @@ msgstr "Отделение"
 msgid "Display Name"
 msgstr "Отображать как"
 
+#: js/ContactEditDialog.js:154 js/ContactGrid.js:111 js/Model.js:30
+#: js/Model.js:142 Export/Pdf.php:117
+msgid "Job Title"
+msgstr "Профессия"
+
+#: js/ContactEditDialog.js:160 js/ContactGrid.js:139 js/Model.js:26
+#: js/Model.js:147 Export/Pdf.php:114
+msgid "Birthday"
+msgstr "Дата рождения"
+
 #: js/ContactEditDialog.js:164 js/Model.js:23
 msgid "Suffix"
 msgstr "Дополнение имени"
@@ -187,6 +167,11 @@ msgstr "Дополнение имени"
 #: js/Model.js:143
 msgid "Job Role"
 msgstr "Рабочая роль"
+
+#: js/ContactEditDialog.js:172 js/ContactGrid.js:113 js/Model.js:33
+#: Export/Pdf.php:76
+msgid "Room"
+msgstr "Помещение"
 
 #: js/ContactEditDialog.js:179
 msgid "Contact Information"
@@ -268,6 +253,11 @@ msgstr "Город"
 msgid "Country"
 msgstr "Страна"
 
+#: js/ContactEditDialog.js:289 js/Model.js:153 js/Model.js:154 js/Model.js:155
+#: js/Model.js:156 js/Model.js:157 Export/Pdf.php:88
+msgid "Private Address"
+msgstr "Личный адрес"
+
 #: js/ContactEditDialog.js:334 js/Model.js:64
 msgid "Description"
 msgstr "Описание"
@@ -310,26 +300,6 @@ msgstr ""
 msgid "Please review this link in edit dialog."
 msgstr ""
 
-#: js/ListMemberFilterModel.js:37
-msgid "Member of List"
-msgstr ""
-
-#: js/Addressbook.js:22
-msgid "New Contact"
-msgstr ""
-
-#: js/Addressbook.js:32 js/Model.js:96 js/Model.js:213
-#, fuzzy
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] "Адресная книга"
-msgstr[1] "Адресная книга"
-msgstr[2] "Адресная книга"
-
-#: js/SearchCombo.js:95
-msgid "Searching..."
-msgstr "Поиск..."
-
 #: js/ContactGrid.js:103 js/Model.js:158
 msgid "Type"
 msgstr "Тип"
@@ -365,6 +335,10 @@ msgstr "Почтовый индекс (личный)"
 #: js/ContactGrid.js:123
 msgid "Country (private)"
 msgstr "Страна (личная)"
+
+#: js/ContactGrid.js:124 Export/Pdf.php:52
+msgid "Email"
+msgstr "Электронная почта"
 
 #: js/ContactGrid.js:128
 msgid "Car phone"
@@ -428,6 +402,33 @@ msgstr ""
 msgid "Internal Contact"
 msgstr "Внутренние контакты"
 
+#: js/ListMemberFilterModel.js:37
+msgid "Member of List"
+msgstr ""
+
+#: js/CardDAVContainerPropertiesHookField.js:35
+msgid "CardDAV URL"
+msgstr ""
+
+#: js/Addressbook.js:22
+msgid "New Contact"
+msgstr ""
+
+#: js/Addressbook.js:32 js/Model.js:96 js/Model.js:213
+#, fuzzy
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] "Адресная книга"
+msgstr[1] "Адресная книга"
+msgstr[2] "Адресная книга"
+
+#: js/ContactFilterModel.js:35 js/Model.js:92 js/Model.js:131
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "Контакт"
+msgstr[1] "Контакта"
+msgstr[2] "Контактов"
+
 #: js/Model.js:34
 msgid "Street (Company Address)"
 msgstr ""
@@ -480,13 +481,6 @@ msgstr ""
 msgid "Web (private)"
 msgstr ""
 
-#: js/Model.js:92 js/Model.js:131 js/ContactFilterModel.js:35
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] "Контакт"
-msgstr[1] "Контакта"
-msgstr[2] "Контактов"
-
 #: js/Model.js:96 js/Model.js:213
 msgid "Addressbooks"
 msgstr ""
@@ -526,71 +520,81 @@ msgstr[2] ""
 msgid "Lists"
 msgstr ""
 
-#: Setup/Initialize.php:112 Setup/Update/Release3.php:37
-msgid "All contacts I have read grants for"
-msgstr ""
+#: Export/Pdf.php:37
+msgid "Business Contact Data"
+msgstr "Деловые данные контактов"
 
-#: Setup/Initialize.php:117
-msgid "My company"
-msgstr ""
+#: Export/Pdf.php:39
+msgid "Organisation / Unit"
+msgstr "Организация / Отделение"
 
-#: Setup/Initialize.php:118
-msgid "All coworkers in my company"
-msgstr ""
+#: Export/Pdf.php:44
+msgid "Business Address"
+msgstr "Рабочий адрес"
 
-#: Setup/Initialize.php:131
-msgid "My contacts"
-msgstr ""
+#: Export/Pdf.php:55
+msgid "Telephone Work"
+msgstr "Телефон (рабочий)"
 
-#: Setup/Initialize.php:132
-msgid "All contacts in my Addressbooks"
-msgstr ""
+#: Export/Pdf.php:58
+msgid "Telephone Cellphone"
+msgstr "Телефон (мобильный)"
 
-#: Setup/Initialize.php:144
-msgid "Last modified by me"
-msgstr ""
+#: Export/Pdf.php:61
+msgid "Telephone Car"
+msgstr "Телефон (автомобильный)"
 
-#: Setup/Initialize.php:145
-msgid "All contacts that I have last modified"
-msgstr ""
+#: Export/Pdf.php:64
+msgid "Telephone Fax"
+msgstr "Телефон (факс)"
 
-#: Setup/setup.xml:690
-msgid "Internal Contacts"
-msgstr "Внутренние контакты"
+#: Export/Pdf.php:67
+msgid "Telephone Page"
+msgstr "Пейджер"
 
-#: Setup/setup.xml:716
-msgid "Mr"
-msgstr "Господин"
+#: Export/Pdf.php:70
+msgid "URL"
+msgstr "URL"
 
-#: Setup/setup.xml:738
-msgid "Ms"
-msgstr "Госпожа"
+#: Export/Pdf.php:73
+msgid "Role"
+msgstr "Роль"
 
-#: Controller.php:95
-#, python-format
-msgid "%s's personal addressbook"
-msgstr "%s личная адресная книга"
+#: Export/Pdf.php:79
+msgid "Assistant"
+msgstr "Помощник"
 
-#: Preference.php:28
-msgid "All contacts"
-msgstr ""
+#: Export/Pdf.php:82
+msgid "Assistant Telephone"
+msgstr "Телефон помощника"
 
-#: Preference.php:65
-#, fuzzy
-msgid "Default Addressbook"
-msgstr "Адресная книга"
+#: Export/Pdf.php:86
+msgid "Private Contact Data"
+msgstr "Личные данные контактов"
 
-#: Preference.php:66
-msgid "The default addressbook for new contacts"
-msgstr ""
+#: Export/Pdf.php:96
+msgid "Email Home"
+msgstr "Электронная почта"
 
-#: Preference.php:69
-msgid "Default Favorite"
-msgstr ""
+#: Export/Pdf.php:99
+msgid "Telephone Home"
+msgstr "Телефон"
 
-#: Preference.php:70
-msgid "The default favorite which is loaded on addressbook startup"
-msgstr ""
+#: Export/Pdf.php:102
+msgid "Telephone Cellphone Private"
+msgstr "Личный сотовый телефон"
+
+#: Export/Pdf.php:105
+msgid "Telephone Fax Home"
+msgstr "Факс (домашний)"
+
+#: Export/Pdf.php:108
+msgid "URL Home"
+msgstr "Домашний URL"
+
+#: Export/Pdf.php:112
+msgid "Other Data"
+msgstr "Другие данные"
 
 #, fuzzy
 #~ msgid "Call contact"

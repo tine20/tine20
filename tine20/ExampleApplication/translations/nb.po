@@ -14,9 +14,14 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/ExampleApplication.js:25
-msgid "Example Application"
+#: Controller.php:96
+#, python-format
+msgid "%s's personal example records"
 msgstr ""
+
+#: Setup/setup.xml:10
+msgid "ExampleApplication"
+msgstr "EksempelApplikasjon"
 
 #: js/ExampleRecordGridPanel.js:74
 msgid "Quick search"
@@ -47,6 +52,10 @@ msgstr "Vis lukket"
 msgid "ExampleRecord"
 msgstr "EksempelPost"
 
+#: js/ExampleApplication.js:25
+msgid "Example Application"
+msgstr ""
+
 #: js/Model.js:31
 msgid "example record"
 msgid_plural "example records"
@@ -58,15 +67,6 @@ msgid "example record list"
 msgid_plural "example record lists"
 msgstr[0] ""
 msgstr[1] ""
-
-#: Setup/setup.xml:10
-msgid "ExampleApplication"
-msgstr "EksempelApplikasjon"
-
-#: Controller.php:96
-#, python-format
-msgid "%s's personal example records"
-msgstr ""
 
 #~ msgid "ExampleRecords"
 #~ msgstr "EksempelPoster"

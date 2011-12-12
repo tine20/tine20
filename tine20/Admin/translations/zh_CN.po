@@ -14,14 +14,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: Controller/Container.php:185
-msgid "Your container has been changed"
-msgstr ""
-
-#: Controller/Container.php:186
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr ""
-
 #: Acl/Rights.php:185
 msgid "manage access log"
 msgstr "管理访问日志"
@@ -126,132 +118,142 @@ msgstr ""
 msgid "view personal and shared containers"
 msgstr ""
 
-#: js/SambaMachineGrid.js:61 js/SambaMachineEditDialog.js:42
+#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:61
 msgid "Computer Name"
 msgstr "电脑名"
 
-#: js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92 js/Groups.js:236
-#: js/RoleEditDialog.js:291 js/user/GridPanel.js:99 js/GroupEditDialog.js:135
-#: js/TagEditDialog.js:225 js/Roles.js:239 js/Tags.js:226
-msgid "Description"
-msgstr "描述"
+#: js/Admin.js:23 js/user/GridPanel.js:98 js/user/Users.js:72
+#: js/AccessLog.js:107
+#, fuzzy
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "用户"
 
-#: js/SambaMachineGrid.js:79 js/container/GridPanel.js:70 js/Groups.js:234
-#: js/user/GridPanel.js:175 js/Roles.js:237
-msgid "ID"
-msgstr "ID"
+#: js/Admin.js:36 js/Models.js:87
+msgid "Groups"
+msgstr "组"
 
-#: js/SambaMachineGrid.js:86 js/container/EditDialog.js:122 js/Groups.js:235
-#: js/user/EditDialog.js:278 js/user/EditDialog.js:314 js/Applications.js:278
-#: js/Roles.js:238 js/Tags.js:225 js/AccessLog.js:131
-msgid "Name"
-msgstr "名字"
+#: js/Admin.js:49
+msgid "Roles"
+msgstr "角色"
 
-#: js/container/Container.js:46 js/container/GridPanel.js:103
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] ""
+#: js/Admin.js:61
+msgid "Computers"
+msgstr "电脑"
 
-#: js/container/GridPanel.js:71
-msgid "Container Name"
+#: js/Admin.js:74 js/Models.js:128
+msgid "Applications"
+msgstr "应用程序"
+
+#: js/Admin.js:87 js/Models.js:51 js/AccessLog.js:105
+#, fuzzy
+msgid "Access Log"
+msgid_plural "Access Logs"
+msgstr[0] "访问日志"
+
+#: js/Admin.js:100
+msgid "Shared Tags"
+msgstr "共享的标签"
+
+#: js/Admin.js:113
+msgid "Containers"
 msgstr ""
 
-#: js/container/GridPanel.js:72 js/container/EditDialog.js:134
-#: js/ApplicationFilter.js:33 js/Models.js:128
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] ""
+#: js/Admin.js:149
+msgid "Admin"
+msgstr "管理"
 
-#: js/container/GridPanel.js:73 js/container/GridPanel.js:104
-#: js/container/EditDialog.js:141
-msgid "Type"
-msgstr ""
-
-#: js/container/EditDialog.js:142
-msgid "personal"
-msgstr ""
-
-#: js/container/EditDialog.js:142
-msgid "shared"
-msgstr ""
-
-#: js/container/EditDialog.js:154 js/TagEditDialog.js:231 js/Tags.js:222
-msgid "Color"
-msgstr "颜色"
-
-#: js/container/EditDialog.js:159
-msgid "Note for Owner"
-msgstr ""
-
-#: js/Groups.js:52 js/Roles.js:47 js/Tags.js:64
-msgid "Confirm"
-msgstr "确认"
-
-#: js/Groups.js:52
-msgid "Do you really want to delete the selected groups?"
-msgstr "真的要删除选中的组？"
-
-#: js/Groups.js:69
-msgid "Deleting group(s)..."
-msgstr "删除组..."
-
-#: js/Groups.js:74 js/RoleEditDialog.js:106 js/RoleEditDialog.js:134
-#: js/GroupEditDialog.js:72 js/TagEditDialog.js:82 js/Roles.js:69
-msgid "Failed"
-msgstr "失败"
-
-#: js/Groups.js:74
-msgid "Some error occurred while trying to delete the group."
-msgstr "当试图删除组时发生错误"
-
-#: js/Groups.js:104
-msgid "add group"
-msgstr "添加组"
-
-#: js/Groups.js:112
-msgid "edit group"
-msgstr "编辑组"
-
-#: js/Groups.js:120
-msgid "delete group"
-msgstr "删除组"
-
-#: js/Groups.js:176 js/Applications.js:183 js/Roles.js:176 js/Tags.js:169
-msgid "Search:"
-msgstr "搜索："
-
-#: js/Groups.js:223
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "显示组 {0} - {1} of {2}"
-
-#: js/Groups.js:224 js/Groups.js:278
-msgid "No groups to display"
-msgstr "没有组要显示"
-
-#: js/SambaMachineModel.js:39
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "电脑"
-
-#: js/RoleEditDialog.js:69 js/GroupEditDialog.js:37 js/TagEditDialog.js:37
+#: js/GroupEditDialog.js:37 js/RoleEditDialog.js:69 js/TagEditDialog.js:37
 msgid "Please wait"
 msgstr "请稍等"
 
-#: js/RoleEditDialog.js:69 js/GroupEditDialog.js:37
+#: js/GroupEditDialog.js:37 js/RoleEditDialog.js:69
 msgid "Updating Memberships"
 msgstr "更新会员身份"
+
+#: js/GroupEditDialog.js:72 js/RoleEditDialog.js:106 js/RoleEditDialog.js:134
+#: js/Groups.js:74 js/TagEditDialog.js:82 js/Roles.js:69
+msgid "Failed"
+msgstr "失败"
+
+#: js/GroupEditDialog.js:72
+msgid "Could not save group."
+msgstr "不能保存组"
+
+#: js/GroupEditDialog.js:77 js/RoleEditDialog.js:113 js/TagEditDialog.js:87
+msgid "Errors"
+msgstr "错误"
+
+#: js/GroupEditDialog.js:77 js/RoleEditDialog.js:113 js/TagEditDialog.js:87
+msgid "Please fix the errors noted."
+msgstr "请修复标明的错误"
+
+#: js/GroupEditDialog.js:108
+msgid "Group Members"
+msgstr "组成员"
+
+#: js/GroupEditDialog.js:127
+msgid "Group Name"
+msgstr "组名"
+
+#: js/GroupEditDialog.js:135 js/SambaMachineGrid.js:62
+#: js/SambaMachineGrid.js:92 js/RoleEditDialog.js:291 js/user/GridPanel.js:99
+#: js/Groups.js:236 js/TagEditDialog.js:225 js/Tags.js:226 js/Roles.js:239
+msgid "Description"
+msgstr "描述"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:837
+msgid "Visibility"
+msgstr "可见度"
+
+#: js/GroupEditDialog.js:149 js/user/EditDialog.js:843
+msgid "Display in addressbook"
+msgstr "在地址本中显示"
+
+#: js/GroupEditDialog.js:149 js/user/EditDialog.js:843
+msgid "Hide from addressbook"
+msgstr "从地址本中隐藏"
+
+#: js/GroupEditDialog.js:160 js/user/EditDialog.js:857
+msgid "Saved in Addressbook"
+msgstr ""
+
+#: js/GroupEditDialog.js:215 js/RoleEditDialog.js:358 js/TagEditDialog.js:289
+msgid "Transferring {0}..."
+msgstr ""
+
+#: js/GroupEditDialog.js:215 js/Models.js:87
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] ""
+
+#: js/GroupEditDialog.js:220 js/GroupEditDialog.js:231
+msgid "Add new group"
+msgstr "添加新组"
+
+#: js/GroupEditDialog.js:233
+msgid "Edit Group \"{0}\""
+msgstr "编辑组\"{0}\""
+
+#: js/SambaMachineGrid.js:79 js/user/GridPanel.js:175 js/Groups.js:234
+#: js/container/GridPanel.js:70 js/Roles.js:237
+msgid "ID"
+msgstr "ID"
+
+#: js/SambaMachineGrid.js:86 js/user/EditDialog.js:278
+#: js/user/EditDialog.js:314 js/Groups.js:235 js/Applications.js:278
+#: js/AccessLog.js:131 js/Tags.js:225 js/container/EditDialog.js:122
+#: js/Roles.js:238
+msgid "Name"
+msgstr "名字"
+
+#: js/AdminPanel.js:46
+msgid "Default Addressbook for new contacts and groups"
+msgstr ""
 
 #: js/RoleEditDialog.js:106
 msgid "Could not save role."
 msgstr "不能保存角色"
-
-#: js/RoleEditDialog.js:113 js/GroupEditDialog.js:77 js/TagEditDialog.js:87
-msgid "Errors"
-msgstr "错误"
-
-#: js/RoleEditDialog.js:113 js/GroupEditDialog.js:77 js/TagEditDialog.js:87
-msgid "Please fix the errors noted."
-msgstr "请修复标明的错误"
 
 #: js/RoleEditDialog.js:126
 msgid "Deleting role..."
@@ -273,10 +275,6 @@ msgstr "成员"
 msgid "Role Name"
 msgstr "角色名"
 
-#: js/RoleEditDialog.js:358 js/GroupEditDialog.js:215 js/TagEditDialog.js:289
-msgid "Transferring {0}..."
-msgstr ""
-
 #: js/RoleEditDialog.js:358
 msgid "Role"
 msgstr ""
@@ -289,6 +287,12 @@ msgstr "添加新角色"
 msgid "Edit Role \"{0}\""
 msgstr "编辑角色 \"{0}\""
 
+#: js/Models.js:128 js/container/GridPanel.js:72
+#: js/container/EditDialog.js:134 js/ApplicationFilter.js:33
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] ""
+
 #: js/user/GridPanel.js:56
 msgid "enable account"
 msgstr "开启账户"
@@ -300,13 +304,6 @@ msgstr "关闭账户"
 #: js/user/GridPanel.js:76
 msgid "reset password"
 msgstr "重置密码"
-
-#: js/user/GridPanel.js:98 js/user/Users.js:72 js/Admin.js:23
-#: js/AccessLog.js:107
-#, fuzzy
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "用户"
 
 #: js/user/GridPanel.js:176 js/user/EditDialog.js:823 js/Applications.js:279
 msgid "Status"
@@ -359,16 +356,6 @@ msgstr "设置新密码"
 #: js/user/GridPanel.js:243
 msgid "Please enter the new password:"
 msgstr "请输入新密码"
-
-#: js/user/Users.js:118
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "Samba 用户"
-
-#: js/user/Users.js:144
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] "电子邮件用户"
 
 #: js/user/EditDialog.js:180
 msgid "Domain is not allowed. Check your SMTP domain configuration."
@@ -578,22 +565,6 @@ msgstr "过期"
 msgid "blocked"
 msgstr ""
 
-#: js/user/EditDialog.js:837 js/GroupEditDialog.js:143
-msgid "Visibility"
-msgstr "可见度"
-
-#: js/user/EditDialog.js:843 js/GroupEditDialog.js:149
-msgid "Display in addressbook"
-msgstr "在地址本中显示"
-
-#: js/user/EditDialog.js:843 js/GroupEditDialog.js:149
-msgid "Hide from addressbook"
-msgstr "从地址本中隐藏"
-
-#: js/user/EditDialog.js:857 js/GroupEditDialog.js:160
-msgid "Saved in Addressbook"
-msgstr ""
-
 #: js/user/EditDialog.js:886 js/user/EditDialog.js:890
 msgid "don't know"
 msgstr "不知道"
@@ -622,39 +593,55 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
-#: js/Admin.js:36 js/Models.js:87
-msgid "Groups"
-msgstr "组"
+#: js/user/Users.js:118
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "Samba 用户"
 
-#: js/Admin.js:49
-msgid "Roles"
-msgstr "角色"
+#: js/user/Users.js:144
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "电子邮件用户"
 
-#: js/Admin.js:61
-msgid "Computers"
-msgstr "电脑"
+#: js/Groups.js:52 js/Tags.js:64 js/Roles.js:47
+msgid "Confirm"
+msgstr "确认"
 
-#: js/Admin.js:74 js/Models.js:128
-msgid "Applications"
-msgstr "应用程序"
+#: js/Groups.js:52
+msgid "Do you really want to delete the selected groups?"
+msgstr "真的要删除选中的组？"
 
-#: js/Admin.js:87 js/Models.js:51 js/AccessLog.js:105
-#, fuzzy
-msgid "Access Log"
-msgid_plural "Access Logs"
-msgstr[0] "访问日志"
+#: js/Groups.js:69
+msgid "Deleting group(s)..."
+msgstr "删除组..."
 
-#: js/Admin.js:100
-msgid "Shared Tags"
-msgstr "共享的标签"
+#: js/Groups.js:74
+msgid "Some error occurred while trying to delete the group."
+msgstr "当试图删除组时发生错误"
 
-#: js/Admin.js:113
-msgid "Containers"
-msgstr ""
+#: js/Groups.js:104
+msgid "add group"
+msgstr "添加组"
 
-#: js/Admin.js:149
-msgid "Admin"
-msgstr "管理"
+#: js/Groups.js:112
+msgid "edit group"
+msgstr "编辑组"
+
+#: js/Groups.js:120
+msgid "delete group"
+msgstr "删除组"
+
+#: js/Groups.js:176 js/Applications.js:183 js/Tags.js:169 js/Roles.js:176
+msgid "Search:"
+msgstr "搜索："
+
+#: js/Groups.js:223
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "显示组 {0} - {1} of {2}"
+
+#: js/Groups.js:224 js/Groups.js:278
+msgid "No groups to display"
+msgstr "没有组要显示"
 
 #: js/Applications.js:43
 msgid "{0} Settings"
@@ -694,35 +681,6 @@ msgstr "顺序"
 msgid "Version"
 msgstr "版本"
 
-#: js/AdminPanel.js:46
-msgid "Default Addressbook for new contacts and groups"
-msgstr ""
-
-#: js/GroupEditDialog.js:72
-msgid "Could not save group."
-msgstr "不能保存组"
-
-#: js/GroupEditDialog.js:108
-msgid "Group Members"
-msgstr "组成员"
-
-#: js/GroupEditDialog.js:127
-msgid "Group Name"
-msgstr "组名"
-
-#: js/GroupEditDialog.js:215 js/Models.js:87
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-
-#: js/GroupEditDialog.js:220 js/GroupEditDialog.js:231
-msgid "Add new group"
-msgstr "添加新组"
-
-#: js/GroupEditDialog.js:233
-msgid "Edit Group \"{0}\""
-msgstr "编辑组\"{0}\""
-
 #: js/TagEditDialog.js:37
 msgid "Updating Tag"
 msgstr "更新标签..."
@@ -755,6 +713,10 @@ msgstr "使用"
 msgid "Tag Name"
 msgstr "标签名"
 
+#: js/TagEditDialog.js:231 js/Tags.js:222 js/container/EditDialog.js:158
+msgid "Color"
+msgstr "颜色"
+
 #: js/TagEditDialog.js:289
 msgid "Tag"
 msgstr ""
@@ -767,61 +729,10 @@ msgstr "添加新标签"
 msgid "Edit Tag \"{0}\""
 msgstr "编辑标签\"{0}\""
 
-#: js/Roles.js:47
-msgid "Do you really want to delete the selected roles?"
-msgstr "真的想删除选中的角色？"
-
-#: js/Roles.js:64
-msgid "Deleting role(s)..."
-msgstr "删除角色 ..."
-
-#: js/Roles.js:102
-msgid "add role"
-msgstr "添加角色"
-
-#: js/Roles.js:110
-msgid "edit role"
-msgstr "编辑角色"
-
-#: js/Roles.js:118
-msgid "delete role"
-msgstr "删除角色"
-
-#: js/Roles.js:226
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "显示角色{0} - {1} of {2}"
-
-#: js/Roles.js:227 js/Roles.js:281
-msgid "No roles to display"
-msgstr "没有角色要显示"
-
-#: js/Tags.js:64
-msgid "Do you really want to delete the selected tags?"
-msgstr "真的想删除选中的标签？"
-
-#: js/Tags.js:82
-msgid "Deleting tag(s)..."
-msgstr "删除标签"
-
-#: js/Tags.js:97
-msgid "add tag"
-msgstr "添加标签"
-
-#: js/Tags.js:105
-msgid "edit tag"
-msgstr "编辑标签"
-
-#: js/Tags.js:113
-msgid "delete tag"
-msgstr "删除标签"
-
-#: js/Tags.js:211
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "显示标签{0} - {1} of {2}"
-
-#: js/Tags.js:212 js/Tags.js:268
-msgid "No tags to display"
-msgstr "没有标签要显示"
+#: js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "电脑"
 
 #: js/AccessLog.js:106 js/AccessLog.js:132
 msgid "IP Address"
@@ -878,6 +789,96 @@ msgstr "失败"
 #: js/AccessLog.js:184
 msgid "success"
 msgstr "成功"
+
+#: js/Tags.js:64
+msgid "Do you really want to delete the selected tags?"
+msgstr "真的想删除选中的标签？"
+
+#: js/Tags.js:82
+msgid "Deleting tag(s)..."
+msgstr "删除标签"
+
+#: js/Tags.js:97
+msgid "add tag"
+msgstr "添加标签"
+
+#: js/Tags.js:105
+msgid "edit tag"
+msgstr "编辑标签"
+
+#: js/Tags.js:113
+msgid "delete tag"
+msgstr "删除标签"
+
+#: js/Tags.js:211
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "显示标签{0} - {1} of {2}"
+
+#: js/Tags.js:212 js/Tags.js:268
+msgid "No tags to display"
+msgstr "没有标签要显示"
+
+#: js/container/GridPanel.js:71
+msgid "Container Name"
+msgstr ""
+
+#: js/container/GridPanel.js:73 js/container/GridPanel.js:104
+#: js/container/EditDialog.js:143
+msgid "Type"
+msgstr ""
+
+#: js/container/GridPanel.js:103 js/container/Container.js:46
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] ""
+
+#: js/container/EditDialog.js:144
+msgid "personal"
+msgstr ""
+
+#: js/container/EditDialog.js:144
+msgid "shared"
+msgstr ""
+
+#: js/container/EditDialog.js:163
+msgid "Note for Owner"
+msgstr ""
+
+#: js/Roles.js:47
+msgid "Do you really want to delete the selected roles?"
+msgstr "真的想删除选中的角色？"
+
+#: js/Roles.js:64
+msgid "Deleting role(s)..."
+msgstr "删除角色 ..."
+
+#: js/Roles.js:102
+msgid "add role"
+msgstr "添加角色"
+
+#: js/Roles.js:110
+msgid "edit role"
+msgstr "编辑角色"
+
+#: js/Roles.js:118
+msgid "delete role"
+msgstr "删除角色"
+
+#: js/Roles.js:226
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "显示角色{0} - {1} of {2}"
+
+#: js/Roles.js:227 js/Roles.js:281
+msgid "No roles to display"
+msgstr "没有角色要显示"
+
+#: Controller/Container.php:185
+msgid "Your container has been changed"
+msgstr ""
+
+#: Controller/Container.php:186
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr ""
 
 #~ msgid "Current Mail Size"
 #~ msgstr "当前邮件大小"

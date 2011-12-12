@@ -15,9 +15,78 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-Bookmarks: 0,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
-#: Controller/Task.php:165
-msgid "Notification for Task "
-msgstr "Powiadomienie o zadaniu"
+#: Controller.php:96
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s zadania własne"
+
+#: Setup/setup.xml:295
+msgid "NEEDS-ACTION"
+msgstr "WYMAGA DZIAŁANIA"
+
+#: Setup/setup.xml:317
+msgid "COMPLETED"
+msgstr "ZAKOŃCZONE"
+
+#: Setup/setup.xml:339
+msgid "IN-PROCESS"
+msgstr "W OPRACOWANIU"
+
+#: Setup/setup.xml:361
+msgid "CANCELLED"
+msgstr "ODWOŁANE"
+
+#: Setup/Update/Release3.php:65 Setup/Initialize.php:36
+msgid "All tasks of my taskslists"
+msgstr "Wszystkie zadania z mojej listy zadań"
+
+#: Setup/Initialize.php:45
+msgid "My open tasks"
+msgstr "Moje, rozpoczęte zadania"
+
+#: Setup/Initialize.php:54
+msgid "My open tasks this week"
+msgstr "Moje zadania rozpoczęte w tym tygodniu"
+
+#: Setup/Initialize.php:63
+msgid "All tasks for me"
+msgstr "Zadania przypisane do mnie"
+
+#: Setup/Initialize.php:64
+msgid "All tasks that I am responsible for"
+msgstr "Wszystkie zadania, za które odpowiadam"
+
+#: Setup/Initialize.php:71
+msgid "Last modified by me"
+msgstr "Ostatnio zmienione przeze mnie"
+
+#: Setup/Initialize.php:72
+msgid "All tasks that I have last modified"
+msgstr "Wszystkie zadania zmienione ostatnio przeze mnie"
+
+#: Setup/Initialize.php:81
+msgid "Tasks without responsible"
+msgstr "Nieprzypisane zadania"
+
+#: Preference.php:23
+msgid "All my tasks"
+msgstr "Wszystkie moje zadania"
+
+#: Preference.php:65
+msgid "Default Favorite"
+msgstr "Domyślne ulubione"
+
+#: Preference.php:66
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "Domyślne ulubione zadanie ładowane przy uruchamianiu zadań"
+
+#: Preference.php:69
+msgid "Default Task List"
+msgstr "Domyślna lista zadań"
+
+#: Preference.php:70
+msgid "The default task list to create new tasks in."
+msgstr "Domyślna lista zadań dla nowych zadań"
 
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
@@ -34,6 +103,11 @@ msgstr "zarządzanie ulubionymi ze wspólnych zadań"
 #: Acl/Rights.php:94
 msgid "Create or update shared tasks favorites"
 msgstr "Utwórz albo uaktualnij ulubione ze wspólnych zadań"
+
+#: js/Status.js:31 js/GridPanel.js:155 js/TaskEditDialog.js:206
+#: Model/Task.php:186
+msgid "Status"
+msgstr "Status"
 
 #: js/GridPanel.js:53
 msgid "Do you really want to delete the selected task?"
@@ -69,11 +143,6 @@ msgstr "Priorytet"
 #: js/GridPanel.js:142 Model/Task.php:187
 msgid "Percent"
 msgstr "W procentach"
-
-#: js/GridPanel.js:155 js/TaskEditDialog.js:206 js/Status.js:31
-#: Model/Task.php:186
-msgid "Status"
-msgstr "Status"
 
 #: js/GridPanel.js:169 js/Tasks.js:155
 msgid "Creation Time"
@@ -157,59 +226,6 @@ msgstr "Ostatnio zmieniony przez"
 msgid "Creator"
 msgstr "Utworzył(a)"
 
-#: Setup/Initialize.php:36 Setup/Update/Release3.php:65
-msgid "All tasks of my taskslists"
-msgstr "Wszystkie zadania z mojej listy zadań"
-
-#: Setup/Initialize.php:45
-msgid "My open tasks"
-msgstr "Moje, rozpoczęte zadania"
-
-#: Setup/Initialize.php:54
-msgid "My open tasks this week"
-msgstr "Moje zadania rozpoczęte w tym tygodniu"
-
-#: Setup/Initialize.php:63
-msgid "All tasks for me"
-msgstr "Zadania przypisane do mnie"
-
-#: Setup/Initialize.php:64
-msgid "All tasks that I am responsible for"
-msgstr "Wszystkie zadania, za które odpowiadam"
-
-#: Setup/Initialize.php:71
-msgid "Last modified by me"
-msgstr "Ostatnio zmienione przeze mnie"
-
-#: Setup/Initialize.php:72
-msgid "All tasks that I have last modified"
-msgstr "Wszystkie zadania zmienione ostatnio przeze mnie"
-
-#: Setup/Initialize.php:81
-msgid "Tasks without responsible"
-msgstr "Nieprzypisane zadania"
-
-#: Setup/setup.xml:295
-msgid "NEEDS-ACTION"
-msgstr "WYMAGA DZIAŁANIA"
-
-#: Setup/setup.xml:317
-msgid "COMPLETED"
-msgstr "ZAKOŃCZONE"
-
-#: Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr "W OPRACOWANIU"
-
-#: Setup/setup.xml:361
-msgid "CANCELLED"
-msgstr "ODWOŁANE"
-
-#: Controller.php:96
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s zadania własne"
-
 #: Model/Task.php:182
 msgid "Due"
 msgstr "Termin"
@@ -230,25 +246,9 @@ msgstr "Telefon"
 msgid "Email"
 msgstr "E-mail"
 
-#: Preference.php:23
-msgid "All my tasks"
-msgstr "Wszystkie moje zadania"
-
-#: Preference.php:65
-msgid "Default Favorite"
-msgstr "Domyślne ulubione"
-
-#: Preference.php:66
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "Domyślne ulubione zadanie ładowane przy uruchamianiu zadań"
-
-#: Preference.php:69
-msgid "Default Task List"
-msgstr "Domyślna lista zadań"
-
-#: Preference.php:70
-msgid "The default task list to create new tasks in."
-msgstr "Domyślna lista zadań dla nowych zadań"
+#: Controller/Task.php:165
+msgid "Notification for Task "
+msgstr "Powiadomienie o zadaniu"
 
 #~ msgid "Failed"
 #~ msgstr "Próba nieudana"

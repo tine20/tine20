@@ -13,39 +13,77 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: Controller/Sieve.php:262
-msgid "Out of Office reply from %1$s"
+#: Setup/Initialize.php:34
+msgid "All inboxes of my email accounts"
 msgstr ""
 
-#: Controller/Message/Send.php:216 js/GridDetailsPanel.js:135
-#: js/GridPanel.js:486 js/MessageEditDialog.js:858 js/Model.js:139
-#: js/sieve/RuleConditionsPanel.js:72
-msgid "Subject"
-msgstr "Předmět"
-
-#: Controller/Message/Send.php:216 js/MessageEditDialog.js:833
-msgid "Body"
-msgstr "Tělo"
-
-#: Controller/Message/Flags.php:24 js/GridPanel.js:581
-msgid "Answered"
-msgstr "Odpovězené"
-
-#: Controller/Message/Flags.php:25
-msgid "Seen"
+#: Setup/Initialize.php:41
+msgid "All unread mail"
 msgstr ""
 
-#: Controller/Message/Flags.php:26
-msgid "Deleted"
+#: Setup/Initialize.php:42
+msgid "All unread mail of my email accounts"
 msgstr ""
 
-#: Controller/Message/Flags.php:27
-msgid "Draft"
+#: Setup/Initialize.php:49
+msgid "All highlighted mail"
 msgstr ""
 
-#: Controller/Message/Flags.php:28
-msgid "Flagged"
+#: Setup/Initialize.php:50
+msgid "All highlighted mail of my email accounts"
 msgstr ""
+
+#: Setup/Initialize.php:57
+msgid "All drafts"
+msgstr ""
+
+#: Setup/Initialize.php:58
+msgid "All mails with the draft flag"
+msgstr ""
+
+#: Preference.php:59
+msgid "All inboxes"
+msgstr ""
+
+#: Preference.php:106
+msgid "Default Email Account"
+msgstr "Výchozí poštovní účet"
+
+#: Preference.php:107
+msgid "The default email account to use when sending mails."
+msgstr "Výchozí poštovní účet pro odesílání e-mailů."
+
+#: Preference.php:110
+msgid "Email Update Interval"
+msgstr "Interval aktualizace emailu"
+
+#: Preference.php:111
+msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
+msgstr "Jak často má Felamimail kontrolovat nové zprávy (v minutách). \"0\" znamená nikdy."
+
+#: Preference.php:114
+msgid "Use in Addressbook"
+msgstr "Použít v adresáři"
+
+#: Preference.php:115
+msgid "Compose Emails from the Addressbook with Felamimail."
+msgstr "Vytvářet e-maily z adresáře pomocí Felamimailu."
+
+#: Preference.php:118
+msgid "Use for NOTES"
+msgstr "Použít pro poznámky"
+
+#: Preference.php:119
+msgid "Save Note default Value."
+msgstr "Výchozí hodnota pro uložení poznámky."
+
+#: Preference.php:122
+msgid "Confirm Delete"
+msgstr "Potvrdit smazání"
+
+#: Preference.php:123
+msgid "Show confirmation dialog when deleting mails."
+msgstr "Zobrazit potvrzovací dialog při mazání e-mailů."
 
 #: Acl/Rights.php:106
 msgid "manage email accounts"
@@ -62,30 +100,6 @@ msgstr "Přidat e-mailové účty"
 #: Acl/Rights.php:111
 msgid "Create new email accounts"
 msgstr "Vytvořit nové e-mailové účty"
-
-#: js/GridDetailsPanel.js:136 js/MessageEditDialog.js:764
-msgid "From"
-msgstr "Od"
-
-#: js/GridDetailsPanel.js:137
-msgid "Add"
-msgstr "Přidat"
-
-#: js/GridDetailsPanel.js:138
-msgid "Add contact to addressbook"
-msgstr "Přidat kontakt do adresáře"
-
-#: js/GridDetailsPanel.js:139
-msgid "Date"
-msgstr "Datum"
-
-#: js/GridDetailsPanel.js:141 js/GridDetailsPanel.js:366
-msgid "Show or hide header information"
-msgstr "Zobrazit nebo skrýt informace ze záhlaví"
-
-#: js/GridDetailsPanel.js:232 js/GridPanel.js:472 js/MessageEditDialog.js:698
-msgid "Attachments"
-msgstr "Přílohy"
 
 #: js/GridPanel.js:110
 msgid "No Messages found or the cache is empty."
@@ -128,7 +142,7 @@ msgstr "Smazat"
 msgid "Add Account"
 msgstr "Přidat účet"
 
-#: js/GridPanel.js:311 js/GridPanel.js:1253 js/GridPanel.js:1269
+#: js/GridPanel.js:311 js/GridPanel.js:1257 js/GridPanel.js:1273
 #: js/MessageDisplayDialog.js:79
 msgid "Print Preview"
 msgstr "Tiskový náhled"
@@ -141,15 +155,25 @@ msgstr "Tisk zprávy"
 msgid "Id"
 msgstr "Id"
 
-#: js/GridPanel.js:479 js/Model.js:145
+#: js/GridPanel.js:472 js/GridDetailsPanel.js:336 js/MessageEditDialog.js:698
+msgid "Attachments"
+msgstr "Přílohy"
+
+#: js/GridPanel.js:479 js/Model.js:147
 msgid "Flags"
 msgstr ""
 
-#: js/GridPanel.js:492 js/Model.js:140 js/sieve/RuleConditionsPanel.js:69
+#: js/GridPanel.js:486 js/GridDetailsPanel.js:239
+#: js/sieve/RuleConditionsPanel.js:72 js/Model.js:141
+#: js/MessageEditDialog.js:858 Controller/Message/Send.php:216
+msgid "Subject"
+msgstr "Předmět"
+
+#: js/GridPanel.js:492 js/sieve/RuleConditionsPanel.js:69 js/Model.js:142
 msgid "From (Email)"
 msgstr ""
 
-#: js/GridPanel.js:498 js/Model.js:141
+#: js/GridPanel.js:498 js/Model.js:143
 msgid "From (Name)"
 msgstr ""
 
@@ -157,21 +181,21 @@ msgstr ""
 msgid "Sender"
 msgstr ""
 
-#: js/GridPanel.js:511 js/Model.js:142
+#: js/GridPanel.js:511 js/Model.js:144
 msgid "To"
 msgstr "Komu"
 
-#: js/GridPanel.js:518 js/Model.js:487
+#: js/GridPanel.js:518 js/Model.js:489
 msgid "Sent"
 msgstr "Odeslané"
 
-#: js/GridPanel.js:526 js/Model.js:148
+#: js/GridPanel.js:526 js/Model.js:150
 msgid "Received"
 msgstr "Přijato"
 
-#: js/GridPanel.js:533 js/FolderFilterModel.js:30 js/TreeContextMenu.js:45
-#: js/TreeContextMenu.js:100 js/TreeContextMenu.js:103
-#: js/TreeContextMenu.js:106 js/Model.js:52 js/Model.js:493
+#: js/GridPanel.js:533 js/TreeContextMenu.js:45 js/TreeContextMenu.js:100
+#: js/TreeContextMenu.js:103 js/TreeContextMenu.js:106
+#: js/FolderFilterModel.js:30 js/Model.js:53 js/Model.js:495
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] "Složka"
@@ -182,6 +206,10 @@ msgstr[2] "Složek"
 msgid "Size"
 msgstr "Velikost"
 
+#: js/GridPanel.js:581 Controller/Message/Flags.php:24
+msgid "Answered"
+msgstr "Odpovězené"
+
 #: js/GridPanel.js:584
 msgid "Forwarded"
 msgstr "Přeposlané"
@@ -190,19 +218,19 @@ msgstr "Přeposlané"
 msgid "Recent"
 msgstr "Nedávné"
 
-#: js/GridPanel.js:1096 js/GridPanel.js:1128
+#: js/GridPanel.js:1099 js/GridPanel.js:1131
 msgid "Quota unknown"
 msgstr ""
 
-#: js/GridPanel.js:1111
+#: js/GridPanel.js:1114
 msgid "{0} %"
 msgstr ""
 
-#: js/GridPanel.js:1119
+#: js/GridPanel.js:1122
 msgid "Your quota"
 msgstr ""
 
-#: js/GridPanel.js:1120
+#: js/GridPanel.js:1123
 msgid "{0} available (total: {1})"
 msgstr ""
 
@@ -222,115 +250,43 @@ msgstr ""
 msgid "Folders of all accounts"
 msgstr ""
 
-#: js/RecipientPickerDialog.js:62
-msgid "(new message)"
+#: js/RecipientPickerFavoritePanel.js:43
+msgid "Recipient filter"
 msgstr ""
 
-#: js/RecipientPickerDialog.js:63
-msgid "Select recipients for \"{0}\""
+#: js/RecipientPickerFavoritePanel.js:54
+msgid "All recipients"
 msgstr ""
 
-#: js/MessageEditDialog.js:133
-msgid "Send"
-msgstr "Odeslat"
-
-#: js/MessageEditDialog.js:141
-msgid "Search Recipients"
+#: js/RecipientPickerFavoritePanel.js:57
+msgid "\"{0}\" recipients"
 msgstr ""
 
-#: js/MessageEditDialog.js:149
-msgid "Save As Draft"
-msgstr ""
+#: js/GridDetailsPanel.js:240 js/MessageEditDialog.js:764
+msgid "From"
+msgstr "Od"
 
-#: js/MessageEditDialog.js:157
-msgid "Save As Template"
-msgstr ""
+#: js/GridDetailsPanel.js:241
+msgid "Add"
+msgstr "Přidat"
 
-#: js/MessageEditDialog.js:166
-msgid "Save Email Note"
-msgstr ""
+#: js/GridDetailsPanel.js:242
+msgid "Add contact to addressbook"
+msgstr "Přidat kontakt do adresáře"
 
-#: js/MessageEditDialog.js:174
-msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
-msgstr ""
+#: js/GridDetailsPanel.js:243
+msgid "Date"
+msgstr "Datum"
 
-#: js/MessageEditDialog.js:192
-msgid "Click to search for and add recipients from the Addressbook."
-msgstr ""
-
-#: js/MessageEditDialog.js:270
-msgid "On {0}, {1} wrote"
-msgstr ""
-
-#: js/MessageEditDialog.js:276
-msgid "Original message"
-msgstr "Původní zpráva"
-
-#: js/MessageEditDialog.js:454 js/ContactGrid.js:341
-msgid "Loading Mail Addresses"
-msgstr ""
-
-#: js/MessageEditDialog.js:476
-msgid "Re:"
-msgstr ""
-
-#: js/MessageEditDialog.js:486
-msgid "Fwd:"
-msgstr ""
-
-#: js/MessageEditDialog.js:489
-msgid "{0} Message"
-msgstr ""
-
-#: js/MessageEditDialog.js:549 js/MessageEditDialog.js:683
-msgid "Failed"
-msgstr "Nezdařilo se"
-
-#: js/MessageEditDialog.js:550
-msgid "{0} account setting empty."
-msgstr ""
-
-#: js/MessageEditDialog.js:565
-msgid "Errors"
-msgstr ""
-
-#: js/MessageEditDialog.js:565
-msgid "Please fix the errors noted."
-msgstr ""
-
-#: js/MessageEditDialog.js:607 js/MessageEditDialog.js:868
-msgid "Compose email:"
-msgstr "Napsat e-mail:"
-
-#: js/MessageEditDialog.js:656
-msgid "Add Note"
-msgstr "Přidat poznámku"
-
-#: js/MessageEditDialog.js:657
-msgid "Edit Email Note Text:"
-msgstr "Editovat text emailové poznámky:"
-
-#: js/MessageEditDialog.js:684
-msgid "Could not send {0}."
-msgstr "Nepodařilo se odeslat {0}."
-
-#: js/MessageEditDialog.js:685
-msgid "Error:"
-msgstr "Chyba:"
-
-#: js/MessageEditDialog.js:892
-msgid "Files are still uploading."
-msgstr ""
-
-#: js/MessageEditDialog.js:912
-msgid "No recipients set."
-msgstr ""
+#: js/GridDetailsPanel.js:245 js/GridDetailsPanel.js:470
+msgid "Show or hide header information"
+msgstr "Zobrazit nebo skrýt informace ze záhlaví"
 
 #: js/TreeContextMenu.js:24
 msgid "Update {0} Cache"
 msgstr "Aktualizovat cache {0}"
 
-#: js/TreeContextMenu.js:24 js/Model.js:48
+#: js/TreeContextMenu.js:24 js/Model.js:49
 msgid "Message"
 msgid_plural "Messages"
 msgstr[0] "Zpráva"
@@ -393,6 +349,32 @@ msgstr ""
 msgid "Update Folder List"
 msgstr ""
 
+#: js/ContactGrid.js:110 js/AccountEditDialog.js:167
+#: js/AccountEditDialog.js:214 js/AccountEditDialog.js:229
+#: js/AccountEditDialog.js:275
+msgid "None"
+msgstr "Žádné"
+
+#: js/ContactGrid.js:254
+msgid "Add as \"To\""
+msgstr ""
+
+#: js/ContactGrid.js:265
+msgid "Add as \"Cc\""
+msgstr ""
+
+#: js/ContactGrid.js:276
+msgid "Add as \"Bcc\""
+msgstr ""
+
+#: js/ContactGrid.js:287
+msgid "Remove from recipients"
+msgstr ""
+
+#: js/ContactGrid.js:341 js/MessageEditDialog.js:454
+msgid "Loading Mail Addresses"
+msgstr ""
+
 #: js/RecipientGrid.js:204
 msgid "Click here to set To/CC/BCC."
 msgstr ""
@@ -413,16 +395,446 @@ msgstr "Skrytá kopie:"
 msgid "Remove"
 msgstr "Odstranit"
 
-#: js/AccountEditDialog.js:83
-msgid "Signature"
-msgstr "Podpis"
+#: js/RecipientPickerDialog.js:62
+msgid "(new message)"
+msgstr ""
 
-#: js/AccountEditDialog.js:103 js/Model.js:347
+#: js/RecipientPickerDialog.js:63
+msgid "Select recipients for \"{0}\""
+msgstr ""
+
+#: js/TreePanel.js:693
+msgid "Total Messages:"
+msgstr "Celkem zpráv:"
+
+#: js/TreePanel.js:697
+msgid "Unread Messages:"
+msgstr "Nepřečtených zpráv:"
+
+#: js/TreePanel.js:701
+msgid "Name on Server:"
+msgstr ""
+
+#: js/TreePanel.js:705
+msgid "Last update:"
+msgstr ""
+
+#: js/TreePanel.js:725
+#, python-format
+msgid "Fetching messages... ({0}% done)"
+msgstr "Stahuji zprávy... ({0}% hotovo)"
+
+#: js/TreePanel.js:741
+msgid "{0} unread message"
+msgid_plural "{0} unread messages"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/AddressbookGridPanelHook.js:33
+msgid "Compose email"
+msgstr ""
+
+#: js/Felamimail.js:33
+msgid "New Mail"
+msgstr ""
+
+#: js/Felamimail.js:83
+msgid "Email"
+msgstr "Pošta"
+
+#: js/Felamimail.js:118
+msgid "Active Vacation Message"
+msgstr ""
+
+#: js/Felamimail.js:119
+msgid "Email account \"{0}\" has an active vacation message."
+msgstr ""
+
+#: js/Felamimail.js:451
+msgid "New mails"
+msgstr "Nové zprávy"
+
+#: js/Felamimail.js:452
+msgid "You got {0} new mail(s) in folder {1} ({2})."
+msgstr ""
+
+#: js/Felamimail.js:562
+msgid "IMAP Credentials for {0}"
+msgstr "IMAP přihlášovací údaje pro {0}"
+
+#: js/Felamimail.js:565
+msgid "Credentials"
+msgstr "Přihlašovací údaje"
+
+#: js/Felamimail.js:717 js/Felamimail.js:750
+msgid "IMAP Error"
+msgstr "IMAP chyba"
+
+#: js/Felamimail.js:718
+msgid "No connection to IMAP server."
+msgstr "Není spojení na IMAP server."
+
+#: js/Felamimail.js:734
+msgid "IMAP Credentials Error"
+msgstr ""
+
+#: js/Felamimail.js:735
+msgid "Your email credentials are wrong. Please contact your administrator"
+msgstr ""
+
+#: js/Felamimail.js:751
+msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
+msgstr ""
+
+#: js/Felamimail.js:780
+msgid "SMTP Error"
+msgstr "SMTP chyba"
+
+#: js/Felamimail.js:781
+msgid "No connection to SMTP server."
+msgstr "Není spojení na SMTP server."
+
+#: js/Felamimail.js:789
+msgid "Sieve Error"
+msgstr ""
+
+#: js/Felamimail.js:790
+msgid "No connection to Sieve server."
+msgstr ""
+
+#: js/Felamimail.js:798
+msgid "Save Sieve Script Error"
+msgstr ""
+
+#: js/Felamimail.js:799
+msgid "Could not save script on Sieve server."
+msgstr ""
+
+#: js/sieve/RulesGridPanel.js:77
+msgid "Move up"
+msgstr ""
+
+#: js/sieve/RulesGridPanel.js:84
+msgid "Move down"
+msgstr ""
+
+#: js/sieve/RulesGridPanel.js:91
+msgid "Enable"
+msgstr ""
+
+#: js/sieve/RulesGridPanel.js:98
+msgid "Disable"
+msgstr ""
+
+#: js/sieve/RulesGridPanel.js:199
+msgid "ID"
+msgstr ""
+
+#: js/sieve/RulesGridPanel.js:206
+msgid "Conditions"
+msgstr ""
+
+#: js/sieve/RulesGridPanel.js:214
+msgid "Action"
+msgstr ""
+
+#: js/sieve/RulesGridPanel.js:305
+msgid "is greater than"
+msgstr ""
+
+#: js/sieve/RulesGridPanel.js:305
+msgid "is less than"
+msgstr ""
+
+#: js/sieve/RulesGridPanel.js:316
+msgid "Header \"{0}\" contains \"{1}\""
+msgstr ""
+
+#: js/sieve/RulesGridPanel.js:316
+msgid "Header \"{0}\" matches \"{1}\""
+msgstr ""
+
+#: js/sieve/RuleConditionsPanel.js:70
+msgid "From (Email and Name)"
+msgstr ""
+
+#: js/sieve/RuleConditionsPanel.js:71
+msgid "To (Email)"
+msgstr ""
+
+#: js/sieve/RuleConditionsPanel.js:74
+msgid "Header contains"
+msgstr ""
+
+#: js/sieve/RuleConditionsPanel.js:75 js/sieve/RuleConditionsPanel.js:77
+msgid "Header name"
+msgstr ""
+
+#: js/sieve/RuleConditionsPanel.js:75 js/sieve/RuleConditionsPanel.js:77
+msgid "Header value"
+msgstr ""
+
+#: js/sieve/RuleConditionsPanel.js:76
+msgid "Header regex"
+msgstr ""
+
+#: js/sieve/RuleEditDialog.js:96
+msgid "Edit Filter Rule"
+msgstr ""
+
+#: js/sieve/RuleEditDialog.js:254
+msgid "If all of the following conditions are met:"
+msgstr ""
+
+#: js/sieve/RuleEditDialog.js:271
+msgid "Do this action:"
+msgstr ""
+
+#: js/sieve/RuleEditDialog.js:361
+msgid "Move mail to folder"
+msgstr ""
+
+#: js/sieve/RuleEditDialog.js:362
+msgid "Redirect mail to address"
+msgstr ""
+
+#: js/sieve/RuleEditDialog.js:363
+msgid "Reject mail with this text"
+msgstr ""
+
+#: js/sieve/RuleEditDialog.js:364
+msgid "Discard mail"
+msgstr ""
+
+#: js/sieve/RuleEditDialog.js:365
+msgid "Keep mail"
+msgstr ""
+
+#: js/sieve/VacationEditDialog.js:76
+msgid "Vacation Message for {0}"
+msgstr ""
+
+#: js/sieve/VacationEditDialog.js:94
+msgid "Incoming mails will be answered with this text:"
+msgstr ""
+
+#: js/sieve/VacationEditDialog.js:114
+msgid "General"
+msgstr ""
+
+#: js/sieve/VacationEditDialog.js:133 js/sieve/VacationEditDialog.js:167
+msgid "I am available (vacation message disabled)"
+msgstr ""
+
+#: js/sieve/VacationEditDialog.js:140 js/sieve/VacationEditDialog.js:168
+msgid "I am not available (vacation message enabled)"
+msgstr ""
+
+#: js/sieve/VacationEditDialog.js:156
+msgid "Status"
+msgstr ""
+
+#: js/sieve/VacationEditDialog.js:180
+msgid "Advanced"
+msgstr ""
+
+#: js/sieve/VacationEditDialog.js:191
+msgid "Only send all X days to the same sender"
+msgstr ""
+
+#: js/sieve/RulesDialog.js:51
+msgid "Sieve Filter Rules"
+msgstr ""
+
+#: js/sieve/RulesDialog.js:82
+msgid "Sieve Filter Rules for {0}"
+msgstr ""
+
+#: js/MessageDisplayDialog.js:66
+msgid "Save"
+msgstr ""
+
+#: js/Model.js:140
+msgid "Subject/From"
+msgstr "Předmět/Od"
+
+#: js/Model.js:145
+msgid "Cc"
+msgstr "Kopie"
+
+#: js/Model.js:146
+msgid "Bcc"
+msgstr "Skrytá kopie"
+
+#: js/Model.js:349 js/AccountEditDialog.js:103
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "Účet"
 msgstr[1] "Účty"
 msgstr[2] "Účtů"
+
+#: js/Model.js:353
+msgid "Email Accounts"
+msgid_plural "Email Accounts"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Model.js:489
+msgid "INBOX"
+msgstr "Doručená pošta"
+
+#: js/Model.js:489
+msgid "Drafts"
+msgstr "Rozepsané"
+
+#: js/Model.js:489
+msgid "Templates"
+msgstr "Šablony"
+
+#: js/Model.js:489
+msgid "Junk"
+msgstr "Spam"
+
+#: js/Model.js:489
+msgid "Trash"
+msgstr "Koš"
+
+#: js/Model.js:498 js/Model.js:615 js/Model.js:680
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "seznam záznamů"
+msgstr[1] "seznamy záznamů"
+msgstr[2] "seznamů záznamů"
+
+#: js/Model.js:611
+msgid "Vacation"
+msgid_plural "Vacations"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Model.js:677
+msgid "Rule"
+msgid_plural "Rules"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Model.js:803
+msgid "Flag"
+msgid_plural "Flags"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Model.js:806
+msgid "Flag list"
+msgid_plural "Flag lists"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/MessageEditDialog.js:133
+msgid "Send"
+msgstr "Odeslat"
+
+#: js/MessageEditDialog.js:141
+msgid "Search Recipients"
+msgstr ""
+
+#: js/MessageEditDialog.js:149
+msgid "Save As Draft"
+msgstr ""
+
+#: js/MessageEditDialog.js:157
+msgid "Save As Template"
+msgstr ""
+
+#: js/MessageEditDialog.js:166
+msgid "Save Email Note"
+msgstr ""
+
+#: js/MessageEditDialog.js:174
+msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
+msgstr ""
+
+#: js/MessageEditDialog.js:192
+msgid "Click to search for and add recipients from the Addressbook."
+msgstr ""
+
+#: js/MessageEditDialog.js:270
+msgid "On {0}, {1} wrote"
+msgstr ""
+
+#: js/MessageEditDialog.js:276
+msgid "Original message"
+msgstr "Původní zpráva"
+
+#: js/MessageEditDialog.js:476
+msgid "Re:"
+msgstr ""
+
+#: js/MessageEditDialog.js:486
+msgid "Fwd:"
+msgstr ""
+
+#: js/MessageEditDialog.js:489
+msgid "{0} Message"
+msgstr ""
+
+#: js/MessageEditDialog.js:549 js/MessageEditDialog.js:683
+msgid "Failed"
+msgstr "Nezdařilo se"
+
+#: js/MessageEditDialog.js:550
+msgid "{0} account setting empty."
+msgstr ""
+
+#: js/MessageEditDialog.js:565
+msgid "Errors"
+msgstr ""
+
+#: js/MessageEditDialog.js:565
+msgid "Please fix the errors noted."
+msgstr ""
+
+#: js/MessageEditDialog.js:607 js/MessageEditDialog.js:868
+msgid "Compose email:"
+msgstr "Napsat e-mail:"
+
+#: js/MessageEditDialog.js:656
+msgid "Add Note"
+msgstr "Přidat poznámku"
+
+#: js/MessageEditDialog.js:657
+msgid "Edit Email Note Text:"
+msgstr "Editovat text emailové poznámky:"
+
+#: js/MessageEditDialog.js:684
+msgid "Could not send {0}."
+msgstr "Nepodařilo se odeslat {0}."
+
+#: js/MessageEditDialog.js:685
+msgid "Error:"
+msgstr "Chyba:"
+
+#: js/MessageEditDialog.js:833 Controller/Message/Send.php:216
+msgid "Body"
+msgstr "Tělo"
+
+#: js/MessageEditDialog.js:892
+msgid "Files are still uploading."
+msgstr ""
+
+#: js/MessageEditDialog.js:912
+msgid "No recipients set."
+msgstr ""
+
+#: js/AccountEditDialog.js:83
+msgid "Signature"
+msgstr "Podpis"
 
 #: js/AccountEditDialog.js:116
 msgid "Account Name"
@@ -457,12 +869,6 @@ msgstr "Port (Výchozí: 143 / SSL: 993)"
 #: js/AccountEditDialog.js:265
 msgid "Secure Connection"
 msgstr "Zabezpečení přípojení"
-
-#: js/AccountEditDialog.js:167 js/AccountEditDialog.js:214
-#: js/AccountEditDialog.js:229 js/AccountEditDialog.js:275
-#: js/ContactGrid.js:110
-msgid "None"
-msgstr "Žádné"
 
 #: js/AccountEditDialog.js:168 js/AccountEditDialog.js:215
 #: js/AccountEditDialog.js:276
@@ -553,431 +959,25 @@ msgstr "Prostý text"
 msgid "Depending on content type (experimental)"
 msgstr ""
 
-#: js/ContactGrid.js:254
-msgid "Add as \"To\""
+#: Controller/Sieve.php:299
+msgid "Out of Office reply from %1$s"
 msgstr ""
 
-#: js/ContactGrid.js:265
-msgid "Add as \"Cc\""
+#: Controller/Message/Flags.php:25
+msgid "Seen"
 msgstr ""
 
-#: js/ContactGrid.js:276
-msgid "Add as \"Bcc\""
+#: Controller/Message/Flags.php:26
+msgid "Deleted"
 msgstr ""
 
-#: js/ContactGrid.js:287
-msgid "Remove from recipients"
+#: Controller/Message/Flags.php:27
+msgid "Draft"
 msgstr ""
 
-#: js/Felamimail.js:33
-msgid "New Mail"
+#: Controller/Message/Flags.php:28
+msgid "Flagged"
 msgstr ""
-
-#: js/Felamimail.js:83
-msgid "Email"
-msgstr "Pošta"
-
-#: js/Felamimail.js:118
-msgid "Active Vacation Message"
-msgstr ""
-
-#: js/Felamimail.js:119
-msgid "Email account \"{0}\" has an active vacation message."
-msgstr ""
-
-#: js/Felamimail.js:451
-msgid "New mails"
-msgstr "Nové zprávy"
-
-#: js/Felamimail.js:452
-msgid "You got {0} new mail(s) in folder {1} ({2})."
-msgstr ""
-
-#: js/Felamimail.js:562
-msgid "IMAP Credentials for {0}"
-msgstr "IMAP přihlášovací údaje pro {0}"
-
-#: js/Felamimail.js:565
-msgid "Credentials"
-msgstr "Přihlašovací údaje"
-
-#: js/Felamimail.js:717 js/Felamimail.js:750
-msgid "IMAP Error"
-msgstr "IMAP chyba"
-
-#: js/Felamimail.js:718
-msgid "No connection to IMAP server."
-msgstr "Není spojení na IMAP server."
-
-#: js/Felamimail.js:734
-msgid "IMAP Credentials Error"
-msgstr ""
-
-#: js/Felamimail.js:735
-msgid "Your email credentials are wrong. Please contact your administrator"
-msgstr ""
-
-#: js/Felamimail.js:751
-msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
-msgstr ""
-
-#: js/Felamimail.js:780
-msgid "SMTP Error"
-msgstr "SMTP chyba"
-
-#: js/Felamimail.js:781
-msgid "No connection to SMTP server."
-msgstr "Není spojení na SMTP server."
-
-#: js/Felamimail.js:789
-msgid "Sieve Error"
-msgstr ""
-
-#: js/Felamimail.js:790
-msgid "No connection to Sieve server."
-msgstr ""
-
-#: js/Felamimail.js:798
-msgid "Save Sieve Script Error"
-msgstr ""
-
-#: js/Felamimail.js:799
-msgid "Could not save script on Sieve server."
-msgstr ""
-
-#: js/RecipientPickerFavoritePanel.js:43
-msgid "Recipient filter"
-msgstr ""
-
-#: js/RecipientPickerFavoritePanel.js:54
-msgid "All recipients"
-msgstr ""
-
-#: js/RecipientPickerFavoritePanel.js:57
-msgid "\"{0}\" recipients"
-msgstr ""
-
-#: js/Model.js:138
-msgid "Subject/From"
-msgstr "Předmět/Od"
-
-#: js/Model.js:143
-msgid "Cc"
-msgstr "Kopie"
-
-#: js/Model.js:144
-msgid "Bcc"
-msgstr "Skrytá kopie"
-
-#: js/Model.js:351
-msgid "Email Accounts"
-msgid_plural "Email Accounts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Model.js:487
-msgid "INBOX"
-msgstr "Doručená pošta"
-
-#: js/Model.js:487
-msgid "Drafts"
-msgstr "Rozepsané"
-
-#: js/Model.js:487
-msgid "Templates"
-msgstr "Šablony"
-
-#: js/Model.js:487
-msgid "Junk"
-msgstr "Spam"
-
-#: js/Model.js:487
-msgid "Trash"
-msgstr "Koš"
-
-#: js/Model.js:496 js/Model.js:613 js/Model.js:678
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "seznam záznamů"
-msgstr[1] "seznamy záznamů"
-msgstr[2] "seznamů záznamů"
-
-#: js/Model.js:609
-msgid "Vacation"
-msgid_plural "Vacations"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Model.js:675
-msgid "Rule"
-msgid_plural "Rules"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Model.js:801
-msgid "Flag"
-msgid_plural "Flags"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Model.js:804
-msgid "Flag list"
-msgid_plural "Flag lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/TreePanel.js:693
-msgid "Total Messages:"
-msgstr "Celkem zpráv:"
-
-#: js/TreePanel.js:697
-msgid "Unread Messages:"
-msgstr "Nepřečtených zpráv:"
-
-#: js/TreePanel.js:701
-msgid "Name on Server:"
-msgstr ""
-
-#: js/TreePanel.js:705
-msgid "Last update:"
-msgstr ""
-
-#: js/TreePanel.js:725
-#, python-format
-msgid "Fetching messages... ({0}% done)"
-msgstr "Stahuji zprávy... ({0}% hotovo)"
-
-#: js/TreePanel.js:741
-msgid "{0} unread message"
-msgid_plural "{0} unread messages"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/AddressbookGridPanelHook.js:33
-msgid "Compose email"
-msgstr ""
-
-#: js/MessageDisplayDialog.js:66
-msgid "Save"
-msgstr ""
-
-#: js/sieve/RulesGridPanel.js:77
-msgid "Move up"
-msgstr ""
-
-#: js/sieve/RulesGridPanel.js:84
-msgid "Move down"
-msgstr ""
-
-#: js/sieve/RulesGridPanel.js:91
-msgid "Enable"
-msgstr ""
-
-#: js/sieve/RulesGridPanel.js:98
-msgid "Disable"
-msgstr ""
-
-#: js/sieve/RulesGridPanel.js:199
-msgid "ID"
-msgstr ""
-
-#: js/sieve/RulesGridPanel.js:206
-msgid "Conditions"
-msgstr ""
-
-#: js/sieve/RulesGridPanel.js:214
-msgid "Action"
-msgstr ""
-
-#: js/sieve/RulesGridPanel.js:305
-msgid "is greater than"
-msgstr ""
-
-#: js/sieve/RulesGridPanel.js:305
-msgid "is less than"
-msgstr ""
-
-#: js/sieve/RulesGridPanel.js:316
-msgid "Header \"{0}\" contains \"{1}\""
-msgstr ""
-
-#: js/sieve/RulesGridPanel.js:316
-msgid "Header \"{0}\" matches \"{1}\""
-msgstr ""
-
-#: js/sieve/RulesDialog.js:51
-msgid "Sieve Filter Rules"
-msgstr ""
-
-#: js/sieve/RulesDialog.js:82
-msgid "Sieve Filter Rules for {0}"
-msgstr ""
-
-#: js/sieve/VacationEditDialog.js:76
-msgid "Vacation Message for {0}"
-msgstr ""
-
-#: js/sieve/VacationEditDialog.js:94
-msgid "Incoming mails will be answered with this text:"
-msgstr ""
-
-#: js/sieve/VacationEditDialog.js:114
-msgid "General"
-msgstr ""
-
-#: js/sieve/VacationEditDialog.js:133 js/sieve/VacationEditDialog.js:167
-msgid "I am available (vacation message disabled)"
-msgstr ""
-
-#: js/sieve/VacationEditDialog.js:140 js/sieve/VacationEditDialog.js:168
-msgid "I am not available (vacation message enabled)"
-msgstr ""
-
-#: js/sieve/VacationEditDialog.js:156
-msgid "Status"
-msgstr ""
-
-#: js/sieve/VacationEditDialog.js:180
-msgid "Advanced"
-msgstr ""
-
-#: js/sieve/VacationEditDialog.js:191
-msgid "Only send all X days to the same sender"
-msgstr ""
-
-#: js/sieve/RuleConditionsPanel.js:70
-msgid "From (Email and Name)"
-msgstr ""
-
-#: js/sieve/RuleConditionsPanel.js:71
-msgid "To (Email)"
-msgstr ""
-
-#: js/sieve/RuleConditionsPanel.js:74
-msgid "Header contains"
-msgstr ""
-
-#: js/sieve/RuleConditionsPanel.js:75 js/sieve/RuleConditionsPanel.js:77
-msgid "Header name"
-msgstr ""
-
-#: js/sieve/RuleConditionsPanel.js:75 js/sieve/RuleConditionsPanel.js:77
-msgid "Header value"
-msgstr ""
-
-#: js/sieve/RuleConditionsPanel.js:76
-msgid "Header regex"
-msgstr ""
-
-#: js/sieve/RuleEditDialog.js:96
-msgid "Edit Filter Rule"
-msgstr ""
-
-#: js/sieve/RuleEditDialog.js:254
-msgid "If all of the following conditions are met:"
-msgstr ""
-
-#: js/sieve/RuleEditDialog.js:271
-msgid "Do this action:"
-msgstr ""
-
-#: js/sieve/RuleEditDialog.js:361
-msgid "Move mail to folder"
-msgstr ""
-
-#: js/sieve/RuleEditDialog.js:362
-msgid "Redirect mail to address"
-msgstr ""
-
-#: js/sieve/RuleEditDialog.js:363
-msgid "Reject mail with this text"
-msgstr ""
-
-#: js/sieve/RuleEditDialog.js:364
-msgid "Discard mail"
-msgstr ""
-
-#: js/sieve/RuleEditDialog.js:365
-msgid "Keep mail"
-msgstr ""
-
-#: Setup/Initialize.php:34
-msgid "All inboxes of my email accounts"
-msgstr ""
-
-#: Setup/Initialize.php:41
-msgid "All unread mail"
-msgstr ""
-
-#: Setup/Initialize.php:42
-msgid "All unread mail of my email accounts"
-msgstr ""
-
-#: Setup/Initialize.php:49
-msgid "All highlighted mail"
-msgstr ""
-
-#: Setup/Initialize.php:50
-msgid "All highlighted mail of my email accounts"
-msgstr ""
-
-#: Setup/Initialize.php:57
-msgid "All drafts"
-msgstr ""
-
-#: Setup/Initialize.php:58
-msgid "All mails with the draft flag"
-msgstr ""
-
-#: Preference.php:59
-msgid "All inboxes"
-msgstr ""
-
-#: Preference.php:106
-msgid "Default Email Account"
-msgstr "Výchozí poštovní účet"
-
-#: Preference.php:107
-msgid "The default email account to use when sending mails."
-msgstr "Výchozí poštovní účet pro odesílání e-mailů."
-
-#: Preference.php:110
-msgid "Email Update Interval"
-msgstr "Interval aktualizace emailu"
-
-#: Preference.php:111
-msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
-msgstr "Jak často má Felamimail kontrolovat nové zprávy (v minutách). \"0\" znamená nikdy."
-
-#: Preference.php:114
-msgid "Use in Addressbook"
-msgstr "Použít v adresáři"
-
-#: Preference.php:115
-msgid "Compose Emails from the Addressbook with Felamimail."
-msgstr "Vytvářet e-maily z adresáře pomocí Felamimailu."
-
-#: Preference.php:118
-msgid "Use for NOTES"
-msgstr "Použít pro poznámky"
-
-#: Preference.php:119
-msgid "Save Note default Value."
-msgstr "Výchozí hodnota pro uložení poznámky."
-
-#: Preference.php:122
-msgid "Confirm Delete"
-msgstr "Potvrdit smazání"
-
-#: Preference.php:123
-msgid "Show confirmation dialog when deleting mails."
-msgstr "Zobrazit potvrzovací dialog při mazání e-mailů."
 
 #~ msgid "wrote"
 #~ msgstr "napsal(a)"

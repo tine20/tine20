@@ -13,6 +13,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Controller.php:95
+#, python-format
+msgid "%s's personal files"
+msgstr "Persönliche Dateien von %s"
+
 #: Acl/Rights.php:97
 msgid "manage shared folders"
 msgstr "Gemeinsame Ordner verwalten"
@@ -24,8 +29,3 @@ msgstr "Neue gemeinsame Ordner anlegen und verwalten"
 #: js/Application.js:29
 msgid "Filemanager"
 msgstr "Dateimanager"
-
-#: Controller.php:95
-#, python-format
-msgid "%s's personal files"
-msgstr "Persönliche Dateien von %s"
