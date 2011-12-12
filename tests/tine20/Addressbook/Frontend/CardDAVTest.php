@@ -85,7 +85,7 @@ class Addressbook_Frontend_CardDAVTest extends PHPUnit_Framework_TestCase
         
         $children = $collection->getChildren();
         
-        $this->assertInstanceOf('Addressbook_Frontend_WebDAV_Container', $children[0]);
+        $this->assertTrue($children[0] instanceof Addressbook_Frontend_WebDAV_Container);
     }
         
     /**
@@ -97,7 +97,7 @@ class Addressbook_Frontend_CardDAVTest extends PHPUnit_Framework_TestCase
         
         $child = $collection->getChild($this->objects['initialContainer']->getId());
         
-        $this->assertInstanceOf('Addressbook_Frontend_WebDAV_Container', $child);
+        $this->assertTrue($child instanceof Addressbook_Frontend_WebDAV_Container);
     }    
     
     public function testCreateFile()

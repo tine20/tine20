@@ -144,7 +144,8 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
         
         $this->objects['contactsToDelete'][] = $contact;
         
-        $this->assertInstanceOf('Addressbook_Frontend_WebDAV_Contact', $contact);
+        $this->assertTrue($contact instanceof Addressbook_Frontend_WebDAV_Contact);
+        
         $this->assertEquals($id, $record->getId(), 'ID mismatch');
         
         return $contact;
@@ -164,6 +165,6 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
         $children = $container->getChildren();
         
         $this->assertEquals(1, count($children));
-        $this->assertInstanceOf('Addressbook_Frontend_WebDAV_Contact', $children[0]);
+        $this->assertTrue($children[0] instanceof Addressbook_Frontend_WebDAV_Contact);
     }    
 }
