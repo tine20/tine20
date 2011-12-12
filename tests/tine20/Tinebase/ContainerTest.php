@@ -116,7 +116,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         if ($_container->type == Tinebase_Model_Container::TYPE_SHARED)  {
             $this->assertEmpty($_container->owner_id);
         } else {
-            $this->assertNotEmpty($_container->owner_id, 'personal container must have an owner_id');
+            $this->assertTrue(! empty($_container->owner_id), 'personal container must have an owner_id');
         }
     }
     
