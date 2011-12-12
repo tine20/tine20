@@ -114,9 +114,9 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     protected function _validateOwnerId(Tinebase_Model_Container $_container)
     {
         if ($_container->type == Tinebase_Model_Container::TYPE_SHARED)  {
-            $this->assertEmpty($_container->owner_id);
+            $this->assertTrue(empty($_container->owner_id), 'shared container does not have an owner');
         } else {
-            $this->assertTrue(! empty($_container->owner_id), 'personal container must have an owner_id');
+            $this->assertTrue(! empty($_container->owner_id), 'personal container must have an owner');
         }
     }
     
