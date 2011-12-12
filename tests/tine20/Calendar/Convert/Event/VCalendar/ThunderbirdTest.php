@@ -77,6 +77,6 @@ class Calendar_Convert_Event_VCalendar_ThunderbirdTest extends PHPUnit_Framework
         $this->assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->class);
         $this->assertEquals('Hamburg',                           $event->location);
         $this->assertEquals('l.kneschke@metaways.de',            $organizer->email);
-        $this->assertNotEmpty($event->attendee->filter('user_id', $event->organizer)->toArray(), 'Organizer must be attendee too');
+        $this->assertTrue(! empty($event->attendee->filter('user_id', $event->organizer)->toArray()), 'Organizer must be attendee too');
     }
 }

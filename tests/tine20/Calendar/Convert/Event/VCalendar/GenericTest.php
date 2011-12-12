@@ -236,7 +236,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         #var_dump($updatedEvent->exdate[3]->attendee->toArray());
         #var_dump($event->dtstart->format('hm'));
     
-        $this->assertNotEmpty($updatedEvent->exdate[3]->attendee[0]->status_authkey);
+        $this->assertTrue(! empty($updatedEvent->exdate[3]->attendee[0]->status_authkey));
         $this->assertEquals($event->exdate[3]->attendee[0]->status_authkey, $updatedEvent->exdate[3]->attendee[0]->status_authkey);
     
         return $event;

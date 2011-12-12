@@ -75,8 +75,8 @@ class Tinebase_WebDav_PrincipalBackendTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('principals/users/' . Tinebase_Core::getUser()->contact_id, $principal['uri']);
         $this->assertEquals(Tinebase_Core::getUser()->accountDisplayName, $principal['{DAV:}displayname']);
-        $this->assertNotEmpty($principal['{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL']);
-        $this->assertNotEmpty($principal['{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL']);
+        $this->assertTrue(! empty($principal['{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL']));
+        $this->assertTrue(! empty($principal['{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL']));
     }
     
     public function testGetGroupMembership()

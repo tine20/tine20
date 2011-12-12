@@ -272,10 +272,13 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $attender->status);
     }
 
+    /**
+     * testEmptyMethod
+     */
     public function testEmptyMethod()
     {
         $iMIP = $this->_getiMIP('REQUEST', FALSE, TRUE);
-        $this->assertEmpty($iMIP->method);
+        $this->assertTrue(empty($iMIP->method));
         $event = $iMIP->getEvent();
         
         $this->assertEquals('REQUEST', $iMIP->method);

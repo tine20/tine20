@@ -120,7 +120,7 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
         
         $result = $container->getProperties($requestedProperties);
        
-        $this->assertNotEmpty($result['{http://calendarserver.org/ns/}getctag']);
+        $this->assertTrue(! empty($result['{http://calendarserver.org/ns/}getctag']));
         $this->assertEquals($result['{DAV:}resource-id'], 'urn:uuid:' . $this->objects['initialContainer']->getId());
     }
     
