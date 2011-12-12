@@ -1255,8 +1255,6 @@ class Setup_Controller
      */
     public function createImportExportDefinitions($_application)
     {
-        Tinebase_ImportExportDefinition::getInstance()->modlogActive(FALSE);
-        
         foreach (array('Import', 'Export') as $type) {
             $path = 
                 $this->_baseDir . $_application->name . 
@@ -1277,8 +1275,6 @@ class Setup_Controller
                 }
             }
         }
-        
-        Tinebase_ImportExportDefinition::getInstance()->modlogActive(TRUE);
     }
     
     /**

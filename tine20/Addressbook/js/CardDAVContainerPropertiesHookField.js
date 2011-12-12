@@ -48,7 +48,7 @@ Tine.Addressbook.CardDAVContainerPropertiesHookField = Ext.extend(Ext.form.TextF
         this.value = [
             window.location.href.replace(/\/?(index\.php.*)?$/, ''),
             '/addressbooks/',
-            Tine.Tinebase.registry.get('currentAccount').accountId,
+            Tine.Tinebase.registry.get('currentAccount').contact_id,
             '/',
             this.grantContainer.id
         ].join('');

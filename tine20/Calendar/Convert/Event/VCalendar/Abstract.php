@@ -251,15 +251,14 @@ class Calendar_Convert_Event_VCalendar_Abstract
         $vevent->add($dtend);
         
         // event organizer
-        try {
-            $organizerContact = Addressbook_Controller_Contact::getInstance()->get($event->organizer);
-            if (!empty($organizerContact->email)) {
+        if (!empty($event->organizer)) {
+            $organizerContact = Addressbook_Controller_Contact::getInstance()->getMultiple(array($event->organizer), TRUE)->getFirstRecord();
+
+            if ($organizerContact instanceof Addressbook_Model_Contact && !empty($organizerContact->email)) {
                 $organizer = new Sabre_VObject_Property('ORGANIZER', 'mailto:' . $organizerContact->email);
                 $organizer->add('CN', $organizerContact->n_fileas);
                 $vevent->add($organizer);
             }
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            // contact not found
         }
         
         $this->_addEventAttendee($vevent, $event);

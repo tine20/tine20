@@ -48,7 +48,7 @@ Tine.Calendar.CalDAVContainerPropertiesHookField = Ext.extend(Ext.form.TextField
         this.value = [
             window.location.href.replace(/\/?(index\.php.*)?$/, ''),
             '/calendars/',
-            Tine.Tinebase.registry.get('currentAccount').accountId,
+            Tine.Tinebase.registry.get('currentAccount').contact_id,
             '/',
             this.grantContainer.id
         ].join('');
