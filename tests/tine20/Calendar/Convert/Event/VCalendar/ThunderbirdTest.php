@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Convert_Event_VCalendar_ThunderbirdTest::main');
-}
-
 /**
  * Test class for Calendar_Convert_Event_VCalendar_Thunderbird
  */
@@ -71,12 +67,9 @@ class Calendar_Convert_Event_VCalendar_ThunderbirdTest extends PHPUnit_Framework
         $event = $converter->toTine20Model($vcalendarStream);
         $organizer = Addressbook_Controller_Contact::getInstance()->get($event->organizer);
         
-        #var_dump($event->toArray());
-        #var_dump($event->attendee->filter('user_id', $event->organizer->id)->toArray());
-        
         $this->assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->class);
         $this->assertEquals('Hamburg',                           $event->location);
         $this->assertEquals('l.kneschke@metaways.de',            $organizer->email);
-        $this->assertTrue(! empty($event->attendee->filter('user_id', $event->organizer)->toArray()), 'Organizer must be attendee too');
+        $this->assertGreaterThan(0, count($event->attendee->filter('user_id', $event->organizer)), 'Organizer must be attendee too');
     }
 }
