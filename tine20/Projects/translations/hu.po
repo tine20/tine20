@@ -35,93 +35,9 @@ msgstr "Lehetséges projekt résztvevő szerepek. Kérlek jegyezd meg, hogy a to
 msgid "%s's personal Projects"
 msgstr "%s személyes Projektjei"
 
-#: js/Model.js:33 js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Projekt"
-msgstr[1] "Projektek"
-
-#: js/Model.js:37
-msgid "Project list"
-msgid_plural "Project lists"
-msgstr[0] "Projekt lista"
-msgstr[1] "Projekt listák"
-
-#: js/Model.js:40
-msgid "Project lists"
-msgstr "Projekt listák"
-
-#: js/Model.js:72
-msgid "Quick search"
-msgstr "Gyors keresés"
-
-#: js/Model.js:74 js/ProjectEditDialog.js:141 js/ProjectGridPanel.js:95
-msgid "Status"
-msgstr "Státusz"
-
-#: js/Model.js:83
-msgid "Last modified"
-msgstr "Utolsó módosítás"
-
-#: js/Model.js:84
-msgid "Last modifier"
-msgstr "Utolsó módosító"
-
-#: js/Model.js:85
-msgid "Creation Time"
-msgstr "Készítés ideje"
-
-#: js/Model.js:86
-msgid "Creator"
-msgstr "Készítő"
-
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:83
-msgid "Attendee"
-msgstr "Résztvevő"
-
-#: js/ProjectAttendeeFilter.js:49
-msgid "Attendee Role"
-msgstr "Résztvevő szerep"
-
-#: js/ProjectEditDialog.js:84
-msgid "Role"
-msgstr "Szerep"
-
-#: js/ProjectEditDialog.js:130 js/ProjectGridPanel.js:89
-msgid "Title"
-msgstr "Cím"
-
-#: js/ProjectEditDialog.js:135 js/ProjectGridPanel.js:82
-msgid "Number"
-msgstr "Szám"
-
-#: js/ProjectEditDialog.js:171
-msgid "Description"
-msgstr "Leírás"
-
-#: js/ProjectEditDialog.js:185
-msgid "Enter description"
-msgstr "Leírás megadása"
-
-#: js/ProjectGridPanel.js:79
-msgid "Tags"
-msgstr "Címkék"
-
-#: js/Projects.js:24 Setup/setup.xml:4
+#: Setup/setup.xml:4 js/Projects.js:24
 msgid "Projects"
 msgstr "Projektek"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "Minden projektem"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "Alapértelmezett kedvenc"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Alapértelmezett kedvenc, amely a Projekt indulásakor betöltődik"
 
 #: Setup/Initialize.php:34
 msgid "On hold"
@@ -166,6 +82,90 @@ msgstr "Várakozó projektjeim"
 #: Setup/Initialize.php:121
 msgid "My projects that are on hold"
 msgstr "Tartásban lévő projektjeim"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Minden projektem"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Alapértelmezett kedvenc"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Alapértelmezett kedvenc, amely a Projekt indulásakor betöltődik"
+
+#: js/ProjectGridPanel.js:85
+msgid "Tags"
+msgstr "Címkék"
+
+#: js/ProjectGridPanel.js:88 js/ProjectEditDialog.js:135
+msgid "Number"
+msgstr "Szám"
+
+#: js/ProjectGridPanel.js:95 js/ProjectEditDialog.js:130
+msgid "Title"
+msgstr "Cím"
+
+#: js/ProjectGridPanel.js:101 js/ProjectEditDialog.js:141 js/Model.js:74
+msgid "Status"
+msgstr "Státusz"
+
+#: js/ProjectEditDialog.js:83 js/ProjectAttendeeFilter.js:38
+msgid "Attendee"
+msgstr "Résztvevő"
+
+#: js/ProjectEditDialog.js:84
+msgid "Role"
+msgstr "Szerep"
+
+#: js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118 js/Model.js:33
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Projekt"
+msgstr[1] "Projektek"
+
+#: js/ProjectEditDialog.js:171
+msgid "Description"
+msgstr "Leírás"
+
+#: js/ProjectEditDialog.js:185
+msgid "Enter description"
+msgstr "Leírás megadása"
+
+#: js/Model.js:37
+msgid "Project list"
+msgid_plural "Project lists"
+msgstr[0] "Projekt lista"
+msgstr[1] "Projekt listák"
+
+#: js/Model.js:40
+msgid "Project lists"
+msgstr "Projekt listák"
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr "Gyors keresés"
+
+#: js/Model.js:83
+msgid "Last modified"
+msgstr "Utolsó módosítás"
+
+#: js/Model.js:84
+msgid "Last modifier"
+msgstr "Utolsó módosító"
+
+#: js/Model.js:85
+msgid "Creation Time"
+msgstr "Készítés ideje"
+
+#: js/Model.js:86
+msgid "Creator"
+msgstr "Készítő"
+
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
+msgstr "Résztvevő szerep"
 
 #~ msgid "Example Application"
 #~ msgstr "Példa Alkalmazás"

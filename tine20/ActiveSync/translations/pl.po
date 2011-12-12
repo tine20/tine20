@@ -13,6 +13,49 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
+#: Setup/setup.xml:487
+msgid "Default Policy"
+msgstr "Domyślna polityka"
+
+#: Setup/setup.xml:492
+msgid "Default Policy installed during setup"
+msgstr "Domyślna polityka określona podczas definiowania ustawień"
+
+#: Preference.php:74
+msgid "Default Addressbook"
+msgstr "Domyślna książka adresowa"
+
+#: Preference.php:75
+msgid "The default addressbook to create new contacts in."
+msgstr "Domyślna książka adresowa z nowymi kontaktami"
+
+#: Preference.php:78
+msgid "Default Calendar"
+msgstr "Domyślny kalendarz"
+
+#: Preference.php:79
+msgid "The default calendar to create new events in."
+msgstr "Domyślny kalendarz z nowymi terminami"
+
+#: Preference.php:82
+msgid "Default Task List"
+msgstr "Domyślna lista zadań"
+
+#: Preference.php:83
+msgid "The default task list to create new tasks in."
+msgstr "Domyślna lista dla nowo tworzonych zadań"
+
+#: js/Model.js:45
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Urządzenie"
+msgstr[1] "urządzenia"
+msgstr[2] "urządzenia"
+
+#: js/Model.js:45
+msgid "Devices"
+msgstr "Urządzenia"
+
 #: js/Application.js:30
 msgid "Active Sync"
 msgstr "Zdalna synchronizacja"
@@ -44,46 +87,3 @@ msgstr "zresetowane"
 #: js/Application.js:105
 msgid "Set Sync Filter"
 msgstr "Ustaw filtr synchronizacji"
-
-#: js/Model.js:45
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Urządzenie"
-msgstr[1] "urządzenia"
-msgstr[2] "urządzenia"
-
-#: js/Model.js:45
-msgid "Devices"
-msgstr "Urządzenia"
-
-#: Preference.php:74
-msgid "Default Addressbook"
-msgstr "Domyślna książka adresowa"
-
-#: Preference.php:75
-msgid "The default addressbook to create new contacts in."
-msgstr "Domyślna książka adresowa z nowymi kontaktami"
-
-#: Preference.php:78
-msgid "Default Calendar"
-msgstr "Domyślny kalendarz"
-
-#: Preference.php:79
-msgid "The default calendar to create new events in."
-msgstr "Domyślny kalendarz z nowymi terminami"
-
-#: Preference.php:82
-msgid "Default Task List"
-msgstr "Domyślna lista zadań"
-
-#: Preference.php:83
-msgid "The default task list to create new tasks in."
-msgstr "Domyślna lista dla nowo tworzonych zadań"
-
-#: Setup/setup.xml:474
-msgid "Default Policy"
-msgstr "Domyślna polityka"
-
-#: Setup/setup.xml:479
-msgid "Default Policy installed during setup"
-msgstr "Domyślna polityka określona podczas definiowania ustawień"

@@ -13,72 +13,16 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: Controller/Course.php:107
-msgid "teacher"
-msgstr "nauczyciel"
-
-#: Controller/Course.php:115
-msgid "Teacher"
-msgstr "Nauczyciel"
-
-#: Controller/Course.php:116
-msgid "Teacher Account"
-msgstr "Konto nauczyciela"
-
-#: Frontend/Json.php:254 js/CourseEditDialog.js:141 js/Models.js:41
+#: Frontend/Json.php:254 js/Models.js:41 js/CourseEditDialog.js:141
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Kurs"
 msgstr[1] "kursy"
 msgstr[2] "kursy"
 
-#: js/CourseEditDialog.js:31
-msgid "Import course members"
-msgstr "Importuj uczestników kursu"
-
-#: js/CourseEditDialog.js:157
-msgid "Course Name"
-msgstr "Nazwa kursu"
-
-#: js/CourseEditDialog.js:164
-msgid "Course / School Type"
-msgstr "Kurs / Typ szkoły"
-
-#: js/CourseEditDialog.js:175
-msgid "Description"
-msgstr "Opis"
-
-#: js/CourseEditDialog.js:182 js/CourseGridPanel.js:85
-msgid "Internet Access"
-msgstr "Internet"
-
-#: js/CourseEditDialog.js:188 js/CourseGridPanel.js:93
-msgid "Fileserver Access"
-msgstr "Serwer plików"
-
-#: js/CourseEditDialog.js:219
-msgid "Members"
-msgstr "Uczestnicy"
-
-#: js/CourseEditDialog.js:245
-msgid "Login"
-msgstr "Login"
-
-#: js/CourseEditDialog.js:249
-msgid "unknown"
-msgstr "nieznany"
-
-#: js/CourseEditDialog.js:254
-msgid "Reset Password"
-msgstr "Zresetuj hasło"
-
-#: js/CourseEditDialog.js:272
-msgid "Set new password"
-msgstr "Ustaw nowe hasło"
-
-#: js/CourseEditDialog.js:272
-msgid "Please enter the new password:"
-msgstr "Proszę wprowadzić nowe hasło:"
+#: Setup/setup.xml:4 js/Courses.js:32
+msgid "Courses"
+msgstr "Kursy"
 
 #: js/CourseGridPanel.js:49
 msgid "Quick search"
@@ -91,6 +35,14 @@ msgstr "Nazwa"
 #: js/CourseGridPanel.js:78
 msgid "Type"
 msgstr "Typ"
+
+#: js/CourseGridPanel.js:85 js/CourseEditDialog.js:182
+msgid "Internet Access"
+msgstr "Internet"
+
+#: js/CourseGridPanel.js:93 js/CourseEditDialog.js:188
+msgid "Fileserver Access"
+msgstr "Serwer plików"
 
 #: js/CourseGridPanel.js:119
 msgid "Internet Access On"
@@ -116,14 +68,6 @@ msgstr "Błąd"
 msgid "Some error occured while trying to update the courses."
 msgstr "Podczas próby aktualizacji kursów wystąpił błąd."
 
-#: js/Courses.js:32 Setup/setup.xml:4
-msgid "Courses"
-msgstr "Kursy"
-
-#: js/Courses.js:37
-msgid "All Courses"
-msgstr "Wszystkie kursy"
-
 #: js/Models.js:45
 msgid "record list"
 msgid_plural "record lists"
@@ -137,3 +81,59 @@ msgid_plural "Course Types"
 msgstr[0] "Rodzaj kursu"
 msgstr[1] "rodzaje kursu"
 msgstr[2] "rodzaje kursu"
+
+#: js/Courses.js:37
+msgid "All Courses"
+msgstr "Wszystkie kursy"
+
+#: js/CourseEditDialog.js:31
+msgid "Import course members"
+msgstr "Importuj uczestników kursu"
+
+#: js/CourseEditDialog.js:157
+msgid "Course Name"
+msgstr "Nazwa kursu"
+
+#: js/CourseEditDialog.js:164
+msgid "Course / School Type"
+msgstr "Kurs / Typ szkoły"
+
+#: js/CourseEditDialog.js:175
+msgid "Description"
+msgstr "Opis"
+
+#: js/CourseEditDialog.js:219
+msgid "Members"
+msgstr "Uczestnicy"
+
+#: js/CourseEditDialog.js:245
+msgid "Login"
+msgstr "Login"
+
+#: js/CourseEditDialog.js:249
+msgid "unknown"
+msgstr "nieznany"
+
+#: js/CourseEditDialog.js:254
+msgid "Reset Password"
+msgstr "Zresetuj hasło"
+
+#: js/CourseEditDialog.js:272
+msgid "Set new password"
+msgstr "Ustaw nowe hasło"
+
+#: js/CourseEditDialog.js:272
+msgid "Please enter the new password:"
+msgstr "Proszę wprowadzić nowe hasło:"
+
+#: Controller/Course.php:107
+msgid "teacher"
+msgstr "nauczyciel"
+
+#: Controller/Course.php:115
+msgid "Teacher"
+msgstr "Nauczyciel"
+
+#: Controller/Course.php:116
+msgid "Teacher Account"
+msgstr "Konto nauczyciela"

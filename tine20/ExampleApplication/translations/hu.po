@@ -27,19 +27,27 @@ msgstr "Lehetséges állapot. Kérlek jegyezd meg, hogy a további állapotok ü
 msgid "%s's personal example records"
 msgstr "%s személyes példa rekordjai"
 
-#: js/ExampleApplication.js:24
-msgid "Example Application test"
-msgstr "Példa Alkalmazás teszt"
+#: Setup/setup.xml:4
+msgid "ExampleApplication"
+msgstr "PéldaAlkalmazás"
 
-#: js/ExampleRecordEditDialog.js:87
-msgid "ExampleRecord"
-msgstr "PéldaRekord"
+#: Setup/Initialize.php:33
+msgid "Completed"
+msgstr "Teljesítve"
 
-#: js/ExampleRecordEditDialog.js:104 js/ExampleRecordGridPanel.js:83
+#: Setup/Initialize.php:34
+msgid "Cancelled"
+msgstr "Lemondva"
+
+#: Setup/Initialize.php:35
+msgid "In process"
+msgstr "Feldolgozás alatt"
+
+#: js/ExampleRecordGridPanel.js:83 js/ExampleRecordEditDialog.js:104
 msgid "Name"
 msgstr "Név"
 
-#: js/ExampleRecordEditDialog.js:110 js/ExampleRecordGridPanel.js:89
+#: js/ExampleRecordGridPanel.js:89 js/ExampleRecordEditDialog.js:110
 #: js/Model.js:71
 msgid "Status"
 msgstr "Státusz"
@@ -55,6 +63,14 @@ msgstr "Költség"
 #: js/ExampleRecordGridPanel.js:126
 msgid "Show closed"
 msgstr "Mutasd a lezártakat"
+
+#: js/ExampleRecordEditDialog.js:87
+msgid "ExampleRecord"
+msgstr "PéldaRekord"
+
+#: js/ExampleApplication.js:24
+msgid "Example Application test"
+msgstr "Példa Alkalmazás teszt"
 
 #: js/Model.js:31
 msgid "example record"
@@ -87,22 +103,6 @@ msgstr "Készítés ideje"
 #: js/Model.js:82
 msgid "Creator"
 msgstr "Készítő"
-
-#: Setup/Initialize.php:33
-msgid "Completed"
-msgstr "Teljesítve"
-
-#: Setup/Initialize.php:34
-msgid "Cancelled"
-msgstr "Lemondva"
-
-#: Setup/Initialize.php:35
-msgid "In process"
-msgstr "Feldolgozás alatt"
-
-#: Setup/setup.xml:4
-msgid "ExampleApplication"
-msgstr "PéldaAlkalmazás"
 
 #~ msgid "Example Application"
 #~ msgstr "Példa Alkalmazás"

@@ -13,6 +13,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
+#: Controller.php:95
+#, python-format
+msgid "%s's personal files"
+msgstr "%s's osobistych plików"
+
 #: Acl/Rights.php:97
 msgid "manage shared folders"
 msgstr "zarządzanie wspólnymi katalogami"
@@ -20,59 +25,6 @@ msgstr "zarządzanie wspólnymi katalogami"
 #: Acl/Rights.php:98
 msgid "Create new shared folders"
 msgstr "Utwórz nowe, wspólne katalogi"
-
-#: Controller/Node.php:163
-msgid "My folders"
-msgstr "Moje katalogi"
-
-#: Controller/Node.php:170
-msgid "Shared folders"
-msgstr "Katalogi współdzielone"
-
-#: Controller/Node.php:177
-msgid "Other users folders"
-msgstr "Katalogi innych użytkowników"
-
-#: Controller.php:95
-#, python-format
-msgid "%s's personal files"
-msgstr "%s's osobistych plików"
-
-#: js/Filemanager.js:29
-msgid "Filemanager"
-msgstr "Zarządca plików"
-
-#: js/Filemanager.js:68
-msgid "Files already exists"
-msgstr "Te pliki już istnieją"
-
-#: js/Filemanager.js:68
-msgid "Do you want to replace the following file(s)?"
-msgstr "Czy chcesz zastąpić następujące pliki?"
-
-#: js/Filemanager.js:93
-msgid "Failure on create folder"
-msgstr "Błąd podczas tworzenia katalogu"
-
-#: js/Filemanager.js:94
-msgid "Item with this name already exists!"
-msgstr "Obiekt o takiej nazwie już istnieje!"
-
-#: js/GridContextMenu.js:36
-msgid "Please enter the new name of the {0}:"
-msgstr "Proszę wpisać nową nazwę dla {0}:"
-
-#: js/GridContextMenu.js:42
-msgid "Not renamed {0}"
-msgstr "Nazwa {0} nie została zmieniona"
-
-#: js/GridContextMenu.js:42 js/GridPanel.js:498
-msgid "You have to supply a {0} name!"
-msgstr "Musisz wprowadzić nazwę {0}!"
-
-#: js/GridContextMenu.js:146 js/GridPanel.js:542
-msgid "Do you really want to delete the following files?"
-msgstr "Czy na pewno chcesz usunąć następujące pliki?"
 
 #: js/GridPanel.js:132
 msgid "Name"
@@ -162,6 +114,14 @@ msgstr "Proszę wpisać nazwę nowego {0}:"
 msgid "No {0} added"
 msgstr "{0} nie został dodany"
 
+#: js/GridPanel.js:498 js/GridContextMenu.js:42
+msgid "You have to supply a {0} name!"
+msgstr "Musisz wprowadzić nazwę {0}!"
+
+#: js/GridPanel.js:542 js/GridContextMenu.js:146
+msgid "Do you really want to delete the following files?"
+msgstr "Czy na pewno chcesz usunąć następujące pliki?"
+
 #: js/GridPanel.js:642 js/GridPanel.js:798 js/TreePanel.js:650
 #: js/TreePanel.js:760
 msgid "Upload Failed"
@@ -174,6 +134,18 @@ msgstr "Plik nie został przesłany. Być może jego rozmiar jest za duży. Pros
 #: js/GridPanel.js:799 js/TreePanel.js:761
 msgid "Putting files in this folder is not allowed!"
 msgstr "Wstawianie plików do tego katalogu jest niedozwolone!"
+
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "ścieżka"
+
+#: js/GridContextMenu.js:36
+msgid "Please enter the new name of the {0}:"
+msgstr "Proszę wpisać nową nazwę dla {0}:"
+
+#: js/GridContextMenu.js:42
+msgid "Not renamed {0}"
+msgstr "Nazwa {0} nie została zmieniona"
 
 #: js/Model.js:37
 msgid "user file"
@@ -207,9 +179,37 @@ msgstr "Szybkie wyszukiwanie"
 msgid "Type"
 msgstr "Typ"
 
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr "ścieżka"
+#: js/Filemanager.js:29
+msgid "Filemanager"
+msgstr "Zarządca plików"
+
+#: js/Filemanager.js:68
+msgid "Files already exists"
+msgstr "Te pliki już istnieją"
+
+#: js/Filemanager.js:68
+msgid "Do you want to replace the following file(s)?"
+msgstr "Czy chcesz zastąpić następujące pliki?"
+
+#: js/Filemanager.js:93
+msgid "Failure on create folder"
+msgstr "Błąd podczas tworzenia katalogu"
+
+#: js/Filemanager.js:94
+msgid "Item with this name already exists!"
+msgstr "Obiekt o takiej nazwie już istnieje!"
+
+#: Controller/Node.php:163
+msgid "My folders"
+msgstr "Moje katalogi"
+
+#: Controller/Node.php:170
+msgid "Shared folders"
+msgstr "Katalogi współdzielone"
+
+#: Controller/Node.php:177
+msgid "Other users folders"
+msgstr "Katalogi innych użytkowników"
 
 #~ msgid "Do you want to replace the files?"
 #~ msgstr "Czy chcesz zastąpić niniejsze pliki?"

@@ -16,43 +16,16 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Phone\n"
 
-#: js/AddressbookGridPanelHook.js:35
-msgid "Call contact"
-msgstr ""
+#: js/Phone.js:29 js/Phone.js:479 js/Phone.js:480
+msgid "Edit phone settings"
+msgstr "Editovat nastavení telefonu"
 
-#: js/AddressbookGridPanelHook.js:172
-msgid "Work"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:181
-msgid "Home"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:190
-msgid "Cell"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:199
-msgid "Cell private"
-msgstr ""
-
-#: js/Models.js:69 js/Phone.js:59 js/Phone.js:254
+#: js/Phone.js:59 js/Phone.js:254 js/Models.js:69
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
 msgstr[1] "Telefony"
 msgstr[2] "Telefonů"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "seznam telefonů"
-msgstr[1] "seznamy telefonů"
-msgstr[2] "seznamů telefonů"
-
-#: js/Phone.js:29 js/Phone.js:479 js/Phone.js:480
-msgid "Edit phone settings"
-msgstr "Editovat nastavení telefonu"
 
 #: js/Phone.js:70
 msgid "Phones"
@@ -157,6 +130,33 @@ msgstr "Vyzvání"
 #: js/Phone.js:701
 msgid "Call ID"
 msgstr "ID hovoru"
+
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "seznam telefonů"
+msgstr[1] "seznamy telefonů"
+msgstr[2] "seznamů telefonů"
+
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:172
+msgid "Work"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:181
+msgid "Home"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:190
+msgid "Cell"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:199
+msgid "Cell private"
+msgstr ""
 
 #~ msgid "Name"
 #~ msgstr "Název"

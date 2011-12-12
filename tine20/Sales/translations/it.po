@@ -21,34 +21,30 @@ msgstr "gestisci prodotti"
 msgid "add, edit and delete products"
 msgstr "aggiungi, modifica e cancella i prodotti"
 
-#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:85
-msgid "Title"
-msgstr "Titolo"
+#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
+msgid "Name"
+msgstr "Nome"
 
-#: js/ContractEditDialog.js:100 js/ProductEditDialog.js:123
+#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
+msgid "Price"
+msgstr "Prezzo"
+
+#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
+msgid "Manufacturer"
+msgstr "Produttore"
+
+#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
+msgid "Category"
+msgstr "Categoria"
+
+#: js/ProductEditDialog.js:123 js/ContractEditDialog.js:100
 #: js/ProductGridPanel.js:123
 msgid "Description"
 msgstr "Descrizione"
 
-#: js/ContractEditDialog.js:101 js/ProductEditDialog.js:124
+#: js/ProductEditDialog.js:124 js/ContractEditDialog.js:101
 msgid "Enter description..."
 msgstr "Inserisci descrizione..."
-
-#: js/ContractGridPanel.js:59 js/Models.js:78
-msgid "Quick search"
-msgstr "Ricerca veloce"
-
-#: js/ContractGridPanel.js:60
-msgid "Summary"
-msgstr "Sommario"
-
-#: js/ContractGridPanel.js:79
-msgid "Contract number"
-msgstr "Numero contratto"
-
-#: js/ContractGridPanel.js:91
-msgid "Status"
-msgstr "Stato"
 
 #: js/Models.js:40
 msgid "Product"
@@ -61,6 +57,10 @@ msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "lista record"
 msgstr[1] "liste record"
+
+#: js/Models.js:78 js/ContractGridPanel.js:59
+msgid "Quick search"
+msgstr "Ricerca veloce"
 
 #: js/Models.js:79
 msgid "Product name"
@@ -78,25 +78,21 @@ msgid_plural "contracts lists"
 msgstr[0] "lista contratti"
 msgstr[1] "liste contratti"
 
-#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
-msgid "Name"
-msgstr "Nome"
+#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:85
+msgid "Title"
+msgstr "Titolo"
 
-#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
-msgid "Price"
-msgstr "Prezzo"
+#: js/ContractGridPanel.js:60
+msgid "Summary"
+msgstr "Sommario"
 
-#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
-msgid "Manufacturer"
-msgstr "Produttore"
+#: js/ContractGridPanel.js:79
+msgid "Contract number"
+msgstr "Numero contratto"
 
-#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
-msgid "Category"
-msgstr "Categoria"
-
-#: js/ProductGridPanel.js:119
-msgid "Tags"
-msgstr "Tag"
+#: js/ContractGridPanel.js:91
+msgid "Status"
+msgstr "Stato"
 
 #: js/Sales.js:53
 msgid "Products"
@@ -113,6 +109,10 @@ msgstr "Contratti"
 #: js/Sales.js:68 js/Sales.js:103
 msgid "All Contracts"
 msgstr "Tutti i Contratti"
+
+#: js/ProductGridPanel.js:119
+msgid "Tags"
+msgstr "Tag"
 
 #~ msgid "Shared Contracts"
 #~ msgstr "Contratti Condivisi"
