@@ -122,6 +122,14 @@
         {
           "text": "ContactEventsGridPanel.js",
           "path": "js/"
+        },
+        {
+          "text": "iMIPDetailsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "CalDAVContainerPropertiesHookField.js",
+          "path": "js/"
         }
       ]
     },

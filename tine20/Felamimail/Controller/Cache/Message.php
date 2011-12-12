@@ -621,6 +621,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * 
      * @param Felamimail_Model_Folder $_folder
      * @param Felamimail_Backend_ImapProxy $_imap
+     * 
+     * @todo split into smaller parts
      */
     protected function _addMessagesToCache(Felamimail_Model_Folder $_folder, Felamimail_Backend_ImapProxy $_imap)
     {

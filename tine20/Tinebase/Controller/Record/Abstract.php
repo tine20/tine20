@@ -1121,7 +1121,6 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param boolean $_refresh if this is TRUE, refresh the recordset by calling getMultiple
      * @param Tinebase_Model_Pagination $_pagination (only valid if $_mixed instanceof Tinebase_Model_Filter_FilterGroup)
      * @return Tinebase_Record_RecordSet
-     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _convertToRecordSet($_mixed, $_refresh = FALSE, Tinebase_Model_Pagination $_pagination = NULL)
     {
@@ -1142,8 +1141,9 @@ abstract class Tinebase_Controller_Record_Abstract
             // SINGLE ID or ARRAY OF IDS 
             $result = $this->_backend->getMultiple($_mixed);
         } else {
-            // UNSUPPORTED TYPE
-            throw new Tinebase_Exception_InvalidArgument('Wrong type.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' Could not convert input param to RecordSet: Unsupported type: ' . gettype($_mixed));
+            $result = new Tinebase_Record_RecordSet($this->_modelName);
         }
         
         return $result;

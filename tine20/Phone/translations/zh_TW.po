@@ -14,40 +14,15 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: js/AddressbookGridPanelHook.js:35
-msgid "Call contact"
-msgstr ""
+#: js/Phone.js:29 js/Phone.js:479 js/Phone.js:480
+msgid "Edit phone settings"
+msgstr "設定電話簿"
 
-#: js/AddressbookGridPanelHook.js:172
-msgid "Work"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:181
-msgid "Home"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:190
-msgid "Cell"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:199
-msgid "Cell private"
-msgstr ""
-
-#: js/Models.js:69 js/Phone.js:59 js/Phone.js:254
+#: js/Phone.js:59 js/Phone.js:254 js/Models.js:69
 #, fuzzy
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "電話"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] ""
-
-#: js/Phone.js:29 js/Phone.js:479 js/Phone.js:480
-msgid "Edit phone settings"
-msgstr "設定電話簿"
 
 #: js/Phone.js:70
 msgid "Phones"
@@ -152,6 +127,31 @@ msgstr "響鈴中"
 #: js/Phone.js:701
 msgid "Call ID"
 msgstr "來電ID"
+
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] ""
+
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:172
+msgid "Work"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:181
+msgid "Home"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:190
+msgid "Cell"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:199
+msgid "Cell private"
+msgstr ""
 
 #~ msgid "Dial phone number"
 #~ msgstr "撥打電話"

@@ -40,62 +40,47 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
     hasAccountPrefix: true,
     recordClass: Tine.Tinebase.Model.Grant,
     
+    readGrantTitle: 'Read', // _('Read')
+    readGrantDescription: 'The grant to read records of this container', // _('The grant to read records of this container')
+    addGrantTitle: 'Add', // _('Add')
+    addGrantDescription: 'The grant to add records to this container', // _('The grant to add records to this container')
+    editGrantTitle: 'Edit', // _('Edit')
+    editGrantDescription: 'The grant to edit records in this container', // _('The grant to edit records in this container')
+    deleteGrantTitle: 'Delete', // _('Delete')
+    deleteGrantDescription: 'The grant to delete records in this container', // _('The grant to delete records in this container')
+    exportGrantTitle: 'Export', // _('Export')
+    exportGrantDescription: 'The grant to export records from this container', // _('The grant to export records from this container')
+    syncGrantTitle: 'Sync', // _('Sync')
+    syncGrantDescription: 'The grant to synchronise records with this container', // _('The grant to synchronise records with this container')
+    adminGrantTitle: 'Admin', // _('Admin')
+    adminGrantDescription: 'The grant to synchronise records with this container', // _('The grant to synchronise records with this container')
+    
+    freebusyGrantTitle: 'Free Busy', // _('Free Busy')
+    freebusyGrantDescription: 'The grant to access free busy information of events in this calendar', // _('The grant to access free busy information of events in this calendar')
+    privateGrantTitle: 'Private', // _('Private')
+    privateGrantDescription: 'The grant to access records marked as private in this container', // _('The grant to access records marked as private in this container')
+    
+    
     /**
      * @private
      */
     initComponent: function () {
         this.initColumns();
         
+        this.recordDefaults = {
+            readGrant: true,
+            exportGrant: true,
+            syncGrant: true
+        };
+        
         Tine.widgets.container.GrantsGrid.superclass.initComponent.call(this);
     },
     
     initColumns: function() {
-        this.configColumns = [
-            new Ext.ux.grid.CheckColumn({
-                header: _('Read'),
-                tooltip: _('The grant to read records of this container'),
-                dataIndex: 'readGrant',
-                width: 55
-            }),
-            new Ext.ux.grid.CheckColumn({
-                header: _('Add'),
-                tooltip: _('The grant to add records to this container'),
-                dataIndex: 'addGrant',
-                width: 55
-            }),
-            new Ext.ux.grid.CheckColumn({
-                header: _('Edit'),
-                tooltip: _('The grant to edit records in this container'),
-                dataIndex: 'editGrant',
-                width: 55
-            }),
-            new Ext.ux.grid.CheckColumn({
-                header: _('Delete'),
-                tooltip: _('The grant to delete records in this container'),
-                dataIndex: 'deleteGrant',
-                width: 55
-            }),
-            new Ext.ux.grid.CheckColumn({
-                header: _('Export'),
-                tooltip: _('The grant to export records from this container'),
-                dataIndex: 'exportGrant',
-                width: 55
-            }),
-            new Ext.ux.grid.CheckColumn({
-                header: _('Sync'),
-                tooltip: _('The grant to synchronise records with this container'),
-                dataIndex: 'syncGrant',
-                width: 55
-            })
-        ];
+        var grants = ['read', 'add', 'edit', 'delete', 'export', 'sync'];
         
         if (this.alwaysShowAdminGrant || (this.grantContainer && this.grantContainer.type == 'shared')) {
-            this.configColumns.push(new Ext.ux.grid.CheckColumn({
-                header: _('Admin'),
-                tooltip: _('The grant to administrate this container'),
-                dataIndex: 'adminGrant',
-                width: 55
-            }));
+            grants.push('admin');
         }
 
         if (this.grantContainer) {
@@ -108,22 +93,23 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
                     isCalendar = this.grantContainer.application_id === calId;
             }
             if (this.grantContainer.type == 'personal' && isCalendar) {
-                this.configColumns.push(new Ext.ux.grid.CheckColumn({
-                    header: _('Free Busy'),
-                    tooltip: _('The grant to access free busy information of events in this calendar'),
-                    dataIndex: 'freebusyGrant',
-                    width: 55
-                }));
+                grants.push('freebusy');
             }
             
             if (this.grantContainer.type == 'personal' && this.grantContainer.capabilites_private) {
-                this.configColumns.push(new Ext.ux.grid.CheckColumn({
-                    header: _('Private'),
-                    tooltip: _('The grant to access records marked as private in this container'),
-                    dataIndex: 'privateGrant',
-                    width: 55
-                }));
+                grants.push('private');
             }
         }
+        
+        this.configColumns = [];
+        Ext.each(grants, function(grant) {
+            this.configColumns.push(new Ext.ux.grid.CheckColumn({
+                header: _(this[grant + 'GrantTitle']),
+                tooltip: _(this[grant + 'GrantDescription']),
+                dataIndex: grant + 'Grant',
+                width: 55
+            }));
+        }, this);
+        
     }
 });

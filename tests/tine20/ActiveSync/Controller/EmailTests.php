@@ -122,7 +122,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     	#echo $this->_domDocument->saveXML();
 
         $this->assertEquals('text/plain', @$this->_domDocument->getElementsByTagNameNS('uri:AirSyncBase', 'ContentType')->item(0)->nodeValue, $this->_domDocument->saveXML());
-        $this->assertEquals(3716, strlen($this->_domDocument->getElementsByTagNameNS('uri:ItemOperations', 'Data')->item(0)->nodeValue), $this->_domDocument->saveXML());
+        $this->assertTrue(3000 < strlen($this->_domDocument->getElementsByTagNameNS('uri:ItemOperations', 'Data')->item(0)->nodeValue), $this->_domDocument->saveXML());
     }
     
     /**

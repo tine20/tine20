@@ -226,9 +226,10 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
         if ($_onlyIds) {
+            $identifier = is_bool($_onlyIds) ? $this->_getRecordIdentifier() : $_onlyIds;
             $result = array();
             foreach ($rows as $row) {
-                $result[] = $row[$this->_getRecordIdentifier()];
+                $result[] = $row[$identifier];
             }
         } else {
             foreach ($rows as &$row) {
@@ -623,6 +624,16 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function createAttendee(Calendar_Model_Attender $_attendee)
     {
+        if ($_attendee->user_id instanceof Addressbook_Model_Contact) {
+            $_attendee->user_id = $_attendee->user_id->getId();
+        } else if ($_attendee->user_id instanceof Addressbook_Model_List) {
+            $_attendee->user_id = $_attendee->user_id->group_id;
+        }
+        
+        if ($_attendee->displaycontainer_id instanceof Tinebase_Model_Container) {
+            $_attendee->displaycontainer_id = $_attendee->displaycontainer_id->getId();
+        }
+        
         return $this->_attendeeBackend->create($_attendee);
     }
     
@@ -634,6 +645,16 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function updateAttendee(Calendar_Model_Attender $_attendee)
     {
+        if ($_attendee->user_id instanceof Addressbook_Model_Contact) {
+            $_attendee->user_id = $_attendee->user_id->getId();
+        } else if ($_attendee->user_id instanceof Addressbook_Model_List) {
+            $_attendee->user_id = $_attendee->user_id->group_id;
+        }
+        
+        if ($_attendee->displaycontainer_id instanceof Tinebase_Model_Container) {
+            $_attendee->displaycontainer_id = $_attendee->displaycontainer_id->getId();
+        }
+        
         return $this->_attendeeBackend->update($_attendee);
     }
     

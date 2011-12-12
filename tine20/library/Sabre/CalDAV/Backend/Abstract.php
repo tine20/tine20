@@ -5,7 +5,7 @@
  * 
  * @package Sabre
  * @subpackage CalDAV
- * @copyright Copyright (C) 2007-2010 Rooftop Solutions. All rights reserved.
+ * @copyright Copyright (C) 2007-2011 Rooftop Solutions. All rights reserved.
  * @author Evert Pot (http://www.rooftopsolutions.nl/) 
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
@@ -36,20 +36,17 @@ abstract class Sabre_CalDAV_Backend_Abstract {
      * If the creation was a success, an id must be returned that can be used to reference
      * this calendar in other methods, such as updateCalendar.
      *
-     * This function must return a server-wide unique id that can be used 
-     * later to reference the calendar.
-     *
      * @param string $principalUri
      * @param string $calendarUri
      * @param array $properties
-     * @return string|int 
+     * @return void 
      */
     abstract function createCalendar($principalUri,$calendarUri,array $properties); 
 
     /**
-     * Updates properties on this node,
+     * Updates properties for a calendar.
      *
-     * The properties array uses the propertyName in clark-notation as key,
+     * The mutations array uses the propertyName in clark-notation as key,
      * and the array value for the property value. In the case a property
      * should be deleted, the property value will be null.
      *
@@ -79,10 +76,10 @@ abstract class Sabre_CalDAV_Backend_Abstract {
      * (424 Failed Dependency) because the request needs to be atomic.
      *
      * @param string $calendarId
-     * @param array $properties
+     * @param array $mutations
      * @return bool|array 
      */
-    public function updateCalendar($calendarId, array $properties) {
+    public function updateCalendar($calendarId, array $mutations) {
         
         return false; 
 
@@ -97,13 +94,23 @@ abstract class Sabre_CalDAV_Backend_Abstract {
     abstract function deleteCalendar($calendarId);
 
     /**
-     * Returns all calendar objects within a calendar object.
+     * Returns all calendar objects within a calendar.
      *
      * Every item contains an array with the following keys:
      *   * id - unique identifier which will be used for subsequent updates
      *   * calendardata - The iCalendar-compatible calnedar data
      *   * uri - a unique key which will be used to construct the uri. This can be any arbitrary string.
      *   * lastmodified - a timestamp of the last modification time
+     *   * etag - An arbitrary string, surrounded by double-quotes. (e.g.: 
+     *   '  "abcdef"')
+     *   * calendarid - The calendarid as it was passed to this function.
+     *
+     * Note that the etag is optional, but it's highly encouraged to return for 
+     * speed reasons.
+     *
+     * The calendardata is also optional. If it's not returned 
+     * 'getCalendarObject' will be called later, which *is* expected to return 
+     * calendardata.
      * 
      * @param string $calendarId 
      * @return array 
@@ -111,7 +118,12 @@ abstract class Sabre_CalDAV_Backend_Abstract {
     abstract function getCalendarObjects($calendarId);
 
     /**
-     * Returns information from a single calendar object, based on it's object uri. 
+     * Returns information from a single calendar object, based on it's object
+     * uri.
+     *
+     * The returned array must have the same keys as getCalendarObjects. The 
+     * 'calendardata' object is required here though, while it's not required 
+     * for getCalendarObjects.
      * 
      * @param string $calendarId 
      * @param string $objectUri 

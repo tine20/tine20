@@ -68,16 +68,17 @@ class ExampleApplication_Controller extends Tinebase_Controller_Event implements
     {
         $translation = Tinebase_Translation::getTranslation('ExampleApplication');
         
-        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $account = Tinebase_User::getInstance()->getUserById($accountId);
+        $account = Tinebase_User::getInstance()->getUserById($_accountId);
+        
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => sprintf($translation->_("%s's personal example records"), $account->accountFullName),
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+            'owner_id'          => $_accountId,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('ExampleApplication')->getId() 
         ));
         
-        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer, NULL, FALSE, $accountId);
+        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
         
         return $container;

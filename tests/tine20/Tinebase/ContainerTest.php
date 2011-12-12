@@ -55,6 +55,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->objects['initialContainer'] = $this->_instance->addContainer(new Tinebase_Model_Container(array(
             'name'              => 'tine20phpunit',
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+        	'owner_id'          => Tinebase_Core::getUser(),
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
         )));
@@ -106,6 +107,26 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('Tinebase_Model_Container', get_class($container), 'wrong type');
         $this->assertEquals($this->objects['initialContainer']->name, $container->name);
+        $this->_validateOwnerId($container);
+        $this->_validatePath($container);
+    }
+    
+    protected function _validateOwnerId(Tinebase_Model_Container $_container)
+    {
+        if ($_container->type == Tinebase_Model_Container::TYPE_SHARED)  {
+            $this->assertEmpty($_container->owner_id);
+        } else {
+            $this->assertNotEmpty($_container->owner_id, 'personal container must have an owner_id');
+        }
+    }
+    
+    protected function _validatePath(Tinebase_Model_Container $_container)
+    {
+        if ($_container->type == Tinebase_Model_Container::TYPE_SHARED)  {
+            $this->assertEquals("/{$_container->type}/{$_container->getId()}", $_container->path);
+        } else {
+            $this->assertEquals("/{$_container->type}/{$_container->owner_id}/{$_container->getId()}", $_container->path);
+        }
     }
     
     /**
@@ -117,11 +138,14 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $container = $this->_instance->getContainerByName(
             'Addressbook',
             $this->objects['initialContainer']->name,
-            $this->objects['initialContainer']->type
+            $this->objects['initialContainer']->type,
+            Tinebase_Core::getUser()->getId()
         );
         
         $this->assertEquals('Tinebase_Model_Container', get_class($container), 'wrong type');
         $this->assertEquals($this->objects['initialContainer']->name, $container->name);
+        $this->_validateOwnerId($container);
+        $this->_validatePath($container);
     }
     
     /**
@@ -134,6 +158,8 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('Tinebase_Model_Container', get_class($container), 'wrong type');
         $this->assertEquals('renamed container', $container->name);
+        $this->_validateOwnerId($container);
+        $this->_validatePath($container);
     }
     
     /**
@@ -382,6 +408,10 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $readableContainer = $this->_instance->getContainerByAcl(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::GRANT_READ);
         $this->assertEquals('Tinebase_Record_RecordSet', get_class($readableContainer), 'wrong type');
         $this->assertTrue(count($readableContainer) >= 2);
+        foreach($readableContainer as $container) {
+            $this->_validateOwnerId($container);
+            $this->_validatePath($container);
+        }
     }
     
     /**
@@ -501,6 +531,11 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             Tinebase_Model_Grants::GRANT_READ
         ));
         $this->assertTrue($otherUsers->getRecordClassName() === 'Tinebase_Model_Container');
+        
+        foreach($otherUsers as $container) {
+            $this->_validateOwnerId($container);
+            $this->_validatePath($container);
+        }
     }
 
     /**

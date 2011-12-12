@@ -101,6 +101,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         // update time
         $persistentEvent->dtstart->addHour(2);
         $persistentEvent->dtend->addHour(2);
+        // NOTE: in normal operations the status authkey is removed by resolveAttendee
+        //       we simulate this here by removeing the keys per hand. (also note that current user does not need an authkey)
+        $persistentEvent->attendee->status_authkey = null;
         $updatedEvent = $this->_controller->update($persistentEvent);
 
         $currentUser = $updatedEvent->attendee
@@ -271,6 +274,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $testCal = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'           => 'PHPUnit test calendar',
             'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
+        	'owner_id'       => Tinebase_Core::getUser(),
             'backend'        => $this->_backend->getType(),
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
         ), true));

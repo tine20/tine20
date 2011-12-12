@@ -26,19 +26,27 @@ msgstr "Mögliche Statuswerte. Bitte beachten Sie, dass Änderungen an dieser St
 msgid "%s's personal example records"
 msgstr "%s persönliche Beispieleinträge"
 
-#: js/ExampleApplication.js:24
-msgid "Example Application test"
-msgstr "Beispiel Anwendung Test"
+#: Setup/setup.xml:4
+msgid "ExampleApplication"
+msgstr "BeispielAnwendung"
 
-#: js/ExampleRecordEditDialog.js:87
-msgid "ExampleRecord"
-msgstr "BeispielEintrag"
+#: Setup/Initialize.php:33
+msgid "Completed"
+msgstr "Abgeschlossen"
 
-#: js/ExampleRecordEditDialog.js:104 js/ExampleRecordGridPanel.js:83
+#: Setup/Initialize.php:34
+msgid "Cancelled"
+msgstr "Abgebrochen"
+
+#: Setup/Initialize.php:35
+msgid "In process"
+msgstr "In Bearbeitung"
+
+#: js/ExampleRecordGridPanel.js:83 js/ExampleRecordEditDialog.js:104
 msgid "Name"
 msgstr "Name"
 
-#: js/ExampleRecordEditDialog.js:110 js/ExampleRecordGridPanel.js:89
+#: js/ExampleRecordGridPanel.js:89 js/ExampleRecordEditDialog.js:110
 #: js/Model.js:71
 msgid "Status"
 msgstr "Status"
@@ -54,6 +62,14 @@ msgstr "Budget"
 #: js/ExampleRecordGridPanel.js:126
 msgid "Show closed"
 msgstr "Zeige geschlossene"
+
+#: js/ExampleRecordEditDialog.js:87
+msgid "ExampleRecord"
+msgstr "BeispielEintrag"
+
+#: js/ExampleApplication.js:24
+msgid "Example Application test"
+msgstr "Beispiel Anwendung Test"
 
 #: js/Model.js:31
 msgid "example record"
@@ -86,22 +102,6 @@ msgstr "Erstelldatum"
 #: js/Model.js:82
 msgid "Creator"
 msgstr "Ersteller"
-
-#: Setup/Initialize.php:33
-msgid "Completed"
-msgstr "Abgeschlossen"
-
-#: Setup/Initialize.php:34
-msgid "Cancelled"
-msgstr "Abgebrochen"
-
-#: Setup/Initialize.php:35
-msgid "In process"
-msgstr "In Bearbeitung"
-
-#: Setup/setup.xml:4
-msgid "ExampleApplication"
-msgstr "BeispielAnwendung"
 
 #~ msgid "Example Application"
 #~ msgstr "Beispielanwendung"

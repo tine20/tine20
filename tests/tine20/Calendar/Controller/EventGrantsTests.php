@@ -125,15 +125,29 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     /**
      * reads an event of the personal calendar of rwight
      *  -> test user is attender with implicit readGrant
+     *  -> test user can update his status
+     *  -> test user can delete
      */
     public function testGrantsByAttender()
     {
         $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', NULL);
         
+        // try read
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
         $this->assertFalse((bool)$loadedEvent->{Tinebase_Model_Grants::GRANT_EDIT});
         $this->assertFalse((bool)$loadedEvent->{Tinebase_Model_Grants::GRANT_DELETE});
+        
+        // try status update
+        $loadedEvent->attendee[0]->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $this->_uit->update($loadedEvent);
+        $loadedEvent = $this->_uit->get($persistentEvent->getId());
+        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $loadedEvent->attendee[0]->status);
+        
+        // try delete (implicit DECLINE atm.
+        $this->_uit->delete($persistentEvent->getId());
+        $loadedEvent = $this->_uit->get($persistentEvent->getId());
+        $this->assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $loadedEvent->attendee[0]->status);
     }
     
     /**

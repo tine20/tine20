@@ -81,7 +81,7 @@ class Filemanager_Frontend_WebDav extends Filemanager_Frontend_WebDav_Node imple
             
         } elseif ($this->_fileSystemPath == $this->_fileSystemBasePath . '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountId) {
             try {
-                $container = $name instanceof Tinebase_Model_Container ? $name : Tinebase_Container::getInstance()->getContainerByName($this->_application->name, $name, Tinebase_Model_Container::TYPE_PERSONAL);
+                $container = $name instanceof Tinebase_Model_Container ? $name : Tinebase_Container::getInstance()->getContainerByName($this->_application->name, $name, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
             } catch (Tinebase_Exception_NotFound $tenf) {
                 throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $name . ' could not be found');
             }
@@ -157,7 +157,7 @@ class Filemanager_Frontend_WebDav extends Filemanager_Frontend_WebDav_Node imple
         }
         
         try {
-            Tinebase_Container::getInstance()->getContainerByName($this->_application->name, $name, $containerType);
+            Tinebase_Container::getInstance()->getContainerByName($this->_application->name, $name, $containerType, Tinebase_Core::getUser());
             
             // container exists already => that's bad!
             throw new Sabre_DAV_Exception_Forbidden('Permission denied to create directory');

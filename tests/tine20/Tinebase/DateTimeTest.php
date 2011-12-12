@@ -82,6 +82,20 @@ class Tinebase_DateTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('2010-11-29 15:14:00', $wdt->format(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('Indian/Mauritius', $wdt->getTimezone()->getName());
     }
+    
+    public function testHasTime()
+    {
+        $date = new Tinebase_DateTime('2011-11-11 11:11:11', 'Europe/Berlin');
+        $this->assertTrue($date->hasTime(), 'date must have the hasTime flag');
+        
+        $date->hasTime(FALSE);
+        $this->assertFalse($date->hasTime(), 'date must not have the hasTime flag');
+        $this->assertEquals('00:00:00', $date->format('H:i:s'), 'time info has not been reset');
+        
+        $date->setTimezone('Asia/Tehran');
+        $this->assertEquals('2011-11-11', $date->format('Y-m-d'), 'date must not chage');
+        $this->assertEquals('00:00:00', $date->format('H:i:s'), 'time must not chage');
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_DateTimeTest::main') {

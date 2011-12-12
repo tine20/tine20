@@ -824,7 +824,14 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     protected function _recordToRawData($_record)
     {
-        return $_record->toArray();
+        $raw = $_record->toArray(FALSE);
+        foreach($raw as $key => $value) {
+            if ($value instanceof Tinebase_Record_Interface) {
+                $raw[$key] = $value->getId();
+            }
+        }
+        
+        return $raw;
     }
     
     /**

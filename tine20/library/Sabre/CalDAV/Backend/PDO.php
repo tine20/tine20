@@ -8,7 +8,7 @@
  * 
  * @package Sabre
  * @subpackage CalDAV
- * @copyright Copyright (C) 2007-2010 Rooftop Solutions. All rights reserved.
+ * @copyright Copyright (C) 2007-2011 Rooftop Solutions. All rights reserved.
  * @author Evert Pot (http://www.rooftopsolutions.nl/) 
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
@@ -19,7 +19,21 @@ class Sabre_CalDAV_Backend_PDO extends Sabre_CalDAV_Backend_Abstract {
      * 
      * @var PDO
      */
-    private $pdo;
+    protected $pdo;
+
+    /**
+     * The table name that will be used for calendars 
+     * 
+     * @var string 
+     */
+    protected $calendarTableName;
+
+    /**
+     * The table name that will be used for calendar objects  
+     * 
+     * @var string 
+     */
+    protected $calendarObjectTableName;
 
     /**
      * List of CalDAV properties, and how they map to database fieldnames
@@ -41,9 +55,11 @@ class Sabre_CalDAV_Backend_PDO extends Sabre_CalDAV_Backend_Abstract {
      * 
      * @param PDO $pdo 
      */
-    public function __construct(PDO $pdo) {
+    public function __construct(PDO $pdo, $calendarTableName = 'calendars', $calendarObjectTableName = 'calendarobjects') {
 
         $this->pdo = $pdo;
+        $this->calendarTableName = $calendarTableName;
+        $this->calendarObjectTableName = $calendarObjectTableName;
 
     }
 
@@ -75,7 +91,7 @@ class Sabre_CalDAV_Backend_PDO extends Sabre_CalDAV_Backend_Abstract {
 
         // Making fields a comma-delimited list 
         $fields = implode(', ', $fields);
-        $stmt = $this->pdo->prepare("SELECT " . $fields . " FROM calendars WHERE principaluri = ?"); 
+        $stmt = $this->pdo->prepare("SELECT " . $fields . " FROM `".$this->calendarTableName."` WHERE principaluri = ?"); 
         $stmt->execute(array($principalUri));
 
         $calendars = array();
@@ -113,7 +129,6 @@ class Sabre_CalDAV_Backend_PDO extends Sabre_CalDAV_Backend_Abstract {
      * @param string $principalUri
      * @param string $calendarUri
      * @param array $properties
-     * @return mixed
      */
     public function createCalendar($principalUri,$calendarUri, array $properties) {
 
@@ -149,7 +164,7 @@ class Sabre_CalDAV_Backend_PDO extends Sabre_CalDAV_Backend_Abstract {
             }
         }
 
-        $stmt = $this->pdo->prepare("INSERT INTO calendars (".implode(', ', $fieldNames).") VALUES (".implode(', ',array_keys($values)).")");
+        $stmt = $this->pdo->prepare("INSERT INTO `".$this->calendarTableName."` (".implode(', ', $fieldNames).") VALUES (".implode(', ',array_keys($values)).")");
         $stmt->execute($values);
 
         return $this->pdo->lastInsertId();
@@ -157,9 +172,9 @@ class Sabre_CalDAV_Backend_PDO extends Sabre_CalDAV_Backend_Abstract {
     }
 
     /**
-     * Updates a calendars properties 
+     * Updates properties for a calendar.
      *
-     * The properties array uses the propertyName in clark-notation as key,
+     * The mutations array uses the propertyName in clark-notation as key,
      * and the array value for the property value. In the case a property
      * should be deleted, the property value will be null.
      *
@@ -189,10 +204,10 @@ class Sabre_CalDAV_Backend_PDO extends Sabre_CalDAV_Backend_Abstract {
      * (424 Failed Dependency) because the request needs to be atomic.
      *
      * @param string $calendarId
-     * @param array $properties
+     * @param array $mutations 
      * @return bool|array 
      */
-    public function updateCalendar($calendarId, array $properties) {
+    public function updateCalendar($calendarId, array $mutations) {
 
         $newValues = array();
         $result = array(
@@ -203,13 +218,13 @@ class Sabre_CalDAV_Backend_PDO extends Sabre_CalDAV_Backend_Abstract {
 
         $hasError = false;
 
-        foreach($properties as $propertyName=>$propertyValue) {
+        foreach($mutations as $propertyName=>$propertyValue) {
 
             // We don't know about this property. 
             if (!isset($this->propertyMap[$propertyName])) {
                 $hasError = true;
                 $result[403][$propertyName] = null;
-                unset($properties[$propertyName]);
+                unset($mutations[$propertyName]);
                 continue;
             }
 
@@ -221,7 +236,7 @@ class Sabre_CalDAV_Backend_PDO extends Sabre_CalDAV_Backend_Abstract {
         // If there were any errors we need to fail the request
         if ($hasError) {
             // Properties has the remaining properties
-            foreach($properties as $propertyName=>$propertyValue) {
+            foreach($mutations as $propertyName=>$propertyValue) {
                 $result[424][$propertyName] = null;
             }
 
@@ -243,7 +258,7 @@ class Sabre_CalDAV_Backend_PDO extends Sabre_CalDAV_Backend_Abstract {
         }
         $valuesSql[] = 'ctag = ctag + 1';
 
-        $stmt = $this->pdo->prepare("UPDATE calendars SET " . implode(', ',$valuesSql) . " WHERE id = ?");
+        $stmt = $this->pdo->prepare("UPDATE `" . $this->calendarTableName . "` SET " . implode(', ',$valuesSql) . " WHERE id = ?");
         $newValues['id'] = $calendarId; 
         $stmt->execute(array_values($newValues));
 
@@ -259,36 +274,51 @@ class Sabre_CalDAV_Backend_PDO extends Sabre_CalDAV_Backend_Abstract {
      */
     public function deleteCalendar($calendarId) {
 
-        $stmt = $this->pdo->prepare('DELETE FROM calendarobjects WHERE calendarid = ?');
+        $stmt = $this->pdo->prepare('DELETE FROM `'.$this->calendarObjectTableName.'` WHERE calendarid = ?');
         $stmt->execute(array($calendarId));
 
-        $stmt = $this->pdo->prepare('DELETE FROM calendars WHERE id = ?');
+        $stmt = $this->pdo->prepare('DELETE FROM `'.$this->calendarTableName.'` WHERE id = ?');
         $stmt->execute(array($calendarId));
 
     }
 
     /**
-     * Returns all calendar objects within a calendar object.
+     * Returns all calendar objects within a calendar. 
      *
      * Every item contains an array with the following keys:
      *   * id - unique identifier which will be used for subsequent updates
      *   * calendardata - The iCalendar-compatible calnedar data
      *   * uri - a unique key which will be used to construct the uri. This can be any arbitrary string.
      *   * lastmodified - a timestamp of the last modification time
+     *   * etag - An arbitrary string, surrounded by double-quotes. (e.g.: 
+     *   '  "abcdef"')
+     *   * calendarid - The calendarid as it was passed to this function.
+     *
+     * Note that the etag is optional, but it's highly encouraged to return for 
+     * speed reasons.
+     *
+     * The calendardata is also optional. If it's not returned 
+     * 'getCalendarObject' will be called later, which *is* expected to return 
+     * calendardata.
      * 
      * @param string $calendarId 
      * @return array 
      */
     public function getCalendarObjects($calendarId) {
 
-        $stmt = $this->pdo->prepare('SELECT * FROM calendarobjects WHERE calendarid = ?');
+        $stmt = $this->pdo->prepare('SELECT * FROM `'.$this->calendarObjectTableName.'` WHERE calendarid = ?');
         $stmt->execute(array($calendarId));
         return $stmt->fetchAll();
 
     }
 
     /**
-     * Returns information from a single calendar object, based on it's object uri. 
+     * Returns information from a single calendar object, based on it's object
+     * uri.
+     *
+     * The returned array must have the same keys as getCalendarObjects. The 
+     * 'calendardata' object is required here though, while it's not required 
+     * for getCalendarObjects.
      * 
      * @param string $calendarId 
      * @param string $objectUri 
@@ -296,7 +326,7 @@ class Sabre_CalDAV_Backend_PDO extends Sabre_CalDAV_Backend_Abstract {
      */
     public function getCalendarObject($calendarId,$objectUri) {
 
-        $stmt = $this->pdo->prepare('SELECT * FROM calendarobjects WHERE calendarid = ? AND uri = ?');
+        $stmt = $this->pdo->prepare('SELECT * FROM `'.$this->calendarObjectTableName.'` WHERE calendarid = ? AND uri = ?');
         $stmt->execute(array($calendarId, $objectUri));
         return $stmt->fetch();
 
@@ -312,9 +342,9 @@ class Sabre_CalDAV_Backend_PDO extends Sabre_CalDAV_Backend_Abstract {
      */
     public function createCalendarObject($calendarId,$objectUri,$calendarData) {
 
-        $stmt = $this->pdo->prepare('INSERT INTO calendarobjects (calendarid, uri, calendardata, lastmodified) VALUES (?,?,?,?)');
+        $stmt = $this->pdo->prepare('INSERT INTO `'.$this->calendarObjectTableName.'` (calendarid, uri, calendardata, lastmodified) VALUES (?,?,?,?)');
         $stmt->execute(array($calendarId,$objectUri,$calendarData,time()));
-        $stmt = $this->pdo->prepare('UPDATE calendars SET ctag = ctag + 1 WHERE id = ?');
+        $stmt = $this->pdo->prepare('UPDATE `'.$this->calendarTableName.'` SET ctag = ctag + 1 WHERE id = ?');
         $stmt->execute(array($calendarId));
 
     }
@@ -329,9 +359,9 @@ class Sabre_CalDAV_Backend_PDO extends Sabre_CalDAV_Backend_Abstract {
      */
     public function updateCalendarObject($calendarId,$objectUri,$calendarData) {
 
-        $stmt = $this->pdo->prepare('UPDATE calendarobjects SET calendardata = ?, lastmodified = ? WHERE calendarid = ? AND uri = ?');
+        $stmt = $this->pdo->prepare('UPDATE `'.$this->calendarObjectTableName.'` SET calendardata = ?, lastmodified = ? WHERE calendarid = ? AND uri = ?');
         $stmt->execute(array($calendarData,time(),$calendarId,$objectUri));
-        $stmt = $this->pdo->prepare('UPDATE calendars SET ctag = ctag + 1 WHERE id = ?');
+        $stmt = $this->pdo->prepare('UPDATE `'.$this->calendarTableName.'` SET ctag = ctag + 1 WHERE id = ?');
         $stmt->execute(array($calendarId));
 
     }
@@ -345,9 +375,9 @@ class Sabre_CalDAV_Backend_PDO extends Sabre_CalDAV_Backend_Abstract {
      */
     public function deleteCalendarObject($calendarId,$objectUri) {
 
-        $stmt = $this->pdo->prepare('DELETE FROM calendarobjects WHERE calendarid = ? AND uri = ?');
+        $stmt = $this->pdo->prepare('DELETE FROM `'.$this->calendarObjectTableName.'` WHERE calendarid = ? AND uri = ?');
         $stmt->execute(array($calendarId,$objectUri));
-        $stmt = $this->pdo->prepare('UPDATE calendars SET ctag = ctag + 1 WHERE id = ?');
+        $stmt = $this->pdo->prepare('UPDATE `'. $this->calendarTableName .'` SET ctag = ctag + 1 WHERE id = ?');
         $stmt->execute(array($calendarId));
 
     }

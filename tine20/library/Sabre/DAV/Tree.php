@@ -5,7 +5,7 @@
  * 
  * @package Sabre
  * @subpackage DAV
- * @copyright Copyright (C) 2007-2010 Rooftop Solutions. All rights reserved.
+ * @copyright Copyright (C) 2007-2011 Rooftop Solutions. All rights reserved.
  * @author Evert Pot (http://www.rooftopsolutions.nl/) 
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
@@ -98,8 +98,12 @@ abstract class Sabre_DAV_Tree {
      */
     public function delete($path) {
 
-        $node = $this->getNodeForPath($path);
-        $node->delete();
+        try {
+            $node = $this->getNodeForPath($path);
+            $node->delete();
+        } catch (Sabre_DAV_Exception_FileNotFound $sdavefnf) {
+            // node is deleted already
+        }
         
         list($parent) = Sabre_DAV_URLUtil::splitPath($path);
         $this->markDirty($parent);

@@ -14,6 +14,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: HUNGARY\n"
 
+#: Controller.php:95
+#, python-format
+msgid "%s's personal files"
+msgstr "%s személyes file-ai"
+
 #: Acl/Rights.php:97
 msgid "manage shared folders"
 msgstr "megosztott könyvtárak kezelése"
@@ -21,59 +26,6 @@ msgstr "megosztott könyvtárak kezelése"
 #: Acl/Rights.php:98
 msgid "Create new shared folders"
 msgstr "Új megosztott könyvtár létrehozása"
-
-#: Controller/Node.php:163
-msgid "My folders"
-msgstr "Saját könyvtárak"
-
-#: Controller/Node.php:170
-msgid "Shared folders"
-msgstr "Megosztott könyvtárak"
-
-#: Controller/Node.php:177
-msgid "Other users folders"
-msgstr "Többi felhasználó megosztott könyvtárai"
-
-#: Controller.php:95
-#, python-format
-msgid "%s's personal files"
-msgstr "%s személyes file-ai"
-
-#: js/Filemanager.js:29
-msgid "Filemanager"
-msgstr "Filekezelő"
-
-#: js/Filemanager.js:68
-msgid "Files already exists"
-msgstr "File már létezik"
-
-#: js/Filemanager.js:68
-msgid "Do you want to replace the following file(s)?"
-msgstr "Szeretnéd cserélni a következő file(oka)t?"
-
-#: js/Filemanager.js:93
-msgid "Failure on create folder"
-msgstr "Hiba a könyvtár létrehozásakor"
-
-#: js/Filemanager.js:94
-msgid "Item with this name already exists!"
-msgstr "Ezen a néven már létezik adat!"
-
-#: js/GridContextMenu.js:36
-msgid "Please enter the new name of the {0}:"
-msgstr "Kérlek írd be a {0} új nevét:"
-
-#: js/GridContextMenu.js:42
-msgid "Not renamed {0}"
-msgstr "{0} átnevezése sikertelen"
-
-#: js/GridContextMenu.js:42 js/GridPanel.js:498
-msgid "You have to supply a {0} name!"
-msgstr "Biztosítanos kell egy {0} nevet!"
-
-#: js/GridContextMenu.js:146 js/GridPanel.js:542
-msgid "Do you really want to delete the following files?"
-msgstr "Biztosan szeretnéd törölni a következő filokat?"
 
 #: js/GridPanel.js:132
 msgid "Name"
@@ -163,6 +115,14 @@ msgstr "Kérlek ad meg az új {0} nevét:"
 msgid "No {0} added"
 msgstr "{0} hozzáadása sikertelen"
 
+#: js/GridPanel.js:498 js/GridContextMenu.js:42
+msgid "You have to supply a {0} name!"
+msgstr "Biztosítanos kell egy {0} nevet!"
+
+#: js/GridPanel.js:542 js/GridContextMenu.js:146
+msgid "Do you really want to delete the following files?"
+msgstr "Biztosan szeretnéd törölni a következő filokat?"
+
 #: js/GridPanel.js:642 js/GridPanel.js:798 js/TreePanel.js:650
 #: js/TreePanel.js:760
 msgid "Upload Failed"
@@ -175,6 +135,18 @@ msgstr "File nem tölthető fel. Fileméret túl nagy lehet. Kérlek értesítsd
 #: js/GridPanel.js:799 js/TreePanel.js:761
 msgid "Putting files in this folder is not allowed!"
 msgstr "Fileok ebbe a könyvtárba helyezése nem engedélyezett!"
+
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "elérési út"
+
+#: js/GridContextMenu.js:36
+msgid "Please enter the new name of the {0}:"
+msgstr "Kérlek írd be a {0} új nevét:"
+
+#: js/GridContextMenu.js:42
+msgid "Not renamed {0}"
+msgstr "{0} átnevezése sikertelen"
 
 #: js/Model.js:37
 msgid "user file"
@@ -208,6 +180,34 @@ msgstr "Gyors keresés"
 msgid "Type"
 msgstr "Típus"
 
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr "elérési út"
+#: js/Filemanager.js:29
+msgid "Filemanager"
+msgstr "Filekezelő"
+
+#: js/Filemanager.js:68
+msgid "Files already exists"
+msgstr "File már létezik"
+
+#: js/Filemanager.js:68
+msgid "Do you want to replace the following file(s)?"
+msgstr "Szeretnéd cserélni a következő file(oka)t?"
+
+#: js/Filemanager.js:93
+msgid "Failure on create folder"
+msgstr "Hiba a könyvtár létrehozásakor"
+
+#: js/Filemanager.js:94
+msgid "Item with this name already exists!"
+msgstr "Ezen a néven már létezik adat!"
+
+#: Controller/Node.php:163
+msgid "My folders"
+msgstr "Saját könyvtárak"
+
+#: Controller/Node.php:170
+msgid "Shared folders"
+msgstr "Megosztott könyvtárak"
+
+#: Controller/Node.php:177
+msgid "Other users folders"
+msgstr "Többi felhasználó megosztott könyvtárai"

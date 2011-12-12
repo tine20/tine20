@@ -19,43 +19,71 @@ msgstr ""
 msgid "%s's personal FAQs"
 msgstr "%s's personal FAQs"
 
-#: Controller.php:147
+#: Controller.php:148
 msgid "Draft"
 msgstr "Draft"
 
-#: Controller.php:148
+#: Controller.php:149
 msgid "released"
 msgstr "released"
 
-#: Controller.php:149
+#: Controller.php:150
 msgid "obsolete"
 msgstr "obsolete"
 
-#: Controller.php:152
+#: Controller.php:153
 msgid "Internal"
 msgstr "Internal"
 
-#: Controller.php:153
+#: Controller.php:154
 msgid "Public"
 msgstr "Public"
 
-#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqGridDetailsPanel.js:205
-#: js/FaqStatus.js:26 js/FaqStatusFilterModel.js:27
+#: Setup/Initialize.php:33
+msgid "All FAQs of my FAQ Lists"
+msgstr "All FAQs of my FAQ Lists"
+
+#: Setup/Initialize.php:40
+msgid "Last modified by me"
+msgstr "Last modified by me"
+
+#: Setup/Initialize.php:41
+msgid "All FAQs that I have last modified"
+msgstr "All FAQs that I have last modified"
+
+#: Preference.php:28
+msgid "All my FAQs"
+msgstr "All my FAQs"
+
+#: Preference.php:70
+msgid "Default Favorite"
+msgstr "Default Favorite"
+
+#: Preference.php:71
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "The default favorite which is loaded on FAQ startup"
+
+#: Preference.php:74
+msgid "Default FAQ List"
+msgstr "Default FAQ List"
+
+#: Preference.php:75
+msgid "The default FAQ list to create new FAQ in."
+msgstr "The default FAQ list to create new FAQ in."
+
+#: js/FaqStatusFilterModel.js:27 js/AdminPanel.js:93 js/AdminPanel.js:125
+#: js/FaqStatus.js:26 js/FaqGridDetailsPanel.js:205
 msgid "FAQ Status"
 msgid_plural "FAQ Status"
 msgstr[0] "FAQ Status"
 msgstr[1] "FAQ Status"
 
-#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqGridDetailsPanel.js:210
-#: js/FaqType.js:26 js/FaqTypeFilterModel.js:27
+#: js/FaqTypeFilterModel.js:27 js/AdminPanel.js:97 js/AdminPanel.js:132
+#: js/FaqType.js:26 js/FaqGridDetailsPanel.js:210
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
 msgstr[0] "FAQ Type"
 msgstr[1] "FAQ Types"
-
-#: js/AdminPanel.js:105
-msgid "Defaults"
-msgstr "Defaults"
 
 #: js/FaqEditDialog.js:108 js/FaqGridDetailsPanel.js:157
 #: js/FaqGridPanel.js:120
@@ -83,6 +111,38 @@ msgstr "Type"
 msgid "Status"
 msgstr "Status"
 
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Defaults"
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Add a new FAQ Type..."
+
+#: js/SimpleFAQ.js:19 js/Model.js:33
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "FAQ"
+msgstr[1] "FAQs"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Add a new FAQ Status..."
+
+#: js/Model.js:37
+msgid "FAQ List"
+msgid_plural "FAQ Lists"
+msgstr[0] "FAQ List"
+msgstr[1] "FAQ Lists"
+
+#: js/Model.js:37
+msgid "FAQ Lists"
+msgstr "FAQ Lists"
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr "Quick search"
+
 #: js/FaqGridDetailsPanel.js:103 js/FaqGridDetailsPanel.js:188
 msgid "FAQ Infos"
 msgstr "FAQ Infos"
@@ -106,63 +166,3 @@ msgstr "No answer yet"
 #: js/FaqGridPanel.js:94
 msgid "FAQ id"
 msgstr "FAQ id"
-
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr "Add a new FAQ Status..."
-
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr "Add a new FAQ Type..."
-
-#: js/Model.js:33 js/SimpleFAQ.js:19
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] "FAQ"
-msgstr[1] "FAQs"
-
-#: js/Model.js:37
-msgid "FAQ List"
-msgid_plural "FAQ Lists"
-msgstr[0] "FAQ List"
-msgstr[1] "FAQ Lists"
-
-#: js/Model.js:37
-msgid "FAQ Lists"
-msgstr "FAQ Lists"
-
-#: js/Model.js:72
-msgid "Quick search"
-msgstr "Quick search"
-
-#: Preference.php:28
-msgid "All my FAQs"
-msgstr "All my FAQs"
-
-#: Preference.php:70
-msgid "Default Favorite"
-msgstr "Default Favorite"
-
-#: Preference.php:71
-msgid "The default favorite which is loaded on FAQ startup"
-msgstr "The default favorite which is loaded on FAQ startup"
-
-#: Preference.php:74
-msgid "Default FAQ List"
-msgstr "Default FAQ List"
-
-#: Preference.php:75
-msgid "The default FAQ list to create new FAQ in."
-msgstr "The default FAQ list to create new FAQ in."
-
-#: Setup/Initialize.php:33
-msgid "All FAQs of my FAQ Lists"
-msgstr "All FAQs of my FAQ Lists"
-
-#: Setup/Initialize.php:40
-msgid "Last modified by me"
-msgstr "Last modified by me"
-
-#: Setup/Initialize.php:41
-msgid "All FAQs that I have last modified"
-msgstr "All FAQs that I have last modified"
