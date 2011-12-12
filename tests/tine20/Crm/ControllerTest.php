@@ -263,7 +263,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($leads), 'count mismatch');
         $this->assertEquals($count['totalcount'], count($leads), 'wrong totalcount');
         $this->assertEquals(1, $count['leadstates'][1], 'leadstates count mismatch');
-        $this->assertType('Tinebase_Record_RecordSet', $leads, 'wrong type');
+        $this->assertEquals('Tinebase_Record_RecordSet', get_class($leads), 'wrong type');
     }
     
     /**
@@ -276,7 +276,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $leads = Crm_Controller_Lead::getInstance()->search($filter);
         
         $this->assertEquals(0, count($leads));
-        $this->assertType('Tinebase_Record_RecordSet', $leads);
+        $this->assertEquals('Tinebase_Record_RecordSet', get_class($leads), 'wrong type');
     }
     
     /**

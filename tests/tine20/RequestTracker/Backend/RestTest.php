@@ -55,7 +55,7 @@ class RequestTracker_Backend_RestTests extends PHPUnit_Framework_TestCase
         ));
         
         $tickets = $this->_backend->search($filter);
-        $this->assertType('Tinebase_Record_RecordSet', $tickets);
+        $this->assertEquals('Tinebase_Record_RecordSet', get_class($tickets), 'wrong type');
         $this->assertGreaterThan(0, count($tickets));
         
         return $tickets;

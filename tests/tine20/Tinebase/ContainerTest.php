@@ -104,7 +104,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $container = $this->_instance->getContainerById($this->objects['initialContainer']);
         
-        $this->assertType('Tinebase_Model_Container', $container);
+        $this->assertEquals('Tinebase_Model_Container', get_class($container), 'wrong type');
         $this->assertEquals($this->objects['initialContainer']->name, $container->name);
     }
     
@@ -120,7 +120,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             $this->objects['initialContainer']->type
         );
         
-        $this->assertType('Tinebase_Model_Container', $container);
+        $this->assertEquals('Tinebase_Model_Container', get_class($container), 'wrong type');
         $this->assertEquals($this->objects['initialContainer']->name, $container->name);
     }
     
@@ -132,7 +132,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $container = $this->_instance->setContainerName($this->objects['initialContainer'], 'renamed container');
         
-        $this->assertType('Tinebase_Model_Container', $container);
+        $this->assertEquals('Tinebase_Model_Container', get_class($container), 'wrong type');
         $this->assertEquals('renamed container', $container->name);
     }
     
@@ -179,7 +179,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
 
         $grants = $this->_instance->getGrantsOfContainer($this->objects['initialContainer']);
         
-        $this->assertType('Tinebase_Record_RecordSet', $grants);
+        $this->assertEquals('Tinebase_Record_RecordSet', get_class($grants), 'wrong type');
 
         $grants = $grants->toArray();
         $this->assertTrue($grants[0]["readGrant"]);
@@ -205,7 +205,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
 
         $grants = $this->_instance->getGrantsOfAccount(Tinebase_Core::getUser(), $this->objects['initialContainer']);
         
-        $this->assertType('Tinebase_Model_Grants', $grants);
+        $this->assertEquals('Tinebase_Model_Grants', get_class($grants), 'wrong type');
         $this->assertTrue($grants->{Tinebase_Model_Grants::GRANT_READ});
         $this->assertTrue($grants->{Tinebase_Model_Grants::GRANT_ADD});
         $this->assertTrue($grants->{Tinebase_Model_Grants::GRANT_EDIT});
@@ -247,7 +247,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         );
         
         $grants = $this->_instance->setGrants($this->objects['initialContainer'], $newGrants);
-        $this->assertType('Tinebase_Record_RecordSet', $grants);
+        $this->assertEquals('Tinebase_Record_RecordSet', get_class($grants), 'wrong type');
         $this->assertEquals(2, count($grants));
 
         $grants = $grants->toArray();
@@ -316,7 +316,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $otherUsers = $this->_instance->getOtherUsers(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::GRANT_READ);
         
-        $this->assertType('Tinebase_Record_RecordSet', $otherUsers);
+        $this->assertEquals('Tinebase_Record_RecordSet', get_class($otherUsers), 'wrong type');
         $this->assertEquals(0, $otherUsers->filter('accountId', Tinebase_Core::getUser()->getId())->count(), 'current user must not be part of otherUsers');
     }
     
@@ -338,7 +338,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             Tinebase_Model_Grants::GRANT_ADMIN,
         ));
         
-        $this->assertType('Tinebase_Record_RecordSet', $otherUsers);
+        $this->assertEquals('Tinebase_Record_RecordSet', get_class($otherUsers), 'wrong type');
         $this->assertEquals(0, $otherUsers->filter('accountId', Tinebase_Core::getUser()->getId())->count(), 'current user must not be part of otherUsers');
     
         $this->_instance->deleteContainer($container->getId(), TRUE);
@@ -380,7 +380,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->_instance->hasGrant(Tinebase_Core::getUser(), $this->objects['initialContainer'], Tinebase_Model_Grants::GRANT_READ));
 
         $readableContainer = $this->_instance->getContainerByAcl(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::GRANT_READ);
-        $this->assertType('Tinebase_Record_RecordSet', $readableContainer);
+        $this->assertEquals('Tinebase_Record_RecordSet', get_class($readableContainer), 'wrong type');
         $this->assertTrue(count($readableContainer) >= 2);
     }
     

@@ -81,8 +81,7 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
     public function testGetNodeForPath_calendars()
     {
         $node = $this->_CalDAVTree->getChild('calendars');
-        
-        $this->assertType('Sabre_CalDAV_CalendarRootNode', $node);
+        $this->assertEquals('Sabre_CalDAV_CalendarRootNode', get_class($node));
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
@@ -92,8 +91,7 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
     public function testGetNodeForPath_principals()
     {
         $node = $this->_CalDAVTree->getChild('principals');
-        
-        $this->assertType('Sabre_DAV_Auth_PrincipalCollection', $node);
+        $this->assertEquals('Sabre_DAV_Auth_PrincipalCollection', get_class($node));
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         

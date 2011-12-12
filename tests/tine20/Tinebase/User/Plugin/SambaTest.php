@@ -174,7 +174,7 @@ class Tinebase_User_Plugin_SambaTest extends PHPUnit_Framework_TestCase
         
         $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
         
-        $this->assertType('DateTime',                        $testUser->accountExpires);
+        $this->assertEquals('Tinebase_DateTime', get_class($testUser->accountExpires), 'wrong type');
         $this->assertEquals(Tinebase_User::STATUS_EXPIRED,   $testUser->accountStatus);
         $this->assertNotEquals($user->sambaSAM->kickoffTime, $testUser->sambaSAM->kickoffTime);
         

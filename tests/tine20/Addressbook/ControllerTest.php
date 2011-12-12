@@ -208,7 +208,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $contact = $this->_addContact();
         
         $image = Addressbook_Controller::getInstance()->getImage($contact->getId());
-        $this->assertType('Tinebase_Model_Image', $image);
+        $this->assertEquals('Tinebase_Model_Image', get_class($image));
         $this->assertEquals($image->width, 94);
     }
     

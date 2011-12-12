@@ -65,7 +65,7 @@ class Tinebase_DateTimeTest extends PHPUnit_Framework_TestCase
         $dt = new Tinebase_DateTime('2010-11-25 12:11:00');
         $instance = $dt->addDay(-1);
         
-        $this->assertType('Tinebase_DateTime', $instance);
+        $this->assertEquals('Tinebase_DateTime', get_class($instance), 'wrong type');
     }
     
     public function testSleepWakeup()

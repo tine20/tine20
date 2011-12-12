@@ -122,7 +122,7 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         
         $handle = $this->_controller->fopen($this->_basePath . '/PHPUNIT/phpunit.txt', 'x');
         
-        $this->assertType('resource', $handle, 'opening file failed');
+        $this->assertEquals('resource', gettype($handle), 'opening file failed');
         
         $written = fwrite($handle, 'phpunit');
         

@@ -250,7 +250,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backends['Asterisk_SipPeer']->create($test);
         $returned = $this->_backends['Asterisk_SipPeer']->get($test);
 
-        $this->assertType('Voipmanager_Model_Asterisk_SipPeer', $returned);
+        $this->assertEquals('Voipmanager_Model_Asterisk_SipPeer', get_class($returned));
         $this->assertEquals($test->id, $returned->id);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->callerid, $returned->callerid);
@@ -433,7 +433,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backends['Snom_Software']->create($test);
         $returned = $this->_backends['Snom_Software']->get($test);
         
-        $this->assertType('Voipmanager_Model_Snom_Software', $returned);
+        $this->assertEquals('Voipmanager_Model_Snom_Software', get_class($returned));
         $this->assertEquals($test->id, $returned->id);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
@@ -611,7 +611,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backends['Snom_Location']->create($test);
         $returned = $this->_backends['Snom_Location']->get($test);
         
-        $this->assertType('Voipmanager_Model_Snom_Location', $returned);
+        $this->assertEquals('Voipmanager_Model_Snom_Location', get_class($returned));
         $this->assertEquals($test->id, $returned->id);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
@@ -712,7 +712,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test = $this->_backends['Snom_Template']->create($test);
         $returned = $this->_backends['Snom_Template']->get($test);
         
-        $this->assertType('Voipmanager_Model_Snom_Template', $returned);
+        $this->assertEquals('Voipmanager_Model_Snom_Template', get_class($returned));
         $this->assertEquals($test->id, $returned->id);
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
