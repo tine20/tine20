@@ -230,9 +230,16 @@ class Calendar_Frontend_iMIP
      * 
      * @param Calendar_Model_iMIP $_iMIP
      * @param Addressbook_Model_Contact $_contact
+     * @param string $_who
+     * @return boolean
      */
-    protected function _assertOriginator(Calendar_Model_iMIP $_iMIP, Addressbook_Model_Contact $_contact, $_who)
+    protected function _assertOriginator(Calendar_Model_iMIP $_iMIP, $_contact, $_who)
     {
+        if ($_contact === NULL) {
+            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORIGINATOR, $_who . " could not be found.");
+            return FALSE;
+        }
+        
         $contactEmails = array($_contact->email, $_contact->email_home);
         if(! in_array($_iMIP->originator, $contactEmails)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__
