@@ -851,7 +851,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $persistentEventWithExdate = $this->_controller->createRecurException($exception, true);
         
         $persistentEvent = $this->_controller->get($persistentEvent->getId());
-        $this->assertEquals('DateTime', get_class($persistentEventWithExdate->exdate[0]));
+        $this->assertEquals('Tinebase_DateTime', get_class($persistentEventWithExdate->exdate[0]));
         $this->assertEquals($persistentEventWithExdate->exdate[0]->format('c'), $persistentEvent->exdate[0]->format('c'));
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
             array('field' => 'uid',     'operator' => 'equals', 'value' => $persistentEvent->uid),
@@ -876,7 +876,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $persistentEvent = $this->_controller->get($persistentEvent->getId());
         
-        $this->assertEquals('DateTime', get_class($persistentEvent->exdate[0]));
+        $this->assertEquals('Tinebase_DateTime', get_class($persistentEvent->exdate[0]));
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
             array('field' => 'uid',     'operator' => 'equals', 'value' => $persistentEvent->uid),
         )));

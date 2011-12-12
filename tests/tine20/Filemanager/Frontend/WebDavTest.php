@@ -120,7 +120,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
         
         $children = $node->getChildren();
         
-        $this->assertEquals('Sabre_DAV_ICollection', get_class($children[0]), 'wrong type');
+        $this->assertEquals('Filemanager_Frontend_WebDav', get_class($children[0]), 'wrong type');
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
@@ -137,7 +137,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
         $children = $node->getChildren();
         
         $this->assertEquals(2, count($children));
-        $this->assertEquals('Sabre_DAV_ICollection', get_class($children[0]), 'wrong type');
+        $this->assertEquals('Filemanager_Frontend_WebDav', get_class($children[0]), 'wrong type');
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
