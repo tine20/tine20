@@ -162,7 +162,7 @@ class jsb2tk
         $JSON = file_get_contents($_file);
         $def = json_decode($JSON);
         if ($jsonError = json_last_error() != JSON_ERROR_NONE) {
-            throw new Exception("cold not parse fiel $_file" , $jsonError);
+            throw new Exception("could not parse file $_file" , $jsonError);
         }
         return json_decode($JSON);
     }
