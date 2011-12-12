@@ -89,16 +89,17 @@ class Filemanager_Controller extends Tinebase_Controller_Event implements Tineba
     {
         $translation = Tinebase_Translation::getTranslation('Filemanager');
         
-        $userId  = $_account instanceof Tinebase_Model_User ? $_account->getId() : $_account;
-        $user    = Tinebase_User::getInstance()->getUserById($userId);
+        $user    = Tinebase_User::getInstance()->getUserById($_account);
+        
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => sprintf($translation->_("%s's personal files"), $user->accountFullName),
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+            'owner_id'			=> $_account,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId() 
         ));
         
-        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer, NULL, FALSE, $userId);
+        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
         
         mkdir('tine20:///' . Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId() . '/folders/personal/' . $user->getId() . '/' . $personalContainer->getId(), 0777, true);
         

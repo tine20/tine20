@@ -182,20 +182,135 @@ class Felamimail_Setup_Update_Release4 extends Setup_Update_Abstract
         $this->setTableVersion('felamimail_account', '15');
         $this->setApplicationVersion('Felamimail', '4.6');
     }
-
+    
     /**
-     * update to 5.0
-     */    
+     * update to 4.7
+     * - add sieve tables
+     */
     public function update_6()
     {
-        $this->setApplicationVersion('Felamimail', '5.0');
+        $tableDefinition = new Setup_Backend_Schema_Table_Xml('
+        <table>
+            <name>felamimail_sieve_rule</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>action_type</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>action_argument</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>conditions</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>enabled</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id-account_id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        ');
+        $this->_backend->createTable($tableDefinition, 'Felamimail', 'felamimail_sieve_rule');
+
+        $tableDefinition = new Setup_Backend_Schema_Table_Xml('
+        <table>
+            <name>felamimail_sieve_vacation</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>subject</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>from</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>mime</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>days</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>reason</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>addresses</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>enabled</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        ');
+        $this->_backend->createTable($tableDefinition, 'Felamimail', 'felamimail_sieve_vacation');
+        $this->setApplicationVersion('Felamimail', '4.7');
     }
     
     /**
-    * update to 5.0
-    */
+     * update to 5.0
+     */
     public function update_7()
     {
         $this->setApplicationVersion('Felamimail', '5.0');
     }
+    
 }

@@ -62,7 +62,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         // tine record fields
-        'id'                   => array('allowEmpty' => true,  'Alnum'),
+        'id'                   => array('allowEmpty' => true,  /*'Alnum'*/),
         'container_id'         => array('allowEmpty' => true,  'Int'  ),
         'created_by'           => array('allowEmpty' => true,         ),
         'creation_time'        => array('allowEmpty' => true          ),
@@ -421,5 +421,42 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         }
         
         return $result;
+    }
+    
+    /**
+     * returns TRUE if given event obsoletes this one
+     * 
+     * @param  Calendar_Model_Event $_event
+     * @return bool
+     */
+    public function isObsoletedBy($_event)
+    {
+        if ($_event->seq != $this->seq) {
+            return $_event->seq > $this->seq;
+        }
+        
+        return $_event->last_modified_time > $this->last_modified_time;
+    }
+    
+    /**
+     * returns TRUE if comparison detects a resechedule / significant change
+     * 
+     * @param  Calendar_Model_Event $_event
+     * @return bool
+     */
+    public function isRescheduled($_event)
+    {
+        return $this->dtstart != $_event->dtstart
+            || $this->dtend != $_event->dtend
+            || $this->rrule != $_event->rrule;
+    }
+    
+    public function resolveOrganizer()
+    {
+        if (! $this->organizer instanceof Addressbook_Model_Contact) {
+            $this->organizer = Addressbook_Controller_Contact::getInstance()->getMultiple($this->organizer, TRUE)->getFirstRecord();
+        }
+        
+        return $this->organizer;
     }
 }

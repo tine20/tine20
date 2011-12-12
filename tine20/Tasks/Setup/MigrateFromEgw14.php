@@ -165,6 +165,7 @@ class Tasks_Setup_MigrateFromTine14
         static $containers = array();
         
         if (!isset($containers[$_owner])) {
+            throw new Exception('wrong api for addCotainer');$resource->getId()
             $containers[$_owner] = Tinebase_Container::getInstance()->addContainer(
                 'Tasks',
                 'My Tasks (from egw 1.4 migration)',

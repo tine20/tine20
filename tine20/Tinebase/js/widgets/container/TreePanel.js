@@ -371,7 +371,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         
         this.contextMenuSingleContainer = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.containerName,
-            actions: ['delete', 'rename', 'grants'].concat(this.useContainerColor ? ['changecolor'] : []),
+            actions: ['delete', 'rename', 'grants', 'properties'].concat(this.useContainerColor ? ['changecolor'] : []),
             scope: this,
             backend: 'Tinebase_Container',
             backendModel: 'Container'

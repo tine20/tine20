@@ -8,7 +8,7 @@
  *
  * @package Sabre
  * @subpackage CalDAV
- * @copyright Copyright (C) 2007-2010 Rooftop Solutions. All rights reserved.
+ * @copyright Copyright (C) 2007-2011 Rooftop Solutions. All rights reserved.
  * @author Evert Pot (http://www.rooftopsolutions.nl/) 
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
@@ -100,7 +100,7 @@ class Sabre_CalDAV_XMLUtil {
                     if (!$collation) $collation = 'i;ascii-casemap';
 
                     $filters[$basePath]['text-match'] = array(
-                        'collation' => $collation,
+                        'collation' => ($collation == 'default'?'i;ascii-casemap':$collation),
                         'negate-condition' => $child->getAttribute('negate-condition')==='yes',
                         'value' => $child->nodeValue,
                     );

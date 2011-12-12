@@ -147,6 +147,15 @@ html, body {
     background-image:url(../../images/oxygen/32x32/actions/password.png) !important;
 }
 
+.action_manageProperties {
+    background-image:url(../../images/oxygen/16x16/actions/dialog-information.png) !important;
+}
+.x-btn-medium .action_manageProperties {
+    background-image:url(../../images/oxygen/22x22/actions/dialog-information.png) !important;
+}
+.x-btn-large .action_manageProperties {
+    background-image:url(../../images/oxygen/32x32/actions/dialog-information.png) !important;
+}
 
 .action_addContact {
     background-image:url(../../images/oxygen/16x16/actions/add-user.png) !important;
@@ -837,3 +846,11 @@ textarea.tinebase-editmultipledialog-noneedit {
 .tinebase-editmultipledialog-clearer.click {background-position: -33px 0}
 
 .tinebase-editmultipledialog-clearer.over {background-position: -67px 0}
+
+.tine-wordbox {
+	border: 1px solid gray;
+	margin-left: 3px;
+	border-radius: 50px;
+	padding: 0px 5px;
+	background-color: white;
+}

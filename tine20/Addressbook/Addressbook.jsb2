@@ -46,6 +46,10 @@
         {
           "text": "MapPanel.js",
           "path": "js/"
+        },
+        {
+          "text": "CardDAVContainerPropertiesHookField.js",
+          "path": "js/"
         }
       ]
     },

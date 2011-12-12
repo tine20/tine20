@@ -374,7 +374,7 @@
         {
           "text": "MultipleEditDialogPlugin.js",
           "path": "js/widgets/dialog/"
-        },        
+        },
         {
           "text": "WizardPanel.js",
           "path": "js/widgets/dialog/"
@@ -568,6 +568,10 @@
           "path": "js/widgets/container/"
         },
         {
+          "text": "PropertiesDialog.js",
+          "path": "js/widgets/container/"
+        },
+        {
           "text": "FilterModel.js",
           "path": "js/widgets/container/"
         },
@@ -582,7 +586,7 @@
         {
           "text": "TagToggleBox.js",
           "path": "js/widgets/tags/"
-        },        
+        },
         {
           "text": "TagFilter.js",
           "path": "js/widgets/tags/"
@@ -594,7 +598,7 @@
         {
           "text": "TagsMassDetachAction.js",
           "path": "js/widgets/tags/"
-        },        
+        },
         {
           "text": "WestPanel.js",
           "path": "js/widgets/mainscreen/"

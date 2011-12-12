@@ -11,7 +11,7 @@
  * 
  * @package Sabre
  * @subpackage DAV
- * @copyright Copyright (C) 2007-2010 Rooftop Solutions. All rights reserved.
+ * @copyright Copyright (C) 2007-2011 Rooftop Solutions. All rights reserved.
  * @author Evert Pot (http://www.rooftopsolutions.nl/)
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
@@ -68,9 +68,16 @@ class Sabre_DAV_Browser_Plugin extends Sabre_DAV_ServerPlugin {
     public function httpGetInterceptor($method, $uri) {
 
         if ($method!='GET') return true;
-        
-        $node = $this->server->tree->getNodeForPath($uri);
-        if ($node instanceof Sabre_DAV_IFile) return true;
+
+        try { 
+            $node = $this->server->tree->getNodeForPath($uri);
+        } catch (Sabre_DAV_Exception_FileNotFound $e) {
+            // We're simply stopping when the file isn't found to not interfere 
+            // with other plugins.
+            return;
+        }
+        if ($node instanceof Sabre_DAV_IFile) 
+            return;
 
         $this->server->httpResponse->sendStatus(200);
         $this->server->httpResponse->setHeader('Content-Type','text/html; charset=utf-8');
@@ -94,7 +101,7 @@ class Sabre_DAV_Browser_Plugin extends Sabre_DAV_ServerPlugin {
     public function httpPOSTHandler($method, $uri) {
 
         if ($method!='POST') return true;
-        if (isset($_POST['action'])) switch($_POST['action']) {
+        if (isset($_POST['sabreAction'])) switch($_POST['sabreAction']) {
 
             case 'mkcol' :
                 if (isset($_POST['name']) && trim($_POST['name'])) {
@@ -165,6 +172,23 @@ class Sabre_DAV_Browser_Plugin extends Sabre_DAV_ServerPlugin {
         '{DAV:}getlastmodified',
     ),1);
 
+    $parent = $this->server->tree->getNodeForPath($path);
+
+
+    if ($path) {
+
+        list($parentUri) = Sabre_DAV_URLUtil::splitPath($path);
+        $fullPath = Sabre_DAV_URLUtil::encodePath($this->server->getBaseUri() . $parentUri);
+
+        $html.= "<tr>
+<td><a href=\"{$fullPath}\">..</a></td>
+<td>[parent]</td>
+<td></td>
+<td></td>
+</tr>";
+
+    }
+
     foreach($files as $k=>$file) {
 
         // This is the current directory, we can skip it
@@ -174,20 +198,45 @@ class Sabre_DAV_Browser_Plugin extends Sabre_DAV_ServerPlugin {
 
         $type = null;
 
+
         if (isset($file[200]['{DAV:}resourcetype'])) {
             $type = $file[200]['{DAV:}resourcetype']->getValue();
 
             // resourcetype can have multiple values
-            if (is_array($type)) {
-                $type = implode(', ', $type);
-            }
+            if (!is_array($type)) $type = array($type);
 
-            // Some name mapping is preferred 
-            switch($type) {
-                case '{DAV:}collection' :
-                    $type = 'Collection';
-                    break;
+            foreach($type as $k=>$v) { 
+
+                // Some name mapping is preferred 
+                switch($v) {
+                    case '{DAV:}collection' :
+                        $type[$k] = 'Collection';
+                        break;
+                    case '{DAV:}principal' :
+                        $type[$k] = 'Principal';
+                        break;
+                    case '{urn:ietf:params:xml:ns:carddav}addressbook' :
+                        $type[$k] = 'Addressbook';
+                        break;
+                    case '{urn:ietf:params:xml:ns:caldav}calendar' :
+                        $type[$k] = 'Calendar';
+                        break;
+                    case '{urn:ietf:params:xml:ns:caldav}schedule-inbox' :
+                        $type[$k] = 'Schedule Inbox';
+                        break;
+                    case '{urn:ietf:params:xml:ns:caldav}schedule-outbox' :
+                        $type[$k] = 'Schedule Outbox';
+                        break;
+                    case '{http://calendarserver.org/ns/}calendar-proxy-read' :
+                        $type[$k] = 'Proxy-Read';
+                        break;
+                    case '{http://calendarserver.org/ns/}calendar-proxy-write' :
+                        $type[$k] = 'Proxy-Write';
+                        break;
+                }
+
             }
+            $type = implode(', ', $type);
         }
 
         // If no resourcetype was found, we attempt to use
@@ -219,16 +268,16 @@ class Sabre_DAV_Browser_Plugin extends Sabre_DAV_ServerPlugin {
 
   $html.= "<tr><td colspan=\"4\"><hr /></td></tr>";
 
-  if ($this->enablePost) {
+  if ($this->enablePost && $parent instanceof Sabre_DAV_ICollection) {
       $html.= '<tr><td><form method="post" action="">
             <h3>Create new folder</h3>
-            <input type="hidden" name="action" value="mkcol" />
+            <input type="hidden" name="sabreAction" value="mkcol" />
             Name: <input type="text" name="name" /><br />
             <input type="submit" value="create" />
             </form>
             <form method="post" action="" enctype="multipart/form-data">
             <h3>Upload file</h3>
-            <input type="hidden" name="action" value="put" />
+            <input type="hidden" name="sabreAction" value="put" />
             Name (optional): <input type="text" name="name" /><br />
             File: <input type="file" name="file" /><br />
             <input type="submit" value="upload" />
@@ -237,7 +286,7 @@ class Sabre_DAV_Browser_Plugin extends Sabre_DAV_ServerPlugin {
   }
 
   $html.= "</table>
-  <address>Generated by SabreDAV " . Sabre_DAV_Version::VERSION ."-". Sabre_DAV_Version::STABILITY . " (c)2007-2010 <a href=\"http://code.google.com/p/sabredav/\">http://code.google.com/p/sabredav/</a></address>
+  <address>Generated by SabreDAV " . Sabre_DAV_Version::VERSION ."-". Sabre_DAV_Version::STABILITY . " (c)2007-2011 <a href=\"http://code.google.com/p/sabredav/\">http://code.google.com/p/sabredav/</a></address>
 </body>
 </html>";
 

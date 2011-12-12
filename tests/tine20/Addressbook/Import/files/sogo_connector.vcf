@@ -1,0 +1,26 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Inverse inc.//SOGo Connector 1.0//EN
+UID:0134ac4e9974ee39937eb08659f774e4c6d6f061.vcf
+N:Kneschke;Lars
+FN:Lars Kneschke
+ORG:Organisation;Business Unit
+CATEGORIES:CATEGORY 1,CATEGORY 2
+ADR;TYPE=work:;Address Business 2;Address Business 1;City Business;Region B
+ usiness;12345;Country Business
+ADR;TYPE=home:;Address Privat 2;Address Privat 1;City Privat;Region Privat;
+ 12345;Country Privat
+TEL;TYPE=work:+49 BUSINESS
+TEL;TYPE=home:+49 PRIVAT
+TEL;TYPE=cell:+49 MOBIL
+TEL;TYPE=fax:+49 FAX
+TEL;TYPE=pager:+49 PAGER
+X-MOZILLA-HTML:FALSE
+EMAIL;TYPE=work:l.kneschke@metaways.de
+EMAIL;TYPE=home:lars@kneschke.de
+URL;TYPE=work:http\://www.tine20.com
+URL;TYPE=home:http\://www.tine20.org
+TITLE:Titel
+BDAY:1975-01-16
+NOTE:Notes\nwith\nLine Break
+END:VCARD

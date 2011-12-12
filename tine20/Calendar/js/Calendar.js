@@ -60,6 +60,8 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
         Tine.Calendar.Application.superclass.init.apply(this.arguments);
         
         new Tine.Calendar.AddressbookGridPanelHook({app: this});
+        
+        Tine.Felamimail.MimeDisplayManager.register('text/calendar', Tine.Calendar.iMIPDetailsPanel);
     }
 });
 

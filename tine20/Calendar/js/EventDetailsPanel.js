@@ -96,7 +96,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             '</div>'
         ).compile();
         
-        this.supr().initComponent.call(this);
+        Tine.Calendar.EventDetailsPanel.superclass.initComponent.call(this);
     },
     
     /**

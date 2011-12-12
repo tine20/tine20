@@ -85,20 +85,13 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param   Tinebase_Model_Container $_container the new container
      * @param   Tinebase_Record_RecordSet $_grants the grants for the new folder 
      * @param   bool  $_ignoreAcl
-     * @param   integer $_accountId
      * @return  Tinebase_Model_Container the newly created container
      * @throws  Tinebase_Exception_Record_Validation
      * @throws  Tinebase_Exception_AccessDenied
      */
-    public function addContainer(Tinebase_Model_Container $_container, $_grants = NULL, $_ignoreAcl = FALSE, $_accountId = NULL)
+    public function addContainer(Tinebase_Model_Container $_container, $_grants = NULL, $_ignoreAcl = FALSE)
     {
         $_container->isValid(TRUE);
-        
-        if ( $_accountId !== NULL ) {
-            $accountId = $_accountId;
-        } else {
-            $accountId = Tinebase_Core::getUser()->getId();
-        }
         
         if($_ignoreAcl !== TRUE) {
             switch($_container->type) {
@@ -133,6 +126,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             }
         }
         
+        if (!empty($_container->owner_id)) {
+            $accountId = $_container->owner_id instanceof Tinebase_Model_User ? $_container->owner_id->getId() : $_container->owner_id;
+        } else {
+            $accountId = Tinebase_Core::getUser()->getId();
+        }
         
         if($_grants === NULL || count($_grants) == 0) {
             $creatorGrants = array(
@@ -149,7 +147,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             
             if($_container->type === Tinebase_Model_Container::TYPE_SHARED) {
     
-                // add all grants to creator
+                // add all grants to creator and
                 // add read grants to any other user
                 $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
                     $creatorGrants,            
@@ -161,7 +159,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 ), TRUE);
             } else {
                 // add all grants to creator only
-                $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($creatorGrants), TRUE);
+                $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+                    $creatorGrants
+                ), TRUE);
             }
         } else {
             $grants = $_grants;
@@ -237,6 +237,30 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         return true;
     }
+    /**
+    * get the basic select object to fetch records from the database
+    *
+    * @param array|string $_cols columns to get, * per default
+    * @param boolean $_getDeleted get deleted records (if modlog is active)
+    * @return Zend_Db_Select
+    */
+    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
+    {
+        $select = parent::_getSelect($_cols, $_getDeleted);
+        
+        if ($_cols == '*') {
+            $select->joinLeft(
+                /* table  */ array('owner' => SQL_TABLE_PREFIX . 'container_acl'),
+                /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')} AND ".
+                			 "{$this->_db->quoteIdentifier('container.type')} = {$this->_db->quote(Tinebase_Model_Container::TYPE_PERSONAL)} AND " .
+                			 "{$this->_db->quoteIdentifier('owner.account_type')} = {$this->_db->quote('user')} AND " .
+                			 "{$this->_db->quoteIdentifier('owner.account_grant')} = {$this->_db->quote(Tinebase_Model_Grants::GRANT_ADMIN)}",
+                /* select */ array('owner_id' => 'account_id')
+            );
+        }
+        
+        return $select;
+    }
     
     /**
      * return all container, which the user has the requested right for
@@ -270,8 +294,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                     /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
                     /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
                     /* select */ array()
-                )
-                
+                )                
+            
                 ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $applicationId)
                 
                 ->group('container.id')
@@ -340,6 +364,23 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * return a container identified by path
+     *
+     * @param   string  $_path        the path to the container
+     * @param   bool    $_getDeleted  get deleted records
+     * @return  Tinebase_Model_Container
+     * @throws  Tinebase_Exception_NotFound
+     */
+    public function getByPath($_path, $_getDeleted = FALSE)
+    {
+        if (($containerId = Tinebase_Model_Container::pathIsContainer($_path) === false)) {
+            throw new Tinebase_Exception_UnexpectedValue ("Invalid path $_path supplied.");
+        }
+    
+        return $this->getContainerById($containerId, $_getDeleted);
+    }
+    
+    /**
      * return a container by container name
      *
      * @param   int|Tinebase_Model_Container $_containerId the id of the container
@@ -350,7 +391,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * 
      * @deprecated this should be removed as it does not return a distinct container 
      */
-    public function getContainerByName($_application, $_containerName, $_type)
+    public function getContainerByName($_application, $_containerName, $_type, $_ownerId = null)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
             . ' This is deprecated. Please do not use it any more.');
@@ -359,18 +400,35 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             throw new Tinebase_Exception_UnexpectedValue ("Invalid type $_type supplied.");
         }
         
+        if($_type == Tinebase_Model_Container::TYPE_PERSONAL && empty($_ownerId)) {
+            throw new Tinebase_Exception_UnexpectedValue ('$_ownerId can not be empty for personal folders');
+        }
+        
+        $ownerId = $_ownerId instanceof Tinebase_Model_User ? $_ownerId->getId() : $_ownerId;
+        
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
+
+        $select = $this->_getSelect()
+            ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $applicationId)
+            ->where("{$this->_db->quoteIdentifier('container.name')} = ?", $_containerName)
+            ->where("{$this->_db->quoteIdentifier('container.type')} = ?", $_type)
+            ->where("{$this->_db->quoteIdentifier('container.is_deleted')} = ?", 0, Zend_Db::INT_TYPE);
+
+        if ($_type == Tinebase_Model_Container::TYPE_PERSONAL) {
+            $select->where("{$this->_db->quoteIdentifier('owner.account_id')} = ?", $ownerId);
+        }
         
-        $filter = new Tinebase_Model_ContainerFilter(array(
-            array('field' => 'application_id', 'operator' => 'equals', 'value' => $applicationId),
-            array('field' => 'name', 'operator' => 'equals', 'value' => $_containerName),
-            array('field' => 'type', 'operator' => 'equals', 'value' => $_type),
-        ));
+        $stmt = $this->_db->query($select);
+        $containersData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-        $container =  $this->search($filter)->getFirstRecord();
-        if (! $container) {
+        if (count($containersData) == 0) {
             throw new Tinebase_Exception_NotFound("Container $_containerName not found.");
         }
+        if (count($containersData) > 1) {
+            throw new Tinebase_Exception_NotFound("Container $_containerName name duplicate.");
+        }
+
+        $container = new Tinebase_Model_Container($containersData[0]);
         
         return $container;
     }
@@ -402,7 +460,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             )
             ->join(array(
                 /* table  */ 'container' => SQL_TABLE_PREFIX . 'container'), 
-                /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')}")
+                /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')}"
+            )
             
             ->where("{$this->_db->quoteIdentifier('owner.account_id')} = ?", $ownerId)
             ->where("{$this->_db->quoteIdentifier('owner.account_grant')} = ?", Tinebase_Model_Grants::GRANT_ADMIN)
@@ -917,8 +976,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         // get container ids
         $containers = array();
+        
         foreach ($_records as $record) {
-            if (isset($record[$_containerProperty]) && !isset($containers[$record[$_containerProperty]])) {
+            if (isset($record[$_containerProperty]) && !isset($containers[Tinebase_Model_Container::convertContainerIdToInt($record[$_containerProperty])])) {
                 $containers[Tinebase_Model_Container::convertContainerIdToInt($record[$_containerProperty])] = array();
             }
         }
@@ -935,13 +995,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
                 /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
                 /* select */ array('*', 'account_grants' => "GROUP_CONCAT( DISTINCT container_acl.account_grant)")
-            )
-            ->joinLeft(array(
-                /* table  */ 'owner' => SQL_TABLE_PREFIX . 'container_acl'), 
-                /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')} " .
-                             "AND {$this->_db->quoteIdentifier('container.type')} = {$this->_db->quote(Tinebase_Model_Container::TYPE_PERSONAL)} " .
-                             "AND {$this->_db->quoteIdentifier('owner.account_grant')} = {$this->_db->quote(Tinebase_Model_Grants::GRANT_ADMIN)}",
-                /* select */ array('owner.account_id AS owner_id')
             )
             ->group('container.id', 'container_acl.account_type', 'container_acl.account_id');
         

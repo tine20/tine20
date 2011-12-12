@@ -68,6 +68,14 @@ Tine.widgets.tree.ContextMenu = {
             scope: this.config
         });
         
+        this.action_properties = new Ext.Action({
+            text: _('Properties'),
+            iconCls: 'action_manageProperties',
+            handler: this.manageProperties,
+            requiredGrant: 'readGrant',
+            scope: this.config
+        });
+        
         this.action_changecolor = new Ext.Action({     
             text: _('Set color'),
             iconCls: 'action_changecolor',
@@ -439,6 +447,31 @@ Tine.widgets.tree.ContextMenu = {
             });
         }
         
+    },
+    
+    /**
+     * manage properties
+     * 
+     */
+    manageProperties: function() {
+        if (this.scope.ctxNode) {
+            var node = this.scope.ctxNode;
+            
+            var grantsContainer;
+            if(node.attributes.container) {
+                grantsContainer = node.attributes.container;
+            }
+            else if(node.attributes.nodeRecord && node.attributes.nodeRecord.data.name) {
+                grantsContainer = node.attributes.nodeRecord.data.name;
+            }
+            
+            var window = Tine.widgets.container.PropertiesDialog.openWindow({
+                title: String.format(_('Properties for {0} "{1}"'), this.nodeName, Ext.util.Format.htmlEncode(grantsContainer.name.name)),
+                containerName: this.nodeName,
+                grantContainer: grantsContainer,
+                app: this.scope.app.appName
+            });
+        }
     },
     
     /**

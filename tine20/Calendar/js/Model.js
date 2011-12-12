@@ -520,3 +520,23 @@ Tine.Calendar.backend = new Tine.Calendar.Model.EventJsonBackend({
     recordClass: Tine.Calendar.Model.Resource
 });
 */
+
+/**
+ * @namespace   Tine.Calendar.Model
+ * @class       Tine.Calendar.Model.iMIP
+ * @extends     Tine.Tinebase.data.Record
+ * iMIP Record Definition
+ */
+Tine.Calendar.Model.iMIP = Tine.Tinebase.data.Record.create([
+    {name: 'id'},
+    {name: 'ics'},
+    {name: 'method'},
+    {name: 'originator'},
+    {name: 'userAgent'},
+    {name: 'event'},
+    {name: 'preconditions'}
+], {
+    appName: 'Calendar',
+    modelName: 'iMIP',
+    idProperty: 'id'
+});

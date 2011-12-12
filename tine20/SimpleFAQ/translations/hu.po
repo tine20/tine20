@@ -130,6 +130,10 @@ msgstr[1] "GYIK listák"
 msgid "FAQ Lists"
 msgstr "GYIK listák"
 
+#: js/Model.js:37
+msgid "FAQ Lists"
+msgstr ""
+
 #: js/Model.js:72
 msgid "Quick search"
 msgstr "Gyors keresés"

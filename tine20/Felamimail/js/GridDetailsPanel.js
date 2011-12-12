@@ -3,12 +3,11 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- *
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
-Ext.namespace('Tine.Felamimail');
+Ext.ns('Tine.Felamimail');
 
 /**
  * @namespace   Tine.Felamimail
@@ -24,10 +23,6 @@ Ext.namespace('Tine.Felamimail');
  * TODO         add 'download all' button
  * TODO         'from' to contact: check for duplicates
  * 
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * 
  * @param       {Object} config
  * @constructor
  * Create a new Tine.Felamimail.GridDetailsPanel
@@ -38,7 +33,7 @@ Ext.namespace('Tine.Felamimail');
      * config
      * @private
      */
-    defaultHeight: 300,
+    defaultHeight: 350,
     currentId: null,
     record: null,
     app: null,
@@ -51,28 +46,82 @@ Ext.namespace('Tine.Felamimail');
      * @private
      */
     initComponent: function() {
-
-        // init detail template
         this.initTemplate();
+        this.initDefaultTemplate();
+        //this.initTopToolbar();
         
-        // use default Tpl for default and multi view
+        Tine.Felamimail.GridDetailsPanel.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * use default Tpl for default and multi view
+     */
+    initDefaultTemplate: function() {
         this.defaultTpl = new Ext.XTemplate(
             '<div class="preview-panel-felamimail">',
                 '<div class="preview-panel-felamimail-body">{[values ? values.msg : ""]}</div>',
             '</div>'
         );
-        
-        Tine.Felamimail.GridDetailsPanel.superclass.initComponent.call(this);
     },
-
+    
+    /**
+     * init bottom toolbar (needed for event invitations atm)
+     * 
+     * TODO add buttons (show header, add to addressbook, create filter, show images ...) here
+     */
+//    initTopToolbar: function() {
+//        this.tbar = new Ext.Toolbar({
+//            hidden: true,
+//            items: []
+//        });
+//    },
+    
     /**
      * add on click event after render
      * @private
      */
     afterRender: function() {
         Tine.Felamimail.GridDetailsPanel.superclass.afterRender.apply(this, arguments);
-        
         this.body.on('click', this.onClick, this);
+    },
+    
+    /**
+     * get panel for single record details
+     * 
+     * @return {Ext.Panel}
+     */
+    getSingleRecordPanel: function() {
+        if (! this.singleRecordPanel) {
+            this.singleRecordPanel = new Ext.Panel({
+                layout: 'vbox',
+                layoutConfig: {
+                    align:'stretch'
+                },
+                border: false,
+                items: [
+                    //this.getTopPanel(),
+                    this.getMessageRecordPanel()
+                    //this.getBottomPanel()
+                ]
+            });
+        }
+        return this.singleRecordPanel;
+    },
+
+    /**
+     * get panel for single record details
+     * 
+     * @return {Ext.Panel}
+     */
+    getMessageRecordPanel: function() {
+        if (! this.messageRecordPanel) {
+            this.messageRecordPanel = new Ext.Panel({
+                border: false,
+                autoScroll: true,
+                flex: 1
+            });
+        }
+        return this.messageRecordPanel;
     },
     
     /**
@@ -85,25 +134,26 @@ Ext.namespace('Tine.Felamimail');
     updateDetails: function(record, body) {
         if (record.id === this.currentId) {
             // nothing to do
-            return;
+        } else if (! record.bodyIsFetched()) {
+            this.waitForContent(record, this.getMessageRecordPanel().body);
+        } else if (record === this.record) {
+            this.setTemplateContent(record, this.getMessageRecordPanel().body);
         }
-        
-        if (! record.bodyIsFetched()) {
-            if (! this.grid || this.grid.getSelectionModel().getCount() == 1) {
-                this.refetchBody(record, this.updateDetails.createDelegate(this, [record, body]), 'updateDetails');
-                this.defaultTpl.overwrite(body, {msg: ''});
-                this.getLoadMask().show();
-            } else {
-                this.getLoadMask().hide();
-            }
-            return;
-        }
-        
-        if (record === this.record) {                
-            this.currentId = record.id;
-            this.tpl.overwrite(body, record.data);
+    },
+    
+    /**
+     * wait for body content
+     * 
+     * @param {Tine.Felamimail.Model.Message} record
+     * @param {String} body
+     */
+    waitForContent: function(record, body) {
+        if (! this.grid || this.grid.getSelectionModel().getCount() == 1) {
+            this.refetchBody(record, this.updateDetails.createDelegate(this, [record, body]), 'updateDetails');
+            this.defaultTpl.overwrite(body, {msg: ''});
+            this.getLoadMask().show();
+        } else {
             this.getLoadMask().hide();
-            this.getEl().down('div').down('div').scrollTo('top', 0, false);
         }
     },
     
@@ -121,6 +171,60 @@ Ext.namespace('Tine.Felamimail');
             Tine.Felamimail.messageBackend.abort(this.fetchBodyTransactionId);
         }
         this.fetchBodyTransactionId = Tine.Felamimail.messageBackend.fetchBody(record, callback);
+    },
+    
+    /**
+     * overwrite template with (body) content
+     * 
+     * @param {Tine.Felamimail.Model.Message} record
+     * @param {String} body
+     * 
+     * TODO allow other prepared parts than email invitations
+     */
+    setTemplateContent: function(record, body) {
+        this.currentId = record.id;
+        this.getLoadMask().hide();
+
+        this.doLayout();
+
+        this.tpl.overwrite(body, record.data);
+        this.getEl().down('div').down('div').scrollTo('top', 0, false);
+        
+        if (this.record.get('preparedParts') && this.record.get('preparedParts').length > 0) {
+            Tine.log.debug('Tine.Felamimail.GridDetailsPanel::setTemplateContent about to handle preparedParts');
+            this.handlePreparedParts(record);
+        }
+    },
+    
+    /**
+     * handle invitation messages (show top + bottom panels)
+     * 
+     * @param {Tine.Felamimail.Model.Message} record
+     */
+    handlePreparedParts: function(record) {
+        try {
+            var firstPreparedPart = this.record.get('preparedParts')[0],
+                mimeType = String(firstPreparedPart.contentType).split(/[ ;]/)[0],
+                mainType = Tine.Felamimail.MimeDisplayManager.getMainType(mimeType);
+                
+            if (! mainType) {
+                Tine.log.info('Tine.Felamimail.GridDetailsPanel::handlePreparedParts nothing found to handle ' + mimeType);
+                return;
+            }
+            
+            var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0],
+                detailsPanel = Tine.Felamimail.MimeDisplayManager.create(mainType, {
+                    preparedPart: firstPreparedPart
+                });
+                
+            // quick hack till we have a card body here 
+            Ext.fly(bodyEl).update('');
+            detailsPanel.render(bodyEl);
+
+        } catch (e) {
+            Tine.log.err('Tine.Felamimail.GridDetailsPanel::handlePreparedParts');
+            Tine.log.err(e.stack ? e.stack : e);
+        }
     },
     
     /**
@@ -269,7 +373,7 @@ Ext.namespace('Tine.Felamimail');
         
         switch (selector) {
             case 'span[class=tinebase-download-link]':
-                var idx = target.id.split(':')[1];
+                var idx = target.id.split(':')[1],
                     attachment = this.record.get('attachments')[idx];
                     
                 if (! this.record.bodyIsFetched()) {

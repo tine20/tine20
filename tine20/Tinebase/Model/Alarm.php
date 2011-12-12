@@ -57,7 +57,7 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                => array('allowEmpty' => TRUE),
-        'record_id'         => array('allowEmpty' => TRUE, 'Alnum'),
+        'record_id'         => array('allowEmpty' => TRUE, /*'Alnum'*/),
         'model'             => array('presence' => 'required'),
         'alarm_time'        => array('presence' => 'required'),
         'minutes_before'    => array('allowEmpty' => TRUE),

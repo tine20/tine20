@@ -127,7 +127,7 @@ abstract class Filemanager_Frontend_WebDav_Node implements Sabre_DAV_INode
                 case Tinebase_Model_Container::TYPE_SHARED:
                     if (!empty($pathParts[2])) {
                         try {
-                            $this->_container = Tinebase_Container::getInstance()->getContainerByName($this->_application->name, $pathParts[2], $containerType);
+                            $this->_container = Tinebase_Container::getInstance()->getContainerByName($this->_application->name, $pathParts[2], $containerType, Tinebase_Core::getUser());
                         } catch (Tinebase_Exception_NotFound $tenf) {
                             throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $pathParts[2] . ' could not be found');
                         }
@@ -153,7 +153,7 @@ abstract class Filemanager_Frontend_WebDav_Node implements Sabre_DAV_INode
                             $subPathParts = explode('/', $pathParts[3], 2);
                             
                             try {
-                                $this->_container = Tinebase_Container::getInstance()->getContainerByName($this->_application->name, $subPathParts[0], $containerType);
+                                $this->_container = Tinebase_Container::getInstance()->getContainerByName($this->_application->name, $subPathParts[0], $containerType, Tinebase_Core::getUser());
                             } catch (Tinebase_Exception_NotFound $tenf) {
                                 throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $subPathParts[0] . ' could not be foundd');
                             }

@@ -5,42 +5,51 @@
  * 
  * @package Sabre
  * @subpackage CalDAV
- * @copyright Copyright (C) 2007-2010 Rooftop Solutions. All rights reserved.
+ * @copyright Copyright (C) 2007-2011 Rooftop Solutions. All rights reserved.
  * @author Evert Pot (http://www.rooftopsolutions.nl/) 
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Sabre_CalDAV_CalendarObject extends Sabre_DAV_File implements Sabre_DAV_IProperties {
+class Sabre_CalDAV_CalendarObject extends Sabre_DAV_File implements Sabre_CalDAV_ICalendarObject, Sabre_DAVACL_IACL {
 
     /**
      * Sabre_CalDAV_Backend_Abstract 
      * 
      * @var array 
      */
-    private $caldavBackend;
+    protected $caldavBackend;
 
     /**
      * Array with information about this CalendarObject 
      * 
      * @var array 
      */
-    private $objectData;
+    protected $objectData;
 
     /**
      * Array with information about the containing calendar
      * 
      * @var array 
      */
-    private $calendarInfo;
+    protected $calendarInfo;
 
     /**
      * Constructor 
      * 
-     * @param Sabre_CalDAV_Backend_Abstract $caldavBackend 
+     * @param Sabre_CalDAV_Backend_Abstract $caldavBackend
+     * @param array $calendarInfo
      * @param array $objectData 
      */
-    public function __construct(Sabre_CalDAV_Backend_Abstract $caldavBackend,$calendarInfo,$objectData) {
+    public function __construct(Sabre_CalDAV_Backend_Abstract $caldavBackend,array $calendarInfo,array $objectData) {
 
         $this->caldavBackend = $caldavBackend;
+
+        if (!isset($objectData['calendarid'])) {
+            throw new InvalidArgumentException('The objectData argument must contain a \'calendarid\' property');
+        }
+        if (!isset($objectData['uri'])) {
+            throw new InvalidArgumentException('The objectData argument must contain an \'uri\' property');
+        }
+
         $this->calendarInfo = $calendarInfo;
         $this->objectData = $objectData;
 
@@ -64,6 +73,11 @@ class Sabre_CalDAV_CalendarObject extends Sabre_DAV_File implements Sabre_DAV_IP
      */
     public function get() {
 
+        // Pre-populating the 'calendardata' is optional, if we don't have it
+        // already we fetch it from the backend.
+        if (!isset($this->objectData['calendardata'])) {
+            $this->objectData = $this->caldavBackend->getCalendarObject($this->objectData['calendarid'], $this->objectData['uri']);
+        }
         return $this->objectData['calendardata'];
 
     }
@@ -79,7 +93,15 @@ class Sabre_CalDAV_CalendarObject extends Sabre_DAV_File implements Sabre_DAV_IP
         if (is_resource($calendarData))
             $calendarData = stream_get_contents($calendarData);
 
-        $supportedComponents = $this->calendarInfo['{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set']->getValue();
+        // Converting to UTF-8, if needed
+        $calendarData = Sabre_DAV_StringUtil::ensureUTF8($calendarData);
+
+        $supportedComponents = $this->calendarInfo['{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set'];
+        if ($supportedComponents) {
+            $supportedComponents = $supportedComponents->getValue();
+        } else {
+            $supportedComponents = null;
+        }
         Sabre_CalDAV_ICalendarUtil::validateICalendarObject($calendarData, $supportedComponents);
 
         $this->caldavBackend->updateCalendarObject($this->calendarInfo['id'],$this->objectData['uri'],$calendarData);
@@ -118,36 +140,11 @@ class Sabre_CalDAV_CalendarObject extends Sabre_DAV_File implements Sabre_DAV_IP
      */
     public function getETag() {
 
-        return '"' . md5($this->objectData['calendardata']). '"';
-
-    }
-
-    /**
-     * Returns the list of properties for this object
-     * 
-     * @param array $properties 
-     * @return array 
-     */
-    public function getProperties($properties) {
-
-        $response = array();
-        if (in_array('{urn:ietf:params:xml:ns:caldav}calendar-data',$properties)) 
-            $response['{urn:ietf:params:xml:ns:caldav}calendar-data'] = str_replace("\r","",$this->objectData['calendardata']);
-       
-
-        return $response;
-
-    }
-
-    /**
-     * Updates properties
-     * 
-     * @param array $properties
-     * @return array 
-     */
-    public function updateProperties($properties) {
-
-        return false;
+        if (isset($this->objectData['etag'])) {
+            return $this->objectData['etag'];
+        } else {
+            return '"' . md5($this->get()). '"';
+        }
 
     }
 
@@ -158,7 +155,7 @@ class Sabre_CalDAV_CalendarObject extends Sabre_DAV_File implements Sabre_DAV_IP
      */
     public function getLastModified() {
 
-        return strtotime($this->objectData['lastmodified']);
+        return $this->objectData['lastmodified'];
 
     }
 
@@ -172,5 +169,92 @@ class Sabre_CalDAV_CalendarObject extends Sabre_DAV_File implements Sabre_DAV_IP
         return strlen($this->objectData['calendardata']);
 
     }
+
+    /**
+     * Returns the owner principal
+     *
+     * This must be a url to a principal, or null if there's no owner 
+     * 
+     * @return string|null
+     */
+    public function getOwner() {
+
+        return $this->calendarInfo['principaluri'];
+
+    }
+
+    /**
+     * Returns a group principal
+     *
+     * This must be a url to a principal, or null if there's no owner
+     * 
+     * @return string|null 
+     */
+    public function getGroup() {
+
+        return null;
+
+    }
+
+    /**
+     * Returns a list of ACE's for this node.
+     *
+     * Each ACE has the following properties:
+     *   * 'privilege', a string such as {DAV:}read or {DAV:}write. These are 
+     *     currently the only supported privileges
+     *   * 'principal', a url to the principal who owns the node
+     *   * 'protected' (optional), indicating that this ACE is not allowed to 
+     *      be updated. 
+     * 
+     * @return array 
+     */
+    public function getACL() {
+
+        return array(
+            array(
+                'privilege' => '{DAV:}read',
+                'principal' => $this->calendarInfo['principaluri'],
+                'protected' => true,
+            ),
+            array(
+                'privilege' => '{DAV:}write',
+                'principal' => $this->calendarInfo['principaluri'],
+                'protected' => true,
+            ),
+            array(
+                'privilege' => '{DAV:}read',
+                'principal' => $this->calendarInfo['principaluri'] . '/calendar-proxy-write',
+                'protected' => true,
+            ),
+            array(
+                'privilege' => '{DAV:}write',
+                'principal' => $this->calendarInfo['principaluri'] . '/calendar-proxy-write',
+                'protected' => true,
+            ),
+            array(
+                'privilege' => '{DAV:}read',
+                'principal' => $this->calendarInfo['principaluri'] . '/calendar-proxy-read',
+                'protected' => true,
+            ),
+
+        );
+
+    }
+
+    /**
+     * Updates the ACL
+     *
+     * This method will receive a list of new ACE's. 
+     * 
+     * @param array $acl 
+     * @return void
+     */
+    public function setACL(array $acl) {
+
+        throw new Sabre_DAV_Exception_MethodNotAllowed('Changing ACL is not yet supported');
+
+    }
+
+
 }
 
