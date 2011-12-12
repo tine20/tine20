@@ -96,6 +96,9 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             );
             Tinebase_Core::getDb()->query($query);
         }
+        
+        // reset tz in core
+        Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, Tinebase_Core::getPreference()->getValue(Tinebase_Preference::TIMEZONE));
     }
     
     /**
