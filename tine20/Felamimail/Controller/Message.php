@@ -174,7 +174,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $folder = Felamimail_Controller_Folder::getInstance()->get($message->folder_id);
         $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
         
-        $this->_getCompleteMessageContent($message, $account, $_partId);
+        $message = $this->_getCompleteMessageContent($message, $account, $_partId);
         
         if ($_setSeen) {
             Felamimail_Controller_Message_Flags::getInstance()->setSeenFlag($message);
@@ -205,14 +205,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $attachments = $this->getAttachments($_message, $_partId);
         
         if ($_partId === null) {
-            $_message->body        = $body;
-            $_message->headers     = $headers;
-            $_message->attachments = $attachments;
+            $message = $_message;
+            
+            $message->body        = $body;
+            $message->headers     = $headers;
+            $message->attachments = $attachments;
         } else {
             // create new object for rfc822 message
             $structure = $_message->getPartStructure($_partId, FALSE);
         
-            $_message = new Felamimail_Model_Message(array(
+            $message = new Felamimail_Model_Message(array(
                 'messageuid'  => $_message->messageuid,
                 'folder_id'   => $_message->folder_id,
                 'received'    => $_message->received,
@@ -223,11 +225,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 'attachments' => $attachments
             ));
         
-            $_message->parseHeaders($headers);
+            $message->parseHeaders($headers);
         
             $structure = array_key_exists('messageStructure', $structure) ? $structure['messageStructure'] : $structure;
-            $_message->parseStructure($structure);
+            $message->parseStructure($structure);
         }
+        
+        return $message;
     }
     
     /**
