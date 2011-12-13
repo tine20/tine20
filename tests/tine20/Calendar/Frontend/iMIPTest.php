@@ -147,11 +147,14 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $vevent->METHOD = $_method;
         $ics = $vevent->serialize();
         
+        $testConfig = Zend_Registry::get('testConfig');
+        $email = ($testConfig->email) ? $testConfig->email : 'unittest@tine20.org';
+        
         $iMIP = new Calendar_Model_iMIP(array(
             'id'             => Tinebase_Record_Abstract::generateUID(),
         	'ics'            => $ics,
             'method'         => ($_testEmptyMethod) ? NULL : $_method,
-            'originator'     => 'unittest@tine20.org',
+            'originator'     => $email,
         ));
         
         if ($_addEventToiMIP) {
@@ -171,7 +174,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $this->_iMIPFrontend->autoProcess($iMIP);
         $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
         
-        $this->assertEquals(2, count($prepared->event->attendee));
+        $this->assertEquals(2, count($prepared->event->attendee), 'expected 2 attendee');
         $this->assertEquals('Sleep very long', $prepared->event->summary);
         $this->assertTrue(empty($prepared->preconditions));
     }
@@ -327,7 +330,12 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
      */
     public function testInvitationExternalReply()
     {
+        $testConfig = Zend_Registry::get('testConfig');
+        $email = ($testConfig->email) ? $testConfig->email : 'unittest@tine20.org';
+        
         $ics = file_get_contents(dirname(__FILE__) . '/files/invitation_reply_external_accepted.ics' );
+        $ics = preg_replace('/unittest@tine20\.org/', $email, $ics);
+        
         $iMIP = new Calendar_Model_iMIP(array(
             'id'             => Tinebase_Record_Abstract::generateUID(),
         	'ics'            => $ics,
