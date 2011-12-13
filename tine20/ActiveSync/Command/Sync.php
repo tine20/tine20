@@ -127,11 +127,13 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
     /**
      * the constructor
      *
-     * @param ActiveSync_Model_Device $_device
+     * @param  mixed                    $_requestBody
+     * @param  ActiveSync_Model_Device  $_device
+     * @param  string                   $_policyKey
      */
-    public function __construct(ActiveSync_Model_Device $_device)
+    public function __construct($_requestBody, ActiveSync_Model_Device $_device = null, $_policyKey = null)
     {
-        parent::__construct($_device);
+        parent::__construct($_requestBody, $_device, $_policyKey);
         
         $this->_contentStateBackend  = new ActiveSync_Backend_ContentState();
         $this->_folderStateBackend   = new ActiveSync_Backend_FolderState();
@@ -393,7 +395,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
      * (non-PHPdoc)
      * @see ActiveSync_Command_Wbxml::getResponse()
      */
-    public function getResponse($_keepSession = false)
+    public function getResponse()
     {
         // add aditional namespaces for contacts, tasks and email
         $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Contacts'    , 'uri:Contacts');
@@ -717,7 +719,10 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
             }
         }
         
-        parent::getResponse($this->_moreAvailable);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_outputDom->saveXML());
+        
+        return $this->_outputDom;
     }
 
     /**

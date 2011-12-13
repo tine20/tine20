@@ -80,9 +80,8 @@ class ActiveSync_Command_Settings extends ActiveSync_Command_Wbxml
     /**
      * this function generates the response for the client
      * 
-     * @param boolean $_keepSession keep session active(don't logout user) when true
      */
-    public function getResponse($_keepSession = FALSE)
+    public function getResponse()
     {
         $settings = $this->_outputDom->documentElement;
         
@@ -107,7 +106,10 @@ class ActiveSync_Command_Settings extends ActiveSync_Command_Wbxml
                 }
             }
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_outputDom->saveXML());
         
-        parent::getResponse($_keepSession);
+        return $this->_outputDom;
     }
 }

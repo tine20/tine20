@@ -53,10 +53,8 @@ class ActiveSync_Command_MoveItems extends ActiveSync_Command_Wbxml
     
     /**
      * generate MoveItems response
-     * 
-     * @param boolean $_keepSession keep session active(don't logout user) when true
      */
-    public function getResponse($_keepSession = FALSE)
+    public function getResponse()
     {
         $folderStateBackend   = new ActiveSync_Backend_FolderState();
         
@@ -80,6 +78,9 @@ class ActiveSync_Command_MoveItems extends ActiveSync_Command_Wbxml
             }
         }
         
-        parent::getResponse($_keepSession);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_outputDom->saveXML());
+    
+        return $this->_outputDom;
     }
 }
