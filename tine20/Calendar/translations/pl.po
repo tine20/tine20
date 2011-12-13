@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-11-23 20:45+0100\n"
+"PO-Revision-Date: 2011-12-13 21:21+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -42,38 +42,47 @@ msgstr "Role użytkownika: Możliwe terminy. Zauważ proszę, że dodatkowe role
 msgid "%s's personal calendar"
 msgstr "%s's kalendarz osobisty"
 
-#: Setup/setup.xml:4 js/Calendar.js:39 js/Model.js:67
+#: Setup/setup.xml:4
+#: js/Calendar.js:39
+#: js/Model.js:67
 msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] "Kalendarz"
 msgstr[1] "kalendarze"
 msgstr[2] "kalendarze"
 
-#: Setup/Update/Release3.php:164 Setup/Initialize.php:34
+#: Setup/Update/Release3.php:164
+#: Setup/Initialize.php:34
 msgid "All events I attend"
 msgstr "Wszystkie terminy dodane przeze mnie"
 
-#: Setup/Update/Release5.php:77 Setup/Initialize.php:98
+#: Setup/Update/Release5.php:77
+#: Setup/Initialize.php:98
 msgid "Required"
 msgstr "Obowiązkowy"
 
-#: Setup/Update/Release5.php:78 Setup/Initialize.php:99
+#: Setup/Update/Release5.php:78
+#: Setup/Initialize.php:99
 msgid "Optional"
 msgstr "Dobrowolny"
 
-#: Setup/Update/Release5.php:91 Setup/Initialize.php:112
+#: Setup/Update/Release5.php:91
+#: Setup/Initialize.php:112
 msgid "No response"
 msgstr "Brak odpowiedzi"
 
-#: Setup/Update/Release5.php:92 Setup/Initialize.php:113
+#: Setup/Update/Release5.php:92
+#: Setup/Initialize.php:113
 msgid "Accepted"
 msgstr "Zaakceptowany"
 
-#: Setup/Update/Release5.php:93 Setup/Initialize.php:114
+#: Setup/Update/Release5.php:93
+#: Setup/Initialize.php:114
 msgid "Declined"
 msgstr "Odrzucony"
 
-#: Setup/Update/Release5.php:94 Setup/Initialize.php:115
+#: Setup/Update/Release5.php:94
+#: Setup/Initialize.php:115
 msgid "Tentative"
 msgstr "Brak ostatecznej decyzji"
 
@@ -105,8 +114,11 @@ msgstr "Terminy, które organizuję"
 msgid "All my events"
 msgstr "Wszystkie moje terminy"
 
-#: Preference.php:79 js/EventDetailsPanel.js:211 js/EventEditDialog.js:101
-#: js/ContactEventsGridPanel.js:118 js/GridView.js:106
+#: Preference.php:79
+#: js/EventDetailsPanel.js:211
+#: js/EventEditDialog.js:101
+#: js/ContactEventsGridPanel.js:118
+#: js/GridView.js:106
 msgid "Start Time"
 msgstr "Początek"
 
@@ -194,39 +206,54 @@ msgstr "Wszelkie uprawnienia do zarządzania zasobami"
 msgid "{0} {1} o'clock"
 msgstr "godzina {0} {1}"
 
-#: js/EventDetailsPanel.js:175 js/EventEditDialog.js:87
-#: js/ContactEventsGridPanel.js:112 js/GridView.js:132 Model/Event.php:238
+#: js/EventDetailsPanel.js:175
+#: js/EventEditDialog.js:87
+#: js/ContactEventsGridPanel.js:112
+#: js/GridView.js:132
+#: Model/Event.php:238
 msgid "Summary"
 msgstr "Streszczenie"
 
-#: js/EventDetailsPanel.js:216 js/EventEditDialog.js:116 js/GridView.js:112
+#: js/EventDetailsPanel.js:216
+#: js/EventEditDialog.js:116
+#: js/GridView.js:112
 msgid "End Time"
 msgstr "Koniec"
 
-#: js/EventDetailsPanel.js:221 Model/Event.php:231
+#: js/EventDetailsPanel.js:221
+#: Model/Event.php:231
 msgid "Blocking"
 msgstr "Blokowanie"
 
-#: js/EventDetailsPanel.js:226 js/ResourcesGridPanel.js:52
-#: js/EventEditDialog.js:95 js/GridView.js:137 Model/Event.php:234
+#: js/EventDetailsPanel.js:226
+#: js/ResourcesGridPanel.js:52
+#: js/EventEditDialog.js:95
+#: js/GridView.js:137
+#: Model/Event.php:234
 msgid "Location"
 msgstr "Miejsce"
 
-#: js/EventDetailsPanel.js:230 js/Model.js:212 Model/Event.php:235
+#: js/EventDetailsPanel.js:230
+#: js/Model.js:212
+#: Model/Event.php:235
 msgid "Organizer"
 msgstr "Notes"
 
-#: js/EventDetailsPanel.js:248 js/AttendeeGridPanel.js:76
-#: js/AttendeeFilterModel.js:35 js/Model.js:355
+#: js/EventDetailsPanel.js:248
+#: js/AttendeeGridPanel.js:76
+#: js/AttendeeFilterModel.js:35
+#: js/Model.js:355
 msgid "Attendee"
 msgstr "Uczestnik"
 
-#: js/ResourcesGridPanel.js:41 js/AttendeeGridPanel.js:178
+#: js/ResourcesGridPanel.js:41
+#: js/AttendeeGridPanel.js:178
 #: js/ResourceEditDialog.js:56
 msgid "Name"
 msgstr "Nazwa"
 
-#: js/ResourcesGridPanel.js:47 js/ResourceEditDialog.js:61
+#: js/ResourcesGridPanel.js:47
+#: js/ResourceEditDialog.js:61
 msgid "Email"
 msgstr "E-mail"
 
@@ -250,7 +277,8 @@ msgstr "Kratka"
 msgid "Day"
 msgstr "Dzień"
 
-#: js/MainScreenCenterPanel.js:198 js/PagingToolbar.js:275
+#: js/MainScreenCenterPanel.js:198
+#: js/PagingToolbar.js:275
 msgid "Week"
 msgstr "Tydzień"
 
@@ -369,7 +397,8 @@ msgstr "Użytkownik"
 msgid "Group"
 msgstr "Grupa"
 
-#: js/AttendeeGridPanel.js:170 js/Model.js:510
+#: js/AttendeeGridPanel.js:170
+#: js/Model.js:510
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Zasób"
@@ -380,8 +409,10 @@ msgstr[2] "zasoby"
 msgid "Member of group"
 msgstr "Uczestnik grupy"
 
-#: js/AttendeeGridPanel.js:186 js/ContactEventsGridPanel.js:125
-#: js/GridView.js:142 Model/Event.php:237
+#: js/AttendeeGridPanel.js:186
+#: js/ContactEventsGridPanel.js:125
+#: js/GridView.js:142
+#: Model/Event.php:237
 msgid "Status"
 msgstr "Status"
 
@@ -393,8 +424,11 @@ msgstr "Usuń uczestnika"
 msgid "Click here to invite another attender..."
 msgstr "Aby zaprosić innego uczestnika, kliknij tutaj..."
 
-#: js/AttendeeGridPanel.js:444 js/AttendeeGridPanel.js:462
-#: js/AttendeeGridPanel.js:479 js/AttendeeGridPanel.js:491 js/Model.js:371
+#: js/AttendeeGridPanel.js:444
+#: js/AttendeeGridPanel.js:462
+#: js/AttendeeGridPanel.js:479
+#: js/AttendeeGridPanel.js:491
+#: js/Model.js:371
 msgid "No Information"
 msgstr "Brak informacji"
 
@@ -406,7 +440,8 @@ msgstr "(jako uczestnik grupy)"
 msgid "Mini Calendar"
 msgstr "Mini kalendarz"
 
-#: js/MainScreenWestPanel.js:52 js/MonthView.js:86
+#: js/MainScreenWestPanel.js:52
+#: js/MonthView.js:86
 msgid "WK"
 msgstr "TK"
 
@@ -414,7 +449,9 @@ msgstr "TK"
 msgid "Manage Resources"
 msgstr "Zarządzaj zasobami"
 
-#: js/EventEditDialog.js:124 js/GridView.js:118 js/Printer/Base.js:66
+#: js/EventEditDialog.js:124
+#: js/GridView.js:118
+#: js/Printer/Base.js:66
 msgid "whole day"
 msgstr "cały dzień"
 
@@ -422,11 +459,14 @@ msgstr "cały dzień"
 msgid "non-blocking"
 msgstr "nie blokuj"
 
-#: js/EventEditDialog.js:157 js/GridView.js:98
+#: js/EventEditDialog.js:157
+#: js/GridView.js:98
 msgid "Private"
 msgstr "Osobiste"
 
-#: js/EventEditDialog.js:198 js/ResourceEditDialog.js:72 Model/Event.php:233
+#: js/EventEditDialog.js:198
+#: js/ResourceEditDialog.js:72
+#: Model/Event.php:233
 msgid "Description"
 msgstr "Opis"
 
@@ -450,7 +490,9 @@ msgstr "Nieprawidłowa data rozpoczęcia"
 msgid "Originally"
 msgstr "Pierwotny kalendarz"
 
-#: js/MonthView.js:81 js/AddressbookGridPanelHook.js:35 js/Calendar.js:29
+#: js/MonthView.js:81
+#: js/AddressbookGridPanelHook.js:35
+#: js/Calendar.js:29
 #: js/DaysView.js:88
 msgid "New Event"
 msgstr "Nowy termin"
@@ -459,7 +501,8 @@ msgstr "Nowy termin"
 msgid "{0} more..."
 msgstr "i jeszcze {0} ..."
 
-#: js/ResourceEditDialog.js:67 js/ResourceEditDialog.js:68
+#: js/ResourceEditDialog.js:67
+#: js/ResourceEditDialog.js:68
 msgid "Is a location"
 msgstr "Jest miejscem"
 
@@ -469,7 +512,7 @@ msgstr "Wprowadź opis..."
 
 #: js/CalDAVContainerPropertiesHookField.js:35
 msgid "CalDAV URL"
-msgstr ""
+msgstr "CalDAV URL"
 
 #: js/EventUI.js:220
 msgid "private classification"
@@ -483,7 +526,9 @@ msgstr "termin wielokrotny"
 msgid "has alarm"
 msgstr "z alarmem"
 
-#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:359
+#: js/ContactEventsGridPanel.js:50
+#: js/Model.js:63
+#: js/Model.js:359
 msgid "Events"
 msgstr "Terminy"
 
@@ -491,7 +536,8 @@ msgstr "Terminy"
 msgid "Select Attendee"
 msgstr "Wybierz uczestnika"
 
-#: js/Model.js:63 js/Model.js:359
+#: js/Model.js:63
+#: js/Model.js:359
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "termin"
@@ -547,47 +593,47 @@ msgstr "{0}, {1} z {2}"
 
 #: js/iMIPDetailsPanel.js:68
 msgid "Checking Calendar Data..."
-msgstr ""
+msgstr "Sprawdzanie danych z kalendarza..."
 
 #: js/iMIPDetailsPanel.js:168
 msgid "The event of this message does not exist"
-msgstr ""
+msgstr "Brak terminu z tej wiadomości"
 
 #: js/iMIPDetailsPanel.js:173
 msgid "The sender is not authorised to update the event"
-msgstr ""
+msgstr "Nadawca nie ma uprawnień do aktualizowania tego terminu"
 
 #: js/iMIPDetailsPanel.js:178
 msgid "This message is already processed"
-msgstr ""
+msgstr "Ta wiadomość została już przetworzona"
 
 #: js/iMIPDetailsPanel.js:183
 msgid "You are not an attendee of this event"
-msgstr ""
+msgstr "Nie jesteś uczestniczką / uczestnikiem tego terminu"
 
 #: js/iMIPDetailsPanel.js:187
 msgid "Unsupported message"
-msgstr ""
+msgstr "Nieobsługiwana wiadomość"
 
 #: js/iMIPDetailsPanel.js:197
 msgid "This is an event invitation for someone else."
-msgstr ""
+msgstr "To jest zaproszenie do wzięcia udziału w wydarzeniu przez jeszcze kogoś."
 
 #: js/iMIPDetailsPanel.js:199
 msgid "You have already replied to this event invitation."
-msgstr ""
+msgstr "Odpowiedź na to zaproszenie została już wysłana."
 
 #: js/iMIPDetailsPanel.js:201
 msgid "You received an event invitation. Set your response to:"
-msgstr ""
+msgstr "Otrzymałaś / Otrzymałeś zaproszenie. Prześlij odpowiedź do:"
 
 #: js/iMIPDetailsPanel.js:209
 msgid "An invited attendee responded to the invitation."
-msgstr ""
+msgstr "Zaproszona osoba odpowiedziała na zaproszenie."
 
 #: js/iMIPDetailsPanel.js:213
 msgid "Unsupported method"
-msgstr ""
+msgstr "Nieobsługiwana metoda"
 
 #: js/RrulePanel.js:28
 msgid "Recurrances"
@@ -653,28 +699,35 @@ msgstr "co {0} tydzień w"
 msgid "Every {0}. Month"
 msgstr "co {0} miesiąc"
 
-#: js/RrulePanel.js:439 js/RrulePanel.js:488 js/RrulePanel.js:619
+#: js/RrulePanel.js:439
+#: js/RrulePanel.js:488
+#: js/RrulePanel.js:619
 #: js/RrulePanel.js:669
 msgid "at the"
 msgstr "dzień:"
 
-#: js/RrulePanel.js:458 js/RrulePanel.js:638
+#: js/RrulePanel.js:458
+#: js/RrulePanel.js:638
 msgid "first"
 msgstr "pierwszy(a)"
 
-#: js/RrulePanel.js:459 js/RrulePanel.js:639
+#: js/RrulePanel.js:459
+#: js/RrulePanel.js:639
 msgid "second"
 msgstr "drugi(a)"
 
-#: js/RrulePanel.js:460 js/RrulePanel.js:640
+#: js/RrulePanel.js:460
+#: js/RrulePanel.js:640
 msgid "third"
 msgstr "trzeci(a)"
 
-#: js/RrulePanel.js:461 js/RrulePanel.js:641
+#: js/RrulePanel.js:461
+#: js/RrulePanel.js:641
 msgid "fourth"
 msgstr "czwarty(a)"
 
-#: js/RrulePanel.js:462 js/RrulePanel.js:642
+#: js/RrulePanel.js:462
+#: js/RrulePanel.js:642
 msgid "last"
 msgstr "ostatni(a)"
 
@@ -682,7 +735,8 @@ msgstr "ostatni(a)"
 msgid "Every {0}. Year"
 msgstr "co {0} rok"
 
-#: js/RrulePanel.js:709 js/RrulePanel.js:721
+#: js/RrulePanel.js:709
+#: js/RrulePanel.js:721
 msgid "of"
 msgstr "miesiąc:"
 
@@ -938,6 +992,7 @@ msgstr "Szczegóły terminu"
 #~ msgstr "Konto nauczyciela"
 
 #~ msgid "Course"
+
 #~ msgid_plural "Courses"
 #~ msgstr[0] "Kurs"
 #~ msgstr[1] "kursy"
@@ -998,12 +1053,14 @@ msgstr "Szczegóły terminu"
 #~ msgstr "Wszystkie kursy"
 
 #~ msgid "record list"
+
 #~ msgid_plural "record lists"
 #~ msgstr[0] "lista kursów"
 #~ msgstr[1] "listy kursów"
 #~ msgstr[2] "list kursów"
 
 #~ msgid "Course Type"
+
 #~ msgid_plural "Course Types"
 #~ msgstr[0] "Rodzaj kursu"
 #~ msgstr[1] "rodzaje kursu"
