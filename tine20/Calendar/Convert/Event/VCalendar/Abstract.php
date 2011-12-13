@@ -235,8 +235,9 @@ class Calendar_Convert_Event_VCalendar_Abstract
             $dtstart = new Sabre_VObject_Element_DateTime('DTSTART');
             $dtstart->setDateTime($event->dtstart, Sabre_VObject_Element_DateTime::DATE);
             
-            // whole day events ends at 23:59:59 in Tine 2.0 but 00:00 the next day in vcalendar
-            $event->dtend->addSecond(1);
+            // whole day events ends at 23:59:(00|59) in Tine 2.0 but 00:00 the next day in vcalendar
+            $event->dtend->addSecond($event->dtend->get('s') == 59 ? 1 : 0);
+            $event->dtend->addMinute($event->dtend->get('i') == 59 ? 1 : 0);
             
             $dtend = new Sabre_VObject_Element_DateTime('DTEND');
             $dtend->setDateTime($event->dtend, Sabre_VObject_Element_DateTime::DATE);

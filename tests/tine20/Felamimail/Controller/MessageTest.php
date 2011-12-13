@@ -726,8 +726,10 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->messageTestHelper('multipart_rfc2822.eml', 'multipart/rfc2822');
         
         $message = $this->_controller->getCompleteMessage($cachedMessage, 2);
+        
         $this->assertEquals('4121', $message->size);
         $this->assertContains("[Officespot-cs-svn] r15209 - trunk/tine20/Tinebase", $message->subject);
+        $this->assertTrue(isset($message->body), 'no body found');
         $this->assertContains('getLogger()-&gt;debug', $message->body);
     }
     
@@ -739,12 +741,10 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->messageTestHelper('multipart_rfc2822-2.eml', 'multipart/rfc2822-2');
         
         $message = $this->_controller->getCompleteMessage($cachedMessage, 2);
-        #var_dump($message->toArray());
-        #$this->assertEquals('1', $message->text_partid);
-        #$this->assertEquals('2.1', $message->html_partid);
+        
         $this->assertEquals('19131', $message->size);
         $this->assertContains("Proposal: Zend_Grid", $message->subject);
-        #$this->assertContains('\Seen', $message->flags);
+        $this->assertTrue(isset($message->body), 'no body found');
         $this->assertContains('Bento Vilas Boas wrote', $message->body ,'string not found in body: ' . $message->body);
         $this->assertEquals('smime.p7s', $message->attachments[0]["filename"]);
     }
@@ -757,6 +757,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->messageTestHelper('multipart_rfc2822-3.eml', 'multipart/rfc2822-3');
         
         $message = $this->_controller->getCompleteMessage($cachedMessage, 2);
+        
+        $this->assertTrue(isset($message->body), 'no body found');
         $this->assertContains('this is base64 encoded', $message->body ,'string not found in body: ' . $message->body);
     }
     
@@ -1146,7 +1148,9 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     */
     public function testEmailInvitation()
     {
-        $cachedMessage = $this->messageTestHelper('invitation.eml');
+        $testConfig = Zend_Registry::get('testConfig');
+        $email = ($testConfig->email) ? $testConfig->email : 'unittest@tine20.org';
+        $cachedMessage = $this->messageTestHelper('invitation.eml', NULL, NULL, array('unittest@tine20.org', $email));
     
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         
@@ -1203,13 +1207,14 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      * @param string $_filename
      * @param string $_testHeaderValue
      * @param Felamimail_Model_Folder $_folder
+     * @param array $_replacements
      * @return Felamimail_Model_Message
      */
-    public function messageTestHelper($_filename, $_testHeaderValue = NULL, $_folder = NULL)
+    public function messageTestHelper($_filename, $_testHeaderValue = NULL, $_folder = NULL, $_replacements = array())
     {
         $testHeaderValue = ($_testHeaderValue !== NULL) ? $_testHeaderValue : $_filename;
         $folder = ($_folder !== NULL) ? $_folder : $this->_folder;
-        $this->_appendMessage($_filename, $folder);
+        $this->_appendMessage($_filename, $folder, $_replacements);
         return $this->_searchAndCacheMessage($testHeaderValue, $folder);
     }
     
@@ -1303,10 +1308,17 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      *
      * @param string $_filename
      * @param string $_folder
+     * @param array $_replacements
      */
-    protected function _appendMessage($_filename, $_folder)
+    protected function _appendMessage($_filename, $_folder, $_replacements = array())
     {
-        $message = fopen(dirname(dirname(__FILE__)) . '/files/' . $_filename, 'r');
+        $filename = dirname(dirname(__FILE__)) . '/files/' . $_filename;
+        if (! empty($_replacements)) {
+            $message = file_get_contents($filename);
+            $message = preg_replace('/' . preg_quote($_replacements[0]) . '/m', $_replacements[1], $message);
+        } else {
+            $message = fopen($filename, 'r');
+        }
         $this->_controller->appendMessage($_folder, $message);
     }
     
