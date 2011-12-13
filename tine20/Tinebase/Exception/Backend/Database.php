@@ -18,4 +18,14 @@
  */
 class Tinebase_Exception_Backend_Database extends Tinebase_Exception_Backend
 {
+    /**
+     * the constructor
+     * 
+     * @param string $_message
+     * @param int $_code (default: 503 Service Unavailable)
+     */
+    public function __construct($_message, $_code = 503)
+    {
+        parent::__construct($_message, $_code);
+    }
 }

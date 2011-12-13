@@ -2,9 +2,9 @@
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
- * @package     Tinebase
+ * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -13,10 +13,12 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
+if (!defined('PHPUnit_MAIN_METHOD')) {
+    define('PHPUnit_MAIN_METHOD', 'Calendar_Frontend_CalDAVTest::main');
+}
+
 /**
- * Test class for Filemanager_Frontend_Tree
- * 
- * @package     Tinebase
+ * Test class for Calendar_Frontend_CalDAV
  */
 class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
 {
@@ -24,13 +26,6 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
      * @var array test objects
      */
     protected $objects = array();
-
-    /**
-     * Tree
-     *
-     * @var Tinebase_WebDav_Tree
-     */
-    protected $_CalDAVTree;
     
     /**
      * Runs the test methods of this class.
@@ -40,7 +35,7 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 CalDAV tree tests');
+		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar CalDAV Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
 	}
 
@@ -52,10 +47,14 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_CalDAVTree = new Calendar_Frontend_CalDAV('caldav');
+        $this->objects['initialContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+            'name'              => Tinebase_Record_Abstract::generateUID(),
+            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+            'backend'           => 'Sql',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+        )));
         
-        $this->objects['nodes'] = array();
-        
+        $this->objects['containerToDelete'][] = $this->objects['initialContainer'];
     }
 
     /**
@@ -66,43 +65,56 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        foreach ($this->objects['nodes'] as $node) {
-            #$this->_rmDir($node);
-        } 
+        foreach ($this->objects['containerToDelete'] as $containerId) {
+            $containerId = $containerId instanceof Tinebase_Model_Container ? $containerId->getId() : $containerId;
+            
+            try {
+                Tinebase_Container::getInstance()->deleteContainer($containerId);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // do nothing
+            }
+        }
     }
     
-    public function testDAVNode()
+    /**
+     * test getChildren
+     */
+    public function testGetChildren()
     {
-        $children = $this->_CalDAVTree->getChildren();
+        $collection = new Calendar_Frontend_CalDAV();
         
-        $this->assertEquals(2, count($children));
+        $children = $collection->getChildren();
+        
+        $this->assertTrue($children[0] instanceof Calendar_Frontend_WebDAV_Container);
     }
-    
-    public function testGetNodeForPath_calendars()
-    {
-        $node = $this->_CalDAVTree->getChild('calendars');
         
-        $this->assertType('Sabre_CalDAV_CalendarRootNode', $node);
+    /**
+     * test getChild
+     */
+    public function testGetChild()
+    {
+        $collection = new Calendar_Frontend_CalDAV();
+        
+        $child = $collection->getChild($this->objects['initialContainer']->getId());
+        
+        $this->assertTrue($child instanceof Calendar_Frontend_WebDAV_Container);
+    }
+        
+    public function testCreateFile()
+    {
+        $collection = new Calendar_Frontend_CalDAV();
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
-        $node->delete();
+        $collection->createFile('foobar');
     }
     
-    public function testGetNodeForPath_principals()
+    public function testCreateDirectory()
     {
-        $node = $this->_CalDAVTree->getChild('principals');
-        
-        $this->assertType('Sabre_DAV_Auth_PrincipalCollection', $node);
+        $collection = new Calendar_Frontend_CalDAV();
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
-        $node->delete();
+        $collection->createDirectory('foobar');
     }
-   
-}		
-	
-
-if (PHPUnit_MAIN_METHOD == 'Calendar_Frontend_WebDavTest::main') {
-    Calendar_Frontend_WebDavTest::main();
 }

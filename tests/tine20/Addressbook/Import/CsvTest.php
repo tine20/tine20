@@ -78,6 +78,26 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test import data
+     */
+    public function testImport()
+    {
+        $result = $this->_doImport(array('dryrun' => 1), 'adb_tine_import_csv', new Addressbook_Model_ContactFilter(array(
+            array(
+                'field'    => 'n_fileas',
+                'operator' => 'equals',
+                'value'    =>  Tinebase_Core::getUser()->accountDisplayName
+            )
+        )));
+        
+        if ($this->_deletePersonalContacts) {
+            Addressbook_Controller_Contact::getInstance()->deleteByFilter(new Addressbook_Model_ContactFilter(array(array(
+                'field' => 'container_id', 'operator' => 'equals', 'value' => Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook()->getId()
+            ))));
+        }
+    }
+    
+    /**
      * test import duplicate data
      */
     public function testImportDuplicates()

@@ -13,6 +13,48 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Setup/setup.xml:487
+msgid "Default Policy"
+msgstr "Standard Policy"
+
+#: Setup/setup.xml:492
+msgid "Default Policy installed during setup"
+msgstr "Standard Policy aus dem Setup Prozess"
+
+#: Preference.php:74
+msgid "Default Addressbook"
+msgstr "Standard-Adressbuch"
+
+#: Preference.php:75
+msgid "The default addressbook to create new contacts in."
+msgstr "Das Standard-Adressbuch, in dem neue Kontakte angelegt werden."
+
+#: Preference.php:78
+msgid "Default Calendar"
+msgstr "Standard-Kalender"
+
+#: Preference.php:79
+msgid "The default calendar to create new events in."
+msgstr "Der Standard-Kalender, in dem neue Termine angelegt werden."
+
+#: Preference.php:82
+msgid "Default Task List"
+msgstr "Standard-Aufgabenliste"
+
+#: Preference.php:83
+msgid "The default task list to create new tasks in."
+msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
+
+#: js/Model.js:45
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Gerät"
+msgstr[1] "Geräte"
+
+#: js/Model.js:45
+msgid "Devices"
+msgstr "Geräte"
+
 #: js/Application.js:30
 msgid "Active Sync"
 msgstr "Active Sync"
@@ -44,45 +86,3 @@ msgstr "zurückgesetzt"
 #: js/Application.js:105
 msgid "Set Sync Filter"
 msgstr "Setze Sync Filter"
-
-#: js/Model.js:45
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Gerät"
-msgstr[1] "Geräte"
-
-#: js/Model.js:45
-msgid "Devices"
-msgstr "Geräte"
-
-#: Preference.php:74
-msgid "Default Addressbook"
-msgstr "Standard-Adressbuch"
-
-#: Preference.php:75
-msgid "The default addressbook to create new contacts in."
-msgstr "Das Standard-Adressbuch, in dem neue Kontakte angelegt werden."
-
-#: Preference.php:78
-msgid "Default Calendar"
-msgstr "Standard-Kalender"
-
-#: Preference.php:79
-msgid "The default calendar to create new events in."
-msgstr "Der Standard-Kalender, in dem neue Termine angelegt werden."
-
-#: Preference.php:82
-msgid "Default Task List"
-msgstr "Standard-Aufgabenliste"
-
-#: Preference.php:83
-msgid "The default task list to create new tasks in."
-msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
-
-#: Setup/setup.xml:474
-msgid "Default Policy"
-msgstr "Standard Policy"
-
-#: Setup/setup.xml:479
-msgid "Default Policy installed during setup"
-msgstr "Standard Policy aus dem Setup Prozess"

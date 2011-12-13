@@ -51,7 +51,7 @@ class Tinebase_NotificationTest extends PHPUnit_Framework_TestCase
             'n_family'  => 'Hüßgen',
             'n_given'   => 'Silke',
             'email'     => 'unittest@tine20.org',
-        )));
+        )), FALSE);
 
         // send notification
         $subject = 'äöü unittest notification';

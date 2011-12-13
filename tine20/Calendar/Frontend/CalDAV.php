@@ -1,74 +1,68 @@
 <?php
 /**
  * Tine 2.0
- * 
+ *
  * @package     Calendar
+ * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * 
+ * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ *
  */
 
 /**
- * class to handle CalDAV requests for calendar
- * 
+ * class to handle CalDAV tree
+ *
  * @package     Calendar
+ * @subpackage  Frontend
  */
-class Calendar_Frontend_CalDAV extends Sabre_DAV_Directory
+class Calendar_Frontend_CalDAV extends Addressbook_Frontend_CardDAV
 {
-    protected $_path;
+    protected $_applicationName = 'Calendar';
     
-    public function __construct($_path)
-    {
-        $this->_path = $_path;
-    }
+    protected $_model = 'Event';    
     
-    public function getChildren() 
+    /**
+     * (non-PHPdoc)
+     * @see Sabre_DAV_Collection::getChild()
+     */
+    public function getChild($_name)
     {
-        $children = array();
-        
-        $children[] = $this->getChild(Sabre_CalDAV_Plugin::CALENDAR_ROOT);
-        $children[] = $this->getChild(Sabre_DAV_Auth_PrincipalCollection::NODENAME);
-        
-        return $children;            
-    }
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' path: ' . $this->_path . ' name: ' . $_name);
     
-    public function getChild($_name) 
-    {
-        switch ($_name) {
-            case 'caldav':
-                return $this;
+        $pathParts = explode('/', trim($this->_path, '/'));
+        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' part count: ' . count($pathParts) . ' ' . print_r($pathParts, true));
+        switch(count($pathParts)) {
+            # path == /account->contact_id
+            # list container
+            case 1:
+                if ($_name == 'schedule-inbox') {
+                    return new Calendar_Frontend_CalDAV_ScheduleInbox(Tinebase_Core::getUser());
+                    
+                } elseif ($_name == 'schedule-outbox') {
+                    return new Calendar_Frontend_CalDAV_ScheduleOutbox(Tinebase_Core::getUser());
+                    
+                } else {
+                    try {
+                        $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerById($_name);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
+                    }
+                    
+                    if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ) || !Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_SYNC)) {
+                        throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
+                    }
+                    $objectClass = $this->_application->name . '_Frontend_WebDAV_Container';
+                    
+                    return new $objectClass($container, true);
+                }
+                
                 break;
-                
-            case Sabre_CalDAV_Plugin::CALENDAR_ROOT:
-                $authBackend = new Tinebase_WebDav_Auth();
-                $calendarBackend = new Calendar_Frontend_CalDAV_Backend();
-                
-                return new Sabre_CalDAV_CalendarRootNode($authBackend, $calendarBackend);
-                break;
-                
-            case Sabre_DAV_Auth_PrincipalCollection::NODENAME:
-                $authBackend = new Tinebase_WebDav_Auth();
-                
-                return new Sabre_DAV_Auth_PrincipalCollection($authBackend);
-                break;
-                
+            
             default:
-                throw new Sabre_DAV_Exception_FileNotFound();
+                throw new Sabre_DAV_Exception_FileNotFound('Child not found');
+            
                 break;
-        }
-    }
-
-    public function getName()
-    {
-        return basename($this->_path);
-    }
-    
-    #public function getNodeForPath() 
-    #{
-    #    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' exists: ' . $this->_path);
-    #    
-    #    $objectTree = new Sabre_DAV_ObjectTree($this);
-    #    return $objectTree->getNodeForPath($this->_path);
-    #}
+        }   
+    }    
 }

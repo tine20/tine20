@@ -14,70 +14,14 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: Controller/Course.php:107
-msgid "teacher"
-msgstr "老师"
-
-#: Controller/Course.php:115
-msgid "Teacher"
-msgstr "老师"
-
-#: Controller/Course.php:116
-msgid "Teacher Account"
-msgstr "老师帐户"
-
-#: Frontend/Json.php:254 js/CourseEditDialog.js:141 js/Models.js:41
+#: Frontend/Json.php:254 js/Models.js:41 js/CourseEditDialog.js:141
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "课程"
 
-#: js/CourseEditDialog.js:31
-msgid "Import course members"
-msgstr "导入课程成员"
-
-#: js/CourseEditDialog.js:157
-msgid "Course Name"
-msgstr "课程名"
-
-#: js/CourseEditDialog.js:164
-msgid "Course / School Type"
-msgstr "课程 / 学校类型"
-
-#: js/CourseEditDialog.js:175
-msgid "Description"
-msgstr "描述"
-
-#: js/CourseEditDialog.js:182 js/CourseGridPanel.js:85
-msgid "Internet Access"
-msgstr "因特网访问"
-
-#: js/CourseEditDialog.js:188 js/CourseGridPanel.js:93
-msgid "Fileserver Access"
-msgstr "文件服务器访问"
-
-#: js/CourseEditDialog.js:219
-msgid "Members"
-msgstr "成员"
-
-#: js/CourseEditDialog.js:245
-msgid "Login"
-msgstr "登录"
-
-#: js/CourseEditDialog.js:249
-msgid "unknown"
-msgstr ""
-
-#: js/CourseEditDialog.js:254
-msgid "Reset Password"
-msgstr "重置密码"
-
-#: js/CourseEditDialog.js:272
-msgid "Set new password"
-msgstr "设置新密码"
-
-#: js/CourseEditDialog.js:272
-msgid "Please enter the new password:"
-msgstr "请输入新密码："
+#: Setup/setup.xml:4 js/Courses.js:32
+msgid "Courses"
+msgstr "课程"
 
 #: js/CourseGridPanel.js:49
 msgid "Quick search"
@@ -90,6 +34,14 @@ msgstr "名字"
 #: js/CourseGridPanel.js:78
 msgid "Type"
 msgstr "类型"
+
+#: js/CourseGridPanel.js:85 js/CourseEditDialog.js:182
+msgid "Internet Access"
+msgstr "因特网访问"
+
+#: js/CourseGridPanel.js:93 js/CourseEditDialog.js:188
+msgid "Fileserver Access"
+msgstr "文件服务器访问"
 
 #: js/CourseGridPanel.js:119
 msgid "Internet Access On"
@@ -115,14 +67,6 @@ msgstr "失败"
 msgid "Some error occured while trying to update the courses."
 msgstr "试图更新课程时有错误发生"
 
-#: js/Courses.js:32 Setup/setup.xml:4
-msgid "Courses"
-msgstr "课程"
-
-#: js/Courses.js:37
-msgid "All Courses"
-msgstr "所有课程"
-
 #: js/Models.js:45
 msgid "record list"
 msgid_plural "record lists"
@@ -132,3 +76,59 @@ msgstr[0] "成绩表"
 msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "课程类型"
+
+#: js/Courses.js:37
+msgid "All Courses"
+msgstr "所有课程"
+
+#: js/CourseEditDialog.js:31
+msgid "Import course members"
+msgstr "导入课程成员"
+
+#: js/CourseEditDialog.js:157
+msgid "Course Name"
+msgstr "课程名"
+
+#: js/CourseEditDialog.js:164
+msgid "Course / School Type"
+msgstr "课程 / 学校类型"
+
+#: js/CourseEditDialog.js:175
+msgid "Description"
+msgstr "描述"
+
+#: js/CourseEditDialog.js:219
+msgid "Members"
+msgstr "成员"
+
+#: js/CourseEditDialog.js:245
+msgid "Login"
+msgstr "登录"
+
+#: js/CourseEditDialog.js:249
+msgid "unknown"
+msgstr ""
+
+#: js/CourseEditDialog.js:254
+msgid "Reset Password"
+msgstr "重置密码"
+
+#: js/CourseEditDialog.js:272
+msgid "Set new password"
+msgstr "设置新密码"
+
+#: js/CourseEditDialog.js:272
+msgid "Please enter the new password:"
+msgstr "请输入新密码："
+
+#: Controller/Course.php:107
+msgid "teacher"
+msgstr "老师"
+
+#: Controller/Course.php:115
+msgid "Teacher"
+msgstr "老师"
+
+#: Controller/Course.php:116
+msgid "Teacher Account"
+msgstr "老师帐户"

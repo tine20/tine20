@@ -69,6 +69,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     const DEFAULT_FALLBACK_CHARSET = 'iso-8859-15';
     
     /**
+     * foreign application content types
+     * 
+     * @var array
+     */
+    protected $_supportedForeignContentTypes = array(
+        'Calendar'     => Felamimail_Model_Message::CONTENT_TYPE_CALENDAR,
+        'Addressbook'  => Felamimail_Model_Message::CONTENT_TYPE_VCARD,
+    );
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton
@@ -145,10 +155,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * get complete message by id
      *
      * @param string|Felamimail_Model_Message  $_id
+     * @param string 						   $_partId
      * @param boolean                          $_setSeen
      * @return Felamimail_Model_Message
      */
-    public function getCompleteMessage($_id, $_partId = null, $_setSeen = FALSE)
+    public function getCompleteMessage($_id, $_partId = NULL, $_setSeen = FALSE)
     {
         if ($_id instanceof Felamimail_Model_Message) {
             $message = $_id;
@@ -157,57 +168,202 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
-            ' Getting message ' . $message->messageuid 
+            ' Getting message content ' . $message->messageuid 
         );
         
-        // get account
         $folder = Felamimail_Controller_Folder::getInstance()->get($message->folder_id);
         $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
-        $mimeType = ($account->display_format == Felamimail_Model_Account::DISPLAY_HTML || $account->display_format == Felamimail_Model_Account::DISPLAY_CONTENT_TYPE) 
-            ? Zend_Mime::TYPE_HTML 
-            : Zend_Mime::TYPE_TEXT;
         
-        $headers     = $this->getMessageHeaders($message, $_partId, true);
-        $body        = $this->getMessageBody($message, $_partId, $mimeType, $account, true);
-        $attachments = $this->getAttachments($message, $_partId);
+        $this->_getCompleteMessageContent($message, $account, $_partId);
         
-        // set \Seen flag
-        if ($_setSeen && !in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-                ' Add \Seen flag to msg uid ' . $message->messageuid
-            );
-            Felamimail_Controller_Message_Flags::getInstance()->addFlags($message, Zend_Mail_Storage::FLAG_SEEN);
-            $message->flags[] = Zend_Mail_Storage::FLAG_SEEN;
+        if ($_setSeen) {
+            Felamimail_Controller_Message_Flags::getInstance()->setSeenFlag($message);
         }
         
+        $this->prepareAndProcessParts($message);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
+        
+        return $message;
+    }
+    
+    /**
+     * get message content (body, headers and attachments)
+     * 
+     * @param Felamimail_Model_Message $_message
+     * @param Felamimail_Model_Account $_account
+     * @param string $_partId
+     */
+    protected function _getCompleteMessageContent(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account, $_partId = NULL)
+    {
+        $mimeType = ($_account->display_format == Felamimail_Model_Account::DISPLAY_HTML || $_account->display_format == Felamimail_Model_Account::DISPLAY_CONTENT_TYPE)
+        ? Zend_Mime::TYPE_HTML
+        : Zend_Mime::TYPE_TEXT;
+        
+        $headers     = $this->getMessageHeaders($_message, $_partId, true);
+        $body        = $this->getMessageBody($_message, $_partId, $mimeType, $_account, true);
+        $attachments = $this->getAttachments($_message, $_partId);
+        
         if ($_partId === null) {
-            $message->body        = $body;
-            $message->headers     = $headers;
-            $message->attachments = $attachments;
+            $_message->body        = $body;
+            $_message->headers     = $headers;
+            $_message->attachments = $attachments;
         } else {
             // create new object for rfc822 message
-            $structure = $message->getPartStructure($_partId, FALSE);
-            
-            $message = new Felamimail_Model_Message(array(
-                'messageuid'  => $message->messageuid,
-                'folder_id'   => $message->folder_id,
-                'received'    => $message->received,
+            $structure = $_message->getPartStructure($_partId, FALSE);
+        
+            $_message = new Felamimail_Model_Message(array(
+                'messageuid'  => $_message->messageuid,
+                'folder_id'   => $_message->folder_id,
+                'received'    => $_message->received,
                 'size'        => (array_key_exists('size', $structure)) ? $structure['size'] : 0,
                 'partid'      => $_partId,
                 'body'        => $body,
                 'headers'     => $headers,
                 'attachments' => $attachments
             ));
-
-            $message->parseHeaders($headers);
-            
+        
+            $_message->parseHeaders($headers);
+        
             $structure = array_key_exists('messageStructure', $structure) ? $structure['messageStructure'] : $structure;
-            $message->parseStructure($structure);
+            $_message->parseStructure($structure);
+        }
+    }
+    
+    /**
+     * prepare message parts that could be interesting for other apps
+     * 
+     * @param Felamimail_Model_Message $_message
+     */
+    public function prepareAndProcessParts(Felamimail_Model_Message $_message)
+    {
+        $preparedParts = new Tinebase_Record_RecordSet('Felamimail_Model_PreparedMessagePart');
+        
+        foreach ($this->_supportedForeignContentTypes as $application => $contentType) {
+            if (! Tinebase_Application::getInstance()->isInstalled($application) || ! Tinebase_Core::getUser()->hasRight($application, Tinebase_Acl_Rights::RUN)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                    . ' ' . $application . ' not installed or access denied.');
+                continue;
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Looking for ' . $application . '[' . $contentType . '] content ...');
+            
+            $parts = $_message->getBodyParts(NULL, $contentType);
+            foreach ($parts as $partId => $partData) {
+                if ($partData['contentType'] !== $contentType) {
+                    continue;
+                }
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                    . ' ' . $application . '[' . $contentType . '] content found.');
+                
+                $preparedPart = $this->_getForeignMessagePart($_message, $partId, $partData);
+                if ($preparedPart) {
+                    $this->_processForeignMessagePart($application, $preparedPart);
+                    $preparedParts->addRecord(new Felamimail_Model_PreparedMessagePart(array(
+                        'id'             => $_message->getId() . '_' . $partId,
+                        'contentType'	 => $contentType,
+                        'preparedData'   => $preparedPart,
+                    )));
+                }
+            }
         }
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
+        $_message->preparedParts = $preparedParts;
+    }
+    
+    /**
+    * get foreign message parts
+    * 
+    * - calendar invitations
+    * - addressbook vcards
+    * - ...
+    *
+    * @param Felamimail_Model_Message $_message
+    * @param string $_partId
+    * @param array $_partData
+    * @return NULL|Tinebase_Record_Abstract
+    */
+    protected function _getForeignMessagePart(Felamimail_Model_Message $_message, $_partId, $_partData)
+    {
+        $part = $this->getMessagePart($_message, $_partId);
         
-        return $message;
+        $userAgent = (isset($_message->headers['user-agent'])) ? $_message->headers['user-agent'] : NULL;
+        $parameters = (isset($_partData['parameters'])) ? $_partData['parameters'] : array();
+        $decodedContent = $part->getDecodedContent();
+        
+        switch ($part->type) {
+            case Felamimail_Model_Message::CONTENT_TYPE_CALENDAR:
+                $partData = new Calendar_Model_iMIP(array(
+                    'id'             => $_message->getId() . '_' . $_partId,
+                	'ics'            => $decodedContent,
+                    'method'         => (isset($parameters['method'])) ? $parameters['method'] : NULL,
+                    'originator'     => $_message->from_email,
+                    'userAgent'      => $userAgent,
+                ));
+                break;
+            default:
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not create iMIP of content type ' . $part->type);
+                $partData = NULL;
+        }
+        
+        return $partData;
+    }
+    
+    /**
+     * process foreign iMIP part
+     * 
+     * @param string $_application
+     * @param Tinebase_Record_Abstract $_iMIP
+     * @return mixed
+     * 
+     * @todo use iMIP factory?
+     */
+    protected function _processForeignMessagePart($_application, $_iMIP)
+    {
+        $iMIPFrontendClass = $_application . '_Frontend_iMIP';
+        if (! class_exists($iMIPFrontendClass)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' iMIP class not found in application ' . $_application);
+            return NULL;
+        }
+        
+        $iMIPFrontend = new $iMIPFrontendClass();
+        try {
+            $result = $iMIPFrontend->autoProcess($_iMIP);
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Processing failed: ' . $e->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+            $result = NULL;
+        }
+        
+        return $result;
+    }
+
+    /**
+     * get iMIP by message and part id
+     * 
+     * @param string $_iMIPId
+     * @throws Tinebase_Exception_InvalidArgument
+     * @return Tinebase_Record_Abstract
+     */
+    public function getiMIP($_iMIPId)
+    {
+        if (strpos($_iMIPId, '_') === FALSE) {
+            throw new Tinebase_Exception_InvalidArgument('messageId_partId expecetd.');
+        }
+        
+        list($messageId, $partId) = explode('_', $_iMIPId);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Fetching ' . $messageId . '[' . $partId . '] part with iMIP data ...');
+        
+        $message = $this->get($messageId);
+        
+        $iMIPPartStructure = $message->getPartStructure($partId);
+        $iMIP = $this->_getForeignMessagePart($message, $partId, $iMIPPartStructure);
+        
+        return $iMIP;
     }
     
     /**
@@ -350,6 +506,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $cacheId = $this->_getMessageBodyCacheId($message, $_partId, $_contentType, $_account);
         
         if ($cache->test($cacheId)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting Message from cache.');
             return $cache->load($cacheId);
         }
         

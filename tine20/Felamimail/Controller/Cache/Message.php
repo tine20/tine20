@@ -128,7 +128,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
         foreach ($folders as $folder) {
-            if ($this->_doNotUpdateCache($folder)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  ' Checking folder ' . $folder->globalname);
+            
+            if ($this->_doNotUpdateCache($folder, FALSE)) {
                 continue;
             }
             
@@ -263,16 +265,18 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     /**
      * checks if cache update should not commence / fencing
      * 
+     * @param Felamimail_Model_Folder $_folder
+     * @param boolean $_lockFolder
      * @return boolean
      */
-    protected function _doNotUpdateCache(Felamimail_Model_Folder $_folder)
+    protected function _doNotUpdateCache(Felamimail_Model_Folder $_folder, $_lockFolder = TRUE)
     {
         if ($_folder->is_selectable == false) {
             // nothing to be done
             return FALSE;
         }
         
-        if (Felamimail_Controller_Cache_Folder::getInstance()->updateAllowed($_folder) !== true) {
+        if (Felamimail_Controller_Cache_Folder::getInstance()->updateAllowed($_folder, $_lockFolder) !== true) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " update of folder {$_folder->globalname} currently not allowed. do nothing!");
             return FALSE;
         }
@@ -617,6 +621,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * 
      * @param Felamimail_Model_Folder $_folder
      * @param Felamimail_Backend_ImapProxy $_imap
+     * 
+     * @todo split into smaller parts
      */
     protected function _addMessagesToCache(Felamimail_Model_Folder $_folder, Felamimail_Backend_ImapProxy $_imap)
     {

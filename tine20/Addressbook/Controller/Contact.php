@@ -200,7 +200,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         
         $userProfile = Tinebase_UserProfile::getInstance()->mergeProfileInfo($contact, $_userProfile);
         
-        $contact = $this->update($userProfile);
+        $contact = $this->update($userProfile, FALSE);
         
         $userProfile = Tinebase_UserProfile::getInstance()->doProfileCleanup($contact);
 

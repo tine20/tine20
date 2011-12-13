@@ -16,6 +16,7 @@
  * @subpackage  Record
  * @property    string application_id
  * @property    string type
+ * @property    sting  owner_id
  * 
  * NOTE: container class is in the transition from int based grants to string based
  *       grants! In the next refactoring step of container class, int based grants 
@@ -80,7 +81,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         'color'             => array('allowEmpty' => true, array('regex', '/^#[0-9a-fA-F]{6}$/')),
         'application_id'    => array('Alnum', 'presence' => 'required'),
         'account_grants'    => array('allowEmpty' => true), // non persistent
-        'owner_id'          => array('allowEmpty' => true), // non persistent
+        'owner_id'          => array('allowEmpty' => true), // non persistent // only set for personal folders
         'path'              => array('allowEmpty' => true), // non persistent
     // modlog fields
         'created_by'             => array('allowEmpty' => true),
@@ -129,24 +130,40 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     }
     
     /**
+     * (non-PHPdoc)
+     * @see Tinebase/Record/Tinebase_Record_Abstract#setFromArray($_data)
+     */
+    public function setFromArray(array $_data)
+    {
+        parent::setFromArray($_data);
+        
+        switch ($this->type) {
+            case Tinebase_Model_Container::TYPE_SHARED:
+                $this->path = "/{$this->type}/{$this->getId()}";
+                break;
+                
+            case Tinebase_Model_Container::TYPE_PERSONAL:
+                if (!empty($this->owner_id)) {
+                    $this->path = "/{$this->type}/{$this->owner_id}/{$this->getId()}";
+                }
+                break;
+        }
+    }
+    
+    /**
      * gets path of this container
      *
      * @return string path
      */
     public function getPath()
     {
-        $path = "/{$this->type}";
         switch ($this->type) {
-            case 'internal':
-                break;
-            case 'shared':
-                $path .= "/{$this->getId()}";
-                break;
-            case 'personal':
+            case Tinebase_Model_Container::TYPE_PERSONAL:
                 if (! $this->owner_id) {
                     // we need to find out who has admin grant
                     $allGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($this, true);
                     
+                    // pick the first user with admin grants
                     foreach ($allGrants as $grants) {
                         if ($grants->{Tinebase_Model_Grants::GRANT_ADMIN} === true) {
                             $this->owner_id = $grants->account_id;
@@ -158,23 +175,15 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
                     }
                 }
                 
-                $path .= "/{$this->owner_id}/{$this->getId()}";
-                break;
-            default:
-                throw new Exception("unknown container type: '{$this->type}'");
+                $this->path = "/{$this->type}/{$this->owner_id}/{$this->getId()}";
                 break;
         }
-        return $path;
-    }
-    
-    public static function path2node($_path)
-    {
         
+        return $this->path;
     }
     
     /**
      * returns containerId if given path represents a (single) container
-     * 
      * 
      * @static
      * @param  String path
@@ -187,6 +196,25 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         }
         
         return false;
+    }
+
+    /**
+     * resolves container_id property
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @param string $_containerProperty
+     */
+    public static function resolveContainer($_record, $_containerProperty = 'container_id')
+    {
+        $containerId = $_record->{$_containerProperty};
+        if ($containerId) {
+            $container = Tinebase_Container::getInstance()->getContainerById($containerId);
+            
+            $container->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $containerId)->toArray();
+            $container->path = $container->getPath();
+            
+            $_record->{$_containerProperty} = $container;
+        }
     }
     
     /**

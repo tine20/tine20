@@ -18,6 +18,85 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Addressbook\n"
 
+#: Config.php:31
+msgid "Contact duplicate check fields"
+msgstr ""
+
+#: Config.php:33
+msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
+msgstr ""
+
+#: Controller.php:96
+#, python-format
+msgid "%s's personal addressbook"
+msgstr "Osobní adresář uživatele %s"
+
+#: Setup/setup.xml:685
+msgid "Internal Contacts"
+msgstr "Interní kontakty"
+
+#: Setup/setup.xml:711
+msgid "Mr"
+msgstr "Pan"
+
+#: Setup/setup.xml:733
+msgid "Ms"
+msgstr "Paní"
+
+#: Setup/setup.xml:755 js/ContactEditDialog.js:142 js/ContactEditDialog.js:436
+#: js/ContactGridDetailsPanel.js:131 js/ContactGrid.js:110 js/Model.js:27
+#: js/Model.js:141
+msgid "Company"
+msgstr "Firma"
+
+#: Setup/Update/Release3.php:37 Setup/Initialize.php:112
+msgid "All contacts I have read grants for"
+msgstr "Všechny kontakty, které jsem oprávněn číst"
+
+#: Setup/Initialize.php:117
+msgid "My company"
+msgstr ""
+
+#: Setup/Initialize.php:118
+msgid "All coworkers in my company"
+msgstr ""
+
+#: Setup/Initialize.php:131
+msgid "My contacts"
+msgstr ""
+
+#: Setup/Initialize.php:132
+msgid "All contacts in my Addressbooks"
+msgstr ""
+
+#: Setup/Initialize.php:144
+msgid "Last modified by me"
+msgstr ""
+
+#: Setup/Initialize.php:145
+msgid "All contacts that I have last modified"
+msgstr ""
+
+#: Preference.php:28
+msgid "All contacts"
+msgstr "Všechny kontakty"
+
+#: Preference.php:65
+msgid "Default Addressbook"
+msgstr "Výchozí adresář"
+
+#: Preference.php:66
+msgid "The default addressbook for new contacts"
+msgstr "Výchozí adresář pro nové kontakty"
+
+#: Preference.php:69
+msgid "Default Favorite"
+msgstr "Výchozí oblíbené položky kontaktů"
+
+#: Preference.php:70
+msgid "The default favorite which is loaded on addressbook startup"
+msgstr "Výchozí oblíbené položky, které jsou načteny při spuštění adresáře"
+
 #: Acl/Rights.php:98
 msgid "manage shared addressbooks"
 msgstr "spravovat sdílené adresáře"
@@ -33,159 +112,6 @@ msgstr "spravovat sdílené oblíbené položky adresáře"
 #: Acl/Rights.php:103
 msgid "Create or update shared addressbook favorites"
 msgstr "Vytvořit nebo aktualizovat sdílené oblíbené položky adresáře"
-
-#: Config.php:31
-msgid "Contact duplicate check fields"
-msgstr ""
-
-#: Config.php:33
-msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
-msgstr ""
-
-#: Controller.php:96
-#, python-format
-msgid "%s's personal addressbook"
-msgstr "Osobní adresář uživatele %s"
-
-#: Export/Pdf.php:37
-msgid "Business Contact Data"
-msgstr "Firemní kotaktní údaje"
-
-#: Export/Pdf.php:39
-msgid "Organisation / Unit"
-msgstr "Organizace / Útvar"
-
-#: Export/Pdf.php:44
-msgid "Business Address"
-msgstr "Firemní adresa"
-
-#: Export/Pdf.php:52 js/ContactGrid.js:125
-msgid "Email"
-msgstr "E-mail"
-
-#: Export/Pdf.php:55
-msgid "Telephone Work"
-msgstr "Služební telefon"
-
-#: Export/Pdf.php:58
-msgid "Telephone Cellphone"
-msgstr "Mobilní telefon"
-
-#: Export/Pdf.php:61
-msgid "Telephone Car"
-msgstr "Telefon do auta"
-
-#: Export/Pdf.php:64
-msgid "Telephone Fax"
-msgstr "Fax"
-
-#: Export/Pdf.php:67
-msgid "Telephone Page"
-msgstr "Pager"
-
-#: Export/Pdf.php:70
-msgid "URL"
-msgstr "URL"
-
-#: Export/Pdf.php:73
-msgid "Role"
-msgstr "Funkce"
-
-#: Export/Pdf.php:76 js/ContactEditDialog.js:179 js/ContactGrid.js:114
-#: js/Model.js:33
-msgid "Room"
-msgstr "Místnost"
-
-#: Export/Pdf.php:79
-msgid "Assistant"
-msgstr "Asistentka"
-
-#: Export/Pdf.php:82
-msgid "Assistant Telephone"
-msgstr "Telefon asistentky"
-
-#: Export/Pdf.php:86
-msgid "Private Contact Data"
-msgstr "Soukromé kontaktní údaje"
-
-#: Export/Pdf.php:88 js/ContactEditDialog.js:296 js/Model.js:43
-#: js/Model.js:155 js/Model.js:156 js/Model.js:157 js/Model.js:158
-#: js/Model.js:159
-msgid "Private Address"
-msgstr "Soukromá adresa"
-
-#: Export/Pdf.php:96
-msgid "Email Home"
-msgstr "Email domů"
-
-#: Export/Pdf.php:99
-msgid "Telephone Home"
-msgstr "Telefon domů"
-
-#: Export/Pdf.php:102
-msgid "Telephone Cellphone Private"
-msgstr "Soukromý mobilní telefon"
-
-#: Export/Pdf.php:105
-msgid "Telephone Fax Home"
-msgstr "Fax domů"
-
-#: Export/Pdf.php:108
-msgid "URL Home"
-msgstr "Domácí URL"
-
-#: Export/Pdf.php:112
-msgid "Other Data"
-msgstr "Ostatní údaje"
-
-#: Export/Pdf.php:114 js/ContactEditDialog.js:167 js/ContactGrid.js:140
-#: js/Model.js:26 js/Model.js:149
-msgid "Birthday"
-msgstr "Narozeniny"
-
-#: Export/Pdf.php:117 js/ContactEditDialog.js:161 js/ContactGrid.js:112
-#: js/Model.js:30 js/Model.js:144
-msgid "Job Title"
-msgstr "Povolání"
-
-#: Import/definitions/adb_google_import_csv.xml:12
-msgid "Contact import from Google address book"
-msgstr ""
-
-#: Import/definitions/adb_import_vcard.xml:13
-msgid "Contact VCARD import"
-msgstr ""
-
-#: Import/definitions/adb_mac_import_csv.xml:16
-msgid "Contact CSV import from mac address book"
-msgstr ""
-
-#: Import/definitions/adb_outlook_import_csv.xml:12
-msgid "Contact CSV import from Outlook address book"
-msgstr ""
-
-#: Import/definitions/adb_tine_import_csv.xml:11
-msgid "Contact CSV import"
-msgstr ""
-
-#: Import/definitions/adb_tine_import_csv.xml:18
-msgid "Import list (###CURRENTDATE###)"
-msgstr ""
-
-#: Import/definitions/adb_tine_import_csv.xml:20
-msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr ""
-
-#: js/Addressbook.js:22
-msgid "New Contact"
-msgstr ""
-
-#: js/Addressbook.js:32 js/Model.js:98 js/Model.js:215
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] "Adresář"
-msgstr[1] "Adresáře"
-msgstr[2] "Adresářů"
 
 #: js/ContactEditDialog.js:39 js/ContactEditDialog.js:45 js/MapPanel.js:40
 msgid "Map"
@@ -212,16 +138,10 @@ msgstr "Křestní jméno"
 msgid "Middle Name"
 msgstr "Prostřední jméno"
 
-#: js/ContactEditDialog.js:133 js/ContactEditDialog.js:440
+#: js/ContactEditDialog.js:133 js/ContactEditDialog.js:436
 #: js/ContactGrid.js:106 js/Model.js:19 js/Model.js:140
 msgid "Last Name"
 msgstr "Příjmení"
-
-#: js/ContactEditDialog.js:142 js/ContactEditDialog.js:440
-#: js/ContactGrid.js:110 js/ContactGridDetailsPanel.js:131 js/Model.js:27
-#: js/Model.js:141 Setup/setup.xml:755
-msgid "Company"
-msgstr "Firma"
 
 #: js/ContactEditDialog.js:147 js/ContactGrid.js:111 js/Model.js:28
 #: js/Model.js:142
@@ -232,6 +152,16 @@ msgstr "Útvar"
 msgid "Display Name"
 msgstr "Zobrazované jméno"
 
+#: js/ContactEditDialog.js:161 js/ContactGrid.js:112 js/Model.js:30
+#: js/Model.js:144 Export/Pdf.php:117
+msgid "Job Title"
+msgstr "Povolání"
+
+#: js/ContactEditDialog.js:167 js/ContactGrid.js:140 js/Model.js:26
+#: js/Model.js:149 Export/Pdf.php:114
+msgid "Birthday"
+msgstr "Narozeniny"
+
 #: js/ContactEditDialog.js:171 js/Model.js:23
 msgid "Suffix"
 msgstr "Dodatek za jménem"
@@ -241,25 +171,28 @@ msgstr "Dodatek za jménem"
 msgid "Job Role"
 msgstr "Pracovní funkce"
 
+#: js/ContactEditDialog.js:179 js/ContactGrid.js:114 js/Model.js:33
+#: Export/Pdf.php:76
+msgid "Room"
+msgstr "Místnost"
+
 #: js/ContactEditDialog.js:186
 msgid "Contact Information"
 msgstr "Kontaktní informace"
 
-#: js/ContactEditDialog.js:191 js/ContactGrid.js:126
-#: js/ContactGridDetailsPanel.js:139 js/ContactGridDetailsPanel.js:163
-#: js/Model.js:51 js/Model.js:143
+#: js/ContactEditDialog.js:191 js/ContactGridDetailsPanel.js:139
+#: js/ContactGridDetailsPanel.js:163 js/ContactGrid.js:126 js/Model.js:51
+#: js/Model.js:143
 msgid "Phone"
 msgstr "Telefon"
 
-#: js/ContactEditDialog.js:196 js/ContactGrid.js:127
-#: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
-#: js/Model.js:52
+#: js/ContactEditDialog.js:196 js/ContactGridDetailsPanel.js:140
+#: js/ContactGridDetailsPanel.js:164 js/ContactGrid.js:127 js/Model.js:52
 msgid "Mobile"
 msgstr "Mobil"
 
-#: js/ContactEditDialog.js:201 js/ContactGrid.js:128
-#: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
-#: js/Model.js:53
+#: js/ContactEditDialog.js:201 js/ContactGridDetailsPanel.js:141
+#: js/ContactGridDetailsPanel.js:165 js/ContactGrid.js:128 js/Model.js:53
 msgid "Fax"
 msgstr "Fax"
 
@@ -284,9 +217,8 @@ msgstr "E-mail"
 msgid "E-Mail (private)"
 msgstr "E-mail (privátní)"
 
-#: js/ContactEditDialog.js:234 js/ContactGrid.js:135
-#: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
-#: js/Model.js:64
+#: js/ContactEditDialog.js:234 js/ContactGridDetailsPanel.js:144
+#: js/ContactGridDetailsPanel.js:168 js/ContactGrid.js:135 js/Model.js:64
 msgid "Web"
 msgstr "WWW"
 
@@ -324,6 +256,11 @@ msgstr "Město"
 msgid "Country"
 msgstr "Stát"
 
+#: js/ContactEditDialog.js:296 js/Model.js:43 js/Model.js:155 js/Model.js:156
+#: js/Model.js:157 js/Model.js:158 js/Model.js:159 Export/Pdf.php:88
+msgid "Private Address"
+msgstr "Soukromá adresa"
+
 #: js/ContactEditDialog.js:341 js/Model.js:68
 msgid "Description"
 msgstr "Popis"
@@ -332,20 +269,37 @@ msgstr "Popis"
 msgid "Enter description"
 msgstr "Vložit popis"
 
-#: js/ContactEditDialog.js:415
+#: js/ContactEditDialog.js:411
 msgid "Export as pdf"
 msgstr "Exportovat do pdf"
 
-#: js/ContactEditDialog.js:440
+#: js/ContactEditDialog.js:436
 msgid "Either {0} or {1} must be given"
 msgstr "Musíte zadat buď {0} nebo {1}"
 
-#: js/ContactFilterModel.js:35 js/Model.js:94 js/Model.js:133
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] "Kontakt"
-msgstr[1] "Kontakty"
-msgstr[2] "Kontaktů"
+#: js/ContactGridDetailsPanel.js:62 js/Model.js:94
+msgid "Contacts"
+msgstr "Kontakty"
+
+#: js/ContactGridDetailsPanel.js:65
+msgid "Select contact"
+msgstr "Vyberte kontakt"
+
+#: js/ContactGridDetailsPanel.js:155
+msgid "Private"
+msgstr "Soukromé"
+
+#: js/ContactGridDetailsPanel.js:178
+msgid "Info"
+msgstr "Informace"
+
+#: js/ContactGridDetailsPanel.js:214
+msgid "Insecure link"
+msgstr ""
+
+#: js/ContactGridDetailsPanel.js:214
+msgid "Please review this link in edit dialog."
+msgstr ""
 
 #: js/ContactGrid.js:104 js/Model.js:160
 msgid "Type"
@@ -382,6 +336,10 @@ msgstr "PSČ (privátní adresa)"
 #: js/ContactGrid.js:124
 msgid "Country (private)"
 msgstr "Stát (privátní adresa)"
+
+#: js/ContactGrid.js:125 Export/Pdf.php:52
+msgid "Email"
+msgstr "E-mail"
 
 #: js/ContactGrid.js:129
 msgid "Car phone"
@@ -443,32 +401,12 @@ msgstr "Importovat kontakty"
 msgid "Internal Contact"
 msgstr "Interní kontakt"
 
-#: js/ContactGridDetailsPanel.js:62 js/Model.js:94
-msgid "Contacts"
-msgstr "Kontakty"
-
-#: js/ContactGridDetailsPanel.js:65
-msgid "Select contact"
-msgstr "Vyberte kontakt"
-
-#: js/ContactGridDetailsPanel.js:155
-msgid "Private"
-msgstr "Soukromé"
-
-#: js/ContactGridDetailsPanel.js:178
-msgid "Info"
-msgstr "Informace"
-
-#: js/ContactGridDetailsPanel.js:214
-msgid "Insecure link"
-msgstr ""
-
-#: js/ContactGridDetailsPanel.js:214
-msgid "Please review this link in edit dialog."
-msgstr ""
-
 #: js/ListMemberFilterModel.js:37
 msgid "Member of List"
+msgstr ""
+
+#: js/CardDAVContainerPropertiesHookField.js:35
+msgid "CardDAV URL"
 msgstr ""
 
 #: js/MapPanel.js:58
@@ -478,6 +416,24 @@ msgstr ""
 #: js/MapPanel.js:65
 msgid "Private address"
 msgstr ""
+
+#: js/Addressbook.js:22
+msgid "New Contact"
+msgstr ""
+
+#: js/Addressbook.js:32 js/Model.js:98 js/Model.js:215
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] "Adresář"
+msgstr[1] "Adresáře"
+msgstr[2] "Adresářů"
+
+#: js/ContactFilterModel.js:35 js/Model.js:94 js/Model.js:133
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "Kontakt"
+msgstr[1] "Kontakty"
+msgstr[2] "Kontaktů"
 
 #: js/Model.js:19
 msgid "Name"
@@ -582,69 +538,112 @@ msgstr[2] ""
 msgid "Lists"
 msgstr ""
 
-#: js/SearchCombo.js:97
-msgid "Searching..."
-msgstr "Hledám..."
+#: Export/Pdf.php:37
+msgid "Business Contact Data"
+msgstr "Firemní kotaktní údaje"
 
-#: Preference.php:28
-msgid "All contacts"
-msgstr "Všechny kontakty"
+#: Export/Pdf.php:39
+msgid "Organisation / Unit"
+msgstr "Organizace / Útvar"
 
-#: Preference.php:65
-msgid "Default Addressbook"
-msgstr "Výchozí adresář"
+#: Export/Pdf.php:44
+msgid "Business Address"
+msgstr "Firemní adresa"
 
-#: Preference.php:66
-msgid "The default addressbook for new contacts"
-msgstr "Výchozí adresář pro nové kontakty"
+#: Export/Pdf.php:55
+msgid "Telephone Work"
+msgstr "Služební telefon"
 
-#: Preference.php:69
-msgid "Default Favorite"
-msgstr "Výchozí oblíbené položky kontaktů"
+#: Export/Pdf.php:58
+msgid "Telephone Cellphone"
+msgstr "Mobilní telefon"
 
-#: Preference.php:70
-msgid "The default favorite which is loaded on addressbook startup"
-msgstr "Výchozí oblíbené položky, které jsou načteny při spuštění adresáře"
+#: Export/Pdf.php:61
+msgid "Telephone Car"
+msgstr "Telefon do auta"
 
-#: Setup/Initialize.php:112 Setup/Update/Release3.php:37
-msgid "All contacts I have read grants for"
-msgstr "Všechny kontakty, které jsem oprávněn číst"
+#: Export/Pdf.php:64
+msgid "Telephone Fax"
+msgstr "Fax"
 
-#: Setup/Initialize.php:117
-msgid "My company"
+#: Export/Pdf.php:67
+msgid "Telephone Page"
+msgstr "Pager"
+
+#: Export/Pdf.php:70
+msgid "URL"
+msgstr "URL"
+
+#: Export/Pdf.php:73
+msgid "Role"
+msgstr "Funkce"
+
+#: Export/Pdf.php:79
+msgid "Assistant"
+msgstr "Asistentka"
+
+#: Export/Pdf.php:82
+msgid "Assistant Telephone"
+msgstr "Telefon asistentky"
+
+#: Export/Pdf.php:86
+msgid "Private Contact Data"
+msgstr "Soukromé kontaktní údaje"
+
+#: Export/Pdf.php:96
+msgid "Email Home"
+msgstr "Email domů"
+
+#: Export/Pdf.php:99
+msgid "Telephone Home"
+msgstr "Telefon domů"
+
+#: Export/Pdf.php:102
+msgid "Telephone Cellphone Private"
+msgstr "Soukromý mobilní telefon"
+
+#: Export/Pdf.php:105
+msgid "Telephone Fax Home"
+msgstr "Fax domů"
+
+#: Export/Pdf.php:108
+msgid "URL Home"
+msgstr "Domácí URL"
+
+#: Export/Pdf.php:112
+msgid "Other Data"
+msgstr "Ostatní údaje"
+
+#: Import/definitions/adb_mac_import_csv.xml:16
+msgid "Contact CSV import from mac address book"
 msgstr ""
 
-#: Setup/Initialize.php:118
-msgid "All coworkers in my company"
+#: Import/definitions/adb_outlook_import_csv.xml:12
+msgid "Contact CSV import from Outlook address book"
 msgstr ""
 
-#: Setup/Initialize.php:131
-msgid "My contacts"
+#: Import/definitions/adb_import_vcard.xml:13
+msgid "Contact VCARD import"
 msgstr ""
 
-#: Setup/Initialize.php:132
-msgid "All contacts in my Addressbooks"
+#: Import/definitions/adb_tine_import_csv.xml:11
+msgid "Contact CSV import"
 msgstr ""
 
-#: Setup/Initialize.php:144
-msgid "Last modified by me"
+#: Import/definitions/adb_tine_import_csv.xml:18
+msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
-#: Setup/Initialize.php:145
-msgid "All contacts that I have last modified"
+#: Import/definitions/adb_tine_import_csv.xml:20
+msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
 
-#: Setup/setup.xml:685
-msgid "Internal Contacts"
-msgstr "Interní kontakty"
+#: Import/definitions/adb_google_import_csv.xml:12
+msgid "Contact import from Google address book"
+msgstr ""
 
-#: Setup/setup.xml:711
-msgid "Mr"
-msgstr "Pan"
-
-#: Setup/setup.xml:733
-msgid "Ms"
-msgstr "Paní"
+#~ msgid "Searching..."
+#~ msgstr "Hledám..."
 
 #~ msgid "Call contact"
 #~ msgstr "Volat kontakt"

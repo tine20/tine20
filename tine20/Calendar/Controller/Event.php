@@ -169,6 +169,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
             $_record->originator_tz = $_record->originator_tz ? $_record->originator_tz : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+            $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->contact_id;
             
             // we need to resolve groupmembers before free/busy checking
             Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
@@ -446,7 +447,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $sendNotifications = $this->sendNotifications(FALSE);
                 
                 parent::update($_record);
-                $this->_saveAttendee($_record);
+                $this->_saveAttendee($_record, $_record->isRescheduled($event));
                 
                 $this->sendNotifications($sendNotifications);
                 
@@ -499,6 +500,56 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         return count($ids);
+    }
+    
+    /**
+     * Deletes a set of records.
+     * 
+     * If one of the records could not be deleted, no record is deleted
+     * 
+     * @param   array array of record identifiers
+     * @return  Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_NotFound|Tinebase_Exception
+     */
+    public function delete($_ids)
+    {
+        if ($_ids instanceof $this->_modelName) {
+            $_ids = (array)$_ids->getId();
+        }
+        
+        $records = $this->_backend->getMultiple((array) $_ids);
+        
+        foreach ($records as $record) {
+            try {
+                $db = $this->_backend->getAdapter();
+                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+                
+                // delete if delte grant is present
+                if ($this->_doContainerACLChecks === FALSE || $record->hasGrant(Tinebase_Model_Grants::GRANT_DELETE)) {
+                    // NOTE delete needs to update sequence otherwise iTIP based protocolls ignore the delete
+                    $this->_touch($record);
+                    parent::delete($record);
+                }  
+                
+                // otherwise update status for user to DECLINED
+                else if ($record->attendee instanceof Tinebase_Record_RecordSet) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no deleteGrant for event: {$records->id}, updating own status to DECLINED only");
+                    $ownContact = Tinebase_Core::getUser()->contact_id;
+                    foreach ($record->attendee as $attender) {
+                        if ($attender->user_id == $ownContact && in_array($attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
+                            $attender->status = Calendar_Model_Attender::STATUS_DECLINED;
+                            $this->attenderStatusUpdate($record, $attender, $attender->status_authkey);
+                        }
+                    }
+                }
+                
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            } catch (Exception $e) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+                throw $e;
+            }
+        }
+            
     }
     
     /**
@@ -726,8 +777,31 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL)
         )), NULL, TRUE));
         
-        // make shure we have a 'fully featured' event
+        // make sure we have a 'fully featured' event
         return $this->get($baseEventId);
+    }
+
+   /**
+    * lookup existing event by uid
+    *
+    * @param  Calendar_Model_Event $_event
+    * @return Calendar_Model_Event|NULL
+    * 
+    * @todo also add more criteria for lookup (recurid, ...)
+    * @todo sophisticated reccurring event handling
+    */
+    public function lookupExistingEvent($_event)
+    {
+        $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'uid',     'operator' => 'equals', 'value' => $_event->uid),
+            array('field' => 'is_deleted', 'operator' => 'equals', 'value' => '0'),
+            //array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL)
+        )));
+        
+        $event = $events->filter(Tinebase_Model_Grants::GRANT_READ, TRUE)->getFirstRecord();
+    
+        // make sure we have a 'fully featured' event
+        return ($event !== NULL) ? $this->get($event->getId()) : NULL;
     }
     
     /**
@@ -850,7 +924,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        // if dtstart of an event changes, we update the originator_tz, alarm times and reset attendee responses
+        // if dtstart of an event changes, we update the originator_tz, alarm times
         if (! $_oldRecord->dtstart->equals($_record->dtstart)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart changed -> adopting organizer_tz');
             $_record->originator_tz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
@@ -887,15 +961,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     $exception->setRecurId();
                     $this->_backend->update($exception);
                 }
-            }
-            
-            foreach($_record->attendee as $attender) {
-                if ($attender->user_id == Tinebase_Core::getUser()->contact_id && in_array($attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
-                    // don't touch current users status
-                    continue;
-                }
-                
-                $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
             }
         }
         
@@ -1072,6 +1137,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             $baseEvent = $this->getRecurBaseEvent($_recurInstance);
+            $baseEventAttendee = Calendar_Model_Attender::getAttendee($baseEvent->attendee, $_attender);
             
             if ($baseEvent->getId() == $_recurInstance->getId()) {
                 // exception to the first occurence
@@ -1083,12 +1149,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 throw new Exception('recurid must be present to create exceptions!');
             }
             
-            // check authkey on series
-            $attender = $baseEvent->attendee->filter('status_authkey', $_authKey)->getFirstRecord();
-            if ($attender->user_type != $_attender->user_type || $attender->user_id != $_attender->user_id) {
-                throw new Tinebase_Exception_AccessDenied('Attender authkey mismatch');
-            }
-            
             // check if this intance takes place
             if (in_array($_recurInstance->dtstart, (array)$baseEvent->exdate)) {
                 throw new Tinebase_Exception_AccessDenied('Event instance is deleted and may not be recreated via status setting!');
@@ -1097,9 +1157,34 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             try {
                 // check if we already have a persistent exception for this event
                 $eventInsance = $this->_backend->getByProperty($_recurInstance->recurid, $_property = 'recurid');
-            } catch (Exception $e) {
+                
+                // NOTE: the user must exist (added by someone with appropriate rights by createRecurException)
+                $exceptionAttender = Calendar_Model_Attender::getAttendee($eventInsance->attendee, $_attender);
+                if (! $exceptionAttender) {
+                    throw new Tinebase_Exception_AccessDenied('not an attendee');
+                }
+                
+                if ($exceptionAttender->status_authkey != $_authKey) {
+                    // NOTE: it might happen, that the user set her status from the base event without knowing about 
+                    //       an existing exception. In this case the base event authkey is also valid
+                    if (! $baseEventAttendee || $baseEventAttendee->status_authkey != $_authKey) {
+                        throw new Tinebase_Exception_AccessDenied('Attender authkey mismatch');
+                    }
+                }
+                
+            } catch (Tinebase_Exception_NotFound $e) {
                 // otherwise create it implicilty
+                
+                if (! $baseEventAttendee) {
+                    throw new Tinebase_Exception_AccessDenied('not an attendee');
+                }
+                
+                if ($baseEventAttendee->status_authkey != $_authKey) {
+                    throw new Tinebase_Exception_AccessDenied('Attender authkey mismatch');
+                }
+                
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating recur exception for a exceptional attendee status");
+                
                 $doContainerAclChecks = $this->doContainerACLChecks(FALSE);
                 // NOTE: the user might have no edit grants, so let's be carefull
                 $diff = $baseEvent->dtstart->diff($baseEvent->dtend);
@@ -1125,12 +1210,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     $attender = $this->_backend->createAttendee($attender);
                     $eventInsance->attendee->addRecord($attender);
                 }
+                
+                $exceptionAttender = Calendar_Model_Attender::getAttendee($eventInsance->attendee, $_attender);
             }
             
-            // set attender to the newly created exception attender
-            $exceptionAttender = $eventInsance->attendee->filter('status_authkey', $_authKey)->getFirstRecord();
             $exceptionAttender->status = $_attender->status;
-            
             $updatedAttender = $this->attenderStatusUpdate($eventInsance, $exceptionAttender, $exceptionAttender->status_authkey);
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -1165,32 +1249,64 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param  string                  $_authKey
      * @return Calendar_Model_Attender updated attender
      */
-    public function attenderStatusUpdate($_event, $_attender, $_authKey)
+    public function attenderStatusUpdate(Calendar_Model_Event $_event, Calendar_Model_Attender $_attender, $_authKey)
     {
         try {
-            $db = $this->_backend->getAdapter();
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-            
             $event = $this->get($_event->getId());
             
-            $currentAttender                      = $event->attendee[$event->attendee->getIndexById($_attender->getId())];
-            $currentAttender->status              = $_attender->status;
-            $currentAttender->displaycontainer_id = $_attender->displaycontainer_id;
+            if (! $event->attendee) {
+                throw new Tinebase_Exception_NotFound('Could not find any attendee of event.');
+            }
             
-            if ($currentAttender->status_authkey == $_authKey) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " update attender status for {$currentAttender->user_type} {$currentAttender->user_id}");
-                $updatedAttender = $this->_backend->updateAttendee($currentAttender);
-                
+            if (($currentAttender = Calendar_Model_Attender::getAttendee($event->attendee, $_attender)) == null) {
+                throw new Tinebase_Exception_NotFound('Could not find attender in event.');
+            }
+            
+            $updatedAttender = clone $currentAttender;
+            
+            if ($currentAttender->status_authkey !== $_authKey) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " no permissions to update status for {$currentAttender->user_type} {$currentAttender->user_id}");
+                return $updatedAttender;
+            }
+            
+            // check if something what can be set as user has changed
+            if ($currentAttender->status == $_attender->status &&
+                $currentAttender->displaycontainer_id == $_attender->displaycontainer_id &&
+                $currentAttender->alarm_ack_time == $_attender->alarm_ack_time &&
+                $currentAttender->alarm_snooze_time == $_attender->alarm_snooze_time
+            ) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                    Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . "no status change -> do nothing");
+                return $updatedAttender;
+            }
+            
+            $updatedAttender->status              = $_attender->status;
+            $updatedAttender->displaycontainer_id = $_attender->displaycontainer_id;
+            $updatedAttender->alarm_ack_time      = isset($_attender->alarm_ack_time) ? $_attender->alarm_ack_time : $updatedAttender->alarm_ack_time;
+            $updatedAttender->alarm_snooze_time   = isset($_attender->alarm_snooze_time) ? $_attender->alarm_snooze_time : $updatedAttender->alarm_snooze_time;
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " update attender status to {$_attender->status} for {$currentAttender->user_type} {$currentAttender->user_id}");
+            
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+            
+            $updatedAttender = $this->_backend->updateAttendee($updatedAttender);
+
+            if ($currentAttender->status != $updatedAttender->status) {
                 $this->_touch($event, TRUE);
-            } else {
-                $updatedAttender = $currentAttender;
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " no permissions to update status for {$currentAttender->user_type} {$currentAttender->user_id}");
             }
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
+        }
+        
+        // send notifications
+        if ($currentAttender->status != $updatedAttender->status && $this->_sendNotifications) {
+            $updatedEvent = $this->get($event->getId());
+            $this->doSendNotifications($updatedEvent, $this->_currentAccount, 'changed', $event);
         }
         
         return $updatedAttender;
@@ -1205,8 +1321,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @todo add support for resources
      * 
      * @param Calendar_Model_Event $_event
+     * @param bool                 $_isRescheduled event got rescheduled reset all attendee status
      */
-    protected function _saveAttendee($_event)
+    protected function _saveAttendee($_event, $_isRescheduled=FALSE)
     {
         $attendee = $_event->attendee instanceof Tinebase_Record_RecordSet ? 
             $_event->attendee : 
@@ -1229,7 +1346,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             if ($idx !== FALSE) {
                 $currentAttender = $currentAttendee[$idx];
-                $this->_updateAttender($attender, $currentAttender, $calendar);
+                $this->_updateAttender($attender, $currentAttender, $calendar, $_isRescheduled);
                 
             } else {
                 $this->_createAttender($attender, $calendar);
@@ -1288,19 +1405,33 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param Calendar_Model_Attender  $_attender
      * @param Calendar_Model_Attender  $_currentAttender
      * @param Tinebase_Model_Container $_calendar
+     * @param bool                     $_isRescheduled event got rescheduled reset all attendee status
      */
-    protected function _updateAttender($_attender, $_currentAttender, $_calendar) {
-        
+    protected function _updateAttender($_attender, $_currentAttender, $_calendar, $_isRescheduled)
+    {
+        //echo  "save: ". (int) $_isRescheduled . "\n";
+            
         $userAccountId = $_currentAttender->getUserAccountId();
         
         // reset status if attender != currentuser and wrong authkey
         if ($_attender->user_type == Calendar_Model_Attender::USERTYPE_GROUP
                 || $userAccountId != Tinebase_Core::getUser()->getId()) {
             
-            if ($_attender->status_authkey != $_currentAttender->status_authkey) {
+            if ($_isRescheduled) {
+                $_attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+            }
+            
+            
+            else  if ($_attender->status_authkey != $_currentAttender->status_authkey) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " wrong authkey -> resetting status ");
                 $_attender->status = $_currentAttender->status;
             }
+        }
+        
+        // reset alarm ack and snooze times
+        if ($_isRescheduled) {
+            $_attender->alarm_ack_time = null;
+            $_attender->alarm_snooze_time = null;
         }
         
         // preserv old authkey

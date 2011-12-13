@@ -41,15 +41,27 @@ class Addressbook_Setup_Update_Release4 extends Setup_Update_Abstract
         
     /**
      * update to 4.3
-     * - add new outlook / exchange import definition
+     * 
+     * - do nothing / just increase version number / import definitions are updated in update_2
      * 
      * @return void
      */
     public function update_2()
     {
+        $this->setApplicationVersion('Addressbook', '4.3');
+    }
+
+    /**
+     * update to 4.4
+     * - add new outlook / exchange / vcard import definition
+     * 
+     * @return void
+     */
+    public function update_3()
+    {
         Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'));
         
-        $this->setApplicationVersion('Addressbook', '4.3');
+        $this->setApplicationVersion('Addressbook', '4.4');
     }
     
     /**

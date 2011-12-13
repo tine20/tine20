@@ -13,7 +13,7 @@
     <mapping>
         <field>
             <source>Anrede</source>
-            <destination>n_prefix</destination>
+            <destination>salutation_id</destination>
         </field>
         <field>
             <source>Vorname</source>
@@ -29,7 +29,7 @@
         </field>
         <field>
             <source>Suffix</source>
-            <destination>n_suffix</destination>
+            <destination>n_prefix</destination>
         </field>
         <field>
             <source>Firma</source>
@@ -48,6 +48,10 @@
             <destination>adr_one_street</destination>
         </field>
         <field>
+            <source>Strasse geschaeftlich 2</source>
+            <destination>adr_one_street2</destination>
+        </field>
+        <field>
             <source>Ort geschaeftlich</source>
             <destination>adr_one_locality</destination>
         </field>
@@ -57,16 +61,20 @@
         </field>
         <field>
             <source>Postleitzahl geschaeftlich</source>
-            <destination>adr_one_postalcode </destination>
+            <destination>adr_one_postalcode</destination>
         </field>
         <field>
             <source>Land/Region geschaeftlich</source>
             <destination>adr_one_countryname</destination>
-        </field>
+        </field>            
         <field>
             <source>Strasse privat</source>
             <destination>adr_two_street</destination>
         </field>
+        <field>
+            <source>Strasse privat 2</source>
+            <destination>adr_two_street2</destination>
+        </field>            
         <field>
             <source>Ort privat</source>
             <destination>adr_two_locality</destination>
@@ -78,6 +86,10 @@
         <field>
             <source>Postleitzahl privat</source>
             <destination>adr_two_postalcode</destination>
+        </field>            
+        <field>
+            <source>Land/Region privat</source>
+            <destination>adr_two_countryname</destination>
         </field>
         <field>
             <source>Fax geschaeftlich</source>
@@ -97,19 +109,31 @@
         </field>
         <field>
             <source>Mobiltelefon</source>
+            <destination>tel_cell</destination>
+        </field>
+        <field>
+            <source>Mobiltelefon 2</source>
             <destination>tel_cell_private</destination>
         </field>
         <field>
             <source>E-Mail-Adresse</source>
-            <destination>email_home</destination>
+            <destination>email</destination>
         </field>
         <field>
             <source>E-Mail 2: Adresse</source>
-            <destination>email</destination>
+            <destination>email_home</destination>
         </field>
         <field>
             <source>Geburtstag</source>
             <destination>bday</destination>
         </field>
+        <field>
+            <source>Notizen</source>
+            <destination>note</destination>
+        </field>
+        <field>
+            <source>Webseite</source>
+            <destination>url</destination>
+        </field>
     </mapping>
-</config>
+</config> 

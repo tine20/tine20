@@ -98,7 +98,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($testUser->getId(),      $this->objects['users']['addedUser']->getId());
         $this->assertEquals('hidden',                $this->objects['users']['addedUser']->visibility);
-        $this->assertType('Tinebase_Model_FullUser', $testUser);
+        $this->assertEquals('Tinebase_Model_FullUser', get_class($testUser), 'wrong type');
         
         return $this->objects['users']['addedUser'];
     }
@@ -129,7 +129,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
         $testUser = $this->_backend->getFullUserByLoginName($user->accountLoginName);
         
         $this->assertEquals($user->accountLoginName, $testUser->accountLoginName);
-        $this->assertType('Tinebase_Model_FullUser', $testUser);
+        $this->assertEquals('Tinebase_Model_FullUser', get_class($testUser), 'wrong type');
     }
     
     /**
@@ -143,7 +143,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
         $testUser = $this->_backend->getFullUserById($user->getId());
         
         $this->assertEquals($user->accountLoginName, $testUser->accountLoginName);
-        $this->assertType('Tinebase_Model_FullUser', $testUser);
+        $this->assertEquals('Tinebase_Model_FullUser', get_class($testUser), 'wrong type');
     }
         
     /**
@@ -303,7 +303,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
         
         $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
         
-        $this->assertType('DateTime',                      $testUser->accountExpires);
+        $this->assertEquals('Tinebase_DateTime', get_class($testUser->accountExpires), 'wrong type');
         $this->assertEquals(Tinebase_User::STATUS_EXPIRED, $testUser->accountStatus);
         
 

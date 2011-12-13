@@ -4,8 +4,8 @@
  * @package     Tinebase
  * @subpackage  widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -79,6 +79,7 @@ Tine.Voipmanager.LineGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
         Tine.Voipmanager.LineGridPanel.superclass.initComponent.call(this);
         
         this.on('afterrender', this.onAfterRender, this);
+        this.store.on('load', this.onStoreLoad, this);
     },
 
     /**
@@ -91,10 +92,22 @@ Tine.Voipmanager.LineGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
     },
     
     /**
+     * select first row after render
+     */
+    onStoreLoad: function(store, records, options) {
+        if (this.rendered && records.length > 0) {
+            var index = store.indexOf(records[0]),
+                row = this.getView().getRow(index);
+                
+            Ext.fly(row).highlight();
+            this.getSelectionModel().selectRow(index);
+        }
+    },
+    
+    /**
      * on call forward form field change: update store
      */
     onFieldChange: function() {
-        //this.cfPanel.getForm().updateRecord(this.activeRecord);
         this.editDialog.getForm().updateRecord(this.activeRecord);
         this.getView().refresh();
     },

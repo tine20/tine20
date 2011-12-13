@@ -246,7 +246,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     public function testDateStringConversion()
     {
         $record = new Tinebase_Record_DummyRecord(array('date_stringtrim' => '2008-12-12 00:00:00'));
-        $this->assertType('string', $record->date_stringtrim, 'implicit conversion of Tinebase_DateTime to string failed');
+        $this->assertEquals('string', gettype($record->date_stringtrim), 'implicit conversion of Tinebase_DateTime to string failed');
     }
     
     /**

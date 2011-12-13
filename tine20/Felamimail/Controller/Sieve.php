@@ -240,21 +240,30 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         $addresses = array();
         if ($_account->type == Felamimail_Model_Account::TYPE_SYSTEM) {
+            $fullUser = Tinebase_User::getInstance()->getFullUserById($this->_currentAccount->getId());
+            
             $addresses[] = (! empty($this->_currentAccount->accountEmailAddress)) ? $this->_currentAccount->accountEmailAddress : $_account->email;
-            if ($this->_currentAccount->smtpUser && ! empty($this->_currentAccount->smtpUser->emailAliases)) {
-                $addresses = array_merge($addresses, $this->_currentAccount->smtpUser->emailAliases);
+            if ($fullUser->smtpUser && ! empty($fullUser->smtpUser->emailAliases)) {
+                $addresses = array_merge($addresses, $fullUser->smtpUser->emailAliases);
+            }
+            if ($this->_isDbmailSieve() && $fullUser->imapUser && ! empty($fullUser->imapUser->emailUID)) {
+                // dbmail sieve needs dbmail uid (envelope recipient) in addresses
+                // see https://bugs.launchpad.net/ubuntu/+source/libsieve/+bug/883627
+                $addresses[] = $fullUser->imapUser->emailUID;
             }
         } else {
             $addresses[] = $_account->email;
         }
-        
-        $from = $_account->from;
-        if (strpos($from, '@') === FALSE) {
-            $from .= ' <' . $_account->email . '>';
-        }
-        
         $_vacation->addresses = $addresses;
-        $_vacation->from = $from;
+        
+        if (! $this->_isDbmailSieve()) {
+            // and: no from for dbmail vacations
+            $from = $_account->from;
+            if (strpos($from, '@') === FALSE) {
+                $from .= ' <' . $_account->email . '>';
+            }
+            $_vacation->from = $from;            
+        }
     }
     
     /**
@@ -284,11 +293,21 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     protected function _addVacationSubject(Felamimail_Model_Sieve_Vacation $_vacation)
     {
-        if (preg_match('/dbmail/i', $this->_backend->getImplementation())) {
+        if ($this->_isDbmailSieve()) {
             // dbmail seems to have problems with different subjects and sends vacation responses to the same recipients again and again
             $translate = Tinebase_Translation::getTranslation('Felamimail');
             $_vacation->subject = sprintf($translate->_('Out of Office reply from %1$s'), $this->_currentAccount->accountFullName);
         }
+    }
+    
+    /**
+     * checks if sieve implementation is dbmail
+     * 
+     * @return boolean
+     */
+    protected function _isDbmailSieve()
+    {
+        return (preg_match('/dbmail/i', $this->_backend->getImplementation()));
     }
         
     /**

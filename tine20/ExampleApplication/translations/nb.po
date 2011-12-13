@@ -27,20 +27,27 @@ msgstr ""
 msgid "%s's personal example records"
 msgstr ""
 
-#: js/ExampleApplication.js:24
-msgid "Example Application test"
+#: Setup/setup.xml:4
+msgid "ExampleApplication"
+msgstr "EksempelApplikasjon"
+
+#: Setup/Initialize.php:33
+msgid "Completed"
 msgstr ""
 
-#: js/ExampleRecordEditDialog.js:87
-#, fuzzy
-msgid "ExampleRecord"
-msgstr "EksempelPost"
+#: Setup/Initialize.php:34
+msgid "Cancelled"
+msgstr ""
 
-#: js/ExampleRecordEditDialog.js:104 js/ExampleRecordGridPanel.js:83
+#: Setup/Initialize.php:35
+msgid "In process"
+msgstr ""
+
+#: js/ExampleRecordGridPanel.js:83 js/ExampleRecordEditDialog.js:104
 msgid "Name"
 msgstr ""
 
-#: js/ExampleRecordEditDialog.js:110 js/ExampleRecordGridPanel.js:89
+#: js/ExampleRecordGridPanel.js:89 js/ExampleRecordEditDialog.js:110
 #: js/Model.js:71
 msgid "Status"
 msgstr "Status"
@@ -56,6 +63,15 @@ msgstr "Budsjett"
 #: js/ExampleRecordGridPanel.js:126
 msgid "Show closed"
 msgstr "Vis lukket"
+
+#: js/ExampleRecordEditDialog.js:87
+#, fuzzy
+msgid "ExampleRecord"
+msgstr "EksempelPost"
+
+#: js/ExampleApplication.js:24
+msgid "Example Application test"
+msgstr ""
 
 #: js/Model.js:31
 msgid "example record"
@@ -88,22 +104,6 @@ msgstr ""
 #: js/Model.js:82
 msgid "Creator"
 msgstr ""
-
-#: Setup/Initialize.php:33
-msgid "Completed"
-msgstr ""
-
-#: Setup/Initialize.php:34
-msgid "Cancelled"
-msgstr ""
-
-#: Setup/Initialize.php:35
-msgid "In process"
-msgstr ""
-
-#: Setup/setup.xml:4
-msgid "ExampleApplication"
-msgstr "EksempelApplikasjon"
 
 #~ msgid "ExampleRecords"
 #~ msgstr "EksempelPoster"

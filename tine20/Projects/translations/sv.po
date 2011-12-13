@@ -35,92 +35,8 @@ msgstr ""
 msgid "%s's personal Projects"
 msgstr ""
 
-#: js/Model.js:33 js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:37
-msgid "Project list"
-msgid_plural "Project lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:40
-msgid "Project lists"
-msgstr ""
-
-#: js/Model.js:72
-msgid "Quick search"
-msgstr ""
-
-#: js/Model.js:74 js/ProjectEditDialog.js:141 js/ProjectGridPanel.js:95
-msgid "Status"
-msgstr ""
-
-#: js/Model.js:83
-msgid "Last modified"
-msgstr ""
-
-#: js/Model.js:84
-msgid "Last modifier"
-msgstr ""
-
-#: js/Model.js:85
-msgid "Creation Time"
-msgstr ""
-
-#: js/Model.js:86
-msgid "Creator"
-msgstr ""
-
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:83
-msgid "Attendee"
-msgstr ""
-
-#: js/ProjectAttendeeFilter.js:49
-msgid "Attendee Role"
-msgstr ""
-
-#: js/ProjectEditDialog.js:84
-msgid "Role"
-msgstr ""
-
-#: js/ProjectEditDialog.js:130 js/ProjectGridPanel.js:89
-msgid "Title"
-msgstr ""
-
-#: js/ProjectEditDialog.js:135 js/ProjectGridPanel.js:82
-msgid "Number"
-msgstr ""
-
-#: js/ProjectEditDialog.js:171
-msgid "Description"
-msgstr ""
-
-#: js/ProjectEditDialog.js:185
-msgid "Enter description"
-msgstr ""
-
-#: js/ProjectGridPanel.js:79
-msgid "Tags"
-msgstr ""
-
-#: js/Projects.js:24 Setup/setup.xml:4
+#: Setup/setup.xml:4 js/Projects.js:24
 msgid "Projects"
-msgstr ""
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr ""
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
 msgstr ""
 
 #: Setup/Initialize.php:34
@@ -165,4 +81,88 @@ msgstr ""
 
 #: Setup/Initialize.php:121
 msgid "My projects that are on hold"
+msgstr ""
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr ""
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr ""
+
+#: js/ProjectGridPanel.js:85
+msgid "Tags"
+msgstr ""
+
+#: js/ProjectGridPanel.js:88 js/ProjectEditDialog.js:135
+msgid "Number"
+msgstr ""
+
+#: js/ProjectGridPanel.js:95 js/ProjectEditDialog.js:130
+msgid "Title"
+msgstr ""
+
+#: js/ProjectGridPanel.js:101 js/ProjectEditDialog.js:141 js/Model.js:74
+msgid "Status"
+msgstr ""
+
+#: js/ProjectEditDialog.js:83 js/ProjectAttendeeFilter.js:38
+msgid "Attendee"
+msgstr ""
+
+#: js/ProjectEditDialog.js:84
+msgid "Role"
+msgstr ""
+
+#: js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118 js/Model.js:33
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/ProjectEditDialog.js:171
+msgid "Description"
+msgstr ""
+
+#: js/ProjectEditDialog.js:185
+msgid "Enter description"
+msgstr ""
+
+#: js/Model.js:37
+msgid "Project list"
+msgid_plural "Project lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:40
+msgid "Project lists"
+msgstr ""
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr ""
+
+#: js/Model.js:83
+msgid "Last modified"
+msgstr ""
+
+#: js/Model.js:84
+msgid "Last modifier"
+msgstr ""
+
+#: js/Model.js:85
+msgid "Creation Time"
+msgstr ""
+
+#: js/Model.js:86
+msgid "Creator"
+msgstr ""
+
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
 msgstr ""

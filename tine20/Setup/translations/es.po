@@ -14,6 +14,335 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: js/Setup.js:53
+msgid "Terms and Conditions"
+msgstr "Términos y Condiciones"
+
+#: js/Setup.js:58
+msgid "Setup Checks"
+msgstr "Pruebas de Instalación"
+
+#: js/Setup.js:64
+msgid "Config Manager"
+msgstr "Administrador de Configuración"
+
+#: js/Setup.js:70
+msgid "Authentication/Accounts"
+msgstr "Autentificación/Cuentas"
+
+#: js/Setup.js:76
+msgid "Email"
+msgstr "Email"
+
+#: js/Setup.js:82
+msgid "Application Manager"
+msgstr "Administrador de Aplicaciones"
+
+#: js/Setup.js:185
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Aplicación"
+msgstr[1] "Aplicaciones"
+
+#: js/ConfigManagerPanel.js:132 js/EmailPanel.js:146
+#: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
+msgid "Backend"
+msgstr "Administración"
+
+#: js/ConfigManagerPanel.js:135
+msgid "File"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:145
+msgid "Adapter"
+msgstr "Adaptador"
+
+#: js/ConfigManagerPanel.js:156
+msgid "Setup Authentication"
+msgstr "Autentificación del Instalador"
+
+#: js/ConfigManagerPanel.js:163 js/EmailPanel.js:186
+msgid "Username"
+msgstr "Nombre de usuario"
+
+#: js/ConfigManagerPanel.js:172 js/ConfigManagerPanel.js:203
+#: js/EmailPanel.js:190 js/AuthenticationPanel.js:323
+#: js/AuthenticationPanel.js:478
+msgid "Password"
+msgstr "Contraseñ"
+
+#: js/ConfigManagerPanel.js:177 js/ConfigManagerPanel.js:195
+msgid "Database"
+msgstr "Base de Datos"
+
+#: js/ConfigManagerPanel.js:187 js/ConfigManagerPanel.js:306
+#: js/EmailPanel.js:182 js/EmailPanel.js:286 js/EmailPanel.js:385
+#: js/AuthenticationPanel.js:363
+msgid "Hostname"
+msgstr "Nombre del Dominio"
+
+#: js/ConfigManagerPanel.js:192 js/ConfigManagerPanel.js:310
+#: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:389
+#: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
+msgid "Port"
+msgstr "Puerto"
+
+#: js/ConfigManagerPanel.js:199
+msgid "User"
+msgstr "Usuario"
+
+#: js/ConfigManagerPanel.js:207
+msgid "Prefix"
+msgstr "Prefijo"
+
+#: js/ConfigManagerPanel.js:211
+msgid "Logging"
+msgstr "Registros de sucesos"
+
+#: js/ConfigManagerPanel.js:221
+msgid "Filename"
+msgstr "Nombre de archivo"
+
+#: js/ConfigManagerPanel.js:224
+msgid "Priority"
+msgstr "Prioridad"
+
+#: js/ConfigManagerPanel.js:228
+msgid "Caching"
+msgstr "Cacheo"
+
+#: js/ConfigManagerPanel.js:238 js/ConfigManagerPanel.js:292
+msgid "Path"
+msgstr "Ruta"
+
+#: js/ConfigManagerPanel.js:242 js/ConfigManagerPanel.js:267
+msgid "Lifetime (seconds)"
+msgstr "Tiempo de vida (segundos)"
+
+#: js/ConfigManagerPanel.js:247
+msgid "Temporary files"
+msgstr "Archivos temporales"
+
+#: js/ConfigManagerPanel.js:255
+msgid "Temporary Files Path"
+msgstr "Ruta de Archivos Temporales"
+
+#: js/ConfigManagerPanel.js:259
+msgid "Session"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:319
+msgid "Filestore directory"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:327
+msgid "Filestore Path"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:332
+msgid "Addressbook Map panel"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:340
+msgid "Map panel"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:342
+msgid "disabled"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:342
+msgid "enabled"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:354
+msgid "Config file is not writable"
+msgstr "El archivo de configuración no tiene permisos de escritura"
+
+#: js/ConfigManagerPanel.js:356 js/AuthenticationPanel.js:596
+msgid "Save config"
+msgstr "Guardar configuración"
+
+#: js/ConfigManagerPanel.js:372
+msgid "Download config file"
+msgstr "Descargando archivo de configuración"
+
+#: js/EmailPanel.js:150
+msgid "Standard IMAP"
+msgstr "IMAP estándar"
+
+#: js/EmailPanel.js:160
+msgid "Standard SMTP"
+msgstr "SMTP estándar"
+
+#: js/EmailPanel.js:174
+msgid "Imap"
+msgstr "Imap"
+
+#: js/EmailPanel.js:199 js/EmailPanel.js:294 js/EmailPanel.js:393
+#: js/AuthenticationPanel.js:370
+msgid "Secure Connection"
+msgstr "Conexión Segura"
+
+#: js/EmailPanel.js:202 js/EmailPanel.js:297 js/EmailPanel.js:303
+#: js/EmailPanel.js:396 js/AuthenticationPanel.js:372
+msgid "None"
+msgstr "Ninguno"
+
+#: js/EmailPanel.js:202 js/EmailPanel.js:297 js/EmailPanel.js:396
+#: js/AuthenticationPanel.js:372
+msgid "TLS"
+msgstr "TLS"
+
+#: js/EmailPanel.js:202 js/EmailPanel.js:297 js/EmailPanel.js:396
+#: js/AuthenticationPanel.js:372
+msgid "SSL"
+msgstr "SSL"
+
+#: js/EmailPanel.js:206
+msgid "Use system account"
+msgstr ""
+
+#: js/EmailPanel.js:207 js/AuthenticationPanel.js:285
+#: js/AuthenticationPanel.js:329 js/AuthenticationPanel.js:458
+#: js/AuthenticationPanel.js:484 js/AuthenticationPanel.js:522
+#: js/AuthenticationPanel.js:553 js/AuthenticationPanel.js:575
+#: js/AuthenticationPanel.js:581
+msgid "No"
+msgstr "No"
+
+#: js/EmailPanel.js:207 js/AuthenticationPanel.js:285
+#: js/AuthenticationPanel.js:329 js/AuthenticationPanel.js:458
+#: js/AuthenticationPanel.js:484 js/AuthenticationPanel.js:522
+#: js/AuthenticationPanel.js:553 js/AuthenticationPanel.js:575
+#: js/AuthenticationPanel.js:581
+msgid "Yes"
+msgstr "Si"
+
+#: js/EmailPanel.js:212 js/AuthenticationPanel.js:377
+msgid "Append domain to login name"
+msgstr ""
+
+#: js/EmailPanel.js:258
+msgid "Cyrus Admin"
+msgstr ""
+
+#: js/EmailPanel.js:261
+msgid "Cyrus Admin Password"
+msgstr ""
+
+#: js/EmailPanel.js:278
+msgid "Smtp"
+msgstr "Smtp"
+
+#: js/EmailPanel.js:300
+msgid "Authentication"
+msgstr "Autentificación"
+
+#: js/EmailPanel.js:303
+msgid "Login"
+msgstr "Ingreso"
+
+#: js/EmailPanel.js:303
+msgid "Plain"
+msgstr "Plano"
+
+#: js/EmailPanel.js:307
+msgid "Primary Domain"
+msgstr ""
+
+#: js/EmailPanel.js:311
+msgid "Secondary Domains (comma separated)"
+msgstr ""
+
+#: js/EmailPanel.js:315
+msgid "Notifications service address"
+msgstr "Dirección del servicio de notificaciones"
+
+#: js/EmailPanel.js:319
+msgid "Notification Username"
+msgstr ""
+
+#: js/EmailPanel.js:323
+msgid "Notification Password"
+msgstr ""
+
+#: js/EmailPanel.js:328
+msgid "Notifications local client (hostname or IP address)"
+msgstr ""
+
+#: js/EmailPanel.js:379
+msgid "SIEVE"
+msgstr ""
+
+#: js/EmailPanel.js:420
+msgid "MySql Hostname"
+msgstr "Dominio de MySql"
+
+#: js/EmailPanel.js:423
+msgid "MySql Database"
+msgstr "Base de Datos MySql"
+
+#: js/EmailPanel.js:426
+msgid "MySql User"
+msgstr "Usuario MySql"
+
+#: js/EmailPanel.js:429
+msgid "MySql Password"
+msgstr "Contraseña MySql"
+
+#: js/EmailPanel.js:433
+msgid "MySql Port"
+msgstr "Puerto MySql"
+
+#: js/EmailPanel.js:449
+msgid "User or UID"
+msgstr ""
+
+#: js/EmailPanel.js:452
+msgid "Group or GID"
+msgstr ""
+
+#: js/EmailPanel.js:455
+msgid "Home Template"
+msgstr ""
+
+#: js/EmailPanel.js:457
+msgid "Password Scheme"
+msgstr ""
+
+#: js/EmailPanel.js:468
+msgid "PLAIN-MD5"
+msgstr ""
+
+#: js/EmailPanel.js:469
+msgid "MD5-CRYPT"
+msgstr ""
+
+#: js/EmailPanel.js:470
+msgid "SHA1"
+msgstr ""
+
+#: js/EmailPanel.js:471
+msgid "SHA256"
+msgstr ""
+
+#: js/EmailPanel.js:472
+msgid "SSHA256"
+msgstr ""
+
+#: js/EmailPanel.js:473
+msgid "SHA512"
+msgstr ""
+
+#: js/EmailPanel.js:474
+msgid "SSHA512"
+msgstr ""
+
+#: js/EmailPanel.js:475
+msgid "PLAIN"
+msgstr ""
+
 #: js/ApplicationGridPanel.js:63
 msgid "Name"
 msgstr "Nombre"
@@ -82,11 +411,6 @@ msgstr "Borrar todos los usuarios y grupos existentes"
 msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
 msgstr "Cambiar desde SQL a LDAP borrará todas las cuentas, cargos y grupos de usuario. ¿Realmente desea cambiar el almacenamiento de cuentas administrativo a LDAP?"
 
-#: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
-#: js/ConfigManagerPanel.js:132 js/EmailPanel.js:146
-msgid "Backend"
-msgstr "Administración"
-
 #: js/AuthenticationPanel.js:233
 msgid "Initial Admin User"
 msgstr ""
@@ -111,22 +435,6 @@ msgstr "Proveedor de autentificación"
 msgid "Try to split username"
 msgstr ""
 
-#: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
-#: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:484
-#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:553
-#: js/AuthenticationPanel.js:575 js/AuthenticationPanel.js:581
-#: js/EmailPanel.js:207
-msgid "Yes"
-msgstr "Si"
-
-#: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
-#: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:484
-#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:553
-#: js/AuthenticationPanel.js:575 js/AuthenticationPanel.js:581
-#: js/EmailPanel.js:207
-msgid "No"
-msgstr "No"
-
 #: js/AuthenticationPanel.js:290 js/AuthenticationPanel.js:341
 #: js/AuthenticationPanel.js:405
 msgid "Account canonical form"
@@ -146,21 +454,9 @@ msgstr ""
 msgid "Host"
 msgstr "Dominio"
 
-#: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
-#: js/ConfigManagerPanel.js:192 js/ConfigManagerPanel.js:310
-#: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:384
-msgid "Port"
-msgstr "Puerto"
-
 #: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:475
 msgid "Login name"
 msgstr "Nombre de ingreso"
-
-#: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:478
-#: js/ConfigManagerPanel.js:172 js/ConfigManagerPanel.js:203
-#: js/EmailPanel.js:190
-msgid "Password"
-msgstr "Contraseñ"
 
 #: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:483
 msgid "Bind requires DN"
@@ -172,36 +468,6 @@ msgstr "Base DN"
 
 #: js/AuthenticationPanel.js:337
 msgid "Search filter"
-msgstr ""
-
-#: js/AuthenticationPanel.js:363 js/ConfigManagerPanel.js:187
-#: js/ConfigManagerPanel.js:306 js/EmailPanel.js:182 js/EmailPanel.js:286
-#: js/EmailPanel.js:380
-msgid "Hostname"
-msgstr "Nombre del Dominio"
-
-#: js/AuthenticationPanel.js:370 js/EmailPanel.js:199 js/EmailPanel.js:294
-#: js/EmailPanel.js:388
-msgid "Secure Connection"
-msgstr "Conexión Segura"
-
-#: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
-#: js/EmailPanel.js:303 js/EmailPanel.js:391
-msgid "None"
-msgstr "Ninguno"
-
-#: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
-#: js/EmailPanel.js:391
-msgid "TLS"
-msgstr "TLS"
-
-#: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
-#: js/EmailPanel.js:391
-msgid "SSL"
-msgstr "SSL"
-
-#: js/AuthenticationPanel.js:377 js/EmailPanel.js:212
-msgid "Append domain to login name"
 msgstr ""
 
 #: js/AuthenticationPanel.js:426
@@ -300,10 +566,6 @@ msgstr "Redirigir al sitio de referencia, si es que existe"
 msgid "Save config and install"
 msgstr "Guardar configuración e instalar"
 
-#: js/AuthenticationPanel.js:596 js/ConfigManagerPanel.js:356
-msgid "Save config"
-msgstr "Guardar configuración"
-
 #: js/AuthenticationPanel.js:621
 msgid "Passwords don't match"
 msgstr "Las contraseñas no coinciden"
@@ -313,234 +575,6 @@ msgstr "Las contraseñas no coinciden"
 #: js/AuthenticationPanel.js:665
 msgid "Should not be empty"
 msgstr "No debería estar vacío"
-
-#: js/ConfigManagerPanel.js:135
-msgid "File"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:145
-msgid "Adapter"
-msgstr "Adaptador"
-
-#: js/ConfigManagerPanel.js:156
-msgid "Setup Authentication"
-msgstr "Autentificación del Instalador"
-
-#: js/ConfigManagerPanel.js:163 js/EmailPanel.js:186
-msgid "Username"
-msgstr "Nombre de usuario"
-
-#: js/ConfigManagerPanel.js:177 js/ConfigManagerPanel.js:195
-msgid "Database"
-msgstr "Base de Datos"
-
-#: js/ConfigManagerPanel.js:199
-msgid "User"
-msgstr "Usuario"
-
-#: js/ConfigManagerPanel.js:207
-msgid "Prefix"
-msgstr "Prefijo"
-
-#: js/ConfigManagerPanel.js:211
-msgid "Logging"
-msgstr "Registros de sucesos"
-
-#: js/ConfigManagerPanel.js:221
-msgid "Filename"
-msgstr "Nombre de archivo"
-
-#: js/ConfigManagerPanel.js:224
-msgid "Priority"
-msgstr "Prioridad"
-
-#: js/ConfigManagerPanel.js:228
-msgid "Caching"
-msgstr "Cacheo"
-
-#: js/ConfigManagerPanel.js:238 js/ConfigManagerPanel.js:292
-msgid "Path"
-msgstr "Ruta"
-
-#: js/ConfigManagerPanel.js:242 js/ConfigManagerPanel.js:267
-msgid "Lifetime (seconds)"
-msgstr "Tiempo de vida (segundos)"
-
-#: js/ConfigManagerPanel.js:247
-msgid "Temporary files"
-msgstr "Archivos temporales"
-
-#: js/ConfigManagerPanel.js:255
-msgid "Temporary Files Path"
-msgstr "Ruta de Archivos Temporales"
-
-#: js/ConfigManagerPanel.js:259
-msgid "Session"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:319
-msgid "Filestore directory"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:327
-msgid "Filestore Path"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:332
-msgid "Addressbook Map panel"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:340
-msgid "Map panel"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:342
-msgid "disabled"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:342
-msgid "enabled"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:354
-msgid "Config file is not writable"
-msgstr "El archivo de configuración no tiene permisos de escritura"
-
-#: js/ConfigManagerPanel.js:372
-msgid "Download config file"
-msgstr "Descargando archivo de configuración"
-
-#: js/EmailPanel.js:150
-msgid "Standard IMAP"
-msgstr "IMAP estándar"
-
-#: js/EmailPanel.js:160
-msgid "Standard SMTP"
-msgstr "SMTP estándar"
-
-#: js/EmailPanel.js:174
-msgid "Imap"
-msgstr "Imap"
-
-#: js/EmailPanel.js:206
-msgid "Use system account"
-msgstr ""
-
-#: js/EmailPanel.js:258
-msgid "Cyrus Admin"
-msgstr ""
-
-#: js/EmailPanel.js:261
-msgid "Cyrus Admin Password"
-msgstr ""
-
-#: js/EmailPanel.js:278
-msgid "Smtp"
-msgstr "Smtp"
-
-#: js/EmailPanel.js:300
-msgid "Authentication"
-msgstr "Autentificación"
-
-#: js/EmailPanel.js:303
-msgid "Login"
-msgstr "Ingreso"
-
-#: js/EmailPanel.js:303
-msgid "Plain"
-msgstr "Plano"
-
-#: js/EmailPanel.js:307
-msgid "Primary Domain"
-msgstr ""
-
-#: js/EmailPanel.js:311
-msgid "Secondary Domains (comma separated)"
-msgstr ""
-
-#: js/EmailPanel.js:315
-msgid "Notifications service address"
-msgstr "Dirección del servicio de notificaciones"
-
-#: js/EmailPanel.js:319
-msgid "Notification Username"
-msgstr ""
-
-#: js/EmailPanel.js:323
-msgid "Notification Password"
-msgstr ""
-
-#: js/EmailPanel.js:374
-msgid "SIEVE"
-msgstr ""
-
-#: js/EmailPanel.js:415
-msgid "MySql Hostname"
-msgstr "Dominio de MySql"
-
-#: js/EmailPanel.js:418
-msgid "MySql Database"
-msgstr "Base de Datos MySql"
-
-#: js/EmailPanel.js:421
-msgid "MySql User"
-msgstr "Usuario MySql"
-
-#: js/EmailPanel.js:424
-msgid "MySql Password"
-msgstr "Contraseña MySql"
-
-#: js/EmailPanel.js:428
-msgid "MySql Port"
-msgstr "Puerto MySql"
-
-#: js/EmailPanel.js:444
-msgid "User or UID"
-msgstr ""
-
-#: js/EmailPanel.js:447
-msgid "Group or GID"
-msgstr ""
-
-#: js/EmailPanel.js:450
-msgid "Home Template"
-msgstr ""
-
-#: js/EmailPanel.js:452
-msgid "Password Scheme"
-msgstr ""
-
-#: js/EmailPanel.js:463
-msgid "PLAIN-MD5"
-msgstr ""
-
-#: js/EmailPanel.js:464
-msgid "MD5-CRYPT"
-msgstr ""
-
-#: js/EmailPanel.js:465
-msgid "SHA1"
-msgstr ""
-
-#: js/EmailPanel.js:466
-msgid "SHA256"
-msgstr ""
-
-#: js/EmailPanel.js:467
-msgid "SSHA256"
-msgstr ""
-
-#: js/EmailPanel.js:468
-msgid "SHA512"
-msgstr ""
-
-#: js/EmailPanel.js:469
-msgid "SSHA512"
-msgstr ""
-
-#: js/EmailPanel.js:470
-msgid "PLAIN"
-msgstr ""
 
 #: js/EnvCheckGridPanel.js:89
 msgid "Performing Environment Checks..."
@@ -569,36 +603,6 @@ msgstr "Realizar pruebas de instalación"
 #: js/EnvCheckGridPanel.js:189
 msgid "Ignore setup tests"
 msgstr "Ignorar pruebas de instalación"
-
-#: js/Setup.js:53
-msgid "Terms and Conditions"
-msgstr "Términos y Condiciones"
-
-#: js/Setup.js:58
-msgid "Setup Checks"
-msgstr "Pruebas de Instalación"
-
-#: js/Setup.js:64
-msgid "Config Manager"
-msgstr "Administrador de Configuración"
-
-#: js/Setup.js:70
-msgid "Authentication/Accounts"
-msgstr "Autentificación/Cuentas"
-
-#: js/Setup.js:76
-msgid "Email"
-msgstr "Email"
-
-#: js/Setup.js:82
-msgid "Application Manager"
-msgstr "Administrador de Aplicaciones"
-
-#: js/Setup.js:185
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Aplicación"
-msgstr[1] "Aplicaciones"
 
 #: js/TermsPanel.js:30
 msgid "I have read the license agreement and accept it"

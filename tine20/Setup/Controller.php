@@ -1208,6 +1208,8 @@ class Setup_Controller
                         $this->_backend->createTable($table);
                     } catch (Zend_Db_Statement_Exception $zdse) {
                         throw new Tinebase_Exception_Backend_Database('Could not create table: ' . $zdse->getMessage());
+                    } catch (Zend_Db_Adapter_Exception $zdae) {
+                        throw new Tinebase_Exception_Backend_Database('Could not create table: ' . $zdae->getMessage());
                     }
                     $createdTables[] = $table;
                 }
@@ -1253,11 +1255,9 @@ class Setup_Controller
      */
     public function createImportExportDefinitions($_application)
     {
-        Tinebase_ImportExportDefinition::getInstance()->modlogActive(FALSE);
-        
         foreach (array('Import', 'Export') as $type) {
             $path = 
-                $this->_baseDir . DIRECTORY_SEPARATOR . $_application->name . 
+                $this->_baseDir . $_application->name . 
                 DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . 'definitions';
     
             if (file_exists($path)) {
@@ -1275,8 +1275,6 @@ class Setup_Controller
                 }
             }
         }
-        
-        Tinebase_ImportExportDefinition::getInstance()->modlogActive(TRUE);
     }
     
     /**

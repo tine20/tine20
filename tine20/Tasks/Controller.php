@@ -90,16 +90,17 @@ class Tasks_Controller extends Tinebase_Controller_Event implements Tinebase_Con
     {
         $translation = Tinebase_Translation::getTranslation('Tasks');
         
-        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $account = Tinebase_User::getInstance()->getUserById($accountId);
+        $account = Tinebase_User::getInstance()->getUserById($_accountId);
+        
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => sprintf($translation->_("%s's personal tasks"), $account->accountFullName),
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+            'owner_id'          => $_accountId,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId() 
         ));
         
-        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer, NULL, FALSE, $accountId);
+        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
         
         return $container;

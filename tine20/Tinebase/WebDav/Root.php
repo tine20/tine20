@@ -1,117 +1,51 @@
 <?php
 /**
  * Tine 2.0
- * 
+ *
  * @package     Tinebase
- * @subpackage  WebDav
+ * @subpackage  WebDAV
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * 
+ * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ *
  */
 
 /**
- * class to handle webdav root
- * 
+ * root of tree for the WebDAV frontend
+ *
+ * This class handles the root of the WebDAV tree
+ *
  * @package     Tinebase
- * @subpackage  WebDav
+ * @subpackage  WebDAV
  */
-class Tinebase_WebDav_Root extends Sabre_DAV_Directory 
+class Tinebase_WebDav_Root extends Sabre_DAV_SimpleCollection
 {
-    const ROOT_NODE = 'webdav';
-    
-    protected $_path;
-    
-    public function __construct($_path) 
+    public function __construct()
     {
-        $this->_path = $_path;
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see Sabre_DAV_ICollection::getChildren()
-     */
-    public function getChildren() 
-    {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path);
+        $webdavApps = array();
         
-        $children = array();
-        
-        if (empty($this->_path)) {
-            $children[] = $this->getChild(Tinebase_WebDav_Root::ROOT_NODE);
-        } elseif ($this->_path == Tinebase_WebDav_Root::ROOT_NODE) {
-            // Loop through the directory, and create objects for each node
-            foreach(Tinebase_Core::getUser()->getApplications() as $application) {
-                #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' application: ' . $application);
-                try {
-                    $children[] = $this->getChild($application);
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' added application: ' . $application);
-                } catch (Sabre_DAV_Exception_FileNotFound $sdefnf) {
-                    continue;
-                }
+        foreach(array('Addressbook', 'Calendar'/*, 'Filemanager'*/) as $application) {
+            if(Tinebase_Core::getUser()->hasRight($application, Tinebase_Acl_Rights::RUN)) {
+                $applicationClass = $application . '_Frontend_WebDAV';
+                $webdavApps[] = new $applicationClass($application);
             }
         }
         
-        return $children;            
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see Sabre_DAV_Directory::getChild()
-     */
-    public function getChild($_name) 
-    {
-        if (empty($this->_path)) {
-            return new Tinebase_WebDav_Root(Tinebase_WebDav_Root::ROOT_NODE);
-        } elseif (strtolower($this->_path) == Tinebase_WebDav_Root::ROOT_NODE) {
-            return $this->_getApplicationNode($_name);
-        }
-    }
-    
-    public function getName() 
-    {
-        return strtolower(basename($this->_path));
-    }    
-    
-    public function getNodeForPath()
-    {
-        if (empty($this->_path) || strtolower($this->_path) == Tinebase_WebDav_Root::ROOT_NODE) {
-            return new Tinebase_WebDav_Root(strtolower($this->_path));
-        } else {
-            $applicationNode = $this->_getApplicationNode(substr($this->_path, strlen(Tinebase_WebDav_Root::ROOT_NODE) +1));
+        parent::__construct('root', array(
+            new Sabre_DAV_SimpleCollection(Sabre_CardDAV_Plugin::ADDRESSBOOK_ROOT, array(
+                new Addressbook_Frontend_CardDAV()
+            )),
+            new Sabre_DAV_SimpleCollection(Sabre_CalDAV_Plugin::CALENDAR_ROOT, array(
+                new Calendar_Frontend_CalDAV()
+            )),
+            new Sabre_DAV_SimpleCollection('webdav', 
+                $webdavApps
+            ),
+            new Sabre_DAV_SimpleCollection('principals', array(
+                new Sabre_DAVACL_PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), 'principals/users'),
+                new Sabre_DAVACL_PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), 'principals/groups')
+            )),
             
-            return $applicationNode->getNodeForPath();
-        }
-    }
-    
-    protected function _getApplicationNode($_appPath)
-    {
-        // appname[/subdir][/subdir]...
-        $pathParts = explode('/', $_appPath, 2);
-        list($appName, $appPath) = array(ucfirst($pathParts[0]), isset($pathParts[1]) ? $pathParts[1] : null);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' appname: ' . $appName . ' apppath: ' . $appPath . ' origPath: ' . $_appPath);
-
-        if (!Tinebase_Application::getInstance()->isInstalled($appName)) {
-            throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $_appPath . ' could not be found');
-        }
-        
-        if (!Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights::RUN)) {
-            throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $_appPath . ' could not be found');
-        }
-
-        // apps which have an WebDav Frontend but are not yet working
-        if (in_array($appName, array('Calendar'))) {
-            throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $_appPath . ' could not be found');
-        }
-        
-        
-        $className = $appName . '_Frontend_WebDav';
-        if (!@class_exists($className)) {
-            throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $_appPath . ' could not be found');
-        }
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' classname: ' . $className);
-        $applicationNode = new $className($_appPath);
-        
-        return $applicationNode;
+        ));
     }
 }

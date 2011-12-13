@@ -93,7 +93,7 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
         $db = Zend_Registry::get('dbAdapter');
         
         $transactionId01 = $this->_instance->startTransaction($db);
-        $this->assertType('string', $transactionId01, 'TransactionId is not a string');
+        $this->assertEquals('string', gettype($transactionId01), 'TransactionId is not a string');
         $this->assertGreaterThan(10, strlen($transactionId01) , 'TransactionId is weak');
         
         $transactionId02 = $this->_instance->startTransaction($db);

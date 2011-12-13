@@ -1,0 +1,66 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Kneschke;Lars;;;
+FN:Vorname Nachname
+ORG:Organisation;
+EMAIL;type=INTERNET;type=WORK;type=pref:l.kneschke@metaways.de
+EMAIL;type=INTERNET;type=HOME:lars@kneschke.de
+item1.EMAIL;type=INTERNET:email other
+item1.X-ABLabel:_$!<Other>!$_
+item2.EMAIL;type=INTERNET:email other
+item2.X-ABLabel:_$!<Other>!$_
+TEL;type=WORK;type=pref:+49 BUSINESS
+TEL;type=CELL:+49 MOBIL
+TEL;type=HOME:+49 PRIVAT
+TEL;type=IPHONE:Tel Iphone
+TEL;type=MAIN:Tel Zentrale
+TEL;type=HOME;type=FAX:+49 FAX PRIVAT
+TEL;type=WORK;type=FAX:+49 FAX
+TEL;type=PAGER:+49 PAGER
+TEL;type=OTHER:Tel other
+TEL;type=OTHER:Tel other
+item3.ADR;type=WORK;type=pref:;;Address Business 1;City Business;;12345;COUNTRY BUSINESS
+item3.X-ABADR:de
+item4.ADR;type=HOME:;;Address Privat 1;City Privat;;12345;COUNTRY PRIVAT
+item4.X-ABADR:de
+item5.ADR;type=OTHER:;;andere sta..e;andere stan..e;;andere plz;andere land
+item5.X-ABADR:de
+NOTE:Notes\nwith\nLine Break
+X-AIM;type=WORK;type=pref:Messenger Work (AIM)
+X-AIM;type=HOME:Messenger Private (AIM)
+item6.X-AIM:Messenger Other (AIM)
+item6.X-ABLabel:_$!<Other>!$_
+IMPP;X-SERVICE-TYPE=aim;type=WORK;type=pref:aim:Messenger%20Work%20(AIM)
+IMPP;X-SERVICE-TYPE=aim;type=HOME:aim:Messenger%20Private%20(AIM)
+item7.IMPP;X-SERVICE-TYPE=aim:aim:Messenger%20Other%20(AIM)
+item7.X-ABLabel:_$!<Other>!$_
+item8.X-ABRELATEDNAMES;type=pref:Kontakt?
+item8.X-ABLabel:_$!<Friend>!$_
+item9.X-ABRELATEDNAMES:Assistent?
+item9.X-ABLabel:_$!<Assistant>!$_
+item10.X-ABRELATEDNAMES:Vater
+item10.X-ABLabel:_$!<Father>!$_
+item11.X-ABRELATEDNAMES:Mutter
+item11.X-ABLabel:_$!<Mother>!$_
+item12.X-ABRELATEDNAMES:Elternteil
+item12.X-ABLabel:_$!<Parent>!$_
+item13.X-ABRELATEDNAMES:Bruder
+item13.X-ABLabel:_$!<Brother>!$_
+item14.X-ABRELATEDNAMES:Schwerster
+item14.X-ABLabel:_$!<Sister>!$_
+item15.X-ABRELATEDNAMES:Kind
+item15.X-ABLabel:_$!<Child>!$_
+item16.X-ABRELATEDNAMES:Ehepartner
+item16.X-ABLabel:_$!<Spouse>!$_
+item17.X-ABRELATEDNAMES:Partner
+item17.X-ABLabel:_$!<Partner>!$_
+item18.X-ABRELATEDNAMES:Manager
+item18.X-ABLabel:_$!<Manager>!$_
+item19.X-ABRELATEDNAMES:Andere
+item19.X-ABLabel:_$!<Other>!$_
+item20.X-ABRELATEDNAMES:Andere
+item20.X-ABLabel:_$!<Other>!$_
+UID:2d935ec3-c22d-4aa5-aa80-66ea39bd9703
+REV:2011-09-29T14:29:39Z
+PRODID:-//Apple Inc.//AddressBook 6.0//EN
+END:VCARD

@@ -152,6 +152,35 @@ class Tinebase_Mail extends Zend_Mail
     }
     
     /**
+     * Sets the HTML body for the message
+     *
+     * @param  string|Zend_Mime_Part    $html
+     * @param  string    $charset
+     *  @param  string    $encoding
+     * @return Zend_Mail Provides fluent interface
+     */
+    public function setBodyHtml($html, $charset = null, $encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE)
+    {
+        if ($html instanceof Zend_Mime_Part) {
+            $mp = $html;
+        } else {
+            if ($charset === null) {
+                $charset = $this->_charset;
+            }
+        
+            $mp = new Zend_Mime_Part($html);
+            $mp->encoding = $encoding;
+            $mp->type = Zend_Mime::TYPE_HTML;
+            $mp->disposition = Zend_Mime::DISPOSITION_INLINE;
+            $mp->charset = $charset;
+        }
+        
+        $this->_bodyHtml = $mp;
+    
+        return $this;
+    }
+    
+    /**
      * Sets the text body for the message.
      *
      * @param  string|Zend_Mime_Part $txt

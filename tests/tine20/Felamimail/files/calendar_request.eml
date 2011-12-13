@@ -1,0 +1,102 @@
+Return-Path: <notifications@caldav.org>
+Delivered-To: <tine20admin@caldav.net>
+Received: from laptoplk.home.kneschke.de
+	by laptoplk (Dovecot) with LMTP id wAQLEw49yk7FRAAAfHVL7A
+	for <tine20admin@caldav.net>; Mon, 21 Nov 2011 12:59:10 +0100
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by laptoplk.home.kneschke.de (Postfix) with ESMTP id 431A97D34
+	for <tine20admin@caldav.net>; Mon, 21 Nov 2011 12:59:10 +0100 (CET)
+Subject: Einladung zum Termin  "test mit extern" am 21.11.2011 13:00:00
+X-MailGenerator: Tine 2.0
+X-MailGenerator: Tine 2.0
+X-Tine20-Type: Notification
+Precedence: bulk
+From: "Tine 2.0 Admin Account" <l.kneschke@caldav.org>
+Sender: "Tine 2.0 notification service" <notifications@caldav.org>
+To: "Caldav External" <tine20admin@caldav.net>
+Date: Mon, 21 Nov 2011 11:59:10 +0000
+X-Tine20TestMessage: calendar_request.eml
+Content-Type: multipart/mixed; charset=UTF-8;
+ boundary="=_a4f4a43c473722a1d83ea9d75a3ccb06"
+MIME-Version: 1.0
+Message-Id: <20111121115910.431A97D34@laptoplk.home.kneschke.de>
+
+This is a message in Mime Format.  If you see this, your mail reader does not support this format.
+
+--=_a4f4a43c473722a1d83ea9d75a3ccb06
+Content-Type: multipart/alternative;
+ boundary="=_47c47e459459e6c52a779c8ada0365bc"
+Content-Transfer-Encoding: 8bit
+
+
+--=_47c47e459459e6c52a779c8ada0365bc
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Termin Details:=0AStart:              21.11.2011 13:00:00=0AEnde:      =
+         21.11.2011 14:00:00=0AThema:              test mit extern=0AOrt=
+:                =0ABeschreibung:       =0ATeilnehmende:=0A    Admin Acc=
+ount, Tine 2.0 (Zugesagt) =0A    L=C3=B6w, Jogi (Keine Antwort) =0A    E=
+xternal, Caldav (Keine Antwort) =0A=0A
+
+--=_47c47e459459e6c52a779c8ada0365bc
+Content-Type: text/calendar; method=REQUEST; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+BEGIN:VCALENDAR=0D=0APRODID:-//tine20.org//Tine 2.0 Calendar V4.0//EN=0D=
+=0AVERSION:2.0=0D=0ACALSCALE:GREGORIAN=0D=0ABEGIN:VTIMEZONE=0D=0ATZID:Eu=
+rope/Berlin=0D=0AX-LIC-LOCATION:Europe/Berlin=0D=0ABEGIN:DAYLIGHT=0D=0AT=
+ZOFFSETFROM:+0100=0D=0ATZOFFSETTO:+0200=0D=0ATZNAME:CEST=0D=0ADTSTART;VA=
+LUE=3DDATE-TIME:20111121T115910=0D=0AEND:DAYLIGHT=0D=0ABEGIN:STANDARD=0D=
+=0ATZOFFSETFROM:+0200=0D=0ATZOFFSETTO:+0100=0D=0ATZNAME:CET=0D=0ADTSTART=
+;VALUE=3DDATE-TIME:20111121T115910=0D=0AEND:STANDARD=0D=0AEND:VTIMEZONE=
+=0D=0ABEGIN:VEVENT=0D=0ACREATED;VALUE=3DDATE-TIME:20111121T115908Z=0D=0A=
+LAST-MODIFIED;VALUE=3DDATE-TIME:20111121T115908Z=0D=0ADTSTAMP;VALUE=3DDA=
+TE-TIME:20111121T115908Z=0D=0AUID:4f0162146d61cb2c06cbe2abf94636f4526abe=
+16=0D=0ASEQUENCE:0=0D=0ADTSTART;VALUE=3DDATE-TIME;TZID=3DEurope/Berlin:2=
+0111121T130000=0D=0ADTEND;VALUE=3DDATE-TIME;TZID=3DEurope/Berlin:2011112=
+1T140000=0D=0AORGANIZER;CN=3D"Admin Account, Tine 2.0":mailto:l.kneschke=
+@caldav.org=0D=0AATTENDEE;CN=3D"Admin Account, Tine 2.0";CUTYPE=3DINDIVI=
+DUAL;EMAIL=3Dl.kneschke@ca=0D=0A ldav.org;PARTSTAT=3DACCEPTED;ROLE=3DREQ=
+-PARTICIPANT;RSVP=3DFALSE:mailto:l.knesch=0D=0A ke@caldav.org=0D=0AATTEN=
+DEE;CN=3D"unitte, Jogi";CUTYPE=3DINDIVIDUAL;EMAIL=3Dunittest@tine20.org;=
+PARTSTAT=0D=0A =3DNEEDS-ACTION;ROLE=3DREQ-PARTICIPANT;RSVP=3DFALSE:mailt=
+o:unittest@tine20.org=0D=0AATTENDEE;CN=3D"Externa,Caldav";CUTYPE=3DINDIV=
+IDUAL;EMAIL=3Dtine20admin@caldav.n=0D=0A et;PARTSTAT=3DNEEDS-ACTION;ROLE=
+=3DREQ-PARTICIPANT;RSVP=3DFALSE:mailto:tine20admi=0D=0A n@caldav.net=0D=
+=0ACLASS:PUBLIC=0D=0ASUMMARY:test mit extern=0D=0ATRANSP:OPAQUE=0D=0AX-M=
+OZ-LASTACK;VALUE=3DDATE-TIME:20111121T115910Z=0D=0AEND:VEVENT=0D=0AMETHO=
+D:REQUEST=0D=0AEND:VCALENDAR=0D=0A
+
+--=_47c47e459459e6c52a779c8ada0365bc--
+
+--=_a4f4a43c473722a1d83ea9d75a3ccb06
+Content-Type: application/ics
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="event.ics"
+
+BEGIN:VCALENDAR=0D=0APRODID:-//tine20.org//Tine 2.0 Calendar V4.0//EN=0D=
+=0AVERSION:2.0=0D=0ACALSCALE:GREGORIAN=0D=0ABEGIN:VTIMEZONE=0D=0ATZID:Eu=
+rope/Berlin=0D=0AX-LIC-LOCATION:Europe/Berlin=0D=0ABEGIN:DAYLIGHT=0D=0AT=
+ZOFFSETFROM:+0100=0D=0ATZOFFSETTO:+0200=0D=0ATZNAME:CEST=0D=0ADTSTART;VA=
+LUE=3DDATE-TIME:20111121T115910=0D=0AEND:DAYLIGHT=0D=0ABEGIN:STANDARD=0D=
+=0ATZOFFSETFROM:+0200=0D=0ATZOFFSETTO:+0100=0D=0ATZNAME:CET=0D=0ADTSTART=
+;VALUE=3DDATE-TIME:20111121T115910=0D=0AEND:STANDARD=0D=0AEND:VTIMEZONE=
+=0D=0ABEGIN:VEVENT=0D=0ACREATED;VALUE=3DDATE-TIME:20111121T115908Z=0D=0A=
+LAST-MODIFIED;VALUE=3DDATE-TIME:20111121T115908Z=0D=0ADTSTAMP;VALUE=3DDA=
+TE-TIME:20111121T115908Z=0D=0AUID:4f0162146d61cb2c06cbe2abf94636f4526abe=
+16=0D=0ASEQUENCE:0=0D=0ADTSTART;VALUE=3DDATE-TIME;TZID=3DEurope/Berlin:2=
+0111121T130000=0D=0ADTEND;VALUE=3DDATE-TIME;TZID=3DEurope/Berlin:2011112=
+1T140000=0D=0AORGANIZER;CN=3D"Admin Account, Tine 2.0":mailto:l.kneschke=
+@caldav.org=0D=0AATTENDEE;CN=3D"Admin Account, Tine 2.0";CUTYPE=3DINDIVI=
+DUAL;EMAIL=3Dl.kneschke@ca=0D=0A ldav.org;PARTSTAT=3DACCEPTED;ROLE=3DREQ=
+-PARTICIPANT;RSVP=3DFALSE:mailto:l.knesch=0D=0A ke@caldav.org=0D=0AATTEN=
+DEE;CN=3D"L=C3=B6w, Jogi";CUTYPE=3DINDIVIDUAL;EMAIL=3Dj.loew@caldav.org;=
+PARTSTAT=0D=0A =3DNEEDS-ACTION;ROLE=3DREQ-PARTICIPANT;RSVP=3DFALSE:mailt=
+o:j.loew@caldav.org=0D=0AATTENDEE;CN=3D"External, Caldav";CUTYPE=3DINDIV=
+IDUAL;EMAIL=3Dtine20admin@caldav.n=0D=0A et;PARTSTAT=3DNEEDS-ACTION;ROLE=
+=3DREQ-PARTICIPANT;RSVP=3DFALSE:mailto:tine20admi=0D=0A n@caldav.net=0D=
+=0ACLASS:PUBLIC=0D=0ASUMMARY:test mit extern=0D=0ATRANSP:OPAQUE=0D=0AX-M=
+OZ-LASTACK;VALUE=3DDATE-TIME:20111121T115910Z=0D=0AEND:VEVENT=0D=0AMETHO=
+D:REQUEST=0D=0AEND:VCALENDAR=0D=0A
+--=_a4f4a43c473722a1d83ea9d75a3ccb06--

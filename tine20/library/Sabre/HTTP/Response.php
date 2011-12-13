@@ -5,7 +5,7 @@
  * 
  * @package Sabre
  * @subpackage HTTP 
- * @copyright Copyright (C) 2007-2010 Rooftop Solutions. All rights reserved.
+ * @copyright Copyright (C) 2007-2011 Rooftop Solutions. All rights reserved.
  * @author Evert Pot (http://www.rooftopsolutions.nl/) 
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
@@ -23,7 +23,7 @@ class Sabre_HTTP_Response {
             100 => 'Continue',
             101 => 'Switching Protocols',
             102 => 'Processing',
-            200 => 'Ok',
+            200 => 'OK',
             201 => 'Created',
             202 => 'Accepted',
             203 => 'Non-Authorative Information',
@@ -73,6 +73,7 @@ class Sabre_HTTP_Response {
             506 => 'Variant Also Negotiates',
             507 => 'Unsufficient Storage', // RFC 4918
             508 => 'Loop Detected', // RFC 5842
+            509 => 'Bandwidth Limit Exceeded', // non-standard
             510 => 'Not extended',
        ); 
 

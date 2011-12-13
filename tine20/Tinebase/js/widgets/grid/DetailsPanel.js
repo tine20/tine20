@@ -112,19 +112,21 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
      * inits this details panel
      */
     initComponent: function() {
-        this.defaults = this.defaults || {};
-        
-        Ext.applyIf(this.defaults, {
-            border: false,
-            autoScroll: true,
-            layout: 'fit'
-        });
         
         this.items = [
             this.getDefaultInfosPanel(),
             this.getSingleRecordPanel(),
             this.getMultiRecordsPanel()
         ];
+        
+        // NOTE: this defaults overwrites configs in already instanciated configs -> see docu
+        Ext.each(this.items, function(item) {
+            Ext.applyIf(item, {
+                border: false,
+                autoScroll: true,
+                layout: 'fit'
+            });
+        }, this);
         
         Tine.widgets.grid.DetailsPanel.superclass.initComponent.apply(this, arguments);
     },

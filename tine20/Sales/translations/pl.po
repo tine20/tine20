@@ -21,34 +21,30 @@ msgstr "edytowanie produktów"
 msgid "add, edit and delete products"
 msgstr "dodaj, edytuj i usuń produkty"
 
-#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:85
-msgid "Title"
-msgstr "Tytuł"
+#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
+msgid "Name"
+msgstr "Nazwa"
 
-#: js/ContractEditDialog.js:100 js/ProductEditDialog.js:123
+#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
+msgid "Price"
+msgstr "Cena"
+
+#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
+msgid "Manufacturer"
+msgstr "Producent"
+
+#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
+msgid "Category"
+msgstr "Kategoria"
+
+#: js/ProductEditDialog.js:123 js/ContractEditDialog.js:100
 #: js/ProductGridPanel.js:123
 msgid "Description"
 msgstr "Opis"
 
-#: js/ContractEditDialog.js:101 js/ProductEditDialog.js:124
+#: js/ProductEditDialog.js:124 js/ContractEditDialog.js:101
 msgid "Enter description..."
 msgstr "Proszę wprowadzić opis..."
-
-#: js/ContractGridPanel.js:59 js/Models.js:78
-msgid "Quick search"
-msgstr "Szybkie wyszukiwanie"
-
-#: js/ContractGridPanel.js:60
-msgid "Summary"
-msgstr "Streszczenie"
-
-#: js/ContractGridPanel.js:79
-msgid "Contract number"
-msgstr "Numer kontraktu"
-
-#: js/ContractGridPanel.js:91
-msgid "Status"
-msgstr "Status"
 
 #: js/Models.js:40
 msgid "Product"
@@ -63,6 +59,10 @@ msgid_plural "record lists"
 msgstr[0] "lista wierszy"
 msgstr[1] "listy wierszy"
 msgstr[2] "list wierszy"
+
+#: js/Models.js:78 js/ContractGridPanel.js:59
+msgid "Quick search"
+msgstr "Szybkie wyszukiwanie"
 
 #: js/Models.js:79
 msgid "Product name"
@@ -82,25 +82,21 @@ msgstr[0] "Lista kontraktów"
 msgstr[1] "listy kontraktów"
 msgstr[2] "listy kontraktów"
 
-#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
-msgid "Name"
-msgstr "Nazwa"
+#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:85
+msgid "Title"
+msgstr "Tytuł"
 
-#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
-msgid "Price"
-msgstr "Cena"
+#: js/ContractGridPanel.js:60
+msgid "Summary"
+msgstr "Streszczenie"
 
-#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
-msgid "Manufacturer"
-msgstr "Producent"
+#: js/ContractGridPanel.js:79
+msgid "Contract number"
+msgstr "Numer kontraktu"
 
-#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
-msgid "Category"
-msgstr "Kategoria"
-
-#: js/ProductGridPanel.js:119
-msgid "Tags"
-msgstr "Znaczniki"
+#: js/ContractGridPanel.js:91
+msgid "Status"
+msgstr "Status"
 
 #: js/Sales.js:53
 msgid "Products"
@@ -117,6 +113,10 @@ msgstr "Kontrakty"
 #: js/Sales.js:68 js/Sales.js:103
 msgid "All Contracts"
 msgstr "Wszystkie kontrakty"
+
+#: js/ProductGridPanel.js:119
+msgid "Tags"
+msgstr "Znaczniki"
 
 #~ msgid "Shared Contracts"
 #~ msgstr "Wspólne kontrakty"

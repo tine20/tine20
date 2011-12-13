@@ -78,10 +78,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 'z-index': 100
                             },
                             items: [new Ext.ux.form.ImageField({
-                                listeners: {
-                                    'add': this.addToDisableOnEditMultiple,
-                                    scope: this
-                                },
                                 name: 'jpegphoto',
                                 width: 90,
                                 height: 120
@@ -357,20 +353,12 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                             }]
                         }),
                         new Tine.widgets.activities.ActivitiesPanel({
-                            listeners: {
-                                'add': this.addToDisableOnEditMultiple,
-                                scope: this
-                            },
                             app: 'Addressbook',
                             showAddNoteForm: false,
                             border: false,
                             bodyStyle: 'border:1px solid #B5B8C8;'
                         }),
                         new Tine.widgets.tags.TagPanel({
-                            listeners: {
-                                'add': this.addToDisableOnEditMultiple,
-                                scope: this
-                            },
                             app: 'Addressbook',
                             border: false,
                             bodyStyle: 'border:1px solid #B5B8C8;'
@@ -380,10 +368,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             }, this.mapPanel,
             new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
-                listeners: {
-                    'add': this.addToDisableOnEditMultiple,
-                    scope: this
-                    },
                 record_id: (this.record && ! this.copyRecord) ? this.record.id : '',
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             }), this.linkPanel
@@ -397,10 +381,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     initComponent: function () {
         
         this.linkPanel = new Tine.widgets.dialog.LinkPanel({
-            listeners: {
-                'add': this.addToDisableOnEditMultiple,
-                scope: this
-            },
             relatedRecords: (Tine.Crm && Tine.Tinebase.common.hasRight('run', 'Crm')) ? {
                 Crm_Model_Lead: {
                     recordClass: Tine.Crm.Model.Lead,

@@ -243,8 +243,11 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             ];        	
         }
         
+        // no support for multiple edit
+        this.on('added', Tine.widgets.dialog.EditDialog.prototype.addToDisableOnEditMultiple, this);
+        
         Tine.widgets.activities.ActivitiesPanel.superclass.initComponent.call(this);
-    }      
+    }
 });
 Ext.reg('tineactivitiespanel', Tine.widgets.activities.ActivitiesPanel);
 

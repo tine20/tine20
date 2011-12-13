@@ -320,4 +320,20 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
         
         return $folderCounts;
     }
+    
+    /**
+     * set seen flag of message
+     * 
+     * @param Felamimail_Model_Message $_message
+     */
+    public function setSeenFlag(Felamimail_Model_Message $_message)
+    {
+        if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $_message->flags)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' Add \Seen flag to msg uid ' . $_message->messageuid);
+            
+            $this->addFlags($_message, Zend_Mail_Storage::FLAG_SEEN);
+            $_message->flags[] = Zend_Mail_Storage::FLAG_SEEN;
+        }        
+    }
 }

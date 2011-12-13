@@ -121,7 +121,7 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
         try {
             $recordArray[] = new Tinebase_Record_DummyRecord(array(), true);
-            $recordArray[] = new Tinebase_Model_Container(array(), true);
+            $recordArray[] = new Tinebase_Model_Tag(array(), true);
             $this->object = new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord', $recordArray);
         } catch (InvalidArgumentException $expected) {
             return;
@@ -154,7 +154,7 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
         try {
-            $record = new Tinebase_Model_Container(array(), true);
+            $record = new Tinebase_Model_Tag(array(), true);
             $this->object->addRecord($record);
         } catch (InvalidArgumentException $expected) {
             return;

@@ -99,7 +99,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
     {
         $node = $this->_webdavTree->getNodeForPath(null);
         
-        $this->assertType('Tinebase_WebDav_Root', $node);
+        $this->assertEquals('Tinebase_WebDav_Root', get_class($node), 'wrong type');
         
         $children = $node->getChildren();
         
@@ -115,14 +115,12 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
         
         $node = $this->_webdavTree->getNodeForPath(Tinebase_WebDav_Root::ROOT_NODE);
         
-        $this->assertType('Tinebase_WebDav_Root', $node);
+        $this->assertEquals('Tinebase_WebDav_Root', get_class($node), 'wrong type');
         $this->assertEquals(Tinebase_WebDav_Root::ROOT_NODE, $node->getName());
         
         $children = $node->getChildren();
         
-        #var_dump($children);
-        
-        $this->assertType('Sabre_DAV_ICollection', $children[0]);
+        $this->assertEquals('Filemanager_Frontend_WebDav', get_class($children[0]), 'wrong type');
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
@@ -133,13 +131,13 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
     {
         $node = $this->_webdavTree->getNodeForPath(Tinebase_WebDav_Root::ROOT_NODE . '/filemanager');
         
-        $this->assertType('Filemanager_Frontend_WebDav', $node);
+        $this->assertEquals('Filemanager_Frontend_WebDav', get_class($node), 'wrong type');
         $this->assertEquals('filemanager', $node->getName());
         
         $children = $node->getChildren();
         
         $this->assertEquals(2, count($children));
-        $this->assertType('Sabre_DAV_ICollection', $children[0]);
+        $this->assertEquals('Filemanager_Frontend_WebDav', get_class($children[0]), 'wrong type');
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
@@ -150,13 +148,13 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
     {
         $node = $this->_webdavTree->getNodeForPath(Tinebase_WebDav_Root::ROOT_NODE . '/filemanager/personal');
         
-        $this->assertType('Filemanager_Frontend_WebDav', $node);
+        $this->assertEquals('Filemanager_Frontend_WebDav', get_class($node), 'wrong type');
         $this->assertEquals('personal', $node->getName());
         
         $children = $node->getChildren();
         
         $this->assertEquals(1, count($children));
-        $this->assertType('Filemanager_Frontend_WebDav', $children[0]);
+        $this->assertEquals('Filemanager_Frontend_WebDav', get_class($children[0]), 'wrong type');
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
@@ -167,13 +165,13 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
     {
         $node = $this->_webdavTree->getNodeForPath(Tinebase_WebDav_Root::ROOT_NODE . '/filemanager/personal/' . Tinebase_Core::getUser()->accountLoginName);
         
-        $this->assertType('Filemanager_Frontend_WebDav', $node);
+        $this->assertEquals('Filemanager_Frontend_WebDav', get_class($node), 'wrong type');
         $this->assertEquals(Tinebase_Core::getUser()->accountLoginName, $node->getName());
         
         $children = $node->getChildren();
         #var_dump($children);
         $this->assertGreaterThanOrEqual(1, count($children));
-        $this->assertType('Filemanager_Frontend_WebDav', $children[0]);
+        $this->assertEquals('Filemanager_Frontend_WebDav', get_class($children[0]), 'wrong type');
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
@@ -189,7 +187,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
         
         $node = $this->_webdavTree->getNodeForPath(Tinebase_WebDav_Root::ROOT_NODE . '/filemanager/personal/' . Tinebase_Core::getUser()->accountLoginName .'/unittestdirectory');
         
-        $this->assertType('Filemanager_Frontend_WebDav_Directory', $node);
+        $this->assertEquals('Filemanager_Frontend_WebDav_Directory', get_class($node), 'wrong type');
         $this->assertEquals('unittestdirectory', $node->getName());
         
         $children = $node->getChildren();
@@ -218,7 +216,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
         $node = $this->_webdavTree->getNodeForPath(Tinebase_WebDav_Root::ROOT_NODE . '/filemanager/personal/' . Tinebase_Core::getUser()->accountLoginName . '/unittestdirectory');
         $this->objects['nodes'][] = $node;
         
-        $this->assertType('Filemanager_Frontend_WebDav_Directory', $node);
+        $this->assertEquals('Filemanager_Frontend_WebDav_Directory', get_class($node), 'wrong type');
         
         return $node;
     }
@@ -227,7 +225,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
     {
         $node = $this->_webdavTree->getNodeForPath(Tinebase_WebDav_Root::ROOT_NODE . '/filemanager/shared');
         
-        $this->assertType('Filemanager_Frontend_WebDav', $node);
+        $this->assertEquals('Filemanager_Frontend_WebDav', get_class($node), 'wrong type');
         $this->assertEquals('shared', $node->getName());
         
         $children = $node->getChildren();
@@ -246,7 +244,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
         
         $node = $this->_webdavTree->getNodeForPath(Tinebase_WebDav_Root::ROOT_NODE . '/filemanager/shared/unittestdirectory');
         
-        $this->assertType('Filemanager_Frontend_WebDav_Directory', $node);
+        $this->assertEquals('Filemanager_Frontend_WebDav_Directory', get_class($node), 'wrong type');
         $this->assertEquals('unittestdirectory', $node->getName());
         
         $children = $node->getChildren();
@@ -260,7 +258,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
         
         $node = $this->_webdavTree->getNodeForPath(Tinebase_WebDav_Root::ROOT_NODE . '/filemanager/shared/unittestdirectory/tine_logo.png');
         
-        $this->assertType('Filemanager_Frontend_WebDav_File', $node);
+        $this->assertEquals('Filemanager_Frontend_WebDav_File', get_class($node), 'wrong type');
         $this->assertEquals('tine_logo.png', $node->getName());
     }
     
@@ -285,7 +283,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
         $node = $this->_webdavTree->getNodeForPath(Tinebase_WebDav_Root::ROOT_NODE . '/filemanager/shared/unittestdirectory');
         $this->objects['nodes'][] = $node;
         
-        $this->assertType('Filemanager_Frontend_WebDav_Directory', $node);
+        $this->assertEquals('Filemanager_Frontend_WebDav_Directory', get_class($node), 'wrong type');
         
         return $node;
     }
@@ -310,7 +308,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
         
         $node = $this->_webdavTree->getNodeForPath(Tinebase_WebDav_Root::ROOT_NODE . '/filemanager/shared/unittestdirectory/tine_logo.png');
         
-        $this->assertType('Filemanager_Frontend_WebDav_File', $node);
+        $this->assertEquals('Filemanager_Frontend_WebDav_File', get_class($node), 'wrong type');
         
         return $node;
     }
@@ -321,7 +319,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
         
         $node->put(fopen(dirname(__FILE__) . '/../../Tinebase/files/tine_logo.png', 'r'));
         
-        $this->assertType('Filemanager_Frontend_WebDav_File', $node);
+        $this->assertEquals('Filemanager_Frontend_WebDav_File', get_class($node), 'wrong type');
     }
     
     public function testgetNodeForPath_invalidApplication()

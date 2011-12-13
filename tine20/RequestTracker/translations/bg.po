@@ -14,11 +14,51 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: js/TreePanel.js:23
+msgid "All Queues"
+msgstr ""
+
 #: js/Model.js:41 js/TicketGridPanel.js:41
 msgid "Ticket"
 msgid_plural "Tickets"
 msgstr[0] ""
 msgstr[1] ""
+
+#: js/TicketGridPanel.js:42 js/TicketGridPanel.js:67
+msgid "Ticket ID"
+msgstr ""
+
+#: js/TicketGridPanel.js:43 js/TicketGridPanel.js:70
+msgid "Queue"
+msgstr ""
+
+#: js/TicketGridPanel.js:44 js/TicketGridPanel.js:76
+msgid "Subject"
+msgstr ""
+
+#: js/TicketGridPanel.js:45 js/TicketGridPanel.js:82
+msgid "Requestors"
+msgstr ""
+
+#: js/TicketGridPanel.js:46 js/TicketGridPanel.js:88
+msgid "Owner"
+msgstr ""
+
+#: js/TicketGridPanel.js:48
+msgid "Description"
+msgstr ""
+
+#: js/TicketGridPanel.js:94 js/StatusCombo.js:50
+msgid "Status"
+msgstr ""
+
+#: js/TicketGridPanel.js:100
+msgid "Final Priority"
+msgstr ""
+
+#: js/TicketGridPanel.js:106
+msgid "Due"
+msgstr ""
 
 #: js/StatusCombo.js:25
 msgid "New"
@@ -50,44 +90,4 @@ msgstr ""
 
 #: js/StatusCombo.js:32
 msgid "Deleted"
-msgstr ""
-
-#: js/StatusCombo.js:50 js/TicketGridPanel.js:94
-msgid "Status"
-msgstr ""
-
-#: js/TicketGridPanel.js:42 js/TicketGridPanel.js:67
-msgid "Ticket ID"
-msgstr ""
-
-#: js/TicketGridPanel.js:43 js/TicketGridPanel.js:70
-msgid "Queue"
-msgstr ""
-
-#: js/TicketGridPanel.js:44 js/TicketGridPanel.js:76
-msgid "Subject"
-msgstr ""
-
-#: js/TicketGridPanel.js:45 js/TicketGridPanel.js:82
-msgid "Requestors"
-msgstr ""
-
-#: js/TicketGridPanel.js:46 js/TicketGridPanel.js:88
-msgid "Owner"
-msgstr ""
-
-#: js/TicketGridPanel.js:48
-msgid "Description"
-msgstr ""
-
-#: js/TicketGridPanel.js:100
-msgid "Final Priority"
-msgstr ""
-
-#: js/TicketGridPanel.js:106
-msgid "Due"
-msgstr ""
-
-#: js/TreePanel.js:23
-msgid "All Queues"
 msgstr ""

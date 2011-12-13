@@ -2,7 +2,7 @@
 <application>
     <name>Calendar</name>
     <!-- gettext('Calendar') -->   
-    <version>5.3</version>
+    <version>5.4</version>
     <order>15</order>
     <status>enabled</status>
     <tables>
@@ -259,7 +259,7 @@
         <!-- attendee -->
         <table>
             <name>cal_attendee</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -316,6 +316,20 @@
                     <name>displaycontainer_id</name>
                     <type>integer</type>
                 </field>
+                <field>
+                    <name>transp</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <default>OPAQUE</default>
+                </field>
+                <field>
+                    <name>alarm_ack_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>alarm_snooze_time</name>
+                    <type>datetime</type>
+                </field> 
                 <index>
                     <name>id</name>
                     <primary>true</primary>

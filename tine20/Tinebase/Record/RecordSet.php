@@ -145,7 +145,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function removeRecord(Tinebase_Record_Interface $_record)
     {
-        $idx = array_search($_record, $this->_listOfRecords);
+        $idx = $this->indexOf($_record);
         if ($idx !== false) {
             $this->offsetUnset($idx);
         }
@@ -161,6 +161,17 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         foreach ($_records as $record) {
             $this->removeRecord($record);
         }
+    }
+    
+    /**
+     * get index of given record
+     * 
+     * @param Tinebase_Record_Interface $_record
+     * @return (int) index of record of false if not found
+     */
+    public function indexOf(Tinebase_Record_Interface $_record)
+    {
+        return array_search($_record, $this->_listOfRecords);
     }
     
     /**

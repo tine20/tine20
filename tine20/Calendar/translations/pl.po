@@ -13,30 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: Acl/Rights.php:96
-msgid "manage shared calendars"
-msgstr "edytowanie wspólnych kalendarzy"
-
-#: Acl/Rights.php:97
-msgid "Create new shared calendars"
-msgstr "Utwórz nowe, wspólne kalendarze"
-
-#: Acl/Rights.php:100
-msgid "manage shared calendars favorites"
-msgstr "zarządzanie ulubionymi ze wspólnego kalendarza"
-
-#: Acl/Rights.php:101
-msgid "Create or update shared calendars favorites"
-msgstr "Utwórz albo uaktualnij ulubione ze wspólnego kalendarza"
-
-#: Acl/Rights.php:104
-msgid "manage resources"
-msgstr "edytowanie zasobów"
-
-#: Acl/Rights.php:105
-msgid "All Rights to administrate resources"
-msgstr "Wszelkie uprawnienia do zarządzania zasobami"
-
 #: Config.php:45
 msgid "Fixed Calendars"
 msgstr "Stałe kalendarze"
@@ -61,163 +37,167 @@ msgstr "Dostępne role użytkownika"
 msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation."
 msgstr "Role użytkownika: Możliwe terminy. Zauważ proszę, że dodatkowe role użytkownika mogą wpływać w innych kalendarzach na eksport albo synchronizację."
 
-#: Controller/EventNotifications.php:263
-msgid "Alarm for event \"%1$s\" at %2$s"
-msgstr "Przypomnienie o terminie \"%1$s\" o %2$s"
-
-#: Controller/EventNotifications.php:266
-msgid "Event invitation \"%1$s\" at %2$s"
-msgstr "Zaproszenie na \"%1$s\" o %2$s"
-
-#: Controller/EventNotifications.php:269
-msgid "Event \"%1$s\" at %2$s has been canceled"
-msgstr "Termin \"%1$s\" at %2$s został anulowany"
-
-#: Controller/EventNotifications.php:274
-msgid "Event \"%1$s\" at %2$s has been rescheduled"
-msgstr "Termin \"%1$s\" at %2$s został przełożony"
-
-#: Controller/EventNotifications.php:278
-msgid "Event \"%1$s\" at %2$s has been updated"
-msgstr "Termin \"%1$s\" at %2$s został zaktualizowany"
-
-#: Controller/EventNotifications.php:288
-msgid "%1$s accepted event \"%2$s\" at %3$s"
-msgstr "%1$s zaakceptowany termin \"%2$s\" o %3$s"
-
-#: Controller/EventNotifications.php:292
-msgid "%1$s declined event \"%2$s\" at %3$s"
-msgstr "%1$s odwołany termin \"%2$s\" o %3$s"
-
-#: Controller/EventNotifications.php:296
-msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
-msgstr "Niezobowiązująca odpowiedź od %1$s dotycząca terminu \"%2$s\" o %3$s"
-
-#: Controller/EventNotifications.php:300
-msgid "No response from %1$s for event \"%2$s\" at %3$s"
-msgstr "Brak odpowiedzi od %1$s dotyczącej terminu \"%2$s\" o %3$s"
-
-#: Controller/EventNotifications.php:304
-msgid "Attendee changes for event \"%1$s\" at %2$s"
-msgstr "Zmiana składu uczestników dotycząca terminu \"%1$s\" o %2$s"
-
 #: Controller.php:103
 #, python-format
 msgid "%s's personal calendar"
 msgstr "%s's kalendarz osobisty"
 
-#: js/AddressbookGridPanelHook.js:35 js/Calendar.js:29 js/DaysView.js:88
-#: js/MonthView.js:81
-msgid "New Event"
-msgstr "Nowy termin"
-
-#: js/AdminPanel.js:44
-msgid "Manage Resources"
-msgstr "Zarządzaj zasobami"
-
-#: js/AttendeeFilterModel.js:35 js/AttendeeGridPanel.js:76
-#: js/EventDetailsPanel.js:248 js/Model.js:355
-msgid "Attendee"
-msgstr "Uczestnik"
-
-#: js/AttendeeFilterModel.js:101
-msgid "Select Attendee"
-msgstr "Wybierz uczestnika"
-
-#: js/AttendeeGridPanel.js:102
-msgid "Role"
-msgstr "Rola"
-
-#: js/AttendeeGridPanel.js:116
-msgid "Quantity"
-msgstr "Ilość"
-
-#: js/AttendeeGridPanel.js:125
-msgid "This is the calendar where the attender has saved this event in"
-msgstr "W tym kalendarzu uczestnik zapisał niniejszy termin"
-
-#: js/AttendeeGridPanel.js:161
-msgid "Type"
-msgstr "Ikona"
-
-#: js/AttendeeGridPanel.js:168
-msgid "User"
-msgstr "Użytkownik"
-
-#: js/AttendeeGridPanel.js:169
-msgid "Group"
-msgstr "Grupa"
-
-#: js/AttendeeGridPanel.js:170 js/Model.js:510
-msgid "Resource"
-msgid_plural "Resources"
-msgstr[0] "Zasób"
-msgstr[1] "zasoby"
-msgstr[2] "zasoby"
-
-#: js/AttendeeGridPanel.js:171
-msgid "Member of group"
-msgstr "Uczestnik grupy"
-
-#: js/AttendeeGridPanel.js:178 js/ResourceEditDialog.js:56
-#: js/ResourcesGridPanel.js:41
-msgid "Name"
-msgstr "Nazwa"
-
-#: js/AttendeeGridPanel.js:186 js/ContactEventsGridPanel.js:125
-#: js/GridView.js:142 Model/Event.php:237
-msgid "Status"
-msgstr "Status"
-
-#: js/AttendeeGridPanel.js:330
-msgid "Remove Attender"
-msgstr "Usuń uczestnika"
-
-#: js/AttendeeGridPanel.js:425
-msgid "Click here to invite another attender..."
-msgstr "Aby zaprosić innego uczestnika, kliknij tutaj..."
-
-#: js/AttendeeGridPanel.js:444 js/AttendeeGridPanel.js:462
-#: js/AttendeeGridPanel.js:479 js/AttendeeGridPanel.js:491 js/Model.js:371
-msgid "No Information"
-msgstr "Brak informacji"
-
-#: js/AttendeeGridPanel.js:449
-msgid "(as a group member)"
-msgstr "(jako uczestnik grupy)"
-
-#: js/Calendar.js:39 js/Model.js:67 Setup/setup.xml:4
+#: Setup/setup.xml:4 js/Calendar.js:39 js/Model.js:67
 msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] "Kalendarz"
 msgstr[1] "kalendarze"
 msgstr[2] "kalendarze"
 
-#: js/CalendarSelectWidget.js:124
-msgid "Originally"
-msgstr "Pierwotny kalendarz"
+#: Setup/Update/Release3.php:164 Setup/Initialize.php:34
+msgid "All events I attend"
+msgstr "Wszystkie terminy dodane przeze mnie"
 
-#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:359
-msgid "Events"
-msgstr "Terminy"
+#: Setup/Update/Release5.php:77 Setup/Initialize.php:98
+msgid "Required"
+msgstr "Obowiązkowy"
 
-#: js/ContactEventsGridPanel.js:112 js/EventDetailsPanel.js:175
-#: js/EventEditDialog.js:87 js/GridView.js:132 Model/Event.php:238
-msgid "Summary"
-msgstr "Streszczenie"
+#: Setup/Update/Release5.php:78 Setup/Initialize.php:99
+msgid "Optional"
+msgstr "Dobrowolny"
 
-#: js/ContactEventsGridPanel.js:118 js/EventDetailsPanel.js:211
-#: js/EventEditDialog.js:101 js/GridView.js:106 Preference.php:79
+#: Setup/Update/Release5.php:91 Setup/Initialize.php:112
+msgid "No response"
+msgstr "Brak odpowiedzi"
+
+#: Setup/Update/Release5.php:92 Setup/Initialize.php:113
+msgid "Accepted"
+msgstr "Zaakceptowany"
+
+#: Setup/Update/Release5.php:93 Setup/Initialize.php:114
+msgid "Declined"
+msgstr "Odrzucony"
+
+#: Setup/Update/Release5.php:94 Setup/Initialize.php:115
+msgid "Tentative"
+msgstr "Brak ostatecznej decyzji"
+
+#: Setup/Initialize.php:47
+msgid "Awaiting response"
+msgstr "Oczekują na odpowiedź"
+
+#: Setup/Initialize.php:48
+msgid "Events I have not yet responded to"
+msgstr "Terminy pozostające bez mojej odpowiedzi"
+
+#: Setup/Initialize.php:63
+msgid "Declined events"
+msgstr "Terminy odrzucone"
+
+#: Setup/Initialize.php:64
+msgid "Events I have declined"
+msgstr "Terminy, które odrzuciłem/-am"
+
+#: Setup/Initialize.php:77
+msgid "I'm organizer"
+msgstr "Jestem organizatorem"
+
+#: Setup/Initialize.php:78
+msgid "Events I'm the organizer of"
+msgstr "Terminy, które organizuję"
+
+#: Preference.php:31
+msgid "All my events"
+msgstr "Wszystkie moje terminy"
+
+#: Preference.php:79 js/EventDetailsPanel.js:211 js/EventEditDialog.js:101
+#: js/ContactEventsGridPanel.js:118 js/GridView.js:106
 msgid "Start Time"
 msgstr "Początek"
 
-#: js/DaysView.js:93
-msgid "{0}, the {1}. of {2}"
-msgstr "{0}, {1} z {2}"
+#: Preference.php:80
+msgid "Position on the left time axis, day and week view should start with"
+msgstr "Pozycja na lewej osi czasu, niech widok dni i tygodni zaczyna się od"
+
+#: Preference.php:83
+msgid "Default Calendar"
+msgstr "Domyślny kalendarz"
+
+#: Preference.php:84
+msgid "The default calendar for invitations and new events"
+msgstr "Domyślny kalendarz dla zaproszeń i nowych terminów"
+
+#: Preference.php:87
+msgid "Default Favorite"
+msgstr "Domyślne ulubione"
+
+#: Preference.php:88
+msgid "The default favorite which is loaded on calendar startup"
+msgstr "Domyślny ulubiony termin ładowany przy uruchamianiu kalendarza"
+
+#: Preference.php:91
+msgid "Get Notification Emails"
+msgstr "Powiadomienie e-mail o terminach"
+
+#: Preference.php:92
+msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
+msgstr "Wybierz poziom szczegółowości powiadomień o wykonywanych akcjach. Zauważ proszę, że organizatorzy otrzymują powiadomienia o każdej aktualizacji, łącznie z odpowiedziami uczestników, o ile niniejsza opcja nie zostanie ustawiona na wartość \"Nigdy\""
+
+#: Preference.php:95
+msgid "Send Notifications Emails of own Actions"
+msgstr "Wysyłaj powiadomienia e-mail o własnych akcjach"
+
+#: Preference.php:96
+msgid "Get notifications emails for actions you did yourself"
+msgstr "Odbieraj powiadomienia e-mail o własnych akcjach"
+
+#: Preference.php:149
+msgid "Never"
+msgstr "Nigdy"
+
+#: Preference.php:149
+msgid "On invitation and cancellation only"
+msgstr "Tylko w przypadku zaproszenia albo odrzucenia"
+
+#: Preference.php:149
+msgid "On time changes"
+msgstr "Przy zmianach czasu"
+
+#: Preference.php:149
+msgid "On all updates but attendee responses"
+msgstr "Przy aktualizacjach za wyjątkiem odpowiedzi uczestnika"
+
+#: Preference.php:149
+msgid "On attendee responses too"
+msgstr "Także w przypadku odpowiedzi uczestnika"
+
+#: Acl/Rights.php:96
+msgid "manage shared calendars"
+msgstr "edytowanie wspólnych kalendarzy"
+
+#: Acl/Rights.php:97
+msgid "Create new shared calendars"
+msgstr "Utwórz nowe, wspólne kalendarze"
+
+#: Acl/Rights.php:100
+msgid "manage shared calendars favorites"
+msgstr "zarządzanie ulubionymi ze wspólnego kalendarza"
+
+#: Acl/Rights.php:101
+msgid "Create or update shared calendars favorites"
+msgstr "Utwórz albo uaktualnij ulubione ze wspólnego kalendarza"
+
+#: Acl/Rights.php:104
+msgid "manage resources"
+msgstr "edytowanie zasobów"
+
+#: Acl/Rights.php:105
+msgid "All Rights to administrate resources"
+msgstr "Wszelkie uprawnienia do zarządzania zasobami"
 
 #: js/EventDetailsPanel.js:58
 msgid "{0} {1} o'clock"
 msgstr "godzina {0} {1}"
+
+#: js/EventDetailsPanel.js:175 js/EventEditDialog.js:87
+#: js/ContactEventsGridPanel.js:112 js/GridView.js:132 Model/Event.php:238
+msgid "Summary"
+msgstr "Streszczenie"
 
 #: js/EventDetailsPanel.js:216 js/EventEditDialog.js:116 js/GridView.js:112
 msgid "End Time"
@@ -227,8 +207,8 @@ msgstr "Koniec"
 msgid "Blocking"
 msgstr "Blokowanie"
 
-#: js/EventDetailsPanel.js:226 js/EventEditDialog.js:95 js/GridView.js:137
-#: js/ResourcesGridPanel.js:52 Model/Event.php:234
+#: js/EventDetailsPanel.js:226 js/ResourcesGridPanel.js:52
+#: js/EventEditDialog.js:95 js/GridView.js:137 Model/Event.php:234
 msgid "Location"
 msgstr "Miejsce"
 
@@ -236,53 +216,19 @@ msgstr "Miejsce"
 msgid "Organizer"
 msgstr "Notes"
 
-#: js/EventEditDialog.js:124 js/GridView.js:118 js/Printer/Base.js:66
-msgid "whole day"
-msgstr "cały dzień"
+#: js/EventDetailsPanel.js:248 js/AttendeeGridPanel.js:76
+#: js/AttendeeFilterModel.js:35 js/Model.js:355
+msgid "Attendee"
+msgstr "Uczestnik"
 
-#: js/EventEditDialog.js:132
-msgid "non-blocking"
-msgstr "nie blokuj"
+#: js/ResourcesGridPanel.js:41 js/AttendeeGridPanel.js:178
+#: js/ResourceEditDialog.js:56
+msgid "Name"
+msgstr "Nazwa"
 
-#: js/EventEditDialog.js:157 js/GridView.js:98
-msgid "Private"
-msgstr "Osobiste"
-
-#: js/EventEditDialog.js:198 js/ResourceEditDialog.js:72 Model/Event.php:233
-msgid "Description"
-msgstr "Opis"
-
-#: js/EventEditDialog.js:212
-msgid "Enter description"
-msgstr "Wprowadź opis"
-
-#: js/EventEditDialog.js:342
-msgid "End date is not valid"
-msgstr "Nieprawidłowa data zakończenia"
-
-#: js/EventEditDialog.js:345
-msgid "End date must be after start date"
-msgstr "Data zakończenia musi przypadać po dacie rozpoczęcia"
-
-#: js/EventEditDialog.js:358
-msgid "Start date is not valid"
-msgstr "Nieprawidłowa data rozpoczęcia"
-
-#: js/EventUI.js:220
-msgid "private classification"
-msgstr "klasyfikowanie prywatnych"
-
-#: js/EventUI.js:227
-msgid "recurring event"
-msgstr "termin wielokrotny"
-
-#: js/EventUI.js:234
-msgid "has alarm"
-msgstr "z alarmem"
-
-#: js/GridView.js:124
-msgid "blocking"
-msgstr "blokowanie"
+#: js/ResourcesGridPanel.js:47 js/ResourceEditDialog.js:61
+msgid "Email"
+msgstr "E-mail"
 
 #: js/MainScreenCenterPanel.js:28
 msgid "Loading events, please wait..."
@@ -399,6 +345,63 @@ msgstr "Edytuj termin"
 msgid "Cancel this action"
 msgstr "Anuluj akcję"
 
+#: js/AttendeeGridPanel.js:102
+msgid "Role"
+msgstr "Rola"
+
+#: js/AttendeeGridPanel.js:116
+msgid "Quantity"
+msgstr "Ilość"
+
+#: js/AttendeeGridPanel.js:125
+msgid "This is the calendar where the attender has saved this event in"
+msgstr "W tym kalendarzu uczestnik zapisał niniejszy termin"
+
+#: js/AttendeeGridPanel.js:161
+msgid "Type"
+msgstr "Ikona"
+
+#: js/AttendeeGridPanel.js:168
+msgid "User"
+msgstr "Użytkownik"
+
+#: js/AttendeeGridPanel.js:169
+msgid "Group"
+msgstr "Grupa"
+
+#: js/AttendeeGridPanel.js:170 js/Model.js:510
+msgid "Resource"
+msgid_plural "Resources"
+msgstr[0] "Zasób"
+msgstr[1] "zasoby"
+msgstr[2] "zasoby"
+
+#: js/AttendeeGridPanel.js:171
+msgid "Member of group"
+msgstr "Uczestnik grupy"
+
+#: js/AttendeeGridPanel.js:186 js/ContactEventsGridPanel.js:125
+#: js/GridView.js:142 Model/Event.php:237
+msgid "Status"
+msgstr "Status"
+
+#: js/AttendeeGridPanel.js:330
+msgid "Remove Attender"
+msgstr "Usuń uczestnika"
+
+#: js/AttendeeGridPanel.js:425
+msgid "Click here to invite another attender..."
+msgstr "Aby zaprosić innego uczestnika, kliknij tutaj..."
+
+#: js/AttendeeGridPanel.js:444 js/AttendeeGridPanel.js:462
+#: js/AttendeeGridPanel.js:479 js/AttendeeGridPanel.js:491 js/Model.js:371
+msgid "No Information"
+msgstr "Brak informacji"
+
+#: js/AttendeeGridPanel.js:449
+msgid "(as a group member)"
+msgstr "(jako uczestnik grupy)"
+
 #: js/MainScreenWestPanel.js:30
 msgid "Mini Calendar"
 msgstr "Mini kalendarz"
@@ -406,6 +409,87 @@ msgstr "Mini kalendarz"
 #: js/MainScreenWestPanel.js:52 js/MonthView.js:86
 msgid "WK"
 msgstr "TK"
+
+#: js/AdminPanel.js:44
+msgid "Manage Resources"
+msgstr "Zarządzaj zasobami"
+
+#: js/EventEditDialog.js:124 js/GridView.js:118 js/Printer/Base.js:66
+msgid "whole day"
+msgstr "cały dzień"
+
+#: js/EventEditDialog.js:132
+msgid "non-blocking"
+msgstr "nie blokuj"
+
+#: js/EventEditDialog.js:157 js/GridView.js:98
+msgid "Private"
+msgstr "Osobiste"
+
+#: js/EventEditDialog.js:198 js/ResourceEditDialog.js:72 Model/Event.php:233
+msgid "Description"
+msgstr "Opis"
+
+#: js/EventEditDialog.js:212
+msgid "Enter description"
+msgstr "Wprowadź opis"
+
+#: js/EventEditDialog.js:342
+msgid "End date is not valid"
+msgstr "Nieprawidłowa data zakończenia"
+
+#: js/EventEditDialog.js:345
+msgid "End date must be after start date"
+msgstr "Data zakończenia musi przypadać po dacie rozpoczęcia"
+
+#: js/EventEditDialog.js:358
+msgid "Start date is not valid"
+msgstr "Nieprawidłowa data rozpoczęcia"
+
+#: js/CalendarSelectWidget.js:124
+msgid "Originally"
+msgstr "Pierwotny kalendarz"
+
+#: js/MonthView.js:81 js/AddressbookGridPanelHook.js:35 js/Calendar.js:29
+#: js/DaysView.js:88
+msgid "New Event"
+msgstr "Nowy termin"
+
+#: js/MonthView.js:91
+msgid "{0} more..."
+msgstr "i jeszcze {0} ..."
+
+#: js/ResourceEditDialog.js:67 js/ResourceEditDialog.js:68
+msgid "Is a location"
+msgstr "Jest miejscem"
+
+#: js/ResourceEditDialog.js:73
+msgid "Enter description..."
+msgstr "Wprowadź opis..."
+
+#: js/CalDAVContainerPropertiesHookField.js:35
+msgid "CalDAV URL"
+msgstr ""
+
+#: js/EventUI.js:220
+msgid "private classification"
+msgstr "klasyfikowanie prywatnych"
+
+#: js/EventUI.js:227
+msgid "recurring event"
+msgstr "termin wielokrotny"
+
+#: js/EventUI.js:234
+msgid "has alarm"
+msgstr "z alarmem"
+
+#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:359
+msgid "Events"
+msgstr "Terminy"
+
+#: js/AttendeeFilterModel.js:101
+msgid "Select Attendee"
+msgstr "Wybierz uczestnika"
 
 #: js/Model.js:63 js/Model.js:359
 msgid "Event"
@@ -449,25 +533,61 @@ msgstr[2] "uczestników"
 msgid "Resources"
 msgstr "Zasoby"
 
-#: js/MonthView.js:91
-msgid "{0} more..."
-msgstr "i jeszcze {0} ..."
+#: js/GridView.js:124
+msgid "blocking"
+msgstr "blokowanie"
 
 #: js/Printer/DaysView.js:36
 msgid "Week {0} :"
 msgstr "Tydzień {0}:"
 
-#: js/ResourceEditDialog.js:61 js/ResourcesGridPanel.js:47
-msgid "Email"
-msgstr "E-mail"
+#: js/DaysView.js:93
+msgid "{0}, the {1}. of {2}"
+msgstr "{0}, {1} z {2}"
 
-#: js/ResourceEditDialog.js:67 js/ResourceEditDialog.js:68
-msgid "Is a location"
-msgstr "Jest miejscem"
+#: js/iMIPDetailsPanel.js:68
+msgid "Checking Calendar Data..."
+msgstr ""
 
-#: js/ResourceEditDialog.js:73
-msgid "Enter description..."
-msgstr "Wprowadź opis..."
+#: js/iMIPDetailsPanel.js:168
+msgid "The event of this message does not exist"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:173
+msgid "The sender is not authorised to update the event"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:178
+msgid "This message is already processed"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:183
+msgid "You are not an attendee of this event"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:187
+msgid "Unsupported message"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:197
+msgid "This is an event invitation for someone else."
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:199
+msgid "You have already replied to this event invitation."
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:201
+msgid "You received an event invitation. Set your response to:"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:209
+msgid "An invited attendee responded to the invitation."
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:213
+msgid "Unsupported method"
+msgstr ""
 
 #: js/RrulePanel.js:28
 msgid "Recurrances"
@@ -566,14 +686,6 @@ msgstr "co {0} rok"
 msgid "of"
 msgstr "miesiąc:"
 
-#: Model/Attender.php:155
-msgid "unknown"
-msgstr "nieznany"
-
-#: Model/Attender.php:310
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "Niniejszy kontakt został dodany automatycznie podczas synchronizacji systemu"
-
 #: Model/Event.php:229
 msgid "Start"
 msgstr "Początek"
@@ -614,117 +726,53 @@ msgstr "Tak"
 msgid "No"
 msgstr "Brak"
 
-#: Preference.php:31
-msgid "All my events"
-msgstr "Wszystkie moje terminy"
+#: Model/Attender.php:164
+msgid "unknown"
+msgstr "nieznany"
 
-#: Preference.php:80
-msgid "Position on the left time axis, day and week view should start with"
-msgstr "Pozycja na lewej osi czasu, niech widok dni i tygodni zaczyna się od"
+#: Model/Attender.php:324
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr "Niniejszy kontakt został dodany automatycznie podczas synchronizacji systemu"
 
-#: Preference.php:83
-msgid "Default Calendar"
-msgstr "Domyślny kalendarz"
+#: Controller/EventNotifications.php:240
+msgid "Alarm for event \"%1$s\" at %2$s"
+msgstr "Przypomnienie o terminie \"%1$s\" o %2$s"
 
-#: Preference.php:84
-msgid "The default calendar for invitations and new events"
-msgstr "Domyślny kalendarz dla zaproszeń i nowych terminów"
+#: Controller/EventNotifications.php:243
+msgid "Event invitation \"%1$s\" at %2$s"
+msgstr "Zaproszenie na \"%1$s\" o %2$s"
 
-#: Preference.php:87
-msgid "Default Favorite"
-msgstr "Domyślne ulubione"
+#: Controller/EventNotifications.php:247
+msgid "Event \"%1$s\" at %2$s has been canceled"
+msgstr "Termin \"%1$s\" at %2$s został anulowany"
 
-#: Preference.php:88
-msgid "The default favorite which is loaded on calendar startup"
-msgstr "Domyślny ulubiony termin ładowany przy uruchamianiu kalendarza"
+#: Controller/EventNotifications.php:253
+msgid "Event \"%1$s\" at %2$s has been rescheduled"
+msgstr "Termin \"%1$s\" at %2$s został przełożony"
 
-#: Preference.php:91
-msgid "Get Notification Emails"
-msgstr "Powiadomienie e-mail o terminach"
+#: Controller/EventNotifications.php:258
+msgid "Event \"%1$s\" at %2$s has been updated"
+msgstr "Termin \"%1$s\" at %2$s został zaktualizowany"
 
-#: Preference.php:92
-msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
-msgstr "Wybierz poziom szczegółowości powiadomień o wykonywanych akcjach. Zauważ proszę, że organizatorzy otrzymują powiadomienia o każdej aktualizacji, łącznie z odpowiedziami uczestników, o ile niniejsza opcja nie zostanie ustawiona na wartość \"Nigdy\""
+#: Controller/EventNotifications.php:269
+msgid "%1$s accepted event \"%2$s\" at %3$s"
+msgstr "%1$s zaakceptowany termin \"%2$s\" o %3$s"
 
-#: Preference.php:95
-msgid "Send Notifications Emails of own Actions"
-msgstr "Wysyłaj powiadomienia e-mail o własnych akcjach"
+#: Controller/EventNotifications.php:273
+msgid "%1$s declined event \"%2$s\" at %3$s"
+msgstr "%1$s odwołany termin \"%2$s\" o %3$s"
 
-#: Preference.php:96
-msgid "Get notifications emails for actions you did yourself"
-msgstr "Odbieraj powiadomienia e-mail o własnych akcjach"
+#: Controller/EventNotifications.php:277
+msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
+msgstr "Niezobowiązująca odpowiedź od %1$s dotycząca terminu \"%2$s\" o %3$s"
 
-#: Preference.php:149
-msgid "Never"
-msgstr "Nigdy"
+#: Controller/EventNotifications.php:281
+msgid "No response from %1$s for event \"%2$s\" at %3$s"
+msgstr "Brak odpowiedzi od %1$s dotyczącej terminu \"%2$s\" o %3$s"
 
-#: Preference.php:149
-msgid "On invitation and cancellation only"
-msgstr "Tylko w przypadku zaproszenia albo odrzucenia"
-
-#: Preference.php:149
-msgid "On time changes"
-msgstr "Przy zmianach czasu"
-
-#: Preference.php:149
-msgid "On all updates but attendee responses"
-msgstr "Przy aktualizacjach za wyjątkiem odpowiedzi uczestnika"
-
-#: Preference.php:149
-msgid "On attendee responses too"
-msgstr "Także w przypadku odpowiedzi uczestnika"
-
-#: Setup/Initialize.php:34 Setup/Update/Release3.php:164
-msgid "All events I attend"
-msgstr "Wszystkie terminy dodane przeze mnie"
-
-#: Setup/Initialize.php:47
-msgid "Awaiting response"
-msgstr "Oczekują na odpowiedź"
-
-#: Setup/Initialize.php:48
-msgid "Events I have not yet responded to"
-msgstr "Terminy pozostające bez mojej odpowiedzi"
-
-#: Setup/Initialize.php:63
-msgid "Declined events"
-msgstr "Terminy odrzucone"
-
-#: Setup/Initialize.php:64
-msgid "Events I have declined"
-msgstr "Terminy, które odrzuciłem/-am"
-
-#: Setup/Initialize.php:77
-msgid "I'm organizer"
-msgstr "Jestem organizatorem"
-
-#: Setup/Initialize.php:78
-msgid "Events I'm the organizer of"
-msgstr "Terminy, które organizuję"
-
-#: Setup/Initialize.php:98 Setup/Update/Release5.php:75
-msgid "Required"
-msgstr "Obowiązkowy"
-
-#: Setup/Initialize.php:99 Setup/Update/Release5.php:76
-msgid "Optional"
-msgstr "Dobrowolny"
-
-#: Setup/Initialize.php:112 Setup/Update/Release5.php:89
-msgid "No response"
-msgstr "Brak odpowiedzi"
-
-#: Setup/Initialize.php:113 Setup/Update/Release5.php:90
-msgid "Accepted"
-msgstr "Zaakceptowany"
-
-#: Setup/Initialize.php:114 Setup/Update/Release5.php:91
-msgid "Declined"
-msgstr "Odrzucony"
-
-#: Setup/Initialize.php:115 Setup/Update/Release5.php:92
-msgid "Tentative"
-msgstr "Brak ostatecznej decyzji"
+#: Controller/EventNotifications.php:285
+msgid "Attendee changes for event \"%1$s\" at %2$s"
+msgstr "Zmiana składu uczestników dotycząca terminu \"%1$s\" o %2$s"
 
 #: views/eventNotification.php:12
 msgid "Updates"

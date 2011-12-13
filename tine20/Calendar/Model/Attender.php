@@ -10,6 +10,9 @@
  * Model of an attendee
  *
  * @package Calendar
+ * @property Tinebase_DateTime alarm_ack_time
+ * @property Tinebase_DateTime alarm_snooze_time
+ * @property string transp
  */
 class Calendar_Model_Attender extends Tinebase_Record_Abstract
 {
@@ -77,7 +80,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         'seq'                  => array('allowEmpty' => true,  'Int'  ),
         */
         
-        'cal_event_id'         => array('allowEmpty' => true,  'Alnum'),
+        'cal_event_id'         => array('allowEmpty' => true/*,  'Alnum'*/),
         'user_id'              => array('allowEmpty' => false,        ),
         'user_type'            => array('allowEmpty' => true,  'InArray' => array(self::USERTYPE_USER, self::USERTYPE_GROUP, self::USERTYPE_GROUPMEMBER, self::USERTYPE_RESOURCE)),
         'role'                 => array('allowEmpty' => true,  'InArray' => array(self::ROLE_OPTIONAL, self::ROLE_REQUIRED)),
@@ -85,6 +88,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         'status'               => array('allowEmpty' => true,  'InArray' => array(self::STATUS_NEEDSACTION, self::STATUS_TENTATIVE, self::STATUS_ACCEPTED, self::STATUS_DECLINED)),
         'status_authkey'       => array('allowEmpty' => true, 'Alnum' ),
         'displaycontainer_id'  => array('allowEmpty' => true, 'Int'   ),
+        'alarm_ack_time'       => array('allowEmpty' => true),
+    	'alarm_snooze_time'    => array('allowEmpty' => true),
+    	'transp'               => array('allowEmpty' => true,  'InArray' => array(Calendar_Model_Event::TRANSP_TRANSP, Calendar_Model_Event::TRANSP_OPAQUE)),
     );
     
     /**
@@ -92,7 +98,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      *
      * @var array
      */
-    protected $_datetimeFields = array();
+    protected $_datetimeFields = array(
+        'alarm_ack_time',
+    	'alarm_snoze_time'
+    );
     
     /**
      * returns accountId of this attender if present
@@ -131,7 +140,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 return $resolvedUser->getPreferedEmailAddress();
                 break;
             case self::USERTYPE_GROUP:
-                return 'nogroupmail@example.com';
+                return $resolvedUser->getId();
                 break;
             case self::USERTYPE_RESOURCE:
                 return $resolvedUser->email;
@@ -238,99 +247,120 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     public static function emailsToAttendee(Calendar_Model_Event $_event, $_emails, $_ImplicitAddMissingContacts = TRUE)
     {
-    	$currentAttendee = $event->getId() ? 
-    	   Calendar_Controller_Event::getInstance()->get($event->getId())->attendee :
-    	   new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-       
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " list of new attendees " . print_r($_emails, true));
+        
+        if (! $_event->attendee instanceof Tinebase_Record_RecordSet) {
+            $_event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        }
+                
         // resolve current attendee
-        self::resolveAttendee($currentAttendee);
+        self::resolveAttendee($_event->attendee);
         
         // build currentMailMap
         // NOTE: non resolvable attendee will be discarded in the map
         //       this is _important_ for the calculation of migration as it
         //       saves us from deleting attendee out of current users scope
-        $currentEmailMap = array();
-        foreach ($currentAttendee as $currentAttender) {
-        	$currentAttenderEmailAdress = $currentAttender->getEmail();
-        	if ($currentAttenderEmailAdress) {
-        	    $currentEmailMap[$currentAttenderEmailAdress] = $currentAttender->getId();
+        $emailsOfCurrentAttendees = array();
+        foreach ($_event->attendee as $currentAttendee) {
+        	if ($currentAttendeeEmailAddress = $currentAttendee->getEmail()) {
+        	    $emailsOfCurrentAttendees[$currentAttendeeEmailAddress] = $currentAttendee;
         	}
         }
         
-        // initialize convertEmailMap
-        $convertEmailMap = array();
-        foreach ($_emails as $email) {
-            $convertEmailMap[$email] = '';
+        // collect emails of new attendees
+        $emailsOfNewAttendees = array();
+        foreach ($_emails as $newAttendee) {
+            $emailsOfNewAttendees[$newAttendee['email']] = $newAttendee;
         }
         
-        // calculate migration
-        $toAdd    = array_diff_key($convertEmailMap, $currentEmailMap);
-        $toDelete = array_diff_key($currentEmailMap, $convertEmailMap);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee to add " . print_r($toAdd, true));
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee to delete " . print_r($toAdd, true));
+        // attendees to remove
+        $attendeesToDelete = array_diff_key($emailsOfCurrentAttendees, $emailsOfNewAttendees);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " attendees to delete " . print_r(array_keys($attendeesToDelete), true));
         
-        // delete attendee from set
-        foreach ($toDelete as $email => $attenderId) {
-        	unset($currentAttendee[$attenderId]);
+        // delete attendees no longer attending from recordset
+        foreach ($attendeesToDelete as $attendeeToDelete) {
+            $_event->attendee->removeRecord($attendeeToDelete);
         }
+        
+        
+        // attendees to keep and update
+        $attendeesToKeep   = array_diff_key($emailsOfCurrentAttendees, $attendeesToDelete);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " attendees to keep " . print_r(array_keys($attendeesToKeep), true));
+        //var_dump($attendeesToKeep);
+        foreach($attendeesToKeep as $emailAddress => $attendeeToKeep) {
+            $newSettings = $emailsOfNewAttendees[$emailAddress];
+
+            // update object by reference
+            $attendeeToKeep->status = isset($newSettings['partStat']) ? $newSettings['partStat'] : $attendeeToKeep->status;
+            $attendeeToKeep->role   = $newSettings['role'];
+        }
+        
+
+        // new attendess to add to event
+        $attendeesToAdd    = array_diff_key($emailsOfNewAttendees,     $emailsOfCurrentAttendees);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " attendees to add " . print_r(array_keys($attendeesToAdd), true));
         
         // add attendee identified by their emailAdress
-        foreach (array_keys($toAdd) as $email) {
-        	$contacts = $addressbook->search(new Addressbook_Model_ContactFilter(array(
-        	    array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
-                array('condition' => 'OR', 'filters' => array(
-                    array('field' => 'email',      'operator'  => 'equals', 'value' => (string) $email),
-                    array('field' => 'email_home', 'operator'  => 'equals', 'value' => (string) $email),
-                )),
-        	)));
-        	
-            if(count($contacts) > 0) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of contacts " . count($contacts));
-                
-                $contactId = NULL;
-                $accountIdMap = $contacts->account_id;
-                
-                // prefer account over contact
-                foreach ($accountIdMap as $contactMapId => $accountMapId) {
-                    $contactId = $accountMapId;
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " taking contact with account with id " . $accountMapId);
-                }
-                
-                if (! $contactId) {
-                	$contactId = $contacts->getFirstRecord()->getId();
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " taking contact with id " . $contactId);
-                    
-                }
-                
-                
-                $contactId = $contacts->getFirstRecord()->getId();
-                
-            } else if ($_ImplicitAddMissingContacts) {
-            	$translation = Tinebase_Translation::getTranslation('Calendar');
-            	$i18nNote = $translation->_('This contact has been automatically added by the system as an event attender');
-                $contactData = array(
-                    'note'        => $i18nNote,
-                    'email'       => (string) $email,
-                    'n_family'    => array_value(0, explode('@', (string) $email)),
-                );
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . print_r($contactData, true));
-                $contact = new Addressbook_Model_Contact($contactData);
-                
-                $contactId = $addressbook->create($contact)->getId();
-            } else {
-            	if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " discarding attender " . $email);
-            	
-            	$contactId = NULL;
-            }
+        foreach ($attendeesToAdd as $newAttendee) {
+            $attendeeId = NULL;
             
-            // finally add to attendee
-            $currentAttendee->addRecord(new Calendar_Model_Attender(array(
-                'user_id'   => $contactId,
-                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            )));
+            if ($newAttendee['userType'] == Calendar_Model_Attender::USERTYPE_USER) {
+            	$contacts = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(array(
+            	    array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
+                    array('condition' => 'OR', 'filters' => array(
+                        array('field' => 'email',      'operator'  => 'equals', 'value' => $newAttendee['email']),
+                        array('field' => 'email_home', 'operator'  => 'equals', 'value' => $newAttendee['email'])
+                    )),
+            	)));
+                
+            	if(count($contacts) > 0) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of contacts " . count($contacts));
+    
+                    $attendeeId = $contacts->getFirstRecord()->getId();
+                    
+                } else if ($_ImplicitAddMissingContacts == true) {
+                	$translation = Tinebase_Translation::getTranslation('Calendar');
+                	$i18nNote = $translation->_('This contact has been automatically added by the system as an event attender');
+                    $contactData = array(
+                        'note'        => $i18nNote,
+                        'email'       => $newAttendee['email'],
+                        'n_family'    => $newAttendee['lastName'],
+                        'n_given'     => $newAttendee['firstName'],
+                    );
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . print_r($contactData, true));
+                    $contact = new Addressbook_Model_Contact($contactData);
+                    
+                    $attendeeId = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE)->getId();
+                }
+    
+            } else if($newAttendee['userType'] == Calendar_Model_Attender::USERTYPE_GROUP) {
+                $lists = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter(array(
+                    array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
+                    array('field' => 'name', 'operator' => 'equals', 'value' => $newAttendee['displayName']),
+                    array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP)
+                )));
+                
+                if(count($lists) > 0) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of lists " . count($lists));
+                
+                    $attendeeId = $lists->getFirstRecord()->group_id;
+                }
+            }
+        	
+            if ($attendeeId !== NULL) {
+                // finally add to attendee
+                $_event->attendee->addRecord(new Calendar_Model_Attender(array(
+                    'user_id'   => $attendeeId,
+                    'user_type' => $newAttendee['userType'],
+                    'status'    => isset($newAttendee['partStat']) ? $newAttendee['partStat'] : self::STATUS_NEEDSACTION,
+                    'role'      => $newAttendee['role']
+                )));
+            }
         }
         
-        return $currentAttendee;
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " updated attendees list " . print_r($_event->attendee->toArray(), true));
     }
     
     /**
@@ -361,11 +391,20 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             #$groupAttenderMemberIds = Tinebase_Group::getInstance()->getGroupMembers($groupAttender->user_id);
             #$groupAttenderContactIds = Tinebase_User::getInstance()->getMultiple($groupAttenderMemberIds)->contact_id;
             #$allGroupMembersContactIds = array_merge($allGroupMembersContactIds, $groupAttenderContactIds);
-        
-            $group = Tinebase_Group::getInstance()->getGroupById($groupAttender->user_id);
             
-            if (!empty($group->list_id)) {
-                $groupAttenderContactIds = Addressbook_Controller_List::getInstance()->get($group->list_id)->members;
+            $listId = null;
+        
+            if ($groupAttender->user_id instanceof Addressbook_Model_List) {
+                $listId = $groupAttender->user_id->getId();
+            } else {
+                $group = Tinebase_Group::getInstance()->getGroupById($groupAttender->user_id);
+                if (!empty($group->list_id)) {
+                    $listId = $group->list_id;
+                }
+            }
+            
+            if ($listId !== null) {
+                $groupAttenderContactIds = Addressbook_Controller_List::getInstance()->get($listId)->members;
                 $allGroupMembersContactIds = array_merge($allGroupMembersContactIds, $groupAttenderContactIds);
                 
                 $toAdd = array_diff($groupAttenderContactIds, $allCurrGroupMembersContactIds);
@@ -394,6 +433,54 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             $attender = $groupmembers->find('user_id', $user_id);
             $_attendee->removeRecord($attender);
         }
+    }
+    
+    /**
+     * get own attender
+     * 
+     * @param Tinebase_Record_RecordSet $_attendee
+     * @return Calendar_Model_Attender|NULL
+     */
+    public static function getOwnAttender($_attendee)
+    {
+        return self::getAttendee($_attendee, new Calendar_Model_Attender(array(
+            'user_id'   => Tinebase_Core::getUser()->contact_id,
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER
+        )));
+    }
+    
+    /**
+     * get a single attendee from set of attendee
+     * 
+     * @param Tinebase_Record_RecordSet $_attendee
+     * @return Calendar_Model_Attender|NULL
+     */
+    public static function getAttendee($_attendeeSet, $_attendee)
+    {
+        $attendeeSet  = $_attendeeSet instanceof Tinebase_Record_RecordSet ? clone $_attendeeSet : new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        
+        // transform id to string
+        foreach($attendeeSet as $attendee) {
+            $attendee->user_id  = $attendee->user_id instanceof Tinebase_Record_Abstract ? $attendee->user_id->getId() : $attendee->user_id;
+        }
+        
+        $attendeeUserId = $_attendee->user_id instanceof Tinebase_Record_Abstract ? $_attendee->user_id->getId() : $_attendee->user_id;
+        
+        $foundAttendee = $attendeeSet
+            ->filter('user_type', $_attendee->user_type)
+            ->filter('user_id', $attendeeUserId)
+            ->getFirstRecord();
+        
+        // search for groupmember if no user got found
+        if ($foundAttendee === null && $_attendee->user_type == Calendar_Model_Attender::USERTYPE_USER) {
+            $foundAttendee = $attendeeSet
+                ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
+                ->filter('user_id', $attendeeUserId)
+                ->getFirstRecord();
+        }
+            
+        return $foundAttendee ? $_attendeeSet[$attendeeSet->indexOf($foundAttendee)] : NULL;
+        
     }
     
     /**

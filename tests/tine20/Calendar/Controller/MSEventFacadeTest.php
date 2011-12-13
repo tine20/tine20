@@ -97,6 +97,23 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $this->_assertTestEvent($events->getFirstRecord());
     }
     
+    public function testSearchBaselessExceptions()
+    {
+        $event = $this->testCreate();
+        
+        // move baseEvent out of scope
+        $cbe = new Calendar_Backend_Sql();
+        $cbe->delete($event->getId());
+        
+        $events = $this->_uit->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_testCalendars->getId()),
+        )));
+        
+        $this->assertEquals(1, $events->count());
+        $this->assertEquals('exception', $events->getFirstRecord()->summary);
+        
+    }
+    
     public function testUpdateRemoveExceptions()
     {
         $event = $this->testCreate();
@@ -146,6 +163,79 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $updatedPersistentException = $updatedEvent->exdate->filter('is_deleted', 0)->getFirstRecord();
         $this->assertEquals('updated exception', $updatedPersistentException->summary);
         $this->assertEquals('2009-03-26 10:00:00', $updatedPersistentException->dtstart->format(Tinebase_Record_Abstract::ISO8601LONG));
+    }
+    
+    public function testAttendeeStatusUpdate()
+    {
+        $event = $this->testCreate();
+        
+        $testAttendee = new Calendar_Model_Attender(array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'   => Tinebase_Core::getUser()->contact_id,
+        ));
+        
+        // update base events status
+        Calendar_Model_Attender::getAttendee($event->attendee, $testAttendee)->status = Calendar_Model_Attender::STATUS_TENTATIVE;
+        $updatedEvent = $this->_uit->attenderStatusUpdate($event, $testAttendee);
+        
+        $this->assertEquals(2, count($updatedEvent->exdate), 'num exdate mismatch');
+        $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, Calendar_Model_Attender::getAttendee($updatedEvent->attendee, $testAttendee)->status, 'status of baseevent was not updated');
+        $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, Calendar_Model_Attender::getAttendee($updatedEvent->exdate->filter('is_deleted', 0)->getFirstRecord()->attendee, $testAttendee)->status, 'status of exdate must not be updated');
+        
+        
+        // update exiting persitent exception
+        Calendar_Model_Attender::getAttendee($updatedEvent->exdate->filter('is_deleted', 0)->getFirstRecord()->attendee, $testAttendee)->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $updatedEvent = $this->_uit->attenderStatusUpdate($updatedEvent, $testAttendee);
+        
+        $this->assertEquals(2, count($updatedEvent->exdate), 'persistent exdate num exdate mismatch');
+        $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, Calendar_Model_Attender::getAttendee($updatedEvent->attendee, $testAttendee)->status, 'persistent exdate status of baseevent was not updated');
+        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, Calendar_Model_Attender::getAttendee($updatedEvent->exdate->filter('is_deleted', 0)->getFirstRecord()->attendee, $testAttendee)->status, 'persistent exdate status of exdate must not be updated');
+        
+        // new exception
+        $newException = clone $event;
+        $newException->id = NULL;
+        $newException->recurid = clone $newException->dtstart;
+        $newException->recurid->addDay(3);
+        $newException->dtstart->addDay(3)->addHour(2);
+        $newException->dtend->addDay(3)->addHour(2);
+        $newException->summary = 'new exception';
+        $newException->exdate = NULL;
+        $updatedEvent->exdate->addRecord($newException);
+        
+        Calendar_Model_Attender::getAttendee($newException->attendee, $testAttendee)->status = Calendar_Model_Attender::STATUS_DECLINED;
+        $updatedEvent = $this->_uit->attenderStatusUpdate($updatedEvent, $testAttendee);
+        
+        $this->assertEquals(3, count($updatedEvent->exdate), 'new exdate num exdate mismatch');
+    }
+    
+    /**
+     * sclever declines event exception.
+     * => from her iTIP perspective this is an fallout than
+     */
+    public function testPerspectiveExceptionFallout()
+    {
+        $event = $this->testCreate();
+        
+        $persistentException = $event->exdate->filter('is_deleted', 0)->getFirstRecord();
+        
+        $sclever = new Calendar_Model_Attender(array(
+            'user_id'        => $this->_personasContacts['sclever']->getId(),
+            'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
+        ));
+        
+        $persistentSClever = Calendar_Model_Attender::getAttendee($persistentException->attendee, $sclever);
+        $persistentException->attendee->removeRecord($persistentSClever);
+        
+        $event = $this->_uit->update($event);
+        
+        //$persistentSClever->status = Calendar_Model_Attender::STATUS_DECLINED;
+        //$this->_uit->attenderStatusUpdate($event, $persistentSClever);
+        
+        $this->_uit->setCalendarUser($sclever);
+        
+        $event = $this->_uit->get($event->getId());
+        $persistentException = $event->exdate->filter('is_deleted', 0)->getFirstRecord();
+        $this->assertNull($persistentException);
     }
     
     protected function _assertTestEvent($persistentEvent)

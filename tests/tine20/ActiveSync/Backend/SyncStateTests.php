@@ -112,16 +112,12 @@ class ActiveSync_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
         
         $syncState = $this->_backend->get($syncState);
         
-        $this->assertInstanceOf('ActiveSync_Model_SyncState', $syncState);
+        $this->assertTrue($syncState instanceof ActiveSync_Model_SyncState);
         
         $syncState->counter--;
         
         $this->setExpectedException('ActiveSync_Exception_SyncStateNotFound');
         
         $this->_backend->get($syncState);
-    }    
-}
-    
-if (PHPUnit_MAIN_METHOD == 'ActiveSync_Backend_SyncState::main') {
-    ActiveSync_Backend_SyncState::main();
+    }
 }

@@ -35,7 +35,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         $this->assertEquals(6, $events->count(), 'events was not imported');
         
         $startbucks = $events->find('uid', '3632597');
-        $this->assertType('Calendar_Model_Event', $startbucks);
+        $this->assertEquals('Calendar_Model_Event', get_class($startbucks));
         $this->assertEquals('2008-11-05 15:00:00', $startbucks->dtstart->format(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
@@ -53,7 +53,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         $this->assertEquals(6, $events->count(), 'events where not imported');
         
         $startbucks = $events->find('uid', '3632597');
-        $this->assertType('Calendar_Model_Event', $startbucks);
+        $this->assertEquals('Calendar_Model_Event', get_class($startbucks));
         $this->assertEquals('2008-11-05 15:00:00', $startbucks->dtstart->format(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
