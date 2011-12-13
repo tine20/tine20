@@ -332,13 +332,13 @@ Ext.ns('Tine.Felamimail');
                 }
             },
             
-            showAttachments: function(attachements, messageData) {
-                var result = (attachements.length > 0) ? '<b>' + this.app.i18n._('Attachments') + ':</b> ' : '';
+            showAttachments: function(attachments, messageData) {
+                var result = (attachments.length > 0) ? '<b>' + this.app.i18n._('Attachments') + ':</b> ' : '';
                 
-                for (var i=0, id, cls; i < attachements.length; i++) {
+                for (var i=0, id, cls; i < attachments.length; i++) {
                     result += '<span id="' + Ext.id() + ':' + i + '" class="tinebase-download-link">' 
-                        + '<i>' + attachements[i].filename + '</i>' 
-                        + ' (' + Ext.util.Format.fileSize(attachements[i].size) + ')</span> ';
+                        + '<i>' + attachments[i].filename + '</i>' 
+                        + ' (' + Ext.util.Format.fileSize(attachments[i].size) + ')</span> ';
                 }
                 
                 return result;
