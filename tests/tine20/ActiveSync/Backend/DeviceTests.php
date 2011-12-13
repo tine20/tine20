@@ -60,7 +60,8 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
             'owner_id'      => Tinebase_Core::getUser()->getId(),
             'policy_id'     => 1,
             'acsversion'    => '2.5',
-            'useragent'     => 'Apple-iPhone/703.144'
+            'useragent'     => 'Apple-iPhone/703.144',
+            'policykey'     => mt_rand(0, 100000)
         ));
         
         return $testDevice;
