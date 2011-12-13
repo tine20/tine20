@@ -251,8 +251,11 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('IMAP backend not configured');
         }
         
+        $testConfig = Zend_Registry::get('testConfig');
+        $email = ($testConfig->email) ? $testConfig->email : 'unittest@tine20.org';
+        
         // handle message with fmail (add to cache)
-        $message = $this->_emailTestClass->messageTestHelper('calendar_request.eml');
+        $message = $this->_emailTestClass->messageTestHelper('calendar_request.eml', NULL, NULL, array('unittest@tine20.org', $email));
         $complete = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
         
         $iMIP = $complete->preparedParts->getFirstRecord()->preparedData;
