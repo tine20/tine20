@@ -1315,7 +1315,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $filename = dirname(dirname(__FILE__)) . '/files/' . $_filename;
         if (! empty($_replacements)) {
             $message = file_get_contents($filename);
-            $message = preg_replace('/' . preg_quote($_replacements[0]) . '/', $_replacements[1], $message);
+            $message = preg_replace('/' . preg_quote($_replacements[0]) . '/m', $_replacements[1], $message);
         } else {
             $message = fopen($filename, 'r');
         }
