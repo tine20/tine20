@@ -62,7 +62,10 @@ class ActiveSync_Command_FolderSyncTests extends PHPUnit_Framework_TestCase
     public function testGetFoldersSyncKey0()
     {
         $doc = new DOMDocument();
-        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?><!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>');
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
+        );
         
         $folderSync = new ActiveSync_Command_FolderSync($doc, $this->objects['device'], $this->objects['device']->policykey);
         
@@ -94,7 +97,10 @@ class ActiveSync_Command_FolderSyncTests extends PHPUnit_Framework_TestCase
         $this->testGetFoldersSyncKey0();
         
         $doc = new DOMDocument();
-        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?><!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><FolderSync xmlns="uri:FolderHierarchy"><SyncKey>1</SyncKey></FolderSync>');
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>1</SyncKey></FolderSync>'
+        );
     
         $folderSync = new ActiveSync_Command_FolderSync($doc, $this->objects['device'], $this->objects['device']->policykey);
     
@@ -124,7 +130,10 @@ class ActiveSync_Command_FolderSyncTests extends PHPUnit_Framework_TestCase
     public function testGetFoldersInvalidSyncKey()
     {
         $doc = new DOMDocument();
-        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?><!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><FolderSync xmlns="uri:FolderHierarchy"><SyncKey>99</SyncKey></FolderSync>');
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>99</SyncKey></FolderSync>'
+        );
         
         $folderSync = new ActiveSync_Command_FolderSync($doc, $this->objects['device'], $this->objects['device']->policykey);
         
