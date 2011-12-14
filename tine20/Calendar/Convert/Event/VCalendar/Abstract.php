@@ -630,14 +630,16 @@ class Calendar_Convert_Event_VCalendar_Abstract
         foreach($_vevent->children() as $property) {
             switch($property->name) {
                 case 'CREATED':
-                case 'LAST-MODIFIED':
                 case 'DTSTAMP':
                     // do nothing
                     break;
                     
+                case 'LAST-MODIFIED':
+                    $event->last_modified_time = new Tinebase_DateTime($property->value);
+                    break;
+                
                 case 'ATTENDEE':
                     $newAttendees[] = $this->_getAttendee($property);
-                    
                     break;
                     
                 case 'CLASS':

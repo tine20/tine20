@@ -367,6 +367,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         ));
         
         $this->assertEquals(1, $iMIP->getEvent()->seq);
+        $this->assertTrue(! empty($iMIP->getEvent()->last_modified_time));
         
         // force creation of external attendee
         $externalAttendee = new Calendar_Model_Attender(array(
