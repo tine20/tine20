@@ -1164,7 +1164,13 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($event instanceof Calendar_Model_Event, 'is no event');
         $this->assertEquals('testevent', $event->summary);
         $this->assertEquals(2, count($event->attendee));
-        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $event->attendee[1]->user_id);
+        
+        $testAttendee = new Calendar_Model_Attender(array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'   => Tinebase_Core::getUser()->contact_id,
+        ));
+        $attender = Calendar_Model_Attender::getAttendee($event->attendee, $testAttendee);
+        $this->assertTrue($attender !== NULL);
     }
 
    /**
