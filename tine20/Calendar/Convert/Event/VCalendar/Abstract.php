@@ -630,14 +630,16 @@ class Calendar_Convert_Event_VCalendar_Abstract
         foreach($_vevent->children() as $property) {
             switch($property->name) {
                 case 'CREATED':
-                case 'LAST-MODIFIED':
                 case 'DTSTAMP':
                     // do nothing
                     break;
                     
+                case 'LAST-MODIFIED':
+                    $event->last_modified_time = new Tinebase_DateTime($property->value);
+                    break;
+                
                 case 'ATTENDEE':
                     $newAttendees[] = $this->_getAttendee($property);
-                    
                     break;
                     
                 case 'CLASS':
@@ -688,19 +690,21 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     
                     break;
                     
+                case 'SEQUENCE':
+                    $event->seq = $property->value;
+                    break;
+                    
                 case 'DESCRIPTION':
                 case 'LOCATION':
                 case 'UID':
-                case 'SEQ':
                 case 'SUMMARY':
                     $key = strtolower($property->name);
                     $event->$key = $property->value;
-                    
                     break;
                     
                 case 'ORGANIZER':
-                    if (preg_match('/mailto:(?P<email>.*)/', $property->value, $matches)) {
-                        $name = isset($property['CN']) ? $property['CN'] : $matches['email'];
+                    if (preg_match('/mailto:(?P<email>.*)/i', $property->value, $matches)) {
+                        $name = isset($property['CN']) ? $property['CN']->value : $matches['email'];
                         $contact = $this->_resolveEmailToContact($matches['email'], $name);
                         
                         // it's not possible to change the organizer by spec

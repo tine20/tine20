@@ -265,6 +265,26 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * testExternalPublishProcess
+     * - uses felamimail to cache external publish message
+     */
+    public function testExternalPublishProcess()
+    {
+        if (! $this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
+            $this->markTestSkipped('IMAP backend not configured');
+        }
+        
+        // handle message with fmail (add to cache)
+        $message = $this->_emailTestClass->messageTestHelper('meetup.eml');
+        $complete = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
+        
+        $iMIP = $complete->preparedParts->getFirstRecord()->preparedData;
+        
+        $this->setExpectedException('Calendar_Exception_iMIP', 'iMIP preconditions failed: ATTENDEE, ORGANIZER');
+        $result = $this->_iMIPFrontend->process($iMIP);
+    }
+
+    /**
      * testInternalInvitationRequestProcess
      */
     public function testInternalInvitationRequestProcess()
@@ -346,8 +366,10 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
             'originator'     => 'mail@corneliusweiss.de',
         ));
         
+        $this->assertEquals(1, $iMIP->getEvent()->seq);
+        $this->assertTrue(! empty($iMIP->getEvent()->last_modified_time));
+        
         // force creation of external attendee
-        $iMIP->getEvent();
         $externalAttendee = new Calendar_Model_Attender(array(
             'user_type'     => Calendar_Model_Attender::USERTYPE_USER,
             'user_id'       => $iMIP->getEvent()->attendee->getFirstRecord()->user_id,

@@ -675,5 +675,3 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
        
     }
 });
-
-Ext.reg('test', Tine.widgets.dialog.EditDialog);

@@ -252,7 +252,10 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $iMIPMessage = $iMIP instanceof Calendar_Model_iMIP ? $iMIP : new Calendar_Model_iMIP($iMIP);
         $iMIPFrontend = new Calendar_Frontend_iMIP();
         
-        return $iMIPFrontend->prepareComponent($iMIPMessage);
+        $iMIPMessage->preconditionsChecked = FALSE;
+        $iMIPFrontend->prepareComponent($iMIPMessage);
+        $iMIPMessage->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        return $iMIPMessage->toArray();
     }
     
     /**
