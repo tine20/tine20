@@ -109,6 +109,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     disableOnEditMultiple: null,
     
+    selectedRecords: null,
+    selectionFilter: null,
+        
+    
     /**
      * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
      */
@@ -180,6 +184,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             Tine.log.debug('initComponent: appName: ', this.appName);
             Tine.log.debug('initComponent: modelName: ', this.modelName);
             Tine.log.debug('initComponent: app: ', this.app);
+            
+            this.selectedRecords = Ext.decode(this.selectedRecords);
+            this.selectionFilter = Ext.decode(this.selectionFilter);
             
             // init some translations
             if (this.app.i18n && this.recordClass !== null) {
