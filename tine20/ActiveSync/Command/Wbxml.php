@@ -101,6 +101,10 @@ abstract class ActiveSync_Command_Wbxml implements ActiveSync_Command_Interface
             #throw new ActiveSync_Exception_ProvisioningNeeded();
         }
         
+        if ($this->_skipValidatePolicyKey !== true && !empty($_policyKey) && $_device->policykey >= ActiveSync_Command_Provision::REMOTEWIPE_REQUESTED) {
+            throw new ActiveSync_Exception_ProvisioningNeeded();
+        }
+        
         $this->_policyKey = $_policyKey;
         $this->_device    = $_device;
         
