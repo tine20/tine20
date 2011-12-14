@@ -111,6 +111,18 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_duplicateCheckFields = NULL;
 
     /**
+     * updateMultipleRecords result array
+     *
+     * @var array
+     */
+    protected $_updateMultipleResult = array(
+        'results'           => NULL,
+        'exceptions'        => NULL,
+        'totalcount'        => 0,
+        'failcount'         => 0,
+    );
+
+    /**
      * returns controller for records of given model
      *
      * @param string $_model
@@ -664,22 +676,40 @@ abstract class Tinebase_Controller_Record_Abstract
         $ids = $this->_backend->search($_filter, NULL, TRUE);
 
         $invalid = 0;
+        $this->_updateMultipleResult['results'] = 0;
+
+        foreach($_data as $key => $value) {
+            if(stristr($key,'#')) {
+                $_data['customfields'][substr($key,1)] = $value;
+                unset($_data[$key]);
+            }
+        }
 
         // check validity
 
-        $records = $this->search($_filter, NULL, false);
+        $records = $this->search($_filter, NULL, true);
         foreach($records as $record) {
-            $record->setFromArray($_data);
-//            if(! $record->isValid()) {
-//                $invalid++;
-//                die(var_dump($record));
-//            }
+            $oldRecord = $record->toArray();
+            $data = array_merge($oldRecord, $_data);
+
+            try {
+            	$record->setFromArray($data);
+            	$this->_backend->update($record);
+            	$this->_updateMultipleResult['results'] ++;
+            } catch (Tinebase_Exception_Record_Validation $e) {
+                $this->_updateMultipleResult['exceptions'][] = new Tinebase_Model_UpdateMultipleException(array(
+                        'index' => $record->getId(),
+                        'exception' => $e,
+                        'code' => $e->getCode(),
+                        'message' => $e->getMessage()
+                ));
+                $this->_updateMultipleResult['failcount'] ++;
+            }
         }
 
-        $ret['updated'] = $this->_backend->updateMultiple($ids, $_data);
-        if($invalid) $ret['invalid'] = $invalid;
+        $this->_updateMultipleResult['totalcount'] = $this->_updateMultipleResult['results'];
 
-        return $ret;
+        return $this->_updateMultipleResult;
     }
 
     /**

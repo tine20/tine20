@@ -179,11 +179,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $decodedData   = is_array($_data) ? $_data : Zend_Json::decode($_data);
         $filter = $this->_decodeFilter($_filter, $_filterModel, TRUE);
 
-        $result = $_controller->updateMultiple($filter, $decodedData);
-
-        return array(
-            'count'       => $result,
-        );
+        return $_controller->updateMultiple($filter, $decodedData);
     }
 
     /**

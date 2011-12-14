@@ -244,6 +244,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         foreach($changes as $f) {
             $data[preg_replace('/^customfield_/','#', $f['name'])] = $f['value'];
         }
+
         return $this->_updateMultiple($filter, $data, Tinebase_Core::getApplicationInstance($appName, $modelName), $filterModel);
     }
 

@@ -281,17 +281,17 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             return false;
         }
 
-//        if(!this.isValid()) {
-//             
-//            Ext.MessageBox.alert(_('Errors'), this.getValidationErrorMessage());
-//            this.form.items.each(function(item){
-//                if(item.activeError) {
-//                    if(!item.edited) item.activeError = null;
-//                }
-//            });
-//                    
-//            return false;
-//        } else {
+        if(!this.isValid()) {
+             
+            Ext.MessageBox.alert(_('Errors'), this.getValidationErrorMessage());
+            this.form.items.each(function(item){
+                if(item.activeError) {
+                    if(!item.edited) item.activeError = null;
+                }
+            });
+                    
+            return false;
+        } else {
             var filter = this.editDialog.sm.getSelectionFilter();
             
             Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to change these {0} records?')
@@ -307,19 +307,22 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                             changes: this.changes,
                             filter: filter
                         },
-                        success: function(_result, _request) {
-                            Tine.log.debug(_result);
+                        success: function(_result, _request) {                           
                             Ext.MessageBox.hide();
-//                            Ext.MessageBox.WARNING
-//                            this.editDialog.fireEvent('update');
-//                            this.editDialog.purgeListeners();
-//                            this.editDialog.window.close();
+                            var resp = Ext.decode(_result.responseText);
+                            if(resp.failcount > 0) {
+                                Ext.MessageBox.alert(_('Update Error'),String.format(_('There had been {0} Error(s) while updating {3} records. Please check: {1}'), resp.failcount, resp.exceptions, resp.totalcount));
+                            }
+
+                            this.editDialog.fireEvent('update');
+                            this.editDialog.purgeListeners();
+                            this.editDialog.window.close();
                         },
                         scope: this
                     });
                 }
             }, this);
-//         }
+         }
         return false;
     },
     

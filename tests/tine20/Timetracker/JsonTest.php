@@ -363,42 +363,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     }
 
     /**
-     * try to update multiple Timesheets
-     */
-    public function testUpdateMultipleTimesheetsWithIds()
-    {
-        // create 2 timesheets
-        $timesheet1 = $this->_getTimesheet();
-        $timesheetData1 = $this->_json->saveTimesheet($timesheet1->toArray());
-        //$timesheet2 = $this->_getTimesheet($timesheetData1['timeaccount_id']['id']);
-        $timesheet2 = $this->_getTimesheet(array('timeaccount_id' => $timesheetData1['timeaccount_id']['id']));
-        $timesheetData2 = $this->_json->saveTimesheet($timesheet2->toArray());
-
-        $this->assertEquals($timesheetData1['is_cleared'], 0);
-
-        // update Timesheets
-        $newValues = array('description' => 'argl', 'is_cleared' => 1);
-        $filterData = array(
-            array('field' => 'id', 'operator' => 'in', 'value' => array($timesheetData1['id'], $timesheetData2['id']))
-        );
-        $result = $this->_json->updateMultipleTimesheets($filterData, $newValues);
-
-        $changed1 = $this->_json->getTimesheet($timesheetData1['id']);
-        $changed2 = $this->_json->getTimesheet($timesheetData2['id']);
-
-        // check
-        $this->assertEquals(2, $result['count']);
-        $this->assertEquals($timesheetData1['id'], $changed1['id']);
-        $this->assertEquals($changed1['description'], $newValues['description']);
-        $this->assertEquals($changed2['description'], $newValues['description']);
-        $this->assertEquals($changed1['is_cleared'], 1);
-        $this->assertEquals($changed2['is_cleared'], 1);
-
-        // cleanup
-        $this->_json->deleteTimeaccounts($timesheetData1['timeaccount_id']['id']);
-    }
-
-    /**
      * try to get a Timesheet
      *
      */
