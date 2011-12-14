@@ -699,8 +699,8 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     break;
                     
                 case 'ORGANIZER':
-                    if (preg_match('/mailto:(?P<email>.*)/', $property->value, $matches)) {
-                        $name = isset($property['CN']) ? $property['CN'] : $matches['email'];
+                    if (preg_match('/mailto:(?P<email>.*)/i', $property->value, $matches)) {
+                        $name = isset($property['CN']) ? $property['CN']->value : $matches['email'];
                         $contact = $this->_resolveEmailToContact($matches['email'], $name);
                         
                         // it's not possible to change the organizer by spec
