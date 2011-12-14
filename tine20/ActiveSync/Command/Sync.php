@@ -142,9 +142,6 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
     
     /**
      * process the XML file and add, change, delete or fetches data 
-     *
-     * @todo can we get rid of LIBXML_NOWARNING
-     * @return resource
      */
     public function handle()
     {
