@@ -281,17 +281,17 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             return false;
         }
 
-        if(!this.isValid()) {
-             
-            Ext.MessageBox.alert(_('Errors'), this.getValidationErrorMessage());
-            this.form.items.each(function(item){
-                if(item.activeError) {
-                    if(!item.edited) item.activeError = null;
-                }
-            });
-                    
-            return false;
-        } else {
+//        if(!this.isValid()) {
+//             
+//            Ext.MessageBox.alert(_('Errors'), this.getValidationErrorMessage());
+//            this.form.items.each(function(item){
+//                if(item.activeError) {
+//                    if(!item.edited) item.activeError = null;
+//                }
+//            });
+//                    
+//            return false;
+//        } else {
             var filter = this.editDialog.sm.getSelectionFilter();
             
             Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to change these {0} records?')
@@ -308,16 +308,18 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                             filter: filter
                         },
                         success: function(_result, _request) {
+                            Tine.log.debug(_result);
                             Ext.MessageBox.hide();
-                            this.editDialog.fireEvent('update');
-                            this.editDialog.purgeListeners();
-                            this.editDialog.window.close();
+//                            Ext.MessageBox.WARNING
+//                            this.editDialog.fireEvent('update');
+//                            this.editDialog.purgeListeners();
+//                            this.editDialog.window.close();
                         },
                         scope: this
                     });
                 }
             }, this);
-         }
+//         }
         return false;
     },
     
