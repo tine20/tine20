@@ -291,7 +291,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $result = $json->updateMultipleRecords('Timetracker', 'Timesheet', $changes, $filter);
 
         // look if all 3 contacts are updated
-        $this->assertEquals(3, $result['count'],'Could not update the correct number of records');
+        $this->assertEquals(3, $result['totalcount'],'Could not update the correct number of records');
 
         // check if default field duration value was found
         $sFilter = array(array('field' => 'duration','operator' => 'equals', 'value' => '111'),

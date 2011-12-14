@@ -687,7 +687,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
         // check validity
 
-        $records = $this->search($_filter, NULL, true);
+        $records = $this->search($_filter, NULL, FALSE);
         foreach($records as $record) {
             $oldRecord = $record->toArray();
             $data = array_merge($oldRecord, $_data);
