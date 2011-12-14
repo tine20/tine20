@@ -430,23 +430,35 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     {
         $filter = new $this->_contentFilterClass();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter class: " . get_class($filter));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter class: " . get_class($filter));
                 
-        try {
-            $persistentFilterId = $this->_device->{$this->_filterProperty} ? 
-                $this->_device->{$this->_filterProperty} : 
+        // apply the default search filter only to devices which do not support multiple folders
+        if($this->_specialFolderName == $_folderId) {
+            $persistentFilterId = $this->_device->{$this->_filterProperty} ?
+                $this->_device->{$this->_filterProperty} :
                 Tinebase_Core::getPreference($this->_applicationName)->defaultpersistentfilter;
-                
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " defaultpersistentfilter: " . Tinebase_Core::getPreference($this->_applicationName)->defaultpersistentfilter);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter id: " . $persistentFilterId);
-            
-            $persistentFilter = Tinebase_PersistentFilter::getFilterById($persistentFilterId);
-            if ($persistentFilter) {
-                $filter = $persistentFilter;
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter class: " . get_class($filter));
+        } else {
+            $persistentFilterId = $this->_device->{$this->_filterProperty} ?
+                $this->_device->{$this->_filterProperty} :
+                null;
+        }
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " defaultpersistentfilter: " . Tinebase_Core::getPreference($this->_applicationName)->defaultpersistentfilter);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter id: " . $persistentFilterId);
+
+        if (!empty($persistentFilterId)) {
+            try {
+                $persistentFilter = Tinebase_PersistentFilter::getFilterById($persistentFilterId);
+                // @todo is this if statement really needed? either the filter got found or a Tinebase_Exception_NotFound got thrown
+                if ($persistentFilter) {
+                    $filter = $persistentFilter;
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter class: " . get_class($filter));
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // filter got deleted already
             }
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            // filter got deleted already
         }
         
         $this->_getContentFilter($filter, $_filterType);
