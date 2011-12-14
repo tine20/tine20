@@ -28,7 +28,7 @@ class ActiveSync_Command_ProvisionTests extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync Commands Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync Provision Command Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
