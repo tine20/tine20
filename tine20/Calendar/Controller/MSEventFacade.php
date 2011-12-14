@@ -399,10 +399,14 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      * sets current calendar user
      * 
      * @param Calendar_Model_Attender $_calUser
+     * @return Calendar_Model_Attender oldUser
      */
     public function setCalendarUser(Calendar_Model_Attender $_calUser)
     {
+        $oldUser = $this->_calendarUser;
         $this->_calendarUser = $_calUser;
+        
+        return $oldUser;
     }
     
     /**

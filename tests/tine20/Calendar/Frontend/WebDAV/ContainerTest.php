@@ -163,7 +163,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         
         $this->objects['eventsToDelete'][] = $event;
         
-        $this->assertInstanceOf('Calendar_Frontend_WebDAV_Event', $event);
+        $this->assertTrue($event instanceof Calendar_Frontend_WebDAV_Event);
         $this->assertEquals($id, $record->getId(), 'ID mismatch');
         
         return $event;
@@ -183,7 +183,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         $children = $container->getChildren();
         
         $this->assertEquals(1, count($children));
-        $this->assertInstanceOf('Calendar_Frontend_WebDAV_Event', $children[0]);
+        $this->assertTrue($children[0] instanceof Calendar_Frontend_WebDAV_Event);
     }
     
     /**

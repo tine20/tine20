@@ -231,9 +231,10 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         //$persistentSClever->status = Calendar_Model_Attender::STATUS_DECLINED;
         //$this->_uit->attenderStatusUpdate($event, $persistentSClever);
         
-        $this->_uit->setCalendarUser($sclever);
-        
+        $currUser = $this->_uit->setCalendarUser($sclever);
         $event = $this->_uit->get($event->getId());
+        $this->_uit->setCalendarUser($currUser);
+        
         $persistentException = $event->exdate->filter('is_deleted', 0)->getFirstRecord();
         $this->assertNull($persistentException);
     }

@@ -111,7 +111,7 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
      * (non-PHPdoc)
      * @see ActiveSync_Command_Wbxml::getResponse()
      */
-    public function getResponse($_keepSession = FALSE)
+    public function getResponse()
     {
         $controller = ActiveSync_Controller::getInstance();
         
@@ -201,7 +201,7 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
             }
         }
                 
-        parent::getResponse($_keepSession);
+        return $this->_outputDom;
     }
 
     /**

@@ -428,10 +428,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
             
             // set own status
-            // @todo enable after Calendar_Model_Attender merge from CalDAV branch
-            #if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($data->attendee)) !== null && ($busyType = array_search($ownAttendee->status, $this->_busyStatusMapping)) !== false) {
-            #    $_xmlNode->appendChild(new DOMElement('BusyStatus', $busyType, 'uri:Calendar'));
-            #}
+            if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($data->attendee)) !== null && ($busyType = array_search($ownAttendee->status, $this->_busyStatusMapping)) !== false) {
+                $_xmlNode->appendChild(new DOMElement('BusyStatus', $busyType, 'uri:Calendar'));
+            }
         
         }
         
@@ -510,11 +509,20 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
         }
 
-        #if ($oldEntry->organizer == Tinebase_Core::getUser()->contact_id) {
+        if ($oldEntry->organizer == Tinebase_Core::getUser()->contact_id) {
             $entry = $this->_contentController->update($entry);
-        #} else {
-        #    echo "I'm attendee";
-        #}
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " current user is not organizer => update attendee status only ");
+            
+            $ownAttendee = Calendar_Model_Attender::getOwnAttender($entry->attendee);
+            
+            if ($_folderId != $this->_specialFolderName) {
+                $ownAttendee->displaycontainer_id = $_folderId;
+            }
+            
+            $entry = Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($entry, $ownAttendee);
+        }
     
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updated entry id " . $entry->getId());
@@ -647,102 +655,45 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " timezone data " . $event->originator_tz);
         }
         
-        // handle attendees
-        $addressbook = Addressbook_Controller_Contact::getInstance();
-        
         if(! $event->attendee instanceof Tinebase_Record_RecordSet) {
             $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         }
         
         if(isset($xmlData->Attendees)) {
-            $newAttendee = array();
+            $newAttendees = array();
             
             foreach($xmlData->Attendees->Attendee as $attendee) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee email " . $attendee->Email);
-
-                // search contact from addressbook using the emailaddress
-                $filterArray = array(
-                    array(
-                        'field'     => 'containerType',
-                        'operator'  => 'equals',
-                        'value'     => 'all'
-                    ),
-                    array('condition' => 'OR', 'filters' => array(
-                        array(
-                            'field'     => 'email',
-                            'operator'  => 'equals',
-                            'value'     => (string)$attendee->Email
-                        ),
-                        array(
-                            'field'     => 'email_home',
-                            'operator'  => 'equals',
-                            'value'     => (string)$attendee->Email
-                        ),
-                    )),
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee email " . $attendee->Email);
+                
+                if(isset($attendee->AttendeeType) && array_key_exists((int)$attendee->AttendeeType, $this->_attendeeTypeMapping)) {
+                    $role = $this->_attendeeTypeMapping[(int)$attendee->AttendeeType];
+                } else {
+                    $role = Calendar_Model_Attender::ROLE_REQUIRED;
+                }
+                
+                // AttendeeStatus send only on repsonse
+                
+                if (preg_match('/(?P<firstName>\S*) (?P<lastNameName>\S*)/', (string)$attendee->Name, $matches)) {
+                    $firstName = $matches['firstName'];
+                    $lastName  = $matches['lastNameName'];
+                } else {
+                    $firstName = null;
+                    $lastName  = $attendee->Name;
+                }
+                
+                // @todo handle resources
+                $newAttendees[] = array(
+                    'userType'  => Calendar_Model_Attender::USERTYPE_USER,
+                    'firstName' => $firstName,
+                	'lastName'  => $lastName,
+                    #'partStat'  => $status,
+                    'role'      => $role,
+                    'email'     => (string)$attendee->Email
                 );
-                                 
-                #$contacts = $addressbook->search(new Addressbook_Model_ContactFilter($filterArray), null, true);
-                $contacts = $addressbook->search(new Addressbook_Model_ContactFilter($filterArray));
-                
-                if(count($contacts) > 0) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of contacts " . count($contacts));
-                    $contactId = $contacts->getFirstRecord()->getId();
-                } else {
-                    $contactData = array(
-                        'note'        => 'added by syncronisation',
-                        'email'       => (string)$attendee->Email,
-                        'n_family'    => (string)$attendee->Name,
-                    );
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . print_r($contactData, true));
-                    $contact = new Addressbook_Model_Contact($contactData);
-                    $contactId = $addressbook->create($contact)->getId();
-                }
-                $newAttendee[$contactId] = $contactId;
-                
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " contactId " . $contactId);
-                
-                // find out if the contact_id is already attending the event
-                $matchingAttendee = $event->attendee
-                    ->filter('user_type', Calendar_Model_Attender::USERTYPE_USER)
-                    ->filter('user_id', $contactId);
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . count($matchingAttendee));
-                
-                if(count($matchingAttendee) == 0) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee not found, adding as new");
-                    $newAttender = new Calendar_Model_Attender(array(
-                        'user_id'   => $contactId,
-                        'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                    ));
-                    if(isset($attendee->AttendeeType) && array_key_exists((int)$attendee->AttendeeType, $this->_attendeeTypeMapping)) {
-                        $newAttender->role = $this->_attendeeTypeMapping[(int)$attendee->AttendeeType];
-                    } else {
-                        $newAttender->role = Calendar_Model_Attender::ROLE_REQUIRED;
-                    }
-                    if(isset($attendee->AttendeeStatus) && array_key_exists((int)$attendee->AttendeeStatus, $this->_attendeeStatusMapping)) {
-                        $newAttender->status = $this->_attendeeStatusMapping[(int)$attendee->AttendeeStatus];
-                    } else {
-                        $newAttender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
-                    }
-                    
-                    $event->attendee->addRecord($newAttender);
-                } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updating attendee");
-                    $currentAttendee = $matchingAttendee->getFirstRecord();
-                    if(isset($attendee->AttendeeType) && array_key_exists((int)$attendee->AttendeeType, $this->_attendeeTypeMapping)) {
-                        $currentAttendee->role = $this->_attendeeTypeMapping[(int)$attendee->AttendeeType];
-                    }
-                    if(isset($attendee->AttendeeStatus) && array_key_exists((int)$attendee->AttendeeStatus, $this->_attendeeStatusMapping)) {
-                        $newAttender->status = $this->_attendeeStatusMapping[(int)$attendee->AttendeeStatus];
-                    }
-                }
-            }
-            
-            foreach($event->attendee as $index => $attender) {
-                if(!isset($newAttendee[$attender->user_id])) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " removed attender from event " . $attender->user_id);
-                    unset($event->attendee[$index]);
-                }
-            }
+            }   
+
+            Calendar_Model_Attender::emailsToAttendee($event, $newAttendees);
         }
         
         // new event, add current user as participant
@@ -764,14 +715,13 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
         }
         
-        // @todo enable after Calendar_Model_Attender merge from CalDAV branch
-        #if (isset($xmlData->BusyStatus) && ($ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee)) !== null) {
-        #    if (isset($this->_busyStatusMapping[(string)$xmlData->BusyStatus])) {
-        #        $ownAttendee->status = $this->_busyStatusMapping[(string)$xmlData->BusyStatus];
-        #    } else {
-        #        $ownAttendee->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
-        #    }
-        #}
+        if (isset($xmlData->BusyStatus) && ($ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee)) !== null) {
+            if (isset($this->_busyStatusMapping[(string)$xmlData->BusyStatus])) {
+                $ownAttendee->status = $this->_busyStatusMapping[(string)$xmlData->BusyStatus];
+            } else {
+                $ownAttendee->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+            }
+        }
         
         // handle recurrence
         if(isset($xmlData->Recurrence) && isset($xmlData->Recurrence->Type)) {

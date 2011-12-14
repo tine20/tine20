@@ -85,7 +85,7 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
         
         $children = $collection->getChildren();
         
-        $this->assertInstanceOf('Calendar_Frontend_WebDAV_Container', $children[0]);
+        $this->assertTrue($children[0] instanceof Calendar_Frontend_WebDAV_Container);
     }
         
     /**
@@ -97,7 +97,7 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
         
         $child = $collection->getChild($this->objects['initialContainer']->getId());
         
-        $this->assertInstanceOf('Calendar_Frontend_WebDAV_Container', $child);
+        $this->assertTrue($child instanceof Calendar_Frontend_WebDAV_Container);
     }
         
     public function testCreateFile()
