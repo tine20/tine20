@@ -19,13 +19,21 @@
  * @subpackage  ActiveSync
  */
  
-class ActiveSync_Command_Provision extends ActiveSync_Command_Wbxml implements ActiveSync_Command_Interface
+class ActiveSync_Command_Provision extends ActiveSync_Command_Wbxml
 {
     protected $_defaultNameSpace = 'uri:Provision';
     protected $_documentElement  = 'Provision';
     
     const POLICYTYPE_XML   = 'MS-WAP-Provisioning-XML';
     const POLICYTYPE_WBXML = 'MS-EAS-Provisioning-WBXML';
+    
+    const STATUS_SUCCESS                   = 1;
+    const STATUS_PROTOCOL_ERROR            = 2;
+    const STATUS_GENERAL_SERVER_ERROR      = 3;
+    const STATUS_DEVICE_MANAGED_EXTERNALLY = 4;
+    
+    const REMOTEWIPE_REQUESTED = 1;
+    const REMOTEWIPE_CONFIRMED = 2;
     
     protected $_skipValidatePolicyKey = true;
     
@@ -35,21 +43,21 @@ class ActiveSync_Command_Provision extends ActiveSync_Command_Wbxml implements A
     /**
      * process the XML file and add, change, delete or fetches data 
      *
-     * @todo can we get rid of LIBXML_NOWARNING
      * @return resource
      */
     public function handle()
     {
         $controller = ActiveSync_Controller::getInstance();
         
-        // @todo switch to simplexml_import_dom
-        #$xml = simplexml_import_dom($this->_inputDom);
-        $xml = new SimpleXMLElement($this->_inputDom->saveXML(), LIBXML_NOWARNING);
-        // @todo still needed?
-        $xml->registerXPathNamespace('Provision:', 'Provision:');    
+        $xml = simplexml_import_dom($this->_inputDom);
         
         $this->_policyType = isset($xml->Policies->Policy->PolicyType) ? (string) $xml->Policies->Policy->PolicyType : null;
         $this->_policyKey  = isset($xml->Policies->Policy->PolicyKey)  ? (int) $xml->Policies->Policy->PolicyKey     : null;
+        
+        if ($this->_device->remotewipe == self::REMOTEWIPE_REQUESTED && isset($xml->RemoteWipe->Status) && (int)$xml->RemoteWipe->Status == self::STATUS_SUCCESS) {
+            $this->_device->remotewipe = self::REMOTEWIPE_CONFIRMED;
+            $this->_device = ActiveSync_Controller_Device::getInstance()->update($this->_device);
+        }
         
     }
     
@@ -60,7 +68,7 @@ class ActiveSync_Command_Provision extends ActiveSync_Command_Wbxml implements A
     public function getResponse()
     {
         // should we wipe the device
-        if ($this->_device->remotewipe > 0) {
+        if ($this->_device->remotewipe >= self::REMOTEWIPE_REQUESTED) {
             $this->_sendRemoteWipe();
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
@@ -73,9 +81,6 @@ class ActiveSync_Command_Provision extends ActiveSync_Command_Wbxml implements A
             }       
         } 
             
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_outputDom->saveXML());
-    
         return $this->_outputDom;
     }
     
@@ -145,9 +150,10 @@ class ActiveSync_Command_Provision extends ActiveSync_Command_Wbxml implements A
         $this->_device->policykey = $newPolicyKey;
         ActiveSync_Controller::getInstance()->updateDevice($this->_device);
     }
+    
     /**
-    * function the send remote wipe command
-    */
+     * function the send remote wipe command
+     */
     protected function _sendRemoteWipe()
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
@@ -156,9 +162,6 @@ class ActiveSync_Command_Provision extends ActiveSync_Command_Wbxml implements A
         $provision = $sync = $this->_outputDom->documentElement;
         $provision->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Status', 1));
         $provision->appendChild($this->_outputDom->createElementNS('uri:Provision', 'RemoteWipe'));
-    
-        $this->_device->policykey = $newPolicyKey;
-        ActiveSync_Controller::getInstance()->updateDevice($this->_device);
     }
     
     protected function _acknowledgePolicy()
