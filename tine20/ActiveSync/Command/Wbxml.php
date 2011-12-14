@@ -19,7 +19,7 @@
  * @subpackage  ActiveSync
  */
  
-abstract class ActiveSync_Command_Wbxml
+abstract class ActiveSync_Command_Wbxml implements ActiveSync_Command_Interface
 {
     /**
      * the domDocument containing the xml response from the server
@@ -57,6 +57,12 @@ abstract class ActiveSync_Command_Wbxml
     protected $_documentElement;
     
     /**
+     * @var string
+     */
+    protected $_policyKey;
+    
+    protected $_skipValidatePolicyKey = false;
+    /**
      * timestamp to use for all sync requests
      *
      * @var Tinebase_DateTime
@@ -81,23 +87,28 @@ abstract class ActiveSync_Command_Wbxml
     /**
      * the constructor
      *
-     * @param ActiveSync_Model_Device $_device
+     * @param  mixed                    $_requestBody
+     * @param  ActiveSync_Model_Device  $_device
+     * @param  string                   $_policyKey
      */
-    public function __construct(ActiveSync_Model_Device $_device)
+    public function __construct($_requestBody, ActiveSync_Model_Device $_device = null, $_policyKey = null)
     {
-        $this->_device      = $_device;
-        $inputStream = fopen("php://input", "r");
-        
-        try {
-            $decoder = new Wbxml_Decoder($inputStream);
-            $this->_inputDom = $decoder->decode();
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " decoded wbxml content: " . $this->_inputDom->saveXML());
-        } catch(Wbxml_Exception_UnexpectedEndOfFile $e) {
-            $this->_inputDom = NULL;
+        if ($this->_skipValidatePolicyKey !== true && $_policyKey === null) {
+            #throw new ActiveSync_Exception_PolicyKeyMissing();
         }
         
+        if ($this->_skipValidatePolicyKey !== true && ($_policyKey === 0 || $_device->policykey != $_policyKey)) {
+            #throw new ActiveSync_Exception_ProvisioningNeeded();
+        }
+        
+        $this->_policyKey = $_policyKey;
+        $this->_device    = $_device;
+        
+        $this->_inputDom = $_requestBody;
+        
         $this->_syncTimeStamp = Tinebase_DateTime::now();
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " sync timestamp: " . $this->_syncTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " sync timestamp: " . $this->_syncTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG));
         
         // Creates an instance of the DOMImplementation class
         $imp = new DOMImplementation();
@@ -110,40 +121,5 @@ abstract class ActiveSync_Command_Wbxml
         $this->_outputDom->formatOutput = false;
         $this->_outputDom->encoding     = 'utf-8';
         
-    }
-    
-    /**
-     * this abstract function must be implemented the commands
-     * this function processes the incoming request
-     *
-     */
-    abstract public function handle();    
-    
-    /**
-     * this function generates the response for the client
-     * could get overwriten by the command
-     * 
-     * @param boolean $_keepSession keep session active(don't logout user) when true
-     */
-    public function getResponse($_keepSession = FALSE)
-    {
-        Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_outputDom->saveXML());
-        
-        $outputStream = fopen("php://temp", 'r+');
-        
-        $encoder = new Wbxml_Encoder($outputStream, 'UTF-8', 3);
-        $encoder->encode($this->_outputDom);
-        
-        header("Content-Type: application/vnd.ms-sync.wbxml");
-        
-        rewind($outputStream);
-        while (!feof($outputStream)) {
-            #$buffer .= fgets($outputStream, 4096);
-            echo fgets($outputStream, 4096);
-        }
-
-        #echo $buffer;        
-    }
+    }    
 }

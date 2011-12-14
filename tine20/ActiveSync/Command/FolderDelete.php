@@ -48,12 +48,14 @@ class ActiveSync_Command_FolderDelete extends ActiveSync_Command_Wbxml
     /**
      * the constructor
      *
-     * @param ActiveSync_Model_Device $_device
+     * @param  mixed                    $_requestBody
+     * @param  ActiveSync_Model_Device  $_device
+     * @param  string                   $_policyKey
      */
-    public function __construct(ActiveSync_Model_Device $_device)
+    public function __construct($_requestBody, ActiveSync_Model_Device $_device = null, $_policyKey = null)
     {
-        parent::__construct($_device);
-        
+        parent::__construct($_requestBody, $_device, $_policyKey);
+            
         $this->_folderStateBackend   = new ActiveSync_Backend_FolderState();
         $this->_controller           = ActiveSync_Controller::getInstance();
 
@@ -77,10 +79,8 @@ class ActiveSync_Command_FolderDelete extends ActiveSync_Command_Wbxml
      * generate FolderDelete response
      *
      * @todo currently we support only the main folder which contains all contacts/tasks/events/notes per class
-     * 
-     * @param boolean $_keepSession keep session active(don't logout user) when true
      */
-    public function getResponse($_keepSession = FALSE)
+    public function getResponse()
     {
         $folderDelete = $this->_outputDom->documentElement;
         
@@ -99,7 +99,7 @@ class ActiveSync_Command_FolderDelete extends ActiveSync_Command_Wbxml
             $this->_controller->updateSyncKey($this->_device, $newSyncKey, $this->_syncTimeStamp, 'FolderSync');
         }
         
-        parent::getResponse($_keepSession);
+        return $this->_outputDom;
     }
     
     /**

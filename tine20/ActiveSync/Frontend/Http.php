@@ -53,14 +53,9 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function handleOptions()
     {
-        // same header like Exchange 2003
-        header("MS-Server-ActiveSync: 8.1");
-        header("MS-ASProtocolVersions: 2.5,12.0");
-        # version 12.1 breaks the Motorola Milestone
-        #header("MS-ASProtocolVersions: 2.5,12.0,12.1");
-        # no Notify(SMS AUTD)
-        #header("MS-ASProtocolCommands: Sync,SendMail,SmartForward,SmartReply,GetAttachment,GetHierarchy,CreateCollection,DeleteCollection,MoveCollection,FolderSync,FolderCreate,FolderDelete,FolderUpdate,MoveItems,GetItemEstimate,MeetingResponse,ResolveRecipients,ValidateCert,Provision,Search,Ping");
-        header("MS-ASProtocolCommands: CreateCollection,DeleteCollection,FolderCreate,FolderDelete,FolderSync,FolderUpdate,GetAttachment,GetItemEstimate,MeetingResponse,MoveCollection,MoveItems,Provision,ResolveRecipients,Ping,SendMail,Search,Settings,SmartForward,SmartReply,Sync");
+        $command = new ActiveSync_Command_Options();
+        
+        $command->getResponse();            
     }
     
     /**
@@ -73,39 +68,78 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function handlePost($_user, $_deviceId, $_deviceType, $_command, $_version)
     {
-        #if(!isset($_SERVER['HTTP_X_MS_POLICYKEY']) && $_command != 'Ping') {
-        #    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " X-MS-POLICYKEY missing (" . $_command. ')');
-        #    header("HTTP/1.1 400 header X-MS-POLICYKEY not found");
-        #    return;
-        #}
+        $request = new Zend_Controller_Request_Http();
         
         // Nokia phones set the devicetype to their IMEI, all other devices to a generic identifier for their platform
-        if($_deviceId == $_deviceType && strtolower(substr($_SERVER['HTTP_USER_AGENT'], 0, 5)) == 'nokia') {
+        if($_deviceId == $_deviceType && strtolower(substr($request->getServer('HTTP_USER_AGENT'), 0, 5)) == 'nokia') {
             $_deviceType = 'Nokia';
         }
         
-        $userAgent = array_key_exists('HTTP_USER_AGENT', $_SERVER) ? $_SERVER['HTTP_USER_AGENT'] : $_deviceType;
-        $policyKey = array_key_exists('HTTP_X_MS_POLICYKEY', $_SERVER) ? (int)$_SERVER['HTTP_X_MS_POLICYKEY'] : null; 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Agent: $userAgent  PolicyKey: $policyKey ASVersion: $_version Command: $_command");
+        $userAgent = $request->getServer('HTTP_USER_AGENT', $_deviceType);
+        $policyKey = $request->getServer('HTTP_X_MS_POLICYKEY'); 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Agent: $userAgent  PolicyKey: $policyKey ASVersion: $_version Command: $_command");
         
         $device = ActiveSync_Controller::getInstance()->getUserDevice($_deviceId, $_deviceType, $userAgent, $_version);
         
-        #if($_command != 'Provision' && $_command != 'Ping' && $policyKey != $device->policykey) {
-        #    header("HTTP/1.1 449 Retry after sending a PROVISION command");
-        #} else {
-            if(!class_exists('ActiveSync_Command_' . $_command)) {
-                throw new Exception('unsupported command ' . $_command);
-            }
+        if(!class_exists('ActiveSync_Command_' . $_command)) {
+            throw new Exception('unsupported command ' . $_command);
+        }
     
-            $className = 'ActiveSync_Command_' . $_command;
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " class name: $className");
-            $command = new $className($device);
+        $className = 'ActiveSync_Command_' . $_command;
+        
+        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " class name: " . print_r($_SERVER, true));
+        
+        if ($request->getServer('CONTENT_TYPE') == 'application/vnd.ms-sync.wbxml') {
+            // decode wbxml request
+            try {
+                $decoder = new Wbxml_Decoder(fopen("php://input", "r"));
+                $requestBody = $decoder->decode();
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml request: " . $requestBody->saveXML());
+            } catch(Wbxml_Exception_UnexpectedEndOfFile $e) {
+                $requestBody = NULL;
+            }
+        } else {
+            $requestBody = fopen("php://input", "r");
+        }
+        
+        try {
+            $command = new $className($requestBody, $device, $policyKey);
             
             $command->handle();
             
-            header("MS-Server-ActiveSync: 8.1");
+            header("MS-Server-ActiveSync: 8.3");
             
-            $command->getResponse();            
-        #}
+            $response = $command->getResponse();            
+        } catch (ActiveSync_Exception_PolicyKeyMissing $asepkm) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " X-MS-POLICYKEY missing (" . $_command. ')');
+            header("HTTP/1.1 400 header X-MS-POLICYKEY not found");
+            return;
+        } catch (ActiveSync_Exception_ProvisioningNeeded $asepn) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " provisioning needed");
+            header("HTTP/1.1 449 Retry after sending a PROVISION command");
+            return;
+        }
+        
+        Tinebase_Controller::getInstance()->logout($request->getClientIp());
+        
+        if ($request->getServer('CONTENT_TYPE') == 'application/vnd.ms-sync.wbxml') {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml response: " . $response->saveXML());
+            
+            $outputStream = fopen("php://temp", 'r+');
+            
+            
+            $encoder = new Wbxml_Encoder($outputStream, 'UTF-8', 3);
+            $encoder->encode($response);
+            
+            header("Content-Type: application/vnd.ms-sync.wbxml");
+            
+            rewind($outputStream);
+            fpassthru($outputStream);
+        }
     }
 }

@@ -30,12 +30,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
     const STATUS_FOLDER_NOT_FOUND           = 7;
     const STATUS_GENERAL_ERROR              = 8;
     
-    /**
-     * folders to monitor
-     *
-     * @var array
-     */
-    #protected $_folders = array();
+    protected $_skipValidatePolicyKey = true;
     
     protected $_changesDetected = false;
     
@@ -171,8 +166,20 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " changes in folder: " . $changedFolder['serverEntryId']);
             }
         }                
-    }    
-
+    }
+        
+    /**
+     * generate ping command response
+     *
+     */
+    public function getResponse()
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_outputDom->saveXML());
+    
+        return $this->_outputDom;
+    }
+    
     /**
      * return number of chnaged entries
      * 

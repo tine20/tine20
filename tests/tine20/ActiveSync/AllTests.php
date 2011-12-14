@@ -30,6 +30,7 @@ class ActiveSync_AllTests
         
         $suite->addTestSuite('ActiveSync_ControllerTests');
         $suite->addTestSuite('ActiveSync_TimezoneConverterTest');
+        $suite->addTestSuite('ActiveSync_Command_AllTests');
         $suite->addTestSuite('ActiveSync_Controller_AllTests');
         $suite->addTestSuite('ActiveSync_Backend_AllTests');
         

@@ -82,15 +82,14 @@ class ActiveSync_Command_ItemOperations extends ActiveSync_Command_Wbxml
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " fetches: " . print_r($this->_fetches, true));        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " fetches: " . print_r($this->_fetches, true));        
     }
     
     /**
      * generate ItemOperations response
-     * 
-     * @param boolean $_keepSession keep session active(don't logout user) when true
      */
-    public function getResponse($_keepSession = FALSE)
+    public function getResponse()
     {
         // add aditional namespaces for contacts, tasks and email
         $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Contacts'    , 'uri:Contacts');
@@ -138,6 +137,6 @@ class ActiveSync_Command_ItemOperations extends ActiveSync_Command_Wbxml
             }
         }
         
-        parent::getResponse($_keepSession);
+        return $this->_outputDom;
     }
 }
