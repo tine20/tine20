@@ -89,6 +89,7 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
      */
     processIMIP: function(status) {
         Tine.log.debug('Tine.Calendar.iMIPDetailsPanel::processIMIP status: ' + status);
+        this.getLoadMask().show();
         
         Tine.Calendar.iMIPProcess(this.iMIPrecord.data, status, function(result, response) {
             if (response.error) {
@@ -215,7 +216,7 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
             }
         }
         
-        
+        this.getLoadMask().hide();
         singleRecordPanel.setVisible(true);
         singleRecordPanel.setHeight(150);
         
