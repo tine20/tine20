@@ -82,7 +82,8 @@ class ActiveSync_Command_ItemOperations extends ActiveSync_Command_Wbxml
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " fetches: " . print_r($this->_fetches, true));        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " fetches: " . print_r($this->_fetches, true));        
     }
     
     /**
@@ -136,9 +137,6 @@ class ActiveSync_Command_ItemOperations extends ActiveSync_Command_Wbxml
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_outputDom->saveXML());
-    
         return $this->_outputDom;
     }
 }

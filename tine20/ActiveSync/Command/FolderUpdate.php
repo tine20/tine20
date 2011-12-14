@@ -101,9 +101,6 @@ class ActiveSync_Command_FolderUpdate extends ActiveSync_Command_Wbxml
             $this->_controller->updateSyncKey($this->_device, $newSyncKey, $this->_syncTimeStamp, 'FolderSync');
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_outputDom->saveXML());
-    
         return $this->_outputDom;
     }    
 }

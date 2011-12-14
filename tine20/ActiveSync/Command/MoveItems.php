@@ -48,7 +48,8 @@ class ActiveSync_Command_MoveItems extends ActiveSync_Command_Wbxml
             );
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " moves: " . print_r($this->_moves, true));        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " moves: " . print_r($this->_moves, true));        
     }
     
     /**
@@ -78,9 +79,6 @@ class ActiveSync_Command_MoveItems extends ActiveSync_Command_Wbxml
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_outputDom->saveXML());
-    
         return $this->_outputDom;
     }
 }

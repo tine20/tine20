@@ -46,9 +46,8 @@ class ActiveSync_Command_SmartReply extends ActiveSync_Command_SendMail
         $this->_collectionId    = $_GET['CollectionId'];
         $this->_itemId          = $_GET['ItemId'];
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . " collectionId: " . $this->_collectionId . " itemId: " . $this->_itemId
-        );
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " collectionId: " . $this->_collectionId . " itemId: " . $this->_itemId);
         
     }    
     

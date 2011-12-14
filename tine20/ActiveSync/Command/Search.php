@@ -45,7 +45,8 @@ class ActiveSync_Command_Search extends ActiveSync_Command_Wbxml
             'name' => (string) $xml->Store->Name
         );
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " stores: " . print_r($this->_store, true));        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " stores: " . print_r($this->_store, true));        
     }
     
     /**
@@ -64,9 +65,6 @@ class ActiveSync_Command_Search extends ActiveSync_Command_Wbxml
         $store->appendChild($this->_outputDom->createElementNS($this->_defaultNameSpace, 'Total', 0));
         
         $result = $store->appendChild($this->_outputDom->createElementNS($this->_defaultNameSpace, 'Result', 0));
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_outputDom->saveXML());
         
         return $this->_outputDom;
     }

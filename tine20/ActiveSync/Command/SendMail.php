@@ -53,7 +53,8 @@ class ActiveSync_Command_SendMail
         try {
             $this->_account = Felamimail_Controller_Account::getInstance()->get($defaultAccountId);
         } catch (Tinebase_Exception_NotFound $ten) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " no email account configured");
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " no email account configured");
             throw new ActiveSync_Exception('no email account configured');
         }
         
@@ -69,7 +70,8 @@ class ActiveSync_Command_SendMail
             $debugStream = fopen("php://temp", 'r+');
             stream_copy_to_stream($emailStream, $debugStream);
             rewind($debugStream);
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " email to send:" . stream_get_contents($debugStream));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " email to send:" . stream_get_contents($debugStream));
             rewind($debugStream);
             $emailStream = $debugStream;
         }
@@ -80,7 +82,8 @@ class ActiveSync_Command_SendMail
             )
         );
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " saveInSent: " . $this->_saveInSent);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " saveInSent: " . $this->_saveInSent);
     }    
     
     /**
