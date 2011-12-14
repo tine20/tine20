@@ -688,14 +688,16 @@ class Calendar_Convert_Event_VCalendar_Abstract
                     
                     break;
                     
+                case 'SEQUENCE':
+                    $event->seq = $property->value;
+                    break;
+                    
                 case 'DESCRIPTION':
                 case 'LOCATION':
                 case 'UID':
-                case 'SEQ':
                 case 'SUMMARY':
                     $key = strtolower($property->name);
                     $event->$key = $property->value;
-                    
                     break;
                     
                 case 'ORGANIZER':

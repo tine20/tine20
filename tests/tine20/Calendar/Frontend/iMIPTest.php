@@ -366,8 +366,9 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
             'originator'     => 'mail@corneliusweiss.de',
         ));
         
+        $this->assertEquals(1, $iMIP->getEvent()->seq);
+        
         // force creation of external attendee
-        $iMIP->getEvent();
         $externalAttendee = new Calendar_Model_Attender(array(
             'user_type'     => Calendar_Model_Attender::USERTYPE_USER,
             'user_id'       => $iMIP->getEvent()->attendee->getFirstRecord()->user_id,
