@@ -104,7 +104,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         // linkType relations automatic list
         if (this.ownRecordClass.hasField('relations')) {
             Tine.Tinebase.data.RecordMgr.eachKey(function(key, record) {
-                if (record.hasField('relations') && Ext.isFunction(record.getFilterModel)) {
+                if (record.hasField('relations') && Ext.isFunction(record.getFilterModel && Tine.Tinebase.appMgr.get(appName))) {
                     var appName = record.getMeta('appName'),
                         label = Tine.Tinebase.appMgr.get(appName).i18n._hidden(record.getMeta('recordsName'));
                     
