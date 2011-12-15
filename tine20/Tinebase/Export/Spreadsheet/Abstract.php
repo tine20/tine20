@@ -15,7 +15,6 @@
  * 
  * @package     Tinebase
  * @subpackage	Export
- * 
  */
 abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abstract
 {
@@ -36,6 +35,7 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
      * 
      * @todo check string type for translated fields?
      * @todo add 'config' type again?
+     * @todo move generic parts to Tinebase_Export_Abstract
      */
     protected function _getCellValue(Zend_Config $_field, Tinebase_Record_Interface $_record, &$_cellType)
     {
@@ -126,6 +126,10 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
                     $result = $_record->{$_field->identifier};
                 }
                 
+                if (isset($_field->trim) && $_field->trim == 1) {
+                    $result = trim($result);
+                }
+                
                 // set special value from params
                 if (isset($_field->values)) {
                     $values = $_field->values->value->toArray();
@@ -134,12 +138,10 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
                     }
                 }
                 
-                // translate strings
                 if (isset($_field->translate) && $_field->translate/* && $_cellType === OpenDocument_SpreadSheet_Cell::TYPE_STRING*/) {
                     $result = $this->_translate->_($result);
                 }
                 
-                // do replacements
                 $result = $this->_replaceAndMatchvalue($result, $_field);
         }
         
