@@ -691,7 +691,8 @@ abstract class Tinebase_Controller_Record_Abstract
         foreach($records as $record) {
             $oldRecord = $record->toArray();
             $data = array_merge($oldRecord, $_data);
-
+            $this->_updateMultipleResult['totalcount'] ++;
+            
             try {
             	$record->setFromArray($data);
             	$this->_backend->update($record);
@@ -707,7 +708,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
         }
 
-        $this->_updateMultipleResult['totalcount'] = $this->_updateMultipleResult['results'];
+        
 
         return $this->_updateMultipleResult;
     }

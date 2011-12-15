@@ -144,7 +144,6 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 field.setValue(this.editDialog.record.data.customfields[fieldKey]);
                 var referenceSelectionData = false;
                 Ext.each(this.editDialog.selectedRecords, function(selection, index) {
-                    Tine.log.err(selection);
                     if(!referenceSelectionData) {
                         referenceSelectionData = selection.customfields[fieldKey];
                         return true;
@@ -331,9 +330,13 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                             Ext.MessageBox.hide();
                             var resp = Ext.decode(_result.responseText);
                             if(resp.failcount > 0) {
-                                Ext.MessageBox.prompt(_('Update Error'), String.format(_('There had been {0} Error(s) while updating {3} records. Please check: {1}'), resp.failcount, resp.exceptions, resp.totalcount), function(_btn, _text) {
-                                       // @TODO: onOK close Window
-                                });
+                                Ext.MessageBox.alert(_('Update Error'), String.format(_('There had been {0} Error(s) while updating {1} records.'), resp.failcount, resp.totalcount), function(_btn, _text) {
+                                    if (_btn == 'ok') {
+                                        this.editDialog.fireEvent('update');
+                                        this.editDialog.purgeListeners();
+                                        this.editDialog.window.close();
+                                    }
+                                }, this);
                             } else {
                                 this.editDialog.fireEvent('update');
                                 this.editDialog.purgeListeners();
