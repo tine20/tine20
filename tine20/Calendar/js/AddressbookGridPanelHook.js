@@ -27,23 +27,35 @@ Tine.Calendar.AddressbookGridPanelHook = function(config) {
     Tine.log.info('initialising calendar addressbook hooks');
     Ext.apply(this, config);
     
+    
+    this.eventMenu = new Ext.menu.Menu({
+        items: [{
+                   text: this.app.i18n._('New Event'),
+                   scope: this,
+                   handler: this.onAddEvent,
+                   iconCls: this.app.getIconCls()
+                }, {
+                   text: this.app.i18n._('Add to Event'),
+                   scope: this,
+                   handler: this.onUpdateEvent,
+                   iconCls: this.app.getIconCls()
+                }]
+    });
+    
+    
     // NOTE: due to the action updater this action is bound the the adb grid only!
-    this.addEventAction = new Ext.Action({
+    this.handleEventAction = new Ext.Action({
         actionType: 'add',
         requiredGrant: 'readGrant',
         allowMultiple: true,
-        text: this.app.i18n._('New Event'),
+        text: this.app.i18n._('Event...'),
         iconCls: this.app.getIconCls(),
         scope: this,
-        handler: this.onAddEvent,
-        listeners: {
-            scope: this,
-            render: this.onRender
-        }
+        menu: this.eventMenu
     });
-    
+        
     // register in contextmenu
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu', this.addEventAction, 80);
+    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu', this.handleEventAction, 80);
 };
 
 Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
@@ -56,11 +68,11 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
     app: null,
     
     /**
-     * @property addEventAction
+     * @property handleEventAction
      * @type Tine.widgets.ActionUpdater
      * @private
      */
-    addEventAction: null,
+    handleEventAction: null,
     
     /**
      * @property ContactGridPanel
@@ -69,43 +81,37 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
      */
     ContactGridPanel: null,
     
+    eventMenu: null,
+    
     /**
      * get addressbook contact grid panel
      */
     getContactGridPanel: function() {
         if (! this.ContactGridPanel) {
+            
             this.ContactGridPanel = Tine.Tinebase.appMgr.get('Addressbook').getMainScreen().getCenterPanel();
         }
-        
         return this.ContactGridPanel;
     },
-    
+
     /**
      * compose an email to selected contacts
      * 
      * @param {Button} btn 
      */
     onAddEvent: function(btn) {
-        var contacts = this.getContactGridPanel().grid.getSelectionModel().getSelections(),
+//        var contacts = this.getContactGridPanel().grid.getSelectionModel().getSelections(),
+        var contacts = this.getContactGridPanel().grid.getSelectionModel().getSelected(),
+
             ms = this.app.getMainScreen(),
             cp = ms.getCenterPanel();
-        
-        
+        Tine.log.err(contacts);
         cp.onEditInNewWindow.call(cp, 'add', {attendee: contacts});
         
     },
-
     
-    /**
-     * add to action updater the first time we render
-     */
-    onRender: function() {
-        var actionUpdater = this.getContactGridPanel().actionUpdater,
-            registeredActions = actionUpdater.actions;
-            
-        if (registeredActions.indexOf(this.addEventAction) < 0) {
-            actionUpdater.addActions([this.addEventAction]);
-        }
-    }
+    onUpdateEvent: function(btn) {
+        
+    }    
 
 });
