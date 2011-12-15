@@ -1,41 +1,41 @@
 /*
  * Tine 2.0
  * 
- * @package     Calendar
+ * @package     Projects
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @author      Alexander Stintzing <alex@stintzing.net>
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
-Ext.ns('Tine.Calendar');
+Ext.ns('Tine.Projects');
 
 /**
- * @namespace   Tine.Calendar
- * @class       Tine.Calendar.AddressbookGridPanelHook
+ * @namespace   Tine.Projects
+ * @class       Tine.Projects.AddressbookGridPanelHook
  * 
- * <p>Calendar Addressbook Hook</p>
+ * <p>Projects Addressbook Hook</p>
  * <p>
  * </p>
  * 
- * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @author      Alexander Stintzing <alex@stintzing.net>
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * 
  * @constructor
  */
-Tine.Calendar.AddressbookGridPanelHook = function(config) {
-    Tine.log.info('initialising calendar addressbook hooks');
+Tine.Projects.AddressbookGridPanelHook = function(config) {
+    Tine.log.info('initialising projects addressbook hooks');
     Ext.apply(this, config);
     
     
-    this.eventMenu = new Ext.menu.Menu({
+    this.projectsMenu = new Ext.menu.Menu({
         items: [{
-           text: this.app.i18n._('New Event'),
+           text: this.app.i18n._('New Project'),
            scope: this,
            handler: this.onAddEvent,
            iconCls: this.app.getIconCls()
         }, {
-           text: this.app.i18n._('Add to Event'),
+           text: this.app.i18n._('Add to Project'),
            scope: this,
            handler: this.onUpdateEvent,
            iconCls: this.app.getIconCls()
@@ -44,35 +44,35 @@ Tine.Calendar.AddressbookGridPanelHook = function(config) {
     
     
     // NOTE: due to the action updater this action is bound the the adb grid only!
-    this.handleEventAction = new Ext.Action({
+    this.handleProjectsAction = new Ext.Action({
         actionType: 'add',
         requiredGrant: 'readGrant',
         allowMultiple: true,
-        text: this.app.i18n._('Event...'),
+        text: this.app.i18n._('Projects...'),
         iconCls: this.app.getIconCls(),
         scope: this,
-        menu: this.eventMenu
+        menu: this.projectsMenu
     });
         
     // register in contextmenu
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu', this.handleEventAction, 100);
+    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu', this.handleProjectsAction, 90);
 };
 
-Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
+Ext.apply(Tine.Projects.AddressbookGridPanelHook.prototype, {
     
     /**
      * @property app
-     * @type Tine.Calendar.Application
+     * @type Tine.Projects.Application
      * @private
      */
     app: null,
     
     /**
-     * @property handleEventAction
+     * @property handleProjectsAction
      * @type Tine.widgets.ActionUpdater
      * @private
      */
-    handleEventAction: null,
+    handleProjectsAction: null,
     
     /**
      * @property ContactGridPanel
@@ -81,7 +81,7 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
      */
     ContactGridPanel: null,
     
-    eventMenu: null,
+    projectsMenu: null,
     
     /**
      * get addressbook contact grid panel

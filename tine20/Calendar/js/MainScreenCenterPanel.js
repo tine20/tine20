@@ -755,6 +755,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 
                 // strip records
                 Ext.each(defaults.attendee, function(attender) {
+                    Tine.log.debug(attender);
                     attendee.push(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
                         user_id: Ext.isFunction(attender.beginEdit) ? attender.data : attender
                     }));

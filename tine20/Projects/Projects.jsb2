@@ -28,6 +28,10 @@
           "path": "js/"
         },
         {
+          "text": "AddressbookGridPanelHook.js",
+          "path": "js/"
+        },        
+        {
           "text": "ProjectEditDialog.js",
           "path": "js/"
         }

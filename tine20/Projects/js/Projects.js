@@ -22,6 +22,11 @@ Tine.Projects.Application = Ext.extend(Tine.Tinebase.Application, {
      */
     getTitle: function() {
         return this.i18n.gettext('Projects');
+    },
+    
+    init: function() {
+        new Tine.Projects.AddressbookGridPanelHook({app: this});
+
     }
 });
 
