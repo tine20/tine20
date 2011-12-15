@@ -276,8 +276,9 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->_customfieldIdsToDelete[] = $createdCustomField->getId();
 
         $changes = array( array('name' => 'url',                    'value' => "http://www.phpunit.de"),
-                          array('name' => "adr_one_region",         'value' => 'PHPUNIT_multipleUpdate'),
-                          array('name' => 'customfield_' . $cfName, 'value' => 'PHPUNIT_multipleUpdate' ));
+                          array('name' => 'adr_one_region',         'value' => 'PHPUNIT_multipleUpdate'),
+                          array('name' => 'customfield_' . $cfName, 'value' => 'PHPUNIT_multipleUpdate' )
+                          );
 
         foreach($companies as $company) {
             $contact = $this->_addContact($company);
@@ -290,7 +291,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $json->updateMultipleRecords('Addressbook', 'Contact', $changes, $filter);
 
         // look if all 3 contacts are updated
-        $this->assertEquals(3, $result['count'],'Could not update the correct number of records');
+        $this->assertEquals(3, $result['totalcount'],'Could not update the correct number of records');
 
         // check if default field adr_one_region value was found
         $sFilter = array(array('field' => 'adr_one_region','operator' => 'equals', 'value' => 'PHPUNIT_multipleUpdate'));

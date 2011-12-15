@@ -1256,7 +1256,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     scope: this,
                     'update': ((this.selectionModel.getCount() > 1) && (this.multipleEdit)) ? this.onUpdateMultipleRecords : this.onUpdateRecord
                 }
-            }, 'useMultiple,sm,record,listeners,copyRecord')
+            }, 'useMultiple,selectedRecords,selectionFilter,record,listeners,copyRecord')
         );
     },
     
