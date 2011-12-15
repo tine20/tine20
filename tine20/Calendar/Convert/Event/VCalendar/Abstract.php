@@ -589,7 +589,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
         preg_match('/(?P<protocol>mailto:|urn:uuid:)(?P<email>.*)/', $_attendee->value, $matches);
         $email = $matches['email'];
         
-        $fullName = isset($_attendee['CN']) ? $_attendee['CN'] : $email;
+        $fullName = isset($_attendee['CN']) ? $_attendee['CN']->value : $email;
         
         if (preg_match('/(?P<firstName>\S*) (?P<lastNameName>\S*)/', $fullName, $matches)) {
             $firstName = $matches['firstName'];
