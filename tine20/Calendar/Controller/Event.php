@@ -424,6 +424,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
+            $sendNotifications = $this->sendNotifications(FALSE);
+            
             $event = $this->get($_record->getId());
             if ($this->_doContainerACLChecks === FALSE || $event->hasGrant(Tinebase_Model_Grants::GRANT_EDIT)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " updating event: {$_record->id} ");
@@ -444,12 +446,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     }
                 }
                 
-                $sendNotifications = $this->sendNotifications(FALSE);
-                
                 parent::update($_record);
                 $this->_saveAttendee($_record, $_record->isRescheduled($event));
-                
-                $this->sendNotifications($sendNotifications);
                 
             } else if ($_record->attendee instanceof Tinebase_Record_RecordSet) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no editGrant for event: {$_record->id}, updating attendee status with valid authKey only");
@@ -463,12 +461,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
+            $this->sendNotifications($sendNotifications);
             throw $e;
         }
         
         $updatedEvent = $this->get($event->getId());
         
         // send notifications
+        $this->sendNotifications($sendNotifications);
         if ($this->_sendNotifications) {
             $this->doSendNotifications($updatedEvent, $this->_currentAccount, 'changed', $event);
         }
