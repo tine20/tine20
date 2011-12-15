@@ -1,7 +1,7 @@
 <?php
 /**
  * backend factory class for the Setup
- * 
+ *
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -10,7 +10,7 @@
 
 /**
  * backend factory class for the Setup
- * 
+ *
  * @package     Setup
  */
 class Setup_Backend_Factory
@@ -29,7 +29,11 @@ class Setup_Backend_Factory
             $adapterName = get_class($db);
 
             // get last part of class name
-            $type = array_pop(explode('_',$adapterName));
+            if (empty($adapterName) || strpos($adapterName, '_') === FALSE) {
+                throw new Setup_Exception('Could not get DB adapter name.');
+            }
+            $adapterNameParts = explode('_',$adapterName);
+            $type = array_pop($adapterNameParts);
             
             // special handling for Oracle
             $type = str_replace('Oci', Tinebase_Core::ORACLE, $type);
