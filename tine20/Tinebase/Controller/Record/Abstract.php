@@ -111,18 +111,6 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_duplicateCheckFields = NULL;
 
     /**
-     * updateMultipleRecords result array
-     *
-     * @var array
-     */
-    protected $_updateMultipleResult = array(
-        'results'           => NULL,
-        'exceptions'        => NULL,
-        'totalcount'        => 0,
-        'failcount'         => 0,
-    );
-
-    /**
      * returns controller for records of given model
      *
      * @param string $_model
@@ -666,17 +654,21 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Model_Filter_FilterGroup $_filter
      * @param   array $_data
      * @return  integer number of updated records
+     * 
+     * @todo add Iterator (@see http://forge.tine20.org/mantisbt/view.php?id=5216) 
+     * @todo add param $_returnFullResults (if false, do not return updated records in 'results')
      */
     public function updateMultiple($_filter, $_data)
     {
         $this->_checkRight('update');
         $this->checkFilterACL($_filter, 'update');
 
-        // get only ids
-        $ids = $this->_backend->search($_filter, NULL, TRUE);
-
-        $invalid = 0;
-        $this->_updateMultipleResult['results'] = 0;
+        $result = array(
+            'results'           => new Tinebase_Record_RecordSet($this->_modelName),
+            'exceptions'        => new Tinebase_Record_RecordSet('Tinebase_Model_UpdateMultipleException'),
+            'totalcount'        => 0,
+            'failcount'         => 0,
+        );
 
         foreach($_data as $key => $value) {
             if(stristr($key,'#')) {
@@ -685,32 +677,28 @@ abstract class Tinebase_Controller_Record_Abstract
             }
         }
 
-        // check validity
-
         $records = $this->search($_filter, NULL, FALSE);
         foreach($records as $record) {
             $oldRecord = $record->toArray();
             $data = array_merge($oldRecord, $_data);
-            $this->_updateMultipleResult['totalcount'] ++;
-            
             try {
             	$record->setFromArray($data);
-            	$this->_backend->update($record);
-            	$this->_updateMultipleResult['results'] ++;
+            	$updatedRecord = $this->_backend->update($record);
+            	$result['results']->addRecord($updatedRecord);
+            	
+            	$result['totalcount'] ++;
             } catch (Tinebase_Exception_Record_Validation $e) {
-                $this->_updateMultipleResult['exceptions'][] = new Tinebase_Model_UpdateMultipleException(array(
-                        'index' => $record->getId(),
-                        'exception' => $e,
-                        'code' => $e->getCode(),
-                        'message' => $e->getMessage()
-                ));
-                $this->_updateMultipleResult['failcount'] ++;
+                $result['exceptions']->addRecord(new Tinebase_Model_UpdateMultipleException(array(
+                    'id' => $record->getId(),
+                    'exception' => $e,
+                    'code' => $e->getCode(),
+                    'message' => $e->getMessage()
+                )));
+                $result['failcount'] ++;
             }
         }
 
-        
-
-        return $this->_updateMultipleResult;
+        return $result;
     }
 
     /**
