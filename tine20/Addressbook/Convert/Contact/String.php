@@ -63,14 +63,26 @@ class Addressbook_Convert_Contact_String implements Tinebase_Convert_Interface
      */
     public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null)
     {
-        $contact = new Addressbook_Model_Contact();
+        $contactData = array();
+        $contactString = $_blob;
         
         foreach ($this->_config->rules->rule as $rule) {
-            // @todo fill contact record + remove recognized tokens
-            //echo $rule->regex;
+            if (isset($contactData[$rule->field])) {
+                continue;
+            }
+            $matches = array();
+            if (preg_match($rule->regex, $contactString, $matches)) {
+                $contactData[$rule->field] = $matches[1];
+            }
         }
         
-        // @todo remaining tokens are $this->_unrecognizedTokens 
+        $contact = new Addressbook_Model_Contact($contactData, TRUE);
+        
+        // remaining tokens are $this->_unrecognizedTokens
+        foreach($contactData as $value) {
+            $contactString = str_replace($value, '', $contactString);
+        }
+        $this->_unrecognizedTokens = preg_split('/[\s,]+/', $contactString);
         
         return $contact;
     }

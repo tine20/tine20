@@ -994,8 +994,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
     * testParseAddressData
-    * 
-    * @todo add more assertions
     */
     public function testParseAddressData()
     {
@@ -1010,10 +1008,17 @@ Tel: +49 (0)40 343244-232
 Fax: +49 (0)40 343244-222";
         
         $result = $this->_instance->parseAddressData($addressString);
-        //print_r($result);
         
         $this->assertTrue(array_key_exists('contact', $result));
         $this->assertTrue(is_array($result['contact']));
         $this->assertTrue(array_key_exists('unrecognizedTokens', $result));
+        $this->assertTrue(count($result['unrecognizedTokens']) > 10 && count($result['unrecognizedTokens']) < 13,
+        	'unrecognizedTokens number mismatch: ' . count('unrecognizedTokens'));
+        $this->assertEquals('p.schuele@metaways.de', $result['contact']['email']);
+        $this->assertEquals('Pickhuben 2', $result['contact']['adr_one_street']);
+        $this->assertEquals('Hamburg', $result['contact']['adr_one_locality']);
+        $this->assertEquals('Metaways Infosystems GmbH', $result['contact']['org_name']);
+        $this->assertEquals('+49 (0)40 343244-232', $result['contact']['tel_work']);
+        $this->assertEquals('http://www.metaways.de', $result['contact']['url']);
     }
 }
