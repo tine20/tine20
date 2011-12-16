@@ -245,14 +245,14 @@ class Tinebase_Translation
         $locale = ($_locale !== NULL) ? $_locale : Tinebase_Core::get('locale');
         
         $cache = Tinebase_Core::getCache();
-        
         $cacheId = 'getTranslation_' . (string)$locale . $_applicationName;
         
         // get translation from cache?
         if ($cache->test($cacheId)) {
             $translate = $cache->load($cacheId);
-            
-            return $translate;
+            if (is_object($translate) && $translate instanceof Zend_Translate) {
+                return $translate;
+            }
         }
 
         $availableTranslations = self::getAvailableTranslations();
