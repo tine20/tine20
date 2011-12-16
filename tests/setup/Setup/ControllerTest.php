@@ -14,10 +14,6 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Setup_JsonTest::main');
-}
-
 /**
  * Test class for Tinebase_Group
  */
@@ -192,8 +188,8 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testUninstallTinebaseShouldThrowDependencyException()
     {
-        $this->setExpectedException('Setup_Exception_Dependency');
         $result = $this->_uit->uninstallApplications(array('Tinebase'));
+        $this->assertTrue($this->_uit->setupRequired());
     }
     
     /**

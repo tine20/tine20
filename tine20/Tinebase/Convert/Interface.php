@@ -22,16 +22,16 @@ interface Tinebase_Convert_Interface
      * converts external format to Tinebase_Record_Abstract
      * 
      * @param  mixed                     $_blob
-     * @param  Tinebase_Record_Abstract  $_model  update existing record
+     * @param  Tinebase_Record_Abstract  $_record  update existing record
      * @return Tinebase_Model_Contact
      */
-    public function toTine20Model($_blob, Tinebase_Record_Abstract $_model = null);
+    public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null);
     
     /**
      * converts Tinebase_Record_Abstract to external format
      * 
-     * @param  Tinebase_Record_Abstract  $_model
+     * @param  Tinebase_Record_Abstract  $_record
      * @return mixed
      */
-    public function fromTine20Model(Tinebase_Record_Abstract $_model);    
+    public function fromTine20Model(Tinebase_Record_Abstract $_record);    
 }

@@ -63,12 +63,12 @@ class Tinebase_Notification
      * @param string                    $_subject
      * @param string                    $_messagePlain
      * @param string                    $_messageHtml
-     * @param string|array              $_attachements
+     * @param string|array              $_attachments
      * @throws Tinebase_Exception
      * 
      * @todo improve exception handling: collect all messages / exceptions / failed email addresses / ...
      */
-    public function send(Tinebase_Model_FullUser $_updater, $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachements = NULL)
+    public function send(Tinebase_Model_FullUser $_updater, $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachments = NULL)
     {
         $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         
@@ -80,7 +80,7 @@ class Tinebase_Notification
                     $recipient = $contactsBackend->get($recipient);
                 }
                 if (! in_array($recipient->getId(), $sentContactIds)) {
-                    $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml, $_attachements);
+                    $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml, $_attachments);
                     $sentContactIds[] = $recipient->getId();
                 }
             } catch (Exception $e) {
