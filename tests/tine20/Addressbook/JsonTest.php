@@ -994,6 +994,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
     * testParseAddressData
+    * 
+    * @todo add more assertions
     */
     public function testParseAddressData()
     {
@@ -1009,5 +1011,9 @@ Fax: +49 (0)40 343244-222";
         
         $result = $this->_instance->parseAddressData($addressString);
         //print_r($result);
+        
+        $this->assertTrue(array_key_exists('contact', $result));
+        $this->assertTrue(is_array($result['contact']));
+        $this->assertTrue(array_key_exists('unrecognizedTokens', $result));
     }
 }
