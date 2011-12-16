@@ -242,13 +242,11 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /*
+    /**
      * this test is for Tinebase_Frontend_Json updateMultipleRecords with contact data in the addressbook app
      */
-
     public function testUpdateMultipleRecords()
     {
-
         $companies = array('Janes', 'Johns', 'Bobs');
         $contacts = array();
 
