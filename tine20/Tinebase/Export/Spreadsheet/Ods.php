@@ -105,6 +105,7 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
         
         // build export table (use current table if using template)
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating export for ' . $this->_modelName . ' . ' . $this->_getDataTableName());
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_config->toArray(), TRUE));
         
         $spreadSheet = $this->_openDocumentObject->getBody();
         

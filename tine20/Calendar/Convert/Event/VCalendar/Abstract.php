@@ -16,7 +16,7 @@
  * @package     Calendar
  * @subpackage  Convert
  */
-class Calendar_Convert_Event_VCalendar_Abstract
+class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Interface
 {
     public static $cutypeMap = array(
         Calendar_Model_Attender::USERTYPE_USER          => 'INDIVIDUAL',
@@ -47,12 +47,12 @@ class Calendar_Convert_Event_VCalendar_Abstract
     /**
      * convert Calendar_Model_Event to Sabre_VObject_Component
      *
-     * @param  Calendar_Model_Event  $_model
+     * @param  Calendar_Model_Event  $_record
      * @return Sabre_VObject_Component
      */
-    public function fromTine20Model(Tinebase_Record_Abstract $_model)
+    public function fromTine20Model(Tinebase_Record_Abstract $_record)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' event ' . print_r($_model->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' event ' . print_r($_record->toArray(), true));
         
         $vcalendar = new Sabre_VObject_Component('VCALENDAR');
         
@@ -65,23 +65,23 @@ class Calendar_Convert_Event_VCalendar_Abstract
         $vcalendar->VERSION  = '2.0';
         $vcalendar->CALSCALE = 'GREGORIAN';
         
-        $vtimezone = $this->_convertDateTimezone($_model->originator_tz);
+        $vtimezone = $this->_convertDateTimezone($_record->originator_tz);
         $vcalendar->add($vtimezone);
         
-        $vevent = $this->_convertCalendarModelEvent($_model);
+        $vevent = $this->_convertCalendarModelEvent($_record);
         $vcalendar->add($vevent);
         
-        if ($_model->exdate instanceof Tinebase_Record_RecordSet) {
-            $eventExceptions = $_model->exdate->filter('is_deleted', false);
+        if ($_record->exdate instanceof Tinebase_Record_RecordSet) {
+            $eventExceptions = $_record->exdate->filter('is_deleted', false);
             
             foreach($eventExceptions as $eventException) {
                 // set timefields
                 // @todo move to MS event facade
-                $eventException->creation_time = $_model->creation_time;
-                if (isset($_model->last_modified_time)) {
-                    $eventException->last_modified_time = $_model->last_modified_time;
+                $eventException->creation_time = $_record->creation_time;
+                if (isset($_record->last_modified_time)) {
+                    $eventException->last_modified_time = $_record->last_modified_time;
                 }
-                $vevent = $this->_convertCalendarModelEvent($eventException, $_model);
+                $vevent = $this->_convertCalendarModelEvent($eventException, $_record);
                 $vcalendar->add($vevent);
             }
             
@@ -189,7 +189,6 @@ class Calendar_Convert_Event_VCalendar_Abstract
          
         return array($standardTransition, $daylightTransition);
     }
-    
     
     protected function _convertCalendarModelEvent(Calendar_Model_Event $_event, Calendar_Model_Event $_mainEvent = null)
     {
@@ -420,10 +419,10 @@ class Calendar_Convert_Event_VCalendar_Abstract
      * converts vcalendar to Calendar_Model_Event
      * 
      * @param  mixed                 $_blob   the vcalendar to parse
-     * @param  Calendar_Model_Event  $_model  update existing event
+     * @param  Calendar_Model_Event  $_record  update existing event
      * @return Calendar_Model_Event
      */
-    public function toTine20Model($_blob, Tinebase_Record_Abstract $_model = null)
+    public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null)
     {
         $vcalendar = $this->_getVcal($_blob);
         
@@ -433,8 +432,8 @@ class Calendar_Convert_Event_VCalendar_Abstract
         }
         
         // update a provided record or create a new one
-        if ($_model instanceof Calendar_Model_Event) {
-            $event = $_model;
+        if ($_record instanceof Calendar_Model_Event) {
+            $event = $_record;
         } else {
             $event = new Calendar_Model_Event(null, false);
         }
@@ -589,7 +588,7 @@ class Calendar_Convert_Event_VCalendar_Abstract
         preg_match('/(?P<protocol>mailto:|urn:uuid:)(?P<email>.*)/', $_attendee->value, $matches);
         $email = $matches['email'];
         
-        $fullName = isset($_attendee['CN']) ? $_attendee['CN'] : $email;
+        $fullName = isset($_attendee['CN']) ? $_attendee['CN']->value : $email;
         
         if (preg_match('/(?P<firstName>\S*) (?P<lastNameName>\S*)/', $fullName, $matches)) {
             $firstName = $matches['firstName'];
