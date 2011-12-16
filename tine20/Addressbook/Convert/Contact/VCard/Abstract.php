@@ -246,5 +246,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     * @param  Tinebase_Record_Abstract  $_record
     * @return mixed
     */
-    abstract public function fromTine20Model(Tinebase_Record_Abstract $_record);
+    public function fromTine20Model(Tinebase_Record_Abstract $_record)
+    {
+    }
 }
