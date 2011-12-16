@@ -1008,6 +1008,6 @@ Tel: +49 (0)40 343244-232
 Fax: +49 (0)40 343244-222";
         
         $result = $this->_instance->parseAddressData($addressString);
-        print_r($result);
+        //print_r($result);
     }
 }
