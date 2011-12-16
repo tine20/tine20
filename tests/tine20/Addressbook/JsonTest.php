@@ -991,4 +991,23 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 
         $sharedTagToDelete = Tinebase_Tags::getInstance()->getTagByName($sharedTagName);
     }
+    
+    /**
+    * testParseAddressData
+    */
+    public function testParseAddressData()
+    {
+        $addressString = "Dipl.-Inf. (FH) Philipp Schüle
+Core Developer
+Metaways Infosystems GmbH
+Pickhuben 2, D-20457 Hamburg
+
+E-Mail: p.schuele@metaways.de
+Web: http://www.metaways.de
+Tel: +49 (0)40 343244-232
+Fax: +49 (0)40 343244-222";
+        
+        $result = $this->_instance->parseAddressData($addressString);
+        print_r($result);
+    }
 }

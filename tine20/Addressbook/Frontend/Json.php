@@ -147,6 +147,22 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
+    * get contact information from string by parsing it using predefined rules
+    *
+    * @param string $address
+    * @return array
+    */
+    public function parseAddressData($address)
+    {
+        $result = Addressbook_Controller_Contact::getInstance()->parseAddressData($address);
+        
+        return array(
+        	'contact'             => $this->_recordToJson($result['contact']),
+            'unrecognizedTokens'  => $result['unrecognizedTokens'],
+        );
+    }
+    
+    /**
      * get default addressbook
      * 
      * @return array
