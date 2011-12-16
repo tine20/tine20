@@ -32,12 +32,12 @@ Tine.Projects.AddressbookGridPanelHook = function(config) {
         items: [{
            text: this.app.i18n._('New Project'),
            scope: this,
-           handler: this.onAddEvent,
+           handler: this.onAddProject,
            iconCls: this.app.getIconCls()
         }, {
            text: this.app.i18n._('Add to Project'),
            scope: this,
-           handler: this.onUpdateEvent,
+           handler: this.onUpdateProject,
            iconCls: this.app.getIconCls()
         }]
     });
@@ -98,7 +98,7 @@ Ext.apply(Tine.Projects.AddressbookGridPanelHook.prototype, {
      * 
      * @param {Button} btn 
      */
-    onAddEvent: function(btn) {
+    onAddProject: function(btn) {
         var contacts = this.getContactGridPanel().grid.getSelectionModel().getSelections(),
             cont = [];
             
@@ -113,8 +113,8 @@ Ext.apply(Tine.Projects.AddressbookGridPanelHook.prototype, {
         
     },
     
-    onUpdateEvent: function(btn) {
-        
+    onUpdateProject: function(btn) {
+        var window = Tine.Projects.AddToProjectPanel.openWindow({});
     }    
 
 });
