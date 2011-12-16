@@ -53,7 +53,7 @@ class Tinebase_Convert_Json // implements Tinebase_Convert_Interface
         
         $result = $_model->toArray();
         
-        if ($_model->has('container_id')) {
+        if ($_model->has('container_id') && ! empty($_model->container_id)) {
             $container = Tinebase_Container::getInstance()->getContainerById($_model->container_id);
         
             $result['container_id'] = $container->toArray();
