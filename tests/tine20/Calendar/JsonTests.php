@@ -267,6 +267,30 @@ class Calendar_JsonTests extends Calendar_TestCase
     }
     
     /**
+    * testSearchRecuringIncludes
+    */
+    public function testSearchRecuringIncludes()
+    {
+        $recurEvent = $this->testCreateRecurEvent();
+    
+        $from = $recurEvent['dtstart'];
+        $until = new Tinebase_DateTime($from);
+        $until->addWeek(5)->addHour(10);
+        $until = $until->get(Tinebase_Record_Abstract::ISO8601LONG);
+    
+        $filter = array(
+        array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+        array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
+        );
+    
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+    
+        $this->assertEquals(6, $searchResultData['totalcount']);
+    
+        return $searchResultData;
+    }
+    
+    /**
      * testSearchRecuringIncludesAndSort
      */
     public function testSearchRecuringIncludesAndSort()
@@ -290,8 +314,6 @@ class Calendar_JsonTests extends Calendar_TestCase
         // check sorting
         $this->assertEquals('2009-04-29 06:00:00', $searchResultData['results'][0]['dtstart']);
         $this->assertEquals('2009-04-22 06:00:00', $searchResultData['results'][1]['dtstart']);
-        
-        return $searchResultData;
     }
     
     /**
