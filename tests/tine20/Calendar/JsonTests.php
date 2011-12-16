@@ -267,9 +267,9 @@ class Calendar_JsonTests extends Calendar_TestCase
     }
     
     /**
-     * testSearchRecuringIncludes
+     * testSearchRecuringIncludesAndSort
      */
-    public function testSearchRecuringIncludes()
+    public function testSearchRecuringIncludesAndSort()
     {
         $recurEvent = $this->testCreateRecurEvent();
         
@@ -283,9 +283,13 @@ class Calendar_JsonTests extends Calendar_TestCase
             array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
         );
         
-        $searchResultData = $this->_uit->searchEvents($filter, array());
+        $searchResultData = $this->_uit->searchEvents($filter, array('sort' => 'dtstart', 'dir' => 'DESC'));
         
-        $this->assertEquals(6, count($searchResultData['results']));
+        $this->assertEquals(6, $searchResultData['totalcount']);
+        
+        // check sorting
+        $this->assertEquals('2009-04-29 06:00:00', $searchResultData['results'][0]['dtstart']);
+        $this->assertEquals('2009-04-22 06:00:00', $searchResultData['results'][1]['dtstart']);
         
         return $searchResultData;
     }
