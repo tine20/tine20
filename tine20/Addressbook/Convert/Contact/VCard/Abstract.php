@@ -18,6 +18,11 @@
  */
 abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Convert_Interface
 {
+    /**
+     * the version string
+     * 
+     * @var string
+     */
     protected $_version;
     
     /**
@@ -234,4 +239,12 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         
         return $contact;
     }    
+
+    /**
+    * converts Tinebase_Record_Abstract to external format
+    *
+    * @param  Tinebase_Record_Abstract  $_record
+    * @return mixed
+    */
+    abstract public function fromTine20Model(Tinebase_Record_Abstract $_record);
 }
