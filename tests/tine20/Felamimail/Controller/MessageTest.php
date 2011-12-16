@@ -1154,8 +1154,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         
-        //print_r($message->toArray());
-        
         $this->assertEquals(1, count($message->preparedParts));
         $preparediMIPPart = $message->preparedParts->getFirstRecord()->preparedData;
         $this->assertTrue($preparediMIPPart instanceof Calendar_Model_iMIP, 'is no iMIP');
@@ -1164,13 +1162,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($event instanceof Calendar_Model_Event, 'is no event');
         $this->assertEquals('testevent', $event->summary);
         $this->assertEquals(2, count($event->attendee));
-        
-        $testAttendee = new Calendar_Model_Attender(array(
-            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => Tinebase_Core::getUser()->contact_id,
-        ));
-        $attender = Calendar_Model_Attender::getAttendee($event->attendee, $testAttendee);
-        $this->assertTrue($attender !== NULL, 'did not find own attender');
     }
 
    /**
