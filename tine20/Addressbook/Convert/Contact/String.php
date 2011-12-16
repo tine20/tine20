@@ -27,9 +27,16 @@ class Addressbook_Convert_Contact_String implements Tinebase_Convert_Interface
     /**
      * config (parsing rules)
      * 
-     * @var array
+     * @var Zend_Config
      */    
     protected $_config = array();
+
+    /**
+     * config filename
+     * 
+     * @var string
+     */
+    const CONFIG_FILENAME = 'config/convert_from_string.xml';
     
     /**
      * the constructor
@@ -38,9 +45,12 @@ class Addressbook_Convert_Contact_String implements Tinebase_Convert_Interface
      */
     public function __construct($_config = array())
     {
-        // @todo if config is empty -> get from file
         if (! empty($_config)) {
-            $this->_config = $_config;
+            $this->_config = new Zend_Config($_config);
+        } else {
+            // read file with Zend_Config_Xml
+            $filename = dirname(__FILE__) . '/' . self::CONFIG_FILENAME;
+            $this->_config = new Zend_Config_Xml($filename);
         }
     }
 
@@ -55,8 +65,12 @@ class Addressbook_Convert_Contact_String implements Tinebase_Convert_Interface
     {
         $contact = new Addressbook_Model_Contact();
         
-        // @todo loop rules
-        // @todo fill contact record + $this->_unrecognizedTokens
+        foreach ($this->_config->rules->rule as $rule) {
+            // @todo fill contact record + remove recognized tokens
+            //echo $rule->regex;
+        }
+        
+        // @todo remaining tokens are $this->_unrecognizedTokens 
         
         return $contact;
     }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <rules>
+        <rule>
+            <field>adr_one_postalcode</field>
+            <regex>/\s*(\d{5})\s+[a-zA-Z]+/m</regex>
+        </rule>
+        <rule>
+            <field>adr_one_postalcode</field>
+            <regex>/[A-Z]{1,3}-(\d{5})\s+[a-zA-Z]+/m</regex>
+        </rule>
+        <rule>
+            <field>org_name</field>
+            <regex>/(^.*(?:GmbH|GbR|OHG|KG).*)/m</regex>
+        </rule>
+        <rule>
+            <field>tel_work</field>
+            <regex>/^(?:Tel[^+^0-9]*)(\+{0,1}[0-9\ \t()-]+)/m</regex>
+        </rule>
+    </rules>
+</config>
