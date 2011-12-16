@@ -423,14 +423,11 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     public function parseAddressData($_address)
     {
-        $contact = new Addressbook_Model_Contact();
-        $tokens = array();
+        $converter = new Addressbook_Convert_Contact_String(); 
         
-        // @todo loop rules
-        // @todo fill contact record
         $result = array(
-            'contact'             => $contact,
-            'unrecognizedTokens'  => $tokens,
+            'contact'             => $converter->toTine20Model($_address),
+            'unrecognizedTokens'  => $converter->getUnrecognizedTokens(),
         );
                     
         return $result;
