@@ -316,14 +316,10 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	        Calendar_Model_Attender::resolveAttendee($_records->attendee);
 	        $this->_resolveOrganizer($_records);
 	        $this->_resolveRrule($_records);
-	        
             Calendar_Controller_Event::getInstance()->getAlarms($_records);
-	        
             Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($_records, $_filter);
             
-	        if ($_pagination !== NULL && $_pagination->sort) {
-                $_records->sort($_pagination->sort, ($_pagination->dir) ? $_pagination->dir : 'ASC');
-	        }
+            $_records->sortByPagination($_pagination);
             
 	        $eventsData = parent::_multipleRecordsToJson($_records);
 	        foreach($eventsData as $eventData) {

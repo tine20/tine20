@@ -643,7 +643,23 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         
         return $this;
     }
+
+    /**
+    * sorts this recordset by pagination sort info
+    *
+    * @param Tinebase_Model_Pagination $_pagination
+    * @return $this
+    */
+    public function sortByPagination($_pagination)
+    {
+        if ($_pagination !== NULL && $_pagination->sort) {
+            $sortField = is_array($_pagination->sort) ? $_pagination->sort[0] : $_pagination->sort; 
+            $this->sort($sortField, ($_pagination->dir) ? $_pagination->dir : 'ASC');
+        }
         
+        return $this;
+    }
+    
     /**
      * translate all member records of this set
      * 
