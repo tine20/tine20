@@ -73,16 +73,16 @@ class Tinebase_Record_Iterator
      */
     public function __construct($_params)
     {
-        $requiredParams = array('controller', 'filter', 'iteratable');
+        $requiredParams = array('controller', 'filter', 'iteratable', 'function');
         foreach ($requiredParams as $param) {
             if (isset($_params[$param])) {
                 $this->{'_' . $param} = $_params[$param];
-            } else {
+            } else if ($param !== 'function') {
                 throw new Tinebase_Exception_InvalidArgument($param . ' required');
             }
         }
         
-        if (! $this->_iteratable instanceof Tinebase_Record_IteratableInterface) {
+        if ($this->_function === 'processIteration' && ! $this->_iteratable instanceof Tinebase_Record_IteratableInterface) {
             throw new Tinebase_Exception_InvalidArgument('iteratable needs to implement Tinebase_Record_IteratableInterface');
         }
 
