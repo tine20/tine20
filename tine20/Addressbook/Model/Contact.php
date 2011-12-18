@@ -217,15 +217,22 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         }
         
         // always update fileas and fn
-        $_data['n_fileas'] = (!empty($_data['n_family'])) ? $_data['n_family'] : $_data['org_name'];
+        $_data['n_fileas'] = (!empty($_data['n_family'])) ? $_data['n_family']
+            : ((! empty($_data['org_name'])) ? $_data['org_name']
+            : ((isset($_data['n_fileas'])) ? $_data['n_fileas'] : ''));
+        
         if (!empty($_data['n_given'])) {
             $_data['n_fileas'] .= ', ' . $_data['n_given'];
         }
-            
-        $_data['n_fn'] = (!empty($_data['n_family'])) ? $_data['n_family'] : $_data['org_name'];
+        
+        $_data['n_fn'] = (!empty($_data['n_family'])) ? $_data['n_family']
+            : ((! empty($_data['org_name'])) ? $_data['org_name']
+            : ((isset($_data['n_fn'])) ? $_data['n_fn'] : ''));
+        
         if (!empty($_data['n_given'])) {
             $_data['n_fn'] = $_data['n_given'] . ' ' . $_data['n_fn'];
         }
+        
         
         parent::setFromArray($_data);
     }
