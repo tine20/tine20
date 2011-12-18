@@ -109,6 +109,8 @@ abstract class Tinebase_Controller_Record_Abstract
      * @var array
      */
     protected $_duplicateCheckFields = NULL;
+    
+    protected $_updateMultipleResult = array();
 
     /**
      * returns controller for records of given model
@@ -655,7 +657,6 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param   array $_data
      * @return  integer number of updated records
      * 
-     * @todo add Iterator (@see http://forge.tine20.org/mantisbt/view.php?id=5216) 
      * @todo add param $_returnFullResults (if false, do not return updated records in 'results')
      */
     public function updateMultiple($_filter, $_data)
@@ -663,44 +664,67 @@ abstract class Tinebase_Controller_Record_Abstract
         $this->_checkRight('update');
         $this->checkFilterACL($_filter, 'update');
 
-        $result = array(
-            'results'           => new Tinebase_Record_RecordSet($this->_modelName),
-            'exceptions'        => new Tinebase_Record_RecordSet('Tinebase_Model_UpdateMultipleException'),
-            'totalcount'        => 0,
-            'failcount'         => 0,
-        );
-
         foreach($_data as $key => $value) {
             if(stristr($key,'#')) {
                 $_data['customfields'][substr($key,1)] = $value;
                 unset($_data[$key]);
             }
         }
+        
+        $this->_updateMultipleResult = array(
+            'results'           => new Tinebase_Record_RecordSet($this->_modelName),
+            'exceptions'        => new Tinebase_Record_RecordSet('Tinebase_Model_UpdateMultipleException'),
+            'totalcount'        => 0,
+            'failcount'         => 0,
+        );
+        
+        $iterator = new Tinebase_Record_Iterator(array(
+            'iteratable' => $this,
+        	'controller' => $this,
+        	'filter'     => $_filter,
+        	'function'	 => 'processUpdateMultipleIteration',
+        ));
+        $result = $iterator->iterate($_data);
+    
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updated ' . $this->_updateMultipleResult['totalcount'] . ' records.');
+        
+        return $this->_updateMultipleResult;
+    }
+    
+    /**
+    * add rows to csv body
+    *
+    * @param Tinebase_Record_RecordSet $_records
+    * @param array $_data
+    */
+    public function processUpdateMultipleIteration($_records, $_data)
+    {
+        if (count($_records) === 0) {
+            return;
+        }
 
-        $records = $this->search($_filter, NULL, FALSE);
-        foreach($records as $record) {
+        foreach ($_records as $record) {
             $oldRecord = $record->toArray();
             $data = array_merge($oldRecord, $_data);
+            
             try {
             	$record->setFromArray($data);
             	$updatedRecord = $this->_backend->update($record);
-            	$result['results']->addRecord($updatedRecord);
+            	$this->_updateMultipleResult['results']->addRecord($updatedRecord);
             	
-            	$result['totalcount'] ++;
+            	$this->_updateMultipleResult['totalcount'] ++;
             } catch (Tinebase_Exception_Record_Validation $e) {
-                $result['exceptions']->addRecord(new Tinebase_Model_UpdateMultipleException(array(
-                    'id' => $record->getId(),
-                    'exception' => $e,
-                    'code' => $e->getCode(),
-                    'message' => $e->getMessage()
+                $this->_updateMultipleResult['exceptions']->addRecord(new Tinebase_Model_UpdateMultipleException(array(
+                    'id'         => $record->getId(),
+                    'exception'  => $e,
+                    'code'       => $e->getCode(),
+                    'message'    => $e->getMessage()
                 )));
-                $result['failcount'] ++;
+                $this->_updateMultipleResult['failcount'] ++;
             }
         }
-
-        return $result;
     }
-
+    
     /**
      * Deletes a set of records.
      *
