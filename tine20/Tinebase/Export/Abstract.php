@@ -208,38 +208,6 @@ abstract class Tinebase_Export_Abstract
     }
     
     /**
-     * get records and resolve fields
-     * 
-     * @param integer  $_start
-     * @param integer  $_limit
-     * @return Tinebase_Record_RecordSet
-     * 
-     * @deprecated remove this when all exports use the new iterator
-     */
-    protected function _getRecords($_start = NULL, $_limit = NULL)
-    {
-        // get records by filter (ensure export acl first)
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting records using filter: ' . print_r($this->_filter->toArray(), TRUE));
-        $pagination = (! empty($this->_sortInfo)) ? new Tinebase_Model_Pagination($this->_sortInfo) : new Tinebase_Model_Pagination();
-        if ($_start !== NULL && $_limit !== NULL) {
-            $pagination->start = $_start;
-            $pagination->limit = $_limit;
-        }
-        $records = $this->_controller->search($this->_filter, $pagination, $this->_getRelations, FALSE, 'export');
-        
-        if (count($records) > 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exporting ' . count($records) . ' records ...');
-            
-            $this->_resolveRecords($records);
-            $records->setTimezone(Tinebase_Core::get('userTimeZone'));
-            
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), TRUE));
-        }
-        
-        return $records;
-    }
-
-    /**
      * resolve records
      *
      * @param Tinebase_Record_RecordSet $_records
