@@ -29,7 +29,7 @@ class Tinebase_Record_Iterator
      * 
      * @var string
      */
-    protected $_function = NULL;
+    protected $_function = 'processIteration';
 
     /**
      * controller with search fn
@@ -73,13 +73,17 @@ class Tinebase_Record_Iterator
      */
     public function __construct($_params)
     {
-        $requiredParams = array('controller', 'filter', 'function', 'iteratable');
+        $requiredParams = array('controller', 'filter', 'iteratable');
         foreach ($requiredParams as $param) {
             if (isset($_params[$param])) {
                 $this->{'_' . $param} = $_params[$param];
             } else {
                 throw new Tinebase_Exception_InvalidArgument($param . ' required');
             }
+        }
+        
+        if (! $this->_iteratable instanceof Tinebase_Record_IteratableInterface) {
+            throw new Tinebase_Exception_InvalidArgument('iteratable needs to implement Tinebase_Record_IteratableInterface');
         }
 
         if (isset($_params['options'])) {
