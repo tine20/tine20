@@ -6,8 +6,9 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
+ * @todo		add test for this export
  */
 
 /**
@@ -16,7 +17,7 @@
  * @package     Addressbook
  * @subpackage  Export
  */
-class Addressbook_Export_FritzBox extends Tinebase_Export_Abstract
+class Addressbook_Export_FritzBox extends Tinebase_Export_Abstract implements Tinebase_Record_IteratableInterface
 {
     /**
      * @var string $_applicationName
@@ -35,38 +36,61 @@ class Addressbook_Export_FritzBox extends Tinebase_Export_Abstract
      */
     protected $_writer = null;
     
-    protected function _addContact($_writer, $_contact)
+    /**
+    * add rows to csv body
+    *
+    * @param Tinebase_Record_RecordSet $_records
+    */
+    public function processIteration($_records)
     {
-        $_writer->startElement("contact");
-        
-        $_writer->startElement("realName");
-        $_writer->text($_contact->n_fn);
-        $_writer->endElement();
-        
-        $_writer->startElement("telephony");
-        $this->_addNumber($_writer, $_contact->tel_home, "home");
-        $this->_addNumber($_writer, $_contact->tel_work, "work");
-        $this->_addNumber($_writer, $_contact->tel_cell ? $_contact->tel_cell : $_contact->tel_cell_private, "mobile");
-        $_writer->endElement();
-        
-        $_writer->startElement("services");
-        $_writer->endElement();
-        
-        $_writer->startElement("setup");
-        $_writer->endElement();
-        
-        $_writer->endElement();
+        foreach($_records as $contact) {
+            $this->_addContact($contact);
+        }
     }
     
-    protected function _addNumber($_writer, $_number, $_type)
+    /**
+     * add contact
+     * 
+     * @param Addressbook_Model_Contact $_contact
+     */
+    protected function _addContact($_contact)
     {
-        $_writer->startElement("number");
-        $_writer->writeAttribute("type", $_type);
-        $_writer->writeAttribute("quickdial", "");
-        $_writer->writeAttribute("vanity", "");
-        $_writer->writeAttribute("prio", "");
-        $_writer->text($_number);
-        $_writer->endElement();
+        $this->_writer->startElement("contact");
+        
+        $this->_writer->startElement("realName");
+        $this->_writer->text($_contact->n_fn);
+        $this->_writer->endElement();
+        
+        $this->_writer->startElement("telephony");
+        $this->_addNumber($_contact->tel_home, "home");
+        $this->_addNumber($_contact->tel_work, "work");
+        $this->_addNumber($_contact->tel_cell ? $_contact->tel_cell : $_contact->tel_cell_private, "mobile");
+        $this->_writer->endElement();
+        
+        $this->_writer->startElement("services");
+        $this->_writer->endElement();
+        
+        $this->_writer->startElement("setup");
+        $this->_writer->endElement();
+        
+        $this->_writer->endElement();
+    }
+    
+    /**
+     * add number
+     * 
+     * @param integer $_number
+     * @param string $_type
+     */
+    protected function _addNumber($_number, $_type)
+    {
+        $this->_writer->startElement("number");
+        $this->_writer->writeAttribute("type", $_type);
+        $this->_writer->writeAttribute("quickdial", "");
+        $this->_writer->writeAttribute("vanity", "");
+        $this->_writer->writeAttribute("prio", "");
+        $this->_writer->text($_number);
+        $this->_writer->endElement();
     }
     
     /**
@@ -82,10 +106,7 @@ class Addressbook_Export_FritzBox extends Tinebase_Export_Abstract
         $this->_writer->startElement("phonebooks");
         $this->_writer->startElement("phonebook");
  
-        $records = $this->_getRecords();
-        foreach($this->_getRecords() as $contact) {
-            $this->_addContact($this->_writer, $contact);
-        }
+        $this->_exportRecords();
          
         $this->_writer->endDocument();
         $this->_writer->flush();

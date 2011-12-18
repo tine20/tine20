@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage	Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -188,11 +188,33 @@ abstract class Tinebase_Export_Abstract
     }
     
     /**
+     * export records
+     */
+    protected function _exportRecords()
+    {
+        $iterator = new Tinebase_Record_Iterator(array(
+            'iteratable' => $this,
+        	'controller' => $this->_controller,
+        	'filter'     => $this->_filter,
+            'options'	 => array(
+        		'searchAction' => 'export',
+        		'sortInfo'	   => $this->_sortInfo,
+        		'getRelations' => $this->_getRelations,
+            ),
+        ));
+        $totalcount = $iterator->iterate();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Exported ' . $totalcount . ' records.');
+    }
+    
+    /**
      * get records and resolve fields
      * 
      * @param integer  $_start
      * @param integer  $_limit
      * @return Tinebase_Record_RecordSet
+     * 
+     * @deprecated remove this when all exports use the new iterator
      */
     protected function _getRecords($_start = NULL, $_limit = NULL)
     {
