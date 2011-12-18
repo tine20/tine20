@@ -138,7 +138,7 @@ class Tinebase_Export_Csv extends Tinebase_Export_Abstract implements Tinebase_R
             $record = new $this->_modelName(array(), TRUE);
             
             $fields = array();
-            foreach (array_keys($record->toArray()) as $key) {
+            foreach ($record->getFields() as $key) {
                 $fields[] = $key;
                 if (in_array($key, array_keys($this->_specialFields))) {
                     $fields[] = $this->_specialFields[$key];

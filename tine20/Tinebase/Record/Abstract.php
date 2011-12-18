@@ -872,6 +872,16 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }   
 
     /**
+     * get fields
+     * 
+     * @return array
+     */
+    public function getFields()
+    {
+        return array_keys($this->_validators);
+    }
+    
+    /**
      * fills a record from json data
      *
      * @param string $_data json encoded data
