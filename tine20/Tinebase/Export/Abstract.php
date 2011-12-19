@@ -194,12 +194,12 @@ abstract class Tinebase_Export_Abstract
     {
         $iterator = new Tinebase_Record_Iterator(array(
             'iteratable' => $this,
-        	'controller' => $this->_controller,
-        	'filter'     => $this->_filter,
+            'controller' => $this->_controller,
+            'filter'     => $this->_filter,
             'options'	 => array(
-        		'searchAction' => 'export',
-        		'sortInfo'	   => $this->_sortInfo,
-        		'getRelations' => $this->_getRelations,
+                'searchAction' => 'export',
+                'sortInfo'	   => $this->_sortInfo,
+                'getRelations' => $this->_getRelations,
             ),
         ));
         $totalcount = $iterator->iterate();
