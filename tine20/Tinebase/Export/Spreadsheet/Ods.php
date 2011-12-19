@@ -218,8 +218,10 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
      *
      * @param Tinebase_Record_RecordSet $records
      */
-    protected function processIteration($_records)
+    public function processIteration($_records)
     {
+        $this->_resolveRecords($_records);
+        
         // add record rows
         $i = 0;
         foreach ($_records as $record) {

@@ -233,8 +233,10 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
      * 
      * @todo add formulas
      */
-    protected function processIteration($_records)
+    public function processIteration($_records)
     {
+        $this->_resolveRecords($_records);
+        
         // add record rows
         $i = 0;
         foreach ($_records as $record) {
