@@ -621,7 +621,7 @@ class Zend_Mail_Protocol_Imap
                 return (count($items) == 1) ? $data[$items[0]] : $data;
             }
             
-            $result[$tokens[0]] = (count($items) == 1) ? $data[$items[0]] : $data;
+            $result[$tokens[0]] = (count($items) == 1 && isset($data[$items[0]])) ? $data[$items[0]] : $data;
         }
 
         if ($to === null && !is_array($from)) {
