@@ -74,7 +74,7 @@
  * 
  *   RELATED-TO:<19960401-080045-4000F192713-0052@host1.com>
  */
-class qCal_Property_RecurrenceId extends qCal_Property {
+class qCal_Property_RelatedTo extends qCal_Property {
 
 	protected $type = 'TEXT';
 	protected $allowedComponents = array('VEVENT','VTODO','VJOURNAL');
