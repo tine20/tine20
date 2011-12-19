@@ -98,23 +98,29 @@ Ext.apply(Tine.Projects.AddressbookGridPanelHook.prototype, {
      * 
      * @param {Button} btn 
      */
-    onAddProject: function(btn) {
+    onAddProject: function() {
+        var ms = this.app.getMainScreen(),
+            cp = ms.getCenterPanel(),
+            cont = this.getSelectionsAsArray();
+           var contacts = this.getContactGridPanel().grid.getSelectionModel().getSelections(); 
+        cp.onEditInNewWindow.call(cp, 'add', {attendee: contacts});
+        
+    },
+    
+       
+    onUpdateProject: function() {
+        var cont = this.getSelectionsAsArray();
+        var window = Tine.Projects.AddToProjectPanel.openWindow({attendee: cont});
+    },
+    
+    getSelectionsAsArray: function() {
         var contacts = this.getContactGridPanel().grid.getSelectionModel().getSelections(),
             cont = [];
             
         Ext.each(contacts, function(contact) {
            if(contact.data) cont.push(contact.data);
         });
-
-        var ms = this.app.getMainScreen(),
-            cp = ms.getCenterPanel();
-            
-        cp.onEditInNewWindow.call(cp, 'add', {attendee: cont});
         
-    },
-    
-    onUpdateProject: function(btn) {
-        var window = Tine.Projects.AddToProjectPanel.openWindow({});
-    }    
-
+        return cont;
+    }
 });

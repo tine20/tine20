@@ -103,4 +103,14 @@ class Projects_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'defaultContainer' => $defaultContainerArray
         );
     }
+    
+    /**
+     * appends some attenders (contacts) to the specified project 
+     * @param string $project Project ID
+     * @param string $role Role Identifier
+     * @param array $attenders Attenders
+     */
+    public function addAttenders($project, $role, $attenders) {
+        return Projects_Controller_Project::getInstance()->addAttenders($project, $role, $attenders);
+    }
 }
