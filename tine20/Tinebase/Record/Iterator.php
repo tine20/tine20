@@ -110,7 +110,7 @@ class Tinebase_Record_Iterator
     /**
      * iterator batches of records
      * 
-     * @return boolean|number
+     * @return array with totalcount and results in array
      */
     public function iterate()
     {
@@ -119,17 +119,20 @@ class Tinebase_Record_Iterator
             return FALSE;
         }
 
-        $totalcount = count($records);
+        $result = array(
+            'totalcount' => count($records),
+            'results' 	 => array(),
+        );
         while (count($records) > 0) {
             $arguments = array_merge(array($records), func_get_args());
-            call_user_func_array(array($this->_iteratable, $this->_function), $arguments);
+            $result['results'][] = call_user_func_array(array($this->_iteratable, $this->_function), $arguments);
 
             $this->_start += $this->_options['limit'];
             $records = $this->_getRecords();
-            $totalcount += count($records);
+            $result['totalcount'] += count($records);
         }
         
-        return $totalcount;
+        return $result;
     }
 
     /**

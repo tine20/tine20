@@ -202,9 +202,10 @@ abstract class Tinebase_Export_Abstract
                 'getRelations' => $this->_getRelations,
             ),
         ));
-        $totalcount = $iterator->iterate();
+        $result = $iterator->iterate();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Exported ' . $totalcount . ' records.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Exported ' . $result['totalcount'] . ' records.');
     }
     
     /**
