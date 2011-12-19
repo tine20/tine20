@@ -106,7 +106,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         }
         
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " XMLHttpRequest style upload");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " XMLHttpRequest style upload to path " . $path);
             
             $name =       $_SERVER['HTTP_X_FILE_NAME'];
             $size = (int) $_SERVER['HTTP_X_FILE_SIZE'];
@@ -115,6 +115,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
             
             $success = copy("php://input", $path);
             if (! $success) {
+                // @todo make it work with safe_mode / or: only allow post upload if safe_mode is activated 
                 throw new Tinebase_Exception_NotFound('No valid upload file found or some other error occurred while uploading! ');
             }
             
