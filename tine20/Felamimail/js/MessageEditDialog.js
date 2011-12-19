@@ -472,21 +472,9 @@ Ext.namespace('Tine.Felamimail');
         if (! this.record.get('subject')) {
             if (! this.subject) {
                 if (this.replyTo) {
-                    // check if there is already a 'Re:' prefix
-                    var replyPrefix = this.app.i18n._('Re:'),
-                        replyPrefixRegexp = new RegExp('^' + replyPrefix, 'i'),
-                        replySubject = (this.replyTo.get('subject')) ? this.replyTo.get('subject') : '';
-                        
-                    if (! replySubject.match(replyPrefixRegexp)) {
-                        this.subject = replyPrefix + ' ' +  replySubject;
-                    } else {
-                        this.subject = replySubject;
-                    }
+                    this.setReplySubject();
                 } else if (this.forwardMsgs) {
-                    this.subject =  this.app.i18n._('Fwd:') + ' ';
-                    this.subject += this.forwardMsgs.length === 1 ?
-                        this.forwardMsgs[0].get('subject') :
-                        String.format(this.app.i18n._('{0} Message', '{0} Messages', this.forwardMsgs.length));
+                    this.setForwardSubject();
                 } else if (this.draftOrTemplate) {
                     this.subject = this.draftOrTemplate.get('subject');
                 }
@@ -495,6 +483,33 @@ Ext.namespace('Tine.Felamimail');
         }
         
         delete this.subject;
+    },
+    
+    /**
+     * setReplySubject -> this.subject
+     * 
+     * TODO: remove existing prefixes / just add Re:
+     */
+    setReplySubject: function() {
+        var replyPrefix = this.app.i18n._('Re:'),
+            replyPrefixRegexp = new RegExp('^' + replyPrefix, 'i'),
+            replySubject = (this.replyTo.get('subject')) ? this.replyTo.get('subject') : '';
+            
+        if (! replySubject.match(replyPrefixRegexp)) {
+            this.subject = replyPrefix + ' ' +  replySubject;
+        } else {
+            this.subject = replySubject;
+        }
+    },
+    
+    /**
+     * setForwardSubject -> this.subject
+     */
+    setForwardSubject: function() {
+        this.subject =  this.app.i18n._('Fwd:') + ' ';
+        this.subject += this.forwardMsgs.length === 1 ?
+            this.forwardMsgs[0].get('subject') :
+            String.format(this.app.i18n._('{0} Message', '{0} Messages', this.forwardMsgs.length));
     },
     
     /**
