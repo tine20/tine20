@@ -88,7 +88,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
             $result = array_pop($iterateResult['results']);
         } else {
             $messages = $this->_convertToRecordSet($_messages, TRUE);
-            $result = $this->processMoveIteration($_messages, $targetFolder);
+            $result = $this->processMoveIteration($messages, $targetFolder);
         }
         
         return $result;
