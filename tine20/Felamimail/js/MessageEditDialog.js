@@ -488,18 +488,14 @@ Ext.namespace('Tine.Felamimail');
     /**
      * setReplySubject -> this.subject
      * 
-     * TODO: remove existing prefixes / just add Re:
+     * removes existing prefixes + just adds 'Re: '
      */
     setReplySubject: function() {
-        var replyPrefix = this.app.i18n._('Re:'),
-            replyPrefixRegexp = new RegExp('^' + replyPrefix, 'i'),
-            replySubject = (this.replyTo.get('subject')) ? this.replyTo.get('subject') : '';
+        var replyPrefix = 'Re: ',
+            replySubject = (this.replyTo.get('subject')) ? this.replyTo.get('subject') : '',
+            replySubject = replySubject.replace(/^((re|aw|antw|fwd|odp|sv|wg|tr):\s*)*/i, replyPrefix);
             
-        if (! replySubject.match(replyPrefixRegexp)) {
-            this.subject = replyPrefix + ' ' +  replySubject;
-        } else {
-            this.subject = replySubject;
-        }
+        this.subject = replySubject;
     },
     
     /**
