@@ -11,6 +11,22 @@
 
 /**
  * class Tinebase_Record_Iterator
+ * 
+ * this helper class allows to iterate through batches of records (by default 100 records/iteration).
+ * it is required when big amounts of records needs to be processed as this requires lots of memory if no iterator is used.
+ * 
+ * use it like this:
+       $iterator = new Tinebase_Record_Iterator(array(
+            'iteratable' => $this,				// should implement Tinebase_Record_IteratableInterface
+        	'controller' => $this->_controller, // Tinebase_Controller_Record_Abstract
+        	'filter'     => $this->_filter,     // Tinebase_Model_Filter_FilterGroup
+            'options'	 => array(
+            	// add specific options here
+            ),
+        ));
+        $totalcount = $iterator->iterate();
+ *
+ * the calling class should implement processIteration($_records) that is given the batch of records to process.
  *
  * @package     Tinebase
  * @subpackage  Record
