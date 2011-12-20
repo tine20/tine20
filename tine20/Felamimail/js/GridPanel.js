@@ -1142,7 +1142,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
 
         // condition from filterPanel
-        filter = filter.filters ? filter.filters : filter;
+        while (filter.filters || (Ext.isArray(filter) && filter.length > 0 && filter[0].filters)) {
+            filter = (filter.filters) ? filter.filters : filter[0].filters;
+        }
         
         var accountId = null, 
             filterAccountId = null,
