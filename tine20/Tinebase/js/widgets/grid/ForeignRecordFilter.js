@@ -120,8 +120,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             // translate label
             var foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(def.foreignRecordClass),
                 appName = foreignRecordClass.getMeta('appName'),
-                label = Tine.Tinebase.appMgr.get(appName).i18n._hidden(def.label);
-                
+                label = (Tine.Tinebase.appMgr.get(appName)) ? Tine.Tinebase.appMgr.get(appName).i18n._hidden(def.label) : def.label;
             
             operators.push({operator: {linkType: def.linkType, foreignRecordClass: foreignRecordClass, filterName: def.filterName}, label: label});
         }, this);

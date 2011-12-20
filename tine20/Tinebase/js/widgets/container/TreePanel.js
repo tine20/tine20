@@ -100,6 +100,11 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * use container colors
      */
     useContainerColor: false,
+    /**
+     * @cfg {Boolean} useContainerColor
+     * use container properties
+     */
+    useProperties: false,
     
     useArrows: true,
     border: false,
@@ -371,7 +376,11 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         
         this.contextMenuSingleContainer = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.containerName,
-            actions: ['delete', 'rename', 'grants', 'properties'].concat(this.useContainerColor ? ['changecolor'] : []),
+            actions: ['delete', 'rename', 'grants'].concat(
+                this.useProperties ? ['properties'] : []
+            ).concat(
+                this.useContainerColor ? ['changecolor'] : []
+            ),
             scope: this,
             backend: 'Tinebase_Container',
             backendModel: 'Container'

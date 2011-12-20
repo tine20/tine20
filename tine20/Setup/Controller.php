@@ -1191,13 +1191,12 @@ class Setup_Controller
      * @param  SimpleXMLElement $_xml
      * @param  array | optional $_options
      * @return void
-     * @throws Setup_Exception
      * @throws Tinebase_Exception_Backend_Database
      */
     protected function _installApplication($_xml, $_options = null)
     {
         if ($this->_backend === NULL) {
-            throw new Setup_Exception('Need configured and working database backend for install.');
+            throw new Tinebase_Exception_Backend_Database('Need configured and working database backend for install.');
         }
         
         try {

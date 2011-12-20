@@ -1093,8 +1093,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         if (accountId === null) {
             Tine.log.debug('No or multiple account ids in filter. Resetting quota bar.');
-            this.quotaBar.updateProgress(0, this.app.i18n._('Quota unknown'));
-            this.quotaBar.setWidth(120);
+            this.quotaBar.hide();
             return;
         }
             
@@ -1104,14 +1103,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }, this).first();
         }
         if (accountInbox && parseInt(accountInbox.get('quota_limit'), 10) && accountId == accountInbox.get('account_id')) {
+            Tine.log.debug('Showing quota info.');
+            
             var limit = parseInt(accountInbox.get('quota_limit'), 10),
                 usage = parseInt(accountInbox.get('quota_usage'), 10),
                 left = limit - usage,
                 percentage = Math.round(usage/limit * 100),
                 text = String.format(this.app.i18n._('{0} %'), percentage);
+            this.quotaBar.show();
             this.quotaBar.setWidth(75);
             this.quotaBar.updateProgress(usage/limit, text);
-            
             
             Ext.QuickTips.register({
                 target:  this.quotaBar,
@@ -1124,9 +1125,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 width: 200
             });
         } else {
-            Tine.log.debug('No account inbox found or no quota info.');
-            this.quotaBar.updateProgress(0, this.app.i18n._('Quota unknown'));
-            this.quotaBar.setWidth(120);
+            Tine.log.debug('No account inbox found or no quota info found.');
+            this.quotaBar.hide();
         }
     },
     
@@ -1142,7 +1142,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
 
         // condition from filterPanel
-        filter = filter.filters ? filter.filters : filter;
+        while (filter.filters || (Ext.isArray(filter) && filter.length > 0 && filter[0].filters)) {
+            filter = (filter.filters) ? filter.filters : filter[0].filters;
+        }
         
         var accountId = null, 
             filterAccountId = null,

@@ -95,18 +95,19 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      * @todo work on a file model
      *  
      * @return Tinebase_Model_TempFile
+     * @throws Tinebase_Exception
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_UnexpectedValue
      */
     public function uploadTempFile()
     {
         $path = tempnam(Tinebase_Core::getTempDir(), 'tine_tempfile_');
-        if (!$path) {
+        if (! $path) {
             throw new Tinebase_Exception_UnexpectedValue('Can not upload file, tempnam() could not return a valid filename!');
         }
         
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " XMLHttpRequest style upload");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " XMLHttpRequest style upload to path " . $path);
             
             $name =       $_SERVER['HTTP_X_FILE_NAME'];
             $size = (int) $_SERVER['HTTP_X_FILE_SIZE'];
@@ -115,7 +116,18 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
             
             $success = copy("php://input", $path);
             if (! $success) {
-                throw new Tinebase_Exception_NotFound('No valid upload file found or some other error occurred while uploading! ');
+                // try again with stream_copy_to_stream
+                $input = fopen("php://input", 'r');
+                if (! $input) {
+                    throw new Tinebase_Exception_NotFound('No valid upload file found or some other error occurred while uploading! ');
+                }
+                $tempfileHandle = fopen($path, "w");
+                if (! $tempfileHandle) {
+                    throw new Tinebase_Exception('Could not open tempfile while uploading! ');
+                }
+                $size = stream_copy_to_stream($input, $tempfileHandle);
+                fclose($input);
+                fclose($tempfileHandle);
             }
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " successfully created tempfile at {$path}");
