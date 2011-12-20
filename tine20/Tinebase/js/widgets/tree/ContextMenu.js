@@ -76,10 +76,11 @@ Tine.widgets.tree.ContextMenu = {
             scope: this.config
         });
         
+        // TODO is edit grant required?
         this.action_changecolor = new Ext.Action({     
             text: _('Set color'),
             iconCls: 'action_changecolor',
-//            requiredGrant: 'deleteGrant',
+//            requiredGrant: 'editGrant',
             allowMultiple: true,
             menu: new Ext.menu.ColorMenu({
                 scope: this,
@@ -132,6 +133,9 @@ Tine.widgets.tree.ContextMenu = {
                     break;
                 case 'rename':
                     items.push(this.action_rename);
+                    break;
+                case 'properties':
+                    items.push(this.action_properties);
                     break;
                 case 'changecolor':
                     items.push(this.action_changecolor);
