@@ -26,7 +26,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         Tine.log.debug('TRE', this.editDialog.selectedRecords);
         
         
-        this.editDialog.on('render', function() {this.onAfterRender();}, this);
+        this.editDialog.on('render', this.onAfterRender, this);
 
         this.editDialog.onRecordLoad = this.editDialog.onRecordLoad.createInterceptor(this.onRecordLoad, this);
         this.editDialog.onRecordUpdate = this.editDialog.onRecordUpdate.createInterceptor(this.onRecordUpdate, this);
@@ -243,8 +243,8 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                             } else {
                                 var arrow = new Ext.Element(document.createElement('img'));
                                 arrow.set({
-                                    src: '../../library/ExtJS/resources/images/default/grid/dirty.gif',
-                                    class: 'tinebase-editmultipledialog-dirty'
+                                    'src': '../../library/ExtJS/resources/images/default/grid/dirty.gif',
+                                    'class': 'tinebase-editmultipledialog-dirty'
                                 });
                                 this.el.insertSibling(arrow);
                             }

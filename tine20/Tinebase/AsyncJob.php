@@ -19,7 +19,7 @@
 class Tinebase_AsyncJob
 {
     /**
-     * @var Tinebase_AsyncJob_Sql
+     * @var Tinebase_Backend_Sql
      */
     protected $_backend;
     
@@ -42,7 +42,10 @@ class Tinebase_AsyncJob
      */
     private function __construct()
     {
-        $this->_backend = new Tinebase_AsyncJob_Sql();
+        $this->_backend = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_AsyncJob', 
+            'tableName' => 'async_job',
+        ));
     }
     
     /**
@@ -61,40 +64,40 @@ class Tinebase_AsyncJob
     /**************************** public functions *********************************/
     
     /**
-     * check if job is running
+     * check if job is running and returns next sequence / FALSE if a job is running atm
      *
      * @param string $_name
-     * @return boolean
+     * @return boolean|integer
      */
-    public function jobIsRunning($_name)
+    public function getNextSequence($_name)
     {
-        // get all pending alarms
-        $filter = new Tinebase_Model_AsyncJobFilter(array(
-            array(
-                'field'     => 'name', 
-                'operator'  => 'equals', 
-                'value'     => $_name
-            ),
-            array(
-                'field'     => 'status', 
-                'operator'  => 'equals', 
-                'value'     => Tinebase_Model_AsyncJob::STATUS_RUNNING
-            ),
+        // get last job of this name
+        $filter = new Tinebase_Model_AsyncJobFilter(array(array(
+            'field'     => 'name',
+            'operator'  => 'equals',
+            'value'     => $_name
+        )));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'sort'		=> 'start_time',
+            'dir'		=> 'DESC',
+            'limit'		=> 1,
         ));
-        $jobs = $this->_backend->search($filter);
+        $jobs = $this->_backend->search($filter, $pagination);
+        $lastJob = $jobs->getFirstRecord();
         
-        $result = (count($jobs) > 0);     
-        
-        // check if job is running for a long time -> set status to Tinebase_Model_AsyncJob::STATUS_FAILURE
-        if ($result) {
-            $job = $jobs->getFirstRecord();
-            if (Tinebase_DateTime::now()->isLater($job->end_time)) {
-                // it seems that the old job ended (start time is older than SECONDS_TILL_FAILURE mins) -> start a new one
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Old ' . $_name . ' job is running too long. Finishing it now.');
-                
-                $this->finishJob($job, Tinebase_Model_AsyncJob::STATUS_FAILURE);
+        if ($lastJob) {
+            if ($lastJob->status === Tinebase_Model_AsyncJob::STATUS_RUNNING) {
+                if (Tinebase_DateTime::now()->isLater($lastJob->end_time)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Old ' . $_name . ' job is running too long. Finishing it now.');
+                    $this->finishJob($lastJob, Tinebase_Model_AsyncJob::STATUS_FAILURE);
+                }
                 $result = FALSE;
+            } else {
+                $result = $lastJob->seq + 1;
             }
+        } else {
+            // begin new sequence
+            $result = 1;
         }
         
         return $result;
@@ -111,28 +114,18 @@ class Tinebase_AsyncJob
     {
         $result = NULL;
         
-        if ($this->jobIsRunning($_name)) {
+        $nextSequence = $this->getNextSequence($_name);
+        if ($nextSequence === FALSE) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . ' Job ' . $_name . ' is already running. Skipping ...');
             return $result;
         }
         
         try {
-            $db = $this->_backend->getAdapter();
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-            
-            $maxSeq = $this->_backend->getMaxSeq();
-            $result = $this->_createNewJob($_name, $maxSeq, $_timeout);
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            
+            $result = $this->_createNewJob($_name, $nextSequence, $_timeout);
         } catch (Zend_Db_Statement_Exception $zdse) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . ' Could not start job ' . $_name . ': ' . $zdse->getMessage());
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
         }
         
         return $result;

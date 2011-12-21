@@ -389,7 +389,15 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             } : {}
         });
         
-        // export lead handler for edit contact dialog
+        this.initToolbar();
+        
+        this.supr().initComponent.apply(this, arguments);    
+    },
+    
+    /**
+     * initToolbar
+     */
+    initToolbar: function() {
         var exportContactButton = new Ext.Action({
             id: 'exportButton',
             text: Tine.Tinebase.appMgr.get('Addressbook').i18n._('Export as pdf'),
@@ -398,10 +406,16 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             disabled: false,
             scope: this
         });
-        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});  
-        this.tbarItems = [exportContactButton, addNoteButton];
+        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});
+        var parseAddressButton = new Ext.Action({
+            text: Tine.Tinebase.appMgr.get('Addressbook').i18n._('Parse address'),
+            handler: this.onParseAddress,
+            iconCls: 'action_parseAddress',
+            disabled: false,
+            scope: this
+        });
         
-        this.supr().initComponent.apply(this, arguments);    
+        this.tbarItems = [exportContactButton, addNoteButton, parseAddressButton];
     },
     
     /**
@@ -444,6 +458,44 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         downloader.start();
     },
     
+    /**
+     * parse address handler
+     * 
+     * opens message box where user can paste address
+     */
+    onParseAddress: function () {
+        Ext.Msg.prompt(this.app.i18n._('Paste address'), this.app.i18n._('Please paste an address that should be parsed:'), function(btn, text) {
+            if (btn == 'ok'){
+                this.parseAddress(text);
+            }
+        }, this, 100);
+    },
+    
+    /**
+     * send address to server + fills record/form with parsed data + adds unrecognizedTokens to description box
+     * 
+     * @param {String} address
+     */
+    parseAddress: function(address) {
+        Tine.log.debug('parsing address ... ');
+        
+        Tine.Addressbook.parseAddressData(address, function(result, response) {
+            Tine.log.debug('parsed address:');
+            Tine.log.debug(result);
+            
+            // only set the fields that could be detected
+            Ext.iterate(result.contact, function(key, value) {
+                this.record.set(key, value);
+            }, this);
+            
+            this.record.set('note', result.unrecognizedTokens.join(' ') + "\n\n------\n\n" + this.record.get('note'));
+            this.onRecordLoad();
+        }, this);
+    },
+    
+    /**
+     * onRecordLoad
+     */
     onRecordLoad: function () {
         // NOTE: it comes again and again till 
         if (this.rendered) {
