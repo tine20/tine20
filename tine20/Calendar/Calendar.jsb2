@@ -130,6 +130,10 @@
         {
           "text": "CalDAVContainerPropertiesHookField.js",
           "path": "js/"
+        },
+        {
+          "text": "AddToEventPanel.js",
+          "path": "js/"
         }
       ]
     },

@@ -1,17 +1,17 @@
 /*
  * Tine 2.0
  * 
- * @package     Projects
+ * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <alex@stintzing.net>
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
-Ext.ns('Tine.Projects');
+Ext.ns('Tine.Calendar');
 
-Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
-    appName : 'Projects',
+Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
+    appName : 'Calendar',
     
     layout : 'fit',
     border : false,
@@ -41,7 +41,7 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
         // get items for this dialog
         this.items = this.getFormItems();
 
-        Tine.Projects.AddToProjectPanel.superclass.initComponent.call(this);
+        Tine.Calendar.AddToEventPanel.superclass.initComponent.call(this);
     },
     
     initActions: function() {
@@ -67,7 +67,7 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
     },  
     
     onRender : function(ct, position) {
-        Tine.Projects.AddToProjectPanel.superclass.onRender.call(this, ct, position);
+        Tine.Calendar.AddToEventPanel.superclass.onRender.call(this, ct, position);
 
         // generalized keybord map for edit dlgs
         var map = new Ext.KeyMap(this.el, [ {
@@ -89,7 +89,7 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
         
         var valid = true;
         if(this.searchBox.getValue() == '') {
-            this.searchBox.markInvalid(this.app.i18n._('Please choose the Project to add to'));
+            this.searchBox.markInvalid(this.appName.i18n._('Please choose the Event to add to'));
             valid = false;
         }
         if(this.chooseRoleBox.getValue() == '') {
@@ -110,13 +110,13 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
                 },this); 
             }
             
-            Ext.MessageBox.wait(String.format(this.app.i18n._('Adding {0} Attenders to Project...'), attenders.length), this.app.i18n._('Adding Attenders'));
+            Ext.MessageBox.wait(String.format(this.app.i18n._('Adding {0} Attenders to Event...'), attenders.length), this.app.i18n._('Adding Attenders'));
             
             Ext.Ajax.request({
                 url: 'index.php',
                 
                 params: {
-                    method: 'Projects.addAttenders',
+                    method: 'Calendar.addAttenders',
                     attenders: attenders,
                     project: this.searchBox.getValue(),
                     role: this.chooseRoleBox.getValue()
@@ -132,7 +132,7 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
     },
     
     getFormItems : function() {
-        this.searchBox = new Tine.Projects.SearchCombo({fieldLabel: this.app.i18n._('Select Project')});
+        this.searchBox = new Tine.Calendar.SearchCombo({fieldLabel: this.app.i18n._('Select Event')});
         
         var records = [];
         
@@ -187,14 +187,14 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
     }
 });
 
-Tine.Projects.AddToProjectPanel.openWindow = function(config) {
+Tine.Calendar.AddToEventPanel.openWindow = function(config) {
     Tine.log.debug(config);
     var window = Tine.WindowFactory.getWindow({
         modal: true,
-        title : Tine.Tinebase.appMgr.get('Projects').i18n._('Choose Project'),
+        title : Tine.Tinebase.appMgr.get('Calendar').i18n._('Choose Event'),
         width : 250,
         height : 150,
-        contentPanelConstructor : 'Tine.Projects.AddToProjectPanel',
+        contentPanelConstructor : 'Tine.Calendar.AddToEventPanel',
         contentPanelConstructorConfig : config
     });
     return window;

@@ -27,14 +27,22 @@ Tine.Calendar.AddressbookGridPanelHook = function(config) {
     Tine.log.info('initialising calendar addressbook hooks');
     Ext.apply(this, config);
     
+    this.addEventAction = new Ext.Action({
+        actionType: 'add',
+        requiredGrant: 'readGrant',
+        allowMultiple: true,
+        text: this.app.i18n._('New Event'),
+        iconCls: this.app.getIconCls(),
+        scope: this,
+        handler: this.onAddEvent,
+        listeners: {
+            scope: this,
+            render: this.onRender
+        }
+    });
     
     this.eventMenu = new Ext.menu.Menu({
-        items: [{
-           text: this.app.i18n._('New Event'),
-           scope: this,
-           handler: this.onAddEvent,
-           iconCls: this.app.getIconCls()
-        }, {
+        items: [this.addEventAction, {
            text: this.app.i18n._('Add to Event'),
            scope: this,
            handler: this.onUpdateEvent,
@@ -114,7 +122,31 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
     },
     
     onUpdateEvent: function(btn) {
+        var cont = this._getSelectionsAsArray();
+        var window = Tine.Calendar.AddToEventPanel.openWindow({attendee: cont});        
+    },
+    
+    _getSelectionsAsArray: function() {
+        var contacts = this.getContactGridPanel().grid.getSelectionModel().getSelections(),
+            cont = [];
+            
+        Ext.each(contacts, function(contact) {
+           if(contact.data) cont.push(contact.data);
+        });
         
-    }    
+        return cont;
+    },
+    
+        /**
+     * add to action updater the first time we render
+     */
+    onRender: function() {
+        var actionUpdater = this.getContactGridPanel().actionUpdater,
+            registeredActions = actionUpdater.actions;
+            
+        if (registeredActions.indexOf(this.addEventAction) < 0) {
+            actionUpdater.addActions([this.addEventAction]);
+        }
+    }
 
 });
