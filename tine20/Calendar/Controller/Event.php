@@ -741,7 +741,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // restore original notification handling
         $this->sendNotifications($sendNotifications);
         $notificationAction = $_deleteInstance ? 'deleted' : 'created';
-        $notificationEvent = $_deleteInstance ? $updatedBaseEvent : $persistentExceptionEvent;
+        $notificationEvent = $_deleteInstance ? $_event : $persistentExceptionEvent;
         
         // send notifications
         if ($this->_sendNotifications) {
@@ -760,7 +760,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
         }
         
-        return $notificationEvent;
+        return $_deleteInstance ? $updatedBaseEvent : $persistentExceptionEvent;;
     }
     
     /**
