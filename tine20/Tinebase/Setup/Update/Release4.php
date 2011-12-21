@@ -339,6 +339,14 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
             } catch (Exception $e) {
                 // already done
             }
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>64</length>
+                </field>');
+            $this->_backend->alterCol('async_job', $declaration);
+                        
             $declaration = new Setup_Backend_Schema_Index_Xml('
                 <index>
                     <name>name-seq</name>

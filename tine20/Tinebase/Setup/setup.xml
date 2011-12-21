@@ -2524,7 +2524,7 @@
 				<field>
 					<name>name</name>
 					<type>text</type>
-					<length>256</length>
+					<length>64</length>
 				</field>
 				<field>
 					<name>start_time</name>
