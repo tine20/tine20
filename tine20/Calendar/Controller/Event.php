@@ -760,7 +760,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
         }
         
-        return $_deleteInstance ? $updatedBaseEvent : $persistentExceptionEvent;;
+        return $_deleteInstance ? $updatedBaseEvent : $persistentExceptionEvent;
     }
     
     /**
