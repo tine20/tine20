@@ -544,7 +544,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' original body string: ' . $_html);
         
         // replace unicode right-to-left and left-to-right marks (@see http://stackoverflow.com/questions/1930009/how-to-strip-unicode-chars-left-to-right-mark-from-a-string-in-php)
-        $html = preg_replace('/\x20(\x0e|\x0f)/', '', $_html);
+        $html = str_replace(array("\x20\x0e", "\x20\x0f"), '', $_html);
         
         $dom = new DOMDocument('1.0', 'UTF-8');
         // use a hack to make sure html is loaded as utf8 (@see http://php.net/manual/en/domdocument.loadhtml.php#95251)
