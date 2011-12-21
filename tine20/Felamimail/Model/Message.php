@@ -559,13 +559,18 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      */
     public static function convertHTMLToPlainTextWithQuotes($_html, $_eol = "\n")
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' original body string: ' . $_html);
+        
         $dom = new DOMDocument('1.0', 'utf-8');
         // use a hack to make sure html is loaded as utf8 (@see http://php.net/manual/en/domdocument.loadhtml.php#95251)
         $dom->loadHTML('<?xml encoding="UTF-8">' . $_html);
         $bodyElements = $dom->getElementsByTagName('body');
         if ($bodyElements->length > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' before quoting: ' . $bodyElements->item(0)->nodeValue);
             $result = self::addQuotesAndStripTags($bodyElements->item(0), 0, $_eol);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' after quoting: ' . $result);
             $result = html_entity_decode($result, ENT_COMPAT, 'UTF-8');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' entities decoded: ' . $result);
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No body element found.');
             $result = self::convertHTMLToPlainTextWithQuotes('<body>' . $_html . '</body>', 0, $_eol);
