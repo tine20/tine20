@@ -389,8 +389,16 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             } : {}
         });
         
+        this.initToolbar();
+        
+        this.supr().initComponent.apply(this, arguments);    
+    },
+    
+    /**
+     * initToolbar
+     */
+    initToolbar: function() {
         // TODO add parse address button here
-        // export lead handler for edit contact dialog
         var exportContactButton = new Ext.Action({
             id: 'exportButton',
             text: Tine.Tinebase.appMgr.get('Addressbook').i18n._('Export as pdf'),
@@ -399,10 +407,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             disabled: false,
             scope: this
         });
-        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});  
-        this.tbarItems = [exportContactButton, addNoteButton];
+        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});
         
-        this.supr().initComponent.apply(this, arguments);    
+        this.tbarItems = [exportContactButton, addNoteButton];
     },
     
     /**
