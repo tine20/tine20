@@ -26,7 +26,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         Tine.log.debug('TRE', this.editDialog.selectedRecords);
         
         
-        this.editDialog.on('render', function() {this.onAfterRender();}, this);
+        this.editDialog.on('render', this.onAfterRender, this);
 
         this.editDialog.onRecordLoad = this.editDialog.onRecordLoad.createInterceptor(this.onRecordLoad, this);
         this.editDialog.onRecordUpdate = this.editDialog.onRecordUpdate.createInterceptor(this.onRecordUpdate, this);
