@@ -577,7 +577,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $result = html_entity_decode($result, ENT_COMPAT, 'UTF-8');
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' entities decoded: ' . $result);
         } else {
-            throw new Felamimail_Exception('Could not load HTML into DOMDocument');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No body element found.');
+            $result = self::convertHTMLToPlainTextWithQuotes('<body>' . $_html . '</body>', $_eol);
         }
         
         return $result;
