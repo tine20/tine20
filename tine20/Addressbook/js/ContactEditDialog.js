@@ -398,7 +398,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
      * initToolbar
      */
     initToolbar: function() {
-        // TODO add parse address button here
         var exportContactButton = new Ext.Action({
             id: 'exportButton',
             text: Tine.Tinebase.appMgr.get('Addressbook').i18n._('Export as pdf'),
@@ -408,8 +407,15 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             scope: this
         });
         var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});
+        var parseAddressButton = new Ext.Action({
+            text: Tine.Tinebase.appMgr.get('Addressbook').i18n._('Parse address'),
+            handler: this.onParseAddress,
+            iconCls: 'action_parseAddress',
+            disabled: false,
+            scope: this
+        });
         
-        this.tbarItems = [exportContactButton, addNoteButton];
+        this.tbarItems = [exportContactButton, addNoteButton, parseAddressButton];
     },
     
     /**
@@ -452,6 +458,20 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         downloader.start();
     },
     
+    /**
+     * parse address handler
+     */
+    onParseAddress: function () {
+        Tine.log.debug('parse address button pressed');
+        // TODO open message box where user can paste address
+        // TODO send address to server
+        // TODO fill form with returned contact
+        // TODO put unrecognized tokens into description textarea
+    },
+    
+    /**
+     * onRecordLoad
+     */
     onRecordLoad: function () {
         // NOTE: it comes again and again till 
         if (this.rendered) {
