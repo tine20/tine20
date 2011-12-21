@@ -104,7 +104,6 @@ Ext.apply(Tine.Projects.AddressbookGridPanelHook.prototype, {
             
         var contacts = this.getContactGridPanel().grid.getSelectionModel().getSelections(); 
         
-        Tine.log.err(contacts);
         cp.onEditInNewWindow.call(cp, 'add', {attendee: contacts});
         
     },
