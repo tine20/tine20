@@ -243,8 +243,8 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                             } else {
                                 var arrow = new Ext.Element(document.createElement('img'));
                                 arrow.set({
-                                    src: '../../library/ExtJS/resources/images/default/grid/dirty.gif',
-                                    class: 'tinebase-editmultipledialog-dirty'
+                                    'src': '../../library/ExtJS/resources/images/default/grid/dirty.gif',
+                                    'class': 'tinebase-editmultipledialog-dirty'
                                 });
                                 this.el.insertSibling(arrow);
                             }
