@@ -193,16 +193,18 @@ class Setup_Frontend_Cli
                     unset($applications[$key]);
                 }
             } catch (Setup_Exception_NotFound $e) {
-              Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to check if an application needs an update:' . $e->getMessage());
-              unset($applications[$key]);
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to check if an application needs an update:' . $e->getMessage());
+                unset($applications[$key]);
             }
         }
 
+        $updatecount = 0;
         if (count($applications) > 0) {
-            $controller->updateApplications($applications);
+            $result = $controller->updateApplications($applications);
+            $updatecount = $result['updated'];
         }
         
-        echo "Updated " . count($applications) . " applications.\n";        
+        echo "Updated " . $updatecount . " applications.\n";        
     }
 
     /**
