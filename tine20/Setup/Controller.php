@@ -55,6 +55,13 @@ class Setup_Controller
     protected $_emailConfigKeys = array();
     
     /**
+     * number of updated apps
+     * 
+     * @var integer
+     */
+    protected $_updatedApplications = 0;
+    
+    /**
      * don't clone. Use the singleton.
      *
      */
@@ -282,15 +289,16 @@ class Setup_Controller
      */
     public function updateApplications(Tinebase_Record_RecordSet $_applications)
     {
+        $this->_updatedApplications = 0;
         $smallestMajorVersion = NULL;
         $biggestMajorVersion = NULL;
         
         //find smallest major version
-        foreach($_applications as $application) {
-            if($smallestMajorVersion === NULL || $application->getMajorVersion() < $smallestMajorVersion) {
+        foreach ($_applications as $application) {
+            if ($smallestMajorVersion === NULL || $application->getMajorVersion() < $smallestMajorVersion) {
                 $smallestMajorVersion = $application->getMajorVersion();
             }
-            if($biggestMajorVersion === NULL || $application->getMajorVersion() > $biggestMajorVersion) {
+            if ($biggestMajorVersion === NULL || $application->getMajorVersion() > $biggestMajorVersion) {
                 $biggestMajorVersion = $application->getMajorVersion();
             }
         }
@@ -319,8 +327,11 @@ class Setup_Controller
             }
         }
         
-        return $messages;
-    }
+        return array(
+            'messages' => $messages,
+            'updated'  => $this->_updatedApplications,
+        );
+    }    
         
     /**
      * load the setup.xml file and returns a simplexml object
@@ -433,6 +444,7 @@ class Setup_Controller
                 $updatedApp = Tinebase_Application::getInstance()->getApplicationById($_application->getId());
                 $_application->version = $updatedApp->version;
                 Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updated ' . $_application->name . " successfully to " .  $_application->version);
+                $this->_updatedApplications++;
                 
                 break;
                 
