@@ -389,6 +389,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             } : {}
         });
         
+        // TODO add parse address button here
         // export lead handler for edit contact dialog
         var exportContactButton = new Ext.Action({
             id: 'exportButton',
