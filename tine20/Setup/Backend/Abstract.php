@@ -1,29 +1,34 @@
 <?php
-
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Setup
+ * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Matthias Greiling <m.greiling@metaways.de>
- * @copyright   Copyright (c); 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de);
- *
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * interface for backend class
  * 
  * @package     Setup
+ * @subpackage  Backend
  */
 abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
 {
     /**
      * Maximum length of table-, index-, contraint- and field names.
      * 
-     * @var int
+     * @var integer
      */
     const MAX_NAME_LENGTH = 30;
     
+    /**
+     * default length of integer fields
+     * 
+     * @var integer
+     */
     const INTEGER_DEFAULT_LENGTH = 11;
 
     /**
@@ -91,18 +96,19 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      * check's a given database table version 
      *
      * @param string $_tableName
-     * @return boolean return string "version" if the table exists, otherwise false
+     * @return boolean|string "version" if the table exists, otherwise false
      */
     public function tableVersionQuery($_tableName)
     {
         $select = $this->_db->select()
-            ->from( SQL_TABLE_PREFIX . 'application_tables')
-            ->where($this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_tableName);
+            ->from(SQL_TABLE_PREFIX . 'application_tables')
+            ->where($this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_tableName)
+            ->orwhere($this->_db->quoteIdentifier('name') . ' = ?', $_tableName);
 
         $stmt = $select->query();
         $version = $stmt->fetchAll();
         
-        return $version[0]['version'];
+        return (! empty($version)) ? $version[0]['version'] : FALSE;
     }
     
     /**
@@ -116,7 +122,6 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
         $statement = "TRUNCATE TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
         $this->execQueryVoid($statement);
     }
-    
     
     /**
      * check's a given application version
