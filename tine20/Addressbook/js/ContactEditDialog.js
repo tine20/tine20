@@ -460,13 +460,37 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     
     /**
      * parse address handler
+     * 
+     * opens message box where user can paste address
      */
     onParseAddress: function () {
-        Tine.log.debug('parse address button pressed');
-        // TODO open message box where user can paste address
-        // TODO send address to server
-        // TODO fill form with returned contact
-        // TODO put unrecognized tokens into description textarea
+        Ext.Msg.prompt(this.app.i18n._('Paste address'), this.app.i18n._('Please paste an address that should be parsed:'), function(btn, text) {
+            if (btn == 'ok'){
+                this.parseAddress(text);
+            }
+        }, this, 100);
+    },
+    
+    /**
+     * send address to server + fills record/form with parsed data + adds unrecognizedTokens to description box
+     * 
+     * @param {String} address
+     */
+    parseAddress: function(address) {
+        Tine.log.debug('parsing address ... ');
+        
+        Tine.Addressbook.parseAddressData(address, function(result, response) {
+            Tine.log.debug('parsed address:');
+            Tine.log.debug(result);
+            
+            // only set the fields that could be detected
+            Ext.iterate(result.contact, function(key, value) {
+                this.record.set(key, value);
+            }, this);
+            
+            this.record.set('note', result.unrecognizedTokens.join(' ') + "\n\n------\n\n" + this.record.get('note'));
+            this.onRecordLoad();
+        }, this);
     },
     
     /**
