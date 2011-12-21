@@ -61,7 +61,9 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
         
         new Tine.Calendar.AddressbookGridPanelHook({app: this});
         
-        Tine.Felamimail.MimeDisplayManager.register('text/calendar', Tine.Calendar.iMIPDetailsPanel);
+        if (Tine.Felamimail) {
+            Tine.Felamimail.MimeDisplayManager.register('text/calendar', Tine.Calendar.iMIPDetailsPanel);
+        }
     }
 });
 
