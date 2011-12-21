@@ -537,7 +537,15 @@ class Tinebase_Core
             }
 
             Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " cache of backend type '{$backendType}' enabled");
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " backend options: " . print_r($backendOptions, TRUE));
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                // logger is an object, that makes ugly traces :)
+                $backendOptionsWithoutLogger = $backendOptions;
+                if (isset($backendOptionsWithoutLogger['logger'])) {
+                    unset($backendOptionsWithoutLogger['logger']);
+                }
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " backend options: " . print_r($backendOptionsWithoutLogger, TRUE));
+            }
 
         } else {
             Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' cache disabled');

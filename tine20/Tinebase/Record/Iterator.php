@@ -124,7 +124,8 @@ class Tinebase_Record_Iterator
             'results' 	 => array(),
         );
         while (count($records) > 0) {
-            $arguments = array_merge(array($records), func_get_args());
+            $arguments = func_get_args();
+            array_unshift($arguments, $records);
             $result['results'][] = call_user_func_array(array($this->_iteratable, $this->_function), $arguments);
 
             $this->_start += $this->_options['limit'];

@@ -559,16 +559,25 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      */
     public static function convertHTMLToPlainTextWithQuotes($_html, $_eol = "\n")
     {
-        $dom = new DOMDocument('1.0', 'utf-8');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' original body string: ' . $_html);
+        
+        $dom = new DOMDocument('1.0', 'UTF-8');
         // use a hack to make sure html is loaded as utf8 (@see http://php.net/manual/en/domdocument.loadhtml.php#95251)
         $dom->loadHTML('<?xml encoding="UTF-8">' . $_html);
+        // is this really needed?
+        $dom->encoding = 'UTF-8';
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' html (DOMDocument): ' . $dom->saveHTML());
         $bodyElements = $dom->getElementsByTagName('body');
         if ($bodyElements->length > 0) {
-            $result = self::addQuotesAndStripTags($bodyElements->item(0), 0, $_eol);
+            $firstBodyNode = $bodyElements->item(0);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' before quoting: ' . $firstBodyNode->nodeValue);
+            $result = self::addQuotesAndStripTags($firstBodyNode, 0, $_eol);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' after quoting: ' . $result);
             $result = html_entity_decode($result, ENT_COMPAT, 'UTF-8');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' entities decoded: ' . $result);
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No body element found.');
-            $result = self::convertHTMLToPlainTextWithQuotes('<body>' . $_html . '</body>', 0, $_eol);
+            throw new Felamimail_Exception('Could not load HTML into DOMDocument');
         }
         
         return $result;
