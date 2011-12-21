@@ -273,4 +273,34 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->setTableVersion('filter', '3');
         $this->setApplicationVersion('Tinebase', '5.5');
     }
+    
+    /**
+    * update to 5.6
+    * - changed seq index in async_job table
+    */
+    public function update_5()
+    {
+        if ($this->_backend->tableVersionQuery('async_job') === '2') {
+            try {
+                $this->_backend->dropIndex('async_job', 'seq');
+            } catch (Exception $e) {
+                // already done
+            }
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>name-seq</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>name</name>
+                    </field>
+                    <field>
+                        <name>seq</name>
+                    </field>
+                </index>
+            ');
+            $this->_backend->addIndex('async_job', $declaration);
+            $this->setTableVersion('async_job', '3');
+        }
+        $this->setApplicationVersion('Tinebase', '5.6');
+    }
 }
