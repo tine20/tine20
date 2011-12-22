@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * TODO         refactor this (use more methods from Tine.widgets.dialog.EditRecord)
  */
@@ -108,7 +108,8 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             title: this.translation.gettext('Group Members'),
             store: this.membersStore,
             region: 'center',
-            anchor: '100% 100%'
+            anchor: '100% 100%',
+            showHidden: true
         });
         
         var editGroupDialog = {
