@@ -1083,6 +1083,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onStoreLoad: function(store, records, options) {
         this.supr().onStoreLoad.apply(this, arguments);
         
+        Tine.log.debug('Tine.Felamimail.GridPanel::onStoreLoad(): store loaded new records.');
+        
         this.updateQuotaBar(options.params.filter);
     },
     
