@@ -7,11 +7,8 @@
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
- * @todo        add generic mechanism for value pre/postfixes? (see accountLoginNamePrefix in Admin_User_Import)
- * @todo        add more conversions e.g. date/accounts
  * @todo        add tests for notes
  * @todo        add more documentation
- * @todo        make it possible to import custom fields
  */
 
 /**
@@ -128,7 +125,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
     }
     
     /**
-     * do the mapping and replacements
+     * do the mapping
      *
      * @param array $_data
      * @return array
@@ -145,46 +142,16 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         foreach ($this->_options['mapping']['field'] as $index => $field) {
             if (empty($_data_indexed)) {
                 // use import definition order
-                
-                if (! array_key_exists('destination', $field) || $field['destination'] == '' || !isset($_data[$index])) {
+                if (! array_key_exists('destination', $field) || $field['destination'] == '' || ! isset($_data[$index])) {
                     continue;
                 }
-            
-                if (isset($field['replace'])) {
-                    if ($field['replace'] === '\n') {
-                        $_data[$index] = str_replace("\\n", "\r\n", $_data[$index]);
-                    }
-                }
-            
-                if (isset($field['separator'])) {
-                    $data[$field['destination']] = explode($field['separator'], $_data[$index]);
-                } else if (isset($field['fixed'])) {
-                    $data[$field['destination']] = $field['fixed'];
-                } else {
-                    $data[$field['destination']] = $_data[$index];
-                }
+                $data[$field['destination']] = $_data[$index];
             } else {
                 // use order defined by headline
-                
-                if ($field['destination'] == '' || !isset($field['source']) || !isset($_data_indexed[$field['source']])) {
+                if ($field['destination'] == '' || ! isset($field['source']) || ! isset($_data_indexed[$field['source']])) {
                     continue;
                 }
-            
-                if (isset($field['replace'])) {
-                    if ($field['replace'] === '\n') {
-                        $_data_indexed[$field['source']] = str_replace("\\n", "\r\n", $_data_indexed[$field['source']]);
-                    }
-                }
-            
-                if (isset($field['separator'])) {
-                    $data[$field['destination']] = preg_split('/\s*' . $field['separator'] . '\s*/', $_data_indexed[$field['source']]);
-                } else if (isset($field['fixed'])) {
-                    $data[$field['destination']] = $field['fixed'];
-                } else if (isset($field['append'])) {
-                    $data[$field['destination']] .= $field['append'] . $_data_indexed[$field['source']];
-                } else {
-                    $data[$field['destination']] = $_data_indexed[$field['source']];
-                }
+                $data[$field['destination']] = $_data_indexed[$field['source']];
             }
         }
         
