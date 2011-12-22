@@ -1,18 +1,18 @@
 <?php
 /**
  * Tine 2.0
- *
+ * 
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- *
+ * 
  */
 
 /**
  * Json interface to Tinebase
- *
+ * 
  * @package     Tinebase
  * @subpackage  Server
  */
@@ -20,7 +20,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     /**
      * wait for changes
-     *
+     * 
+     * @todo do we still need this?
      */
 	public function ping()
 	{
@@ -31,10 +32,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     /**
      * get list of translated country names
-     *
+     * 
      * Wrapper for {@see Tinebase_Core::getCountrylist}
-     *
-     *
+     * 
      * @return array list of countrys
      */
     public function getCountryList()
