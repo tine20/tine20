@@ -454,7 +454,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     onUpdateFolder: function(store, record, operation) {
         if (operation === Ext.data.Record.EDIT) {
             if (record.isModified('cache_status')) {
-                Tine.log.info('Folder "' + record.get('localname') + '" updated with cache_status: ' + record.get('cache_status'));
+                Tine.log.info('Tine.Felamimail.Application::onUpdateFolder(): Folder "' + record.get('localname') + '" updated with cache_status: ' + record.get('cache_status'));
                 
                 // as soon as we get a folder with status != complete we need to trigger checkmail soon!
                 if (['complete', 'pending'].indexOf(record.get('cache_status')) === -1) {
