@@ -31,7 +31,7 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Spreadsheet_Ods
      */
     protected $_sortInfo = array(
         'sort'  => 'start_date',
-        'dir'   => 'DESC'
+        'dir'   => 'ASC'
     );
     
     /**
