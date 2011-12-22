@@ -227,7 +227,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             recordPrefix: this.recordPrefix,
             userOnly: true,
             onSelect: this.onAddRecordFromCombo,
-            additionalFilters: (this.showHidden) ? [{field: 'visibility', operator: 'in', value: ['displayed', 'hidden']}] : []
+            additionalFilters: (this.showHidden) ? [{field: 'showDisabled', operator: 'equals', value: true}] : []
         });
     },
     
