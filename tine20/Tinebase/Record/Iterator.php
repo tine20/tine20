@@ -105,6 +105,9 @@ class Tinebase_Record_Iterator
         if (isset($_params['options'])) {
             $this->_options = array_merge($this->_options, $_params['options']);
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Created new Iterator with options: ' . print_r($this->_options, TRUE));
     }
 
     /**
@@ -145,13 +148,18 @@ class Tinebase_Record_Iterator
      */
     protected function _getRecords()
     {
-        // get records by filter (ensure acl)
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting records using filter: ' . print_r($this->_filter->toArray(), TRUE));
-        $pagination = (! empty($this->_options['_sortInfo'])) ? new Tinebase_Model_Pagination($this->_options['_sortInfo']) : new Tinebase_Model_Pagination();
+        $pagination = (! empty($this->_options['sortInfo'])) ? new Tinebase_Model_Pagination($this->_options['sortInfo']) : new Tinebase_Model_Pagination();
         if ($this->_start !== NULL) {
             $pagination->start = $this->_start;
             $pagination->limit = $this->_options['limit'];
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Getting records using filter: ' . print_r($this->_filter->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' and pagination: ' . print_r($pagination->toArray(), TRUE));
+        
+        // get records by filter (ensure acl)
         $records = $this->_controller->search($this->_filter, $pagination, $this->_options['getRelations'], FALSE, $this->_options['searchAction']);
 
         return $records;
