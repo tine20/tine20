@@ -114,5 +114,8 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Addressbook')),
         'type'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'customfield'          => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array('idProperty' => 'addressbook.id')),
+        'showDisabled'		   => array('filter' => 'Addressbook_Model_ContactDisabledFilter', 'options' => array(
+            'requiredCols'  => array('account_id' => 'accounts.id')
+        )),
     );
 }

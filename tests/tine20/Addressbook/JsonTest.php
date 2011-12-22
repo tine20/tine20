@@ -42,6 +42,13 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     protected $_customfieldIdsToDelete = array();
 
     /**
+     * if set to NULL during the test -> rollback transaction in tearDown
+     * 
+     * @var string
+     */
+    protected $_transactionId = NULL;
+    
+    /**
      * @var array test objects
      */
     protected $objects = array();
@@ -74,6 +81,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_instance = new Addressbook_Frontend_Json();
+        
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'),
@@ -109,6 +118,12 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 
 	    foreach($this->_customfieldIdsToDelete as $cfd) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cfd);
+	    }
+	    
+	    if ($this->_transactionId === NULL) {
+	        Tinebase_TransactionManager::getInstance()->rollBack();
+	    } else {
+	        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
 	    }
     }
 
@@ -307,7 +322,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($record['url'],'http://www.phpunit.de','DefaultField "url" was not updated as expected');
 
     }
-
 
     /**
      * try to get contacts by owner
@@ -1018,5 +1032,27 @@ Fax: +49 (0)40 343244-222";
         $this->assertEquals('Metaways Infosystems GmbH', $result['contact']['org_name']);
         $this->assertEquals('+49 (0)40 343244-232', $result['contact']['tel_work']);
         $this->assertEquals('http://www.metaways.de', $result['contact']['url']);
+    }
+    
+    /**
+     * testContactDisabledFilter
+     */
+    public function testContactDisabledFilter()
+    {
+        $this->_transactionId = NULL;
+        
+        // hide sclever from adb
+        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+        $sclever->visibility = Tinebase_Model_User::VISIBILITY_HIDDEN;
+        Tinebase_User::getInstance()->updateUser($sclever);
+        
+        // search for her with ContactDisabledFilter
+        $filter = array(array('field' => 'n_given',      'operator' => 'equals',   'value' => 'Susan'));
+        $result = $this->_instance->searchContacts($filter, array());
+        $this->assertEquals(0, $result['totalcount']);
+        
+        $filter[] = array('field' => 'showDisabled', 'operator' => 'equals',   'value' => TRUE);
+        $result = $this->_instance->searchContacts($filter, array());
+        $this->assertEquals(1, $result['totalcount']);
     }
 }

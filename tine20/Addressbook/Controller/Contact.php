@@ -121,6 +121,19 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+    * you can define default filters here
+    *
+    * @param Tinebase_Model_Filter_FilterGroup $_filter
+    */
+    protected function _addDefaultFilter(Tinebase_Model_Filter_FilterGroup $_filter = NULL)
+    {
+        if (! $_filter->isFilterSet('showDisabled')) {
+            $disabledFilter = $_filter->createFilter('showDisabled', 'equals', FALSE);
+            $_filter->addFilter($disabledFilter);
+        }
+    }
+    
+    /**
      * fetch one contact identified by $_userId
      *
      * @param   int $_userId
