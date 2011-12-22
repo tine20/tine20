@@ -286,7 +286,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     protected function _doConversions($_data)
     {
         foreach ($this->_options['mapping']['field'] as $index => $field) {
-            if (! array_key_exists('destination', $field) || $field['destination'] == '' ) {
+            if (! array_key_exists('destination', $field) || $field['destination'] == '' || ! isset($_data[$field['destination']])) {
                 continue;
             }
             
