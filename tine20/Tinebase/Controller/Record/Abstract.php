@@ -139,6 +139,7 @@ abstract class Tinebase_Controller_Record_Abstract
     {
     	$this->_checkRight($_action);
         $this->checkFilterACL($_filter, $_action);
+        $this->_addDefaultFilter($_filter);
 
         $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
 
@@ -152,6 +153,16 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         return $result;
+    }
+    
+    /**
+     * you can define default filters here
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     */
+    protected function _addDefaultFilter(Tinebase_Model_Filter_FilterGroup $_filter = NULL)
+    {
+        
     }
 
     /**
