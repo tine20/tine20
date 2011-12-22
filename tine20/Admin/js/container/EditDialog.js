@@ -86,7 +86,8 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 			flex: 1,
             store: this.grantsStore,
             grantContainer: this.record.data,
-            alwaysShowAdminGrant: true
+            alwaysShowAdminGrant: true,
+            showHidden: true
         });
         
         return this.grantsGrid;

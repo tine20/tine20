@@ -190,6 +190,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             hasAccountPrefix: true,
             selectType: 'both',
             selectTypeDefault: 'group',
+            showHidden: true,
             configColumns: [
                 new Ext.ux.grid.CheckColumn({
                     header: this.translation.gettext('View'),
