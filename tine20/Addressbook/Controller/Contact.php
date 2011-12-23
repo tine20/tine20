@@ -129,6 +129,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     {
         if (! $_filter->isFilterSet('showDisabled')) {
             $disabledFilter = $_filter->createFilter('showDisabled', 'equals', FALSE);
+            $disabledFilter->setIsImplicit(TRUE);
             $_filter->addFilter($disabledFilter);
         }
     }
