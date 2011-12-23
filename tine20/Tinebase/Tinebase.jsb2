@@ -376,6 +376,10 @@
           "path": "js/widgets/dialog/"
         },
         {
+          "text": "TokenModeEditDialogPlugin.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
           "text": "WizardPanel.js",
           "path": "js/widgets/dialog/"
         },
