@@ -22,6 +22,12 @@ Ext.ns('Tine.Addressbook');
  */
 Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
+    /**
+     * parse address button
+     * @type Ext.Button 
+     */
+    parseAddressButton: null,
+    
     windowNamePrefix: 'ContactEditWindow_',
     appName: 'Addressbook',
     recordClass: Tine.Addressbook.Model.Contact,
@@ -407,15 +413,16 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             scope: this
         });
         var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});
-        var parseAddressButton = new Ext.Action({
+        this.parseAddressButton = new Ext.Action({
             text: Tine.Tinebase.appMgr.get('Addressbook').i18n._('Parse address'),
             handler: this.onParseAddress,
             iconCls: 'action_parseAddress',
             disabled: false,
-            scope: this
+            scope: this,
+            enableToggle: true
         });
         
-        this.tbarItems = [exportContactButton, addNoteButton, parseAddressButton];
+        this.tbarItems = [exportContactButton, addNoteButton, this.parseAddressButton];
     },
     
     /**
@@ -462,13 +469,22 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
      * parse address handler
      * 
      * opens message box where user can paste address
+     * 
+     * @param {Ext.Button} button
      */
-    onParseAddress: function () {
-        Ext.Msg.prompt(this.app.i18n._('Paste address'), this.app.i18n._('Please paste an address that should be parsed:'), function(btn, text) {
-            if (btn == 'ok'){
-                this.parseAddress(text);
-            }
-        }, this, 100);
+    onParseAddress: function (button) {
+        if (button.pressed) {
+            Ext.Msg.prompt(this.app.i18n._('Paste address'), this.app.i18n._('Please paste an address that should be parsed:'), function(btn, text) {
+                if (btn == 'ok'){
+                    this.parseAddress(text);
+                } else if (btn == 'cancel') {
+                    button.toggle();
+                }
+            }, this, 100);
+        } else {
+            button.setText(this.app.i18n._('Parse address'));
+            this.tokenModePlugin.endTokenMode();
+        }
     },
     
     /**
@@ -488,8 +504,12 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 this.record.set(key, value);
             }, this);
             
-            this.record.set('note', result.unrecognizedTokens.join(' ') + "\n\n------\n\n" + this.record.get('note'));
+            var oldNote = (this.record.get('note')) ? this.record.get('note') : '';
+            this.record.set('note', result.unrecognizedTokens.join(' ') + oldNote);
             this.onRecordLoad();
+            
+            this.parseAddressButton.setText(this.app.i18n._('End token mode'));
+            this.tokenModePlugin.startTokenMode();
         }, this);
     },
     
