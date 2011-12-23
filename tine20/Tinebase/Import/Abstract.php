@@ -285,13 +285,35 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _doConversions($_data)
     {
+        if (isset($this->_options['mapping'])) {
+            $data = $this->_doMappingConversion($_data);
+        } else {
+            $data = $_data;
+        }
+
+        foreach ($data as $key => $value) {
+            $data[$key] = $this->_encode($value);
+        }
+                
+        return $data;
+    }
+    
+    /**
+     * do the mapping conversions defined in field configs
+     *
+     * @param array $_data
+     * @return array
+     */
+    protected function _doMappingConversion($_data)
+    {
+        $data = $_data;
         foreach ($this->_options['mapping']['field'] as $index => $field) {
             if (! array_key_exists('destination', $field) || $field['destination'] == '' || ! isset($_data[$field['destination']])) {
                 continue;
             }
-            
+        
             $key = $field['destination'];
-            
+        
             if (isset($field['replace'])) {
                 if ($field['replace'] === '\n') {
                     $data[$key] = str_replace("\\n", "\r\n", $_data[$key]);
@@ -305,8 +327,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             } else {
                 $data[$key] = $_data[$key];
             }
-            
-            $data[$key] = $this->_encode($data[$key]);
         }
         
         return $data;
