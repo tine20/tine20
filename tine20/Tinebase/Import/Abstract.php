@@ -173,7 +173,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         while (($recordData = $this->_getRawData($_resource)) !== FALSE) {
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Importing record ' . $recordIndex . ' ...');
+                . ' Importing record ' . $recordIndex . ' ...');
             
             $recordToImport = NULL;
             try {
@@ -404,6 +404,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         
         if ($this->_options['dryrun']) {
             Tinebase_TransactionManager::getInstance()->rollBack();
+        } else if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Successfully imported record with id ' . $importedRecord->getId());
         }
         
         $this->_importResult['totalcount']++;
