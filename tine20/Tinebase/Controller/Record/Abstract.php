@@ -110,6 +110,11 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected $_duplicateCheckFields = NULL;
     
+    /**
+     * result of updateMultiple function
+     * 
+     * @var array
+     */
     protected $_updateMultipleResult = array();
 
     /**
@@ -536,6 +541,9 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         $filter = new $filterClass($filterData);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($filter->toArray(), TRUE));
+        
         return $filter;
     }
 
