@@ -81,8 +81,8 @@ Tine.widgets.dialog.TokenModeEditDialogPlugin.prototype = {
     
     onRecordLoad: function() {
         if (this.inTokenMode) {
-            // restart token mode
-            this.startTokenMode();
+            // restart token mode defered to don't consume time before closeing
+            this.startTokenMode.defer(100, this);
         }
     },
     
@@ -90,7 +90,7 @@ Tine.widgets.dialog.TokenModeEditDialogPlugin.prototype = {
         this.initialize();
         
         if (this.inTokenMode) {
-            this.stopTokenMode();
+            this.endTokenMode();
         }
         
         this.inTokenMode = true;
@@ -125,8 +125,7 @@ Tine.widgets.dialog.TokenModeEditDialogPlugin.prototype = {
         if (! this.isInitialized) {
             this.isInitialized = true;
             
-            this.editDialog.getEl().on('click', this.onClick, this);
-            this.editDialog.getEl().on('dblclick', this.endTokenMode, this);
+            //this.editDialog.getEl().on('dblclick', this.endTokenMode, this);
             
             this.dragZone = new Ext.dd.DragZone(this.editDialog.getEl(), {
                 getDragData: this.getDragData.createDelegate(this),
@@ -138,6 +137,8 @@ Tine.widgets.dialog.TokenModeEditDialogPlugin.prototype = {
                 onNodeDrop: this.onNodeDrop.createDelegate(this),
                 getTargetFromEvent: this.getTargetFromEvent.createDelegate(this)
             });
+            
+            this.editDialog.getEl().on('mousedown', this.onClick, this);
         }
     },
     
@@ -183,8 +184,14 @@ Tine.widgets.dialog.TokenModeEditDialogPlugin.prototype = {
     },
     
     onClick: function(e) {
-        var target = e.getTarget('.tinebase-tokenedit-token', 10, true);
         
+        if (this.processedEvent == e.browserEvent) {
+            return;
+        }
+        
+        this.processedEvent = e.browserEvent;
+        
+        var target = e.getTarget('.tinebase-tokenedit-token', 10, true);
         if (target) {
             if (e.ctrlKey) {
                 if (this.selection.indexOf(target) < 0) {
@@ -206,13 +213,14 @@ Tine.widgets.dialog.TokenModeEditDialogPlugin.prototype = {
     
     getDragData: function(e) {
         try {
-            var target = e.getTarget('.tinebase-tokenedit-token', 10);
+            var target = e.getTarget('.tinebase-tokenedit-token', 10, true);
                 
             if (target) {
                 // autoselect token
-                if (!e.ctrlKey && this.selection.indexOf(target) < 0) {
+                if (this.selection.indexOf(target) < 0) {
                     this.onClick(e);
                 }
+                this.processedEvent = e.browserEvent;
                 
                 var ddel = new Ext.Element(document.createElement('div'));
                 ddel.id = Ext.id();
