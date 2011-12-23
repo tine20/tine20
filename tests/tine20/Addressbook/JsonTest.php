@@ -42,13 +42,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     protected $_customfieldIdsToDelete = array();
 
     /**
-     * if set to NULL during the test -> rollback transaction in tearDown
-     * 
-     * @var string
-     */
-    protected $_transactionId = NULL;
-    
-    /**
      * @var array test objects
      */
     protected $objects = array();
@@ -60,6 +53,13 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected $container;
 
+    /**
+     * sclever was made invisible! show her again in tearDown if this is TRUE!
+     * 
+     * @var boolean
+     */
+    protected $_makeSCleverVisibleAgain = FALSE;
+    
     /**
      * Runs the test methods of this class.
      *
@@ -82,8 +82,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $this->_instance = new Addressbook_Frontend_Json();
         
-        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'),
             'Addressbook',
@@ -120,10 +118,10 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             Tinebase_CustomField::getInstance()->deleteCustomField($cfd);
 	    }
 	    
-	    if ($this->_transactionId === NULL) {
-	        Tinebase_TransactionManager::getInstance()->rollBack();
-	    } else {
-	        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+	    if ($this->_makeSCleverVisibleAgain) {
+    	    $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+    	    $sclever->visibility = Tinebase_Model_User::VISIBILITY_DISPLAYED;
+    	    Tinebase_User::getInstance()->updateUser($sclever);
 	    }
     }
 
@@ -614,6 +612,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 
         // once again for duplicates (check if client record has tag)
         $result = $this->_importHelper($options);
+        //print_r($result);
+        $this->assertEquals(2, count($result['exceptions']), 'should have 2 duplicates');
         $this->assertEquals(1, count($result['exceptions'][0]['exception']['clientRecord']['tags']), 'no tag added');
         $this->assertEquals('Importliste (19.10.2011)', $result['exceptions'][0]['exception']['clientRecord']['tags'][0]['name']);
         $fritzClient = $result['exceptions'][1]['exception']['clientRecord'];
@@ -1039,7 +1039,7 @@ Fax: +49 (0)40 343244-222";
      */
     public function testContactDisabledFilter()
     {
-        $this->_transactionId = NULL;
+        $this->_makeSCleverVisibleAgain = TRUE;
         
         // hide sclever from adb
         $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
