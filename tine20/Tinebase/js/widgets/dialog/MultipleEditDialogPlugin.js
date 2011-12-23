@@ -206,10 +206,10 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                     // create Button
                     var button = new Ext.Element(document.createElement('img'));
                     button.set({
-                        src: '../../library/ExtJS/resources/images/default/s.gif',
-                        title: _('Delete value from all selected records'),
-                        class: 'tinebase-editmultipledialog-clearer',
-                        style: 'left:' + left
+                        'src': '../../library/ExtJS/resources/images/default/s.gif',
+                        'title': _('Delete value from all selected records'),
+                        'class': 'tinebase-editmultipledialog-clearer',
+                        'style': 'left:' + left
                         });
                     
                     button.addClassOnOver('over');
