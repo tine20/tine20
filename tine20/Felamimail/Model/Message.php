@@ -560,9 +560,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     public static function convertHTMLToPlainTextWithQuotes($_html, $_eol = "\n")
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' original body string: ' . $_html);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' original body string bin2hex: ' . bin2hex($_html));
         
         // replace unicode right-to-left and left-to-right marks (@see http://stackoverflow.com/questions/1930009/how-to-strip-unicode-chars-left-to-right-mark-from-a-string-in-php)
-        $html = str_replace(array("\x20\x0e", "\x20\x0f"), '', $_html);
+        // replace explicit bidirectional controls, too (@see http://www.unicode.org/reports/tr9/)
+        $html = str_replace(array("\x20\x0e", "\x20\x0f", "\x20\x2a", "\x20\x2b", "\x20\x2c", "\x20\x2d", "\x20\x2e"), '', $_html);
         
         $dom = new DOMDocument('1.0', 'UTF-8');
         // use a hack to make sure html is loaded as utf8 (@see http://php.net/manual/en/domdocument.loadhtml.php#95251)
