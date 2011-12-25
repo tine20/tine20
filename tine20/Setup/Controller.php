@@ -733,10 +733,8 @@ class Setup_Controller
         
         $config = $this->writeConfigToFile($_data, $filename, $_merge);
         
-        // set as active config
         Setup_Core::set(Setup_Core::CONFIG, $config);
         
-        // init logger
         Setup_Core::setupLogger();
         
         if ($doLogin && isset($password)) {
@@ -819,7 +817,9 @@ class Setup_Controller
      */
     protected function _updateAuthentication($_authenticationData)
     {
-        //Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_authenticationData, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_authenticationData, TRUE));
+
+        $this->_enableCaching();
         
         if (isset($_authenticationData['authentication'])) {
             $this->_updateAuthenticationProvider($_authenticationData['authentication']);
@@ -836,6 +836,16 @@ class Setup_Controller
         if (isset($_authenticationData['acceptedTermsVersion'])) {
             $this->saveAcceptedTerms($_authenticationData['acceptedTermsVersion']);
         }
+    }
+    
+    /**
+     * enable caching to make sure cache gets cleaned if config options change
+     */
+    protected function _enableCaching()
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Activate caching backend if available ...');
+        
+        Tinebase_Core::setupCache();
     }
     
     /**
@@ -991,7 +1001,6 @@ class Setup_Controller
         return $return;
     }
 
-    
     /**
      * get email config
      *
@@ -1020,6 +1029,8 @@ class Setup_Controller
      */
     public function saveEmailConfig($_data)
     {
+        $this->_enableCaching();
+        
         foreach ($this->_emailConfigKeys as $configName => $configKey) {
             if (array_key_exists($configName, $_data)) {
                 Tinebase_Config::getInstance()->setConfigForApplication($configKey, Zend_Json::encode($_data[$configName]));
