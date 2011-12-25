@@ -17,6 +17,16 @@
 class Felamimail_Setup_Initialize extends Setup_Initialize
 {
     /**
+    * array with user role rights, overwrite this in your app to add more rights to user role
+    *
+    * @var array
+    */
+    protected $_userRoleRights = array(
+        Tinebase_Acl_Rights::RUN,
+        Felamimail_Acl_Rights::MANAGE_ACCOUNTS,
+    );
+    
+    /**
      * init favorites
      */
     protected function _initializeFavorites()
