@@ -767,7 +767,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * returns an array with differences to the given record
      * 
-     * @param  Tinebase_Record_Interface $_record record for comparism
+     * @param  Tinebase_Record_Interface $_record record for comparison
      * @return array with differences field => different value
      */
     public function diff($_record)
@@ -776,11 +776,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             return $_record;
         }
         
-        //echo '---------------' ."n";
-        //print_r($_record->toArray());
         $diff = array();
         foreach (array_keys($this->_validators) as $fieldName) {
-            //echo $fieldName . "\n";
             if (in_array($fieldName, $this->_datetimeFields)) {
                 if ($this->__get($fieldName) instanceof DateTime
                     && $_record->$fieldName instanceof DateTime) {
@@ -797,19 +794,16 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                           && $this->__get($fieldName) == $_record->$fieldName) {
                     continue;
                 } 
-            } elseif($fieldName == $this->_identifier
-                     && $this->getId() == $_record->getId()) {
-                    continue;
-            } /*elseif (is_array($_record->$fieldName)) {
-                throw new Exception('Arrays are not allowed as values in records. use recordSets instead!');
-            } */elseif ($_record->$fieldName instanceof Tinebase_Record_RecordSet 
+            } elseif ($fieldName == $this->_identifier && $this->getId() == $_record->getId()) {
+                continue;
+            } elseif ($_record->$fieldName instanceof Tinebase_Record_RecordSet 
                       || $_record->$fieldName instanceof Tinebase_Record_Abstract) {
                  $subdiv = $_record->$fieldName->diff($this->__get($fieldName));
                  if (!empty($subdiv)) {
                      $diff[$fieldName] = $subdiv;
                  }
                  continue;
-            } elseif($this->__get($fieldName) == $_record->$fieldName) {
+            } elseif ($this->__get($fieldName) == $_record->$fieldName) {
                 continue;
             }
             
