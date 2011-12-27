@@ -594,6 +594,9 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _updateACLCheck($_record, $_currentRecord)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Doing ACL check ...');
+        
         if ($_currentRecord->has('container_id') && $_currentRecord->container_id != $_record->container_id) {
             $this->_checkGrant($_record, 'create');
             $this->_checkRight('create');
@@ -622,7 +625,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Doing concurrency check');
+            . ' Doing concurrency check ...');
 
         $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
         $modLog->manageConcurrentUpdates($_record, $_currentRecord, $this->_modelName, $this->_backend->getType(), $_record->getId());
