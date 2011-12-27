@@ -203,7 +203,7 @@ class Voipmanager_Frontend_Asterisk_CallForward
      */
     protected function _getRedirect($_sipPeer) 
     {
-        $sipPeerId = Voipmanager_Model_Asterisk_SipPeer::convertAsteriskSipPeerIdToInt($_sipPeer);
+        $sipPeerId = Tinebase_Record_Abstract::convertId($_sipPeer, 'Voipmanager_Model_Asterisk_SipPeer');
         
         $filter = new Voipmanager_Model_Asterisk_RedirectFilter(array(
             array(

@@ -5,8 +5,8 @@
  * @package     Voipmanager
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -18,6 +18,13 @@
  */
 class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abstract
 {
+    /**
+    * prefix for cache id
+    *
+    * @var string
+    */
+    protected $_cacheIdPrefix = 'asteriskSipPeer';
+    
     /**
      * holds the instance of the singleton
      *
@@ -60,25 +67,6 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
     }
 
     /**
-     * get asterisk sip peer by id
-     *
-     * @param string $_id the id of the peer
-     * @return Voipmanager_Model_Asterisk_SipPeer
-     * 
-     * @todo move that to Voipmanager_Controller_Abstract ?
-     */
-    public function get($_id)
-    {
-        $id = Voipmanager_Model_Asterisk_SipPeer::convertAsteriskSipPeerIdToInt($_id);
-        if (($result = $this->_cache->load('asteriskSipPeer_' . $id)) === false) {
-            $result = $this->_backend->get($id);
-            $this->_cache->save($result, 'asteriskSipPeer_' . $id, array('asteriskSipPeer'), 5);
-        }
-        
-        return $result;    
-    }
-    
-    /**
      * (non-PHPdoc)
      * @see Tinebase/Controller/Record/Tinebase_Controller_Record_Abstract#create($_record)
      */
@@ -113,20 +101,17 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
     }
     
     /**
-     * (non-PHPdoc)
-     * @see Tinebase/Controller/Record/Tinebase_Controller_Record_Abstract#update($_record)
-     */
-    public function update(Tinebase_Record_Interface $_record)
+    * inspect update of one record (after update)
+     *
+    * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
+    * @param   Tinebase_Record_Interface $_record          the update record
+    * @return  void
+    */
+    protected function _inspectAfterUpdate($_updatedRecord, $_record)
     {
-        $this->_cache->clean('all', array('asteriskSipPeer'));
-        
-        $result =  parent::update($_record);
-        
-        if(isset(Tinebase_Core::getConfig()->asterisk)) {
-            $this->publishConfiguration();
+        if (isset(Tinebase_Core::getConfig()->asterisk)) {
+            self::publishConfiguration();
         }
-        
-        return $result;
     }
     
     /**
@@ -136,7 +121,7 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
      */
     public static function publishConfiguration()
     {   
-        if(isset(Tinebase_Core::getConfig()->asterisk)) {
+        if (isset(Tinebase_Core::getConfig()->asterisk)) {
             $asteriskConfig = Tinebase_Core::getConfig()->asterisk;
             
             $url        = $asteriskConfig->managerbaseurl;

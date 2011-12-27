@@ -2,17 +2,19 @@
 /**
  * class to hold snom location data
  * 
- * @package     Voipmanager Management
+ * @package     Voipmanager
+ * @subpackage	Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
 /**
  * class to hold snom location data
  * 
- * @package     Voipmanager Management
+ * @package     Voipmanager
+ * @subpackage	Model
  */
 class Voipmanager_Model_Snom_Location extends Tinebase_Record_Abstract
 {
@@ -92,29 +94,5 @@ class Voipmanager_Model_Snom_Location extends Tinebase_Record_Abstract
         $this->_filters['https_port'] = new Zend_Filter_Empty(0);
         
         parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }
-    
-    /**
-     * converts a int, string or Voipmanager_Model_Snom_Location to an location id
-     *
-     * @param int|string|Voipmanager_Model_Snom_Location $_locationId the location id to convert
-     * @return int
-     * @throws  Voipmanager_Exception_InvalidArgument
-     */
-    static public function convertSnomLocationIdToInt($_locationId)
-    {
-        if ($_locationId instanceof Voipmanager_Model_Snom_Location) {
-            if (empty($_locationId->id)) {
-                throw new Voipmanager_Exception_InvalidArgument('no location id set');
-            }
-            $id = (string) $_locationId->id;
-        } else {
-            $id = (string) $_locationId;
-        }
-        
-        if ($id == '') {
-            throw new Voipmanager_Exception_InvalidArgument('location id can not be 0');
-        }
-        return $id;
     }
 }
