@@ -571,7 +571,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $record = $this->_backend->update($_record);
             $this->_inspectAfterUpdate($record, $_record);
             
-            $this->_setRelatedData($record, $_record);
+            $this->_setRelatedData($record, $_record, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED);
             
             if ($this->_sendNotifications && count($currentMods) > 0) {
                 $this->doSendNotifications($record, $this->_currentAccount, 'changed', $currentRecord);
@@ -645,8 +645,9 @@ abstract class Tinebase_Controller_Record_Abstract
      * 
      * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
      * @param   Tinebase_Record_Interface $_record          the update record
+     * @param   string					  $_systemNoteType 	created/updated
      */
-    protected function _setRelatedData($_updatedRecord, $_record)
+    protected function _setRelatedData($_updatedRecord, $_record, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED)
     {
         if ($_record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
             Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $_updatedRecord->getId(), $_record->relations);
@@ -660,7 +661,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 $_updatedRecord->notes = $_record->notes;
                 Tinebase_Notes::getInstance()->setNotesOfRecord($_updatedRecord);
             }
-            Tinebase_Notes::getInstance()->addSystemNote($_updatedRecord, $this->_currentAccount->getId(), 'created');
+            Tinebase_Notes::getInstance()->addSystemNote($_updatedRecord, $this->_currentAccount->getId(), $_systemNoteType);
         }
         if ($_record->has('alarms') && isset($_record->alarms)) {
             $_updatedRecord->alarms = $_record->alarms;
