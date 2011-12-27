@@ -560,39 +560,20 @@ abstract class Tinebase_Controller_Record_Abstract
 
             $currentRecord = $this->get($_record->getId());
 
-            // ACL checks
-            if ($currentRecord->has('container_id') && $currentRecord->container_id != $_record->container_id) {
-                $this->_checkGrant($_record, 'create');
-                $this->_checkRight('create');
-                // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
-                $this->_checkGrant($currentRecord, 'delete');
-                $this->_checkRight('delete');
-            } else {
-                $this->_checkGrant($_record, 'update', TRUE, 'No permission to update record.', $currentRecord);
-                $this->_checkRight('update');
-            }
-
-            // concurrency management & history log
-            if ($_record->has('created_by')) {
-                $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
-                $modLog->manageConcurrentUpdates($_record, $currentRecord, $this->_modelName, $this->_backend->getType(), $_record->getId());
-                $modLog->setRecordMetaData($_record, 'update', $currentRecord);
-                if ($this->_omitModLog !== TRUE) {
-                    $currentMods = $modLog->writeModLog($_record, $currentRecord, $this->_modelName, $this->_backend->getType(), $_record->getId());
-                } else {
-                    $currentMods = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
-                }
-            }
-
+            $this->_updateACLCheck($_record, $currentRecord);
+            
+            $currentMods = $this->_concurrencyManagementAndModLog($_record, $currentRecord);
+            
             $this->_inspectBeforeUpdate($_record, $currentRecord);
             if ($_duplicateCheck) {
                 $this->_duplicateCheck($_record);
             }
             $record = $this->_backend->update($_record);
             $this->_inspectAfterUpdate($record, $_record);
+            
             $this->_setRelatedData($record, $_record);
             
-            if ($this->_sendNotifications && $record->has('created_by') && count($currentMods) > 0) {
+            if ($this->_sendNotifications && count($currentMods) > 0) {
                 $this->doSendNotifications($record, $this->_currentAccount, 'changed', $currentRecord);
             }
 
@@ -603,6 +584,52 @@ abstract class Tinebase_Controller_Record_Abstract
             throw $e;
         }
         return $this->get($record->getId());
+    }
+    
+    /**
+     * do ACL check for update record
+     * 
+     * @param unknown_type $_record
+     * @param unknown_type $_currentRecord
+     */
+    protected function _updateACLCheck($_record, $_currentRecord)
+    {
+        // ACL checks
+        if ($_currentRecord->has('container_id') && $_currentRecord->container_id != $_record->container_id) {
+            $this->_checkGrant($_record, 'create');
+            $this->_checkRight('create');
+            // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
+            $this->_checkGrant($_currentRecord, 'delete');
+            $this->_checkRight('delete');
+        } else {
+            $this->_checkGrant($_record, 'update', TRUE, 'No permission to update record.', $_currentRecord);
+            $this->_checkRight('update');
+        }
+    }
+    
+    /**
+     * concurrency management & history log
+     * 
+     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Record_Interface $_currentRecord
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _concurrencyManagementAndModLog($_record, $_currentRecord)
+    {
+        $currentMods = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
+        
+        if (! $_record->has('created_by')) {
+            return $currentMods;
+        }
+
+        $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
+        $modLog->manageConcurrentUpdates($_record, $_currentRecord, $this->_modelName, $this->_backend->getType(), $_record->getId());
+        $modLog->setRecordMetaData($_record, 'update', $_currentRecord);
+        if ($this->_omitModLog !== TRUE) {
+            $currentMods = $modLog->writeModLog($_record, $_currentRecord, $this->_modelName, $this->_backend->getType(), $_record->getId());
+        }
+        
+        return $currentMods;
     }
     
     /**
