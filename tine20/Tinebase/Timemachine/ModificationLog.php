@@ -6,10 +6,9 @@
  * @subpackage  Timemachine 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
-
 
 /**
  * ModificationLog tracks and supplies the logging of modifications on a field 
@@ -68,7 +67,18 @@ class Tinebase_Timemachine_ModificationLog
         'last_modified_time',
         'is_deleted',
         'deleted_time',
-        'deleted_by'
+        'deleted_by',
+        'tags',
+        'relations',
+    	'customfields'
+        'notes',
+        'products',
+        'jpegphoto',
+        'grants',
+        'account_grants',
+        'exdate',
+        'attendee',
+        'alarms',
     );
     
     /**
@@ -290,12 +300,13 @@ class Tinebase_Timemachine_ModificationLog
      * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
      * 
      * @todo move more 'toOmit' fields to record
+     * @todo support more "second order" (tags, relations, ...) records in modlog
      */
     public function writeModLog($_newRecord, $_curRecord, $_model, $_backend, $_id)
     {
         list($appName, $i, $modelName) = explode('_', $_model);
-        
-        $modLogEntry = new Tinebase_Model_ModificationLog(array(
+         
+        $commonModLogEntry = new Tinebase_Model_ModificationLog(array(
             'application_id'       => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId(),
             'record_id'            => $_id,
             'record_type'          => $_model,
@@ -305,37 +316,36 @@ class Tinebase_Timemachine_ModificationLog
         ),true);
             
         $diffs = $_curRecord->diff($_newRecord);
+        $toOmit = array_merge($this->_metaProperties, $_curRecord->getModlogOmitFields());
         
         $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
-        
-        // omit second order records and jpegphoto for the moment
-        $toOmit = array_merge($this->_metaProperties, array(
-            'tags',
-            'relations',
-            'notes',
-            'products',
-            'jpegphoto',
-            'grants',
-            'account_grants',
-            'customfields',
-            'exdate',
-            'attendee',
-            'alarms'
-        ));
-        $toOmit = array_merge($toOmit, $_curRecord->getModlogOmitFields());
-        
         foreach ($diffs as $field => $newValue) {
-            if(! in_array($field, $toOmit)) {
-                $curValue = $_curRecord->$field;
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " field '$field' changed from '$curValue' to '$newValue'");
-                
-                $modLogEntry->modified_attribute = $field;
-                $modLogEntry->old_value = $curValue;
-                $modLogEntry->new_value = $newValue;
-                $modLogEntry->setId($this->setModification($modLogEntry));
-                $modifications->addRecord(clone $modLogEntry);
+            if (in_array($field, $toOmit)) {
+                continue;
             }
+        
+            switch ($newModlog) {
+                // @todo support customfield/notes/tags/... modlog
+//                 case 'customfields':
+//                     break;
+//                 case 'tags':
+//                     break;
+                default:
+                    $curValue = $_curRecord->{$_field};
+            }
+        
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " field '$field' changed from '$curValue' to '$newValue'");
+        
+            $modLogEntry = clone $commonModLogEntry;
+            $modLogEntry->modified_attribute = $field;
+            $modLogEntry->old_value = $curValue;
+            $modLogEntry->new_value = $newValue;
+            $modLogEntry->setId($this->setModification($modLogEntry));
+        
+            $modifications->addRecord($modLogEntry);
         }
+        
         return $modifications;
     }
     
@@ -385,4 +395,4 @@ class Tinebase_Timemachine_ModificationLog
         }
     } // end of static function setRecordMetaData
     
-} // end of Tinebase_Timemachine_ModificationLog
+}
