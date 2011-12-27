@@ -332,7 +332,7 @@ class Tinebase_Timemachine_ModificationLog
 //                 case 'tags':
 //                     break;
                 default:
-                    $curValue = $_curRecord->{$_field};
+                    $curValue = $_curRecord->{$field};
             }
         
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
