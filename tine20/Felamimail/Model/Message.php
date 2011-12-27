@@ -556,18 +556,28 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      * @param string $_html
      * @param string $_eol
      * @return string
+     * 
+     * @todo remove obsolete code / logging
      */
     public static function convertHTMLToPlainTextWithQuotes($_html, $_eol = "\n")
     {
+        $html = $_html;
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' original body string: ' . $_html);
         
         // replace unicode right-to-left and left-to-right marks (@see http://stackoverflow.com/questions/1930009/how-to-strip-unicode-chars-left-to-right-mark-from-a-string-in-php)
         // replace explicit bidirectional controls, too (@see http://www.unicode.org/reports/tr9/)
         //$html = str_replace(array("\x20\x0e", "\x20\x0f", "\x20\x2a", "\x20\x2b", "\x20\x2c", "\x20\x2d", "\x20\x2e"), '', $_html);
         
-        $dom = new DOMDocument('1.0', 'UTF-8');
         // use a hack to make sure html is loaded as utf8 (@see http://php.net/manual/en/domdocument.loadhtml.php#95251)
-        $dom->loadHTML('<?xml encoding="UTF-8">' . $_html);
+        // need to set meta tag to make sure that the encoding is done right (@see https://bugs.php.net/bug.php?id=32547)
+        $dom = new DOMDocument('1.0', 'UTF-8');
+        if (strpos($html, '<body>') === FALSE) {
+            $html = '<body>' . $_html . '</body>';
+        }
+        if (strpos($html, '<html>') === FALSE) {
+            $html = '<title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/></title>' . $html;
+        }
+        $dom->loadHTML('<?xml encoding="UTF-8">' . $html);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' html (DOMDocument): ' . $dom->saveHTML());
         
@@ -577,24 +587,21 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' before quoting: ' . $firstBodyNode->nodeValue);
             
-            // @todo try move this to separate function
-            if (quoted_printable_encode($firstBodyNode->nodeValue) !== quoted_printable_encode(strip_tags($_html))) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
-                    . ' Encoding mismatch / unsupported language! Do not try to add quoting');
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
-                    . quoted_printable_encode($firstBodyNode->nodeValue) . ' !== ' . quoted_printable_encode(strip_tags($_html)));
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                    . ' Browser locales: ' . print_r(Zend_Locale::getBrowser(), TRUE));
-                return Felamimail_Message::convertFromHTMLToText($_html);
-            }
+            // @todo try move this to separate function / perhaps this can be removed / see <meta> content type and charset fix above
+//             if (quoted_printable_encode($firstBodyNode->nodeValue) !== quoted_printable_encode(strip_tags($_html))) {
+//                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+//                     . ' Encoding mismatch / unsupported language! Do not try to add quoting');
+//                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+//                     . quoted_printable_encode($firstBodyNode->nodeValue) . ' !== ' . quoted_printable_encode(strip_tags($_html)));
+//                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+//                     . ' Browser locales: ' . print_r(Zend_Locale::getBrowser(), TRUE));
+//                 return Felamimail_Message::convertFromHTMLToText($_html);
+//             }
             
             $result = self::addQuotesAndStripTags($firstBodyNode, 0, $_eol);
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' after quoting: ' . $result);
             $result = html_entity_decode($result, ENT_COMPAT, 'UTF-8');
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' entities decoded: ' . $result);
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No body element found.');
-            $result = self::convertHTMLToPlainTextWithQuotes('<body>' . $_html . '</body>', $_eol);
         }
         
         return $result;
