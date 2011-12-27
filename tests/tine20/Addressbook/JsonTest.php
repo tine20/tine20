@@ -16,7 +16,7 @@
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
- * Test class for Tinebase_Group
+ * Test class for Addressbook_Frontend_Json
  */
 class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 {
@@ -263,33 +263,12 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $companies = array('Janes', 'Johns', 'Bobs');
         $contacts = array();
 
-        // create customfield
-        $cfName = Tinebase_Record_Abstract::generateUID();
-
-        $cfc = new Tinebase_Model_CustomField_Config(array(
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            'name'              => $cfName,
-            'model'             => 'Addressbook_Model_Contact',
-            'definition'        => array(
-                'label' => Tinebase_Record_Abstract::generateUID(),
-                'type'  => 'string',
-                'uiconfig' => array(
-                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
-                    'length' => 10,
-                    'group'  => 'unittest',
-                    'order'  => 100,
-                )
-            )
-        ));
-
-        $createdCustomField = Tinebase_CustomField::getInstance()->addCustomField($cfc);
-
-        $this->_customfieldIdsToDelete[] = $createdCustomField->getId();
-
-        $changes = array( array('name' => 'url',                    'value' => "http://www.phpunit.de"),
-                          array('name' => 'adr_one_region',         'value' => 'PHPUNIT_multipleUpdate'),
-                          array('name' => 'customfield_' . $cfName, 'value' => 'PHPUNIT_multipleUpdate' )
-                          );
+        $createdCustomField = $this->_createCustomfield();
+        $changes = array(
+            array('name' => 'url',                    'value' => "http://www.phpunit.de"),
+            array('name' => 'adr_one_region',         'value' => 'PHPUNIT_multipleUpdate'),
+            array('name' => 'customfield_' . $createdCustomField->name, 'value' => 'PHPUNIT_multipleUpdate' )
+        );
 
         foreach($companies as $company) {
             $contact = $this->_addContact($company);
@@ -314,11 +293,57 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $record = array_pop($searchResult['results']);
 
         // check if customfieldvalue was updated properly
-        $this->assertEquals($record['customfields'][$cfName],'PHPUNIT_multipleUpdate','Customfield was not updated as expected');
+        $this->assertEquals($record['customfields'][$createdCustomField->name],'PHPUNIT_multipleUpdate','Customfield was not updated as expected');
 
         // check if other default field value was updated properly
         $this->assertEquals($record['url'],'http://www.phpunit.de','DefaultField "url" was not updated as expected');
-
+    }
+    
+    /**
+     * created customfield config
+     * 
+     * @return Tinebase_Model_CustomField_Config
+     */
+    protected function _createCustomfield()
+    {
+        $cfName = Tinebase_Record_Abstract::generateUID();
+        
+        $cfc = new Tinebase_Model_CustomField_Config(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'name'              => $cfName,
+            'model'             => 'Addressbook_Model_Contact',
+            'definition'        => array(
+                'label' => Tinebase_Record_Abstract::generateUID(),
+                'type'  => 'string',
+                'uiconfig' => array(
+                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
+                    'length' => 10,
+                    'group'  => 'unittest',
+                    'order'  => 100,
+                )
+            )
+        ));
+        
+        $createdCustomField = Tinebase_CustomField::getInstance()->addCustomField($cfc);
+        $this->_customfieldIdsToDelete[] = $createdCustomField->getId();
+        
+        return $createdCustomField;
+    }
+    
+    /**
+     * test customfield modlog
+     * 
+     * @todo test modlog
+     */
+    public function testCustomfieldModlog()
+    {
+        $cf = $this->_createCustomfield();
+        $contact = $this->_addContact('company');
+        $contact['customfields'][$cf->name] = 'changed value';
+        $result = $this->_instance->saveContact($contact);
+        
+        $this->assertEquals('changed value', $result['customfields'][$cf->name]);
+        //print_r($result);
     }
 
     /**
