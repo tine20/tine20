@@ -58,6 +58,8 @@ class Tinebase_Timemachine_ModificationLog
      * holds names of meta properties in record
      * 
      * @var array
+     * 
+     * @todo move more 'toOmit' fields to record (getModlogOmitFields)
      */
     protected $_metaProperties = array(
         'created_by',
@@ -70,7 +72,7 @@ class Tinebase_Timemachine_ModificationLog
         'deleted_by',
         'tags',
         'relations',
-    	'customfields'
+    	'customfields',
         'notes',
         'products',
         'jpegphoto',
@@ -299,7 +301,6 @@ class Tinebase_Timemachine_ModificationLog
      * @param  Tinebase_Record_Abstract $_curRecord record from storage
      * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
      * 
-     * @todo move more 'toOmit' fields to record
      * @todo support more "second order" (tags, relations, ...) records in modlog
      */
     public function writeModLog($_newRecord, $_curRecord, $_model, $_backend, $_id)
