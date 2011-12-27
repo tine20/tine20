@@ -332,8 +332,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * test customfield modlog
-     * 
-     * @todo test modlog
      */
     public function testCustomfieldModlog()
     {
@@ -343,7 +341,14 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_instance->saveContact($contact);
         
         $this->assertEquals('changed value', $result['customfields'][$cf->name]);
-        //print_r($result);
+        
+        $tinebaseJson = new Tinebase_Frontend_Json();
+        $history = $tinebaseJson->searchNotes(array(array(
+            'field' => 'record_id', 'operator' => 'in', 'value' => array($result['id'])
+        )), array('sort' => 'note_type_id'));
+        $this->assertEquals(3, $history['totalcount']);
+        $changedNote = $history['results'][2];
+        $this->assertContains('null -> {"' . $cf->name . '":"changed value"})', $changedNote['note'], print_r($history, TRUE));
     }
 
     /**

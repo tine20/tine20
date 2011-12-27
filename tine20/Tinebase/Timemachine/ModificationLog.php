@@ -72,7 +72,6 @@ class Tinebase_Timemachine_ModificationLog
         'deleted_by',
         'tags',
         'relations',
-    	'customfields',
         'notes',
         'products',
         'jpegphoto',
@@ -288,8 +287,7 @@ class Tinebase_Timemachine_ModificationLog
         }
         
         return $resolved;
-        
-    } // end of member function manageConcurrentUpdates
+    }
     
     /**
      * computes changes of records and writes them to the logbook
@@ -325,18 +323,24 @@ class Tinebase_Timemachine_ModificationLog
                 continue;
             }
         
-            switch ($newModlog) {
-                // @todo support customfield/notes/tags/... modlog
-//                 case 'customfields':
-//                     break;
+            switch ($field) {
+                case 'customfields':
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' ' . count($newValue) . ' customfields changed');
+                    
+                    $curValue = Zend_Json::encode($_curRecord->{$field});
+                    $newValue = Zend_Json::encode($newValue);
+                    break;
+                // @todo add tags and more
 //                 case 'tags':
 //                     break;
                 default:
                     $curValue = $_curRecord->{$field};
+
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . " field '$field' changed from '$curValue' to '$newValue'");
             }
         
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . " field '$field' changed from '$curValue' to '$newValue'");
         
             $modLogEntry = clone $commonModLogEntry;
             $modLogEntry->modified_attribute = $field;
@@ -346,6 +350,9 @@ class Tinebase_Timemachine_ModificationLog
         
             $modifications->addRecord($modLogEntry);
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Logged ' . count($modifications) . ' modifications.');
         
         return $modifications;
     }
