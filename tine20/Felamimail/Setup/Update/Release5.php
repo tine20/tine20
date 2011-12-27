@@ -197,4 +197,29 @@ class Felamimail_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->setTableVersion('felamimail_folder', 10);
         $this->setApplicationVersion('Felamimail', '5.4');
     }
+    
+    /**
+     * update to 5.5
+     * - add signature_position
+     */
+    public function update_4()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>signature_position</name>
+                <type>text</type>
+                <length>64</length>
+                <default>below</default>
+            </field>');
+        try {
+            $this->_backend->addCol('felamimail_account', $declaration);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // already done
+        }
+        
+        $this->setTableVersion('felamimail_account', 17);
+        $this->setApplicationVersion('Felamimail', '5.5');
+    }
+    
+    
 }

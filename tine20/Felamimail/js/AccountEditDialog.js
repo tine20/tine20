@@ -63,6 +63,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 // only enable some fields
                 switch(item.name) {
                     case 'signature':
+                    case 'signature_position':
                         break;
                     default:
                         item.setDisabled(true);
@@ -128,7 +129,23 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }, {
                     fieldLabel: this.app.i18n._('Organization'),
                     name: 'organization'
-                }, this.signatureEditor
+                }, this.signatureEditor,
+                {
+                    fieldLabel: this.app.i18n._('Signature position'),
+                    name: 'signature_position',
+                    typeAhead     : false,
+                    triggerAction : 'all',
+                    lazyRender    : true,
+                    editable      : false,
+                    mode          : 'local',
+                    forceSelection: true,
+                    value: 'below',
+                    xtype: 'combo',
+                    store: [
+                        ['above', this.app.i18n._('Above the quote')],
+                        ['below',  this.app.i18n._('Below the quote')]
+                    ]
+                }
                 ]]
             }, {
                 title: this.app.i18n._('IMAP'),

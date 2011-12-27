@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>5.4</version>
+    <version>5.5</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
         <table>
             <name>felamimail_account</name>
-            <version>16</version>
+            <version>17</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -123,6 +123,12 @@
                 <field>
                     <name>signature</name>
                     <type>text</type>
+                </field>
+                <field>
+                    <name>signature_position</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <default>below</default>
                 </field>
                 <field>
                     <name>smtp_hostname</name>

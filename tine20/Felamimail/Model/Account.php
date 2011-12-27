@@ -4,12 +4,11 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        update account credentials if user password changed
  * @todo        use generic (JSON encoded) field for 'other' settings like folder names
- * @todo        don't use enum fields (ssl, smtp_ssl, display_format)
  */
 
 /**
@@ -23,6 +22,7 @@
  * @property  string    display_format
  * @property  string    delimiter
  * @property  string    type
+ * @property  string    signature_position
  * @package   Felamimail
  */
 class Felamimail_Model_Account extends Tinebase_Record_Abstract
@@ -68,6 +68,18 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      *
      */
     const DISPLAY_HTML = 'html';
+    
+    /**
+     * signature position above quote
+     *
+     */
+    const SIGNATURE_ABOVE_QUOTE = 'above';
+    
+    /**
+     * signature position above quote
+     *
+     */
+    const SIGNATURE_BELOW_QUOTE = 'below';
     
     /**
      * display format: content type
@@ -119,7 +131,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'credentials_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'user'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'password'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // other settings (add single JSON encoded field for that?)
+    // other settings (@todo add single JSON encoded field or keyfield for that?)
         'sent_folder'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'Sent'),
         'trash_folder'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'Trash'),
         'drafts_folder'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'Drafts'),
@@ -140,7 +152,12 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => ''),
         'organization'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => ''),
         'signature'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // smtp config
+        'signature_position'    => array(
+            Zend_Filter_Input::ALLOW_EMPTY => true, 
+            Zend_Filter_Input::DEFAULT_VALUE => self::SIGNATURE_BELOW_QUOTE,
+            'InArray' => array(self::SIGNATURE_ABOVE_QUOTE, self::SIGNATURE_BELOW_QUOTE)
+        ),
+        // smtp config
         'smtp_port'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 25),
         'smtp_hostname'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'smtp_auth'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'login'),
