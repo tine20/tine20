@@ -164,7 +164,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             text: _('Install web app'),
             tooltip:  _('Install Tine 2.0 as web app in your browser.'),
             iconCls: 'action_edit',
-            disabled: ! (Ext.isChrome && chrome.app && !chrome.app.isInstalled),
+            disabled: true, // ! (Ext.isChrome && chrome.app && !chrome.app.isInstalled),
             handler: function() {
                 chrome.app.install();
             },
