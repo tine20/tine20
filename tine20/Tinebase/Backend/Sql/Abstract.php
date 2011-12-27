@@ -1035,7 +1035,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             return 0;
         }
         
-        $idArray = (! is_array($_id)) ? array($this->_convertId($_id)) : $_id;
+        $idArray = (! is_array($_id)) ? array(Tinebase_Record_Abstract::convertId($_id, $this->_modelName)) : $_id;
         $identifier = $this->_getRecordIdentifier();
         
         $where = array(

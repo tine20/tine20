@@ -774,7 +774,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public static function convertId($_id, $_modelName = 'Tinebase_Record_Abstract')
     {
         if ($_id instanceof $_modelName) {
-            if (empty($_id->getId())) {
+            if (! $_id->getId()) {
                 throw new Tinebase_Exception_InvalidArgument('No id set!');
             }
             $id = $_id->getId();
