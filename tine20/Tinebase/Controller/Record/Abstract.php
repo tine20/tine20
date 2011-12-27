@@ -589,12 +589,11 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * do ACL check for update record
      * 
-     * @param unknown_type $_record
-     * @param unknown_type $_currentRecord
+     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Record_Interface $_currentRecord
      */
     protected function _updateACLCheck($_record, $_currentRecord)
     {
-        // ACL checks
         if ($_currentRecord->has('container_id') && $_currentRecord->container_id != $_record->container_id) {
             $this->_checkGrant($_record, 'create');
             $this->_checkRight('create');
@@ -621,11 +620,17 @@ abstract class Tinebase_Controller_Record_Abstract
         if (! $_record->has('created_by')) {
             return $currentMods;
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Doing concurrency check');
 
         $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
         $modLog->manageConcurrentUpdates($_record, $_currentRecord, $this->_modelName, $this->_backend->getType(), $_record->getId());
         $modLog->setRecordMetaData($_record, 'update', $_currentRecord);
         if ($this->_omitModLog !== TRUE) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Writing modlog');
+            
             $currentMods = $modLog->writeModLog($_record, $_currentRecord, $this->_modelName, $this->_backend->getType(), $_record->getId());
         }
         
