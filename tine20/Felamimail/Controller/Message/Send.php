@@ -304,13 +304,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     protected function _setMailBody(Tinebase_Mail $_mail, Felamimail_Model_Message $_message)
     {
         if ($_message->content_type == Felamimail_Model_Message::CONTENT_TYPE_HTML) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $_message->body);
             $_mail->setBodyHtml(Felamimail_Message::addHtmlMarkup($_message->body));
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $_mail->getBodyHtml(TRUE));
         }
         
         $plainBodyText = $_message->getPlainTextBody();
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $plainBodyText);
         $_mail->setBodyText($plainBodyText);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $_mail->getBodyText(TRUE));
     }
