@@ -558,7 +558,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
             $_record->isValid(TRUE);
 
-            $currentRecord = $this->_backend->get($_record->getId());
+            $currentRecord = $this->get($_record->getId());
 
             // ACL checks
             if ($currentRecord->has('container_id') && $currentRecord->container_id != $_record->container_id) {
