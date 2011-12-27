@@ -575,7 +575,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $html = '<body>' . $_html . '</body>';
         }
         if (strpos($html, '<html>') === FALSE) {
-            $html = '<title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/></title>' . $html;
+            $html = '<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/></head>' . $html;
         }
         $dom->loadHTML('<?xml encoding="UTF-8">' . $html);
         
