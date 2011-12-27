@@ -266,16 +266,9 @@ Ext.namespace('Tine.Felamimail');
                     }
                     
                     if (this.replyTo) {
-                        var date = (this.replyTo.get('received')) ? this.replyTo.get('received') : new Date();
-                        this.msgBody = String.format(this.app.i18n._('On {0}, {1} wrote'), 
-                            Tine.Tinebase.common.dateTimeRenderer(date), 
-                            Ext.util.Format.htmlEncode(this.replyTo.get('from_name'))
-                        ) + ':<br/>'
-                          + '<blockquote class="felamimail-body-blockquote">' + this.msgBody + '</blockquote><br/>';
+                        this.setMessageBodyReply();
                     } else if (this.forwardMsgs && this.forwardMsgs.length === 1) {
-                        this.msgBody = '<br/>-----' + this.app.i18n._('Original message') + '-----<br/>'
-                            + Tine.Felamimail.GridPanel.prototype.formatHeaders(this.forwardMsgs[0].get('headers'), false, true) + '<br/><br/>'
-                            + this.msgBody + '<br/>';
+                        this.setMessageBodyForward();
                         this.initAttachements(message);
                     } else if (this.draftOrTemplate) {
                         this.initAttachements(message);
@@ -292,6 +285,28 @@ Ext.namespace('Tine.Felamimail');
         
         delete this.msgBody;
         this.onRecordLoad();
+    },
+    
+    /**
+     * set message body for reply message
+     */
+    setMessageBodyReply: function() {
+        var date = (this.replyTo.get('received')) ? this.replyTo.get('received') : new Date();
+        
+        this.msgBody = String.format(this.app.i18n._('On {0}, {1} wrote'), 
+            Tine.Tinebase.common.dateTimeRenderer(date), 
+            Ext.util.Format.htmlEncode(this.replyTo.get('from_name'))
+        ) + ':<br/>'
+          + '<blockquote class="felamimail-body-blockquote">' + this.msgBody + '</blockquote><br/>';
+    },
+    
+    /**
+     * set message body for forwarded message
+     */
+    setMessageBodyForward: function() {
+        this.msgBody = '<br/>-----' + this.app.i18n._('Original message') + '-----<br/>'
+            + Tine.Felamimail.GridPanel.prototype.formatHeaders(this.forwardMsgs[0].get('headers'), false, true) + '<br/><br/>'
+            + this.msgBody + '<br/>';
     },
     
     /**
