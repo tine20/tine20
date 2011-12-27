@@ -765,6 +765,33 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
     
     /**
+    * converts a int, string or Tinebase_Record_Interface to a id
+    *
+    * @param int|string|Tinebase_Record_Abstract $_id the id to convert
+    * @param string $_modelName
+    * @return int|string
+    */
+    public static function convertId($_id, $_modelName = 'Tinebase_Record_Abstract')
+    {
+        if ($_id instanceof $_modelName) {
+            if (empty($_id->getId())) {
+                throw new Tinebase_Exception_InvalidArgument('No id set!');
+            }
+            $id = $_id->getId();
+        } elseif (is_array($_id)) {
+            throw new Tinebase_Exception_InvalidArgument('Id can not be an array!');
+        } else {
+            $id = $_id;
+        }
+    
+        if ($id === 0) {
+            throw new Tinebase_Exception_InvalidArgument($_modelName . '.id can not be 0!');
+        }
+    
+        return $id;
+    }
+    
+    /**
      * returns an array with differences to the given record
      * 
      * @param  Tinebase_Record_Interface $_record record for comparison
