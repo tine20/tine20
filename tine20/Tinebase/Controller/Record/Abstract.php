@@ -416,29 +416,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             $record = $this->_backend->create($_record);
             $this->_inspectAfterCreate($record, $_record);
-
-            // @todo move those to separate functions that can be called in create() + update()
-            // set relations / tags / notes / alarms
-            if ($record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
-                Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), $_record->relations);
-            }
-            if ($record->has('tags') && !empty($_record->tags) && (is_array($_record->tags) || $_record->tags instanceof Tinebase_Record_RecordSet)) {
-                $record->tags = $_record->tags;
-                Tinebase_Tags::getInstance()->setTagsOfRecord($record);
-            }
-            if ($record->has('notes')) {
-                if (isset($_record->notes) && is_array($_record->notes)) {
-                    $record->notes = $_record->notes;
-                    Tinebase_Notes::getInstance()->setNotesOfRecord($record);
-                }
-                Tinebase_Notes::getInstance()->addSystemNote($record, $this->_currentAccount->getId(), 'created');
-            }
-            if ($record->has('alarms') && isset($_record->alarms)) {
-
-                $record->alarms = $_record->alarms;
-
-                $this->_saveAlarms($record);
-            }
+            $this->_setRelatedData($record, $_record);
 
             if ($this->sendNotifications()) {
                 $this->doSendNotifications($record, $this->_currentAccount, 'created');
@@ -612,26 +590,8 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             $record = $this->_backend->update($_record);
             $this->_inspectAfterUpdate($record, $_record);
-
-            // @todo move those to separate functions that can be called in create() + update()
-            // set relations / tags / notes / alarms
-            if ($record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
-                Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), $_record->relations);
-            }
-            if ($record->has('tags') && isset($_record->tags) && (is_array($_record->tags) || $_record->tags instanceof Tinebase_Record_RecordSet)) {
-                Tinebase_Tags::getInstance()->setTagsOfRecord($_record);
-            }
-            if ($record->has('notes')) {
-                if (isset($_record->notes) && is_array($_record->notes)) {
-                    Tinebase_Notes::getInstance()->setNotesOfRecord($_record);
-                }
-                Tinebase_Notes::getInstance()->addSystemNote($record, $this->_currentAccount->getId(), 'changed', $currentMods);
-            }
-            if ($record->has('alarms') && isset($_record->alarms)) {
-                $this->_saveAlarms($_record);
-            }
-
-            // send notifications
+            $this->_setRelatedData($record, $_record);
+            
             if ($this->_sendNotifications && $record->has('created_by') && count($currentMods) > 0) {
                 $this->doSendNotifications($record, $this->_currentAccount, 'changed', $currentRecord);
             }
@@ -643,6 +603,34 @@ abstract class Tinebase_Controller_Record_Abstract
             throw $e;
         }
         return $this->get($record->getId());
+    }
+    
+    /**
+     * set relations / tags / notes / alarms
+     * 
+     * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $_record          the update record
+     */
+    protected function _setRelatedData($_updatedRecord, $_record)
+    {
+        if ($_record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
+            Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $_updatedRecord->getId(), $_record->relations);
+        }
+        if ($_record->has('tags') && isset($_record->tags) && (is_array($_record->tags) || $_record->tags instanceof Tinebase_Record_RecordSet)) {
+            $_updatedRecord->tags = $_record->tags;
+            Tinebase_Tags::getInstance()->setTagsOfRecord($_updatedRecord);
+        }
+        if ($_record->has('notes')) {
+            if (isset($_record->notes) && is_array($_record->notes)) {
+                $_updatedRecord->notes = $_record->notes;
+                Tinebase_Notes::getInstance()->setNotesOfRecord($_updatedRecord);
+            }
+            Tinebase_Notes::getInstance()->addSystemNote($_updatedRecord, $this->_currentAccount->getId(), 'created');
+        }
+        if ($_record->has('alarms') && isset($_record->alarms)) {
+            $_updatedRecord->alarms = $_record->alarms;
+            $this->_saveAlarms($_record);
+        }
     }
 
     /**
