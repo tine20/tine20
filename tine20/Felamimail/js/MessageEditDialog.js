@@ -248,6 +248,8 @@ Ext.namespace('Tine.Felamimail');
      */
     initContent: function() {
         if (! this.record.get('body')) {
+            var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
+            
             if (! this.msgBody) {
                 var message = this.getMessageFromConfig();
                           
@@ -257,34 +259,40 @@ Ext.namespace('Tine.Felamimail');
                         return this.recordProxy.fetchBody(message, this.initContent.createDelegate(this));
                     }
                     
-                    this.msgBody = message.get('body');
+                    this.setMessageBody(message, account);
                     
-                    var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
-            
-                    if (account.get('display_format') == 'plain' || (account.get('display_format') == 'content_type' && message.get('body_content_type') == 'text/plain')) {
-                        this.msgBody = Ext.util.Format.nl2br(this.msgBody);
-                    }
-                    
-                    if (this.replyTo) {
-                        this.setMessageBodyReply();
-                    } else if (this.forwardMsgs && this.forwardMsgs.length === 1) {
-                        this.setMessageBodyForward();
-                        this.initAttachements(message);
-                    } else if (this.draftOrTemplate) {
+                    if (this.isForwardedMessage() || this.draftOrTemplate) {
                         this.initAttachements(message);
                     }
                 }
-            }
+            } 
+            this.addSignature(account);
             
-            if (! this.draftOrTemplate) {
-                this.msgBody += Tine.Felamimail.getSignature(this.record.get('account_id'))
-            }
-        
             this.record.set('body', this.msgBody);
         }
         
         delete this.msgBody;
         this.onRecordLoad();
+    },
+    
+    /**
+     * set message body: converts newlines, adds quotes
+     * 
+     * @param {Tine.Felamimail.Model.Message} message
+     * @param {Tine.Felamimail.Model.Account} account
+     */
+    setMessageBody: function(message, account) {
+        this.msgBody = message.get('body');
+        
+        if (account.get('display_format') == 'plain' || (account.get('display_format') == 'content_type' && message.get('body_content_type') == 'text/plain')) {
+            this.msgBody = Ext.util.Format.nl2br(this.msgBody);
+        }
+        
+        if (this.replyTo) {
+            this.setMessageBodyReply();
+        } else if (this.isForwardedMessage()) {
+            this.setMessageBodyForward();
+        }
     },
     
     /**
@@ -301,12 +309,40 @@ Ext.namespace('Tine.Felamimail');
     },
     
     /**
+     * returns true if message is forwarded
+     * 
+     * @return {Boolean}
+     */
+    isForwardedMessage: function() {
+        return (this.forwardMsgs && this.forwardMsgs.length === 1);
+    },
+    
+    /**
      * set message body for forwarded message
      */
     setMessageBodyForward: function() {
         this.msgBody = '<br/>-----' + this.app.i18n._('Original message') + '-----<br/>'
             + Tine.Felamimail.GridPanel.prototype.formatHeaders(this.forwardMsgs[0].get('headers'), false, true) + '<br/><br/>'
             + this.msgBody + '<br/>';
+    },
+    
+    /**
+     * add signature to message
+     * 
+     * @param {Tine.Felamimail.Model.Account} account
+     */
+    addSignature: function(account) {
+        if (this.draftOrTemplate) {
+            return;
+        }
+
+        var signaturePosition = (account.get('signature_position')) ? account.get('signature_position') : 'below',
+            signature = Tine.Felamimail.getSignature(this.record.get('account_id'));
+        if (signaturePosition == 'below') {
+            this.msgBody += signature;
+        } else {
+            this.msgBody = signature + '<br/><br/>' + this.msgBody;
+        }
     },
     
     /**
