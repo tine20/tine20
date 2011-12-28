@@ -486,8 +486,6 @@ class Tinebase_Tags
      *
      * @param Tinebase_Record_Abstract  $_record        the record object
      * @param string                    $_tagsProperty  the property in the record where the tags are in (defaults: 'tags')
-     *
-     * @todo: history log
      */
     public function setTagsOfRecord($_record, $_tagsProperty = 'tags')
     {
@@ -508,15 +506,14 @@ class Tinebase_Tags
                 'record_id'      => $recordId,
             // backend property not supported by record yet
                 'record_backend_id' => ''
-                ));
-                $this->_addOccurrence($tagId, +1);
+            ));
+            $this->_addOccurrence($tagId, +1);
         }
         foreach ($toDetach as $tagId) {
             $this->_db->delete(SQL_TABLE_PREFIX . 'tagging', array(
-            $this->_db->quoteInto('tag_id = ?',         $tagId),
-            $this->_db->quoteInto('application_id = ?', $appId),
-            $this->_db->quoteInto('record_id = ?',      $recordId),
-            // backend property not supported by record yet
+                $this->_db->quoteInto('tag_id = ?',         $tagId),
+                $this->_db->quoteInto('application_id = ?', $appId),
+                $this->_db->quoteInto('record_id = ?',      $recordId),
             ));
             $this->_addOccurrence($tagId, -1);
         }
@@ -557,9 +554,9 @@ class Tinebase_Tags
         // fetch ids of records already having the tag
         $allreadyAttachedIds = array();
         $select = $this->_db->select()
-        ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), 'record_id')
-        ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $appId)
-        ->where($this->_db->quoteIdentifier('tag_id') . ' = ? ', $tagId);
+            ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), 'record_id')
+            ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $appId)
+            ->where($this->_db->quoteIdentifier('tag_id') . ' = ? ', $tagId);
 
         foreach ($this->_db->fetchAssoc($select) as $tagArray){
             $allreadyAttachedIds[] = $tagArray['record_id'];
