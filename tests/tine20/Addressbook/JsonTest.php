@@ -297,6 +297,9 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 
         // check if other default field value was updated properly
         $this->assertEquals($record['url'],'http://www.phpunit.de','DefaultField "url" was not updated as expected');
+        
+        // check 'changed' systemnote
+        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) customfields ( -> {');
     }
     
     /**

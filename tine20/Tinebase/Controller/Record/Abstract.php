@@ -699,8 +699,6 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param Tinebase_Model_Filter_FilterGroup|array $_filterOrIds
      * @param array $_oldData
      * @param array $_newData
-     * 
-     * @todo finish
      */
     public function concurrencyManagementAndModlogMultiple($_filterOrIds, $_oldData, $_newData)
     {
@@ -767,7 +765,8 @@ abstract class Tinebase_Controller_Record_Abstract
     }
     
     /**
-    * add rows to csv body
+    * update multiple records in an iteration
+    * @see Tinebase_Record_Iterator / self::updateMultiple()
     *
     * @param Tinebase_Record_RecordSet $_records
     * @param array $_data
@@ -778,16 +777,22 @@ abstract class Tinebase_Controller_Record_Abstract
             return;
         }
 
-        foreach ($_records as $record) {
-            $oldRecord = $record->toArray();
-            $data = array_merge($oldRecord, $_data);
+        foreach ($_records as $currentRecord) {
+            $oldRecordArray = $currentRecord->toArray();
+            $data = array_merge($oldRecordArray, $_data);
             
             try {
-            	$record->setFromArray($data);
-            	$updatedRecord = $this->_backend->update($record);
-            	$this->_updateMultipleResult['results']->addRecord($updatedRecord);
+            	$record = new $this->_modelName($data);
             	
+            	$currentMods = $this->_concurrencyManagementAndModLog($record, $currentRecord);
+            	$updatedRecord = $this->_backend->update($record);
+            	if ($updatedRecord->has('notes')) {
+            	    Tinebase_Notes::getInstance()->addSystemNote($updatedRecord, $this->_currentAccount->getId(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
+            	}
+            	
+            	$this->_updateMultipleResult['results']->addRecord($updatedRecord);
             	$this->_updateMultipleResult['totalcount'] ++;
+            	
             } catch (Tinebase_Exception_Record_Validation $e) {
                 $this->_updateMultipleResult['exceptions']->addRecord(new Tinebase_Model_UpdateMultipleException(array(
                     'id'         => $record->getId(),
