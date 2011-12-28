@@ -64,15 +64,14 @@ class Tinebase_Timemachine_ModificationLog
     protected $_metaProperties = array(
         'created_by',
         'creation_time',
-        'seq',
         'last_modified_by',
         'last_modified_time',
         'is_deleted',
         'deleted_time',
         'deleted_by',
-        'tags',
         'relations',
         'notes',
+    // record specific properties / no meta properties / @todo to be moved to record definition
         'products',
         'jpegphoto',
         'grants',
@@ -80,6 +79,7 @@ class Tinebase_Timemachine_ModificationLog
         'exdate',
         'attendee',
         'alarms',
+        'seq',
     );
     
     /**
@@ -299,7 +299,7 @@ class Tinebase_Timemachine_ModificationLog
      * @param  Tinebase_Record_Abstract $_curRecord record from storage
      * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
      * 
-     * @todo support more "second order" (tags, relations, ...) records in modlog
+     * @todo support more "second order" (relations, ...) records in modlog
      */
     public function writeModLog($_newRecord, $_curRecord, $_model, $_backend, $_id)
     {
@@ -324,23 +324,20 @@ class Tinebase_Timemachine_ModificationLog
             }
         
             switch ($field) {
+                case 'tags':
                 case 'customfields':
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' ' . count($newValue) . ' customfields changed');
+                        . ' ' . count($newValue) . ' ' . $field . ' changed.');
                     
                     $curValue = Zend_Json::encode($_curRecord->{$field});
                     $newValue = Zend_Json::encode($newValue);
                     break;
-                // @todo add tags and more
-//                 case 'tags':
-//                     break;
                 default:
                     $curValue = $_curRecord->{$field};
 
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . " field '$field' changed from '$curValue' to '$newValue'");
             }
-        
         
             $modLogEntry = clone $commonModLogEntry;
             $modLogEntry->modified_attribute = $field;

@@ -352,6 +352,35 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * test tags modlog
+     */
+    public function testTagsModlog()
+    {
+        $contact = $this->_addContact('company');
+        $tagName = Tinebase_Record_Abstract::generateUID();
+        $tag = array(
+            'type'          => Tinebase_Model_Tag::TYPE_PERSONAL,
+            'name'          => $tagName,
+            'description'	=> 'testModlog',
+            'color'         => '#009B31',
+        );
+        $contact['tags'] = array($tag);
+        
+        $result = $this->_instance->saveContact($contact);
+        
+        $this->assertEquals($tagName, $result['tags'][0]['name']);
+        
+        $tinebaseJson = new Tinebase_Frontend_Json();
+        $history = $tinebaseJson->searchNotes(array(array(
+            'field' => 'record_id', 'operator' => 'in', 'value' => array($result['id'])
+        )), array('sort' => 'note_type_id'));
+        
+        $this->assertEquals(3, $history['totalcount']);
+        $changedNote = $history['results'][2];
+        $this->assertContains('tags ({} -> [{"type":"personal","name":"' . $tagName . '","description":"testModlog","color":"#009B31"}])', $changedNote['note'], print_r($history, TRUE));
+    }
+
+    /**
      * try to get contacts by owner
      *
      */
