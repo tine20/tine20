@@ -133,7 +133,9 @@ class Felamimail_Sieve_Rule_Condition
     /**
      * quote string for usage in Sieve script 
      * 
-     * @param   string  $string     the srting to quote
+     * @param   string  $string     the string to quote
+     * 
+     * @todo generalize this
      */
     protected function _quoteString($string)
     {
@@ -141,7 +143,7 @@ class Felamimail_Sieve_Rule_Condition
             $string = array_map(array($this, '_quoteString'), $string);
             return '[' . implode(',', $string) . ']'; 
         } else {
-            return '"' . str_replace('"', '\""', $string) . '"';
+            return '"' . str_replace('"', '\"', $string) . '"';
         }
     }
     
