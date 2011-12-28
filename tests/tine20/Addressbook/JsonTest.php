@@ -522,23 +522,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
                 'value'    =>  Tinebase_Core::getUser()->accountDisplayName
             )
         ));
-        $sharedTagName = Tinebase_Record_Abstract::generateUID();
-        $tag = new Tinebase_Model_Tag(array(
-            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
-            'name'  => $sharedTagName,
-            'description' => 'testImport',
-            'color' => '#009B31',
-        ));
-        Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $tag);
-
-        $personalTagName = Tinebase_Record_Abstract::generateUID();
-        $tag = new Tinebase_Model_Tag(array(
-            'type'  => Tinebase_Model_Tag::TYPE_PERSONAL,
-            'name'  => $personalTagName,
-            'description' => 'testImport',
-            'color' => '#009B31',
-        ));
-        Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $tag);
+        $sharedTagName = $this->_createAndAttachTag($filter);
+        $personalTagName = $this->_createAndAttachTag($filter, Tinebase_Model_Tag::TYPE_PERSONAL);
 
         // export first and create files array
         $exporter = new Addressbook_Export_Csv($filter, Addressbook_Controller_Contact::getInstance());
@@ -552,6 +537,26 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $sharedTagToDelete = Tinebase_Tags::getInstance()->getTagByName($sharedTagName);
         $personalTagToDelete = Tinebase_Tags::getInstance()->getTagByName($personalTagName);
         Tinebase_Tags::getInstance()->deleteTags(array($sharedTagToDelete->getId(), $personalTagToDelete->getId()));
+    }
+    
+    /**
+     * tag attachment helper
+     * 
+     * @param Addressbook_Model_ContactFilter $_filter
+     * @param string $_tagType
+     */
+    protected function _createAndAttachTag($_filter, $_tagType = Tinebase_Model_Tag::TYPE_SHARED)
+    {
+        $tagName = Tinebase_Record_Abstract::generateUID();
+        $tag = new Tinebase_Model_Tag(array(
+            'type'          => $_tagType,
+            'name'          => $sharedTagName,
+            'description'   => 'testTagDescription',
+            'color'         => '#009B31',
+        ));
+        Tinebase_Tags::getInstance()->attachTagToMultipleRecords($_filter, $tag);
+        
+        return $tagName;
     }
 
     /**
