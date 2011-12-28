@@ -805,36 +805,40 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         
         $diff = array();
         foreach (array_keys($this->_validators) as $fieldName) {
+            $ownField = $this->__get($fieldName);
+            $recordField = $_record->$fieldName;
+            
             if (in_array($fieldName, $this->_datetimeFields)) {
-                if ($this->__get($fieldName) instanceof DateTime
-                    && $_record->$fieldName instanceof DateTime) {
-                    if ($this->__get($fieldName)->compare($_record->$fieldName) === 0) {
+                if ($ownField instanceof DateTime
+                    && $recordField instanceof DateTime) {
+                    if ($ownField->compare($recordField) === 0) {
                         continue;
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
                             ' datetime for field ' . $fieldName . ' is not equal: '
-                            . $this->__get($fieldName)->getIso() . ' != '
-                            . $_record->$fieldName->getIso()
+                            . $ownField->getIso() . ' != '
+                            . $recordField->getIso()
                         );
                     } 
-                } elseif (!$_record->$fieldName instanceof DateTime
-                          && $this->__get($fieldName) == $_record->$fieldName) {
+                } else if (! $recordField instanceof DateTime && $ownField == $recordField) {
                     continue;
                 } 
-            } elseif ($fieldName == $this->_identifier && $this->getId() == $_record->getId()) {
+            } else if ($fieldName == $this->_identifier && $this->getId() == $_record->getId()) {
                 continue;
-            } elseif ($_record->$fieldName instanceof Tinebase_Record_RecordSet 
-                      || $_record->$fieldName instanceof Tinebase_Record_Abstract) {
-                 $subdiv = $_record->$fieldName->diff($this->__get($fieldName));
-                 if (!empty($subdiv)) {
-                     $diff[$fieldName] = $subdiv;
-                 }
-                 continue;
-            } elseif ($this->__get($fieldName) == $_record->$fieldName) {
+            } else if ($recordField instanceof Tinebase_Record_RecordSet 
+                      || $recordField instanceof Tinebase_Record_Abstract) {
+                $subdiv = $recordField->diff($ownField);
+                if (!empty($subdiv)) {
+                    $diff[$fieldName] = $subdiv;
+                }
+                continue;
+            } else if ($ownField == $recordField) {
+                continue;
+            } else if (empty($ownField) && empty($recordField)) {
                 continue;
             }
             
-            $diff[$fieldName] = $_record->$fieldName;
+            $diff[$fieldName] = $recordField;
         }
         return $diff;
     }
