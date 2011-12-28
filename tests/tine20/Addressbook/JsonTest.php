@@ -348,9 +348,9 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      * check 'changed' system note and modlog after tag/customfield update
      * 
      * @param string $_recordId
-     * @param string $_expectedText
+     * @param string|array $_expectedText
      */
-    protected function _checkChangedNote($_recordId, $_expectedText = NULL)
+    protected function _checkChangedNote($_recordId, $_expectedText = array())
     {
         $tinebaseJson = new Tinebase_Frontend_Json();
         $history = $tinebaseJson->searchNotes(array(array(
@@ -358,7 +358,9 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         )), array('sort' => 'note_type_id'));
         $this->assertEquals(3, $history['totalcount'], print_r($history, TRUE));
         $changedNote = $history['results'][2];
-        $this->assertContains($_expectedText, $changedNote['note'], print_r($changedNote, TRUE));
+        foreach ((array) $_expectedText as $text) {
+            $this->assertContains($text, $changedNote['note'], print_r($changedNote, TRUE));
+        }
     }
 
     /**
@@ -384,19 +386,17 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
     * test attach multiple tags modlog
-    * 
-    * @todo finish
     */
     public function testAttachMultipleTagsModlog()
     {
         $contact = $this->_addContact();
         $filter = new Addressbook_Model_ContactFilter(array(array(
-            'field'    => 'record_id',
+            'field'    => 'id',
             'operator' => 'equals',
             'value'    =>  $contact['id']
         )));
         $sharedTagName = $this->_createAndAttachTag($filter);
-        //$this->_checkChangedNote($contact['id']);
+        $this->_checkChangedNote($contact['id'], array(',"name":"' . $sharedTagName . '","description":"testTagDescription"', 'tags ([] -> [{'));
     }
     
     /**

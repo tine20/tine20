@@ -343,16 +343,21 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     /**
      * add new system note
      *
-     * @param Tinebase_Model_Record $_record
-     * @param int $_userId
+     * @param Tinebase_Record_Abstract|string $_record
+     * @param string $_userId
      * @param string $_type (created|changed)
      * @param Tinebase_Record_RecordSet RecordSet $_mods (Tinebase_Model_ModificationLog)
      * @param string $_backend   backend of record
+     * @return Tinebase_Model_Note|boolean
      * 
      * @todo get field translations from application?
+     * @todo attach modlog record (id) to note instead of saving an ugly string
      */
-    public function addSystemNote($_record, $_userId, $_type, $_mods = NULL, $_backend = 'Sql')
+    public function addSystemNote($_record, $_userId, $_type, $_mods = NULL, $_backend = 'Sql', $_modelName = NULL)
     {
+        $id = ($_record instanceof Tinebase_Record_Abstract) ? $_record->getId() : $_record;
+        $modelName = ($_modelName !== NULL) ? $_modelName : (($_record instanceof Tinebase_Record_Abstract) ? get_class($_record) : 'unknown');
+        
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         $backend = ucfirst(strtolower($_backend));
         
@@ -362,8 +367,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $noteText = $translate->_($_type) . ' ' . $translate->_('by') . ' ' . $user->accountDisplayName;
         
         if ($_mods !== NULL && count($_mods) > 0) {
-            
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' mods to log: ' . $_mods);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' mods to log: ' . print_r($_mods->toArray(), TRUE));
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' Adding "' . $_type . '" system note note to record.');
             
             $noteText .= ' | ' .$translate->_('Changed fields:');
@@ -379,12 +383,27 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $note = new Tinebase_Model_Note(array(
             'note_type_id'      => $noteType->getId(),
             'note'              => $noteText,    
-            'record_model'      => get_class($_record),
+            'record_model'      => $modelName,
             'record_backend'    => $backend,       
-            'record_id'         => $_record->getId()        
+            'record_id'         => $id,       
         ));
         
-        $this->addNote($note);
+        return $this->addNote($note);
+    }
+    
+    /**
+     * add multiple modification system nodes
+     * 
+     * @param Tinebase_Record_RecordSet $_mods
+     * @param string $_userId
+     */
+    public function addMultipleModificationSystemNotes($_mods, $_userId)
+    {
+        $_mods->addIndices(array('record_id'));
+        foreach ($_mods->record_id as $recordId) {
+            $modsOfRecord = $_mods->filter('record_id', $recordId);
+            $this->addSystemNote($recordId, $_userId, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $modsOfRecord);
+        }
     }
     
     /**

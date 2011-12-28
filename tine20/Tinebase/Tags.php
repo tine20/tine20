@@ -563,7 +563,7 @@ class Tinebase_Tags
         }
 
         $toAttachIds = array_diff($recordIds, $alreadyAttachedIds);
-
+        
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Attaching 1 Tag to ' . count($toAttachIds) . ' records.');
         foreach ($toAttachIds as $recordId) {
             $this->_db->insert(SQL_TABLE_PREFIX . 'tagging', array(
@@ -579,7 +579,7 @@ class Tinebase_Tags
         $controller->concurrencyManagementAndModlogMultiple(
             $toAttachIds, 
             array('tags' => array()), 
-            array('tags' => new Tinebase_Record_RecordSet('Tinebase_Model_Tag', array($tag->toArray())))
+            array('tags' => array($tag->toArray()))
         );
         
         $this->_addOccurrence($tagId, count($toAttachIds));
@@ -640,7 +640,7 @@ class Tinebase_Tags
 
             $controller->concurrencyManagementAndModlogMultiple(
                 $attachedIds,
-                array('tags' => new Tinebase_Record_RecordSet('Tinebase_Model_Tag', array($tag->toArray()))),
+                array('tags' => array($tag->toArray())),
                 array('tags' => array())
             );
             

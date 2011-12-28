@@ -352,7 +352,7 @@ class Tinebase_Timemachine_ModificationLog
     /**
      * loop the modifications
      * 
-     * @param unknown_type $_diffs
+     * @param array $_newData
      * @param Tinebase_Model_ModificationLog $_commonModlog
      * @param Tinebase_Record_RecordSet $_modifications
      * @param array $_currentData
@@ -360,10 +360,10 @@ class Tinebase_Timemachine_ModificationLog
      * 
      * @todo support more "second order" (relations, ...) records in modlog
      */
-    protected function _loopModifications($_diffs, Tinebase_Model_ModificationLog $_commonModlog, Tinebase_Record_RecordSet $_modifications, $_currentData, $_toOmit = array())
+    protected function _loopModifications($_newData, Tinebase_Model_ModificationLog $_commonModlog, Tinebase_Record_RecordSet $_modifications, $_currentData, $_toOmit = array())
     {
         $toOmit = array_merge($this->_metaProperties, $_toOmit);
-        foreach ($_diffs as $field => $newValue) {
+        foreach ($_newData as $field => $newValue) {
             if (in_array($field, $toOmit)) {
                 continue;
             }
@@ -407,23 +407,25 @@ class Tinebase_Timemachine_ModificationLog
      * write modlog for multiple records
      * 
      * @param array $_ids
-     * @param mixed $_oldData
-     * @param mixed $_newData
+     * @param array $_oldData
+     * @param array $_newData
      * @param string $_model
      * @param string $_backend
      * @param array $updateMetaData
-     * 
-     * @todo finish
+     * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
      */
-    public function writeModLogMultiple($_ids, $_oldData, $_newData, $_model, $_backend, $updateMetaData = array())
+    public function writeModLogMultiple($_ids, $_currentData, $_newData, $_model, $_backend, $updateMetaData = array())
     {
-        $commonModLogEntry = $this->_getCommonModlog($_model, $_backend, $updateMetaData);
+        $commonModLog = $this->_getCommonModlog($_model, $_backend, $updateMetaData);
         
         $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         
         foreach ($_ids as $id) {
-            //$this->_loopModifications($diffs, $commonModLog, $modifications, $_curRecord->getModlogOmitFields());
+            $commonModLog->record_id = $id;
+            $this->_loopModifications($_newData, $commonModLog, $modifications, $_currentData);
         }
+        
+        return $modifications;
     }
     
     /**

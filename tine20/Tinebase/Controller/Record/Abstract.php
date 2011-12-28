@@ -717,11 +717,11 @@ abstract class Tinebase_Controller_Record_Abstract
         $this->_backend->updateMultiple($ids, $updateMetaData);
         
         if ($this->_omitModLog !== TRUE) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Writing modlog for ' . count($ids) . ' records ...');
             
             $currentMods = Tinebase_Timemachine_ModificationLog::getInstance()->writeModLogMultiple($ids, $_oldData, $_newData, $this->_modelName, $this->_backend->getType(), $updateMetaData);
-            //Tinebase_Notes::getInstance()->addSystemNoteMultiple($_filter, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
+            Tinebase_Notes::getInstance()->addMultipleModificationSystemNotes($currentMods, $currentAccountId);
         }
     }
     
