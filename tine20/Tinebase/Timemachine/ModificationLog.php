@@ -301,49 +301,17 @@ class Tinebase_Timemachine_ModificationLog
      * @param  string $_backend
      * @param  string $_id
      * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
-     * 
-     * @todo support more "second order" (relations, ...) records in modlog
      */
     public function writeModLog($_newRecord, $_curRecord, $_model, $_backend, $_id)
     {
-        $commonModLogEntry = $this->_getCommonModlog($_model, $_backend, array(
+        $commonModLog = $this->_getCommonModlog($_model, $_backend, array(
             'last_modified_time' => $_newRecord->last_modified_time, 
             'last_modified_by'   => $_newRecord->last_modified_by
         ), $_id);
-            
         $diffs = $_curRecord->diff($_newRecord);
-        $toOmit = array_merge($this->_metaProperties, $_curRecord->getModlogOmitFields());
-        
+        print_r($diffs);
         $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
-        foreach ($diffs as $field => $newValue) {
-            if (in_array($field, $toOmit)) {
-                continue;
-            }
-        
-            switch ($field) {
-                case 'tags':
-                case 'customfields':
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' ' . count($newValue) . ' ' . $field . ' changed.');
-                    
-                    $curValue = Zend_Json::encode($_curRecord->{$field});
-                    $newValue = Zend_Json::encode($newValue);
-                    break;
-                default:
-                    $curValue = $_curRecord->{$field};
-
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . " field '$field' changed from '$curValue' to '$newValue'");
-            }
-        
-            $modLogEntry = clone $commonModLogEntry;
-            $modLogEntry->modified_attribute = $field;
-            $modLogEntry->old_value = $curValue;
-            $modLogEntry->new_value = $newValue;
-            $modLogEntry->setId($this->setModification($modLogEntry));
-        
-            $modifications->addRecord($modLogEntry);
-        }
+        $this->_loopModifications($diffs, $commonModLog, $modifications, $_curRecord->toArray(), $_curRecord->getModlogOmitFields());
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Logged ' . count($modifications) . ' modifications.');
@@ -383,6 +351,60 @@ class Tinebase_Timemachine_ModificationLog
     }
     
     /**
+     * loop the modifications
+     * 
+     * @param unknown_type $_diffs
+     * @param Tinebase_Model_ModificationLog $_commonModlog
+     * @param Tinebase_Record_RecordSet $_modifications
+     * @param array $_currentData
+     * @param array $_toOmit
+     * 
+     * @todo support more "second order" (relations, ...) records in modlog
+     */
+    protected function _loopModifications($_diffs, Tinebase_Model_ModificationLog $_commonModlog, Tinebase_Record_RecordSet $_modifications, $_currentData, $_toOmit = array())
+    {
+        $toOmit = array_merge($this->_metaProperties, $_toOmit);
+        foreach ($_diffs as $field => $newValue) {
+            if (in_array($field, $toOmit)) {
+                continue;
+            }
+            
+            $curValue = (isset($_currentData[$field])) ? $_currentData[$field] : '';
+            if (is_array($curValue)) {
+                $curValue = Zend_Json::encode($curValue);
+            }
+            if (is_array($newValue)) {
+                $newValue = Zend_Json::encode($newValue);
+            }
+            
+            if ($curValue === $newValue) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Current and new value match. It looks like the diff() failed or you passed identical data for field ' . $field);
+                continue;
+            }
+            
+            switch ($field) {
+                case 'tags':
+                case 'customfields':
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' ' . count($newValue) . ' ' . $field . ' changed.');
+                    break;
+                default:
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . " field '$field' changed from '$curValue' to '$newValue'");
+            }
+        
+            $modLogEntry = clone $_commonModlog;
+            $modLogEntry->modified_attribute = $field;
+            $modLogEntry->old_value = $curValue;
+            $modLogEntry->new_value = $newValue;
+            $modLogEntry->setId($this->setModification($modLogEntry));
+    
+            $_modifications->addRecord($modLogEntry);
+        }
+    }
+    
+    /**
      * write modlog for multiple records
      * 
      * @param array $_ids
@@ -392,11 +414,17 @@ class Tinebase_Timemachine_ModificationLog
      * @param string $_backend
      * @param array $updateMetaData
      * 
-     * @todo implement
+     * @todo finish
      */
     public function writeModLogMultiple($_ids, $_oldData, $_newData, $_model, $_backend, $updateMetaData = array())
     {
         $commonModLogEntry = $this->_getCommonModlog($_model, $_backend, $updateMetaData);
+        
+        $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
+        
+        foreach ($_ids as $id) {
+            //$this->_loopModifications($diffs, $commonModLog, $modifications, $_curRecord->getModlogOmitFields());
+        }
     }
     
     /**

@@ -336,12 +336,12 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     public function testCustomfieldModlog()
     {
         $cf = $this->_createCustomfield();
-        $contact = $this->_addContact('company');
+        $contact = $this->_addContact();
         $contact['customfields'][$cf->name] = 'changed value';
         $result = $this->_instance->saveContact($contact);
         
         $this->assertEquals('changed value', $result['customfields'][$cf->name]);
-        $this->_checkChangedNote($result['id'], 'null -> {"' . $cf->name . '":"changed value"})');
+        $this->_checkChangedNote($result['id'], ' -> {"' . $cf->name . '":"changed value"})');
     }
     
     /**
@@ -350,13 +350,13 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      * @param string $_recordId
      * @param string $_expectedText
      */
-    protected function _checkChangedNote($_recordId, $_expectedText)
+    protected function _checkChangedNote($_recordId, $_expectedText = NULL)
     {
         $tinebaseJson = new Tinebase_Frontend_Json();
         $history = $tinebaseJson->searchNotes(array(array(
             'field' => 'record_id', 'operator' => 'equals', 'value' => $_recordId
         )), array('sort' => 'note_type_id'));
-        $this->assertEquals(3, $history['totalcount']);
+        $this->assertEquals(3, $history['totalcount'], print_r($history, TRUE));
         $changedNote = $history['results'][2];
         $this->assertContains($_expectedText, $changedNote['note'], print_r($changedNote, TRUE));
     }
@@ -366,7 +366,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testTagsModlog()
     {
-        $contact = $this->_addContact('company');
+        $contact = $this->_addContact();
         $tagName = Tinebase_Record_Abstract::generateUID();
         $tag = array(
             'type'          => Tinebase_Model_Tag::TYPE_PERSONAL,
@@ -379,16 +379,24 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_instance->saveContact($contact);
         
         $this->assertEquals($tagName, $result['tags'][0]['name']);
-        $this->_checkChangedNote($result['id'], 'tags ({} -> [{"type":"personal","name":"' . $tagName . '","description":"testModlog","color":"#009B31"}])');
+        $this->_checkChangedNote($result['id'], 'tags ([] -> [{"type":"personal","name":"' . $tagName . '","description":"testModlog","color":"#009B31"}])');
     }
 
     /**
     * test attach multiple tags modlog
     * 
-    * @todo implement
+    * @todo finish
     */
     public function testAttachMultipleTagsModlog()
     {
+        $contact = $this->_addContact();
+        $filter = new Addressbook_Model_ContactFilter(array(array(
+            'field'    => 'record_id',
+            'operator' => 'equals',
+            'value'    =>  $contact['id']
+        )));
+        $sharedTagName = $this->_createAndAttachTag($filter);
+        //$this->_checkChangedNote($contact['id']);
     }
     
     /**
@@ -515,13 +523,11 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testExport()
     {
-        $filter = new Addressbook_Model_ContactFilter(array(
-            array(
-                'field'    => 'n_fileas',
-                'operator' => 'equals',
-                'value'    =>  Tinebase_Core::getUser()->accountDisplayName
-            )
-        ));
+        $filter = new Addressbook_Model_ContactFilter(array(array(
+            'field'    => 'n_fileas',
+            'operator' => 'equals',
+            'value'    =>  Tinebase_Core::getUser()->accountDisplayName
+        )));
         $sharedTagName = $this->_createAndAttachTag($filter);
         $personalTagName = $this->_createAndAttachTag($filter, Tinebase_Model_Tag::TYPE_PERSONAL);
 
@@ -544,13 +550,14 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      * 
      * @param Addressbook_Model_ContactFilter $_filter
      * @param string $_tagType
+     * @return string created tag name
      */
     protected function _createAndAttachTag($_filter, $_tagType = Tinebase_Model_Tag::TYPE_SHARED)
     {
         $tagName = Tinebase_Record_Abstract::generateUID();
         $tag = new Tinebase_Model_Tag(array(
             'type'          => $_tagType,
-            'name'          => $sharedTagName,
+            'name'          => $tagName,
             'description'   => 'testTagDescription',
             'color'         => '#009B31',
         ));

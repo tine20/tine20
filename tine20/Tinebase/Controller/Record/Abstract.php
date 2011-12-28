@@ -696,13 +696,33 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * update modlog / metadata / add systemnote for multiple records defined by filter
      * 
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param mixed $_updatedData
+     * @param Tinebase_Model_Filter_FilterGroup|array $_filterOrIds
+     * @param array $_oldData
+     * @param array $_newData
      * 
-     * @todo implement
+     * @todo finish
      */
-    public function concurrencyManagementAndModlogMultiple(Tinebase_Model_Filter_FilterGroup $_filter, $_updatedData)
+    public function concurrencyManagementAndModlogMultiple($_filterOrIds, $_oldData, $_newData)
     {
+        $ids = ($_filterOrIds instanceof Tinebase_Model_Filter_FilterGroup) ? $this->search($_filterOrIds, NULL, FALSE, TRUE, 'update') : $_filterOrIds;
+        if (! is_array($ids) || count($ids) === 0) {
+            return;
+        }
+        
+        list($currentAccountId, $currentTime) = Tinebase_Timemachine_ModificationLog::getCurrentAccountIdAndTime();
+        $updateMetaData = array(
+            'last_modified_by'   => $currentAccountId,
+            'last_modified_time' => $currentTime,
+        );
+        $this->_backend->updateMultiple($ids, $updateMetaData);
+        
+        if ($this->_omitModLog !== TRUE) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Writing modlog for ' . count($ids) . ' records ...');
+            
+            $currentMods = Tinebase_Timemachine_ModificationLog::getInstance()->writeModLogMultiple($ids, $_oldData, $_newData, $this->_modelName, $this->_backend->getType(), $updateMetaData);
+            //Tinebase_Notes::getInstance()->addSystemNoteMultiple($_filter, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
+        }
     }
     
     /**

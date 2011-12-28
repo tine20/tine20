@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Tags
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  *
  * @todo        this should implement Tinebase_Backend_Sql_Interface or use standard sql backend + refactor this
@@ -16,6 +16,7 @@
  *
  * NOTE: Functions in the 'tagging' chain check acl of the actions,
  *       tag housekeeper functions do their acl in the admin controller
+ *       
  * @package     Tinebase
  * @subpackage  Tags
  */
@@ -525,20 +526,17 @@ class Tinebase_Tags
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param mixed                             $_tag       string|array|Tinebase_Model_Tag with existing and non-existing tag
      * @return Tinebase_Model_Tag
-     * 
-     * @todo history logging
      */
     public function attachTagToMultipleRecords($_filter, $_tag)
     {
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), TRUE));
-
         // check/create tag on the fly
         $tags = $this->_createTagsOnTheFly(array($_tag));
         if (empty($tags) || count($tags) == 0) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No tags created.');
             return;
         }
-        $tagId = $tags->getFirstRecord()->getId();
+        $tag = $tags->getFirstRecord();
+        $tagId = $tag->getId();
 
         list($appName, $i, $modelName) = explode('_', $_filter->getModelName());
         $appId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
@@ -578,7 +576,11 @@ class Tinebase_Tags
             );
         }
         
-        // @todo call $controller->concurrencyManagementAndModlogMultiple($toAttachIds-filter, attached tag)
+        $controller->concurrencyManagementAndModlogMultiple(
+            $toAttachIds, 
+            array('tags' => array()), 
+            array('tags' => new Tinebase_Record_RecordSet('Tinebase_Model_Tag', array($tag->toArray())))
+        );
         
         $this->_addOccurrence($tagId, count($toAttachIds));
         
@@ -591,8 +593,6 @@ class Tinebase_Tags
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param mixed                             $_tag       string|array|Tinebase_Model_Tag with existing and non-existing tag
      * @return void
-     * 
-     * @todo history logging
      */
     public function detachTagsFromMultipleRecords($_filter, $_tag)
     {
@@ -639,10 +639,14 @@ class Tinebase_Tags
                 $this->_db->delete(SQL_TABLE_PREFIX . 'tagging', 'tag_id=\'' . $tagId . '\' AND record_id=\'' . $recordId. '\' AND application_id=\'' . $appId . '\'');
             }
 
+            $controller->concurrencyManagementAndModlogMultiple(
+                $attachedIds,
+                array('tags' => new Tinebase_Record_RecordSet('Tinebase_Model_Tag', array($tag->toArray()))),
+                array('tags' => array()),
+            );
+            
             $this->_deleteOccurrence($tagId, count($attachedIds));
         }
-
-        // @todo call $controller->concurrencyManagementAndModlogMultiple($attachedIds-filter, removed tags)
     }
 
     /**
