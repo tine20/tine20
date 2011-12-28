@@ -72,17 +72,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             return array();
         }
         
-        if ($_records->getFirstRecord()->has('container_id')) {
-            Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
-        }
-        
-        if ($_records->getFirstRecord()->has('tags')) {
-            Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
-        }
-        
-        if (array_key_exists($_records->getRecordClassName(), $_resolveUserFields)) {
-            Tinebase_User::getInstance()->resolveMultipleUsers($_records, $_resolveUserFields[$_records->getRecordClassName()], TRUE);
-        }
+        Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($_records, $_resolveUserFields);
         
         $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $_records->convertDates = true;
