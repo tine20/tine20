@@ -383,6 +383,24 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+    * test attach multiple tags modlog
+    * 
+    * @todo implement
+    */
+    public function testAttachMultipleTagsModlog()
+    {
+    }
+    
+    /**
+    * test detach multiple tags modlog
+    * 
+    * @todo implement
+    */
+    public function testDetachMultipleTagsModlog()
+    {
+    }
+    
+    /**
      * try to get contacts by owner
      *
      */
