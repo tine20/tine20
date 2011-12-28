@@ -596,7 +596,10 @@ class Tinebase_Tags
      */
     public function detachTagsFromMultipleRecords($_filter, $_tag)
     {
-
+        list($appName, $i, $modelName) = explode('_', $_filter->getModelName());
+        $appId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
+        $controller = Tinebase_Core::getApplicationInstance($appName, $modelName);
+        
         if(!is_array($_tag)) $_tag = array($_tag);
 
         foreach($_tag as $dirtyTagId) {
@@ -607,10 +610,6 @@ class Tinebase_Tags
                 return;
             }
             $tagId = $tag->getId();
-
-            list($appName, $i, $modelName) = explode('_', $_filter->getModelName());
-            $appId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
-            $controller = Tinebase_Core::getApplicationInstance($appName, $modelName);
 
             // only get records user has update rights to
             $controller->checkFilterACL($_filter, 'update');
@@ -642,7 +641,7 @@ class Tinebase_Tags
             $controller->concurrencyManagementAndModlogMultiple(
                 $attachedIds,
                 array('tags' => new Tinebase_Record_RecordSet('Tinebase_Model_Tag', array($tag->toArray()))),
-                array('tags' => array()),
+                array('tags' => array())
             );
             
             $this->_deleteOccurrence($tagId, count($attachedIds));
