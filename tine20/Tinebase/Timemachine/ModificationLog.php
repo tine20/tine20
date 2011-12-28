@@ -255,7 +255,7 @@ class Tinebase_Timemachine_ModificationLog
         }
         
         if($_curRecord->last_modified_time instanceof DateTime && !$_curRecord->last_modified_time->equals($_newRecord->last_modified_time)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  concurrent updates: current record last updated '" .
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " concurrent updates: current record last updated '" .
                 $_curRecord->last_modified_time . "' where record to be updated was last updated '" . $_newRecord->last_modified_time . "'");
             
             $loggedMods = $this->getModifications($appName, $_id,
@@ -309,6 +309,10 @@ class Tinebase_Timemachine_ModificationLog
             'last_modified_by'   => $_newRecord->last_modified_by
         ), $_id);
         $diffs = $_curRecord->diff($_newRecord);
+        
+        if (! empty($diffs) && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' diffs: ' . print_r($diffs, TRUE));
+        
         $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         $this->_loopModifications($diffs, $commonModLog, $modifications, $_curRecord->toArray(), $_curRecord->getModlogOmitFields());
         
@@ -369,30 +373,27 @@ class Tinebase_Timemachine_ModificationLog
             }
             
             $curValue = (isset($_currentData[$field])) ? $_currentData[$field] : '';
-            if (is_array($curValue)) {
-                $curValue = Zend_Json::encode($curValue);
-            }
-            if (is_array($newValue)) {
-                $newValue = Zend_Json::encode($newValue);
-            }
-            
-            if ($curValue === $newValue) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Current and new value match. It looks like the diff() failed or you passed identical data for field ' . $field);
-                continue;
-            }
             
             switch ($field) {
                 case 'tags':
                 case 'customfields':
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' ' . count($newValue) . ' ' . $field . ' changed.');
+                    $curValue = $this->_convertToJsonString($curValue);
+                    $newValue = $this->_convertToJsonString($newValue);
                     break;
                 default:
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . " field '$field' changed from '$curValue' to '$newValue'");
             }
-        
+
+            if ($curValue === $newValue) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Current and new value match. It looks like the diff() failed or you passed identical data for field ' . $field);
+                continue;
+            }
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Field '$field' changed.");
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . " Change: from '$curValue' to '$newValue'");
+            
             $modLogEntry = clone $_commonModlog;
             $modLogEntry->modified_attribute = $field;
             $modLogEntry->old_value = $curValue;
@@ -401,6 +402,28 @@ class Tinebase_Timemachine_ModificationLog
     
             $_modifications->addRecord($modLogEntry);
         }
+    }
+    
+    /**
+     * convert to json string
+     * 
+     * @param mixed $_value
+     * @return string
+     */
+    protected function _convertToJsonString($_value)
+    {
+        $result = $_value;
+        if ($result instanceof Tinebase_Record_RecordSet) {
+            $result = $result->toArray();
+        }
+        if (is_array($result)) {
+            $result = Zend_Json::encode($result);
+        }
+        if (empty($result)) {
+            $result = '[]';
+        }
+        
+        return $result;
     }
     
     /**
