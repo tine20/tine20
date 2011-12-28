@@ -825,11 +825,16 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 } 
             } else if ($fieldName == $this->_identifier && $this->getId() == $_record->getId()) {
                 continue;
-            } else if ($recordField instanceof Tinebase_Record_RecordSet 
-                      || $recordField instanceof Tinebase_Record_Abstract) {
+            } else if ($recordField instanceof Tinebase_Record_Abstract) {
                 $subdiv = $recordField->diff($ownField);
-                if (!empty($subdiv)) {
+                if (! empty($subdiv)) {
                     $diff[$fieldName] = $subdiv;
+                }
+                continue;
+            } else if ($recordField instanceof Tinebase_Record_RecordSet) {
+                $subdiv = $recordField->diff($ownField);
+                if (count($subdiv) > 0) {
+                    $diff[$fieldName] = $subdiv->toArray();
                 }
                 continue;
             } else if ($ownField == $recordField) {
@@ -911,10 +916,13 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      *
      * @param string $_data json encoded data
      * @return void
+     * 
+     * @todo replace this (and setFromJsonInUsersTimezone) with Tinebase_Convert_Json::toTine20Model
+     * @todo move custom _setFromJson to (custom) converter
      */
     public function setFromJson($_data)
     {
-        if(is_array($_data)) {
+        if (is_array($_data)) {
             $recordData = $_data;
         } else {
             $recordData = Zend_Json::decode($_data);

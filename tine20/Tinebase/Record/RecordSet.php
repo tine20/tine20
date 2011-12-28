@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -573,12 +573,30 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
     
     /**
-     * @todo implement this!
+     * compares two recordsets / only compares the ids / returns all records that are different
+     * 
+     * @param Tinebase_Record_RecordSet $_recordSet
+     * @return Tinebase_Record_RecordSet
+     * 
+     * @todo compare records with each other?
+     */
     public function diff($_recordSet)
     {
-        return array();
+        if ($this->getRecordClassName() !== $_recordSet->getRecordClassName()) {
+            throw new Tinebase_Exception_InvalidArgument('can only compare recordsets with the same type of records');
+        }
+        $result = new Tinebase_Record_RecordSet($this->getRecordClassName());
+        
+        $migration = $this->getMigration($_recordSet->getArrayOfIds());
+        foreach ($migration['toDeleteIds'] as $id) {
+            $result->addRecord($this->getById($id));
+        }
+        foreach ($migration['toCreateIds'] as $id) {
+            $result->addRecord($_recordSet->getById($id));
+        }
+        
+        return $result;
     }
-    */
     
     /**
      * merges records from given record set
