@@ -297,22 +297,19 @@ class Tinebase_Timemachine_ModificationLog
      * 
      * @param  Tinebase_Record_Abstract $_newRecord record from user data
      * @param  Tinebase_Record_Abstract $_curRecord record from storage
+     * @param  string $_model
+     * @param  string $_backend
+     * @param  string $_id
      * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
      * 
      * @todo support more "second order" (relations, ...) records in modlog
      */
     public function writeModLog($_newRecord, $_curRecord, $_model, $_backend, $_id)
     {
-        list($appName, $i, $modelName) = explode('_', $_model);
-         
-        $commonModLogEntry = new Tinebase_Model_ModificationLog(array(
-            'application_id'       => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId(),
-            'record_id'            => $_id,
-            'record_type'          => $_model,
-            'record_backend'       => $_backend,
-            'modification_time'    => $_newRecord->last_modified_time,
-            'modification_account' => $_newRecord->last_modified_by
-        ),true);
+        $commonModLogEntry = $this->_getCommonModlog($_model, $_backend, array(
+            'last_modified_time' => $_newRecord->last_modified_time, 
+            'last_modified_by'   => $_newRecord->last_modified_by
+        ), $_id);
             
         $diffs = $_curRecord->diff($_newRecord);
         $toOmit = array_merge($this->_metaProperties, $_curRecord->getModlogOmitFields());
@@ -352,6 +349,54 @@ class Tinebase_Timemachine_ModificationLog
             . ' Logged ' . count($modifications) . ' modifications.');
         
         return $modifications;
+    }
+    
+    /**
+     * creates a common modlog record
+     * 
+     * @param string $_model
+     * @param string $_backend
+     * @param array $_updateMetaData
+     * @param string $_recordId
+     * @return Tinebase_Model_ModificationLog
+     */
+    protected function _getCommonModlog($_model, $_backend, $_updateMetaData = array(), $_recordId = NULL)
+    {
+        if (empty($_updateMetaData)) {
+            list($currentAccountId, $currentTime) = Tinebase_Timemachine_ModificationLog::getCurrentAccountIdAndTime();
+        } else {
+            $currentAccountId = $_updateMetaData['last_modified_by'];
+            $currentTime      = $_updateMetaData['last_modified_time'];
+        }
+        
+        list($appName, $i, $modelName) = explode('_', $_model);
+        $commonModLogEntry = new Tinebase_Model_ModificationLog(array(
+            'application_id'       => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId(),
+            'record_id'            => $_recordId,
+            'record_type'          => $_model,
+            'record_backend'       => $_backend,
+            'modification_time'    => $currentTime,
+            'modification_account' => $currentAccountId,
+        ), TRUE);
+        
+        return $commonModLogEntry;
+    }
+    
+    /**
+     * write modlog for multiple records
+     * 
+     * @param array $_ids
+     * @param mixed $_oldData
+     * @param mixed $_newData
+     * @param string $_model
+     * @param string $_backend
+     * @param array $updateMetaData
+     * 
+     * @todo implement
+     */
+    public function writeModLogMultiple($_ids, $_oldData, $_newData, $_model, $_backend, $updateMetaData = array())
+    {
+        $commonModLogEntry = $this->_getCommonModlog($_model, $_backend, $updateMetaData);
     }
     
     /**
