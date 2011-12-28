@@ -341,14 +341,24 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_instance->saveContact($contact);
         
         $this->assertEquals('changed value', $result['customfields'][$cf->name]);
-        
+        $this->_checkChangedNote($result['id'], 'null -> {"' . $cf->name . '":"changed value"})');
+    }
+    
+    /**
+     * check 'changed' system note and modlog after tag/customfield update
+     * 
+     * @param string $_recordId
+     * @param string $_expectedText
+     */
+    protected function _checkChangedNote($_recordId, $_expectedText)
+    {
         $tinebaseJson = new Tinebase_Frontend_Json();
         $history = $tinebaseJson->searchNotes(array(array(
-            'field' => 'record_id', 'operator' => 'in', 'value' => array($result['id'])
+            'field' => 'record_id', 'operator' => 'equals', 'value' => $_recordId
         )), array('sort' => 'note_type_id'));
         $this->assertEquals(3, $history['totalcount']);
         $changedNote = $history['results'][2];
-        $this->assertContains('null -> {"' . $cf->name . '":"changed value"})', $changedNote['note'], print_r($history, TRUE));
+        $this->assertContains($_expectedText, $changedNote['note'], print_r($changedNote, TRUE));
     }
 
     /**
@@ -369,15 +379,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_instance->saveContact($contact);
         
         $this->assertEquals($tagName, $result['tags'][0]['name']);
-        
-        $tinebaseJson = new Tinebase_Frontend_Json();
-        $history = $tinebaseJson->searchNotes(array(array(
-            'field' => 'record_id', 'operator' => 'in', 'value' => array($result['id'])
-        )), array('sort' => 'note_type_id'));
-        
-        $this->assertEquals(3, $history['totalcount']);
-        $changedNote = $history['results'][2];
-        $this->assertContains('tags ({} -> [{"type":"personal","name":"' . $tagName . '","description":"testModlog","color":"#009B31"}])', $changedNote['note'], print_r($history, TRUE));
+        $this->_checkChangedNote($result['id'], 'tags ({} -> [{"type":"personal","name":"' . $tagName . '","description":"testModlog","color":"#009B31"}])');
     }
 
     /**
