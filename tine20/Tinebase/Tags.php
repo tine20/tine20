@@ -525,6 +525,8 @@ class Tinebase_Tags
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param mixed                             $_tag       string|array|Tinebase_Model_Tag with existing and non-existing tag
      * @return Tinebase_Model_Tag
+     * 
+     * @todo history logging
      */
     public function attachTagToMultipleRecords($_filter, $_tag)
     {
@@ -552,17 +554,17 @@ class Tinebase_Tags
         }
 
         // fetch ids of records already having the tag
-        $allreadyAttachedIds = array();
+        $alreadyAttachedIds = array();
         $select = $this->_db->select()
             ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), 'record_id')
             ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $appId)
             ->where($this->_db->quoteIdentifier('tag_id') . ' = ? ', $tagId);
 
-        foreach ($this->_db->fetchAssoc($select) as $tagArray){
-            $allreadyAttachedIds[] = $tagArray['record_id'];
+        foreach ($this->_db->fetchAssoc($select) as $tagArray) {
+            $alreadyAttachedIds[] = $tagArray['record_id'];
         }
 
-        $toAttachIds = array_diff($recordIds, $allreadyAttachedIds);
+        $toAttachIds = array_diff($recordIds, $alreadyAttachedIds);
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Attaching 1 Tag to ' . count($toAttachIds) . ' records.');
         foreach ($toAttachIds as $recordId) {
@@ -586,6 +588,8 @@ class Tinebase_Tags
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param mixed                             $_tag       string|array|Tinebase_Model_Tag with existing and non-existing tag
      * @return void
+     * 
+     * @todo history logging
      */
     public function detachTagsFromMultipleRecords($_filter, $_tag)
     {
