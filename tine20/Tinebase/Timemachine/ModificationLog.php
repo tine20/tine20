@@ -362,11 +362,9 @@ class Tinebase_Timemachine_ModificationLog
      * @param   Tinebase_Record_Abstract $_curRecord record from storage
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public static function setRecordMetaData($_newRecord, $_action, $_curRecord=NULL)
+    public static function setRecordMetaData($_newRecord, $_action, $_curRecord = NULL)
     {
-        $currentAccount   = Tinebase_Core::getUser();
-        $currentAccountId = $currentAccount instanceof Tinebase_Record_Abstract ? $currentAccount->getId(): NULL;
-        $currentTime      = new Tinebase_DateTime();
+        list($currentAccountId, $currentTime) = self::getCurrentAccountIdAndTime();
         
         // spoofing protection
         $_newRecord->created_by         = $_curRecord ? $_curRecord->created_by : NULL;
@@ -398,6 +396,19 @@ class Tinebase_Timemachine_ModificationLog
                 throw new Tinebase_Exception_InvalidArgument('Action must be one of {create|update|delete}.');
                 break;
         }
-    } // end of static function setRecordMetaData
+    }
     
+    /**
+     * returns current account id and time
+     * 
+     * @return array
+     */
+    public static function getCurrentAccountIdAndTime()
+    {
+        $currentAccount   = Tinebase_Core::getUser();
+        $currentAccountId = $currentAccount instanceof Tinebase_Record_Abstract ? $currentAccount->getId(): NULL;
+        $currentTime      = new Tinebase_DateTime();
+
+        return array($currentAccountId, $currentTime);
+    }
 }
