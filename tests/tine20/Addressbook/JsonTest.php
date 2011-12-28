@@ -349,15 +349,16 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      * 
      * @param string $_recordId
      * @param string|array $_expectedText
+     * @param integer $_changedNoteNumber
      */
-    protected function _checkChangedNote($_recordId, $_expectedText = array())
+    protected function _checkChangedNote($_recordId, $_expectedText = array(), $_changedNoteNumber = 3)
     {
         $tinebaseJson = new Tinebase_Frontend_Json();
         $history = $tinebaseJson->searchNotes(array(array(
             'field' => 'record_id', 'operator' => 'equals', 'value' => $_recordId
-        )), array('sort' => 'note_type_id'));
-        $this->assertEquals(3, $history['totalcount'], print_r($history, TRUE));
-        $changedNote = $history['results'][2];
+        )), array('sort' => array('note_type_id', 'creation_time')));
+        $this->assertEquals($_changedNoteNumber, $history['totalcount'], print_r($history, TRUE));
+        $changedNote = $history['results'][$_changedNoteNumber - 1];
         foreach ((array) $_expectedText as $text) {
             $this->assertContains($text, $changedNote['note'], print_r($changedNote, TRUE));
         }
@@ -365,6 +366,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * test tags modlog
+     * 
+     * @return array contact with tag
      */
     public function testTagsModlog()
     {
@@ -382,6 +385,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($tagName, $result['tags'][0]['name']);
         $this->_checkChangedNote($result['id'], 'tags ([] -> [{"type":"personal","name":"' . $tagName . '","description":"testModlog","color":"#009B31"}])');
+        
+        return $result;
     }
 
     /**
@@ -401,11 +406,14 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
     * test detach multiple tags modlog
-    * 
-    * @todo implement
     */
     public function testDetachMultipleTagsModlog()
     {
+        $contact = $this->testTagsModlog();
+        $contact['tags'] = array();
+        sleep(1);
+        $result = $this->_instance->saveContact($contact);
+        $this->_checkChangedNote($result['id'], array('tags ([{"id":', ' -> [])'), 4);
     }
     
     /**
