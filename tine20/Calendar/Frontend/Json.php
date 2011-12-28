@@ -303,6 +303,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Model_Pagination $_pagination needed for sorting
      * @return array data
+     * 
+     * @todo perhaps we need to resolveContainerTagsUsers() before  mergeAndRemoveNonMatchingRecurrences(), but i'm not sure about that
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL, $_pagination = NULL)
     {
@@ -317,12 +319,17 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	        $this->_resolveOrganizer($_records);
 	        $this->_resolveRrule($_records);
             Calendar_Controller_Event::getInstance()->getAlarms($_records);
+            
+//            Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($_records, $this->_resolveUserFields);
             Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($_records, $_filter);
             
             $_records->sortByPagination($_pagination);
             
-	        $eventsData = parent::_multipleRecordsToJson($_records);
-	        foreach($eventsData as $eventData) {
+//             $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+//             $_records->convertDates = true;
+//             $eventsData = $_records->toArray();
+            $eventsData = parent::_multipleRecordsToJson($_records);
+	        foreach ($eventsData as $eventData) {
 	            if (! array_key_exists(Tinebase_Model_Grants::GRANT_READ, $eventData) || ! $eventData[Tinebase_Model_Grants::GRANT_READ]) {
 	                $eventData['notes'] = array();
 	                $eventData['tags'] = array();
