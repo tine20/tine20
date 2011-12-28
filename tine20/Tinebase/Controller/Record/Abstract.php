@@ -694,6 +694,18 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * update modlog / metadata / add systemnote for multiple records defined by filter
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param mixed $_updatedData
+     * 
+     * @todo implement
+     */
+    public function concurrencyManagementAndModlogMultiple(Tinebase_Model_Filter_FilterGroup $_filter, $_updatedData)
+    {
+    }
+    
+    /**
      * update multiple records
      *
      * @param   Tinebase_Model_Filter_FilterGroup $_filter

@@ -577,6 +577,9 @@ class Tinebase_Tags
                 )
             );
         }
+        
+        // @todo call $controller->concurrencyManagementAndModlogMultiple($toAttachIds-filter, attached tag)
+        
         $this->_addOccurrence($tagId, count($toAttachIds));
         
         return $tags->getFirstRecord();
@@ -617,10 +620,10 @@ class Tinebase_Tags
 
             $attachedIds = array();
             $select = $this->_db->select()
-            ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), 'record_id')
-            ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $appId)
-            ->where($this->_db->quoteIdentifier('tag_id') . ' = ? ', $tagId)
-            ->where('record_id IN ( ' . $recordIdList . ' ) ');
+                ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), 'record_id')
+                ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $appId)
+                ->where($this->_db->quoteIdentifier('tag_id') . ' = ? ', $tagId)
+                ->where('record_id IN ( ' . $recordIdList . ' ) ');
 
             foreach ($this->_db->fetchAssoc($select) as $tagArray){
                 $attachedIds[] = $tagArray['record_id'];
@@ -639,6 +642,7 @@ class Tinebase_Tags
             $this->_deleteOccurrence($tagId, count($attachedIds));
         }
 
+        // @todo call $controller->concurrencyManagementAndModlogMultiple($attachedIds-filter, removed tags)
     }
 
     /**
