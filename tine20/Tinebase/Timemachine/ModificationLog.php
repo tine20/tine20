@@ -309,7 +309,6 @@ class Tinebase_Timemachine_ModificationLog
             'last_modified_by'   => $_newRecord->last_modified_by
         ), $_id);
         $diffs = $_curRecord->diff($_newRecord);
-        print_r($diffs);
         $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         $this->_loopModifications($diffs, $commonModLog, $modifications, $_curRecord->toArray(), $_curRecord->getModlogOmitFields());
         
