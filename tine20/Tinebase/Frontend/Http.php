@@ -253,9 +253,28 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         $view->registryData = array();
         
-        header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('jsclient.php');
+        $this->_setMainscreenHeaders();
         
+        echo $view->render('jsclient.php');
+    }
+    
+    /**
+     * set headers for mainscreen
+     * 
+     * @todo allow to configure security headers?
+     * @todo add violation report for CSP? @see https://developer.mozilla.org/en/Security/CSP/Using_CSP_violation_reports
+     */
+    protected function _setMainscreenHeaders()
+    {
+        header('Content-Type: text/html; charset=utf-8');
+        
+        // set x-frame header against clickjacking
+        // @see https://developer.mozilla.org/en/the_x-frame-options_response_header
+        header('X-Frame-Options: SAMEORIGIN');
+        
+        // set X-Content-Security-Policy header against clickjacking and XSS
+        // @see https://developer.mozilla.org/en/Security/CSP/CSP_policy_directives
+        header("X-Content-Security-Policy: allow 'self';");
     }
     
     /**
