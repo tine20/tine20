@@ -50,11 +50,9 @@ Tine.Projects.AddressbookGridPanelHook = function(config) {
             render: this.onRender
         }
     });
-       
+    
     Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-Add', this.addProjectAction, 90);
     Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-New', this.newProjectAction, 90);
-    
-    
 };
 
 Ext.apply(Tine.Projects.AddressbookGridPanelHook.prototype, {

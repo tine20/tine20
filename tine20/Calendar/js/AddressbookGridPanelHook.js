@@ -27,6 +27,8 @@ Tine.Calendar.AddressbookGridPanelHook = function(config) {
     Tine.log.info('initialising calendar addressbook hooks');
     Ext.apply(this, config);
     
+    
+    
     this.addEventAction = new Ext.Action({
         actionType: 'add',
         requiredGrant: 'readGrant',
