@@ -299,7 +299,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($record['url'],'http://www.phpunit.de','DefaultField "url" was not updated as expected');
         
         // check 'changed' systemnote
-        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) customfields ( -> {');
+        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) customfields ([] -> {');
     }
     
     /**
@@ -718,14 +718,11 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($result['exceptions']), 'should have 2 duplicates');
         $this->assertEquals(1, count($result['exceptions'][0]['exception']['clientRecord']['tags']), 'no tag added');
         $this->assertEquals('Importliste (19.10.2011)', $result['exceptions'][0]['exception']['clientRecord']['tags'][0]['name']);
-        $fritzClient = $result['exceptions'][1]['exception']['clientRecord'];
+        $fritzClient = $result['exceptions'][1]['exception']['duplicates'][0];
 
-        $fritzClient['tags'][] = array(
-            'name'	=> 'supi',
-            'type'	=> Tinebase_Model_Tag::TYPE_PERSONAL,
-        );
+        // emulate client merge behaviour
+        $fritzClient['tags'][] = $result['exceptions'][1]['exception']['clientRecord']['tags'][0];
         $fritzClient['adr_one_locality'] = '';
-        $fritzClient['id'] = $fritz['id'];
         $clientRecords = array(array(
             'recordData'        => $fritzClient,
             'resolveStrategy'   => 'mergeMine',
@@ -733,8 +730,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         ));
         //print_r($clientRecords);
         $result = $this->_importHelper(array('dryrun' => 0), $clientRecords);
-        //print_r($result['results'][0]);
-        $this->assertEquals(1, $result['totalcount'], 'Should merge fritz');
+        $this->assertEquals(1, $result['totalcount'], 'Should merge fritz: ' . print_r($result['exceptions'], TRUE));
         $this->assertEquals(2, count($result['results'][0]['tags']), 'Should merge tags');
         $this->assertEquals(NULL, $result['results'][0]['adr_one_locality'], 'Should remove locality');
 
