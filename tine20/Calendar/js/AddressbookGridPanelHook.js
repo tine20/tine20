@@ -107,26 +107,33 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
      * @param {Button} btn 
      */
     onAddEvent: function(btn) {
-        var contacts = this.getContactGridPanel().grid.getSelectionModel().getSelections(),
-            cont = [];
-            
-        Ext.each(contacts, function(contact) {
-           if(contact.data) cont.push(contact.data);
-        });
-
         var ms = this.app.getMainScreen(),
-            cp = ms.getCenterPanel();
-            
-        cp.onEditInNewWindow.call(cp, 'add', {attendee: cont});
+            cp = ms.getCenterPanel(),
+            cont = this.getSelectionsAsArray(),
+            attendee = []; 
         
+        attendee.push(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
+            user_type: 'user',
+            user_id: Tine.Tinebase.registry.get('currentAccount'),
+            status: 'ACCEPTED'
+        }));
+        
+        Ext.each(cont, function(contact) {
+        	attendee.push(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
+        		user_id: contact
+        	}));
+        });
+        
+        cp.onEditInNewWindow.call(cp, 'add', {attendee: attendee});
     },
     
     onUpdateEvent: function(btn) {
-        var cont = this._getSelectionsAsArray();
+        var cont = this.getSelectionsAsArray();
+        
         var window = Tine.Calendar.AddToEventPanel.openWindow({attendee: cont});        
     },
     
-    _getSelectionsAsArray: function() {
+    getSelectionsAsArray: function() {
         var contacts = this.getContactGridPanel().grid.getSelectionModel().getSelections(),
             cont = [];
             
@@ -137,7 +144,7 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
         return cont;
     },
     
-        /**
+    /**
      * add to action updater the first time we render
      */
     onRender: function() {
