@@ -573,26 +573,43 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
     
     /**
-     * compares two recordsets / only compares the ids / returns all records that are different
+     * compares two recordsets / only compares the ids / returns all records that are different in an array:
+     *  - removed  -> all records that are in $this but not in $_recordSet
+     *  - added    -> all records that are in $_recordSet but not in $this
+     *  - modified -> array of diffs  for all different records that are in both record sets
      * 
      * @param Tinebase_Record_RecordSet $_recordSet
-     * @return Tinebase_Record_RecordSet
-     * 
-     * @todo compare records with each other?
+     * @return array
      */
     public function diff($_recordSet)
     {
         if ($this->getRecordClassName() !== $_recordSet->getRecordClassName()) {
             throw new Tinebase_Exception_InvalidArgument('can only compare recordsets with the same type of records');
         }
-        $result = new Tinebase_Record_RecordSet($this->getRecordClassName());
+        $removed = new Tinebase_Record_RecordSet($this->getRecordClassName());
+        $added = new Tinebase_Record_RecordSet($this->getRecordClassName());
+        $modified = array();
+        
+        $result = array();
         
         $migration = $this->getMigration($_recordSet->getArrayOfIds());
         foreach ($migration['toDeleteIds'] as $id) {
-            $result->addRecord($this->getById($id));
+            $added->addRecord($this->getById($id));
         }
         foreach ($migration['toCreateIds'] as $id) {
-            $result->addRecord($_recordSet->getById($id));
+            $removed->addRecord($_recordSet->getById($id));
+        }
+        foreach ($migration['toUpdateIds'] as $id) {
+            $diff = $this->getById($id)->diff($_recordSet->getById($id));
+            if (! empty($diff)) {
+                $modified[$id] = $diff;
+            }
+        }
+        
+        foreach (array('removed', 'added', 'modified') as $subresult) {
+            if (count($$subresult) > 0) {
+                $result[$subresult] = $$subresult;
+            }
         }
         
         return $result;

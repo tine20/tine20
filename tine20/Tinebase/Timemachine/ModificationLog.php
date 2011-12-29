@@ -312,6 +312,8 @@ class Tinebase_Timemachine_ModificationLog
         
         if (! empty($diffs) && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' diffs: ' . print_r($diffs, TRUE));
+        if (! empty($diffs) && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' curRecord: ' . print_r($_curRecord->toArray(), TRUE));
         
         $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         $this->_loopModifications($diffs, $commonModLog, $modifications, $_curRecord->toArray(), $_curRecord->getModlogOmitFields());
@@ -417,6 +419,12 @@ class Tinebase_Timemachine_ModificationLog
             $result = $result->toArray();
         }
         if (is_array($result)) {
+            // deal with RecordSet diff()
+            foreach (array('removed', 'added') as $index) {
+                if (isset($result[$index])) {
+                    $result[$index] = $result[$index]->toArray();
+                }
+            }
             $result = Zend_Json::encode($result);
         }
         if (empty($result)) {
