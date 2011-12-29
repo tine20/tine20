@@ -825,16 +825,10 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 } 
             } else if ($fieldName == $this->_identifier && $this->getId() == $_record->getId()) {
                 continue;
-            } else if ($recordField instanceof Tinebase_Record_Abstract) {
+            } else if ($recordField instanceof Tinebase_Record_Abstract || $recordField instanceof Tinebase_Record_RecordSet) {
                 $subdiv = $recordField->diff($ownField);
                 if (! empty($subdiv)) {
                     $diff[$fieldName] = $subdiv;
-                }
-                continue;
-            } else if ($recordField instanceof Tinebase_Record_RecordSet) {
-                $subdiv = $recordField->diff($ownField);
-                if (count($subdiv) > 0) {
-                    $diff[$fieldName] = $subdiv->toArray();
                 }
                 continue;
             } else if ($ownField == $recordField) {

@@ -54,7 +54,9 @@ Tine.widgets.tags.TagFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
                  this.onFiltertrigger();
              }
         }, this);
-        //value.on('select', this.onFiltertrigger, this);
+        // need to trigger filter on select because we can have the same names for (shared/personal) tags
+        //  and when filters are triggered, the first matching record in the TagCombo gets selected ... :(
+        value.on('select', this.onFiltertrigger, this);
         
         return value;
     }

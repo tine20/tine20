@@ -405,7 +405,6 @@ abstract class Tinebase_Controller_Record_Abstract
 
             $this->_checkGrant($_record, 'create');
 
-            // add modlog info
             if ($_record->has('created_by')) {
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'create');
             }
@@ -414,12 +413,13 @@ abstract class Tinebase_Controller_Record_Abstract
             if ($_duplicateCheck) {
                 $this->_duplicateCheck($_record);
             }
-            $record = $this->_backend->create($_record);
-            $this->_inspectAfterCreate($record, $_record);
-            $this->_setRelatedData($record, $_record);
+            $createdRecord = $this->_backend->create($_record);
+            $this->_inspectAfterCreate($createdRecord, $_record);
+            $this->_setRelatedData($createdRecord, $_record);
+            $this->_setNotes($createdRecord, $_record);
 
             if ($this->sendNotifications()) {
-                $this->doSendNotifications($record, $this->_currentAccount, 'created');
+                $this->doSendNotifications($createdRecord, $this->_currentAccount, 'created');
             }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -431,7 +431,7 @@ abstract class Tinebase_Controller_Record_Abstract
             throw $e;
         }
 
-        return $this->get($record);
+        return $this->get($createdRecord);
     }
 
     /**
@@ -548,7 +548,7 @@ abstract class Tinebase_Controller_Record_Abstract
     public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
-            . print_r($_record->toArray(),true));
+            . ' Record to update: ' . print_r($_record->toArray(), TRUE));
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Update ' . $this->_modelName);
 
@@ -559,22 +559,33 @@ abstract class Tinebase_Controller_Record_Abstract
             $_record->isValid(TRUE);
 
             $currentRecord = $this->get($_record->getId());
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Current record: ' . print_r($currentRecord->toArray(), TRUE));
 
             $this->_updateACLCheck($_record, $currentRecord);
-            
-            $currentMods = $this->_concurrencyManagementAndModLog($_record, $currentRecord);
-            
+            $this->_concurrencyManagement($_record, $currentRecord);
             $this->_inspectBeforeUpdate($_record, $currentRecord);
+            
             if ($_duplicateCheck) {
                 $this->_duplicateCheck($_record);
             }
-            $record = $this->_backend->update($_record);
-            $this->_inspectAfterUpdate($record, $_record);
             
-            $this->_setRelatedData($record, $_record, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
+            $updatedRecord = $this->_backend->update($_record);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Updated record: ' . print_r($updatedRecord->toArray(), TRUE));
             
+            $this->_inspectAfterUpdate($updatedRecord, $_record);
+            $this->_setRelatedData($updatedRecord, $_record);
+
+            $updatedRecordWithRelatedData = $this->get($_record->getId());
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Updated record with related data: ' . print_r($updatedRecordWithRelatedData->toArray(), TRUE));
+            
+            $currentMods = $this->_writeModLog($updatedRecordWithRelatedData, $currentRecord);
+            $this->_setNotes($updatedRecordWithRelatedData, $_record, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
+                        
             if ($this->_sendNotifications && count($currentMods) > 0) {
-                $this->doSendNotifications($record, $this->_currentAccount, 'changed', $currentRecord);
+                $this->doSendNotifications($updatedRecordWithRelatedData, $this->_currentAccount, 'changed', $currentRecord);
             }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -583,7 +594,7 @@ abstract class Tinebase_Controller_Record_Abstract
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
         }
-        return $this->get($record->getId());
+        return $this->get($updatedRecord->getId());
     }
     
     /**
@@ -614,14 +625,11 @@ abstract class Tinebase_Controller_Record_Abstract
      * 
      * @param Tinebase_Record_Interface $_record
      * @param Tinebase_Record_Interface $_currentRecord
-     * @return Tinebase_Record_RecordSet
      */
-    protected function _concurrencyManagementAndModLog($_record, $_currentRecord)
+    protected function _concurrencyManagement($_record, $_currentRecord)
     {
-        $currentMods = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
-        
         if (! $_record->has('created_by')) {
-            return $currentMods;
+            return NULL;
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -630,24 +638,37 @@ abstract class Tinebase_Controller_Record_Abstract
         $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
         $modLog->manageConcurrentUpdates($_record, $_currentRecord, $this->_modelName, $this->_backend->getType(), $_record->getId());
         $modLog->setRecordMetaData($_record, 'update', $_currentRecord);
-        if ($this->_omitModLog !== TRUE) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Writing modlog');
-            
-            $currentMods = $modLog->writeModLog($_record, $_currentRecord, $this->_modelName, $this->_backend->getType(), $_record->getId());
+    }
+
+    /**
+     * write modlog
+     * 
+     * @param Tinebase_Record_Interface $_newRecord
+     * @param Tinebase_Record_Interface $_oldRecord
+     * @return NULL|Tinebase_Record_RecordSet
+     */
+    protected function _writeModLog($_newRecord, $_oldRecord)
+    {
+        if (! $_newRecord->has('created_by') || $this->_omitModLog === TRUE) {
+            return NULL;
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Writing modlog');
+    
+        $currentMods = Tinebase_Timemachine_ModificationLog::getInstance()->writeModLog($_newRecord, $_oldRecord, $this->_modelName, $this->_backend->getType(), $_newRecord->getId());
         
         return $currentMods;
     }
     
+    
     /**
-     * set relations / tags / notes / alarms
+     * set relations / tags / alarms
      * 
      * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
      * @param   Tinebase_Record_Interface $_record          the update record
-     * @param   string					  $_systemNoteType 	created/updated
      */
-    protected function _setRelatedData($_updatedRecord, $_record, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_modifications = NULL)
+    protected function _setRelatedData($_updatedRecord, $_record)
     {
         if ($_record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
             Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $_updatedRecord->getId(), $_record->relations);
@@ -656,19 +677,33 @@ abstract class Tinebase_Controller_Record_Abstract
             $_updatedRecord->tags = $_record->tags;
             Tinebase_Tags::getInstance()->setTagsOfRecord($_updatedRecord);
         }
-        if ($_record->has('notes')) {
-            if (isset($_record->notes) && is_array($_record->notes)) {
-                $_updatedRecord->notes = $_record->notes;
-                Tinebase_Notes::getInstance()->setNotesOfRecord($_updatedRecord);
-            }
-            Tinebase_Notes::getInstance()->addSystemNote($_updatedRecord, $this->_currentAccount->getId(), $_systemNoteType, $_modifications);
-        }
         if ($_record->has('alarms') && isset($_record->alarms)) {
             $_updatedRecord->alarms = $_record->alarms;
             $this->_saveAlarms($_record);
         }
     }
 
+    /**
+     * set notes
+     * 
+     * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $_record          the update record
+     * @param   string $_systemNoteType
+     * @param   Tinebase_Record_RecordSet $_currentMods
+     */
+    protected function _setNotes($_updatedRecord, $_record, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_currentMods = NULL)
+    {
+        if (! $_record->has('notes')) {
+            return;
+        }
+
+        if (isset($_record->notes) && is_array($_record->notes)) {
+            $_updatedRecord->notes = $_record->notes;
+            Tinebase_Notes::getInstance()->setNotesOfRecord($_updatedRecord);
+        }
+        Tinebase_Notes::getInstance()->addSystemNote($_updatedRecord, $this->_currentAccount->getId(), $_systemNoteType, $_currentMods);
+    }
+    
     /**
      * inspect update of one record (before update)
      *
@@ -783,12 +818,7 @@ abstract class Tinebase_Controller_Record_Abstract
             
             try {
             	$record = new $this->_modelName($data);
-            	
-            	$currentMods = $this->_concurrencyManagementAndModLog($record, $currentRecord);
-            	$updatedRecord = $this->_backend->update($record);
-            	if ($updatedRecord->has('notes')) {
-            	    Tinebase_Notes::getInstance()->addSystemNote($updatedRecord, $this->_currentAccount->getId(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
-            	}
+            	$updatedRecord = $this->update($record, FALSE);
             	
             	$this->_updateMultipleResult['results']->addRecord($updatedRecord);
             	$this->_updateMultipleResult['totalcount'] ++;

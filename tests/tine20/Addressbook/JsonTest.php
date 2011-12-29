@@ -387,7 +387,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_instance->saveContact($contact);
         
         $this->assertEquals($tagName, $result['tags'][0]['name']);
-        $this->_checkChangedNote($result['id'], 'tags ([] -> [{"type":"personal","name":"' . $tagName . '","description":"testModlog","color":"#009B31"}])');
+        $this->_checkChangedNote($result['id'], array('tags ([] -> {"added":[{"id":', '"type":"personal"', ',"name":"' . $tagName . '","description":"testModlog","color":"#009B31"'));
         
         return $result;
     }
@@ -416,7 +416,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $contact['tags'] = array();
         sleep(1);
         $result = $this->_instance->saveContact($contact);
-        $this->_checkChangedNote($result['id'], array('tags ([{"id":', ' -> [])'), 4);
+        $this->_checkChangedNote($result['id'], array('tags ([{"id":', ' -> {"removed":[{'), 4);
     }
     
     /**
