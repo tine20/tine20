@@ -27,11 +27,12 @@ Tine.Calendar.AddressbookGridPanelHook = function(config) {
     Tine.log.info('initialising calendar addressbook hooks');
     Ext.apply(this, config);
     
+    
+    
     this.addEventAction = new Ext.Action({
         actionType: 'add',
         requiredGrant: 'readGrant',
-        allowMultiple: true,
-        text: this.app.i18n._('New Event'),
+        text: this.app.i18n._('Event'),
         iconCls: this.app.getIconCls(),
         scope: this,
         handler: this.onAddEvent,
@@ -41,29 +42,22 @@ Tine.Calendar.AddressbookGridPanelHook = function(config) {
         }
     });
     
-    this.eventMenu = new Ext.menu.Menu({
-        items: [this.addEventAction, {
-           text: this.app.i18n._('Add to Event'),
-           scope: this,
-           handler: this.onUpdateEvent,
-           iconCls: this.app.getIconCls()
-        }]
-    });
-    
-    
-    // NOTE: due to the action updater this action is bound the the adb grid only!
-    this.handleEventAction = new Ext.Action({
-        actionType: 'add',
+    this.newEventAction = new Ext.Action({
+        actionType: 'new',
         requiredGrant: 'readGrant',
-        allowMultiple: true,
-        text: this.app.i18n._('Event...'),
+        text: this.app.i18n._('Event'),
         iconCls: this.app.getIconCls(),
         scope: this,
-        menu: this.eventMenu
+        handler: this.onUpdateEvent,
+        listeners: {
+            scope: this,
+            render: this.onRender
+        }
     });
-        
-    // register in contextmenu
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu', this.handleEventAction, 100);
+    
+    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-Add', this.addEventAction, 100);
+    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-New', this.newEventAction, 100);
+    
 };
 
 Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
@@ -74,23 +68,14 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
      * @private
      */
     app: null,
-    
-    /**
-     * @property handleEventAction
-     * @type Tine.widgets.ActionUpdater
-     * @private
-     */
-    handleEventAction: null,
-    
+       
     /**
      * @property ContactGridPanel
      * @type Tine.Addressbook.ContactGridPanel
      * @private
      */
     ContactGridPanel: null,
-    
-    eventMenu: null,
-    
+        
     /**
      * get addressbook contact grid panel
      */
@@ -154,6 +139,10 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
         if (registeredActions.indexOf(this.addEventAction) < 0) {
             actionUpdater.addActions([this.addEventAction]);
         }
+        
+        if (registeredActions.indexOf(this.newEventAction) < 0) {
+        	actionUpdater.addActions([this.newEventAction]);
+        }        
     }
 
 });

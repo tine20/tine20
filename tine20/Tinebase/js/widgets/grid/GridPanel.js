@@ -986,6 +986,44 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             
             // lookup additional items
             items = items.concat(this.getContextMenuItems());
+
+            // New record of another app
+            this.newRecordMenu = new Ext.menu.Menu({
+                items: [],
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key:   this.app.appName + '-GridPanel-ContextMenu-New'
+                }]
+            });
+            
+            this.newRecordAction = new Ext.Action({
+                text: this.app.i18n._('New...'),
+                hidden: ! this.newRecordMenu.items.length,
+                iconCls: this.app.getIconCls(),
+                scope: this,
+                menu: this.newRecordMenu
+            });
+            
+            items.push(this.newRecordAction);
+
+            // Add to record of another app            
+            this.addToRecordMenu = new Ext.menu.Menu({
+                items: [],
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key:   this.app.appName + '-GridPanel-ContextMenu-Add'
+                }]
+            });
+            
+            this.addToRecordAction = new Ext.Action({
+                text: this.app.i18n._('Add...'),
+                hidden: ! this.addToRecordMenu.items.length,
+                iconCls: this.app.getIconCls(),
+                scope: this,
+                menu: this.addToRecordMenu
+            });            
+            
+            items.push(this.addToRecordAction);
             
             this.contextMenu = new Ext.menu.Menu({
                 items: items,
