@@ -254,6 +254,7 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 title: this.app.i18n._('If all of the following conditions are met:'),
                 region: 'north',
                 border: false,
+                autoScroll: true,
                 items: [
                     this.conditionsPanel
                 ],
@@ -262,7 +263,9 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     scope: this,
                     afterlayout: function(ct, layout) {
                         ct.suspendEvents();
-                        ct.setHeight(this.conditionsPanel.getHeight()+30);
+                        if (this.conditionsPanel.getHeight() < 170) {
+                            ct.setHeight(this.conditionsPanel.getHeight() + 30);
+                        }
                         ct.ownerCt.layout.layout();
                         ct.resumeEvents();
                     }
