@@ -27,35 +27,34 @@ Tine.Projects.AddressbookGridPanelHook = function(config) {
     Tine.log.info('initialising projects addressbook hooks');
     Ext.apply(this, config);
     
-    
-    this.projectsMenu = new Ext.menu.Menu({
-        items: [{
-           text: this.app.i18n._('New Project'),
-           scope: this,
-           handler: this.onAddProject,
-           iconCls: this.app.getIconCls()
-        }, {
-           text: this.app.i18n._('Add to Project'),
-           scope: this,
-           handler: this.onUpdateProject,
-           iconCls: this.app.getIconCls()
-        }]
-    });
-    
-    
-    // NOTE: due to the action updater this action is bound the the adb grid only!
-    this.handleProjectsAction = new Ext.Action({
-        actionType: 'add',
+    this.addProjectAction = new Ext.Action({
         requiredGrant: 'readGrant',
-        allowMultiple: true,
-        text: this.app.i18n._('Projects...'),
+        text: this.app.i18n._('Project'),
         iconCls: this.app.getIconCls(),
         scope: this,
-        menu: this.projectsMenu
+        handler: this.onUpdateProject,
+        listeners: {
+            scope: this,
+            render: this.onRender
+        }
     });
-        
-    // register in contextmenu
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu', this.handleProjectsAction, 90);
+    
+    this.newProjectAction = new Ext.Action({
+        requiredGrant: 'readGrant',
+        text: this.app.i18n._('Project'),
+        iconCls: this.app.getIconCls(),
+        scope: this,
+        handler: this.onAddProject,
+        listeners: {
+            scope: this,
+            render: this.onRender
+        }
+    });
+       
+    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-Add', this.addProjectAction, 90);
+    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-New', this.newProjectAction, 90);
+    
+    
 };
 
 Ext.apply(Tine.Projects.AddressbookGridPanelHook.prototype, {
@@ -123,5 +122,21 @@ Ext.apply(Tine.Projects.AddressbookGridPanelHook.prototype, {
         });
         
         return cont;
+    },
+    
+    /**
+     * add to action updater the first time we render
+     */
+    onRender: function() {
+        var actionUpdater = this.getContactGridPanel().actionUpdater,
+            registeredActions = actionUpdater.actions;
+            
+        if (registeredActions.indexOf(this.addEventAction) < 0) {
+            actionUpdater.addActions([this.addEventAction]);
+        }
+        
+        if (registeredActions.indexOf(this.newEventAction) < 0) {
+        	actionUpdater.addActions([this.newEventAction]);
+        }        
     }
 });
