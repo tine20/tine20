@@ -82,14 +82,12 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
             'value'             => json_encode($tasksStatusConfig),
         )));
         
-        // update persitent filters
+        // update persistent filters
         $stmt = $this->_db->query("SELECT * FROM `" . SQL_TABLE_PREFIX . "filter` WHERE ".
             "`application_id` = '" . $tasksAppId . "' AND ".
             "`model` = 'Tasks_Model_TaskFilter'"
         );
         $pfiltersDatas = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-        // update persistent filters
         foreach($pfiltersDatas as $pfilterData) {
             $filtersData = Zend_Json::decode($pfilterData['filters']);
             foreach($filtersData as &$filterData) {
