@@ -36,6 +36,7 @@ Tine.Calendar.AddressbookGridPanelHook = function(config) {
         iconCls: this.app.getIconCls(),
         scope: this,
         handler: this.onUpdateEvent,
+        allowMultiple: true,
         listeners: {
             scope: this,
             render: this.onRender
@@ -49,6 +50,7 @@ Tine.Calendar.AddressbookGridPanelHook = function(config) {
         iconCls: this.app.getIconCls(),
         scope: this,
         handler: this.onAddEvent,
+        allowMultiple: true,
         listeners: {
             scope: this,
             render: this.onRender

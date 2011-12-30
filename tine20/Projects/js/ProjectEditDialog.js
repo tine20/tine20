@@ -49,9 +49,35 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     onRecordLoad: function() {
-    	Tine.Projects.ProjectEditDialog.superclass.onRecordLoad.call(this);        
 
-        if (this.rendered) {
+    	// add selections to record if new record and selected Records
+    	if(this.record && this.record.id == 0) {
+    		if(this.selectedRecords.length > 0) {
+    			var relations = [];
+    			Ext.each(this.selectedRecords, function(contact) {  				
+    				var rec = new Tine.Addressbook.Model.Contact(contact, contact.id);
+    				var rel = new Tine.Tinebase.Model.Relation({
+        				own_degree: 'sibling',
+        				own_id: null,
+        				own_model: 'Projects_Model_Project',
+        				related_backend: 'Sql',
+        				related_id: contact.id,
+        				related_model: 'Addressbook_Model_Contact',
+        				related_record: rec.data,
+        				type: 'COWORKER'
+        		});
+    				
+    			relations.push(rel.data);
+    			});
+    			
+    			this.record.set('relations',relations);
+    		}
+    	}
+
+    	Tine.log.debug('REC',this.record);
+    	Tine.Projects.ProjectEditDialog.superclass.onRecordLoad.call(this);        
+        
+    	if (this.rendered) {
             this.contactLinkPanel.onRecordLoad(this.record);
         }
     },
@@ -64,7 +90,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordUpdate: function() {
         Tine.Projects.ProjectEditDialog.superclass.onRecordUpdate.call(this);
-        
+        Tine.log.err(this.contactLinkPanel.getData());
         this.record.set('relations', this.contactLinkPanel.getData());
     },
     
@@ -214,7 +240,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  * @param   {Object} config
  * @return  {Ext.ux.Window}
  */
-Tine.Projects.ProjectEditDialog.openWindow = function (config) {
+Tine.Projects.ProjectEditDialog.openWindow = function (config) {Tine.log.debug('CONFIG',config);
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,

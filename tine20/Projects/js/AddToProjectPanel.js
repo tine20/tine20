@@ -188,7 +188,6 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
 });
 
 Tine.Projects.AddToProjectPanel.openWindow = function(config) {
-    Tine.log.debug(config);
     var window = Tine.WindowFactory.getWindow({
         modal: true,
         title : Tine.Tinebase.appMgr.get('Projects').i18n._('Choose Project'),
