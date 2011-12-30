@@ -53,33 +53,4 @@ class Projects_Controller_Project extends Tinebase_Controller_Record_Abstract
         
         return self::$_instance;
     }      
-
-    public function addAttenders($_project, $_role, $_attenders) {
-
-        $be = new Projects_Backend_Project();
-        $project = $be->get($_project); 
-        $oldRelations = Tinebase_Relations::getInstance()->getRelations('Projects_Model_Project', 'Sql', $_project);
-        
-        $i=0;
-        foreach($_attenders as $attender) {
-            $relation = array('own_model' => 'Projects_Model_Project',
-                              'own_backend' => 'Sql',
-                              'own_id' => $project->getId(),
-                              'own_degree' => 'sibling',
-                              'related_model' => 'Addressbook_Model_Contact',
-                              'related_backend' => 'Sql',
-                              'related_id' => $attender,
-                              'type' => $_role
-            );
-            
-            $newRelation = new Tinebase_Model_Relation();
-            $newRelation->setFromArray($relation);
-            $oldRelations->addRecord($newRelation);
-            $i++;
-        }
-        
-        Tinebase_Relations::getInstance()->setRelations('Projects_Model_Project', 'Sql', $_project, $oldRelations->toArray());        
-        return $i; 
-        
-    }
 }

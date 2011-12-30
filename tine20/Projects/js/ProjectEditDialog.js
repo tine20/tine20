@@ -49,9 +49,9 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     onRecordLoad: function() {
-
-    	// add selections to record if new record and selected Records
-    	if(this.record && this.record.id == 0) {
+Tine.log.debug('REC',this.record);
+    	// add selections to record
+    	if(this.record) {
     		if(this.selectedRecords.length > 0) {
     			var relations = [];
     			Ext.each(this.selectedRecords, function(contact) {  				
@@ -64,11 +64,11 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         				related_id: contact.id,
         				related_model: 'Addressbook_Model_Contact',
         				related_record: rec.data,
-        				type: 'COWORKER'
+        				type: this.attendeeRole ? this.attendeeRole : 'COWORKER'
         		});
     				
     			relations.push(rel.data);
-    			});
+    			},this);
     			
     			this.record.set('relations',relations);
     		}
