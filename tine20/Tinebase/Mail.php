@@ -69,7 +69,7 @@ class Tinebase_Mail extends Zend_Mail
                 $mp->boundary = $contentTypeHeader['boundary'];
             }
             
-            if (isset($contentTypeHeader['charset'])) {
+            if (isset($contenbtTypeHeader['charset'])) {
                 $mp->charset = $contentTypeHeader['charset'];
             }
         } else {
@@ -84,6 +84,9 @@ class Tinebase_Mail extends Zend_Mail
             foreach ((array)$values as $value) {
                 switch ($header) {
                     case 'content-transfer-encoding':
+                    // these are implicitly set by Zend_Mail_Transport_Abstract::_getHeaders()
+                    case 'content-type':
+                    case 'mime-version':
                         // do nothing
                         
                         break;
