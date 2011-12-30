@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Mail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -69,7 +69,7 @@ class Tinebase_Mail extends Zend_Mail
                 $mp->boundary = $contentTypeHeader['boundary'];
             }
             
-            if (isset($contenbtTypeHeader['charset'])) {
+            if (isset($contentTypeHeader['charset'])) {
                 $mp->charset = $contentTypeHeader['charset'];
             }
         } else {
