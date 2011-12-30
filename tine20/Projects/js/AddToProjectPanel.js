@@ -101,33 +101,8 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
     },
     
     onUpdate: function() {
-        if(this.isValid()) {
-            
-            if(this.attendee) {
-                var attenders = [];
-                Ext.each(this.attendee, function(el){
-                    attenders.push(el.id);   
-                },this); 
-            }
-            
-            Ext.MessageBox.wait(String.format(this.app.i18n._('Adding {0} Attenders to Project...'), attenders.length), this.app.i18n._('Adding Attenders'));
-            
-            Ext.Ajax.request({
-                url: 'index.php',
-                
-                params: {
-                    method: 'Projects.addAttenders',
-                    attenders: attenders,
-                    project: this.searchBox.getValue(),
-                    role: this.chooseRoleBox.getValue()
-                    
-                },
-                success: function(_result, _request) {                           
-                    Ext.MessageBox.hide();
-                    this.onCancel();
-                },
-                scope: this
-            });
+        if(this.isValid()) {          
+            Tine.Projects.ProjectEditDialog.openWindow({selectedRecords: Ext.encode(this.attendee), attendeeRole: this.chooseRoleBox.getValue()});
         }
     },
     
