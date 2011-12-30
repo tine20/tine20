@@ -191,14 +191,16 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                     header: this.app.i18n._("Priority"),
                     width: 45,
                     dataIndex: 'priority',
-                    renderer: Tine.widgets.Priority.renderer,
-                    editor: new Tine.widgets.Priority.Combo({
-                        allowBlank: false,
-                        autoExpand: true,
-                        blurOnSelect: true
-                    }),
-                    quickaddField: new Tine.widgets.Priority.Combo({
-                        autoExpand: true
+                    renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tasks', 'taskPriority'),
+                    editor: {
+                        xtype: 'widget-keyfieldcombo',
+                        app: 'Tasks',
+                        keyFieldName: 'taskPriority'
+                    },
+                    quickaddField: new Tine.Tinebase.widgets.keyfield.ComboBox({
+                        app: 'Tasks',
+                        keyFieldName: 'taskPriority',
+                        value: 'NORMAL'
                     })
                 }, {
                     id: 'percent',

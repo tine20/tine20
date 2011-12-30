@@ -204,10 +204,13 @@ Ext.namespace('Tine.Tasks');
                         		}
                         	}
                     	}), 
-						new Tine.widgets.Priority.Combo({
-	                        fieldLabel: this.app.i18n._('Priority'),
-	                        name: 'priority'
-	                    }), 
+                        new Tine.Tinebase.widgets.keyfield.ComboBox({
+                            fieldLabel: this.app.i18n._('Priority'),
+                            name: 'priority',
+                            app: 'Tasks',
+                            keyFieldName: 'taskPriority',
+                            value: 'NORMAL'
+                        }),
 	                    new Tine.Addressbook.SearchCombo({
                             emptyText: _('Add Responsible ...'),
                             userOnly: true,
