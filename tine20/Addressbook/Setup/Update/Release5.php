@@ -48,8 +48,8 @@ class Addressbook_Setup_Update_Release5 extends Setup_Update_Abstract
                 <length>32</length>
                 <notnull>false</notnull>
             </field>');
-        $this->_backend->alterCol('addressbook_salutations', $declaration);
-        $this->setTableVersion('addressbook_salutations', 3);
+        $this->_backend->alterCol('addressbook_salutationss', $declaration);
+        $this->setTableVersion('addressbook_salutationss', 3);
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
@@ -140,8 +140,73 @@ class Addressbook_Setup_Update_Release5 extends Setup_Update_Abstract
      */
     public function update_4()
     {
-    Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'));
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'));
+        $this->setApplicationVersion('Addressbook', '5.5');
+    }
+
+    /**
+     * update to 5.6
+     * - convert salutations to keyfield config
+     *
+     * @return void
+     */
+    public function update_5()
+    {
+        $addressbookAppId = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId();
+        
+        // alter salutation_id -> salutation
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>salutation</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>false</notnull>
+            </field>');
+        
+        $this->_backend->alterCol('addressbook', $declaration, 'salutation_id');
+        
+        // get all current salutation datas and drop old salutation table
+        $stmt = $this->_db->query("SELECT * FROM `" . SQL_TABLE_PREFIX . "addressbook_salutations`");
+        $salutationDatas = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        $this->_backend->dropTable('addressbook_salutations', $addressbookAppId);
+        
+        // update addressbook table
+        $salutationMap = array(); // oldId => newId
+        foreach ($salutationDatas as $salutationData) {
+            $salutationMap[$salutationData['id']] = $salutationData['name'];
+            $this->_db->update(SQL_TABLE_PREFIX . 'addressbook', array(
+                'salutation' => strtoupper($salutationData['name']),
+            ), "`salutation` = '{$salutationData['id']}'");
+        }
+        
+        $cb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Config', 
+            'tableName' => 'config',
+        ));
     
-    $this->setApplicationVersion('Addressbook', '5.5');
+        $keyfieldConfig = array(
+            'name'    => Addressbook_Config::CONTACT_SALUTATION,
+            'records' => array(
+                array('id' => 'MR',      'value' => 'Mr', 	   'gender' => Addressbook_Model_Salutation::GENDER_MALE,   'image' => 'images/empty_photo_male.png',    'system' => true), //_('Mr')
+                array('id' => 'MS',      'value' => 'Ms',      'gender' => Addressbook_Model_Salutation::GENDER_FEMALE, 'image' => 'images/empty_photo_female.png',  'system' => true), //_('Ms')
+                array('id' => 'COMPANY', 'value' => 'Company', 'gender' => Addressbook_Model_Salutation::GENDER_OTHER,  'image' => 'images/empty_photo_company.png', 'system' => true), //_('Company')
+            ),
+        );
+    
+        // add non system custom salutation
+        foreach ($salutationDatas as $salutationData) {
+            if (! in_array(strtoupper($salutationData['name']), array('MR', 'MS', 'COMPANY'))) {
+                $keyfieldConfig['records'][] = array('id' => strtoupper($salutationData['name']), 'value' => $salutationData['name'], 'gender' => $salutationData['gender'], 'image' => $salutationData['image_path']);
+            }
+        }
+
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'name'              => Addressbook_Config::CONTACT_SALUTATION,
+            'value'             => json_encode($keyfieldConfig),
+        )));
+        
+        $this->setTableVersion('addressbook', '16');
+        $this->setApplicationVersion('Addressbook', '5.6');
     }
 }

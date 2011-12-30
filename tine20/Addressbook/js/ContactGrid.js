@@ -103,6 +103,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         return [
             { id: 'tid', header: this.app.i18n._('Type'), dataIndex: 'tid', width: 30, renderer: this.contactTidRenderer.createDelegate(this), hidden: false },
             { id: 'tags', header: this.app.i18n._('Tags'), dataIndex: 'tags', width: 50, renderer: Tine.Tinebase.common.tagsRenderer, sortable: false, hidden: false  },
+            { id: 'salutation', header: this.app.i18n._('Salutation'), dataIndex: 'salutation', renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Addressbook', 'contactSalutation') },
             { id: 'n_family', header: this.app.i18n._('Last Name'), dataIndex: 'n_family' },
             { id: 'n_given', header: this.app.i18n._('First Name'), dataIndex: 'n_given', width: 80 },
             { id: 'n_fn', header: this.app.i18n._('Full Name'), dataIndex: 'n_fn' },
