@@ -49,11 +49,17 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     onRecordLoad: function() {
-Tine.log.debug('REC',this.record);
     	// add selections to record
-    	if(this.record) {
+
+        Tine.Projects.ProjectEditDialog.superclass.onRecordLoad.call(this);
+        
+        if(this.record) {
     		if(this.selectedRecords.length > 0) {
-    			var relations = [];
+    			
+    		    var oldRelations = this.record.get('relations');
+    		    
+    		    var relations = oldRelations ? oldRelations : [];
+
     			Ext.each(this.selectedRecords, function(contact) {  				
     				var rec = new Tine.Addressbook.Model.Contact(contact, contact.id);
     				var rel = new Tine.Tinebase.Model.Relation({
@@ -65,16 +71,17 @@ Tine.log.debug('REC',this.record);
         				related_model: 'Addressbook_Model_Contact',
         				related_record: rec.data,
         				type: this.attendeeRole ? this.attendeeRole : 'COWORKER'
-        		});
-    				
-    			relations.push(rel.data);
+    				});
+    			
+    				relations.push(rel.data);	
+    			
     			},this);
     			
     			this.record.set('relations',relations);
+    			this.selectedRecords = [];
     		}
     	}
-
-    	Tine.Projects.ProjectEditDialog.superclass.onRecordLoad.call(this);        
+       
         
     	if (this.rendered) {
             this.contactLinkPanel.onRecordLoad(this.record);
