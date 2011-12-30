@@ -261,6 +261,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * set headers for mainscreen
      * 
+     * @todo think about CSP: is only supported by FF atm, which options/exceptions should we choose?
      * @todo allow to configure security headers?
      * @todo add violation report for CSP? @see https://developer.mozilla.org/en/Security/CSP/Using_CSP_violation_reports
      */
@@ -274,12 +275,11 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         // set X-Content-Security-Policy header against clickjacking and XSS
         // @see https://developer.mozilla.org/en/Security/CSP/CSP_policy_directives
-        header("X-Content-Security-Policy: allow 'self';");
+        //header("X-Content-Security-Policy: allow 'self' https://*.officespot20.com;");
     }
     
     /**
      * renders the setup/update required dialog
-     *
      */
     public function setupRequired()
     {
@@ -348,12 +348,10 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     }
     
     /**
-     * hanlde session exception for http requests
+     * handle session exception for http requests
      * 
      * we force the client to delete session cookie, but we don't destroy
      * the session on server side. This way we prevent session DOS from thrid party
-     *
-     *
      */
     public function sessionException()
     {
@@ -387,7 +385,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     
     /**
      * generic http exception occurred
-     *
      */
     public function exception()
     {
