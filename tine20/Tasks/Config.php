@@ -35,14 +35,24 @@ class Tasks_Config extends Tinebase_Config_Abstract
      */
     protected static $_properties = array(
         self::TASK_STATUS => array(
-                                   //_('Tasks Status Available')
-            'label'                 => 'Tasks Status Available',
+                                   //_('Tasks status available')
+            'label'                 => 'Tasks status available',
                                    //_('Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation.')
             'description'           => 'Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation.',
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Tasks_Model_Status'),
             'clientRegistryInclude' => TRUE,
             'default'               => 'NEEDS-ACTION'
+        ),
+        self::TASK_PRIORITY => array(
+                                   //_('Task priorities available')
+            'label'                 => 'Task priorities available',
+                                   //_('Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation.')
+            'description'           => 'Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation.',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'Tasks_Model_Priority'),
+            'clientRegistryInclude' => TRUE,
+            'default'               => 'NORMAL'
         ),
     );
     
