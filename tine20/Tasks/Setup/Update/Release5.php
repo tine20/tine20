@@ -53,7 +53,6 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
             ), "`status` = '{$statusData['id']}'");
         }
         
-        
         // create status config
         $cb = new Tinebase_Backend_Sql(array(
             'modelName' => 'Tinebase_Model_Config', 
@@ -61,7 +60,7 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
         ));
         
         $tasksStatusConfig = array(
-            'name'    => Calendar_Config::ATTENDEE_STATUS,
+            'name'    => Tasks_Config::TASK_STATUS,
             'records' => array(
                 array('id' => 'NEEDS-ACTION', 'value' => 'No response', 'is_open' => 1, 'icon' => 'images/oxygen/16x16/actions/mail-mark-unread-new.png', 'system' => true), //_('No response')
                 array('id' => 'COMPLETED',    'value' => 'Completed',   'is_open' => 0, 'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true), //_('Completed')
@@ -90,7 +89,7 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
         );
         $pfiltersDatas = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-        // update persitent filters
+        // update persistent filters
         foreach($pfiltersDatas as $pfilterData) {
             $filtersData = Zend_Json::decode($pfilterData['filters']);
             foreach($filtersData as &$filterData) {
@@ -123,5 +122,58 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
     {
         Tinebase_Application::getInstance()->removeApplicationTable(Tinebase_Application::getInstance()->getApplicationByName('Tasks'), 'tasks_status');
         $this->setApplicationVersion('Tasks', '5.2');
+    }
+
+    /**
+     * update to 5.3
+     *  - move task priority to key field config
+     */
+    public function update_2()
+    {
+        $tasksAppId = Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId();
+
+        // alter status_id -> status
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>priority</name>
+                <type>text</type>
+                <length>40</length>
+                <default>NORMAL</default>
+                <notnull>true</notnull>
+            </field>');
+        
+        $this->_backend->alterCol('tasks', $declaration);
+        
+        // create status config
+        $cb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Config', 
+            'tableName' => 'config',
+        ));
+        
+        $tasksPriorityConfig = array(
+            'name'    => Tasks_Config::TASK_STATUS,
+            'records' => array(
+                array('id' => 'LOW', 	'value' => 'low', 	   'system' => true), //_('low')
+                array('id' => 'NORMAL', 'value' => 'normal',   'system' => true), //_('normal')
+                array('id' => 'HIGH',   'value' => 'high',     'system' => true), //_('high')
+                array('id' => 'URGENT', 'value' => 'urgent',   'system' => true), //_('urgent')
+            ),
+        );
+        
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $tasksAppId,
+            'name'              => Tasks_Config::TASK_PRIORITY,
+            'value'             => json_encode($tasksPriorityConfig),
+        )));
+
+        // update task table
+        foreach ($tasksPriorityConfig['records'] as $index => $prioData) {
+            $this->_db->update(SQL_TABLE_PREFIX . 'tasks', array(
+                'priority' => $prioData['id'],
+            ), "`priority` = '{$index}'");
+        }
+        
+        $this->setTableVersion('tasks', '5');
+        $this->setApplicationVersion('Tasks', '5.3');
     }
 }

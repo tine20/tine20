@@ -23,6 +23,13 @@ class Tasks_Config extends Tinebase_Config_Abstract
     const TASK_STATUS = 'taskStatus';
     
     /**
+     * Tasks Priorities Available
+     * 
+     * @var string
+     */
+    const TASK_PRIORITY = 'taskPriority';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
