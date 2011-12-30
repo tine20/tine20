@@ -151,7 +151,7 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
         ));
         
         $tasksPriorityConfig = array(
-            'name'    => Tasks_Config::TASK_STATUS,
+            'name'    => Tasks_Config::TASK_PRIORITY,
             'records' => array(
                 array('id' => 'LOW', 	'value' => 'low', 	   'system' => true), //_('low')
                 array('id' => 'NORMAL', 'value' => 'normal',   'system' => true), //_('normal')
