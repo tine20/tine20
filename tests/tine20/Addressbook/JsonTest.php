@@ -520,13 +520,11 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * get all salutations
-     *
      */
     public function testGetSalutations()
     {
-        $salutations = $this->_instance->getSalutations();
-
-        $this->assertGreaterThan(2, $salutations['totalcount']);
+        $salutations = Addressbook_Config::getInstance()->contactSalutation;
+        $this->assertGreaterThan(2, count($salutations->records));
     }
 
     /**
