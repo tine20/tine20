@@ -74,7 +74,6 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     		}
     	}
 
-    	Tine.log.debug('REC',this.record);
     	Tine.Projects.ProjectEditDialog.superclass.onRecordLoad.call(this);        
         
     	if (this.rendered) {
@@ -90,7 +89,6 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordUpdate: function() {
         Tine.Projects.ProjectEditDialog.superclass.onRecordUpdate.call(this);
-        Tine.log.err(this.contactLinkPanel.getData());
         this.record.set('relations', this.contactLinkPanel.getData());
     },
     
@@ -240,7 +238,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  * @param   {Object} config
  * @return  {Ext.ux.Window}
  */
-Tine.Projects.ProjectEditDialog.openWindow = function (config) {Tine.log.debug('CONFIG',config);
+Tine.Projects.ProjectEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
