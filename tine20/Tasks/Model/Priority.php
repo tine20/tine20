@@ -43,7 +43,7 @@ class Tasks_Model_Priority extends Tinebase_Config_KeyFieldRecord
     
         // key field record specific
         'value'                => array('allowEmpty' => false         ),
-        //'icon'                 => array('allowEmpty' => true          ),
+        'icon'                 => array('allowEmpty' => true          ),
         'system'               => array('allowEmpty' => true,  'Int'  ),
     );
 }
