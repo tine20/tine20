@@ -184,6 +184,10 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
         ));
         $result = $this->_backend->search($filter, NULL, $_onlyIds);
         
+        if ($result instanceof Tinebase_Record_RecordSet) {
+            $result->addIndices(array('record_id'));
+        }
+        
         return $result;
     }
     
