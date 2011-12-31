@@ -615,7 +615,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function addUser(Tinebase_Model_FullUser $_user)
     {
-        if($this instanceof Tinebase_User_Interface_SyncAble) {
+        if ($this instanceof Tinebase_User_Interface_SyncAble) {
             $userFromSyncBackend = $this->addUserToSyncBackend($_user);
             // set accountId for sql backend sql backend
             $_user->setId($userFromSyncBackend->getId());
@@ -673,20 +673,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $this->rowNameMapping['accountFirstName']    => $_user->accountFirstName,
             $this->rowNameMapping['accountLastName']     => $_user->accountLastName,
             $this->rowNameMapping['accountEmailAddress'] => $_user->accountEmailAddress,
-        
         );
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding user to SQL backend: ' . $_user->accountLoginName);
         
-        try {
-            // add new user
-            $accountsTable->insert($accountData);
+        $accountsTable->insert($accountData);
             
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw($e);
-        }
-        
         return $this->getUserById($_user->getId(), 'Tinebase_Model_FullUser');
     }
     
