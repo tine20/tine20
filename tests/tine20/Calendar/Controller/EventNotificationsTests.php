@@ -287,7 +287,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         ));
         
         $persistentEvent = $this->_eventController->create($event);
-
+        
         // assert alarm
         $this->_flushMailer();
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
@@ -297,9 +297,13 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // check adjusted alarm time
         $loadedEvent = $this->_eventController->get($persistentEvent->getId());
         
-        $orgiginalAlarm = $persistentEvent->alarms->getFirstRecord()->alarm_time;
-        $adjustedAlarm = $loadedEvent->alarms->getFirstRecord()->alarm_time;
-        $this->assertTrue($adjustedAlarm->isLater($orgiginalAlarm), 'alarmtime is not adjusted');
+        $recurid = $loadedEvent->alarms->getFirstRecord()->getOption('recurid');
+        $nextAlarmEventStart = new Tinebase_DateTime(substr($recurid, -19));
+        
+        $this->assertTrue($nextAlarmEventStart > Tinebase_DateTime::now()->addDay(1), 'alarmtime is not adjusted');
+        //$orgiginalAlarm = $persistentEvent->alarms->getFirstRecord()->alarm_time;
+        //$adjustedAlarm = $loadedEvent->alarms->getFirstRecord()->alarm_time;
+        //$this->assertTrue($adjustedAlarm->isLater($orgiginalAlarm), 'alarmtime is not adjusted');
 
         $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $loadedEvent->alarms->getFirstRecord()->sent_status, 'alarmtime is set to pending');
     }
