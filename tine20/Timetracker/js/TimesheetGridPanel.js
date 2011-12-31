@@ -62,114 +62,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         Tine.Timetracker.TimesheetGridPanel.superclass.initComponent.call(this);
     },
-    
-    /**
-     * onMassUpdate (Quick hack for mass update, to be generalized!!!)
-     * 
-     * @param {Button} btn
-     * @param {Event} e
-     */ 
-    onMassUpdate: function(btn, e) {
-        var input;
-        
-        switch (btn.field) {
-            case 'is_billable':
-            case 'is_cleared':
-//                input = new Ext.form.ComboBox({
-//                    fieldLabel: btn.text,
-//                    name: btn.field,
-//                    width: 40,
-//                    mode: 'local',
-//                    forceSelection: true,
-//                    triggerAction: 'all',
-//                    store: [
-//                        [0, Locale.getTranslationData('Question', 'no').replace(/:.*/, '')], 
-//                        [1, Locale.getTranslationData('Question', 'yes').replace(/:.*/, '')]
-//                    ]
-//                });
-                    input = new Ext.form.Checkbox({
-                        hideLabel: true,
-                        boxLabel: btn.text,
-                        name: btn.field
-                    });
-                break;
-            default:
-                input = new Ext.form.TextField({
-                    fieldLabel: btn.text,
-                    name: btn.field
-                });
-        }
-        
-        var sm = this.grid.getSelectionModel();
-        var filter = sm.getSelectionFilter();
-        
-        var updateForm = new Ext.FormPanel({
-            border: false,
-            labelAlign: 'top',
-            buttonAlign: 'right',
-            items: input,
-            defaults: {
-                anchor: '90%'
-            }
-        });
-        var win = Tine.WindowFactory.getWindow({
-            title: String.format(_('Update {0} records'), sm.getCount()),
-            modal: true,
-            width: 300,
-            height: 150,
-            layout: 'fit',
-            plain: true,
-            closeAction: 'close',
-            autoScroll: true,
-            items: updateForm,
-            buttons: [{
-                text: _('Cancel'),
-                iconCls: 'action_cancel',
-                handler: function() {
-                    win.close();
-                }
-            }, {
-                text: _('Ok'),
-                iconCls: 'action_saveAndClose',
-                scope: this,
-                handler: function() {
-                    var field = input.name,
-                        value = input.getValue();
-                        update = {},
-                    update[field] = value;
-                    
-                    win.close();
-                    
-                    // some adjustments
-                    if (field == 'is_cleared' && !update[field]) {
-                        // reset billed_in field
-                        update.billed_in = '';
-                    }
-                    if (field == 'billed_in' && update[field].length > 0) {
-                        // set is cleard dynamically
-                        update.is_cleared = true;
-                    }
-                    
-                    this.recordProxy.updateRecords(filter, update, {
-                        scope: this,
-                        success: function(response) {
-                            this.store.load();
-                            
-                            Ext.Msg.show({
-                               title: _('Success'),
-                               msg: String.format(_('Updated {0} records'), response.count),
-                               buttons: Ext.Msg.OK,
-                               animEl: 'elId',
-                               icon: Ext.MessageBox.INFO
-                            });
-                        }
-                    });
-                }
-            }]
-        });
-    },
-    // END OF QUICK HACK
-    
+ 
     /**
      * initialises filter toolbar
      * @private
@@ -483,34 +376,35 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     getContextMenuItems: function() {
         var items = [
             '-',
-            this.actions_exportTimesheet,
-            '-', {
-            text: _('Mass Update'),
-            iconCls: 'action_edit',
-            disabled: !Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts'),
-            scope: this,
-            menu: {
-                items: [
-                    '<b class="x-ux-menu-title">' + _('Update field:') + '</b>',
-                    {
-                        text: this.app.i18n._('Billable'),
-                        field: 'is_billable',
-                        scope: this,
-                        handler: this.onMassUpdate
-                    }, {
-                        text: this.app.i18n._('Cleared'),
-                        field: 'is_cleared',
-                        scope: this,
-                        handler: this.onMassUpdate
-                    }, {
-                        text: this.app.i18n._('Cleared in'),
-                        field: 'billed_in',
-                        scope: this,
-                        handler: this.onMassUpdate
-                    }
-                ]
-            }
-        }];
+            this.actions_exportTimesheet
+//            '-', {
+//            text: _('Mass Update'),
+//            iconCls: 'action_edit',
+//            disabled: !Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts'),
+//            scope: this,
+//            menu: {
+//                items: [
+//                    '<b class="x-ux-menu-title">' + _('Update field:') + '</b>',
+//                    {
+//                        text: this.app.i18n._('Billable'),
+//                        field: 'is_billable',
+//                        scope: this,
+//                        handler: this.onMassUpdate
+//                    }, {
+//                        text: this.app.i18n._('Cleared'),
+//                        field: 'is_cleared',
+//                        scope: this,
+//                        handler: this.onMassUpdate
+//                    }, {
+//                        text: this.app.i18n._('Cleared in'),
+//                        field: 'billed_in',
+//                        scope: this,
+//                        handler: this.onMassUpdate
+//                    }
+//                ]
+//            }
+//        }
+        ];
         
         return items;
     }

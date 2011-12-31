@@ -290,18 +290,26 @@ abstract class Tinebase_Config_Abstract
         
         $config = $this->_loadConfig($_config->name, $_config->application_id);
         if ($config) {
-            // update
             $config->value = $_config->value;
             $result = $this->_getBackend()->update($config);
             
         } else {
-            // create new
             $result = $this->_getBackend()->create($_config);
         }
         
-        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('config'));
+        $this->_clearCache();
         
         return $result;
+    }
+    
+    /**
+     * clear the cache
+     */
+    protected function _clearCache()
+    {
+        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' clearing cache ... ');
+        
+        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('config'));
     }
     
     /**

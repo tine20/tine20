@@ -356,10 +356,6 @@
           "path": "js/widgets/"
         },
         {
-          "text": "Priority.js",
-          "path": "js/widgets/"
-        },
-        {
           "text": "VersionCheck.js",
           "path": "js/widgets/"
         },
@@ -373,6 +369,10 @@
         },
         {
           "text": "MultipleEditDialogPlugin.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
+          "text": "TokenModeEditDialogPlugin.js",
           "path": "js/widgets/dialog/"
         },
         {

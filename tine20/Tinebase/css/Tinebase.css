@@ -854,3 +854,38 @@ textarea.tinebase-editmultipledialog-noneedit {
 	padding: 0px 5px;
 	background-color: white;
 }
+
+/* token mode edit dialog */
+.tinebase-tokenedit-textfield {
+    color: white;
+}
+
+.tinebase-tokenedit-tokenbox {
+    position: absolute;
+    background-color: white;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.tinebase-tokenedit-token {
+    border: 1px solid gray;
+    margin-right: 3px;
+}
+
+.tinebase-tokenedit-tokenbox-area .tinebase-tokenedit-token {
+    display: inline-block;
+    line-height: 13px;
+}
+
+.tinebase-tokenedit-token-selected {
+    background-color: #FFFFAE;
+}
+
+.tinebase-tokenedit-position {
+    display: none;
+    width: 0px;
+    border: 1px solid gray;
+    margin-right: 3px;
+    line-height: 13px;
+    overflow: hidden;
+}

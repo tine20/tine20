@@ -109,7 +109,10 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             'groups'                => array('allowEmpty' => true),
             'imapUser'              => array('allowEmpty' => true),
             'smtpUser'              => array('allowEmpty' => true),
-            'visibility'            => array(new Zend_Validate_InArray(array(Tinebase_Model_User::VISIBILITY_HIDDEN, Tinebase_Model_User::VISIBILITY_DISPLAYED)), Zend_Filter_Input::DEFAULT_VALUE => Tinebase_Model_User::VISIBILITY_DISPLAYED),
+            'visibility'            => array(new Zend_Validate_InArray(array(
+                Tinebase_Model_User::VISIBILITY_HIDDEN, 
+                Tinebase_Model_User::VISIBILITY_DISPLAYED)
+            ), Zend_Filter_Input::DEFAULT_VALUE => Tinebase_Model_User::VISIBILITY_DISPLAYED),
         );
         
         parent::__construct($_data, $_bypassFilters, $_convertDates);

@@ -765,9 +765,36 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
     
     /**
+    * converts a int, string or Tinebase_Record_Interface to a id
+    *
+    * @param int|string|Tinebase_Record_Abstract $_id the id to convert
+    * @param string $_modelName
+    * @return int|string
+    */
+    public static function convertId($_id, $_modelName = 'Tinebase_Record_Abstract')
+    {
+        if ($_id instanceof $_modelName) {
+            if (! $_id->getId()) {
+                throw new Tinebase_Exception_InvalidArgument('No id set!');
+            }
+            $id = $_id->getId();
+        } elseif (is_array($_id)) {
+            throw new Tinebase_Exception_InvalidArgument('Id can not be an array!');
+        } else {
+            $id = $_id;
+        }
+    
+        if ($id === 0) {
+            throw new Tinebase_Exception_InvalidArgument($_modelName . '.id can not be 0!');
+        }
+    
+        return $id;
+    }
+    
+    /**
      * returns an array with differences to the given record
      * 
-     * @param  Tinebase_Record_Interface $_record record for comparism
+     * @param  Tinebase_Record_Interface $_record record for comparison
      * @return array with differences field => different value
      */
     public function diff($_record)
@@ -776,44 +803,41 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             return $_record;
         }
         
-        //echo '---------------' ."n";
-        //print_r($_record->toArray());
         $diff = array();
         foreach (array_keys($this->_validators) as $fieldName) {
-            //echo $fieldName . "\n";
+            $ownField = $this->__get($fieldName);
+            $recordField = $_record->$fieldName;
+            
             if (in_array($fieldName, $this->_datetimeFields)) {
-                if ($this->__get($fieldName) instanceof DateTime
-                    && $_record->$fieldName instanceof DateTime) {
-                    if ($this->__get($fieldName)->compare($_record->$fieldName) === 0) {
+                if ($ownField instanceof DateTime
+                    && $recordField instanceof DateTime) {
+                    if ($ownField->compare($recordField) === 0) {
                         continue;
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
                             ' datetime for field ' . $fieldName . ' is not equal: '
-                            . $this->__get($fieldName)->getIso() . ' != '
-                            . $_record->$fieldName->getIso()
+                            . $ownField->getIso() . ' != '
+                            . $recordField->getIso()
                         );
                     } 
-                } elseif (!$_record->$fieldName instanceof DateTime
-                          && $this->__get($fieldName) == $_record->$fieldName) {
+                } else if (! $recordField instanceof DateTime && $ownField == $recordField) {
                     continue;
                 } 
-            } elseif($fieldName == $this->_identifier
-                     && $this->getId() == $_record->getId()) {
-                    continue;
-            } /*elseif (is_array($_record->$fieldName)) {
-                throw new Exception('Arrays are not allowed as values in records. use recordSets instead!');
-            } */elseif ($_record->$fieldName instanceof Tinebase_Record_RecordSet 
-                      || $_record->$fieldName instanceof Tinebase_Record_Abstract) {
-                 $subdiv = $_record->$fieldName->diff($this->__get($fieldName));
-                 if (!empty($subdiv)) {
-                     $diff[$fieldName] = $subdiv;
-                 }
-                 continue;
-            } elseif($this->__get($fieldName) == $_record->$fieldName) {
+            } else if ($fieldName == $this->_identifier && $this->getId() == $_record->getId()) {
+                continue;
+            } else if ($recordField instanceof Tinebase_Record_Abstract || $recordField instanceof Tinebase_Record_RecordSet) {
+                $subdiv = $recordField->diff($ownField);
+                if (! empty($subdiv)) {
+                    $diff[$fieldName] = $subdiv;
+                }
+                continue;
+            } else if ($ownField == $recordField) {
+                continue;
+            } else if (empty($ownField) && empty($recordField)) {
                 continue;
             }
             
-            $diff[$fieldName] = $_record->$fieldName;
+            $diff[$fieldName] = $recordField;
         }
         return $diff;
     }
@@ -872,14 +896,27 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }   
 
     /**
+     * get fields
+     * 
+     * @return array
+     */
+    public function getFields()
+    {
+        return array_keys($this->_validators);
+    }
+    
+    /**
      * fills a record from json data
      *
      * @param string $_data json encoded data
      * @return void
+     * 
+     * @todo replace this (and setFromJsonInUsersTimezone) with Tinebase_Convert_Json::toTine20Model
+     * @todo move custom _setFromJson to (custom) converter
      */
     public function setFromJson($_data)
     {
-        if(is_array($_data)) {
+        if (is_array($_data)) {
             $recordData = $_data;
         } else {
             $recordData = Zend_Json::decode($_data);

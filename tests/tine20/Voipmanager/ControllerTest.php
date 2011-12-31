@@ -15,10 +15,6 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Voipmanager_ControllerTest::main');
-}
-
 /**
  * Test class for Tinebase_Group
  */
@@ -80,11 +76,13 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {	
-        // delete all contexts
-        $search = $this->_backends['Asterisk_Context']->search(new Voipmanager_Model_Asterisk_ContextFilter());
-        foreach ($search as $result) {
-            $this->_backends['Asterisk_Context']->delete($result->getId());
-        }        
+        foreach (array('Asterisk_SipPeer', 'Asterisk_Context', 'Snom_Location') as $backend) {
+            $filterName = 'Voipmanager_Model_' . $backend . 'Filter';
+            $search = $this->_backends[$backend]->search(new $filterName());
+            foreach ($search as $result) {
+                $this->_backends[$backend]->delete($result->getId());
+            }
+        }
     }
 
     /**
@@ -271,8 +269,8 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $test->name = Tinebase_Record_Abstract::generateUID();
         
         $returned = $this->_backends['Asterisk_SipPeer']->update($test);
-        $this->assertEquals($test->name, $returned->name);
-        $this->assertEquals($test->qualify, $returned->qualify);
+        $this->assertEquals($test->qualify, $returned->qualify, 'qualify does not match');
+        $this->assertEquals($test->name, $returned->name, 'name does not match');
         $this->assertNotNull($returned->id);
         
        $this->_backends['Asterisk_SipPeer']->delete($returned->getId()); 

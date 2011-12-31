@@ -19,6 +19,10 @@
     background-image:url(../../images/oxygen/32x32/apps/kaddressbook.png) !important;
 }
 
+.action_parseAddress {
+    background-image:url(../../images/oxygen/16x16/actions/contact-new.png) !important;
+}
+
 
 .x-form-item-float-left {
     float: left;

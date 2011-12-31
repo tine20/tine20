@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>5.5</version>
+    <version>5.6</version>
     <tables>
         <table>
             <name>applications</name>
@@ -2480,7 +2480,7 @@
                 <field>
                     <name>name</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>64</length>
                 </field>
                 <field>
                     <name>start_time</name>
@@ -2512,8 +2512,11 @@
                     </field>
                 </index>
                 <index>
-                    <name>seq</name>
+                    <name>name-seq</name>
                     <unique>true</unique>
+                    <field>
+                        <name>name</name>
+                    </field>
                     <field>
                         <name>seq</name>
                     </field>

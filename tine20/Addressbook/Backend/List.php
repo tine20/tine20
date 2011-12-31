@@ -95,7 +95,7 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
         $newMembers = $this->_getIdsFromMixed($_newMembers);
         $idsToAdd   = array_diff($newMembers, $list->members);
         
-        $listId     = $this->_convertId($_listId);
+        $listId     = Tinebase_Record_Abstract::convertId($_listId, $this->_modelName);
         
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
@@ -144,7 +144,7 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
         
         $oldMembers  = $this->_getIdsFromMixed($_oldMembers);
         $idsToRemove = array_intersect($list->members, $oldMembers);
-        $listId      = $this->_convertId($_listId);
+        $listId      = Tinebase_Record_Abstract::convertId($_listId, $this->_modelName);
         
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         

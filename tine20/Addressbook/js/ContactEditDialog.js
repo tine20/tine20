@@ -22,6 +22,12 @@ Ext.ns('Tine.Addressbook');
  */
 Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
+    /**
+     * parse address button
+     * @type Ext.Button 
+     */
+    parseAddressButton: null,
+    
     windowNamePrefix: 'ContactEditWindow_',
     appName: 'Addressbook',
     recordClass: Tine.Addressbook.Model.Contact,
@@ -84,29 +90,25 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                             })]
                         }, {
                             xtype: 'columnform',
-                            items: [[{
-                                columnWidth: 0.35,
+                            items: [[
+                                new Tine.Tinebase.widgets.keyfield.ComboBox({
                                 fieldLabel: this.app.i18n._('Salutation'),
-                                xtype: 'combo',
-                                store: Tine.Addressbook.getSalutationStore(),
-                                name: 'salutation_id',
-                                mode: 'local',
-                                displayField: 'name',
-                                valueField: 'id',
-                                triggerAction: 'all',
-                                forceSelection: true,
+                                name: 'salutation',
+                                app: 'Addressbook',
+                                keyFieldName: 'contactSalutation',
+                                value: '',
+                                columnWidth: 0.35,
                                 listeners: {
                                     scope: this,
                                     'select': function (combo, record, index) {
                                         var jpegphoto = this.getForm().findField('jpegphoto');
-                                        
                                         // set new empty photo depending on chosen salutation only if user doesn't have own image
-                                        if (Ext.isEmpty(jpegphoto.getValue()) && ! Ext.isEmpty(record.get('image_path'))) {
-                                            jpegphoto.setDefaultImage(record.get('image_path'));
+                                        if (Ext.isEmpty(jpegphoto.getValue()) && ! Ext.isEmpty(record.json.image)) {
+                                            jpegphoto.setDefaultImage(record.json.image);
                                         }
                                     }
                                 }
-                            }, {
+                            }), {
                                 columnWidth: 0.65,
                                 fieldLabel: this.app.i18n._('Title'), 
                                 name: 'n_prefix',
@@ -389,7 +391,15 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             } : {}
         });
         
-        // export lead handler for edit contact dialog
+        this.initToolbar();
+        
+        this.supr().initComponent.apply(this, arguments);    
+    },
+    
+    /**
+     * initToolbar
+     */
+    initToolbar: function() {
         var exportContactButton = new Ext.Action({
             id: 'exportButton',
             text: Tine.Tinebase.appMgr.get('Addressbook').i18n._('Export as pdf'),
@@ -398,10 +408,17 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             disabled: false,
             scope: this
         });
-        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});  
-        this.tbarItems = [exportContactButton, addNoteButton];
+        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});
+        this.parseAddressButton = new Ext.Action({
+            text: Tine.Tinebase.appMgr.get('Addressbook').i18n._('Parse address'),
+            handler: this.onParseAddress,
+            iconCls: 'action_parseAddress',
+            disabled: false,
+            scope: this,
+            enableToggle: true
+        });
         
-        this.supr().initComponent.apply(this, arguments);    
+        this.tbarItems = [exportContactButton, addNoteButton, this.parseAddressButton];
     },
     
     /**
@@ -444,6 +461,57 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         downloader.start();
     },
     
+    /**
+     * parse address handler
+     * 
+     * opens message box where user can paste address
+     * 
+     * @param {Ext.Button} button
+     */
+    onParseAddress: function (button) {
+        if (button.pressed) {
+            Ext.Msg.prompt(this.app.i18n._('Paste address'), this.app.i18n._('Please paste an address that should be parsed:'), function(btn, text) {
+                if (btn == 'ok'){
+                    this.parseAddress(text);
+                } else if (btn == 'cancel') {
+                    button.toggle();
+                }
+            }, this, 100);
+        } else {
+            button.setText(this.app.i18n._('Parse address'));
+            this.tokenModePlugin.endTokenMode();
+        }
+    },
+    
+    /**
+     * send address to server + fills record/form with parsed data + adds unrecognizedTokens to description box
+     * 
+     * @param {String} address
+     */
+    parseAddress: function(address) {
+        Tine.log.debug('parsing address ... ');
+        
+        Tine.Addressbook.parseAddressData(address, function(result, response) {
+            Tine.log.debug('parsed address:');
+            Tine.log.debug(result);
+            
+            // only set the fields that could be detected
+            Ext.iterate(result.contact, function(key, value) {
+                this.record.set(key, value);
+            }, this);
+            
+            var oldNote = (this.record.get('note')) ? this.record.get('note') : '';
+            this.record.set('note', result.unrecognizedTokens.join(' ') + oldNote);
+            this.onRecordLoad();
+            
+            this.parseAddressButton.setText(this.app.i18n._('End token mode'));
+            this.tokenModePlugin.startTokenMode();
+        }, this);
+    },
+    
+    /**
+     * onRecordLoad
+     */
     onRecordLoad: function () {
         // NOTE: it comes again and again till 
         if (this.rendered) {

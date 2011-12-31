@@ -100,6 +100,11 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * use container colors
      */
     useContainerColor: false,
+    /**
+     * @cfg {Boolean} useContainerColor
+     * use container properties
+     */
+    useProperties: false,
     
     useArrows: true,
     border: false,
@@ -371,7 +376,19 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         
         this.contextMenuSingleContainer = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.containerName,
-            actions: ['delete', 'rename', 'grants', 'properties'].concat(this.useContainerColor ? ['changecolor'] : []),
+            actions: ['delete', 'rename', 'grants'].concat(
+                this.useProperties ? ['properties'] : []
+            ).concat(
+                this.useContainerColor ? ['changecolor'] : []
+            ),
+            scope: this,
+            backend: 'Tinebase_Container',
+            backendModel: 'Container'
+        });
+        
+        this.contextMenuSingleContainerProperties = Tine.widgets.tree.ContextMenu.getMenu({
+            nodeName: this.containerName,
+            actions: ['properties'],
             scope: this,
             backend: 'Tinebase_Container',
             backendModel: 'Container'
@@ -418,6 +435,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         if (Tine.Tinebase.container.pathIsContainer(path)) {
             if (container.account_grants && container.account_grants.adminGrant) {
                 this.contextMenuSingleContainer.showAt(event.getXY());
+            } else {
+                this.contextMenuSingleContainerProperties.showAt(event.getXY());
             }
         } else if (path.match(/^\/shared$/) && (Tine.Tinebase.common.hasRight('admin', this.app.appName) || Tine.Tinebase.common.hasRight('manage_shared_folders', this.app.appName))){
             this.contextMenuUserFolder.showAt(event.getXY());

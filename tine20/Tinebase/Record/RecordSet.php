@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -573,12 +573,47 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
     
     /**
-     * @todo implement this!
+     * compares two recordsets / only compares the ids / returns all records that are different in an array:
+     *  - removed  -> all records that are in $this but not in $_recordSet
+     *  - added    -> all records that are in $_recordSet but not in $this
+     *  - modified -> array of diffs  for all different records that are in both record sets
+     * 
+     * @param Tinebase_Record_RecordSet $_recordSet
+     * @return array
+     */
     public function diff($_recordSet)
     {
-        return array();
+        if ($this->getRecordClassName() !== $_recordSet->getRecordClassName()) {
+            throw new Tinebase_Exception_InvalidArgument('can only compare recordsets with the same type of records');
+        }
+        $removed = new Tinebase_Record_RecordSet($this->getRecordClassName());
+        $added = new Tinebase_Record_RecordSet($this->getRecordClassName());
+        $modified = array();
+        
+        $result = array();
+        
+        $migration = $this->getMigration($_recordSet->getArrayOfIds());
+        foreach ($migration['toDeleteIds'] as $id) {
+            $added->addRecord($this->getById($id));
+        }
+        foreach ($migration['toCreateIds'] as $id) {
+            $removed->addRecord($_recordSet->getById($id));
+        }
+        foreach ($migration['toUpdateIds'] as $id) {
+            $diff = $this->getById($id)->diff($_recordSet->getById($id));
+            if (! empty($diff)) {
+                $modified[$id] = $diff;
+            }
+        }
+        
+        foreach (array('removed', 'added', 'modified') as $subresult) {
+            if (count($$subresult) > 0) {
+                $result[$subresult] = $$subresult;
+            }
+        }
+        
+        return $result;
     }
-    */
     
     /**
      * merges records from given record set
@@ -643,7 +678,23 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         
         return $this;
     }
+
+    /**
+    * sorts this recordset by pagination sort info
+    *
+    * @param Tinebase_Model_Pagination $_pagination
+    * @return $this
+    */
+    public function sortByPagination($_pagination)
+    {
+        if ($_pagination !== NULL && $_pagination->sort) {
+            $sortField = is_array($_pagination->sort) ? $_pagination->sort[0] : $_pagination->sort; 
+            $this->sort($sortField, ($_pagination->dir) ? $_pagination->dir : 'ASC');
+        }
         
+        return $this;
+    }
+    
     /**
      * translate all member records of this set
      * 

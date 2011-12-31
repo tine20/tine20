@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -20,7 +20,7 @@ set_include_path(dirname(dirname(dirname(dirname(__FILE__)))) . '/library/PHPExc
  * @subpackage  Export
  * 
  */
-class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstract
+class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstract implements Tinebase_Record_IteratableInterface
 {
     /**
      * current row number
@@ -53,20 +53,23 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
         $this->_createDocument();
         $this->_setDocumentProperties();
         
-        $records = $this->_getRecords();
+        $this->_addHeader();
+        $this->_exportRecords();
         
-        // add header
+        return $this->getDocument();
+    }
+    
+    /**
+     * add header
+     */
+    protected function _addHeader()
+    {
         if (isset($this->_config->header) && $this->_config->header) {
             $this->_currentRowIndex = 1;
             $this->_addHead();
         } else {
             $this->_currentRowIndex = 2;
         }
-        
-        // add body
-        $this->_addBody($records);
-        
-        return $this->getDocument();
     }
     
     /**
@@ -230,8 +233,10 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
      * 
      * @todo add formulas
      */
-    protected function _addBody($_records)
+    public function processIteration($_records)
     {
+        $this->_resolveRecords($_records);
+        
         // add record rows
         $i = 0;
         foreach ($_records as $record) {

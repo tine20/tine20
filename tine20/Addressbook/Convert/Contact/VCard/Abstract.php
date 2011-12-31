@@ -18,6 +18,11 @@
  */
 abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Convert_Interface
 {
+    /**
+     * the version string
+     * 
+     * @var string
+     */
     protected $_version;
     
     /**
@@ -32,10 +37,10 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * converts vcard to Addressbook_Model_Contact
      * 
      * @param  Sabre_VObject_Component|stream|string  $_blob   the vcard to parse
-     * @param  Tinebase_Record_Abstract               $_model  update existing contact
+     * @param  Tinebase_Record_Abstract               $_record  update existing contact
      * @return Addressbook_Model_Contact
      */
-    public function toTine20Model($_blob, Tinebase_Record_Abstract $_model = null)
+    public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . print_r($_blob, true));
         
@@ -49,8 +54,8 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
             $vcard = Sabre_VObject_Reader::read($_blob);
         }
         
-        if ($_model instanceof Addressbook_Model_Contact) {
-            $contact = $_model;
+        if ($_record instanceof Addressbook_Model_Contact) {
+            $contact = $_record;
         } else {
             $contact = new Addressbook_Model_Contact(null, false);
         }
@@ -234,4 +239,14 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         
         return $contact;
     }    
+
+    /**
+    * converts Tinebase_Record_Abstract to external format
+    *
+    * @param  Tinebase_Record_Abstract  $_record
+    * @return mixed
+    */
+    public function fromTine20Model(Tinebase_Record_Abstract $_record)
+    {
+    }
 }

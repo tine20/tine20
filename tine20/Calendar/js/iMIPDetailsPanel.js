@@ -50,9 +50,11 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         
         
         this.iMIPrecord = new Tine.Calendar.Model.iMIP(this.preparedPart.preparedData);
-        this.iMIPrecord.set('event', Tine.Calendar.backend.recordReader({
-            responseText: Ext.util.JSON.encode(this.preparedPart.preparedData.event)
-        }));
+        if (! Ext.isFunction(this.iMIPrecord.get('event').beginEdit)) {
+            this.iMIPrecord.set('event', Tine.Calendar.backend.recordReader({
+                responseText: Ext.util.JSON.encode(this.preparedPart.preparedData.event)
+            }));
+        }
         
         this.initIMIPToolbar();
         
@@ -68,6 +70,7 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         this.iMIPclause.setText(this.app.i18n._('Checking Calendar Data...'));
         
         Tine.Calendar.iMIPPrepare(this.iMIPrecord.data, function(result, response) {
+            this.preparedPart.preparedData = result;
             if (response.error) {
                 // give up!
                 this.iMIPrecord.set('preconditions', {'GENERIC': 'generic problem'});
@@ -89,8 +92,10 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
      */
     processIMIP: function(status) {
         Tine.log.debug('Tine.Calendar.iMIPDetailsPanel::processIMIP status: ' + status);
+        this.getLoadMask().show();
         
         Tine.Calendar.iMIPProcess(this.iMIPrecord.data, status, function(result, response) {
+            this.preparedPart.preparedData = result;
             if (response.error) {
                 // precondition changed?  
                 return this.prepareIMIP();
@@ -215,7 +220,7 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
             }
         }
         
-        
+        this.getLoadMask().hide();
         singleRecordPanel.setVisible(true);
         singleRecordPanel.setHeight(150);
         

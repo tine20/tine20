@@ -15,21 +15,18 @@
  * @package     Tinebase
  * @subpackage  Convert
  * 
- * @todo add implements when Tinebase_Convert_Interface is available
  * @todo add factory for converters?
  */
-class Tinebase_Convert_Json // implements Tinebase_Convert_Interface
+class Tinebase_Convert_Json implements Tinebase_Convert_Interface
 {
     /**
      * converts external format to Tinebase_Record_Abstract
      * 
      * @param  mixed                     $_blob   the input data to parse
-     * @param  Tinebase_Record_Abstract  $_model  update existing record
+     * @param  Tinebase_Record_Abstract  $_record  update existing record
      * @return Tinebase_Record_Abstract
-     * 
-     * @todo rename model to record?
      */
-    public function toTine20Model($_blob, Tinebase_Record_Abstract $_model = null)
+    public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null)
     {
         throw new Tinebase_Exception_NotImplemented('From json to record is not implemented yet');
     }
@@ -39,25 +36,23 @@ class Tinebase_Convert_Json // implements Tinebase_Convert_Interface
      * 
      * @param  Tinebase_Record_Abstract $_record
      * @return mixed
-     * 
-     * @todo rename model to record?
      */
-    public function fromTine20Model(Tinebase_Record_Abstract $_model)
+    public function fromTine20Model(Tinebase_Record_Abstract $_record)
     {
-        if (! $_model) {
+        if (! $_record) {
             return array();
         }
         
-        $_model->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-        $_model->bypassFilters = true;
+        $_record->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $_record->bypassFilters = true;
         
-        $result = $_model->toArray();
+        $result = $_record->toArray();
         
-        if ($_model->has('container_id')) {
-            $container = Tinebase_Container::getInstance()->getContainerById($_model->container_id);
+        if ($_record->has('container_id') && ! empty($_record->container_id)) {
+            $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
         
             $result['container_id'] = $container->toArray();
-            $result['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $_model->container_id)->toArray();
+            $result['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $_record->container_id)->toArray();
             $result['container_id']['path'] = $container->getPath();
         }
         
@@ -77,17 +72,7 @@ class Tinebase_Convert_Json // implements Tinebase_Convert_Interface
             return array();
         }
         
-        if ($_records->getFirstRecord()->has('container_id')) {
-            Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
-        }
-        
-        if ($_records->getFirstRecord()->has('tags')) {
-            Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
-        }
-        
-        if (array_key_exists($_records->getRecordClassName(), $_resolveUserFields)) {
-            Tinebase_User::getInstance()->resolveMultipleUsers($_records, $_resolveUserFields[$_records->getRecordClassName()], TRUE);
-        }
+        Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($_records, $_resolveUserFields);
         
         $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $_records->convertDates = true;

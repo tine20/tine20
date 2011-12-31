@@ -7,20 +7,15 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- *
- * @todo        use functions from Tinebase_Frontend_Json_Abstract
- *              -> get/save/getAll
- * @todo        remove deprecated functions afterwards
  */
 
 /**
- * backend class for Zend_Json_Server
+ * Addressbook_Frontend_Json
  *
  * This class handles all Json requests for the addressbook application
  *
  * @package     Addressbook
  * @subpackage  Frontend
- * @todo        handle timezone management
  */
 class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
@@ -40,22 +35,15 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'Addressbook_Model_Contact' => array('created_by', 'last_modified_by')
     );
     
-    /****************************************** get contacts *************************************/
-
     /**
-     * get one contact identified by contactId
+     * get one contact identified by $id
      *
-     * @param int $id
+     * @param string $id
      * @return array
      */
     public function getContact($id)
     {
-        $result = array();
-               
-        $contact = Addressbook_Controller_Contact::getInstance()->get($id);
-        $result = $this->_contactToJson($contact);
-        
-        return $result;
+        return $this->_get($id, Addressbook_Controller_Contact::getInstance());
     }
     
     /**
@@ -119,8 +107,6 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_search($filter, $paging, Addressbook_Controller_List::getInstance(), 'Addressbook_Model_ListFilter');
     }    
 
-    /****************************************** save / delete / import contacts ****************************/
-    
     /**
      * delete multiple contacts
      *
@@ -160,7 +146,21 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_import($tempFileId, $definitionId, $importOptions, $clientRecordData);
     }
     
-    /****************************************** get default adb ****************************/
+    /**
+    * get contact information from string by parsing it using predefined rules
+    *
+    * @param string $address
+    * @return array
+    */
+    public function parseAddressData($address)
+    {
+        $result = Addressbook_Controller_Contact::getInstance()->parseAddressData($address);
+        
+        return array(
+        	'contact'             => $this->_recordToJson($result['contact']),
+            'unrecognizedTokens'  => $result['unrecognizedTokens'],
+        );
+    }
     
     /**
      * get default addressbook
@@ -176,31 +176,19 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $defaultAddressbookArray;
     }
     
-    /****************************************** get salutations ****************************/
-    
     /**
-     * get salutations
-     *
-     * @return array
-     * @todo   use _getAll() from Tinebase_Frontend_Json_Abstract
-     */
-   public function getSalutations()
+    * returns contact prepared for json transport
+    *
+    * @param Addressbook_Model_Contact $_contact
+    * @return array contact data
+    */
+    protected function _contactToJson($_contact)
     {
-         $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        if ($rows = Addressbook_Controller_Salutation::getInstance()->getSalutations()) {
-            $rows->translate();
-            $result['results']      = $rows->toArray();
-            $result['totalcount']   = count($result['results']);
-        }
-
-        return $result;
-    }  
+        $result = parent::_recordToJson($_contact);
+        $result['jpegphoto'] = $this->_getImageLink($result);
     
-    /****************************************** helper functions ***********************************/
+        return $result;
+    }
     
     /**
      * returns multiple records prepared for json transport
@@ -221,41 +209,21 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * returns contact prepared for json transport
-     *
-     * @param Addressbook_Model_Contact $_contact
-     * @return array contact data
-     */
-    protected function _contactToJson($_contact)
-    {   
-        $result = parent::_recordToJson($_contact);
-        $result['jpegphoto'] = $this->_getImageLink($result);
-        
-        return $result;
-    }
-
-    /**
      * returns a image link
      * 
      * @param  array $contactArray
      * @return string
-     * 
-     * @todo    get all available salutations first / do not query db for each record
      */
     protected function _getImageLink($contactArray)
     {
         $link = 'images/empty_photo_blank.png';
         if (! empty($contactArray['jpegphoto'])) {
             $link = 'index.php?method=Tinebase.getImage&application=Addressbook&location=&id=' . $contactArray['id'] . '&width=90&height=90&ratiomode=0';
-        } else {
-        	if (isset($contactArray['salutation_id']) && ! empty($contactArray['salutation_id'])) {
-        	    try {
-                    $salutation = Addressbook_Controller_Salutation::getInstance()->getSalutation($contactArray['salutation_id'])->toArray();
-    				$link = $salutation['image_path'];	
-        	    } catch (Tinebase_Exception_NotFound $tenf) {
-        	        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find salution record for id ' . $contactArray['salutation_id']);
-        	    }
-        	}
+        } else if (isset($contactArray['salutation']) && ! empty($contactArray['salutation'])) {
+    	    $salutationRecord = Addressbook_Config::getInstance()->contactSalutation->records->getById($contactArray['salutation']);
+    	    if ($salutationRecord->image) {
+			    $link = $salutationRecord->image;
+    	    }	
         }
         
         return $link;
@@ -274,7 +242,6 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $defaultDefinition = $this->_getDefaultImportDefinition($importDefinitions);
         
         $registryData = array(
-            'Salutations'               => $this->getSalutations(),
             'defaultAddressbook'        => $this->getDefaultAddressbook(),
             'defaultImportDefinition'   => $definitionConverter->fromTine20Model($defaultDefinition),
             'importDefinitions'         => array(

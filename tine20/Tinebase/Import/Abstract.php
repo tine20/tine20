@@ -173,7 +173,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         while (($recordData = $this->_getRawData($_resource)) !== FALSE) {
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Importing record ' . $recordIndex . ' ...');
+                . ' Importing record ' . $recordIndex . ' ...');
             
             $recordToImport = NULL;
             try {
@@ -275,29 +275,85 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     }
     
     /**
-     * do conversions (transformations, charset, ...)
+     * do conversions (transformations, charset, replacements ...)
      *
      * @param array $_data
      * @return array
      * 
      * @todo add date and other conversions
+     * @todo add generic mechanism for value pre/postfixes? (see accountLoginNamePrefix in Admin_User_Import)
      */
     protected function _doConversions($_data)
     {
-        $data = array();
-        foreach ($_data as $key => $value) {
-            if (is_array($value)) {
-                $result = array();
-                foreach ($value as $singleValue) {
-                    $result[] = @iconv($this->_options['encoding'], $this->_options['encodingTo'], $singleValue);
+        if (isset($this->_options['mapping'])) {
+            $data = $this->_doMappingConversion($_data);
+        } else {
+            $data = $_data;
+        }
+
+        foreach ($data as $key => $value) {
+            $data[$key] = $this->_encode($value);
+        }
+                
+        return $data;
+    }
+    
+    /**
+     * do the mapping conversions defined in field configs
+     *
+     * @param array $_data
+     * @return array
+     */
+    protected function _doMappingConversion($_data)
+    {
+        $data = $_data;
+        foreach ($this->_options['mapping']['field'] as $index => $field) {
+            if (! array_key_exists('destination', $field) || $field['destination'] == '' || ! isset($_data[$field['destination']])) {
+                continue;
+            }
+        
+            $key = $field['destination'];
+        
+            if (isset($field['replace'])) {
+                if ($field['replace'] === '\n') {
+                    $data[$key] = str_replace("\\n", "\r\n", $_data[$key]);
                 }
-                $data[$key] = $result;
+            } else if (isset($field['separator'])) {
+                $data[$key] = preg_split('/\s*' . $field['separator'] . '\s*/', $_data[$key]);
+            } else if (isset($field['fixed'])) {
+                $data[$key] = $field['fixed'];
+            } else if (isset($field['append'])) {
+                $data[$key] .= $field['append'] . $_data[$key];
             } else {
-                $data[$key] = @iconv($this->_options['encoding'], $this->_options['encodingTo'], $value);
+                $data[$key] = $_data[$key];
             }
         }
         
         return $data;
+    }
+    
+    /**
+     * encode values
+     * 
+     * @param string|array $_value
+     * @return string|array
+     */
+    protected function _encode($_value)
+    {
+        if (! isset($this->_options['encoding']) || ! isset($this->_options['encodingTo']) || $this->_options['encoding'] === $this->_options['encodingTo']) {
+            return $_value;
+        }
+        
+        if (is_array($_value)) {
+            $result = array();
+            foreach ($_value as $singleValue) {
+                $result[] = @iconv($this->_options['encoding'], $this->_options['encodingTo'], $singleValue);
+            }
+        } else {
+            $result = @iconv($this->_options['encoding'], $this->_options['encodingTo'], $_value);
+        }
+        
+        return $result;
     }
 
     /**
@@ -348,6 +404,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         
         if ($this->_options['dryrun']) {
             Tinebase_TransactionManager::getInstance()->rollBack();
+        } else if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Successfully imported record with id ' . $importedRecord->getId());
         }
         
         $this->_importResult['totalcount']++;

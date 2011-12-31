@@ -3,19 +3,28 @@
  * Tine 2.0
   * 
  * @package     Setup
+ * @subpackage  Initialize
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- *
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * Class to handle application initialization
  * 
  * @package     Setup
+ * @subpackage  Initialize
  */
 class Setup_Initialize
 {
+    /**
+     * array with user role rights, overwrite this in your app to add more rights to user role
+     * 
+     * @var array
+     */
+    protected $_userRoleRights = array(
+        Tinebase_Acl_Rights::RUN
+    );
     
     /**
      * Call {@see _initialize} on an instance of the concrete Setup_Initialize class for the given {@param $_application}  
@@ -70,6 +79,7 @@ class Setup_Initialize
     }
     
     /**
+     * create inital rights
      * 
      * @todo make hard coded role names ('user role' and 'admin role') configurable
      * 
@@ -78,36 +88,30 @@ class Setup_Initialize
      */
     protected function _createInitialRights(Tinebase_Model_Application $_application)
     {   
-    	try {
-	    	$roles = Tinebase_Acl_Roles::getInstance();
-	    	$userRole = $roles->getRoleByName('user role');
-	        //run right for user role
-			$roles->addSingleRight(
-			    $userRole->getId(), 
-			    $_application->getId(), 
-			    Tinebase_Acl_Rights::RUN
-			);
-    	} catch(Exception $e) {
-    		Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Cannot add right: ' . Tinebase_Acl_Rights::RUN . ' for application: ' . $_application->name . 
-    			' - user role - ' . print_r($e->getMessage(), true)
-    		);
-    	}
-		
-		try {
-			$adminRole = $roles->getRoleByName('admin role');
-			$allRights = Tinebase_Application::getInstance()->getAllRights($_application->getId());
-			foreach ( $allRights as $right ) {
-			    $roles->addSingleRight(
-			        $adminRole->getId(), 
-			        $_application->getId(), 
-			        $right
-			    );
-			}
-		} catch(Exception $e) {
-			Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Cannot add all right rights for application: ' . $_application->name . 
-    			' - admin role - ' . print_r($e->getMessage(), true)
-    		);
-		}
+        $roleRights = array(
+        	'user role'     => $this->_userRoleRights,
+        	'admin role'	=> Tinebase_Application::getInstance()->getAllRights($_application->getId()),
+        );
+        
+        foreach ($roleRights as $roleName => $rights) {
+            try {
+                $role = Tinebase_Acl_Roles::getInstance()->getRoleByName($roleName);
+            } catch(Tinebase_Exception_NotFound $tenf) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                continue;
+            }
+            
+            foreach ($rights as $right) {
+                try {
+                    Tinebase_Acl_Roles::getInstance()->addSingleRight($role->getId(), $_application->getId(), $right);
+                } catch(Exception $e) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                        . ' Cannot add right: ' . $right . ' for application: ' . $_application->name
+            			. ' - ' . $roleName . ' - ' . print_r($e->getMessage(), true)
+                    );
+                }
+            }
+        }
     }
     
 }

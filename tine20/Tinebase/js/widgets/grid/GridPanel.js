@@ -159,6 +159,28 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     autoRefreshInterval: 300,
     
     /**
+     * @cfg {Bool} hasFavoritesPanel 
+     */
+    hasFavoritesPanel: true,
+    
+    /**
+     * @cfg {Bool} hasQuickSearchFilterToolbarPlugin 
+     */
+    hasQuickSearchFilterToolbarPlugin: true,
+    
+    /**
+     * disable 'select all pages' in paging toolbar
+     * @cfg {Bool} disableSelectAllPages
+     */
+    disableSelectAllPages: false,
+    
+    /**
+     * enable if records should be multiple editable
+     * @cfg {Bool} multipleEdit
+     */
+    multipleEdit: false,
+    
+    /**
      * @property autoRefreshTask
      * @type Ext.util.DelayedTask
      */
@@ -197,16 +219,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     contextMenu: null,
     
     /**
-     * @cfg {Bool} hasFavoritesPanel 
-     */
-    hasFavoritesPanel: true,
-    
-    /**
-     * @cfg {Bool} hasQuickSearchFilterToolbarPlugin 
-     */
-    hasQuickSearchFilterToolbarPlugin: true,
-    
-    /**
      * @property lastStoreTransactionId 
      * @type String
      */
@@ -225,16 +237,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     deleteQueue: null,
     
     /**
-     * disable 'select all pages' in paging toolbar
-     * @cfg {Bool} disableSelectAllPages
+     * @property selectionModel
+     * @type Tine.widgets.grid.FilterSelectionModel
      */
-    disableSelectAllPages: false,
+    selectionModel: null,
     
-    /**
-     * enable if records should be multiple editable
-     * @cfg {Bool} multipleEdit
-     */
-    multipleEdit: false,
     
     layout: 'border',
     border: false,
@@ -979,6 +986,44 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             
             // lookup additional items
             items = items.concat(this.getContextMenuItems());
+
+            // New record of another app
+            this.newRecordMenu = new Ext.menu.Menu({
+                items: [],
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key:   this.app.appName + '-GridPanel-ContextMenu-New'
+                }]
+            });
+            
+            this.newRecordAction = new Ext.Action({
+                text: this.app.i18n._('New...'),
+                hidden: ! this.newRecordMenu.items.length,
+                iconCls: this.app.getIconCls(),
+                scope: this,
+                menu: this.newRecordMenu
+            });
+            
+            items.push(this.newRecordAction);
+
+            // Add to record of another app            
+            this.addToRecordMenu = new Ext.menu.Menu({
+                items: [],
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key:   this.app.appName + '-GridPanel-ContextMenu-Add'
+                }]
+            });
+            
+            this.addToRecordAction = new Ext.Action({
+                text: this.app.i18n._('Add to...'),
+                hidden: ! this.addToRecordMenu.items.length,
+                iconCls: this.app.getIconCls(),
+                scope: this,
+                menu: this.addToRecordMenu
+            });            
+            
+            items.push(this.addToRecordAction);
             
             this.contextMenu = new Ext.menu.Menu({
                 items: items,
@@ -1226,19 +1271,30 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             record = new this.recordClass(this.recordClass.getDefaultData(), 0);
         }
         
+        var useMultiple = ((this.selectionModel.getCount() > 1) && (this.multipleEdit) && (button.actionType == 'edit')),
+            selectedRecords = [];
+        
+        if (useMultiple && ! this.selectionModel.isFilterSelect ) {
+            Ext.each(this.selectionModel.getSelections(), function(record) {
+                selectedRecords.push(record.data);
+            }, this );
+        }
         var editDialogClass = this.editDialogClass || Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'],
             config = null,
             popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
-                useMultiple: ((this.selectionModel.getCount() > 1) && (this.multipleEdit) && (button.actionType == 'edit')),
-                sm: this.selectionModel,
+                /* multi edit stuff: NOTE: due to cross window restrictions, we can only pass strings here  */
+                useMultiple: useMultiple,
+                selectedRecords: Ext.encode(selectedRecords),
+                selectionFilter: Ext.encode(this.selectionModel.getSelectionFilter()),
+                /* end multi edit stuff */
                 record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
                 copyRecord: (button.actionType == 'copy'),
                 listeners: {
                     scope: this,
                     'update': ((this.selectionModel.getCount() > 1) && (this.multipleEdit)) ? this.onUpdateMultipleRecords : this.onUpdateRecord
                 }
-            }, 'useMultiple,sm,record,listeners,copyRecord')
+            }, 'useMultiple,selectedRecords,selectionFilter,record,listeners,copyRecord')
         );
     },
     

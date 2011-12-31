@@ -248,7 +248,7 @@ class Addressbook_Backend_Ldap implements Tinebase_Backend_Interface
         //'deleted_by'            => '',
         
         //'container_id'          => '',
-        //'salutation_id'         => '',
+        //'salutation'            => '',
         
         //'tz'                    => '',
         //'geo'                   => '',

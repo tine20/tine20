@@ -76,10 +76,11 @@ Tine.widgets.tree.ContextMenu = {
             scope: this.config
         });
         
+        // TODO is edit grant required?
         this.action_changecolor = new Ext.Action({     
             text: _('Set color'),
             iconCls: 'action_changecolor',
-//            requiredGrant: 'deleteGrant',
+//            requiredGrant: 'editGrant',
             allowMultiple: true,
             menu: new Ext.menu.ColorMenu({
                 scope: this,
@@ -132,6 +133,9 @@ Tine.widgets.tree.ContextMenu = {
                     break;
                 case 'rename':
                     items.push(this.action_rename);
+                    break;
+                case 'properties':
+                    items.push(this.action_properties);
                     break;
                 case 'changecolor':
                     items.push(this.action_changecolor);
@@ -440,7 +444,7 @@ Tine.widgets.tree.ContextMenu = {
             }
             
             var window = Tine.widgets.container.GrantsDialog.openWindow({
-                title: String.format(_('Manage Permissions for {0} "{1}"'), this.nodeName, Ext.util.Format.htmlEncode(grantsContainer.name.name)),
+                title: String.format(_('Manage Permissions for {0} "{1}"'), this.nodeName, Ext.util.Format.htmlEncode(grantsContainer.name)),
                 containerName: this.nodeName,
                 grantContainer: grantsContainer,
                 app: this.scope.app.appName
@@ -465,8 +469,10 @@ Tine.widgets.tree.ContextMenu = {
                 grantsContainer = node.attributes.nodeRecord.data.name;
             }
             
+            console.log(grantsContainer);
+            
             var window = Tine.widgets.container.PropertiesDialog.openWindow({
-                title: String.format(_('Properties for {0} "{1}"'), this.nodeName, Ext.util.Format.htmlEncode(grantsContainer.name.name)),
+                title: String.format(_('Properties for {0} "{1}"'), this.nodeName, Ext.util.Format.htmlEncode(grantsContainer.name)),
                 containerName: this.nodeName,
                 grantContainer: grantsContainer,
                 app: this.scope.app.appName

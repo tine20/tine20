@@ -109,6 +109,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     disableOnEditMultiple: null,
     
+    selectedRecords: null,
+    selectionFilter: null,
+        
+    
     /**
      * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
      */
@@ -181,6 +185,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             Tine.log.debug('initComponent: modelName: ', this.modelName);
             Tine.log.debug('initComponent: app: ', this.app);
             
+            this.selectedRecords = Ext.decode(this.selectedRecords);
+            this.selectionFilter = Ext.decode(this.selectionFilter);
+            
             // init some translations
             if (this.app.i18n && this.recordClass !== null) {
                 this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
@@ -197,6 +204,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             // init cf plugin
             this.plugins = this.plugins ? this.plugins : [];
             this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
+            this.plugins.push(this.tokenModePlugin = new Tine.widgets.dialog.TokenModeEditDialogPlugin({}));
                    
             if(this.useMultiple) this.plugins.push(new Tine.widgets.dialog.MultipleEditDialogPlugin({}));
             
@@ -675,5 +683,3 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
        
     }
 });
-
-Ext.reg('test', Tine.widgets.dialog.EditDialog);

@@ -121,6 +121,20 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+    * you can define default filters here
+    *
+    * @param Tinebase_Model_Filter_FilterGroup $_filter
+    */
+    protected function _addDefaultFilter(Tinebase_Model_Filter_FilterGroup $_filter = NULL)
+    {
+        if (! $_filter->isFilterSet('showDisabled')) {
+            $disabledFilter = $_filter->createFilter('showDisabled', 'equals', FALSE);
+            $disabledFilter->setIsImplicit(TRUE);
+            $_filter->addFilter($disabledFilter);
+        }
+    }
+    
+    /**
      * fetch one contact identified by $_userId
      *
      * @param   int $_userId
@@ -260,7 +274,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
-     * 
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
@@ -413,6 +426,24 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $result = '';
         }
         
+        return $result;
+    }
+    
+    /**
+     * get contact information from string by parsing it using predefined rules
+     * 
+     * @param string $_address
+     * @return array with Addressbook_Model_Contact + array of unrecognized tokens
+     */
+    public function parseAddressData($_address)
+    {
+        $converter = new Addressbook_Convert_Contact_String(); 
+        
+        $result = array(
+            'contact'             => $converter->toTine20Model($_address),
+            'unrecognizedTokens'  => $converter->getUnrecognizedTokens(),
+        );
+                    
         return $result;
     }
 }

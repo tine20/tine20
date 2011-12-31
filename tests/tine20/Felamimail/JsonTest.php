@@ -900,7 +900,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
                 'test'          => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
                 'comperator'    => Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS,
                 'header'        => 'From',
-                'key'           => 'info@example.com',
+                'key'           => '"abcd" <info@example.org>',
             )),
             'enabled'       => 1,
         ), array(

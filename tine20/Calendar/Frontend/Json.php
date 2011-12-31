@@ -3,14 +3,17 @@
  * Tine 2.0
  * 
  * @package     Calendar
+ * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * json interface for calendar
+ * 
  * @package     Calendar
+ * @subpackage  Frontend
  */
 class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
@@ -157,7 +160,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $records = $controller->search($filter, $pagination, FALSE);
         
-        $result = $this->_multipleRecordsToJson($records, $clientFilter);
+        $result = $this->_multipleRecordsToJson($records, $clientFilter, $pagination);
         
         return array(
             'results'       => $result,
@@ -252,7 +255,10 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $iMIPMessage = $iMIP instanceof Calendar_Model_iMIP ? $iMIP : new Calendar_Model_iMIP($iMIP);
         $iMIPFrontend = new Calendar_Frontend_iMIP();
         
-        return $iMIPFrontend->prepareComponent($iMIPMessage);
+        $iMIPMessage->preconditionsChecked = FALSE;
+        $iMIPFrontend->prepareComponent($iMIPMessage);
+        $iMIPMessage->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        return $iMIPMessage->toArray();
     }
     
     /**
@@ -294,10 +300,13 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * returns multiple records prepared for json transport
      *
      * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
-     * @param Tinebase_Model_Filter_FilterGroup
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination needed for sorting
      * @return array data
+     * 
+     * @todo perhaps we need to resolveContainerTagsUsers() before  mergeAndRemoveNonMatchingRecurrences(), but i'm not sure about that
      */
-    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL, $_pagination = NULL)
     {
     	if ($_records->getRecordClassName() == 'Calendar_Model_Event') {
 	    	if (is_null($_filter)) {
@@ -309,17 +318,18 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	        Calendar_Model_Attender::resolveAttendee($_records->attendee);
 	        $this->_resolveOrganizer($_records);
 	        $this->_resolveRrule($_records);
-	        
-            // get/resolve alarms
             Calendar_Controller_Event::getInstance()->getAlarms($_records);
-	        
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
-	        
+            
+//            Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($_records, $this->_resolveUserFields);
             Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($_records, $_filter);
             
-	        // @todo sort (record set)
-	        $eventsData = parent::_multipleRecordsToJson($_records);
-	        foreach($eventsData as $eventData) {
+            $_records->sortByPagination($_pagination);
+            
+//             $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+//             $_records->convertDates = true;
+//             $eventsData = $_records->toArray();
+            $eventsData = parent::_multipleRecordsToJson($_records);
+	        foreach ($eventsData as $eventData) {
 	            if (! array_key_exists(Tinebase_Model_Grants::GRANT_READ, $eventData) || ! $eventData[Tinebase_Model_Grants::GRANT_READ]) {
 	                $eventData['notes'] = array();
 	                $eventData['tags'] = array();
@@ -329,7 +339,6 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	        return $eventsData;
     	}
           
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
         return parent::_multipleRecordsToJson($_records);
     }
     

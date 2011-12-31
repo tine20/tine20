@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Tags
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  *
  * @todo        this should implement Tinebase_Backend_Sql_Interface or use standard sql backend + refactor this
@@ -16,6 +16,7 @@
  *
  * NOTE: Functions in the 'tagging' chain check acl of the actions,
  *       tag housekeeper functions do their acl in the admin controller
+ *       
  * @package     Tinebase
  * @subpackage  Tags
  */
@@ -486,8 +487,6 @@ class Tinebase_Tags
      *
      * @param Tinebase_Record_Abstract  $_record        the record object
      * @param string                    $_tagsProperty  the property in the record where the tags are in (defaults: 'tags')
-     *
-     * @todo: history log
      */
     public function setTagsOfRecord($_record, $_tagsProperty = 'tags')
     {
@@ -508,15 +507,14 @@ class Tinebase_Tags
                 'record_id'      => $recordId,
             // backend property not supported by record yet
                 'record_backend_id' => ''
-                ));
-                $this->_addOccurrence($tagId, +1);
+            ));
+            $this->_addOccurrence($tagId, +1);
         }
         foreach ($toDetach as $tagId) {
             $this->_db->delete(SQL_TABLE_PREFIX . 'tagging', array(
-            $this->_db->quoteInto('tag_id = ?',         $tagId),
-            $this->_db->quoteInto('application_id = ?', $appId),
-            $this->_db->quoteInto('record_id = ?',      $recordId),
-            // backend property not supported by record yet
+                $this->_db->quoteInto('tag_id = ?',         $tagId),
+                $this->_db->quoteInto('application_id = ?', $appId),
+                $this->_db->quoteInto('record_id = ?',      $recordId),
             ));
             $this->_addOccurrence($tagId, -1);
         }
@@ -531,15 +529,14 @@ class Tinebase_Tags
      */
     public function attachTagToMultipleRecords($_filter, $_tag)
     {
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), TRUE));
-
         // check/create tag on the fly
         $tags = $this->_createTagsOnTheFly(array($_tag));
         if (empty($tags) || count($tags) == 0) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No tags created.');
             return;
         }
-        $tagId = $tags->getFirstRecord()->getId();
+        $tag = $tags->getFirstRecord();
+        $tagId = $tag->getId();
 
         list($appName, $i, $modelName) = explode('_', $_filter->getModelName());
         $appId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
@@ -555,18 +552,18 @@ class Tinebase_Tags
         }
 
         // fetch ids of records already having the tag
-        $allreadyAttachedIds = array();
+        $alreadyAttachedIds = array();
         $select = $this->_db->select()
-        ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), 'record_id')
-        ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $appId)
-        ->where($this->_db->quoteIdentifier('tag_id') . ' = ? ', $tagId);
+            ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), 'record_id')
+            ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $appId)
+            ->where($this->_db->quoteIdentifier('tag_id') . ' = ? ', $tagId);
 
-        foreach ($this->_db->fetchAssoc($select) as $tagArray){
-            $allreadyAttachedIds[] = $tagArray['record_id'];
+        foreach ($this->_db->fetchAssoc($select) as $tagArray) {
+            $alreadyAttachedIds[] = $tagArray['record_id'];
         }
 
-        $toAttachIds = array_diff($recordIds, $allreadyAttachedIds);
-
+        $toAttachIds = array_diff($recordIds, $alreadyAttachedIds);
+        
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Attaching 1 Tag to ' . count($toAttachIds) . ' records.');
         foreach ($toAttachIds as $recordId) {
             $this->_db->insert(SQL_TABLE_PREFIX . 'tagging', array(
@@ -578,6 +575,13 @@ class Tinebase_Tags
                 )
             );
         }
+        
+        $controller->concurrencyManagementAndModlogMultiple(
+            $toAttachIds, 
+            array('tags' => array()), 
+            array('tags' => array($tag->toArray()))
+        );
+        
         $this->_addOccurrence($tagId, count($toAttachIds));
         
         return $tags->getFirstRecord();
@@ -592,7 +596,10 @@ class Tinebase_Tags
      */
     public function detachTagsFromMultipleRecords($_filter, $_tag)
     {
-
+        list($appName, $i, $modelName) = explode('_', $_filter->getModelName());
+        $appId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
+        $controller = Tinebase_Core::getApplicationInstance($appName, $modelName);
+        
         if(!is_array($_tag)) $_tag = array($_tag);
 
         foreach($_tag as $dirtyTagId) {
@@ -604,10 +611,6 @@ class Tinebase_Tags
             }
             $tagId = $tag->getId();
 
-            list($appName, $i, $modelName) = explode('_', $_filter->getModelName());
-            $appId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
-            $controller = Tinebase_Core::getApplicationInstance($appName, $modelName);
-
             // only get records user has update rights to
             $controller->checkFilterACL($_filter, 'update');
 
@@ -616,10 +619,10 @@ class Tinebase_Tags
 
             $attachedIds = array();
             $select = $this->_db->select()
-            ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), 'record_id')
-            ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $appId)
-            ->where($this->_db->quoteIdentifier('tag_id') . ' = ? ', $tagId)
-            ->where('record_id IN ( ' . $recordIdList . ' ) ');
+                ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), 'record_id')
+                ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $appId)
+                ->where($this->_db->quoteIdentifier('tag_id') . ' = ? ', $tagId)
+                ->where('record_id IN ( ' . $recordIdList . ' ) ');
 
             foreach ($this->_db->fetchAssoc($select) as $tagArray){
                 $attachedIds[] = $tagArray['record_id'];
@@ -635,9 +638,14 @@ class Tinebase_Tags
                 $this->_db->delete(SQL_TABLE_PREFIX . 'tagging', 'tag_id=\'' . $tagId . '\' AND record_id=\'' . $recordId. '\' AND application_id=\'' . $appId . '\'');
             }
 
+            $controller->concurrencyManagementAndModlogMultiple(
+                $attachedIds,
+                array('tags' => array($tag->toArray())),
+                array('tags' => array())
+            );
+            
             $this->_deleteOccurrence($tagId, count($attachedIds));
         }
-
     }
 
     /**

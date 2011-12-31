@@ -161,7 +161,8 @@ class jsb2tk
     {
         $JSON = file_get_contents($_file);
         $def = json_decode($JSON);
-        if ($jsonError = json_last_error() != JSON_ERROR_NONE) {
+        // json error checking for php >= 5.3.0
+        if (function_exists('json_last_error') && $jsonError = json_last_error() != JSON_ERROR_NONE) {
             throw new Exception("could not parse file $_file" , $jsonError);
         }
         return json_decode($JSON);

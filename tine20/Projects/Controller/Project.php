@@ -52,5 +52,5 @@ class Projects_Controller_Project extends Tinebase_Controller_Record_Abstract
         }
         
         return self::$_instance;
-    }        
+    }      
 }

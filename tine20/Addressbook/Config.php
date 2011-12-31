@@ -23,6 +23,13 @@ class Addressbook_Config extends Tinebase_Config_Abstract
     const CONTACT_DUP_FIELDS = 'contactDupFields';
     
     /**
+     * fields for contact salutations
+     * 
+     * @var string
+     */
+    const CONTACT_SALUTATION = 'contactSalutation';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -40,6 +47,16 @@ class Addressbook_Config extends Tinebase_Config_Abstract
                 array('n_given', 'n_family', 'org_name'),   // all fields must match
                 array('email'),                             // single field that needs to match
             ),
+        ),
+        self::CONTACT_SALUTATION => array(
+        //_('Contact salutations available')
+            'label'                 => 'Task priorities available',
+        //_('Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation.')
+            'description'           => 'Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation.',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'Addressbook_Model_Salutation'),
+            'clientRegistryInclude' => TRUE,
+        //            'default'               => 'MR'
         ),
     );
     

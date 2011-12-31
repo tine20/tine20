@@ -263,7 +263,8 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             groupRecordClass: Tine.Admin.Model.Group,
             selectType: 'both',
             selectAnyone: false,
-            selectTypeDefault: 'group'
+            selectTypeDefault: 'group',
+            showHidden: true
         });
         
         this.initRightsTree();

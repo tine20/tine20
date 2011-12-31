@@ -26,7 +26,7 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'bday', label: 'Birthday', type: 'date', dateFormat: Date.patterns.ISO8601Long }, //_('Birthday')
     {name: 'org_name', label: 'Company', group: 'Company' }, //_('Company')
     {name: 'org_unit', label: 'Unit', group: 'Company' }, //_('Unit')
-    {name: 'salutation_id', label: 'Salutation', group: 'Name' }, //_('Salutation')
+    {name: 'salutation', label: 'Salutation', group: 'Name' }, //_('Salutation')
     {name: 'title', label: 'Job Title', group: 'Company' }, //_('Job Title')
     {name: 'role', label: 'Job Role', group: 'Company' }, //_('Job Role')
     {name: 'assistent', group: 'Company', ommitDuplicateResolveing: true},
@@ -175,17 +175,7 @@ Tine.Addressbook.contactBackend = new Tine.Tinebase.data.RecordProxy({
 });
 
 /**
- * salutation model
- */
-Tine.Addressbook.Model.Salutation = Ext.data.Record.create([
-	{name: 'id'},
-	{name: 'name'},
-	{name: 'gender'},
-	{name: 'image_path'}
-]);
-
-/**
- * salutation model
+ * list model
  */
 Tine.Addressbook.Model.List = Tine.Tinebase.data.Record.create([
    {name: 'id'},
@@ -217,34 +207,3 @@ Tine.Addressbook.Model.List = Tine.Tinebase.data.Record.create([
     containersName: 'Addressbooks',
     copyOmitFields: ['group_id']
 });
-
-/**
- * get salutation store
- * if available, load data from initial data
- * 
- * @return Ext.data.JsonStore with salutations
- */
-Tine.Addressbook.getSalutationStore = function () {
-    
-    var store = Ext.StoreMgr.get('AddressbookSalutationStore');
-    if (! store) {
-        store = new Ext.data.JsonStore({
-            fields: Tine.Addressbook.Model.Salutation,
-            baseParams: {
-                method: 'Addressbook.getSalutations'
-            },
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'id',
-            remoteSort: false
-        });
-        
-        if (Tine.Addressbook.registry.get('Salutations')) {
-            store.loadData(Tine.Addressbook.registry.get('Salutations'));
-        }
-            
-        Ext.StoreMgr.add('AddressbookSalutationStore', store);
-    }
-    
-    return store;
-};

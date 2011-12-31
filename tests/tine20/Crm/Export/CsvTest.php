@@ -5,8 +5,8 @@
  * @package     Crm
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -14,10 +14,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Crm_Export_CsvTest::main');
-}
 
 /**
  * Test class for Crm_Export_Csv
@@ -69,10 +65,10 @@ class Crm_Export_CsvTest extends Crm_Export_AbstractTest
         $translate = Tinebase_Translation::getTranslation('Crm');
         
         $defaultContainerId = Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Crm')->getId();
-        $this->assertContains('"lead_name","leadstate_id","Leadstate","leadtype_id","Leadtype","leadsource_id","Leadsource","container_id",'
-            . '"description","turnover","probability","start","end","end_scheduled","probableTurnover","notes","tags","CUSTOMER","PARTNER","RESPONSIBLE","TASK"', $export, 'headline wrong');
+        $this->assertContains('"lead_name","leadstate_id","Leadstate","leadtype_id","Leadtype","leadsource_id","Leadsource","container_id","start"'
+            . ',"description","end","turnover","probableTurnover","probability","end_scheduled","tags","notes","tags","CUSTOMER","PARTNER","RESPONSIBLE","TASK"', $export, 'headline wrong');
         $this->assertContains('"PHPUnit","1","' . $translate->_('open') . '","1","' . $translate->_('Customer') . '","1","' . $translate->_('Market') . '","' 
-            . $defaultContainerId . '","Description","200000","70","', $export, 'data wrong');
+            . $defaultContainerId . '"', $export, 'data #1 wrong');
         $this->assertContains('"Kneschke, Lars","","phpunit: crm test task"', $export, 'relations wrong');
         
         $dateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat(NULL, NULL, NULL, 'date');
@@ -81,7 +77,3 @@ class Crm_Export_CsvTest extends Crm_Export_AbstractTest
         unlink($csvFilename);
     }
 }       
-
-if (PHPUnit_MAIN_METHOD == 'Crm_Export_CsvTest::main') {
-    Addressbook_ControllerTest::main();
-}

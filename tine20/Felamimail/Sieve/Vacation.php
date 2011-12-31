@@ -247,7 +247,9 @@ class Felamimail_Sieve_Vacation
     /**
      * quote string for usage in Sieve script 
      * 
-     * @param   string  $string     the srting to quote
+     * @param   string  $string     the string to quote
+     * 
+     * @todo generalize this
      */
     protected function _quoteString($_string)
     {
@@ -255,7 +257,7 @@ class Felamimail_Sieve_Vacation
             $string = array_map(array($this, '_quoteString'), $_string);
             return '[' . implode(',', $string) . ']'; 
         } else {
-            return '"' . str_replace('"', '\""', $_string) . '"';
+            return '"' . str_replace('"', '\"', $_string) . '"';
         }
     }
     

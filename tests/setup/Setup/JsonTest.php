@@ -1,22 +1,18 @@
 <?php
 /**
  * Tine 2.0 - http://www.tine20.org
- * 
+ *
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * 
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ *
  */
 
 /**
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Setup_JsonTest::main');
-}
 
 /**
  * Test class for Tinebase_Group
@@ -30,10 +26,10 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * Authentication data as stored in config before a test runs.
-     * Needed to restore originakl state after a test ran. 
+     * Needed to restore originakl state after a test ran.
      * @see setUp()
      * @see teardown()
-     * 
+     *
      * @var array
      */
     protected $_originalAuthenticationData;
@@ -73,32 +69,45 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $this->_installAllApps();
     }
     
+    /**
+     * testUninstallApplications
+     */
     public function testUninstallApplications()
     {
-      try {
-        $result = $this->_json->uninstallApplications(array('ActiveSync'));
-      } catch (Tinebase_Exception_NotFound $e) {
-        $this->_json->installApplications(array('ActiveSync'));
-        $result = $this->_json->uninstallApplications(array('ActiveSync'));
-      }
+        try {
+            $result = $this->_json->uninstallApplications(array('ActiveSync'));
+        } catch (Tinebase_Exception_NotFound $e) {
+            $this->_json->installApplications(array('ActiveSync'));
+            $result = $this->_json->uninstallApplications(array('ActiveSync'));
+        }
               
         $this->assertTrue($result['success']);
-
-      $this->_json->installApplications(array('ActiveSync')); //cleanup
     }
 
+    /**
+     * testUninstallTinebaseShouldThrowDependencyException
+     *
+     * tinebase uninstalls all other apps, too
+     */
     public function testUninstallTinebaseShouldThrowDependencyException()
     {
-        $this->setExpectedException('Setup_Exception_Dependency');
         $result = $this->_json->uninstallApplications(array('Tinebase'));
+        $this->assertTrue($result['success']);
+        $this->assertTrue($result['setupRequired']);
     }
     
+    /**
+     * testSearchApplications
+     */
     public function testSearchApplications()
     {
         $apps = $this->_json->searchApplications();
         $this->assertGreaterThan(0, $apps['totalcount']);
     }
 
+    /**
+     * testInstallApplications
+     */
     public function testInstallApplications()
     {
         try {
@@ -114,7 +123,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * test update application
      *
-     * @todo test real update process; currently this test case only tests updating an already uptodate application 
+     * @todo test real update process; currently this test case only tests updating an already uptodate application
      */
     public function testUpdateApplications()
     {
@@ -128,22 +137,19 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testEnvCheck()
     {
-        $result = $this->_json->envCheck();       
+        $result = $this->_json->envCheck();
         $this->assertTrue(isset($result['success']));
     }
 
-
-    
+    /**
+     * testLoginWithWrongUsernameAndPassword
+     */
     public function testLoginWithWrongUsernameAndPassword()
     {
         $result = $this->_json->login('unknown_user_xxyz', 'wrong_password');
         $this->assertTrue(is_array($result));
         $this->assertFalse($result['success']);
         $this->assertTrue(isset($result['errorMessage']));
-        
-//        $config = Tinebase_Core::getConfig();
-//        $result = $this->_json->login($config->setupuser->username, $config->setupuser->password);
-
     }
     
     /**
@@ -161,6 +167,9 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(1, count($result));
     }
     
+    /**
+     * testGetRegistryData
+     */
     public function testGetRegistryData()
     {
       $result = $this->_json->getRegistryData();
@@ -174,6 +183,9 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($result['authenticationData']));
     }
     
+    /**
+     * testLoadAuthenticationData
+     */
     public function testLoadAuthenticationData()
     {
         $result = $this->_json->loadAuthenticationData();
@@ -187,6 +199,9 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($authentication[Tinebase_Auth::LDAP]));
     }
     
+    /**
+     * testSaveAuthenticationSql
+     */
     public function testSaveAuthenticationSql()
     {
         $testAuthenticationData = $this->_json->loadAuthenticationData();
@@ -222,7 +237,6 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * test load config
-     *
      */
     public function testSaveConfig()
     {
@@ -241,6 +255,9 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($configData['database'], $result['database']);
     }
     
+    /**
+     * _uninstallAllApps helper
+     */
     protected function _uninstallAllApps()
     {
         $installedApplications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
@@ -249,6 +266,9 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $this->_json->uninstallApplications($installedApplications);
     }
     
+    /**
+     * _installAllApps helper
+     */
     protected function _installAllApps()
     {
         $installableApplications = Setup_Controller::getInstance()->getInstallableApplications();

@@ -26,11 +26,23 @@
         {
           "text": "ProjectGridPanel.js",
           "path": "js/"
-        },
+        },       
+        {
+          "text": "AddressbookGridPanelHook.js",
+          "path": "js/"
+        },        
         {
           "text": "ProjectEditDialog.js",
           "path": "js/"
-        }
+        },
+        {
+          "text": "SearchCombo.js",
+          "path": "js/"
+        },        
+        {
+          "text": "AddToProjectPanel.js",
+          "path": "js/"
+        }        
       ]
     },
     {

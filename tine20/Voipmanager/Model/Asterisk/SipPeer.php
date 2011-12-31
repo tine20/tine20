@@ -5,7 +5,7 @@
  * @package     Voipmanager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -48,17 +48,6 @@ class Voipmanager_Model_Asterisk_SipPeer extends Tinebase_Record_Abstract
      * @var string
      */
     protected $_application = 'Voipmanager';
-    
-    /**
-     * list of zend inputfilter
-     * 
-     * this filter get used when validating user generated content with Zend_Input_Filter
-     *
-     * @var array
-     */
-    #protected $_filters = array(
-    #    '*'                     => 'StringTrim'
-    #);
     
     /**
      * list of zend validator
@@ -149,31 +138,6 @@ class Voipmanager_Model_Asterisk_SipPeer extends Tinebase_Record_Abstract
         $this->_filters['cfd_time'] = new Zend_Filter_Empty(0);
         
         parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }
-    
-    /**
-     * converts a int, string or Voipmanager_Model_Asterisk_SipPeer to an line id
-     *
-     * @param int|string|Voipmanager_Model_Asterisk_SipPeer $_sipPeerId the sip peer id to convert
-     * @return int
-     * @throws  Voipmanager_Exception_InvalidArgument
-     */
-    static public function convertAsteriskSipPeerIdToInt($_sipPeerId)
-    {
-        if ($_sipPeerId instanceof Voipmanager_Model_Asterisk_SipPeer) {
-            if (empty($_sipPeerId->id)) {
-                throw new Voipmanager_Exception_InvalidArgument('no sip peer id set');
-            }
-            $id = (string) $_sipPeerId->id;
-        } else {
-            $id = (string) $_sipPeerId;
-        }
-        
-        if ($id == '') {
-            throw new Voipmanager_Exception_InvalidArgument('sip peer id can not be 0');
-        }
-        
-        return $id;
     }
 
     /**

@@ -5,7 +5,7 @@
  * @subpackage  widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -55,6 +55,12 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
      * add 'anyone' selection if selectType == 'both'
      */
     selectAnyone: true,
+
+    /**
+     * @cfg {bool}
+     * show hidden (user) contacts / (group) lists
+     */
+    showHidden: false,
 
     /**
      * get only users with defined status (enabled, disabled, expired)
@@ -220,7 +226,8 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             newRecordDefaults: this.recordDefaults,
             recordPrefix: this.recordPrefix,
             userOnly: true,
-            onSelect: this.onAddRecordFromCombo
+            onSelect: this.onAddRecordFromCombo,
+            additionalFilters: (this.showHidden) ? [{field: 'showDisabled', operator: 'equals', value: true}] : []
         });
     },
     

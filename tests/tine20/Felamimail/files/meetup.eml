@@ -28,6 +28,7 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=AWL,DKIM_SIGNED,DKIM_VALID,
 X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on
 	mail03.metaways.net
 Return-Path: info@meetup.com
+X-Tine20TestMessage: meetup.eml
 MIME-Version: 1.0
 Content-Type: multipart/mixed;
 	boundary="----=_Part_22890491_1902335162.1323695538854"

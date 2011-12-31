@@ -52,6 +52,27 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         return array();
     }
 
+    /**
+    * resolve containers, tags and users
+    *
+    * @param Tinebase_Record_RecordSet $_records
+    * @param array $_resolveUserFields
+    */
+    public static function resolveContainerTagsUsers(Tinebase_Record_RecordSet $_records, $_resolveUserFields = array())
+    {
+        if ($_records->getFirstRecord()->has('container_id')) {
+            Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
+        }
+    
+        if ($_records->getFirstRecord()->has('tags')) {
+            Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
+        }
+    
+        if (array_key_exists($_records->getRecordClassName(), $_resolveUserFields)) {
+            Tinebase_User::getInstance()->resolveMultipleUsers($_records, $_resolveUserFields[$_records->getRecordClassName()], TRUE);
+        }
+    }
+    
     /************************** protected functions **********************/
 
     /**
@@ -180,10 +201,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $filter = $this->_decodeFilter($_filter, $_filterModel, TRUE);
 
         $result = $_controller->updateMultiple($filter, $decodedData);
-
-        return array(
-            'count'       => $result,
-        );
+        $result['results']     = $this->_multipleRecordsToJson($result['results']);
+        $result['exceptions']  = $this->_multipleRecordsToJson($result['exceptions']);
+        
+        return $result;
     }
 
     /**

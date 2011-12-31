@@ -27,23 +27,39 @@ Tine.Calendar.AddressbookGridPanelHook = function(config) {
     Tine.log.info('initialising calendar addressbook hooks');
     Ext.apply(this, config);
     
-    // NOTE: due to the action updater this action is bound the the adb grid only!
+    
+    
     this.addEventAction = new Ext.Action({
         actionType: 'add',
         requiredGrant: 'readGrant',
-        allowMultiple: true,
-        text: this.app.i18n._('New Event'),
+        text: this.app.i18n._('Event'),
         iconCls: this.app.getIconCls(),
         scope: this,
-        handler: this.onAddEvent,
+        handler: this.onUpdateEvent,
+        allowMultiple: true,
         listeners: {
             scope: this,
             render: this.onRender
         }
     });
     
-    // register in contextmenu
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu', this.addEventAction, 80);
+    this.newEventAction = new Ext.Action({
+        actionType: 'new',
+        requiredGrant: 'readGrant',
+        text: this.app.i18n._('Event'),
+        iconCls: this.app.getIconCls(),
+        scope: this,
+        handler: this.onAddEvent,
+        allowMultiple: true,
+        listeners: {
+            scope: this,
+            render: this.onRender
+        }
+    });
+    
+    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-Add', this.addEventAction, 100);
+    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-New', this.newEventAction, 100);
+    
 };
 
 Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
@@ -54,21 +70,14 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
      * @private
      */
     app: null,
-    
-    /**
-     * @property addEventAction
-     * @type Tine.widgets.ActionUpdater
-     * @private
-     */
-    addEventAction: null,
-    
+       
     /**
      * @property ContactGridPanel
      * @type Tine.Addressbook.ContactGridPanel
      * @private
      */
     ContactGridPanel: null,
-    
+        
     /**
      * get addressbook contact grid panel
      */
@@ -76,25 +85,51 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
         if (! this.ContactGridPanel) {
             this.ContactGridPanel = Tine.Tinebase.appMgr.get('Addressbook').getMainScreen().getCenterPanel();
         }
-        
         return this.ContactGridPanel;
     },
-    
+
     /**
      * compose an email to selected contacts
      * 
      * @param {Button} btn 
      */
     onAddEvent: function(btn) {
-        var contacts = this.getContactGridPanel().grid.getSelectionModel().getSelections(),
-            ms = this.app.getMainScreen(),
-            cp = ms.getCenterPanel();
+        var ms = this.app.getMainScreen(),
+            cp = ms.getCenterPanel(),
+            cont = this.getSelectionsAsArray(),
+            attendee = []; 
         
+        attendee.push(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
+            user_type: 'user',
+            user_id: Tine.Tinebase.registry.get('currentAccount'),
+            status: 'ACCEPTED'
+        }));
         
-        cp.onEditInNewWindow.call(cp, 'add', {attendee: contacts});
+        Ext.each(cont, function(contact) {
+        	attendee.push(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
+        		user_id: contact
+        	}));
+        });
         
+        cp.onEditInNewWindow.call(cp, 'add', {attendee: attendee});
     },
-
+    
+    onUpdateEvent: function(btn) {
+        var cont = this.getSelectionsAsArray();
+        
+        var window = Tine.Calendar.AddToEventPanel.openWindow({attendee: cont});        
+    },
+    
+    getSelectionsAsArray: function() {
+        var contacts = this.getContactGridPanel().grid.getSelectionModel().getSelections(),
+            cont = [];
+            
+        Ext.each(contacts, function(contact) {
+           if(contact.data) cont.push(contact.data);
+        });
+        
+        return cont;
+    },
     
     /**
      * add to action updater the first time we render
@@ -106,6 +141,10 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
         if (registeredActions.indexOf(this.addEventAction) < 0) {
             actionUpdater.addActions([this.addEventAction]);
         }
+        
+        if (registeredActions.indexOf(this.newEventAction) < 0) {
+        	actionUpdater.addActions([this.newEventAction]);
+        }        
     }
 
 });

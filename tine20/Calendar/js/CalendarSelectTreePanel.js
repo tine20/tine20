@@ -72,6 +72,7 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
     ddGroup: 'cal-event',
     filterMode: 'filterToolbar',
     useContainerColor: true,
+    useProperties: true,
     
     initComponent: function() {
         this.filterPlugin = new Tine.widgets.tree.FilterPlugin({

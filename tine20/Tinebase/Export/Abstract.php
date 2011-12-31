@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage	Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -188,35 +188,26 @@ abstract class Tinebase_Export_Abstract
     }
     
     /**
-     * get records and resolve fields
-     * 
-     * @param integer  $_start
-     * @param integer  $_limit
-     * @return Tinebase_Record_RecordSet
+     * export records
      */
-    protected function _getRecords($_start = NULL, $_limit = NULL)
+    protected function _exportRecords()
     {
-        // get records by filter (ensure export acl first)
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting records using filter: ' . print_r($this->_filter->toArray(), TRUE));
-        $pagination = (! empty($this->_sortInfo)) ? new Tinebase_Model_Pagination($this->_sortInfo) : new Tinebase_Model_Pagination();
-        if ($_start !== NULL && $_limit !== NULL) {
-            $pagination->start = $_start;
-            $pagination->limit = $_limit;
-        }
-        $records = $this->_controller->search($this->_filter, $pagination, $this->_getRelations, FALSE, 'export');
+        $iterator = new Tinebase_Record_Iterator(array(
+            'iteratable' => $this,
+            'controller' => $this->_controller,
+            'filter'     => $this->_filter,
+            'options'	 => array(
+                'searchAction' => 'export',
+                'sortInfo'	   => $this->_sortInfo,
+                'getRelations' => $this->_getRelations,
+            ),
+        ));
+        $result = $iterator->iterate();
         
-        if (count($records) > 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exporting ' . count($records) . ' records ...');
-            
-            $this->_resolveRecords($records);
-            $records->setTimezone(Tinebase_Core::get('userTimeZone'));
-            
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), TRUE));
-        }
-        
-        return $records;
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Exported ' . $result['totalcount'] . ' records.');
     }
-
+    
     /**
      * resolve records
      *

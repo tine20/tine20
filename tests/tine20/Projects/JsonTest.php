@@ -166,7 +166,7 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
         $search = $this->_json->searchProjects($filter, $this->_getPaging());
         $this->assertEquals($projectData['description'], $search['results'][0]['description']);
         $this->assertEquals(1, $search['totalcount']);
-        $this->assertEquals(3, count($search['filter'][1]['value']));
+        $this->assertEquals(4, count($search['filter'][1]['value']));
         $this->assertEquals(':relation_type', $search['filter'][1]['value'][0]['field']);
         $this->assertEquals(TRUE, $search['filter'][1]['value'][2]['implicit']);
         $this->assertEquals(Tinebase_Core::getUser()->contact_id, 

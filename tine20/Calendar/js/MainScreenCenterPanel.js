@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-/*global Ext, Tine*/
+/* global Ext, Tine */
 
 Ext.ns('Tine.Calendar');
 
@@ -240,7 +240,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 this.showSheetView,
                 this.showGridView
             ]
-        }
+        };
     },
     
     /**
@@ -320,7 +320,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         return {
             period: period ? period : activePeriod,
             presentation: presentation ? presentation : activePresentation,
-            toString: function() {return this.period + Ext.util.Format.capitalize(this.presentation)}
+            toString: function() {return this.period + Ext.util.Format.capitalize(this.presentation);}
         };
     },
     
@@ -742,28 +742,15 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 }
             }
         }
-        
+
         if (! event) {
             event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), defaults), 0);
             if (defaults && Ext.isDate(defaults.dtStart)) {
                 event.set('dtstart', defaults.dtStart);
                 event.set('dtend', defaults.dtStart.add(Date.HOUR, 1));
             }
-            
-            if (defaults && Ext.isArray(defaults.attendee)) {
-                var attendee = event.get('attendee') || [];
-                
-                // strip records
-                Ext.each(defaults.attendee, function(attender) {
-                    attendee.push(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
-                        user_id: Ext.isFunction(attender.beginEdit) ? attender.data : attender
-                    }));
-                }, this);
-                
-                event.set('attendee', attendee);
-            }
         }
-        
+
         Tine.Calendar.EventEditDialog.openWindow({
             record: Ext.util.JSON.encode(event.data),
             recordId: event.data.id,

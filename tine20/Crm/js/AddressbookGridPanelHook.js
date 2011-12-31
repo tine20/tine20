@@ -32,7 +32,7 @@ Tine.Crm.AddressbookGridPanelHook = function(config) {
         actionType: 'add',
         requiredGrant: 'readGrant',
         allowMultiple: true,
-        text: this.app.i18n._('New Lead'),
+        text: this.app.i18n._('Lead'),
         iconCls: this.app.getIconCls(),
         scope: this,
         handler: this.onAddLead,
@@ -43,7 +43,8 @@ Tine.Crm.AddressbookGridPanelHook = function(config) {
     });
     
     // register in contextmenu
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu', this.addEventAction, 80);
+    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-New', this.addEventAction, 80);
+
 };
 
 Ext.apply(Tine.Crm.AddressbookGridPanelHook.prototype, {

@@ -3,17 +3,17 @@
  * Tine 2.0
  *
  * @package     Addressbook
+ * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @todo        move visibility='displayed' check from getSelect to contact filter
  */
 
 /**
  * sql backend class for the addressbook
  *
  * @package     Addressbook
+ * @subpackage  Backend
  */
 class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 {
@@ -172,58 +172,5 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         }
         
         return $imageData;
-    }
-    
-    /**
-     * get the basic select object to fetch records from the database
-     *  
-     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
-     * @param boolean $_getDeleted get deleted records (if modlog is active)
-     * @return Zend_Db_Select
-     * 
-     * @todo remove this when visibility/status check is moved to contact filter
-     */
-    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
-    {        
-        $select = parent::_getSelect($_cols, $_getDeleted);
-        
-        // @todo move this to a 'disabled' contact filter
-        if ($this->_getDisabledContacts !== true && ($_cols == '*' || array_key_exists('account_id', $_cols))) {
-            if (Tinebase_Core::getUser() instanceof Tinebase_Model_FullUser) {
-                $where = "/* is no user */ ISNULL(accounts.id) OR /* is user */ (NOT ISNULL(accounts.id) AND " . 
-                    $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.status') . ' = ?', 'enabled') . 
-                    " AND " . 
-                    '('. $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.visibility') . ' = ?', 'displayed') . ' OR ' . $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.id') . ' = ?', Tinebase_Core::getUser()->getId()) . ')' .
-                ")";
-            } else {
-                $where = "/* is no user */ ISNULL(accounts.id) OR /* is user */ (NOT ISNULL(accounts.id) AND " . 
-                    $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.status') . ' = ?', 'enabled') . 
-                    " AND " . 
-                    $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.visibility') . ' = ?', 'displayed') . 
-                ")";
-            }
-            
-            $select->where($where);
-        }
-        
-        return $select;
-    }
-    
-    /**
-     * add columns from filter
-     * 
-     * @param array $_colsToFetch
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @return array
-     * 
-     * @todo remove this when visibility/status check is moved to contact filter
-     */
-    protected function _addFilterColumns($_colsToFetch, Tinebase_Model_Filter_FilterGroup $_filter)
-    {
-        $result = parent::_addFilterColumns($_colsToFetch, $_filter);
-        
-        // add account.id column as we always need this filter for disabled/invisible users
-        $result['account_id'] = 'accounts.id';
-        return $result;
     }
 }

@@ -279,7 +279,7 @@ class Calendar_Frontend_iMIP
             $result &= $this->_assertOriginator($_iMIP, $organizer, 'organizer');
         }
         
-        if ($_assertAccount && ! $organizer->account_id) {
+        if ($_assertAccount && (! $organizer || ! $organizer->account_id)) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORGANIZER, "processing {$_iMIP->method} without organizer user account is not possible");
             $result = FALSE;
         }

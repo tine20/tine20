@@ -6,10 +6,9 @@
  * @subpackage  Timemachine 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
-
 
 /**
  * ModificationLog tracks and supplies the logging of modifications on a field 
@@ -59,16 +58,28 @@ class Tinebase_Timemachine_ModificationLog
      * holds names of meta properties in record
      * 
      * @var array
+     * 
+     * @todo move more 'toOmit' fields to record (getModlogOmitFields)
      */
     protected $_metaProperties = array(
         'created_by',
         'creation_time',
-        'seq',
         'last_modified_by',
         'last_modified_time',
         'is_deleted',
         'deleted_time',
-        'deleted_by'
+        'deleted_by',
+        'relations',
+        'notes',
+    // record specific properties / no meta properties / @todo to be moved to record definition
+        'products',
+        'jpegphoto',
+        'grants',
+        'account_grants',
+        'exdate',
+        'attendee',
+        'alarms',
+        'seq',
     );
     
     /**
@@ -244,7 +255,7 @@ class Tinebase_Timemachine_ModificationLog
         }
         
         if($_curRecord->last_modified_time instanceof DateTime && !$_curRecord->last_modified_time->equals($_newRecord->last_modified_time)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  concurrent updates: current record last updated '" .
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " concurrent updates: current record last updated '" .
                 $_curRecord->last_modified_time . "' where record to be updated was last updated '" . $_newRecord->last_modified_time . "'");
             
             $loggedMods = $this->getModifications($appName, $_id,
@@ -276,8 +287,7 @@ class Tinebase_Timemachine_ModificationLog
         }
         
         return $resolved;
-        
-    } // end of member function manageConcurrentUpdates
+    }
     
     /**
      * computes changes of records and writes them to the logbook
@@ -287,55 +297,165 @@ class Tinebase_Timemachine_ModificationLog
      * 
      * @param  Tinebase_Record_Abstract $_newRecord record from user data
      * @param  Tinebase_Record_Abstract $_curRecord record from storage
+     * @param  string $_model
+     * @param  string $_backend
+     * @param  string $_id
      * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
-     * 
-     * @todo move more 'toOmit' fields to record
      */
     public function writeModLog($_newRecord, $_curRecord, $_model, $_backend, $_id)
     {
-        list($appName, $i, $modelName) = explode('_', $_model);
+        $commonModLog = $this->_getCommonModlog($_model, $_backend, array(
+            'last_modified_time' => $_newRecord->last_modified_time, 
+            'last_modified_by'   => $_newRecord->last_modified_by
+        ), $_id);
+        $diffs = $_curRecord->diff($_newRecord);
         
-        $modLogEntry = new Tinebase_Model_ModificationLog(array(
+        if (! empty($diffs) && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' diffs: ' . print_r($diffs, TRUE));
+        if (! empty($diffs) && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' curRecord: ' . print_r($_curRecord->toArray(), TRUE));
+        
+        $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
+        $this->_loopModifications($diffs, $commonModLog, $modifications, $_curRecord->toArray(), $_curRecord->getModlogOmitFields());
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Logged ' . count($modifications) . ' modifications.');
+        
+        return $modifications;
+    }
+    
+    /**
+     * creates a common modlog record
+     * 
+     * @param string $_model
+     * @param string $_backend
+     * @param array $_updateMetaData
+     * @param string $_recordId
+     * @return Tinebase_Model_ModificationLog
+     */
+    protected function _getCommonModlog($_model, $_backend, $_updateMetaData = array(), $_recordId = NULL)
+    {
+        if (empty($_updateMetaData)) {
+            list($currentAccountId, $currentTime) = Tinebase_Timemachine_ModificationLog::getCurrentAccountIdAndTime();
+        } else {
+            $currentAccountId = $_updateMetaData['last_modified_by'];
+            $currentTime      = $_updateMetaData['last_modified_time'];
+        }
+        
+        list($appName, $i, $modelName) = explode('_', $_model);
+        $commonModLogEntry = new Tinebase_Model_ModificationLog(array(
             'application_id'       => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId(),
-            'record_id'            => $_id,
+            'record_id'            => $_recordId,
             'record_type'          => $_model,
             'record_backend'       => $_backend,
-            'modification_time'    => $_newRecord->last_modified_time,
-            'modification_account' => $_newRecord->last_modified_by
-        ),true);
+            'modification_time'    => $currentTime,
+            'modification_account' => $currentAccountId,
+        ), TRUE);
+        
+        return $commonModLogEntry;
+    }
+    
+    /**
+     * loop the modifications
+     * 
+     * @param array $_newData
+     * @param Tinebase_Model_ModificationLog $_commonModlog
+     * @param Tinebase_Record_RecordSet $_modifications
+     * @param array $_currentData
+     * @param array $_toOmit
+     * 
+     * @todo support more "second order" (relations, ...) records in modlog
+     */
+    protected function _loopModifications($_newData, Tinebase_Model_ModificationLog $_commonModlog, Tinebase_Record_RecordSet $_modifications, $_currentData, $_toOmit = array())
+    {
+        $toOmit = array_merge($this->_metaProperties, $_toOmit);
+        foreach ($_newData as $field => $newValue) {
+            if (in_array($field, $toOmit)) {
+                continue;
+            }
             
-        $diffs = $_curRecord->diff($_newRecord);
+            $curValue = (isset($_currentData[$field])) ? $_currentData[$field] : '';
+            
+            switch ($field) {
+                case 'tags':
+                case 'customfields':
+                    $curValue = $this->_convertToJsonString($curValue);
+                    $newValue = $this->_convertToJsonString($newValue);
+                    break;
+                default:
+            }
+
+            if ($curValue === $newValue) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Current and new value match. It looks like the diff() failed or you passed identical data for field ' . $field);
+                continue;
+            }
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Field '$field' changed.");
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . " Change: from '$curValue' to '$newValue'");
+            
+            $modLogEntry = clone $_commonModlog;
+            $modLogEntry->modified_attribute = $field;
+            $modLogEntry->old_value = $curValue;
+            $modLogEntry->new_value = $newValue;
+            $modLogEntry->setId($this->setModification($modLogEntry));
+    
+            $_modifications->addRecord($modLogEntry);
+        }
+    }
+    
+    /**
+     * convert to json string
+     * 
+     * @param mixed $_value
+     * @return string
+     */
+    protected function _convertToJsonString($_value)
+    {
+        $result = $_value;
+        if ($result instanceof Tinebase_Record_RecordSet) {
+            $result = $result->toArray();
+        }
+        if (is_array($result)) {
+            // deal with RecordSet diff()
+            foreach (array('removed', 'added') as $index) {
+                if (isset($result[$index])) {
+                    $result[$index] = $result[$index]->toArray();
+                }
+            }
+            $result = Zend_Json::encode($result);
+        }
+        if (empty($result)) {
+            $result = '[]';
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * write modlog for multiple records
+     * 
+     * @param array $_ids
+     * @param array $_oldData
+     * @param array $_newData
+     * @param string $_model
+     * @param string $_backend
+     * @param array $updateMetaData
+     * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
+     */
+    public function writeModLogMultiple($_ids, $_currentData, $_newData, $_model, $_backend, $updateMetaData = array())
+    {
+        $commonModLog = $this->_getCommonModlog($_model, $_backend, $updateMetaData);
         
         $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         
-        // omit second order records and jpegphoto for the moment
-        $toOmit = array_merge($this->_metaProperties, array(
-            'tags',
-            'relations',
-            'notes',
-            'products',
-            'jpegphoto',
-            'grants',
-            'account_grants',
-            'customfields',
-            'exdate',
-            'attendee',
-            'alarms'
-        ));
-        $toOmit = array_merge($toOmit, $_curRecord->getModlogOmitFields());
-        
-        foreach ($diffs as $field => $newValue) {
-            if(! in_array($field, $toOmit)) {
-                $curValue = $_curRecord->$field;
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " field '$field' changed from '$curValue' to '$newValue'");
-                
-                $modLogEntry->modified_attribute = $field;
-                $modLogEntry->old_value = $curValue;
-                $modLogEntry->new_value = $newValue;
-                $modLogEntry->setId($this->setModification($modLogEntry));
-                $modifications->addRecord(clone $modLogEntry);
-            }
+        foreach ($_ids as $id) {
+            $commonModLog->record_id = $id;
+            $this->_loopModifications($_newData, $commonModLog, $modifications, $_currentData);
         }
+        
         return $modifications;
     }
     
@@ -347,11 +467,9 @@ class Tinebase_Timemachine_ModificationLog
      * @param   Tinebase_Record_Abstract $_curRecord record from storage
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public static function setRecordMetaData($_newRecord, $_action, $_curRecord=NULL)
+    public static function setRecordMetaData($_newRecord, $_action, $_curRecord = NULL)
     {
-        $currentAccount   = Tinebase_Core::getUser();
-        $currentAccountId = $currentAccount instanceof Tinebase_Record_Abstract ? $currentAccount->getId(): NULL;
-        $currentTime      = new Tinebase_DateTime();
+        list($currentAccountId, $currentTime) = self::getCurrentAccountIdAndTime();
         
         // spoofing protection
         $_newRecord->created_by         = $_curRecord ? $_curRecord->created_by : NULL;
@@ -383,6 +501,19 @@ class Tinebase_Timemachine_ModificationLog
                 throw new Tinebase_Exception_InvalidArgument('Action must be one of {create|update|delete}.');
                 break;
         }
-    } // end of static function setRecordMetaData
+    }
     
-} // end of Tinebase_Timemachine_ModificationLog
+    /**
+     * returns current account id and time
+     * 
+     * @return array
+     */
+    public static function getCurrentAccountIdAndTime()
+    {
+        $currentAccount   = Tinebase_Core::getUser();
+        $currentAccountId = $currentAccount instanceof Tinebase_Record_Abstract ? $currentAccount->getId(): NULL;
+        $currentTime      = new Tinebase_DateTime();
+
+        return array($currentAccountId, $currentTime);
+    }
+}

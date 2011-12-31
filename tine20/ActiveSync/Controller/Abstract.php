@@ -162,7 +162,43 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
      *
      * @return array
      */
-    abstract public function getSupportedFolders();
+    public function getSupportedFolders()
+    {
+        // device supports multiple folders ?
+        if(in_array(strtolower($this->_device->devicetype), array('iphone', 'ipad', 'thundertine'))) {
+        
+            // get the folders the user has access to
+            $allowedFolders = $this->_getSyncableFolders();
+            
+            $wantedFolders = null;
+            // maybe the user has defined a filter to limit the search results
+            try {
+                if(!empty($this->_device->contactsfilter_id)) {
+                    $persistentFilter = Tinebase_PersistentFilter::getFilterById($this->_device->contactsfilter_id);
+                    
+                    foreach($persistentFilter as $filter) {
+                        if($filter instanceof Tinebase_Model_Filter_Container) {
+                            $wantedFolders = array_flip($filter->getContainerIds());
+                        }
+                    }
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+               // filter got deleted already
+            }
+            $folders = $wantedFolders === null ? $allowedFolders : array_intersect_key($allowedFolders, $wantedFolders);
+        } else {
+            
+            $folders[$this->_specialFolderName] = array(
+                'folderId'      => $this->_specialFolderName,
+                'parentId'      => 0,
+                'displayName'   => $this->_applicationName,
+                'type'          => $this->_defaultFolderType
+            );
+            
+        }
+        
+        return $folders;
+    }
     
     /**
      * Returns a set of records identified by their id's
@@ -370,6 +406,29 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
         }
 
         $_filter->addFilter($_filter->createFilter('container_id', 'in', $containerIds));
+    }
+    
+    /**
+     * get syncable folders
+     * 
+     * @return array
+     */
+    protected function _getSyncableFolders()
+    {
+        $folders = array();
+        
+        $containers = Tinebase_Container::getInstance()->getContainerByACL(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_SYNC);
+        
+        foreach ($containers as $container) {
+            $folders[$container->id] = array(
+                'folderId'      => $container->id,
+                'parentId'      => 0,
+                'displayName'   => $container->name,
+                'type'          => (count($folders) == 0) ? $this->_defaultFolderType : $this->_folderType
+            );
+        }
+                
+        return $folders;
     }
     
     /**

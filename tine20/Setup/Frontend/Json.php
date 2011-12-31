@@ -231,7 +231,6 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
      * 
      * Installs Tinebase if not already installed
      * 
-     * 
      * @todo validate $data
      * 
      * @param  array $data
@@ -249,8 +248,6 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
     /**
      * load email config data
      * 
-     * @todo implement controller function
-     * 
      * @return array
      */
     public function getEmailConfig()
@@ -260,8 +257,6 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
     
     /**
      * Update email config data
-     * 
-     * @todo implement controller function
      * 
      * @param  array $data
      * @return array [success status]

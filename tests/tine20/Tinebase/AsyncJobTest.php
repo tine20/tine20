@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
  */
 
@@ -36,40 +36,23 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
     public function testStartStopJob()
     {
         $async = Tinebase_AsyncJob::getInstance();
+        $sequence = $async->getNextSequence('Test_Job');
         $job = $async->startJob('Test_Job');
         $this->assertTrue($job instanceof Tinebase_Model_AsyncJob);
-        $this->assertTrue($async->jobIsRunning('Test_Job'));
+        $this->assertFalse($async->getNextSequence('Test_Job'));
         $async->finishJob($job);
-        $this->assertFalse($async->jobIsRunning('Test_Job'));
+        $this->assertGreaterThan($sequence + 1, $async->getNextSequence('Test_Job'));
     }
     
     /**
-     * test
-     * 
+     * testGetNextSequence
      */
-    public function testIsJobRunning()
+    public function testGetNextSequence()
     {
         $async = Tinebase_AsyncJob::getInstance();
         $job = $async->startJob('Test_Job1', 5);
         sleep(3);
-        $this->assertTrue($async->jobIsRunning('Test_Job1'));
+        $this->assertFalse($async->getNextSequence('Test_Job1'));
         $async->finishJob($job);        
     }
-    
-    
-    /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp() {}
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown() {}
 }

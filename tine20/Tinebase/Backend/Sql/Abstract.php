@@ -191,38 +191,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function get($_id, $_getDeleted = FALSE) 
     {
-        $id = $this->_convertId($_id);
-        
+        $id = Tinebase_Record_Abstract::convertId($_id, $this->_modelName);
         return $this->getByProperty($id, $this->_identifier, $_getDeleted);
     }
 
-    /**
-     * converts a int, string or Tinebase_Record_Interface to a id
-     *
-     * @param int|string|Tinebase_Record_Interface $_id the id to convert
-     * @return int
-     */
-    protected function _convertId($_id)
-    {
-        if($_id instanceof $this->_modelName) {
-            $identifier = $this->_getRecordIdentifier();
-            if(empty($_id->$identifier)) {
-                throw new Tinebase_Exception_InvalidArgument('No id set!');
-            }
-            $id = $_id->$identifier;
-        } elseif (is_array($_id)) {
-            throw new Tinebase_Exception_InvalidArgument('Id can not be an array!');
-        } else {
-            $id = $_id;
-        }
-        
-        if($id === 0) {
-            throw new Tinebase_Exception_InvalidArgument($this->_modelName . '.id can not be 0!');
-        }
-        
-        return $id;
-    }
-    
     /**
      * splits identifier if table name is given (i.e. for joined tables)
      *
@@ -1063,7 +1035,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             return 0;
         }
         
-        $idArray = (! is_array($_id)) ? array($this->_convertId($_id)) : $_id;
+        $idArray = (! is_array($_id)) ? array(Tinebase_Record_Abstract::convertId($_id, $this->_modelName)) : $_id;
         $identifier = $this->_getRecordIdentifier();
         
         $where = array(

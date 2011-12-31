@@ -10,16 +10,23 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
 
     editDialog : null,
 
+    selectedRecords: null,
+    selectionFilter: null,
+    
     form : null,
     changes : null,
 
     init : function(editDialog) {
-
+        
         this.editDialog = editDialog;
         this.app = Tine.Tinebase.appMgr.get(this.editDialog.app);
         this.form = this.editDialog.getForm();
 
-        this.editDialog.on('render', function() {this.onAfterRender();}, this);
+        Tine.log.debug('TRE', this.editDialog.selectionFilter);
+        Tine.log.debug('TRE', this.editDialog.selectedRecords);
+        
+        
+        this.editDialog.on('render', this.onAfterRender, this);
 
         this.editDialog.onRecordLoad = this.editDialog.onRecordLoad.createInterceptor(this.onRecordLoad, this);
         this.editDialog.onRecordUpdate = this.editDialog.onRecordUpdate.createInterceptor(this.onRecordUpdate, this);
@@ -67,18 +74,23 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
 
         this.editDialog.getForm().clearInvalid();
 
-        this.editDialog.window.setTitle(String.format(_('Edit {0} {1}'), this.editDialog.sm.getCount(), this.editDialog.i18nRecordsName));
+        var length = (this.editDialog.selectedRecords.length) ? this.editDialog.selectedRecords.length : _('multiple');
+        
+        this.editDialog.window.setTitle(String.format(_('Edit {0} {1}'), length, this.editDialog.i18nRecordsName));
 
         Ext.each(this.form.record.store.fields.keys, function(fieldKey) {
             var field = this.form.findField(fieldKey);
             
             if (field) {
-
+                if(! this.editDialog.selectedRecords.length) {
+                    this.handleField(field, fieldKey, false);
+                } else {
                 var referenceSelectionData = false; 
                 field.isClearable = true;
-                return Ext.each(this.editDialog.sm.getSelections(), function(selection, index) {
+                return Ext.each(this.editDialog.selectedRecords, function(selection, index) {
+                    
                     if(!referenceSelectionData) {
-                        referenceSelectionData = selection.data[fieldKey];
+                        referenceSelectionData = selection[fieldKey];
                         if(referenceSelectionData) {
                            if(typeof referenceSelectionData == 'object') {
                                 if(fieldKey == 'account_id') {
@@ -104,16 +116,17 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                         return true;
                     }
 
-                    if (Ext.encode(selection.data[fieldKey]) != Ext.encode(referenceSelectionData)) {
+                    if (Ext.encode(selection[fieldKey]) != Ext.encode(referenceSelectionData)) {
                         this.handleField(field, fieldKey, false);
                         return false;
                     } else {
-                        if (index == this.editDialog.sm.selections.length) {
+                        if (index == this.editDialog.selectedRecords.length) {
                             this.handleField(field, fieldKey, true);
                             return false;
                         }
                     }
                 }, this);
+            }
             }
 
         }, this);
@@ -123,24 +136,30 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             var field = this.form.findField('customfield_' + fieldKey);
 
             if (field) {
+                
+                if(! this.editDialog.selectedRecords.length) {
+                    this.handleField(field, fieldKey, false);
+                } else {
+                
                 field.setValue(this.editDialog.record.data.customfields[fieldKey]);
                 var referenceSelectionData = false;
-                Ext.each(this.editDialog.sm.getSelections(), function(selection, index) {
+                Ext.each(this.editDialog.selectedRecords, function(selection, index) {
                     if(!referenceSelectionData) {
-                        referenceSelectionData = selection.data.customfields[fieldKey];
+                        referenceSelectionData = selection.customfields[fieldKey];
                         return true;
                     }
 
-                    if (Ext.encode(selection.data.customfields[fieldKey]) != Ext.encode(referenceSelectionData)) {
+                    if (Ext.encode(selection.customfields[fieldKey]) != Ext.encode(referenceSelectionData)) {
                         this.handleField(field, fieldKey, false);
                         return false;
                     } else {
-                        if (index == this.editDialog.sm.selections.length) {
+                        if (index == this.editDialog.selectedRecords.length) {
                             this.handleField(field, fieldKey, true);
                             return false;
                         }
                     }
                 }, this);
+            }
             }
         }, this);
 
@@ -187,10 +206,10 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                     // create Button
                     var button = new Ext.Element(document.createElement('img'));
                     button.set({
-                        src: '../../library/ExtJS/resources/images/default/s.gif',
-                        title: _('Delete value from all selected records'),
-                        class: 'tinebase-editmultipledialog-clearer',
-                        style: 'left:' + left
+                        'src': '../../library/ExtJS/resources/images/default/s.gif',
+                        'title': _('Delete value from all selected records'),
+                        'class': 'tinebase-editmultipledialog-clearer',
+                        'style': 'left:' + left
                         });
                     
                     button.addClassOnOver('over');
@@ -224,8 +243,8 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                             } else {
                                 var arrow = new Ext.Element(document.createElement('img'));
                                 arrow.set({
-                                    src: '../../library/ExtJS/resources/images/default/grid/dirty.gif',
-                                    class: 'tinebase-editmultipledialog-dirty'
+                                    'src': '../../library/ExtJS/resources/images/default/grid/dirty.gif',
+                                    'class': 'tinebase-editmultipledialog-dirty'
                                 });
                                 this.el.insertSibling(arrow);
                             }
@@ -292,10 +311,10 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                     
             return false;
         } else {
-            var filter = this.editDialog.sm.getSelectionFilter();
+            var filter = this.editDialog.selectionFilter;
             
             Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to change these {0} records?')
-            + this.changedHuman, this.editDialog.sm.getCount()), function(_btn) {
+            + this.changedHuman, this.editDialog.selectedRecords.length), function(_btn) {
                 if (_btn == 'yes') {
                     Ext.MessageBox.wait(_('Please wait'),_('Applying changes'));
                     Ext.Ajax.request({
@@ -307,11 +326,22 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                             changes: this.changes,
                             filter: filter
                         },
-                        success: function(_result, _request) {
+                        success: function(_result, _request) {                           
                             Ext.MessageBox.hide();
-                            this.editDialog.fireEvent('update');
-                            this.editDialog.purgeListeners();
-                            this.editDialog.window.close();
+                            var resp = Ext.decode(_result.responseText);
+                            if(resp.failcount > 0) {
+                                Ext.MessageBox.alert(_('Update Error'), String.format(_('There had been {0} Error(s) while updating {1} records.'), resp.failcount, resp.totalcount), function(_btn, _text) {
+                                    if (_btn == 'ok') {
+                                        this.editDialog.fireEvent('update');
+                                        this.editDialog.purgeListeners();
+                                        this.editDialog.window.close();
+                                    }
+                                }, this);
+                            } else {
+                                this.editDialog.fireEvent('update');
+                                this.editDialog.purgeListeners();
+                                this.editDialog.window.close();
+                            }
                         },
                         scope: this
                     });

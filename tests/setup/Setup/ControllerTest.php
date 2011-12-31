@@ -1,22 +1,18 @@
 <?php
 /**
  * Tine 2.0 - http://www.tine20.org
- * 
+ *
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * 
+ *
  */
 
 /**
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Setup_JsonTest::main');
-}
 
 /**
  * Test class for Tinebase_Group
@@ -48,7 +44,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_uit = Setup_Controller::getInstance();       
+        $this->_uit = Setup_Controller::getInstance();
     }
 
     /**
@@ -60,8 +56,8 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->_installAllApplications(array(
-            'defaultAdminGroupName' => 'Administrators', 
-            'defaultUserGroupName'  => 'Users', 
+            'defaultAdminGroupName' => 'Administrators',
+            'defaultUserGroupName'  => 'Users',
             'adminLoginName'        => Tinebase_Core::get('testconfig')->username,
             'adminPassword'         => Tinebase_Core::get('testconfig')->password,
         ));
@@ -69,7 +65,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
        
     /**
      * test uninstall application and cache clearing
-     * 
+     *
      */
     public function testUninstallApplications()
     {
@@ -173,7 +169,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $this->_uninstallAllApplications();
         $this->_installAllApplications(array(
-            'defaultAdminGroupName' => 'phpunit-admins', 
+            'defaultAdminGroupName' => 'phpunit-admins',
             'defaultUserGroupName'  => 'phpunit-users',
             'adminLoginName'        => Tinebase_Core::get('testconfig')->username,
             'adminPassword'         => Tinebase_Core::get('testconfig')->password,
@@ -192,8 +188,8 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testUninstallTinebaseShouldThrowDependencyException()
     {
-        $this->setExpectedException('Setup_Exception_Dependency');
         $result = $this->_uit->uninstallApplications(array('Tinebase'));
+        $this->assertTrue($this->_uit->setupRequired());
     }
     
     /**
@@ -261,14 +257,14 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
                 $right['right'] === 'run') {
                 $hasRight = true;
             }
-        } 
+        }
         $this->assertTrue($hasRight, 'User role has run right for recently installed app?');
     }
 
     /**
      * test update application
      *
-     * @todo test real update process; currently this test case only tests updating an already uptodate application 
+     * @todo test real update process; currently this test case only tests updating an already uptodate application
      */
     public function testUpdateApplications()
     {
@@ -292,7 +288,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     
     /**
      * testLoginWithWrongUsernameAndPassword
-     * 
+     *
      */
     public function testLoginWithWrongUsernameAndPassword()
     {
@@ -311,11 +307,15 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     
     /**
      * installAllApplications
-     * 
+     *
      * @param array $_options
      */
     protected function _installAllApplications($_options = null)
     {
+        if (! $this->_uit) {
+            throw new Setup_Exception('could not run test, Setup_Controller init failed');
+        }
+        
         $installableApplications = $this->_uit->getInstallableApplications();
         $installableApplications = array_keys($installableApplications);
         $this->_uit->installApplications($installableApplications, $_options);
