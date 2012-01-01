@@ -538,6 +538,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'value'    =>  Tinebase_Core::getUser()->accountDisplayName
         )));
         $sharedTagName = $this->_createAndAttachTag($filter);
+        // need to sleep for 1 second because modlog does not allow to change the same attribute twice in the same second ...
+        sleep(1);
         $personalTagName = $this->_createAndAttachTag($filter, Tinebase_Model_Tag::TYPE_PERSONAL);
 
         // export first and create files array
