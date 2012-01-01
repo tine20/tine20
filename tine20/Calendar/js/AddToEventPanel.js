@@ -10,6 +10,12 @@
  
 Ext.ns('Tine.Calendar');
 
+/**
+ * @namespace   Tine.Calendar
+ * @class       Tine.Calendar.AddToEventPanel
+ * @extends     Ext.FormPanel
+ * @author      Alexander Stintzing <alex@stintzing.net>
+ */
 Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
     appName : 'Calendar',
     
@@ -24,6 +30,9 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
     buttonAlign : null,
     bufferResize : 500,
     
+    /**
+     * init component
+     */
     initComponent: function() {
         
         if (!this.app) {
@@ -44,6 +53,9 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
         Tine.Calendar.AddToEventPanel.superclass.initComponent.call(this);
     },
     
+    /**
+     * init actions
+     */
     initActions: function() {
         this.action_cancel = new Ext.Action({
             text : this.app.i18n._('Cancel'),
@@ -62,10 +74,18 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
         });
     },
     
+    /**
+     * init buttons
+     */
     initButtons : function() {
         this.fbar = [ '->', this.action_cancel, this.action_update ];
     },  
     
+    /**
+     * is called when the component is rendered
+     * @param {} ct
+     * @param {} position
+     */
     onRender : function(ct, position) {
         Tine.Calendar.AddToEventPanel.superclass.onRender.call(this, ct, position);
 
@@ -79,12 +99,20 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
 
     },
        
+    /**
+     * closes the window
+     */
     onCancel: function() {
         this.fireEvent('cancel');
         this.purgeListeners();
         this.window.close();
     },
     
+    /**
+     * checks validity and marks invalid fields
+     * returns true on valid
+     * @return boolean
+     */
     isValid: function() {
         
         var valid = true;
@@ -97,27 +125,52 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
         return valid;
     },
     
+    /**
+     * save record and close window
+     */
     onUpdate: function() {
 
         if(this.isValid()) {    
-            var recordId = this.searchBox.getValue();
+            var recordId = this.searchBox.getValue(),
                 e = this.searchBox.store.getById(recordId),
-                attendee = e.get('attendee'); 
-        
-            Ext.each(this.attendee, function(contact) {
-                attendee.push(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
-                    user_id: contact
-                }));
+                ms = this.app.getMainScreen(),
+                cp = ms.getCenterPanel();
+
+            var window = Tine.Calendar.EventEditDialog.openWindow({
+                record: Ext.util.JSON.encode(e.data),
+                recordId: e.data.id,
+                attendee: Ext.util.JSON.encode(this.attendee),
+                listeners: {
+                    scope: cp,
+                    update: function (eventJson) {
+
+                        var updatedEvent = Tine.Calendar.backend.recordReader({responseText: eventJson});
+                        updatedEvent.dirty = true;
+                        updatedEvent.modified = {};
+                        event.phantom = true;
+                        
+                        var panel = this.getCalendarPanel(this.activeView);
+                        var store = panel.getStore();
+                        
+                        event = store.getById(event.id);
+                        
+                        store.replaceRecord(event, updatedEvent);
+                        
+                        this.onUpdateEvent(updatedEvent);
+                    }
+                }
             });
 
-            var window = Tine.Calendar.EventEditDialog.openWindow({recordId: recordId, record: e, attendee: attendee});
-        
             window.on('close', function() {
-                    this.onCancel();
-            },this);   
+                this.onCancel();
+            }, this);   
         }
     },
     
+    /**
+     * create and return form items
+     * @return Object
+     */
     getFormItems : function() {
                 
         this.searchBox = new Tine.Calendar.SearchCombo({});
@@ -153,6 +206,9 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
         };
     },
     
+    /**
+     * creates filter 
+     */
     updateSearchBox: function() {
         var year = this.datePicker.activeDate.getYear() + 1900,
             yearEnd = year,
