@@ -782,8 +782,27 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_json->deleteNodes($filepaths);
 
         // check if node is deleted
-        $this->setExpectedException('Tinebase_Exception_NotFound');
-        $this->_fsController->stat(Filemanager_Controller_Node::getInstance()->addBasePath($filepaths[0]));
+        try {
+            $this->_fsController->stat(Filemanager_Controller_Node::getInstance()->addBasePath($filepaths[0]));
+            $this->assertTrue(FALSE);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $this->assertTrue(TRUE);
+        }
+    }
+    
+    /**
+     * test cleanup of deleted files
+     */
+    public function testDeletedFileCleanup()
+    {
+        $this->testDeleteFileNodes();
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFiles();
+        $this->assertGreaterThan(0, $result);
+        $this->tearDown();
+
+        $this->testDeleteFileNodes();
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFiles();
+        $this->assertEquals(1, $result);
     }
 
     /**
