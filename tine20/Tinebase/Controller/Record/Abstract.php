@@ -1183,22 +1183,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAlarmSet(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting alarm time for ' . $this->_recordAlarmField);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' alarm data: ' . print_r($_alarm->toArray(), TRUE));
-
-        // check if alarm field is Tinebase_DateTime
-        if (! ($_alarm->alarm_time instanceof DateTime && $_alarm->minutes_before == 'custom')) {
-            if ($_record->{$this->_recordAlarmField} instanceof DateTime && isset($_alarm->minutes_before)) {
-                $_alarm->setTime($_record->{$this->_recordAlarmField});
-            } else {
-                throw new Tinebase_Exception_InvalidArgument('Record has no alarm field, no alarm time set or minutes before are missing.');
-            }
-        } else {
-            // save in options that we have a custom defined datetime for the alarm
-            $_alarm->options = Zend_Json::encode(array(
-                'custom'         => TRUE,
-            ));
-        }
+        $_alarm->setTime($_record->{$this->_recordAlarmField});
     }
 
     /**
@@ -1208,32 +1193,18 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function getAlarms($_record)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Resolving alarms and add them to record set.");
+        
         $alarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord($this->_modelName, $_record);
+        $records = $_record instanceof Tinebase_Record_RecordSet ? $_record : new Tinebase_Record_RecordSet($this->_modelName, array($_record));
 
-        if ($_record instanceof Tinebase_Record_RecordSet) {
+        foreach ($records as $record) {
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Resolving alarms and add them to record set.");
-
-            $alarms->addIndices(array('record_id'));
-            foreach ($_record as $record) {
-
-                $record->alarms = $alarms->filter('record_id', $record->getId());
-
-                // calc minutes_before
-                if ($record->has($this->_recordAlarmField)) {
-                    $this->_inspectAlarmGet($record);
-                }
-            }
-
-        } else if ($_record instanceof Tinebase_Record_Interface) {
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Resolving alarms and add them to record.");
-
-            $_record->alarms = $alarms;
+            $record->alarms = $alarms->filter('record_id', $record->getId());
 
             // calc minutes_before
-            if ($_record->has($this->_recordAlarmField)) {
-                $this->_inspectAlarmGet($_record);
+            if ($record->has($this->_recordAlarmField) && $record->{$this->_recordAlarmField} instanceof DateTime) {
+                $this->_inspectAlarmGet($record);
             }
         }
     }
@@ -1246,9 +1217,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAlarmGet(Tinebase_Record_Abstract $_record)
     {
-        if ($_record->{$this->_recordAlarmField} instanceof DateTime) {
-            $_record->alarms->setMinutesBefore($_record->{$this->_recordAlarmField});
-        }
+        $_record->alarms->setMinutesBefore($_record->{$this->_recordAlarmField});
     }
 
     /**
