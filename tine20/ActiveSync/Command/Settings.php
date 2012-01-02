@@ -31,13 +31,6 @@ class ActiveSync_Command_Settings extends ActiveSync_Command_Wbxml
     const STATUS_DEVICEPASSWORD_TO_LONG = 5;
     const STATUS_DEVICEPASSWORD_PASSWORD_RECOVERY_DISABLED = 7;
     
-    /**
-     * Enter description here...
-     *
-     * @var ActiveSync_Backend_StandAlone_Abstract
-     */
-    protected $_dataBackend;
-
     protected $_defaultNameSpace = 'uri:Settings';
     protected $_documentElement  = 'Settings';
     
@@ -48,9 +41,6 @@ class ActiveSync_Command_Settings extends ActiveSync_Command_Wbxml
     /**
      * process the XML file and add, change, delete or fetches data 
      *
-     * @todo can we get rid of LIBXML_NOWARNING
-     * @todo we need to stored the initial data for folders and lifetime as the phone is sending them only when they change
-     * @return resource
      */
     public function handle()
     {
