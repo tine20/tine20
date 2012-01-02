@@ -114,9 +114,9 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
     }
     
     /**
-     * init scheduler
+     * init scheduler tasks
      */
-    public function initTinebaseScheduler()
+    public function _initializeSchedulerTasks()
     {
         $scheduler = Tinebase_Core::getScheduler();
         Tinebase_Scheduler_Task::addAlarmTask($scheduler);
