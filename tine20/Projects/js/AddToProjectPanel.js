@@ -10,6 +10,13 @@
  
 Ext.ns('Tine.Projects');
 
+/**
+ * @namespace   Tine.Projects
+ * @class       Tine.Projects.AddToProjectPanel
+ * @extends     Ext.FormPanel
+ * @author      Alexander Stintzing <alex@stintzing.net>
+ */
+
 Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
     appName : 'Projects',
     
@@ -112,7 +119,10 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
     },
     
     getFormItems : function() {
-        this.searchBox = new Tine.Projects.SearchCombo({fieldLabel: this.app.i18n._('Select Project')});
+        this.searchBox = new Tine.Projects.SearchCombo({
+            fieldLabel: this.app.i18n._('Select Project'),
+            anchor : '100% 100%'
+            });
         
         var records = [];
         
@@ -122,15 +132,16 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
         });
         
         this.chooseRoleBox = new Ext.form.ComboBox({
-            autoWidth: true,
             mode: 'local',
             fieldLabel: this.app.i18n._('Select Role'),
             valueField: 'id',
             displayField: 'role',
             forceSelection: true,
+            minHeight: 45,
+            anchor : '100% 100%',
             itemSelector: 'div.search-item',
             tpl: new Ext.XTemplate(
-                '<tpl for="."><div class="search-item" style="border: 1px dotted white">',
+                '<tpl for="."><div class="search-item">',
                     '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
                         '<tr>',
                             '<td width="20%">',                   
@@ -152,17 +163,26 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
         
         return {
             border : false,
-            frame : true,
-            layout : 'form',
+            frame : false,
+            layout : 'border',
 
             items : [ {
                 region : 'center',
+                border: false,
+                frame:  false,
                 layout : {
                     align: 'stretch',
                     type: 'vbox'
-                }
+                },
+                items: [{
+                    layout:  'form',
+                    margins: '10px 10px',
+                    border:  false,
+                    frame:   false,
+                    items: [ this.searchBox, this.chooseRoleBox ] 
+                    }]
 
-            }, this.searchBox, this.chooseRoleBox]
+            }]
         };
     }
 });
@@ -170,7 +190,7 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
 Tine.Projects.AddToProjectPanel.openWindow = function(config) {
     var window = Tine.WindowFactory.getWindow({
         modal: true,
-        title : Tine.Tinebase.appMgr.get('Projects').i18n._('Choose Project'),
+        title : String.format(Tine.Tinebase.appMgr.get('Projects').i18n._('Adding {0} Participants to project'), config.attendee.length),
         width : 250,
         height : 150,
         contentPanelConstructor : 'Tine.Projects.AddToProjectPanel',

@@ -377,11 +377,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     if(ret) {
                         var att = new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id());
                         att.set('user_id', attender);
+                        if (!attender.account_id) att.set('status', attender.status);
+                        att.set('role', attender.role);
                         this.store.add([att]);
                     }
                 },this);
             }        
-        
             this.store.add([new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() )]);
         }
     },

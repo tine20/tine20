@@ -19,10 +19,6 @@ Ext.ns('Tine.Calendar');
  * @extends     Ext.form.ComboBox
  * 
  * <p>Event Search Combobox</p>
- * <p><pre>
- * TODO         make this a twin trigger field with 'clear' button?
- * TODO         add switch to filter for expired/enabled/disabled user accounts
- * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <alex@stintzing.net>
@@ -34,24 +30,49 @@ Ext.ns('Tine.Calendar');
  * 
  * TODO         add     forceSelection: true ?
  */
-Tine.Calendar.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
-     
-    itemSelector: 'div.search-item',
-    minListWidth: 200,
-    width: 240,
-    hideLabel: true,
+
+Tine.Calendar.SearchCombo = Ext.extend(Ext.form.ComboBox, {
+    anchor: '100% 100%',
+    margins: '10px 10px',
     
-    //private
-    initComponent: function(){
+    app: null,
+    appName: 'Calendar',
+    
+    store: null,
+    
+    triggerAction: 'all',
+    itemSelector: 'div.search-item',
+    minChars: 3,
+    forceSelection: true,
+    
+    initComponent: function() {
+        if (!this.app) {
+            this.app = Tine.Tinebase.appMgr.get(this.appName);
+        }
+        
+        this.loadingText = _('Searching...');
+        
         this.recordClass = Tine.Calendar.Model.Event;
-        this.recordProxy = Tine.Calendar.eventBackend;
+        this.recordProxy = Tine.Calendar.eventBackend;      
+        
+        this.displayField = this.recordClass.getMeta('titleProperty');
+        this.valueField = this.recordClass.getMeta('idProperty');
+        
+        this.fieldLabel = this.app.i18n._('Event'),
+        this.emptyText = this.app.i18n._('Search Event'),
+        
+        this.store = new Tine.Tinebase.data.RecordStore(Ext.copyTo({
+            readOnly: true,
+            proxy: this.recordProxy || undefined
+        }, this, 'totalProperty,root,recordClass'));
+        
+        this.on('beforequery', this.onBeforeQuery, this);
         
         this.initTemplate();
         
         Tine.Calendar.SearchCombo.superclass.initComponent.call(this);
-        
     },
-     
+    
     /**
      * init template
      * @private
@@ -60,7 +81,7 @@ Tine.Calendar.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerCo
 
         if (! this.tpl) {
             this.tpl = new Ext.XTemplate(
-                '<tpl for="."><div class="search-item" style="border:1px solid white">',
+                '<tpl for="."><div class="search-item">',
                     '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
                         '<tr>',
                             '<td><b>{[this.encode(values.summary)]}</b></td>',
@@ -81,19 +102,16 @@ Tine.Calendar.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerCo
     },
     
     /**
-     * overwrite
-     */
-    onBeforeQuery: function () {
-        
-    },
-
-    /**
      * sets the filter
      * @param {} filter
      */
     setFilter: function(filter) {
         this.store.baseParams.filter = [filter];
         this.fireEvent('filterupdate');
+    },
+    
+    onBeforeQuery: function (qevent) {
+        this.store.baseParams.filter.push({field: 'query', operator: 'contains', value: qevent.query });
     }
 
 

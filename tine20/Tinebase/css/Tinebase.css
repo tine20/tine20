@@ -807,6 +807,8 @@ span:hover.tinebase-showheaders-link {
     padding-right: 4px;
 }*/
 
+.search-item {border: 1px solid white}
+
 /* multiple edit dialog */
     
 .tinebase-editmultipledialog-noneedit, 
