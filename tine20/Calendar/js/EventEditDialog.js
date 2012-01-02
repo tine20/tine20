@@ -235,6 +235,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     initComponent: function() {
+        
+        if(this.attendee) this.attendee = Ext.decode(this.attendee);
+        
         this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({});
         this.rrulePanel = new Tine.Calendar.RrulePanel({});
         this.alarmPanel = new Tine.widgets.dialog.AlarmPanel({});         
@@ -299,7 +302,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordLoad: function() {
         // NOTE: it comes again and again till 
         if (this.rendered) {
-            this.attendeeGridPanel.onRecordLoad(this.record);
+            this.attendeeGridPanel.onRecordLoad(this.record, this.attendee);
             this.rrulePanel.onRecordLoad(this.record);
             this.alarmPanel.onRecordLoad(this.record);
             this.CalendarSelectWidget.onRecordLoad(this.record);

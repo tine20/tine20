@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -190,6 +190,13 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         return array($standardTransition, $daylightTransition);
     }
     
+    /**
+     * convert calendar event to Sabre_VObject_Component
+     * 
+     * @param Calendar_Model_Event $_event
+     * @param Calendar_Model_Event $_mainEvent
+     * @return Sabre_VObject_Component
+     */
     protected function _convertCalendarModelEvent(Calendar_Model_Event $_event, Calendar_Model_Event $_mainEvent = null)
     {
         // clone the event and change the timezone
@@ -288,12 +295,11 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         // repeating event properties
         if ($event->rrule) {
             if ($event->is_all_day_event == true) {
-                $vevent->add(new Sabre_VObject_Property_Recure('RRULE', preg_replace_callback('/UNTIL=([\d :-]{19})(?=;?)/', function($matches) {
+                $vevent->add(new Sabre_VObject_Property_Recure('RRULE', preg_replace_callback('/UNTIL=([\d :-]{19})(?=;?)/', create_function('$matches', '
                     $dtUntil = new Tinebase_DateTime($matches[1]);
                     $dtUntil->setTimezone((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-                    
-                    return 'UNTIL=' . $dtUntil->format('Ymd');
-                }, $event->rrule)));
+                    return "UNTIL=" . $dtUntil->format("Ymd");
+                '), $event->rrule)));
             } else {
                 $vevent->add(new Sabre_VObject_Property_Recure('RRULE', preg_replace('/(UNTIL=)(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', '$1$2$3$4T$5$6$7Z', $event->rrule)));
             }

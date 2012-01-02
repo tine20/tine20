@@ -89,11 +89,11 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
         
         var valid = true;
         if(this.searchBox.getValue() == '') {
-            this.searchBox.markInvalid(this.app.i18n._('Please choose the Project to add to'));
+            this.searchBox.markInvalid(this.app.i18n._('Please choose the Project to add the contacts to'));
             valid = false;
         }
         if(this.chooseRoleBox.getValue() == '') {
-            this.chooseRoleBox.markInvalid(this.app.i18n._('Please select the Attenders\' role'));
+            this.chooseRoleBox.markInvalid(this.app.i18n._('Please select the attenders\' role'));
             valid = false;
         }
         

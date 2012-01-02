@@ -7,18 +7,12 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * 
- * @todo        implement tests
  */
 
 /**
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    Tasks_ControllerTest::main();
-}
 
 /**
  * Test class for Tinebase_Relations
@@ -161,13 +155,12 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
         $task = clone $this->_persistantTestTask1;
         
         $task->summary = 'Update of test task 1';
-        //$task->due->addWeek(1);
         $utask = $this->_controller->update($task);
         
         foreach ($task as $field => $value) {
             switch ($field) {
                 case 'last_modified_time':
-                    $this->assertEquals($nowTs, $utask->last_modified_time->getTimestamp(),'', 1);
+                    $this->assertGreaterThanOrEqual($nowTs, $utask->last_modified_time->getTimestamp(),'', 1);
                     break;
                 case 'last_modified_by':
                     $this->assertEquals(Zend_Registry::get('currentAccount')->getId(), $utask->last_modified_by);
@@ -272,4 +265,3 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
     	$u2task = $this->_controller->update($ctask);
     }
 }
-
