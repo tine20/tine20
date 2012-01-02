@@ -27,8 +27,6 @@ Tine.Calendar.AddressbookGridPanelHook = function(config) {
     Tine.log.info('initialising calendar addressbook hooks');
     Ext.apply(this, config);
     
-    
-    
     this.addEventAction = new Ext.Action({
         actionType: 'add',
         requiredGrant: 'readGrant',
@@ -89,7 +87,7 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
     },
 
     /**
-     * compose an email to selected contacts
+     * add selected contacts to a new event
      * 
      * @param {Button} btn 
      */
@@ -114,12 +112,19 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
         cp.onEditInNewWindow.call(cp, 'add', {attendee: attendee});
     },
     
-    onUpdateEvent: function(btn) {
+    /**
+     * adds selected contacts to an existing event
+     */
+    onUpdateEvent: function() {
         var cont = this.getSelectionsAsArray();
         
         var window = Tine.Calendar.AddToEventPanel.openWindow({attendee: cont});        
     },
     
+    /**
+     * returns selected contacts
+     * @returns {Array}
+     */
     getSelectionsAsArray: function() {
         var contacts = this.getContactGridPanel().grid.getSelectionModel().getSelections(),
             cont = [];

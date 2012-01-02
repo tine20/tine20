@@ -64,10 +64,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * record in edit process.
      */
     record: null,
-    /**
-     * @cfg GridPanel SelectionModel
-     */
-    sm: null,
+
     /**
      * @cfg {String} saveAndCloseButtonText
      * text of save and close button
@@ -323,6 +320,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * init record to edit
      */
     initRecord: function() {
+        
         Tine.log.debug('init record with mode: ' + this.mode);
         if (! this.record) {
             Tine.log.debug('creating new default data record');

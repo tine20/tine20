@@ -10,6 +10,12 @@
  
 Ext.ns('Tine.Calendar');
 
+/**
+ * @namespace   Tine.Calendar
+ * @class       Tine.Calendar.AddToEventPanel
+ * @extends     Ext.FormPanel
+ * @author      Alexander Stintzing <alex@stintzing.net>
+ */
 Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
     appName : 'Calendar',
     
@@ -24,6 +30,9 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
     buttonAlign : null,
     bufferResize : 500,
     
+    /**
+     * init component
+     */
     initComponent: function() {
         
         if (!this.app) {
@@ -44,6 +53,9 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
         Tine.Calendar.AddToEventPanel.superclass.initComponent.call(this);
     },
     
+    /**
+     * init actions
+     */
     initActions: function() {
         this.action_cancel = new Ext.Action({
             text : this.app.i18n._('Cancel'),
@@ -62,10 +74,18 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
         });
     },
     
+    /**
+     * init buttons
+     */
     initButtons : function() {
         this.fbar = [ '->', this.action_cancel, this.action_update ];
     },  
     
+    /**
+     * is called when the component is rendered
+     * @param {} ct
+     * @param {} position
+     */
     onRender : function(ct, position) {
         Tine.Calendar.AddToEventPanel.superclass.onRender.call(this, ct, position);
 
@@ -79,97 +99,97 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
 
     },
        
+    /**
+     * closes the window
+     */
     onCancel: function() {
         this.fireEvent('cancel');
         this.purgeListeners();
         this.window.close();
     },
     
+    /**
+     * checks validity and marks invalid fields
+     * returns true on valid
+     * @return boolean
+     */
     isValid: function() {
         
         var valid = true;
-        if(this.searchBox.getValue() == '') {
-            this.searchBox.markInvalid(this.appName.i18n._('Please choose the Event to add to'));
-            valid = false;
-        }
-        if(this.chooseRoleBox.getValue() == '') {
-            this.chooseRoleBox.markInvalid(this.app.i18n._('Please select the Attenders\' role'));
-            valid = false;
-        }
         
+        if(this.searchBox.getValue() == '') {
+            this.searchBox.markInvalid(this.app.i18n._('Please choose the Event to add the contacts to'));
+            valid = false;
+        }
+          
         return valid;
     },
     
+    /**
+     * save record and close window
+     */
     onUpdate: function() {
-        if(this.isValid()) {
-            
-            if(this.attendee) {
-                var attenders = [];
-                Ext.each(this.attendee, function(el){
-                    attenders.push(el.id);   
-                },this); 
-            }
-            
-            Ext.MessageBox.wait(String.format(this.app.i18n._('Adding {0} Attenders to Event...'), attenders.length), this.app.i18n._('Adding Attenders'));
-            
-            Ext.Ajax.request({
-                url: 'index.php',
-                
-                params: {
-                    method: 'Calendar.addAttenders',
-                    attenders: attenders,
-                    project: this.searchBox.getValue(),
-                    role: this.chooseRoleBox.getValue()
-                    
-                },
-                success: function(_result, _request) {                           
-                    Ext.MessageBox.hide();
-                    this.onCancel();
-                },
-                scope: this
+
+        if(this.isValid()) {    
+            var recordId = this.searchBox.getValue(),
+                e = this.searchBox.store.getById(recordId),
+                ms = this.app.getMainScreen(),
+                cp = ms.getCenterPanel();
+
+            var window = Tine.Calendar.EventEditDialog.openWindow({
+                record: Ext.util.JSON.encode(e.data),
+                recordId: e.data.id,
+                attendee: Ext.util.JSON.encode(this.attendee),
+                listeners: {
+                    scope: cp,
+                    update: function (eventJson) {
+
+                        var updatedEvent = Tine.Calendar.backend.recordReader({responseText: eventJson});
+                        updatedEvent.dirty = true;
+                        updatedEvent.modified = {};
+                        event.phantom = true;
+                        
+                        var panel = this.getCalendarPanel(this.activeView);
+                        var store = panel.getStore();
+                        
+                        event = store.getById(event.id);
+                        
+                        store.replaceRecord(event, updatedEvent);
+                        
+                        this.onUpdateEvent(updatedEvent);
+                    }
+                }
             });
+
+            window.on('close', function() {
+                this.onCancel();
+            }, this);   
         }
     },
     
+    /**
+     * create and return form items
+     * @return Object
+     */
     getFormItems : function() {
-        this.searchBox = new Tine.Calendar.SearchCombo({fieldLabel: this.app.i18n._('Select Event')});
-        
-        var records = [];
-        
-        Ext.each(this.app.getRegistry().get('config')['projectAttendeeRole'].value.records, function(el) {
-            var label = el.i18nValue ? el.i18nValue : el.value;
-            records.push([el.id, label, el.icon]);
+                
+        this.searchBox = new Tine.Calendar.SearchCombo();
+
+        this.searchBox.on('filterupdate', function() {
+            this.store.removeAll();
+            this.store.load();
         });
         
-        this.chooseRoleBox = new Ext.form.ComboBox({
-            autoWidth: true,
-            mode: 'local',
-            fieldLabel: this.app.i18n._('Select Role'),
-            valueField: 'id',
-            displayField: 'role',
-            forceSelection: true,
-            itemSelector: 'div.search-item',
-            tpl: new Ext.XTemplate(
-                '<tpl for="."><div class="search-item" style="border: 1px dotted white">',
-                    '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
-                        '<tr>',
-                            '<td width="20%">',                   
-                                '<img src="{values.icon}" />',
-                            '</td>',
-                            '<td width="80%">',
-                                '{values.role}',
-                            '</td>',
-                        '</td></tr>',
-                    '</table>',
-                '</div></tpl>'
-            ),
-            store: new Ext.data.ArrayStore({
-                id: 0,
-                fields: ['id','role','icon'],
-                data: records
-            })
+        this.datePicker = new Ext.DatePicker({
+            plugins: 'monthPickerPlugin',
+            width: 240,
+            showToday: false,
+            listeners: {
+                scope: this,
+                change: this.updateSearchBox
+            }
         });
-        
+                
         return {
             border : false,
             frame : true,
@@ -182,17 +202,48 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
                     type: 'vbox'
                 }
 
-            }, this.searchBox, this.chooseRoleBox]
+            }, this.datePicker, this.searchBox]
         };
-    }
+    },
+    
+    /**
+     * creates filter 
+     */
+    updateSearchBox: function() {
+        var year = this.datePicker.activeDate.getYear() + 1900,
+            yearEnd = year,
+            month = this.datePicker.activeDate.getMonth() + 1,
+            monthEnd = month + 1;
+            
+        if(monthEnd > 12) {
+            monthEnd = monthEnd - 12;
+            yearEnd = yearEnd + 1;
+        }
+        
+        if (month < 10) month = '0' + month;
+        if (monthEnd < 10) monthEnd = '0' + monthEnd;
+        
+        var from = year + '-' + month + '-01 00:00:00',
+            until = yearEnd + '-' + monthEnd + '-01 00:00:00';
+
+        var filter = {
+            field: 'period',
+            operator: 'within',
+            value: {
+                from: from,
+                until: until
+            }
+        };
+
+        this.searchBox.setFilter(filter); 
+    }    
 });
 
 Tine.Calendar.AddToEventPanel.openWindow = function(config) {
-    Tine.log.debug(config);
     var window = Tine.WindowFactory.getWindow({
         modal: true,
         title : Tine.Tinebase.appMgr.get('Calendar').i18n._('Choose Event'),
-        width : 250,
+        width : 267,
         height : 150,
         contentPanelConstructor : 'Tine.Calendar.AddToEventPanel',
         contentPanelConstructorConfig : config
