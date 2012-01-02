@@ -899,7 +899,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $eventStart = clone $_record->dtstart;
         }
         
-        // save original alarm
+        // save minutes before / compute it for custom alarms
         $_alarm->setOption('minutes_before', $_alarm->minutes_before == Tinebase_Model_Alarm::OPTION_CUSTOM ? ($_record->dtstart->getTimestamp() - $_alarm->alarm_time->getTimestamp()) / 60 : $_alarm->minutes_before);
         //$_alarm->setOption('alarm_time', $_alarm->alarm_time->toString());
         
@@ -907,24 +907,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $_alarm->setOption('recurid', isset($nextOccurrence) ? $nextOccurrence->recurid : NULL);
         
         $_alarm->setTime($eventStart);
-        
-        /*
-        // if alarm time has been set, we don't need to calculate it and set minutes_before to 0
-        if ($_alarm->alarm_time instanceof DateTime && $_alarm->minutes_before == 'custom') {
-            $_alarm->minutes_before = 0;
-            $customDateTime = TRUE;
-        } else {
-            $_alarm->setTime($eventStart);
-            $customDateTime = FALSE;
-        }
-        
-        // we need to save some values in the options because of recurring events
-        $_alarm->options = Zend_Json::encode(array(
-            'minutes_before' => $customDateTime ? ($_record->dtstart->getTimestamp() - $_alarm->alarm_time->getTimestamp()) / 60 : $_alarm->minutes_before,
-            'recurid'        => isset($nextOccurrence) ? $nextOccurrence->recurid : NULL,
-            'custom'         => $customDateTime,
-        ));
-        */
     }
     
     /**
@@ -1535,12 +1517,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $event->dtend = clone $event->dtstart;
                 $event->dtend->add($diff);
             }
-            
-//            $_alarm->sent_status = Tinebase_Model_Alarm::STATUS_PENDING;
-//            $_alarm->sent_message = '';
-            
-            
-            
         }
         $this->doContainerACLChecks($doContainerACLChecks);
         
