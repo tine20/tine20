@@ -49,7 +49,7 @@ class Addressbook_Convert_Contact_String implements Tinebase_Convert_Interface
             $this->_config = new Zend_Config($_config);
         } else {
             // read file with Zend_Config_Xml
-            $filename = dirname(__FILE__) . '/' . self::CONFIG_FILENAME;
+            $filename = Addressbook_Config::getInstance()->get(Addressbook_Config::CONTACT_ADDRESS_PARSE_RULES_FILE, dirname(__FILE__) . '/' . self::CONFIG_FILENAME);
             $this->_config = new Zend_Config_Xml($filename);
         }
     }
