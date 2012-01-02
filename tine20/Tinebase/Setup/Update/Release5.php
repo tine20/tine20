@@ -312,4 +312,15 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('Tinebase', '5.6');
     }
+    
+    /**
+    * update to 5.7
+     * - add deleted file cleanup task to scheduler
+    */
+    public function update_6()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addDeletedFileCleanupTask($scheduler);
+        $this->setApplicationVersion('Tinebase', '5.7');
+    }
 }

@@ -25,6 +25,13 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
     protected $_tableName = 'tree_fileobjects';
     
     /**
+     * Table name without prefix (file revisions)
+     *
+     * @var string
+     */
+    protected $_revisionsTableName = 'tree_filerevisions';
+    
+    /**
      * Model name
      *
      * @var string
@@ -57,8 +64,9 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         $select = parent::_getSelect($_cols, $_getDeleted);
         
         $select->joinLeft(
-            /* table  */ array('tree_filerevisions' => $this->_tablePrefix . 'tree_filerevisions'), 
-            /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions.id') . ' AND ' . $this->_db->quoteIdentifier($this->_tableName . '.revision') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions.revision'),
+            /* table  */ array($this->_revisionsTableName => $this->_tablePrefix . $this->_revisionsTableName), 
+            /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier($this->_revisionsTableName . '.id') . ' AND ' 
+                . $this->_db->quoteIdentifier($this->_tableName . '.revision') . ' = ' . $this->_db->quoteIdentifier($this->_revisionsTableName . '.revision'),
             /* select */ array('revision', 'hash', 'size')
         );
             
@@ -162,5 +170,27 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             );
             $this->_db->update($this->_tablePrefix . 'tree_filerevisions', $data, $where);
         }
+    }
+
+    /**
+     * returns all hashes of revisions that still exists in the db
+     * 
+     * @param array $_hashes
+     * @return array
+     */
+    public function checkRevisions($_hashes)
+    {
+        if (empty($_hashes)) {
+            return array();
+        }
+        
+        $select = $this->_db->select();
+        $select->from(array($this->_revisionsTableName => $this->_tablePrefix . $this->_revisionsTableName), array('hash'));
+        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier($this->_revisionsTableName . '.hash') . ' IN (?)', (array) $_hashes));
+        
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
+        
+        return $queryResult;
     }
 }
