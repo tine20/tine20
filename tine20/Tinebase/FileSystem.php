@@ -610,6 +610,18 @@ class Tinebase_FileSystem
         $result = $this->_treeNodeBackend->search($_filter, $_pagination);
         return $result;
     }
+
+    /**
+    * search tree nodes count
+    *
+    * @param Tinebase_Model_Tree_Node_Filter $_filter
+    * @return integer
+    */
+    public function searchNodesCount(Tinebase_Model_Tree_Node_Filter $_filter = NULL)
+    {
+        $result = $this->_treeNodeBackend->searchCount($_filter);
+        return $result;
+    }
     
     /**
      * get tree node specified by parent node (or id) and name

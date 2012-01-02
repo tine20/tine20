@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add transactions to move/create/delete/copy 
  */
@@ -85,7 +85,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
-        $path = $this->_checkFilterACL($_filter, 'get');
+        $path = $this->_checkFilterACL($_filter, $_action);
         
         if ($path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
             $result = $this->_getRootNodes();
@@ -145,7 +145,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         $path = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($pathFilter->getValue()));
         $pathFilter->setValue($path);
         
-        $this->_checkPathACL($path, 'get');
+        $this->_checkPathACL($path, $_action);
         
         return $path;
     }
@@ -239,8 +239,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         $basePath .= '/folders';
         
         $path = (strpos($_path, '/') === 0) ? $_path : '/' . $_path;
+        // only add base path once
+        $result = (! preg_match('@^' . preg_quote($basePath) . '@', $path)) ? $basePath . $path : $path;
                 
-        return $basePath . $path;
+        return $result;
     }
     
     /**
@@ -282,7 +284,17 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
-        throw new Tinebase_Exception_NotImplemented('searchCount not implemented yet');
+        $path = $this->_checkFilterACL($_filter, $_action);
+        
+        if ($path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
+            $result = count($this->_getRootNodes());
+        } else if ($path->containerType === Tinebase_Model_Container::TYPE_PERSONAL && ! $path->containerOwner) {
+            $result = count($this->_getOtherUserNodes());
+        } else {
+            $result = $this->_backend->searchNodesCount($_filter);
+        }
+        
+        return $result;
     }
 
     /**
