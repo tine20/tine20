@@ -162,19 +162,19 @@ class Sabre_VObject_Property extends Sabre_VObject_Element {
         }
 
         $str.=':' . $this->addSlashes($this->value);
-
         $out = '';
-        while(strlen($str)>0) {
-            if (strlen($str)>75) {
-                $out.= substr($str,0,75) . "\r\n";
-                $str = ' ' . substr($str,75);
+        
+        while(!empty($str)) {
+            if (($strlen = iconv_strlen($str,'utf-8')) > 75) {
+                $out.= iconv_substr($str,0,75,'utf-8') . "\r\n ";
+                $str = iconv_substr($str,75,$strlen,'utf-8');
             } else {
-                $out.=$str . "\r\n";
-                $str='';
+                $out.= $str . "\r\n";
+                $str = null;
                 break;
             }
         }
-
+        
         return $out;
 
     }
