@@ -1183,7 +1183,9 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAlarmSet(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm)
     {
-        $_alarm->setTime($_record->{$this->_recordAlarmField});
+        if ($_record->{$this->_recordAlarmField} instanceof DateTime) {
+            $_alarm->setTime($_record->{$this->_recordAlarmField});
+        }
     }
 
     /**
