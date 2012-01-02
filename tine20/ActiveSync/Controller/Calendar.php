@@ -320,9 +320,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         if(!empty($data->alarms)) {
             $alarm = $data->alarms->getFirstRecord();
             if($alarm instanceof Tinebase_Model_Alarm) {
-                // NOTE: $alarm->minutes_before is always calculated by Calendar_Controller_Event::_inspectAlarmGet
-                if ($alarm->minutes_before >= 0) {
-                    $_xmlNode->appendChild(new DOMElement('Reminder', $alarm->minutes_before, 'uri:Calendar'));
+                // NOTE: option minutes_before is always calculated by Calendar_Controller_Event::_inspectAlarmSet
+                $minutesBefore = (int) $alarm->getOption('minutes_before');
+                if ($minutesBefore >= 0) {
+                    $_xmlNode->appendChild(new DOMElement('Reminder', $minutesBefore, 'uri:Calendar'));
                 }
             }
         }
