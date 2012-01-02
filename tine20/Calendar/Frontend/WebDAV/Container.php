@@ -95,7 +95,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                 'value'     => $this->_container->getId()
             ),
             array(
-        		'fielde'    => 'period', 
+        		'field'    => 'period', 
         		'operator'  => 'within', 
         		'value'     => array(
         			'from'  => Tinebase_DateTime::now()->subWeek(4),

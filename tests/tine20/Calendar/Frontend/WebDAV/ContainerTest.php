@@ -172,11 +172,15 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
     /**
      * test getChildren
      * 
-     * @depends testCreateFile
      */
     public function testGetChildren()
     {
-        $event = $this->testCreateFile();
+        $event = $this->testCreateFile()->getRecord();
+        
+        // reschedule to match period filter
+        $event->dtstart = Tinebase_DateTime::now();
+        $event->dtend = Tinebase_DateTime::now()->addMinute(30);
+        Calendar_Controller_MSEventFacade::getInstance()->update($event);
         
         $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
         

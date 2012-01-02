@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -190,6 +190,13 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         return array($standardTransition, $daylightTransition);
     }
     
+    /**
+     * convert calendar event to Sabre_VObject_Component
+     * 
+     * @param Calendar_Model_Event $_event
+     * @param Calendar_Model_Event $_mainEvent
+     * @return Sabre_VObject_Component
+     */
     protected function _convertCalendarModelEvent(Calendar_Model_Event $_event, Calendar_Model_Event $_mainEvent = null)
     {
         // clone the event and change the timezone

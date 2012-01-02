@@ -75,25 +75,36 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
         
         Tine.widgets.container.GrantsGrid.superclass.initComponent.call(this);
         
-        //this.on('cellclick', this.onCellClick, this);
-        //this.getStore().on('update', this.onStoreUpdate(), this);
+        this.getStore().on('update', this.onStoreUpdate, this);
+        
+        this.getStore().on('load', function(store) {
+            store.each(function(r) {this.onStoreUpdate(store, r)}, this);
+        }, this);
     },
 
-//    onStoreUpdate: function(store, record, operation) {
-//        console.log(record);
-//    },
-    
-    /**
-     * @param {Grid} grid
-     * @param {Number} rowIndex
-     * @param {Number} columnIndex
-     * @param {Ext.EventObject} e
-     */
-//    onCellClick: function(grid, rowIndex, columnIndex, e) {
-//        console.log('cellclick');
-//        var grantRecord = grid.getStore().getAt(rowIndex);
-//        console.log(grantRecord);
-//    },
+    onStoreUpdate: function(store, record, operation) {
+        try {
+            if (this.alwaysShowAdminGrant || (this.grantContainer && this.grantContainer.type == 'shared')) {
+                if (record.get('adminGrant')) {
+                    // set all grants and mask other checkboxes
+                    Ext.each(this.getColumnModel().columns, function(col, colIdx) {
+                        var matches;
+                        if ((matches = col.dataIndex.match(/^([a-z]+)Grant$/)) && matches[1] != 'admin') {
+//                          //Ext.fly(this.getView().getCell(store.indexOf(record), colIdx)).mask('test');
+                            record.set(col.dataIndex, true);
+                        }
+                    }, this);
+                    
+                } else {
+                    // make sure grants are not masked
+                }
+            }
+        } catch (e) {
+            Tine.log.err(e);
+            Tine.log.err(e.stack);
+        }
+            
+    },
     
     /**
      * init grid columns
@@ -125,19 +136,12 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
         
         this.configColumns = [];
         
-        // TODO disable all grants except admin if admin is activated
-        // TODO perhaps we need to redesign the CheckColumn for that to work as it swallows the cellclick event 
-        //  and store update does not work, too
         Ext.each(grants, function(grant) {
             this.configColumns.push(new Ext.ux.grid.CheckColumn({
                 header: _(this[grant + 'GrantTitle']),
                 tooltip: _(this[grant + 'GrantDescription']),
                 dataIndex: grant + 'Grant',
                 width: 55
-//                listeners: {
-//                    
-//                    scope: this
-//                }
             }));
         }, this);
     }

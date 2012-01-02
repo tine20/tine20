@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -25,9 +25,16 @@ class Calendar_Frontend_CalDAV extends Addressbook_Frontend_CardDAV
     /**
      * (non-PHPdoc)
      * @see Sabre_DAV_Collection::getChild()
+     * 
+     * @throws Sabre_DAV_Exception
+     * @throws Sabre_DAV_Exception_FileNotFound
      */
     public function getChild($_name)
     {
+        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+            throw new Sabre_DAV_Exception('PHP 5.3+ is needed for CalDAV support.');
+        }
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' path: ' . $this->_path . ' name: ' . $_name);
     
         $pathParts = explode('/', trim($this->_path, '/'));

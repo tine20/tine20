@@ -177,6 +177,25 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
     }
     
     /**
+     * add deleted file cleanup task to scheduler
+     * 
+     * @param Zend_Scheduler $_scheduler
+     */
+    public static function addDeletedFileCleanupTask(Zend_Scheduler $_scheduler)
+    {
+        $task = Tinebase_Scheduler_Task::getPreparedTask(Tinebase_Scheduler_Task::TASK_TYPE_DAILY, array(
+            'controller'    => 'Tinebase_FileSystem',
+            'action'        => 'clearDeletedFiles',
+        ));
+        
+        $_scheduler->addTask('Tinebase_DeletedFileCleanup', $task);
+        $_scheduler->saveTask();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Saved task Tinebase_FileSystem::clearDeletedFiles in scheduler.');
+    }
+    
+    /**
      * run requests
      * 
      * @see tine20/Zend/Scheduler/Zend_Scheduler_Task::run()

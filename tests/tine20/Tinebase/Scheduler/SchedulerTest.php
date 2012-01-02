@@ -39,11 +39,15 @@ class Tinebase_Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
     public function tearDown()
     {
         // remove all tasks
-        Tinebase_Core::getScheduler()->getBackend()->saveQueue();
+        $scheduler = Tinebase_Core::getScheduler();
+        $scheduler->getBackend()->saveQueue();
         
         // init default tasks
-        $setup = new Tinebase_Setup_Initialize();
-        $setup->initTinebaseScheduler();
+        Tinebase_Scheduler_Task::addAlarmTask($scheduler);
+        Tinebase_Scheduler_Task::addCacheCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addCredentialCacheCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addTempFileCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addDeletedFileCleanupTask($scheduler);
     }
     
     /**
