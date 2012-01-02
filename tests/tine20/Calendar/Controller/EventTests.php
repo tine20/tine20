@@ -927,10 +927,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($persistentEvent, $exceptions, new Tinebase_DateTime());
         
-        $alarmTime = clone $nextOccurance->dtstart;
-        $alarmTime->subMinute(30);
+        $nextAlarmEventStart = new Tinebase_DateTime(substr($persistentEvent->alarms->getFirstRecord()->getOption('recurid'), -19));
         
-        $this->assertTrue($alarmTime->equals($persistentEvent->alarms->getFirstRecord()->alarm_time), 'initial alarm is not at expected time');
+        $this->assertTrue($nextOccurance->dtstart->equals($nextAlarmEventStart), 'initial alarm is not at expected time');
         
         // move whole series
         $persistentEvent->dtstart->addHour(5);
@@ -940,11 +939,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($updatedEvent, $exceptions, new Tinebase_DateTime());
         
-        $alarmTime = clone $nextOccurance->dtstart;
-        $alarmTime->subMinute(30);
+        $nextAlarmEventStart = new Tinebase_DateTime(substr($updatedEvent->alarms->getFirstRecord()->getOption('recurid'), -19));
         
-        $alarm = $updatedEvent->alarms->getFirstRecord();
-        $this->assertTrue($alarmTime->equals($alarm->alarm_time), 'updated alarm is not at expected time');
+        $this->assertTrue($nextOccurance->dtstart->equals($nextAlarmEventStart), 'updated alarm is not at expected time');
     }
     
     public function testSetAlarmOfRecurSeriesException()
@@ -971,9 +968,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $exceptions = $this->_controller->getRecurExceptions($persistentException);
         $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, $exceptions, Tinebase_DateTime::now());
         
-        $alarmTime = clone $nextOccurance->dtstart;
-        $alarmTime->subMinute(30);
-        $this->assertTrue($alarmTime->equals($baseEvent->alarms->getFirstRecord()->alarm_time), 'next alarm got not adjusted');
+        $nextAlarmEventStart = new Tinebase_DateTime(substr($baseEvent->alarms->getFirstRecord()->getOption('recurid'), -19));
+        
+        $this->assertTrue($nextOccurance->dtstart->equals($nextAlarmEventStart), 'next alarm got not adjusted');
         
         $alarmTime = clone $persistentException->dtstart;
         $alarmTime->subMinute(30);
