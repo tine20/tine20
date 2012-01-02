@@ -173,7 +173,7 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
      */
     getFormItems : function() {
                 
-        this.searchBox = new Tine.Calendar.SearchCombo({});
+        this.searchBox = new Tine.Calendar.SearchCombo();
 
         this.searchBox.on('filterupdate', function() {
             this.store.removeAll();
@@ -182,7 +182,7 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
         
         this.datePicker = new Ext.DatePicker({
             plugins: 'monthPickerPlugin',
-            width: 177,
+            width: 240,
             showToday: false,
             listeners: {
                 scope: this,
@@ -243,7 +243,7 @@ Tine.Calendar.AddToEventPanel.openWindow = function(config) {
     var window = Tine.WindowFactory.getWindow({
         modal: true,
         title : Tine.Tinebase.appMgr.get('Calendar').i18n._('Choose Event'),
-        width : 250,
+        width : 267,
         height : 150,
         contentPanelConstructor : 'Tine.Calendar.AddToEventPanel',
         contentPanelConstructorConfig : config

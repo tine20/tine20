@@ -31,6 +31,12 @@ Ext.ux.MonthPickerPlugin.prototype = {
         var el = Ext.DomQuery.selectNode('table[class=x-date-inner]', this.getEl().dom);
         Ext.DomHelper.applyStyles(el, 'display: none');
 
+        if(this.width) {
+            var width = this.width - 2;
+            var el1 = Ext.DomQuery.selectNode('table', this.getEl().dom);
+            Ext.DomHelper.applyStyles(el1, 'width: ' + width + 'px');
+        }
+        
         this.mbtn.disable();
         this.mbtn.el.child('em').removeClass('x-btn-arrow');
         

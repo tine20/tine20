@@ -38,6 +38,8 @@ Tine.Calendar.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerCo
      
     itemSelector: 'div.search-item',
     minListWidth: 200,
+    width: 240,
+    hideLabel: true,
     
     //private
     initComponent: function(){
@@ -55,11 +57,10 @@ Tine.Calendar.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerCo
      * @private
      */
     initTemplate: function() {
-        // Custom rendering Template
-        // TODO move style def to css ?
+
         if (! this.tpl) {
             this.tpl = new Ext.XTemplate(
-                '<tpl for="."><div class="search-item">',
+                '<tpl for="."><div class="search-item" style="border:1px solid white">',
                     '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
                         '<tr>',
                             '<td><b>{[this.encode(values.summary)]}</b></td>',
@@ -67,9 +68,8 @@ Tine.Calendar.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerCo
                     '</table>',
                 '</div></tpl>',
                 {
-                    encode: function(value) {
-                        
-                         if (value) {
+                    encode: function(value) {                
+                        if (value) {
                             return Ext.util.Format.htmlEncode(value);
                         } else {
                             return '';
