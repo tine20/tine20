@@ -143,8 +143,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @param   string  $_accountClass  type of model to return
      * 
      * @return  Tinebase_Model_User the user object
-     * @throws  Tinebase_Exception_NotFound
-     * @throws  Tinebase_Exception_Record_Validation
      */
     public function getUserByProperty($_property, $_value, $_accountClass = 'Tinebase_Model_User')
     {
@@ -152,10 +150,15 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         // append data from plugins
         foreach ($this->_sqlPlugins as $plugin) {
-            $plugin->inspectGetUserByProperty($user);
+            try {
+                $plugin->inspectGetUserByProperty($user);
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' User sql plugin failure: ' . $e->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+            }
         }
             
-        if($this instanceof Tinebase_User_Interface_SyncAble) {
+        if ($this instanceof Tinebase_User_Interface_SyncAble) {
             try {
                 $syncUser = $this->getUserByPropertyFromSyncBackend('accountId', $user, $_accountClass);
                 
