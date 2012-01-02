@@ -40,7 +40,7 @@ class Addressbook_Convert_Contact_VCard_MacOSX extends Addressbook_Convert_Conta
         #'freebusy_uri'          => null,
         'note'                  => null,
         #'role'                  => null,
-        #'salutation_id'         => null,
+        #'salutation'            => null,
         #'title'                 => null,
         'url'                   => null,
         'url_home'              => null,

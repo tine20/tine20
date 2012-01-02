@@ -356,10 +356,6 @@
           "path": "js/widgets/"
         },
         {
-          "text": "Priority.js",
-          "path": "js/widgets/"
-        },
-        {
           "text": "VersionCheck.js",
           "path": "js/widgets/"
         },

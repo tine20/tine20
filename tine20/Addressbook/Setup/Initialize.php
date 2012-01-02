@@ -46,9 +46,36 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         
         parent::_initialize($_application, $_options);
         
-        $this->_initializeUserContacts();
-        $this->_initializeGroupLists();
-        $this->_initializeConfig();
+        // those should be called automatically in parent::_initialize
+//         $this->_initializeUserContacts();
+//         $this->_initializeGroupLists();
+//         $this->_initializeConfig();
+    }
+    
+    /**
+    * init key fields
+    */
+    protected function _initializeKeyFields()
+    {
+        $cb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Config', 
+            'tableName' => 'config',
+        ));
+    
+        $keyfieldConfig = array(
+            'name'    => Addressbook_Config::CONTACT_SALUTATION,
+            'records' => array(
+                array('id' => 'MR',      'value' => 'Mr', 	   'gender' => Addressbook_Model_Salutation::GENDER_MALE,   'image' => 'images/empty_photo_male.png',    'system' => true), //_('Mr')
+                array('id' => 'MS',      'value' => 'Ms',      'gender' => Addressbook_Model_Salutation::GENDER_FEMALE, 'image' => 'images/empty_photo_female.png',  'system' => true), //_('Ms')
+                array('id' => 'COMPANY', 'value' => 'Company', 'gender' => Addressbook_Model_Salutation::GENDER_OTHER,  'image' => 'images/empty_photo_company.png', 'system' => true), //_('Company')
+            ),
+        );
+    
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'name'              => Addressbook_Config::CONTACT_SALUTATION,
+            'value'             => json_encode($keyfieldConfig),
+        )));
     }
     
     /**

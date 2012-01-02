@@ -459,6 +459,10 @@ class Setup_Controller
                 break;
         }
         
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing cache after update ...');
+        $this->_enableCaching();
+        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
+        
         return $messages;
     }
 

@@ -4,7 +4,7 @@
  * @package     Tasks
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -85,7 +85,6 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             filterModels: Tine.Tasks.Task.getFilterModel(),
             defaultFilter: 'query',
             filters: [
-//                {field: 'status', operator: 'notin', value: Tine.Tasks.Task.getClosedStatus()},
                 {field: 'container_id', operator: 'equals', value: {path: Tine.Tinebase.container.getMyNodePath()}}
             ],
             plugins: [
@@ -136,14 +135,6 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 emptyText: this.app.i18n._('Add a task...')
             })
         }, {
-//            id: 'due',
-//            header: this.app.i18n._("Due Date"),
-//            width: 60,
-//            dataIndex: 'due',
-//            renderer: Tine.Tinebase.common.dateRenderer,
-//            editor: new Ext.ux.form.ClearableDateField({}),
-//            quickaddField: new Ext.ux.form.ClearableDateField({})
-        	
         	id: 'due',
             header: this.app.i18n._("Due Date"),
 			width: 145,
@@ -166,14 +157,16 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             header: this.app.i18n._("Priority"),
             width: 65,
             dataIndex: 'priority',
-            renderer: Tine.widgets.Priority.renderer,
-            editor: new Tine.widgets.Priority.Combo({
-                allowBlank: false,
-                autoExpand: true,
-                blurOnSelect: true
-            }),
-            quickaddField: new Tine.widgets.Priority.Combo({
-                autoExpand: true
+            renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tasks', 'taskPriority'),
+            editor: {
+                xtype: 'widget-keyfieldcombo',
+                app: 'Tasks',
+                keyFieldName: 'taskPriority'
+            },
+            quickaddField: new Tine.Tinebase.widgets.keyfield.ComboBox({
+                app: 'Tasks',
+                keyFieldName: 'taskPriority',
+                value: 'NORMAL'
             })
         }, {
             id: 'percent',

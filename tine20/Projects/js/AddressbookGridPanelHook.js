@@ -32,7 +32,7 @@ Tine.Projects.AddressbookGridPanelHook = function(config) {
         text: this.app.i18n._('Project'),
         iconCls: this.app.getIconCls(),
         scope: this,
-        handler: this.onUpdateProject,
+        handler: this.onAddProject,
         listeners: {
             scope: this,
             render: this.onRender
@@ -44,7 +44,7 @@ Tine.Projects.AddressbookGridPanelHook = function(config) {
         text: this.app.i18n._('Project'),
         iconCls: this.app.getIconCls(),
         scope: this,
-        handler: this.onAddProject,
+        handler: this.onNewProject,
         listeners: {
             scope: this,
             render: this.onRender
@@ -91,26 +91,26 @@ Ext.apply(Tine.Projects.AddressbookGridPanelHook.prototype, {
     },
 
     /**
-     * compose an email to selected contacts
-     * 
-     * @param {Button} btn 
+     * adds contacts to a new project
      */
-    onAddProject: function() {
+    onNewProject: function() {
         var ms = this.app.getMainScreen(),
             cp = ms.getCenterPanel();
-            
-        var contacts = this.getContactGridPanel().grid.getSelectionModel().getSelections(); 
-        
-        cp.onEditInNewWindow.call(cp, 'add', {attendee: contacts});
-        
+ 
+        Tine.Projects.ProjectEditDialog.openWindow({selectedRecords: Ext.encode(this.getSelectionsAsArray())});
     },
     
-       
-    onUpdateProject: function() {
+    /**
+     * adds contacts to an existing project
+     */
+    onAddProject: function() {
         var cont = this.getSelectionsAsArray();
         var window = Tine.Projects.AddToProjectPanel.openWindow({attendee: cont});
     },
     
+    /**
+     * gets the current selection as an array 
+     */
     getSelectionsAsArray: function() {
         var contacts = this.getContactGridPanel().grid.getSelectionModel().getSelections(),
             cont = [];

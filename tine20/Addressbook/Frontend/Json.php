@@ -177,28 +177,6 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * get salutations
-     *
-     * @return array
-     * @todo   use _getAll() from Tinebase_Frontend_Json_Abstract
-     */
-   public function getSalutations()
-    {
-         $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        if ($rows = Addressbook_Controller_Salutation::getInstance()->getSalutations()) {
-            $rows->translate();
-            $result['results']      = $rows->toArray();
-            $result['totalcount']   = count($result['results']);
-        }
-
-        return $result;
-    }
-    
-    /**
     * returns contact prepared for json transport
     *
     * @param Addressbook_Model_Contact $_contact
@@ -235,23 +213,17 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @param  array $contactArray
      * @return string
-     * 
-     * @todo    get all available salutations first / do not query db for each record
      */
     protected function _getImageLink($contactArray)
     {
         $link = 'images/empty_photo_blank.png';
         if (! empty($contactArray['jpegphoto'])) {
             $link = 'index.php?method=Tinebase.getImage&application=Addressbook&location=&id=' . $contactArray['id'] . '&width=90&height=90&ratiomode=0';
-        } else {
-        	if (isset($contactArray['salutation_id']) && ! empty($contactArray['salutation_id'])) {
-        	    try {
-                    $salutation = Addressbook_Controller_Salutation::getInstance()->getSalutation($contactArray['salutation_id'])->toArray();
-    				$link = $salutation['image_path'];	
-        	    } catch (Tinebase_Exception_NotFound $tenf) {
-        	        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find salution record for id ' . $contactArray['salutation_id']);
-        	    }
-        	}
+        } else if (isset($contactArray['salutation']) && ! empty($contactArray['salutation'])) {
+    	    $salutationRecord = Addressbook_Config::getInstance()->contactSalutation->records->getById($contactArray['salutation']);
+    	    if ($salutationRecord->image) {
+			    $link = $salutationRecord->image;
+    	    }	
         }
         
         return $link;
@@ -270,7 +242,6 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $defaultDefinition = $this->_getDefaultImportDefinition($importDefinitions);
         
         $registryData = array(
-            'Salutations'               => $this->getSalutations(),
             'defaultAddressbook'        => $this->getDefaultAddressbook(),
             'defaultImportDefinition'   => $definitionConverter->fromTine20Model($defaultDefinition),
             'importDefinitions'         => array(

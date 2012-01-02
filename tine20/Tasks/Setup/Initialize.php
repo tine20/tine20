@@ -3,16 +3,18 @@
  * Tine 2.0
  * 
  * @package     Tasks
+ * @subpackage	Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
 /**
  * class for Tasks initialization
  * 
- * @package     Setup
+ * @package     Tasks
+ * @subpackage	Setup
  */
 class Tasks_Setup_Initialize extends Setup_Initialize
 {
@@ -21,7 +23,6 @@ class Tasks_Setup_Initialize extends Setup_Initialize
      */
     protected function _initializeKeyFields()
     {
-        // create status config
         $cb = new Tinebase_Backend_Sql(array(
             'modelName' => 'Tinebase_Model_Config', 
             'tableName' => 'config',
@@ -31,8 +32,8 @@ class Tasks_Setup_Initialize extends Setup_Initialize
             'name'    => Tasks_Config::TASK_STATUS,
             'records' => array(
                 array('id' => 'NEEDS-ACTION', 'value' => 'No response', 'is_open' => 1,  'icon' => 'images/oxygen/16x16/actions/mail-mark-unread-new.png', 'system' => true), //_('No response')
-                array('id' => 'COMPLETED',    'value' => 'Completed',   'is_open' => 0, 'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true), //_('Completed')
-                array('id' => 'CANCELLED',    'value' => 'Cancelled',   'is_open' => 0, 'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',        'system' => true), //_('Cancelled')
+                array('id' => 'COMPLETED',    'value' => 'Completed',   'is_open' => 0,  'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true), //_('Completed')
+                array('id' => 'CANCELLED',    'value' => 'Cancelled',   'is_open' => 0,  'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',        'system' => true), //_('Cancelled')
                 array('id' => 'IN-PROCESS',   'value' => 'In process',  'is_open' => 1,  'icon' => 'images/oxygen/16x16/actions/view-refresh.png',         'system' => true), //_('In process')
             ),
         );
@@ -41,6 +42,22 @@ class Tasks_Setup_Initialize extends Setup_Initialize
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
             'name'              => Tasks_Config::TASK_STATUS,
             'value'             => json_encode($tasksStatusConfig),
+        )));
+        
+        $tasksPriorityConfig = array(
+            'name'    => Tasks_Config::TASK_PRIORITY,
+            'records' => array(
+                array('id' => 'LOW', 	'value' => 'low', 	   'icon' => 'images/oxygen/16x16/actions/go-down.png', 'system' => true), //_('low')
+                array('id' => 'NORMAL', 'value' => 'normal',   'icon' => 'images/oxygen/16x16/actions/go-next.png', 'system' => true), //_('normal')
+                array('id' => 'HIGH',   'value' => 'high',     'icon' => 'images/oxygen/16x16/actions/go-up.png',   'system' => true), //_('high')
+                array('id' => 'URGENT', 'value' => 'urgent',   'icon' => 'images/oxygen/16x16/emblems/emblem-important.png', 'system' => true), //_('urgent')
+            ),
+        );
+        
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
+            'name'              => Tasks_Config::TASK_PRIORITY,
+            'value'             => json_encode($tasksPriorityConfig),
         )));
     }
     

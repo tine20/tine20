@@ -40,7 +40,7 @@ class Addressbook_Convert_Contact_VCard_Sogo extends Addressbook_Convert_Contact
         #'freebusy_uri'          => null,
         'note'                  => null,
         #'role'                  => null,
-        #'salutation_id'         => null,
+        #'salutation'            => null,
         'title'                 => null,
         'url'                   => null,
         'url_home'              => null,
