@@ -1,31 +1,45 @@
-/*
- * Tine 2.0
- * 
- * @package     Ext
- * @subpackage  ux
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- *
+/*!
+ * Ext JS Library 3.1.1
+ * Copyright(c) 2006-2010 Ext JS, LLC
+ * licensing@extjs.com
+ * http://www.extjs.com/license
  */
-Ext.ns('Ext.ux', 'Ext.ux.grid');
+Ext.ns('Ext.ux.grid');
 
 /**
- * Class for having a checkbox in a girds column.
+ * @class Ext.ux.grid.CheckColumn
+ * @extends Object
+ * GridPanel plugin to add a column with check boxes to a grid.
  * <p>Example usage:</p>
  * <pre><code>
- var cm = new Ext.grid.ColumnModel([
-    new Ext.ux.grid.CheckColumn({
-        header: 'Read',
-        dataIndex: 'readGrant',
-        width: 55
-    }),
+// create the column
+var checkColumn = new Ext.grid.CheckColumn({
+   header: 'Indoor?',
+   dataIndex: 'indoor',
+   id: 'check',
+   width: 55
+});
+
+// add the column to the column model
+var cm = new Ext.grid.ColumnModel([{
+       header: 'Foo',
+       ...
+    },
+    checkColumn
+]);
+
+// create the grid
+var grid = new Ext.grid.EditorGridPanel({
     ...
- ]);
+    cm: cm,
+    plugins: [checkColumn], // include plugin
+    ...
+});
  * </code></pre>
- * 
- * @namespace   Ext.ux.grid
- * @class       Ext.ux.grid.CheckColumn
+ * In addition to storing a Boolean value within the record data, this
+ * class toggles a css class between <tt>'x-grid3-check-col'</tt> and
+ * <tt>'x-grid3-check-col-on'</tt> to alter the background image used for
+ * a column.
  */
 Ext.ux.grid.CheckColumn = function(config){
     Ext.apply(this, config);
@@ -36,9 +50,6 @@ Ext.ux.grid.CheckColumn = function(config){
 };
 
 Ext.ux.grid.CheckColumn.prototype ={
-	/**
-	 * @private
-	 */
     init : function(grid){
         this.grid = grid;
         this.grid.on('render', function(){
@@ -46,22 +57,28 @@ Ext.ux.grid.CheckColumn.prototype ={
             view.mainBody.on('mousedown', this.onMouseDown, this);
         }, this);
     },
-    /**
-     * @private
-     */
+
     onMouseDown : function(e, t){
-        if(t.className && t.className.indexOf('x-grid3-cc-'+this.id) != -1){
+        if(Ext.fly(t).hasClass(this.createId())){
             e.stopEvent();
             var index = this.grid.getView().findRowIndex(t);
             var record = this.grid.store.getAt(index);
             record.set(this.dataIndex, !record.data[this.dataIndex]);
         }
     },
-    /**
-     * @private
-     */
+
     renderer : function(v, p, record){
-        p.css += ' x-grid3-check-col-td';
-        return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
+        p.css += ' x-grid3-check-col-td'; 
+        return String.format('<div class="x-grid3-check-col{0} {1}">&#160;</div>', v ? '-on' : '', this.createId());
+    },
+    
+    createId : function(){
+        return 'x-grid3-cc-' + this.id;
     }
 };
+
+// register ptype
+Ext.preg('checkcolumn', Ext.ux.grid.CheckColumn);
+
+// backwards compat
+Ext.grid.CheckColumn = Ext.ux.grid.CheckColumn;
