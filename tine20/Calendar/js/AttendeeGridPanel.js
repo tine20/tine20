@@ -346,12 +346,14 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * called by edit dialog when record is loaded
      * 
      * @param {Tine.Calendar.Model.Event} record
+     * @param Array addAttendee
      */
-    onRecordLoad: function(record) {
+    onRecordLoad: function(record, addAttendee) {
         this.record = record;
         this.store.removeAll();
         var attendee = record.get('attendee');
         Ext.each(attendee, function(attender) {
+
             var record = new Tine.Calendar.Model.Attender(attender, attender.id);
             this.store.addSorted(record);
             
@@ -361,6 +363,26 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }, this);
         
         if (record.get('editGrant')) {
+            // Add new attendee
+            if(Ext.isArray(addAttendee)) {
+                Ext.each(addAttendee, function(attender) {
+                    var ret = true;
+                    Ext.each(attendee, function(already) {
+                        if (already.user_id.id == attender.id) {
+                            ret = false;
+                            return false;
+                        }
+                    },this);
+                    
+                    if(ret) {
+                        var att = new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id());
+                        att.set('user_id', attender);
+                        if (!attender.account_id) att.set('status', attender.status);
+                        att.set('role', attender.role);
+                        this.store.add([att]);
+                    }
+                },this);
+            }        
             this.store.add([new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() )]);
         }
     },

@@ -305,7 +305,7 @@
         
         $messageBody = $view->render('eventNotification.php');
         
-        if (isset($method)) {
+        if (isset($method) && version_compare(PHP_VERSION, '5.3.0', '>=')) {
             $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
             $converter->setMethod($method);
             $vevent = $converter->fromTine20Model($_event);

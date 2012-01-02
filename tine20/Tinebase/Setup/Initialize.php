@@ -38,7 +38,6 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         }
         
         Tinebase_Acl_Roles::getInstance()->createInitialRoles();
-        $this->initTinebaseScheduler();
         
     	parent::_initialize($_application, $_options);
     }
@@ -114,14 +113,15 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
     }
     
     /**
-     * init scheduler
+     * init scheduler tasks
      */
-    public function initTinebaseScheduler()
+    protected function _initializeSchedulerTasks()
     {
         $scheduler = Tinebase_Core::getScheduler();
         Tinebase_Scheduler_Task::addAlarmTask($scheduler);
         Tinebase_Scheduler_Task::addCacheCleanupTask($scheduler);
         Tinebase_Scheduler_Task::addCredentialCacheCleanupTask($scheduler);
         Tinebase_Scheduler_Task::addTempFileCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addDeletedFileCleanupTask($scheduler);
     }
 }

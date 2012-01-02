@@ -610,6 +610,18 @@ class Tinebase_FileSystem
         $result = $this->_treeNodeBackend->search($_filter, $_pagination);
         return $result;
     }
+
+    /**
+    * search tree nodes count
+    *
+    * @param Tinebase_Model_Tree_Node_Filter $_filter
+    * @return integer
+    */
+    public function searchNodesCount(Tinebase_Model_Tree_Node_Filter $_filter = NULL)
+    {
+        $result = $this->_treeNodeBackend->searchCount($_filter);
+        return $result;
+    }
     
     /**
      * get tree node specified by parent node (or id) and name
@@ -672,5 +684,51 @@ class Tinebase_FileSystem
         $modLog->setRecordMetaData($_node, 'update', $currentNodeObject);
                 
         return $this->_treeNodeBackend->update($_node);
+    }
+    
+    /**
+     * removes deleted files that no longer exist in the database from the filesystem
+     * 
+     * @return integer number of deleted files
+     */
+    public function clearDeletedFiles()
+    {
+        try {
+            $dirIterator = new DirectoryIterator($this->_basePath);
+        } catch (Exception $e) {
+            throw new Tinebase_Exception_AccessDenied('Could not open files directory.');
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Scanning ' . $this->_basePath . ' for deleted files.');
+        
+        $deleteCount = 0;
+        foreach ($dirIterator as $item) {
+            $subDir = $item->getFileName();
+            $subDirIterator = new DirectoryIterator($this->_basePath . '/' . $subDir);
+            $hashsToCheck = array();
+            // loop dirs + check if files in dir are in tree_filerevisions
+            foreach ($subDirIterator as $file) {
+                if ($file->isFile()) {
+                    $hash = $subDir . $file->getFileName();
+                    $hashsToCheck[] = $hash;
+                }
+            }
+            $existingHashes = $this->_fileObjectBackend->checkRevisions($hashsToCheck);
+            $hashesToDelete = array_diff($hashsToCheck, $existingHashes);
+            // remove from filesystem if not existing any more
+            foreach ($hashesToDelete as $hashToDelete) {
+                $filename = $this->_basePath . '/' . $subDir . '/' . substr($hashToDelete, 3);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Deleting ' . $filename);
+                unlink($filename);
+                $deleteCount++;
+            }
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Deleted ' . $deleteCount . ' obsolete file.');
+        
+        return $deleteCount;
     }
 }

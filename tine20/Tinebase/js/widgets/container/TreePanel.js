@@ -104,7 +104,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @cfg {Boolean} useContainerColor
      * use container properties
      */
-    useProperties: false,
+    useProperties: true,
     
     useArrows: true,
     border: false,

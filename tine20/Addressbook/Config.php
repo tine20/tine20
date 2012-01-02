@@ -30,6 +30,13 @@ class Addressbook_Config extends Tinebase_Config_Abstract
     const CONTACT_SALUTATION = 'contactSalutation';
     
     /**
+     * config for address parsing rules file
+     * 
+     * @var string
+     */
+    const CONTACT_ADDRESS_PARSE_RULES_FILE = 'parseRulesFile';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -57,6 +64,16 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             'options'               => array('recordModel' => 'Addressbook_Model_Salutation'),
             'clientRegistryInclude' => TRUE,
         //            'default'               => 'MR'
+        ),
+        self::CONTACT_ADDRESS_PARSE_RULES_FILE => array(
+        //_('Parsing rules for addresses')
+            'label'                 => 'Parsing rules for addresses',
+        //_('Path to a XML file with address parsing rules.')
+            'description'           => 'Path to a XML file with address parsing rules.',
+            'type'                  => 'string',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
         ),
     );
     

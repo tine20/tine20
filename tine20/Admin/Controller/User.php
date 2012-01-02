@@ -180,22 +180,30 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $oldUser = $this->_userBackend->getUserByProperty('accountId', $_user, 'Tinebase_Model_FullUser');
         
-        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        
-        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-            $_user->contact_id = $oldUser->contact_id;
-            $contact = $this->createOrUpdateContact($_user);
-            $_user->contact_id = $contact->getId();
+        try {
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+            
+            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+                $_user->contact_id = $oldUser->contact_id;
+                $contact = $this->createOrUpdateContact($_user);
+                $_user->contact_id = $contact->getId();
+            }
+            
+            $user = $this->_userBackend->updateUser($_user);
+    
+            // make sure primary groups is in the list of groupmemberships
+            $groups = array_unique(array_merge(array($user->accountPrimaryGroup), (array) $_user->groups));
+            Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+            throw $e;
         }
-        
-        $user = $this->_userBackend->updateUser($_user);
-
-        // make sure primary groups is in the list of groupmemberships
-        $groups = array_unique(array_merge(array($user->accountPrimaryGroup), (array) $_user->groups));
-        Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
-        
-        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-        
+            
         // fire needed events
         $event = new Admin_Event_UpdateAccount;
         $event->account = $user;
@@ -223,20 +231,28 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         // avoid forging accountId, get's created in backend
         unset($_user->accountId);
         
-        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        
-        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-            $contact = $this->createOrUpdateContact($_user);
-            $_user->contact_id = $contact->getId();
+        try {
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+            
+            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+                $contact = $this->createOrUpdateContact($_user);
+                $_user->contact_id = $contact->getId();
+            }
+            
+            $user = $this->_userBackend->addUser($_user);
+            
+            // make sure primary groups is in the list of groupmemberships
+            $groups = array_unique(array_merge(array($user->accountPrimaryGroup), (array) $_user->groups));
+            Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+            throw $e;
         }
-        
-        $user = $this->_userBackend->addUser($_user);
-        
-        // make sure primary groups is in the list of groupmemberships
-        $groups = array_unique(array_merge(array($user->accountPrimaryGroup), (array) $_user->groups));
-        Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
-        
-        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
         $event = new Admin_Event_AddAccount(array(
         	'account' => $user

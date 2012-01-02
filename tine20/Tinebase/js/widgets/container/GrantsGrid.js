@@ -74,8 +74,41 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
         };
         
         Tine.widgets.container.GrantsGrid.superclass.initComponent.call(this);
+        
+        this.getStore().on('update', this.onStoreUpdate, this);
+        
+        this.getStore().on('load', function(store) {
+            store.each(function(r) {this.onStoreUpdate(store, r)}, this);
+        }, this);
+    },
+
+    onStoreUpdate: function(store, record, operation) {
+        try {
+            if (this.alwaysShowAdminGrant || (this.grantContainer && this.grantContainer.type == 'shared')) {
+                if (record.get('adminGrant')) {
+                    // set all grants and mask other checkboxes
+                    Ext.each(this.getColumnModel().columns, function(col, colIdx) {
+                        var matches;
+                        if ((matches = col.dataIndex.match(/^([a-z]+)Grant$/)) && matches[1] != 'admin') {
+//                          //Ext.fly(this.getView().getCell(store.indexOf(record), colIdx)).mask('test');
+                            record.set(col.dataIndex, true);
+                        }
+                    }, this);
+                    
+                } else {
+                    // make sure grants are not masked
+                }
+            }
+        } catch (e) {
+            Tine.log.err(e);
+            Tine.log.err(e.stack);
+        }
+            
     },
     
+    /**
+     * init grid columns
+     */
     initColumns: function() {
         var grants = ['read', 'add', 'edit', 'delete', 'export', 'sync'];
         
@@ -102,6 +135,7 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
         }
         
         this.configColumns = [];
+        
         Ext.each(grants, function(grant) {
             this.configColumns.push(new Ext.ux.grid.CheckColumn({
                 header: _(this[grant + 'GrantTitle']),
@@ -110,6 +144,5 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
                 width: 55
             }));
         }, this);
-        
     }
 });

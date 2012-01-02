@@ -244,7 +244,6 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($candidate, $exceptions, $_from, $_until);
                 foreach ($recurSet as $event) {
                     $_events->addRecord($event);
-                    $event->setId('fakeid' . $candidate->uid . $event->dtstart->getTimeStamp());
                 }
                 
                 // check if candidate/baseEvent has an exception itself -> in this case remove baseEvent from set
@@ -257,6 +256,27 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                continue;
             }
         }
+    }
+    
+    /**
+     * add given recurrence to given set and to nessesary adoptions
+     * 
+     * @param Calendar_Model_Event      $_recurrence
+     * @param Tinebase_Record_RecordSet $_eventSet
+     */
+    protected static function addRecurrence($_recurrence, $_eventSet)
+    {
+        $_recurrence->setId('fakeid' . $_recurrence->uid . $_recurrence->dtstart->getTimeStamp());
+        
+        // adjust alarms
+        if ($_recurrence->alarms instanceof Tinebase_Record_RecordSet) {
+            foreach($_recurrence->alarms as $alarm) {
+                $alarm->alarm_time = clone $_recurrence->dtstart;
+                $alarm->alarm_time->subMinute($alarm->getOption('minutes_before'));
+            }
+        }
+        
+        $_eventSet->addRecord($_recurrence);
     }
     
     /**
@@ -420,7 +440,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     // check if base event (recur instance) needs to be added to the set
                     if ($baseEvent->dtstart->isLater($_event->dtstart) && $baseEvent->dtstart->isLater($_from) && $baseEvent->dtstart->isEarlier($_until)) {
                         if (! in_array($baseEvent->setRecurId(), $exceptionRecurIds)) {
-                            $recurSet->addRecord($baseEvent);
+                            self::addRecurrence($baseEvent, $recurSet);
                         }
                     }
                 }
@@ -459,7 +479,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     // check if base event (recur instance) needs to be added to the set
                     if ($baseEvent->dtstart->isLater($_from) && $baseEvent->dtstart->isEarlier($_until)) {
                         if (! in_array($baseEvent->setRecurId(), $exceptionRecurIds)) {
-                            $recurSet->addRecord($baseEvent);
+                            self::addRecurrence($baseEvent, $recurSet);
                         }
                     }
                 }
@@ -564,7 +584,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $recurEvent->setRecurId();
             
             if (! in_array($recurEvent->recurid, $_exceptionRecurIds)) {
-                $_recurSet->addRecord($recurEvent);
+                self::addRecurrence($recurEvent, $_recurSet);
             }
         }
     }
@@ -647,7 +667,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             
             
             if (! in_array($recurEvent->recurid, $_exceptionRecurIds)) {
-                $_recurSet->addRecord($recurEvent);
+                self::addRecurrence($recurEvent, $_recurSet);
             }
         }
     }
@@ -746,7 +766,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $recurEvent->setRecurId();
             
             if (! in_array($recurEvent->recurid, $_exceptionRecurIds)) {
-                $_recurSet->addRecord($recurEvent);
+                self::addRecurrence($recurEvent, $_recurSet);
             }
         }
     }

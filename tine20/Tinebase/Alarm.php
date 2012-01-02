@@ -184,6 +184,11 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
         ));
         $result = $this->_backend->search($filter, NULL, $_onlyIds);
         
+        // NOTE: Adding indices to empty recordsets breaks empty tests
+        if (count($result) > 0 && $result instanceof Tinebase_Record_RecordSet) {
+            $result->addIndices(array('record_id'));
+        }
+        
         return $result;
     }
     

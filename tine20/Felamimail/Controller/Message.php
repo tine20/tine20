@@ -299,6 +299,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         switch ($part->type) {
             case Felamimail_Model_Message::CONTENT_TYPE_CALENDAR:
+                if (! version_compare(PHP_VERSION, '5.3.0', '>=')) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' PHP 5.3+ is needed for vcalendar support.');
+                    return NULL;
+                }
+                
                 $partData = new Calendar_Model_iMIP(array(
                     'id'             => $_message->getId() . '_' . $_partId,
                 	'ics'            => $decodedContent,

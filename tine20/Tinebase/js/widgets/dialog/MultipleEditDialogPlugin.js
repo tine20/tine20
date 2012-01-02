@@ -20,18 +20,14 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         
         this.editDialog = editDialog;
         this.app = Tine.Tinebase.appMgr.get(this.editDialog.app);
-        this.form = this.editDialog.getForm();
-
-        Tine.log.debug('TRE', this.editDialog.selectionFilter);
-        Tine.log.debug('TRE', this.editDialog.selectedRecords);
-        
+        this.form = this.editDialog.getForm();    
         
         this.editDialog.on('render', this.onAfterRender, this);
 
         this.editDialog.onRecordLoad = this.editDialog.onRecordLoad.createInterceptor(this.onRecordLoad, this);
         this.editDialog.onRecordUpdate = this.editDialog.onRecordUpdate.createInterceptor(this.onRecordUpdate, this);
         this.editDialog.isValid = this.editDialog.isValid.createInterceptor(this.isValid, this);
-        this.editDialog.onApplyChanges = function(button, event, closeWindow) { this.onRecordUpdate(); }
+        this.editDialog.onApplyChanges = function(button, event, closeWindow) { this.onRecordUpdate(); };
     },
 
     isValid : function() {

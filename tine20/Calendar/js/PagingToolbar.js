@@ -21,6 +21,14 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
      * @private periodPicker
      */
     periodPicker: null,
+    /**
+     * @cfg {Boolean} showReloadBtn
+     */    
+    showReloadBtn: true,
+    /**
+     * @cfg {Boolean} showTodayBtn
+     */ 
+    showTodayBtn: true,
     
     /**
      * @private
@@ -81,24 +89,30 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
             iconCls: "x-tbar-page-next",
             handler: this.onClick.createDelegate(this, ["next"])
         });
-        this.addSeparator();
-        this.todayBtn = this.addButton({
-            text: Ext.DatePicker.prototype.todayText,
-            iconCls: 'cal-today-action',
-            handler: this.onClick.createDelegate(this, ["today"])
-        });
-        this.loading = this.addButton({
-            tooltip: Ext.PagingToolbar.prototype.refreshText,
-            iconCls: "x-tbar-loading",
-            handler: this.onClick.createDelegate(this, ["refresh"])
-        });
+        
+        if(this.showTodayBtn || this.showReloadBtn) this.addSeparator();
+        
+        if(this.showTodayBtn) {
+            this.todayBtn = this.addButton({
+                text: Ext.DatePicker.prototype.todayText,
+                iconCls: 'cal-today-action',
+                handler: this.onClick.createDelegate(this, ["today"])
+            });
+        }
+
+        if(this.showReloadBtn) {
+            this.loading = this.addButton({
+                tooltip: Ext.PagingToolbar.prototype.refreshText,
+                iconCls: "x-tbar-loading",
+                handler: this.onClick.createDelegate(this, ["refresh"])
+            });
+        }
         
         this.addFill();
         
         if(this.isLoading){
             this.loading.disable();
         }
-        
     },
     
     /**

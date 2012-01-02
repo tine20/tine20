@@ -300,6 +300,21 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         // check 'changed' systemnote
         $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) customfields ([] -> {');
+        
+        /* TODO: check invalid records
+        // check invalid data
+        
+        $contact = $this->_addContact($company);
+        $contactId= $contact['id'];
+        $changes = array(
+            array('name' => 'n_family', 'value' => ''),
+            array('name' => 'n_given',  'value' => ''),
+            array('name' => 'org_name', 'value' => '')
+        );
+        $result = $json->updateMultipleRecords('Addressbook', 'Contact', $changes, $filter);
+        
+        $this->assertEquals($record['url'],'http://www.phpunit.de','DefaultField "url" was not updated as expected');
+        */
     }
     
     /**
@@ -538,6 +553,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'value'    =>  Tinebase_Core::getUser()->accountDisplayName
         )));
         $sharedTagName = $this->_createAndAttachTag($filter);
+        // need to sleep for 1 second because modlog does not allow to change the same attribute twice in the same second ...
+        sleep(1);
         $personalTagName = $this->_createAndAttachTag($filter, Tinebase_Model_Tag::TYPE_PERSONAL);
 
         // export first and create files array

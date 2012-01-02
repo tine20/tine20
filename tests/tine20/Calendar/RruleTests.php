@@ -936,6 +936,37 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals('2003-03-28 08:00:00', $event->getOriginalDtStart()->format(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
+    public function testAlarmAdjust()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'custom alarm',
+            'dtstart'       => '2011-12-30 10:30:00',
+            'dtend'         => '2011-12-30 12:30:00',
+            'rrule'         => 'FREQ=YEARLY',
+            'originator_tz' => 'Europe/Berlin',
+            'alarms'        => array(array(
+                'alarm_time'        => '2011-12-20 10:30:00',
+                'minutes_before'    => 'custom',
+                'options'           => Zend_Json::encode(array(
+                    'minutes_before' => 14400,
+                    'recurid'        => NULL,
+                    'custom'         => TRUE,
+                ))
+            )),
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        $from = new Tinebase_DateTime('2012-01-01 00:00:00');
+        $until = new Tinebase_DateTime('2012-12-31 23:59:59');
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($event, $exceptions, $from, $until);
+        
+        $this->assertEquals(1, count($recurSet), 'recur set failed');
+        $this->assertEquals('2012-12-20 10:30:00', (string) $recurSet->getFirstRecord()->alarms->getFirstRecord()->alarm_time);
+    }
+    
 }
     
 
