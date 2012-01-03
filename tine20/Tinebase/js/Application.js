@@ -120,8 +120,18 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
     onBeforeActivate: Ext.emptyFn,
     
     /**
+     * template function for subclasses is called after app activation.
+     */
+    onActivate: Ext.emptyFn,
+    
+    /**
      * template function for subclasses is called before app deactivation. Return false to cancel deactivation
      */
-    onBeforeDeActivate: Ext.emptyFn
+    onBeforeDeActivate: Ext.emptyFn,
+    
+    /**
+     * template function for subclasses is called after app deactivation.
+     */
+    onDeActivate: Ext.emptyFn
     
 });
