@@ -30,6 +30,7 @@ class ActiveSync_Command_AllTests
         
         $suite->addTestSuite('ActiveSync_Command_FolderSyncTests');
         $suite->addTestSuite('ActiveSync_Command_ProvisionTests');
+        $suite->addTestSuite('ActiveSync_Command_SyncTests');
         
         return $suite;
     }
