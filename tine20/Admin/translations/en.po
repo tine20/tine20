@@ -131,20 +131,20 @@ msgstr "Label"
 #: js/customfield/GridPanel.js:72 js/customfield/EditDialog.js:595
 #: js/SambaMachineGrid.js:86 js/user/EditDialog.js:278
 #: js/user/EditDialog.js:314 js/Groups.js:235 js/Applications.js:278
-#: js/AccessLog.js:131 js/Tags.js:225 js/container/EditDialog.js:122
+#: js/AccessLog.js:131 js/Tags.js:225 js/container/EditDialog.js:123
 #: js/Roles.js:238
 msgid "Name"
 msgstr "Name"
 
 #: js/customfield/GridPanel.js:73 js/customfield/EditDialog.js:583
 #: js/container/GridPanel.js:73 js/container/GridPanel.js:104
-#: js/container/EditDialog.js:143
+#: js/container/EditDialog.js:144
 msgid "Type"
 msgstr "Type"
 
 #: js/customfield/GridPanel.js:74 js/customfield/EditDialog.js:387
 #: js/customfield/EditDialog.js:528 js/Models.js:128
-#: js/container/GridPanel.js:72 js/container/EditDialog.js:134
+#: js/container/GridPanel.js:72 js/container/EditDialog.js:135
 #: js/ApplicationFilter.js:33
 msgid "Application"
 msgid_plural "Applications"
@@ -275,7 +275,7 @@ msgstr "Length"
 msgid "Custom field additional properties"
 msgstr "Custom field additional properties"
 
-#: js/customfield/EditDialog.js:620 js/GroupEditDialog.js:215 js/Models.js:87
+#: js/customfield/EditDialog.js:620 js/GroupEditDialog.js:216 js/Models.js:87
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] "Group"
@@ -363,41 +363,41 @@ msgstr "Please fix the errors noted."
 msgid "Group Members"
 msgstr "Group Members"
 
-#: js/GroupEditDialog.js:127
+#: js/GroupEditDialog.js:128
 msgid "Group Name"
 msgstr "Group Name"
 
-#: js/GroupEditDialog.js:135 js/SambaMachineGrid.js:62
-#: js/SambaMachineGrid.js:92 js/RoleEditDialog.js:291 js/user/GridPanel.js:99
-#: js/Groups.js:236 js/TagEditDialog.js:225 js/Tags.js:226 js/Roles.js:239
+#: js/GroupEditDialog.js:136 js/SambaMachineGrid.js:62
+#: js/SambaMachineGrid.js:92 js/RoleEditDialog.js:292 js/user/GridPanel.js:99
+#: js/Groups.js:236 js/TagEditDialog.js:226 js/Tags.js:226 js/Roles.js:239
 msgid "Description"
 msgstr "Description"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:837
+#: js/GroupEditDialog.js:144 js/user/EditDialog.js:837
 msgid "Visibility"
 msgstr "Visibility"
 
-#: js/GroupEditDialog.js:149 js/user/EditDialog.js:843
+#: js/GroupEditDialog.js:150 js/user/EditDialog.js:843
 msgid "Display in addressbook"
 msgstr "Display in addressbook"
 
-#: js/GroupEditDialog.js:149 js/user/EditDialog.js:843
+#: js/GroupEditDialog.js:150 js/user/EditDialog.js:843
 msgid "Hide from addressbook"
 msgstr "Hide from addressbook"
 
-#: js/GroupEditDialog.js:160 js/user/EditDialog.js:857
+#: js/GroupEditDialog.js:161 js/user/EditDialog.js:857
 msgid "Saved in Addressbook"
 msgstr "Saved in Addressbook"
 
-#: js/GroupEditDialog.js:215 js/RoleEditDialog.js:358 js/TagEditDialog.js:289
+#: js/GroupEditDialog.js:216 js/RoleEditDialog.js:359 js/TagEditDialog.js:290
 msgid "Transferring {0}..."
 msgstr "Transferring {0}..."
 
-#: js/GroupEditDialog.js:220 js/GroupEditDialog.js:231
+#: js/GroupEditDialog.js:221 js/GroupEditDialog.js:232
 msgid "Add new group"
 msgstr "Add new group"
 
-#: js/GroupEditDialog.js:233
+#: js/GroupEditDialog.js:234
 msgid "Edit Group \"{0}\""
 msgstr "Edit Group \"{0}\""
 
@@ -425,19 +425,19 @@ msgstr "Rights"
 msgid "Members"
 msgstr "Members"
 
-#: js/RoleEditDialog.js:283
+#: js/RoleEditDialog.js:284
 msgid "Role Name"
 msgstr "Role Name"
 
-#: js/RoleEditDialog.js:358
+#: js/RoleEditDialog.js:359
 msgid "Role"
 msgstr "Role"
 
-#: js/RoleEditDialog.js:368
+#: js/RoleEditDialog.js:369
 msgid "Add New Role"
 msgstr "Add New Role"
 
-#: js/RoleEditDialog.js:370
+#: js/RoleEditDialog.js:371
 msgid "Edit Role \"{0}\""
 msgstr "Edit Role \"{0}\""
 
@@ -833,31 +833,31 @@ msgstr "Context"
 msgid "Account Rights"
 msgstr "Account Rights"
 
-#: js/TagEditDialog.js:195
+#: js/TagEditDialog.js:196
 msgid "View"
 msgstr "View"
 
-#: js/TagEditDialog.js:200
+#: js/TagEditDialog.js:201
 msgid "Use"
 msgstr "Use"
 
-#: js/TagEditDialog.js:218
+#: js/TagEditDialog.js:219
 msgid "Tag Name"
 msgstr "Tag Name"
 
-#: js/TagEditDialog.js:231 js/Tags.js:222 js/container/EditDialog.js:158
+#: js/TagEditDialog.js:232 js/Tags.js:222 js/container/EditDialog.js:159
 msgid "Color"
 msgstr "Color"
 
-#: js/TagEditDialog.js:289
+#: js/TagEditDialog.js:290
 msgid "Tag"
 msgstr "Tag"
 
-#: js/TagEditDialog.js:299
+#: js/TagEditDialog.js:300
 msgid "Add New Tag"
 msgstr "Add New Tag"
 
-#: js/TagEditDialog.js:301
+#: js/TagEditDialog.js:302
 msgid "Edit Tag \"{0}\""
 msgstr "Edit Tag \"{0}\""
 
@@ -965,15 +965,15 @@ msgid_plural "Containers"
 msgstr[0] "Container"
 msgstr[1] "Containers"
 
-#: js/container/EditDialog.js:144
+#: js/container/EditDialog.js:145
 msgid "personal"
 msgstr "personal"
 
-#: js/container/EditDialog.js:144
+#: js/container/EditDialog.js:145
 msgid "shared"
 msgstr "shared"
 
-#: js/container/EditDialog.js:163
+#: js/container/EditDialog.js:164
 msgid "Note for Owner"
 msgstr "Note for Owner"
 

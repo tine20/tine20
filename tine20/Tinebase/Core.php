@@ -640,6 +640,7 @@ class Tinebase_Core
      * 
      * @param array $_options
      * @param string $_namespace
+     * @throws Exception
      */
     public static function startSession($_options = array(), $_namespace = 'tinebase')
     {
@@ -648,11 +649,11 @@ class Tinebase_Core
         
         try {
             Zend_Session::start();
-        } catch (Zend_Session_Exception $zse) {
+        } catch (Exception $e) {
             Zend_Session::destroy();
-            self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Session error: ' . $zse->getMessage());
-            self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zse->getTraceAsString());
-            throw $zse;
+            self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Session error: ' . $e->getMessage());
+            self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+            throw $e;
         }
         
         $session = new Zend_Session_Namespace($_namespace);

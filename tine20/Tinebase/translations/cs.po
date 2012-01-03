@@ -159,19 +159,19 @@ msgstr ""
 msgid "Directory with web server write access for user files."
 msgstr ""
 
-#: Frontend/Http.php:357 js/ExceptionHandler.js:140
+#: Frontend/Http.php:374 js/ExceptionHandler.js:140
 msgid "Authorisation Required"
 msgstr "Je vyžadována autorizace"
 
-#: Frontend/Http.php:358
+#: Frontend/Http.php:375
 msgid "Your session is not valid. You need to login again."
 msgstr "Vaše relace je neplatná. Musíte se přihlásit znovu."
 
-#: Frontend/Http.php:384 js/ExceptionDialog.js:50
+#: Frontend/Http.php:400 js/ExceptionDialog.js:50
 msgid "Abnormal End"
 msgstr "Abnormální ukončení"
 
-#: Frontend/Http.php:385 js/ExceptionDialog.js:75
+#: Frontend/Http.php:401 js/ExceptionDialog.js:75
 msgid "An error occurred, the program ended abnormal."
 msgstr "Došlo k chybě, program se neukončil korektně."
 
@@ -179,43 +179,43 @@ msgstr "Došlo k chybě, program se neukončil korektně."
 msgid "default"
 msgstr ""
 
-#: Setup/setup.xml:3014
+#: Setup/setup.xml:3017
 msgid "note"
 msgstr "poznámka"
 
-#: Setup/setup.xml:3019
+#: Setup/setup.xml:3022
 msgid "default note type"
 msgstr "výchozí typ poznámky"
 
-#: Setup/setup.xml:3045
+#: Setup/setup.xml:3048
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:3050
+#: Setup/setup.xml:3053
 msgid "telephone call"
 msgstr "telefonní hovor"
 
-#: Setup/setup.xml:3076
+#: Setup/setup.xml:3079
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:3081
+#: Setup/setup.xml:3084
 msgid "email contact"
 msgstr "emailový kontakt"
 
-#: Setup/setup.xml:3107
+#: Setup/setup.xml:3110
 msgid "created"
 msgstr "vytvořeno"
 
-#: Setup/setup.xml:3112
+#: Setup/setup.xml:3115
 msgid "record created"
 msgstr "záznam byl vytvořen"
 
-#: Setup/setup.xml:3138
+#: Setup/setup.xml:3141
 msgid "changed"
 msgstr "změněno"
 
-#: Setup/setup.xml:3143
+#: Setup/setup.xml:3146
 msgid "record changed"
 msgstr "záznam byl změněn"
 
@@ -392,9 +392,9 @@ msgid "Install Tine 2.0 as web app in your browser."
 msgstr ""
 
 #: js/MainMenu.js:213 js/widgets/persistentfilter/PickerPanel.js:330
-#: js/widgets/dialog/EditDialog.js:561
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:297
-#: js/widgets/tree/ContextMenu.js:329 js/widgets/grid/GridPanel.js:1336
+#: js/widgets/dialog/EditDialog.js:567
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:312
+#: js/widgets/tree/ContextMenu.js:333 js/widgets/grid/GridPanel.js:1392
 msgid "Confirm"
 msgstr "Potvrdit"
 
@@ -414,7 +414,7 @@ msgstr "Čekejte prosím!"
 msgid "Profile Information"
 msgstr ""
 
-#: js/AdminPanel.js:79 js/widgets/dialog/EditDialog.js:237
+#: js/AdminPanel.js:79 js/widgets/dialog/EditDialog.js:242
 #: js/widgets/EditRecord.js:168
 msgid "Apply"
 msgstr "Použít"
@@ -452,7 +452,7 @@ msgstr ""
 msgid "Please select a file with one of the following extensions:"
 msgstr ""
 
-#: js/widgets/form/RecordPickerComboBox.js:69 js/widgets/tags/TagsPanel.js:474
+#: js/widgets/form/RecordPickerComboBox.js:69 js/widgets/tags/TagsPanel.js:477
 msgid "Searching..."
 msgstr "Vyhledávám..."
 
@@ -481,31 +481,31 @@ msgstr "Uložit konfiguraci"
 msgid "Reload config"
 msgstr "Znovu načíst konfiguraci"
 
-#: js/widgets/account/PickerGridPanel.js:149
+#: js/widgets/account/PickerGridPanel.js:155
 msgid "Search User"
 msgstr "Hledat uživatele"
 
-#: js/widgets/account/PickerGridPanel.js:155
+#: js/widgets/account/PickerGridPanel.js:161
 msgid "Search Group"
 msgstr "Hledat skupinu"
 
-#: js/widgets/account/PickerGridPanel.js:161
+#: js/widgets/account/PickerGridPanel.js:167
 msgid "Add Anyone"
 msgstr "Přidat kohokoli"
 
-#: js/widgets/account/PickerGridPanel.js:170
+#: js/widgets/account/PickerGridPanel.js:176
 msgid "Anyone"
 msgstr "Kdokoli"
 
-#: js/widgets/account/PickerGridPanel.js:218
+#: js/widgets/account/PickerGridPanel.js:224
 msgid "Search for users ..."
 msgstr "Hledat uživatele..."
 
-#: js/widgets/account/PickerGridPanel.js:239
+#: js/widgets/account/PickerGridPanel.js:246
 msgid "Search for groups ..."
 msgstr "Hledat skupiny..."
 
-#: js/widgets/account/PickerGridPanel.js:255
+#: js/widgets/account/PickerGridPanel.js:262
 #: js/widgets/grid/LinkGridPanel.js:103
 #: js/widgets/container/PropertiesDialog.js:104 js/Models.js:393
 msgid "Name"
@@ -514,22 +514,6 @@ msgstr "Jméno"
 #: js/widgets/TimezoneChooser.js:77
 msgid "setting new timezone..."
 msgstr "nastavuji nové časové pásmo..."
-
-#: js/widgets/Priority.js:20
-msgid "low"
-msgstr "nízká"
-
-#: js/widgets/Priority.js:21
-msgid "normal"
-msgstr "normální"
-
-#: js/widgets/Priority.js:22
-msgid "high"
-msgstr "vysoká"
-
-#: js/widgets/Priority.js:23
-msgid "urgent"
-msgstr "urgentní"
 
 #: js/widgets/ActivitiesPanel.js:147
 msgid "Add a Note..."
@@ -558,7 +542,7 @@ msgstr "Zadejte novou poznámku:"
 
 #: js/widgets/ActivitiesPanel.js:306
 #: js/widgets/persistentfilter/PickerPanel.js:592
-#: js/widgets/dialog/EditDialog.js:245
+#: js/widgets/dialog/EditDialog.js:250
 #: js/widgets/dialog/PreferencesDialog.js:122
 #: js/widgets/dialog/MultiOptionsDialog.js:109
 #: js/widgets/dialog/WizardPanel.js:187 js/widgets/EditRecord.js:178
@@ -569,7 +553,7 @@ msgstr "Zadejte novou poznámku:"
 msgid "Cancel"
 msgstr "Storno"
 
-#: js/widgets/ActivitiesPanel.js:314 js/widgets/dialog/EditDialog.js:227
+#: js/widgets/ActivitiesPanel.js:314 js/widgets/dialog/EditDialog.js:232
 #: js/widgets/dialog/PreferencesDialog.js:114
 #: js/widgets/dialog/MultiOptionsDialog.js:102 js/widgets/EditRecord.js:157
 #: js/widgets/container/ContainerSelect.js:459
@@ -591,7 +575,7 @@ msgstr "Přidat {0} poznámku..."
 msgid "Type"
 msgstr "Typ"
 
-#: js/widgets/ActivitiesPanel.js:467 js/widgets/grid/GridPanel.js:1021
+#: js/widgets/ActivitiesPanel.js:467 js/widgets/grid/GridPanel.js:1066
 msgid "Created By"
 msgstr "Vytvořil(a)"
 
@@ -656,8 +640,8 @@ msgstr "Opravdu chcete smazat oblíbenou položku \"{0}\"?"
 #: js/widgets/persistentfilter/PickerPanel.js:374
 #: js/widgets/persistentfilter/PickerPanel.js:404
 #: js/widgets/persistentfilter/PickerPanel.js:458
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:300
-#: js/widgets/tree/ContextMenu.js:178 js/widgets/container/GrantsDialog.js:95
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:315
+#: js/widgets/tree/ContextMenu.js:182 js/widgets/container/GrantsDialog.js:95
 #: js/LoginPanel.js:341
 msgid "Please wait"
 msgstr "Čekejte prosím"
@@ -725,7 +709,7 @@ msgid "Title"
 msgstr "Čas"
 
 #: js/widgets/persistentfilter/PickerPanel.js:679
-#: js/widgets/tags/TagsPanel.js:609 js/ExceptionDialog.js:83
+#: js/widgets/tags/TagsPanel.js:612 js/ExceptionDialog.js:83
 msgid "Description"
 msgstr "Popis"
 
@@ -745,33 +729,33 @@ msgstr "Obecné předvolby"
 msgid "My Profile"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:254 js/widgets/EditRecord.js:188
+#: js/widgets/dialog/EditDialog.js:259 js/widgets/EditRecord.js:188
 msgid "delete"
 msgstr "smazat"
 
-#: js/widgets/dialog/EditDialog.js:294 js/widgets/dialog/EditDialog.js:307
+#: js/widgets/dialog/EditDialog.js:299 js/widgets/dialog/EditDialog.js:312
 #: js/widgets/EditRecord.js:131
 msgid "Saved in"
 msgstr "Uloženo v"
 
-#: js/widgets/dialog/EditDialog.js:382 js/widgets/grid/GridPanel.js:367
+#: js/widgets/dialog/EditDialog.js:388 js/widgets/grid/GridPanel.js:374
 msgid "Copy {0}"
 msgstr "Kopírovat {0}"
 
-#: js/widgets/dialog/EditDialog.js:385
+#: js/widgets/dialog/EditDialog.js:391
 msgid "Add New {0}"
 msgstr "Přidat nový {0}"
 
-#: js/widgets/dialog/EditDialog.js:387
+#: js/widgets/dialog/EditDialog.js:393
 msgid "Edit {0} \"{1}\""
 msgstr "Editovat {0} \"{1}\""
 
-#: js/widgets/dialog/EditDialog.js:433
+#: js/widgets/dialog/EditDialog.js:439
 msgid "Transferring {0}..."
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:544
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:286
+#: js/widgets/dialog/EditDialog.js:550
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:301
 #: js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/PreferencesDialog.js:250
 #: js/widgets/dialog/PreferencesDialog.js:279
@@ -779,32 +763,32 @@ msgstr ""
 msgid "Errors"
 msgstr "Chyby"
 
-#: js/widgets/dialog/EditDialog.js:554
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:325
+#: js/widgets/dialog/EditDialog.js:560
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 #: js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/ExportDialog.js:140 js/LoginPanel.js:379
 msgid "Please fix the errors noted."
 msgstr "Opravte prosím uvedené chyby."
 
-#: js/widgets/dialog/EditDialog.js:561
+#: js/widgets/dialog/EditDialog.js:567
 msgid "Do you really want to delete this {0}?"
 msgstr "Opravdu chcete smazat {0}?"
 
-#: js/widgets/dialog/EditDialog.js:563 js/widgets/grid/GridPanel.js:1369
+#: js/widgets/dialog/EditDialog.js:569 js/widgets/grid/GridPanel.js:1425
 msgid "Deleting {0}"
 msgstr "Mažu {0}"
 
-#: js/widgets/dialog/EditDialog.js:573 js/widgets/grid/GridPanel.js:1386
-#: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:406
-#: js/widgets/tags/TagsPanel.js:439
+#: js/widgets/dialog/EditDialog.js:579 js/widgets/grid/GridPanel.js:1442
+#: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:409
+#: js/widgets/tags/TagsPanel.js:442
 msgid "Failed"
 msgstr "Nepodařilo se"
 
-#: js/widgets/dialog/EditDialog.js:573 js/widgets/grid/GridPanel.js:1386
+#: js/widgets/dialog/EditDialog.js:579 js/widgets/grid/GridPanel.js:1442
 msgid "Could not delete {0}."
 msgstr "Nepodařilo se smazat {0}."
 
-#: js/widgets/dialog/EditDialog.js:625
+#: js/widgets/dialog/EditDialog.js:631
 msgid "Resolve Duplicate {0} Suspicion"
 msgstr ""
 
@@ -812,46 +796,58 @@ msgstr ""
 msgid "There are no preferences for this application."
 msgstr "Pro tuto aplikaci nejsou žádné předvolby."
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:39
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:42
 msgid "Either {0} or {1} must be given"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:39
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:42
 #, fuzzy
 msgid "Last Name"
 msgstr "Jméno"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:39
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:42
 msgid "Company"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:48
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:51
 msgid "Field \"Description\" must not be empty"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:70
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:73
+msgid "multiple"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:75
 msgid "Edit {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:191
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:202
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:206
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:217
 msgid "Delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:207
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:222
 msgid "Undo delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:265
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:280
 msgid "<br /><ul style=\"padding:10px;border:1px\">"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:297
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:312
 msgid "Do you really want to change these {0} records?"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:300
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:315
 msgid "Applying changes"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:329
+msgid "Update Error"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:329
+msgid "There had been {0} Error(s) while updating {1} records."
 msgstr ""
 
 #: js/widgets/dialog/DuplicateResolveGridPanel.js:41
@@ -1217,63 +1213,63 @@ msgstr "Spravovat oprávnění"
 msgid "Properties"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:80
+#: js/widgets/tree/ContextMenu.js:81
 msgid "Set color"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:94
+#: js/widgets/tree/ContextMenu.js:95
 msgid "Reload"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:101 js/widgets/grid/FileUploadGrid.js:197
+#: js/widgets/tree/ContextMenu.js:102 js/widgets/grid/FileUploadGrid.js:197
 msgid "Resume upload"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:109 js/widgets/grid/FileUploadGrid.js:188
+#: js/widgets/tree/ContextMenu.js:110 js/widgets/grid/FileUploadGrid.js:188
 msgid "Pause upload"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:117
+#: js/widgets/tree/ContextMenu.js:118
 msgid "Download"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:172
+#: js/widgets/tree/ContextMenu.js:176
 msgid "New {0}"
 msgstr "Nový {0}"
 
-#: js/widgets/tree/ContextMenu.js:172
+#: js/widgets/tree/ContextMenu.js:176
 msgid "Please enter the name of the new {0}:"
 msgstr "Zadejte prosím název pro nový(ou/é) {0}:"
 
-#: js/widgets/tree/ContextMenu.js:175
+#: js/widgets/tree/ContextMenu.js:179
 msgid "No {0} added"
 msgstr "Žádný {0} nebyl přidán"
 
-#: js/widgets/tree/ContextMenu.js:175 js/widgets/tree/ContextMenu.js:258
+#: js/widgets/tree/ContextMenu.js:179 js/widgets/tree/ContextMenu.js:262
 msgid "You have to supply a {0} name!"
 msgstr "Musíte zadat název pro {0}!"
 
-#: js/widgets/tree/ContextMenu.js:178
+#: js/widgets/tree/ContextMenu.js:182
 msgid "Creating {0}..."
 msgstr "Vytvářím {0}..."
 
-#: js/widgets/tree/ContextMenu.js:252
+#: js/widgets/tree/ContextMenu.js:256
 msgid "Please enter the new name of the {0}:"
 msgstr "Zadejte prosím nový název pro {0}:"
 
-#: js/widgets/tree/ContextMenu.js:258
+#: js/widgets/tree/ContextMenu.js:262
 msgid "Not renamed {0}"
 msgstr "Nepřejmenováno {0}"
 
-#: js/widgets/tree/ContextMenu.js:329
+#: js/widgets/tree/ContextMenu.js:333
 msgid "Do you really want to delete the {0} \"{1}\"?"
 msgstr "Opravdu chcete smazat  {0} \"{1}\"?"
 
-#: js/widgets/tree/ContextMenu.js:443
+#: js/widgets/tree/ContextMenu.js:447
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr "Spravovat oprávnění pro {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:469
+#: js/widgets/tree/ContextMenu.js:475
 msgid "Properties for {0} \"{1}\""
 msgstr ""
 
@@ -1301,7 +1297,7 @@ msgid "Defined by ..."
 msgstr ""
 
 #: js/widgets/relation/FilterModel.js:91 js/widgets/grid/FilterModel.js:223
-#: js/widgets/grid/ForeignRecordFilter.js:397
+#: js/widgets/grid/ForeignRecordFilter.js:396
 msgid "select a operator"
 msgstr "vyberte operátor"
 
@@ -1309,12 +1305,12 @@ msgstr "vyberte operátor"
 msgid "Define ..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:254
+#: js/widgets/grid/GridPanel.js:261
 msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr "Nebyly nalezeny žádné {0}. Zkuste prosím změnit kritéria filtru, volby zobrazování nebo {1} ve kterém hledáte."
 
-#: js/widgets/grid/GridPanel.js:352 js/widgets/grid/GridPanel.js:353
-#: js/widgets/grid/GridPanel.js:354
+#: js/widgets/grid/GridPanel.js:359 js/widgets/grid/GridPanel.js:360
+#: js/widgets/grid/GridPanel.js:361
 #, fuzzy
 msgid "Edit {0}"
 msgid_plural "Edit {0}"
@@ -1322,58 +1318,66 @@ msgstr[0] "Editovat {0}"
 msgstr[1] "Editovat {0}"
 msgstr[2] "Editovat {0}"
 
-#: js/widgets/grid/GridPanel.js:378
+#: js/widgets/grid/GridPanel.js:385
 msgid "Add {0}"
 msgstr "Přidat {0}"
 
-#: js/widgets/grid/GridPanel.js:386
+#: js/widgets/grid/GridPanel.js:393
 msgid "Print Page"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:433 js/widgets/grid/GridPanel.js:434
-#: js/widgets/grid/GridPanel.js:436
+#: js/widgets/grid/GridPanel.js:440 js/widgets/grid/GridPanel.js:441
+#: js/widgets/grid/GridPanel.js:443
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Smazat {0}"
 msgstr[1] "Smazat {0}"
 msgstr[2] "Smazat {0}"
 
-#: js/widgets/grid/GridPanel.js:776
+#: js/widgets/grid/GridPanel.js:783
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Zobrazuji záznamy {0} - {1} z {2}"
 
-#: js/widgets/grid/GridPanel.js:777
+#: js/widgets/grid/GridPanel.js:784
 msgid "No {0} to display"
 msgstr "Žádné {0} ke zobrazení"
 
-#: js/widgets/grid/GridPanel.js:1020
+#: js/widgets/grid/GridPanel.js:1000
+msgid "New..."
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:1019
+msgid "Add to..."
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:1065
 msgid "Creation Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1022
+#: js/widgets/grid/GridPanel.js:1067
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1023
+#: js/widgets/grid/GridPanel.js:1068
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1310
+#: js/widgets/grid/GridPanel.js:1366
 msgid "Not Allowed"
 msgstr "Není povoleno"
 
-#: js/widgets/grid/GridPanel.js:1311
+#: js/widgets/grid/GridPanel.js:1367
 msgid "You are not allowed to delete all pages at once"
 msgstr "Nemáte oprávnění smazat všechny stránky najednou."
 
-#: js/widgets/grid/GridPanel.js:1334
+#: js/widgets/grid/GridPanel.js:1390
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/widgets/grid/GridPanel.js:1369
+#: js/widgets/grid/GridPanel.js:1425
 msgid " ... This may take a long time!"
 msgstr "... Toto může trvat dlouho!"
 
@@ -1523,7 +1527,7 @@ msgstr "příští čtvrtletí"
 msgid "next year"
 msgstr "příští rok"
 
-#: js/widgets/grid/FileUploadGrid.js:115 js/ux/form/ImageField.js:162
+#: js/widgets/grid/FileUploadGrid.js:115 js/ux/form/ImageField.js:164
 msgid "Upload Failed"
 msgstr "Aktualizace se nezdařila"
 
@@ -1673,7 +1677,7 @@ msgid "You are not allowed to remove all admins for this container!"
 msgstr "Nemáte oprávnění odstranit všechny administrátory pro tento kontejner!"
 
 #: js/widgets/container/PropertiesDialog.js:110
-#: js/widgets/tags/TagsPanel.js:613
+#: js/widgets/tags/TagsPanel.js:616
 msgid "Color"
 msgstr "Barva"
 
@@ -1681,22 +1685,22 @@ msgstr "Barva"
 msgid "My Grants"
 msgstr ""
 
-#: js/widgets/container/TreePanel.js:136
+#: js/widgets/container/TreePanel.js:141
 msgid "container"
 msgid_plural "containers"
 msgstr[0] "kontejner"
 msgstr[1] "kontejnery"
 msgstr[2] "kontejnerů"
 
-#: js/widgets/container/TreePanel.js:494
+#: js/widgets/container/TreePanel.js:513
 msgid "You are not allowed to select the {0} '{1}':"
 msgstr "Nemáte oprávnění vybrat {0} '{1}':"
 
-#: js/widgets/container/TreePanel.js:495
+#: js/widgets/container/TreePanel.js:514
 msgid "{0} grant is required for desired action"
 msgstr "Pro požadovanou akci je zapotřebí oprávnění {0}"
 
-#: js/widgets/container/TreePanel.js:496
+#: js/widgets/container/TreePanel.js:515
 msgid "Insufficient Grants"
 msgstr "Nedostatečná oprávnění"
 
@@ -1773,8 +1777,8 @@ msgid "tag name"
 msgstr "název štítku"
 
 #: js/widgets/tags/TagCombo.js:145 js/widgets/tags/TagCombo.js:150
-#: js/widgets/tags/TagsPanel.js:140 js/widgets/tags/TagsPanel.js:454
-#: js/widgets/tags/TagsPanel.js:458 js/widgets/tags/TagToggleBox.js:112
+#: js/widgets/tags/TagsPanel.js:140 js/widgets/tags/TagsPanel.js:457
+#: js/widgets/tags/TagsPanel.js:461 js/widgets/tags/TagToggleBox.js:112
 #: js/widgets/tags/TagToggleBox.js:117
 msgid "personal"
 msgstr "osobní"
@@ -1882,23 +1886,23 @@ msgstr[2] "Mažu štítky"
 msgid "Could not delete Tag(s)."
 msgstr "Nepodařilo se smazat štítek/štítky."
 
-#: js/widgets/tags/TagsPanel.js:358 js/widgets/tags/TagsPanel.js:420
+#: js/widgets/tags/TagsPanel.js:361 js/widgets/tags/TagsPanel.js:423
 msgid "Notice"
 msgstr "Upozornění"
 
-#: js/widgets/tags/TagsPanel.js:359 js/widgets/tags/TagsPanel.js:421
+#: js/widgets/tags/TagsPanel.js:362 js/widgets/tags/TagsPanel.js:424
 msgid "The minimum tag length is three."
 msgstr "Minimální délka štítku jsou tři znaky."
 
-#: js/widgets/tags/TagsPanel.js:406
+#: js/widgets/tags/TagsPanel.js:409
 msgid "Could not create tag."
 msgstr "Nepodařilo se vytvořit štítek."
 
-#: js/widgets/tags/TagsPanel.js:439
+#: js/widgets/tags/TagsPanel.js:442
 msgid "Could not update tag."
 msgstr "Nepodařilo se aktualizovat štítek."
 
-#: js/widgets/tags/TagsPanel.js:473 js/widgets/tags/TagsPanel.js:531
+#: js/widgets/tags/TagsPanel.js:476 js/widgets/tags/TagsPanel.js:534
 msgid "Enter tag name"
 msgstr "Zadejte název štítku"
 
@@ -1946,47 +1950,47 @@ msgstr "Obecné"
 msgid "Custom Fields"
 msgstr "Uživatelské položky"
 
-#: js/ux/form/ImageField.js:72
+#: js/ux/form/ImageField.js:74
 msgid "Loading"
 msgstr "Načítám"
 
-#: js/ux/form/ImageField.js:75
+#: js/ux/form/ImageField.js:77
 msgid "Click to edit"
 msgstr "Klikněte pro editaci"
 
-#: js/ux/form/ImageField.js:124
+#: js/ux/form/ImageField.js:126
 msgid "Not An Image"
 msgstr "Není obrázek"
 
-#: js/ux/form/ImageField.js:124
+#: js/ux/form/ImageField.js:126
 msgid "Please select an image file (gif/png/jpeg)"
 msgstr "Vyberte prosím soubor s obrázkem (gif/png/jpeg)"
 
-#: js/ux/form/ImageField.js:162
+#: js/ux/form/ImageField.js:164
 msgid "Could not upload image. Please notify your Administrator"
 msgstr "Nemohu uploadovat obrázek. Upozorněte prosím svého administrátora"
 
-#: js/ux/form/ImageField.js:174
+#: js/ux/form/ImageField.js:176
 msgid "Change Image"
 msgstr "Změnit obrázek"
 
-#: js/ux/form/ImageField.js:183 js/ux/form/ImageField.js:201
+#: js/ux/form/ImageField.js:185 js/ux/form/ImageField.js:203
 msgid "Crop Image"
 msgstr "Oříznout obrázek"
 
-#: js/ux/form/ImageField.js:207
+#: js/ux/form/ImageField.js:209
 msgid "Delete Image"
 msgstr "Smazat obrázek"
 
-#: js/ux/form/ImageField.js:216
+#: js/ux/form/ImageField.js:218
 msgid "Show Original Image"
 msgstr "Zobrazit původní obrázek"
 
-#: js/ux/form/ImageField.js:278
+#: js/ux/form/ImageField.js:280
 msgid "Image Failed"
 msgstr "Obrázek se nezdařil"
 
-#: js/ux/form/ImageField.js:278
+#: js/ux/form/ImageField.js:280
 msgid "Could not load image. Please notify your Administrator"
 msgstr "Nemohu načíst obrázek. Upozorněte prosím svého administrátora"
 
@@ -2392,7 +2396,7 @@ msgstr "Vytvořil(a)"
 msgid "Activities"
 msgstr "Činnosti"
 
-#: Export/Spreadsheet/Ods.php:287
+#: Export/Spreadsheet/Ods.php:278
 msgid "Data"
 msgstr "Data"
 
@@ -2404,13 +2408,25 @@ msgstr ""
 msgid "Please wait or contact your administrator"
 msgstr ""
 
-#: Notes.php:362
+#: Notes.php:367
 msgid "by"
 msgstr "(kým)"
 
-#: Notes.php:369
+#: Notes.php:373
 msgid "Changed fields:"
 msgstr "Změněné položky"
+
+#~ msgid "low"
+#~ msgstr "nízká"
+
+#~ msgid "normal"
+#~ msgstr "normální"
+
+#~ msgid "high"
+#~ msgstr "vysoká"
+
+#~ msgid "urgent"
+#~ msgstr "urgentní"
 
 #~ msgid "The grant to administrate this container"
 #~ msgstr "Oprávnění administrovat tento kontejner"

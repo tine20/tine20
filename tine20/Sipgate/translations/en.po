@@ -236,22 +236,22 @@ msgstr "Number to call"
 msgid "Call contact"
 msgstr "Call contact"
 
-#: js/AddressbookGridPanelHook.js:61
+#: js/AddressbookGridPanelHook.js:62
 msgid "Compose SMS"
 msgstr "Compose SMS"
 
-#: js/AddressbookGridPanelHook.js:255
+#: js/AddressbookGridPanelHook.js:256
 msgid "Work"
 msgstr "Work"
 
-#: js/AddressbookGridPanelHook.js:265
+#: js/AddressbookGridPanelHook.js:266
 msgid "Home"
 msgstr "Home"
 
-#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:320
+#: js/AddressbookGridPanelHook.js:276 js/AddressbookGridPanelHook.js:321
 msgid "Cell"
 msgstr "Cell"
 
-#: js/AddressbookGridPanelHook.js:285 js/AddressbookGridPanelHook.js:330
+#: js/AddressbookGridPanelHook.js:286 js/AddressbookGridPanelHook.js:331
 msgid "Cell private"
 msgstr "Cell private"

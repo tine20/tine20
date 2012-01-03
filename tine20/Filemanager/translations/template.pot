@@ -166,23 +166,23 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: js/Filemanager.js:29
+#: js/Filemanager.js:26
 msgid "Filemanager"
 msgstr ""
 
-#: js/Filemanager.js:68
+#: js/Filemanager.js:64
 msgid "Files already exists"
 msgstr ""
 
-#: js/Filemanager.js:68
+#: js/Filemanager.js:64
 msgid "Do you want to replace the following file(s)?"
 msgstr ""
 
-#: js/Filemanager.js:93
+#: js/Filemanager.js:98
 msgid "Failure on create folder"
 msgstr ""
 
-#: js/Filemanager.js:94
+#: js/Filemanager.js:99
 msgid "Item with this name already exists!"
 msgstr ""
 

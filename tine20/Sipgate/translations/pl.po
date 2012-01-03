@@ -235,23 +235,23 @@ msgstr "Numer rozmówcy"
 msgid "Call contact"
 msgstr "Wybierz numer"
 
-#: js/AddressbookGridPanelHook.js:61
+#: js/AddressbookGridPanelHook.js:62
 msgid "Compose SMS"
 msgstr "Napisz SMSa"
 
-#: js/AddressbookGridPanelHook.js:255
+#: js/AddressbookGridPanelHook.js:256
 msgid "Work"
 msgstr "Praca"
 
-#: js/AddressbookGridPanelHook.js:265
+#: js/AddressbookGridPanelHook.js:266
 msgid "Home"
 msgstr "Dom"
 
-#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:320
+#: js/AddressbookGridPanelHook.js:276 js/AddressbookGridPanelHook.js:321
 msgid "Cell"
 msgstr "Komórka"
 
-#: js/AddressbookGridPanelHook.js:285 js/AddressbookGridPanelHook.js:330
+#: js/AddressbookGridPanelHook.js:286 js/AddressbookGridPanelHook.js:331
 msgid "Cell private"
 msgstr "Komórka prywatna"
 

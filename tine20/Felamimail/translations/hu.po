@@ -14,31 +14,31 @@ msgstr ""
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Setup/Initialize.php:34
+#: Setup/Initialize.php:44
 msgid "All inboxes of my email accounts"
 msgstr "Email fiókjaim összes beérkezett üzenetek mappája"
 
-#: Setup/Initialize.php:41
+#: Setup/Initialize.php:51
 msgid "All unread mail"
 msgstr "Összes olvasatlan levél"
 
-#: Setup/Initialize.php:42
+#: Setup/Initialize.php:52
 msgid "All unread mail of my email accounts"
 msgstr "Email fiókajim összes olvasatlan levele"
 
-#: Setup/Initialize.php:49
+#: Setup/Initialize.php:59
 msgid "All highlighted mail"
 msgstr "Összes megjelelölt levél"
 
-#: Setup/Initialize.php:50
+#: Setup/Initialize.php:60
 msgid "All highlighted mail of my email accounts"
 msgstr "Email fiókjaim összes megjelelölt levele"
 
-#: Setup/Initialize.php:57
+#: Setup/Initialize.php:67
 msgid "All drafts"
 msgstr "Összes piszkozat"
 
-#: Setup/Initialize.php:58
+#: Setup/Initialize.php:68
 msgid "All mails with the draft flag"
 msgstr "Összes levél piszkozat zászlóval"
 
@@ -143,7 +143,7 @@ msgstr "Törlés"
 msgid "Add Account"
 msgstr "Fiók hozzáadása"
 
-#: js/GridPanel.js:314 js/GridPanel.js:1257 js/GridPanel.js:1273
+#: js/GridPanel.js:314 js/GridPanel.js:1261 js/GridPanel.js:1277
 #: js/MessageDisplayDialog.js:78
 msgid "Print Preview"
 msgstr "Nyomtatási nézet"
@@ -156,7 +156,7 @@ msgstr "Üzenet nyomtatása"
 msgid "Id"
 msgstr "Id"
 
-#: js/GridPanel.js:468 js/GridDetailsPanel.js:336 js/MessageEditDialog.js:699
+#: js/GridPanel.js:468 js/GridDetailsPanel.js:336 js/MessageEditDialog.js:761
 msgid "Attachments"
 msgstr "Mellékletek"
 
@@ -166,7 +166,7 @@ msgstr "Zászlók"
 
 #: js/GridPanel.js:482 js/GridDetailsPanel.js:239
 #: js/sieve/RuleConditionsPanel.js:72 js/Model.js:141
-#: js/MessageEditDialog.js:859 Controller/Message/Send.php:236
+#: js/MessageEditDialog.js:921 Controller/Message/Send.php:236
 msgid "Subject"
 msgstr "Tárgy"
 
@@ -186,7 +186,7 @@ msgstr "Küldő"
 msgid "To"
 msgstr "Címzett"
 
-#: js/GridPanel.js:514 js/Model.js:489
+#: js/GridPanel.js:514 js/Model.js:490
 msgid "Sent"
 msgstr "Elküldött"
 
@@ -196,7 +196,7 @@ msgstr "Beérkezett"
 
 #: js/GridPanel.js:529 js/TreeContextMenu.js:45 js/TreeContextMenu.js:100
 #: js/TreeContextMenu.js:103 js/TreeContextMenu.js:106
-#: js/FolderFilterModel.js:30 js/Model.js:53 js/Model.js:495
+#: js/FolderFilterModel.js:30 js/Model.js:53 js/Model.js:496
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] "Mappa"
@@ -218,19 +218,15 @@ msgstr "Továbbított"
 msgid "Recent"
 msgstr "Legújabb"
 
-#: js/GridPanel.js:1096 js/GridPanel.js:1128
-msgid "Quota unknown"
-msgstr "Kvóta ismeretlen"
-
-#: js/GridPanel.js:1111
+#: js/GridPanel.js:1114
 msgid "{0} %"
 msgstr "{0} %"
 
-#: js/GridPanel.js:1119
+#: js/GridPanel.js:1122
 msgid "Your quota"
 msgstr "Kvótád"
 
-#: js/GridPanel.js:1120
+#: js/GridPanel.js:1123
 msgid "{0} available (total: {1})"
 msgstr "{0} elérhető (összesen: {1})"
 
@@ -262,7 +258,7 @@ msgstr "Minden címzett"
 msgid "\"{0}\" recipients"
 msgstr "\"{0}\" címzettek"
 
-#: js/GridDetailsPanel.js:240 js/MessageEditDialog.js:765
+#: js/GridDetailsPanel.js:240 js/MessageEditDialog.js:827
 msgid "From"
 msgstr "Feladó"
 
@@ -348,9 +344,9 @@ msgstr "Mappa megjelölése olvasottként"
 msgid "Update Folder List"
 msgstr "Mappa lista újratöltése"
 
-#: js/ContactGrid.js:110 js/AccountEditDialog.js:162
-#: js/AccountEditDialog.js:203 js/AccountEditDialog.js:218
-#: js/AccountEditDialog.js:258
+#: js/ContactGrid.js:110 js/AccountEditDialog.js:179
+#: js/AccountEditDialog.js:220 js/AccountEditDialog.js:235
+#: js/AccountEditDialog.js:275
 msgid "None"
 msgstr "Semmi"
 
@@ -370,7 +366,7 @@ msgstr "Hozzáadás \"Bcc\"-ként"
 msgid "Remove from recipients"
 msgstr "Eltávolítás a címzettek kzül"
 
-#: js/ContactGrid.js:341 js/MessageEditDialog.js:454
+#: js/ContactGrid.js:341 js/MessageEditDialog.js:505
 msgid "Loading Mail Addresses"
 msgstr "Üzenet címek betöltése"
 
@@ -585,27 +581,27 @@ msgstr "Szűrő szabály szerkesztése"
 msgid "If all of the following conditions are met:"
 msgstr "Ha az összes következő feltételek találkoznak:"
 
-#: js/sieve/RuleEditDialog.js:271
+#: js/sieve/RuleEditDialog.js:274
 msgid "Do this action:"
 msgstr "Tegye ezt a műveletet:"
 
-#: js/sieve/RuleEditDialog.js:361
+#: js/sieve/RuleEditDialog.js:364
 msgid "Move mail to folder"
 msgstr "Levél áthelyezése mappába"
 
-#: js/sieve/RuleEditDialog.js:362
+#: js/sieve/RuleEditDialog.js:365
 msgid "Redirect mail to address"
 msgstr "Levél továbbküldése"
 
-#: js/sieve/RuleEditDialog.js:363
+#: js/sieve/RuleEditDialog.js:366
 msgid "Reject mail with this text"
 msgstr "Levél visszaküldése ezzel a szöveggel"
 
-#: js/sieve/RuleEditDialog.js:364
+#: js/sieve/RuleEditDialog.js:367
 msgid "Discard mail"
 msgstr "Levél eldobása"
 
-#: js/sieve/RuleEditDialog.js:365
+#: js/sieve/RuleEditDialog.js:368
 msgid "Keep mail"
 msgstr "Levél megtartása"
 
@@ -665,63 +661,63 @@ msgstr "Másolat"
 msgid "Bcc"
 msgstr "Titkos másolat"
 
-#: js/Model.js:349 js/AccountEditDialog.js:110
+#: js/Model.js:350 js/AccountEditDialog.js:111
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "Fiók"
 msgstr[1] "Fiókok"
 
-#: js/Model.js:353
+#: js/Model.js:354
 msgid "Email Accounts"
 msgid_plural "Email Accounts"
 msgstr[0] "Email fiókok"
 msgstr[1] "Email fiókok"
 
-#: js/Model.js:489
+#: js/Model.js:490
 msgid "INBOX"
 msgstr "BEJÖVŐ ÜZENTEK"
 
-#: js/Model.js:489
+#: js/Model.js:490
 msgid "Drafts"
 msgstr "Piszkozatok"
 
-#: js/Model.js:489
+#: js/Model.js:490
 msgid "Templates"
 msgstr "Sablonok"
 
-#: js/Model.js:489
+#: js/Model.js:490
 msgid "Junk"
 msgstr "Szemét"
 
-#: js/Model.js:489
+#: js/Model.js:490
 msgid "Trash"
 msgstr "Törölt elemek"
 
-#: js/Model.js:498 js/Model.js:615 js/Model.js:680
+#: js/Model.js:499 js/Model.js:616 js/Model.js:681
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "adat lista"
 msgstr[1] "adat listák"
 
-#: js/Model.js:611
+#: js/Model.js:612
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] "Szabadság"
 msgstr[1] "Szabadságok"
 
-#: js/Model.js:677
+#: js/Model.js:678
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] "Szabály"
 msgstr[1] "Szabályok"
 
-#: js/Model.js:803
+#: js/Model.js:804
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] "Zászló"
 msgstr[1] "Zászlók"
 
-#: js/Model.js:806
+#: js/Model.js:807
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] "Zászló lista"
@@ -755,199 +751,207 @@ msgstr "Aktiváld ezt a kapcsoló gombot, hogy az üzenet szövegét megjegyzés
 msgid "Click to search for and add recipients from the Addressbook."
 msgstr "Kattints a címzettek kereséséhez és hozzáadásához a Címjegyzékből."
 
-#: js/MessageEditDialog.js:270
+#: js/MessageEditDialog.js:304
 #, fuzzy
 msgid "On {0}, {1} wrote"
 msgstr "{0}-ből, {1} írott"
 
-#: js/MessageEditDialog.js:276
+#: js/MessageEditDialog.js:324
 msgid "Original message"
 msgstr "Eredeti üzenet"
 
-#: js/MessageEditDialog.js:476
-msgid "Re:"
-msgstr "Válasz:"
-
-#: js/MessageEditDialog.js:486
+#: js/MessageEditDialog.js:556
 msgid "Fwd:"
 msgstr "Továbbítás:"
 
-#: js/MessageEditDialog.js:489
+#: js/MessageEditDialog.js:559
 msgid "{0} Message"
 msgstr "{0} üzenet"
 
-#: js/MessageEditDialog.js:549 js/MessageEditDialog.js:684
+#: js/MessageEditDialog.js:611 js/MessageEditDialog.js:746
 msgid "Failed"
 msgstr "Sikertelen"
 
-#: js/MessageEditDialog.js:550
+#: js/MessageEditDialog.js:612
 msgid "{0} account setting empty."
 msgstr "{0} fiók beállításai üresek."
 
-#: js/MessageEditDialog.js:565
+#: js/MessageEditDialog.js:627
 msgid "Errors"
 msgstr "Hibák"
 
-#: js/MessageEditDialog.js:565
+#: js/MessageEditDialog.js:627
 msgid "Please fix the errors noted."
 msgstr "Kérlek javítsd a jegyzett hibákat."
 
-#: js/MessageEditDialog.js:607 js/MessageEditDialog.js:869
+#: js/MessageEditDialog.js:669 js/MessageEditDialog.js:931
 msgid "Compose email:"
 msgstr "Email írása:"
 
-#: js/MessageEditDialog.js:657
+#: js/MessageEditDialog.js:719
 msgid "Add Note"
 msgstr "Megjegyzés hozzáadása"
 
-#: js/MessageEditDialog.js:658
+#: js/MessageEditDialog.js:720
 msgid "Edit Email Note Text:"
 msgstr "Email megjegyzés szerkesztése:"
 
-#: js/MessageEditDialog.js:685
+#: js/MessageEditDialog.js:747
 msgid "Could not send {0}."
 msgstr "{0} elküldése sikertelen."
 
-#: js/MessageEditDialog.js:686
+#: js/MessageEditDialog.js:748
 msgid "Error:"
 msgstr "Hiba: "
 
-#: js/MessageEditDialog.js:834 Controller/Message/Send.php:236
+#: js/MessageEditDialog.js:896 Controller/Message/Send.php:236
 msgid "Body"
 msgstr "Üzenet"
 
-#: js/MessageEditDialog.js:893
+#: js/MessageEditDialog.js:955
 msgid "Files are still uploading."
 msgstr "Fileok éppen feltöltés alatt állnak."
 
-#: js/MessageEditDialog.js:913
+#: js/MessageEditDialog.js:975
 msgid "No recipients set."
 msgstr "Nincsenek címzettek beállítva."
 
-#: js/AccountEditDialog.js:83
+#: js/AccountEditDialog.js:84
 msgid "Signature"
 msgstr "Aláírás"
 
-#: js/AccountEditDialog.js:117
+#: js/AccountEditDialog.js:118
 msgid "Account Name"
 msgstr "Fiók neve"
 
-#: js/AccountEditDialog.js:121
+#: js/AccountEditDialog.js:122
 msgid "User Email"
 msgstr "Felhasználói email"
 
-#: js/AccountEditDialog.js:126
+#: js/AccountEditDialog.js:127
 msgid "User Name (From)"
 msgstr "Felhasználói név (Feladó)"
 
-#: js/AccountEditDialog.js:129
+#: js/AccountEditDialog.js:130
 msgid "Organization"
 msgstr "Szervezet"
 
 #: js/AccountEditDialog.js:134
+msgid "Signature position"
+msgstr ""
+
+#: js/AccountEditDialog.js:145
+msgid "Above the quote"
+msgstr ""
+
+#: js/AccountEditDialog.js:146
+msgid "Below the quote"
+msgstr ""
+
+#: js/AccountEditDialog.js:151
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/AccountEditDialog.js:141 js/AccountEditDialog.js:184
-#: js/AccountEditDialog.js:239
+#: js/AccountEditDialog.js:158 js/AccountEditDialog.js:201
+#: js/AccountEditDialog.js:256
 msgid "Host"
 msgstr "Szerver"
 
-#: js/AccountEditDialog.js:145
+#: js/AccountEditDialog.js:162
 msgid "Port (Default: 143 / SSL: 993)"
 msgstr "Port (Alapértelmezett: 143 / SSL: 993)"
 
-#: js/AccountEditDialog.js:151 js/AccountEditDialog.js:193
-#: js/AccountEditDialog.js:248
+#: js/AccountEditDialog.js:168 js/AccountEditDialog.js:210
+#: js/AccountEditDialog.js:265
 msgid "Secure Connection"
 msgstr "Biztonságos kapcsolat"
 
-#: js/AccountEditDialog.js:163 js/AccountEditDialog.js:204
-#: js/AccountEditDialog.js:259
+#: js/AccountEditDialog.js:180 js/AccountEditDialog.js:221
+#: js/AccountEditDialog.js:276
 msgid "TLS"
 msgstr "TLS"
 
-#: js/AccountEditDialog.js:164 js/AccountEditDialog.js:205
+#: js/AccountEditDialog.js:181 js/AccountEditDialog.js:222
 msgid "SSL"
 msgstr "SSL"
 
-#: js/AccountEditDialog.js:167
+#: js/AccountEditDialog.js:184
 msgid "Username"
 msgstr "Felhasználónév"
 
-#: js/AccountEditDialog.js:171
+#: js/AccountEditDialog.js:188
 msgid "Password"
 msgstr "Jelszó"
 
-#: js/AccountEditDialog.js:177
+#: js/AccountEditDialog.js:194
 msgid "SMTP"
 msgstr "SMTP"
 
-#: js/AccountEditDialog.js:187
+#: js/AccountEditDialog.js:204
 msgid "Port (Default: 25)"
 msgstr "Port (Alapértelmezett: 25)"
 
-#: js/AccountEditDialog.js:208
+#: js/AccountEditDialog.js:225
 msgid "Authentication"
 msgstr "Hitelesítés"
 
-#: js/AccountEditDialog.js:219
+#: js/AccountEditDialog.js:236
 msgid "Login"
 msgstr "Bejelentkezés"
 
-#: js/AccountEditDialog.js:220
+#: js/AccountEditDialog.js:237
 msgid "Plain"
 msgstr "Egyszerű"
 
-#: js/AccountEditDialog.js:223
+#: js/AccountEditDialog.js:240
 msgid "Username (optional)"
 msgstr "Felhasználónév (opcionális)"
 
-#: js/AccountEditDialog.js:226
+#: js/AccountEditDialog.js:243
 msgid "Password (optional)"
 msgstr "Jelszó (opcionális)"
 
-#: js/AccountEditDialog.js:232
+#: js/AccountEditDialog.js:249
 msgid "Sieve"
 msgstr "Sieve"
 
-#: js/AccountEditDialog.js:243
+#: js/AccountEditDialog.js:260
 msgid "Port (Default: 2000)"
 msgstr "Port (Alapértelmezett: 2000)"
 
-#: js/AccountEditDialog.js:263
+#: js/AccountEditDialog.js:280
 msgid "Other Settings"
 msgstr "Egyéb beállítások"
 
-#: js/AccountEditDialog.js:270
+#: js/AccountEditDialog.js:287
 msgid "Sent Folder Name"
 msgstr "Elküldött mappa neve"
 
-#: js/AccountEditDialog.js:276
+#: js/AccountEditDialog.js:293
 msgid "Trash Folder Name"
 msgstr "Szemét mappa neve"
 
-#: js/AccountEditDialog.js:282
+#: js/AccountEditDialog.js:299
 msgid "Drafts Folder Name"
 msgstr "Piszkozatok mappa neve"
 
-#: js/AccountEditDialog.js:288
+#: js/AccountEditDialog.js:305
 msgid "Templates Folder Name"
 msgstr "Sablonok mappa neve"
 
-#: js/AccountEditDialog.js:294
+#: js/AccountEditDialog.js:311
 msgid "Display Format"
 msgstr "Megjelenítés formája"
 
-#: js/AccountEditDialog.js:305
+#: js/AccountEditDialog.js:322
 msgid "HTML"
 msgstr "HTML"
 
-#: js/AccountEditDialog.js:306
+#: js/AccountEditDialog.js:323
 msgid "Plain Text"
 msgstr "Egyszerű szöveg"
 
-#: js/AccountEditDialog.js:307
+#: js/AccountEditDialog.js:324
 msgid "Depending on content type (experimental)"
 msgstr "Tartalom típusától függő (kísérleti)"
 
@@ -970,6 +974,12 @@ msgstr "Piszkozat"
 #: Controller/Message/Flags.php:28
 msgid "Flagged"
 msgstr "Zászlóval jelölt"
+
+#~ msgid "Quota unknown"
+#~ msgstr "Kvóta ismeretlen"
+
+#~ msgid "Re:"
+#~ msgstr "Válasz:"
 
 #~ msgid "One of your folders was deleted from an other client, please reload you browser"
 #~ msgstr "Egy a mappáid közül egy másik kliensen törölve lett, kérlek töltsd újra a böngésződet"

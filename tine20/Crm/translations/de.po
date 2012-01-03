@@ -310,7 +310,7 @@ msgstr "Email"
 msgid "Web"
 msgstr "Webseite"
 
-#: js/LeadGridDetailsPanel.js:464 js/Task.js:218
+#: js/LeadGridDetailsPanel.js:464 js/Task.js:220
 msgid "Status"
 msgstr "Status"
 
@@ -343,7 +343,7 @@ msgstr[1] "Lead Status"
 msgid "Add a Leadstate..."
 msgstr "Lead-Status hinzufügen..."
 
-#: js/Crm.js:24 js/AddressbookGridPanelHook.js:35
+#: js/Crm.js:24
 msgid "New Lead"
 msgstr "Neuer Lead"
 
@@ -393,6 +393,12 @@ msgstr "Als ODS exportieren"
 msgid "Export as XLS"
 msgstr "Als XLS exportieren"
 
+#: js/AddressbookGridPanelHook.js:35 js/LeadEditDialog.js:268 js/Model.js:48
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "Lead"
+msgstr[1] "Lead"
+
 #: js/LeadStateFilterModel.js:37
 msgid "Show closed"
 msgstr "Abgeschlossene Leads anzeigen"
@@ -412,12 +418,6 @@ msgstr "Sie haben nicht das erforderliche Recht die Aufgaben-Anwendung zu benutz
 #: js/LeadEditDialog.js:257
 msgid "You do not have the run right for the Sales application or it is not activated."
 msgstr "Sie haben nicht das erforderliche Recht die Sales-Anwendung zu benutzen oder sie ist deaktiviert."
-
-#: js/LeadEditDialog.js:268 js/Model.js:48
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "Lead"
-msgstr[1] "Lead"
 
 #: js/LeadEditDialog.js:295
 msgid "Enter short name"
@@ -493,7 +493,7 @@ msgstr "Fälligkeitsdatum"
 msgid "Priority"
 msgstr "Priorität"
 
-#: js/Task.js:205
+#: js/Task.js:207
 msgid "Percent"
 msgstr "Prozent"
 

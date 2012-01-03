@@ -312,7 +312,7 @@ msgstr "E-mail"
 msgid "Web"
 msgstr "Web"
 
-#: js/LeadGridDetailsPanel.js:464 js/Task.js:218
+#: js/LeadGridDetailsPanel.js:464 js/Task.js:220
 msgid "Status"
 msgstr "Status"
 
@@ -347,7 +347,7 @@ msgstr[2] "Statusů leadů"
 msgid "Add a Leadstate..."
 msgstr "Přidat stav leadu"
 
-#: js/Crm.js:24 js/AddressbookGridPanelHook.js:35
+#: js/Crm.js:24
 msgid "New Lead"
 msgstr ""
 
@@ -397,6 +397,13 @@ msgstr "Exportovat do ODS"
 msgid "Export as XLS"
 msgstr "Exportovat do XLS"
 
+#: js/AddressbookGridPanelHook.js:35 js/LeadEditDialog.js:268 js/Model.js:48
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "Lead"
+msgstr[1] "Leady"
+msgstr[2] "Leadů"
+
 #: js/LeadStateFilterModel.js:37
 msgid "Show closed"
 msgstr "Zobrazit uzavřené"
@@ -416,13 +423,6 @@ msgstr "Nemáte oprávnění ke spuštění aplikace Úkoly nebo aplikace není 
 #: js/LeadEditDialog.js:257
 msgid "You do not have the run right for the Sales application or it is not activated."
 msgstr "Nemáte oprávnění ke spuštění aplikace Prodej nebo aplikace není povolena."
-
-#: js/LeadEditDialog.js:268 js/Model.js:48
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "Lead"
-msgstr[1] "Leady"
-msgstr[2] "Leadů"
 
 #: js/LeadEditDialog.js:295
 msgid "Enter short name"
@@ -501,7 +501,7 @@ msgstr "Termín dokončení"
 msgid "Priority"
 msgstr "Priorita"
 
-#: js/Task.js:205
+#: js/Task.js:207
 msgid "Percent"
 msgstr "Procent"
 

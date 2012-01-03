@@ -179,23 +179,23 @@ msgstr "Szybkie wyszukiwanie"
 msgid "Type"
 msgstr "Typ"
 
-#: js/Filemanager.js:29
+#: js/Filemanager.js:26
 msgid "Filemanager"
 msgstr "Zarządca plików"
 
-#: js/Filemanager.js:68
+#: js/Filemanager.js:64
 msgid "Files already exists"
 msgstr "Te pliki już istnieją"
 
-#: js/Filemanager.js:68
+#: js/Filemanager.js:64
 msgid "Do you want to replace the following file(s)?"
 msgstr "Czy chcesz zastąpić następujące pliki?"
 
-#: js/Filemanager.js:93
+#: js/Filemanager.js:98
 msgid "Failure on create folder"
 msgstr "Błąd podczas tworzenia katalogu"
 
-#: js/Filemanager.js:94
+#: js/Filemanager.js:99
 msgid "Item with this name already exists!"
 msgstr "Obiekt o takiej nazwie już istnieje!"
 

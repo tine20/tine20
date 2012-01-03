@@ -180,23 +180,23 @@ msgstr "Gyors keresés"
 msgid "Type"
 msgstr "Típus"
 
-#: js/Filemanager.js:29
+#: js/Filemanager.js:26
 msgid "Filemanager"
 msgstr "Filekezelő"
 
-#: js/Filemanager.js:68
+#: js/Filemanager.js:64
 msgid "Files already exists"
 msgstr "File már létezik"
 
-#: js/Filemanager.js:68
+#: js/Filemanager.js:64
 msgid "Do you want to replace the following file(s)?"
 msgstr "Szeretnéd cserélni a következő file(oka)t?"
 
-#: js/Filemanager.js:93
+#: js/Filemanager.js:98
 msgid "Failure on create folder"
 msgstr "Hiba a könyvtár létrehozásakor"
 
-#: js/Filemanager.js:94
+#: js/Filemanager.js:99
 msgid "Item with this name already exists!"
 msgstr "Ezen a néven már létezik adat!"
 

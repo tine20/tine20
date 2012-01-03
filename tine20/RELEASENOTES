@@ -3,60 +3,52 @@
 
                     TINE 2.0 RELEASENOTES
                     
-Release:    Maischa (2011/05)
+Release:    Milan (2012/03)
 
 
 Contents
 --
 
-1. VCard import in addressbook
-2. API change Tinebase_Backend_Sql / Tinebase_Backend_Sql_Abstract
-3. Move to GIT
-4. js/css description and build via jsbuilder2/jsb2tk
-5. Move to Phing
+1. CalDAV Support
+2. Filemanager
+3. Customfields administration
+4. Config changes
+5. Projects application
+6. New Addressbook features
 
 -----------------
 
-1. VCard import in addressbook
+1. CalDAV Support
 
-- It is now possible to import vcards into the addressbook and the plugin is usable in the import framework (js client + CLI)
-- We use the vcardphp class by Frank Hellwig (http://vcardphp.sourceforge.net) to parse the file 
-and the import plugin by Yann Le Moigne <segfaultmaker@gmail.com>
+- PHP 5.3+ required
+- @todo add some more information about setup (rewrite rules, ...)
 
-
-2. API change Tinebase_Backend_Sql / Tinebase_Backend_Sql_Abstract
+2. Filemanager
 -----------------
 
-- The constructor API has changed: all options have moved to one options param
-    public function __construct($_dbAdapter = NULL, $_options = array())
-- you can use the following options:
-     *  - modelName
-     *  - tableName
-     *  - tablePrefix
-     *  - modlogActive
-     *  - useSubselectForCount
+- @todo add some more information about setup
      
- 3. Move to GIT
+3. Customfields administration
 -----------------
  
- - The Sourcecode-Management-System changed from Subversion to GIT.
- - Several subprojects got their own repositories
- - http://git.tine20.org/git/
- - The main reasons for this change are the fast and reliable branching and merging capabilities of GIT. 
- With this, we hope to reach an even higher level of development productivity.
+- Administration of customfields is now possible in Admin application
  
- 
- 4. js/css description and build via jsbuilder2/jsb2tk
------------------ 
-- js/css Files to be included are not longer to be defined in Appname/Fontend/Http.php
-- js/css Files to be included are now defined in Appname.jsb2
-- The name of the standard Tine 2.0 fat client is FAT a appname package has to be named Appname-FAT
-- compression and inclusion is done by the jsb2tk lib (library/jsb2tk)
-
-5. Move to Phing
+4. Config changes
 -----------------
-- release.php got deleted and replaced with a phing build.xml
-- see http://www.phing.info/trac/
-- a js/css build is done by just typeing phing in the tine20 root dir
+ 
+- Keyfields for attender status, task priority + status, contact salutations
+- See http://www.tine20.org/wiki/index.php/Developers/Concepts/KeyFields
 
-     
+5. Projects application
+-----------------
+
+- A new application has been added to the Tine 2.0 core: Projects
+
+6. New Addressbook features
+-----------------
+
+- New import dialog with duplicate detection and merge features
+- Multi-edit in contact dialog
+- Add attender to Calendar event or Project
+- Address parsing in contact dialog 
+  (see http://www.tine20.org/wiki/index.php/Admin_FAQ#How_can_I_change_the_address_parsing_rules.3F)
