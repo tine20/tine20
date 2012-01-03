@@ -394,10 +394,9 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
      */
     public function getResponse()
     {
-        // add aditional namespaces for contacts, tasks and email
+        // add aditional namespaces for tasks and email
         $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Tasks'       , 'uri:Tasks');
         $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Email'       , 'uri:Email');
-        $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Calendar'    , 'uri:Calendar');
         $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:AirSyncBase' , 'uri:AirSyncBase');
         
         $sync = $this->_outputDom->documentElement;
