@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ExampleApplication\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-09-07 14:06+0100\n"
+"PO-Revision-Date: 2012-01-03 15:43+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -34,7 +34,8 @@ msgstr "Mögliche Teilnehmerrollen. Bitte beachten Sie, dass Änderungen an dies
 msgid "%s's personal Projects"
 msgstr "%s persönliche Projekte"
 
-#: Setup/setup.xml:4 js/Projects.js:24
+#: Setup/setup.xml:4
+#: js/Projects.js:24
 msgid "Projects"
 msgstr "Projekte"
 
@@ -96,49 +97,54 @@ msgstr "Standard_favorit, der beim starten von Projekten geladen wird"
 
 #: js/AddToProjectPanel.js:56
 msgid "Cancel"
-msgstr ""
+msgstr "Abbrechen"
 
 #: js/AddToProjectPanel.js:64
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: js/AddToProjectPanel.js:99
 msgid "Please choose the Project to add the contacts to"
-msgstr ""
+msgstr "Bitte wählen Sie ein Projekt, zu dem die Kontakte hinzugefügt werden sollen"
 
 #: js/AddToProjectPanel.js:103
 msgid "Please select the attenders' role"
-msgstr ""
+msgstr "Bitte wählen Sie die Rolle des Teilnehmers"
 
 #: js/AddToProjectPanel.js:123
 msgid "Select Project"
-msgstr ""
+msgstr "Projekt auswählen"
 
 #: js/AddToProjectPanel.js:136
 msgid "Select Role"
-msgstr ""
+msgstr "Rolle auswählen"
 
 #: js/AddToProjectPanel.js:193
 msgid "Adding {0} Participants to project"
-msgstr ""
+msgstr "Füge {0} Teilnehmer zum Projekt hinzu"
 
 #: js/ProjectGridPanel.js:85
 msgid "Tags"
 msgstr "Tags"
 
-#: js/ProjectGridPanel.js:88 js/ProjectEditDialog.js:166
+#: js/ProjectGridPanel.js:88
+#: js/ProjectEditDialog.js:166
 msgid "Number"
 msgstr "Projektnummer"
 
-#: js/ProjectGridPanel.js:95 js/ProjectEditDialog.js:161
+#: js/ProjectGridPanel.js:95
+#: js/ProjectEditDialog.js:161
 msgid "Title"
 msgstr "Titel"
 
-#: js/ProjectGridPanel.js:101 js/ProjectEditDialog.js:172 js/Model.js:74
+#: js/ProjectGridPanel.js:101
+#: js/ProjectEditDialog.js:172
+#: js/Model.js:74
 msgid "Status"
 msgstr "Status"
 
-#: js/ProjectEditDialog.js:114 js/ProjectAttendeeFilter.js:38
+#: js/ProjectEditDialog.js:114
+#: js/ProjectAttendeeFilter.js:38
 msgid "Attendee"
 msgstr "Teilnehmer"
 
@@ -146,8 +152,10 @@ msgstr "Teilnehmer"
 msgid "Role"
 msgstr "Rolle"
 
-#: js/ProjectEditDialog.js:136 js/ProjectEditDialog.js:149
-#: js/AddressbookGridPanelHook.js:32 js/AddressbookGridPanelHook.js:44
+#: js/ProjectEditDialog.js:136
+#: js/ProjectEditDialog.js:149
+#: js/AddressbookGridPanelHook.js:32
+#: js/AddressbookGridPanelHook.js:44
 #: js/Model.js:33
 msgid "Project"
 msgid_plural "Projects"
@@ -212,11 +220,13 @@ msgstr "Teilnehmerrolle"
 #~ msgstr "BeispielEintrag"
 
 #~ msgid "example record"
+
 #~ msgid_plural "example records"
 #~ msgstr[0] "Beispieleintrag"
 #~ msgstr[1] "Beispieleinträge"
 
 #~ msgid "example record list"
+
 #~ msgid_plural "example record lists"
 #~ msgstr[0] "Liste von Beispieleinträgen"
 #~ msgstr[1] "Listen von Beispieleinträgen"
@@ -234,6 +244,7 @@ msgstr "Teilnehmerrolle"
 #~ msgstr "Alle BeispielEinträge"
 
 #~ msgid "record list"
+
 #~ msgid_plural "record lists"
 #~ msgstr[0] "Eintrags Liste"
 #~ msgstr[1] "Eintrags Listen"

@@ -109,12 +109,15 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
                 return true;
             }
             
-            if (this.activeApp && (this.fireEvent('beforedeactivate', this.activeApp) === false || this.activeApp.onBeforeDeActivate() === false)) {
-                return false;
+            if (this.activeApp) {
+                if ((this.fireEvent('beforedeactivate', this.activeApp) === false || this.activeApp.onBeforeDeActivate() === false)) {
+                    return false;
+                }
+                
+                this.activeApp.onDeActivate();
+                this.fireEvent('deactivate', this.activeApp);
+                this.activeApp = null;
             }
-            
-            this.fireEvent('deactivate', this.activeApp);
-            this.activeApp = null;
             
             if (this.fireEvent('beforeactivate', app) === false || app.onBeforeActivate() === false) {
                 return false;
@@ -129,6 +132,7 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
             }
             
             this.activeApp = app;
+            app.onActivate();
             this.fireEvent('activate', app);
         }
     },
