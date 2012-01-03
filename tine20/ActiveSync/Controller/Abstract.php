@@ -497,13 +497,14 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
             $persistentFilterId = $this->_device->{$this->_filterProperty} ?
                 $this->_device->{$this->_filterProperty} :
                 Tinebase_Core::getPreference($this->_applicationName)->defaultpersistentfilter;
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " defaultpersistentfilter: " . Tinebase_Core::getPreference($this->_applicationName)->defaultpersistentfilter);
         } else {
             $persistentFilterId = $this->_device->{$this->_filterProperty} ?
                 $this->_device->{$this->_filterProperty} :
                 null;
         }
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " defaultpersistentfilter: " . Tinebase_Core::getPreference($this->_applicationName)->defaultpersistentfilter);
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter id: " . $persistentFilterId);
 
