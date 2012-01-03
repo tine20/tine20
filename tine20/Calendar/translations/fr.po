@@ -249,7 +249,7 @@ msgstr ""
 msgid "Day"
 msgstr "Jour"
 
-#: js/MainScreenCenterPanel.js:198 js/PagingToolbar.js:275
+#: js/MainScreenCenterPanel.js:198 js/PagingToolbar.js:289
 msgid "Week"
 msgstr "Semaine"
 
@@ -315,35 +315,50 @@ msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Êtes-vous sûr de vouloir supprimer l'évènement sélectionné?"
 msgstr[1] "Êtes-vous sûr de vouloir supprimer les {0} évènements sélectionnés?"
 
-#: js/MainScreenCenterPanel.js:828
+#: js/MainScreenCenterPanel.js:815
 msgid "Could not Print"
 msgstr "L'impression a échoué"
 
-#: js/MainScreenCenterPanel.js:828
+#: js/MainScreenCenterPanel.js:815
 msgid "Sorry, your current view does not support printing."
 msgstr "Désolé, cette vue n'est pas imprimable."
 
-#: js/MainScreenCenterPanel.js:973
+#: js/MainScreenCenterPanel.js:960
 msgid "Scheduling Conflict"
 msgstr "Conflit de planification"
 
-#: js/MainScreenCenterPanel.js:975
+#: js/MainScreenCenterPanel.js:962
 msgid "The following attendee are busy at the requested time:"
 msgstr "Le participant suivant est déjà occupé à l'heure demandée :"
 
-#: js/MainScreenCenterPanel.js:979
+#: js/MainScreenCenterPanel.js:966
 msgid "Ignore Conflict"
 msgstr "Ignorer le conflit"
 
-#: js/MainScreenCenterPanel.js:980
+#: js/MainScreenCenterPanel.js:967
 msgid "Edit Event"
 msgstr "Modifier l'évènement"
 
-#: js/MainScreenCenterPanel.js:981
+#: js/MainScreenCenterPanel.js:968
 msgid "Cancel this action"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:102
+#: js/SearchCombo.js:53
+msgid "Searching..."
+msgstr ""
+
+#: js/SearchCombo.js:61 js/AddressbookGridPanelHook.js:33
+#: js/AddressbookGridPanelHook.js:47 js/Model.js:63 js/Model.js:359
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] "Évènement"
+msgstr[1] "Évènements"
+
+#: js/SearchCombo.js:62
+msgid "Search Event"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:102 js/AddToEventPanel.js:227
 msgid "Role"
 msgstr "Rôle"
 
@@ -386,16 +401,16 @@ msgstr "Statut"
 msgid "Remove Attender"
 msgstr "Supprimer le participant"
 
-#: js/AttendeeGridPanel.js:425
+#: js/AttendeeGridPanel.js:447
 msgid "Click here to invite another attender..."
 msgstr "Cliquez ici pour ajouter un participant..."
 
-#: js/AttendeeGridPanel.js:444 js/AttendeeGridPanel.js:462
-#: js/AttendeeGridPanel.js:479 js/AttendeeGridPanel.js:491 js/Model.js:371
+#: js/AttendeeGridPanel.js:466 js/AttendeeGridPanel.js:484
+#: js/AttendeeGridPanel.js:501 js/AttendeeGridPanel.js:513 js/Model.js:371
 msgid "No Information"
 msgstr "Pas d'information"
 
-#: js/AttendeeGridPanel.js:449
+#: js/AttendeeGridPanel.js:471
 msgid "(as a group member)"
 msgstr "(comme membre du groupe)"
 
@@ -431,24 +446,47 @@ msgstr "Description"
 msgid "Enter description"
 msgstr "Saisir une description"
 
-#: js/EventEditDialog.js:342
+#: js/EventEditDialog.js:345
 msgid "End date is not valid"
 msgstr "Date de fin invalide"
 
-#: js/EventEditDialog.js:345
+#: js/EventEditDialog.js:348
 msgid "End date must be after start date"
 msgstr "La date de fin doit être postérieure à la date de début"
 
-#: js/EventEditDialog.js:358
+#: js/EventEditDialog.js:361
 msgid "Start date is not valid"
 msgstr "Date de début non valide"
+
+#: js/AddToEventPanel.js:62
+msgid "Cancel"
+msgstr ""
+
+#: js/AddToEventPanel.js:70
+msgid "OK"
+msgstr ""
+
+#: js/AddToEventPanel.js:122
+msgid "Please choose the Event to add the contacts to"
+msgstr ""
+
+#: js/AddToEventPanel.js:226
+msgid "Select Role"
+msgstr ""
+
+#: js/AddToEventPanel.js:259 js/AddToEventPanel.js:260
+msgid "Select Status"
+msgstr ""
+
+#: js/AddToEventPanel.js:348
+msgid "Adding {0} Attendee to event"
+msgstr ""
 
 #: js/CalendarSelectWidget.js:124
 msgid "Originally"
 msgstr "À l'origine"
 
-#: js/MonthView.js:81 js/AddressbookGridPanelHook.js:35 js/Calendar.js:29
-#: js/DaysView.js:88
+#: js/MonthView.js:81 js/Calendar.js:29 js/DaysView.js:88
 msgid "New Event"
 msgstr "Nouvel évènement"
 
@@ -487,12 +525,6 @@ msgstr "Évènements"
 #: js/AttendeeFilterModel.js:101
 msgid "Select Attendee"
 msgstr "Sélectionner un participant"
-
-#: js/Model.js:63 js/Model.js:359
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] "Évènement"
-msgstr[1] "Évènements"
 
 #: js/Model.js:67
 msgid "Calendars"
@@ -540,47 +572,47 @@ msgstr "Semaine {0} :"
 msgid "{0}, the {1}. of {2}"
 msgstr "{0} {1} {2}"
 
-#: js/iMIPDetailsPanel.js:68
+#: js/iMIPDetailsPanel.js:75
 msgid "Checking Calendar Data..."
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:168
+#: js/iMIPDetailsPanel.js:178
 msgid "The event of this message does not exist"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:173
+#: js/iMIPDetailsPanel.js:183
 msgid "The sender is not authorised to update the event"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:178
+#: js/iMIPDetailsPanel.js:188
 msgid "This message is already processed"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:183
+#: js/iMIPDetailsPanel.js:193
 msgid "You are not an attendee of this event"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:187
+#: js/iMIPDetailsPanel.js:197
 msgid "Unsupported message"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:197
+#: js/iMIPDetailsPanel.js:207
 msgid "This is an event invitation for someone else."
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:199
+#: js/iMIPDetailsPanel.js:209
 msgid "You have already replied to this event invitation."
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:201
+#: js/iMIPDetailsPanel.js:211
 msgid "You received an event invitation. Set your response to:"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:209
+#: js/iMIPDetailsPanel.js:219
 msgid "An invited attendee responded to the invitation."
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:213
+#: js/iMIPDetailsPanel.js:223
 msgid "Unsupported method"
 msgstr ""
 

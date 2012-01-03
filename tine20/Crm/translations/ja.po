@@ -324,7 +324,7 @@ msgstr "Eメール"
 msgid "Web"
 msgstr "ウェブサイト"
 
-#: js/LeadGridDetailsPanel.js:464 js/Task.js:218
+#: js/LeadGridDetailsPanel.js:464 js/Task.js:220
 msgid "Status"
 msgstr "ステータス"
 
@@ -357,7 +357,7 @@ msgstr[0] ""
 msgid "Add a Leadstate..."
 msgstr "タスクを追加しています..."
 
-#: js/Crm.js:24 js/AddressbookGridPanelHook.js:35
+#: js/Crm.js:24
 msgid "New Lead"
 msgstr ""
 
@@ -411,6 +411,12 @@ msgstr "PDFにエクスポート"
 msgid "Export as XLS"
 msgstr ""
 
+#: js/AddressbookGridPanelHook.js:35 js/LeadEditDialog.js:268 js/Model.js:48
+#, fuzzy
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "リード"
+
 #: js/LeadStateFilterModel.js:37
 #, fuzzy
 msgid "Show closed"
@@ -431,12 +437,6 @@ msgstr ""
 #: js/LeadEditDialog.js:257
 msgid "You do not have the run right for the Sales application or it is not activated."
 msgstr ""
-
-#: js/LeadEditDialog.js:268 js/Model.js:48
-#, fuzzy
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "リード"
 
 #: js/LeadEditDialog.js:295
 msgid "Enter short name"
@@ -509,7 +509,7 @@ msgstr "期日"
 msgid "Priority"
 msgstr "重要度"
 
-#: js/Task.js:205
+#: js/Task.js:207
 msgid "Percent"
 msgstr "パーセント"
 

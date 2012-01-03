@@ -110,7 +110,7 @@ msgstr[0] "Lista obrazów oprogramowania"
 msgstr[1] "listy obrazów oprogramowania"
 msgstr[2] "listy obrazów oprogramowania"
 
-#: js/Models.js:278 js/Snom/LineGridPanel.js:235
+#: js/Models.js:278 js/Snom/LineGridPanel.js:248
 msgid "Line"
 msgid_plural "Lines"
 msgstr[0] "Łącze"
@@ -560,7 +560,7 @@ msgstr "Hasło HTTP"
 msgid "Software Version"
 msgstr "Wersja oprogramowania"
 
-#: js/Snom/LineGridPanel.js:236
+#: js/Snom/LineGridPanel.js:249
 msgid "Idle Text"
 msgstr "Wiadomość, gdy wyłączony"
 

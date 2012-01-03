@@ -100,7 +100,7 @@ msgid_plural "softwareImages lists"
 msgstr[0] "softwareImages list"
 msgstr[1] "softwareImages lists"
 
-#: js/Models.js:278 js/Snom/LineGridPanel.js:235
+#: js/Models.js:278 js/Snom/LineGridPanel.js:248
 msgid "Line"
 msgid_plural "Lines"
 msgstr[0] "Line"
@@ -534,7 +534,7 @@ msgstr "HTTP Password"
 msgid "Software Version"
 msgstr "Software Version"
 
-#: js/Snom/LineGridPanel.js:236
+#: js/Snom/LineGridPanel.js:249
 msgid "Idle Text"
 msgstr "Idle Text"
 

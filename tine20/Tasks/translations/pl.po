@@ -15,65 +15,89 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-Bookmarks: 0,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
-#: Config.php:31
-msgid "Tasks Status Available"
-msgstr "Status zadania: Dostępne"
+#: Config.php:38
+msgid "Tasks status available"
+msgstr ""
 
-#: Config.php:33
+#: Config.php:40
 msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
 msgstr "Status zadania: Możliwe. Zauważ proszę, że dodatkowy status zadania może wpływać w innych zadaniach na eksport albo synchronizację."
+
+#: Config.php:48
+msgid "Task priorities available"
+msgstr ""
+
+#: Config.php:50
+msgid "Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation."
+msgstr ""
 
 #: Controller.php:96
 #, python-format
 msgid "%s's personal tasks"
 msgstr "%s zadania własne"
 
-#: Setup/Update/Release3.php:65 Setup/Initialize.php:64
+#: Setup/Update/Release3.php:65 Setup/Initialize.php:81
 msgid "All tasks of my taskslists"
 msgstr "Wszystkie zadania z mojej listy zadań"
 
-#: Setup/Update/Release5.php:66 Setup/Initialize.php:33
+#: Setup/Update/Release5.php:65 Setup/Initialize.php:34
 msgid "No response"
 msgstr "Brak odpowiedzi"
 
-#: Setup/Update/Release5.php:67 Setup/Initialize.php:34 js/GridPanel.js:216
-#: js/TaskEditDialog.js:239
+#: Setup/Update/Release5.php:66 Setup/Initialize.php:35 js/GridPanel.js:209
+#: js/TaskEditDialog.js:242
 msgid "Completed"
 msgstr "Zakończone dnia"
 
-#: Setup/Update/Release5.php:68 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:67 Setup/Initialize.php:36
 msgid "Cancelled"
 msgstr "Anulowane"
 
-#: Setup/Update/Release5.php:69 Setup/Initialize.php:36
+#: Setup/Update/Release5.php:68 Setup/Initialize.php:37
 msgid "In process"
 msgstr "W opracowaniu"
 
-#: Setup/Initialize.php:73
+#: Setup/Update/Release5.php:154 Setup/Initialize.php:50
+msgid "low"
+msgstr ""
+
+#: Setup/Update/Release5.php:155 Setup/Initialize.php:51
+msgid "normal"
+msgstr ""
+
+#: Setup/Update/Release5.php:156 Setup/Initialize.php:52
+msgid "high"
+msgstr ""
+
+#: Setup/Update/Release5.php:157 Setup/Initialize.php:53
+msgid "urgent"
+msgstr ""
+
+#: Setup/Initialize.php:90
 msgid "My open tasks"
 msgstr "Moje, rozpoczęte zadania"
 
-#: Setup/Initialize.php:82
+#: Setup/Initialize.php:99
 msgid "My open tasks this week"
 msgstr "Moje zadania rozpoczęte w tym tygodniu"
 
-#: Setup/Initialize.php:91
+#: Setup/Initialize.php:108
 msgid "All tasks for me"
 msgstr "Zadania przypisane do mnie"
 
-#: Setup/Initialize.php:92
+#: Setup/Initialize.php:109
 msgid "All tasks that I am responsible for"
 msgstr "Wszystkie zadania, za które odpowiadam"
 
-#: Setup/Initialize.php:99
+#: Setup/Initialize.php:116
 msgid "Last modified by me"
 msgstr "Ostatnio zmienione przeze mnie"
 
-#: Setup/Initialize.php:100
+#: Setup/Initialize.php:117
 msgid "All tasks that I have last modified"
 msgstr "Wszystkie zadania zmienione ostatnio przeze mnie"
 
-#: Setup/Initialize.php:109
+#: Setup/Initialize.php:126
 msgid "Tasks without responsible"
 msgstr "Nieprzypisane zadania"
 
@@ -120,35 +144,35 @@ msgstr[0] "Czy na pewno chcesz usunąć zaznaczone zadanie?"
 msgstr[1] "Czy na pewno chcesz usunąć zaznaczone zadania?"
 msgstr[2] "Czy na pewno chcesz usunąć zaznaczone zadania?"
 
-#: js/GridPanel.js:128
+#: js/GridPanel.js:127
 msgid "Tags"
 msgstr "Znaczniki"
 
-#: js/GridPanel.js:129 Model/Task.php:194
+#: js/GridPanel.js:128 Model/Task.php:194
 msgid "Lead"
 msgstr "Zapytanie wstępne"
 
-#: js/GridPanel.js:132 js/TaskEditDialog.js:180 js/Tasks.js:148
+#: js/GridPanel.js:131 js/TaskEditDialog.js:180 js/Tasks.js:148
 msgid "Summary"
 msgstr "Streszczenie"
 
-#: js/GridPanel.js:136
+#: js/GridPanel.js:135
 msgid "Add a task..."
 msgstr "Dodaj zadanie..."
 
-#: js/GridPanel.js:140 js/GridPanel.js:148 js/Tasks.js:149
+#: js/GridPanel.js:139 js/Tasks.js:149
 msgid "Due Date"
 msgstr "Data zakończenia"
 
-#: js/GridPanel.js:166 js/TaskEditDialog.js:208 Model/Task.php:185
+#: js/GridPanel.js:157 js/TaskEditDialog.js:208 Model/Task.php:185
 msgid "Priority"
 msgstr "Priorytet"
 
-#: js/GridPanel.js:180 Model/Task.php:187
+#: js/GridPanel.js:173 Model/Task.php:187
 msgid "Percent"
 msgstr "W procentach"
 
-#: js/GridPanel.js:193 js/TaskEditDialog.js:234 js/Tasks.js:151
+#: js/GridPanel.js:186 js/TaskEditDialog.js:237 js/Tasks.js:151
 #: js/Tasks.js:211 Model/Task.php:186
 msgid "Status"
 msgid_plural "Status"
@@ -156,15 +180,15 @@ msgstr[0] "Status"
 msgstr[1] "statusy"
 msgstr[2] "statusy"
 
-#: js/GridPanel.js:209 js/Tasks.js:163
+#: js/GridPanel.js:202 js/Tasks.js:163
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
-#: js/GridPanel.js:223 js/Tasks.js:159
+#: js/GridPanel.js:216 js/Tasks.js:159
 msgid "Responsible"
 msgstr "Osoba odpowiedzialna"
 
-#: js/GridPanel.js:272
+#: js/GridPanel.js:265
 msgid "Show closed"
 msgstr "Pokaż zakończone"
 
@@ -176,19 +200,19 @@ msgstr "Należy podać prawidłową datę, ponieważ ustawiony jest alarm!"
 msgid "Due date"
 msgstr "Data ukończenia"
 
-#: js/TaskEditDialog.js:212
+#: js/TaskEditDialog.js:215
 msgid "Add Responsible ..."
 msgstr "Dodaj osobę odpowiedzialną..."
 
-#: js/TaskEditDialog.js:220
+#: js/TaskEditDialog.js:223
 msgid "Notes"
 msgstr "Notatki"
 
-#: js/TaskEditDialog.js:221
+#: js/TaskEditDialog.js:224
 msgid "Enter description..."
 msgstr "Wprowadź opis..."
 
-#: js/TaskEditDialog.js:227
+#: js/TaskEditDialog.js:230
 msgid "Percentage"
 msgstr "Procentowo"
 
@@ -257,6 +281,9 @@ msgstr "E-mail"
 #: Controller/Task.php:165
 msgid "Notification for Task "
 msgstr "Powiadomienie o zadaniu"
+
+#~ msgid "Tasks Status Available"
+#~ msgstr "Status zadania: Dostępne"
 
 #~ msgid "NEEDS-ACTION"
 #~ msgstr "WYMAGA DZIAŁANIA"

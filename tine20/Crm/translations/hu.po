@@ -309,7 +309,7 @@ msgstr "E-Mail"
 msgid "Web"
 msgstr "Web"
 
-#: js/LeadGridDetailsPanel.js:464 js/Task.js:218
+#: js/LeadGridDetailsPanel.js:464 js/Task.js:220
 msgid "Status"
 msgstr "Állapot"
 
@@ -342,7 +342,7 @@ msgstr[1] "Ügylet állapotok"
 msgid "Add a Leadstate..."
 msgstr "Ügylet állapot hozzáadása..."
 
-#: js/Crm.js:24 js/AddressbookGridPanelHook.js:35
+#: js/Crm.js:24
 msgid "New Lead"
 msgstr "Új ügylet"
 
@@ -392,6 +392,12 @@ msgstr "Exportálás ODS-be"
 msgid "Export as XLS"
 msgstr "Exportálás XLS-be"
 
+#: js/AddressbookGridPanelHook.js:35 js/LeadEditDialog.js:268 js/Model.js:48
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "Ügylet"
+msgstr[1] "Ügyletek"
+
 #: js/LeadStateFilterModel.js:37
 msgid "Show closed"
 msgstr "Lezártak mutatása"
@@ -411,12 +417,6 @@ msgstr "Nincs futtatási jogod a Feladatok alkalmazáshoz vagy nincs aktiválva.
 #: js/LeadEditDialog.js:257
 msgid "You do not have the run right for the Sales application or it is not activated."
 msgstr "Nincs futtatási jogod a Sales alkalmazáshoz vagy nincs aktiválva."
-
-#: js/LeadEditDialog.js:268 js/Model.js:48
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "Ügylet"
-msgstr[1] "Ügyletek"
 
 #: js/LeadEditDialog.js:295
 msgid "Enter short name"
@@ -492,7 +492,7 @@ msgstr "Lejárati idő"
 msgid "Priority"
 msgstr "Prioritás"
 
-#: js/Task.js:205
+#: js/Task.js:207
 msgid "Percent"
 msgstr "Százalék"
 

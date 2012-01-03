@@ -1,10 +1,20 @@
-#: Config.php:31
-msgid "Tasks Status Available"
+#: Config.php:38
+msgid "Tasks status available"
 msgstr ""
 
-#: Config.php:33
+#: Config.php:40
 msgid ""
 "Possible tasks status. Please note that additional attendee status might "
+"impact other Tasks systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:48
+msgid "Task priorities available"
+msgstr ""
+
+#: Config.php:50
+msgid ""
+"Possible task priorities. Please note that additional priorities might "
 "impact other Tasks systems on export or syncronisation."
 msgstr ""
 
@@ -13,52 +23,68 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr ""
 
-#: Setup/Update/Release3.php:65 Setup/Initialize.php:64
+#: Setup/Update/Release3.php:65 Setup/Initialize.php:81
 msgid "All tasks of my taskslists"
 msgstr ""
 
-#: Setup/Update/Release5.php:66 Setup/Initialize.php:33
+#: Setup/Update/Release5.php:65 Setup/Initialize.php:34
 msgid "No response"
 msgstr ""
 
-#: Setup/Update/Release5.php:67 Setup/Initialize.php:34 js/GridPanel.js:216
-#: js/TaskEditDialog.js:239
+#: Setup/Update/Release5.php:66 Setup/Initialize.php:35 js/GridPanel.js:209
+#: js/TaskEditDialog.js:242
 msgid "Completed"
 msgstr ""
 
-#: Setup/Update/Release5.php:68 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:67 Setup/Initialize.php:36
 msgid "Cancelled"
 msgstr ""
 
-#: Setup/Update/Release5.php:69 Setup/Initialize.php:36
+#: Setup/Update/Release5.php:68 Setup/Initialize.php:37
 msgid "In process"
 msgstr ""
 
-#: Setup/Initialize.php:73
+#: Setup/Update/Release5.php:154 Setup/Initialize.php:50
+msgid "low"
+msgstr ""
+
+#: Setup/Update/Release5.php:155 Setup/Initialize.php:51
+msgid "normal"
+msgstr ""
+
+#: Setup/Update/Release5.php:156 Setup/Initialize.php:52
+msgid "high"
+msgstr ""
+
+#: Setup/Update/Release5.php:157 Setup/Initialize.php:53
+msgid "urgent"
+msgstr ""
+
+#: Setup/Initialize.php:90
 msgid "My open tasks"
 msgstr ""
 
-#: Setup/Initialize.php:82
+#: Setup/Initialize.php:99
 msgid "My open tasks this week"
 msgstr ""
 
-#: Setup/Initialize.php:91
+#: Setup/Initialize.php:108
 msgid "All tasks for me"
 msgstr ""
 
-#: Setup/Initialize.php:92
+#: Setup/Initialize.php:109
 msgid "All tasks that I am responsible for"
 msgstr ""
 
-#: Setup/Initialize.php:99
+#: Setup/Initialize.php:116
 msgid "Last modified by me"
 msgstr ""
 
-#: Setup/Initialize.php:100
+#: Setup/Initialize.php:117
 msgid "All tasks that I have last modified"
 msgstr ""
 
-#: Setup/Initialize.php:109
+#: Setup/Initialize.php:126
 msgid "Tasks without responsible"
 msgstr ""
 
@@ -104,50 +130,50 @@ msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/GridPanel.js:128
+#: js/GridPanel.js:127
 msgid "Tags"
 msgstr ""
 
-#: js/GridPanel.js:129 Model/Task.php:194
+#: js/GridPanel.js:128 Model/Task.php:194
 msgid "Lead"
 msgstr ""
 
-#: js/GridPanel.js:132 js/TaskEditDialog.js:180 js/Tasks.js:148
+#: js/GridPanel.js:131 js/TaskEditDialog.js:180 js/Tasks.js:148
 msgid "Summary"
 msgstr ""
 
-#: js/GridPanel.js:136
+#: js/GridPanel.js:135
 msgid "Add a task..."
 msgstr ""
 
-#: js/GridPanel.js:140 js/GridPanel.js:148 js/Tasks.js:149
+#: js/GridPanel.js:139 js/Tasks.js:149
 msgid "Due Date"
 msgstr ""
 
-#: js/GridPanel.js:166 js/TaskEditDialog.js:208 Model/Task.php:185
+#: js/GridPanel.js:157 js/TaskEditDialog.js:208 Model/Task.php:185
 msgid "Priority"
 msgstr ""
 
-#: js/GridPanel.js:180 Model/Task.php:187
+#: js/GridPanel.js:173 Model/Task.php:187
 msgid "Percent"
 msgstr ""
 
-#: js/GridPanel.js:193 js/TaskEditDialog.js:234 js/Tasks.js:151
+#: js/GridPanel.js:186 js/TaskEditDialog.js:237 js/Tasks.js:151
 #: js/Tasks.js:211 Model/Task.php:186
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/GridPanel.js:209 js/Tasks.js:163
+#: js/GridPanel.js:202 js/Tasks.js:163
 msgid "Creation Time"
 msgstr ""
 
-#: js/GridPanel.js:223 js/Tasks.js:159
+#: js/GridPanel.js:216 js/Tasks.js:159
 msgid "Responsible"
 msgstr ""
 
-#: js/GridPanel.js:272
+#: js/GridPanel.js:265
 msgid "Show closed"
 msgstr ""
 
@@ -159,19 +185,19 @@ msgstr ""
 msgid "Due date"
 msgstr ""
 
-#: js/TaskEditDialog.js:212
+#: js/TaskEditDialog.js:215
 msgid "Add Responsible ..."
 msgstr ""
 
-#: js/TaskEditDialog.js:220
+#: js/TaskEditDialog.js:223
 msgid "Notes"
 msgstr ""
 
-#: js/TaskEditDialog.js:221
+#: js/TaskEditDialog.js:224
 msgid "Enter description..."
 msgstr ""
 
-#: js/TaskEditDialog.js:227
+#: js/TaskEditDialog.js:230
 msgid "Percentage"
 msgstr ""
 

@@ -95,41 +95,71 @@ msgstr "Default Favorite"
 msgid "The default favorite which is loaded on Projects startup"
 msgstr "The default favorite which is loaded on Projects startup"
 
+#: js/AddToProjectPanel.js:56
+msgid "Cancel"
+msgstr "Cancel"
+
+#: js/AddToProjectPanel.js:64
+msgid "OK"
+msgstr "OK"
+
+#: js/AddToProjectPanel.js:99
+msgid "Please choose the Project to add the contacts to"
+msgstr "Please choose the Project to add the contacts to"
+
+#: js/AddToProjectPanel.js:103
+msgid "Please select the attenders' role"
+msgstr "Please select the attenders' role"
+
+#: js/AddToProjectPanel.js:123
+msgid "Select Project"
+msgstr "Select Project"
+
+#: js/AddToProjectPanel.js:136
+msgid "Select Role"
+msgstr "Select Role"
+
+#: js/AddToProjectPanel.js:193
+msgid "Adding {0} Participants to project"
+msgstr "Adding {0} Participants to project"
+
 #: js/ProjectGridPanel.js:85
 msgid "Tags"
 msgstr "Tags"
 
-#: js/ProjectGridPanel.js:88 js/ProjectEditDialog.js:135
+#: js/ProjectGridPanel.js:88 js/ProjectEditDialog.js:166
 msgid "Number"
 msgstr "Number"
 
-#: js/ProjectGridPanel.js:95 js/ProjectEditDialog.js:130
+#: js/ProjectGridPanel.js:95 js/ProjectEditDialog.js:161
 msgid "Title"
 msgstr "Title"
 
-#: js/ProjectGridPanel.js:101 js/ProjectEditDialog.js:141 js/Model.js:74
+#: js/ProjectGridPanel.js:101 js/ProjectEditDialog.js:172 js/Model.js:74
 msgid "Status"
 msgstr "Status"
 
-#: js/ProjectEditDialog.js:83 js/ProjectAttendeeFilter.js:38
+#: js/ProjectEditDialog.js:114 js/ProjectAttendeeFilter.js:38
 msgid "Attendee"
 msgstr "Attendee"
 
-#: js/ProjectEditDialog.js:84
+#: js/ProjectEditDialog.js:115
 msgid "Role"
 msgstr "Role"
 
-#: js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118 js/Model.js:33
+#: js/ProjectEditDialog.js:136 js/ProjectEditDialog.js:149
+#: js/AddressbookGridPanelHook.js:32 js/AddressbookGridPanelHook.js:44
+#: js/Model.js:33
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Project"
 msgstr[1] "Projects"
 
-#: js/ProjectEditDialog.js:171
+#: js/ProjectEditDialog.js:202
 msgid "Description"
 msgstr "Description"
 
-#: js/ProjectEditDialog.js:185
+#: js/ProjectEditDialog.js:216
 msgid "Enter description"
 msgstr "Enter description"
 

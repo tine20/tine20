@@ -113,7 +113,7 @@ msgstr[0] "seznam obrazů softwaru"
 msgstr[1] "seznamy obrazů softwaru"
 msgstr[2] "seznamů obrazů softwaru"
 
-#: js/Models.js:278 js/Snom/LineGridPanel.js:235
+#: js/Models.js:278 js/Snom/LineGridPanel.js:248
 msgid "Line"
 msgid_plural "Lines"
 msgstr[0] "Linka"
@@ -559,7 +559,7 @@ msgstr "HTTP heslo"
 msgid "Software Version"
 msgstr "Verze softwaru"
 
-#: js/Snom/LineGridPanel.js:236
+#: js/Snom/LineGridPanel.js:249
 msgid "Idle Text"
 msgstr "Text při nečinnosti"
 
