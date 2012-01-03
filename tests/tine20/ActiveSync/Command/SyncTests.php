@@ -146,12 +146,13 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         // first do a foldersync
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
-                    <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-                    <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
         );
         $folderSync = new ActiveSync_Command_FolderSync($doc, $this->objects['device'], $this->objects['device']->policykey);
         $folderSync->handle();
         $folderSync->getResponse();
+        
         
         // request initial synckey
         $doc = new DOMDocument();
@@ -181,6 +182,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
         $this->assertEquals(ActiveSync_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        
         
         // now do the first sync
         $doc = new DOMDocument();
@@ -214,5 +216,117 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Commands');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
         #$this->assertEquals(ActiveSync_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        
+        $this->assertEquals("uri:Contacts", $syncDoc->lookupNamespaceURI('Contacts'), $syncDoc->saveXML());
+    }
+    
+    /**
+     * test sync of existing events folder
+     */
+    public function testSyncOfEvents()
+    {        
+        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
+            Tinebase_Core::getUser(),
+            'Calendar', 
+            Tinebase_Core::getUser(),
+            Tinebase_Model_Grants::GRANT_EDIT
+        )->getFirstRecord();
+        
+        
+        // add a test event
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'SyncTest',
+            'dtstart'       => Tinebase_DateTime::now()->addMonth(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-04-25 18:00:00',
+            'dtend'         => Tinebase_DateTime::now()->addMonth(1)->addHour(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-04-25 18:30:00',
+            'originator_tz' => 'Europe/Berlin',
+            'container_id'  => $personalContainer->getId(),
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+            'attendee'      => new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+                array(
+                    'user_id' => Tinebase_Core::getUser()->contact_id,
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'status' => Calendar_Model_Attender::STATUS_ACCEPTED
+                )
+            ))
+        ));
+        
+        $event = Calendar_Controller_Event::getInstance()->create($event);
+        
+        
+        // first do a foldersync
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
+        );
+        $folderSync = new ActiveSync_Command_FolderSync($doc, $this->objects['device'], $this->objects['device']->policykey);
+        $folderSync->handle();
+        $folderSync->getResponse();
+        
+        
+        // request initial synckey
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Calendar</Class><SyncKey>0</SyncKey><CollectionId>' . $personalContainer->getId() . '</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><FilterType>4</FilterType><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
+        );
+        
+        $sync = new ActiveSync_Command_Sync($doc, $this->objects['device'], $this->objects['device']->policykey);
+        
+        $sync->handle();
+        
+        $syncDoc = $sync->getResponse();
+        #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
+        
+        $xpath = new DomXPath($syncDoc);
+        $xpath->registerNamespace('AirSync', 'uri:AirSync');
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Class');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals('Calendar', $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(1, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(ActiveSync_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        
+        
+        // now do the first sync
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Calendar</Class><SyncKey>1</SyncKey><CollectionId>' . $personalContainer->getId() . '</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><FilterType>4</FilterType><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
+        );
+        
+        $sync = new ActiveSync_Command_Sync($doc, $this->objects['device'], $this->objects['device']->policykey);
+        
+        $sync->handle();
+        
+        $syncDoc = $sync->getResponse();
+        $syncDoc->formatOutput = true; echo $syncDoc->saveXML();
+        
+        $xpath = new DomXPath($syncDoc);
+        $xpath->registerNamespace('AirSync', 'uri:AirSync');
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Class');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals('Calendar', $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(2, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(ActiveSync_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Commands');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        
+        $this->assertEquals("uri:Calendar", $syncDoc->lookupNamespaceURI('Calendar'), $syncDoc->saveXML());
     }
 }
