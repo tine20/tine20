@@ -5,8 +5,8 @@
  * @package     Crm
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -14,10 +14,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Crm_Export_OdsTest::main');
-}
 
 /**
  * Test class for Crm_Export_Ods
@@ -31,6 +27,9 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
      */
     protected $_instance;
     
+    /**
+     * @var Tinebase_Model_Container
+     */
     protected $_container = NULL;
     
     /**
@@ -103,8 +102,9 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
         $this->assertEquals(1, preg_match("/PHPUnit/",      $xmlBody), 'no name'); 
         $this->assertEquals(1, preg_match("/Description/",  $xmlBody), 'no description');
         $this->assertEquals(1, preg_match('/open/',         $xmlBody), 'no leadstate');
-        $this->assertEquals(1, preg_match('/Admin Account, Tine 2\.0/',         $xmlBody), 'no creator');
-        $this->assertEquals(1, preg_match('/Tine 2\.0 Admin Accounts/',         $xmlBody), 'no container name');
+        $this->assertEquals(1, preg_match('/Admin Account, Tine 2\.0/',        $xmlBody), 'no creator');
+        $this->assertEquals(1, preg_match('/Tine 2\.0 Admin Account/',         $xmlBody), 'no container name');
+        $this->assertEquals(1, preg_match('/personal leads/',                  $xmlBody), 'no container name');
         
         unlink($odsFilename);
     }
@@ -134,8 +134,4 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
         
         unlink($odsFilename);
     }
-}       
-
-if (PHPUnit_MAIN_METHOD == 'Crm_Export_OdsTest::main') {
-    Addressbook_ControllerTest::main();
 }
