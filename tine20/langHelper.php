@@ -604,8 +604,10 @@ function getPluralForm($_languageName)
             
         // Romanic family
         case 'French' :
-        case 'Brazilian Portuguese' :
             $pluralForm = 'nplurals=2; plural=n>1;';
+            break;
+        case 'Brazilian Portuguese' :
+            $pluralForm = 'nplurals=2; plural=n != 1;';
             break;
             
         // Baltic family
