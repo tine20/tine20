@@ -515,6 +515,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     },
     
     onShow: function() {
+        this.layout();
         this.scroller.dom.scrollTop = this.lastScrollPos || this.getTimeOffset(new Date());
     },
     

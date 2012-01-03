@@ -89,7 +89,7 @@ msgid "softwareImages list"
 msgid_plural "softwareImages lists"
 msgstr[0] "ソフトウェアイメージ留守と"
 
-#: js/Models.js:278 js/Snom/LineGridPanel.js:235
+#: js/Models.js:278 js/Snom/LineGridPanel.js:248
 msgid "Line"
 msgid_plural "Lines"
 msgstr[0] "ライン"
@@ -511,7 +511,7 @@ msgstr "HTTP指すワード"
 msgid "Software Version"
 msgstr "ソフトウェアバージョン"
 
-#: js/Snom/LineGridPanel.js:236
+#: js/Snom/LineGridPanel.js:249
 msgid "Idle Text"
 msgstr "アイドルテキスト"
 

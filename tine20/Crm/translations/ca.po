@@ -308,7 +308,7 @@ msgstr "Correu electrònic"
 msgid "Web"
 msgstr "Web"
 
-#: js/LeadGridDetailsPanel.js:464 js/Task.js:218
+#: js/LeadGridDetailsPanel.js:464 js/Task.js:220
 msgid "Status"
 msgstr "Estat"
 
@@ -341,7 +341,7 @@ msgstr[1] "Estats del client potencial"
 msgid "Add a Leadstate..."
 msgstr "Afegeix un estat"
 
-#: js/Crm.js:24 js/AddressbookGridPanelHook.js:35
+#: js/Crm.js:24
 msgid "New Lead"
 msgstr ""
 
@@ -391,6 +391,12 @@ msgstr "Exporta com a ODS"
 msgid "Export as XLS"
 msgstr "Exporta com a XLS"
 
+#: js/AddressbookGridPanelHook.js:35 js/LeadEditDialog.js:268 js/Model.js:48
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "Client potencial"
+msgstr[1] "Clients potencials"
+
 #: js/LeadStateFilterModel.js:37
 msgid "Show closed"
 msgstr "Mostra els tancats"
@@ -410,12 +416,6 @@ msgstr "No disposeu dels permisos per a executar l'aplicació Tasques o bé aque
 #: js/LeadEditDialog.js:257
 msgid "You do not have the run right for the Sales application or it is not activated."
 msgstr "No disposeu dels permisos per a executar l'aplicació Vendes o bé aquesta no es troba activada."
-
-#: js/LeadEditDialog.js:268 js/Model.js:48
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "Client potencial"
-msgstr[1] "Clients potencials"
 
 #: js/LeadEditDialog.js:295
 msgid "Enter short name"
@@ -491,7 +491,7 @@ msgstr "Data de venciment"
 msgid "Priority"
 msgstr "Prioritat"
 
-#: js/Task.js:205
+#: js/Task.js:207
 msgid "Percent"
 msgstr "Percentatge"
 

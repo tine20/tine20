@@ -330,7 +330,7 @@ msgstr "Электронная почта"
 msgid "Web"
 msgstr "вебсайт"
 
-#: js/LeadGridDetailsPanel.js:464 js/Task.js:218
+#: js/LeadGridDetailsPanel.js:464 js/Task.js:220
 msgid "Status"
 msgstr "Статус"
 
@@ -367,7 +367,7 @@ msgstr[2] ""
 msgid "Add a Leadstate..."
 msgstr "Добавить задание..."
 
-#: js/Crm.js:24 js/AddressbookGridPanelHook.js:35
+#: js/Crm.js:24
 msgid "New Lead"
 msgstr ""
 
@@ -421,6 +421,14 @@ msgstr "Экспортировать как PDF"
 msgid "Export as XLS"
 msgstr ""
 
+#: js/AddressbookGridPanelHook.js:35 js/LeadEditDialog.js:268 js/Model.js:48
+#, fuzzy
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "Предложение"
+msgstr[1] "Предложение"
+msgstr[2] "Предложение"
+
 #: js/LeadStateFilterModel.js:37
 #, fuzzy
 msgid "Show closed"
@@ -441,14 +449,6 @@ msgstr ""
 #: js/LeadEditDialog.js:257
 msgid "You do not have the run right for the Sales application or it is not activated."
 msgstr ""
-
-#: js/LeadEditDialog.js:268 js/Model.js:48
-#, fuzzy
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "Предложение"
-msgstr[1] "Предложение"
-msgstr[2] "Предложение"
 
 #: js/LeadEditDialog.js:295
 msgid "Enter short name"
@@ -527,7 +527,7 @@ msgstr "До даты"
 msgid "Priority"
 msgstr "Приоритет"
 
-#: js/Task.js:205
+#: js/Task.js:207
 msgid "Percent"
 msgstr "Процент"
 

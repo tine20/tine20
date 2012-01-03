@@ -100,7 +100,7 @@ msgid_plural "softwareImages lists"
 msgstr[0] "szoftverkép lista"
 msgstr[1] "szoftverkép listák"
 
-#: js/Models.js:278 js/Snom/LineGridPanel.js:235
+#: js/Models.js:278 js/Snom/LineGridPanel.js:248
 msgid "Line"
 msgid_plural "Lines"
 msgstr[0] "Vonal"
@@ -534,7 +534,7 @@ msgstr "HTTP jelszó"
 msgid "Software Version"
 msgstr "Szoftver verzió "
 
-#: js/Snom/LineGridPanel.js:236
+#: js/Snom/LineGridPanel.js:249
 msgid "Idle Text"
 msgstr "Szünetelő szöveg"
 

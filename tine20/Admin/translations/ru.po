@@ -131,20 +131,20 @@ msgstr ""
 #: js/customfield/GridPanel.js:72 js/customfield/EditDialog.js:595
 #: js/SambaMachineGrid.js:86 js/user/EditDialog.js:278
 #: js/user/EditDialog.js:314 js/Groups.js:235 js/Applications.js:278
-#: js/AccessLog.js:131 js/Tags.js:225 js/container/EditDialog.js:122
+#: js/AccessLog.js:131 js/Tags.js:225 js/container/EditDialog.js:123
 #: js/Roles.js:238
 msgid "Name"
 msgstr "Имя"
 
 #: js/customfield/GridPanel.js:73 js/customfield/EditDialog.js:583
 #: js/container/GridPanel.js:73 js/container/GridPanel.js:104
-#: js/container/EditDialog.js:143
+#: js/container/EditDialog.js:144
 msgid "Type"
 msgstr ""
 
 #: js/customfield/GridPanel.js:74 js/customfield/EditDialog.js:387
 #: js/customfield/EditDialog.js:528 js/Models.js:128
-#: js/container/GridPanel.js:72 js/container/EditDialog.js:134
+#: js/container/GridPanel.js:72 js/container/EditDialog.js:135
 #: js/ApplicationFilter.js:33
 msgid "Application"
 msgid_plural "Applications"
@@ -277,7 +277,7 @@ msgstr ""
 msgid "Custom field additional properties"
 msgstr ""
 
-#: js/customfield/EditDialog.js:620 js/GroupEditDialog.js:215 js/Models.js:87
+#: js/customfield/EditDialog.js:620 js/GroupEditDialog.js:216 js/Models.js:87
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] ""
@@ -369,42 +369,42 @@ msgstr "Пожалуйста, устраните отмеченные ошибк
 msgid "Group Members"
 msgstr "Члены группы"
 
-#: js/GroupEditDialog.js:127
+#: js/GroupEditDialog.js:128
 msgid "Group Name"
 msgstr "Название группы"
 
-#: js/GroupEditDialog.js:135 js/SambaMachineGrid.js:62
-#: js/SambaMachineGrid.js:92 js/RoleEditDialog.js:291 js/user/GridPanel.js:99
-#: js/Groups.js:236 js/TagEditDialog.js:225 js/Tags.js:226 js/Roles.js:239
+#: js/GroupEditDialog.js:136 js/SambaMachineGrid.js:62
+#: js/SambaMachineGrid.js:92 js/RoleEditDialog.js:292 js/user/GridPanel.js:99
+#: js/Groups.js:236 js/TagEditDialog.js:226 js/Tags.js:226 js/Roles.js:239
 msgid "Description"
 msgstr "Описание"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:837
+#: js/GroupEditDialog.js:144 js/user/EditDialog.js:837
 msgid "Visibility"
 msgstr ""
 
-#: js/GroupEditDialog.js:149 js/user/EditDialog.js:843
+#: js/GroupEditDialog.js:150 js/user/EditDialog.js:843
 #, fuzzy
 msgid "Display in addressbook"
 msgstr "Экранное имя"
 
-#: js/GroupEditDialog.js:149 js/user/EditDialog.js:843
+#: js/GroupEditDialog.js:150 js/user/EditDialog.js:843
 msgid "Hide from addressbook"
 msgstr ""
 
-#: js/GroupEditDialog.js:160 js/user/EditDialog.js:857
+#: js/GroupEditDialog.js:161 js/user/EditDialog.js:857
 msgid "Saved in Addressbook"
 msgstr ""
 
-#: js/GroupEditDialog.js:215 js/RoleEditDialog.js:358 js/TagEditDialog.js:289
+#: js/GroupEditDialog.js:216 js/RoleEditDialog.js:359 js/TagEditDialog.js:290
 msgid "Transferring {0}..."
 msgstr ""
 
-#: js/GroupEditDialog.js:220 js/GroupEditDialog.js:231
+#: js/GroupEditDialog.js:221 js/GroupEditDialog.js:232
 msgid "Add new group"
 msgstr "Добавить новую группу"
 
-#: js/GroupEditDialog.js:233
+#: js/GroupEditDialog.js:234
 msgid "Edit Group \"{0}\""
 msgstr "Изменить группу \"{0}\""
 
@@ -432,19 +432,19 @@ msgstr "Права"
 msgid "Members"
 msgstr "Участники"
 
-#: js/RoleEditDialog.js:283
+#: js/RoleEditDialog.js:284
 msgid "Role Name"
 msgstr "Название роли"
 
-#: js/RoleEditDialog.js:358
+#: js/RoleEditDialog.js:359
 msgid "Role"
 msgstr ""
 
-#: js/RoleEditDialog.js:368
+#: js/RoleEditDialog.js:369
 msgid "Add New Role"
 msgstr "Добавьте новую роль"
 
-#: js/RoleEditDialog.js:370
+#: js/RoleEditDialog.js:371
 msgid "Edit Role \"{0}\""
 msgstr "Изменить роль \"{0}\""
 
@@ -851,31 +851,31 @@ msgstr "Контекст"
 msgid "Account Rights"
 msgstr "Права учётной записи"
 
-#: js/TagEditDialog.js:195
+#: js/TagEditDialog.js:196
 msgid "View"
 msgstr "Представление"
 
-#: js/TagEditDialog.js:200
+#: js/TagEditDialog.js:201
 msgid "Use"
 msgstr "Использовать"
 
-#: js/TagEditDialog.js:218
+#: js/TagEditDialog.js:219
 msgid "Tag Name"
 msgstr "Название тэга"
 
-#: js/TagEditDialog.js:231 js/Tags.js:222 js/container/EditDialog.js:158
+#: js/TagEditDialog.js:232 js/Tags.js:222 js/container/EditDialog.js:159
 msgid "Color"
 msgstr "Цвет"
 
-#: js/TagEditDialog.js:289
+#: js/TagEditDialog.js:290
 msgid "Tag"
 msgstr ""
 
-#: js/TagEditDialog.js:299
+#: js/TagEditDialog.js:300
 msgid "Add New Tag"
 msgstr "Добавить новый тэг"
 
-#: js/TagEditDialog.js:301
+#: js/TagEditDialog.js:302
 msgid "Edit Tag \"{0}\""
 msgstr "Изменить тэг \"{0}\""
 
@@ -985,15 +985,15 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/container/EditDialog.js:144
+#: js/container/EditDialog.js:145
 msgid "personal"
 msgstr ""
 
-#: js/container/EditDialog.js:144
+#: js/container/EditDialog.js:145
 msgid "shared"
 msgstr ""
 
-#: js/container/EditDialog.js:163
+#: js/container/EditDialog.js:164
 msgid "Note for Owner"
 msgstr ""
 
