@@ -189,11 +189,9 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
             $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($_user->accountLoginName, $_password);
             Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
             
-            // need to set locale again if user preference is available because locale might not be set correctly during loginFromPost
-            $userPrefLocaleString = Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE};
-            if ($userPrefLocaleString !== 'auto') {
-                Tinebase_Core::setupUserLocale($userPrefLocaleString);
-            }
+            // need to set locale again and save it in preference because locale might not be set correctly during loginFromPost
+            // use 'auto' setting because it is fetched from cookie or preference then
+            Tinebase_Core::setupUserLocale('auto', TRUE);
             
             // need to set userTimeZone again
             $userTimezone = Tinebase_Core::getPreference()->getValue(Tinebase_Preference::TIMEZONE);
