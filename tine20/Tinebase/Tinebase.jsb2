@@ -375,6 +375,10 @@
           "text": "MultipleEditDialogPlugin.js",
           "path": "js/widgets/dialog/"
         },
+         {
+          "text": "KeyShortcutsEditDialogPlugin.js",
+          "path": "js/widgets/dialog/"
+        },
         {
           "text": "TokenModeEditDialogPlugin.js",
           "path": "js/widgets/dialog/"

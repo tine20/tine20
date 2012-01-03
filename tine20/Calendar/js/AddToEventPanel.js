@@ -151,18 +151,19 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
                 listeners: {
                     scope: cp,
                     update: function (eventJson) {
-                        //var updatedEvent = new Tine.Calendar.Model.Event(Ext.util.JSON.decode(eventJson), event.id);
-                    var updatedEvent = Tine.Calendar.backend.recordReader({responseText: eventJson});
-                    updatedEvent.dirty = true;
-                    updatedEvent.modified = {};
-                    event.phantom = true;
-                    var panel = this.getCalendarPanel(this.activeView);
-                    var store = panel.getStore();
-                    event = store.getById(event.id);
-                    if (event) store.replaceRecord(event, updatedEvent);
-                    else store.add(updatedEvent);
-                    this.activeView = 'weekSheet';
-                    this.onUpdateEvent(updatedEvent);
+
+                        var updatedEvent = Tine.Calendar.backend.recordReader({responseText: eventJson});
+                            updatedEvent.dirty = true;
+                            updatedEvent.modified = {};
+                            
+                        event.phantom = true;
+                        var panel = this.getCalendarPanel(this.activeView);
+                        var store = panel.getStore();
+                        event = store.getById(event.id);
+                        if (event) store.replaceRecord(event, updatedEvent);
+                        else store.add(updatedEvent);
+                        this.activeView = 'weekSheet';
+                        this.onUpdateEvent(updatedEvent);
 
                     }
                 }
