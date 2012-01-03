@@ -1,5 +1,20 @@
+/*
+ * Tine 2.0
+ * 
+ * @package     Tinebase
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Alexander Stintzing <alex@stintzing.net>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ *
+ */
+ 
 Ext.ns('Tine.widgets.editDialog');
 
+/**
+ * @namespace   Tine.widgets.editDialog
+ * @class       Tine.widgets.dialog.KeyShortcutsEditDialogPlugin
+ * @author      Alexander Stintzing <alex@stintzing.net>
+ */
 Tine.widgets.dialog.KeyShortcutsEditDialogPlugin = function(config) {
     Ext.apply(this, config);
 };
@@ -18,8 +33,11 @@ Tine.widgets.dialog.KeyShortcutsEditDialogPlugin.prototype = {
         this.editDialog = editDialog;
         this.editDialog.onRender = this.editDialog.onRender.createSequence(this.onRender, this);
     },
-
-    onRender: function(ct, position) {
+    
+    /**
+     * creates shortcuts for tabs
+     */
+    onRender: function() {
         
         var tabCount = this.tabPanel.items.items.length;
         
@@ -35,7 +53,10 @@ Tine.widgets.dialog.KeyShortcutsEditDialogPlugin.prototype = {
             }
         }
     },
-    
+    /**
+     * switch to tab
+     * @param Integer code
+     */
     switchTab: function(code) {
         var number = parseInt(code) - 49;
         if (this.tabPanel) {
