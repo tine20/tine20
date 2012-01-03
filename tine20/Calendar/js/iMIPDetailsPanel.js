@@ -125,9 +125,9 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
             if (status.id == 'NEEDS-ACTION') return;
             
             this.statusActions.push(new Ext.Action({
-                text: status.get('status_name'),
+                text: status.get('i18nValue'),
                 handler: this.processIMIP.createDelegate(this, [status.id]),
-                iconCls: 'cal-response-action-' + status.id
+                icon: status.get('icon')
             }));
         }, this);
         
