@@ -24,7 +24,7 @@ class Tinebase_WebDav_Root extends Sabre_DAV_SimpleCollection
     {
         $webdavApps = array();
         
-        foreach(array('Addressbook', 'Calendar'/*, 'Filemanager'*/) as $application) {
+        foreach(array('Addressbook', 'Calendar', 'Filemanager') as $application) {
             if(Tinebase_Core::getUser()->hasRight($application, Tinebase_Acl_Rights::RUN)) {
                 $applicationClass = $application . '_Frontend_WebDAV';
                 $webdavApps[] = new $applicationClass($application);
