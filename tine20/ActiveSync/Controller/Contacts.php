@@ -139,6 +139,8 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      */
     public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_options, $_neverTruncate = false)
     {
+        $_xmlNode->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Contacts', 'uri:Contacts');
+        
         $data = $_serverId instanceof Tinebase_Record_Abstract ? $_serverId : $this->_contentController->get($_serverId);
         
         foreach($this->_mapping as $key => $value) {
