@@ -120,7 +120,7 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         this.actions = [];
         this.statusActions = [];
         
-        Tine.Calendar.Model.Attender.getAttendeeStatusStore().each(function(status) {
+        Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus').each(function(status) {
             // NEEDS-ACTION is not appropriate in iMIP context
             if (status.id == 'NEEDS-ACTION') return;
             
