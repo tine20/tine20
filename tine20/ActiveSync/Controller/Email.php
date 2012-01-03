@@ -397,26 +397,26 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         }
     }
     
-    /**
-     * get id's of all contacts available on the server
-     *
-     * @return array
-     */
-    protected function _getServerEntries($_folderId, $_filterType)
-    {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " get server entries for folder " . $_folderId);
-        
-        $filter = new $this->_contentFilterClass();
-        
-        $this->_getContentFilter($filter, $_filterType);
-        $this->_getContainerFilter($filter, $_folderId);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter " . print_r($filter->toArray(), true));
-        
-        $messages = $this->_contentController->search($filter, null, false, true);
-        
-    	return $messages;    	
-    }
+    #/**
+    # * get id's of all contacts available on the server
+    # *
+    # * @return array
+    # */
+    #protected function _getServerEntries($_folderId, $_filterType)
+    #{
+    #    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " get server entries for folder " . $_folderId);
+    #    
+    #    $filter = new $this->_contentFilterClass();
+    #    
+    #    $this->_getContentFilter($filter, $_filterType);
+    #    $this->_getContainerFilter($filter, $_folderId);
+    #    
+    #    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter " . print_r($filter->toArray(), true));
+    #    
+    #    $messages = $this->_contentController->search($filter, null, false, true);
+    #    
+    #	return $messages;    	
+    #}
     
     /**
      * update existing entry
