@@ -44,8 +44,12 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * @return {String} html
      */
     containerRenderer: function(container) {
-        var displayContainer = this.record.getDisplayContainer();
-        return Tine.Tinebase.common.containerRenderer(displayContainer);
+        if(this.record) {   // no record after delete
+            var displayContainer = this.record.getDisplayContainer();
+            return Tine.Tinebase.common.containerRenderer(displayContainer);
+        } else {
+            return null;
+        }
     },
     
     /**

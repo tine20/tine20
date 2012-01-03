@@ -580,17 +580,16 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var panel = this.getCalendarPanel(this.activeView),
             store = panel.getStore(),
             view = panel.getView();
-                        
+
         Tine.Calendar.backend.saveRecord(event, {
             scope: this,
             success: function(updatedEvent) {
-                //console.log('Backend returned updated event -> replace event in view');
                 if (updatedEvent.isRecurBase()) {
                     store.load({refresh: true});
                 } else {
                     event =  store.indexOf(event) != -1 ? event : store.getById(event.id);
-                    
-                    store.replaceRecord(event, updatedEvent);
+                    if(event) store.replaceRecord(event, updatedEvent);
+                    else store.add(updatedEvent)
                     
                     this.setLoading(false);
                     view.getSelectionModel().select(updatedEvent);
@@ -610,7 +609,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var containsRecurInstance = false;
         
         Ext.each(selection, function (event) {
-            event.ui.markDirty();
+            if(event.ui) event.ui.markDirty();
             if (event.isRecurInstance()) {
                 containsRecurInstance = true;
             }
@@ -729,8 +728,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     /**
      * @param {String} action add|edit
      */
-    onEditInNewWindow: function (action, defaults) {
-        var event = null;
+    onEditInNewWindow: function (action, defaults, event) {
+        if(!event) event = null;
         
         if (action === 'edit') {
             var panel = this.getCalendarPanel(this.activeView);
@@ -762,13 +761,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     updatedEvent.dirty = true;
                     updatedEvent.modified = {};
                     event.phantom = (action === 'edit');
-                    
                     var panel = this.getCalendarPanel(this.activeView);
                     var store = panel.getStore();
-                    
                     event = store.getById(event.id);
-                    
-                    store.replaceRecord(event, updatedEvent);
+                    if (event) store.replaceRecord(event, updatedEvent);
+                    else store.add(updatedEvent);
                     
                     this.onUpdateEvent(updatedEvent);
                 }
@@ -907,11 +904,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         this.loadMask.hide();
         
         if (error.code == 901) {
-            
+           
             // resort fbInfo to combine all events of a attender
             var busyAttendee = [];
             var conflictEvents = {};
             var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(event.get('attendee'));
+             
             Ext.each(error.freebusyinfo, function(fbinfo) {
                 attendeeStore.each(function(a) {
                     if (a.get('user_type') == fbinfo.user_type && a.getUserId() == fbinfo.user_id) {
@@ -970,9 +968,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 scope: this,
                 handler: function(option) {
                     var panel = this.getCalendarPanel(this.activeView),
-                        store = panel.getStore(),
-                        view = panel.getView();
-                        
+                        store = panel.getStore();
+
                     switch (option) {
                         case 'ignore':
                             this.onAddEvent(event, false);
@@ -980,13 +977,23 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                             break;
                         
                         case 'edit':
-                            view.getSelectionModel().select(event);
-                            // mark event as not dirty to allow edit dlg
-                            event.dirty = false;
-                            view.fireEvent('dblclick', view, event);
-                            this.conflictConfirmWin.close();
-                            break;
                             
+                            var presentationMatch = this.activeView.match(this.presentationRe),
+                                presentation = Ext.isArray(presentationMatch) ? presentationMatch[0] : null;
+                            
+                            if (presentation != 'Grid') {
+                                var view = panel.getView();
+                                view.getSelectionModel().select(event);
+                                // mark event as not dirty to allow edit dlg
+                                event.dirty = false;
+                                view.fireEvent('dblclick', view, event);
+                            } else {
+                                // add or edit?
+                                this.onEditInNewWindow(null, null, event);
+                            }
+                            
+                            this.conflictConfirmWin.close();
+                            break;                            
                         case 'cancel':
                         default:
                             this.conflictConfirmWin.close();
