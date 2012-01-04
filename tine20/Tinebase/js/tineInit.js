@@ -96,7 +96,7 @@ Tine.Tinebase.tineInit = {
     
     initWindow: function () {
         Ext.getBody().on('keydown', function (e) {
-            if (e.ctrlKey && e.getKey() === e.A) {
+            if (e.ctrlKey && e.getKey() === e.A && ! (e.getTarget('form') || e.getTarget('input') || e.getTarget('textarea'))) {
                 // disable the native 'select all'
                 e.preventDefault();
             } else if (e.getKey() === e.BACKSPACE && ! (e.getTarget('form') || e.getTarget('input') || e.getTarget('textarea'))) {
