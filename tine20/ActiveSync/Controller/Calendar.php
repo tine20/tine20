@@ -608,14 +608,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         }
         
         // get body
-        if (isset($xmlData->Body)) {
-            // ActiveSync 2.5
-            $event->description = (string)$xmlData->Body;
-        } elseif(isset($airSyncBase->Body)) {
-            // ActiveSync >= 12.0
-            $event->description = (string)$airSyncBase->Body->Data;
+        if (version_compare($this->_device->acsversion, '12.0', '>=') === true) {
+            $event->description = isset($airSyncBase->Body) ? (string)$airSyncBase->Body->Data : null;
         } else {
-            $event->description = null;
+            $event->description = isset($xmlData->Body) ? (string)$xmlData->Body : null;
         }
         
         // whole day events ends at 23:59:59 in Tine 2.0 but 00:00 the next day in AS
