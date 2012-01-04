@@ -151,11 +151,5 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
         if (!rmdir('tine20://' . $this->_path)) {
             throw new Sabre_DAV_Exception_Forbidden('Permission denied to delete node');
         }
-        
-#        if ($this->_path == $this->_containerPath) {
-#            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete container');
-#            Tinebase_Container::getInstance()->delete($this->_getContainer());  
-#        }
     }
-    
 }
