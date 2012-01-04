@@ -246,6 +246,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.CalendarSelectWidget = new Tine.Calendar.CalendarSelectWidget(this);
         
         Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
+        
+        // overwrite saveAndCloseHandler
+        this.action_saveAndClose.setHandler(this.checkPastEvent, this);
     },
     
     /**
@@ -264,7 +267,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         return isValid && Tine.Calendar.EventEditDialog.superclass.isValid.apply(this, arguments);
     },
-    
+     
     onAllDayChange: function(checkbox, isChecked) {
         var dtStartField = this.getForm().findField('dtstart');
         var dtEndField = this.getForm().findField('dtend');
@@ -299,6 +302,31 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
     },
     
+    /**
+     * check if event is in the past
+     */
+    checkPastEvent: function() {       
+        var start = this.getForm().findField('dtstart').getValue().getTime();
+        var now = new Date().getTime();
+        if(start < now) {
+            Tine.log.err('should show message');
+            Ext.MessageBox.confirm(
+                this.app.i18n._('Event in past'), 
+                this.app.i18n._('You want to create an event which is in the past. Please confirm!'), 
+                function(btn) {
+                    if(btn == 'yes') {
+                        this.onSaveAndClose();
+                    } else {
+                        return false;
+                    }
+                },
+                this
+            );        
+        } else {
+            this.onSaveAndClose();
+        }
+    },
+    
     onRecordLoad: function() {
         // NOTE: it comes again and again till 
         if (this.rendered) {
@@ -325,7 +353,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.attendeeGridPanel.onRecordUpdate(this.record);
         this.rrulePanel.onRecordUpdate(this.record);
         this.alarmPanel.onRecordUpdate(this.record);
-        this.CalendarSelectWidget.onRecordUpdate(this.record);
+        this.CalendarSelectWidget.onRecordUpdate(this.record);       
     },
     
     setTabHeight: function() {

@@ -150,10 +150,17 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
                 this.westPanel.on('selectionchange', function(){
                     var cp = this.getCenterPanel();
                     if(cp) {
-                        var sm = cp.getGrid().getSelectionModel();
-                        if(sm) {
-                            sm.clearSelections();
-                            cp.actionUpdater.updateActions(sm.getSelectionsCollection());
+                        try {
+                            var grid = cp.getGrid();
+                            if(grid) {
+                                var sm = grid.getSelectionModel();
+                                if(sm) {
+                                    sm.clearSelections();
+                                    cp.actionUpdater.updateActions(sm.getSelectionsCollection());
+                                }
+                            }
+                        } catch (e) {
+                            Tine.log.err('Tine.widgets.MainScreen::getWestPanel');
                         }
                     }
                 }, this);
