@@ -8,7 +8,7 @@
  *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL), 
  *              Version 1, the distribution of the Tine 2.0 ActiveSync module in or to the 
  *              United States of America is excluded from the scope of this license.
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -218,7 +218,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      */
     public function toTineModel(SimpleXMLElement $_data, $_entry = null)
     {
-        if($_entry instanceof Addressbook_Model_Contact) {
+        if ($_entry instanceof Addressbook_Model_Contact) {
             $contact = $_entry;
         } else {
             $contact = new Addressbook_Model_Contact(null, true);
@@ -228,7 +228,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         $xmlData = $_data->children('uri:Contacts');
 
         foreach($this->_mapping as $fieldName => $value) {
-            switch($value) {
+            switch ($value) {
                 case 'jpegphoto':
                     // do not change if not set
                     if(isset($xmlData->$fieldName)) {
@@ -242,12 +242,13 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                             if (isset($currentPhoto) && $currentPhoto == $devicePhoto) {
                                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " photo did not change on device -> preserving server photo");
                             } else {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " takeing new contact photo from device (" . strlen($devicePhoto) . "KB)");
+                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " using new contact photo from device (" . strlen($devicePhoto) . "KB)");
                                 $contact->jpegphoto = $devicePhoto;
                             }
-                        } else {
+                        } else if ($_entry && ! empty($_entry->jpegphoto)) {
                             $contact->jpegphoto = '';
-                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " deleting contact photo on device request");
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ 
+                                . ' Deleting contact photo on device request (contact id: ' . $contact->getId() . ')');
                         }
                     }
                     break;
