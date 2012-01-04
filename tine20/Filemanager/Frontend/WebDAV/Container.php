@@ -16,35 +16,52 @@
  * @package     Filemanager
  * @subpackage  Frontend
  */
-class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract implements Sabre_CardDAV_IAddressBook
+class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract
 {
     protected $_applicationName = 'Filemanager';
     
     protected $_model = 'File';
     
     protected $_suffix = null;
-    
+
+    /**
+     * contructor
+     * 
+     * @param  string|Tinebase_Model_Application  $_application  the current application
+     * @param  string                             $_container    the current path
+     */
+    public function __construct(Tinebase_Model_Container $_container, $_useIdAsName = false)
+    {
+        parent::__construct($_container, $_useIdAsName);
+        
+        $this->_fileSystemPath = '/' . $this->_application->getId() . '/folders/' . $this->_container->type . '/';
+        
+        if ($this->_container->type == Tinebase_Model_Container::TYPE_SHARED) {
+            $this->_fileSystemPath .= $this->_container->getId();
+        } else {
+            $this->_fileSystemPath .= Tinebase_Core::getUser()->accountId . '/' . $this->_container->getId();
+        }
+    }
+     
     public function getChild($name)
     {
-        $fileSystemPath = '/' . $this->_application->getId() . '/folders/' . $this->_container->type . '/' . $this->_container->getId();
-    
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . $fileSystemPath . '/' . $name);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_fileSystemPath . '/' . $name);
     
         if ($name[0]=='.')  {
             throw new Sabre_DAV_Exception_FileNotFound('Access denied');
         }
         
         try {
-            $childNode = Tinebase_FileSystem::getInstance()->stat($fileSystemPath . '/' . $name);
+            $childNode = Tinebase_FileSystem::getInstance()->stat($this->_fileSystemPath . '/' . $name);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new Sabre_DAV_Exception_FileNotFound('file not found: ' . $fileSystemPath . '/' . $name);
+            throw new Sabre_DAV_Exception_FileNotFound('file not found: ' . $this->_fileSystemPath . '/' . $name);
         }
         
         if ($childNode->type == Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
-            return new Filemanager_Frontend_WebDAV_Directory($fileSystemPath . '/' . $name);
+            return new Filemanager_Frontend_WebDAV_Directory($this->_fileSystemPath . '/' . $name);
         } else {
-            return new Filemanager_Frontend_WebDAV_File($fileSystemPath . '/' . $name);
+            return new Filemanager_Frontend_WebDAV_File($this->_fileSystemPath . '/' . $name);
         }
     }
     
@@ -55,8 +72,6 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
      */
     function getChildren()
     {
-        $this->_fileSystemPath = '/' . $this->_application->getId() . '/folders/' . $this->_container->type . '/' . $this->_container->getId();
-        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_fileSystemPath);
         
