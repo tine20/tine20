@@ -31,8 +31,7 @@ class Calendar_Frontend_iMIP
             return;
         }
         
-        $exitingEvent = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($_iMIP->getEvent());
-        
+        $exitingEvent = $_iMIP->getExistingEvent();
         if (! $exitingEvent) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " skip auto processing of iMIP component whose event is not in our db yet");
             return;
@@ -373,7 +372,7 @@ class Calendar_Frontend_iMIP
             $result = FALSE;
         }
         
-        if (! $this->_assertOrganizer($_iMIP, $existingEvent, TRUE, FALSE, TRUE)) {
+        if (! $this->_assertOrganizer($_iMIP, TRUE, FALSE, TRUE)) {
             $result = FALSE;
         }
         
