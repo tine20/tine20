@@ -37,7 +37,7 @@ Tine.widgets.dialog.KeyShortcutsEditDialogPlugin.prototype = {
      */
     onRender: function() {
         try {
-            var tabCount = this.tabPanel.items.items.length;
+            var tabCount = (this.tabPanel) ? this.tabPanel.items.items.length : 0;
             
             for (var index = 0; index < tabCount; index++) {
                 var item = this.tabPanel.items.items[index];
