@@ -34,34 +34,61 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
     {
         parent::__construct($_container, $_useIdAsName);
         
-        $this->_fileSystemPath = '/' . $this->_application->getId() . '/folders/' . $this->_container->type . '/';
+        $this->_path = '/' . $this->_application->getId() . '/folders/' . $this->_container->type . '/';
         
         if ($this->_container->type == Tinebase_Model_Container::TYPE_SHARED) {
-            $this->_fileSystemPath .= $this->_container->getId();
+            $this->_path .= $this->_container->getId();
         } else {
-            $this->_fileSystemPath .= Tinebase_Core::getUser()->accountId . '/' . $this->_container->getId();
+            $this->_path .= Tinebase_Core::getUser()->accountId . '/' . $this->_container->getId();
         }
     }
-     
+    
+    /**
+     * Deleted the current container
+     *
+     * @todo   use filesystem controller to delete directories recursive
+     * @throws Sabre_DAV_Exception_Forbidden
+     * @return void
+     */
+    public function delete()
+    {
+        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_DELETE)) {
+            throw new Sabre_DAV_Exception_Forbidden('Forbidden to delete directory: ' . $this->_path);
+        }
+    
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete directory: ' . $this->_path);
+    
+        foreach ($this->getChildren() as $child) {
+            $child->delete();
+        }
+    
+        if (!rmdir('tine20://' . $this->_path)) {
+            throw new Sabre_DAV_Exception_Forbidden('Permission denied to delete node');
+        }
+    
+        Tinebase_Container::getInstance()->delete($this->_getContainer());
+    }
+    
     public function getChild($name)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_fileSystemPath . '/' . $name);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path . '/' . $name);
     
         if ($name[0]=='.')  {
             throw new Sabre_DAV_Exception_FileNotFound('Access denied');
         }
         
         try {
-            $childNode = Tinebase_FileSystem::getInstance()->stat($this->_fileSystemPath . '/' . $name);
+            $childNode = Tinebase_FileSystem::getInstance()->stat($this->_path . '/' . $name);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new Sabre_DAV_Exception_FileNotFound('file not found: ' . $this->_fileSystemPath . '/' . $name);
+            throw new Sabre_DAV_Exception_FileNotFound('file not found: ' . $this->_path . '/' . $name);
         }
         
         if ($childNode->type == Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
-            return new Filemanager_Frontend_WebDAV_Directory($this->_fileSystemPath . '/' . $name);
+            return new Filemanager_Frontend_WebDAV_Directory($this->_path . '/' . $name);
         } else {
-            return new Filemanager_Frontend_WebDAV_File($this->_fileSystemPath . '/' . $name);
+            return new Filemanager_Frontend_WebDAV_File($this->_path . '/' . $name);
         }
     }
     
@@ -73,12 +100,12 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
     function getChildren()
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_fileSystemPath);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path);
         
         $children = array();
             
         // Loop through the directory, and create objects for each node
-        foreach(Tinebase_FileSystem::getInstance()->scanDir($this->_fileSystemPath) as $node) {
+        foreach(Tinebase_FileSystem::getInstance()->scanDir($this->_path) as $node) {
             $children[] = $this->getChild($node->name);
         }
         
