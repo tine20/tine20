@@ -535,9 +535,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         }
         
         // get body
-        if (isset($xmlData->body)) {
+        if (isset($xmlData->Body)) {
             // ActiveSync 2.5
-            $event->description = (string)$xmlData->body;
+            $event->description = (string)$xmlData->Body;
         } elseif(isset($airSyncBase->Body)) {
             // ActiveSync >= 12.0
             $event->description = (string)$airSyncBase->Body->Data;
