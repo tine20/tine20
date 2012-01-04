@@ -16,36 +16,22 @@
  */
 class Filemanager_Frontend_WebDAV_File extends Filemanager_Frontend_WebDAV_Node implements Sabre_DAV_IFile
 {
-    public function __construct($_path) 
-    {
-        parent::__construct($_path);
-        
-#        if ($this->_container == null) {
-#            throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $this->_path . ' could not be found');
-#        }
+#    public function __construct($_path) 
+#    {
+#        parent::__construct($_path);
 #        
 #        if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_READ)) {
 #            throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $this->_path . ' could not be found');
 #        }
-#
-        try {
-            $this->_node = Tinebase_FileSystem::getInstance()->stat($this->_path);
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $this->_path . ' could not be found');
-        }
-    }
+#    }
     
     public function get() 
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__);
-        
-        return fopen($this->_fileSystemPath, 'r');
+        return Tinebase_FileSystem::getInstance()->fopen($this->_path, 'r');
     }
 
     public function getSize() 
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $this->_fileSystemPath);
-        
         return $this->_node->size;
     }
     
