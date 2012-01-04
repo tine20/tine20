@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -59,8 +59,6 @@ class Calendar_Frontend_iMIP
     
     /**
      * prepares iMIP component for client
-     * 
-     * @TODO  move to Calendar_Frontend_Json / Model / Convert?
      *  
      * @param  Calendar_Model_iMIP $_iMIP
      * @return Calendar_Model_iMIP
