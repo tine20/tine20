@@ -206,6 +206,10 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      */
     public static function resolveContainer($_record, $_containerProperty = 'container_id')
     {
+        if (! $_record instanceof Tinebase_Record_Abstract) {
+            return;
+        }
+        
         $containerId = $_record->{$_containerProperty};
         if ($containerId) {
             $container = Tinebase_Container::getInstance()->getContainerById($containerId);
