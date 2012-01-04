@@ -69,7 +69,7 @@ class Calendar_Frontend_iMIP
     {
         $this->_checkPreconditions($_iMIP);
         
-        Calendar_Model_Attender::resolveAttendee($_iMIP->event->attendee);
+        Calendar_Convert_Event_Json::resolveRelatedData($_iMIP->event);
         Tinebase_Model_Container::resolveContainer($_iMIP->event);
         
         return $_iMIP;
