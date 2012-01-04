@@ -95,7 +95,7 @@ abstract class Filemanager_Frontend_WebDAV_Node implements Sabre_DAV_INode
     protected function _getContainer()
     {
         if ($this->_container == null) {
-            $pathParts = explode('/', substr($_path, 1), 7);
+            $pathParts = explode('/', substr($this->_path, 1), 7);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' name: ' . print_r($pathParts, true));
