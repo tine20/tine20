@@ -396,7 +396,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
             // add personal container id if container id is missing in record
-            if($_record->has('container_id') && empty($_record->container_id)) {
+            if ($_record->has('container_id') && empty($_record->container_id)) {
                 $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, $this->_applicationName, $this->_currentAccount, Tinebase_Model_Grants::GRANT_ADD);
                 $_record->container_id = $containers[0]->getId();
             }
@@ -421,6 +421,8 @@ abstract class Tinebase_Controller_Record_Abstract
             if ($this->sendNotifications()) {
                 $this->doSendNotifications($createdRecord, $this->_currentAccount, 'created');
             }
+            
+            $this->_increaseContainerContentSequence($createdRecord);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
@@ -433,7 +435,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
         return $this->get($createdRecord);
     }
-
+    
     /**
      * inspect creation of one record (before create)
      *
@@ -538,6 +540,18 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * increase container content sequence
+     * 
+     * @param Tinebase_Record_Interface $_record
+     */
+    protected function _increaseContainerContentSequence(Tinebase_Record_Interface $_record)
+    {
+        if ($_record->has('container_id')) {
+            Tinebase_Container::getInstance()->increaseContentSequence($_record->container_id);
+        }
+    }
+    
+    /**
      * update one record
      *
      * @param   Tinebase_Record_Interface $_record
@@ -587,6 +601,8 @@ abstract class Tinebase_Controller_Record_Abstract
             if ($this->_sendNotifications && count($currentMods) > 0) {
                 $this->doSendNotifications($updatedRecordWithRelatedData, $this->_currentAccount, 'changed', $currentRecord);
             }
+            
+            $this->_increaseContainerContentSequence($updatedRecord);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
@@ -660,7 +676,6 @@ abstract class Tinebase_Controller_Record_Abstract
         
         return $currentMods;
     }
-    
     
     /**
      * set relations / tags / alarms
@@ -991,6 +1006,8 @@ abstract class Tinebase_Controller_Record_Abstract
         } else {
             $this->_backend->delete($_record);
         }
+        
+        $this->_increaseContainerContentSequence($_record);
     }
 
     /**

@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -524,7 +524,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $db = $this->_backend->getAdapter();
                 $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
                 
-                // delete if delte grant is present
+                // delete if delete grant is present
                 if ($this->_doContainerACLChecks === FALSE || $record->hasGrant(Tinebase_Model_Grants::GRANT_DELETE)) {
                     // NOTE delete needs to update sequence otherwise iTIP based protocolls ignore the delete
                     $this->_touch($record);
@@ -543,13 +543,19 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     }
                 }
                 
+                // increase display container content sequence for all attendee of deleted event
+                if ($record->attendee instanceof Tinebase_Record_RecordSet) {
+                    foreach ($record->attendee as $attender) {
+                        $this->_increaseDisplayContainerContentSequence($attender, $record->container_id);
+                    }
+                }
+                
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             } catch (Exception $e) {
                 Tinebase_TransactionManager::getInstance()->rollBack();
                 throw $e;
             }
         }
-            
     }
     
     /**
@@ -1341,10 +1347,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if ($idx !== FALSE) {
                 $currentAttender = $currentAttendee[$idx];
                 $this->_updateAttender($attender, $currentAttender, $calendar, $_isRescheduled);
-                
             } else {
                 $this->_createAttender($attender, $calendar);
             }
+            
+            $this->_increaseDisplayContainerContentSequence($attender, $calendar->getId());
         }
     }
 
@@ -1391,6 +1398,22 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $_attender->displaycontainer_id = $resource->container_id;
         }
         $this->_backend->createAttendee($_attender);
+    }
+    
+    /**
+     * increases content sequence of attender display container
+     * 
+     * @param Calendar_Model_Attender $_attender
+     * @param integer $_eventContainerId
+     */
+    protected function _increaseDisplayContainerContentSequence($_attender, $_eventContainerId)
+    {
+        if ($_eventContainerId === $_attender->displaycontainer_id || empty($_attender->displaycontainer_id)) {
+            // no need to increase sequence
+            return; 
+        }
+        
+        Tinebase_Container::getInstance()->increaseContentSequence($_attender->displaycontainer_id);        
     }
     
     /**
