@@ -31,8 +31,7 @@ class Calendar_Frontend_iMIP
             return;
         }
         
-        $exitingEvent = $_iMIP->getExistingEvent();
-        if (! $exitingEvent) {
+        if (! $_iMIP->getExistingEvent(TRUE)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " skip auto processing of iMIP component whose event is not in our db yet");
             return;
         }
