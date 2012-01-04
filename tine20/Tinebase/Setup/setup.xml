@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>5.7</version>
+    <version>5.8</version>
     <tables>
         <table>
             <name>applications</name>
@@ -536,7 +536,7 @@
 
         <table>
             <name>container</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -573,6 +573,11 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>content_seq</name>
+                    <type>integer</type>
+                    <length>64</length>
                 </field>
                 <field>
                     <name>created_by</name>
