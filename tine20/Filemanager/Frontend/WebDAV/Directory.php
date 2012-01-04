@@ -27,12 +27,6 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
         #if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_READ)) {
         #    throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $this->_path . ' could not be found');
         #}
-        
-        #try {
-        #    $this->_node = Tinebase_FileSystem::getInstance()->stat(substr($this->_fileSystemPath, 9));
-        #} catch (Tinebase_Exception_NotFound $tenf) {
-        #    throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $this->_path . ' could not be found');
-        #}
     #}
     
     public function getChildren() 
@@ -44,8 +38,6 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
             
         // Loop through the directory, and create objects for each node
         foreach(Tinebase_FileSystem::getInstance()->scanDir($this->_path) as $node) {
-            // Ignoring files staring with .
-            #if ($node[0]==='.') continue;
             $children[] = $this->getChild($node->name);
         }
         
@@ -54,8 +46,6 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
     
     public function getChild($name) 
     {
-        $path = $this->_path . '/' . $name;
-        
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path . '/' . $name);
         
@@ -63,11 +53,13 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
             throw new Sabre_DAV_Exception_FileNotFound('Access denied');
         }
         
-        if (!Tinebase_FileSystem::getInstance()->fileExists($this->_path . '/' . $name)) {
+        try {
+            $childNode = Tinebase_FileSystem::getInstance()->stat($this->_path . '/' . $name);
+        } catch (Tinebase_Exception_NotFound $tenf) {
             throw new Sabre_DAV_Exception_FileNotFound('file not found: ' . $this->_path . '/' . $name);
         }
         
-        if (Tinebase_FileSystem::getInstance()->isDir($this->_path . '/' . $name)) {
+        if ($childNode->type == Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
             return new Filemanager_Frontend_WebDAV_Directory($this->_path . '/' . $name);
         } else {
             return new Filemanager_Frontend_WebDAV_File($this->_path . '/' . $name);
