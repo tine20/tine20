@@ -394,7 +394,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         try {
             $this->_iMIPFrontend->autoProcess($iMIP);
         } catch (Exception $e) {
-            $this->fail('TEST NORMAL REPLY autoProcess throwed Exception');
+            $this->fail('TEST NORMAL REPLY autoProcess throws Exception: ' . $e);
         }
         
         $updatedEvent = Calendar_Controller_Event::getInstance()->get($event->getId());
@@ -410,7 +410,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
             $iMIP->preconditionsChecked = false;
             $this->_iMIPFrontend->autoProcess($iMIP);
         } catch (Exception $e) {
-            $this->fail('TEST ACCEPTABLE NON RECENT REPLY autoProcess throwed Exception');
+            $this->fail('TEST ACCEPTABLE NON RECENT REPLY autoProcess throws Exception: ' . $e);
         }
         
         $updatedEvent = Calendar_Controller_Event::getInstance()->get($event->getId());
