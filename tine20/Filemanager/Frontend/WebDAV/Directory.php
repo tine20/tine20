@@ -89,15 +89,16 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
     public function createFile($name, $data = null) 
     {
         if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_ADD)) {
-            throw new Sabre_DAV_Exception_Forbidden('Forbidden to create file: ' . $name);
+            throw new Sabre_DAV_Exception_Forbidden('Forbidden to create file: ' . $this->_path . '/' . $name);
         }
         
-        $path = $this->_fileSystemPath . '/' . $name;
+        $path = $this->_path . '/' . $name;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $path);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $path);
 
-        if (!$handle = fopen($path, 'x')) {
-            throw new Sabre_DAV_Exception_Forbidden('Permission denied to create file (filename ' . $path . ')');
+        if (!$handle = fopen('tine20://' . $path, 'x')) {
+            throw new Sabre_DAV_Exception_Forbidden('Permission denied to create file (filename file://' . $path . ')');
         }
         
         if (is_resource($data)) {
@@ -120,11 +121,11 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
             throw new Sabre_DAV_Exception_Forbidden('Forbidden to create folder: ' . $name);
         }
         
-        $path = $this->_fileSystemPath . '/' . $name;
+        $path = $this->_path . '/' . $name;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create directory: ' . $path);
         
-        mkdir($path);
+        mkdir('tine20://' . $path);
     }
     
     /**
@@ -140,40 +141,41 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
             throw new Sabre_DAV_Exception_Forbidden('Forbidden to delete directory: ' . $this->_path);
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete directory: ' . $this->_fileSystemPath);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete directory: ' . $this->_path);
         
         foreach ($this->getChildren() as $child) {
             $child->delete();
         }
         
-        if (!rmdir($this->_fileSystemPath)) {
+        if (!rmdir('tine20://' . $this->_path)) {
             throw new Sabre_DAV_Exception_Forbidden('Permission denied to delete node');
         }
         
-        if ($this->_fileSystemPath == $this->_containerPath) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete container');
-            Tinebase_Container::getInstance()->delete($this->_getContainer());  
-        }
+#        if ($this->_path == $this->_containerPath) {
+#            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete container');
+#            Tinebase_Container::getInstance()->delete($this->_getContainer());  
+#        }
     }
     
-    /**
-     * Renames the node
-     * 
-     * @throws Sabre_DAV_Exception_Forbidden
-     * @param string $name The new name
-     * @return void
-     */
-    public function setName($name) 
-    {
-        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_EDIT)) {
-            throw new Sabre_DAV_Exception_Forbidden('Forbidden to rename file: ' . $this->_path);
-        }
-        
-        if ($this->_fileSystemPath == $this->_containerPath) {
-            $this->_getContainer()->name = $name;
-            Tinebase_Container::getInstance()->update($this->_getContainer());
-        } else {
-            rename($this->_fileSystemPath, dirname($this->_fileSystemPath) . '/' . $name);
-        }
-    }
+#    /**
+#     * Renames the node
+#     * 
+#     * @throws Sabre_DAV_Exception_Forbidden
+#     * @param string $name The new name
+#     * @return void
+#     */
+#    public function setName($name) 
+#    {
+#        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_EDIT)) {
+#            throw new Sabre_DAV_Exception_Forbidden('Forbidden to rename file: ' . $this->_path);
+#        }
+#        
+#        if ($this->_fileSystemPath == $this->_containerPath) {
+#            $this->_getContainer()->name = $name;
+#            Tinebase_Container::getInstance()->update($this->_getContainer());
+#        } else {
+#        rename($this->_path, dirname($this->_fileSystemPath) . '/' . $name);
+#        }
+#    }
 }
