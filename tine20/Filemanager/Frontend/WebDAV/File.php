@@ -16,15 +16,6 @@
  */
 class Filemanager_Frontend_WebDAV_File extends Filemanager_Frontend_WebDAV_Node implements Sabre_DAV_IFile
 {
-#    public function __construct($_path) 
-#    {
-#        parent::__construct($_path);
-#        
-#        if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_READ)) {
-#            throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $this->_path . ' could not be found');
-#        }
-#    }
-    
     public function get() 
     {
         return Tinebase_FileSystem::getInstance()->fopen($this->_path, 'r');
