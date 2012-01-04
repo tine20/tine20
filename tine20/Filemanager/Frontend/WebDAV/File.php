@@ -55,16 +55,16 @@ class Filemanager_Frontend_WebDAV_File extends Filemanager_Frontend_WebDAV_Node 
      */
     public function delete() 
     {
-        if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_DELETE)) {
+        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_DELETE)) {
             throw new Sabre_DAV_Exception_Forbidden('Forbidden to edit file: ' . $this->_path);
         }
         
-        Tinebase_FileSystem::getInstance()->unlink(substr($this->_fileSystemPath, 9));
+        Tinebase_FileSystem::getInstance()->unlink($this->_path);
     }
     
     public function put($data)
     {
-        if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_EDIT)) {
+        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_EDIT)) {
             throw new Sabre_DAV_Exception_Forbidden('Forbidden to edit file: ' . $this->_path);
         }
         
