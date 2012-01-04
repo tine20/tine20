@@ -68,6 +68,7 @@ class Calendar_Frontend_iMIP
         
         Calendar_Convert_Event_Json::resolveRelatedData($_iMIP->event);
         Tinebase_Model_Container::resolveContainer($_iMIP->event);
+        Tinebase_Model_Container::resolveContainer($_iMIP->getExistingEvent());
         
         return $_iMIP;
     }
