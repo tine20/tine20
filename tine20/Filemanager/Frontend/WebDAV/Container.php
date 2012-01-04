@@ -35,11 +35,13 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
             throw new Sabre_DAV_Exception_FileNotFound('Access denied');
         }
         
-        if (!Tinebase_FileSystem::getInstance()->fileExists($fileSystemPath . '/' . $name)) {
+        try {
+            $childNode = Tinebase_FileSystem::getInstance()->stat($fileSystemPath . '/' . $name);
+        } catch (Tinebase_Exception_NotFound $tenf) {
             throw new Sabre_DAV_Exception_FileNotFound('file not found: ' . $fileSystemPath . '/' . $name);
         }
-    
-        if (Tinebase_FileSystem::getInstance()->isDir($fileSystemPath . '/' . $name)) {
+        
+        if ($childNode->type == Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
             return new Filemanager_Frontend_WebDAV_Directory($fileSystemPath . '/' . $name);
         } else {
             return new Filemanager_Frontend_WebDAV_File($fileSystemPath . '/' . $name);
