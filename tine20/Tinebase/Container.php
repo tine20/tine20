@@ -1209,4 +1209,58 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
 
         return $grants;
     }
+
+    /**
+     * increase content sequence of container
+     * - should be increased for each create/update/delete operation in this container
+     * 
+     * @param integer|Tinebase_Model_Container $_containerId
+     * @return integer number of updated rows
+     * 
+     * @todo clear cache? perhaps not, we have getContentSequence() for that
+     */
+    public function increaseContentSequence($_containerId)
+    {
+        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Increasing content seq of container ' . $containerId . ' ...');
+        
+        $quotedIdentifier = $this->_db->quoteIdentifier('content_seq');
+        $data = array(
+            'content_seq' => new Zend_Db_Expr('IF(' . $quotedIdentifier . ' >= 1 ,' . $quotedIdentifier . ' + 1, 1)')
+        );
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $containerId)
+        );
+        $result = $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
+    }
+
+    /**
+     * get content sequences for single container or array of ids
+     * 
+     * @param array|integer|Tinebase_Model_Container $_containerIds
+     * @return array with key = container id / value = content seq number
+     */
+    public function getContentSequence($_containerIds)
+    {
+        if (empty($_containerIds)) {
+            return NULL;
+        }
+        
+        if (is_array($_containerIds)) {
+            $containerIds = $_containerIds;
+        } else {
+            $containerIds = array(Tinebase_Model_Container::convertContainerIdToInt($_containerIds));
+        }
+        
+        $select = $this->_getSelect(array('id', 'content_seq'));
+        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $containerIds));
+        $stmt = $this->_db->query($select);
+        $result = $stmt->fetchAll(Zend_Db::FETCH_GROUP | Zend_Db::FETCH_COLUMN);
+        foreach ($result as $key => $value) {
+            $result[$key] = $value[0];
+        }
+        
+        return $result;
+    }
 }
