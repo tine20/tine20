@@ -26,7 +26,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         #'AssistantName'         => 'assistantname',
         'AssistnamePhoneNumber' => 'tel_assistent',
         'Birthday'              => 'bday',
-        #'Body'                  => 'body',
+        #'Body'                  => 'note',
         #'BodySize'              => 'bodysize',
         #'BodyTruncated'         => 'bodytruncated',
         #'Business2PhoneNumber'  => 'business2phonenumber',
@@ -201,7 +201,34 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                 
             }
         }
-          
+        
+        if(!empty($data->note)) {
+            if (version_compare($this->_device->acsversion, '12.0', '>=') === true) {
+                $body = $_xmlNode->appendChild(new DOMElement('Body', null, 'uri:AirSyncBase'));
+                
+                $body->appendChild(new DOMElement('Type', 1, 'uri:AirSyncBase'));
+                
+                // create a new DOMElement ...
+                $dataTag = new DOMElement('Data', null, 'uri:AirSyncBase');
+
+                // ... append it to parent node aka append it to the document ...
+                $body->appendChild($dataTag);
+                
+                // ... and now add the content (DomText takes care of special chars)
+                $dataTag->appendChild(new DOMText($data->note));
+            } else {
+                // create a new DOMElement ...
+                $node = new DOMElement('Body', null, 'uri:Contacts');
+
+                // ... append it to parent node aka append it to the document ...
+                $_xmlNode->appendChild($node);
+                
+                // ... and now add the content (DomText takes care of special chars)
+                $node->appendChild(new DOMText($data->note));
+                
+            }
+        }
+        
         if(isset($data->tags) && count($data->tags) > 0) {
             $categories = $_xmlNode->appendChild(new DOMElement('Categories', null, 'uri:Contacts'));
             foreach($data->tags as $tag) {
@@ -226,7 +253,8 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         unset($contact->jpegphoto);
         
         $xmlData = $_data->children('uri:Contacts');
-
+        $airSyncBase = $_data->children('uri:AirSyncBase');
+        
         foreach($this->_mapping as $fieldName => $value) {
             switch ($value) {
                 case 'jpegphoto':
@@ -315,6 +343,14 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                     break;
             }
         }
+        
+        // get body
+        if (version_compare($this->_device->acsversion, '12.0', '>=') === true) {
+                $contact->note = isset($airSyncBase->Body) ? (string)$airSyncBase->Body->Data : null;
+        } else {
+            $contact->note = isset($xmlData->Body) ? (string)$xmlData->Body : null;
+        }
+        
         // force update of n_fileas and n_fn
         $contact->setFromArray(array(
             'n_given'   => $contact->n_given,
