@@ -309,7 +309,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var start = this.getForm().findField('dtstart').getValue().getTime();
         var now = new Date().getTime();
         if(start < now) {
-            Tine.log.err('should show message');
+            
             Ext.MessageBox.confirm(
                 this.app.i18n._('Event in past'), 
                 this.app.i18n._('You want to create an event which is in the past. Please confirm!'), 
