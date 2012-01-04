@@ -279,24 +279,6 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * returns record prepared for json transport
-     *
-     * @param Tinebase_Record_Interface $_record
-     * @return array record data
-     */
-    protected function _recordToJson($_record)
-    {
-    	if ($_record instanceof Calendar_Model_Event) {
-	    	Calendar_Model_Attender::resolveAttendee($_record->attendee);
-	        $this->_resolveRrule($_record);
-	        $this->_resolveOrganizer($_record);
-    	}
-	        
-        $recordData = parent::_recordToJson($_record);
-        return $recordData;
-    }
-    
-    /**
      * returns multiple records prepared for json transport
      *
      * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
