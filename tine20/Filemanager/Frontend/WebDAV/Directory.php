@@ -158,24 +158,4 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
 #        }
     }
     
-#    /**
-#     * Renames the node
-#     * 
-#     * @throws Sabre_DAV_Exception_Forbidden
-#     * @param string $name The new name
-#     * @return void
-#     */
-#    public function setName($name) 
-#    {
-#        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_EDIT)) {
-#            throw new Sabre_DAV_Exception_Forbidden('Forbidden to rename file: ' . $this->_path);
-#        }
-#        
-#        if ($this->_fileSystemPath == $this->_containerPath) {
-#            $this->_getContainer()->name = $name;
-#            Tinebase_Container::getInstance()->update($this->_getContainer());
-#        } else {
-#        rename($this->_path, dirname($this->_fileSystemPath) . '/' . $name);
-#        }
-#    }
 }

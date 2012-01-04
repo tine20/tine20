@@ -114,4 +114,20 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
         
         return $response;
     }
+    /**
+     * Renames the node
+     * 
+     * @throws Sabre_DAV_Exception_Forbidden
+     * @param string $name The new name
+     * @return void
+     */
+    public function setName($name) 
+    {
+        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_EDIT)) {
+            throw new Sabre_DAV_Exception_Forbidden('Forbidden to rename file: ' . $this->_path);
+        }
+        
+        $this->_getContainer()->name = $name;
+        Tinebase_Container::getInstance()->update($this->_getContainer());
+    }
 }
