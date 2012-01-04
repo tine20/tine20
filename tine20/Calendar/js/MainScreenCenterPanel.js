@@ -525,51 +525,56 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     
                 ],
                 handler: function(option) {
-                    var panel = this.getCalendarPanel(this.activeView),
-                        store = panel.getStore(),
-                        view = panel.getView();
-                        
-                    switch (option) {
-                        case 'series':
-                            this.loadMask.show();
+                    try {
+                        var panel = this.getCalendarPanel(this.activeView),
+                            store = panel.getStore(),
+                            view = panel.getView();
                             
-                            var options = {
-                                scope: this,
-                                success: function() {
-                                    store.load({refresh: true});
-                                },
-                                failure: this.onProxyFail.createDelegate(this, [event], true)
-                            };
-                            
-                            Tine.Calendar.backend.updateRecurSeries(event, options);
-                            break;
-                            
-                        case 'this':
-                        case 'future':
-                            var options = {
-                                scope: this,
-                                success: function(updatedEvent) {
-                                    if (option === 'this') {
-                                        event =  store.indexOf(event) != -1 ? event : store.getById(event.id);
-                                        
-                                        store.replaceRecord(event ,updatedEvent);
-                                        this.setLoading(false);
-                                        view.getSelectionModel().select(updatedEvent);
-                                    } else {
-                                        store.load({refresh: true});
-                                    }
-                                },
-                                failure: this.onProxyFail.createDelegate(this, [event], true)
-                            };
-                            
-                            Tine.Calendar.backend.createRecurException(event, false, option == 'future', options);
+                        switch (option) {
+                            case 'series':
+                                this.loadMask.show();
                                 
-                        default:
-                            this.loadMask.show();
-                            store.load({refresh: true});
-                            break;
+                                var options = {
+                                    scope: this,
+                                    success: function() {
+                                        store.load({refresh: true});
+                                    },
+                                    failure: this.onProxyFail.createDelegate(this, [event], true)
+                                };
+                                
+                                Tine.Calendar.backend.updateRecurSeries(event, options);
+                                break;
+                                
+                            case 'this':
+                            case 'future':
+                                var options = {
+                                    scope: this,
+                                    success: function(updatedEvent) {
+                                        if (option === 'this') {
+                                            event =  store.indexOf(event) != -1 ? event : store.getById(event.id);
+                                            
+                                            store.replaceRecord(event ,updatedEvent);
+                                            this.setLoading(false);
+                                            view.getSelectionModel().select(updatedEvent);
+                                        } else {
+                                            store.load({refresh: true});
+                                        }
+                                    },
+                                    failure: this.onProxyFail.createDelegate(this, [event], true)
+                                };
+                                
+                                Tine.Calendar.backend.createRecurException(event, false, option == 'future', options);
+                                    
+                            default:
+                                this.loadMask.show();
+                                store.load({refresh: true});
+                                break;
+                        }
+                    } catch (e) {
+                        Tine.log.error('Tine.Calendar.MainScreenCenterPanel::onUpdateEvent::handle');
+                        Tine.log.error(e);
                     }
-                }
+                } 
             });
         } else {
             this.onUpdateEventAction(event);
@@ -645,39 +650,45 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     {text: this.app.i18n._('Delete nothing'), name: 'nothing'}
                 ],
                 handler: function (option) {
-                    switch (option) {
-                    case 'all':
-                    case 'this':
-                    case 'future':
-                        panel.getTopToolbar().beforeLoad();
-                        if (option !== 'this') {
-                            panel.loadMask.show();
-                        }
-                        
-                        var options = {
-                            scope: this,
-                            success: function () {
-                                if (option === 'this') {
-                                    Ext.each(selection, function (event) {
-                                        panel.getStore().remove(event);
-                                    });
-                                    panel.getTopToolbar().onLoad();
-                                } else {
-                                    this.refresh(true);
+                    try {
+                        switch (option) {
+                            case 'all':
+                            case 'this':
+                            case 'future':
+                                panel.getTopToolbar().beforeLoad();
+                                if (option !== 'this') {
+                                    this.loadMask.show();
                                 }
                                 
-                            }
-                        };
-                        
-                        if (option === 'all') {
-                            Tine.Calendar.backend.deleteRecurSeries(selection[0], options);
-                        } else {
-                            Tine.Calendar.backend.createRecurException(selection[0], true, option === 'future', options);
-                        }
-                        break;
-                    default:
-                        this.onDeleteRecordsConfirmFail(panel, selection);
-                        break;
+                                var options = {
+                                    scope: this,
+                                    success: function () {
+                                        if (option === 'this') {
+                                            Ext.each(selection, function (event) {
+                                                panel.getStore().remove(event);
+                                            });
+                                            panel.getTopToolbar().onLoad();
+                                        } else {
+                                            this.refresh(true);
+                                        }
+                                        
+                                    }
+                                };
+                                
+                                if (option === 'all') {
+                                    Tine.Calendar.backend.deleteRecurSeries(selection[0], options);
+                                } else {
+                                    Tine.Calendar.backend.createRecurException(selection[0], true, option === 'future', options);
+                                }
+                                break;
+                            default:
+                                this.onDeleteRecordsConfirmFail(panel, selection);
+                                break;
+                    }
+                    
+                    } catch (e) {
+                        Tine.log.error('Tine.Calendar.MainScreenCenterPanel::onDeleteRecords::handle');
+                        Tine.log.error(e);
                     }
                 }
             });
