@@ -29,6 +29,10 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
         #}
     #}
     
+    /**
+     * return list of children
+     * @return array list of children
+     */
     public function getChildren() 
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
@@ -84,7 +88,7 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
      */
     public function createFile($name, $data = null) 
     {
-        if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_ADD)) {
+        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_ADD)) {
             throw new Sabre_DAV_Exception_Forbidden('Forbidden to create file: ' . $name);
         }
         
@@ -112,7 +116,7 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
      */
     public function createDirectory($name) 
     {
-        if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_ADD)) {
+        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_ADD)) {
             throw new Sabre_DAV_Exception_Forbidden('Forbidden to create folder: ' . $name);
         }
         
@@ -132,7 +136,7 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
      */
     public function delete() 
     {
-        if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_DELETE)) {
+        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_DELETE)) {
             throw new Sabre_DAV_Exception_Forbidden('Forbidden to delete directory: ' . $this->_path);
         }
         
@@ -148,7 +152,7 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
         
         if ($this->_fileSystemPath == $this->_containerPath) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete container');
-            Tinebase_Container::getInstance()->delete($this->_container);
+            Tinebase_Container::getInstance()->delete($this->_getContainer());  
         }
     }
     
@@ -161,13 +165,13 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
      */
     public function setName($name) 
     {
-        if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_EDIT)) {
+        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_EDIT)) {
             throw new Sabre_DAV_Exception_Forbidden('Forbidden to rename file: ' . $this->_path);
         }
         
         if ($this->_fileSystemPath == $this->_containerPath) {
-            $this->_container->name = $name;
-            Tinebase_Container::getInstance()->update($this->_container);
+            $this->_getContainer()->name = $name;
+            Tinebase_Container::getInstance()->update($this->_getContainer());
         } else {
             rename($this->_fileSystemPath, dirname($this->_fileSystemPath) . '/' . $name);
         }
