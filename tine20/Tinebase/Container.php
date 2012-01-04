@@ -385,22 +385,19 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      *
      * @param   int|Tinebase_Model_Container $_containerId the id of the container
      * @param   int|Tinebase_Model_Container $_ignoreACL
+     * @param   string $_type
+     * @param   string $_ownerId
      * @return  Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
      * @throws  Tinebase_Exception_UnexpectedValue
-     * 
-     * @deprecated this should be removed as it does not return a distinct container 
      */
     public function getContainerByName($_application, $_containerName, $_type, $_ownerId = null)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
-            . ' This is deprecated. Please do not use it any more.');
-        
         if ($_type !== Tinebase_Model_Container::TYPE_PERSONAL && $_type !== Tinebase_Model_Container::TYPE_SHARED) {
             throw new Tinebase_Exception_UnexpectedValue ("Invalid type $_type supplied.");
         }
         
-        if($_type == Tinebase_Model_Container::TYPE_PERSONAL && empty($_ownerId)) {
+        if ($_type == Tinebase_Model_Container::TYPE_PERSONAL && empty($_ownerId)) {
             throw new Tinebase_Exception_UnexpectedValue ('$_ownerId can not be empty for personal folders');
         }
         

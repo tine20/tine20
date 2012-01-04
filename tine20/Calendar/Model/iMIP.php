@@ -135,6 +135,7 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
         'originator'           => array('allowEmpty' => false,        ), // email adddress
         'userAgent'            => array('allowEmpty' => true,         ),
         'event'                => array('allowEmpty' => true          ),
+    	'existing_event'       => array('allowEmpty' => true          ),
         'preconditions'        => array('allowEmpty' => true          ),
         'preconditionsChecked' => array('allowEmpty' => true          ),
     );
@@ -171,6 +172,20 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
         }
         
         return $this->event;
+    }
+
+    /**
+    * get existing event record
+    *
+    * @return Calendar_Model_Event
+    */
+    public function getExistingEvent()
+    {
+        if (! $this->existing_event instanceof Calendar_Model_Event) {
+            $this->existing_event = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($this->getEvent());
+        }
+        
+        return $this->existing_event;
     }
     
     /**

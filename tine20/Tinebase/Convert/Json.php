@@ -14,8 +14,6 @@
  *
  * @package     Tinebase
  * @subpackage  Convert
- * 
- * @todo add factory for converters?
  */
 class Tinebase_Convert_Json implements Tinebase_Convert_Interface
 {

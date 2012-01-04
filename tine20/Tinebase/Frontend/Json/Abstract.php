@@ -309,7 +309,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _recordToJson($_record)
     {
-        $converter = new Tinebase_Convert_Json();
+        $converter = Tinebase_Convert_Factory::factory($_record);
         $result = $converter->fromTine20Model($_record);
 
         return $result;

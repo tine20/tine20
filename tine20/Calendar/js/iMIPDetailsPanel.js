@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Calendar');
 
@@ -48,7 +48,6 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
     initComponent: function() {
         try {
             this.app = Tine.Tinebase.appMgr.get('Calendar');
-            
             
             this.iMIPrecord = new Tine.Calendar.Model.iMIP(this.preparedPart.preparedData);
             if (! Ext.isFunction(this.iMIPrecord.get('event').beginEdit)) {
@@ -166,8 +165,14 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
                 preconditions = this.iMIPrecord.get('preconditions'),
                 method = this.iMIPrecord.get('method'),
                 event = this.iMIPrecord.get('event'),
+                existingEvent = this.iMIPrecord.get('existing_event'),
                 myAttenderRecord = event.getMyAttenderRecord(),
                 myAttenderstatus = myAttenderRecord ? myAttenderRecord.get('status') : null;
+                
+            // show container from existing event if exists
+            if (existingEvent && existingEvent.container_id) {
+                event.set('container_id', existingEvent.container_id);
+            }
                 
             // reset actions
             Ext.each(this.actions, function(action) {action.setHidden(true)});
@@ -238,7 +243,5 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
             
             singleRecordPanel.setVisible(false);
         }
-        
     }
-
 });
