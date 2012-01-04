@@ -49,9 +49,15 @@ class Calendar_JsonTests extends Calendar_TestCase
     
     /**
      * testCreateEvent
+     * 
+     * @todo finish display container content seq test
      */
     public function testCreateEvent()
     {
+        //$scleverDisplayContainerId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $this->_personas['sclever']->getId());
+        // @todo get display container
+        //print_r($scleverDisplayContainer);
+        
         $eventData = $this->_getEvent()->toArray();
         
         $tag = Tinebase_Tags::getInstance()->createTag(new Tinebase_Model_Tag(array(
@@ -70,6 +76,13 @@ class Calendar_JsonTests extends Calendar_TestCase
         $loadedEventData = $this->_uit->getEvent($persistentEventData['id']);
         
         $this->_assertJsonEvent($eventData, $loadedEventData, 'failed to create/load event');
+        
+        // @todo check content sequence update of sclever display container
+        // @todo use $this->_findAttender
+//         $displayContainerId = $eventData['attendee'][0]['displaycontainer_id']['id'];
+//         $contentSeq = Tinebase_Container::getInstance()->getContentSequence($displayContainerId);
+//         $this->assertNotEmpty($contentSeq[$displayContainerId]);
+//         $this->assertGreaterThan($oldContentSeq, $contentSeq[$displayContainerId], print_r($contentSeq, TRUE));
         
         return $loadedEventData;
     }

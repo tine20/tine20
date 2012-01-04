@@ -323,4 +323,22 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
         Tinebase_Scheduler_Task::addDeletedFileCleanupTask($scheduler);
         $this->setApplicationVersion('Tinebase', '5.7');
     }
+    
+    /**
+    * update to 5.8
+    * - add content_seq to container
+    */
+    public function update_7()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>content_seq</name>
+                <type>integer</type>
+                <length>64</length>
+            </field>');
+        $this->_backend->addCol('container', $declaration);
+            
+        $this->setTableVersion('container', '5');
+        $this->setApplicationVersion('Tinebase', '5.8');
+    }
 }
