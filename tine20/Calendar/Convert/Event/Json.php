@@ -25,10 +25,63 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
     */
     public function fromTine20Model(Tinebase_Record_Abstract $_record)
     {
-        Calendar_Model_Attender::resolveAttendee($_record->attendee);
-        $this->_resolveRrule($_record);
-        $this->_resolveOrganizer($_record);
-        
+        self::resolveRelatedData($_record);
         return parent::fromTine20Model($_record);
+    }
+    
+    /**
+     * resolve related event data: attendee, rrule and organizer
+     * 
+     * @param Calendar_Model_Event $_record
+     */
+    static public function resolveRelatedData(Calendar_Model_Event $_record)
+    {
+        Calendar_Model_Attender::resolveAttendee($_record->attendee);
+        self::resolveRrule($_record);
+        self::resolveOrganizer($_record);
+    }
+    
+    /**
+    * resolves rrule of given event(s)
+    *
+    * @param Tinebase_Record_RecordSet|Calendar_Model_Event $_events
+    */
+    static public function resolveRrule($_events)
+    {
+        $events = $_events instanceof Tinebase_Record_RecordSet ? $_events : array($_events);
+    
+        foreach ($events as $event) {
+            if ($event->rrule) {
+                $event->rrule = Calendar_Model_Rrule::getRruleFromString($event->rrule);
+            }
+        }
+    }
+    
+    /**
+    * resolves organizer of given event
+    *
+    * @param Tinebase_Record_RecordSet|Calendar_Model_Event $_events
+    */
+    static public function resolveOrganizer($_events)
+    {
+        $events = $_events instanceof Tinebase_Record_RecordSet ? $_events : array($_events);
+    
+        $organizerIds = array();
+        foreach ($events as $event) {
+            if ($event->organizer) {
+                $organizerIds[] = $event->organizer;
+            }
+        }
+    
+        $organizers = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($organizerIds), TRUE);
+    
+        foreach ($events as $event) {
+            if ($event->organizer) {
+                $idx = $organizers->getIndexById($event->organizer);
+                if ($idx !== FALSE) {
+                    $event->organizer = $organizers[$idx];
+                }
+            }
+        }
     }
 }

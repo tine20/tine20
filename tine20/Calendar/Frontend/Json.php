@@ -265,7 +265,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * process an iMIP (RFC 6047) Message
      * 
      * @param array  $iMIP
-     * @pram  string $status
+     * @param string $status
      * @return array prepared iMIP part
      */
     public function iMIPProcess($iMIP, $status=null)
@@ -287,6 +287,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return array data
      * 
      * @todo perhaps we need to resolveContainerTagsUsers() before  mergeAndRemoveNonMatchingRecurrences(), but i'm not sure about that
+     * @todo use Calendar_Convert_Event_Json
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL, $_pagination = NULL)
     {
@@ -298,18 +299,13 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	        Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
 	        
 	        Calendar_Model_Attender::resolveAttendee($_records->attendee);
-	        $this->_resolveOrganizer($_records);
-	        $this->_resolveRrule($_records);
+	        Calendar_Convert_Event_Json::resolveOrganizer($_records);
+	        Calendar_Convert_Event_Json::resolveRrule($_records);
             Calendar_Controller_Event::getInstance()->getAlarms($_records);
             
-//            Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($_records, $this->_resolveUserFields);
             Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($_records, $_filter);
             
             $_records->sortByPagination($_pagination);
-            
-//             $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-//             $_records->convertDates = true;
-//             $eventsData = $_records->toArray();
             $eventsData = parent::_multipleRecordsToJson($_records);
 	        foreach ($eventsData as $eventData) {
 	            if (! array_key_exists(Tinebase_Model_Grants::GRANT_READ, $eventData) || ! $eventData[Tinebase_Model_Grants::GRANT_READ]) {
@@ -322,49 +318,5 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     	}
           
         return parent::_multipleRecordsToJson($_records);
-    }
-    
-    /**
-     * resolves organizer of given event
-     *
-     * @param Tinebase_Record_RecordSet|Calendar_Model_Event $_events
-     */
-    protected function _resolveOrganizer($_events)
-    {
-        $events = $_events instanceof Tinebase_Record_RecordSet ? $_events : array($_events);
-        
-        $organizerIds = array();
-        foreach ($events as $event) {
-            if ($event->organizer) {
-                $organizerIds[] = $event->organizer;
-            }
-        }
-
-        $organizers = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($organizerIds), TRUE);
-        
-        foreach ($events as $event) {
-            if ($event->organizer) {
-                $idx = $organizers->getIndexById($event->organizer);
-                if ($idx !== FALSE) {
-                    $event->organizer = $organizers[$idx];
-                }
-            }
-        }
-    }
-    
-    /**
-     * resolves rrule of given event
-     *
-     * @param Tinebase_Record_RecordSet|Calendar_Model_Event $_events
-     */
-    protected function _resolveRrule($_events)
-    {
-        $events = $_events instanceof Tinebase_Record_RecordSet ? $_events : array($_events);
-        
-        foreach ($events as $event) {
-            if ($event->rrule) {
-                $event->rrule = Calendar_Model_Rrule::getRruleFromString($event->rrule);
-            }
-        }
     }
 }
