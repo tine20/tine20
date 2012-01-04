@@ -202,7 +202,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.plugins = this.plugins ? this.plugins : [];
             this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
             this.plugins.push(this.tokenModePlugin = new Tine.widgets.dialog.TokenModeEditDialogPlugin({}));
-                   
+            this.plugins.push(new Tine.widgets.dialog.KeyShortcutsEditDialogPlugin({}));
+            
             if(this.useMultiple) this.plugins.push(new Tine.widgets.dialog.MultipleEditDialogPlugin({}));
             
             // init actions
@@ -381,7 +382,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
         
         Tine.log.debug('loading of the following record completed:');
-        Tine.log.debug(this.record);
+        //without decode in FF: uncaught exception: TypeError: iter is undefined
+        Tine.log.debug(Ext.decode(this.record));
         
         if (this.copyRecord) {
             this.doCopyRecord();

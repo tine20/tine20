@@ -133,7 +133,7 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
 
         if(this.isValid()) {    
             var recordId = this.searchBox.getValue(),
-                e = this.searchBox.store.getById(recordId),
+                event = this.searchBox.store.getById(recordId),
                 ms = this.app.getMainScreen(),
                 cp = ms.getCenterPanel(),
                 role = this.chooseRoleBox.getValue(),
@@ -145,26 +145,26 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
             }
                 
             var window = Tine.Calendar.EventEditDialog.openWindow({
-                record: Ext.util.JSON.encode(e.data),
-                recordId: e.data.id,
+                record: Ext.util.JSON.encode(event.data),
+                recordId: event.data.id,
                 attendee: Ext.util.JSON.encode(this.attendee),
                 listeners: {
                     scope: cp,
                     update: function (eventJson) {
 
                         var updatedEvent = Tine.Calendar.backend.recordReader({responseText: eventJson});
-                        updatedEvent.dirty = true;
-                        updatedEvent.modified = {};
+                            updatedEvent.dirty = true;
+                            updatedEvent.modified = {};
+                            
                         event.phantom = true;
-                        
                         var panel = this.getCalendarPanel(this.activeView);
                         var store = panel.getStore();
-                        
                         event = store.getById(event.id);
-                        
-                        store.replaceRecord(event, updatedEvent);
-                        
+                        if (event) store.replaceRecord(event, updatedEvent);
+                        else store.add(updatedEvent);
+                        this.activeView = 'weekSheet';
                         this.onUpdateEvent(updatedEvent);
+
                     }
                 }
             });
