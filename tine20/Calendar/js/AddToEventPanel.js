@@ -147,6 +147,7 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
             var window = Tine.Calendar.EventEditDialog.openWindow({
                 record: Ext.util.JSON.encode(event.data),
                 recordId: event.data.id,
+                actionType: 'add',
                 attendee: Ext.util.JSON.encode(this.attendee),
                 listeners: {
                     scope: cp,

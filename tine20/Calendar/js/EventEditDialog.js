@@ -248,7 +248,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
         
         // overwrite saveAndCloseHandler
-        this.action_saveAndClose.setHandler(this.checkPastEvent, this);
+        if(this.actionType == 'add') this.action_saveAndClose.setHandler(this.checkPastEvent, this);
     },
     
     /**
@@ -308,11 +308,12 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     checkPastEvent: function() {       
         var start = this.getForm().findField('dtstart').getValue().getTime();
         var now = new Date().getTime();
+        
         if(start < now) {
             
             Ext.MessageBox.confirm(
                 this.app.i18n._('Event in past'), 
-                this.app.i18n._('You want to create an event which is in the past. Please confirm!'), 
+                this.app.i18n._('You are creating an event which is in the past. Do you really want to do this?'), 
                 function(btn) {
                     if(btn == 'yes') {
                         this.onSaveAndClose();
