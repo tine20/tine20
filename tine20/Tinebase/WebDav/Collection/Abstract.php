@@ -83,6 +83,10 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
             # path == ApplicationName
             # return personal and shared folder
             case 1:
+                if (!in_array($_name, array(Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Model_Container::TYPE_SHARED))) {
+                    throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
+                }
+                
                 $className = $this->_applicationName . '_Frontend_WebDAV';
                 return new $className($this->_path . '/' . $_name);
         
