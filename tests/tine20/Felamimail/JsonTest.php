@@ -929,6 +929,37 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test to set a forward rule to this accounts email address
+     * -> should throw exception to prevent mail cycling
+     */
+    public function testSetForwardRuleToSelf()
+    {
+        $ruleData = array(array(
+            'id'            => 1,
+            'action_type'   => Felamimail_Sieve_Rule_Action::REDIRECT, 
+            'action_argument' => $this->_account->email,
+            'conditions'    => array(array(
+                'test'          => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
+                'comperator'    => Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS,
+                'header'        => 'From',
+                'key'           => 'info@example.org',
+            )),
+            'enabled'       => 1,
+        ));
+        
+        try {
+            $this->_sieveTestHelper($ruleData);
+            $this->assertTrue(FALSE, 'it is not allowed to set own email address for redirect!');
+        } catch (Felamimail_Exception_Sieve $e) {
+            $this->assertTrue(TRUE);
+        }
+
+        // this should work
+        $ruleData[0]['enabled'] = 0;
+        $this->_sieveTestHelper($ruleData);
+    }
+    
+    /**
      * get folder filter
      *
      * @return array
