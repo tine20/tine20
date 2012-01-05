@@ -89,9 +89,9 @@ abstract class Felamimail_Sieve_Backend_Abstract
      */
     public function getSieve()
     {
-        $header = $this->_getHeaderString();
         $rules = $this->_getRulesString();
         $vacation = $this->_getVacationString();
+        $header = (! empty($rules) || ! empty($vacation)) ? $this->_getHeaderString() : '';
         
         $sieve = $header . "\r\n\r\n" . $rules . $vacation . "\r\n\r\n";
         
