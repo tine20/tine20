@@ -57,18 +57,6 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
     {
         $this->_path = $_path;
         $this->_pathParts = $this->_parsePath($_path);
-
-        #$this->_application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
-    }
-    
-    protected function _parsePath($_path)
-    {
-        $pathParts = explode('/', trim($this->_path, '/'));
-        $this->_applicationName = $pathParts[0];
-        
-        Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' part count: ' . count($pathParts) . ' ' . print_r($pathParts, true));
-        
-        return $pathParts;
     }
     
     /**
@@ -366,4 +354,13 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
     {
         return $this->carddavBackend->updateAddressBook($this->addressBookInfo['id'], $mutations); 
     }
+    
+    protected function _parsePath($_path)
+    {
+        $pathParts = explode('/', trim($this->_path, '/'));
+        $this->_applicationName = $pathParts[0];
+        
+        return $pathParts;
+    }
+    
 }
