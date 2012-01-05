@@ -735,7 +735,7 @@ class Setup_Controller
             $filename = dirname(__FILE__) . '/../config.inc.php';
         }
         
-        $config = $this->writeConfigToFile($_data, $filename, $_merge);
+        $config = $this->writeConfigToFile($_data, $_merge, $filename);
         
         Setup_Core::set(Setup_Core::CONFIG, $config);
         
