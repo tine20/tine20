@@ -44,6 +44,57 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
     }
     
     /**
+     * Creates a new subdirectory
+     *
+     * @param string $name
+     * @throws Sabre_DAV_Exception_Forbidden
+     * @return void
+     */
+    public function createDirectory($name)
+    {
+        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_ADD)) {
+            throw new Sabre_DAV_Exception_Forbidden('Forbidden to create folder: ' . $name);
+        }
+    
+        $path = $this->_path . '/' . $name;
+    
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create directory: ' . $path);
+    
+        mkdir('tine20://' . $path);
+    }
+    
+    /**
+     * Creates a new file in the directory
+     *
+     * @param string $name Name of the file
+     * @param resource $data Initial payload, passed as a readable stream resource.
+     * @throws Sabre_DAV_Exception_Forbidden
+     * @return void
+     */
+    public function createFile($name, $data = null)
+    {
+        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_ADD)) {
+            throw new Sabre_DAV_Exception_Forbidden('Forbidden to create file: ' . $this->_path . '/' . $name);
+        }
+    
+        $path = $this->_path . '/' . $name;
+    
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $path);
+    
+        if (!$handle = fopen('tine20://' . $path, 'x')) {
+            throw new Sabre_DAV_Exception_Forbidden('Permission denied to create file (filename file://' . $path . ')');
+        }
+    
+        if (is_resource($data)) {
+            stream_copy_to_stream($data, $handle);
+        }
+    
+        fclose($handle);
+    }
+    
+    /**
      * Deleted the current container
      *
      * @todo   use filesystem controller to delete directories recursive
@@ -156,5 +207,15 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
         
         $this->_getContainer()->name = $name;
         Tinebase_Container::getInstance()->update($this->_getContainer());
+    }
+    
+    /**
+     * return container for given path
+     * 
+     * @return Tinebase_Model_Container
+     */
+    protected function _getContainer()
+    {        
+        return $this->_container;
     }
 }
