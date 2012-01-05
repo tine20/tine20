@@ -256,12 +256,12 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      * update one record
      *
      * @param   Calendar_Model_Event $_record
-     * @param   bool                 $_checkBusyConficts
+     * @param   bool                 $_checkBusyConflicts
      * @return  Calendar_Model_Event
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function update(Tinebase_Record_Interface $_event, $_checkBusyConficts = FALSE)
+    public function update(Tinebase_Record_Interface $_event, $_checkBusyConflicts = FALSE)
     {
         if ($_event->recurid) {
             throw new Tinebase_Exception_UnexpectedValue('recur event instances must be saved as part of the base event');
@@ -283,10 +283,10 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         
         foreach($migration['toUpdate'] as $exception) {
-            $this->_eventController->update($exception, $_checkBusyConficts);
+            $this->_eventController->update($exception, $_checkBusyConflicts);
         }
         
-        $updatedBaseEvent = $this->_eventController->update($_event, $_checkBusyConficts);
+        $updatedBaseEvent = $this->_eventController->update($_event, $_checkBusyConflicts);
         
         return $this->_toiTIP($updatedBaseEvent);
     }

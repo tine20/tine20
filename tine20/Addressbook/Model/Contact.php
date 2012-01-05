@@ -5,10 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- *
- * @todo        rename some fields (modified, ...)
- * @todo        add relations as contact attribute
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -85,13 +82,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_countryname'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_locality'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_postalcode'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -111,20 +101,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'assistent'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'bday'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'calendar_uri'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
- /*       'email'     => array(
-            array(
-                'Regex', 
-                '/^[^0-9][a-z0-9_]+([.][a-z0-9_]+)*[@][a-z0-9_]+([.][a-z0-9_]+)*[.][a-z]{2,4}$/'
-            ), 
-            Zend_Filter_Input::ALLOW_EMPTY => true
-        ),
-        'email_home'     => array(
-            array(
-                'Regex', 
-                '/^[^0-9][a-z0-9_]+([.][a-z0-9_]+)*[@][a-z0-9_]+([.][a-z0-9_]+)*[.][a-z]{2,4}$/'
-            ), 
-            Zend_Filter_Input::ALLOW_EMPTY => true
-        ),*/
         'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'email_home'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'jpegphoto'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -162,6 +138,14 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
 		'tel_prefer'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tz'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 		'geo'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    // modlog fields
+    	'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // tine 2.0 generic fields
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -192,7 +176,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     * @var array list of modlog omit fields
     */
     protected $_modlogOmitFields = array(
-            'jpegphoto',
+        'jpegphoto',
     );
     
     /**
@@ -238,61 +222,47 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     }
     
     /**
-     * converts a int, string or Addressbook_Model_Contact to an contact id
-     *
-     * @param   int|string|Addressbook_Model_Contact $_contactId the contact id to convert
-     * @return  int
-     * @throws  UnexpectedValueException if no contact id set or 0 
-     */
-    static public function convertContactIdToInt($_contactId)
-    {
-        if ($_contactId instanceof Addressbook_Model_Contact) {
-            if (empty($_contactId->id)) {
-                throw new UnexpectedValueException('No contact id set.');
-            }
-            $id = (string) $_contactId->id;
-        } else {
-            $id = (string) $_contactId;
-        }
-        
-        if ($id == '') {
-            throw new UnexpectedValueException('Contact id can not be 0.');
-        }
-        
-        return $id;
-    }
-    
-    /**
      * fills a contact from json data
      *
-     * @todo timezone conversion for birthdays?
      * @param array $_data record data
      * @return void
      * 
-     * @todo check in calling functions where these tags/notes/container arrays are coming from and get down to the root of the trouble    
+     * @todo timezone conversion for birthdays?
+     * @todo move this to Addressbook_Convert_Contact_Json
      */
     protected function _setFromJson(array &$_data)
     {
-        if (isset($_data['jpegphoto'])) {
-            if ($_data['jpegphoto'] != '') {
-                $imageParams = Tinebase_ImageHelper::parseImageLink($_data['jpegphoto']);
-                if ($imageParams['isNewImage']) {
-                    try {
-                        $_data['jpegphoto'] = Tinebase_ImageHelper::getImageData($imageParams);
-                    } catch(Tinebase_Exception_UnexpectedValue $teuv) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not add contact image: ' . $teuv->getMessage());
-                        unset($_data['jpegphoto']);
-                    }
-                } else {
-                    unset($_data['jpegphoto']);
-                }
-            }
-        }
+        $this->_setContactImage($_data);
         
         // unset if empty
+        // @todo is this still needed?
         if (empty($_data['id'])) {
             unset($_data['id']);
         }
     }
     
+    /**
+     * set contact image
+     * 
+     * @param array $_data
+     */
+    protected function _setContactImage(&$_data)
+    {
+        if (! isset($_data['jpegphoto']) || $_data['jpegphoto'] === '') {
+            return;
+        }
+        
+        $imageParams = Tinebase_ImageHelper::parseImageLink($_data['jpegphoto']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' image params:' . print_r($imageParams, TRUE));
+        if ($imageParams['isNewImage']) {
+            try {
+                $_data['jpegphoto'] = Tinebase_ImageHelper::getImageData($imageParams);
+            } catch(Tinebase_Exception_UnexpectedValue $teuv) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not add contact image: ' . $teuv->getMessage());
+                unset($_data['jpegphoto']);
+            }
+        } else {
+            unset($_data['jpegphoto']);
+        }
+    }
 }
