@@ -120,7 +120,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @return void
      * @throws Calendar_Exception_AttendeeBusy
      */
-    public function checkBusyConficts($_event)
+    public function checkBusyConflicts($_event)
     {
         $ignoreUIDs = !empty($_event->uid) ? array($_event->uid) : array();
         
@@ -176,7 +176,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             if ($_checkBusyConflicts) {
                 // ensure that all attendee are free
-                $this->checkBusyConficts($_record);
+                $this->checkBusyConflicts($_record);
             }
             
             $sendNotifications = $this->_sendNotifications;
@@ -442,7 +442,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                        ) {
                         
                         // ensure that all attendee are free
-                        $this->checkBusyConficts($_record);
+                        $this->checkBusyConflicts($_record);
                     }
                 }
                 

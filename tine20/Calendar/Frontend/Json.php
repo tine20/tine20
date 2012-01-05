@@ -28,15 +28,15 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  array       $recordData
      * @param  bool        $deleteInstance
      * @param  bool        $deleteAllFollowing
-     * @param  bool        $checkBusyConficts
+     * @param  bool        $checkBusyConflicts
      * @return array       exception Event | updated baseEvent
      */
-    public function createRecurException($recordData, $deleteInstance, $deleteAllFollowing, $checkBusyConficts = FALSE)
+    public function createRecurException($recordData, $deleteInstance, $deleteAllFollowing, $checkBusyConflicts = FALSE)
     {
         $event = new Calendar_Model_Event(array(), TRUE);
         $event->setFromJsonInUsersTimezone($recordData);
         
-        $returnEvent = Calendar_Controller_Event::getInstance()->createRecurException($event, $deleteInstance, $deleteAllFollowing, $checkBusyConficts);
+        $returnEvent = Calendar_Controller_Event::getInstance()->createRecurException($event, $deleteInstance, $deleteAllFollowing, $checkBusyConflicts);
         
         return $this->getEvent($returnEvent->getId());
     }
@@ -185,12 +185,12 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * creates/updates an event
      *
      * @param   array   $recordData
-     * @param   bool    $checkBusyConficts
+     * @param   bool    $checkBusyConflicts
      * @return  array   created/updated event
      */
-    public function saveEvent($recordData, $checkBusyConficts = FALSE)
+    public function saveEvent($recordData, $checkBusyConflicts = FALSE)
     {
-        return $this->_save($recordData, Calendar_Controller_Event::getInstance(), 'Event', 'id', array($checkBusyConficts));
+        return $this->_save($recordData, Calendar_Controller_Event::getInstance(), 'Event', 'id', array($checkBusyConflicts));
     }
     
     /**
@@ -228,18 +228,18 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * updated a recur series
      *
      * @param  array $recordData
-     * @param  bool  $checkBusyConficts
+     * @param  bool  $checkBusyConflicts
      * @noparamyet  JSONstring $returnPeriod NOT IMPLEMENTED YET
      * @return array 
      */
-    public function updateRecurSeries($recordData, $checkBusyConficts = FALSE /*, $returnPeriod*/)
+    public function updateRecurSeries($recordData, $checkBusyConflicts = FALSE /*, $returnPeriod*/)
     {
         $recurInstance = new Calendar_Model_Event(array(), TRUE);
         $recurInstance->setFromJsonInUsersTimezone($recordData);
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(print_r($recurInstance->toArray(), true));
         
-        $baseEvent = Calendar_Controller_Event::getInstance()->updateRecurSeries($recurInstance, $checkBusyConficts);
+        $baseEvent = Calendar_Controller_Event::getInstance()->updateRecurSeries($recurInstance, $checkBusyConflicts);
         
         return $this->getEvent($baseEvent->getId());
     }

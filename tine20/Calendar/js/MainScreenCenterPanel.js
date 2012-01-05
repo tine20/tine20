@@ -470,7 +470,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         ctxMenu.showAt(e.getXY());
     },
     
-    checkPastEvent: function(event, checkBusyConficts) {
+    checkPastEvent: function(event, checkBusyConflicts) {
         
         var start = event.get('dtstart').getTime();
         var now = new Date().getTime();
@@ -481,7 +481,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 this.app.i18n._('You are creating an event which is in the past. Do you really want to do this?'), 
                 function(btn) {
                     if(btn == 'yes') {
-                        this.onAddEvent(event, checkBusyConficts, true);
+                        this.onAddEvent(event, checkBusyConflicts, true);
                     } else {
                         var panel = this.getCalendarPanel(this.activeView),
                             store = panel.getStore();
@@ -492,14 +492,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 this
             );
         } else {
-            this.onAddEvent(event, checkBusyConficts, true);
+            this.onAddEvent(event, checkBusyConflicts, true);
         }
     },
     
-    onAddEvent: function(event, checkBusyConficts, pastChecked) {
+    onAddEvent: function(event, checkBusyConflicts, pastChecked) {
 
         if(!pastChecked) {
-            this.checkPastEvent(event, checkBusyConficts);
+            this.checkPastEvent(event, checkBusyConflicts);
             return;
         }
         
@@ -533,7 +533,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             },
             failure: this.onProxyFail.createDelegate(this, [event], true)
         }, {
-            checkBusyConficts: checkBusyConficts === false ? 0 : 1
+            checkBusyConflicts: checkBusyConflicts === false ? 0 : 1
         });
     },
     
@@ -635,7 +635,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             },
             failure: this.onProxyFail.createDelegate(this, [event], true)
         }, {
-            checkBusyConficts: 1
+            checkBusyConflicts: 1
         });
     },
     
