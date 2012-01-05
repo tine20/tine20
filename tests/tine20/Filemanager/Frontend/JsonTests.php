@@ -795,14 +795,22 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
      */
     public function testDeletedFileCleanup()
     {
+        // remove all files with size 0 first
+        $size0Nodes = Tinebase_FileSystem::getInstance()->searchNodes(new Tinebase_Model_Tree_Node_Filter(array(array(
+            'field' => 'size', 'operator' => 'equals', 'value' => 0
+        ))));
+        foreach ($size0Nodes as $node) {
+            Tinebase_FileSystem::getInstance()->deleteFileNode($node);
+        }
+        
         $this->testDeleteFileNodes();
         $result = Tinebase_FileSystem::getInstance()->clearDeletedFiles();
-        $this->assertGreaterThan(0, $result);
+        $this->assertGreaterThan(0, $result, 'should cleanup one file or more');
         $this->tearDown();
-
+        
         $this->testDeleteFileNodes();
         $result = Tinebase_FileSystem::getInstance()->clearDeletedFiles();
-        $this->assertEquals(1, $result);
+        $this->assertEquals(1, $result, 'should cleanup one file');
     }
 
     /**
