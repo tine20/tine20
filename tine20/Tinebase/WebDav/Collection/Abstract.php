@@ -57,6 +57,51 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
     {
         $this->_path = $_path;
         $this->_pathParts = $this->_parsePath($_path);
+        $this->_applicationName = $this->_pathParts[0];
+    }
+    
+    /**
+     * Creates a new subdirectory
+     *
+     * @param  string  $name  name of the new subdirectory
+     * @throws Sabre_DAV_Exception_Forbidden
+     * @return Tinebase_Model_Container
+     */
+    public function createDirectory($name) 
+    {
+        $containerType = $this->_pathParts[1];
+        
+        if (!in_array($containerType, array(Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Model_Container::TYPE_SHARED))) {
+            throw new Sabre_DAV_Exception_Forbidden('Permission denied to create directory');
+        }
+        
+        if ($containerType == Tinebase_Model_Container::TYPE_SHARED &&
+            !Tinebase_Core::getUser()->hasRight($this->_getApplication(), Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS)) {
+            throw new Sabre_DAV_Exception_Forbidden('Permission denied to create directory');
+        }
+        
+        // is the loginname for personal folders set?
+        if ($containerType == Tinebase_Model_Container::TYPE_PERSONAL && count($this->_pathParts) < 3) {
+            throw new Sabre_DAV_Exception_Forbidden('Permission denied to create directory');
+        }
+        
+        try {
+            Tinebase_Container::getInstance()->getContainerByName($this->_applicationName, $name, $containerType, Tinebase_Core::getUser());
+            
+            // container exists already => that's bad!
+            throw new Sabre_DAV_Exception_Forbidden('Folders exists already');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // continue
+        }
+        
+        $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+            'name'           => $name,
+            'type'           => $containerType,
+            'backend'        => 'sql',
+            'application_id' => $this->_getApplication()->getId()
+        )));
+        
+        return $container;
     }
     
     /**
@@ -355,10 +400,18 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
         return $this->carddavBackend->updateAddressBook($this->addressBookInfo['id'], $mutations); 
     }
     
+    protected function _getApplication()
+    {
+        if ($this->_application == null) {
+            $this->_application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        }
+        
+        return $this->_application;
+    }
+    
     protected function _parsePath($_path)
     {
         $pathParts = explode('/', trim($this->_path, '/'));
-        $this->_applicationName = $pathParts[0];
         
         return $pathParts;
     }
