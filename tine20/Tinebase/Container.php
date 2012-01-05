@@ -385,22 +385,19 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      *
      * @param   int|Tinebase_Model_Container $_containerId the id of the container
      * @param   int|Tinebase_Model_Container $_ignoreACL
+     * @param   string $_type
+     * @param   string $_ownerId
      * @return  Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
      * @throws  Tinebase_Exception_UnexpectedValue
-     * 
-     * @deprecated this should be removed as it does not return a distinct container 
      */
     public function getContainerByName($_application, $_containerName, $_type, $_ownerId = null)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
-            . ' This is deprecated. Please do not use it any more.');
-        
         if ($_type !== Tinebase_Model_Container::TYPE_PERSONAL && $_type !== Tinebase_Model_Container::TYPE_SHARED) {
             throw new Tinebase_Exception_UnexpectedValue ("Invalid type $_type supplied.");
         }
         
-        if($_type == Tinebase_Model_Container::TYPE_PERSONAL && empty($_ownerId)) {
+        if ($_type == Tinebase_Model_Container::TYPE_PERSONAL && empty($_ownerId)) {
             throw new Tinebase_Exception_UnexpectedValue ('$_ownerId can not be empty for personal folders');
         }
         
@@ -1211,5 +1208,59 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $grants = new $_grantModel($grantsFields, TRUE);
 
         return $grants;
+    }
+
+    /**
+     * increase content sequence of container
+     * - should be increased for each create/update/delete operation in this container
+     * 
+     * @param integer|Tinebase_Model_Container $_containerId
+     * @return integer number of updated rows
+     * 
+     * @todo clear cache? perhaps not, we have getContentSequence() for that
+     */
+    public function increaseContentSequence($_containerId)
+    {
+        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Increasing content seq of container ' . $containerId . ' ...');
+        
+        $quotedIdentifier = $this->_db->quoteIdentifier('content_seq');
+        $data = array(
+            'content_seq' => new Zend_Db_Expr('IF(' . $quotedIdentifier . ' >= 1 ,' . $quotedIdentifier . ' + 1, 1)')
+        );
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $containerId)
+        );
+        $result = $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
+    }
+
+    /**
+     * get content sequences for single container or array of ids
+     * 
+     * @param array|integer|Tinebase_Model_Container $_containerIds
+     * @return array with key = container id / value = content seq number
+     */
+    public function getContentSequence($_containerIds)
+    {
+        if (empty($_containerIds)) {
+            return NULL;
+        }
+        
+        if (is_array($_containerIds)) {
+            $containerIds = $_containerIds;
+        } else {
+            $containerIds = array(Tinebase_Model_Container::convertContainerIdToInt($_containerIds));
+        }
+        
+        $select = $this->_getSelect(array('id', 'content_seq'));
+        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $containerIds));
+        $stmt = $this->_db->query($select);
+        $result = $stmt->fetchAll(Zend_Db::FETCH_GROUP | Zend_Db::FETCH_COLUMN);
+        foreach ($result as $key => $value) {
+            $result[$key] = $value[0];
+        }
+        
+        return $result;
     }
 }

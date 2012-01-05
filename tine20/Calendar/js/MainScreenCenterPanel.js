@@ -470,7 +470,39 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         ctxMenu.showAt(e.getXY());
     },
     
-    onAddEvent: function(event, checkBusyConficts) {
+    checkPastEvent: function(event, checkBusyConficts) {
+        
+        var start = event.get('dtstart').getTime();
+        var now = new Date().getTime();
+        
+        if(start < now) {
+            Ext.MessageBox.confirm(
+                this.app.i18n._('Event in past'), 
+                this.app.i18n._('You are creating an event which is in the past. Do you really want to do this?'), 
+                function(btn) {
+                    if(btn == 'yes') {
+                        this.onAddEvent(event, checkBusyConficts, true);
+                    } else {
+                        var panel = this.getCalendarPanel(this.activeView),
+                            store = panel.getStore();
+                            store.remove(event);
+                        return false;
+                    }
+                },
+                this
+            );
+        } else {
+            this.onAddEvent(event, checkBusyConficts, true);
+        }
+    },
+    
+    onAddEvent: function(event, checkBusyConficts, pastChecked) {
+
+        if(!pastChecked) {
+            this.checkPastEvent(event, checkBusyConficts);
+            return;
+        }
+        
         this.setLoading(true);
         
         // remove temporary id
@@ -506,6 +538,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
     
     onUpdateEvent: function(event) {
+        
         this.setLoading(true);
         
         if (event.isRecurBase()) {
@@ -764,6 +797,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         Tine.Calendar.EventEditDialog.openWindow({
             record: Ext.util.JSON.encode(event.data),
             recordId: event.data.id,
+            actionType: action,
             listeners: {
                 scope: this,
                 update: function (eventJson) {
@@ -912,7 +946,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     
     onProxyFail: function(error, event) {
         this.setLoading(false);
-        this.loadMask.hide();
+        if(this.loadMask) this.loadMask.hide();
         
         if (error.code == 901) {
            
@@ -983,7 +1017,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
 
                     switch (option) {
                         case 'ignore':
-                            this.onAddEvent(event, false);
+                            this.onAddEvent(event, false, true);
                             this.conflictConfirmWin.close();
                             break;
                         

@@ -146,6 +146,25 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
                 this.westPanel = Ext.ComponentMgr.create({
                     app: this.app
                 }, this.westPanelXType);
+                
+                this.westPanel.on('selectionchange', function(){
+                    var cp = this.getCenterPanel();
+                    if(cp) {
+                        try {
+                            var grid = cp.getGrid();
+                            if(grid) {
+                                var sm = grid.getSelectionModel();
+                                if(sm) {
+                                    sm.clearSelections();
+                                    cp.actionUpdater.updateActions(sm.getSelectionsCollection());
+                                }
+                            }
+                        } catch (e) {
+                            Tine.log.err('Tine.widgets.MainScreen::getWestPanel');
+                        }
+                    }
+                }, this);
+                
             } catch (e) {
                 Tine.log.err('Could not create westPanel');
                 Tine.log.err(e);

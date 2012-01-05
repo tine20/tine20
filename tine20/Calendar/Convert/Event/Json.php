@@ -34,8 +34,12 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
      * 
      * @param Calendar_Model_Event $_record
      */
-    static public function resolveRelatedData(Calendar_Model_Event $_record)
+    static public function resolveRelatedData($_record)
     {
+        if (! $_record instanceof Calendar_Model_Event) {
+            return;
+        }
+        
         Calendar_Model_Attender::resolveAttendee($_record->attendee);
         self::resolveRrule($_record);
         self::resolveOrganizer($_record);
@@ -76,7 +80,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         $organizers = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($organizerIds), TRUE);
     
         foreach ($events as $event) {
-            if ($event->organizer) {
+            if ($event->organizer && is_scalar($event->organizer)) {
                 $idx = $organizers->getIndexById($event->organizer);
                 if ($idx !== FALSE) {
                     $event->organizer = $organizers[$idx];

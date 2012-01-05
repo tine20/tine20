@@ -85,7 +85,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
             }
             
             //bubble state events
-            item.enableBubble(['collapse', 'expand']);
+            item.enableBubble(['collapse', 'expand', 'selectionchange']);
         }, this);
         
         // enable vertical scrolling
@@ -142,6 +142,14 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
     getContainerTreePanel: function() {
         if (this.hasContainerTreePanel && !this.containerTreePanel) {
             this.containerTreePanel = new Tine[this.app.appName][this.containerTreePanelClassName]({app: this.app});
+            
+            this.containerTreePanel.on('click', function (node, event) {
+                if(node != this.lastClickedNode) {
+                    this.lastClickedNode = node;
+                    this.fireEvent('selectionchange');
+                }
+            });
+            
         }
         
         return this.containerTreePanel;
@@ -157,6 +165,13 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
             this.favoritesPanel = new Tine[this.app.appName][this.favoritesPanelClassName]({
                 app: this.app,
                 treePanel: this.getContainerTreePanel()
+            });
+            
+            this.favoritesPanel.on('click', function (node, event) {
+                if(node != this.lastClickedNode) {
+                    this.lastClickedNode = node;
+                    this.fireEvent('selectionchange');
+                }
             });
         }
         
@@ -271,6 +286,9 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         this.stateId = this.app.appName + '-mainscreen-westpanel';
         
         this.items = this.getPortalColumn();
+
+
+        
         Tine.widgets.mainscreen.WestPanel.superclass.initComponent.apply(this, arguments);
     },
     

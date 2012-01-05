@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -781,12 +781,20 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->_controller->get($persitentException->getId());
     }
     
+    /**
+     * test delete event
+     * - check here if content sequence of container has been increased
+     */
     public function testDeleteEvent()
     {
         $event = $this->_getEvent();
         $persistentEvent = $this->_controller->create($event);
         
         $this->_controller->delete($persistentEvent->getId());
+        
+        $contentSeq = Tinebase_Container::getInstance()->getContentSequence($this->_testCalendar);
+        $this->assertEquals(2, $contentSeq[$this->_testCalendar->getId()], 'container content seq should be increased 2 times!');
+        
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_controller->get($persistentEvent->getId());
     }
@@ -1027,6 +1035,10 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         ));
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see Calendar_TestCase::_getAttendee()
+     */
     protected function _getAttendee()
     {
         return new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(

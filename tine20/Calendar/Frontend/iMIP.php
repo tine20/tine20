@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -31,15 +31,13 @@ class Calendar_Frontend_iMIP
             return;
         }
         
-        $exitingEvent = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($_iMIP->getEvent());
-        
-        if (! $exitingEvent) {
+        if (! $_iMIP->getExistingEvent(TRUE)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " skip auto processing of iMIP component whose event is not in our db yet");
             return;
         }
         
         // update existing event details _WITHOUT_ status updates
-        return $this->_process($_iMIP, $exitingEvent);
+        return $this->_process($_iMIP);
     }
     
     /**
@@ -53,14 +51,11 @@ class Calendar_Frontend_iMIP
         // client spoofing protection
         $iMIP = Felamimail_Controller_Message::getInstance()->getiMIP($_iMIP->getId());
         
-        $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($iMIP->getEvent());
-        return $this->_process($_iMIP, $existingEvent, $_status);
+        return $this->_process($_iMIP, $_status);
     }
     
     /**
      * prepares iMIP component for client
-     * 
-     * @TODO  move to Calendar_Frontend_Json / Model / Convert?
      *  
      * @param  Calendar_Model_iMIP $_iMIP
      * @return Calendar_Model_iMIP
@@ -71,6 +66,7 @@ class Calendar_Frontend_iMIP
         
         Calendar_Convert_Event_Json::resolveRelatedData($_iMIP->event);
         Tinebase_Model_Container::resolveContainer($_iMIP->event);
+        Tinebase_Model_Container::resolveContainer($_iMIP->getExistingEvent());
         
         return $_iMIP;
     }
@@ -80,14 +76,13 @@ class Calendar_Frontend_iMIP
      * 
      * @param Calendar_Model_iMIP $_iMIP
      * @param boolean $_throwException
-     * @param Calendar_Model_Event $_existingEvent
      * @param string $_status
      * @throws Calendar_Exception_iMIP
      * @return boolean
      * 
      * @todo add iMIP record to exception when it extends the Data exception
      */
-    protected function _checkPreconditions(Calendar_Model_iMIP $_iMIP, $_throwException = FALSE, $_existingEvent = NULL, $_status = NULL)
+    protected function _checkPreconditions(Calendar_Model_iMIP $_iMIP, $_throwException = FALSE, $_status = NULL)
     {
         if ($_iMIP->preconditionsChecked) {
             if (empty($_iMIP->preconditions) || ! $_throwException) {
@@ -100,8 +95,7 @@ class Calendar_Frontend_iMIP
         $method = ucfirst(strtolower($_iMIP->method));
         $preconditionMethodName  = '_check'     . $method . 'Preconditions';
         if (method_exists($this, $preconditionMethodName)) {
-            $existingEvent = ($_existingEvent !== NULL) ? $_existingEvent : Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($_iMIP->getEvent());
-            $preconditionCheckSuccessful = $this->{$preconditionMethodName}($_iMIP, $existingEvent, $_status);
+            $preconditionCheckSuccessful = $this->{$preconditionMethodName}($_iMIP, $_status);
         } else {
             $preconditionCheckSuccessful = TRUE;
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " No preconditions check fn found for method " . $method);
@@ -130,11 +124,10 @@ class Calendar_Frontend_iMIP
      * process iMIP component and optionally set status
      * 
      * @param  Calendar_Model_iMIP   $_iMIP
-     * @param  Calendar_Model_Event  $_event
      * @param  string                $_status
      * @return mixed
      */
-    protected function _process($_iMIP, $_existingEvent, $_status = NULL)
+    protected function _process($_iMIP, $_status = NULL)
     {
         $method                  = ucfirst(strtolower($_iMIP->method));
         $processMethodName       = '_process'   . $method;
@@ -143,8 +136,8 @@ class Calendar_Frontend_iMIP
             throw new Tinebase_Exception_UnexpectedValue("Method {$_iMIP->method} not supported");
         }
         
-        $this->_checkPreconditions($_iMIP, TRUE, $_existingEvent, $_status);
-        $result = $this->{$processMethodName}($_iMIP, $_existingEvent, $_status);
+        $this->_checkPreconditions($_iMIP, TRUE, $_status);
+        $result = $this->{$processMethodName}($_iMIP, $_status);
         
         return $result;
     }
@@ -153,12 +146,11 @@ class Calendar_Frontend_iMIP
      * publish precondition
      * 
      * @param  Calendar_Model_iMIP   $_iMIP
-     * @param  Calendar_Model_Event  $_existingEvent
      * @return boolean
      * 
      * @todo implement
      */
-    protected function _checkPublishPreconditions($_iMIP, $_existingEvent)
+    protected function _checkPublishPreconditions($_iMIP)
     {
         $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_SUPPORTED, 'processing published events is not supported yet');
         
@@ -169,11 +161,10 @@ class Calendar_Frontend_iMIP
      * process publish
      * 
      * @param  Calendar_Model_iMIP   $_iMIP
-     * @param  Calendar_Model_Event  $_existingEvent
      * 
      * @todo implement
      */
-    protected function _processPublish($_iMIP, $_existingEvent)
+    protected function _processPublish($_iMIP)
     {
         // add/update event (if outdated) / no status stuff / DANGER of duplicate UIDs
         // -  no notifications!
@@ -183,18 +174,18 @@ class Calendar_Frontend_iMIP
      * request precondition
      * 
      * @param  Calendar_Model_iMIP   $_iMIP
-     * @param  Calendar_Model_Event  $_existingEvent
      * @return boolean
      */
-    protected function _checkRequestPreconditions($_iMIP, $_existingEvent)
+    protected function _checkRequestPreconditions($_iMIP)
     {
-        $result  = $this->_assertOwnAttender($_iMIP, $_existingEvent, TRUE, FALSE);
-        $result &= $this->_assertOrganizer($_iMIP, $_existingEvent, TRUE, TRUE, TRUE);
+        $result  = $this->_assertOwnAttender($_iMIP, TRUE, FALSE);
+        $result &= $this->_assertOrganizer($_iMIP, TRUE, TRUE, TRUE);
         
-         if ($_existingEvent && $_iMIP->getEvent()->isObsoletedBy($_existingEvent)) {
-             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
-             $result = FALSE;
-         }
+        $existingEvent = $_iMIP->getExistingEvent();
+        if ($existingEvent && $_iMIP->getEvent()->isObsoletedBy($existingEvent)) {
+            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
+            $result = FALSE;
+        }
         
         return $result;
     }
@@ -203,16 +194,16 @@ class Calendar_Frontend_iMIP
     * returns and optionally asserts own attendee record
     *
     * @param  Calendar_Model_iMIP   $_iMIP
-    * @param  string                $_status
     * @param  boolean               $_assertExistence
     * @param  boolean               $_assertOriginator
     * @return boolean
     */
-    protected function _assertOwnAttender($_iMIP, $_existingEvent, $_assertExistence, $_assertOriginator)
+    protected function _assertOwnAttender($_iMIP, $_assertExistence, $_assertOriginator)
     {
         $result = TRUE;
         
-        $ownAttender = Calendar_Model_Attender::getOwnAttender($_existingEvent ? $_existingEvent->attendee : $_iMIP->getEvent()->attendee);
+        $existingEvent = $_iMIP->getExistingEvent();
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($existingEvent ? $existingEvent->attendee : $_iMIP->getEvent()->attendee);
         if ($_assertExistence && ! $ownAttender) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ATTENDEE, "processing {$_iMIP->method} for non attendee is not supported");
             $result = FALSE;
@@ -256,7 +247,6 @@ class Calendar_Frontend_iMIP
     * returns and optionally asserts own attendee record
     *
     * @param  Calendar_Model_iMIP   $_iMIP
-    * @param  string                $_status
     * @param  bool                  $_assertExistence
     * @param  bool                  $_assertOriginator
     * @param  bool                  $_assertAccount
@@ -265,11 +255,12 @@ class Calendar_Frontend_iMIP
     * 
     * @todo this needs to be splitted into assertExternalOrganizer / assertInternalOrganizer
     */
-    protected function _assertOrganizer($_iMIP, $_existingEvent, $_assertExistence, $_assertOriginator, $_assertAccount = FALSE)
+    protected function _assertOrganizer($_iMIP, $_assertExistence, $_assertOriginator, $_assertAccount = FALSE)
     {
         $result = TRUE;
         
-        $organizer = $_existingEvent ? $_existingEvent->resolveOrganizer() : $_iMIP->getEvent()->resolveOrganizer();
+        $existingEvent = $_iMIP->getExistingEvent();
+        $organizer = $existingEvent ? $existingEvent->resolveOrganizer() : $_iMIP->getEvent()->resolveOrganizer();
         if ($_assertExistence && ! $organizer) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORGANIZER, "processing {$_iMIP->method} without organizer is not possible");
             $result = FALSE;
@@ -291,34 +282,35 @@ class Calendar_Frontend_iMIP
      * process request
      * 
      * @param  Calendar_Model_iMIP   $_iMIP
-     * @param  Calendar_Model_Event  $_existingEvent
      * @param  string                $_status
      * @throws Tinebase_Exception_NotImplemented
      * 
      * @todo handle external organizers
+     * @todo create event in the organizers context
      */
-    protected function _processRequest($_iMIP, $_existingEvent, $_status)
+    protected function _processRequest($_iMIP, $_status)
     {
-        $ownAttender = Calendar_Model_Attender::getOwnAttender($_existingEvent ? $_existingEvent->attendee : $_iMIP->getEvent()->attendee);
-        $organizer = $_existingEvent ? $_existingEvent->resolveOrganizer() : $_iMIP->getEvent()->resolveOrganizer();
+        $existingEvent = $_iMIP->getExistingEvent();
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($existingEvent ? $existingEvent->attendee : $_iMIP->getEvent()->attendee);
+        $organizer = $existingEvent ? $existingEvent->resolveOrganizer() : $_iMIP->getEvent()->resolveOrganizer();
         
         // internal organizer:
         //  - event is up to date
         //  - status change could also be done by calendar method
         //  - normal notifications
         if ($organizer->account_id) {
-            if (! $_existingEvent) {
+            if (! $existingEvent) {
                 // organizer has an account but no event exists, it seems that event was created from a non-caldav client
                 // do not send notifications in this case + create event in context of organizer
-                return; // not clear how to create in the orginizers context...
+                return; // not clear how to create in the organizers context...
                 $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(FALSE);
-                $_existingEvent = Calendar_Controller_MSEventFacade::getInstance()->create($_iMIP->getEvent());
+                $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->create($_iMIP->getEvent());
                 Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications);
             }
             
             if ($_status && $_status != $ownAttender->status) {
                 $ownAttender->status = $_status;
-                Calendar_Controller_Event::getInstance()->attenderStatusUpdate($_existingEvent, $ownAttender, $ownAttender->status_authkey);
+                Calendar_Controller_Event::getInstance()->attenderStatusUpdate($existingEvent, $ownAttender, $ownAttender->status_authkey);
             }
         }
         
@@ -336,14 +328,14 @@ class Calendar_Frontend_iMIP
     * @TODO distinguish RECENT and PROCESSED preconditions?
     * 
     * @param  Calendar_Model_iMIP   $_iMIP
-    * @param  Calendar_Model_Event  $_existingEvent
     * @return boolean
     */
-    protected function _checkReplyPreconditions($_iMIP, $_existingEvent)
+    protected function _checkReplyPreconditions($_iMIP)
     {
         $result = TRUE;
         
-        if (! $_existingEvent) {
+        $existingEvent = $_iMIP->getExistingEvent();
+        if (! $existingEvent) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_EVENTEXISTS, "cannot process REPLY to non existent/invisible event");
             $result = FALSE;
         }
@@ -351,14 +343,14 @@ class Calendar_Frontend_iMIP
         $iMIPAttenderIdx = $_iMIP->getEvent()->attendee instanceof Tinebase_Record_RecordSet ? array_search($_iMIP->originator, $_iMIP->getEvent()->attendee->getEmail()) : FALSE;
         $iMIPAttender = $iMIPAttenderIdx !== FALSE ? $_iMIP->getEvent()->attendee[$iMIPAttenderIdx] : NULL;
         $iMIPAttenderStatus = $iMIPAttender ? $iMIPAttender->status : NULL;
-        $eventAttenderIdx = $_existingEvent->attendee instanceof Tinebase_Record_RecordSet ? array_search($_iMIP->originator, $_existingEvent->attendee->getEmail()) : FALSE;
-        $eventAttender = $eventAttenderIdx !== FALSE ? $_existingEvent->attendee[$eventAttenderIdx] : NULL;
+        $eventAttenderIdx = $existingEvent->attendee instanceof Tinebase_Record_RecordSet ? array_search($_iMIP->originator, $existingEvent->attendee->getEmail()) : FALSE;
+        $eventAttender = $eventAttenderIdx !== FALSE ? $existingEvent->attendee[$eventAttenderIdx] : NULL;
         $eventAttenderStatus = $eventAttender ? $eventAttender->status : NULL;
         
-        if ($_iMIP->getEvent()->isObsoletedBy($_existingEvent)) {
+        if ($_iMIP->getEvent()->isObsoletedBy($existingEvent)) {
             
             // allow non RECENT replies if no reschedule and STATUS_NEEDSACTION
-            if ($eventAttenderStatus != Calendar_Model_Attender::STATUS_NEEDSACTION || $_existingEvent->isRescheduled($_iMIP->getEvent())) {
+            if ($eventAttenderStatus != Calendar_Model_Attender::STATUS_NEEDSACTION || $existingEvent->isRescheduled($_iMIP->getEvent())) {
                 $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
                 $result = FALSE;
             }
@@ -379,7 +371,7 @@ class Calendar_Frontend_iMIP
             $result = FALSE;
         }
         
-        if (! $this->_assertOrganizer($_iMIP, $_existingEvent, TRUE, FALSE, TRUE)) {
+        if (! $this->_assertOrganizer($_iMIP, TRUE, FALSE, TRUE)) {
             $result = FALSE;
         }
         
@@ -395,14 +387,13 @@ class Calendar_Frontend_iMIP
      *       @todo check silence for internal replies
      *       
      * @param  Calendar_Model_iMIP   $_iMIP
-     * @param  Calendar_Model_Event  $_existingEvent
-     * 
      */
-    protected function _processReply($_iMIP, $_existingEvent)
+    protected function _processReply(Calendar_Model_iMIP $_iMIP)
     {
         // merge ics into existing event
-        $event = $_iMIP->mergeEvent($_existingEvent);
-        $attendee = $event->attendee[array_search($_iMIP->originator, $_existingEvent->attendee->getEmail())];
+        $existingEvent = $_iMIP->getExistingEvent();
+        $event = $_iMIP->mergeEvent($existingEvent);
+        $attendee = $event->attendee[array_search($_iMIP->originator, $existingEvent->attendee->getEmail())];
         
         // NOTE: if current user has no rights to the calendar, status update is not applied
         Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($event, $attendee);
@@ -412,12 +403,11 @@ class Calendar_Frontend_iMIP
     * add precondition
     *
     * @param  Calendar_Model_iMIP   $_iMIP
-    * @param  Calendar_Model_Event  $_existingEvent
     * @return boolean
     *
     * @todo implement
     */
-    protected function _checkAddPreconditions($_iMIP, $_existingEvent)
+    protected function _checkAddPreconditions($_iMIP)
     {
         $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_SUPPORTED, 'processing add requests is not supported yet');
     
@@ -428,11 +418,10 @@ class Calendar_Frontend_iMIP
     * process add
     *
     * @param  Calendar_Model_iMIP   $_iMIP
-    * @param  Calendar_Model_Event  $_existingEvent
     * 
     * @todo implement
     */
-    protected function _processAdd($_iMIP, $_existingEvent)
+    protected function _processAdd($_iMIP)
     {
         // organizer added a meeting/recurrance to an existing event -> update event
         // internal organizer:
@@ -446,12 +435,11 @@ class Calendar_Frontend_iMIP
     * cancel precondition
     *
     * @param  Calendar_Model_iMIP   $_iMIP
-    * @param  Calendar_Model_Event  $_existingEvent
     * @return boolean
     *
     * @todo implement
     */
-    protected function _checkCancelPreconditions($_iMIP, $_existingEvent)
+    protected function _checkCancelPreconditions($_iMIP)
     {
         $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_SUPPORTED, 'processing CANCEL is not supported yet');
     
@@ -476,12 +464,11 @@ class Calendar_Frontend_iMIP
     * refresh precondition
     *
     * @param  Calendar_Model_iMIP   $_iMIP
-    * @param  Calendar_Model_Event  $_existingEvent
     * @return boolean
     *
     * @todo implement
     */
-    protected function _checkRefreshPreconditions($_iMIP, $_existingEvent)
+    protected function _checkRefreshPreconditions($_iMIP)
     {
         $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_SUPPORTED, 'processing REFRESH is not supported yet');
     
@@ -492,11 +479,10 @@ class Calendar_Frontend_iMIP
     * process refresh
     *
     * @param  Calendar_Model_iMIP   $_iMIP
-    * @param  Calendar_Model_Event  $_existingEvent
     *
     * @todo implement
     */
-    protected function _processRefresh($_iMIP, $_existingEvent)
+    protected function _processRefresh($_iMIP)
     {
         // always internal organizer
         //  - send message
@@ -507,12 +493,11 @@ class Calendar_Frontend_iMIP
     * counter precondition
     *
     * @param  Calendar_Model_iMIP   $_iMIP
-    * @param  Calendar_Model_Event  $_existingEvent
     * @return boolean
     *
     * @todo implement
     */
-    protected function _checkCounterPreconditions($_iMIP, $_existingEvent)
+    protected function _checkCounterPreconditions($_iMIP)
     {
         $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_SUPPORTED, 'processing COUNTER is not supported yet');
     
@@ -523,11 +508,10 @@ class Calendar_Frontend_iMIP
     * process counter
     *
     * @param  Calendar_Model_iMIP   $_iMIP
-    * @param  Calendar_Model_Event  $_existingEvent
     *
     * @todo implement
     */
-    protected function _processCounter($_iMIP, $_existingEvent)
+    protected function _processCounter($_iMIP)
     {
         // some attendee suggests to change the event
         // status: ACCEPT => update event, send notifications to all
@@ -539,12 +523,11 @@ class Calendar_Frontend_iMIP
     * declinecounter precondition
     *
     * @param  Calendar_Model_iMIP   $_iMIP
-    * @param  Calendar_Model_Event  $_existingEvent
     * @return boolean
     *
     * @todo implement
     */
-    protected function _checkDeclinecounterPreconditions($_iMIP, $_existingEvent)
+    protected function _checkDeclinecounterPreconditions($_iMIP)
     {
         $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_SUPPORTED, 'processing DECLINECOUNTER is not supported yet');
     
@@ -555,11 +538,10 @@ class Calendar_Frontend_iMIP
     * process declinecounter
     *
     * @param  Calendar_Model_iMIP   $_iMIP
-    * @param  Calendar_Model_Event  $_existingEvent
     *
     * @todo implement
     */
-    protected function _processDeclinecounter($_iMIP, $_existingEvent)
+    protected function _processDeclinecounter($_iMIP)
     {
         // organizer declined my counter request of an existing event -> update event
     }
