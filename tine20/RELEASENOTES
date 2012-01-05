@@ -15,29 +15,32 @@ Contents
 4. Config changes
 5. Projects application
 6. New Addressbook features
+7. ActiveSync improvements
 
 -----------------
 
 1. CalDAV Support
 
 - PHP 5.3+ required
-- @todo add some more information about setup (rewrite rules, ...)
+- See http://www.tine20.org/wiki/index.php/Admins/Thunderbird-Synchronisation for setup instructions.
 
 2. Filemanager
 -----------------
 
-- @todo add some more information about setup
+- A path for the files is needed in the Tine 2.0 setup. You can add it to the config.inc.php like this:
+
+ 'filesdir' => '/some/path/to/tine/files',
      
 3. Customfields administration
 -----------------
  
-- Administration of customfields is now possible in Admin application
+- Administration of customfields is now possible in Admin application.
  
 4. Config changes
 -----------------
  
-- Keyfields for attender status, task priority + status, contact salutations
-- See http://www.tine20.org/wiki/index.php/Developers/Concepts/KeyFields
+- Keyfields for attender status, task priority + status, contact salutations have been added.
+- See http://www.tine20.org/wiki/index.php/Developers/Concepts/KeyFields for background information.
 
 5. Projects application
 -----------------
@@ -52,3 +55,8 @@ Contents
 - Add attender to Calendar event or Project
 - Address parsing in contact dialog 
   (see http://www.tine20.org/wiki/index.php/Admin_FAQ#How_can_I_change_the_address_parsing_rules.3F)
+
+  7. ActiveSync improvements
+-----------------
+ 
+- The handling of the synckey has been improved. Resets of the sync data should happen at a much lower rate now.
