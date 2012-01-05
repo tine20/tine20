@@ -31,10 +31,10 @@ class Filemanager_Frontend_WebDAV extends Tinebase_WebDav_Collection_Abstract
     {
         $container = parent::createDirectory($name);
                 
-        $path = '/' . $this->_application->getId() . '/folders/' . $container->type;
+        $path = '/' . $this->_application->getId() . '/folders/' . $container->type . '/';
         
         if ($container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
-            $path .= '/' . Tinebase_Core::getUser()->accountId;
+            $path .= Tinebase_Core::getUser()->accountId . '/';
         }
         
         $path .= $container->getId();

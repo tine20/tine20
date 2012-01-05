@@ -154,7 +154,7 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path);
         
         $children = array();
-            
+        
         // Loop through the directory, and create objects for each node
         foreach(Tinebase_FileSystem::getInstance()->scanDir($this->_path) as $node) {
             $children[] = $this->getChild($node->name);

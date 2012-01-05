@@ -19,7 +19,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
  * 
  * @package     Filemanager
  */
-class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
+class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
 {
     /**
      * @var array test objects
@@ -223,9 +223,9 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     protected function _searchHelper($_filter, $_expectedName, $_toplevel = FALSE, $_checkAccountGrants = TRUE)
     {
         $result = $this->_json->searchNodes($_filter, array('sort' => 'size'));
-        //print_r($result);
+        #print_r($result);
         
-        $this->assertEquals(1, $result['totalcount'], 'expected single result');
+        $this->assertGreaterThanOrEqual(1, $result['totalcount'], 'expected at least one entry');
         if ($_toplevel) {
             // toplevel containers are resolved
             $this->assertEquals($_expectedName, $result['results'][0]['name']['name']);
