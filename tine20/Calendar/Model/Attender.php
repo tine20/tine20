@@ -402,6 +402,54 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     }
     
     /**
+     * get own attender
+     * 
+     * @param Tinebase_Record_RecordSet $_attendee
+     * @return Calendar_Model_Attender|NULL
+     */
+    public static function getOwnAttender($_attendee)
+    {
+        return self::getAttendee($_attendee, new Calendar_Model_Attender(array(
+            'user_id'   => Tinebase_Core::getUser()->contact_id,
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER
+        )));
+    }
+    
+    /**
+     * get a single attendee from set of attendee
+     * 
+     * @param Tinebase_Record_RecordSet $_attendee
+     * @return Calendar_Model_Attender|NULL
+     */
+    public static function getAttendee($_attendeeSet, $_attendee)
+    {
+        $attendeeSet  = $_attendeeSet instanceof Tinebase_Record_RecordSet ? clone $_attendeeSet : new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        
+        // transform id to string
+        foreach($attendeeSet as $attendee) {
+            $attendee->user_id  = $attendee->user_id instanceof Tinebase_Record_Abstract ? $attendee->user_id->getId() : $attendee->user_id;
+        }
+        
+        $attendeeUserId = $_attendee->user_id instanceof Tinebase_Record_Abstract ? $_attendee->user_id->getId() : $_attendee->user_id;
+        
+        $foundAttendee = $attendeeSet
+            ->filter('user_type', $_attendee->user_type)
+            ->filter('user_id', $attendeeUserId)
+            ->getFirstRecord();
+        
+        // search for groupmember if no user got found
+        if ($foundAttendee === null && $_attendee->user_type == Calendar_Model_Attender::USERTYPE_USER) {
+            $foundAttendee = $attendeeSet
+                ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
+                ->filter('user_id', $attendeeUserId)
+                ->getFirstRecord();
+        }
+            
+        return $foundAttendee ? $_attendeeSet[$attendeeSet->indexOf($foundAttendee)] : NULL;
+        
+    }
+    
+    /**
      * resolves given attendee for json representation
      *
      * @param Tinebase_Record_RecordSet|array   $_eventAttendee 
