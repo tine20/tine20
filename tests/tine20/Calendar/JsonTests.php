@@ -49,14 +49,11 @@ class Calendar_JsonTests extends Calendar_TestCase
     
     /**
      * testCreateEvent
-     * 
-     * @todo finish display container content seq test
      */
     public function testCreateEvent()
     {
-        //$scleverDisplayContainerId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $this->_personas['sclever']->getId());
-        // @todo get display container
-        //print_r($scleverDisplayContainer);
+        $scleverDisplayContainerId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $this->_personas['sclever']->getId());
+        $contentSeqBefore = Tinebase_Container::getInstance()->getContentSequence($scleverDisplayContainerId);
         
         $eventData = $this->_getEvent()->toArray();
         
@@ -77,12 +74,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         $this->_assertJsonEvent($eventData, $loadedEventData, 'failed to create/load event');
         
-        // @todo check content sequence update of sclever display container
-        // @todo use $this->_findAttender
-//         $displayContainerId = $eventData['attendee'][0]['displaycontainer_id']['id'];
-//         $contentSeq = Tinebase_Container::getInstance()->getContentSequence($displayContainerId);
-//         $this->assertNotEmpty($contentSeq[$displayContainerId]);
-//         $this->assertGreaterThan($oldContentSeq, $contentSeq[$displayContainerId], print_r($contentSeq, TRUE));
+        $contentSeqAfter = Tinebase_Container::getInstance()->getContentSequence($scleverDisplayContainerId);
+        $this->assertEquals($contentSeqBefore[$scleverDisplayContainerId] + 1, $contentSeqAfter[$scleverDisplayContainerId],
+        	'content sequence of display container should be increased by 1:' . print_r($contentSeqAfter, TRUE));
         
         return $loadedEventData;
     }
