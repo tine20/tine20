@@ -19,4 +19,29 @@
 class Filemanager_Frontend_WebDAV extends Tinebase_WebDav_Collection_Abstract
 {
     protected $_applicationName = 'Filemanager';
+    
+    /**
+     * Creates a new subdirectory
+     *
+     * @param  string  $name  name of the new subdirectory
+     * @throws Sabre_DAV_Exception_Forbidden
+     * @return Tinebase_Model_Container
+     */
+    public function createDirectory($name) 
+    {
+        $container = parent::createDirectory($name);
+                
+        $path = '/' . $this->_application->getId() . '/folders/' . $container->type;
+        
+        if ($container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
+            $path .= '/' . Tinebase_Core::getUser()->accountId;
+        }
+        
+        $path .= $container->getId();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create directory: ' . $path);
+        
+        mkdir('tine20://' . $path, 0777, true);
+    }
 }
