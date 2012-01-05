@@ -500,21 +500,29 @@ class Tinebase_FileSystem
     public function unlink($_path)
     {
         $node = $this->stat($_path);
+        $this->deleteFileNode($node);
+        unset($this->_statCache[$_path]);
         
-        if ($node->type == Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
+        return true;
+    }
+    
+    /**
+     * delete file node
+     * 
+     * @param Tinebase_Model_Tree_Node $_node
+     */
+    public function deleteFileNode(Tinebase_Model_Tree_Node $_node)
+    {
+        if ($_node->type == Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
             throw new Tinebase_Exception_InvalidArgument('can not unlink directories');
         }
         
-        $this->_treeNodeBackend->delete($node->getId());
-        
-        unset($this->_statCache[$_path]);
+        $this->_treeNodeBackend->delete($_node->getId());
         
         // delete object only, if no one uses it anymore
-        if ($this->_treeNodeBackend->getObjectCount($node->object_id) == 0) {
-            $this->_fileObjectBackend->delete($node->object_id);
+        if ($this->_treeNodeBackend->getObjectCount($_node->object_id) == 0) {
+            $this->_fileObjectBackend->delete($_node->object_id);
         }
-        
-        return true;
     }
     
     /**
@@ -705,6 +713,8 @@ class Tinebase_FileSystem
         $deleteCount = 0;
         foreach ($dirIterator as $item) {
             $subDir = $item->getFileName();
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Checking ' . $subDir);
             $subDirIterator = new DirectoryIterator($this->_basePath . '/' . $subDir);
             $hashsToCheck = array();
             // loop dirs + check if files in dir are in tree_filerevisions
