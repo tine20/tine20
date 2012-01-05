@@ -176,7 +176,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     * @var array list of modlog omit fields
     */
     protected $_modlogOmitFields = array(
-            'jpegphoto',
+        'jpegphoto',
     );
     
     /**
@@ -232,27 +232,37 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      */
     protected function _setFromJson(array &$_data)
     {
-        if (isset($_data['jpegphoto'])) {
-            if ($_data['jpegphoto'] != '') {
-                $imageParams = Tinebase_ImageHelper::parseImageLink($_data['jpegphoto']);
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' image params:' . print_r($imageParams, TRUE));
-                if ($imageParams['isNewImage']) {
-                    try {
-                        $_data['jpegphoto'] = Tinebase_ImageHelper::getImageData($imageParams);
-                    } catch(Tinebase_Exception_UnexpectedValue $teuv) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not add contact image: ' . $teuv->getMessage());
-                        unset($_data['jpegphoto']);
-                    }
-                } else {
-                    unset($_data['jpegphoto']);
-                }
-            }
-        }
+        $this->_setContactImage($_data);
         
         // unset if empty
         // @todo is this still needed?
         if (empty($_data['id'])) {
             unset($_data['id']);
+        }
+    }
+    
+    /**
+     * set contact image
+     * 
+     * @param array $_data
+     */
+    protected function _setContactImage(&$_data)
+    {
+        if (! isset($_data['jpegphoto']) || $_data['jpegphoto'] === '') {
+            return;
+        }
+        
+        $imageParams = Tinebase_ImageHelper::parseImageLink($_data['jpegphoto']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' image params:' . print_r($imageParams, TRUE));
+        if ($imageParams['isNewImage']) {
+            try {
+                $_data['jpegphoto'] = Tinebase_ImageHelper::getImageData($imageParams);
+            } catch(Tinebase_Exception_UnexpectedValue $teuv) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not add contact image: ' . $teuv->getMessage());
+                unset($_data['jpegphoto']);
+            }
+        } else {
+            unset($_data['jpegphoto']);
         }
     }
 }
