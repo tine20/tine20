@@ -123,7 +123,8 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
         
         $path = $this->_path . '/' . $name;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create directory: ' . $path);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create directory: ' . $path);
         
         mkdir('tine20://' . $path);
     }
