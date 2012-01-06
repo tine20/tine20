@@ -154,23 +154,7 @@ class Tinebase_Filesystem_StreamWrapper
      */
     public function mkdir($_path, $_mode, $_options)
     {
-        try {
-            $this->_validatePath($_path);
-        } catch (Tinebase_Exception_InvalidArgument $teia) {
-            return false;
-        }
-        
-        $recursive       = (bool)($_options & STREAM_MKDIR_RECURSIVE);
-        $pathParts       = $this->_splitPath($_path);
-        $parentDirectory = null;
-        
-        foreach ($pathParts as $directoryName) {
-            try {
-                $parentDirectory = $this->_getTinebaseFileSystem()->getTreeNode($parentDirectory, $directoryName);
-            } catch (Tinebase_Exception_InvalidArgument $teia) {
-                $parentDirectory = $this->_getTinebaseFileSystem()->createDirectoryTreeNode($parentDirectory, $directoryName);
-            }
-        }
+        Tinebase_FileSystem::getInstance()->mkDir(substr($_path, 9));
         
         return true;
     }
