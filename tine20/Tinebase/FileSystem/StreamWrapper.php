@@ -217,36 +217,9 @@ class Tinebase_Filesystem_StreamWrapper
      */
     public function rmdir($_path, $_context = NULL)
     {
-        try {
-            $path = $this->_validatePath($_path);
-        } catch (Tinebase_Exception_InvalidArgument $teia) {
-            return false;
-        }
+        Tinebase_FileSystem::getInstance()->rmDir(substr($_path, 9), true);
         
-        $node = $this->_getTreeNodeBackend()->getLastPathNode($path);
-        
-        $children = $this->_getTreeNodeBackend()->getChildren($node);
-        
-        // check if child entries exists and delete if $recursive is true
-        if ($children->count() > 0) {
-            foreach ($children as $child) {
-                if ($this->isDir($_path . '/' . $child->name)) {
-                    $this->rmdir($_path . '/' . $child->name, STREAM_MKDIR_RECURSIVE);
-                } else {
-                    $this->unlink($_path . '/' . $child->name);
-                }
-            }
-        }
-        
-        // delete tree node
-        $this->_getTreeNodeBackend()->delete($node->getId());
-        
-        // delete object only, if no other tree node refers to it
-        if ($this->_getTreeNodeBackend()->getObjectCount($node->object_id) == 0) {
-            $this->_getObjectBackend()->delete($node->object_id);
-        }
-        
-        return true;
+        return true;        
     }
     
     /**

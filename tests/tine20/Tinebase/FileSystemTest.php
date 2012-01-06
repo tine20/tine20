@@ -80,10 +80,24 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
     {
         $testPath = $this->_basePath . '/PHPUNIT';
         $this->_controller->mkDir($testPath);
-        $this->objects['directories'][] = $testPath;
+        $this->objects['directories']['testpath'] = $testPath;
         
         $this->assertTrue($this->_controller->fileExists($testPath), 'path created by mkdir not found');
         $this->assertTrue($this->_controller->isDir($testPath),      'path created by mkdir is not a directory');
+        
+        return $testPath;
+    }
+    
+    public function testRmdir()
+    {
+        $testPath = $this->testMkdir();
+    
+        $result = $this->_controller->rmDir($testPath);
+    
+        unset($this->objects['directories']['testpath']);
+    
+        $this->assertTrue($result,                                    'wrong result for rmdir command');
+        $this->assertFalse($this->_controller->fileExists($testPath), 'failed to delete directory');
     }
     
     public function testScandir()

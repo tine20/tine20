@@ -429,14 +429,14 @@ class Tinebase_FileSystem
      */
     public function rmDir($_path, $_recursive = FALSE)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Removing directory ' . $_path);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Removing directory ' . $_path);
         
         $node = $this->stat($_path);
         
         $children = $this->_getTreeNodeChildren($node);
         
-        // delete object only, if no one uses it anymore
+        // check if child entries exists and delete if $_recursive is true
         if (count($children) > 0) {
             if ($_recursive !== true) {
                 throw new Tinebase_Exception_InvalidArgument('directory not empty');
@@ -453,18 +453,9 @@ class Tinebase_FileSystem
         
         $this->_treeNodeBackend->delete($node->getId());
         unset($this->_statCache[$_path]);
-        
-        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
-            array(
-                'field'     => 'object_id',
-                'operator'  => 'equals',
-                'value'     => $node->object_id
-            )
-        ));
-        $result = $this->_treeNodeBackend->search($searchFilter);
 
-        // delete object only, if no one uses it anymore
-        if ($result->count() == 0) {
+        // delete object only, if no other tree node refers to it
+        if ($this->_treeNodeBackend->getObjectCount($node->object_id) == 0) {
             $this->_fileObjectBackend->delete($node->object_id);
         }
         
