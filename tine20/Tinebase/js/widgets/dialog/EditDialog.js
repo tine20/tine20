@@ -198,13 +198,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 });
             }
             
-            // init cf plugin
+            // init plugins
             this.plugins = this.plugins ? this.plugins : [];
             this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
             this.plugins.push(this.tokenModePlugin = new Tine.widgets.dialog.TokenModeEditDialogPlugin({}));
-            this.plugins.push(new Tine.widgets.dialog.KeyShortcutsEditDialogPlugin({}));
             
-            //if(this.useMultiple) this.plugins.push(new Tine.widgets.dialog.MultipleEditDialogPlugin({}));
+            if(this.useMultiple) this.plugins.push(new Tine.widgets.dialog.MultipleEditDialogPlugin({}));
             
             // init actions
             this.initActions();

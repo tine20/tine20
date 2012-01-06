@@ -135,6 +135,9 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             xtype: 'tabpanel',
             border: false,
             plain:true,
+            plugins: [{
+                ptype : 'ux.tabpanelkeyplugin'
+            }],
             activeTab: 0,
             border: false,
             items:[{               

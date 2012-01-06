@@ -376,8 +376,8 @@
           "path": "js/widgets/dialog/"
         },
          {
-          "text": "KeyShortcutsEditDialogPlugin.js",
-          "path": "js/widgets/dialog/"
+          "text": "TabPanelKeyPlugin.js",
+          "path": "js/ux/"
         },
         {
           "text": "TokenModeEditDialogPlugin.js",

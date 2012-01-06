@@ -8,28 +8,23 @@
  *
  */
  
-Ext.ns('Tine.widgets.editDialog');
+Ext.ns('Ext.ux');
 
 /**
- * @namespace   Tine.widgets.editDialog
- * @class       Tine.widgets.dialog.KeyShortcutsEditDialogPlugin
+ * @namespace   Ext.ux
+ * @class       Ext.ux.TabPanelKeyPlugin
  * @author      Alexander Stintzing <alex@stintzing.net>
  */
-Tine.widgets.dialog.KeyShortcutsEditDialogPlugin = function(config) {
+Ext.ux.TabPanelKeyPlugin = function(config) {
     Ext.apply(this, config);
 };
 
-Tine.widgets.dialog.KeyShortcutsEditDialogPlugin.prototype = {
-    editDialog : null,
-    tabPanel: null,
-    
-    init : function(editDialog) {
-        this.tabPanel = editDialog.items.find(function(item) {
-            return Ext.isObject(item) && Ext.isFunction(item.getXType) && item.getXType() == 'tabpanel';
-        });
+Ext.ux.TabPanelKeyPlugin.prototype = {
+    panel : null,
         
-        this.editDialog = editDialog;
-        this.editDialog.onRender = this.editDialog.onRender.createSequence(this.onRender, this);
+    init : function(panel) {
+        this.panel = panel;
+        this.panel.onRender = this.panel.onRender.createSequence(this.onRender, this);
     },
     
     /**
@@ -37,18 +32,18 @@ Tine.widgets.dialog.KeyShortcutsEditDialogPlugin.prototype = {
      */
     onRender: function() {
         
-        if (! this.editDialog.rendered) {
+        if (! this.panel.rendered) {
             this.onRender.defer(250, this);
             return;
         }
         
         try {
-            var tabCount = (this.tabPanel) ? this.tabPanel.items.items.length : 0;
+            var tabCount = this.panel.items.length;
             
             for (var index = 0; index < tabCount; index++) {
-                var item = this.tabPanel.items.items[index];
+                var item = this.panel.items.items[index];
                 if(item.disabled !== true) {
-                    new Ext.KeyMap(this.editDialog.window.el, [{
+                    new Ext.KeyMap(this.panel.el, [{
                         key: index + 49,
                         ctrl: true,
                         scope: this,
@@ -57,7 +52,7 @@ Tine.widgets.dialog.KeyShortcutsEditDialogPlugin.prototype = {
                 }
             }
         } catch (e) {
-            Tine.log.error('Tine.widgets.dialog.KeyShortcutsEditDialogPlugin::onRender');
+            Tine.log.error('Ext.ux.TabPanelKeyPlugin::onRender');
             Tine.log.error(e.stack ? e.stack : e);
         }
     },
@@ -68,8 +63,10 @@ Tine.widgets.dialog.KeyShortcutsEditDialogPlugin.prototype = {
      */
     switchTab: function(code) {
         var number = parseInt(code) - 49;
-        if (this.tabPanel) {
-            this.tabPanel.setActiveTab(number);
+        if (this.panel) {
+            this.panel.setActiveTab(number);
         }
     }
 }
+
+Ext.preg('ux.tabpanelkeyplugin', Ext.ux.TabPanelKeyPlugin);
