@@ -337,8 +337,14 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     renderFilterRow: function(filter) {
         filter.formFields = {};
-        var filterModel = this.getFilterModel(filter.get('field'));
-
+        var filterModel = this.getFilterModel(filter);
+        
+        if (! filterModel) {
+            Tine.log.warn('Tine.widgets.grid.FilterToolbar::renderFilterRow no filterModel found');
+            Tine.log.warn(filter)
+            this.filterStore.remove(filter);
+            return;
+        }
         var fRow = this.bwrap.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
         
         // field
@@ -481,13 +487,18 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @private
      */
     onFieldChange: function(filter, newField) {
-        var oldOperator = filter.formFields.operator.getValue();
-        var oldValue    = filter.formFields.value.getValue();
+        var oldFilterModel = this.getFilterModel(filter),
+            oldOperator = filter.formFields.operator.getValue(),
+            oldValue    = filter.formFields.value.getValue();
         
         // only use old operator/value for textfields
         var f = filter.formFields.value;
         if (typeof f.selectText != 'function' || typeof f.doQuery == 'function') {
             oldValue = '';
+        }
+        
+        if (oldFilterModel && Ext.isFunction(oldFilterModel.onDestroy)) {
+            oldFilterModel.onDestroy(filter);
         }
         
         // NOTE: removeMode got introduced on ext3.1 but is not docuemented
@@ -654,8 +665,14 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @param {String} fieldName
      * @return {Tine.widgets.grid.FilterModel}
      */
-    getFilterModel: function(fieldName) {
-        return this.filterModelMap[fieldName];   
+    getFilterModel: function(field) {
+        var fieldName = Ext.isFunction(field.get) ? field.get('field') : field;
+        
+        if (! fieldName && field.data && field.data.condition) {
+            return this.ownRecordFilterModel;
+        }
+        
+        return this.filterModelMap[fieldName];
     },
     
     /**
@@ -701,7 +718,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         var fRow = this.bwrap.child('tr[id=tw-ftb-frowid-' + filter.id + ']');
         //var isLast = this.filterStore.getAt(this.filterStore.getCount()-1).id == filter.id;
         var isLast = this.filterStore.getCount() == 1,
-            filterModel = this.getFilterModel(filter.get('field'));
+            filterModel = this.getFilterModel(filter);
             
         this.filterStore.remove(this.filterStore.getById(filter.id));
         filter.formFields.field.destroy();
@@ -751,7 +768,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         this.filterStore.each(function(filter) {
             try {
-                var filterModel = this.getFilterModel(filter.get('field')),
+                var filterModel = this.getFilterModel(filter),
                     line = Ext.isFunction(filterModel.getFilterData) ? filterModel.getFilterData(filter) : this.getFilterData(filter);
                 
                 if (line.field && Ext.isString(line.field) &&  line.field.match(/:/)) {

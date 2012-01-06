@@ -26,7 +26,7 @@ Tine.widgets.grid.OwnRecordFilter = Ext.extend(Tine.widgets.grid.ForeignRecordFi
     getFilterData: function(filterRecord) {
         filterRecord.set('operator', 'definedBy');
         
-        return {condition: filterRecord.condition || 'AND', filters: this.getRelatedRecordValue(filterRecord), id: filterRecord.id, label: filterRecord.toolbar ? filterRecord.toolbar.title : null};
+        return {field: this.field, condition: filterRecord.condition || 'AND', filters: this.getRelatedRecordValue(filterRecord), id: filterRecord.id, label: filterRecord.toolbar ? filterRecord.toolbar.title : null};
     },
     
     setFilterData: function(filterRecord, filterData) {
@@ -36,8 +36,18 @@ Tine.widgets.grid.OwnRecordFilter = Ext.extend(Tine.widgets.grid.ForeignRecordFi
         }
         
         filterRecord.condition = filterData.condition || 'AND';
-        filterRecord.setValue(filterData.filters);
-        this.setRelatedRecordValue(filterData.filters);
+        
+        //filterRecord.set('value', filterData.filters);
+        this.setRelatedRecordValue(filterRecord);
+    },
+    
+    setRelatedRecordValue: function(filterRecord) {
+        if (filterRecord.data.filters) {
+            filterRecord.set('value', filterRecord.data.filters);
+            delete filterRecord.data.filters;
+        }
+        
+        Tine.widgets.grid.OwnRecordFilter.superclass.setRelatedRecordValue.apply(this, arguments);
     }
 });
 
