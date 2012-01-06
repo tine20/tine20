@@ -510,7 +510,10 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                         id: 'tw-ftb-frow-valuefield-' + filter.id,
                         renderTo: el,
                         handler: this.onDefineRelatedRecord.createDelegate(this, [filter]),
-                        scope: this
+                        scope: this,
+                        listeners: {
+                            destroy: function(filter) {delete filter.toolbar}.createDelegate(this, [filter])
+                        }
                     });
                     
                     // show button
