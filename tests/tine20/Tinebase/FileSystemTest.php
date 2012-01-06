@@ -82,7 +82,8 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $this->_controller->mkDir($testPath);
         $this->objects['directories'][] = $testPath;
         
-        $this->assertTrue($this->_controller->fileExists($testPath));
+        $this->assertTrue($this->_controller->fileExists($testPath), 'path created by mkdir not found');
+        $this->assertTrue($this->_controller->isDir($testPath),      'path created by mkdir is not a directory');
     }
     
     public function testScandir()
