@@ -711,7 +711,10 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                 case 'ORGANIZER':
                     if (preg_match('/mailto:(?P<email>.*)/i', $property->value, $matches)) {
                         $name = isset($property['CN']) ? $property['CN']->value : $matches['email'];
-                        $contact = $this->_resolveEmailToContact($matches['email'], $name);
+                        $contact = Calendar_Model_Attender::resolveEmailToContact(array(
+                            'email'     => $matches['email'],
+                            'lastName'	=> $name,
+                        ));
                         
                         // it's not possible to change the organizer by spec
                         if (empty($event->organizer)) {
@@ -884,53 +887,4 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         // convert all datetime fields to UTC
         $event->setTimezone('UTC');
     }
-    
-    /**
-     * find contact identifed by personal of work email address
-     * 
-     * @param  string  $_email  the email address of the contact
-     * @param  string  $_fn     the fullname of the contact (used to match mulitple contacts and used when creating a new contact)
-     * @return Addressbook_Model_Contact
-     */
-    protected function _resolveEmailToContact($_email, $_fn)
-    {
-        // search contact from addressbook using the emailaddress
-        $filterArray = array(
-            array(
-                'field'     => 'containerType',
-                'operator'  => 'equals',
-                'value'     => 'all'
-            ),
-            array('condition' => 'OR', 'filters' => array(
-                array(
-                    'field'     => 'email',
-                    'operator'  => 'equals',
-                    'value'     => $_email
-                ),
-                array(
-                    'field'     => 'email_home',
-                    'operator'  => 'equals',
-                    'value'     => $_email
-                )
-            ))
-        );
-         
-        $contacts = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter($filterArray));
-
-        // @todo filter by fn if multiple matches
-        if(count($contacts) > 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of contacts " . count($contacts));
-            return $contacts->getFirstRecord();
-        }
-        
-        $contact = new Addressbook_Model_Contact(array(
-            'n_family' => $_fn,
-        	'email'    => $_email,
-            'note'     => 'added by syncronisation'
-        ));
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . print_r($contact->toArray(), true));
-        
-        return Addressbook_Controller_Contact::getInstance()->create($contact);
-    }    
 }
