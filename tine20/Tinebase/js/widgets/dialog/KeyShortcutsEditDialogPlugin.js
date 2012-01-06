@@ -36,6 +36,12 @@ Tine.widgets.dialog.KeyShortcutsEditDialogPlugin.prototype = {
      * creates shortcuts for tabs
      */
     onRender: function() {
+        
+        if (! this.editDialog.rendered) {
+            this.onRender.defer(250, this);
+            return;
+        }
+        
         try {
             var tabCount = (this.tabPanel) ? this.tabPanel.items.items.length : 0;
             
