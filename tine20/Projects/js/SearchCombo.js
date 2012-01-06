@@ -74,7 +74,7 @@ Tine.Projects.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerCo
                 '<tpl for="."><div class="search-item">',
                     '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
                         '<tr>',
-                            '<td>{[this.encode(values)]}</td>',
+                            '<td style="height:16px">{[this.encode(values)]}</td>',
                         '</tr>',
                     '</table>',
                 '</div></tpl>',
