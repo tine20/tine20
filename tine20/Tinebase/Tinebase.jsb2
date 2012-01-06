@@ -150,11 +150,7 @@
         {
           "text": "Download.js",
           "path": "js/ux/file/"
-        },
-        {
-          "text": "MonthPickerPlugin.js",
-          "path": "js/ux/form/"
-        },        
+        },    
         {
           "text": "ColorField.js",
           "path": "js/ux/form/"
