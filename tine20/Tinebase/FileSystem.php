@@ -403,8 +403,8 @@ class Tinebase_FileSystem
      */
     public function mkDir($_path)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Creating directory ' . $_path);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating directory ' . $_path);
         
         $path = '/';
         $parentNode = null;
