@@ -191,7 +191,10 @@ class Tinebase_FileSystem
         $options = stream_context_get_options($_handle);
         
         switch ($options['tine20']['mode']) {
+            case 'w':
+            case 'wb':
             case 'x':
+            case 'xb':
                 rewind($_handle);
                 
                 $ctx = hash_init('sha1');
@@ -199,8 +202,6 @@ class Tinebase_FileSystem
                 $hash = hash_final($ctx);
                 
                 $hashDirectory = $this->_basePath . '/' . substr($hash, 0, 3);
-                $hashFile      = $hashDirectory . '/' . substr($hash, 3);
-                
                 if (!file_exists($hashDirectory)) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create hash directory: ' . $hashDirectory);
                     if(mkdir($hashDirectory, 0700) === false) {
@@ -208,6 +209,7 @@ class Tinebase_FileSystem
                     } 
                 }
                 
+                $hashFile      = $hashDirectory . '/' . substr($hash, 3);
                 if (!file_exists($hashFile)) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create hash file: ' . $hashFile);
                     rewind($_handle);
@@ -263,24 +265,30 @@ class Tinebase_FileSystem
      */
     public function fopen($_path, $_mode)
     {
+        $dirName = dirname($_path);
+        $fileName = basename($_path);
+        
         switch ($_mode) {
+            // Create and open for writing only; place the file pointer at the beginning of the file. 
+            // If the file already exists, the fopen() call will fail by returning FALSE and generating 
+            // an error of level E_WARNING. If the file does not exist, attempt to create it. This is 
+            // equivalent to specifying O_EXCL|O_CREAT flags for the underlying open(2) system call.
             case 'x':
-                $dirName  = dirname($_path);
-                $fileName = basename($_path);
-                
+            case 'xb':
                 if (!$this->isDir($dirName) || $this->fileExists($_path)) {
                     return false;
                 }
+                
                 $parent = $this->stat($dirName);
                 $node = $this->createFileTreeNode($parent, $fileName);
                 
                 $handle = tmpfile();
+                
                 break;
                 
+            // Open for reading only; place the file pointer at the beginning of the file.
             case 'r':
-                $dirName = dirname($_path);
-                $fileName = basename($_path);
-                
+            case 'rb':
                 if ($this->isDir($_path) || !$this->fileExists($_path)) {
                     return false;
                 }
@@ -288,7 +296,25 @@ class Tinebase_FileSystem
                 $node = $this->stat($_path);
                 $hashFile = $this->_basePath . '/' . substr($node->hash, 0, 3) . '/' . substr($node->hash, 3);
                 
-                $handle = fopen($hashFile, 'r');
+                $handle = fopen($hashFile, $_mode);
+                
+                break;
+                
+            // Open for writing only; place the file pointer at the beginning of the file and truncate the 
+            // file to zero length. If the file does not exist, attempt to create it.
+            case 'w':
+            case 'wb':
+                if (!$this->isDir($dirName)) {
+                    return false;
+                }
+                
+                if (!$this->fileExists($_path)) {
+                    $parent = $this->stat($dirName);
+                    $node = $this->createFileTreeNode($parent, $fileName);
+                }
+                
+                $handle = tmpfile();
+                
                 break;
                 
             default:
