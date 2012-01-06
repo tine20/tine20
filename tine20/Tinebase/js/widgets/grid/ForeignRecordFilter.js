@@ -104,9 +104,11 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         // linkType relations automatic list
         if (this.ownRecordClass.hasField('relations')) {
             Tine.Tinebase.data.RecordMgr.eachKey(function(key, record) {
-                if (record.hasField('relations') && Ext.isFunction(record.getFilterModel && Tine.Tinebase.appMgr.get(appName))) {
+                if (record.hasField('relations') && Ext.isFunction(record.getFilterModel)) {
                     var appName = record.getMeta('appName'),
-                        label = Tine.Tinebase.appMgr.get(appName).i18n._hidden(record.getMeta('recordsName'));
+                        recordsName = record.getMeta('recordsName'),
+                        app = Tine.Tinebase.appMgr.get(appName),
+                        label = app ? app.i18n._hidden(recordsName) : recordsName;
                     
                     if (Tine.Tinebase.common.hasRight('run', appName)) {
                         operators.push({operator: {linkType: 'relation', foreignRecordClass: record}, label: label});
@@ -114,13 +116,14 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 }
             }, this);
         }
-        
+
         // get operators from registry
         Ext.each(Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.get(this.ownRecordClass), function(def) {
             // translate label
             var foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(def.foreignRecordClass),
                 appName = foreignRecordClass.getMeta('appName'),
-                label = (Tine.Tinebase.appMgr.get(appName)) ? Tine.Tinebase.appMgr.get(appName).i18n._hidden(def.label) : def.label;
+                app = Tine.Tinebase.appMgr.get(appName),
+                label = app ? app.i18n._hidden(def.label) : def.label;
             
             operators.push({operator: {linkType: def.linkType, foreignRecordClass: foreignRecordClass, filterName: def.filterName}, label: label});
         }, this);
