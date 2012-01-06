@@ -228,6 +228,7 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
             fieldLabel: this.app.i18n._('Role'),
             valueField: 'id',
             displayField: 'value',
+            value: 'REQ',
             forceSelection: true,
             anchor : '100% 100%',
             margins: '10px 10px',
@@ -254,7 +255,7 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
             var label = el.i18nValue ? el.i18nValue : el.value;
             srecords.push([el.id, label]);
         });
-        
+        Tine.log.err(this.app.getRegistry().get('config')['attendeeStatus'].value.records);
         this.chooseStatusBox = new Ext.form.ComboBox({
             mode: 'local',
             emptyText: this.app.i18n._('Select Status'),
@@ -262,6 +263,7 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
             valueField: 'id',
             displayField: 'value',
             forceSelection: true,
+            value: 'NEEDS-ACTION',
             anchor : '100% 100%',
             margins: '10px 10px',
             itemSelector: 'div.search-item',

@@ -74,10 +74,18 @@ Tine.Projects.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerCo
                 '<tpl for="."><div class="search-item">',
                     '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
                         '<tr>',
-                            '<td><b>{values.title}</b> ({values.number})</td>',
+                            '<td style="height:16px">{[this.encode(values)]}</td>',
                         '</tr>',
                     '</table>',
-                '</div></tpl>'
+                '</div></tpl>',
+                {
+                    encode: function(values) {
+                        var ret = '<b>' + Ext.util.Format.htmlEncode(values.title) + '</b>';
+                        if(values.number) ret += ' (' + values.number + ')';
+                        return ret;
+                        
+                    }
+                }
             );       
         }
     },

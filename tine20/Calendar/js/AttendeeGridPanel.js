@@ -198,6 +198,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         switch (o.field) {
             case 'user_id' :
                 // detect duplicate entry
+                // TODO detect duplicate emails, too 
                 var isDuplicate = false;
                 this.store.each(function(attender) {
                     if (o.record.getUserId() == attender.getUserId()
@@ -281,9 +282,11 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 colModel.config[o.column].setEditor(new Tine.Addressbook.SearchCombo({
                     blurOnSelect: true,
                     selectOnFocus: true,
+                    forceSelection: false,
                     renderAttenderName: this.renderAttenderName,
                     getValue: function() {
-                        return this.selectedRecord ? this.selectedRecord.data : null;
+                        var value = this.selectedRecord ? this.selectedRecord.data : ((this.getRawValue() && Ext.form.VTypes.email(this.getRawValue())) ? this.getRawValue() : null);
+                        return value;
                     }
                 }));
                 break;
