@@ -137,6 +137,7 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
             valueField: 'id',
             displayField: 'role',
             forceSelection: true,
+            value: 'COWORKER',
             minHeight: 45,
             anchor : '100% 100%',
             itemSelector: 'div.search-item',
@@ -154,6 +155,7 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
                     '</table>',
                 '</div></tpl>'
             ),
+            
             store: new Ext.data.ArrayStore({
                 id: 0,
                 fields: ['id','role','icon'],
