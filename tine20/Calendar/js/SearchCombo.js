@@ -84,17 +84,33 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.form.ComboBox, {
                 '<tpl for="."><div class="search-item">',
                     '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
                         '<tr>',
-                            '<td><b>{[this.encode(values.summary)]}</b></td>',
+                            '<td width="40%"><b>{[this.encode(values.summary)]}</b></td>',
+                            '<td width="60%">',
+                                '{[this.encodeDate(values)]}',
+                            '</td>',
+                            
                         '</tr>',
                     '</table>',
                 '</div></tpl>',
                 {
-                    encode: function(value) {                
+                    encode: function(value) {
+                        
                         if (value) {
                             return Ext.util.Format.htmlEncode(value);
                         } else {
                             return '';
                         }
+                    },
+                    encodeDate: function(values) {
+                        var start = event.data.dtstart.getTime() <= dayStart.getTime() ? dayStart : event.data.dtstart,
+                            end   = event.data.dtend.getTime() > dayEnd.getTime() ? dayEnd : event.data.dtend;
+
+                        var duration = values.is_all_day_event ? Tine.Tinebase.appMgr.get('Calendar').i18n._('whole day') : 
+                                       Tine.Tinebase.common.minutesRenderer(Math.round((end.getTime() - start.getTime())/(1000*60)), '{0}:{1}', 'i');
+                        
+                        var startYear = start.getYear() + 1900;
+                        return start.getDate() + '.' + start.getMonth() + '.' + startYear + ' ' + duration;
+                        
                     }
                 }
             );
