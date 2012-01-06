@@ -35,6 +35,8 @@ class Tinebase_FileSystem
      */
     protected $_basePath;
     
+    protected $_statCache = array();
+    
     /**
      * holds the instance of the singleton
      *
