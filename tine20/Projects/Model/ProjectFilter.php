@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -41,7 +41,10 @@ class Projects_Model_ProjectFilter extends Tinebase_Model_Filter_FilterGroup
         'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('title', 'number'))),
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Projects')),
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'Projects_Model_Project')),
-        'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'projects_project.id')),
+        'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
+        	'idProperty'      => 'projects_project.id',
+        	'applicationName' => 'Projects',
+    	)),
 
         'title'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'number'         => array('filter' => 'Tinebase_Model_Filter_Text'),
@@ -49,7 +52,7 @@ class Projects_Model_ProjectFilter extends Tinebase_Model_Filter_FilterGroup
         'status'         => array('filter' => 'Tinebase_Model_Filter_Text'),
     
         'contact'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
-            'related_model'     => 'Addressbook_Model_Contact',
+            'related_model'  => 'Addressbook_Model_Contact',
             'filtergroup'    => 'Addressbook_Model_ContactFilter'
         )),
     
