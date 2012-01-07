@@ -125,6 +125,8 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(file_exists($testPath) ,  'failed to create file');
         $this->assertTrue(is_file($testPath)     ,  'path created by mkdir is not a directory');
         $this->assertEquals(7, filesize($testPath), 'failed to write content to file');
+        
+        return $testPath;
     }
     
     public function testReadFile()
@@ -157,10 +159,9 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
     
     public function testScandir()
     {
-        $testPath = $this->testMkdir();
-        $this->testCreateFile();
-        
-        $children = scandir($testPath);
+        $testPath = $this->testCreateFile();
+                
+        $children = scandir(dirname($testPath));
         
         $this->assertTrue(in_array('phpunit.txt', $children));
     }

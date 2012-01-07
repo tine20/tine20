@@ -77,7 +77,6 @@ class Tinebase_Filesystem_StreamWrapper
      */
     public function dir_closedir() 
     {
-        $this->_currentNode      = null;
         $this->_readDirRecordSet = null;
         $this->_readDirIterator  = null;
         
@@ -93,17 +92,10 @@ class Tinebase_Filesystem_StreamWrapper
     public function dir_opendir($_path, $_options) 
     {
         try {
-            $path = $this->_validatePath($_path);
-        } catch (Tinebase_Exception_InvalidArgument $teia) {
-            trigger_error("invalid path provided", E_USER_WARNING);
-            return false;
-        }
-        
-        try {
-            $node = $this->_getTreeNodeBackend()->getLastPathNode($path);
-        } catch (Tinebase_Exception_InvalidArgument $teia) {
+            $node = Tinebase_FileSystem::getInstance()->stat(substr($_path, 9));
+        } catch (Tinebase_Exception_NotFound $teia) {
             if (!$quiet) {
-                trigger_error('path not found', E_USER_WARNING);
+                trigger_error($teia->getMessage(), E_USER_WARNING);
             }
             return false;
         }
@@ -113,7 +105,9 @@ class Tinebase_Filesystem_StreamWrapper
             return false;
         }
         
-        $this->_currentNode = $node;
+        $this->_readDirRecordSet = Tinebase_FileSystem::getInstance()->scanDir(substr($_path, 9));
+        $this->_readDirIterator  = $this->_readDirRecordSet->getIterator();
+        reset($this->_readDirIterator);
         
         return true;
     }
@@ -123,12 +117,6 @@ class Tinebase_Filesystem_StreamWrapper
      */
     public function dir_readdir() 
     {
-        if ($this->_readDirRecordSet === null) {
-            $this->_readDirRecordSet = $this->_getTreeNodeBackend()->getChildren($this->_currentNode);
-            $this->_readDirIterator  = $this->_readDirRecordSet->getIterator();
-            reset($this->_readDirIterator);
-        }
-        
         if (($node = current($this->_readDirIterator)) === false) {
             return false;
         }
