@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -81,6 +81,30 @@ class Calendar_JsonTests extends Calendar_TestCase
         return $loadedEventData;
     }
 
+    /**
+    * testCreateEventWithNonExistantAttender
+    */
+    public function testCreateEventWithNonExistantAttender()
+    {
+        $testEmail = 'unittestnotexists@example.org';
+        $eventData = $this->_getEvent()->toArray();
+        $eventData['attendee'][] = array(
+            'user_id'        => $testEmail,
+            'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
+            'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
+        );
+        
+        $persistentEventData = $this->_uit->saveEvent($eventData);
+        $found = FALSE;
+        foreach ($persistentEventData['attendee'] as $attender) {
+            if ($attender['user_id']['email'] === $testEmail) {
+                $this->assertEquals($testEmail, $attender['user_id']['n_fn']);
+                $found = TRUE;
+            }
+        }
+        $this->assertTrue($found);
+    }
+    
     /**
      * test create event with alarm
      *
