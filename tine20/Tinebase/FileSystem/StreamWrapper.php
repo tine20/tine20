@@ -156,44 +156,7 @@ class Tinebase_Filesystem_StreamWrapper
      */
     public function rename($_oldPath, $_newPath)
     {
-        try {
-            $oldPath = $this->_validatePath($_oldPath);
-            $newPath = $this->_validatePath($_newPath);
-        } catch (Tinebase_Exception_InvalidArgument $teia) {
-            return false;
-        }
-        
-        try {
-            $node = $this->_getTreeNodeBackend()->getLastPathNode($oldPath);
-        } catch (Tinebase_Exception_InvalidArgument $teia) {
-            trigger_error('path not found', E_USER_WARNING);
-            return false;
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            trigger_error('path not found', E_USER_WARNING);
-            return false;
-        }
-
-        if (dirname($oldPath) != dirname($newPath)) {
-            try {
-                $newParent = $this->_getTreeNodeBackend()->getLastPathNode(dirname($newPath));
-            } catch (Tinebase_Exception_InvalidArgument $teia) {
-                trigger_error('new parent path not found', E_USER_WARNING);
-                return false;
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                trigger_error('new parent path not found', E_USER_WARNING);
-                return false;
-            }
-            
-            $node->parent_id = $newParent->getId();
-        }
-        
-        if (basename($oldPath) != basename($newPath)) {
-            $node->name = basename($newPath);
-        }
-        
-        $this->_getTreeNodeBackend()->update($node);
-        
-        return true;
+        return Tinebase_FileSystem::getInstance()->rename(substr($_oldPath, 9), substr($_newPath, 9));
     }
     
     /**
@@ -205,9 +168,7 @@ class Tinebase_Filesystem_StreamWrapper
      */
     public function rmdir($_path, $_context = NULL)
     {
-        Tinebase_FileSystem::getInstance()->rmDir(substr($_path, 9), true);
-        
-        return true;        
+        return Tinebase_FileSystem::getInstance()->rmDir(substr($_path, 9), true);
     }
     
     /**

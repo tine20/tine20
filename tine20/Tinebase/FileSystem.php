@@ -350,6 +350,7 @@ class Tinebase_FileSystem
     /**
      * get content type
      * 
+     * @deprecated use Tinebase_FileSystem::stat()->contenttype
      * @param string $_path
      * @return string
      */
@@ -363,6 +364,7 @@ class Tinebase_FileSystem
     /**
      * get etag
      * 
+     * @deprecated use Tinebase_FileSystem::stat()->hash
      * @param string $_path
      * @return string
      */
@@ -393,6 +395,44 @@ class Tinebase_FileSystem
             return false;
         }
         
+        return true;
+    }
+    
+    /**
+     * rename file/directory
+     *
+     * @param  string  $_oldPath
+     * @param  string  $_newPath
+     * @return boolean
+     */
+    public function rename($_oldPath, $_newPath)
+    {
+        try {
+            $node = $this->stat($_oldPath);
+        } catch (Tinebase_Exception_InvalidArgument $teia) {
+            return false;
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            return false;
+        }
+    
+        if (dirname($_oldPath) != dirname($_newPath)) {
+            try {
+                $newParent = $this->_treeNodeBackend->getLastPathNode(dirname($_newPath));
+            } catch (Tinebase_Exception_InvalidArgument $teia) {
+                return false;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                return false;
+            }
+    
+            $node->parent_id = $newParent->getId();
+        }
+    
+        if (basename($_oldPath) != basename($_newPath)) {
+            $node->name = basename($_newPath);
+        }
+    
+        $this->_treeNodeBackend->update($node);
+    
         return true;
     }
     
@@ -500,6 +540,7 @@ class Tinebase_FileSystem
     /**
      * get filesize
      * 
+     * @deprecated use Tinebase_FileSystem::stat()->size
      * @param string $_path
      * @return integer
      */

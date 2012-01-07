@@ -87,6 +87,24 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         
         return $testPath;
     }
+
+    public function testRename()
+    {
+        $testPath = $this->testMkdir();
+        $this->testCreateFile();
+    
+        $testPath2 = $testPath . '/RENAMED';
+        Tinebase_FileSystem::getInstance()->mkDir($testPath2);
+    
+        Tinebase_FileSystem::getInstance()->rename($testPath . '/phpunit.txt', $testPath2 . '/phpunit2.txt');
+    
+        $nameOfChildren = Tinebase_FileSystem::getInstance()->scandir($testPath)->name;
+        $this->assertFalse(in_array('phpunit.txt', $nameOfChildren));
+
+        $nameOfChildren = Tinebase_FileSystem::getInstance()->scandir($testPath2)->name;
+        $this->assertTrue(in_array('phpunit2.txt', $nameOfChildren));
+    }
+    
     
     public function testRmdir()
     {
