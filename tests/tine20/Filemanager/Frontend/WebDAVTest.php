@@ -203,11 +203,12 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         
         $children = $node->getChildren();
         
+        $properties = $node->getProperties(array());
+        
         return $node;
     }
     
     /**
-     * 
      * @return Filemanager_Frontend_WebDAV_File
      */
     public function testgetNodeForPath_webdav_filemanager_shared_unittestdirectory_file()
@@ -246,6 +247,23 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Sabre_DAV_Exception_FileNotFound');
         
         $node = $this->_webdavTree->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory/tine_logo.png');
+    }
+    
+    /**
+     * @return Filemanager_Frontend_WebDAV_Directory
+     */
+    public function testgetNodeForPath_webdav_filemanager_shared_unittestdirectory_directory()
+    {
+        $parent = $this->testgetNodeForPath_webdav_filemanager_shared_unittestdirectory();
+    
+        $file = $parent->createDirectory('directory');
+    
+        $node = $this->_webdavTree->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory/directory');
+    
+        $this->assertTrue($node instanceof Filemanager_Frontend_WebDAV_Directory, 'wrong node class');
+        $this->assertEquals('directory', $node->getName());
+            
+        return $node;
     }
     
     public function testgetNodeForPath_invalidApplication()
