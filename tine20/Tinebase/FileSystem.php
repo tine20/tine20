@@ -478,7 +478,7 @@ class Tinebase_FileSystem
         }
         
         $this->_treeNodeBackend->delete($node->getId());
-        unset($this->_statCache[$_path]);
+        $this->clearStatCache($_path);
 
         // delete object only, if no other tree node refers to it
         if ($this->_treeNodeBackend->getObjectCount($node->object_id) == 0) {
