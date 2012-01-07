@@ -329,25 +329,6 @@ class Tinebase_FileSystem
     }
     
     /**
-     * write into file
-     * 
-     * @param handle $_handle
-     * @param string $_data
-     * @param int $_length
-     * @return int
-     */
-    public function fwrite($_handle, $_data, $_length = null)
-    {
-        if (!is_resource($_handle)) {
-            return false;
-        }
-        
-        $written = fwrite($_handle, $_data, $_length);
-        
-        return $written;
-    }
-    
-    /**
      * get content type
      * 
      * @deprecated use Tinebase_FileSystem::stat()->contenttype
