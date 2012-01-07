@@ -69,7 +69,7 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
-        
+        Tinebase_FileSystem::getInstance()->clearStatCache();
         Tinebase_FileSystem::getInstance()->clearDeletedFiles();
     }
     
@@ -90,8 +90,9 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
         $path = $this->testMkdir();
 
         $result = rmdir($path);
+        clearstatcache();
         
-        $this->assertTrue($result, 'wrong result for rmdir command');
+        $this->assertTrue($result,             'wrong result for rmdir command');
         $this->assertFalse(file_exists($path), 'failed to delete directory');
     }
     
