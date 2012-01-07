@@ -220,6 +220,8 @@ class Tinebase_FileSystem
                 
                 $this->_updateFileObject($options['tine20']['node']->object_id, $hash, $hashFile);
                 
+                $this->clearStatCache($options['tine20']['path']);
+                
                 break;
         }
         
@@ -253,6 +255,7 @@ class Tinebase_FileSystem
         
         $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
         $modLog->setRecordMetaData($updatedFileObject, 'update', $currentFileObject);
+        
         return $this->_fileObjectBackend->update($updatedFileObject);
     }
     
@@ -311,6 +314,8 @@ class Tinebase_FileSystem
                 if (!$this->fileExists($_path)) {
                     $parent = $this->stat($dirName);
                     $node = $this->createFileTreeNode($parent, $fileName);
+                } else {
+                    $node = $this->stat($_path);
                 }
                 
                 $handle = tmpfile();
