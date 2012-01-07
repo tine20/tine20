@@ -84,7 +84,7 @@ abstract class Filemanager_Frontend_WebDAV_Node implements Sabre_DAV_INode
         
         list($dirname, $basename) = Sabre_DAV_URLUtil::splitPath($this->_path);
         
-        rename('tine20://' . $this->_path, 'tine20://' . $dirname . '/' . $name);
+        Tinebase_FileSystem::getInstance()->rename($this->_path, $dirname . '/' . $name);
     }    
     
     /**
