@@ -172,25 +172,6 @@ class Tinebase_Filesystem_StreamWrapper
     }
     
     /**
-     * get filesize
-     * 
-     * @param $_path
-     * @return integer
-     */
-    public function filesize($_path)
-    {
-        try {
-            $path = $this->_validatePath($_path);
-        } catch (Tinebase_Exception_InvalidArgument $teia) {
-            return false;
-        }
-        
-        $node = $this->_getTreeNodeBackend()->getLastPathNode($path);
-        
-        return $node->size;
-    }
-    
-    /**
      * stream_close
      * 
      * @return boolean

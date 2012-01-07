@@ -127,6 +127,17 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(in_array('PHPUNIT', $children));
     }
     
+    public function testStat()
+    {
+        $this->testCreateFile();
+    
+        $node = $this->_controller->stat($this->_basePath . '/PHPUNIT/phpunit.txt');
+    
+        $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $node->type);
+        $this->assertEquals('phpunit.txt', $node->name);
+        $this->assertEquals(7, $node->size);
+    }
+    
     /**
      * test for isDir with existing directory 
      */
