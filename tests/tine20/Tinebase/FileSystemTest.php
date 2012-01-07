@@ -55,10 +55,14 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        if (empty(Tinebase_Core::getConfig()->filesdir)) {
+            $this->markTestSkipped('filesystem base path not found');
+        }
+        
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         $this->_controller = new Tinebase_FileSystem();
         $this->_basePath   = '/' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '/' . Tinebase_Model_Container::TYPE_SHARED;
-        
-        $this->objects['directories'] = array();
         
         $this->_controller->initializeApplication(Tinebase_Application::getInstance()->getApplicationByName('Tinebase'));
     }
@@ -71,16 +75,15 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        foreach ($this->objects['directories'] as $directory) {
-            $this->_controller->rmDir($directory, true);
-        } 
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        
+        Tinebase_FileSystem::getInstance()->clearDeletedFiles();
     }
     
     public function testMkdir()
     {
         $testPath = $this->_basePath . '/PHPUNIT';
         $this->_controller->mkDir($testPath);
-        $this->objects['directories']['testpath'] = $testPath;
         
         $this->assertTrue($this->_controller->fileExists($testPath), 'path created by mkdir not found');
         $this->assertTrue($this->_controller->isDir($testPath),      'path created by mkdir is not a directory');
@@ -111,8 +114,6 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $testPath = $this->testMkdir();
     
         $result = $this->_controller->rmDir($testPath);
-    
-        unset($this->objects['directories']['testpath']);
     
         $this->assertTrue($result,                                    'wrong result for rmdir command');
         $this->assertFalse($this->_controller->fileExists($testPath), 'failed to delete directory');

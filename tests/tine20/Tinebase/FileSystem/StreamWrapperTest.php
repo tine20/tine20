@@ -51,9 +51,13 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('filesystem base path not found');
         }
         
-        $this->_basePath   = 'tine20:///' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '/internal/phpunit';
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
-        $this->objects['directories'] = array();
+        $this->_basePath = 'tine20:///' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '/internal/phpunit';
+        
+        Tinebase_FileSystem::getInstance()->initializeApplication(Tinebase_Application::getInstance()->getApplicationByName('Tinebase'));
+        
+        clearstatcache();
     }
 
     /**
@@ -64,27 +68,9 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        if (substr($this->_basePath, 0, 9) == 'tine20://') {
-            $this->_rmdir($this->_basePath);
-        }
-    }
-    
-    protected function _rmdir($_path)
-    {
-        if ($dir = opendir($_path)) {
-            while (($element = readdir($dir)) !== false) { 
-                $path = $_path . '/' . $element;
-                
-                if (is_dir($path)) {
-                    $this->_rmdir($path);
-                } else {
-                    unlink($path);
-                }
-            }
-        }
-        rmdir($_path);
+        Tinebase_TransactionManager::getInstance()->rollBack();
         
-        closedir($dir);
+        Tinebase_FileSystem::getInstance()->clearDeletedFiles();
     }
     
     public function testMkdir()
@@ -92,8 +78,6 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
         $testPath = $this->_basePath . '/PHPUNIT-VIA-STREAM';
         
         mkdir($testPath, 0777, true);
-        
-        $this->objects['directories']['streampath'] = $testPath;
         
         $this->assertTrue(file_exists($testPath), 'path created by mkdir not found');
         $this->assertTrue(is_dir($testPath)     , 'path created by mkdir is not a directory');
@@ -106,9 +90,6 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
         $path = $this->testMkdir();
 
         $result = rmdir($path);
-        clearstatcache();
-        
-        unset($this->objects['directories']['streampath']);
         
         $this->assertTrue($result, 'wrong result for rmdir command');
         $this->assertFalse(file_exists($path), 'failed to delete directory');
