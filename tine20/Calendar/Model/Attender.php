@@ -350,7 +350,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
         
         foreach ($_event->attendee as $currentAttendee) {
-            if (preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $currentAttendee->user_id)) {
+            if (is_string($currentAttendee->user_id) && preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $currentAttendee->user_id)) {
                 if ($currentAttendee->user_type !== Calendar_Model_Attender::USERTYPE_USER) {
                     throw new Tinebase_Exception_InvalidArgument('it is only allowed to set contacts as email only attender');
                 }
