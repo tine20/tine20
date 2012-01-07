@@ -59,8 +59,6 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         $this->_webdavTree = new Sabre_DAV_ObjectTree(new Tinebase_WebDav_Root());
-        
-        $this->objects['nodes'] = array();
     }
 
     /**
@@ -84,7 +82,7 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
-        $node->delete();
+        $this->_webdavTree->delete('/');
     }
     
     public function testgetNodeForPath_webdav()
@@ -100,7 +98,7 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
-        $node->delete();
+        $this->_webdavTree->delete('/webdav');
     }
     
     public function testgetNodeForPath_webdav_filemanager()
@@ -117,7 +115,7 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
-        $node->delete();
+        $this->_webdavTree->delete('/webdav/Filemanager');
     }
     
     public function testgetNodeForPath_webdav_filemanager_personal()
@@ -134,7 +132,7 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
-        $node->delete();
+        $this->_webdavTree->delete('/webdav/Filemanager/personal');
     }
     
     public function testgetNodeForPath_webdav_filemanager_personal_currentuser()
@@ -151,7 +149,7 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
-        $node->delete();
+        $this->_webdavTree->delete('/webdav/Filemanager/personal/' . Tinebase_Core::getUser()->accountLoginName);
     }
     
     /**
@@ -186,7 +184,7 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
-        $node->delete();
+        $this->_webdavTree->delete('/webdav/Filemanager/shared');
     }
     
     /**
