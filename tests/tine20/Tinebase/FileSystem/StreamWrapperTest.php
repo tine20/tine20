@@ -156,6 +156,16 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_file($testPath)     ,  'path created by mkdir is not a directory');
         $this->assertEquals(8, filesize($testPath), 'failed to write content to file');
     }
+
+    public function testDeleteFile()
+    {
+        $testPath = $this->testCreateFile();
+
+        unlink($testPath);
+        clearstatcache();
+        
+        $this->assertFalse(file_exists($testPath) ,  'failed to unlink file');
+    }
     
     public function testScandir()
     {

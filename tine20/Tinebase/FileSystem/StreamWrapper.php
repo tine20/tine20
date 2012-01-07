@@ -534,35 +534,16 @@ class Tinebase_Filesystem_StreamWrapper
     public function unlink($_path)
     {
         try {
-            $path = $this->_validatePath($_path);
+            $result = Tinebase_FileSystem::getInstance()->unlink(substr($_path, 9));
         } catch (Tinebase_Exception_InvalidArgument $teia) {
-            trigger_error('path must start with tine20://', E_USER_WARNING);
-            return false;
-        }
-        
-        try {
-            $node = $this->_getTreeNodeBackend()->getLastPathNode($path);
-        } catch (Tinebase_Exception_InvalidArgument $teia) {
-            trigger_error('path not found', E_USER_WARNING);
+            trigger_error($teia->getMessage(), E_USER_WARNING);
             return false;
         } catch (Tinebase_Exception_NotFound $tenf) {
-            trigger_error('path not found', E_USER_WARNING);
+            trigger_error($tenf->getMessage(), E_USER_WARNING);
             return false;
         }
         
-        if ($node->type !== Tinebase_Model_Tree_FileObject::TYPE_FILE) {
-            trigger_error('can unlink files and links only', E_USER_WARNING);
-            return false;
-        }
-        
-        $this->_getTreeNodeBackend()->delete($node->getId());
-        
-        // delete object only, if no one uses it anymore
-        if ($this->_getTreeNodeBackend()->getObjectCount($node->object_id) == 0) {
-            $this->_getObjectBackend()->delete($node->object_id);
-        }
-        
-        return true;
+        return $result;
     }
     
     /**
