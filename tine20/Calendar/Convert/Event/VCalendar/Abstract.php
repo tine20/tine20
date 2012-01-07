@@ -227,7 +227,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             $originalDtStart->setTimezone($_event->originator_tz);
             
             $recurrenceId = new Sabre_VObject_Element_DateTime('RECURRENCE-ID');
-            if ($_mainEvent->is_all_day_event == true) {
+            if ($_mainEvent && $_mainEvent->is_all_day_event == true) {
                 $recurrenceId->setDateTime($originalDtStart, Sabre_VObject_Element_DateTime::DATE);
             } else {
                 $recurrenceId->setDateTime($originalDtStart);
