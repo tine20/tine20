@@ -62,6 +62,13 @@ Description: webbased groupware and crm - email module
  enables you to read emails stored on a imap server. You can read emails on 
  multiple imap servers.
  
+Package: tine20-filemanager
+Architecture: all
+Depends: tine20-tinebase (= ${binary:Version})
+Description: webbased groupware and crm - filemanager module
+ This package contains the filemanager module of Tine 2.0. Installing this package
+ enables you to store files on your webserver.
+ 
 Package: tine20-tasks
 Architecture: all
 Depends: tine20-tinebase (= ${binary:Version})
@@ -69,6 +76,12 @@ Description: webbased groupware and crm - tasks module
  This package contains the tasks module of Tine 2.0. Installing this package
  enables you to manage tasks.
  
+Package: tine20-projects
+Architecture: all
+Depends: tine20-tinebase (= ${binary:Version})
+Description: webbased groupware and crm - projects module
+ This package contains the projects module of Tine 2.0.
+
 Package: tine20-sales
 Architecture: all
 Depends: tine20-tinebase (= ${binary:Version})

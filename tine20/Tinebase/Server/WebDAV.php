@@ -62,9 +62,12 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
         #$baseUri = substr($decodedUri, 0, strpos($decodedUri, 'carddav/') + strlen('carddav/'));
         $server->setBaseUri('/');
         
-        #$lockBackend = new Sabre_DAV_Locks_Backend_FS('/var/www/phpfcgi/cache');
-        #$lockPlugin = new Sabre_DAV_Locks_Plugin($lockBackend);
-        #$server->addPlugin($lockPlugin);
+        $tempDir = Tinebase_Core::getTempDir();
+        if (!empty($tempDir)) {
+            $lockBackend = new Sabre_DAV_Locks_Backend_File($tempDir . '/webdav.lock');
+            $lockPlugin = new Sabre_DAV_Locks_Plugin($lockBackend);
+            $server->addPlugin($lockPlugin);
+        }
         
         $authPlugin = new Sabre_DAV_Auth_Plugin(new Tinebase_WebDav_Auth(), null);
         $server->addPlugin($authPlugin);

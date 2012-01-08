@@ -59,17 +59,6 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         $this->_webdavTree = new Sabre_DAV_ObjectTree(new Tinebase_WebDav_Root());
-        
-        $this->objects['nodes'] = array();
-        
-        #try {
-        #    $container = Tinebase_Container::getInstance()->getContainerByName('Filemanager', 'unittestdirectory', Tinebase_Model_Container::TYPE_SHARED);
-        #    
-        #    // container exists already => remove him
-        #    Tinebase_Container::getInstance()->delete($container);
-        #} catch (Tinebase_Exception_NotFound $tenf) {
-        #    // continue
-        #}
     }
 
     /**
@@ -80,24 +69,8 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        #foreach ($this->objects['nodes'] as $node) {
-        #    $this->_rmDir($node);
-        #} 
-        
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
-    
-    #protected function _rmDir($_node)
-    #{
-    #    foreach ($_node->getChildren() as $child) {
-    #        if ($child instanceof Filemanager_Frontend_WebDAV_File) {
-    #            $child->delete();
-    #        } else {
-    #            $this->_rmDir($child);
-    #        }
-    #    }
-    #    $_node->delete();
-    #}
     
     public function testgetNodeForPath()
     {
@@ -109,7 +82,7 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
-        $node->delete();
+        $this->_webdavTree->delete('/');
     }
     
     public function testgetNodeForPath_webdav()
@@ -125,7 +98,7 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
-        $node->delete();
+        $this->_webdavTree->delete('/webdav');
     }
     
     public function testgetNodeForPath_webdav_filemanager()
@@ -142,7 +115,7 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
-        $node->delete();
+        $this->_webdavTree->delete('/webdav/Filemanager');
     }
     
     public function testgetNodeForPath_webdav_filemanager_personal()
@@ -159,7 +132,7 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
-        $node->delete();
+        $this->_webdavTree->delete('/webdav/Filemanager/personal');
     }
     
     public function testgetNodeForPath_webdav_filemanager_personal_currentuser()
@@ -176,7 +149,7 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
-        $node->delete();
+        $this->_webdavTree->delete('/webdav/Filemanager/personal/' . Tinebase_Core::getUser()->accountLoginName);
     }
     
     /**
@@ -211,7 +184,7 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
-        $node->delete();
+        $this->_webdavTree->delete('/webdav/Filemanager/shared');
     }
     
     /**
@@ -230,11 +203,12 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         
         $children = $node->getChildren();
         
+        $properties = $node->getProperties(array());
+        
         return $node;
     }
     
     /**
-     * 
      * @return Filemanager_Frontend_WebDAV_File
      */
     public function testgetNodeForPath_webdav_filemanager_shared_unittestdirectory_file()
@@ -246,7 +220,11 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         $node = $this->_webdavTree->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory/tine_logo.png');
         
         $this->assertTrue($node instanceof Filemanager_Frontend_WebDAV_File, 'wrong node class');
+        $this->assertTrue(is_resource($node->get()));
         $this->assertEquals('tine_logo.png', $node->getName());
+        $this->assertEquals(7246, $node->getSize());
+        $this->assertEquals('image/png', $node->getContentType());
+        $this->assertEquals('"7424e2c16388bf388af1c4fe44c1dd67d31f468b"', $node->getETag());
         
         return $node;
     }
@@ -258,6 +236,34 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         $node->put(fopen(dirname(__FILE__) . '/../../Tinebase/files/tine_logo.png', 'r'));
         
         $this->assertEquals('Filemanager_Frontend_WebDAV_File', get_class($node), 'wrong type');
+    }
+    
+    public function testDeleteFile()
+    {
+        $node = $this->testgetNodeForPath_webdav_filemanager_shared_unittestdirectory_file();
+    
+        $this->_webdavTree->delete('/webdav/Filemanager/shared/unittestdirectory/tine_logo.png');
+    
+        $this->setExpectedException('Sabre_DAV_Exception_FileNotFound');
+        
+        $node = $this->_webdavTree->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory/tine_logo.png');
+    }
+    
+    /**
+     * @return Filemanager_Frontend_WebDAV_Directory
+     */
+    public function testgetNodeForPath_webdav_filemanager_shared_unittestdirectory_directory()
+    {
+        $parent = $this->testgetNodeForPath_webdav_filemanager_shared_unittestdirectory();
+    
+        $file = $parent->createDirectory('directory');
+    
+        $node = $this->_webdavTree->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory/directory');
+    
+        $this->assertTrue($node instanceof Filemanager_Frontend_WebDAV_Directory, 'wrong node class');
+        $this->assertEquals('directory', $node->getName());
+            
+        return $node;
     }
     
     public function testgetNodeForPath_invalidApplication()

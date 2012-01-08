@@ -55,10 +55,14 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        if (empty(Tinebase_Core::getConfig()->filesdir)) {
+            $this->markTestSkipped('filesystem base path not found');
+        }
+        
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         $this->_controller = new Tinebase_FileSystem();
         $this->_basePath   = '/' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '/' . Tinebase_Model_Container::TYPE_SHARED;
-        
-        $this->objects['directories'] = array();
         
         $this->_controller->initializeApplication(Tinebase_Application::getInstance()->getApplicationByName('Tinebase'));
     }
@@ -71,18 +75,48 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        foreach ($this->objects['directories'] as $directory) {
-            $this->_controller->rmDir($directory, true);
-        } 
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        Tinebase_FileSystem::getInstance()->clearStatCache();
+        Tinebase_FileSystem::getInstance()->clearDeletedFiles();
     }
     
     public function testMkdir()
     {
         $testPath = $this->_basePath . '/PHPUNIT';
         $this->_controller->mkDir($testPath);
-        $this->objects['directories'][] = $testPath;
         
-        $this->assertTrue($this->_controller->fileExists($testPath));
+        $this->assertTrue($this->_controller->fileExists($testPath), 'path created by mkdir not found');
+        $this->assertTrue($this->_controller->isDir($testPath),      'path created by mkdir is not a directory');
+        
+        return $testPath;
+    }
+
+    public function testRename()
+    {
+        $testPath = $this->testMkdir();
+        $this->testCreateFile();
+    
+        $testPath2 = $testPath . '/RENAMED';
+        Tinebase_FileSystem::getInstance()->mkDir($testPath2);
+    
+        Tinebase_FileSystem::getInstance()->rename($testPath . '/phpunit.txt', $testPath2 . '/phpunit2.txt');
+    
+        $nameOfChildren = Tinebase_FileSystem::getInstance()->scandir($testPath)->name;
+        $this->assertFalse(in_array('phpunit.txt', $nameOfChildren));
+
+        $nameOfChildren = Tinebase_FileSystem::getInstance()->scandir($testPath2)->name;
+        $this->assertTrue(in_array('phpunit2.txt', $nameOfChildren));
+    }
+    
+    
+    public function testRmdir()
+    {
+        $testPath = $this->testMkdir();
+    
+        $result = $this->_controller->rmDir($testPath);
+    
+        $this->assertTrue($result,                                    'wrong result for rmdir command');
+        $this->assertFalse($this->_controller->fileExists($testPath), 'failed to delete directory');
     }
     
     public function testScandir()
@@ -92,6 +126,17 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $children = $this->_controller->scanDir($this->_basePath)->name;
         
         $this->assertTrue(in_array('PHPUNIT', $children));
+    }
+    
+    public function testStat()
+    {
+        $this->testCreateFile();
+    
+        $node = $this->_controller->stat($this->_basePath . '/PHPUNIT/phpunit.txt');
+    
+        $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $node->type);
+        $this->assertEquals('phpunit.txt', $node->name);
+        $this->assertEquals(7, $node->size);
     }
     
     /**

@@ -61,7 +61,7 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create directory: ' . $path);
     
-        mkdir('tine20://' . $path);
+        Tinebase_FileSystem::getInstance()->mkDir($path);
     }
     
     /**
@@ -83,7 +83,7 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $path);
     
-        if (!$handle = fopen('tine20://' . $path, 'x')) {
+        if (!$handle = Tinebase_FileSystem::getInstance()->fopen($path, 'x')) {    
             throw new Sabre_DAV_Exception_Forbidden('Permission denied to create file (filename file://' . $path . ')');
         }
     
@@ -91,7 +91,7 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
             stream_copy_to_stream($data, $handle);
         }
     
-        fclose($handle);
+        Tinebase_FileSystem::getInstance()->fclose($handle);
     }
     
     /**
@@ -114,7 +114,7 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
             $child->delete();
         }
     
-        if (!rmdir('tine20://' . $this->_path)) {
+        if (!Tinebase_FileSystem::getInstance()->rmDir($this->_path)) {
             throw new Sabre_DAV_Exception_Forbidden('Permission denied to delete node');
         }
     
@@ -171,25 +171,22 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
      */
     public function getProperties($requestedProperties) 
     {
-        $displayName = $this->_container->name;
-        
-        $properties = array(
-#            '{http://calendarserver.org/ns/}getctag' => round(time()/60),
-            'id'                                     => $this->_container->getId(),
-            'uri'                                    => $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name,
-#            '{DAV:}resource-id'                      => 'urn:uuid:' . $this->_container->getId(),
-#            '{DAV:}owner'                            => new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id),
-        	'{DAV:}displayname'                      => $displayName,
-        );
-        
+    #    $displayName = $this->_container->name;
+    #    
+    #    $properties = array(
+    #        'id'                                     => $this->_container->getId(),
+    #        'uri'                                    => $this->_container->name,
+    #    	'{DAV:}displayname'                      => $displayName,
+    #    );
+    #    
         $response = array();
-    
-        foreach($requestedProperties as $prop) {
-            if (isset($properties[$prop])) {
-                $response[$prop] = $properties[$prop];
-            }
-        }
-        
+    # 
+    #    foreach($requestedProperties as $prop) {
+    #        if (isset($properties[$prop])) {
+    #            $response[$prop] = $properties[$prop];
+    #        }
+    #    }
+    #    
         return $response;
     }
     /**

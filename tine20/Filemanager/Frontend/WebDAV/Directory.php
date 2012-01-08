@@ -16,19 +16,6 @@
  */
 class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_Node implements Sabre_DAV_ICollection
 {
-    #public function __construct($_path) 
-    #{
-        #parent::__construct($_path);
-                
-        #if ($this->_container == null) {
-        #    throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $this->_path . ' could not be found');
-        #}
-        
-        #if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_READ)) {
-        #    throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $this->_path . ' could not be found');
-        #}
-    #}
-    
     /**
      * return list of children
      * @return array list of children
@@ -97,7 +84,7 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $path);
 
-        if (!$handle = fopen('tine20://' . $path, 'x')) {
+        if (!$handle = Tinebase_FileSystem::getInstance()->fopen($path, 'x')) {
             throw new Sabre_DAV_Exception_Forbidden('Permission denied to create file (filename file://' . $path . ')');
         }
         
@@ -105,7 +92,7 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
             stream_copy_to_stream($data, $handle);
         }
         
-        fclose($handle);
+        Tinebase_FileSystem::getInstance()->fclose($handle);
     }
 
     /**
@@ -126,7 +113,7 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create directory: ' . $path);
         
-        mkdir('tine20://' . $path);
+        Tinebase_FileSystem::getInstance()->mkDir($path);
     }
     
     /**
@@ -149,7 +136,7 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
             $child->delete();
         }
         
-        if (!rmdir('tine20://' . $this->_path)) {
+        if (!Tinebase_FileSystem::getInstance()->rmDir($this->_path)) {
             throw new Sabre_DAV_Exception_Forbidden('Permission denied to delete node');
         }
     }

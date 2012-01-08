@@ -70,7 +70,7 @@ class Filemanager_Frontend_WebDAV_File extends Filemanager_Frontend_WebDAV_Node 
             throw new Sabre_DAV_Exception_Forbidden('Forbidden to edit file: ' . $this->_path);
         }
         
-        $handle = fopen('tine20://' . $this->_path, 'w');
+        $handle = Tinebase_FileSystem::getInstance()->fopen($this->_path, 'w');
         
         if (!is_resource($handle)) {
             throw new Sabre_DAV_Exception_Forbidden('Permission denied to create file:' . $this->_path );
@@ -80,6 +80,6 @@ class Filemanager_Frontend_WebDAV_File extends Filemanager_Frontend_WebDAV_Node 
             stream_copy_to_stream($data, $handle);
         }
         
-        fclose($handle);
+        Tinebase_FileSystem::getInstance()->fclose($handle);
     }
 }

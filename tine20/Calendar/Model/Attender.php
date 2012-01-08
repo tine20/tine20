@@ -242,10 +242,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * 
      * @param  Calendar_Model_Event $_event
      * @param  iteratable           $_emails
-     * @param  bool                 $_ImplicitAddMissingContacts
-     * @return Tinebase_Record_RecordSet
+     * @param  bool                 $_implicitAddMissingContacts
      */
-    public static function emailsToAttendee(Calendar_Model_Event $_event, $_emails, $_ImplicitAddMissingContacts = TRUE)
+    public static function emailsToAttendee(Calendar_Model_Event $_event, $_emails, $_implicitAddMissingContacts = TRUE)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " list of new attendees " . print_r($_emails, true));
@@ -283,7 +282,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             $_event->attendee->removeRecord($attendeeToDelete);
         }
         
-        
         // attendees to keep and update
         $attendeesToKeep   = array_diff_key($emailsOfCurrentAttendees, $attendeesToDelete);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " attendees to keep " . print_r(array_keys($attendeesToKeep), true));
@@ -295,7 +293,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             $attendeeToKeep->status = isset($newSettings['partStat']) ? $newSettings['partStat'] : $attendeeToKeep->status;
             $attendeeToKeep->role   = $newSettings['role'];
         }
-        
 
         // new attendess to add to event
         $attendeesToAdd    = array_diff_key($emailsOfNewAttendees,     $emailsOfCurrentAttendees);
@@ -306,34 +303,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             $attendeeId = NULL;
             
             if ($newAttendee['userType'] == Calendar_Model_Attender::USERTYPE_USER) {
-            	$contacts = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(array(
-            	    array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
-                    array('condition' => 'OR', 'filters' => array(
-                        array('field' => 'email',      'operator'  => 'equals', 'value' => $newAttendee['email']),
-                        array('field' => 'email_home', 'operator'  => 'equals', 'value' => $newAttendee['email'])
-                    )),
-            	)));
-                
-            	if(count($contacts) > 0) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of contacts " . count($contacts));
-    
-                    $attendeeId = $contacts->getFirstRecord()->getId();
-                    
-                } else if ($_ImplicitAddMissingContacts == true) {
-                	$translation = Tinebase_Translation::getTranslation('Calendar');
-                	$i18nNote = $translation->_('This contact has been automatically added by the system as an event attender');
-                    $contactData = array(
-                        'note'        => $i18nNote,
-                        'email'       => $newAttendee['email'],
-                        'n_family'    => $newAttendee['lastName'],
-                        'n_given'     => $newAttendee['firstName'],
-                    );
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . print_r($contactData, true));
-                    $contact = new Addressbook_Model_Contact($contactData);
-                    
-                    $attendeeId = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE)->getId();
+                $contact = self::resolveEmailToContact($newAttendee, $_implicitAddMissingContacts);
+                if ($contact) {
+                    $attendeeId = $contact->getId();
                 }
-    
+                
             } else if($newAttendee['userType'] == Calendar_Model_Attender::USERTYPE_GROUP) {
                 $lists = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter(array(
                     array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
@@ -361,6 +335,77 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " updated attendees list " . print_r($_event->attendee->toArray(), true));
+    }
+    
+    /**
+     * get attendee with user_id = email address and create contacts for them on the fly if they do not exist
+     * 
+     * @param Calendar_Model_Event $_event
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public static function resolveEmailOnlyAttendee(Calendar_Model_Event $_event)
+    {
+        if (! $_event->attendee instanceof Tinebase_Record_RecordSet) {
+            $_event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        }
+        
+        foreach ($_event->attendee as $currentAttendee) {
+            if (is_string($currentAttendee->user_id) && preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $currentAttendee->user_id)) {
+                if ($currentAttendee->user_type !== Calendar_Model_Attender::USERTYPE_USER) {
+                    throw new Tinebase_Exception_InvalidArgument('it is only allowed to set contacts as email only attender');
+                }
+                $contact = self::resolveEmailToContact(array(
+                    'email'     => $currentAttendee->user_id,
+                ));
+                $currentAttendee->user_id = $contact->getId();
+            }
+        }
+    }
+    
+    /**
+    * check if contact with given email exists in addressbook and creates it if not
+    *
+    * @param  array $_attenderData array with email, firstname and lastname (if available)
+    * @param  boolean $_implicitAddMissingContacts
+    * @return Addressbook_Model_Contact
+    * 
+    * @todo filter by fn if multiple matches
+    */
+    public static function resolveEmailToContact($_attenderData, $_implicitAddMissingContacts = TRUE)
+    {
+        if (! isset($_attenderData['email'])) {
+            throw new Tinebase_Exception_InvalidArgument('email address is needed to resolve contact');
+        }
+        
+        $contacts = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(array(
+            array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
+            array('condition' => 'OR', 'filters' => array(
+                array('field' => 'email',      'operator'  => 'equals', 'value' => $_attenderData['email']),
+                array('field' => 'email_home', 'operator'  => 'equals', 'value' => $_attenderData['email'])
+            )),
+        )));
+        
+        if (count($contacts) > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of contacts " . count($contacts));
+            $result = $contacts->getFirstRecord();
+        
+        } else if ($_implicitAddMissingContacts === TRUE) {
+            $translation = Tinebase_Translation::getTranslation('Calendar');
+            $i18nNote = $translation->_('This contact has been automatically added by the system as an event attender');
+            $contactData = array(
+                'note'        => $i18nNote,
+                'email'       => $_attenderData['email'],
+                'n_family'    => (isset($_attenderData['lastName'])) ? $_attenderData['lastName'] : $_attenderData['email'],
+                'n_given'     => (isset($_attenderData['firstName'])) ? $_attenderData['firstName'] : '',
+            );
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . print_r($contactData, true));
+            $contact = new Addressbook_Model_Contact($contactData);
+            $result = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE);
+        } else {
+            $result = NULL;
+        }
+        
+        return $result;
     }
     
     /**

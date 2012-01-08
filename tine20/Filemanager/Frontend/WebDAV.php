@@ -42,6 +42,6 @@ class Filemanager_Frontend_WebDAV extends Tinebase_WebDav_Collection_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create directory: ' . $path);
         
-        mkdir('tine20://' . $path, 0777, true);
+        Tinebase_FileSystem::getInstance()->mkDir($path);
     }
 }

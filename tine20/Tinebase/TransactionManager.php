@@ -137,7 +137,7 @@ class Tinebase_TransactionManager
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  rollBack request, rollBack all transactionables");
         foreach ($this->_openTransactionables as $transactionable) {
-        if ($transactionable instanceof Zend_Db_Adapter_Abstract) {
+            if ($transactionable instanceof Zend_Db_Adapter_Abstract) {
                 $transactionable->rollBack();
                 Tinebase_Backend_Sql_Command::setAutocommit($transactionable,true);
             }

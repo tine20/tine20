@@ -1323,24 +1323,27 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param Calendar_Model_Event $_event
      * @param bool                 $_isRescheduled event got rescheduled reset all attendee status
      */
-    protected function _saveAttendee($_event, $_isRescheduled=FALSE)
+    protected function _saveAttendee($_event, $_isRescheduled = FALSE)
     {
-        $attendee = $_event->attendee instanceof Tinebase_Record_RecordSet ? 
-            $_event->attendee : 
-            new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-        $attendee->cal_event_id = $_event->getId();
+        if (! $_event->attendee instanceof Tinebase_Record_RecordSet) {
+            $_event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        }
+        
+        Calendar_Model_Attender::resolveEmailOnlyAttendee($_event);
+        
+        $_event->attendee->cal_event_id = $_event->getId();
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " About to save attendee for event {$_event->id} ");
         
         $currentEvent = $this->get($_event->getId());
         $currentAttendee = $currentEvent->attendee;
         
-        $diff = $currentAttendee->getMigration($attendee->getArrayOfIds());
+        $diff = $currentAttendee->getMigration($_event->attendee->getArrayOfIds());
         $this->_backend->deleteAttendee($diff['toDeleteIds']);
         
         $calendar = Tinebase_Container::getInstance()->getContainerById($_event->container_id);
         
-        foreach ($attendee as $attender) {
+        foreach ($_event->attendee as $attender) {
             $attenderId = $attender->getId();
             $idx = ($attenderId) ? $currentAttendee->getIndexById($attenderId) : FALSE;
             
