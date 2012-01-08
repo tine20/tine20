@@ -160,7 +160,6 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
                                 }
                             }
                         } catch (e) {
-                            Tine.log.err('Tine.widgets.MainScreen::getWestPanel');
                         }
                     }
                 }, this);
