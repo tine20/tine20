@@ -801,7 +801,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             listeners: {
                 scope: this,
                 update: function (eventJson) {
-                    //var updatedEvent = new Tine.Calendar.Model.Event(Ext.util.JSON.decode(eventJson), event.id);
                     var updatedEvent = Tine.Calendar.backend.recordReader({responseText: eventJson});
                     updatedEvent.dirty = true;
                     updatedEvent.modified = {};
