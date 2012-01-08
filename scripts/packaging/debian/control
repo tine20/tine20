@@ -76,6 +76,12 @@ Description: webbased groupware and crm - tasks module
  This package contains the tasks module of Tine 2.0. Installing this package
  enables you to manage tasks.
  
+Package: tine20-projects
+Architecture: all
+Depends: tine20-tinebase (= ${binary:Version})
+Description: webbased groupware and crm - projects module
+ This package contains the projects module of Tine 2.0.
+
 Package: tine20-sales
 Architecture: all
 Depends: tine20-tinebase (= ${binary:Version})
