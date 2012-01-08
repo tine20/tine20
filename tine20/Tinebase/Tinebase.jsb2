@@ -53,7 +53,7 @@
         },
         {
           "text": "RecordPickerManager.js",
-          "path": "js/widgets/"
+          "path": "js/widgets/form/"
         },
         {
           "text": "FieldLabeler.js",
