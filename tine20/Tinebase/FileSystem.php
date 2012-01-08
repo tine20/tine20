@@ -112,7 +112,7 @@ class Tinebase_FileSystem
         $result = '/' . $application->getId();
         if ($_type !== NULL) {
             if (! in_array($_type, array(Tinebase_Model_Container::TYPE_SHARED, Tinebase_Model_Container::TYPE_PERSONAL))) {
-                throw new Timetracker_Exception_UnexpectedValue('Type can only be shared or personal.');
+                throw new Tinebase_Exception_UnexpectedValue('Type can only be shared or personal.');
             }
             
             $result .= '/folders/' . $_type;
