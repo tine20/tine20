@@ -1,3 +1,9 @@
+tine20 (2012.03.1-0~beta1) natty; urgency=low
+
+  * New upstream release
+
+ -- Lars Kneschke <l.kneschke@metaways.de>  Sat, 08 Jan 2012 10:20:47 +0200
+
 tine20 (2011.05.3-1) unstable; urgency=low
 
   * Initial Debian upload (Closes: #634940)
