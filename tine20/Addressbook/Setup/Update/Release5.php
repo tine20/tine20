@@ -48,8 +48,8 @@ class Addressbook_Setup_Update_Release5 extends Setup_Update_Abstract
                 <length>32</length>
                 <notnull>false</notnull>
             </field>');
-        $this->_backend->alterCol('addressbook_salutationss', $declaration);
-        $this->setTableVersion('addressbook_salutationss', 3);
+        $this->_backend->alterCol('addressbook_salutations', $declaration);
+        $this->setTableVersion('addressbook_salutations', 3);
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
