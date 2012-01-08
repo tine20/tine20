@@ -255,7 +255,7 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
             var label = el.i18nValue ? el.i18nValue : el.value;
             srecords.push([el.id, label]);
         });
-        Tine.log.err(this.app.getRegistry().get('config')['attendeeStatus'].value.records);
+
         this.chooseStatusBox = new Ext.form.ComboBox({
             mode: 'local',
             emptyText: this.app.i18n._('Select Status'),

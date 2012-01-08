@@ -102,8 +102,8 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.form.ComboBox, {
                         }
                     },
                     encodeDate: function(values) {
-                        var start = event.data.dtstart.getTime() <= dayStart.getTime() ? dayStart : event.data.dtstart,
-                            end   = event.data.dtend.getTime() > dayEnd.getTime() ? dayEnd : event.data.dtend;
+                        var start = values.dtstart;
+                            end   = values.dtend;
 
                         var duration = values.is_all_day_event ? Tine.Tinebase.appMgr.get('Calendar').i18n._('whole day') : 
                                        Tine.Tinebase.common.minutesRenderer(Math.round((end.getTime() - start.getTime())/(1000*60)), '{0}:{1}', 'i');
