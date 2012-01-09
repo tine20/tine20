@@ -517,7 +517,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                     // get address 
                     // @todo get name here
                     //<*([a-zA-Z@_\-0-9\.]+)>*/
-                    if (preg_match(self::EMAIL_ADDRESS_REGEXP, $recipient, $matches) > 0) {
+                    if (preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $recipient, $matches) > 0) {
                         $recipient = $matches[1];
                     }
                     if (empty($recipient)) {
