@@ -343,12 +343,12 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         
         while (TRUE) {
             
-            if ($rrule->until instanceof DateTime && $from->isLater($rrule->until)) {
+            if ($_event->rrule_until instanceof DateTime && $from->isLater($_event->rrule_until)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' passed rrule_until -> no furthor occurrences');
                 return NULL;
             }
             
-            $until   = ($rrule->until instanceof DateTime && $until->isLater($rrule->until)) ? $rrule->until : $until;
+            $until   = ($_event->rrule_until instanceof DateTime && $until->isLater($_event->rrule_until)) ? $_event->rrule_until : $until;
             
             
             
@@ -548,7 +548,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     protected static function _computeRecurDaily($_event, $_rrule, $_exceptionRecurIds, $_from, $_until, $_recurSet)
     {
         $computationStartDate = clone $_event->dtstart;
-        $computationEndDate   = ($_rrule->until instanceof DateTime && $_until->isLater($_rrule->until)) ? $_rrule->until : $_until;
+        $computationEndDate   = ($_event->rrule_until instanceof DateTime && $_until->isLater($_event->rrule_until)) ? $_event->rrule_until : $_until;
         
         // if dtstart is before $_from, we compute the offset where to start our calculations
         if ($_event->dtstart->isEarlier($_from)) {
@@ -621,7 +621,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, -1 * $_rrule->interval);
         }
         
-        $computationEndDate   = ($_rrule->until instanceof DateTime && $_until->isLater($_rrule->until)) ? $_rrule->until : $_until;
+        $computationEndDate   = ($_event->rrule_until instanceof DateTime && $_until->isLater($_event->rrule_until)) ? $_event->rrule_until : $_until;
         
         
         
@@ -697,7 +697,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, -1 * $_rrule->interval);
         }
         
-        $computationEndDate   = ($_rrule->until instanceof DateTime && $_until->isLater($_rrule->until)) ? $_rrule->until : $_until;
+        $computationEndDate   = ($_event->rrule_until instanceof DateTime && $_until->isLater($_event->rrule_until)) ? $_event->rrule_until : $_until;
         
         // if dtstart is before $_from, we compute the offset where to start our calculations
         if ($eventInOrganizerTZ->dtstart->isEarlier($_from)) {
