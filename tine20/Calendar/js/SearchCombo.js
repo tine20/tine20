@@ -37,7 +37,11 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.form.ComboBox, {
     
     app: null,
     appName: 'Calendar',
-    
+
+    /**
+     * date filter from datepicker
+     */
+    addFilter: null,
     store: null,
     
     triggerAction: 'all',
@@ -122,11 +126,13 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.form.ComboBox, {
      * @param {} filter
      */
     setFilter: function(filter) {
-        this.store.baseParams.filter = [filter];
-        this.fireEvent('filterupdate');
+        //this.store.baseParams.filter = [filter];
+        //this.fireEvent('filterupdate');
+        this.addFilter = filter;
     },
     
     onBeforeQuery: function (qevent) {
+        this.store.baseParams.filter = [this.addFilter];
         this.store.baseParams.filter.push({field: 'query', operator: 'contains', value: qevent.query });
     }
 

@@ -392,7 +392,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
         }, this);
         
-        record.set('attendee', '');
         record.set('attendee', attendee);
     },
     
