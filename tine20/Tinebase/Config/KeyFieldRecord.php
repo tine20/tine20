@@ -16,7 +16,6 @@
  */
 class Tinebase_Config_KeyFieldRecord extends Tinebase_Record_Abstract
 {
-    
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Record/Abstract::$_identifier
@@ -64,7 +63,7 @@ class Tinebase_Config_KeyFieldRecord extends Tinebase_Record_Abstract
     */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
-        $this->_validators = array_merge($this->_validators, $_this->_additionalValidators);
+        $this->_validators = array_merge($this->_validators, $this->_additionalValidators);
         
         parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
