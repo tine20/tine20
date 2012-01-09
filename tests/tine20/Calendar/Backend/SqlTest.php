@@ -158,6 +158,7 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
+                'rrule_until'  => '2009-04-02 23:59:59',
                 Tinebase_Model_Grants::GRANT_READ    => true
             ),
             array(
@@ -169,6 +170,7 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
+                'rrule_until'  => '2009-04-05 23:59:59',
                 Tinebase_Model_Grants::GRANT_READ    => true
             ),
             array(
@@ -180,6 +182,7 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
+                'rrule_until'  => '2009-04-06 23:59:59',
                 Tinebase_Model_Grants::GRANT_READ    => true
             ),
             array(
@@ -191,6 +194,7 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
+                'rrule_until'  => '2009-04-12 23:59:59',
                 Tinebase_Model_Grants::GRANT_READ    => true
             ),
             array(
@@ -202,6 +206,7 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
+                'rrule_until'  => '2009-04-15 02:00:00',
                 Tinebase_Model_Grants::GRANT_READ    => true
             )
         ));
@@ -256,19 +261,6 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
         foreach ($persistentEvent->exdate as $exdate) {
         	$this->assertTrue($exdate->equals($event->exdate[0]) || $exdate->equals($event->exdate[1]), 'exdates mismatch');
         }
-    }
-    
-    public function testRruleUntil()
-    {
-        $event = $this->_getEvent();
-        
-        $event->rrule_until = Tinebase_DateTime::now();
-        $persitentEvent = $this->_backend->create($event);
-        $this->assertNull($persitentEvent->rrule_until, 'rrul_until is not unset');
-        
-        $persitentEvent->rrule = 'FREQ=YEARLY;INTERVAL=1;BYMONTH=2;UNTIL=2010-04-01 08:00:00';
-        $updatedEvent = $this->_backend->update($persitentEvent);
-        $this->assertEquals('2010-04-01 08:00:00', $updatedEvent->rrule_until->get(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
     /**

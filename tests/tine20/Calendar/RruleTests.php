@@ -60,6 +60,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'rrule'         => 'FREQ=DAILY;INTERVAL=2;UNTIL=2009-04-01 08:00:00',
             'exdate'        => '2009-03-31 07:00:00',
             'originator_tz' => 'Europe/Berlin',
+            'rrule_until'   => '2009-04-01 08:00:00',
             Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
         

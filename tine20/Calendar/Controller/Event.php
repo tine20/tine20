@@ -935,31 +935,20 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if (! empty($_record->rrule)) {
                 $diff = $_oldRecord->dtstart->diff($_record->dtstart);
                 
-                // update rrule->until
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart of a series changed -> adopting rrule_until');
-                
-                $rrule = $_record->rrule instanceof Calendar_Model_Rrule ? $_record->rrule : Calendar_Model_Rrule::getRruleFromString($_record->rrule);
-                if ($rrule->until instanceof DateTime) {
-                    Calendar_Model_Rrule::addUTCDateDstFix($rrule->until, $diff, $_record->originator_tz);
-                    $_record->rrule = (string) $rrule;
-                }
-                
-                // update exdate(s)
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart of a series changed -> adopting '. count($_record->exdate) . ' exdate(s)');
-                
-                foreach ((array)$_record->exdate as $exdate) {
-                    Calendar_Model_Rrule::addUTCDateDstFix($exdate, $diff, $_record->originator_tz);
-                }
-                
                 // update exceptions
+                $exceptions = $this->getRecurExceptions($_record);
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart of a series changed -> adopting '. count($exceptions) . ' recurid(s)');
-                foreach ($this->getRecurExceptions($_record) as $exception) {
-                    $originalDtstart = new Tinebase_DateTime(substr($exception->recurid, -19));
-                    Calendar_Model_Rrule::addUTCDateDstFix($originalDtstart, $diff, $_record->originator_tz);
+                $exdates = array();
+                foreach ($exceptions as $exception) {
+                    $exception->recurid = new Tinebase_DateTime(substr($exception->recurid, -19));
+                    Calendar_Model_Rrule::addUTCDateDstFix($exception->recurid, $diff, $_record->originator_tz);
+                    $exdates[] = $exception->recurid;
                     
                     $exception->setRecurId();
                     $this->_backend->update($exception);
                 }
+                
+                $_record->exdate = $exdates;
             }
         }
         
