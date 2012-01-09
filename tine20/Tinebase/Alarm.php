@@ -121,17 +121,16 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                     $alarm->sent_time = Tinebase_DateTime::now();
                 
                     try {
-                        // NOTE: we set the staus here, so controller can adopt the status itself
+                        // NOTE: we set the status here, so controller can adopt the status itself
                         $alarm->sent_status = Tinebase_Model_Alarm::STATUS_SUCCESS;
                         $appController->sendAlarm($alarm);
                     
                     } catch (Exception $e) {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
                     
                         $alarm->sent_message = $e->getMessage();
                         $alarm->sent_status = Tinebase_Model_Alarm::STATUS_FAILURE;
-                        //throw $e;
                     } 
                 
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating alarm status: ' . $alarm->sent_status);
@@ -145,6 +144,8 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
         } catch (Exception $e) {
             // save new status 'failure'
             $job = Tinebase_AsyncJob::getInstance()->finishJob($job, Tinebase_Model_AsyncJob::STATUS_FAILURE, $e->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Job failed: ' . $e->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Job ' . $eventName . ' finished.');           
