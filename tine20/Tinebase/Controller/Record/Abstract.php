@@ -839,6 +839,7 @@ abstract class Tinebase_Controller_Record_Abstract
             	$this->_updateMultipleResult['totalcount'] ++;
             	
             } catch (Tinebase_Exception_Record_Validation $e) {
+                print_r($record);
                 $this->_updateMultipleResult['exceptions']->addRecord(new Tinebase_Model_UpdateMultipleException(array(
                     'id'         => $record->getId(),
                     'exception'  => $e,

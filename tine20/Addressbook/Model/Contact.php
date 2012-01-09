@@ -216,9 +216,43 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         if (!empty($_data['n_given'])) {
             $_data['n_fn'] = $_data['n_given'] . ' ' . $_data['n_fn'];
         }
-        
-        
+
+
         parent::setFromArray($_data);
+    }
+
+    /**
+     * additional validation
+     *
+     * @param $_throwExceptionOnInvalidData
+     * @return bool
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    function isValid($_throwExceptionOnInvalidData = false) {
+        if(parent::isValid($_throwExceptionOnInvalidData)) {
+
+            if ((($this->__get('org_name') == '') || ($this->__get('org_name') == null)) &&
+                 ($this->__get('n_family') == '') || ($this->__get('n_family') == null)) {
+                if ($_throwExceptionOnInvalidData) {
+                    $e = new Tinebase_Exception_Record_Validation('either "org_name" or "n_family" must be given!');
+                    //Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ":\n" . print_r($this->_validationErrors,true). $e);
+                    throw $e;
+                }    
+        } else {
+            return true;
+        }
+            
+        
+            
+            
+            
+            
+            
+            
+            
+        } else {
+            return true;
+        }
     }
     
     /**
