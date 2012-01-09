@@ -109,7 +109,7 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.form.ComboBox, {
                                        Tine.Tinebase.common.minutesRenderer(Math.round((end.getTime() - start.getTime())/(1000*60)), '{0}:{1}', 'i');
                         
                         var startYear = start.getYear() + 1900;
-                        return start.getDate() + '.' + start.getMonth() + '.' + startYear + ' ' + duration;
+                        return start.getDate() + '.' + (start.getMonth() + 1) + '.' + startYear + ' ' + duration;
                         
                     }
                 }
