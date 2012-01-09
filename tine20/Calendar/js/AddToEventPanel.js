@@ -129,58 +129,59 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
     /**
      * save record and close window
      */
-    onUpdate: function() {
+    onUpdate : function() {
+		try {
+			if (this.isValid()) {
+				var recordId = this.searchBox.getValue(), 
+                    record = this.searchBox.store.getById(recordId), 
+                    ms = this.app.getMainScreen(), 
+                    cp = ms.getCenterPanel(), 
+                    role = this.chooseRoleBox.getValue(), 
+                    status = this.chooseStatusBox.getValue();
 
-        if(this.isValid()) {    
-            var recordId = this.searchBox.getValue(),
-                event = this.searchBox.store.getById(recordId),
-                ms = this.app.getMainScreen(),
-                cp = ms.getCenterPanel(),
-                role = this.chooseRoleBox.getValue(),
-                status = this.chooseStatusBox.getValue();
+				for (var index = 0; index < this.attendee.length; index++) {
+					this.attendee[index].role = role;
+					this.attendee[index].status = status;
+				}
+                // existing attendee
+				var attendee = record.data.attendee;
 
-            for (var index = 0; index < this.attendee.length; index++) {
-                this.attendee[index].role = role;
-                this.attendee[index].status = status;
-            }
-                
-            var window = Tine.Calendar.EventEditDialog.openWindow({
-                record: Ext.util.JSON.encode(event.data),
-                recordId: event.data.id,
-                actionType: 'add',
-                attendee: Ext.util.JSON.encode(this.attendee),
-                listeners: {
-                    scope: cp,
-                    update: function (eventJson) {
+				if (this.attendee.length > 0) {
+					Ext.each(this.attendee, function(attender) {
+						var ret = true;
+						Ext.each(attendee, function(already) {
+							if (already.user_id.id == attender.id) {
+								ret = false;
+								return false;
+							}
+						}, this);
 
-                        var updatedEvent = Tine.Calendar.backend.recordReader({responseText: eventJson});
-                            updatedEvent.dirty = true;
-                            updatedEvent.modified = {};
-                            
-                        event.phantom = true;
-                        var panel = this.getCalendarPanel(this.activeView);
-                        var store = panel.getStore();
-                        event = store.getById(event.id);
-                        if (event) store.replaceRecord(event, updatedEvent);
-                        else store.add(updatedEvent);
-                        this.activeView = 'weekSheet';
-                        this.onUpdateEvent(updatedEvent);
+						if (ret) {
+							var att = new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id());
+							att.set('user_id', attender);
+							if (!attender.account_id) att.set('status', attender.status);
+							att.set('role', attender.role);
+							attendee.push(att.data);
+						}
+					}, this);
+					record.set('attendee', attendee);
+				}
 
-                    }
-                }
-            });
-
-            window.on('close', function() {
-                this.onCancel();
-            }, this);   
-        }
+				cp.onEditInNewWindow.call(cp, 'edit', null, record);
+                // close this window
+				this.onCancel();
+			}
+		} catch (e) {
+			Tine.log.error('Tine.Calendar.AddToEventPanel::onUpdate');
+			Tine.log.error(e.stack ? e.stack : e);
+		}
     },
     
     /**
      * create and return form items
      * @return Object
      */
-    getFormItems : function() {
+    getFormItems: function() {
         this.searchBox = new Tine.Calendar.SearchCombo({});
 
         this.searchBox.on('filterupdate', function() {

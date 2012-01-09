@@ -542,7 +542,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         this.setLoading(true);
         
         if (event.isRecurBase()) {
-            this.loadMask.show();
+           if(this.loadMask) this.loadMask.show();
         }
         
         if (event.isRecurInstance() || (event.isRecurBase() && ! event.get('rrule').newrule)) {
@@ -630,7 +630,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     else store.add(updatedEvent)
                     
                     this.setLoading(false);
-                    view.getSelectionModel().select(updatedEvent);
+                    // no sm when called from another app
+                    if (view && view.calPanel && view.rendered) {
+                        view.getSelectionModel().select(updatedEvent);
+                    }
                 }
             },
             failure: this.onProxyFail.createDelegate(this, [event], true)
