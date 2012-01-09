@@ -159,7 +159,10 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
 						if (ret) {
 							var att = new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id());
 							att.set('user_id', attender);
-							if (!attender.account_id) att.set('status', attender.status);
+							if (!attender.account_id) {
+                                att.set('status', attender.status);
+                                att.set('status_authkey', 1);
+                            }
 							att.set('role', attender.role);
 							attendee.push(att.data);
 						}
@@ -236,13 +239,13 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
             itemSelector: 'div.search-item',
             tpl: new Ext.XTemplate(
                 '<tpl for="."><div class="search-item">',
-                    '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
-                        '<tr>',
-                            '<td>',                   
+//                    '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
+//                        '<tr>',
+//                            '<td>',                   
                                 '{values.value}',
-                            '</td>',
-                        '</td></tr>',
-                    '</table>',
+//                            '</td>',
+//                        '</td></tr>',
+//                    '</table>',
                 '</div></tpl>'
             ),
             store: new Ext.data.ArrayStore({
@@ -270,13 +273,13 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
             itemSelector: 'div.search-item',
             tpl: new Ext.XTemplate(
                 '<tpl for="."><div class="search-item">',
-                    '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
-                        '<tr>',
-                            '<td>',                   
+//                    '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
+//                        '<tr>',
+//                            '<td>',                   
                                 '{values.value}',
-                            '</td>',
-                        '</td></tr>',
-                    '</table>',
+//                            '</td>',
+//                        '</td></tr>',
+//                    '</table>',
                 '</div></tpl>'
             ),
             store: new Ext.data.ArrayStore({
