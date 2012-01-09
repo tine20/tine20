@@ -186,12 +186,7 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
      */
     getFormItems: function() {
         this.searchBox = new Tine.Calendar.SearchCombo({});
-
-        this.searchBox.on('filterupdate', function() {
-            this.store.removeAll();
-            this.store.load();
-        });
-       
+      
         var startDate = new Date().clearTime(),
             store = new Ext.data.JsonStore({
                 id: 'id',
@@ -239,13 +234,7 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
             itemSelector: 'div.search-item',
             tpl: new Ext.XTemplate(
                 '<tpl for="."><div class="search-item">',
-//                    '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
-//                        '<tr>',
-//                            '<td>',                   
-                                '{values.value}',
-//                            '</td>',
-//                        '</td></tr>',
-//                    '</table>',
+                    '{values.value}',
                 '</div></tpl>'
             ),
             store: new Ext.data.ArrayStore({
@@ -272,14 +261,8 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
             margins: '10px 10px',
             itemSelector: 'div.search-item',
             tpl: new Ext.XTemplate(
-                '<tpl for="."><div class="search-item">',
-//                    '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
-//                        '<tr>',
-//                            '<td>',                   
-                                '{values.value}',
-//                            '</td>',
-//                        '</td></tr>',
-//                    '</table>',
+                '<tpl for="."><div class="search-item">',              
+                    '{values.value}',
                 '</div></tpl>'
             ),
             store: new Ext.data.ArrayStore({
