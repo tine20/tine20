@@ -181,7 +181,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             $sendNotifications = $this->_sendNotifications;
             $this->_sendNotifications = FALSE;
-                
+            
+            $this->_setRruleUntil($_record);
             $event = parent::create($_record);
             $this->_saveAttendee($_record);
             
@@ -446,6 +447,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     }
                 }
                 
+                $this->_setRruleUntil($_record);
                 parent::update($_record);
                 $this->_saveAttendee($_record, $_record->isRescheduled($event));
                 
@@ -1116,6 +1118,29 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         
         $this->_backend->update($_event);
+    }
+    
+    
+    /**
+     * sets rrule until field in event model
+     *
+     * @param  Calendar_Model_Event $_event
+     * @return void
+     */
+    protected function _setRruleUntil(Calendar_Model_Event $_event)
+    {
+        if (empty($_event->rrule)) {
+            $_event->rrule_until = NULL;
+        } else {
+            $rrule = $_event->rrule;
+            if (! $_event->rrule instanceof Calendar_Model_Rrule) {
+                $rrule = new Calendar_Model_Rrule(array());
+                $rrule->setFromString($_event->rrule);
+            }
+            
+            
+            $_event->rrule_until = $rrule->until;
+        }
     }
     
     /****************************** attendee functions ************************/
