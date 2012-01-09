@@ -771,7 +771,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(2, count($recurSet));
     }
     
-    public function testUpdateImplicitDeleteRcuringExceptions()
+    public function testDeleteImplicitDeleteRcuringExceptions()
     {
         $event = $this->_getEvent();
         $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 13:30:00';
@@ -788,8 +788,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $persitentException = $this->_controller->create($exception);
         
         unset($persistentEvent->rrule);
-        $updatedEvent = $this->_controller->update($persistentEvent);
-        $this->assertNull($updatedEvent->exdate);
+        $updatedEvent = $this->_controller->delete($persistentEvent);
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_controller->get($persitentException->getId());
     }
