@@ -3,7 +3,7 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -16,7 +16,6 @@
  */
 class Tinebase_Config_KeyFieldRecord extends Tinebase_Record_Abstract
 {
-    
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Record/Abstract::$_identifier
@@ -45,4 +44,27 @@ class Tinebase_Config_KeyFieldRecord extends Tinebase_Record_Abstract
         'system'               => array('allowEmpty' => true,  'Int'  ),
     );
     
+    /**
+     * allows to add additional validators in subclasses
+     * 
+     * @var array
+     * @see tine20/Tinebase/Record/Abstract::$_validators
+     */
+    protected $_additionalValidators = array();
+
+    /**
+    * Default constructor
+    * Constructs an object and sets its record related properties.
+    *
+    * @param mixed $_data
+    * @param bool $bypassFilters sets {@see this->bypassFilters}
+    * @param mixed $convertDates sets {@see $this->convertDates} and optionaly {@see $this->$dateConversionFormat}
+    * @return void
+    */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        $this->_validators = array_merge($this->_validators, $this->_additionalValidators);
+        
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
 }
