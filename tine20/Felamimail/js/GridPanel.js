@@ -779,8 +779,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {String} composedMsg
      * @param {String} action
      * @param {Array}  [affectedMsgs]  messages affected 
+     * @param {String} [mode]
      */
-    onAfterCompose: function(composedMsg, action, affectedMsgs) {
+    onAfterCompose: function(composedMsg, action, affectedMsgs, mode) {
+        Tine.log.debug('Tine.Felamimail.GridPanel::onAfterCompose / arguments:');
+        Tine.log.debug(arguments);
         try {
             // mark send folders cache status incomplete
             composedMsg = Ext.isString(composedMsg) ? new this.recordClass(Ext.decode(composedMsg)) : composedMsg;
@@ -861,7 +864,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var win = Tine.Felamimail.MessageEditDialog.openWindow({
             accountId: activeAccount ? activeAccount.id : null,
             listeners: {
-                'update': this.onAfterCompose.createDelegate(this, ['compose'], 1)
+                'update': this.onAfterCompose.createDelegate(this, ['compose', []], 1)
             }
         });
     },
@@ -957,7 +960,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 record: record,
                 listeners: {
                     scope: this,
-                    'update': this.onAfterCompose,
+                    'update': this.onAfterCompose.createDelegate(this, ['compose', []], 1),
                     'remove': this.onRemoveInDisplayDialog
                 }
             });
