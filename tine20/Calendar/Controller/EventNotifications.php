@@ -207,131 +207,131 @@
      */
     public function sendNotificationToAttender($_attender, $_event, $_updater, $_action, $_notificationLevel, $_updates=NULL)
     {
-        if (
-            // 2011-05-26 only send notifications to user accounts!
-            $_attender->getUserAccountId() === NULL
-            
-            // old code + comments follow:
-            //! in_array($_attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))
-            //  - for contacts prefs of organizer is taken, this leads to unpredictable results if notification is send or not!
-            //  - users can not yet configure which user/contact should get notification or not    
-            //|| ! $_attender->getResolvedUser() instanceof Addressbook_Model_Contact
-            
-        ) {
-            return;
-        }
-        
-        // find organizer account
-        if ($_event->organizer) {
-            $organizerContact = Addressbook_Controller_Contact::getInstance()->get($_event->organizer);
-            $organizer = Tinebase_User::getInstance()->getFullUserById($organizerContact->account_id);
-        } else {
-            // use creator as organizer
-            $organizer = Tinebase_User::getInstance()->getFullUserById($_event->created_by);
-        }
-        
-        // get prefered language, timezone and notification level
-        $prefUser = $_attender->getUserAccountId();
-        // e.g. contacts
-        if (! $prefUser) {
-            $prefUser = $organizer->getId();
-        }
-        $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $prefUser));
-        $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $prefUser);
-        $translate = Tinebase_Translation::getTranslation('Calendar', $locale);
-        
-        // check if user wants this notification
-        $sendLevel          = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::NOTIFICATION_LEVEL, $prefUser);
-        $sendOnOwnActions   = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, $prefUser);
-        if ($prefUser == $_updater->getId() && ! $sendOnOwnActions) {
-            return;
-        }
-        if ($sendLevel < $_notificationLevel) {
-            if($prefUser != $organizer->getId()) {
-                return;
-            } else if ($sendLevel == self::NOTIFICATION_LEVEL_NONE) {
+        try {
+            if (
+                // 2011-05-26 only send notifications to user accounts!
+                $_attender->getUserAccountId() === NULL
+                
+                // old code + comments follow:
+                //! in_array($_attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))
+                //  - for contacts prefs of organizer is taken, this leads to unpredictable results if notification is send or not!
+                //  - users can not yet configure which user/contact should get notification or not    
+                //|| ! $_attender->getResolvedUser() instanceof Addressbook_Model_Contact
+                
+            ) {
                 return;
             }
-        }
-
-        // get date strings
-        $startDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtstart, $timezone, $locale);
-        $endDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtend, $timezone, $locale);
-        
-        switch ($_action) {
-            case 'alarm':
-                $messageSubject = sprintf($translate->_('Alarm for event "%1$s" at %2$s'), $_event->summary, $startDateString);
-                break;
-            case 'created':
-                $messageSubject = sprintf($translate->_('Event invitation "%1$s" at %2$s'), $_event->summary, $startDateString);
-                break;
-            case 'deleted':
-                $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been canceled' ), $_event->summary, $startDateString);
-                break;
-            case 'changed':
-                switch ($_notificationLevel) {
-                    case self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE:
-                        $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been rescheduled' ), $_event->summary, $startDateString);
-                        break;
-                        
-                    case self::NOTIFICATION_LEVEL_EVENT_UPDATE:
-                        $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been updated' ), $_event->summary, $startDateString);
-                        break;
-                        
-                    case self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE:
-                        if(! empty($_updates['attendee']) && ! empty($_updates['attendee']['toUpdate']) && count($_updates['attendee']['toUpdate']) == 1) {
-                            // single attendee status update
-                            $attender = $_updates['attendee']['toUpdate'][0];
-                            
-                            switch ($attender->status) {
-                                case Calendar_Model_Attender::STATUS_ACCEPTED:
-                                    $messageSubject = sprintf($translate->_('%1$s accepted event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
-                                    break;
-                                    
-                                case Calendar_Model_Attender::STATUS_DECLINED:
-                                    $messageSubject = sprintf($translate->_('%1$s declined event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
-                                    break;
-                                    
-                                case Calendar_Model_Attender::STATUS_TENTATIVE:
-                                    $messageSubject = sprintf($translate->_('Tentative response from %1$s for event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
-                                    break;
-                                    
-                                case Calendar_Model_Attender::STATUS_NEEDSACTION:
-                                    $messageSubject = sprintf($translate->_('No response from %1$s for event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
-                                    break;
-                            }
-                        } else {
-                            $messageSubject = sprintf($translate->_('Attendee changes for event "%1$s" at %2$s' ), $_event->summary, $startDateString);
-                        }
-                        break;
+            
+            // find organizer account
+            if ($_event->organizer) {
+                $organizerContact = Addressbook_Controller_Contact::getInstance()->get($_event->organizer);
+                $organizer = Tinebase_User::getInstance()->getFullUserById($organizerContact->account_id);
+            } else {
+                // use creator as organizer
+                $organizer = Tinebase_User::getInstance()->getFullUserById($_event->created_by);
+            }
+            
+            // get prefered language, timezone and notification level
+            $prefUser = $_attender->getUserAccountId();
+            // e.g. contacts
+            if (! $prefUser) {
+                $prefUser = $organizer->getId();
+            }
+            $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $prefUser));
+            $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $prefUser);
+            $translate = Tinebase_Translation::getTranslation('Calendar', $locale);
+            
+            // check if user wants this notification
+            $sendLevel          = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::NOTIFICATION_LEVEL, $prefUser);
+            $sendOnOwnActions   = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, $prefUser);
+            if ($prefUser == $_updater->getId() && ! $sendOnOwnActions) {
+                return;
+            }
+            if ($sendLevel < $_notificationLevel) {
+                if($prefUser != $organizer->getId()) {
+                    return;
+                } else if ($sendLevel == self::NOTIFICATION_LEVEL_NONE) {
+                    return;
                 }
-                break;
-            default:
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " unknown action '$_action'");
-                break;
-        }
-        
-        $view = new Zend_View();
-        $view->setScriptPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'views');
-        
-        $view->translate    = $translate;
-        $view->timezone     = $timezone;
-        
-        $view->event        = $_event;
-        $view->updater      = $_updater;
-        $view->updates      = $_updates;
-        
-        $messageBody = $view->render('eventNotification.php');
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " receiver: '{$_attender->getEmail()}'");
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " subject: '$messageSubject'");
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " body: $messageBody");
-        
-        // NOTE: this is a contact as we only support users and groupmembers
-        $contact = $_attender->getResolvedUser();
-        $sender = $_action == 'alarm' ? $organizer : $_updater;
-        
-        try {
+            }
+    
+            // get date strings
+            $startDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtstart, $timezone, $locale);
+            $endDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtend, $timezone, $locale);
+            
+            switch ($_action) {
+                case 'alarm':
+                    $messageSubject = sprintf($translate->_('Alarm for event "%1$s" at %2$s'), $_event->summary, $startDateString);
+                    break;
+                case 'created':
+                    $messageSubject = sprintf($translate->_('Event invitation "%1$s" at %2$s'), $_event->summary, $startDateString);
+                    break;
+                case 'deleted':
+                    $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been canceled' ), $_event->summary, $startDateString);
+                    break;
+                case 'changed':
+                    switch ($_notificationLevel) {
+                        case self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE:
+                            $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been rescheduled' ), $_event->summary, $startDateString);
+                            break;
+                            
+                        case self::NOTIFICATION_LEVEL_EVENT_UPDATE:
+                            $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been updated' ), $_event->summary, $startDateString);
+                            break;
+                            
+                        case self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE:
+                            if(! empty($_updates['attendee']) && ! empty($_updates['attendee']['toUpdate']) && count($_updates['attendee']['toUpdate']) == 1) {
+                                // single attendee status update
+                                $attender = $_updates['attendee']['toUpdate'][0];
+                                
+                                switch ($attender->status) {
+                                    case Calendar_Model_Attender::STATUS_ACCEPTED:
+                                        $messageSubject = sprintf($translate->_('%1$s accepted event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                        break;
+                                        
+                                    case Calendar_Model_Attender::STATUS_DECLINED:
+                                        $messageSubject = sprintf($translate->_('%1$s declined event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                        break;
+                                        
+                                    case Calendar_Model_Attender::STATUS_TENTATIVE:
+                                        $messageSubject = sprintf($translate->_('Tentative response from %1$s for event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                        break;
+                                        
+                                    case Calendar_Model_Attender::STATUS_NEEDSACTION:
+                                        $messageSubject = sprintf($translate->_('No response from %1$s for event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                        break;
+                                }
+                            } else {
+                                $messageSubject = sprintf($translate->_('Attendee changes for event "%1$s" at %2$s' ), $_event->summary, $startDateString);
+                            }
+                            break;
+                    }
+                    break;
+                default:
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " unknown action '$_action'");
+                    break;
+            }
+            
+            $view = new Zend_View();
+            $view->setScriptPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'views');
+            
+            $view->translate    = $translate;
+            $view->timezone     = $timezone;
+            
+            $view->event        = $_event;
+            $view->updater      = $_updater;
+            $view->updates      = $_updates;
+            
+            $messageBody = $view->render('eventNotification.php');
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " receiver: '{$_attender->getEmail()}'");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " subject: '$messageSubject'");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " body: $messageBody");
+            
+            // NOTE: this is a contact as we only support users and groupmembers
+            $contact = $_attender->getResolvedUser();
+            $sender = $_action == 'alarm' ? $organizer : $_updater;
+            
             Tinebase_Notification::getInstance()->send($sender, array($contact), $messageSubject, $messageBody);
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . " could not send notification :" . $e);
