@@ -130,6 +130,8 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetProperties()
     {
+        $this->testCreateFile();
+        
         $requestedProperties = array(
         	'{http://calendarserver.org/ns/}getctag',
             '{DAV:}resource-id'

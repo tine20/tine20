@@ -130,8 +130,10 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     {
         $displayName = $this->_container->type == Tinebase_Model_Container::TYPE_SHARED ? $this->_container->name . ' (shared)' : $this->_container->name;
         
+        $ctags = Tinebase_Container::getInstance()->getContentSequence($this->_container);
+        
         $properties = array(
-            '{http://calendarserver.org/ns/}getctag' => round(time()),
+            '{http://calendarserver.org/ns/}getctag' => $ctags[$this->_container->getId()],
             'id'                => $this->_container->getId(),
             'uri'               => $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name,
         	'{DAV:}resource-id'	=> 'urn:uuid:' . $this->_container->getId(),
