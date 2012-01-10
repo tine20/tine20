@@ -84,17 +84,17 @@ class Tinebase_FileSystem
         // create app root node
         $appPath = $this->getApplicationBasePath($_application);
         if (!$this->fileExists($appPath)) {
-            $this->mkDir($appPath);
+            $this->mkdir($appPath);
         }
         
         $sharedBasePath = $this->getApplicationBasePath($_application, Tinebase_Model_Container::TYPE_SHARED);
         if (!$this->fileExists($sharedBasePath)) {
-            $this->mkDir($sharedBasePath);
+            $this->mkdir($sharedBasePath);
         }
         
         $personalBasePath = $this->getApplicationBasePath($_application, Tinebase_Model_Container::TYPE_PERSONAL);
         if (!$this->fileExists($personalBasePath)) {
-            $this->mkDir($personalBasePath);
+            $this->mkdir($personalBasePath);
         }
     }
     
@@ -131,7 +131,7 @@ class Tinebase_FileSystem
         $application = Tinebase_Application::getInstance()->getApplicationById($_container->application_id);
         $path = '/' . $application->getId() . '/' . $_container->type . '/' . $_container->getId();
         if (!$this->fileExists($path)) {
-            $this->mkDir($path);
+            $this->mkdir($path);
         }
     }
     
@@ -427,7 +427,7 @@ class Tinebase_FileSystem
      * 
      * @param string $_path
      */
-    public function mkDir($_path)
+    public function mkdir($_path)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating directory ' . $_path);
@@ -453,7 +453,7 @@ class Tinebase_FileSystem
      * @param boolean $_recursive
      * @return boolean
      */
-    public function rmDir($_path, $_recursive = FALSE)
+    public function rmdir($_path, $_recursive = FALSE)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Removing directory ' . $_path);
@@ -469,7 +469,7 @@ class Tinebase_FileSystem
             } else {
                 foreach ($children as $child) {
                     if ($this->isDir($_path . '/' . $child->name)) {
-                        $this->rmDir($_path . '/' . $child->name, true);
+                        $this->rmdir($_path . '/' . $child->name, true);
                     } else {
                         $this->unlink($_path . '/' . $child->name);
                     }

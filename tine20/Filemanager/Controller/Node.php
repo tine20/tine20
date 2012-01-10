@@ -929,7 +929,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 $success = unlink($_path->streamwrapperpath);
                 break;
             case Tinebase_Model_Tree_Node::TYPE_FOLDER:
-                $success = $this->_backend->rmDir($_path->statpath, TRUE);
+                $success = $this->_backend->rmdir($_path->statpath, TRUE);
                 break;
         }
         
