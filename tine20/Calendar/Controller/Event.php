@@ -181,7 +181,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             $sendNotifications = $this->_sendNotifications;
             $this->_sendNotifications = FALSE;
-                
+            
+            $_record->setRruleUntil();
             $event = parent::create($_record);
             $this->_saveAttendee($_record);
             
@@ -446,6 +447,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     }
                 }
                 
+                $_record->setRruleUntil();
                 parent::update($_record);
                 $this->_saveAttendee($_record, $_record->isRescheduled($event));
                 
@@ -933,43 +935,27 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if (! empty($_record->rrule)) {
                 $diff = $_oldRecord->dtstart->diff($_record->dtstart);
                 
-                // update rrule->until
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart of a series changed -> adopting rrule_until');
-                
-                
-                $rrule = $_record->rrule instanceof Calendar_Model_Rrule ? $_record->rrule : Calendar_Model_Rrule::getRruleFromString($_record->rrule);
-                if ($rrule->until instanceof DateTime) {
-                    Calendar_Model_Rrule::addUTCDateDstFix($rrule->until, $diff, $_record->originator_tz);
-                    $_record->rrule = (string) $rrule;
-                }
-                
-                // update exdate(s)
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart of a series changed -> adopting '. count($_record->exdate) . ' exdate(s)');
-                
-                foreach ((array)$_record->exdate as $exdate) {
-                    Calendar_Model_Rrule::addUTCDateDstFix($exdate, $diff, $_record->originator_tz);
-                }
-                
                 // update exceptions
-                $exceptions = $this->_backend->getMultipleByProperty($_record->uid, 'uid');
-                unset($exceptions[$exceptions->getIndexById($_record->getId())]);
+                $exceptions = $this->getRecurExceptions($_record);
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart of a series changed -> adopting '. count($exceptions) . ' recurid(s)');
+                $exdates = array();
                 foreach ($exceptions as $exception) {
-                    $originalDtstart = new Tinebase_DateTime(substr($exception->recurid, -19));
-                    Calendar_Model_Rrule::addUTCDateDstFix($originalDtstart, $diff, $_record->originator_tz);
+                    $exception->recurid = new Tinebase_DateTime(substr($exception->recurid, -19));
+                    Calendar_Model_Rrule::addUTCDateDstFix($exception->recurid, $diff, $_record->originator_tz);
+                    $exdates[] = $exception->recurid;
                     
                     $exception->setRecurId();
                     $this->_backend->update($exception);
                 }
+                
+                $_record->exdate = $exdates;
             }
         }
         
         // delete recur exceptions if update is not longer a recur series
         if (! empty($_oldRecord->rrule) && empty($_record->rrule)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' deleteing recur exceptions as event is no longer a recur series');
-            $exceptionIds = $this->_backend->getMultipleByProperty($_record->uid, 'uid')->getId();
-            unset($exceptionIds[array_search($_record->getId(), $exceptionIds)]);
-            $this->_backend->delete($exceptionIds);
+            $this->_backend->delete($this->getRecurExceptions($_record));
         }
         
         // touch base event of a recur series if an persisten exception changes
@@ -993,7 +979,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             // implicitly delete persistent recur instances of series
             if (! empty($event->rrule)) {
-                $exceptionIds = $this->_backend->getMultipleByProperty($event->uid, 'uid')->getId();
+                $exceptionIds = $this->getRecurExceptions($event)->getId();
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Implicitly deleting ' . (count($exceptionIds) - 1 ) . ' persistent exception(s) for recurring series with uid' . $event->uid);
                 $_ids = array_merge($_ids, $exceptionIds);
             }

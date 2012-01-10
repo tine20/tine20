@@ -70,11 +70,6 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     const ATTACHMENT_FILENAME_REGEXP = "/name=\"(.*)\"/";
     
     /**
-     * email address regexp
-     */
-    const EMAIL_ADDRESS_REGEXP = '/([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,5})/i'; 
-    
-    /**
      * quote string ("> ")
      * 
      * @var string
@@ -522,7 +517,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                     // get address 
                     // @todo get name here
                     //<*([a-zA-Z@_\-0-9\.]+)>*/
-                    if (preg_match(self::EMAIL_ADDRESS_REGEXP, $recipient, $matches) > 0) {
+                    if (preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $recipient, $matches) > 0) {
                         $recipient = $matches[1];
                     }
                     if (empty($recipient)) {

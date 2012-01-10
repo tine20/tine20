@@ -95,18 +95,26 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
         var ms = this.app.getMainScreen(),
             cp = ms.getCenterPanel(),
             cont = this.getSelectionsAsArray(),
+            myAccount = Tine.Tinebase.registry.get('currentAccount'),
             attendee = []; 
         
         attendee.push(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
             user_type: 'user',
-            user_id: Tine.Tinebase.registry.get('currentAccount'),
+            user_id: myAccount,
             status: 'ACCEPTED'
         }));
         
         Ext.each(cont, function(contact) {
-        	attendee.push(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
-        		user_id: contact
-        	}));
+            // skip adding contact of current user twice
+            if (myAccount.accountId == contact.account_id) return true;
+            if(contact.account_id) {
+            	var data = {user_id: contact}
+            } else {    // allow edit in attendeeGridPanel if no account or account belongs to current User
+                var data = {user_id: contact, status_authkey: 1}
+            }
+            
+            attendee.push(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), data));
+            
         });
         
         cp.onEditInNewWindow.call(cp, 'add', {attendee: attendee});

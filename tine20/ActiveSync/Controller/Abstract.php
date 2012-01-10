@@ -165,7 +165,7 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     public function getSupportedFolders()
     {
         // device supports multiple folders ?
-        if(in_array(strtolower($this->_device->devicetype), array('iphone', 'ipad', 'thundertine'))) {
+        if(in_array(strtolower($this->_device->devicetype), array('iphone', 'ipad', 'thundertine', 'windowsphone'))) {
         
             // get the folders the user has access to
             $allowedFolders = $this->_getSyncableFolders();

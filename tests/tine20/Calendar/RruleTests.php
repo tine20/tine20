@@ -48,6 +48,30 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals($rruleString, (string)$rrule);
     }
     
+    public function testIsValid()
+    {
+        // test invalid by normal validation actions
+        $rrule = new Calendar_Model_Rrule(array(
+            'interval'  => 'NotAnInt'
+        ), true);
+        $rrule->bypassFilters = false;
+        $this->assertFalse($rrule->isValid(false));
+        
+        // count and until are not allowed together
+        $rrule = new Calendar_Model_Rrule(array(
+            'count'  => '10',
+            'until'  => '2012-01-09 09:33:00'
+        ), true);
+        $this->assertFalse($rrule->isValid(false), 'until & count');
+        
+        // test invalid by setFromString
+        $this->setExpectedException('Tinebase_Exception_Record_Validation');
+        $rruleString = "FREQ=WEEKLY;INTERVAL=NotAnInt";
+        $rrule = new Calendar_Model_Rrule(array());
+        $rrule->setFromString($rruleString);
+        
+        
+    }
     /************************ recur computation tests ************************/
     
     public function testCalcDaily()
@@ -60,6 +84,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'rrule'         => 'FREQ=DAILY;INTERVAL=2;UNTIL=2009-04-01 08:00:00',
             'exdate'        => '2009-03-31 07:00:00',
             'originator_tz' => 'Europe/Berlin',
+            'rrule_until'   => '2009-04-01 08:00:00',
             Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
         

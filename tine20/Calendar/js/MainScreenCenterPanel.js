@@ -470,27 +470,77 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         ctxMenu.showAt(e.getXY());
     },
     
-    checkPastEvent: function(event, checkBusyConflicts) {
+    checkPastEvent: function(event, checkBusyConflicts, actionType) {
         
         var start = event.get('dtstart').getTime();
         var now = new Date().getTime();
         
+        switch (actionType) {
+            case 'update':
+                var title = this.app.i18n._('Updating event in the past'),
+                    optionYes = this.app.i18n._('Update this event'),
+                    optionNo = this.app.i18n._('Do not update this event');
+                break;                    
+            case 'add':            
+            default:
+                var title = this.app.i18n._('Creating event in the past'),
+                    optionYes = this.app.i18n._('Create this event'),
+                    optionNo = this.app.i18n._('Do not create this event');
+        }
+        
         if(start < now) {
-            Ext.MessageBox.confirm(
-                this.app.i18n._('Event in past'), 
-                this.app.i18n._('You are creating an event which is in the past. Do you really want to do this?'), 
-                function(btn) {
-                    if(btn == 'yes') {
-                        this.onAddEvent(event, checkBusyConflicts, true);
-                    } else {
-                        var panel = this.getCalendarPanel(this.activeView),
-                            store = panel.getStore();
-                            store.remove(event);
-                        return false;
+            Tine.widgets.dialog.MultiOptionsDialog.openWindow({                
+                title: title,
+                height: 170,
+                scope: this,
+                options: [
+                    {text: optionYes, name: 'yes'},
+                    {text: optionNo, name: 'no'}                   
+                ],
+                
+                handler: function(option) {
+                    try {
+                        switch (option) {
+                            case 'yes':
+                                if (actionType == 'update') this.onUpdateEvent(event, true);
+                                else this.onAddEvent(event, checkBusyConflicts, true);
+                                break;
+                            case 'no':
+                            default:
+                                try {
+                                    var panel = this.getCalendarPanel(this.activeView);
+                                    if(panel) {
+                                        var store = panel.getStore(),
+                                            view = panel.getView();
+                                    }
+                                } catch(e) {
+                                    var panel = null, 
+                                        store = null,
+                                        view = null;
+                                }
+                                
+                                if (actionType == 'add') {
+                                    if(store) store.remove(event);
+                                } else {
+                                    if (view && view.calPanel && view.rendered) {
+
+                                        var updatedEvent = Ext.util.clone(event);
+                                        updatedEvent.dirty = false;
+                                        updatedEvent.editing = false;
+                                        updatedEvent.modified = null;
+                                        
+                                        store.replaceRecord(event, updatedEvent);
+                                        view.getSelectionModel().select(event);
+                                    }
+                                    this.setLoading(false);
+                                }
+                        }
+                    } catch (e) {
+                        Tine.log.error('Tine.Calendar.MainScreenCenterPanel::checkPastEvent::handler');
+                        Tine.log.error(e);
                     }
-                },
-                this
-            );
+                }             
+            });
         } else {
             this.onAddEvent(event, checkBusyConflicts, true);
         }
@@ -499,7 +549,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     onAddEvent: function(event, checkBusyConflicts, pastChecked) {
 
         if(!pastChecked) {
-            this.checkPastEvent(event, checkBusyConflicts);
+            this.checkPastEvent(event, checkBusyConflicts, 'add');
             return;
         }
         
@@ -537,12 +587,19 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         });
     },
     
-    onUpdateEvent: function(event) {
+    onUpdateEvent: function(event, pastChecked, actionType) {
+        
+        if(!actionType) actionType = 'update';
         
         this.setLoading(true);
         
+        if(!pastChecked) {
+            this.checkPastEvent(event, null, actionType);
+            return;
+        }
+        
         if (event.isRecurBase()) {
-            this.loadMask.show();
+           if(this.loadMask) this.loadMask.show();
         }
         
         if (event.isRecurInstance() || (event.isRecurBase() && ! event.get('rrule').newrule)) {
@@ -618,7 +675,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var panel = this.getCalendarPanel(this.activeView),
             store = panel.getStore(),
             view = panel.getView();
-
+            
         Tine.Calendar.backend.saveRecord(event, {
             scope: this,
             success: function(updatedEvent) {
@@ -630,7 +687,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     else store.add(updatedEvent)
                     
                     this.setLoading(false);
-                    view.getSelectionModel().select(updatedEvent);
+                    // no sm when called from another app
+                    if (view && view.calPanel && view.rendered) {
+                        view.getSelectionModel().select(updatedEvent);
+                    }
                 }
             },
             failure: this.onProxyFail.createDelegate(this, [event], true)
@@ -811,7 +871,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     if (event) store.replaceRecord(event, updatedEvent);
                     else store.add(updatedEvent);
                     
-                    this.onUpdateEvent(updatedEvent);
+                    this.onUpdateEvent(updatedEvent, false, 'add');
                 }
             }
         });
