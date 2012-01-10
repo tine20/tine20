@@ -265,15 +265,26 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
 	}
 	
 	/**
-	 * check if old entry exists and delete it first
+	 * check if old entry exists and delete it
 	 * 
 	 * @param array $_userData
-	 * 
-	 * @todo implement
 	 */
 	protected function _checkOldUserRecord($_userData)
 	{
+	    $userIdProperty = $this->_propertyMapping['emailUsername'];
+	    $where = $this->_db->quoteInto($this->_db->quoteIdentifier($userIdProperty) . ' = ?', $_userData[$userIdProperty]);
+	    $select = $this->_db->select();
+	    $select->from(array($this->_userTable => $this->_userTable), array($userIdProperty))
+	        ->where($where)
+	        ->limit(1);
 	    
+	    $stmt = $this->_db->query($select);
+	    $queryResult = $stmt->fetch();
+	    if ($queryResult) {
+	        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+	            . " Delete existing userid {$_userData[$userIdProperty]} from {$this->_userTable}");
+            $this->_db->delete($this->_userTable, $where);
+	    }
 	}
 	
     /**
