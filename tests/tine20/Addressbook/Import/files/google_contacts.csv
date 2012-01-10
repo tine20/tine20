@@ -1,7 +1,7 @@
 Name,Given Name,Additional Name,Family Name,Yomi Name,Given Name Yomi,Additional Name Yomi,Family Name Yomi,Name Prefix,Name Suffix,Initials,Nickname,Short Name,Maiden Name,Birthday,Gender,Location,Billing Information,Directory Server,Mileage,Occupation,Hobby,Sensitivity,Priority,Subject,Notes,Group Membership,E-mail 1 - Type,E-mail 1 - Value,Phone 1 - Type,Phone 1 - Value,Address 1 - Type,Address 1 - Formatted,Address 1 - Street,Address 1 - City,Address 1 - PO Box,Address 1 - Region,Address 1 - Postal Code,Address 1 - Country,Address 1 - Extended Address
-Ando,Ando,,,yomi,,,,,,,,,,,,,,,,,,,,,,* My Contacts,,,Mobile,+49227913452,,,,,,,,,
-Anna,Anna,,,,,,,,,,,,,,,,,,,,,,,,,* My Contacts,,,Mobile,+494471707801,,,,,,,,,
-Anne,Anne,,,,,,,,,,,,,,,,,,,,,,,,,* My Contacts,,,Mobile,01235684494,,,,,,,,,
+Ando,Ando,,family,yomi,,,,,,,,,,,,,,,,,,,,,,* My Contacts,,,Mobile,+49227913452,,,,,,,,,
+Anna,Anna,,family,,,,,,,,,,,,,,,,,,,,,,,* My Contacts,,,Mobile,+494471707801,,,,,,,,,
+Anne,Anne,,family,,,,,,,,,,,,,,,,,,,,,,,* My Contacts,,,Mobile,01235684494,,,,,,,,,
 axel,axel,,gert,,,,,,,,,,,,,,,,,,,,,,rutan,kunden ::: * My Contacts,* Other,abc@here.de,Mobile,+4921234435,,,,,,,,,
-Bus Winsen,Bus Winsen,,,,,,,,,,,,,,,,,,,,,,,,,* My Contacts,,,Home,021224351809,Home,"Ring 22
+Bus Winsen,Bus Winsen,,family,,,,,,,,,,,,,,,,,,,,,,,* My Contacts,,,Home,021224351809,Home,"Ring 22
 Winsen",Niedersachsen Ring 22,Winsen,,,,,

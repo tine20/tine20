@@ -64,5 +64,6 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'last_modified_time'    => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'summary'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'location'              => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'description'           => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
 }

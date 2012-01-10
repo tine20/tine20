@@ -198,6 +198,9 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
     
     return [
         {label: _('Quick search'), field: 'query', operators: ['contains']},
+        {label: app.i18n._('Summary'), field: 'summary'},
+        {label: app.i18n._('Location'), field: 'location'},
+        {label: app.i18n._('Description'), field: 'description'},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Calendar.Model.Event, /*defaultOperator: 'in',*/ defaultValue: {path: Tine.Tinebase.container.getMyNodePath()}},
         {filtertype: 'calendar.attendee'},
         {
