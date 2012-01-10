@@ -319,6 +319,27 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     }
     
     /**
+     * sets rrule until helper field
+     *
+     * @return void
+     */
+    public function setRruleUntil()
+    {
+        if (empty($this->rrule)) {
+            $this->rrule_until = NULL;
+        } else {
+            $rrule = $this->rrule;
+            if (! $this->rrule instanceof Calendar_Model_Rrule) {
+                $rrule = new Calendar_Model_Rrule(array());
+                $rrule->setFromString($this->rrule);
+            }
+            
+            
+            $this->rrule_until = $rrule->until;
+        }
+    }
+    
+    /**
      * cleans up data to only contain freebusy infos
      * removes all fields except dtstart/dtend/id/modlog fields
      * 
@@ -452,6 +473,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             || $this->rrule != $_event->rrule;
     }
     
+    /**
+     * sets and returns the addressbook entry of the organizer
+     * 
+     * @return Addressbook_Model_Contact
+     */
     public function resolveOrganizer()
     {
         if (! $this->organizer instanceof Addressbook_Model_Contact) {
