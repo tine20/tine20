@@ -48,6 +48,30 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals($rruleString, (string)$rrule);
     }
     
+    public function testIsValid()
+    {
+        // test invalid by normal validation actions
+        $rrule = new Calendar_Model_Rrule(array(
+            'interval'  => 'NotAnInt'
+        ), true);
+        $rrule->bypassFilters = false;
+        $this->assertFalse($rrule->isValid(false));
+        
+        // count and until are not allowed together
+        $rrule = new Calendar_Model_Rrule(array(
+            'count'  => '10',
+            'until'  => '2012-01-09 09:33:00'
+        ), true);
+        $this->assertFalse($rrule->isValid(false), 'until & count');
+        
+        // test invalid by setFromString
+        $this->setExpectedException('Tinebase_Exception_Record_Validation');
+        $rruleString = "FREQ=WEEKLY;INTERVAL=NotAnInt";
+        $rrule = new Calendar_Model_Rrule(array());
+        $rrule->setFromString($rruleString);
+        
+        
+    }
     /************************ recur computation tests ************************/
     
     public function testCalcDaily()
@@ -60,6 +84,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'rrule'         => 'FREQ=DAILY;INTERVAL=2;UNTIL=2009-04-01 08:00:00',
             'exdate'        => '2009-03-31 07:00:00',
             'originator_tz' => 'Europe/Berlin',
+            'rrule_until'   => '2009-04-01 08:00:00',
             Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
         
@@ -800,6 +825,23 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals('2009-09-16 08:00:00', $nextOccurrence->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG));
         
     }
+    
+    public function testWeeklyWithCount()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'weekly end by count',
+            'dtstart'       => '2012-01-10 10:00:00',
+            'dtend'         => '2012-01-10 11:00:00',
+            'rrule'         => 'FREQ=WEEKLY;BYDAY=TU;INTERVAL=1;COUNT=10',
+            'originator_tz' => 'Europe/Berlin',
+        ));
+        
+        $event->setRruleUntil();
+        
+        $this->assertEquals('2012-03-13 11:00:00', $event->rrule_until->toString(Tinebase_Record_Abstract::ISO8601LONG));
+    }
+    
     
     /************************** date helper tests ***************************/
     

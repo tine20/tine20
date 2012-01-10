@@ -665,6 +665,19 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(0, count($user), 'added user is attender of event, but should be');
     }
     
+    public function testRruleUntil()
+    {
+        $event = $this->_getEvent();
+        
+        $event->rrule_until = Tinebase_DateTime::now();
+        $persistentEvent = $this->_controller->create($event);
+        $this->assertNull($persistentEvent->rrule_until, 'rrul_until is not unset');
+        
+        $persistentEvent->rrule = 'FREQ=YEARLY;INTERVAL=1;BYMONTH=2;UNTIL=2010-04-01 08:00:00';
+        $updatedEvent = $this->_controller->update($persistentEvent);
+        $this->assertEquals('2010-04-01 08:00:00', $updatedEvent->rrule_until->get(Tinebase_Record_Abstract::ISO8601LONG));
+    }
+    
     public function testUpdateRecuingDtstart()
     {
         $event = $this->_getEvent();
@@ -689,17 +702,18 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $updatedException = $this->_controller->get($persitentException->getId());
         
-        $this->assertEquals('2009-04-07 18:00:00', $updatedEvent->exdate[0]->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update exdate');
-        $this->assertEquals('2009-04-08 13:00:00', substr($updatedException->recurid, -19), 'failed to update persistent exception');
-        $this->assertEquals('2009-04-30 18:30:00', Calendar_Model_Rrule::getRruleFromString($updatedEvent->rrule)->until->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update until in rrule');
-        $this->assertEquals('2009-04-30 18:30:00', $updatedEvent->rrule_until->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update rrule_until');
+        $this->assertEquals(1, count($updatedEvent->exdate), 'failed to reset exdate');
+        $this->assertEquals('2009-04-08 18:00:00', $updatedEvent->exdate[0]->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update exdate');
+        $this->assertEquals('2009-04-08 18:00:00', substr($updatedException->recurid, -19), 'failed to update persistent exception');
+        $this->assertEquals('2009-04-30 13:30:00', Calendar_Model_Rrule::getRruleFromString($updatedEvent->rrule)->until->get(Tinebase_Record_Abstract::ISO8601LONG), 'until in rrule must not be changed');
+        $this->assertEquals('2009-04-30 13:30:00', $updatedEvent->rrule_until->get(Tinebase_Record_Abstract::ISO8601LONG), 'rrule_until must not be changed');
         
         sleep(1); // wait for modlog
         $updatedEvent->dtstart->subHour(5);
         $updatedEvent->dtend->subHour(5);
         $secondUpdatedEvent = $this->_controller->update($updatedEvent);
         $secondUpdatedException = $this->_controller->get($persitentException->getId());
-        $this->assertEquals('2009-04-07 13:00:00', $secondUpdatedEvent->exdate[0]->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update exdate (sub)');
+        $this->assertEquals('2009-04-08 13:00:00', $secondUpdatedEvent->exdate[0]->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update exdate (sub)');
         $this->assertEquals('2009-04-08 13:00:00', substr($secondUpdatedException->recurid, -19), 'failed to update persistent exception (sub)');
     }
     
@@ -739,7 +753,6 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $from->addDay(5); //31
         $until->addDay(5); //08
         
-        // NOTE: with this, also until, and exceptions get moved, but not the persistent exceptions
         $updatedPersistenEvent = $this->_controller->update($persistentEvent);
         
         $persistentEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
@@ -754,11 +767,11 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $exceptions = $persistentEvents->filter('recurid', "/^{$persistentEvent->uid}-.*/", TRUE);
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($updatedPersistenEvent, $exceptions, $from, $until);
         
-        // skip 31(exception), and 8 (until)
-        $this->assertEquals(7, count($recurSet));
+        // until is not adopted
+        $this->assertEquals(2, count($recurSet));
     }
     
-    public function testUpdateImplicitDeleteRcuringExceptions()
+    public function testDeleteImplicitDeleteRcuringExceptions()
     {
         $event = $this->_getEvent();
         $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 13:30:00';
@@ -775,8 +788,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $persitentException = $this->_controller->create($exception);
         
         unset($persistentEvent->rrule);
-        $updatedEvent = $this->_controller->update($persistentEvent);
-        $this->assertNull($updatedEvent->exdate);
+        $updatedEvent = $this->_controller->delete($persistentEvent);
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_controller->get($persitentException->getId());
     }

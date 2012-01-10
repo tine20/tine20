@@ -88,7 +88,6 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     public function create(Tinebase_Record_Interface $_record) 
     {
         
-        $this->_setRruleUntil($_record);
         if ($_record->rrule) {
             $_record->rrule = (string) $_record->rrule;
         }
@@ -288,7 +287,6 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function update(Tinebase_Record_Interface $_record) 
     {
-        $this->_setRruleUntil($_record);
         if ($_record->rrule) {
             $_record->rrule = (string) $_record->rrule;
         }
@@ -579,27 +577,6 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         }
     }
     */
-    
-    /**
-     * sets rrule until field in event model
-     *
-     * @param  Calendar_Model_Event $_event
-     * @return void
-     */
-    protected function _setRruleUntil(Calendar_Model_Event $_event)
-    {
-        if (empty($_event->rrule)) {
-            $_event->rrule_until = NULL;
-        } else {
-            $rrule = $_event->rrule;
-            if (! $_event->rrule instanceof Calendar_Model_Rrule) {
-                $rrule = new Calendar_Model_Rrule(array());
-                $rrule->setFromString($_event->rrule);
-            }
-            
-            $_event->rrule_until = $rrule->until;
-        }
-    }
     
     /****************************** attendee functions ************************/
     

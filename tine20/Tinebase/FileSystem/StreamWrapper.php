@@ -114,7 +114,7 @@ class Tinebase_Filesystem_StreamWrapper
      */
     public function mkdir($_path, $_mode, $_options)
     {
-        Tinebase_FileSystem::getInstance()->mkDir(substr($_path, 9));
+        Tinebase_FileSystem::getInstance()->mkdir(substr($_path, 9));
         
         return true;
     }
@@ -140,7 +140,7 @@ class Tinebase_Filesystem_StreamWrapper
      */
     public function rmdir($_path, $_context = NULL)
     {
-        return Tinebase_FileSystem::getInstance()->rmDir(substr($_path, 9), true);
+        return Tinebase_FileSystem::getInstance()->rmdir(substr($_path, 9), true);
     }
     
     /**

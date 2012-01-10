@@ -91,7 +91,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             $result = $this->_getRootNodes();
         } else if ($path->containerType === Tinebase_Model_Container::TYPE_PERSONAL && ! $path->containerOwner) {
             if (! file_exists($path->statpath)) {
-                mkdir($path->streamwrapperpath);
+                $this->_backend->mkdir($path->statpath);
             }
             $result = $this->_getOtherUserNodes();
         } else {
@@ -109,7 +109,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 ) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
                         ' Creating new path ' . $path->statpath);
-                    mkdir($path->streamwrapperpath);
+                    $this->_backend->mkdir($path->statpath);
                     $result = $this->_backend->searchNodes($_filter, $_pagination);
                 } else {
                     throw $tenf;
@@ -211,12 +211,14 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param Tinebase_Model_Tree_Node_Path $_path
      * @return Tinebase_Model_Tree_Node
+     *
+     * @todo use is_file() of Tinebase_FileSystem
      */
     public function getFileNode(Tinebase_Model_Tree_Node_Path $_path)
     {
         $this->_checkPathACL($_path, 'get');
         
-        if (! file_exists($_path->streamwrapperpath)) {
+        if (! $this->_backend->fileExists($_path->statpath)) {
             throw new Filemanager_Exception('File does not exist,');
         }
         
@@ -414,11 +416,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Creating new path ' . $_statpath . ' of type ' . $_type);
         
-        $streamwrapperpath = Tinebase_Model_Tree_Node_Path::STREAMWRAPPERPREFIX . $_statpath;
-        
         switch ($_type) {
             case Tinebase_Model_Tree_Node::TYPE_FILE:
-                if (!$handle = fopen($streamwrapperpath, 'w')) {
+                if (! $handle = $this->_backend->fopen($_statpath, 'w')) {
                     throw new Tinebase_Exception_AccessDenied('Permission denied to create file (filename ' . $_statpath . ')');
                 }
                 
@@ -436,7 +436,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 fclose($handle);                
                 break;
             case Tinebase_Model_Tree_Node::TYPE_FOLDER:
-                mkdir($streamwrapperpath);
+                $this->_backend->mkdir($_statpath);
                 break;
         }
         
@@ -452,7 +452,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      */
     protected function _checkIfExists(Tinebase_Model_Tree_Node_Path $_path, $_node = NULL)
     {
-        if (file_exists($_path->streamwrapperpath)) {
+        if ($this->_backend->fileExists($_path->statpath)) {
             $existsException = new Filemanager_Exception_NodeExists();
             $existsException->addExistingNodeInfo(($_node !== NULL) ? $_node : $this->_backend->stat($_path->statpath));
             throw $existsException;
@@ -710,6 +710,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param string $_action
      * @param boolean $_forceOverwrite
      * @return Tinebase_Model_Tree_Node
+     * 
+     * @todo use copy() of Tinebase_FileSystem  
      */
     protected function _copyOrMoveFileNode(Tinebase_Model_Tree_Node_Path $_source, Tinebase_Model_Tree_Node_Path $_destination, $_action, $_forceOverwrite = FALSE)
     {
@@ -718,9 +720,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         try {
             $this->_checkIfExists($_destination);
         } catch (Filemanager_Exception_NodeExists $fene) {
-            if ($_forceOverwrite && $_source->streamwrapperpath !== $_destination->streamwrapperpath) {
+            if ($_forceOverwrite && $_source->statpath !== $_destination->statpath) {
                 // delete old node
-                unlink($_destination->streamwrapperpath);
+                $this->_backend->unlink($_destination->statpath);
             } else if (! $_forceOverwrite) {
                 throw $fene;
             }
@@ -731,7 +733,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 copy($_source->streamwrapperpath, $_destination->streamwrapperpath);
                 break;
             case 'move':
-                rename($_source->streamwrapperpath, $_destination->streamwrapperpath);
+                $this->_backend->rename($_source->statpath, $_destination->statpath);
                 break;
         }
 
@@ -848,10 +850,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' rename ' . $_source->streamwrapperpath . ' -> ' . $_destination->streamwrapperpath);
+                . ' rename ' . $_source->statpath . ' -> ' . $_destination->statpath);
             
             $this->_checkPathACL($destinationParentPathRecord, 'update');
-            rename($_source->streamwrapperpath, $_destination->streamwrapperpath);
+            $this->_backend->rename($_source->statpath, $_destination->statpath);
         }
         
         $movedNode = $this->_backend->stat($_destination->statpath);
@@ -926,10 +928,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         
         switch ($node->type) {
             case Tinebase_Model_Tree_Node::TYPE_FILE:
-                $success = unlink($_path->streamwrapperpath);
+                $success = $this->_backend->unlink($_path->statpath);
                 break;
             case Tinebase_Model_Tree_Node::TYPE_FOLDER:
-                $success = $this->_backend->rmDir($_path->statpath, TRUE);
+                $success = $this->_backend->rmdir($_path->statpath, TRUE);
                 break;
         }
         

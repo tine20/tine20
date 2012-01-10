@@ -301,7 +301,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $persistentEvent = $this->_controller->create($event);
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($event, $exceptions, $from, $until);
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
         
         // create exceptions
         $recurSet->summary = 'Limo bei Schweinske';
@@ -341,7 +341,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->assertEquals(1, count($newSeries->filter('recurid', "/^.+/", TRUE)->filter('rrule', '/^$/', TRUE)), 'there should be exactly one new persitent event exception');
         
         $this->assertEquals(1, count($oldSeries->filter('id', "/^fake.*/", TRUE)), 'there should be exactly one old fake event');
-        $this->assertEquals(1, count($newSeries->filter('id', "/^fake.*/", TRUE)), 'there should be exactly one new fake event');
+        $this->assertEquals(1, count($newSeries->filter('id', "/^fake.*/", TRUE)), 'there should be exactly one new fake event'); //26 (reset)
         
         $oldBaseEvent = $oldSeries->filter('recurid', "/^$/", TRUE)->getFirstRecord();
         $newBaseEvent = $newSeries->filter('recurid', "/^$/", TRUE)->getFirstRecord();
@@ -352,7 +352,6 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         )), 'exdate of old series');
         
         $this->assertFalse(!!array_diff($newBaseEvent->exdate, array(
-            new Tinebase_DateTime('2011-04-26 14:00:00'),
             new Tinebase_DateTime('2011-04-27 14:00:00'),
         )), 'exdate of new series');
         
@@ -364,8 +363,8 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         
         $this->assertFalse(!!array_diff($newSeries->dtstart, array(
             new Tinebase_DateTime('2011-04-25 14:00:00'),
+            new Tinebase_DateTime('2011-04-26 14:00:00'),
             new Tinebase_DateTime('2011-04-27 12:00:00'),
-            new Tinebase_DateTime('2011-04-28 14:00:00'),
         )), 'dtstart of new series');
     }
     
