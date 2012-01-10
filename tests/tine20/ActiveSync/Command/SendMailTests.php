@@ -61,7 +61,7 @@ class ActiveSync_Command_SendMailTests extends PHPUnit_Framework_TestCase
      */
     public function testSendMail()
     {
-        $stream = fopen(dirname(__FILE__) . '/../../Felamimail/files/mail.eml', 'r');
+        $stream = fopen(dirname(__FILE__) . '/../../Felamimail/files/text_plain.eml', 'r');
         
         $sendMail = new ActiveSync_Command_SendMail($stream);
         
