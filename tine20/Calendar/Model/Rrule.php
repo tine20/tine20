@@ -76,21 +76,6 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        /*
-        // tine record fields
-        'id'                   => array('allowEmpty' => true,  'Alnum'),
-        'created_by'           => array('allowEmpty' => true,  'Int'  ),
-        'creation_time'        => array('allowEmpty' => true          ),
-        'last_modified_by'     => array('allowEmpty' => true          ),
-        'last_modified_time'   => array('allowEmpty' => true          ),
-        'is_deleted'           => array('allowEmpty' => true          ),
-        'deleted_time'         => array('allowEmpty' => true          ),
-        'deleted_by'           => array('allowEmpty' => true          ),
-        'seq'                  => array('allowEmpty' => true,  'Int'  ),
-    
-        'cal_event_id'         => array('allowEmpty' => true,  'Alnum'),
-        */
-    
         'freq'                 => array('allowEmpty' => true, 'InArray' => array(self::FREQ_DAILY, self::FREQ_MONTHLY, self::FREQ_WEEKLY, self::FREQ_YEARLY)),
         'interval'             => array('allowEmpty' => true, 'Int'   ),
         'byday'                => array('allowEmpty' => true, 'Regex' => '/^[\-0-9A_Z,]{2,}$/'),
@@ -98,8 +83,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         'bymonthday'           => array('allowEmpty' => true, 'Int'   ),
         'wkst'                 => array('allowEmpty' => true, 'InArray' => array(self::WDAY_SUNDAY, self::WDAY_MONDAY, self::WDAY_TUESDAY, self::WDAY_WEDNESDAY, self::WDAY_THURSDAY, self::WDAY_FRIDAY, self::WDAY_SATURDAY)),
         'until'                => array('allowEmpty' => true          ),
-        
-        //'organizer_tz'          => array('allowEmpty' => true         ),
+        'count'                => array('allowEmpty' => true, 'Int'   ),
     );
     
     /**
@@ -108,16 +92,13 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_datetimeFields = array(
-        //'creation_time', 
-        //'last_modified_time', 
-        //'deleted_time', 
         'until',
     );
     
     /**
      * @var array supported rrule parts
      */
-    protected $_rruleParts = array('freq', 'interval', 'until', 'wkst', 'byday', 'bymonth', 'bymonthday');
+    protected $_rruleParts = array('freq', 'interval', 'until', 'count', 'wkst', 'byday', 'bymonth', 'bymonthday');
     
     /**
      * set from ical rrule string
@@ -222,6 +203,29 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         }
     }
     
+    /**
+     * validate and filter the the internal data
+     *
+     * @param $_throwExceptionOnInvalidData
+     * @return bool
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function isValid($_throwExceptionOnInvalidData = false)
+    {
+        $isValid = parent::isValid($_throwExceptionOnInvalidData);
+        
+        if (isset($this->_properties['count']) && isset($this->_properties['until'])) {
+            $isValid = $this->_isValidated = false;
+            
+            if ($_throwExceptionOnInvalidData) {
+                $e = new Tinebase_Exception_Record_Validation('count and until can not be set both');
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . $e);
+                throw $e;
+            }
+        }
+        
+        return $isValid;
+    }
     /************************* Recurrence computation *****************************/
     
     /**
