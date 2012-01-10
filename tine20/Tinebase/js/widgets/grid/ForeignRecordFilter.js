@@ -441,12 +441,15 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             filter.foreignRecordDefinition = newOperator;
         }
         
-        if (filter.toolbar) {
-            filter.toolbar.destroy();
-            delete filter.toolbar;
+        if (filter.get('operator') != newOperator) {
+            if (filter.toolbar) {
+                filter.toolbar.destroy();
+                delete filter.toolbar;
+            }
         }
         
         filter.set('operator', newOperator);
+
         if (! keepValue) {
             filter.set('value', '');
         }
