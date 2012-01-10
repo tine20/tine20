@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -257,10 +257,23 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
         unset($imapSettings[$this->_propertyMapping['emailMailSize']]);
         unset($imapSettings[$this->_propertyMapping['emailSieveSize']]);
         unset($imapSettings[$this->_propertyMapping['emailLastLogin']]);
-                    
+        
+        $this->_checkOldUserRecord($imapSettings);
         $this->_db->insert($this->_userTable, $imapSettings);
         
         $this->inspectGetUserByProperty($_addedUser);
+	}
+	
+	/**
+	 * check if old entry exists and delete it first
+	 * 
+	 * @param array $_userData
+	 * 
+	 * @todo implement
+	 */
+	protected function _checkOldUserRecord($_userData)
+	{
+	    
 	}
 	
     /**
