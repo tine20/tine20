@@ -334,8 +334,14 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 $rrule->setFromString($this->rrule);
             }
             
-            
-            $this->rrule_until = $rrule->until;
+            if (isset($rrule->count)) {
+                $this->rrule_until = NULL;
+                
+                $lastOccurrence = Calendar_Model_Rrule::computeNextOccurrence($this, new Tinebase_Record_RecordSet('Calendar_Model_Event'), $this->dtend, --$rrule->count);
+                $this->rrule_until = $lastOccurrence->dtend;
+            } else {
+                $this->rrule_until = $rrule->until;
+            }
         }
     }
     
