@@ -5,14 +5,12 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * 
- * @todo        add toJson / setFromJson functions?
  */
 
 /**
- * Abstract implemetation of  Tinebase_Record_Interface
+ * Abstract implemetation of Tinebase_Record_Interface
  * 
  * @package     Tinebase
  * @subpackage  Record
@@ -29,14 +27,14 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      *
      * @var bool
      */
-    public  $bypassFilters;
+    public $bypassFilters;
     
     /**
      * should datetimeFields be converted from iso8601 (or optionally others {@see $this->dateConversionFormat}) strings to DateTime objects and back 
      *
      * @var bool
      */
-    public  $convertDates;
+    public $convertDates;
     
     /**
      * differnet format than iso8601 to use for conversions 
@@ -120,6 +118,15 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * @var array list of modlog omit fields
      */
     protected $_modlogOmitFields = array();
+    
+    /**
+     * name of fields that should not be persisted during create/update in backend
+     *
+     * @var array
+     * 
+     * @todo think about checking the setting of readonly field and not allow it
+     */
+    protected $_readOnlyFields = array();
     
     /**
      * save state if data are validated
@@ -951,4 +958,13 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         return $this->_modlogOmitFields;
     }
 
+    /**
+     * returns read only fields
+     *
+     * @return array
+     */
+    public function getReadOnlyFields()
+    {
+        return $this->_readOnlyFields;
+    }
 }
