@@ -71,7 +71,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
         $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
         $contact->setId($id);
         
-        $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
+        $contact = Addressbook_Controller_Contact::getInstance()->create($contact, false);
         
         $card = new self($container, $contact);
                 
@@ -226,7 +226,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
         
         $contact = $this->_converter->toTine20Model($cardData, $this->getRecord());
         
-        $this->_contact = Addressbook_Controller_Contact::getInstance()->update($contact);
+        $this->_contact = Addressbook_Controller_Contact::getInstance()->update($contact, false);
         $this->_vcard   = null;
 
         // avoid sending headers during unit tests

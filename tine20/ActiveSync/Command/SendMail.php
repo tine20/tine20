@@ -40,7 +40,22 @@ class ActiveSync_Command_SendMail
      * @var Felamimail_Model_Account
      */
     protected $_account;
-        
+    
+    /**
+     * @var resource
+     */
+    protected $_inputStream;
+
+    /**
+     * @param resource $_inputStream
+     */
+    public function __construct($_inputStream = null)
+    {
+        if (is_resource($_inputStream)) {
+            $this->_inputStream = $_inputStream;
+        }
+    }
+    
     /**
      * process the XML file and add, change, delete or fetches data 
      *
@@ -62,28 +77,29 @@ class ActiveSync_Command_SendMail
             throw new ActiveSync_Exception('no email address set for current user');
         }
         
-        $this->_saveInSent = (bool)$_GET['SaveInSent'] == 'T';
+        $this->_saveInSent = isset($_GET['SaveInSent']) && (bool)$_GET['SaveInSent'] == 'T';
         
-        $emailStream = fopen("php://input", 'r');
+        if (!is_resource($this->_inputStream)) {
+            $this->_inputStream = fopen("php://input", 'r');
+        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
             $debugStream = fopen("php://temp", 'r+');
-            stream_copy_to_stream($emailStream, $debugStream);
+            stream_copy_to_stream($this->_inputStream, $debugStream);
             rewind($debugStream);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " email to send:" . stream_get_contents($debugStream));
-            rewind($debugStream);
-            $emailStream = $debugStream;
+
+            // replace original stream wirh debug stream, as php://input can't be rewinded
+            $this->_inputStream = $debugStream;
+            rewind($this->_inputStream);
         }
-        
+
         $this->_incomingMessage = new Zend_Mail_Message(
             array(
-                'file' => $emailStream
+                'file' => $this->_inputStream
             )
         );
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " saveInSent: " . $this->_saveInSent);
     }    
     
     /**
@@ -94,6 +110,9 @@ class ActiveSync_Command_SendMail
     public function getResponse()
     {
         $mail = Tinebase_Mail::createFromZMM($this->_incomingMessage);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " saveInSent: " . (int)$this->_saveInSent);
         
         Felamimail_Controller_Message_Send::getInstance()->sendZendMail($this->_account, $mail, $this->_saveInSent);        
     }    

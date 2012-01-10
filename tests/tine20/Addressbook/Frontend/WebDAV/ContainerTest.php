@@ -47,16 +47,14 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         $this->objects['initialContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'              => Tinebase_Record_Abstract::generateUID(),
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
         )));
-        
-        $this->objects['containerToDelete'][] = $this->objects['initialContainer'];
-        
-        $this->objects['contactsToDelete'] = array();
     }
 
     /**
@@ -67,19 +65,7 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
      */
     protected function tearDown()
     {
-        foreach ($this->objects['contactsToDelete'] as $contact) {
-            $contact->delete();
-        }
-        
-        foreach ($this->objects['containerToDelete'] as $containerId) {
-            $containerId = $containerId instanceof Tinebase_Model_Container ? $containerId->getId() : $containerId;
-            
-            try {
-                Tinebase_Container::getInstance()->deleteContainer($containerId);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                // do nothing
-            }
-        }
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
@@ -111,6 +97,8 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
      */
     public function testGetProperties()
     {
+        $this->testCreateFile();
+        
         $requestedProperties = array(
         	'{http://calendarserver.org/ns/}getctag',
             '{DAV:}resource-id'
@@ -141,8 +129,6 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
         
         $contact = $container->createFile("$id.vcf", $vcardStream);
         $record = $contact->getRecord();
-        
-        $this->objects['contactsToDelete'][] = $contact;
         
         $this->assertTrue($contact instanceof Addressbook_Frontend_WebDAV_Contact);
         
