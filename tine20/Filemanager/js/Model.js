@@ -155,9 +155,10 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         }
 
         var params = {
-                application: this.appName,                                
-                filenames: filenames,
-                method: this.appName + ".deleteNodes"
+            application: this.appName,                                
+            filenames: filenames,
+            method: this.appName + ".deleteNodes",
+            timeout: 300000 // 5 minutes
         };
 
         options.params = params;
@@ -277,6 +278,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         
         Ext.Ajax.request({
             params: params,
+            timeout: 300000, // 5 minutes
             scope: this,
             success: function(result, request){
                 
