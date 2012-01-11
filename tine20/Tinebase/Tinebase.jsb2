@@ -375,7 +375,11 @@
           "text": "MultipleEditDialogPlugin.js",
           "path": "js/widgets/dialog/"
         },
-         {
+        {
+          "text": "MultipleEditResultSummary.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
           "text": "TabPanelKeyPlugin.js",
           "path": "js/ux/"
         },
