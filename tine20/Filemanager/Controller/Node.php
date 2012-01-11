@@ -423,6 +423,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 }
                 
                 if ($_tempFileId !== NULL) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        ' Reading data from tempfile ...');
+                    
                     $tempFile = Tinebase_TempFile::getInstance()->getTempFile($_tempFileId);
                     $tempData = fopen($tempFile->path, 'r');
                     if ($tempData) {
@@ -433,7 +436,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                         throw new Filemanager_Exception('Could not read tempfile ' . $tempFile->path);
                     }
                 }
-                fclose($handle);                
+                $this->_backend->fclose($handle);
                 break;
             case Tinebase_Model_Tree_Node::TYPE_FOLDER:
                 $this->_backend->mkdir($_statpath);
