@@ -77,6 +77,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $contentSeqAfter = Tinebase_Container::getInstance()->getContentSequence($scleverDisplayContainerId);
         $this->assertEquals($contentSeqBefore[$scleverDisplayContainerId] + 1, $contentSeqAfter[$scleverDisplayContainerId],
         	'content sequence of display container should be increased by 1:' . print_r($contentSeqAfter, TRUE));
+        $this->assertEquals($contentSeqAfter[$scleverDisplayContainerId], Tinebase_Container::getInstance()->get($scleverDisplayContainerId)->content_seq);
         
         return $loadedEventData;
     }

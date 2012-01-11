@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Container
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -111,6 +111,11 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->_validatePath($container);
     }
     
+    /**
+     * validate owner id
+     * 
+     * @param Tinebase_Model_Container $_container
+     */
     protected function _validateOwnerId(Tinebase_Model_Container $_container)
     {
         if ($_container->type == Tinebase_Model_Container::TYPE_SHARED)  {
@@ -120,6 +125,11 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * validate path
+     * 
+     * @param Tinebase_Model_Container $_container
+     */
     protected function _validatePath(Tinebase_Model_Container $_container)
     {
         if ($_container->type == Tinebase_Model_Container::TYPE_SHARED)  {
@@ -150,7 +160,6 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to set new container name
-     *
      */
     public function testSetContainerName()
     {
@@ -160,6 +169,19 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('renamed container', $container->name);
         $this->_validateOwnerId($container);
         $this->_validatePath($container);
+    }
+
+    /**
+    * try to set readonly content seq
+    */
+    public function testSetContentSeq()
+    {
+        $container = $this->objects['initialContainer'];
+        $initialContentSeq = $container->content_seq;
+        $container->content_seq = 500;
+        $updatedContainer = $this->_instance->update($container);
+        
+        $this->assertEquals($initialContentSeq, $updatedContainer->content_seq);
     }
     
     /**
