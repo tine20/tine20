@@ -301,11 +301,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         // check 'changed' systemnote
         $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) customfields ([] -> {');
         
-        /* TODO: check invalid records
         // check invalid data
         
-        $contact = $this->_addContact($company);
-        $contactId= $contact['id'];
         $changes = array(
             array('name' => 'n_family', 'value' => ''),
             array('name' => 'n_given',  'value' => ''),
@@ -313,8 +310,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         );
         $result = $json->updateMultipleRecords('Addressbook', 'Contact', $changes, $filter);
         
-        $this->assertEquals($record['url'],'http://www.phpunit.de','DefaultField "url" was not updated as expected');
-        */
+        $this->assertEquals($result['failcount'], 3, 'failcount does not show the correct number');
+        $this->assertEquals($result['totalcount'], 0, 'totalcount does not show the correct number');
     }
     
     /**

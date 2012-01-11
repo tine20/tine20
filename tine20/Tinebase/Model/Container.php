@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -81,11 +81,11 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         'color'             => array('allowEmpty' => true, array('regex', '/^#[0-9a-fA-F]{6}$/')),
         'application_id'    => array('Alnum', 'presence' => 'required'),
         'account_grants'    => array('allowEmpty' => true), // non persistent
-        'owner_id'          => array('allowEmpty' => true), // non persistent // only set for personal folders
+        'owner_id'          => array('allowEmpty' => true), // non persistent + only set for personal folders
         'path'              => array('allowEmpty' => true), // non persistent
         
-    // only gets updated in increaseContentSequence() + only readable by getContentSequence
-    //    'content_seq'       => array('allowEmpty' => true),
+    // only gets updated in increaseContentSequence() + readonly in normal record context
+        'content_seq'       => array('allowEmpty' => true),
     
     // modlog fields
         'created_by'             => array('allowEmpty' => true),
@@ -107,6 +107,13 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time',
     );    
+    
+    /**
+    * name of fields that should not be persisted during create/update in backend
+    *
+    * @var array
+    */
+    protected $_readOnlyFields = array('content_seq');
     
     /**
      * converts a int, string or Tinebase_Model_Container to a containerid

@@ -47,6 +47,8 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         $this->objects['initialContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'              => Tinebase_Record_Abstract::generateUID(),
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
@@ -55,10 +57,6 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         )));
         
         Tinebase_Container::getInstance()->addGrants($this->objects['initialContainer'], Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, Tinebase_Core::getUser()->accountPrimaryGroup, array(Tinebase_Model_Grants::GRANT_READ));
-        
-        $this->objects['containerToDelete'][] = $this->objects['initialContainer'];
-        
-        $this->objects['eventsToDelete'] = array();
         
         // must be defined for Calendar/Frontend/WebDAV/Event.php
         $_SERVER['REQUEST_URI'] = 'foobar';
@@ -72,19 +70,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        foreach ($this->objects['eventsToDelete'] as $contact) {
-            $contact->delete();
-        }
-        
-        foreach ($this->objects['containerToDelete'] as $containerId) {
-            $containerId = $containerId instanceof Tinebase_Model_Container ? $containerId->getId() : $containerId;
-            
-            try {
-                Tinebase_Container::getInstance()->deleteContainer($containerId);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                // do nothing
-            }
-        }
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
@@ -130,6 +116,8 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetProperties()
     {
+        $this->testCreateFile();
+        
         $requestedProperties = array(
         	'{http://calendarserver.org/ns/}getctag',
             '{DAV:}resource-id'
@@ -160,8 +148,6 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         
         $event = $container->createFile("$id.ics", $vcalendarStream);
         $record = $event->getRecord();
-        
-        $this->objects['eventsToDelete'][] = $event;
         
         $this->assertTrue($event instanceof Calendar_Frontend_WebDAV_Event);
         $this->assertEquals($id, $record->getId(), 'ID mismatch');

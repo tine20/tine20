@@ -826,7 +826,6 @@ abstract class Tinebase_Controller_Record_Abstract
         if (count($_records) === 0) {
             return;
         }
-
         foreach ($_records as $currentRecord) {
             $oldRecordArray = $currentRecord->toArray();
             $data = array_merge($oldRecordArray, $_data);
@@ -839,8 +838,9 @@ abstract class Tinebase_Controller_Record_Abstract
             	$this->_updateMultipleResult['totalcount'] ++;
             	
             } catch (Tinebase_Exception_Record_Validation $e) {
+                
                 $this->_updateMultipleResult['exceptions']->addRecord(new Tinebase_Model_UpdateMultipleException(array(
-                    'id'         => $record->getId(),
+                    'id'         => $currentRecord->getId(),
                     'exception'  => $e,
                     'code'       => $e->getCode(),
                     'message'    => $e->getMessage()

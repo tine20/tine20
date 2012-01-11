@@ -196,6 +196,16 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      */
     public function setFromArray(array $_data)
     {
+        $_data = $this->_resolveAutoValues($_data);
+        parent::setFromArray($_data);
+    }
+    
+    /**
+     * Resolves the auto values n_fn and n_fileas
+     * @param array $_data
+     * @return array $_data
+     */
+    protected function _resolveAutoValues(array $_data) {
         if (! array_key_exists('org_name', $_data)) {
             $_data['org_name'] = '';
         }
@@ -216,10 +226,82 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         if (!empty($_data['n_given'])) {
             $_data['n_fn'] = $_data['n_given'] . ' ' . $_data['n_fn'];
         }
-        
-        
-        parent::setFromArray($_data);
+        return $_data;
     }
+    
+    /**
+     * Overwrites the __set Method from Tinebase_Record_Abstract
+     * Also sets n_fn and n_fileas when org_name, n_given or n_family should be set
+     * @see Tinebase_Record_Abstract::__set()
+     */
+    public function __set($_name, $_value) {
+        
+        switch ($_name) {
+            case 'n_given':
+                $resolved = $this->_resolveAutoValues(array('n_given' => $_value, 'n_family' => $this->__get('n_family'), 'org_name' => $this->__get('org_name')));                
+                parent::__set('n_fn', $resolved['n_fn']);
+                parent::__set('n_fileas', $resolved['n_fileas']);
+                break;
+            case 'n_family':
+                $resolved = $this->_resolveAutoValues(array('n_family' => $_value, 'n_given' => $this->__get('n_given'), 'org_name' => $this->__get('org_name')));
+                parent::__set('n_fn', $resolved['n_fn']);
+                parent::__set('n_fileas', $resolved['n_fileas']);
+                break;
+            case 'org_name':
+                $resolved = $this->_resolveAutoValues(array('org_name' => $_value, 'n_given' => $this->__get('n_given'), 'n_family' => $this->__get('n_family')));
+                parent::__set('n_fn', $resolved['n_fn']);
+                parent::__set('n_fileas', $resolved['n_fileas']);
+        }
+        
+        parent::__set($_name, $_value);
+    }
+
+    /**
+     * additional validation
+     *
+     * @param $_throwExceptionOnInvalidData
+     * @return bool
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    
+    
+    function isValid($_throwExceptionOnInvalidData = false) {
+        
+        if ((!$this->__get('org_name')) && (!$this->__get('n_family'))) {
+
+            array_push($this->_validationErrors, array('id' => 'org_name', 'msg' => 'either "org_name" or "n_family" must be given!'));
+            array_push($this->_validationErrors, array('id' => 'n_family', 'msg' => 'either "org_name" or "n_family" must be given!'));
+            
+            $valid = false;
+
+        } else {
+            $valid = true;
+        }
+        
+        $parentException = false;
+        $parentValid = false;
+        
+        try {
+            $parentValid = parent::isValid($_throwExceptionOnInvalidData);
+        } catch (Tinebase_Exception_Record_Validation $e) {
+            $parentException = $e;
+        }
+        
+        if ($_throwExceptionOnInvalidData && (!$valid || !$parentValid)) {
+            
+            if(!$valid) {
+                $message = 'either "org_name" or "n_family" must be given!';    
+            }
+            
+            if($parentException) $message .= ', ' . $parentException->getMessage();
+            $e = new Tinebase_Exception_Record_Validation($message);
+            if(!$valid) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ":\n" . print_r($this->_validationErrors,true). $e);
+            throw $e;
+        }
+        
+        return $parentValid && $valid;        
+    }    
+
     
     /**
      * fills a contact from json data
