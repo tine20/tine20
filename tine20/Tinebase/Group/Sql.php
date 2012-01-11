@@ -77,23 +77,22 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
-        $cache = Tinebase_Core::get('cache');
-        $cacheId = convertCacheId('getGroupMemberships' . $accountId);
-        $memberships = $cache->load($cacheId);
+        $cacheId = convertCacheId('groupMemberships' . $accountId);
+        $memberships = Tinebase_Core::getCache()->load($cacheId);
 
         if (! $memberships) {
             $memberships = array();
             $colName = $this->groupsTable->getAdapter()->quoteIdentifier('account_id');
             $select = $this->groupMembersTable->select();
             $select->where($colName . ' = ?', $accountId);
-
+            
             $rows = $this->groupMembersTable->fetchAll($select);
-
+            
             foreach($rows as $membership) {
                 $memberships[] = $membership->group_id;
             }
 
-            $cache->save($memberships, $cacheId, array('group'));
+            Tinebase_Core::getCache()->save($memberships, $cacheId);
         }
 
         return $memberships;
@@ -109,9 +108,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
-        $cache = Tinebase_Core::get('cache');
-        $cacheId = convertCacheId('getGroupMembers' . $groupId);
-        $members = $cache->load($cacheId);
+        $cacheId = convertCacheId('groupMembers' . $groupId);
+        $members = Tinebase_Core::getCache()->load($cacheId);
 
         if (! $members) {
             $members = array();
@@ -125,7 +123,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
                 $members[] = $member->account_id;
             }
 
-            $cache->save($members, $cacheId, array('group'));
+            Tinebase_Core::getCache()->save($members, $cacheId);
         }
 
         return $members;
@@ -171,11 +169,16 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
                     $groupId, 
                     $accountId
                 ));
+                
+                // invalidate membership cache
+                $cacheId = convertCacheId('groupMemberships' . $accountId);
+                Tinebase_Core::getCache()->remove($cacheId);
             }
         }
         
-        // invalidate cache
-        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('group'));
+        // invalidate group cache
+        $cacheId = convertCacheId('groupMembers' . $groupId);
+        Tinebase_Core::getCache()->remove($cacheId);
     }
     
     /**
@@ -281,8 +284,12 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $this->groupMembersTable->insert($data);
             
             // invalidate cache
-            Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('group'));     
-                   
+            $cacheId = convertCacheId('groupMembers' . $groupId);
+            Tinebase_Core::getCache()->remove($cacheId);
+            
+            $cacheId = convertCacheId('groupMemberships' . $accountId);
+            Tinebase_Core::getCache()->remove($cacheId);
+            
         } catch (Zend_Db_Statement_Exception $e) {
             // account is already member of this group
         }
@@ -322,7 +329,11 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $this->groupMembersTable->delete($where);
         
         // invalidate cache
-        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('group'));
+        $cacheId = convertCacheId('groupMembers' . $groupId);
+        Tinebase_Core::getCache()->remove($cacheId);
+        
+        $cacheId = convertCacheId('groupMemberships' . $accountId);
+        Tinebase_Core::getCache()->remove($cacheId);
     }
     
     /**
