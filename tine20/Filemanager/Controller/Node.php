@@ -409,7 +409,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param type
      * @param string $_tempFileId
      * @return Tinebase_Model_Tree_Node
-     * @throws Filemanager_Exception
      */
     protected function _createNodeInBackend($_statpath, $_type, $_tempFileId = NULL)
     {
@@ -421,20 +420,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 if (! $handle = $this->_backend->fopen($_statpath, 'w')) {
                     throw new Tinebase_Exception_AccessDenied('Permission denied to create file (filename ' . $_statpath . ')');
                 }
-                
                 if ($_tempFileId !== NULL) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                        ' Reading data from tempfile ...');
-                    
-                    $tempFile = Tinebase_TempFile::getInstance()->getTempFile($_tempFileId);
-                    $tempData = fopen($tempFile->path, 'r');
-                    if ($tempData) {
-                        stream_copy_to_stream($tempData, $handle);
-                        fclose($tempData);
-                        $this->_backend->clearStatCache($_statpath);
-                    } else {
-                        throw new Filemanager_Exception('Could not read tempfile ' . $tempFile->path);
-                    }
+                    $this->_copyTempfile($_tempFileId, $handle);
+                    $this->_backend->clearStatCache($_statpath);
                 }
                 $this->_backend->fclose($handle);
                 break;
@@ -444,6 +432,28 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         }
         
         return $this->_backend->stat($_statpath);
+    }
+    
+    /**
+     * copy tempfile data to file handle
+     * 
+     * @param string $_tempFileId
+     * @param resource $_fileHandle
+     * @throws Filemanager_Exception
+     */
+    protected function _copyTempfile($_tempFileId, $_fileHandle)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' Reading data from tempfile ...');
+        
+        $tempFile = Tinebase_TempFile::getInstance()->getTempFile($_tempFileId);
+        $tempData = fopen($tempFile->path, 'r');
+        if ($tempData) {
+            stream_copy_to_stream($tempData, $_fileHandle);
+            fclose($tempData);
+        } else {
+            throw new Filemanager_Exception('Could not read tempfile ' . $tempFile->path);
+        }
     }
     
     /**
