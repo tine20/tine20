@@ -200,21 +200,25 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
     autoHeight: true,
     
     getRule: function() {
-        var until = this.until.getRawValue();
-        until = until ? Date.parseDate(until, this.until.format) : null;
-        
-        
-        if (Ext.isDate(until)) {
-            // make sure, last reccurance is included
-            until = until.clearTime(true).add(Date.HOUR, 24).add(Date.SECOND, -1).format(Date.patterns.ISO8601Long);
-        }
         
         var rrule = {
             freq    : this.freq,
-            interval: this.interval.getValue(),
-            //until   : Ext.isDate(until) ? until.format(Date.patterns.ISO8601Long) : null
-            until   : until
+            interval: this.interval.getValue()
         };
+        
+        if (this.untilRadio.checked) {
+            rrule.until = this.until.getRawValue();
+            rrule.until = rrule.until ? Date.parseDate(rrule.until, this.until.format) : null;
+            
+            
+            if (Ext.isDate(rrule.until)) {
+                // make sure, last reccurance is included
+                rrule.until = rrule.until.clearTime(true).add(Date.HOUR, 24).add(Date.SECOND, -1).format(Date.patterns.ISO8601Long);
+            }
+        } else {
+            rrule.count = this.count.getValue() || 1;
+        }
+            
         
         return rrule;
     },
@@ -229,12 +233,24 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         
-        this.untilId = Ext.id();
+        this.limitId = Ext.id();
+        
+        this.untilRadio = new Ext.form.Radio({
+            requiredGrant : 'editGrant',
+            hideLabel     : true,
+            boxLabel      : this.app.i18n._('at'), 
+            name          : this.limitId + 'LimitRadioGroup', 
+            inputValue    : 'UNTIL',
+            checked       : true,
+            listeners     : {
+                check: this.onLimitRadioCheck.createDelegate(this)
+            }
+        });
         
         this.until = new Ext.form.DateField({
             requiredGrant : 'editGrant',
             width         : 100,
-            emptyText     : this.app.i18n._('forever'),
+            emptyText     : this.app.i18n._('never'),
             onTriggerClick: Ext.form.DateField.prototype.onTriggerClick.createSequence(this.onAfterUnitTriggerClick, this),
             listeners: {
                 scope: this,
@@ -243,20 +259,31 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
             }
         });
         
-        /*
-        this.untilCombo = new Ext.form.ComboBox({
-            triggerAction : 'all',
-            width: 70,
-            hideLabel: true,
-            value         : false,
-            editable      : false,
-            mode          : 'local',
-            store         : [
-                [false,   this.app.i18n._('Forever')  ],
-                ['at',    this.app.i18n._('at')     ]
-            ]
+        var countStringParts = this.app.i18n._('after {0} occurrences').split('{0}'),
+            countBeforeString = countStringParts[0],
+            countAfterString = countStringParts[1];
+        
+        this.countRadio = new Ext.form.Radio({
+            requiredGrant : 'editGrant',
+            hideLabel     : true,
+            boxLabel      : countBeforeString, 
+            name          : this.limitId + 'LimitRadioGroup', 
+            inputValue    : 'COUNT',
+            listeners     : {
+                check: this.onLimitRadioCheck.createDelegate(this)
+            }
         });
-        */
+        
+        this.count = new Ext.form.NumberField({
+            requiredGrant : 'editGrant',
+            style         : 'text-align:right;',
+            //fieldLabel    : this.intervalBeforeString,
+            width         : 40,
+            minValue      : 1,
+            disabled      : true,
+            allowBlank    : false
+        });
+        
         var intervalPars = this.intervalString.split('{0}');
         var intervalBeforeString = intervalPars[0];
         var intervalAfterString = intervalPars[1];
@@ -289,16 +316,61 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         }
         
         this.items = this.items.concat({
-            layout: 'column',
-            style: 'padding-top: 5px;',
-            items: [{
-                width: 70,
-                html: this.app.i18n._('Until')
-            }, this.until]
-                
+            layout: 'form',
+            html: '<div style="padding-top: 5px;">' + this.app.i18n._('End') + '</div>' +
+                    '<div style="position: relative;">' +
+                    '<div style="position: relative;">' +
+                        '<table><tr>' +
+                            '<td width="65" id="' + this.limitId + 'untilRadio"></td>' +
+                            '<td width="100" id="' + this.limitId + 'until"></td>' +
+                        '</tr></table>' +
+                    '</div>' +
+                    '<div style="position: relative;">' +
+                        '<table><tr>' +
+                            '<td width="65" id="' + this.limitId + 'countRadio"></td>' +
+                            '<td width="40" id="' + this.limitId + 'count"></td>' +
+                            '<td width="40" style="padding-left: 5px" >' + countAfterString + '</td>' +
+                         '</tr></table>' +
+                    '</div>' +
+                '</div>',
+                listeners: {
+                   scope: this,
+                   render: this.onLimitRender
+                }
         });
         
         Tine.Calendar.RrulePanel.AbstractCard.superclass.initComponent.call(this);
+    },
+    
+    onLimitRender: function() {
+        var untilradioel = Ext.get(this.limitId + 'untilRadio');
+        var untilel = Ext.get(this.limitId + 'until');
+        
+        var countradioel = Ext.get(this.limitId + 'countRadio');
+        var countel = Ext.get(this.limitId + 'count');
+        
+        if (! (untilradioel && countradioel)) {
+            return this.onLimitRender.defer(100, this, arguments);
+        }
+        
+        this.untilRadio.render(untilradioel);
+        this.until.render(untilel);
+        this.until.wrap.setWidth(80);
+        
+        this.countRadio.render(countradioel);
+        this.count.render(countel);
+        this.count.wrap.setWidth(80);
+    },
+    
+    onLimitRadioCheck: function(radio, checked) {
+        switch(radio.inputValue) {
+            case 'UNTIL':
+                this.count.setDisabled(checked);
+                break;
+            case 'COUNT':
+                this.until.setDisabled(checked);
+                break;
+        }
     },
     
     isValid: function(record) {
@@ -317,6 +389,15 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         this.interval.setValue(rrule.interval);
         var date = Date.parseDate(rrule.until, Date.patterns.ISO8601Long);
         this.until.value = date;
+        
+        if (rrule.count) {
+            this.count.value = rrule.count;
+                
+            this.untilRadio.setValue(false);
+            this.countRadio.setValue(true);
+            this.onLimitRadioCheck(this.untilRadio, false);
+            this.onLimitRadioCheck(this.countRadio, true);
+        }
     }
 });
 
@@ -502,17 +583,17 @@ Tine.Calendar.RrulePanel.MONTHLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstr
         });
         
         this.items = [{
-            html: '<div style="padding-top: 5px; padding-left: 5px">' +
+            html: '<div style="padding-top: 5px;">' + 
                     '<div style="position: relative;">' +
                         '<table><tr>' +
-                            '<td style="position: relative;" width="60" id="' + this.idPrefix + 'bydayradio"></td>' +
+                            '<td style="position: relative;" width="65" id="' + this.idPrefix + 'bydayradio"></td>' +
                             '<td width="100" id="' + this.idPrefix + 'bydaywknumber"></td>' +
                             '<td width="110" id="' + this.idPrefix + 'bydaywkday"></td>' +
                         '</tr></table>' +
                     '</div>' +
                     '<div style="position: relative;">' +
                         '<table><tr>' +
-                            '<td width="60" id="' + this.idPrefix + 'bymonthdayradio"></td>' +
+                            '<td width="65" id="' + this.idPrefix + 'bymonthdayradio"></td>' +
                             '<td width="40" id="' + this.idPrefix + 'bymonthdayday"></td>' +
                             '<td>.</td>' +
                          '</tr></table>' +
