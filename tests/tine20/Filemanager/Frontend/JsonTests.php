@@ -401,10 +401,8 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
      * testCreateFileNodeWithTempfile
      * 
      * @return array node
-     * 
-     * @todo enable
      */
-    public function _testCreateFileNodeWithTempfile()
+    public function testCreateFileNodeWithTempfile()
     {
         $sharedContainerNode = $this->testCreateContainerNodeInSharedFolder();
         
@@ -418,7 +416,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         $tempFile = $tempFileBackend->createTempFile(dirname(dirname(__FILE__)) . '/files/test.txt');
         $result = $this->_json->createNode($filepath, Tinebase_Model_Tree_Node::TYPE_FILE, $tempFile->getId(), TRUE);
         
-        $this->assertEquals('text/plain', $result['contenttype']);
+        $this->assertEquals('text/plain', $result['contenttype'], print_r($result, TRUE));
         $this->assertEquals(17, $result['size']);
         
         return $result;
@@ -572,10 +570,8 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     
     /**
      * testCopyFileWithContentToFolder
-     * 
-     * @todo enable
      */
-    public function _testCopyFileWithContentToFolder()
+    public function testCopyFileWithContentToFolder()
     {
         $fileToCopy = $this->testCreateFileNodeWithTempfile();
         $targetNode = $this->testCreateContainerNodeInPersonalFolder();
@@ -796,10 +792,8 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     
     /**
      * test cleanup of deleted files
-     * 
-     * @todo enable
      */
-    public function _testDeletedFileCleanup()
+    public function testDeletedFileCleanup()
     {
         // remove all files with size 0 first
         $size0Nodes = Tinebase_FileSystem::getInstance()->searchNodes(new Tinebase_Model_Tree_Node_Filter(array(array(
