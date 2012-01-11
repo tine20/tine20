@@ -126,10 +126,6 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path . '/' . $name);
     
-        if ($name[0]=='.')  {
-            throw new Sabre_DAV_Exception_FileNotFound('Access denied');
-        }
-        
         try {
             $childNode = Tinebase_FileSystem::getInstance()->stat($this->_path . '/' . $name);
         } catch (Tinebase_Exception_NotFound $tenf) {
