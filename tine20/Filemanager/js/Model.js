@@ -385,17 +385,14 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             
         }).createDelegate({uploadKey: uploadKey, addToGridStore: addToGridStore});
         
-        
         Ext.Ajax.request({
             params: params,
+            timeout: 300000, // 5 minutes
             scope: this,
             success: onSuccess || Ext.emptyFn,
             failure: onFailure || Ext.emptyFn
         });
-        
-        
     },
-    
     
     /**
      * upload files
@@ -453,6 +450,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         
         Ext.Ajax.request({
             params: params,
+            timeout: 300000, // 5 minutes
             scope: this,
             success: onSuccess || Ext.emptyFn,
             failure: onFailure || Ext.emptyFn
