@@ -5,16 +5,14 @@
  * @subpackage  widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
 Ext.ns('Ext.ux.grid');
 
-
 /**
  * Paging toolbar with build in selection support
- * 
  *
  * @namespace   Ext.ux.grid
  * @class       Ext.ux.grid.PagingToolbar
@@ -47,12 +45,10 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
      * @private
      */
     initComponent: function() {
-        
         // initialise i18n
         this.selHelperText = {
             'main'         : _('{0} selected'),
             'deselect'     : _('Unselect all'),
-            'selectvisible': _('Select all visible ({0} records)'),
             'selectall'    : _('Select all pages ({0} records)'),
             'toggle'       : _('Toggle selection')
         };
@@ -88,12 +84,6 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
             disabled: this.disableSelectAllPages,
             handler: function() {this.sm.selectAll();}
         });
-        this.selectVisibleBtn = new Ext.Action({
-            iconCls: 'x-ux-pagingtb-selectvisible',
-            text: this.getSelHelperText('selectvisible'),
-            scope: this,
-            handler: function() {this.sm.selectAll(true);}
-        });
         this.toggleSelectionBtn = new Ext.Action({
             iconCls: 'x-ux-pagingtb-toggle',
             text: this.getSelHelperText('toggle'),
@@ -110,7 +100,6 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
                 items: [
                     this.deselectBtn,
                     this.selectAllPages,
-                    this.selectVisibleBtn, // usefull?
                     this.toggleSelectionBtn
                 ]
             })
@@ -128,7 +117,6 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
      */
     updateSelHelper: function() {
         this.selHelperBtn.setText(this.getSelHelperText('main'));
-        this.selectVisibleBtn.setText(this.getSelHelperText('selectvisible'));
         this.selectAllPages.setText(this.getSelHelperText('selectall'));
     },
 
@@ -142,9 +130,6 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
         switch(domain) {
             case 'main':
                 num = this.sm.getCount();
-                break;
-            case 'selectvisible':
-                num = this.store.getCount();
                 break;
             case 'selectall':
                 num = this.store.getTotalCount();
