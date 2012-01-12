@@ -385,6 +385,29 @@ class Tinebase_FileSystem
     }
     
     /**
+     * return if path is directory
+     *
+     * @param  string  $_path
+     * @return boolean
+     */
+    public function isFile($_path)
+    {
+        try {
+            $node = $this->stat($_path);
+        } catch (Tinebase_Exception_InvalidArgument $teia) {
+            return false;
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            return false;
+        }
+    
+        if ($node->type != Tinebase_Model_Tree_FileObject::TYPE_FILE) {
+            return false;
+        }
+    
+        return true;
+    }
+    
+    /**
      * rename file/directory
      *
      * @param  string  $_oldPath

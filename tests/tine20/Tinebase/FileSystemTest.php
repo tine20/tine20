@@ -149,6 +149,10 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $result = $this->_controller->isDir($this->_basePath . '/PHPUNIT');
         
         $this->assertTrue($result);
+
+        $result = $this->_controller->isFile($this->_basePath . '/PHPUNIT');
+    
+        $this->assertFalse($result);
     }
     
     /**
@@ -178,6 +182,22 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $children = $this->_controller->scanDir($this->_basePath . '/PHPUNIT')->name;
         
         $this->assertTrue(in_array('phpunit.txt', $children));
+    }
+    
+    /**
+     * test for isDir with existing directory
+     */
+    public function testIsFile()
+    {
+        $this->testCreateFile();
+    
+        $result = $this->_controller->isFile($this->_basePath . '/PHPUNIT/phpunit.txt');
+    
+        $this->assertTrue($result);
+
+        $result = $this->_controller->isDir($this->_basePath . '/PHPUNIT/phpunit.txt');
+    
+        $this->assertFalse($result);
     }
     
     public function testOpenFile()
