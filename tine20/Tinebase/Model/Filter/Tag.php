@@ -66,7 +66,7 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
     {
         // don't take empty tag filter into account
         if (empty($this->_value)) {
-            if ($this->_operator === 'in' || $this->_operator === 'notin' ) {
+            if ($this->_operator === 'in') {
                 $_select->where('1=0');
             }
             return;
