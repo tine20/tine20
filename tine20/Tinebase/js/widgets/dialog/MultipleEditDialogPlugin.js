@@ -349,7 +349,8 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                                     Tine.log.err('Tine.widgets.dialog.MultipleEditDialogPlugin::onRecordUpdate::openSummaryWindow');
                                     Tine.log.err(e.stack ? e.stack : e);
                                 }
-                                window.on('cancel', function() {
+                                
+                                window.on('close', function() {
                                     this.editDialog.fireEvent('update');
                                     this.editDialog.purgeListeners();
                                     this.editDialog.window.close();

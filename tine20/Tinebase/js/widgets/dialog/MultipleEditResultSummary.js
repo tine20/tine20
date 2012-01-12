@@ -15,22 +15,17 @@ Tine.widgets.dialog.MultipleEditResultSummary = function(config) {
  * @extends     Ext.FormPanel
  */
 Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
-    
       
     layout : 'fit',
     border : false,    
     
     labelAlign : 'top',
-
+    items: null,
     anchor : '100% 100%',
-    deferredRender : false,
-    buttonAlign : null,
-    bufferResize : 500,
-    
+
     initComponent: function() {
         try {
             this.response = Ext.decode(this.response);
-            Tine.log.debug('RESP',this.response);
             // init actions
             this.initActions();
             // init buttons and tbar
@@ -66,7 +61,7 @@ Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
         this.store = new Ext.data.JsonStore({
                 mode: 'local',
                 idProperty: 'index',
-                fields: ['index', 'code', 'message', 'exception', 'resolveStrategy', 'resolvedRecord', 'isResolved']
+                fields: ['index', 'message']
             });
         this.store.loadData(this.response.exceptions);
     },
@@ -78,23 +73,23 @@ Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
         this.fbar = [ '->', this.action_update ];
     },  
     
-//    /**
-//     * is called when the component is rendered
-//     * @param {} ct
-//     * @param {} position
-//     */
-//    onRender : function(ct, position) {
-//        Tine.widgets.dialog.MultipleEditResultSummary.superclass.onRender.call(this, ct, position);
-//
-//        // generalized keybord map for edit dlgs
-//        var map = new Ext.KeyMap(this.el, [ {
-//            key : [ 10, 13 ], // ctrl + return
-//            ctrl : true,
-//            fn : this.onSend,
-//            scope : this
-//        } ]);
-//
-//    },
+    /**
+     * is called when the component is rendered
+     * @param {} ct
+     * @param {} position
+     */
+    onRender : function(ct, position) {
+        Tine.widgets.dialog.MultipleEditResultSummary.superclass.onRender.call(this, ct, position);
+
+        // generalized keybord map for edit dlgs
+        var map = new Ext.KeyMap(this.el, [ {
+            key : [ 10, 13 ], // ctrl + return
+            ctrl : true,
+            fn : this.onCancel,
+            scope : this
+        } ]);
+
+    },
        
     /**
      * closes the window
@@ -106,17 +101,32 @@ Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
     },    
     
     getFormItems: function() {
+        
+        if(this.items) return this.items;
+        var allrecs = this.response.totalcount + this.response.failcount;
+        Tine.log.debug(this.response);
+        var summary = String.format( (allrecs>1) ? _('You edited {0} records.') : _('You edited {0} record.'), allrecs);
+        summary += '<br />';
+        summary += String.format( (this.response.totalcount>1) ? _('{0} records have been updated properly.') : _('{0} record has been updated properly.'), this.response.totalcount);
+        summary += '<br />';
+        summary += String.format( (this.response.failcount>1) ? _('{0} records have invalid data after updating. These records have not changed.') : _('{0} record has invalid data after updating. This record has not changed.'), this.response.failcount);
+        
         try {
             this.summaryPanelInfo = {
                 height: 100,
                 border: false,
+                items: [{
+                    hideLabel: true,
+                    xtype: 'ux.displayfield',
+                    value: summary,
+                    htmlEncode: false,
+                    style: 'padding: 0 5px; color: black',
+                    cls: 'x-panel-mc'
+                }],
+                hideLabel: true,
                 layout: 'ux.display',
                 layoutConfig: {
                     background: 'border'
-                },
-                listeners: {
-                    scope: this,
-                    render: function() { this.onSummaryPanelShow(); }
                 }
             };
             
@@ -140,8 +150,10 @@ Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
             };
             
             return {
-                border: false,
-                xtype: 'ux.displaypanel',
+                border: false,            
+                cls : 'x-ux-display',
+                layout: 'ux.display',
+                
                 frame: true,
                 autoScroll: true,
                 items: [ this.summaryPanelInfo, this.summaryPanelFailures ]
@@ -150,98 +162,8 @@ Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
             Tine.log.err('Tine.widgets.dialog.MultipleEditResultSummary::getFormItems');
             Tine.log.err(e.stack ? e.stack : e);
         }
-    },
-    
-    onSummaryPanelShow: function() {
-        
-//        if (! this.summaryPanelInfo.rendered) {
-//            return this.onSummaryPanelShow.defer(100, this);
-//        }
-//        try {
-            alert('WUH');
-//            if(this.response.failcount > 0) {
-//                this.summaryPanelFailures.show();
-//            }
-            Tine.log.debug(this.summaryPanelFailures);//.el.update('Es gibt');
-            Tine.log.debug(this.summaryPanelInfo);//.el.update('Es gibt');
-//        } catch (e) {
-//            Tine.log.err('Tine.widgets.dialog.MultipleEditResultSummary::onSummaryPanelShow');
-//            Tine.log.err(e.stack ? e.stack : e);
-//        }
     }
-//    
-//    /**
-//     * summary panel show handler
-//     */
-//    onSummaryPanelShow: function() {
-//        if (! this.summaryPanelInfo.rendered) {
-//            return this.onSummaryPanelShow.defer(100, this);
-//        }
-//        
-//        try {
-//            // calc metrics
-//            var rsp = this.lastImportResponse,
-//                totalcount = rsp.totalcount,
-//                failcount = 0,
-//                mergecount = 0
-//                discardcount = 0;
-//                
-//            this.exceptionStore.clearFilter();
-//            this.exceptionStore.each(function(r) {
-//                var strategy = r.get('resolveStrategy');
-//                if (! strategy || !Ext.isString(strategy)) {
-//                    failcount++;
-//                } else if (strategy == 'keep') {
-//                    totalcount++;
-//                } else if (strategy.match(/^merge.*/)) {
-//                    mergecount++;
-//                } else if (strategy == 'discard') {
-//                    discardcount++;
-//                }
-//            }, this);
-//            
-//            var tags = this.tagsPanel.getFormField().getValue(),
-//                container = this.containerCombo.selectedContainer,
-//                info = [String.format(_('In total we found {0} records in your import file.'), rsp.totalcount + rsp.duplicatecount + rsp.failcount)];
-//                
-//                if (totalcount) {
-//                    info.push(String.format(_('{0} of them will be added as new records into: "{1}".'), 
-//                        totalcount, 
-//                        Tine.Tinebase.common.containerRenderer(container).replace('<div', '<span').replace('</div>', '</span>')
-//                    ));
-//                }
-//                
-//                if (mergecount + discardcount) {
-//                    info.push(String.format(_('{0} of them where identified as duplicates.'), mergecount + discardcount));
-//                    
-//                    if (mergecount) {
-//                        info.push(String.format(_('From the identified duplicates {0} will be merged into the existing records.'), mergecount));
-//                    }
-//                    
-//                    if (discardcount) {
-//                        info.push(String.format(_('From the identified duplicates {0} will be discarded.'), discardcount));
-//                    }
-//                }
-//                
-//                if (Ext.isArray(tags) && tags.length) {
-//                    var tagNames = [];
-//                    Ext.each(tags, function(tag) {tagNames.push(tag.name)});
-//                    info.push(String.format(_('All records will be tagged with: "{0}" so you can find them easily.'), tagNames.join(',')));
-//                }
-//                
-//                
-//            this.summaryPanelInfo.update('<div style="padding: 5px;">' + info.join('<br />') + '</div>');
-//            
-//            // failures
-//            if (failcount) {
-//                this.exceptionStore.filter('code', 0);
-//                this.summaryPanelFailures.show();
-//                this.summaryPanelFailures.setTitle(String.format(_('{0} records have failures and will be discarded.'), failcount));
-//                
-//            }
-//            
 
-//    }
 });
 
 
@@ -250,7 +172,6 @@ Tine.widgets.dialog.MultipleEditResultSummary.openWindow = function (config) {
         width: 800,
         height: 600,
         title: _('Summary'),
-        name: Tine.widgets.dialog.ImportDialog.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.widgets.dialog.MultipleEditResultSummary',
         contentPanelConstructorConfig: config
     });
