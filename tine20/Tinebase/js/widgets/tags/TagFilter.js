@@ -3,8 +3,9 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
+ * TODO add 'in' operator with multiselect layercombo / perhaps we should generalize that in Tine.widgets.grid.FilterModel?
  */
 
 Ext.ns('Tine.widgets', 'Tine.widgets.tags');
@@ -29,7 +30,7 @@ Tine.widgets.tags.TagFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     initComponent: function() {
         Tine.widgets.tags.TagFilter.superclass.initComponent.call(this);
         
-        this.operators = ['equals', 'not'];
+        this.operators = ['equals', 'not'/*, 'in' */];
         this.label = _('Tag');
     },
     

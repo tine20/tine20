@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -25,7 +25,8 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
     protected $_operators = array(
         0 => 'equals',
         1 => 'not',
-        //2 => 'in'
+        2 => 'in',
+        3 => 'notin',
     );
     
     /**
@@ -33,8 +34,9 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
      */
     protected $_opSqlMap = array(
         'equals'     => array('sqlop' => ' IS NOT NULL'),
-        'not'        => array('sqlop' => ' IS NULL'    ),
-        //'in'         => array('sqlop' => ' IS NOT NULL'),
+    	'not'        => array('sqlop' => ' IS NULL'    ),
+        'in'         => array('sqlop' => ' IS NOT NULL'),
+    	'notin'      => array('sqlop' => ' IS NULL'    ),
     );
     
     /**
@@ -64,6 +66,9 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
     {
         // don't take empty tag filter into account
         if (empty($this->_value)) {
+            if ($this->_operator === 'in') {
+                $_select->where('1=0');
+            }
             return;
         }
         
@@ -82,7 +87,7 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
             /* what */    array($correlationName => SQL_TABLE_PREFIX . 'tagging'), 
             /* on   */    $db->quoteIdentifier("{$correlationName}.record_id") . " = $idProperty " .
                 " AND " . $db->quoteIdentifier("{$correlationName}.application_id") . " = " . $db->quote($app->getId()) .
-                " AND " . $db->quoteIdentifier("{$correlationName}.tag_id") . " = " . $db->quote($this->_value),
+                " AND " . $db->quoteInto($db->quoteIdentifier("{$correlationName}.tag_id") . " IN (?)", (array) $this->_value),
         /* select */  array());
         
         $_select->where($db->quoteIdentifier("{$correlationName}.tag_id") .  $this->_opSqlMap[$this->_operator]['sqlop']);

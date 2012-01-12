@@ -759,7 +759,7 @@ class Tinebase_FileSystem
         $deleteCount = 0;
         foreach ($dirIterator as $item) {
             $subDir = $item->getFileName();
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Checking ' . $subDir);
             $subDirIterator = new DirectoryIterator($this->_basePath . '/' . $subDir);
             $hashsToCheck = array();
@@ -783,7 +783,7 @@ class Tinebase_FileSystem
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Deleted ' . $deleteCount . ' obsolete file.');
+            . ' Deleted ' . $deleteCount . ' obsolete file(s).');
         
         return $deleteCount;
     }

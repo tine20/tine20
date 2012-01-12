@@ -183,21 +183,31 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
                     try {
                         $group = Tinebase_Group::getInstance()->getGroupById($grant->account_id);
+                    } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                        // skip group
+                        continue 2;
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         // skip group
                         continue 2;
                     }
+                    
                     $principal = 'principals/groups/' . $group->list_id;
+                    
                     break;
                     
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                     try {
                         $fulluser = Tinebase_User::getInstance()->getFullUserById($grant->account_id);
+                    } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                        // skip group
+                        continue 2;
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         // skip user
                         continue 2;
                     }
+                    
                     $principal = 'principals/users/' . $fulluser->contact_id;
+                    
                     break;
                     
                 default:

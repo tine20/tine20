@@ -40,10 +40,6 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path . '/' . $name);
         
-        if ($name[0]=='.')  {
-            throw new Sabre_DAV_Exception_FileNotFound('Access denied');
-        }
-        
         try {
             $childNode = Tinebase_FileSystem::getInstance()->stat($this->_path . '/' . $name);
         } catch (Tinebase_Exception_NotFound $tenf) {
