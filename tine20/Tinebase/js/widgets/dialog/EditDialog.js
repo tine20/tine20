@@ -382,8 +382,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         
         try {
             Tine.log.debug('loading of the following record completed:');
-            //without decode in FF: uncaught exception: TypeError: iter is undefined
-            Tine.log.debug(Ext.decode(this.record));
+            Tine.log.debug(this.record);
             
             if (this.copyRecord) {
                 this.doCopyRecord();
