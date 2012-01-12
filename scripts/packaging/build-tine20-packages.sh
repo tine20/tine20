@@ -11,10 +11,11 @@ BASEDIR="./tine20build"
 TEMPDIR="$BASEDIR/temp"
 MISCPACKAGESDIR="$BASEDIR/packages/misc"
 
-RELEASE=""
 CODENAME="Milan"
 GITURL="http://git.tine20.org/git/tine20"
-GITBRANCH="master"
+
+RELEASE=""
+GITBRANCH=""
 PACKAGEDIR=""
 
 #
@@ -22,24 +23,46 @@ PACKAGEDIR=""
 #
 function checkout()
 {
-    echo "checkout files from branch $2 at git url $1 to $TEMPDIR/tine20 ... "
+    echo "checkout files from git url $1 to $TEMPDIR/tine20 ... "
     rm -rf $TEMPDIR/tine20
+    rm -rf $TEMPDIR/debian
     
     rm -rf $TEMPDIR/tine20.git
     mkdir $TEMPDIR/tine20.git
     cd $TEMPDIR/tine20.git
     
-    git init
-    git remote add -t $2 -f origin $1
-    git checkout $2
+    git clone $1 .
+
+    if [ -n "$GITBRANCH" ]; then
+        echo "checkout refspec"
+        git checkout $GITBRANCH
+        RETVAL=$?
+
+        if [ $RETVAL -ne 0 ]; then
+            echo "refspec $GITBRANCH not found. Either define a valid release name or a valid git refspec (-b)"
+            exit
+        fi
+    elif [ -n "$RELEASE" ]; then   
+        echo "checkout release tag"
+        git checkout refs/tags/$RELEASE
+        RETVAL=$?
+
+        if [ $RETVAL -ne 0 ]; then
+            echo "release tag refs/tags/$RELEASE not found. Either define a valid release name or a valid git refspec (-b)"
+            exit
+        fi
+    else
+        echo "You must either define a release (-r) or a branch (-b)"
+        exit
+    fi
     
-    REVISION=$2-$(git log --abbrev-commit --pretty=oneline -1 | cut -d " " -f 1)
+    REVISION=$(git describe --tags)
     if [ "$RELEASE" == "" ]; then
         RELEASE=${REVISION}
     fi
-    
+
     cd - > /dev/null
-    
+
     mv $TEMPDIR/tine20.git/tine20 $TEMPDIR/tine20
     mv $TEMPDIR/tine20.git/scripts/packaging/debian $TEMPDIR/debian
     rm -Rf $TEMPDIR/tine20.git
@@ -105,7 +128,7 @@ function activateReleaseMode()
         local BUILDTYPE="RELEASE";
     fi
     
-    echo "CODENAME: $CODENAME BUILDTYPE: $BUILDTYPE";
+    echo "RELEASE: $RELEASE REVISION: $REVISION CODENAME: $CODENAME BUILDTYPE: $BUILDTYPE";
     
     sed -i -e "s/'buildtype', 'DEVELOPMENT'/'buildtype', '$BUILDTYPE'/" $TEMPDIR/tine20/Tinebase/Core.php
     sed -i -e "s/'buildtype', 'DEVELOPMENT'/'buildtype', '$BUILDTYPE'/" $TEMPDIR/tine20/Setup/Core.php
