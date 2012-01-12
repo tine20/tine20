@@ -67,7 +67,11 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
                     $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerById($_name);
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
+                } catch (Tinebase_Exception_InvalidArgument $teia) {
+                    // invalid container id provided
+                    throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
                 }
+                
                 if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ) || !Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_SYNC)) {
                     throw new Sabre_DAV_Exception_FileNotFound('Directory permissions mismatch');
                 }
