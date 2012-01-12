@@ -109,7 +109,7 @@ Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
         summary += '<br />';
         summary += String.format( (this.response.totalcount>1) ? _('{0} records have been updated properly.') : _('{0} record has been updated properly.'), this.response.totalcount);
         summary += '<br />';
-        summary += String.format( (this.response.failcount>1) ? _('{0} records have invalid data after updating. These records have not changed.') : _('{0} record has invalid data after updating. This record has not changed.'), this.response.failcount);
+        summary += String.format( (this.response.failcount>1) ? _('{0} records have invalid data after updating. These records have not been changed.') : _('{0} record has invalid data after updating. This record has not changed.'), this.response.failcount);
         
         try {
             this.summaryPanelInfo = {
@@ -171,6 +171,7 @@ Tine.widgets.dialog.MultipleEditResultSummary.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 600,
+        modal: true,
         title: _('Summary'),
         contentPanelConstructor: 'Tine.widgets.dialog.MultipleEditResultSummary',
         contentPanelConstructorConfig: config
