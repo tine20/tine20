@@ -211,8 +211,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param Tinebase_Model_Tree_Node_Path $_path
      * @return Tinebase_Model_Tree_Node
-     *
-     * @todo use is_file() of Tinebase_FileSystem
      */
     public function getFileNode(Tinebase_Model_Tree_Node_Path $_path)
     {
@@ -222,7 +220,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             throw new Filemanager_Exception('File does not exist,');
         }
         
-        if (! is_file($_path->streamwrapperpath)) {
+        if (! $this->_backend->isFile($_path->statpath)) {
             throw new Filemanager_Exception('Is a directory');
         }
         
