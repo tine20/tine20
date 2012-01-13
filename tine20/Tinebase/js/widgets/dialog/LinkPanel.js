@@ -103,7 +103,7 @@ Tine.widgets.dialog.LinkPanel = Ext.extend(Ext.Panel, {
                     
                     var result = record.modelName 
                         + ' ( <i>' + type + '</i> ): <a class="tinebase-relation-link" href="#" id="' + id + ':' + model + '">' 
-                        + record.getTitle() + '</a>';
+                        + Ext.util.Format.htmlEncode(record.getTitle()) + '</a>';
                     
                     return result;
                 }
