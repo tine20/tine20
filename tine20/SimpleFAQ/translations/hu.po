@@ -132,7 +132,7 @@ msgstr "GYIK listák"
 
 #: js/Model.js:37
 msgid "FAQ Lists"
-msgstr ""
+msgstr "GYIK lista"
 
 #: js/Model.js:72
 msgid "Quick search"
