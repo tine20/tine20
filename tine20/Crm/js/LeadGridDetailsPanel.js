@@ -176,8 +176,17 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             '<div class="x-tree-node-leaf x-unselectable file">',
                 '<img class="x-tree-node-icon" unselectable="on" src="', Ext.BLANK_IMAGE_URL, '">',
                 '<span style="color: {color};">&nbsp</span>',
-                '<span>{name}</span>',
-            '</div>'
+                '<span>{[this.encode(values.name)]}</span>',
+            '</div>',
+            {
+                encode: function(value) {
+                     if (value) {
+                        return Ext.util.Format.htmlEncode(value);
+                    } else {
+                        return '';
+                    }
+                }
+            }
         ).compile();
         
         this.supr().initComponent.call(this);
