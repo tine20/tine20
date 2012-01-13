@@ -474,9 +474,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         var start = event.get('dtstart').getTime();
         var now = new Date().getTime();
-        
+
         switch (actionType) {
             case 'update':
+            case 'edit':
                 var title = this.app.i18n._('Updating event in the past'),
                     optionYes = this.app.i18n._('Update this event'),
                     optionNo = this.app.i18n._('Do not update this event');
@@ -502,7 +503,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     try {
                         switch (option) {
                             case 'yes':
-                                if (actionType == 'update') this.onUpdateEvent(event, true);
+                                if (actionType == 'update') this.onUpdateEvent(event, true, actionType);
                                 else this.onAddEvent(event, checkBusyConflicts, true);
                                 break;
                             case 'no':
@@ -834,7 +835,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      */
     onEditInNewWindow: function (action, defaults, event) {
         if(!event) event = null;
-        
+
         if (action === 'edit') {
             var panel = this.getCalendarPanel(this.activeView);
             var selection = panel.getSelectionModel().getSelectedEvents();
@@ -857,7 +858,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         Tine.Calendar.EventEditDialog.openWindow({
             record: Ext.util.JSON.encode(event.data),
             recordId: event.data.id,
-            actionType: action,
             listeners: {
                 scope: this,
                 update: function (eventJson) {
@@ -871,7 +871,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     if (event) store.replaceRecord(event, updatedEvent);
                     else store.add(updatedEvent);
                     
-                    this.onUpdateEvent(updatedEvent, false, 'add');
+                    this.onUpdateEvent(updatedEvent, false, action);
                 }
             }
         });

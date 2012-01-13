@@ -244,7 +244,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         translation.textdomain('Crm');
                         var tel_work           = Ext.isEmpty(record.data.tel_work) === false ? translation._('Phone') + ': ' + record.data.tel_work : ' ';
                         var tel_cell           = Ext.isEmpty(record.data.tel_cell) === false ? translation._('Cellphone') + ': ' + record.data.tel_cell : ' ';          
-                        var formated_return = tel_work + '<br/>' + tel_cell + '<br/>';
+                        var formated_return = Ext.util.Format.htmlEncode(tel_work) + '<br/>' + Ext.util.Format.htmlEncode(tel_cell) + '<br/>';
                         return formated_return;
                     }
                 }, {

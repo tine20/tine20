@@ -125,10 +125,10 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.form.ComboBox, {
      * sets the filter
      * @param {} filter
      */
-    setFilter: function(filter) {
-        //this.store.baseParams.filter = [filter];
-        //this.fireEvent('filterupdate');
+    setFilter: function(filter) {      
         this.addFilter = filter;
+        this.store.baseParams.filter = [this.addFilter];
+        this.fireEvent('filterupdate');
     },
     
     onBeforeQuery: function (qevent) {

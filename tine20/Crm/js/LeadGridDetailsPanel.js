@@ -101,21 +101,6 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     },
     
     /**
-     * renders container name
-     * 
-     * @param {Array} container
-     * @return {String} html
-     * 
-     * TODO generalize this?
-     * TODO add button/link to switch to container?
-     */
-    containerRenderer: function(container) {
-        return this.containerTpl.apply({
-            name: Ext.util.Format.htmlEncode(container && container.name ? container.name : '')
-        });
-    },
-    
-    /**
      * lead state renderer
      * 
      * @param   {Number} id
@@ -170,15 +155,6 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             this.cardPanel
         ];
         */
-        
-        // TODO generalize this
-        this.containerTpl = new Ext.XTemplate(
-            '<div class="x-tree-node-leaf x-unselectable file">',
-                '<img class="x-tree-node-icon" unselectable="on" src="', Ext.BLANK_IMAGE_URL, '">',
-                '<span style="color: {color};">&nbsp</span>',
-                '<span>{name}</span>',
-            '</div>'
-        ).compile();
         
         this.supr().initComponent.call(this);
     },
@@ -444,7 +420,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                             name: 'container_id',
                             cls: 'x-ux-display-header',
                             htmlEncode: false,
-                            renderer: this.containerRenderer.createDelegate(this)
+                            renderer: Tine.Tinebase.common.containerRenderer
                         }]
                     }, {
                         layout: 'hbox',
