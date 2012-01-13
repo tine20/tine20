@@ -18,9 +18,10 @@
  */
 class Addressbook_Convert_Contact_VCard_Factory
 {
-    const CLIENT_SOGO       = 'sogo';
-    const CLIENT_MACOSX     = 'macosx';
-    const CLIENT_GENERIC    = 'generic';
+    const CLIENT_GENERIC = 'generic';
+    const CLIENT_KDE     = 'kde';
+    const CLIENT_MACOSX  = 'macosx';
+    const CLIENT_SOGO    = 'sogo';
     
     /**
 	 * factory function to return a selected phone backend class
@@ -37,7 +38,12 @@ class Addressbook_Convert_Contact_VCard_Factory
 	            
 	            break;
 	            
-	        case Addressbook_Convert_Contact_VCard_Factory::CLIENT_MACOSX:
+	        case Addressbook_Convert_Contact_VCard_Factory::CLIENT_KDE:
+	            return new Addressbook_Convert_Contact_VCard_KDE($_version);
+	            
+	            break;
+	            
+            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_MACOSX:
 	            return new Addressbook_Convert_Contact_VCard_MacOSX($_version);
 	            
 	            break;
@@ -57,6 +63,8 @@ class Addressbook_Convert_Contact_VCard_Factory
 	 */
 	static public function parseUserAgent($_userAgent)
 	{
+	    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' user agent: ' . $_userAgent);
+	    
 	    // MacOS X
         if (preg_match(Addressbook_Convert_Contact_VCard_MacOSX::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_MACOSX;
@@ -67,7 +75,12 @@ class Addressbook_Convert_Contact_VCard_Factory
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO;
             $version = $matches['version'];
         
-            // generic client
+        // KDE addressbook
+        } elseif (preg_match(Addressbook_Convert_Contact_VCard_KDE::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_KDE;
+            $version = $matches['version'];
+        
+        // generic client
         } else {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC;
             $version = null;
