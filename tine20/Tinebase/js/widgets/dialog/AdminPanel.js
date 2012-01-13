@@ -102,7 +102,7 @@ Tine.widgets.dialog.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
         return {
             xtype: 'tabpanel',
             activeTab: 0,
-            border: true,
+            border: false,
             items: [{
                 title: this.app.i18n._('Defaults'),
                 autoScroll: true,

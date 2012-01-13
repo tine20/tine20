@@ -26,7 +26,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 
     windowNamePrefix: 'AdminTagEditDialog_',
     id: 'tagDialog',
-    layout: 'hfit',
+    layout: 'fit',
     labelWidth: 120,
     labelAlign: 'top',
     
@@ -206,11 +206,10 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         });
 
         var editTagDialog = {
-            layout: 'hfit',
+            layout: 'border',
             border: false,
-            width: 600,
-            height: 350,
             items: [{
+            	region: 'north',
                 xtype: 'columnform',
                 border: false,
                 autoHeight: true,
@@ -233,8 +232,8 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     name: 'color'
                 }]]
             }, {
+            	region: 'center',
                 xtype: 'tabpanel',
-                height: 300,
                 activeTab: 0,
                 deferredRender: false,
                 defaults: { autoScroll: true },

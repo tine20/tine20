@@ -31,6 +31,7 @@ Ext.namespace('Tine.Calendar');
  */
 Tine.Calendar.AdminPanel = Ext.extend(Ext.TabPanel, {
 
+	border: false,
     activeTab: 0,
 
     /**
