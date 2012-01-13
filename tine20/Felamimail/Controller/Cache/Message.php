@@ -32,6 +32,13 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     protected $_flagSyncCountPerStep = 1000;
     
     /**
+     * max size of message to cache body for
+     * 
+     * @var integer
+     */
+    protected $_maxMessageSizeToCacheBody = 2097152;
+    
+    /**
      * initial cache status (used by updateCache and helper funcs)
      * 
      * @var string
@@ -892,15 +899,22 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             return;
         }
         
+        $memory = (function_exists('memory_get_peak_usage')) ? memory_get_peak_usage(true) : memory_get_usage(true);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' caching message ' . $_message->getId() . ' / memory usage: ' . $memory/1024/1024 . ' MBytes');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_message->toArray(), TRUE));
+        
         $cacheId = 'getMessageHeaders' . $_message->getId();
         Tinebase_Core::getCache()->save($_messageData['header'], $cacheId, array('getMessageHeaders'));
     
         // prefetch body to cache
-        $account = Felamimail_Controller_Account::getInstance()->get($_folder->account_id);
-        $mimeType = ($account->display_format == Felamimail_Model_Account::DISPLAY_HTML || $account->display_format == Felamimail_Model_Account::DISPLAY_CONTENT_TYPE)
-            ? Zend_Mime::TYPE_HTML
-            : Zend_Mime::TYPE_TEXT;
-        Felamimail_Controller_Message::getInstance()->getMessageBody($_message, null, $mimeType, $account);
+        if ($_message->size < $this->_maxMessageSizeToCacheBody) {
+            $account = Felamimail_Controller_Account::getInstance()->get($_folder->account_id);
+            $mimeType = ($account->display_format == Felamimail_Model_Account::DISPLAY_HTML || $account->display_format == Felamimail_Model_Account::DISPLAY_CONTENT_TYPE)
+                ? Zend_Mime::TYPE_HTML
+                : Zend_Mime::TYPE_TEXT;
+            Felamimail_Controller_Message::getInstance()->getMessageBody($_message, null, $mimeType, $account);
+        }
     }
     
     /**
