@@ -243,6 +243,8 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
                             xtype: 'widget-keyfieldcombo',
                             app:   'Calendar',
                             value: 'REQ',
+                            anchor : '100% 100%',
+                            margins: '10px 10px',
                             keyFieldName: 'attendeeRoles',
                             ref: '../../../chooseRoleBox'
                         },{
@@ -251,6 +253,8 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
                             xtype: 'widget-keyfieldcombo',
                             app:   'Calendar',
                             value: 'NEEDS-ACTION',
+                            anchor : '100% 100%',
+                            margins: '10px 10px',
                             keyFieldName: 'attendeeStatus',
                             ref: '../../../chooseStatusBox'
                         }
@@ -265,7 +269,7 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
      * creates filter 
      */
     updateSearchBox: function() {
-      Tine.log.debug('UPDATE');
+
          var year = this.datePicker.getPeriod().until.getYear() + 1900,
              yearEnd = year,
              month = this.datePicker.getPeriod().until.getMonth(),
