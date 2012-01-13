@@ -18,7 +18,6 @@
  */
 class Addressbook_Convert_Contact_VCard_KDE extends Addressbook_Convert_Contact_VCard_Abstract
 {
-    // KDE DAV groupware client
     // Mozilla/5.0 (X11; Linux i686) KHTML/4.7.3 (like Gecko) Konqueror/4.7
     const HEADER_MATCH = '/Konqueror\/(?P<version>.*)/';
     
@@ -35,7 +34,7 @@ class Addressbook_Convert_Contact_VCard_KDE extends Addressbook_Convert_Contact_
         'adr_two_region'        => null,
         'adr_two_street'        => null,
         'adr_two_street2'       => null,
-        #'assistent'             => null,
+        'assistent'             => null,
         'bday'                  => null,
         #'calendar_uri'          => null,
         'email'                 => null,
@@ -43,7 +42,7 @@ class Addressbook_Convert_Contact_VCard_KDE extends Addressbook_Convert_Contact_
         'jpegphoto'             => null,
         #'freebusy_uri'          => null,
         'note'                  => null,
-        #'role'                  => null,
+        'role'                  => null,
         #'salutation'            => null,
         'title'                 => null,
         'url'                   => null,
@@ -58,7 +57,7 @@ class Addressbook_Convert_Contact_VCard_KDE extends Addressbook_Convert_Contact_
         'org_name'              => null,
         'org_unit'              => null,
         #'pubkey'                => null,
-        #'room'                  => null,
+        'room'                  => null,
         #'tel_assistent'         => null,
         #'tel_car'               => null,
         'tel_cell'              => null,
@@ -81,6 +80,7 @@ class Addressbook_Convert_Contact_VCard_KDE extends Addressbook_Convert_Contact_
     /**
      * converts Addressbook_Model_Contact to vcard
      * 
+     * @todo return all supported fields in correct format see http://forge.tine20.org/mantisbt/view.php?id=5346
      * @param  Addressbook_Model_Contact  $_record
      * @return string
      */
