@@ -507,9 +507,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     public function getMessageBody($_messageId, $_partId, $_contentType, $_account = NULL)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get Message body of content type ' . $_contentType);
-        
         $message = ($_messageId instanceof Felamimail_Model_Message) ? $_messageId : $this->get($_messageId);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Get Message body of message id ' . $message->getId() . ' (content type ' . $_contentType . ')');
         
         $cache = Tinebase_Core::getCache();
         $cacheId = $this->_getMessageBodyCacheId($message, $_partId, $_contentType, $_account);
