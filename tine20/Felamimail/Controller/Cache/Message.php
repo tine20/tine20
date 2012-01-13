@@ -901,7 +901,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         $memory = (function_exists('memory_get_peak_usage')) ? memory_get_peak_usage(true) : memory_get_usage(true);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' caching message ' . $_message->getId() . ' / memory usage: ' . $memory);
+            . ' caching message ' . $_message->getId() . ' / memory usage: ' . $memory/1024/1024 . ' MBytes');
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_message->toArray(), TRUE));
         
         $cacheId = 'getMessageHeaders' . $_message->getId();
