@@ -101,14 +101,16 @@ class Sabre_VObject_Property extends Sabre_VObject_Element {
             '/\\\,/',
             '/\\\;/',
         	'/\\\n/',
-        	'/\\\"/'        # Thunderbird 3 hack only see http://forge.tine20.org/mantisbt/view.php?id=5114
+        	'/\\\"/',        # Thunderbird 3 hack only see http://forge.tine20.org/mantisbt/view.php?id=5114
+        	'/\\\:/',        # Sogo Connector hack : must not be encoded for vcard 3.0
         );
         $replace = array(
             '\\',
             ',',
             ';',
         	"\n",
-        	'"'             # Thunderbird 3 hack only see http://forge.tine20.org/mantisbt/view.php?id=5114
+        	'"',            # Thunderbird 3 hack only see http://forge.tine20.org/mantisbt/view.php?id=5114
+        	':'             # Sogo Connector hack : must not be encoded for vcard 3.0
         );
         
         return preg_replace($search, $replace, $value);
