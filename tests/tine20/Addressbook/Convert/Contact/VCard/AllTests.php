@@ -27,6 +27,7 @@ class Addressbook_Convert_Contact_VCard_AllTests
     public static function suite ()
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook All Import Vcard Tests');
+        $suite->addTestSuite('Addressbook_Convert_Contact_VCard_FactoryTest');
         $suite->addTestSuite('Addressbook_Convert_Contact_VCard_GenericTest');
         $suite->addTestSuite('Addressbook_Convert_Contact_VCard_MacOSXTest');
         $suite->addTestSuite('Addressbook_Convert_Contact_VCard_SogoTest');
