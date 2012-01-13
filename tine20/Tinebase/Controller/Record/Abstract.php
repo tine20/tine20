@@ -842,6 +842,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 $this->_updateMultipleResult['exceptions']->addRecord(new Tinebase_Model_UpdateMultipleException(array(
                     'id'         => $currentRecord->getId(),
                     'exception'  => $e,
+                    'record'	 => $currentRecord,
                     'code'       => $e->getCode(),
                     'message'    => $e->getMessage()
                 )));

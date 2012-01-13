@@ -125,44 +125,7 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
             });
         
         var records = [];
-        
-        Ext.each(this.app.getRegistry().get('config')['projectAttendeeRole'].value.records, function(el) {
-            var label = el.i18nValue ? el.i18nValue : el.value;
-            records.push([el.id, label, el.icon]);
-        });
-        
-        this.chooseRoleBox = new Ext.form.ComboBox({
-            mode: 'local',
-            fieldLabel: this.app.i18n._('Select Role'),
-            valueField: 'id',
-            displayField: 'role',
-            forceSelection: true,
-            value: 'COWORKER',
-            minHeight: 45,
-            anchor : '100% 100%',
-            itemSelector: 'div.search-item',
-            tpl: new Ext.XTemplate(
-                '<tpl for="."><div class="search-item">',
-                    '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
-                        '<tr>',
-                            '<td width="20%">',                   
-                                '<img src="{values.icon}" />',
-                            '</td>',
-                            '<td width="80%">',
-                                '{values.role}',
-                            '</td>',
-                        '</td></tr>',
-                    '</table>',
-                '</div></tpl>'
-            ),
-            
-            store: new Ext.data.ArrayStore({
-                id: 0,
-                fields: ['id','role','icon'],
-                data: records
-            })
-        });
-        
+         
         return {
             border : false,
             frame : false,
@@ -181,7 +144,19 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
                     margins: '10px 10px',
                     border:  false,
                     frame:   false,
-                    items: [ this.searchBox, this.chooseRoleBox ] 
+                    items: [ 
+                        this.searchBox,
+                        {
+                            fieldLabel: this.app.i18n._('Role'),
+                            emptyText: this.app.i18n._('Select Role'),
+                            xtype: 'widget-keyfieldcombo',
+                            app:   'Projects',
+                            value: 'COWORKER',
+                            keyFieldName: 'projectAttendeeRole',
+                            ref: '../../../chooseRoleBox'
+                        }
+                        
+                        ] 
                     }]
 
             }]

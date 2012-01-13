@@ -17,15 +17,55 @@ Tine.widgets.dialog.MultipleEditResultSummary = function(config) {
 Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
       
     layout : 'fit',
-    border : false,    
-    
+    border : false,      
     labelAlign : 'top',
     items: null,
     anchor : '100% 100%',
+    
+    /**
+     * Store holding the Exceptions
+     * @type Ext.Store
+     */
+    store: null,
+    
+    /**
+     * Json Response from updateMultipleRecords
+     * @type String
+     */
+    response: null,
 
+    /**
+     * The appname of the calling app
+     * @type String 
+     */
+    appName: null,
+    
+    /**
+     * The calling app
+     * @type Tinebase.Application
+     */
+    app: null,
+    
+    /**
+     * {Ext.data.Record} recordClass
+     * record definition class  (required)
+     */
+    recordClass: null,
+    
     initComponent: function() {
         try {
             this.response = Ext.decode(this.response);
+            
+            if (!this.app) {
+                this.app = Tine.Tinebase.appMgr.get(this.appName);
+            }
+            
+            // init some translations
+            if (this.app.i18n && this.recordClass !== null) {
+                this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
+                this.i18nRecordsName = this.app.i18n._hidden(this.recordClass.getMeta('recordsName'));
+            }
+            
             // init actions
             this.initActions();
             // init buttons and tbar
@@ -60,8 +100,12 @@ Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
     initStore: function() {
         this.store = new Ext.data.JsonStore({
                 mode: 'local',
-                idProperty: 'index',
-                fields: ['index', 'message']
+                idProperty: 'id',
+                fields: ['id', 'record','message'],
+                sortInfo: {
+                    field: 'record',
+                    direction: 'ASC'
+                }
             });
         this.store.loadData(this.response.exceptions);
     },
@@ -102,53 +146,19 @@ Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
     
     getFormItems: function() {
         
-        if(this.items) return this.items;
-        var allrecs = this.response.totalcount + this.response.failcount;
-        Tine.log.debug(this.response);
-        var summary = String.format( (allrecs>1) ? _('You edited {0} records.') : _('You edited {0} record.'), allrecs);
-        summary += '<br />';
-        summary += String.format( (this.response.totalcount>1) ? _('{0} records have been updated properly.') : _('{0} record has been updated properly.'), this.response.totalcount);
-        summary += '<br />';
-        summary += String.format( (this.response.failcount>1) ? _('{0} records have invalid data after updating. These records have not been changed.') : _('{0} record has invalid data after updating. This record has not changed.'), this.response.failcount);
-        
-        try {
-            this.summaryPanelInfo = {
-                height: 100,
-                border: false,
-                items: [{
-                    hideLabel: true,
-                    xtype: 'ux.displayfield',
-                    value: summary,
-                    htmlEncode: false,
-                    style: 'padding: 0 5px; color: black',
-                    cls: 'x-panel-mc'
-                }],
-                hideLabel: true,
-                layout: 'ux.display',
-                layoutConfig: {
-                    background: 'border'
-                }
-            };
+        try {        
+            if(this.items) return this.items;
+            var allrecs = this.response.totalcount + this.response.failcount;
             
-            this.summaryPanelFailures = {
-                baseCls: 'ux-arrowcollapse',
-                cls: 'ux-arrowcollapse-plain',
-                collapsible: true,
-                hidden: false,
-                flex: 1,
-                title:'',
-                items: [{
-                    xtype: 'grid',
-                    store: this.store,
-                    autoHeight: true,
-                    columns: [
-                        { id: 'index', header: _('Index'), width: 60, sortable: false, dataIndex: 'index'}, 
-                        { id: 'failure', header: _('Failure'), width: 60, sortable: false, dataIndex: 'message'}
-                    ],
-                    autoExpandColumn: 'failure'
-                }]
-            };
-            
+            var rn = (allrecs>1) ? this.i18nRecordsName : this.i18nRecordName;
+            var summary = String.format( (allrecs>1) ? _('You edited {0} {1}.') : _('You edited {0} {1}.'), allrecs, rn);
+            summary += '<br />';
+            rn = (this.response.totalcount>1) ? this.i18nRecordsName : this.i18nRecordName;
+            summary += String.format( (this.response.totalcount>1) ? _('{0} {1} have been updated properly.') : _('{0} {1} has been updated properly.'), this.response.totalcount, rn);
+            summary += '<br />';
+            rn = (this.response.failcount>1) ? this.i18nRecordsName : this.i18nRecordName;
+            summary += String.format( (this.response.failcount>1) ? _('{0} {1} have invalid data after updating. These {1} have not been changed.') : _('{0} {1} has invalid data after updating. This {1} has not been changed.'), this.response.failcount, rn);
+           
             return {
                 border: false,            
                 cls : 'x-ux-display',
@@ -156,7 +166,47 @@ Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
                 
                 frame: true,
                 autoScroll: true,
-                items: [ this.summaryPanelInfo, this.summaryPanelFailures ]
+                items: [
+                    {
+                        height: 100,
+                        border: false,
+                        items: [{
+                            hideLabel: true,
+                            xtype: 'ux.displayfield',
+                            value: summary,
+                            htmlEncode: false,
+                            style: 'padding: 0 5px; color: black',
+                            cls: 'x-panel-mc'
+                        }],
+                        hideLabel: true,
+                        ref: '../../summaryPanelInfo',
+                        layout: 'ux.display',
+                        layoutConfig: {
+                            background: 'border'
+                        }
+                    }, {
+                        baseCls: 'ux-arrowcollapse',
+                        cls: 'ux-arrowcollapse-plain',
+                        collapsible: true,
+                        hidden: false,
+                        flex: 1,
+                        title:'',
+                        ref: '../../summaryPanelFailures',
+                        items: [{
+                            xtype: 'grid',
+                            store: this.store,
+                            autoHeight: true,
+                            columns: [
+                                { id: 'id', header: _('Index'), width: 60, sortable: false, dataIndex: 'id', hidden: true}, 
+                                { id: 'record', header: this.i18nRecordName, width: 160, sortable: true, dataIndex: 'record', renderer: function(value) {
+                                    return value.n_fn;
+                                }},
+                                { id: 'failure', header: _('Failure'), width: 60, sortable: true, dataIndex: 'message'}
+                            ],
+                            autoExpandColumn: 'failure'
+                        }]
+                    }
+                ]
             };
         } catch (e) {
             Tine.log.err('Tine.widgets.dialog.MultipleEditResultSummary::getFormItems');
@@ -169,8 +219,8 @@ Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
 
 Tine.widgets.dialog.MultipleEditResultSummary.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 600,
+        width: 600,
+        height: 450,
         modal: true,
         title: _('Summary'),
         contentPanelConstructor: 'Tine.widgets.dialog.MultipleEditResultSummary',

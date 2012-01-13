@@ -213,66 +213,7 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
                 render: this.updateSearchBox
             }
         });
-               
-        var rrecords = [];
-
-        Ext.each(this.app.getRegistry().get('config')['attendeeRoles'].value.records, function(el) {
-            var label = el.i18nValue ? el.i18nValue : el.value;
-            rrecords.push([el.id, label]);
-        });
-        
-        this.chooseRoleBox = new Ext.form.ComboBox({
-            mode: 'local',
-            emptyText: this.app.i18n._('Select Role'),
-            fieldLabel: this.app.i18n._('Role'),
-            valueField: 'id',
-            displayField: 'value',
-            value: 'REQ',
-            forceSelection: true,
-            anchor : '100% 100%',
-            margins: '10px 10px',
-            itemSelector: 'div.search-item',
-            tpl: new Ext.XTemplate(
-                '<tpl for="."><div class="search-item">',
-                    '{values.value}',
-                '</div></tpl>'
-            ),
-            store: new Ext.data.ArrayStore({
-                id: 0,
-                fields: ['id','value'],
-                data: rrecords
-            })
-        });
-        var srecords = [];
-        Ext.each(this.app.getRegistry().get('config')['attendeeStatus'].value.records, function(el) {
-            var label = el.i18nValue ? el.i18nValue : el.value;
-            srecords.push([el.id, label]);
-        });
-
-        this.chooseStatusBox = new Ext.form.ComboBox({
-            mode: 'local',
-            emptyText: this.app.i18n._('Select Status'),
-            fieldLabel: this.app.i18n._('Select Status'),
-            valueField: 'id',
-            displayField: 'value',
-            forceSelection: true,
-            value: 'NEEDS-ACTION',
-            anchor : '100% 100%',
-            margins: '10px 10px',
-            itemSelector: 'div.search-item',
-            tpl: new Ext.XTemplate(
-                '<tpl for="."><div class="search-item">',              
-                    '{values.value}',
-                '</div></tpl>'
-            ),
-            store: new Ext.data.ArrayStore({
-                id: 0,
-                fields: ['id','value'],
-                data: srecords
-            })
-        });
-        
-        
+ 
         return {
             border: false,
             frame:  false,
@@ -291,7 +232,26 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
                     margins: '10px 10px',
                     border:  false,
                     frame:   false,
-                    items: [ this.searchBox, this.chooseRoleBox, this.chooseStatusBox ] 
+                    items: [ 
+                        this.searchBox,
+                        {
+                            fieldLabel: this.app.i18n._('Role'),
+                            emptyText: this.app.i18n._('Select Role'),
+                            xtype: 'widget-keyfieldcombo',
+                            app:   'Calendar',
+                            value: 'REQ',
+                            keyFieldName: 'attendeeRoles',
+                            ref: '../../../chooseRoleBox'
+                        },{
+                            fieldLabel: this.app.i18n._('Status'),
+                            emptyText: this.app.i18n._('Select Status'),
+                            xtype: 'widget-keyfieldcombo',
+                            app:   'Calendar',
+                            value: 'NEEDS-ACTION',
+                            keyFieldName: 'attendeeStatus',
+                            ref: '../../../chooseStatusBox'
+                        }
+                         ] 
                     }]
 
             }]
