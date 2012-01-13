@@ -5,7 +5,7 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
- * TODO add 'in' operator with multiselect layercombo / perhaps we should generalize that in Tine.widgets.grid.FilterModel?
+ * TODO add 'in' operator with multiselect layercombo -> extend new PickerFilter (was: FilterModelMultiSelect)
  */
 
 Ext.ns('Tine.widgets', 'Tine.widgets.tags');
