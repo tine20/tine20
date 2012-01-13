@@ -186,7 +186,10 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
      */
     getFormItems: function() {
         this.searchBox = new Tine.Calendar.SearchCombo({});
-      
+        this.searchBox.on('filterupdate', function() {
+            this.store.removeAll();
+            this.store.load();
+        });
         var startDate = new Date().clearTime(),
             store = new Ext.data.JsonStore({
                 id: 'id',
@@ -262,7 +265,7 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
      * creates filter 
      */
     updateSearchBox: function() {
-      
+      Tine.log.debug('UPDATE');
          var year = this.datePicker.getPeriod().until.getYear() + 1900,
              yearEnd = year,
              month = this.datePicker.getPeriod().until.getMonth(),
