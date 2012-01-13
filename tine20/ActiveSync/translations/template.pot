@@ -1,35 +1,3 @@
-#: Setup/setup.xml:487
-msgid "Default Policy"
-msgstr ""
-
-#: Setup/setup.xml:492
-msgid "Default Policy installed during setup"
-msgstr ""
-
-#: Preference.php:74
-msgid "Default Addressbook"
-msgstr ""
-
-#: Preference.php:75
-msgid "The default addressbook to create new contacts in."
-msgstr ""
-
-#: Preference.php:78
-msgid "Default Calendar"
-msgstr ""
-
-#: Preference.php:79
-msgid "The default calendar to create new events in."
-msgstr ""
-
-#: Preference.php:82
-msgid "Default Task List"
-msgstr ""
-
-#: Preference.php:83
-msgid "The default task list to create new tasks in."
-msgstr ""
-
 #: js/Model.js:45
 msgid "Device"
 msgid_plural "Devices"
@@ -70,4 +38,36 @@ msgstr ""
 
 #: js/Application.js:105
 msgid "Set Sync Filter"
+msgstr ""
+
+#: Preference.php:74
+msgid "Default Addressbook"
+msgstr ""
+
+#: Preference.php:75
+msgid "The default addressbook to create new contacts in."
+msgstr ""
+
+#: Preference.php:78
+msgid "Default Calendar"
+msgstr ""
+
+#: Preference.php:79
+msgid "The default calendar to create new events in."
+msgstr ""
+
+#: Preference.php:82
+msgid "Default Task List"
+msgstr ""
+
+#: Preference.php:83
+msgid "The default task list to create new tasks in."
+msgstr ""
+
+#: Setup/setup.xml:487
+msgid "Default Policy"
+msgstr ""
+
+#: Setup/setup.xml:492
+msgid "Default Policy installed during setup"
 msgstr ""

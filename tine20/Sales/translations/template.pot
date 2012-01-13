@@ -6,65 +6,21 @@ msgstr ""
 msgid "add, edit and delete products"
 msgstr ""
 
-#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
-msgid "Name"
+#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:85
+msgid "Title"
 msgstr ""
 
-#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
-msgid "Price"
-msgstr ""
-
-#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
-msgid "Manufacturer"
-msgstr ""
-
-#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
-msgid "Category"
-msgstr ""
-
-#: js/ProductEditDialog.js:123 js/ContractEditDialog.js:100
-#: js/ProductGridPanel.js:123
+#: js/ContractEditDialog.js:100 js/ProductGridPanel.js:123
+#: js/ProductEditDialog.js:123
 msgid "Description"
 msgstr ""
 
-#: js/ProductEditDialog.js:124 js/ContractEditDialog.js:101
+#: js/ContractEditDialog.js:101 js/ProductEditDialog.js:124
 msgid "Enter description..."
 msgstr ""
 
-#: js/Models.js:40
-msgid "Product"
-msgid_plural "Products"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Models.js:44
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Models.js:78 js/ContractGridPanel.js:59
+#: js/ContractGridPanel.js:59 js/Models.js:78
 msgid "Quick search"
-msgstr ""
-
-#: js/Models.js:79
-msgid "Product name"
-msgstr ""
-
-#: js/Models.js:112
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Models.js:116
-msgid "contracts list"
-msgid_plural "contracts lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:85
-msgid "Title"
 msgstr ""
 
 #: js/ContractGridPanel.js:60
@@ -98,3 +54,47 @@ msgstr ""
 #: js/ProductGridPanel.js:119
 msgid "Tags"
 msgstr ""
+
+#: js/ProductGridPanel.js:120 js/ProductEditDialog.js:102
+msgid "Name"
+msgstr ""
+
+#: js/ProductGridPanel.js:121 js/ProductEditDialog.js:115
+msgid "Manufacturer"
+msgstr ""
+
+#: js/ProductGridPanel.js:122 js/ProductEditDialog.js:119
+msgid "Category"
+msgstr ""
+
+#: js/ProductGridPanel.js:124 js/ProductEditDialog.js:108
+msgid "Price"
+msgstr ""
+
+#: js/Models.js:40
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:44
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:79
+msgid "Product name"
+msgstr ""
+
+#: js/Models.js:112
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:116
+msgid "contracts list"
+msgid_plural "contracts lists"
+msgstr[0] ""
+msgstr[1] ""
