@@ -87,11 +87,21 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if(this.additionalContacts) { 
             var relations = this.record.get('relations');
             Ext.each(this.additionalContacts, function(contact) {
-                relations.push({
-                    type: this.additionalContactsRole,
-                    related_record: contact
+                var add = true;
+                Ext.each(this.record.get('relations'), function(existingRelation){
+                    if(contact.id == existingRelation.related_record.id) {
+                        add = false;
+                        return false;
+                    }
                 });
+                if(add) {
+                    relations.push({
+                        type: this.additionalContactsRole,
+                        related_record: contact
+                    });
+                }
             }, this);
+            
             this.record.set('relations', relations);
         }
         
