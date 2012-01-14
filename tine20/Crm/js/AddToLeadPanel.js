@@ -149,7 +149,8 @@ Tine.Crm.AddToLeadPanel = Ext.extend(Ext.FormPanel, {
                             fieldLabel: this.app.i18n._('Role'),
                             amptyText: this.app.i18n._('Select Role'),
                             xtype: 'leadcontacttypecombo',
-                            ref : '../../../chooseRoleBox'
+                            ref : '../../../chooseRoleBox',
+                            anchor : '100% 100%'
                     }] 
                 }]
             }]
@@ -160,7 +161,7 @@ Tine.Crm.AddToLeadPanel = Ext.extend(Ext.FormPanel, {
 Tine.Crm.AddToLeadPanel.openWindow = function(config) {
     var window = Tine.WindowFactory.getWindow({
         modal: true,
-        title : String.format(Tine.Tinebase.appMgr.get('Crm').i18n._('Adding {0} Participants to lead'), config.attendee.length),
+        title : String.format(Tine.Tinebase.appMgr.get('Crm').i18n._('Adding {0} Contacts to lead'), config.attendee.length),
         width : 250,
         height : 150,
         contentPanelConstructor : 'Tine.Crm.AddToLeadPanel',
