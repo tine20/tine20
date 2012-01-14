@@ -139,6 +139,9 @@ class Calendar_Frontend_iMIP
         $this->_checkPreconditions($_iMIP, TRUE, $_status);
         $result = $this->{$processMethodName}($_iMIP, $_status);
         
+        //clear existing event cache
+        unset($_iMIP->existing_event);
+        
         return $result;
     }
     

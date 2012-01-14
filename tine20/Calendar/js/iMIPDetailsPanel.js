@@ -94,7 +94,27 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
      * 
      * @param {String} status
      */
-    processIMIP: function(status) {
+    processIMIP: function(status, range) {
+        if (this.iMIPrecord.get('event').isRecurBase() && status != 'ACCEPTED' && !range) {
+            Tine.widgets.dialog.MultiOptionsDialog.openWindow({
+                title: this.app.i18n._('Reply to Recurring Event'),
+                questionText: this.app.i18n._('You are responding to an recurring event. What would you like to do?'),
+                height: 170,
+                scope: this,
+                options: [
+                    {text: this.app.i18n._('Respond to whole series'), name: 'series'},
+                    {text: this.app.i18n._('Do not respond'), name: 'cancel'}
+                ],
+                
+                handler: function(option) {
+                    if (option != 'cancel') {
+                        this.processIMIP(status, option);
+                    }
+                }
+            });
+            return;
+        }
+        
         Tine.log.debug('Tine.Calendar.iMIPDetailsPanel::processIMIP status: ' + status);
         this.getLoadMask().show();
         

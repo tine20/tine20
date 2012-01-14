@@ -730,7 +730,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             folder = this.app.getFolderStore().getById(folderId),
             progress = Math.round(folder.get('cache_job_actions_done') / folder.get('cache_job_actions_est') * 100);
         if (! this.isDropSensitive) {
-            tip.body.dom.innerHTML = String.format(this.app.i18n._('Fetching messages... ({0}% done)'), progress);
+            tip.body.dom.innerHTML = String.format(this.app.i18n._('Fetching messages... ({0}%% done)'), progress);
         } else {
             return false;
         }

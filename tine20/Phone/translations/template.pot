@@ -1,3 +1,23 @@
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:172
+msgid "Work"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:181
+msgid "Home"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:190
+msgid "Cell"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:199
+msgid "Cell private"
+msgstr ""
+
 #: js/Phone.js:29 js/Phone.js:479 js/Phone.js:480
 msgid "Edit phone settings"
 msgstr ""
@@ -117,23 +137,3 @@ msgid "phones list"
 msgid_plural "phones lists"
 msgstr[0] ""
 msgstr[1] ""
-
-#: js/AddressbookGridPanelHook.js:35
-msgid "Call contact"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:172
-msgid "Work"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:181
-msgid "Home"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:190
-msgid "Cell"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:199
-msgid "Cell private"
-msgstr ""

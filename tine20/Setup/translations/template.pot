@@ -1,35 +1,5 @@
-#: js/Setup.js:53
-msgid "Terms and Conditions"
-msgstr ""
-
-#: js/Setup.js:58
-msgid "Setup Checks"
-msgstr ""
-
-#: js/Setup.js:64
-msgid "Config Manager"
-msgstr ""
-
-#: js/Setup.js:70
-msgid "Authentication/Accounts"
-msgstr ""
-
-#: js/Setup.js:76
-msgid "Email"
-msgstr ""
-
-#: js/Setup.js:82
-msgid "Application Manager"
-msgstr ""
-
-#: js/Setup.js:185
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/ConfigManagerPanel.js:132 js/EmailPanel.js:146
-#: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
+#: js/ConfigManagerPanel.js:132 js/AuthenticationPanel.js:204
+#: js/AuthenticationPanel.js:217 js/EmailPanel.js:146
 msgid "Backend"
 msgstr ""
 
@@ -50,8 +20,8 @@ msgid "Username"
 msgstr ""
 
 #: js/ConfigManagerPanel.js:172 js/ConfigManagerPanel.js:203
-#: js/EmailPanel.js:190 js/AuthenticationPanel.js:323
-#: js/AuthenticationPanel.js:478
+#: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:478
+#: js/EmailPanel.js:190
 msgid "Password"
 msgstr ""
 
@@ -60,14 +30,14 @@ msgid "Database"
 msgstr ""
 
 #: js/ConfigManagerPanel.js:187 js/ConfigManagerPanel.js:306
-#: js/EmailPanel.js:182 js/EmailPanel.js:286 js/EmailPanel.js:385
-#: js/AuthenticationPanel.js:363
+#: js/AuthenticationPanel.js:363 js/EmailPanel.js:182 js/EmailPanel.js:286
+#: js/EmailPanel.js:385
 msgid "Hostname"
 msgstr ""
 
 #: js/ConfigManagerPanel.js:192 js/ConfigManagerPanel.js:310
-#: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:389
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
+#: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:389
 msgid "Port"
 msgstr ""
 
@@ -151,6 +121,362 @@ msgstr ""
 msgid "Download config file"
 msgstr ""
 
+#: js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
+msgstr ""
+
+#: js/TermsPanel.js:37
+msgid "License Agreement"
+msgstr ""
+
+#: js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
+msgstr ""
+
+#: js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr ""
+
+#: js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
+msgstr ""
+
+#: js/AuthenticationPanel.js:127
+msgid "Delete all existing users and groups"
+msgstr ""
+
+#: js/AuthenticationPanel.js:127
+msgid ""
+"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
+"and Roles. Do you really want to switch the accounts storage backend to "
+"LDAP ?"
+msgstr ""
+
+#: js/AuthenticationPanel.js:233
+msgid "Initial Admin User"
+msgstr ""
+
+#: js/AuthenticationPanel.js:246
+msgid "Initial admin login name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:251
+msgid "Initial admin Password"
+msgstr ""
+
+#: js/AuthenticationPanel.js:255
+msgid "Password confirmation"
+msgstr ""
+
+#: js/AuthenticationPanel.js:263
+msgid "Authentication provider"
+msgstr ""
+
+#: js/AuthenticationPanel.js:284 js/AuthenticationPanel.js:391
+msgid "Try to split username"
+msgstr ""
+
+#: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
+#: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:484
+#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:553
+#: js/AuthenticationPanel.js:575 js/AuthenticationPanel.js:581
+#: js/EmailPanel.js:207
+msgid "Yes"
+msgstr ""
+
+#: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
+#: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:484
+#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:553
+#: js/AuthenticationPanel.js:575 js/AuthenticationPanel.js:581
+#: js/EmailPanel.js:207
+msgid "No"
+msgstr ""
+
+#: js/AuthenticationPanel.js:290 js/AuthenticationPanel.js:341
+#: js/AuthenticationPanel.js:405
+msgid "Account canonical form"
+msgstr ""
+
+#: js/AuthenticationPanel.js:296 js/AuthenticationPanel.js:347
+#: js/AuthenticationPanel.js:409
+msgid "Account domain name "
+msgstr ""
+
+#: js/AuthenticationPanel.js:299 js/AuthenticationPanel.js:350
+#: js/AuthenticationPanel.js:414
+msgid "Account domain short name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:313 js/AuthenticationPanel.js:472
+msgid "Host"
+msgstr ""
+
+#: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:475
+msgid "Login name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:483
+msgid "Bind requires DN"
+msgstr ""
+
+#: js/AuthenticationPanel.js:334
+msgid "Base DN"
+msgstr ""
+
+#: js/AuthenticationPanel.js:337
+msgid "Search filter"
+msgstr ""
+
+#: js/AuthenticationPanel.js:370 js/EmailPanel.js:199 js/EmailPanel.js:294
+#: js/EmailPanel.js:393
+msgid "Secure Connection"
+msgstr ""
+
+#: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
+#: js/EmailPanel.js:303 js/EmailPanel.js:396
+msgid "None"
+msgstr ""
+
+#: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
+#: js/EmailPanel.js:396
+msgid "TLS"
+msgstr ""
+
+#: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
+#: js/EmailPanel.js:396
+msgid "SSL"
+msgstr ""
+
+#: js/AuthenticationPanel.js:377 js/EmailPanel.js:212
+msgid "Append domain to login name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:426
+msgid "Accounts storage"
+msgstr ""
+
+#: js/AuthenticationPanel.js:448 js/AuthenticationPanel.js:545
+msgid "Default user group name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:452 js/AuthenticationPanel.js:548
+msgid "Default admin group name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:457
+msgid "User can change password"
+msgstr ""
+
+#: js/AuthenticationPanel.js:489
+msgid "User DN"
+msgstr ""
+
+#: js/AuthenticationPanel.js:492
+msgid "User Filter"
+msgstr ""
+
+#: js/AuthenticationPanel.js:496
+msgid "User Search Scope"
+msgstr ""
+
+#: js/AuthenticationPanel.js:502
+msgid "Groups DN"
+msgstr ""
+
+#: js/AuthenticationPanel.js:505
+msgid "Group Filter"
+msgstr ""
+
+#: js/AuthenticationPanel.js:509
+msgid "Group Search Scope"
+msgstr ""
+
+#: js/AuthenticationPanel.js:515
+msgid "Password encoding"
+msgstr ""
+
+#: js/AuthenticationPanel.js:521
+msgid "Use Rfc 2307 bis"
+msgstr ""
+
+#: js/AuthenticationPanel.js:527
+msgid "Min User Id"
+msgstr ""
+
+#: js/AuthenticationPanel.js:530
+msgid "Max User Id"
+msgstr ""
+
+#: js/AuthenticationPanel.js:533
+msgid "Min Group Id"
+msgstr ""
+
+#: js/AuthenticationPanel.js:536
+msgid "Max Group Id"
+msgstr ""
+
+#: js/AuthenticationPanel.js:539
+msgid "Group UUID Attribute name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:542
+msgid "User UUID Attribute name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:552
+msgid "Allow user to change her password?"
+msgstr ""
+
+#: js/AuthenticationPanel.js:562
+msgid "Redirect Settings"
+msgstr ""
+
+#: js/AuthenticationPanel.js:570
+msgid "Redirect Url (redirect to login screen if empty)"
+msgstr ""
+
+#: js/AuthenticationPanel.js:574
+msgid "Redirect Always (if No, only redirect after logout)"
+msgstr ""
+
+#: js/AuthenticationPanel.js:580
+msgid "Redirect to referring site, if exists"
+msgstr ""
+
+#: js/AuthenticationPanel.js:594
+msgid "Save config and install"
+msgstr ""
+
+#: js/AuthenticationPanel.js:621
+msgid "Passwords don't match"
+msgstr ""
+
+#: js/AuthenticationPanel.js:631 js/AuthenticationPanel.js:638
+#: js/AuthenticationPanel.js:642 js/AuthenticationPanel.js:654
+#: js/AuthenticationPanel.js:665
+msgid "Should not be empty"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:63
+msgid "Name"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:64
+msgid "Enabled"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:65
+msgid "Order"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:66
+msgid "Installed Version"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:67
+msgid "Available Version"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:68
+msgid "Status"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:69
+msgid "Depends on"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
+msgid "Install application"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:87
+msgid "Uninstall application"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:96
+msgid "Update application"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:105
+msgid "Go to {0} login"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:168
+msgid "uninstall"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:168
+msgid "Do you really want to uninstall the application(s)?"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:228
+msgid "This may take a while"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:260
+msgid "Dependency Violation"
+msgstr ""
+
+#: js/Setup.js:53
+msgid "Terms and Conditions"
+msgstr ""
+
+#: js/Setup.js:58
+msgid "Setup Checks"
+msgstr ""
+
+#: js/Setup.js:64
+msgid "Config Manager"
+msgstr ""
+
+#: js/Setup.js:70
+msgid "Authentication/Accounts"
+msgstr ""
+
+#: js/Setup.js:76
+msgid "Email"
+msgstr ""
+
+#: js/Setup.js:82
+msgid "Application Manager"
+msgstr ""
+
+#: js/Setup.js:185
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/EnvCheckGridPanel.js:89
+msgid "Performing Environment Checks..."
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:130
+msgid ""
+"No {0} where found. Please try to change your filter-criteria, view-options "
+"or the {1} you search in."
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:160
+msgid "Check"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:161
+msgid "Result"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:162
+msgid "Error"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:180
+msgid "Run setup tests"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:189
+msgid "Ignore setup tests"
+msgstr ""
+
 #: js/EmailPanel.js:150
 msgid "Standard IMAP"
 msgstr ""
@@ -163,48 +489,8 @@ msgstr ""
 msgid "Imap"
 msgstr ""
 
-#: js/EmailPanel.js:199 js/EmailPanel.js:294 js/EmailPanel.js:393
-#: js/AuthenticationPanel.js:370
-msgid "Secure Connection"
-msgstr ""
-
-#: js/EmailPanel.js:202 js/EmailPanel.js:297 js/EmailPanel.js:303
-#: js/EmailPanel.js:396 js/AuthenticationPanel.js:372
-msgid "None"
-msgstr ""
-
-#: js/EmailPanel.js:202 js/EmailPanel.js:297 js/EmailPanel.js:396
-#: js/AuthenticationPanel.js:372
-msgid "TLS"
-msgstr ""
-
-#: js/EmailPanel.js:202 js/EmailPanel.js:297 js/EmailPanel.js:396
-#: js/AuthenticationPanel.js:372
-msgid "SSL"
-msgstr ""
-
 #: js/EmailPanel.js:206
 msgid "Use system account"
-msgstr ""
-
-#: js/EmailPanel.js:207 js/AuthenticationPanel.js:285
-#: js/AuthenticationPanel.js:329 js/AuthenticationPanel.js:458
-#: js/AuthenticationPanel.js:484 js/AuthenticationPanel.js:522
-#: js/AuthenticationPanel.js:553 js/AuthenticationPanel.js:575
-#: js/AuthenticationPanel.js:581
-msgid "No"
-msgstr ""
-
-#: js/EmailPanel.js:207 js/AuthenticationPanel.js:285
-#: js/AuthenticationPanel.js:329 js/AuthenticationPanel.js:458
-#: js/AuthenticationPanel.js:484 js/AuthenticationPanel.js:522
-#: js/AuthenticationPanel.js:553 js/AuthenticationPanel.js:575
-#: js/AuthenticationPanel.js:581
-msgid "Yes"
-msgstr ""
-
-#: js/EmailPanel.js:212 js/AuthenticationPanel.js:377
-msgid "Append domain to login name"
 msgstr ""
 
 #: js/EmailPanel.js:258
@@ -325,290 +611,4 @@ msgstr ""
 
 #: js/EmailPanel.js:475
 msgid "PLAIN"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:63
-msgid "Name"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:64
-msgid "Enabled"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:65
-msgid "Order"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:66
-msgid "Installed Version"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:67
-msgid "Available Version"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:68
-msgid "Status"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:69
-msgid "Depends on"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
-msgid "Install application"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:87
-msgid "Uninstall application"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:96
-msgid "Update application"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:105
-msgid "Go to {0} login"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:168
-msgid "uninstall"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:168
-msgid "Do you really want to uninstall the application(s)?"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:228
-msgid "This may take a while"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:260
-msgid "Dependency Violation"
-msgstr ""
-
-#: js/AuthenticationPanel.js:127
-msgid "Delete all existing users and groups"
-msgstr ""
-
-#: js/AuthenticationPanel.js:127
-msgid ""
-"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
-"and Roles. Do you really want to switch the accounts storage backend to "
-"LDAP ?"
-msgstr ""
-
-#: js/AuthenticationPanel.js:233
-msgid "Initial Admin User"
-msgstr ""
-
-#: js/AuthenticationPanel.js:246
-msgid "Initial admin login name"
-msgstr ""
-
-#: js/AuthenticationPanel.js:251
-msgid "Initial admin Password"
-msgstr ""
-
-#: js/AuthenticationPanel.js:255
-msgid "Password confirmation"
-msgstr ""
-
-#: js/AuthenticationPanel.js:263
-msgid "Authentication provider"
-msgstr ""
-
-#: js/AuthenticationPanel.js:284 js/AuthenticationPanel.js:391
-msgid "Try to split username"
-msgstr ""
-
-#: js/AuthenticationPanel.js:290 js/AuthenticationPanel.js:341
-#: js/AuthenticationPanel.js:405
-msgid "Account canonical form"
-msgstr ""
-
-#: js/AuthenticationPanel.js:296 js/AuthenticationPanel.js:347
-#: js/AuthenticationPanel.js:409
-msgid "Account domain name "
-msgstr ""
-
-#: js/AuthenticationPanel.js:299 js/AuthenticationPanel.js:350
-#: js/AuthenticationPanel.js:414
-msgid "Account domain short name"
-msgstr ""
-
-#: js/AuthenticationPanel.js:313 js/AuthenticationPanel.js:472
-msgid "Host"
-msgstr ""
-
-#: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:475
-msgid "Login name"
-msgstr ""
-
-#: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:483
-msgid "Bind requires DN"
-msgstr ""
-
-#: js/AuthenticationPanel.js:334
-msgid "Base DN"
-msgstr ""
-
-#: js/AuthenticationPanel.js:337
-msgid "Search filter"
-msgstr ""
-
-#: js/AuthenticationPanel.js:426
-msgid "Accounts storage"
-msgstr ""
-
-#: js/AuthenticationPanel.js:448 js/AuthenticationPanel.js:545
-msgid "Default user group name"
-msgstr ""
-
-#: js/AuthenticationPanel.js:452 js/AuthenticationPanel.js:548
-msgid "Default admin group name"
-msgstr ""
-
-#: js/AuthenticationPanel.js:457
-msgid "User can change password"
-msgstr ""
-
-#: js/AuthenticationPanel.js:489
-msgid "User DN"
-msgstr ""
-
-#: js/AuthenticationPanel.js:492
-msgid "User Filter"
-msgstr ""
-
-#: js/AuthenticationPanel.js:496
-msgid "User Search Scope"
-msgstr ""
-
-#: js/AuthenticationPanel.js:502
-msgid "Groups DN"
-msgstr ""
-
-#: js/AuthenticationPanel.js:505
-msgid "Group Filter"
-msgstr ""
-
-#: js/AuthenticationPanel.js:509
-msgid "Group Search Scope"
-msgstr ""
-
-#: js/AuthenticationPanel.js:515
-msgid "Password encoding"
-msgstr ""
-
-#: js/AuthenticationPanel.js:521
-msgid "Use Rfc 2307 bis"
-msgstr ""
-
-#: js/AuthenticationPanel.js:527
-msgid "Min User Id"
-msgstr ""
-
-#: js/AuthenticationPanel.js:530
-msgid "Max User Id"
-msgstr ""
-
-#: js/AuthenticationPanel.js:533
-msgid "Min Group Id"
-msgstr ""
-
-#: js/AuthenticationPanel.js:536
-msgid "Max Group Id"
-msgstr ""
-
-#: js/AuthenticationPanel.js:539
-msgid "Group UUID Attribute name"
-msgstr ""
-
-#: js/AuthenticationPanel.js:542
-msgid "User UUID Attribute name"
-msgstr ""
-
-#: js/AuthenticationPanel.js:552
-msgid "Allow user to change her password?"
-msgstr ""
-
-#: js/AuthenticationPanel.js:562
-msgid "Redirect Settings"
-msgstr ""
-
-#: js/AuthenticationPanel.js:570
-msgid "Redirect Url (redirect to login screen if empty)"
-msgstr ""
-
-#: js/AuthenticationPanel.js:574
-msgid "Redirect Always (if No, only redirect after logout)"
-msgstr ""
-
-#: js/AuthenticationPanel.js:580
-msgid "Redirect to referring site, if exists"
-msgstr ""
-
-#: js/AuthenticationPanel.js:594
-msgid "Save config and install"
-msgstr ""
-
-#: js/AuthenticationPanel.js:621
-msgid "Passwords don't match"
-msgstr ""
-
-#: js/AuthenticationPanel.js:631 js/AuthenticationPanel.js:638
-#: js/AuthenticationPanel.js:642 js/AuthenticationPanel.js:654
-#: js/AuthenticationPanel.js:665
-msgid "Should not be empty"
-msgstr ""
-
-#: js/EnvCheckGridPanel.js:89
-msgid "Performing Environment Checks..."
-msgstr ""
-
-#: js/EnvCheckGridPanel.js:130
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
-msgstr ""
-
-#: js/EnvCheckGridPanel.js:160
-msgid "Check"
-msgstr ""
-
-#: js/EnvCheckGridPanel.js:161
-msgid "Result"
-msgstr ""
-
-#: js/EnvCheckGridPanel.js:162
-msgid "Error"
-msgstr ""
-
-#: js/EnvCheckGridPanel.js:180
-msgid "Run setup tests"
-msgstr ""
-
-#: js/EnvCheckGridPanel.js:189
-msgid "Ignore setup tests"
-msgstr ""
-
-#: js/TermsPanel.js:30
-msgid "I have read the license agreement and accept it"
-msgstr ""
-
-#: js/TermsPanel.js:37
-msgid "License Agreement"
-msgstr ""
-
-#: js/TermsPanel.js:56
-msgid "I have read the privacy agreement and accept it"
-msgstr ""
-
-#: js/TermsPanel.js:63
-msgid "Privacy Agreement"
-msgstr ""
-
-#: js/TermsPanel.js:80
-msgid "Accept Terms and Conditions"
 msgstr ""

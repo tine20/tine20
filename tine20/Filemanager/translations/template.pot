@@ -11,6 +11,50 @@ msgstr ""
 msgid "Create new shared folders"
 msgstr ""
 
+#: js/Model.js:37
+msgid "user file"
+msgstr ""
+
+#: js/Model.js:38
+msgid "user files"
+msgstr ""
+
+#: js/Model.js:40 js/GridPanel.js:491
+msgid "user file folder"
+msgstr ""
+
+#: js/Model.js:41
+msgid "user file folders"
+msgstr ""
+
+#: js/Model.js:252 js/Model.js:268
+msgid "Copying data .. {0}"
+msgstr ""
+
+#: js/Model.js:255 js/Model.js:270
+msgid "Moving data .. {0}"
+msgstr ""
+
+#: js/Model.js:274
+msgid "Please wait"
+msgstr ""
+
+#: js/Model.js:507
+msgid "Quick search"
+msgstr ""
+
+#: js/Model.js:508
+msgid "Type"
+msgstr ""
+
+#: js/Model.js:509 js/GridPanel.js:146
+msgid "Contenttype"
+msgstr ""
+
+#: js/Model.js:510 js/GridPanel.js:178
+msgid "Creation Time"
+msgstr ""
+
 #: js/GridPanel.js:132
 msgid "Name"
 msgstr ""
@@ -19,20 +63,12 @@ msgstr ""
 msgid "Size"
 msgstr ""
 
-#: js/GridPanel.js:146 js/Model.js:509
-msgid "Contenttype"
-msgstr ""
-
 #: js/GridPanel.js:154
 msgid "Folder"
 msgstr ""
 
 #: js/GridPanel.js:163
 msgid "Revision"
-msgstr ""
-
-#: js/GridPanel.js:178 js/Model.js:510
-msgid "Creation Time"
 msgstr ""
 
 #: js/GridPanel.js:186
@@ -83,10 +119,6 @@ msgstr ""
 msgid "Resume upload"
 msgstr ""
 
-#: js/GridPanel.js:491 js/Model.js:40
-msgid "user file folder"
-msgstr ""
-
 #: js/GridPanel.js:493
 msgid "New {0}"
 msgstr ""
@@ -126,46 +158,6 @@ msgstr ""
 msgid "path"
 msgstr ""
 
-#: js/GridContextMenu.js:36
-msgid "Please enter the new name of the {0}:"
-msgstr ""
-
-#: js/GridContextMenu.js:42
-msgid "Not renamed {0}"
-msgstr ""
-
-#: js/Model.js:37
-msgid "user file"
-msgstr ""
-
-#: js/Model.js:38
-msgid "user files"
-msgstr ""
-
-#: js/Model.js:41
-msgid "user file folders"
-msgstr ""
-
-#: js/Model.js:251 js/Model.js:267
-msgid "Copying data .. {0}"
-msgstr ""
-
-#: js/Model.js:254 js/Model.js:269
-msgid "Moving data .. {0}"
-msgstr ""
-
-#: js/Model.js:273
-msgid "Please wait"
-msgstr ""
-
-#: js/Model.js:507
-msgid "Quick search"
-msgstr ""
-
-#: js/Model.js:508
-msgid "Type"
-msgstr ""
-
 #: js/Filemanager.js:26
 msgid "Filemanager"
 msgstr ""
@@ -184,6 +176,14 @@ msgstr ""
 
 #: js/Filemanager.js:99
 msgid "Item with this name already exists!"
+msgstr ""
+
+#: js/GridContextMenu.js:36
+msgid "Please enter the new name of the {0}:"
+msgstr ""
+
+#: js/GridContextMenu.js:42
+msgid "Not renamed {0}"
 msgstr ""
 
 #: Controller/Node.php:163

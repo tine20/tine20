@@ -97,15 +97,18 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
      *
      * @param Voipmanager_Model_Snom_Phone $_phone
      * @return  Voipmanager_Model_Snom_Phone
+     * @throws Voipmanager_Exception_Validation
      */
     public function create(Tinebase_Record_Interface $_phone)
     {
-        // check first if mac address is already used
-        try {
-            $this->getByMacAddress($_phone->macaddress);
-            throw new Voipmanager_Exception_Validation('A phone with this mac address already exists.');
-        } catch (Voipmanager_Exception_NotFound $venf) {
-            // everything ok
+        if ($_phone->has('macaddress')) {
+            // check first if mac address is already used
+            try {
+                $this->getByMacAddress($_phone->macaddress);
+                throw new Voipmanager_Exception_Validation('A phone with this mac address already exists.');
+            } catch (Voipmanager_Exception_NotFound $venf) {
+                // everything ok
+            }
         }
         
         // auto generate random http client username and password
@@ -160,17 +163,30 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
      *
      * @param Voipmanager_Model_Snom_Phone $_phone
      * @param Voipmanager_Model_Snom_PhoneSettings|optional $_phoneSettings
-     * @return  Voipmanager_Model_Snom_Phone
+     * @return Voipmanager_Model_Snom_Phone
+     * @throws Voipmanager_Exception_Validation
      */
     public function update(Tinebase_Record_Interface $_phone)
     {
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_phone->toArray(), true));
         
+        // check first if mac address is already used
+        if ($_phone->has('macaddress')) {
+            try {
+                $phoneWithMac = $this->getByMacAddress($_phone->macaddress);
+                if ($phoneWithMac->getId() !== $_phone->getId()) {
+                    throw new Voipmanager_Exception_Validation('A phone with this mac address already exists.');
+                }
+            } catch (Voipmanager_Exception_NotFound $venf) {
+                // everything ok
+            }
+        }
+        
         $phone = $this->_backend->update($_phone);
         
         $_phoneSettings = $_phone->settings;
         
-        if($_phoneSettings instanceof Voipmanager_Model_Snom_PhoneSettings) {
+        if ($_phoneSettings instanceof Voipmanager_Model_Snom_PhoneSettings) {
         
             // force the right phone_id
             $_phoneSettings->setId($phone->getId());
@@ -179,8 +195,8 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
             $template = Voipmanager_Controller_Snom_Template::getInstance()->get($phone->template_id);
             $settingDefaults = Voipmanager_Controller_Snom_Setting::getInstance()->get($template->setting_id);
     
-            foreach($_phoneSettings->toArray() AS $key => $value) {
-                if($key == 'phone_id') {
+            foreach ($_phoneSettings->toArray() as $key => $value) {
+                if ($key == 'phone_id') {
                     continue;
                 }
                 if($settingDefaults->$key == $value) {
@@ -188,7 +204,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
                 }    
             }
             
-            if(Voipmanager_Controller_Snom_PhoneSettings::getInstance()->get($phone->getId())) {
+            if (Voipmanager_Controller_Snom_PhoneSettings::getInstance()->get($phone->getId())) {
                 //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_phoneSettings->toArray(), true));
                 $phoneSettings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->update($_phoneSettings);
             } else {

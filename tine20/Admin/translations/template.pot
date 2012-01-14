@@ -103,22 +103,32 @@ msgstr ""
 msgid "view personal and shared containers"
 msgstr ""
 
-#: js/customfield/GridPanel.js:70 js/customfield/EditDialog.js:283
-#: js/SambaMachineGrid.js:79 js/user/GridPanel.js:175 js/Groups.js:234
-#: js/container/GridPanel.js:70 js/Roles.js:237
+#: js/SambaMachineGrid.js:61 js/SambaMachineEditDialog.js:42
+msgid "Computer Name"
+msgstr ""
+
+#: js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92 js/TagEditDialog.js:226
+#: js/Roles.js:239 js/Groups.js:236 js/Tags.js:226 js/GroupEditDialog.js:136
+#: js/user/GridPanel.js:99 js/RoleEditDialog.js:292
+msgid "Description"
+msgstr ""
+
+#: js/SambaMachineGrid.js:79 js/customfield/GridPanel.js:70
+#: js/customfield/EditDialog.js:283 js/Roles.js:237
+#: js/container/GridPanel.js:70 js/Groups.js:234 js/user/GridPanel.js:175
 msgid "ID"
+msgstr ""
+
+#: js/SambaMachineGrid.js:86 js/customfield/GridPanel.js:72
+#: js/customfield/EditDialog.js:595 js/Roles.js:238
+#: js/container/EditDialog.js:123 js/Applications.js:278 js/Groups.js:235
+#: js/AccessLog.js:131 js/Tags.js:225 js/user/EditDialog.js:278
+#: js/user/EditDialog.js:314
+msgid "Name"
 msgstr ""
 
 #: js/customfield/GridPanel.js:71 js/customfield/EditDialog.js:601
 msgid "Label"
-msgstr ""
-
-#: js/customfield/GridPanel.js:72 js/customfield/EditDialog.js:595
-#: js/SambaMachineGrid.js:86 js/user/EditDialog.js:278
-#: js/user/EditDialog.js:314 js/Groups.js:235 js/Applications.js:278
-#: js/AccessLog.js:131 js/Tags.js:225 js/container/EditDialog.js:123
-#: js/Roles.js:238
-msgid "Name"
 msgstr ""
 
 #: js/customfield/GridPanel.js:73 js/customfield/EditDialog.js:583
@@ -128,9 +138,8 @@ msgid "Type"
 msgstr ""
 
 #: js/customfield/GridPanel.js:74 js/customfield/EditDialog.js:387
-#: js/customfield/EditDialog.js:528 js/Models.js:128
-#: js/container/GridPanel.js:72 js/container/EditDialog.js:135
-#: js/ApplicationFilter.js:33
+#: js/customfield/EditDialog.js:528 js/container/GridPanel.js:72
+#: js/container/EditDialog.js:135 js/ApplicationFilter.js:33 js/Models.js:128
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] ""
@@ -146,8 +155,8 @@ msgid_plural "Customfields"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/customfield/GridPanel.js:131 js/Groups.js:52 js/Tags.js:64
-#: js/Roles.js:47
+#: js/customfield/GridPanel.js:131 js/Roles.js:47 js/Groups.js:52
+#: js/Tags.js:64
 msgid "Confirm"
 msgstr ""
 
@@ -156,7 +165,7 @@ msgid "Restart application to apply new cusomfields?"
 msgstr ""
 
 #: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
-#: js/GroupEditDialog.js:77 js/RoleEditDialog.js:113 js/TagEditDialog.js:87
+#: js/TagEditDialog.js:87 js/GroupEditDialog.js:77 js/RoleEditDialog.js:113
 msgid "Errors"
 msgstr ""
 
@@ -274,74 +283,322 @@ msgstr ""
 msgid "Customfield already exists. Please choose another name."
 msgstr ""
 
-#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:61
-msgid "Computer Name"
+#: js/TagEditDialog.js:37 js/GroupEditDialog.js:37 js/RoleEditDialog.js:69
+msgid "Please wait"
 msgstr ""
 
-#: js/Admin.js:23 js/user/GridPanel.js:98 js/user/Users.js:72
-#: js/AccessLog.js:107
-msgid "User"
-msgid_plural "Users"
+#: js/TagEditDialog.js:37
+msgid "Updating Tag"
+msgstr ""
+
+#: js/TagEditDialog.js:82 js/Roles.js:69 js/Groups.js:74
+#: js/GroupEditDialog.js:72 js/RoleEditDialog.js:106 js/RoleEditDialog.js:134
+msgid "Failed"
+msgstr ""
+
+#: js/TagEditDialog.js:82
+msgid "Could not save tag."
+msgstr ""
+
+#: js/TagEditDialog.js:87 js/GroupEditDialog.js:77 js/RoleEditDialog.js:113
+msgid "Please fix the errors noted."
+msgstr ""
+
+#: js/TagEditDialog.js:168
+msgid "Allowed Contexts"
+msgstr ""
+
+#: js/TagEditDialog.js:174
+msgid "Context"
+msgstr ""
+
+#: js/TagEditDialog.js:187
+msgid "Account Rights"
+msgstr ""
+
+#: js/TagEditDialog.js:196
+msgid "View"
+msgstr ""
+
+#: js/TagEditDialog.js:201
+msgid "Use"
+msgstr ""
+
+#: js/TagEditDialog.js:219
+msgid "Tag Name"
+msgstr ""
+
+#: js/TagEditDialog.js:232 js/container/EditDialog.js:159 js/Tags.js:222
+msgid "Color"
+msgstr ""
+
+#: js/TagEditDialog.js:290 js/GroupEditDialog.js:216 js/RoleEditDialog.js:359
+msgid "Transferring {0}..."
+msgstr ""
+
+#: js/TagEditDialog.js:290
+msgid "Tag"
+msgstr ""
+
+#: js/TagEditDialog.js:300
+msgid "Add New Tag"
+msgstr ""
+
+#: js/TagEditDialog.js:302
+msgid "Edit Tag \"{0}\""
+msgstr ""
+
+#: js/Roles.js:47
+msgid "Do you really want to delete the selected roles?"
+msgstr ""
+
+#: js/Roles.js:64
+msgid "Deleting role(s)..."
+msgstr ""
+
+#: js/Roles.js:69 js/RoleEditDialog.js:134
+msgid "Some error occurred while trying to delete the role."
+msgstr ""
+
+#: js/Roles.js:102
+msgid "add role"
+msgstr ""
+
+#: js/Roles.js:110
+msgid "edit role"
+msgstr ""
+
+#: js/Roles.js:118
+msgid "delete role"
+msgstr ""
+
+#: js/Roles.js:176 js/Applications.js:183 js/Groups.js:176 js/Tags.js:169
+msgid "Search:"
+msgstr ""
+
+#: js/Roles.js:226
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr ""
+
+#: js/Roles.js:227 js/Roles.js:281
+msgid "No roles to display"
+msgstr ""
+
+#: js/container/GridPanel.js:71
+msgid "Container Name"
+msgstr ""
+
+#: js/container/GridPanel.js:103 js/container/Container.js:46
+msgid "Container"
+msgid_plural "Containers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Admin.js:36 js/Models.js:87
-msgid "Groups"
+#: js/container/EditDialog.js:145
+msgid "personal"
 msgstr ""
 
-#: js/Admin.js:49
-msgid "Roles"
+#: js/container/EditDialog.js:145
+msgid "shared"
 msgstr ""
 
-#: js/Admin.js:61
-msgid "Computers"
+#: js/container/EditDialog.js:164
+msgid "Note for Owner"
 msgstr ""
 
-#: js/Admin.js:74 js/Models.js:128
-msgid "Applications"
+#: js/Applications.js:43
+msgid "{0} Settings"
 msgstr ""
 
-#: js/Admin.js:87 js/Models.js:51 js/AccessLog.js:105
+#: js/Applications.js:144
+msgid "enable application"
+msgstr ""
+
+#: js/Applications.js:145
+msgid "disable application"
+msgstr ""
+
+#: js/Applications.js:146
+msgid "settings"
+msgstr ""
+
+#: js/Applications.js:226 js/user/EditDialog.js:829
+msgid "disabled"
+msgstr ""
+
+#: js/Applications.js:229 js/user/EditDialog.js:829
+msgid "enabled"
+msgstr ""
+
+#: js/Applications.js:233
+msgid "unknown status ({0})"
+msgstr ""
+
+#: js/Applications.js:267
+msgid "Displaying application {0} - {1} of {2}"
+msgstr ""
+
+#: js/Applications.js:268
+msgid "No applications to display"
+msgstr ""
+
+#: js/Applications.js:279 js/user/GridPanel.js:176 js/user/EditDialog.js:823
+msgid "Status"
+msgstr ""
+
+#: js/Applications.js:280
+msgid "Version"
+msgstr ""
+
+#: js/Groups.js:52
+msgid "Do you really want to delete the selected groups?"
+msgstr ""
+
+#: js/Groups.js:69
+msgid "Deleting group(s)..."
+msgstr ""
+
+#: js/Groups.js:74
+msgid "Some error occurred while trying to delete the group."
+msgstr ""
+
+#: js/Groups.js:104
+msgid "add group"
+msgstr ""
+
+#: js/Groups.js:112
+msgid "edit group"
+msgstr ""
+
+#: js/Groups.js:120
+msgid "delete group"
+msgstr ""
+
+#: js/Groups.js:223
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr ""
+
+#: js/Groups.js:224 js/Groups.js:278
+msgid "No groups to display"
+msgstr ""
+
+#: js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/AccessLog.js:105 js/Admin.js:87 js/Models.js:51
 msgid "Access Log"
 msgid_plural "Access Logs"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Admin.js:100
-msgid "Shared Tags"
+#: js/AccessLog.js:106 js/AccessLog.js:132
+msgid "IP Address"
 msgstr ""
 
-#: js/Admin.js:113
-msgid "Containers"
+#: js/AccessLog.js:107 js/Admin.js:23 js/user/GridPanel.js:98
+#: js/user/Users.js:72
+msgid "User"
+msgid_plural "Users"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/AccessLog.js:108 js/AccessLog.js:133
+msgid "Login Time"
 msgstr ""
 
-#: js/Admin.js:125
-msgid "Customfields"
+#: js/AccessLog.js:109 js/AccessLog.js:134
+msgid "Logout Time"
 msgstr ""
 
-#: js/Admin.js:161
-msgid "Admin"
+#: js/AccessLog.js:110 js/AccessLog.js:136
+msgid "Client Type"
 msgstr ""
 
-#: js/GroupEditDialog.js:37 js/RoleEditDialog.js:69 js/TagEditDialog.js:37
-msgid "Please wait"
+#: js/AccessLog.js:129
+msgid "Session ID"
+msgstr ""
+
+#: js/AccessLog.js:130 js/user/EditDialog.js:758 js/user/EditDialog.js:801
+msgid "Login Name"
+msgstr ""
+
+#: js/AccessLog.js:135
+msgid "Result"
+msgstr ""
+
+#: js/AccessLog.js:156
+msgid "user blocked"
+msgstr ""
+
+#: js/AccessLog.js:160
+msgid "password expired"
+msgstr ""
+
+#: js/AccessLog.js:164
+msgid "user disabled"
+msgstr ""
+
+#: js/AccessLog.js:168
+msgid "invalid password"
+msgstr ""
+
+#: js/AccessLog.js:172
+msgid "ambiguous username"
+msgstr ""
+
+#: js/AccessLog.js:176
+msgid "user not found"
+msgstr ""
+
+#: js/AccessLog.js:180
+msgid "failure"
+msgstr ""
+
+#: js/AccessLog.js:184
+msgid "success"
+msgstr ""
+
+#: js/Tags.js:64
+msgid "Do you really want to delete the selected tags?"
+msgstr ""
+
+#: js/Tags.js:82
+msgid "Deleting tag(s)..."
+msgstr ""
+
+#: js/Tags.js:97
+msgid "add tag"
+msgstr ""
+
+#: js/Tags.js:105
+msgid "edit tag"
+msgstr ""
+
+#: js/Tags.js:113
+msgid "delete tag"
+msgstr ""
+
+#: js/Tags.js:211
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr ""
+
+#: js/Tags.js:212 js/Tags.js:268
+msgid "No tags to display"
+msgstr ""
+
+#: js/Tags.js:223
+msgid "Usage:&#160;"
 msgstr ""
 
 #: js/GroupEditDialog.js:37 js/RoleEditDialog.js:69
 msgid "Updating Memberships"
 msgstr ""
 
-#: js/GroupEditDialog.js:72 js/RoleEditDialog.js:106 js/RoleEditDialog.js:134
-#: js/Groups.js:74 js/TagEditDialog.js:82 js/Roles.js:69
-msgid "Failed"
-msgstr ""
-
 #: js/GroupEditDialog.js:72
 msgid "Could not save group."
-msgstr ""
-
-#: js/GroupEditDialog.js:77 js/RoleEditDialog.js:113 js/TagEditDialog.js:87
-msgid "Please fix the errors noted."
 msgstr ""
 
 #: js/GroupEditDialog.js:108
@@ -350,12 +607,6 @@ msgstr ""
 
 #: js/GroupEditDialog.js:128
 msgid "Group Name"
-msgstr ""
-
-#: js/GroupEditDialog.js:136 js/SambaMachineGrid.js:62
-#: js/SambaMachineGrid.js:92 js/RoleEditDialog.js:292 js/user/GridPanel.js:99
-#: js/Groups.js:236 js/TagEditDialog.js:226 js/Tags.js:226 js/Roles.js:239
-msgid "Description"
 msgstr ""
 
 #: js/GroupEditDialog.js:144 js/user/EditDialog.js:837
@@ -374,10 +625,6 @@ msgstr ""
 msgid "Saved in Addressbook"
 msgstr ""
 
-#: js/GroupEditDialog.js:216 js/RoleEditDialog.js:359 js/TagEditDialog.js:290
-msgid "Transferring {0}..."
-msgstr ""
-
 #: js/GroupEditDialog.js:221 js/GroupEditDialog.js:232
 msgid "Add new group"
 msgstr ""
@@ -386,44 +633,40 @@ msgstr ""
 msgid "Edit Group \"{0}\""
 msgstr ""
 
+#: js/Admin.js:36 js/Models.js:87
+msgid "Groups"
+msgstr ""
+
+#: js/Admin.js:49
+msgid "Roles"
+msgstr ""
+
+#: js/Admin.js:61
+msgid "Computers"
+msgstr ""
+
+#: js/Admin.js:74 js/Models.js:128
+msgid "Applications"
+msgstr ""
+
+#: js/Admin.js:100
+msgid "Shared Tags"
+msgstr ""
+
+#: js/Admin.js:113
+msgid "Containers"
+msgstr ""
+
+#: js/Admin.js:125
+msgid "Customfields"
+msgstr ""
+
+#: js/Admin.js:161
+msgid "Admin"
+msgstr ""
+
 #: js/AdminPanel.js:46
 msgid "Default Addressbook for new contacts and groups"
-msgstr ""
-
-#: js/RoleEditDialog.js:106
-msgid "Could not save role."
-msgstr ""
-
-#: js/RoleEditDialog.js:126
-msgid "Deleting role..."
-msgstr ""
-
-#: js/RoleEditDialog.js:134 js/Roles.js:69
-msgid "Some error occurred while trying to delete the role."
-msgstr ""
-
-#: js/RoleEditDialog.js:158
-msgid "Rights"
-msgstr ""
-
-#: js/RoleEditDialog.js:260
-msgid "Members"
-msgstr ""
-
-#: js/RoleEditDialog.js:284
-msgid "Role Name"
-msgstr ""
-
-#: js/RoleEditDialog.js:359
-msgid "Role"
-msgstr ""
-
-#: js/RoleEditDialog.js:369
-msgid "Add New Role"
-msgstr ""
-
-#: js/RoleEditDialog.js:371
-msgid "Edit Role \"{0}\""
 msgstr ""
 
 #: js/user/GridPanel.js:56
@@ -436,10 +679,6 @@ msgstr ""
 
 #: js/user/GridPanel.js:76
 msgid "reset password"
-msgstr ""
-
-#: js/user/GridPanel.js:176 js/user/EditDialog.js:823 js/Applications.js:279
-msgid "Status"
 msgstr ""
 
 #: js/user/GridPanel.js:177
@@ -658,10 +897,6 @@ msgstr ""
 msgid "Last Name"
 msgstr ""
 
-#: js/user/EditDialog.js:758 js/user/EditDialog.js:801 js/AccessLog.js:130
-msgid "Login Name"
-msgstr ""
-
 #: js/user/EditDialog.js:763
 msgid "Password"
 msgstr ""
@@ -672,14 +907,6 @@ msgstr ""
 
 #: js/user/EditDialog.js:794
 msgid "Emailaddress"
-msgstr ""
-
-#: js/user/EditDialog.js:829 js/Applications.js:229
-msgid "enabled"
-msgstr ""
-
-#: js/user/EditDialog.js:829 js/Applications.js:226
-msgid "disabled"
 msgstr ""
 
 #: js/user/EditDialog.js:829
@@ -730,264 +957,36 @@ msgid_plural "Email Users"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Groups.js:52
-msgid "Do you really want to delete the selected groups?"
+#: js/RoleEditDialog.js:106
+msgid "Could not save role."
 msgstr ""
 
-#: js/Groups.js:69
-msgid "Deleting group(s)..."
+#: js/RoleEditDialog.js:126
+msgid "Deleting role..."
 msgstr ""
 
-#: js/Groups.js:74
-msgid "Some error occurred while trying to delete the group."
+#: js/RoleEditDialog.js:158
+msgid "Rights"
 msgstr ""
 
-#: js/Groups.js:104
-msgid "add group"
+#: js/RoleEditDialog.js:260
+msgid "Members"
 msgstr ""
 
-#: js/Groups.js:112
-msgid "edit group"
+#: js/RoleEditDialog.js:284
+msgid "Role Name"
 msgstr ""
 
-#: js/Groups.js:120
-msgid "delete group"
+#: js/RoleEditDialog.js:359
+msgid "Role"
 msgstr ""
 
-#: js/Groups.js:176 js/Applications.js:183 js/Tags.js:169 js/Roles.js:176
-msgid "Search:"
+#: js/RoleEditDialog.js:369
+msgid "Add New Role"
 msgstr ""
 
-#: js/Groups.js:223
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr ""
-
-#: js/Groups.js:224 js/Groups.js:278
-msgid "No groups to display"
-msgstr ""
-
-#: js/Applications.js:43
-msgid "{0} Settings"
-msgstr ""
-
-#: js/Applications.js:144
-msgid "enable application"
-msgstr ""
-
-#: js/Applications.js:145
-msgid "disable application"
-msgstr ""
-
-#: js/Applications.js:146
-msgid "settings"
-msgstr ""
-
-#: js/Applications.js:233
-msgid "unknown status ({0})"
-msgstr ""
-
-#: js/Applications.js:267
-msgid "Displaying application {0} - {1} of {2}"
-msgstr ""
-
-#: js/Applications.js:268
-msgid "No applications to display"
-msgstr ""
-
-#: js/Applications.js:280
-msgid "Version"
-msgstr ""
-
-#: js/TagEditDialog.js:37
-msgid "Updating Tag"
-msgstr ""
-
-#: js/TagEditDialog.js:82
-msgid "Could not save tag."
-msgstr ""
-
-#: js/TagEditDialog.js:168
-msgid "Allowed Contexts"
-msgstr ""
-
-#: js/TagEditDialog.js:174
-msgid "Context"
-msgstr ""
-
-#: js/TagEditDialog.js:187
-msgid "Account Rights"
-msgstr ""
-
-#: js/TagEditDialog.js:196
-msgid "View"
-msgstr ""
-
-#: js/TagEditDialog.js:201
-msgid "Use"
-msgstr ""
-
-#: js/TagEditDialog.js:219
-msgid "Tag Name"
-msgstr ""
-
-#: js/TagEditDialog.js:232 js/Tags.js:222 js/container/EditDialog.js:159
-msgid "Color"
-msgstr ""
-
-#: js/TagEditDialog.js:290
-msgid "Tag"
-msgstr ""
-
-#: js/TagEditDialog.js:300
-msgid "Add New Tag"
-msgstr ""
-
-#: js/TagEditDialog.js:302
-msgid "Edit Tag \"{0}\""
-msgstr ""
-
-#: js/SambaMachineModel.js:39
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/AccessLog.js:106 js/AccessLog.js:132
-msgid "IP Address"
-msgstr ""
-
-#: js/AccessLog.js:108 js/AccessLog.js:133
-msgid "Login Time"
-msgstr ""
-
-#: js/AccessLog.js:109 js/AccessLog.js:134
-msgid "Logout Time"
-msgstr ""
-
-#: js/AccessLog.js:110 js/AccessLog.js:136
-msgid "Client Type"
-msgstr ""
-
-#: js/AccessLog.js:129
-msgid "Session ID"
-msgstr ""
-
-#: js/AccessLog.js:135
-msgid "Result"
-msgstr ""
-
-#: js/AccessLog.js:156
-msgid "user blocked"
-msgstr ""
-
-#: js/AccessLog.js:160
-msgid "password expired"
-msgstr ""
-
-#: js/AccessLog.js:164
-msgid "user disabled"
-msgstr ""
-
-#: js/AccessLog.js:168
-msgid "invalid password"
-msgstr ""
-
-#: js/AccessLog.js:172
-msgid "ambiguous username"
-msgstr ""
-
-#: js/AccessLog.js:176
-msgid "user not found"
-msgstr ""
-
-#: js/AccessLog.js:180
-msgid "failure"
-msgstr ""
-
-#: js/AccessLog.js:184
-msgid "success"
-msgstr ""
-
-#: js/Tags.js:64
-msgid "Do you really want to delete the selected tags?"
-msgstr ""
-
-#: js/Tags.js:82
-msgid "Deleting tag(s)..."
-msgstr ""
-
-#: js/Tags.js:97
-msgid "add tag"
-msgstr ""
-
-#: js/Tags.js:105
-msgid "edit tag"
-msgstr ""
-
-#: js/Tags.js:113
-msgid "delete tag"
-msgstr ""
-
-#: js/Tags.js:211
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr ""
-
-#: js/Tags.js:212 js/Tags.js:268
-msgid "No tags to display"
-msgstr ""
-
-#: js/Tags.js:223
-msgid "Usage:&#160;"
-msgstr ""
-
-#: js/container/GridPanel.js:71
-msgid "Container Name"
-msgstr ""
-
-#: js/container/GridPanel.js:103 js/container/Container.js:46
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/container/EditDialog.js:145
-msgid "personal"
-msgstr ""
-
-#: js/container/EditDialog.js:145
-msgid "shared"
-msgstr ""
-
-#: js/container/EditDialog.js:164
-msgid "Note for Owner"
-msgstr ""
-
-#: js/Roles.js:47
-msgid "Do you really want to delete the selected roles?"
-msgstr ""
-
-#: js/Roles.js:64
-msgid "Deleting role(s)..."
-msgstr ""
-
-#: js/Roles.js:102
-msgid "add role"
-msgstr ""
-
-#: js/Roles.js:110
-msgid "edit role"
-msgstr ""
-
-#: js/Roles.js:118
-msgid "delete role"
-msgstr ""
-
-#: js/Roles.js:226
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr ""
-
-#: js/Roles.js:227 js/Roles.js:281
-msgid "No roles to display"
+#: js/RoleEditDialog.js:371
+msgid "Edit Role \"{0}\""
 msgstr ""
 
 #: Controller/Container.php:185

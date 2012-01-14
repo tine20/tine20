@@ -75,7 +75,7 @@ class Tinebase_Translation
         }
         
         // lookup/merge custom translations
-        if (Tasks_Config::isReady() === TRUE) {
+        if (Tinebase_Config::isReady() === TRUE) {
             $customTranslationsDir = Tinebase_Config::getInstance()->translations;
             if ($customTranslationsDir) {
                 foreach((array) scandir($customTranslationsDir) as $dir) {
