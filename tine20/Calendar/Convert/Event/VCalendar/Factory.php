@@ -20,6 +20,7 @@ class Calendar_Convert_Event_VCalendar_Factory
 {
     const CLIENT_GENERIC     = 'generic';
     const CLIENT_IPHONE      = 'iphone';
+    const CLIENT_KDE         = 'kde';
     const CLIENT_MACOSX      = 'macosx';
     const CLIENT_THUNDERBIRD = 'thunderbird';
     
@@ -40,6 +41,11 @@ class Calendar_Convert_Event_VCalendar_Factory
 	            
 	        case Calendar_Convert_Event_VCalendar_Factory::CLIENT_IPHONE:
 	            return new Calendar_Convert_Event_VCalendar_Iphone($_version);
+	            
+	            break;
+	            
+	        case Calendar_Convert_Event_VCalendar_Factory::CLIENT_KDE:
+	            return new Calendar_Convert_Event_VCalendar_KDE($_version);
 	            
 	            break;
 	            
@@ -68,14 +74,19 @@ class Calendar_Convert_Event_VCalendar_Factory
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX;
             $version = $matches['version'];
         
-        // Thunderbird
-        } elseif (preg_match(Calendar_Convert_Event_VCalendar_Thunderbird::HEADER_MATCH, $_userAgent, $matches)) {
-            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD;
-            $version = $matches['version'];
-        
         // iPhone
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_Iphone::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_IPHONE;
+            $version = $matches['version'];
+        
+        // KDE
+        } elseif (preg_match(Calendar_Convert_Event_VCalendar_KDE::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_KDE;
+            $version = $matches['version'];
+        
+        // Thunderbird
+        } elseif (preg_match(Calendar_Convert_Event_VCalendar_Thunderbird::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD;
             $version = $matches['version'];
         
         } else {
