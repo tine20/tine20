@@ -88,6 +88,12 @@ class Addressbook_Convert_Contact_VCard_Generic extends Addressbook_Convert_Cont
         
         $card->add(new Sabre_VObject_Property('NOTE', $_record->note));
         
+        if ($_record->bday instanceof Tinebase_DateTime) {
+            $bday = new Sabre_VObject_Property_DateTime('BDAY');
+            $bday->setDateTime($_record->bday, Sabre_VObject_Property_DateTime::LOCAL);
+            $card->add($bday);
+        }
+        
         if(! empty($_record->jpegphoto)) {
             try {
                 $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $_record->getId());

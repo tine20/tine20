@@ -105,23 +105,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                     break;
                     
                 case 'EMAIL':
-                    $type = null;
-                    foreach($property['TYPE'] as $typeProperty) {
-                        if(strtolower($typeProperty) == 'home' || strtolower($typeProperty) == 'work') {
-                            $type = strtolower($typeProperty);
-                            break;
-                        }
-                    }
-                    
-                    switch ($type) {
-                        case 'home':
-                            $data['email_home'] = $property->value;
-                            break;
-                            
-                        case 'work':
-                            $data['email'] = $property->value;
-                            break;
-                    }
+                    $this->_toTine20ModelParseEmail($data, $property);
                     break;
                     
                 case 'FN':
@@ -248,5 +232,26 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     */
     public function fromTine20Model(Tinebase_Record_Abstract $_record)
     {
+    }
+    
+    protected function _toTine20ModelParseEmail(&$_data, $_property)
+    {
+        $type = null;
+        foreach($_property['TYPE'] as $typeProperty) {
+            if(strtolower($typeProperty) == 'home' || strtolower($typeProperty) == 'work') {
+                $type = strtolower($typeProperty);
+                break;
+            }
+        }
+        
+        switch ($type) {
+            case 'home':
+                $_data['email_home'] = $_property->value;
+                break;
+        
+            case 'work':
+                $_data['email'] = $_property->value;
+                break;
+        }
     }
 }

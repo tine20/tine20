@@ -140,13 +140,22 @@ class Addressbook_Convert_Contact_VCard_KDE extends Addressbook_Convert_Contact_
         $adr->add('TYPE', 'HOME');
         $card->add($adr);
         
-        $card->add(new Sabre_VObject_Property('EMAIL;TYPE=work', $_record->email));
-        $card->add(new Sabre_VObject_Property('EMAIL;TYPE=home', $_record->email_home));
+        $email = new Sabre_VObject_Property('EMAIL', $_record->email);
+        $adr->add('TYPE', 'PREF');
+        $card->add($email);
         
-        $card->add(new Sabre_VObject_Property('URL;TYPE=work', $_record->url));
-        $card->add(new Sabre_VObject_Property('URL;TYPE=home', $_record->url_home));
+        $email = new Sabre_VObject_Property('EMAIL', $_record->email_home);
+        $card->add($email);
+                
+        $card->add(new Sabre_VObject_Property('URL', $_record->url));
         
         $card->add(new Sabre_VObject_Property('NOTE', $_record->note));
+        
+        if ($_record->bday instanceof Tinebase_DateTime) {
+            $bday = new Sabre_VObject_Property_DateTime('BDAY');
+            $bday->setDateTime($_record->bday, Sabre_VObject_Property_DateTime::LOCAL);
+            $card->add($bday);
+        }
         
         if(! empty($_record->jpegphoto)) {
             try {
@@ -166,5 +175,27 @@ class Addressbook_Convert_Contact_VCard_KDE extends Addressbook_Convert_Contact_
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' card ' . $card->serialize());
         
         return $card;
-    }    
+    }
+        
+    protected function _toTine20ModelParseEmail(&$_data, $_property)
+    {
+        $type = null;
+        foreach($_property['TYPE'] as $typeProperty) {
+            if(strtolower($typeProperty) == 'pref') {
+                $type = 'work';
+                break;
+            }
+        }
+        
+        switch ($type) {
+            case 'work':
+                $_data['email'] = $_property->value;
+                break;
+                
+            default:
+                $_data['email_home'] = $_property->value;
+                break;
+        
+        }
+    }
 }
