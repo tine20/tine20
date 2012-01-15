@@ -61,9 +61,9 @@ class Addressbook_Convert_Contact_VCard_KDE extends Addressbook_Convert_Contact_
         #'tel_assistent'         => null,
         #'tel_car'               => null,
         'tel_cell'              => null,
-        #'tel_cell_private'      => null,
+        'tel_cell_private'      => null,
         'tel_fax'               => null,
-        #'tel_fax_home'          => null,
+        'tel_fax_home'          => null,
         'tel_home'              => null,
         'tel_pager'             => null,
         'tel_work'              => null,
@@ -93,7 +93,7 @@ class Addressbook_Convert_Contact_VCard_KDE extends Addressbook_Convert_Contact_
         // required vcard fields
         $card->add(new Sabre_VObject_Property('VERSION', '3.0'));
         $card->add(new Sabre_VObject_Property('FN', $_record->n_fileas));
-        $card->add(new Sabre_VObject_Element_MultiValue('N', array($_record->n_family, $_record->n_given)));
+        $card->add(new Sabre_VObject_Element_MultiValue('N', array($_record->n_family, $_record->n_given, $_record->n_middle, $_record->n_prefix, $_record->n_suffix)));
         
         $card->add(new Sabre_VObject_Property('PRODID', '-//tine20.org//Tine 2.0//EN'));
         $card->add(new Sabre_VObject_Property('UID', $_record->getId()));
@@ -122,10 +122,15 @@ class Addressbook_Convert_Contact_VCard_KDE extends Addressbook_Convert_Contact_
         $tel->add('TYPE', 'FAX');
         $card->add($tel);
         
-        #$tel = new Sabre_VObject_Property('TEL', $_record->tel_fax_home);
-        #$tel->add('TYPE', 'FAX');
-        #$tel->add('TYPE', 'HOME');
-        #$card->add($tel);
+        $tel = new Sabre_VObject_Property('TEL', $_record->tel_fax_home);
+        $tel->add('TYPE', 'FAX');
+        $tel->add('TYPE', 'HOME');
+        $card->add($tel);
+        
+        $tel = new Sabre_VObject_Property('TEL', $_record->tel_cell_private);
+        $tel->add('TYPE', 'CELL');
+        $tel->add('TYPE', 'HOME');
+        $card->add($tel);
         
         $adr = new Sabre_VObject_Element_MultiValue('ADR', array(null, $_record->adr_one_street2, $_record->adr_one_street, $_record->adr_one_locality, $_record->adr_one_region, $_record->adr_one_postalcode, $_record->adr_one_countryname));
         $adr->add('TYPE', 'WORK');
