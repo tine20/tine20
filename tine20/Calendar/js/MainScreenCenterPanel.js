@@ -477,7 +477,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
 
         switch (actionType) {
             case 'update':
-            case 'edit':
                 var title = this.app.i18n._('Updating event in the past'),
                     optionYes = this.app.i18n._('Update this event'),
                     optionNo = this.app.i18n._('Do not update this event');
@@ -524,14 +523,16 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                                     if(store) store.remove(event);
                                 } else {
                                     if (view && view.calPanel && view.rendered) {
-
-                                        var updatedEvent = Ext.util.clone(event);
-                                        updatedEvent.dirty = false;
-                                        updatedEvent.editing = false;
-                                        updatedEvent.modified = null;
-                                        
-                                        store.replaceRecord(event, updatedEvent);
-                                        view.getSelectionModel().select(event);
+                                        this.loadMask.show();
+                                        store.reload();
+//                                        TODO: restore original event so no reload is needed
+//                                        var updatedEvent = event;
+//                                        updatedEvent.dirty = false;
+//                                        updatedEvent.editing = false;
+//                                        updatedEvent.modified = null;
+//                                        
+//                                        store.replaceRecord(event, updatedEvent);
+//                                        view.getSelectionModel().select(event);
                                     }
                                     this.setLoading(false);
                                 }
@@ -543,7 +544,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 }             
             });
         } else {
-            this.onAddEvent(event, checkBusyConflicts, true);
+            if (actionType == 'update') this.onUpdateEvent(event, true, actionType);
+            else this.onAddEvent(event, checkBusyConflicts, true);
         }
     },
     
@@ -590,8 +592,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     
     onUpdateEvent: function(event, pastChecked, actionType) {
         
-        if(!actionType) actionType = 'update';
-        
+        if(!actionType || actionType == 'edit') actionType = 'update';
         this.setLoading(true);
         
         if(!pastChecked) {

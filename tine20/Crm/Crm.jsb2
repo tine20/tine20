@@ -16,6 +16,10 @@
           "path": "js/"
         },
         {
+          "text": "SearchCombo.js",
+          "path": "js/"
+        },        
+        {
           "text": "Model.js",
           "path": "js/"
         },
@@ -41,6 +45,10 @@
         },
         {
           "text": "LeadEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "AddToLeadPanel.js",
           "path": "js/"
         },
         {

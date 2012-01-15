@@ -102,8 +102,8 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
                 height: 170,
                 scope: this,
                 options: [
-                    {text: this.app.i18n._('Responde to whole series'), name: 'series'},
-                    {text: this.app.i18n._('Do not responde'), name: 'cancel'}
+                    {text: this.app.i18n._('Respond to whole series'), name: 'series'},
+                    {text: this.app.i18n._('Do not respond'), name: 'cancel'}
                 ],
                 
                 handler: function(option) {

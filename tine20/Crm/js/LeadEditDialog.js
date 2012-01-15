@@ -48,6 +48,18 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     tasksGrid: null,
     
     /**
+     * New contacts when adding contacts from addressbook
+     * @type Array 
+     */
+    additionalContacts: null,
+    
+    /**
+     * New contacts' role when adding contacts from addressbook
+     * @type String 
+     */
+    additionalContactsRole: null,
+    
+    /**
      * @private
      */
     windowNamePrefix: 'LeadEditWindow_',
@@ -56,6 +68,14 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordProxy: Tine.Crm.leadBackend,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     showContainerSelector: true,
+    
+    /**
+     * Init this component
+     */
+    initComponent: function() {
+        this.additionalContacts = Ext.decode(this.additionalContacts);
+        Tine.Crm.LeadEditDialog.superclass.initComponent.apply(this, arguments);
+    },
 
     /**
      * executed after record got updated from proxy
@@ -63,7 +83,28 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     onRecordLoad: function() {
-
+        // add contacts from addressbook if any
+        if(this.additionalContacts) { 
+            var relations = this.record.get('relations');
+            Ext.each(this.additionalContacts, function(contact) {
+                var add = true;
+                Ext.each(this.record.get('relations'), function(existingRelation){
+                    if(contact.id == existingRelation.related_record.id) {
+                        add = false;
+                        return false;
+                    }
+                });
+                if(add) {
+                    relations.push({
+                        type: this.additionalContactsRole,
+                        related_record: contact
+                    });
+                }
+            }, this);
+            
+            this.record.set('relations', relations);
+        }
+        
         // load contacts/tasks/products into link grid (only first time this function gets called/store is empty)
         if (this.contactGrid && this.tasksGrid && this.productsGrid 
             && this.contactGrid.store.getCount() == 0 
@@ -174,9 +215,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     splitRelations: function() {
         
-        var contacts = [];
-        var tasks = []
-        var products = []
+        var contacts = [],
+            tasks = [],
+            products = [];
         
         var relations = this.record.get('relations');
         

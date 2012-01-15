@@ -101,12 +101,14 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
      */
     public function create(Tinebase_Record_Interface $_phone)
     {
-        // check first if mac address is already used
-        try {
-            $this->getByMacAddress($_phone->macaddress);
-            throw new Voipmanager_Exception_Validation('A phone with this mac address already exists.');
-        } catch (Voipmanager_Exception_NotFound $venf) {
-            // everything ok
+        if ($_phone->has('macaddress')) {
+            // check first if mac address is already used
+            try {
+                $this->getByMacAddress($_phone->macaddress);
+                throw new Voipmanager_Exception_Validation('A phone with this mac address already exists.');
+            } catch (Voipmanager_Exception_NotFound $venf) {
+                // everything ok
+            }
         }
         
         // auto generate random http client username and password
@@ -169,13 +171,15 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_phone->toArray(), true));
         
         // check first if mac address is already used
-        try {
-            $phoneWithMac = $this->getByMacAddress($_phone->macaddress);
-            if ($phoneWithMac->getId() !== $_phone->getId()) {
-                throw new Voipmanager_Exception_Validation('A phone with this mac address already exists.');
+        if ($_phone->has('macaddress')) {
+            try {
+                $phoneWithMac = $this->getByMacAddress($_phone->macaddress);
+                if ($phoneWithMac->getId() !== $_phone->getId()) {
+                    throw new Voipmanager_Exception_Validation('A phone with this mac address already exists.');
+                }
+            } catch (Voipmanager_Exception_NotFound $venf) {
+                // everything ok
             }
-        } catch (Voipmanager_Exception_NotFound $venf) {
-            // everything ok
         }
         
         $phone = $this->_backend->update($_phone);

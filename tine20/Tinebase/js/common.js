@@ -436,7 +436,7 @@ Tine.Tinebase.common = {
 	        if (o.hasOwnProperty(p)) {
 	            v = o[p];
 	            if (v && 'object' === typeof v) {
-	                c[p] = Ext.ux.clone(v);
+	                c[p] = Tine.Tinebase.common.clone(v);
 	            }
 	            else {
 	                c[p] = v;
