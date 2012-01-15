@@ -182,7 +182,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     * @param Addressbook_Model_Contact $_contact
     * @return array contact data
     */
-    protected function _contactToJson($_contact)
+    protected function _recordToJson($_contact)
     {
         $result = parent::_recordToJson($_contact);
         $result['jpegphoto'] = $this->_getImageLink($result);
