@@ -691,11 +691,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     this.setLoading(false);
                     // no sm when called from another app
                     if (view && view.calPanel && view.rendered) {
-                        
+                        view.getSelectionModel().select(updatedEvent);
                         // find out if filter still matches for this record
-                        if(!this.onAfterUpdateEventAction(updatedEvent)) {
-                            view.getSelectionModel().select(updatedEvent);
-                        }
+                        this.onAfterUpdateEventAction(updatedEvent);
                     }
                 }
             },
@@ -705,30 +703,27 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         });
     },
     
+    /**
+     * checks if filter still matches for the last updated event
+     * which does not when default filter had been set, and event was declined 
+     * @param {} event
+     * @return {Boolean}
+     */
     onAfterUpdateEventAction: function(event) {
-        var ftb = this.getFilterToolbar();
         try {
-
             var filterData = this.getAllFilterData();
-            
             filterData[0].filters[0].filters.push({field: 'id', operator: 'in', value: [ event.get('id') ]});
             
             Tine.Calendar.searchEvents(filterData, {}, function(_response) {
                 if(_response.totalcount == 0) {
-                    var panel = this.getCalendarPanel(this.activeView),
-                        store = panel.getStore(),
-                        view = panel.getView(),
-                        row = view.getSelectionModel().select(event);
-                        // JUHU 
-                        // gleich nochmal
-//                    Tine.log.warn(row);
+                    var sel = this.getCalendarPanel(this.activeView).getView().getSelectionModel().getSelected();
+                    sel.ui.markDeclined();
                 }
-                    
-                }, this);
-        } catch (e) {
-            Tine.log.err(e);
-        }
-        return false;
+            }, this);
+        } catch(e) {
+            Tine.log.error('Tine.Calendar.MainScreenCenterPanel::onAfterUpdateEventAction');
+            Tine.log.error(e.stack ? e.stack : e);
+        }          
     },
     
     onDeleteRecords: function () {
