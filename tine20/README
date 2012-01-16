@@ -2,7 +2,7 @@ Production use of git master WARNING
 -----------------------------------
 
 Do not use the Tine 2.0 git master on a production server:
-The trunk should be seen as a development code and *not* suitable for production use.
+The master should be seen as a development code and *not* suitable for production use.
 
 Production servers should only run the official Tine 2.0 releases from http://www.tine20.org/download.
 
@@ -15,7 +15,7 @@ Nevertheless we highly appreciate testing of the git master and user feedback an
 You can send bugreports via 
 - the build in bugreporting tool.
 - the forum (http://www.tine20.org/forum).
-- the bugtracker (http://www.tine20.org/bugtracker/index.php).
+- the bugtracker (http://forge.tine20.org/mantisbt/index.php).
 
 We also like to have your feedback to new features and suggestions for improvements. You may put these in our forum at http://www.tine20.org/forum as well.
 
