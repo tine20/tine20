@@ -718,8 +718,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             var filterData = this.getAllFilterData();
             filterData[0].filters[0].filters.push({field: 'id', operator: 'in', value: [ event.get('id') ]});
             
-            Tine.Calendar.searchEvents(filterData, {}, function(_response) {
-                if(_response.totalcount == 0) {
+            Tine.Calendar.searchEvents(filterData, {}, function(r) {
+                if(r.totalcount == 0) {
                     var sel = this.getCalendarPanel(this.activeView).getView().getSelectionModel().getSelected();
                     sel.ui.markDeclined();
                 }
