@@ -5,7 +5,7 @@
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
- * TODO         container / folder / tag filter should extend this
+ * TODO         container / tag filter should extend this
  */
 Ext.ns('Tine.widgets.grid');
 
@@ -59,10 +59,33 @@ Tine.widgets.grid.PickerFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
      * @private
      */
     initComponent: function() {
-        this.operators = this.operators || ['in', 'notin'];
+        this.operators = this.operators || ['equals', 'not', 'in', 'notin'];
         this.multiselectFieldConfig = this.multiselectFieldConfig || {};
         
         Tine.widgets.grid.PickerFilter.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * called on operator change of a filter row
+     * @private
+     * 
+     * TODO keep value widget if old operator / new operator use the same widget?
+     */
+    onOperatorChange: function(filter, newOperator, keepValue) {
+
+        Tine.widgets.grid.PickerFilter.superclass.onOperatorChange.apply(this, arguments);
+        
+        var el = Ext.select('tr[id=' + this.ftb.frowIdPrefix + filter.id + '] td[class^=tw-ftb-frow-value]', this.ftb.el).first();
+        
+        // NOTE: removeMode got introduced on ext3.1 but is not docuemented
+        //       'childonly' is no ext mode, we just need something other than 'container'
+        if (filter.formFields.value && Ext.isFunction(filter.formFields.value.destroy)) {
+            filter.formFields.value.removeMode = 'childsonly';
+            filter.formFields.value.destroy();
+            delete filter.formFields.value;
+        }
+        
+        filter.formFields.value = this.valueRenderer(filter, el);
     },
     
     /**
@@ -70,22 +93,87 @@ Tine.widgets.grid.PickerFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
      * 
      * @param {Ext.data.Record} filter line
      * @param {Ext.Element} element to render to 
+     * 
+     * TODO add record picker for equals + not operators
      */
     valueRenderer: function(filter, el) {
-        var value = new Tine.widgets.grid.PickerFilterValueField(Ext.apply({
-            app: this.app,
-            filter: filter,
-            width: this.filterValueWidth,
-            id: 'tw-ftb-frow-valuefield-' + filter.id,
-            value: filter.data.value ? filter.data.value : this.defaultValue,
-            renderTo: el
-        }, this.multiselectFieldConfig));
-        value.on('specialkey', function(field, e){
-             if(e.getKey() == e.ENTER){
-                 this.onFiltertrigger();
-             }
-        }, this);
-        value.on('select', this.onFiltertrigger, this);
+        var operator = filter.get('operator') ? filter.get('operator') : this.defaultOperator,
+            value;
+            
+        Tine.log.debug('Tine.widgets.grid.PickerFilter::valueRenderer - Creating new value field for ' + operator + ' operator.')
+
+        switch(operator) {
+            case 'equals':
+            case 'not':
+//                // @TODO invent a picker registry
+//                var picker = this.foreignRecordClass == Tine.Addressbook.Model.Contact ?  Tine.Addressbook.SearchCombo : Tine.Tinebase.widgets.form.RecordPickerComboBox;
+//                
+//                value = new picker ({
+//                    recordClass: this.foreignRecordClass,
+//                    filter: filter,
+//                    blurOnSelect: true,
+//                    width: this.filterValueWidth,
+//                    listWidth: 500,
+//                    listAlign: 'tr-br',
+//                    id: 'tw-ftb-frow-valuefield-' + filter.id,
+//                    value: filter.data.value ? filter.data.value : this.defaultValue,
+//                    renderTo: el
+//                });
+//                
+//                value.on('specialkey', function(field, e){
+//                     if(e.getKey() == e.ENTER){
+//                         this.onFiltertrigger();
+//                     }
+//                }, this);
+//                
+//                value.origSetValue = value.setValue.createDelegate(value);
+//                break;
+                
+            default:
+                if (! filter.formFields.value) {
+                    value = new Tine.widgets.grid.PickerFilterValueField(Ext.apply({
+                        app: this.app,
+                        filter: filter,
+                        width: this.filterValueWidth,
+                        id: 'tw-ftb-frow-valuefield-' + filter.id,
+                        value: filter.data.value ? filter.data.value : this.defaultValue,
+                        renderTo: el
+                    }, this.multiselectFieldConfig));
+                    value.on('specialkey', function(field, e){
+                         if(e.getKey() == e.ENTER){
+                             this.onFiltertrigger();
+                         }
+                    }, this);
+                    value.on('select', this.onFiltertrigger, this);
+                } else {
+                    value = filter.formFields.value;
+                }
+        
+//                this.setRelatedRecordValue(filter);
+//                
+//                if (! filter.formFields.value) {
+//                    value = new Ext.Button({
+//                        text: _(this.startDefinitionText),
+//                        filter: filter,
+//                        width: this.filterValueWidth,
+//                        id: 'tw-ftb-frow-valuefield-' + filter.id,
+//                        renderTo: el,
+//                        handler: this.onDefineRelatedRecord.createDelegate(this, [filter]),
+//                        scope: this
+//                    });
+//                    
+//                    // show button
+//                    el.addClass('x-btn-over');
+//                    
+//                    // change text if setRelatedRecordValue had child filters
+//                    if (filter.toolbar) {
+//                        value.setText((this.editDefinitionText));
+//                    }
+//                
+//                } else {
+//                    value = filter.formFields.value;
+//                }
+        }
         
         return value;
     }
