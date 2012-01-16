@@ -1129,6 +1129,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
                     'description' => 'testImport',
                     'color' => '#009B31',
         ));
+        sleep(1);
         $tag = Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $tag);
         $filter = array(array(
             'field'    => 'tag',
