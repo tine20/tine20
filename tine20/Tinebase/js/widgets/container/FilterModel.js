@@ -5,7 +5,7 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
- * TODO         extend Tine.widgets.grid.FilterModelMultiSelect
+ * TODO         extend Tine.widgets.grid.PickerFilter
  */
 Ext.ns('Tine.widgets.container');
 

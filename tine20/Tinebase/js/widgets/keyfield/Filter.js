@@ -73,7 +73,7 @@ Tine.widgets.grid.FilterToolbar.FILTERS['tine.widget.keyfield.filter'] = Tine.Ti
  * 
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
- * TODO think about using Tine.widgets.grid.FilterModelMultiSelectValueField
+ * TODO think about using Tine.widgets.grid.PickerFilterValueField
  */
 Tine.Tinebase.widgets.keyfield.FilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
     hideButtons: false,
