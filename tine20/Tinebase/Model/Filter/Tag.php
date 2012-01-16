@@ -106,7 +106,7 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
         if ($_valueToJson == true) {
             $tags = Tinebase_Tags::getInstance()->getTagsById($this->_value)->toArray();
             if (count($tags) > 0) {
-                $result['value'] = $tags[0];
+                $result['value'] = (is_array($this->_value)) ? $tags : $tags[0];
             } else {
                 $result['value'] = '';
             }
