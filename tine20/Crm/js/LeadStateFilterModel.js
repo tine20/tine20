@@ -14,7 +14,7 @@ Ext.ns('Tine.Crm');
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
- * TODO         extend Tine.widgets.grid.FilterModelMultiSelect
+ * TODO         use keyfield filter when lead state is a keyfield config
  */
 Tine.Crm.LeadStateFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
     /**
