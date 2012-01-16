@@ -5,7 +5,7 @@
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
- * TODO         container / tag filter should extend this
+ * TODO         container tag filter should extend this
  */
 Ext.ns('Tine.widgets.grid');
 
@@ -56,11 +56,23 @@ Tine.widgets.grid.PickerFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     multiselectFieldConfig: null,
     
     /**
+     * record picker
+     * 
+     * @type Tine.Tinebase.widgets.form.RecordPickerComboBox
+     */
+    picker: null,
+    
+    /**
      * @private
      */
     initComponent: function() {
         this.operators = this.operators || ['equals', 'not', 'in', 'notin'];
         this.multiselectFieldConfig = this.multiselectFieldConfig || {};
+        
+        // TODO invent a picker registry
+        if (this.picker === null) {
+            this.picker = (this.recordClass == Tine.Addressbook.Model.Contact) ?  Tine.Addressbook.SearchCombo : Tine.Tinebase.widgets.form.RecordPickerComboBox;
+        }
         
         Tine.widgets.grid.PickerFilter.superclass.initComponent.call(this);
     },
@@ -93,89 +105,79 @@ Tine.widgets.grid.PickerFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
      * 
      * @param {Ext.data.Record} filter line
      * @param {Ext.Element} element to render to 
-     * 
-     * TODO add record picker for equals + not operators
      */
     valueRenderer: function(filter, el) {
+        if (filter.formFields.value) {
+            return filter.formFields.value;
+        }
+
         var operator = filter.get('operator') ? filter.get('operator') : this.defaultOperator,
             value;
             
-        Tine.log.debug('Tine.widgets.grid.PickerFilter::valueRenderer - Creating new value field for ' + operator + ' operator.')
+        Tine.log.debug('Tine.widgets.grid.PickerFilter::valueRenderer() - Creating new value field for ' + operator + ' operator.')
 
         switch(operator) {
             case 'equals':
             case 'not':
-//                // @TODO invent a picker registry
-//                var picker = this.foreignRecordClass == Tine.Addressbook.Model.Contact ?  Tine.Addressbook.SearchCombo : Tine.Tinebase.widgets.form.RecordPickerComboBox;
-//                
-//                value = new picker ({
-//                    recordClass: this.foreignRecordClass,
-//                    filter: filter,
-//                    blurOnSelect: true,
-//                    width: this.filterValueWidth,
-//                    listWidth: 500,
-//                    listAlign: 'tr-br',
-//                    id: 'tw-ftb-frow-valuefield-' + filter.id,
-//                    value: filter.data.value ? filter.data.value : this.defaultValue,
-//                    renderTo: el
-//                });
-//                
-//                value.on('specialkey', function(field, e){
-//                     if(e.getKey() == e.ENTER){
-//                         this.onFiltertrigger();
-//                     }
-//                }, this);
-//                
-//                value.origSetValue = value.setValue.createDelegate(value);
-//                break;
-                
+                value = this.getPicker(filter, el);
+                break;
             default:
-                if (! filter.formFields.value) {
-                    value = new Tine.widgets.grid.PickerFilterValueField(Ext.apply({
-                        app: this.app,
-                        filter: filter,
-                        width: this.filterValueWidth,
-                        id: 'tw-ftb-frow-valuefield-' + filter.id,
-                        value: filter.data.value ? filter.data.value : this.defaultValue,
-                        renderTo: el
-                    }, this.multiselectFieldConfig));
-                    value.on('specialkey', function(field, e){
-                         if(e.getKey() == e.ENTER){
-                             this.onFiltertrigger();
-                         }
-                    }, this);
-                    value.on('select', this.onFiltertrigger, this);
-                } else {
-                    value = filter.formFields.value;
-                }
-        
-//                this.setRelatedRecordValue(filter);
-//                
-//                if (! filter.formFields.value) {
-//                    value = new Ext.Button({
-//                        text: _(this.startDefinitionText),
-//                        filter: filter,
-//                        width: this.filterValueWidth,
-//                        id: 'tw-ftb-frow-valuefield-' + filter.id,
-//                        renderTo: el,
-//                        handler: this.onDefineRelatedRecord.createDelegate(this, [filter]),
-//                        scope: this
-//                    });
-//                    
-//                    // show button
-//                    el.addClass('x-btn-over');
-//                    
-//                    // change text if setRelatedRecordValue had child filters
-//                    if (filter.toolbar) {
-//                        value.setText((this.editDefinitionText));
-//                    }
-//                
-//                } else {
-//                    value = filter.formFields.value;
-//                }
+                value = this.getPickerGridLayerCombo(filter, el);
         }
+
+        value.on('specialkey', function(field, e){
+             if(e.getKey() == e.ENTER){
+                 this.onFiltertrigger();
+             }
+        }, this);
+        value.on('select', this.onFiltertrigger, this);
         
         return value;
+    },
+    
+    /**
+     * get record picker
+     * 
+     * @param {Ext.data.Record} filter line
+     * @param {Ext.Element} element to render to 
+     * 
+     */
+    getPicker: function(filter, el) {
+        Tine.log.debug('Tine.widgets.grid.PickerFilter::getPicker()');
+        
+        var result = new this.picker ({
+            recordClass: this.recordClass,
+            filter: filter,
+            blurOnSelect: true,
+            width: this.filterValueWidth,
+//            listWidth: 500,
+//            listAlign: 'tr-br',
+            id: 'tw-ftb-frow-valuefield-' + filter.id,
+            value: filter.data.value ? filter.data.value : this.defaultValue,
+            renderTo: el
+        });
+        
+        result.origSetValue = result.setValue.createDelegate(result);
+        
+        return result;
+    },
+
+    /**
+     * get picker grid layer combo
+     * 
+     * @param {Ext.data.Record} filter line
+     * @param {Ext.Element} element to render to 
+     * 
+     */
+    getPickerGridLayerCombo: function(filter, el) {
+        return new Tine.widgets.grid.PickerFilterValueField(Ext.apply({
+            app: this.app,
+            filter: filter,
+            width: this.filterValueWidth,
+            id: 'tw-ftb-frow-valuefield-' + filter.id,
+            value: filter.data.value ? filter.data.value : this.defaultValue,
+            renderTo: el
+        }, this.multiselectFieldConfig));
     }
 });
 
@@ -349,10 +351,13 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
      * @return {String}
      */
     getRecordText: function(value) {
-        var text = '';
-        
-        id = (Ext.isString(value)) ? value : value.id;
-        record = this.valueStore.getById(id);
+        var text = '',
+            id = (Ext.isString(value)) ? value : value.id,
+            record = (this.valueStore) ? this.valueStore.getById(id) : null;
+            
+        Tine.log.debug('Tine.widgets.grid.PickerFilterValueField::getRecordText');
+        Tine.log.debug(value);
+            
         if (record) {
             this.currentValue.push(record.id);
             // always copy/clone record because it can't exist in 2 different stores
