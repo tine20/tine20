@@ -62,12 +62,12 @@ Tine.Calendar.EventUI.prototype = {
         //this.colMgr = Tine.Calendar.colorMgr;
     },
     
-    markDirty: function() {       
+    markDirty: function() {
         Ext.each(this.getEls(), function(el) {
             el.setOpacity(0.5, 1);
         });
     },
-        
+    
     onSelectedChange: function(state){
         if(state){
             //this.focus();
@@ -172,15 +172,6 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         
         Ext.each(this.getEls(), function(el) {
             el.setStyle({'border-style': 'dashed'});
-        });
-    },
-
-    markDeclined: function() {
-        Ext.each(this.getEls(), function(el) {
-            el.setOpacity(0.5, 1);
-            el.setStyle({'background-color': '#aaa', 'border-color': '#888'});
-            Ext.DomHelper.applyStyles(el.dom.firstChild, {'background-color': '#888'});
-            Ext.DomHelper.applyStyles(el.dom.firstChild.firstChild, {'background-color': '#888'});
         });
     },
     
