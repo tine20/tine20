@@ -726,6 +726,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                         store = panel.getStore(),
                         view = panel.getView(),
                         row = view.getSelectionModel().select(event);
+<<<<<<< HEAD
+=======
+                        // JUHU
+>>>>>>> parent of 8687b48... test
 //                    Tine.log.warn(row);
 >>>>>>> parent of e23dae8... test
                 }
