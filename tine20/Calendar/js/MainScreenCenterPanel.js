@@ -550,44 +550,48 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
     
     onAddEvent: function(event, checkBusyConflicts, pastChecked) {
-
-        if(!pastChecked) {
-            this.checkPastEvent(event, checkBusyConflicts, 'add');
-            return;
-        }
-        
-        this.setLoading(true);
-        
-        // remove temporary id
-        if (event.get('id').match(/new/)) {
-            event.set('id', '');
-        }
-        
-        if (event.isRecurBase()) {
-            this.loadMask.show();
-        }
-        
-        var panel = this.getCalendarPanel(this.activeView),
-            store = panel.getStore(),
-            view = panel.getView();
-                        
-        Tine.Calendar.backend.saveRecord(event, {
-            scope: this,
-            success: function(createdEvent) {
-                if (createdEvent.isRecurBase()) {
-                    store.load({refresh: true});
-                } else {
-                    store.replaceRecord(event, createdEvent);
-                    this.setLoading(false);
-                    if (view && view.calPanel && view.rendered) {
-                        view.getSelectionModel().select(createdEvent);
+        try {
+            if(!pastChecked) {
+                this.checkPastEvent(event, checkBusyConflicts, 'add');
+                return;
+            }
+            
+            this.setLoading(true);
+            
+            // remove temporary id
+            if (event.get('id').match(/new/)) {
+                event.set('id', '');
+            }
+            
+            if (event.isRecurBase()) {
+                this.loadMask.show();
+            }
+            
+            var panel = this.getCalendarPanel(this.activeView),
+                store = panel.getStore(),
+                view = panel.getView();
+                            
+            Tine.Calendar.backend.saveRecord(event, {
+                scope: this,
+                success: function(createdEvent) {
+                    if (createdEvent.isRecurBase()) {
+                        store.load({refresh: true});
+                    } else {
+                        store.replaceRecord(event, createdEvent);
+                        this.setLoading(false);
+                        if (view && view.calPanel && view.rendered) {
+                            view.getSelectionModel().select(createdEvent);
+                        }
                     }
-                }
-            },
-            failure: this.onProxyFail.createDelegate(this, [event], true)
-        }, {
-            checkBusyConflicts: checkBusyConflicts === false ? 0 : 1
-        });
+                },
+                failure: this.onProxyFail.createDelegate(this, [event], true)
+            }, {
+                checkBusyConflicts: checkBusyConflicts === false ? 0 : 1
+            });
+        } catch(e) {
+            Tine.log.error('Tine.Calendar.MainScreenCenterPanel::onAddEvent');
+            Tine.log.error(e.stack ? e.stack : e);
+        } 
     },
     
     onUpdateEvent: function(event, pastChecked, actionType) {
