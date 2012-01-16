@@ -5,7 +5,6 @@
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
- * TODO         remove checkbox stuff
  * TODO         container / folder / tag filter should extend this
  */
 Ext.ns('Tine.widgets.grid');
@@ -14,8 +13,6 @@ Ext.ns('Tine.widgets.grid');
  * @namespace   Tine.widgets.grid
  * @class       Tine.widgets.grid.PickerFilter
  * @extends     Tine.widgets.grid.FilterModel
- * 
- * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 Tine.widgets.grid.PickerFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     /**
@@ -100,8 +97,6 @@ Tine.widgets.grid.FilterToolbar.FILTERS['tinebase.multiselect'] = Tine.widgets.g
  * @namespace   Tine.widgets.grid
  * @class       Tine.widgets.grid.PickerFilterValueField
  * @extends     Ext.ux.form.LayerCombo
- * 
- * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
     hideButtons: false,
@@ -110,7 +105,6 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
         labelWidth: 30
     },
     labelField: 'name',
-    xtype: 'checkbox',
     recordClass: null,
     valueStore: null,
 
@@ -139,18 +133,9 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
     getFormValue: function() {
         var values = [];
 
-        if (this.xtype == 'checkbox') {
-            var formValues = this.getInnerForm().getForm().getValues();
-            for (var id in formValues) {
-                if (formValues[id] === 'on' && this.valueStore.getById(id)) {
-                    values.push(id);
-                }
-            }
-        } else {
-            this.store.each(function(record) {
-                values.push(record.data);
-            }, this);            
-        }
+        this.store.each(function(record) {
+            values.push(record.data);
+        }, this);            
         
         return values;
     },
@@ -163,39 +148,27 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
     getItems: function() {
         var items = [];
 
-        if (this.xtype == 'wdgt.pickergrid') {
-            this.initSelectionWidget();
-            
-            // defeat scoping :)
-            selectionWidget = this.selectionWidget;
-            
-            this.pickerGridPanel = new Tine.widgets.grid.PickerGridPanel({
-                height: this.layerHeight || 'auto',
-                recordClass: this.recordClass,
-                store: this.store,
-                autoExpandColumn: this.labelField,
-                getColumnModel: this.getColumnModel.createDelegate(this),
-                initActionsAndToolbars: function() {
-                    Tine.widgets.grid.PickerGridPanel.prototype.initActionsAndToolbars.call(this);
-                    this.tbar = new Ext.Toolbar({
-                        layout: 'fit',
-                        items: [ selectionWidget ]
-                    });
-                }
-            });
-            
-            items.push(this.pickerGridPanel);
-            
-        } else if (this.xtype == 'checkbox') {
-            this.valueStore.each(function(record) {
-                items.push({
-                    xtype: this.xtype,
-                    boxLabel: record.get(this.labelField),
-                    name: record.get('id')
-                    //icon: record.get('icon'),
+        this.initSelectionWidget();
+        
+        // defeat scoping :)
+        selectionWidget = this.selectionWidget;
+        
+        this.pickerGridPanel = new Tine.widgets.grid.PickerGridPanel({
+            height: this.layerHeight || 'auto',
+            recordClass: this.recordClass,
+            store: this.store,
+            autoExpandColumn: this.labelField,
+            getColumnModel: this.getColumnModel.createDelegate(this),
+            initActionsAndToolbars: function() {
+                Tine.widgets.grid.PickerGridPanel.prototype.initActionsAndToolbars.call(this);
+                this.tbar = new Ext.Toolbar({
+                    layout: 'fit',
+                    items: [ selectionWidget ]
                 });
-            }, this);
-        }
+            }
+        });
+        
+        items.push(this.pickerGridPanel);
         
         return items;
     },
@@ -267,26 +240,12 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
         var recordText = [];
         this.currentValue = [];
         
-        if (this.xtype == 'checkbox') {
-            this.valueStore.each(function(record) {
-                var id = record.get('id');
-                var name = record.get(this.labelField);
-                Ext.each(value, function(valueId) {
-                    // NOTE: no type match id's might be int or string and should match anyway!
-                    if (valueId == id) {
-                        recordText.push(name);
-                        this.currentValue.push(id);
-                    }
-                }, this);
-            }, this);
-        } else {
-            this.store.removeAll();
-            var record, id, text;
-            for (var i=0; i < value.length; i++) {
-                text = this.getRecordText(value[i]);
-                if (text && text !== '') {
-                    recordText.push(text);
-                }
+        this.store.removeAll();
+        var record, id, text;
+        for (var i=0; i < value.length; i++) {
+            text = this.getRecordText(value[i]);
+            if (text && text !== '') {
+                recordText.push(text);
             }
         }
         
@@ -341,16 +300,5 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
      */
     isSelectionVisible: function() {
         return false;
-    },
-    
-    /**
-     * sets values to innerForm
-     */
-    setFormValue: function(value) {
-        if (this.xtype == 'checkbox') {
-            this.getInnerForm().getForm().items.each(function(item) {
-                item.setValue(value.indexOf(item.name) >= 0 ? 'on' : 'off');
-            }, this);
-        }
     }
 });

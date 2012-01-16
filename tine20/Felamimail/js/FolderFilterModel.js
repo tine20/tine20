@@ -2,8 +2,8 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 Ext.ns('Tine.Felamimail');
@@ -30,7 +30,6 @@ Tine.Felamimail.FolderFilterModel = Ext.extend(Tine.widgets.grid.PickerFilter, {
         this.label = this.app.i18n._('Folder');
         
         this.multiselectFieldConfig = {
-            xtype: 'wdgt.pickergrid',
             labelField: 'path',
             layerHeight: 200,
             selectionWidget: new Tine.Felamimail.FolderSelectTriggerField({
