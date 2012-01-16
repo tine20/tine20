@@ -15,7 +15,7 @@ Ext.ns('Tine.Felamimail');
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
-Tine.Felamimail.FolderFilterModel = Ext.extend(Tine.widgets.grid.FilterModelMultiSelect, {
+Tine.Felamimail.FolderFilterModel = Ext.extend(Tine.widgets.grid.PickerFilter, {
 
     /**
      * @cfg 

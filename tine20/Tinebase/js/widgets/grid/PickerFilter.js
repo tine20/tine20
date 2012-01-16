@@ -2,10 +2,9 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
- * TODO         rename to PickerFilter
  * TODO         remove checkbox stuff
  * TODO         container / folder / tag filter should extend this
  */
@@ -13,12 +12,12 @@ Ext.ns('Tine.widgets.grid');
 
 /**
  * @namespace   Tine.widgets.grid
- * @class       Tine.widgets.grid.FilterModelMultiSelect
+ * @class       Tine.widgets.grid.PickerFilter
  * @extends     Tine.widgets.grid.FilterModel
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
-Tine.widgets.grid.FilterModelMultiSelect = Ext.extend(Tine.widgets.grid.FilterModel, {
+Tine.widgets.grid.PickerFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     /**
      * @property Tine.Tinebase.Application app
      */
@@ -66,7 +65,7 @@ Tine.widgets.grid.FilterModelMultiSelect = Ext.extend(Tine.widgets.grid.FilterMo
         this.operators = this.operators || ['in', 'notin'];
         this.multiselectFieldConfig = this.multiselectFieldConfig || {};
         
-        Tine.widgets.grid.FilterModelMultiSelect.superclass.initComponent.call(this);
+        Tine.widgets.grid.PickerFilter.superclass.initComponent.call(this);
     },
     
     /**
@@ -76,7 +75,7 @@ Tine.widgets.grid.FilterModelMultiSelect = Ext.extend(Tine.widgets.grid.FilterMo
      * @param {Ext.Element} element to render to 
      */
     valueRenderer: function(filter, el) {
-        var value = new Tine.widgets.grid.FilterModelMultiSelectValueField(Ext.apply({
+        var value = new Tine.widgets.grid.PickerFilterValueField(Ext.apply({
             app: this.app,
             filter: filter,
             width: this.filterValueWidth,
@@ -95,16 +94,16 @@ Tine.widgets.grid.FilterModelMultiSelect = Ext.extend(Tine.widgets.grid.FilterMo
     }
 });
 
-Tine.widgets.grid.FilterToolbar.FILTERS['tinebase.multiselect'] = Tine.widgets.grid.FilterModelMultiSelect;
+Tine.widgets.grid.FilterToolbar.FILTERS['tinebase.multiselect'] = Tine.widgets.grid.PickerFilter;
 
 /**
  * @namespace   Tine.widgets.grid
- * @class       Tine.widgets.grid.FilterModelMultiSelectValueField
+ * @class       Tine.widgets.grid.PickerFilterValueField
  * @extends     Ext.ux.form.LayerCombo
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
-Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.LayerCombo, {
+Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
     hideButtons: false,
     formConfig: {
         labelAlign: 'left',
@@ -129,7 +128,7 @@ Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.Laye
             });
         }
         
-        Tine.widgets.grid.FilterModelMultiSelectValueField.superclass.initComponent.call(this);
+        Tine.widgets.grid.PickerFilterValueField.superclass.initComponent.call(this);
     },
     
     /**

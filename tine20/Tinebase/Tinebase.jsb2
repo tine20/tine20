@@ -472,7 +472,7 @@
           "path": "js/widgets/grid/"
         },
         {
-          "text": "FilterModelMultiSelect.js",
+          "text": "PickerFilter.js",
           "path": "js/widgets/grid/"
         },
         {
