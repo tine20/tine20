@@ -714,10 +714,20 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             var filterData = this.getAllFilterData();
             filterData[0].filters[0].filters.push({field: 'id', operator: 'in', value: [ event.get('id') ]});
             
+<<<<<<< HEAD
             Tine.Calendar.searchEvents(filterData, {}, function(r) {
                 if(r.totalcount == 0) {
                     var sel = this.getCalendarPanel(this.activeView).getView().getSelectionModel().getSelected();
                     sel.ui.markDeclined();
+=======
+            Tine.Calendar.searchEvents(filterData, {}, function(_response) {
+                if(_response.totalcount == 0) {
+                    var panel = this.getCalendarPanel(this.activeView),
+                        store = panel.getStore(),
+                        view = panel.getView(),
+                        row = view.getSelectionModel().select(event);
+//                    Tine.log.warn(row);
+>>>>>>> parent of e23dae8... test
                 }
             }, this);
         } catch(e) {
