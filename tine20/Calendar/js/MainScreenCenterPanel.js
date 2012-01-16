@@ -719,7 +719,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                         store = panel.getStore(),
                         view = panel.getView(),
                         row = view.getSelectionModel().select(event);
-                        // JUHU
+                        // JUHU 
+                        // gleich nochmal
 //                    Tine.log.warn(row);
                 }
                     
