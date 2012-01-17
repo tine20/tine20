@@ -68,6 +68,15 @@ Tine.Calendar.EventUI.prototype = {
         });
     },
     
+    markOutOfFilter: function() {
+        Ext.each(this.getEls(), function(el) {
+            el.setOpacity(0.5, 0);
+            el.setStyle({'background-color': '#aaa', 'border-color': '#888'});
+            Ext.DomHelper.applyStyles(el.dom.firstChild, {'background-color': '#888'});
+            Ext.DomHelper.applyStyles(el.dom.firstChild.firstChild, {'background-color': '#888'});
+        });
+    },
+    
     onSelectedChange: function(state){
         if(state){
             //this.focus();
@@ -101,7 +110,7 @@ Tine.Calendar.EventUI.prototype = {
     },
     
     render: function() {
-        
+        // do nothing
     },
     
     setOpacity: function(v) {

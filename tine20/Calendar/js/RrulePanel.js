@@ -360,7 +360,7 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
             
             this.countRadio.render(countradioel);
             this.count.render(countel);
-            this.count.wrap.setWidth(80); 
+             
         } catch (e) {
             Tine.log.error('Tine.Calendar.RrulePanel::onLimitRender');
             Tine.log.error(e);
