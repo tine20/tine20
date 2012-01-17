@@ -381,7 +381,7 @@ Tine.Calendar.EventEditDialog.openWindow = function (config) {
     var id = config.recordId ? config.recordId : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
-        height: 470,
+        height: 500,
         name: Tine.Calendar.EventEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Calendar.EventEditDialog',
         contentPanelConstructorConfig: config
