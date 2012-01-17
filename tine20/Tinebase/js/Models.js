@@ -109,9 +109,9 @@ Tine.Tinebase.Model.Grant = Ext.data.Record.create([
 /**
  * Model of a tag
  * 
- * @constructor {Ext.data.Record}
+ * @constructor {Tine.Tinebase.data.Record}
  */
-Tine.Tinebase.Model.Tag = Ext.data.Record.create([
+Tine.Tinebase.Model.Tag = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     {name: 'id'         },
     {name: 'app'        },
     {name: 'owner'      },
@@ -123,7 +123,15 @@ Tine.Tinebase.Model.Tag = Ext.data.Record.create([
     {name: 'rights'     },
     {name: 'contexts'   },
     {name: 'selection_occurrence', type: 'number'}
-]);
+]), {
+    appName: 'Tinebase',
+    modelName: 'Tag',
+    idProperty: 'id',
+    titleProperty: 'name',
+    // ngettext('Tag', 'Tags', n); gettext('Tag');
+    recordName: 'Tag',
+    recordsName: 'Tags'
+});
 
 /**
  * replace template fields with data
