@@ -232,6 +232,8 @@ Tine.Felamimail.setTreeContextMenus = function() {
         scope: this,
         handler: function() {
             if (this.ctxNode) {
+                this.getSelectionModel().clearSelections();
+                
                 var folder = this.app.getFolderStore().getById(this.ctxNode.id),
                     account = folder ? this.app.getAccountStore().getById(folder.get('account_id')) :
                                        this.app.getAccountStore().getById(this.ctxNode.id);
