@@ -96,6 +96,26 @@ class Tinebase_DateTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('2011-11-11', $date->format('Y-m-d'), 'date must not chage');
         $this->assertEquals('00:00:00', $date->format('H:i:s'), 'time must not chage');
     }
+    
+    /**
+     * test create from DateTime
+     * @see http://forge.tine20.org/mantisbt/view.php?id=5020
+     */
+    public function testFromDateTime()
+    {
+        $dt = new DateTime('2012-01-16 14:30:00', new DateTimeZone('UTC'));
+        
+        $tdt = new Tinebase_DateTime($dt);
+        
+        $this->assertTrue($tdt instanceof Tinebase_DateTime);
+        $this->assertEquals('2012-01-16 14:30:00', $tdt->toString());
+        
+        $dtz = new DateTimeZone('Europe/Berlin');
+        $tdt = new Tinebase_DateTime($dt, $dtz);
+        
+        $this->assertEquals('UTC', $dt->getTimezone()->getName(), 'original timzone changed');
+        $this->assertEquals('2012-01-16 15:30:00', $tdt->toString());
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_DateTimeTest::main') {

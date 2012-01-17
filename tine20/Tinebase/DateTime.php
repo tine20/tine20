@@ -85,6 +85,19 @@ class Tinebase_DateTime extends DateTime
     public function __construct($_time = "now", $_timezone = NULL)
     {
         $time = (is_numeric($_time)) ? "@" . $_time : $_time;
+        
+        // allow to pass instanceof DateTime
+        if ($_time instanceof DateTime) {
+            if (! $_timezone) {
+                $_timezone = $_time->getTimezone();
+            } else {
+                $_time = clone $_time;
+                $_time->setTimezone($_timezone);
+            }
+            
+            $time = $_time->format("Y-m-d H:i:s");
+        }
+        
         if ($_timezone) {
             if (! $_timezone instanceof DateTimeZone) {
                 $_timezone = new DateTimeZone($_timezone);
