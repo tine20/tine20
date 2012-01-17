@@ -345,21 +345,86 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
                     <type>text</type>
                     <length>64</length>
                 </field>');
-            $this->_backend->alterCol('async_job', $declaration);
-                        
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>name-seq</name>
-                    <unique>true</unique>
-                    <field>
-                        <name>name</name>
-                    </field>
-                    <field>
-                        <name>seq</name>
-                    </field>
-                </index>
-            ');
-            $this->_backend->addIndex('async_job', $declaration);
+            try {
+                $this->_backend->alterCol('async_job', $declaration);
+                            
+                $declaration = new Setup_Backend_Schema_Index_Xml('
+                    <index>
+                        <name>name-seq</name>
+                        <unique>true</unique>
+                        <field>
+                            <name>name</name>
+                        </field>
+                        <field>
+                            <name>seq</name>
+                        </field>
+                    </index>
+                ');
+                $this->_backend->addIndex('async_job', $declaration);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                // table might be missing due to bad update script management
+                $declaration = new Setup_Backend_Schema_Table_Xml('
+                 <table>
+        			<name>async_job</name>
+        			<version>3</version>
+        			<declaration>
+        				<field>
+        					<name>id</name>
+        					<type>text</type>
+        					<length>40</length>
+        					<notnull>true</notnull>
+        				</field>
+        				<field>
+        					<name>name</name>
+        					<type>text</type>
+        					<length>64</length>
+        				</field>
+        				<field>
+        					<name>start_time</name>
+        					<type>datetime</type>
+        				</field>
+        				<field>
+        					<name>end_time</name>
+        					<type>datetime</type>
+        				</field>
+        				<field>
+        					<name>status</name>
+        					<type>enum</type>
+        					<value>running</value>
+        					<value>failure</value>
+        					<value>success</value>
+        					<notnull>true</notnull>
+        				</field>
+                        <field>
+                            <name>seq</name>
+                            <type>integer</type>
+                            <length>64</length>
+                        </field>
+        				<field>
+        					<name>message</name>
+        					<type>text</type>
+        				</field>
+        				<index>
+        					<name>id</name>
+        					<primary>true</primary>
+        					<field>
+        						<name>id</name>
+        					</field>
+        				</index>
+                        <index>
+                            <name>name-seq</name>
+                            <unique>true</unique>
+                            <field>
+                                <name>name</name>
+                            </field>
+                            <field>
+                                <name>seq</name>
+                            </field>
+                        </index>
+        			</declaration>
+        		</table>');
+                $this->createTable('async_job', $declaration);
+            }
             $this->setTableVersion('async_job', '3');
         }
         $this->setApplicationVersion('Tinebase', '4.10');
