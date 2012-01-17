@@ -5,7 +5,7 @@
  * @package     Setup
  * @subpackage  Update
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -204,10 +204,11 @@ class Setup_Update_Abstract
      * drop table
      *
      * @param string $_tableName
+     * 
+     * @todo this should remove table from application tables, too
      */  
     public function dropTable($_tableName)
     {
         $result = $this->_backend->dropTable($_tableName);
     }
-    
 }
