@@ -641,11 +641,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         
         // place in viewport
         this.window.setTitle(String.format(_('Resolve Duplicate {0} Suspicion'), this.i18nRecordName));
-        var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
+        var mainCardPanel = this.findParentBy(function(p) {return p.isWindowMainCardPanel });
         mainCardPanel.add(resolveGridPanel);
         mainCardPanel.layout.setActiveItem(resolveGridPanel.id);
         resolveGridPanel.doLayout();
-        
         
         this.loadMask.hide();
 

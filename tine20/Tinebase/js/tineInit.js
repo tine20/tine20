@@ -154,6 +154,7 @@ Tine.Tinebase.tineInit = {
             	xtype: 'container',
                 id: 'tine-viewport-maincardpanel',
                 ref: 'tineViewportMaincardpanel',
+                isWindowMainCardPanel: true,
                 layout: 'card',
                 border: false,
                 activeItem: 0,
