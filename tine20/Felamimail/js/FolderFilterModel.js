@@ -31,7 +31,6 @@ Tine.Felamimail.FolderFilterModel = Ext.extend(Tine.widgets.grid.PickerFilter, {
         
         this.multiselectFieldConfig = {
             labelField: 'path',
-            layerHeight: 200,
             selectionWidget: new Tine.Felamimail.FolderSelectTriggerField({
                 allAccounts: true
             }),
