@@ -93,14 +93,25 @@ class Calendar_Convert_Event_VCalendar_FactoryTest extends PHPUnit_Framework_Tes
     }            
     
     /**
-     * test factory with useragent string from MacOS X 
+     * test factory with useragent string from MacOS X  Snow Leopard
      */
-    public function testUserAgentMacOSX()
+    public function testUserAgentMacOSXSnowLeopard()
+    {
+        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent('DAVKit/4.0.3 (732.2); CalendarStore/4.0.4 (997.7); iCal/4.0.4 (1395.7); Mac OS X/10.6.8 (10K549)');
+        
+        $this->assertEquals(Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX, $backend);
+        $this->assertEquals('4.0.4', $version);
+    }            
+    
+    /**
+     * test factory with useragent string from MacOS X Lion
+     */
+    public function testUserAgentMacOSXLion()
     {
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent('CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)');
         
         $this->assertEquals(Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX, $backend);
-        $this->assertEquals('10.7.1', $version);
+        $this->assertEquals('5.0', $version);
     }            
     
     /**
