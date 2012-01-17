@@ -332,6 +332,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
     public function put($cardData) 
     {
         if (get_class($this->_converter) == 'Calendar_Convert_Event_VCalendar_Generic') {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " update by generic client not allowed. See Calendat_Convert_Event_VCalendar_Factory for supported clients.");
             throw new Sabre_DAV_Exception_Forbidden('Update denied for unknow client');
         }
         
