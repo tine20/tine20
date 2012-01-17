@@ -63,16 +63,32 @@ Tine.widgets.grid.PickerFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     picker: null,
     
     /**
+     * record class
+     * 
+     * @type Tine.Tinebase.data.Record
+     */
+    recordClass: null,
+    
+    /**
      * @private
      */
     initComponent: function() {
         this.operators = this.operators || ['equals', 'not', 'in', 'notin'];
-        this.multiselectFieldConfig = this.multiselectFieldConfig || {};
         
         // TODO invent a picker registry
         if (this.picker === null) {
             this.picker = (this.recordClass == Tine.Addressbook.Model.Contact) ?  Tine.Addressbook.SearchCombo : Tine.Tinebase.widgets.form.RecordPickerComboBox;
         }
+        this.multiselectFieldConfig = this.multiselectFieldConfig || {
+            selectionWidget: new this.picker ({
+                recordClass: this.recordClass,
+                blurOnSelect: true
+            }),
+            recordClass: this.recordClass,
+            isSelectionVisible: function() {
+                return this.selectionWidget.isExpanded();
+            }
+        };
         
         Tine.widgets.grid.PickerFilter.superclass.initComponent.call(this);
     },
@@ -189,6 +205,7 @@ Tine.widgets.grid.FilterToolbar.FILTERS['tinebase.multiselect'] = Tine.widgets.g
  * @extends     Ext.ux.form.LayerCombo
  */
 Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
+    layerHeight: 200,
     hideButtons: false,
     formConfig: {
         labelAlign: 'left',
@@ -304,12 +321,14 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
      * @param {Object} recordData
      */
     addRecord: function(recordData) {
+        Tine.log.debug('Tine.widgets.grid.PickerFilterValueField::addRecord()');
+        Tine.log.debug(recordData);
+        
         var data = (recordData.data) ? recordData.data : recordData.attributes ? recordData.attributes : recordData;
         
         var existingRecord = this.store.getById(recordData.id);
         if (! existingRecord) {
-            
-            this.store.add(new Tine.Tinebase.Model.Container(data));
+            this.store.add(new this.recordClass(data));
             
         } else {
             var idx = this.store.indexOf(existingRecord);
@@ -317,7 +336,9 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
             Ext.fly(row).highlight();
         }
         
-        this.selectionWidget.selectPanel.close();
+        if (this.selectionWidget.selectPanel) {
+            this.selectionWidget.selectPanel.close();
+        }
     },
     
     /**
@@ -326,6 +347,9 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
      */
     setValue: function(value) {
         value = Ext.isArray(value) ? value : [value];
+        
+        Tine.log.debug('Tine.widgets.grid.PickerFilterValueField::setValue()');
+        Tine.log.debug(value);
         
         var recordText = [];
         this.currentValue = [];
@@ -351,20 +375,21 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
      * @return {String}
      */
     getRecordText: function(value) {
-        var text = '',
-            id = (Ext.isString(value)) ? value : value.id,
-            record = (this.valueStore) ? this.valueStore.getById(id) : null;
+        var id = (Ext.isString(value)) ? value : value.id,
+            record = (this.valueStore) ? this.valueStore.getById(id) : ((! Ext.isString(value)) ? new this.recordClass(value, id) : null);
             
-        Tine.log.debug('Tine.widgets.grid.PickerFilterValueField::getRecordText');
-        Tine.log.debug(value);
+        Tine.log.debug('Tine.widgets.grid.PickerFilterValueField::getRecordText()');
+        Tine.log.debug(record);
             
-        if (record) {
-            this.currentValue.push(record.id);
-            // always copy/clone record because it can't exist in 2 different stores
-            this.store.add(record.copy());
-            text = record.get(this.labelField);
-            text = (this.labelRenderer != Ext.emptyFn) ? this.labelRenderer(text) : text;
+        if (! record) {
+            return '';
         }
+        
+        // always copy/clone record because it can't exist in 2 different stores
+        this.store.add(record.copy());
+        this.currentValue.push(record.id);
+        text = record.get(this.labelField);
+        text = (this.labelRenderer != Ext.emptyFn) ? this.labelRenderer(text) : text;
         
         return text;
     },
@@ -378,11 +403,14 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
         if (this.pickerGridPanel) {
             var contextMenuVisible = this.pickerGridPanel.contextMenu && ! this.pickerGridPanel.contextMenu.hidden,
                 selectionVisible = this.isSelectionVisible();
-            
-            return ! (contextMenuVisible || selectionVisible);
+            result = ! (contextMenuVisible || selectionVisible);
         } else {
-            return true;
+            result = true;
         }
+        
+        Tine.log.debug('Tine.widgets.grid.PickerFilterValueField::onBeforeCollapse() - collapse: ' + result);
+        
+        return result;
     },
     
     /**
