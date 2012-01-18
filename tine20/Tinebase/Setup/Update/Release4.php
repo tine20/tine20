@@ -120,17 +120,17 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
     public function update_3()
     {
         $declaration = new Setup_Backend_Schema_Field_Xml('
-    		<field>
-            	<name>login_name</name>
-            	<type>text</type>
-            	<length>255</length>
-            	<notnull>true</notnull>
+            <field>
+                <name>login_name</name>
+                <type>text</type>
+                <length>255</length>
+                <notnull>true</notnull>
             </field>
         ');
         $this->_backend->alterCol('accounts', $declaration);
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
-    		<field>
+            <field>
                 <name>email</name>
                 <type>text</type>
                 <length>255</length>
@@ -139,7 +139,7 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
         $this->_backend->alterCol('accounts', $declaration);
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
-    		<field>
+            <field>
                 <name>first_name</name>
                 <type>text</type>
                 <length>255</length>
@@ -148,12 +148,12 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
         $this->_backend->alterCol('accounts', $declaration);
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
-    		<field>
+            <field>
                 <name>last_name</name>
                 <type>text</type>
                 <length>255</length>
                 <notnull>true</notnull>
-    		</field>
+            </field>
         ');
         $this->_backend->alterCol('accounts', $declaration);
         
@@ -328,13 +328,109 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
     }
     
     /**
-     * update to 5.0
-     */
+    * update to 5.0
+    * - changed seq index in async_job table
+    */
     public function update_9()
     {
+        if ($this->_backend->tableVersionQuery('async_job') === '2') {
+            try {
+                $this->_backend->dropIndex('async_job', 'seq');
+            } catch (Exception $e) {
+                // already done
+            }
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                    <field>
+                        <name>name</name>
+                        <type>text</type>
+                        <length>64</length>
+                    </field>');
+            try {
+                $this->_backend->alterCol('async_job', $declaration);
+    
+                $declaration = new Setup_Backend_Schema_Index_Xml('
+                        <index>
+                            <name>name-seq</name>
+                            <unique>true</unique>
+                            <field>
+                                <name>name</name>
+                            </field>
+                            <field>
+                                <name>seq</name>
+                            </field>
+                        </index>
+                    ');
+                $this->_backend->addIndex('async_job', $declaration);
+                $this->setTableVersion('async_job', '3');
+                
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                // table might be missing due to bad update script management
+                $declaration = new Setup_Backend_Schema_Table_Xml('
+                     <table>
+                        <name>async_job</name>
+                        <version>3</version>
+                        <declaration>
+                            <field>
+                                <name>id</name>
+                                <type>text</type>
+                                <length>40</length>
+                                <notnull>true</notnull>
+                            </field>
+                            <field>
+                                <name>name</name>
+                                <type>text</type>
+                                <length>64</length>
+                            </field>
+                            <field>
+                                <name>start_time</name>
+                                <type>datetime</type>
+                            </field>
+                            <field>
+                                <name>end_time</name>
+                                <type>datetime</type>
+                            </field>
+                            <field>
+                                <name>status</name>
+                                <type>enum</type>
+                                <value>running</value>
+                                <value>failure</value>
+                                <value>success</value>
+                                <notnull>true</notnull>
+                            </field>
+                            <field>
+                                <name>seq</name>
+                                <type>integer</type>
+                                <length>64</length>
+                            </field>
+                            <field>
+                                <name>message</name>
+                                <type>text</type>
+                            </field>
+                            <index>
+                                <name>id</name>
+                                <primary>true</primary>
+                                <field>
+                                    <name>id</name>
+                                </field>
+                            </index>
+                            <index>
+                                <name>name-seq</name>
+                                <unique>true</unique>
+                                <field>
+                                    <name>name</name>
+                                </field>
+                                <field>
+                                    <name>seq</name>
+                                </field>
+                            </index>
+                        </declaration>
+                    </table>');
+                $this->createTable('async_job', $declaration, 'Tinebase', 3);
+            }
+        }
         $this->setApplicationVersion('Tinebase', '5.0');
     }
-
+    
     /**
      * update to 5.0
      */

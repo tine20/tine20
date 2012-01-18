@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
@@ -258,7 +258,6 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
         $update4 = new Tinebase_Setup_Update_Release4($this->_backend);
         $update4->update_8();
         
-        $this->setTableVersion('async_job', '3');
         $this->setApplicationVersion('Tinebase', '5.4');
     }
 
@@ -280,36 +279,8 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
     */
     public function update_5()
     {
-        if ($this->_backend->tableVersionQuery('async_job') === '2') {
-            try {
-                $this->_backend->dropIndex('async_job', 'seq');
-            } catch (Exception $e) {
-                // already done
-            }
-            $declaration = new Setup_Backend_Schema_Field_Xml('
-                <field>
-                    <name>name</name>
-                    <type>text</type>
-                    <length>64</length>
-                </field>');
-            $this->_backend->alterCol('async_job', $declaration);
-            
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>name-seq</name>
-                    <unique>true</unique>
-                    <field>
-                        <name>name</name>
-                    </field>
-                    <field>
-                        <name>seq</name>
-                    </field>
-                </index>
-            ');
-            $this->_backend->addIndex('async_job', $declaration);
-            
-            $this->setTableVersion('async_job', '3');
-        }
+        $update4 = new Tinebase_Setup_Update_Release4($this->_backend);
+        $update4->update_9();
         $this->setApplicationVersion('Tinebase', '5.6');
     }
     
