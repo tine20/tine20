@@ -52,6 +52,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         this.ruleCards = new Ext.Panel({
             layout: 'card',
             activeItem: 0,
+            style: 'padding: 10px 0 0 10px;',
             items: [
                 this.NONEcard,
                 this.DAILYcard,
@@ -63,56 +64,47 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
 
         this.idPrefix = Ext.id();
         
-        this.items = [{
-            xtype: 'toolbar',
-            //style: 'background: 0; border: 0; padding-bottom: 5px;',
-            style: 'margin-bottom: 5px;',
-            
-            items: [{
-                id: this.idPrefix + 'tglbtn' + 'NONE',
-                xtype: 'tbbtnlockedtoggle',
-                enableToggle: true,
-                //pressed: true,
-                text: this.app.i18n._('None'),
-                handler: this.onFreqChange.createDelegate(this, ['NONE']),
-                toggleGroup: this.idPrefix + 'freqtglgroup'
-            }, {
-                id: this.idPrefix + 'tglbtn' + 'DAILY',
-                xtype: 'tbbtnlockedtoggle',
-                enableToggle: true,
-                text: this.app.i18n._('Daily'),
-                handler: this.onFreqChange.createDelegate(this, ['DAILY']),
-                toggleGroup: this.idPrefix + 'freqtglgroup'
-            }, {
-                id: this.idPrefix + 'tglbtn' + 'WEEKLY',
-                xtype: 'tbbtnlockedtoggle',
-                enableToggle: true,
-                text: this.app.i18n._('Weekly'),
-                handler: this.onFreqChange.createDelegate(this, ['WEEKLY']),
-                toggleGroup: this.idPrefix + 'freqtglgroup'
-            }, {
-                id: this.idPrefix + 'tglbtn' + 'MONTHLY',
-                xtype: 'tbbtnlockedtoggle',
-                enableToggle: true,
-                text: this.app.i18n._('Monthly'),
-                handler: this.onFreqChange.createDelegate(this, ['MONTHLY']),
-                toggleGroup: this.idPrefix + 'freqtglgroup'
-            }, {
-                id: this.idPrefix + 'tglbtn' + 'YEARLY',
-                xtype: 'tbbtnlockedtoggle',
-                enableToggle: true,
-                text: this.app.i18n._('Yearly'),
-                handler: this.onFreqChange.createDelegate(this, ['YEARLY']),
-                toggleGroup: this.idPrefix + 'freqtglgroup'
-            }]
-            
+        this.tbar = [{
+            id: this.idPrefix + 'tglbtn' + 'NONE',
+            xtype: 'tbbtnlockedtoggle',
+            enableToggle: true,
+            //pressed: true,
+            text: this.app.i18n._('None'),
+            handler: this.onFreqChange.createDelegate(this, ['NONE']),
+            toggleGroup: this.idPrefix + 'freqtglgroup'
         }, {
-            layout: 'form',
-            style: 'padding-left: 10px;',
-            items: [
-                this.ruleCards
-            ]
+            id: this.idPrefix + 'tglbtn' + 'DAILY',
+            xtype: 'tbbtnlockedtoggle',
+            enableToggle: true,
+            text: this.app.i18n._('Daily'),
+            handler: this.onFreqChange.createDelegate(this, ['DAILY']),
+            toggleGroup: this.idPrefix + 'freqtglgroup'
+        }, {
+            id: this.idPrefix + 'tglbtn' + 'WEEKLY',
+            xtype: 'tbbtnlockedtoggle',
+            enableToggle: true,
+            text: this.app.i18n._('Weekly'),
+            handler: this.onFreqChange.createDelegate(this, ['WEEKLY']),
+            toggleGroup: this.idPrefix + 'freqtglgroup'
+        }, {
+            id: this.idPrefix + 'tglbtn' + 'MONTHLY',
+            xtype: 'tbbtnlockedtoggle',
+            enableToggle: true,
+            text: this.app.i18n._('Monthly'),
+            handler: this.onFreqChange.createDelegate(this, ['MONTHLY']),
+            toggleGroup: this.idPrefix + 'freqtglgroup'
+        }, {
+            id: this.idPrefix + 'tglbtn' + 'YEARLY',
+            xtype: 'tbbtnlockedtoggle',
+            enableToggle: true,
+            text: this.app.i18n._('Yearly'),
+            handler: this.onFreqChange.createDelegate(this, ['YEARLY']),
+            toggleGroup: this.idPrefix + 'freqtglgroup'
         }];
+        
+        this.items = [
+        	this.ruleCards
+    	];
         
         Tine.Calendar.RrulePanel.superclass.initComponent.call(this);
     },
@@ -581,6 +573,7 @@ Tine.Calendar.RrulePanel.MONTHLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstr
         
         this.bymonthdayday = new Ext.form.NumberField({
             requiredGrant : 'editGrant',
+            style         : 'text-align:right;',
             hideLabel     : true,
             width         : 40,
             value         : 1,
@@ -763,6 +756,7 @@ Tine.Calendar.RrulePanel.YEARLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
         
         this.bymonthdayday = new Ext.form.NumberField({
             requiredGrant : 'editGrant',
+            style         : 'text-align:right;',
             hideLabel     : true,
             width         : 40,
             value         : 1
@@ -800,11 +794,7 @@ Tine.Calendar.RrulePanel.YEARLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
                             '<td width="65" id="' + this.idPrefix + 'bymonthdayradio"></td>' +
                             '<td width="40" id="' + this.idPrefix + 'bymonthdayday"></td>' +
                             '<td>.</td>' +
-                         '</tr></table>' +
-                    '</div>' +
-                    '<div style="position: relative;">' +
-                        '<table><tr>' +
-                            '<td width="48" style="padding-left: 17px">' + this.app.i18n._('of') + '</td>' +
+                            '<td width="15" style="padding-left: 37px">' + this.app.i18n._('of') + '</td>' +
                             '<td width="100" id="' + this.idPrefix + 'bymonth"></td>' +
                          '</tr></table>' +
                     '</div>' +

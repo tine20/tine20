@@ -711,7 +711,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                             else store.add(updatedEvent);
                             this.setLoading(false);
                         }
-                    }
+                   }
                 },
                 failure: this.onProxyFail.createDelegate(this, [event], true)
             }, {
