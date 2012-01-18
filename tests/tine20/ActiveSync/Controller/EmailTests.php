@@ -27,6 +27,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     protected $_domDocument;
     
     /**
+     * email test class for checking emails on IMAP server
      * 
      * @var Felamimail_Controller_MessageTest
      */
