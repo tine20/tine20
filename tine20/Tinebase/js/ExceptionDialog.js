@@ -6,8 +6,10 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
- 
- Ext.ns('Tine', 'Tine.Tinebase');
+
+/*global Ext, Tine, window*/
+
+Ext.ns('Tine', 'Tine.Tinebase');
  
  /**
   * @namespace  Tine.Tinebase
@@ -25,18 +27,21 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
     autoScroll: true,
     releaseMode: true,
     
-    
-    initComponent: function() {
+    /**
+     * @private
+     */
+    initComponent: function () {
         this.currentAccount = Tine.Tinebase.registry.get('currentAccount');
         
         // check if we have the version in registry (is not the case in the setup)
-        if(! Tine.Tinebase.registry.get('version') || Tine.Tinebase.registry.get('version').buildType != 'RELEASE') {
+        if (! Tine.Tinebase.registry.get('version') || Tine.Tinebase.registry.get('version').buildType != 'RELEASE') {
             this.releaseMode = false;
             this.width = 800;
         }
+        
         var trace = '';
         if (Ext.isArray(this.exception.trace)) {
-            for (var i=0,j=this.exception.trace.length; i<j; i++) {
+            for (var i = 0,j = this.exception.trace.length; i < j; i++) {
                 trace += (this.exception.trace[i].file ? this.exception.trace[i].file : '[internal function]') +
                          (this.exception.trace[i].line ? '(' + this.exception.trace[i].line + ')' : '') + ': ' +
                          (this.exception.trace[i]['class'] ? '<b>' + this.exception.trace[i]['class'] + this.exception.trace[i].type + '</b>' : '') +
@@ -48,82 +53,103 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
         }
         
         this.title = _('Abnormal End');
-        this.items = new Ext.FormPanel({
-                id: 'tb-exceptiondialog-frompanel',
-                bodyStyle: 'padding:5px;',
-                buttonAlign: 'right',
-                labelAlign: 'top',
-                autoScroll: true,
-                buttons: [{
-                    text: _('Cancel'),
-                    iconCls: 'action_cancel',
-                    scope: this,
-                    enabled: Tine.Tinebase.common.hasRight('report_bugs', 'Tinebase'),
-                    handler: function() {
-                        this.close();
-                    }
-                }, {
-                    text: _('Send Report'),
-                    iconCls: 'action_saveAndClose',
-                    scope: this,
-                    handler: this.onSendReport
-                }],
-                items: [{
-                    xtype: 'panel',
-                    border: false,
-                    html: '<div class="tb-exceptiondialog-text">' + 
-                              '<p>' + _('An error occurred, the program ended abnormal.') + '</p>' +
-                              '<p>' + _('The last action you made was potentially not performed correctly.') + '</p>' +
-                              '<p>' + _('Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred.') + '</p>' + 
-                          '</div>'
-                }, {
-                    id: 'tb-exceptiondialog-description',
-                    height: 60,
-                    xtype: 'textarea',
-                    fieldLabel: _('Description'),
-                    name: 'description',
-                    anchor: '95%',
-                    readOnly: false
-                }, {
-                    xtype: 'fieldset',
-                    id: 'tb-exceptiondialog-send-contact',
-                    anchor: '95%',
-                    title: _('Send Contact Information'),
-                    autoHeight: true,
-                    checkboxToggle: true,
-                    items: [{
-                        id: 'tb-exceptiondialog-contact',
-                        xtype: 'textfield',
-                        hideLabel: true,
-                        anchor: '100%',
-                        name: 'contact',
-                        value: this.currentAccount.accountFullName + ' ' + this.currentAccount.accountEmailAddress
-                    }]
-                }, {
-                    xtype: 'panel',
-                    width: '95%',
-                    layout: 'form',
-                    collapsible: true,
-                    collapsed: this.releaseMode,
-                    title: _('Details:'),
-                    defaults: {
-                        xtype: 'textfield',
-                        readOnly: true,
-                        anchor: '95%'
-                    },
-                    html:  '<div class="tb-exceptiondialog-details">' +
-                                '<p class="tb-exceptiondialog-msg">' + this.exception.message + '</p>' +
-                                '<p class="tb-exceptiondialog-trace">' + this.exception.traceHTML + '</p>' +
-                           '</div>'
-                }]
-        });
+        this.items = this.getReportForm();
         
         Tine.Tinebase.ExceptionDialog.superclass.initComponent.call(this);
         
-        this.on('show', function() {
+        this.on('show', function () {
             // fix layout issue
             this.setHeight(this.getHeight() + 10);
         }, this);
+    },
+    
+    /**
+     * @private
+     * @return {Array}
+     */
+    initButtons: function () {
+    	this.reportButtons = [{
+            text: _('Cancel'),
+            iconCls: 'action_cancel',
+            scope: this,
+            enabled: Tine.Tinebase.common.hasRight('report_bugs', 'Tinebase'),
+            handler: function() {
+                this.close();
+            }
+        }, {
+            text: _('Send Report'),
+            iconCls: 'action_saveAndClose',
+            scope: this,
+            handler: this.onSendReport
+        }];
+        
+        return this.reportButtons;
+    },
+    
+    /**
+     * @private
+     */
+    getReportForm: function () {
+    	this.initButtons();
+    	
+    	this.reportForm = new Ext.FormPanel({
+            id: 'tb-exceptiondialog-frompanel',
+            bodyStyle: 'padding:5px;',
+            buttonAlign: 'right',
+            labelAlign: 'top',
+            autoScroll: true,
+            buttons: this.reportButtons,
+            items: [{
+                xtype: 'panel',
+                border: false,
+                html: '<div class="tb-exceptiondialog-text">' + 
+						'<p>' + _('An error occurred, the program ended abnormal.') + '</p>' +
+                        '<p>' + _('The last action you made was potentially not performed correctly.') + '</p>' +
+                        '<p>' + _('Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred.') + '</p>' + 
+					'</div>'
+            }, {
+                id: 'tb-exceptiondialog-description',
+                height: 60,
+                xtype: 'textarea',
+                fieldLabel: _('Description'),
+                name: 'description',
+                anchor: '95%',
+                readOnly: false
+            }, {
+                xtype: 'fieldset',
+                id: 'tb-exceptiondialog-send-contact',
+                anchor: '95%',
+                title: _('Send Contact Information'),
+                autoHeight: true,
+                checkboxToggle: true,
+                items: [{
+                    id: 'tb-exceptiondialog-contact',
+                    xtype: 'textfield',
+                    hideLabel: true,
+                    anchor: '100%',
+                    name: 'contact',
+                    value: this.currentAccount.accountFullName + ' ' + this.currentAccount.accountEmailAddress
+                }]
+            }, {
+                xtype: 'panel',
+                width: '95%',
+                layout: 'form',
+                collapsible: true,
+                collapsed: this.releaseMode,
+                title: _('Details:'),
+                defaults: {
+                    xtype: 'textfield',
+                    readOnly: true,
+                    anchor: '95%'
+                },
+                html: '<div class="tb-exceptiondialog-details">' +
+						'<p class="tb-exceptiondialog-msg">' + this.exception.message + '</p>' +
+						'<p class="tb-exceptiondialog-trace">' + this.exception.traceHTML + '</p>' +
+					'</div>'
+            }]
+        });
+        
+        return this.reportForm;
     },
     
     /**
@@ -132,7 +158,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
      * NOTE: due to same domain policy, we need to send data via a img get request
      * @private
      */
-    onSendReport: function() {
+    onSendReport: function () {
         Ext.MessageBox.wait(_('Sending report...'), _('Please wait a moment'));
         var baseUrl = 'http://www.tine20.org/bugreport.php';
         var hash = this.generateHash();
@@ -143,7 +169,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
         this.exception.serverVersion = (Tine.Tinebase.registry.get('version')) ? Tine.Tinebase.registry.get('version') : {};
         
         // tinebase version
-        Ext.each(Tine.Tinebase.registry.get('userApplications'), function(app) {
+        Ext.each(Tine.Tinebase.registry.get('userApplications'), function (app) {
             if (app.name == 'Tinebase') {
                 this.exception.tinebaseVersion = app;
                 return false;
@@ -161,7 +187,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
         var chunks = this.strChunk(Ext.util.JSON.encode(this.exception), 600);
         
         var img = [];
-        for (var i=0;i<chunks.length;i++) {
+        for (var i = 0; i < chunks.length; i++) {
             var part = i+1 + '/' + chunks.length;
             var data = {data : this.base64encode('hash=' + hash + '&part=' + part + '&data=' + chunks[i])};
             
@@ -173,7 +199,11 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
         
         this.close();
     },
-    showTransmissionCompleted: function() {
+    
+    /**
+     * @private
+     */
+    showTransmissionCompleted: function () {
         Ext.MessageBox.show({
             title: _('Transmission Completed'),
             msg: _('Your report has been sent. Thanks for your contribution') + '<br /><b>' + _('Please restart your browser now!') + '</b>',
@@ -181,22 +211,24 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
             icon: Ext.MessageBox.INFO
         });
     },
+    
     /**
      * @private
      */
-    strChunk: function(str, chunklen) {
+    strChunk: function (str, chunklen) {
         var chunks = [];
         
         var numChunks = Math.ceil(str.length / chunklen);
-        for (var i=0;i<str.length; i+=chunklen) {
-            chunks.push(str.substr(i,chunklen));
+        for (var i = 0; i < str.length; i +=  chunklen) {
+            chunks.push(str.substr(i, chunklen));
         }
         return chunks;
     },
+    
     /**
      * @private
      */
-    generateHash: function(){
+    generateHash: function () {
         // if the time isn't unique enough, the addition 
         // of random chars should be
         var t = String(new Date().getTime()).substr(4);
@@ -243,5 +275,4 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
 
         return output;
     }
-
 });
