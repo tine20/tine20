@@ -330,6 +330,9 @@ Tine.widgets.tree.ContextMenu = {
         if (this.scope.ctxNode) {
             var node = this.scope.ctxNode;
             
+            Tine.log.debug('Tine.widgets.tree.ContextMenu::deleteNode()');
+            Tine.log.debug(node);
+            
             Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the {0} "{1}"?'), this.nodeName, node.text), function(_btn){
                 if ( _btn == 'yes') {
                     

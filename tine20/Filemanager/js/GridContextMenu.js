@@ -450,3 +450,6 @@ Tine.Filemanager.GridContextMenu = {
         }                 
     }  
 };
+
+// extends Tine.widgets.tree.ContextMenu
+Ext.applyIf(Tine.Filemanager.GridContextMenu, Tine.widgets.tree.ContextMenu);
