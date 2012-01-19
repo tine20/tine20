@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * TODO         use new filter syntax in onBeforeQuery when TagFilter is refactored and extends Tinebase_Model_Filter_FilterGroup 
  */
@@ -52,17 +52,22 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
         
         Tine.widgets.tags.TagCombo.superclass.initComponent.call(this);
         
-        this.on('select', function(){
-            
-            var v = this.getValue();
-            
-            if(String(v) !== String(this.startValue)){
-                this.fireEvent('change', this, v, this.startValue);
-            }
-            
-        }, this);
+        this.on('select', this.onSelectRecord, this);
         
         this.on('beforequery', this.onBeforeQuery, this);
+    },
+    
+    /**
+     * hander of select event
+     * NOTE: executed after native onSelect method
+     */
+    onSelectRecord: function(){
+        var v = this.getValue();
+        
+        if(String(v) !== String(this.startValue)){
+            this.fireEvent('change', this, v, this.startValue);
+        }
+        
     },
     
     /**
@@ -88,8 +93,8 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
      */
     setValue: function(value) {
         
-        if(typeof value === 'object' && Object.prototype.toString.call(value) === '[object Object]') {
-            this.store.loadData({results: [value]});
+        if (typeof value === 'object' && Object.prototype.toString.call(value) === '[object Object]') {
+            this.store.addSorted(new Tine.Tinebase.Model.Tag(value));
             value = value.id;
         }
         
@@ -118,7 +123,7 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
         } else {
             var baseParams = {
                 method: 'Tinebase.searchTags',
-                paging: {}              
+                paging: {}
             };
         }
         
@@ -160,6 +165,6 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
                     }
                 }
             }
-        );        
+        );
     }
 });
