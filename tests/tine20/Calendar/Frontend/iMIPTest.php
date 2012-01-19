@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -247,9 +247,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
      */
     public function testExternalInvitationRequestProcess()
     {
-        if (! $this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
-            $this->markTestSkipped('IMAP backend not configured');
-        }
+        $this->_checkIMAPConfig();
         
         $testConfig = Zend_Registry::get('testConfig');
         $email = ($testConfig->email) ? $testConfig->email : 'unittest@tine20.org';
@@ -263,6 +261,20 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Calendar_Exception_iMIP', 'iMIP preconditions failed: ORGANIZER');
         $result = $this->_iMIPFrontend->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
     }
+    
+    /**
+     * check IMAP config and marks test as skipped if no IMAP backend is configured
+     */
+    protected function _checkIMAPConfig()
+    {
+        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
+        if (! $imapConfig || ! isset($imapConfig->useSystemAccount)
+            || $imapConfig->useSystemAccount != TRUE
+            || ! $this->_emailTestClass instanceof Felamimail_Controller_MessageTest
+        ) {
+            $this->markTestSkipped('IMAP backend not configured');
+        }
+    }
 
     /**
      * testExternalPublishProcess
@@ -270,9 +282,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
      */
     public function testExternalPublishProcess()
     {
-        if (! $this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
-            $this->markTestSkipped('IMAP backend not configured');
-        }
+        $this->_checkIMAPConfig();
         
         // handle message with fmail (add to cache)
         $message = $this->_emailTestClass->messageTestHelper('meetup.eml');
