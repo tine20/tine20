@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -31,14 +31,16 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      */
     private function __construct() 
     {
-        $this->_currentAccount        = Tinebase_Core::getUser();        
+        $this->_currentAccount        = Tinebase_Core::getUser();
         $this->_applicationName       = 'Admin';
-		$this->_modelName             = 'Tinebase_Model_Container';
-		$this->_doContainerACLChecks  = FALSE;
+        $this->_modelName             = 'Tinebase_Model_Container';
+        $this->_doContainerACLChecks  = FALSE;
+        $this->_purgeRecords          = FALSE;
         
         $this->_backend = new Tinebase_Backend_Sql(array(
-            'tableName' => 'container',
-            'modelName' => $this->_modelName,
+            'tableName'     => 'container',
+            'modelName'     => $this->_modelName,
+            'modlogActive'  => TRUE,
         ));
         
         $this->_containerController = Tinebase_Container::getInstance();
