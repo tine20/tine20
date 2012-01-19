@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -43,18 +43,34 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         
         $_record->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $_record->bypassFilters = true;
+        self::resolveContainer($_record);
         
-        $result = $_record->toArray();
-        
-        if ($_record->has('container_id') && ! empty($_record->container_id)) {
-            $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
-        
-            $result['container_id'] = $container->toArray();
-            $result['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $_record->container_id)->toArray();
-            $result['container_id']['path'] = $container->getPath();
+        return $_record->toArray();
+    }
+    
+    /**
+     * resolve container id to container record
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     */
+    public static function resolveContainer($_record)
+    {
+        if (! $_record->has('container_id') || empty($_record->container_id)) {
+            return;
         }
         
-        return $result;
+        try {
+            $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            return;
+        }
+        
+        // @todo check if we can remove the toArray() here as this should be handled by the container toArray fn
+        $container->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $_record->container_id)->toArray();
+        
+        $container->path = $container->getPath();
+        
+        $_record->container_id = $container;
     }
 
     /**
