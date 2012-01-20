@@ -286,9 +286,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchUsers($filter, $paging)
     {
-    	$sort = (isset($paging['sort']))    ? $paging['sort']   : 'accountDisplayName';
+        $sort = (isset($paging['sort']))    ? $paging['sort']   : 'accountDisplayName';
         $dir  = (isset($paging['dir']))     ? $paging['dir']    : 'ASC';
-    	
+        
         $result = $this->getUsers($filter[0]['value'], $sort, $dir, $paging['start'], $paging['limit']);
         $result['filter'] = $filter[0];
         
@@ -306,7 +306,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchGroups($filter, $paging)
     {
-    	$result = array(
+        $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
@@ -374,11 +374,10 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // after user update or creation add user to selected roles
         if (isset($recordData['accountRoles']) && $recordData['accountRoles']) {
-			Tinebase_Acl_Roles::getInstance()->setRoleMemberships(array('id' => $account->accountId, 'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $recordData['accountRoles']);
+            Tinebase_Acl_Roles::getInstance()->setRoleMemberships(array('id' => $account->accountId, 'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $recordData['accountRoles']);
         }
         
-        $result = $account->toArray();
-        
+        $result = $this->_recordToJson($account);
         
         // add primary group to account for the group selection combo box
         $group = Tinebase_Group::getInstance()->getGroupById($account->accountPrimaryGroup);
@@ -388,27 +387,21 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // add user roles
         $userRoles = Tinebase_Acl_Roles::getInstance()->getMultiple(Tinebase_Acl_Roles::getInstance()->getRoleMemberships($account->accountId))->toArray();
-            
         
         // encode the account array
         $result['accountPrimaryGroup'] = $group;
         
         // encode the groups array
         $result['groups'] = array(
-			'results' 		=> $userGroups,
-			'totalcount' 	=> count($userGroups)
-		);
-		
-		// encode the roles array
-        $result['accountRoles'] = array(
-			'results' 		=> $userRoles,
-			'totalcount' 	=> count($userRoles)
-		);
+            'results'         => $userGroups,
+            'totalcount'     => count($userGroups)
+        );
         
-		// encode container id
-		if (!empty($result['container_id'])) {
-            $result['container_id'] = Tinebase_Container::getInstance()->getContainerById($result['container_id'])->toArray();
-        }
+        // encode the roles array
+        $result['accountRoles'] = array(
+            'results'         => $userRoles,
+            'totalcount'     => count($userRoles)
+        );
         
         return $result;
     }
