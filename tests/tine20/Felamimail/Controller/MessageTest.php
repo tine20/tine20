@@ -88,7 +88,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->_controller = Felamimail_Controller_Message::getInstance();
         $this->_imap       = Felamimail_Backend_ImapFactory::factory($this->_account);
         
-        $this->_folder     = $this->_getFolder($this->_testFolderName);
+        $this->_folder     = $this->getFolder($this->_testFolderName);
         $this->_imap->selectFolder($this->_testFolderName);
         $this->_cache      = Felamimail_Controller_Cache_Message::getInstance();
         $this->_createdMessages = new Tinebase_Record_RecordSet('Felamimail_Model_Message');
@@ -814,7 +814,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $forwardMessage = new Felamimail_Model_Message(array(
             'account_id'    => $this->_account->getId(),
             'subject'       => 'test forward',
-            'to'            => array($this->_getEmailAddress()),
+            'to'            => array($this->getEmailAddress()),
             'body'          => 'aaaaaä <br>',
             'headers'       => array('X-Tine20TestMessage' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822),
             'original_id'   => $cachedMessage->getId(),
@@ -823,12 +823,12 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
                 'name'  => $cachedMessage->subject,
             ), TRUE)),
         ));
-        $sentFolder = $this->_getFolder('Sent');
+        $sentFolder = $this->getFolder('Sent');
 
         Felamimail_Controller_Message_Send::getInstance()->sendMessage($forwardMessage);
         
-        $forwardedMessage = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $this->_getFolder('INBOX'));
-        $forwardedMessageInSent = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $sentFolder);
+        $forwardedMessage = $this->searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $this->getFolder('INBOX'));
+        $forwardedMessageInSent = $this->searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $sentFolder);
         $completeForwardedMessage = $this->_controller->getCompleteMessage($forwardedMessage);
         
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $forwardedMessage['structure']['parts'][2]['contentType']);
@@ -843,7 +843,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    protected function _getEmailAddress()
+    public function getEmailAddress()
     {
         $config = TestServer::getInstance()->getConfig();
         $email = ($config->email) ? $config->email : 'unittest@tine20.org';
@@ -861,7 +861,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $forwardMessage = new Felamimail_Model_Message(array(
             'account_id'    => $this->_account->getId(),
             'subject'       => 'test forward part',
-            'to'            => array($this->_getEmailAddress()),
+            'to'            => array($this->getEmailAddress()),
             'body'          => 'aaaaaä <br>',
             'headers'       => array('X-Tine20TestMessage' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 . 'part'),
             'original_id'   => $forwardedMessage->getId() . '_2', // part 2 is the original forwared message
@@ -872,7 +872,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         ));
         Felamimail_Controller_Message_Send::getInstance()->sendMessage($forwardMessage);
         
-        $forwardedMessage = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 . 'part', $this->_getFolder('INBOX'));
+        $forwardedMessage = $this->searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 . 'part', $this->getFolder('INBOX'));
         $completeForwardedMessagePart = $this->_controller->getCompleteMessage($forwardedMessage, 2);
         
         //print_r($completeForwardedMessagePart->toArray());
@@ -998,7 +998,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testMoveMessageToAnotherAccount()
     {
         $clonedAccount = $this->_cloneAccount();
-        $folder = $this->_getFolder('INBOX', $clonedAccount);
+        $folder = $this->getFolder('INBOX', $clonedAccount);
         
         $cachedMessage = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         $this->_moveTestHelper($cachedMessage, $folder);
@@ -1010,7 +1010,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testMoveMessageToAnotherAccountWithFilter()
     {
         $clonedAccount = $this->_cloneAccount();
-        $folder = $this->_getFolder('INBOX', $clonedAccount);
+        $folder = $this->getFolder('INBOX', $clonedAccount);
         
         $cachedMessage = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         $messageFilter = new Felamimail_Model_MessageFilter(array(
@@ -1056,8 +1056,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $clonedAccount = $this->_cloneAccount();
         
-        $trashFolderMainAccount = $this->_getFolder('Trash');
-        $trashFolderClonedAccount = $this->_getFolder('Trash', $clonedAccount);
+        $trashFolderMainAccount = $this->getFolder('Trash');
+        $trashFolderClonedAccount = $this->getFolder('Trash', $clonedAccount);
         
         // empty trash
         Felamimail_Controller_Folder::getInstance()->emptyFolder($trashFolderMainAccount);
@@ -1212,7 +1212,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $testHeaderValue = ($_testHeaderValue !== NULL) ? $_testHeaderValue : $_filename;
         $folder = ($_folder !== NULL) ? $_folder : $this->_folder;
         $this->_appendMessage($_filename, $folder, $_replacements);
-        return $this->_searchAndCacheMessage($testHeaderValue, $folder);
+        return $this->searchAndCacheMessage($testHeaderValue, $folder);
     }
     
     /**
@@ -1222,7 +1222,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      * @param Felamimail_Model_Folder $_folder
      * @return Felamimail_Model_Message
      */
-    protected function _searchAndCacheMessage($_testHeaderValue, $_folder = NULL)
+    public function searchAndCacheMessage($_testHeaderValue, $_folder = NULL)
     {
         $folder = ($_folder !== NULL) ? $_folder : $this->_folder;
         $message = $this->_searchMessage($_testHeaderValue, $folder);
@@ -1337,7 +1337,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      *
      * @return Felamimail_Model_Folder
      */
-    protected function _getFolder($_folderName = null, $_account = NULL)
+    public function getFolder($_folderName = null, $_account = NULL)
     {
         $folderName = ($_folderName !== null) ? $_folderName : $this->_testFolderName;
         $account = ($_account !== NULL) ? $_account : $this->_account;

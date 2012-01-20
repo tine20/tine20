@@ -113,7 +113,15 @@ class Tinebase_Mail extends Zend_Mail
                         break;
                         
                     case 'date':
-                        $result->setDate($value);
+                        try {
+                            $result->setDate($value);
+                        } catch (Zend_Mail_Exception $zme) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " Could not set date: " . $value);
+                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " " . $zme);
+                            $result->setDate();
+                        }
                         
                         break;
                         

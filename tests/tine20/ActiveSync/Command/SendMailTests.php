@@ -4,7 +4,7 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -20,6 +20,20 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
  */
 class ActiveSync_Command_SendMailTests extends PHPUnit_Framework_TestCase
 {
+    /**
+    * email test class for checking emails on IMAP server
+    *
+    * @var Felamimail_Controller_MessageTest
+    */
+    protected $_emailTestClass;
+    
+    /**
+    * keep track of created messages
+    *
+    * @var Tinebase_Record_RecordSet
+    */
+    protected $_createdMessages;
+    
     /**
      * Runs the test methods of this class.
      *
@@ -38,6 +52,14 @@ class ActiveSync_Command_SendMailTests extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
+        if (! $imapConfig || ! isset($imapConfig->useSystemAccount) || $imapConfig->useSystemAccount != TRUE) {
+            $this->markTestSkipped('IMAP backend not configured');
+        }
+        $this->_emailTestClass = new Felamimail_Controller_MessageTest();
+        $this->_emailTestClass->setup();
+        $this->_createdMessages = new Tinebase_Record_RecordSet('Felamimail_Model_Message');
+        
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         $testDevice = ActiveSync_Backend_DeviceTests::getTestDevice();
@@ -53,20 +75,28 @@ class ActiveSync_Command_SendMailTests extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        Felamimail_Controller_Message_Flags::getInstance()->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
-     * test xml generation for IPhone
+     * test (plain text) mail sending via ActiveSync_Command_SendMail
      */
     public function testSendMail()
     {
-        $stream = fopen(dirname(__FILE__) . '/../../Felamimail/files/text_plain.eml', 'r');
+        $email = file_get_contents(dirname(__FILE__) . '/../../Felamimail/files/text_plain.eml');
+        $email = str_replace('gentoo-dev@lists.gentoo.org, webmaster@changchung.org', $this->_emailTestClass->getEmailAddress(), $email);
+        $stream = fopen('data://text/plain;base64,' . base64_encode($email), 'r');
         
         $sendMail = new ActiveSync_Command_SendMail($stream);
-        
         $sendMail->handle();
-        
         $sendMail->getResponse();
+        
+        // check if mail is in INBOX of test account
+        $inbox = $this->_emailTestClass->getFolder('INBOX');
+        $testHeaderValue = 'text/plain';
+        $message = $this->_emailTestClass->searchAndCacheMessage($testHeaderValue, $inbox);
+        $this->_createdMessages->addRecord($message);
+        $this->assertEquals("Re: [gentoo-dev] `paludis --info' is not like `emerge --info'", $message->subject);
     }
 }
