@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        try to split this into smaller parts (record proxy should support 'nested' json frontends first)
  * @todo        use functions from Tinebase_Frontend_Json_Abstract
@@ -196,8 +196,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         if (!empty($id)) {
             $user = Admin_Controller_User::getInstance()->get($id);
-            $user->setTimezone(Tinebase_Core::get('userTimeZone'));
-            $userArray = $user->toArray();
+            $userArray = $this->_recordToJson($user);
             
             // don't send some infos to the client: unset email uid+gid
             if (array_key_exists('emailUser', $userArray)) {
@@ -241,21 +240,16 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // encode the groups array
         $userArray['groups'] = array(
-			'results' 		=> $userGroups,
-			'totalcount' 	=> count($userGroups)
-		);
-		
-		// encode the roles array
-        $userArray['accountRoles'] = array(
-			'results' 		=> $userRoles,
-			'totalcount' 	=> count($userRoles)
-		);
+            'results'         => $userGroups,
+            'totalcount'     => count($userGroups)
+        );
         
-		// encode container id
-		if (!empty($user->container_id)) {
-            $userArray['container_id'] = Tinebase_Container::getInstance()->getContainerById($user->container_id)->toArray();
-        }
-
+        // encode the roles array
+        $userArray['accountRoles'] = array(
+            'results'         => $userRoles,
+            'totalcount'     => count($userRoles)
+        );
+        
         return $userArray;
     }
     
