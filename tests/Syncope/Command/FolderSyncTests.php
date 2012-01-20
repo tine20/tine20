@@ -26,7 +26,7 @@ class Syncope_Command_FolderSyncTests extends PHPUnit_Framework_TestCase
     protected $_deviceBackend;
 
     /**
-     * @var Syncope_Backend_IFolderState
+     * @var Syncope_Backend_IFolder
      */
     protected $_folderStateBackend;
     
@@ -36,7 +36,7 @@ class Syncope_Command_FolderSyncTests extends PHPUnit_Framework_TestCase
     protected $_syncStateBackend;
     
     /**
-     * @var Syncope_Backend_IContentState
+     * @var Syncope_Backend_IContent
      */
     protected $_contentStateBackend;
     
@@ -68,9 +68,9 @@ class Syncope_Command_FolderSyncTests extends PHPUnit_Framework_TestCase
         $this->_db->beginTransaction();
 
         $this->_deviceBackend       = new Syncope_Backend_Device($this->_db);
-        $this->_folderStateBackend  = new Syncope_Backend_FolderState($this->_db);
+        $this->_folderStateBackend  = new Syncope_Backend_Folder($this->_db);
         $this->_syncStateBackend    = new Syncope_Backend_SyncState($this->_db);
-        $this->_contentStateBackend = new Syncope_Backend_ContentState($this->_db);
+        $this->_contentStateBackend = new Syncope_Backend_Content($this->_db);
 
         $this->_device = $this->_deviceBackend->create(
             Syncope_Backend_DeviceTests::getTestDevice()

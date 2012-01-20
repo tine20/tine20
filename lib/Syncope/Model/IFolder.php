@@ -16,16 +16,15 @@
  * class to handle ActiveSync Sync command
  *
  * @package     Model
- * @property    string    id
- * @property    string    device_id
- * @property    string    class
- * @property    string    collectionid
- * @property    string    contentid
- * @property    DateTime  creation_time
- * @property    string    is_deleted
+ * @property    string   id
+ * @property    string   device_id
+ * @property    string   class
+ * @property    string   folderid
+ * @property    string   creation_time
+ * @property    string   lastfiltertype
  */
 
-interface Syncope_Model_IContentState
+interface Syncope_Model_IFolder
 {
     
 }

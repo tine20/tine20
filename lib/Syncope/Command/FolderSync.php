@@ -170,7 +170,7 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
                     $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Type', $folder['type']));
                     
                     // store state in backend
-                    $this->_folderStateBackend->create(new Syncope_Model_FolderState(array(
+                    $this->_folderStateBackend->create(new Syncope_Model_Folder(array(
                         'device_id'         => $this->_device,
                         'class'             => $class,
                         'folderid'          => $folder['folderId'],
@@ -188,7 +188,7 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
                     $delete = $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Delete'));
                     $delete->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ServerId', $folderId));
                     
-                    $this->_deleteFolderState($class, $folderId);
+                    $this->_deleteFolder($class, $folderId);
                 }
             }
             
@@ -208,9 +208,9 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
      * @param string $_class the class from the xml
      * @param string $_contentId the Tine 2.0 id of the folder
      */
-    protected function __deleteFolderState($_class, $_folderId)
+    protected function __deleteFolder($_class, $_folderId)
     {
-        $folderStateFilter = new Syncope_Model_FolderStateFilter(array(
+        $folderStateFilter = new Syncope_Model_FolderFilter(array(
             array(
                     'field'     => 'device_id',
                     'operator'  => 'equals',

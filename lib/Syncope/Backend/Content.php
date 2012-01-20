@@ -19,7 +19,7 @@
  * @package     Syncope
  * @subpackage  Backend
  */
-class Syncope_Backend_ContentState implements Syncope_Backend_IContentState
+class Syncope_Backend_Content implements Syncope_Backend_IContent
 {
     /**
      * the database adapter
@@ -36,18 +36,19 @@ class Syncope_Backend_ContentState implements Syncope_Backend_IContentState
     /**
      * create new content state
      *
-     * @param Syncope_Model_IContentState $_state
-     * @return Syncope_Model_IContentState
+     * @param Syncope_Model_IContent $_state
+     * @return Syncope_Model_IContent
      */
-    public function create(Syncope_Model_IContentState $_state)
+    public function create(Syncope_Model_IContent $_state)
     {
         $id = sha1(mt_rand(). microtime());
         $deviceId = $_state->device_id instanceof Syncope_Model_IDevice ? $_state->device_id->id : $_state->device_id;
+        $folderId = $_state->folder_id instanceof Syncope_Model_IFolder ? $_state->folder_id->id : $_state->folder_id;
     
         $this->_db->insert('syncope_contentstates', array(
         	'id'            => $id, 
         	'device_id'     => $deviceId,
-        	'class'         => $_state->class,
+        	'folder_id'     => $_state->folder_id,
         	'collectionid'  => $_state->collectionid,
         	'contentid'     => $_state->contentid,
         	'creation_time' => $_state->creation_time->format('Y-m-d H:i:s'),
@@ -61,11 +62,11 @@ class Syncope_Backend_ContentState implements Syncope_Backend_IContentState
      * mark state as deleted. The state gets removed finally, 
      * when the synckey gets validated during next sync.
      * 
-     * @param Syncope_Model_IContentState|string $_id
+     * @param Syncope_Model_IContent|string $_id
      */
     public function delete($_id)
     {
-        $id = $_id instanceof Syncope_Model_IContentState ? $_id->id : $_id;
+        $id = $_id instanceof Syncope_Model_IContent ? $_id->id : $_id;
         
         $this->_db->update('syncope_contentstates', array(
                 	'is_deleted' => 1
@@ -78,7 +79,7 @@ class Syncope_Backend_ContentState implements Syncope_Backend_IContentState
     /**
      * @param string  $_id
      * @throws Syncope_Exception_NotFound
-     * @return Syncope_Model_IContentState
+     * @return Syncope_Model_IContent
      */
     public function get($_id)
     {
@@ -87,9 +88,9 @@ class Syncope_Backend_ContentState implements Syncope_Backend_IContentState
             ->where('id = ?', $_id);
     
         $stmt = $this->_db->query($select);
-        $state = $stmt->fetchObject('Syncope_Model_ContentState');
+        $state = $stmt->fetchObject('Syncope_Model_Content');
         
-        if (! $state instanceof Syncope_Model_IContentState) {
+        if (! $state instanceof Syncope_Model_IContent) {
             throw new Syncope_Exception_NotFound('id not found');
         }
         

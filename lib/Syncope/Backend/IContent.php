@@ -19,28 +19,13 @@
  * @package     Syncope
  * @subpackage  Backend
  */
-interface Syncope_Backend_IFolderState
+interface Syncope_Backend_IContent
 {
     /**
-     * @param Syncope_Model_IFolderState $_folderState
-     * @return Syncope_Model_IFolderState
-     */
-    public function create(Syncope_Model_IFolderState $_folderState);
-    
-    /**
-     * delete all stored folderId's for given device
+     * create new content state
      *
-     * @param Syncope_Model_Device $_deviceId
-     * @param string $_class
+     * @param Syncope_Model_IContent $_contentState
+     * @return Syncope_Model_IContent
      */
-    public function resetState($_deviceId);
-    
-    /**
-     * get array of ids which got send to the client for a given class
-     *
-     * @param Syncope_Model_Device $_deviceId
-     * @param string $_class
-     * @return array
-     */
-    public function getClientState($_deviceId, $_class);
+    public function create(Syncope_Model_IContent $_contentState);    
 }

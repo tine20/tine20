@@ -13,7 +13,7 @@
  * 
  * @package     Backend
  */
-class Syncope_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
+class Syncope_Backend_ContentTests extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Syncope_Model_Device
@@ -48,7 +48,7 @@ class Syncope_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Syncope SyncState backend tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Syncope Content backend tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
@@ -86,12 +86,12 @@ class Syncope_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $syncState = new Syncope_Model_SyncState(array(
-            'device_id'   => $this->_device,
-            'type'        => 'FolderSync',
-            'counter'     => '0',
-            'lastsync'    => new DateTime(null, new DateTimeZone('utc')),
-            'pendingdata' => null
+        $syncState = new Syncope_Model_Content(array(
+            'device_id'     => $this->_device,
+            'folder_id'     => $this->_folder,
+            'contentid'     => '0',
+            'creation_time' => new DateTime(null, new DateTimeZone('utc')),
+            'is_deleted'    => null
         ));
         
         $syncState = $this->_syncStateBackend->create($syncState);

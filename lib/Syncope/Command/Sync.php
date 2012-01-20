@@ -167,7 +167,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
             
             // got the folder synchronized to the device already
             try {
-                $folder = $this->_folderStateBackend->getFolderState($this->_device, $collectionData['collectionId']);
+                $folder = $this->_folderStateBackend->getFolder($this->_device, $collectionData['collectionId']);
                 
                 $collectionData['class'] = $folder->class;
                 
@@ -258,7 +258,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         }
                         $collectionData['added'][(string)$add->ClientId]['serverId'] = $added->getId(); 
                         $collectionData['added'][(string)$add->ClientId]['status'] = self::STATUS_SUCCESS;
-                        $this->_addContentState($collectionData['class'], $collectionData['collectionId'], $added->getId());
+                        $this->_addContent($collectionData['class'], $collectionData['collectionId'], $added->getId());
                     } catch (Exception $e) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
                             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " failed to add entry " . $e->getMessage());
@@ -305,7 +305,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     
                     try {
                         // check if we have send this entry to the phone
-                        $this->_controller->getContentState($this->_device, $collectionData['class'], $collectionData['collectionId'], $serverId);
+                        $this->_controller->getContent($this->_device, $collectionData['class'], $collectionData['collectionId'], $serverId);
                         
                         try {
                             $dataController->delete($collectionData['collectionId'], $serverId, $collectionData);
@@ -325,7 +325,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     }
                     
                     $collectionData['deleted'][$serverId] = self::STATUS_SUCCESS;
-                    $this->_deleteContentState($collectionData['class'], $collectionData['collectionId'], $serverId);
+                    $this->_deleteContent($collectionData['class'], $collectionData['collectionId'], $serverId);
                 }
             }
                         
@@ -569,7 +569,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                             }
                             
                             // mark as send to the client, even the conversion to xml might have failed 
-                            $contentState = $this->_contentStateBackend->create(new Syncope_Model_ContentState(array(
+                            $contentState = $this->_contentStateBackend->create(new Syncope_Model_Content(array(
                                 'device_id'     => $this->_device,
                                 'class'         => $collectionData['class'],
                                 'collectionid'  => $collectionData['collectionId'],
@@ -618,7 +618,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                                 $delete = $this->_outputDom->createElementNS('uri:AirSync', 'Delete');
                                 $delete->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
                                 
-                                $this->_markContentStateAsDeleted($collectionData['class'], $collectionData['collectionId'], $serverId);
+                                $this->_markContentAsDeleted($collectionData['class'], $collectionData['collectionId'], $serverId);
                                 
                                 $commands->appendChild($delete);
                                 
@@ -660,7 +660,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     
                     // store current filter type
                     try {
-                        $folderState = $this->_folderStateBackend->getFolderState($this->_device, $collectionData['collectionId']);
+                        $folderState = $this->_folderStateBackend->getFolder($this->_device, $collectionData['collectionId']);
                         $folderState->lastfiltertype = $collectionData['filterType'];
                         $this->_folderStateBackend->update($folderState);
                     } catch (Syncope_Exception_NotFound $senf) {
@@ -682,9 +682,9 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
      * @param string $_collectionId the collection id from the xml
      * @param string $_contentId the Tine 2.0 id of the entry
      */
-    protected function _markContentStateAsDeleted($_class, $_collectionId, $_contentId)
+    protected function _markContentAsDeleted($_class, $_collectionId, $_contentId)
     {
-        $contentState = new Syncope_Model_ContentState(array(
+        $contentState = new Syncope_Model_Content(array(
                 'device_id'     => $this->_device->getId(),
                 'class'         => $_class,
                 'collectionid'  => $_collectionId,
@@ -692,21 +692,21 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                 'creation_time' => $this->_syncTimeStamp
         ));
     
-        $this->_controller->markContentStateAsDeleted($contentState);
+        $this->_controller->markContentAsDeleted($contentState);
     }
     
     /**
      * @param unknown_type $_deviceId
      * @param unknown_type $_class
      * @param unknown_type $_folderId
-     * @return Syncope_Model_FolderState
+     * @return Syncope_Model_Folder
      */
-    public function __getFolderState($_deviceId, $_folderId)
+    public function __getFolder($_deviceId, $_folderId)
     {
         $deviceId = $_deviceId instanceof Syncope_Model_Device ? $_deviceId->getId() : $_deviceId;
         
         // store current filter type
-        $filter = new Syncope_Model_FolderStateFilter(array(
+        $filter = new Syncope_Model_FolderFilter(array(
             array(
                 'field'     => 'device_id',
                 'operator'  => 'equals',

@@ -19,7 +19,7 @@
  * @package     Syncope
  * @subpackage  Backend
  */
-class Syncope_Backend_FolderState implements Syncope_Backend_IFolderState
+class Syncope_Backend_Folder implements Syncope_Backend_IFolder
 {
     /**
      * the database adapter
@@ -36,10 +36,10 @@ class Syncope_Backend_FolderState implements Syncope_Backend_IFolderState
     /**
      * create new folder state
      *
-     * @param Syncope_Model_IFolderState $_folderState
-     * @return Syncope_Model_IFolderState
+     * @param Syncope_Model_IFolder $_folderState
+     * @return Syncope_Model_IFolder
      */
-    public function create(Syncope_Model_IFolderState $_folderState)
+    public function create(Syncope_Model_IFolder $_folderState)
     {
         $id = sha1(mt_rand(). microtime());
         $deviceId = $_folderState->device_id instanceof Syncope_Model_IDevice ? $_folderState->device_id->id : $_folderState->device_id;
@@ -59,7 +59,7 @@ class Syncope_Backend_FolderState implements Syncope_Backend_IFolderState
     /**
      * @param string  $_id
      * @throws Syncope_Exception_NotFound
-     * @return Syncope_Model_IFolderState
+     * @return Syncope_Model_IFolder
      */
     public function get($_id)
     {
@@ -68,9 +68,9 @@ class Syncope_Backend_FolderState implements Syncope_Backend_IFolderState
             ->where('id = ?', $_id);
     
         $stmt = $this->_db->query($select);
-        $state = $stmt->fetchObject('Syncope_Model_FolderState');
+        $state = $stmt->fetchObject('Syncope_Model_Folder');
         
-        if (! $state instanceof Syncope_Model_IFolderState) {
+        if (! $state instanceof Syncope_Model_IFolder) {
             throw new Syncope_Exception_NotFound('id not found');
         }
         
@@ -98,7 +98,7 @@ class Syncope_Backend_FolderState implements Syncope_Backend_IFolderState
         $this->_db->delete('syncope_folderstates', $where);
     }
     
-    public function update(Syncope_Model_IFolderState $_state)
+    public function update(Syncope_Model_IFolder $_state)
     {
         $deviceId = $_state->device_id instanceof Syncope_Model_IDevice ? $_state->device_id->id : $_state->device_id;
     
@@ -140,7 +140,7 @@ class Syncope_Backend_FolderState implements Syncope_Backend_IFolderState
      * @param string $_class
      * @return array
      */
-    public function getFolderState($_deviceId, $_folderId)
+    public function getFolder($_deviceId, $_folderId)
     {
         $deviceId = $_deviceId instanceof Syncope_Model_IDevice ? $_deviceId->id : $_deviceId;
         
@@ -150,9 +150,9 @@ class Syncope_Backend_FolderState implements Syncope_Backend_IFolderState
             ->where($this->_db->quoteIdentifier('folderid') . ' = ?', $_folderId);
         
         $stmt = $this->_db->query($select);
-        $state = $stmt->fetchObject('Syncope_Model_FolderState');
+        $state = $stmt->fetchObject('Syncope_Model_Folder');
         
-        if (! $state instanceof Syncope_Model_IFolderState) {
+        if (! $state instanceof Syncope_Model_IFolder) {
             throw new Syncope_Exception_NotFound('id not found');
         }
         

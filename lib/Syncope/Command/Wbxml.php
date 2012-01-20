@@ -38,7 +38,7 @@ abstract class Syncope_Command_Wbxml implements Syncope_Command_Interface
     /**
      * informations about the currently device
      *
-     * @var Syncope_Backend_IFolderState
+     * @var Syncope_Backend_IFolder
      */
     protected $_folderStateBackend;
     
@@ -48,7 +48,7 @@ abstract class Syncope_Command_Wbxml implements Syncope_Command_Interface
     protected $_syncStateBackend;
     
     /**
-     * @var Syncope_Backend_IContentState
+     * @var Syncope_Backend_IContent
      */
     protected $_contentStateBackend;
     

@@ -18,7 +18,7 @@
  * @package     Model
  */
 
-class Syncope_Model_FolderState implements Syncope_Model_IFolderState
+class Syncope_Model_Content implements Syncope_Model_IContent
 {
     public function __construct(array $_data = array())
     {

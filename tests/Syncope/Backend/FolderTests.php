@@ -13,7 +13,7 @@
  * 
  * @package     Backend
  */
-class Syncope_Backend_FolderStateTests extends PHPUnit_Framework_TestCase
+class Syncope_Backend_FolderTests extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Syncope_Model_IDevice
@@ -26,7 +26,7 @@ class Syncope_Backend_FolderStateTests extends PHPUnit_Framework_TestCase
     protected $_deviceBackend;
 
     /**
-     * @var Syncope_Backend_IFolderState
+     * @var Syncope_Backend_IFolder
      */
     protected $_folderStateBackend;
     
@@ -43,7 +43,7 @@ class Syncope_Backend_FolderStateTests extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Syncope FolderState backend tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Syncope Folder backend tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
@@ -58,7 +58,7 @@ class Syncope_Backend_FolderStateTests extends PHPUnit_Framework_TestCase
         $this->_db->beginTransaction();
 
         $this->_deviceBackend      = new Syncope_Backend_Device($this->_db);
-        $this->_folderStateBackend = new Syncope_Backend_FolderState($this->_db);
+        $this->_folderStateBackend = new Syncope_Backend_Folder($this->_db);
 
         $newDevice = Syncope_Backend_DeviceTests::getTestDevice();
         $this->_device    = $this->_deviceBackend->create($newDevice);
@@ -76,11 +76,11 @@ class Syncope_Backend_FolderStateTests extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * @return Syncope_Model_IFolderState
+     * @return Syncope_Model_IFolder
      */
     public function testCreate()
     {
-        $folderState = new Syncope_Model_FolderState(array(
+        $folderState = new Syncope_Model_Folder(array(
             'device_id'         => $this->_device,
             'class'             => Syncope_Data_Factory::CONTACTS,
             'folderid'          => '1234567890',
@@ -107,11 +107,11 @@ class Syncope_Backend_FolderStateTests extends PHPUnit_Framework_TestCase
         $this->assertEmpty($state);
     }
     
-    public function testGetFolderState()
+    public function testGetFolder()
     {
         $folderState = $this->testCreate();
         
-        $folderState = $this->_folderStateBackend->getFolderState($folderState->device_id, $folderState->folderid);
+        $folderState = $this->_folderStateBackend->getFolder($folderState->device_id, $folderState->folderid);
         
         $this->assertTrue($folderState->creation_time instanceof DateTime);
     }
