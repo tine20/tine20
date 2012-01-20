@@ -729,7 +729,7 @@ Tine.Felamimail.getSignature = function(id) {
     var defaultAccount = app.getAccountStore().getById(id);
     var signature = (defaultAccount) ? defaultAccount.get('signature') : '';
     if (signature && signature != '') {
-        signature = Ext.util.Format.nl2br(signature);
+        // NOTE: signature is always in html, nl2br here would cause duplicate linebreaks!
         result = '<br><br><span id="felamimail-body-signature">--<br>' + signature + '</span>';
     }
     
