@@ -748,53 +748,20 @@ Ext.ux.file.Upload.file.getFileData = function(file) {
     return Ext.copyTo({}, file.data, ['tempFile', 'name', 'path', 'size', 'type']);
 };
 
+/**
+ * generic size renderer
+ */
 Ext.ux.file.Upload.fileSize = function (value, metadata, record) {
+    value = parseInt(value, 10);
     
-  if (!value || (record && record.get('type') == 'folder')) {
-      return '';
-  }
-  else if (value < 1) {
-      return '0 bytes';
-  }
-
-  var intValue= value/1;  
+    if (record && record.get('type') == 'folder') {
+        return '';
+    }
+    
+    var suffix = ['Bytes', 'Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    for (var i=0,j; i<suffix.length; i++) {
+        if (value < Math.pow(1024, i)) break;
+    }
   
-  if (intValue < 1024) {
-      return intValue + ' Bytes';     
-  }
-  else if(intValue < 1048576) {
-      
-      var stringValue = (intValue/1024).toString();
-      var separatorIndex = stringValue.indexOf('.');
-      var returnValue = stringValue;
-      if(separatorIndex > -1) {
-          returnValue = stringValue.substring(0, separatorIndex);
-      }
-      return returnValue + ' KB';
-      
-  }
-  else if(intValue < 1073741824) {
-      
-      var stringValue = (intValue/(1024*1024)).toString();
-      var separatorIndex = stringValue.indexOf('.');
-      
-      var returnValue = stringValue;
-      if(separatorIndex > -1 && separatorIndex <= stringValue.length - 3) {
-          returnValue = stringValue.substring(0, separatorIndex + 3);
-      }
-      
-      return returnValue + ' MB';
-  }
-  else {
-          
-      var stringValue = (intValue/(1024*1024*1024)).toString();
-      var separatorIndex = stringValue.indexOf('.');
-
-      var returnValue = stringValue;
-      if(separatorIndex > -1 && separatorIndex <= stringValue.length - 3)  {
-          returnValue = stringValue.substring(0, separatorIndex + 3);
-      }
-      return sreturnValue + ' GB';
-  }  
-    
+  return Ext.util.Format.round(value/(Math.pow(1024,Math.max(1, i-1))), 2) + ' ' + suffix[i];
 };
