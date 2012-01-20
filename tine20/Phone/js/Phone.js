@@ -4,9 +4,9 @@
  * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
- * TODO         refactor this
+ * TODO         refactor this!
  */
  
 Ext.namespace('Tine.Phone');
@@ -18,13 +18,13 @@ Ext.namespace('Tine.Phone');
  * creates and returnes app tree panel
  */
 Tine.Phone.getPanel = function(){
-	
+    
     var translation = new Locale.Gettext();
     translation.textdomain('Phone');
 
     new Tine.Phone.AddressbookGridPanelHook({app: {i18n: translation}});
     
-    // @todo generalise this for panel & main
+    // TODO generalise this for panel & main
     var editPhoneSettingsAction = new Ext.Action({
         text: translation._('Edit phone settings'),
         iconCls: 'PhoneIconCls',
@@ -91,31 +91,41 @@ Tine.Phone.getPanel = function(){
         }
     }, this);
         
-    treePanel.on('beforeexpand', function(panel) {    	
-    	// expand root (Phones) node
-        if(panel.getSelectionModel().getSelectedNode() === null) {
-        	var node = panel.getRootNode();
-        	node.select();
-        	node.expand();
+    treePanel.on('beforeexpand', function(panel) {        
+        // expand and select first phone or root ('Phones') node
+        if (panel.getSelectionModel().getSelectedNode() === null) {
+            var phonesStore = Tine.Phone.loadPhoneStore(),
+                firstPhone = phonesStore.getAt(0),
+                node = (firstPhone) ? panel.getNodeById(firstPhone.id) : null;
+                
+            if (! node){
+                node = panel.getRootNode();
+                node.select();
+                node.expand();
+            } else {
+                panel.expandPath(node.getPath(), null, function(success, expandedNode) {
+                    expandedNode.select();
+                });
+            }
+            
         } else {
-        	panel.getSelectionModel().fireEvent('selectionchange', panel.getSelectionModel());
+            panel.getSelectionModel().fireEvent('selectionchange', panel.getSelectionModel());
         }
     }, this);
 
     treePanel.getSelectionModel().on('selectionchange', function(_selectionModel) {
-    	var node = _selectionModel.getSelectedNode();
+        var node = _selectionModel.getSelectedNode();
 
         // update toolbar
         var settingsButton = Ext.getCmp('phone-settings-button');
         if (settingsButton) {
             if(node && node.id != 'root') {
-            	settingsButton.setDisabled(false);                     
+                settingsButton.setDisabled(false);                     
             } else {
                 settingsButton.setDisabled(true);
             }
         }
 
-        //node.getOwnerTree().selectPath(node.getPath());
         Tine.Phone.Main.show(node);
     }, this);
     
@@ -126,18 +136,18 @@ Tine.Phone.getPanel = function(){
  * load phones
  */
 Tine.Phone.updatePhoneTree = function(store){
-	
+    
     var translation = new Locale.Gettext();
     translation.textdomain('Phone');
 
     // get tree root
     var treeRoot = Ext.getCmp('phone-tree').getRootNode();    
 
-	// remove all children first
+    // remove all children first
     treeRoot.eachChild(function(child){
-    	treeRoot.removeChild(child);
+        treeRoot.removeChild(child);
     });
-	
+    
     // add phones to tree menu
     store.each(function(record){
         var label = (record.data.description == '') 
@@ -166,13 +176,13 @@ Tine.Phone.updatePhoneTree = function(store){
  * @todo what todo if no lines are available?
  */
 Tine.Phone.dialPhoneNumber = function(number) {
-	
-	var phonesStore = Tine.Phone.loadPhoneStore();
-	var lines = (phonesStore.getAt(0)) ? phonesStore.getAt(0).data.lines : [];
+    
+    var phonesStore = Tine.Phone.loadPhoneStore();
+    var lines = (phonesStore.getAt(0)) ? phonesStore.getAt(0).data.lines : [];
     
     // check if only one phone / one line exists and numer is set
-	if (phonesStore.getTotalCount() == 1 && lines.length == 1 && number) {
-		// call Phone.dialNumber
+    if (phonesStore.getTotalCount() == 1 && lines.length == 1 && number) {
+        // call Phone.dialNumber
         Ext.Ajax.request({
             url: 'index.php',
             params: {
@@ -189,9 +199,9 @@ Tine.Phone.dialPhoneNumber = function(number) {
             }
         });                
 
-    } else {	
+    } else {    
 
-    	// open dialer box (with phone and lines selection)
+        // open dialer box (with phone and lines selection)
         var dialerPanel = new Tine.Phone.DialerPanel({
             number: (number) ? number : null
         });
@@ -208,7 +218,7 @@ Tine.Phone.dialPhoneNumber = function(number) {
             closeAction: 'close',
             items: [dialerPanel] 
         });
-	}
+    }
 };
 
 /**
@@ -217,25 +227,25 @@ Tine.Phone.dialPhoneNumber = function(number) {
  * @todo use macaddress or description/name as display value?
  */
 Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
-	
-	id: 'dialerPanel',
-	translation: null,
-	
-	// initial phone number
-	number: null,
-	
-	// config settings
+    
+    id: 'dialerPanel',
+    translation: null,
+    
+    // initial phone number
+    number: null,
+    
+    // config settings
     defaults: {
         xtype: 'textfield',
         anchor: '100%',
         allowBlank: false
-    },	
-	bodyStyle: 'padding:5px;',	
-	buttonAlign: 'right',
-	    
-	phoneStore: null,
-	linesStore: null,
-	
+    },    
+    bodyStyle: 'padding:5px;',    
+    buttonAlign: 'right',
+        
+    phoneStore: null,
+    linesStore: null,
+    
     // private
     initComponent: function(){
         
@@ -264,8 +274,8 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
                 name: 'phoneId',
                 triggerAction: 'all',
                 listeners: {                
-                	scope: this,
-                	
+                    scope: this,
+                    
                     // reload lines combo on change
                     select: function(combo, newValue, oldValue){
                         //console.log('set line store for ' + newValue.data.id);
@@ -273,7 +283,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
                     }
                 }
             }),{
-            	xtype: 'combo',
+                xtype: 'combo',
                 fieldLabel: this.translation._('Line'),
                 name: 'lineId',
                 displayField:'linenumber',
@@ -298,9 +308,9 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
                 Ext.getCmp('dialerWindow').close();
             }
         });
-        	
+            
         // dial action
-		this.dialAction = new Ext.Action({
+        this.dialAction = new Ext.Action({
             scope: this,
             text: this.translation._('Dial'),
             iconCls: 'action_DialNumber',
@@ -352,19 +362,19 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
      * @todo add prefered phone/line selections
      */
     initMyFields: function() {
-    	// focus number field or set initial value
-    	if (this.number != null) {
+        // focus number field or set initial value
+        if (this.number != null) {
             this.getForm().findField('phoneNumber').setValue(this.number);
-    	} else {
-    		this.getForm().findField('phoneNumber').focus();
-    	}
+        } else {
+            this.getForm().findField('phoneNumber').focus();
+        }
 
         // get combos
         var phoneCombo = this.getForm().findField('phoneId'); 
         var lineCombo = this.getForm().findField('lineId'); 
         
         // select first combo values
-		if(! phoneCombo.getState() && this.phoneStore.getAt(0)) {
+        if(! phoneCombo.getState() && this.phoneStore.getAt(0)) {
             phoneCombo.setValue(this.phoneStore.getAt(0).id);
         } else {
             // update line store again (we need this, because it is changed when dlg is opened the second time)
@@ -380,15 +390,15 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
      * get values from phones store
      */
     setLineStore: function(phoneId) {
-    	
-    	if (this.linesStore == null) {
-    	   this.linesStore = new Ext.data.Store({});
-    	} else {
-    		// empty store
-    		this.linesStore.removeAll();
-    	}
         
-    	var form = this.getForm();
+        if (this.linesStore == null) {
+           this.linesStore = new Ext.data.Store({});
+        } else {
+            // empty store
+            this.linesStore.removeAll();
+        }
+        
+        var form = this.getForm();
         
         if (phoneId == null) {
             if (form) {
@@ -400,24 +410,24 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
                 return;
             }
         }
-    	
-    	var phone = this.phoneStore.getById(phoneId);
-    	for(var i=0; i<phone.data.lines.length; i++) {
-    		var lineRecord = new Tine.Voipmanager.Model.SnomLine(phone.data.lines[i], phone.data.lines[i].id);
+        
+        var phone = this.phoneStore.getById(phoneId);
+        for(var i=0; i<phone.data.lines.length; i++) {
+            var lineRecord = new Tine.Voipmanager.Model.SnomLine(phone.data.lines[i], phone.data.lines[i].id);
             this.linesStore.add(lineRecord);
-    	}
+        }
         
         //console.log(phone);
         //console.log(this.linesStore);
-    	
+        
         // disable lineCombo if only 1 line available
-    	if (form) {
+        if (form) {
             var lineCombo = form.findField('lineId'); 
             lineCombo.setDisabled((this.linesStore.getCount() <= 1));
             
             // set first line
             lineCombo.setValue(this.linesStore.getAt(0).id);
-    	}         
+        }         
     }
 });
 
@@ -428,16 +438,16 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
  * @todo show phone calls
  */
 Tine.Phone.Main = {
-	/**
-	 * translations object
-	 */
-	translation: null,
-	
+    /**
+     * translations object
+     */
+    translation: null,
+    
     /**
      * holds underlaying store
      */
     store: null,
-	
+    
     /**
      * @cfg {Object} paging defaults
      */
@@ -448,23 +458,23 @@ Tine.Phone.Main = {
         dir: 'DESC'
     },
         
-	/**
-	 * action buttons
-	 */
-	actions: 
-	{
-	   	dialNumber: null,
-	   	editPhoneSettings: null
-	},
-	
-	/**
-	 * init component function
-	 */
-	initComponent: function()
+    /**
+     * action buttons
+     */
+    actions: 
     {
-    	this.translation = new Locale.Gettext();
+           dialNumber: null,
+           editPhoneSettings: null
+    },
+    
+    /**
+     * init component function
+     */
+    initComponent: function()
+    {
+        this.translation = new Locale.Gettext();
         this.translation.textdomain('Phone');    
-    	
+        
         this.actions.dialNumber = new Ext.Action({
             text: this.translation._('Dial number'),
             tooltip: this.translation._('Initiate a new outgoing call'),
@@ -472,16 +482,16 @@ Tine.Phone.Main = {
             iconCls: 'action_DialNumber',
             scope: this
         });
-    	
+        
         // @todo generalise this for panel & main
         this.actions.editPhoneSettings = new Ext.Action({
             id: 'phone-settings-button',
             //text: translation._('Edit phone settings'),
-        	text: this.translation._('Edit phone settings'),
+            text: this.translation._('Edit phone settings'),
             iconCls: 'PhoneIconCls',
             handler: function() {
-            	// get selected node id
-            	var node = Ext.getCmp('phone-tree').getSelectionModel().getSelectedNode();
+                // get selected node id
+                var node = Ext.getCmp('phone-tree').getSelectionModel().getSelectedNode();
                 
                 var popupWindow = Tine.Voipmanager.SnomPhoneEditDialog.openWindow({
                     record: node.attributes.record,
@@ -507,35 +517,35 @@ Tine.Phone.Main = {
     
     handlers: 
     {
-    	dialNumber: function(_button, _event) {
-    		var number = '';
-    		var grid = Ext.getCmp('Phone_Callhistory_Grid');
-    		if (grid) {
-    		    record = grid.getSelectionModel().getSelected();
-    		    if (record) {
-    		        number = record.data.destination;
-    		    }
-    		}
-    		
-    		Tine.Phone.dialPhoneNumber(number);
-    	}
+        dialNumber: function(_button, _event) {
+            var number = '';
+            var grid = Ext.getCmp('Phone_Callhistory_Grid');
+            if (grid) {
+                record = grid.getSelectionModel().getSelected();
+                if (record) {
+                    number = record.data.destination;
+                }
+            }
+            
+            Tine.Phone.dialPhoneNumber(number);
+        }
     },
     
     renderer: {
-    	direction: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
-    		var translation = new Locale.Gettext();
+        direction: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
+            var translation = new Locale.Gettext();
             translation.textdomain('Phone');
              
-    		switch(_data) {
-    			case 'in':
+            switch(_data) {
+                case 'in':
                     return "<img src='images/call-incoming.png' width='12' height='12' alt='contact' ext:qtip='" + translation._('Incoming call') + "'/>";
                     break;
                     
                 case 'out':
                     return "<img src='images/call-outgoing.png' width='12' height='12' alt='contact' ext:qtip='" + translation._('Outgoing call') + "'/>";
                     break;
-    		}
-    	},
+            }
+        },
         destination: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
             if (_data.toString().toLowerCase() == 'unknown') {
                 var translation = new Locale.Gettext();
@@ -631,18 +641,18 @@ Tine.Phone.Main = {
             var node = Ext.getCmp('phone-tree').getSelectionModel().getSelectedNode() || null;            
             
             var filter = [{ 
-            	   field: 'query',
-            	   operator: 'contains',
-            	   value: quicksearchField.getValue()
-        	}];
-	        
-	        if (node !== null && node.id != 'root') {
-	        	filter.push({ 
+                   field: 'query',
+                   operator: 'contains',
+                   value: quicksearchField.getValue()
+            }];
+            
+            if (node !== null && node.id != 'root') {
+                filter.push({ 
                     field: 'phone_id',
                     operator: 'equals',
                     value: node.id
                 });
-	        }
+            }
             
             options.params.filter = filter;
             
@@ -658,7 +668,7 @@ Tine.Phone.Main = {
     displayGrid: function() 
     {
         // the filter toolbar
-    	/*
+        /*
         var filterToolbar = new Tine.widgets.grid.FilterToolbar({
             id : 'callhistoryFilterToolbar',
             filterModels: [
@@ -764,8 +774,8 @@ Tine.Phone.Main = {
         Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
     },
 
-	show: function(_node) 
-	{	
+    show: function(_node) 
+    {    
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
         if(currentToolbar === false || currentToolbar.id != 'Phone_Toolbar') {
@@ -774,9 +784,9 @@ Tine.Phone.Main = {
             this.store.load({});
             this.displayGrid();
         } else {
-        	this.store.load({});
+            this.store.load({});
         }
-	}
+    }
 };
 
 /**************************** store ****************************************/
@@ -787,7 +797,7 @@ Tine.Phone.Main = {
  * @return Ext.data.JsonStore with phones
  */
 Tine.Phone.loadPhoneStore = function(reload) {
-	
+    
     var store = Ext.StoreMgr.get('UserPhonesStore');
     
     if (!store) {
@@ -806,12 +816,6 @@ Tine.Phone.loadPhoneStore = function(reload) {
         Tine.Phone.updatePhoneTree(store);
         
     } 
-    
-    /*else if (reload == true) {
-    	
-    	store.on('load', Tine.Phone.updatePhoneTree, this);
-    	//store.load();
-    }*/
     
     return store;
 };
