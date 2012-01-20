@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -599,33 +599,39 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      * 
      * @todo we can transform more tags here, i.e. the <strong>BOLDTEXT</strong> tag could be replaced with *BOLDTEXT*
      * @todo think about removing the tidy code
+     * @todo reduce complexity
      */
-    public static function addQuotesAndStripTags($_node, $_quoteIndent = 0, $_eol = "\n") {
-        
+    public static function addQuotesAndStripTags($_node, $_quoteIndent = 0, $_eol = "\n")
+    {
         $result = '';
         
         $hasChildren = ($_node instanceof DOMNode) ? $_node->hasChildNodes() : $_node->hasChildren();
         $nameProperty = ($_node instanceof DOMNode) ? 'nodeName' : 'name';
         $valueProperty = ($_node instanceof DOMNode) ? 'nodeValue' : 'value';
+
+        $divNewline = FALSE;
         
         if ($hasChildren) {
             $lastChild = NULL;
             $children = ($_node instanceof DOMNode) ? $_node->childNodes : $_node->child;
             
+            if ($_node->{$nameProperty} == 'div') {
+                $divNewline = TRUE;
+            }
+            
             foreach ($children as $child) {
+                
                 $isTextLeaf = ($child instanceof DOMNode) ? $child->{$nameProperty} == '#text' : ! $child->{$nameProperty};
-                if ($isTextLeaf) { 
+                if ($isTextLeaf) {
                     // leaf -> add quotes and append to content string
                     if ($_quoteIndent > 0) {
                         $result .= str_repeat(self::QUOTE, $_quoteIndent) . $child->{$valueProperty};
-                        // add newline if parent is div
-                        if ($_node->{$nameProperty} == 'div') {
-                            $result .=  $_eol . str_repeat(self::QUOTE, $_quoteIndent);
-                        }
                     } else {
-                        // add newline if parent is div
-                        if ($_node->{$nameProperty} == 'div') {
-                            $result .= $_eol;
+                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . 
+                            "value: " . $child->{$valueProperty} . " / name: " . $_node->{$nameProperty} . "\n");
+                        if ($divNewline) {
+                            $result .=  $_eol . str_repeat(self::QUOTE, $_quoteIndent);
+                            $divNewline = FALSE;
                         }
                         $result .= $child->{$valueProperty};
                     }
@@ -635,15 +641,18 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                     $_quoteIndent++;
                     
                 } else if ($child->{$nameProperty} == 'br') {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' .
+                        "value: " . $child->{$valueProperty} . " / name: " . $_node->{$nameProperty} . "\n");
                     // reset quoted state on newline
                     if ($lastChild !== NULL && $lastChild->{$nameProperty} == 'br') {
                         // add quotes to repeating newlines
                         $result .= str_repeat(self::QUOTE, $_quoteIndent);
                     }
                     $result .= $_eol;
+                    $divNewline = FALSE;
                 }
                 
-                $result .= self::addQuotesAndStripTags($child, $_quoteIndent);
+                $result .= self::addQuotesAndStripTags($child, $_quoteIndent, $_eol);
                 
                 if ($child->{$nameProperty} == 'blockquote') {
                     // closing blockquote
@@ -656,8 +665,13 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                 
                 $lastChild = $child;
             }
+            
+            // add newline if closing div
+            if ($divNewline) {
+                $result .=  $_eol . str_repeat(self::QUOTE, $_quoteIndent);
+            }
         }
         
         return $result;
-    }    
+    }
 }
