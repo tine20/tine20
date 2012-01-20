@@ -473,7 +473,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     checkPastEvent: function(event, checkBusyConflicts, actionType) {
         
         var start = event.get('dtstart').getTime();
-        var now = new Date().getTime();
+        var morning = new Date().clearTime().getTime();
 
         switch (actionType) {
             case 'update':
@@ -488,7 +488,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     optionNo = this.app.i18n._('Do not create this event');
         }
         
-        if(start < now) {
+        if(start < morning) {
             Tine.widgets.dialog.MultiOptionsDialog.openWindow({                
                 title: title,
                 height: 170,
