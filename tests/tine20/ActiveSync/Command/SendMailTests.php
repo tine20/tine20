@@ -98,5 +98,10 @@ class ActiveSync_Command_SendMailTests extends PHPUnit_Framework_TestCase
         $message = $this->_emailTestClass->searchAndCacheMessage($testHeaderValue, $inbox);
         $this->_createdMessages->addRecord($message);
         $this->assertEquals("Re: [gentoo-dev] `paludis --info' is not like `emerge --info'", $message->subject);
+        
+        // check duplicate headers
+        $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
+        $this->assertEquals(1, count($completeMessage->headers['mime-version']));
+        $this->assertEquals(1, count($completeMessage->headers['content-type']));
     }
 }
