@@ -47,7 +47,7 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
         $this->_db->insert('syncope_synckeys', array(
         	'id'          => $id, 
         	'device_id'   => $deviceId,
-        	'type'        => $_syncState->type,
+        	'type'        => $_syncState->type instanceof Syncope_Model_IFolder ? $_syncState->type->id : $_syncState->type,
         	'counter'     => $_syncState->counter,
         	'lastsync'    => $_syncState->lastsync->format('Y-m-d H:i:s'),
         	'pendingdata' => isset($_syncState->pendingdata) && is_array($_syncState->pendingdata) ? Zend_Json::encode($_syncState->pendingdata) : null
@@ -107,18 +107,19 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
     }
     
     /**
-     * delete all stored folderId's for given device
+     * delete all stored synckeys for given type
      *
-     * @param Syncope_Model_Device|string $_deviceId
-     * @param string $_class
+     * @param  Syncope_Model_IDevice|string  $_deviceId
+     * @param  Syncope_Model_IFolder|string  $_folderId
      */
-    public function resetState($_deviceId, $_type)
+    public function resetState($_deviceId, $_folderId)
     {
         $deviceId = $_deviceId instanceof Syncope_Model_IDevice ? $_deviceId->id : $_deviceId;
+        $folderId = $_folderId instanceof Syncope_Model_IFolder ? $_folderId->id : $_folderId;
          
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId),
-            $this->_db->quoteInto($this->_db->quoteIdentifier('type') . ' = ?',      $_type)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('type') . ' = ?',      $folderId)
         );
     
         $this->_db->delete('syncope_synckeys', $where);
@@ -142,8 +143,8 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
     /**
      * get array of ids which got send to the client for a given class
      *
-     * @param Syncope_Model_Device|string $_deviceId
-     * @param string $_class
+     * @param  Syncope_Model_IDevice|string  $_deviceId
+     * @param  Syncope_Model_IFolder|string  $_folderId
      * @return Syncope_Model_ISyncState
      */
     public function validate($_deviceId, $_folderId, $_syncKey)
@@ -154,8 +155,8 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
         $select = $this->_db->select()
             ->from('syncope_synckeys')
             ->where($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
-            ->where($this->_db->quoteIdentifier('counter') . ' = ?', $_syncKey)
-            ->where($this->_db->quoteIdentifier('type') . ' = ?', $folderId);
+            ->where($this->_db->quoteIdentifier('counter')   . ' = ?', $_syncKey)
+            ->where($this->_db->quoteIdentifier('type')      . ' = ?', $folderId);
         
         $stmt = $this->_db->query($select);
         $state = $stmt->fetchObject('Syncope_Model_SyncState');

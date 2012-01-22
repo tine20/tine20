@@ -167,22 +167,15 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
             
             // got the folder synchronized to the device already
             try {
-                $folder = $this->_folderBackend->getFolder($this->_device, $collectionData['collectionId']);
+                $collectionData['folder'] = $this->_folderBackend->getFolder($this->_device, $collectionData['collectionId']);
                 
-                $collectionData['class'] = $folder->class;
+                #$collectionData['class'] = $folder->class;
                 
             } catch (Syncope_Exception_NotFound $senf) {
                 #if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
                 #    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " folder {$collectionData['collectionId']} not found");
                 
-                $collectionData['syncState']    = new Syncope_Model_SyncState(array(
-                    'device_id' => $this->_device,
-                    'counter'   => 0,
-                    'type'      => $collectionData['collectionId'], // this is not the complete type the class is missing, but thats ok in this case
-                    'lastsync'  => $this->_syncTimeStamp
-                ));
-                
-                $this->_collections['collectionNotFound'][$collectionData['collectionId']] = $collectionData;
+                $this->_collections['invalidFolderId'][$collectionData['collectionId']] = $collectionData;
                 continue;
             }
             
@@ -194,37 +187,37 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                 #if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
                 #    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " initial client synckey 0 provided");
                 
+                // reset sync state for this folder
+                $this->_syncStateBackend->resetState($this->_device, $collectionData['folder']);
+                $this->_contentStateBackend->resetState($this->_device, $collectionData['folder']);
+            
                 $collectionData['syncState']    = new Syncope_Model_SyncState(array(
                     'device_id' => $this->_device,
-                    'counter'   => $collectionData['syncKey'],
-                    'type'      => $collectionData['class'] . '-' . $collectionData['collectionId'],
+                    'counter'   => 0,
+                    'type'      => $collectionData['folder'],
                     'lastsync'  => $this->_syncTimeStamp
                 ));
                 
-                $this->_collections[$collectionData['class']][$collectionData['collectionId']] = $collectionData;
-                
-                continue;
-            }
-            die('fix validate');
-            // check for invalid sycnkey
-            if(($collectionData['syncState'] = $this->_syncStateBackend->validate($this->_device, $collectionData['syncKey'], $collectionData['class'], $collectionData['collectionId'])) === false) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey {$collectionData['syncKey']} provided");
-                
-                $collectionData['syncKeyValid'] = false;
-                $collectionData['syncState']    = new Syncope_Model_SyncState(array(
-                    'device_id' => $this->_device->getId(),
-                    'counter'   => $collectionData['syncKey'],
-                    'type'      => $collectionData['class'] . '-' . $collectionData['collectionId'],
-                    'lastsync'  => $this->_syncTimeStamp
-                ));
-                
-                $this->_collections[$collectionData['class']][$collectionData['collectionId']] = $collectionData;
+                $this->_collections[$collectionData['folder']->class][$collectionData['collectionId']] = $collectionData;
                 
                 continue;
             }
             
-            $dataController = Syncope_Data_Factory::factory($collectionData['class'] , $this->_device, $this->_syncTimeStamp);
+            // check for invalid sycnkey
+            if(($collectionData['syncState'] = $this->_syncStateBackend->validate($this->_device, $collectionData['folder'], $collectionData['syncKey'])) === false) {
+                #if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                #    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey {$collectionData['syncKey']} provided");
+                
+                // reset sync state for this folder
+                $this->_syncStateBackend->resetState($this->_device, $collectionData['folder']);
+                $this->_contentStateBackend->resetState($this->_device, $collectionData['folder']);
+                
+                $this->_collections[$collectionData['folder']->class][$collectionData['collectionId']] = $collectionData;
+                
+                continue;
+            }
+            
+            $dataController = Syncope_Data_Factory::factory($collectionData['folder']->class , $this->_device, $this->_syncTimeStamp);
             
             // handle incoming data
             if(isset($xmlCollection->Commands->Add)) {
@@ -258,7 +251,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         }
                         $collectionData['added'][(string)$add->ClientId]['serverId'] = $added->getId(); 
                         $collectionData['added'][(string)$add->ClientId]['status'] = self::STATUS_SUCCESS;
-                        $this->_addContent($collectionData['class'], $collectionData['collectionId'], $added->getId());
+                        $this->_addContent($collectionData['folder']->class, $collectionData['collectionId'], $added->getId());
                     } catch (Exception $e) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
                             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " failed to add entry " . $e->getMessage());
@@ -305,7 +298,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     
                     try {
                         // check if we have send this entry to the phone
-                        $this->_controller->getContent($this->_device, $collectionData['class'], $collectionData['collectionId'], $serverId);
+                        $this->_controller->getContent($this->_device, $collectionData['folder']->class, $collectionData['collectionId'], $serverId);
                         
                         try {
                             $dataController->delete($collectionData['collectionId'], $serverId, $collectionData);
@@ -325,7 +318,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     }
                     
                     $collectionData['deleted'][$serverId] = self::STATUS_SUCCESS;
-                    $this->_deleteContent($collectionData['class'], $collectionData['collectionId'], $serverId);
+                    $this->_deleteContent($collectionData['folder']->class, $collectionData['collectionId'], $serverId);
                 }
             }
                         
@@ -348,7 +341,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                 }
             }            
             
-            $this->_collections[$collectionData['class']][$collectionData['collectionId']] = $collectionData;
+            $this->_collections[$collectionData['folder']->class][$collectionData['collectionId']] = $collectionData;
         }  
     }    
     
@@ -367,41 +360,45 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
         
         $collections = $sync->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collections'));
 
-        foreach($this->_collections as $class => $classCollections) {
+        foreach($this->_collections as $classCollections) {
             foreach($classCollections as $collectionId => $collectionData) {
-                if ($class == 'collectionNotFound') {
+                
+                // invalid collectionid provided
+                if (empty($collectionData['folder'])) {
                     $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
-                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData['class']));
+                    if (!empty($collectionData['class'])) {
+                        $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData['class']));
+                    }
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey', 0));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $collectionData['collectionId']));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_FOLDER_HIERARCHY_HAS_CHANGED));
-                    
-                } elseif ($collectionData['syncKeyValid'] !== true) {
-                    $collectionData['syncState']->counter = 0;
-    
+
+
+                // invalid synckey provided
+                } elseif (! ($collectionData['syncState'] instanceof Syncope_Model_ISyncState)) {
                     // set synckey to 0
                     $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
-                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData['class']));
-                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey', $collectionData['syncState']->counter));
+                    if (!empty($collectionData['class'])) {
+                        $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData['class']));
+                    }
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey', 0));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $collectionData['collectionId']));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_INVALID_SYNC_KEY));
                     
-                    $this->_contentStateBackend->resetState($this->_device, $collectionData['class'], $collectionData['collectionId']);
-                    $this->_syncStateBackend->resetState($this->_device, $collectionData['class'] . '-' . $collectionData['collectionId']);
-                    
+
+                // initial sync
                 } elseif ($collectionData['syncState']->counter === 0) {
                     $collectionData['syncState']->counter++;
     
                     // initial sync
                     // send back a new SyncKey only
                     $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
-                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData['class']));
+                    if (!empty($collectionData['class'])) {
+                        $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData['class']));
+                    }
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey', $collectionData['syncState']->counter));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $collectionData['collectionId']));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_SUCCESS));
-                    
-                    $this->_contentStateBackend->resetState($this->_device, $collectionData['class'], $collectionData['collectionId']);
-                    $this->_syncStateBackend->resetState($this->_device, $collectionData['class'] . '-' . $collectionData['collectionId']);
                     
                 } else {
                     if (empty($collectionData['added']) && empty($collectionData['changed']) && empty($collectionData['deleted']) && $collectionData['getChanges'] === false) {
@@ -412,7 +409,9 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     
                     // collection header
                     $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
-                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData['class']));
+                    if (!empty($collectionData['class'])) {
+                        $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData['class']));
+                    }
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey', $collectionData['syncState']->counter));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $collectionData['collectionId']));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_SUCCESS));
@@ -446,7 +445,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         }
                     }
                     
-                    $dataController = Syncope_Data_Factory::factory($collectionData['class'] , $this->_device, $this->_syncTimeStamp);
+                    $dataController = Syncope_Data_Factory::factory($collectionData['folder']->class , $this->_device, $this->_syncTimeStamp);
                     
                     // sent response for to be fetched entries
                     if(!empty($collectionData['toBeFetched'])) {
@@ -460,14 +459,14 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                             
                             try {
                                 $applicationData = $this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData');
-                                $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverId, $collectionData, true);
+                                $dataController->appendXML($applicationData, $collectionData, $serverId);
                                 
                                 $fetch->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_SUCCESS));
                                 
                                 $fetch->appendChild($applicationData);
                             } catch (Exception $e) {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
+                                #if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                #    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
                                 $fetch->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_OBJECT_NOT_FOUND));
                             }
                         }
@@ -476,7 +475,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     if($collectionData['getChanges'] === true) {
                         if($collectionData['syncState']->counter === 1) {
                             // all entries available
-                            $serverAdds    = $dataController->getServerEntries($collectionData['collectionId'], $collectionData['filterType']);
+                            $serverAdds    = $dataController->getServerEntries($collectionData['folder'], $collectionData['filterType']);
                             $serverChanges = array();
                             $serverDeletes = array();
                         } else {
@@ -490,22 +489,21 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                             } else {
                                 // fetch entries added since last sync
                                 
-                                $allClientEntries = $this->_contentStateBackend->getFolderState($this->_device, $collectionData['class'], $collectionData['collectionId']);
+                                $allClientEntries = $this->_contentStateBackend->getFolderState($this->_device, $collectionData['folder']->class, $collectionData['collectionId']);
                                 $allServerEntries = $dataController->getServerEntries($collectionData['collectionId'], $collectionData['filterType']);
                                 
                                 // add entries
                                 $serverDiff = array_diff($allServerEntries, $allClientEntries);
                                 // add entries which produced problems during delete from client
-                                $serverAdds = $this->_collections[$class][$collectionId]['forceAdd'];
+                                $serverAdds = $collectionData['forceAdd'];
                                 // add entries not yet sent to client
                                 $serverAdds = array_unique(array_merge($serverAdds, $serverDiff));
                                 
                                 foreach($serverAdds as $id => $serverId) {
                                     // skip entries added by client during this sync session
-                                    // @todo $this->_collections[$class][$collectionId] should be equal to $collectionData ???
-                                    if(isset($collectionData['added'][$serverId]) && !isset($this->_collections[$class][$collectionId]['forceAdd'][$serverId])) {
-                                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " skipped added entry: " . $serverId);
+                                    if(isset($collectionData['added'][$serverId]) && !isset($collectionData['forceAdd'][$serverId])) {
+                                        #if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                        #    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " skipped added entry: " . $serverId);
                                         unset($serverAdds[$id]);
                                     }
                                 }
@@ -515,7 +513,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                                 
                                 // fetch entries changed since last sync
                                 $serverChanges = $dataController->getChanged($collectionData['collectionId'], $collectionData['syncState']->lastsync, $this->_syncTimeStamp);
-                                $serverChanges = array_merge($serverChanges, $this->_collections[$class][$collectionId]['forceChange']);
+                                $serverChanges = array_merge($serverChanges, $collectionData['forceChange']);
                                 
                                 foreach($serverChanges as $id => $serverId) {
                                     // skip entry, if it got changed by client during current sync
@@ -571,8 +569,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                             // mark as send to the client, even the conversion to xml might have failed 
                             $contentState = $this->_contentStateBackend->create(new Syncope_Model_Content(array(
                                 'device_id'     => $this->_device,
-                                'class'         => $collectionData['class'],
-                                'collectionid'  => $collectionData['collectionId'],
+                                'folder_id'     => $collectionData['folder'],
                                 'contentid'     => $serverId,
                                 'creation_time' => $this->_syncTimeStamp
                             )));                
@@ -618,7 +615,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                                 $delete = $this->_outputDom->createElementNS('uri:AirSync', 'Delete');
                                 $delete->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
                                 
-                                $this->_markContentAsDeleted($collectionData['class'], $collectionData['collectionId'], $serverId);
+                                $this->_markContentAsDeleted($collectionData['folder']->class, $collectionData['collectionId'], $serverId);
                                 
                                 $commands->appendChild($delete);
                                 
@@ -635,8 +632,11 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     #    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " new synckey is ". $collectionData['syncState']->counter);                
                 }
                 
-                if ($class != 'collectionNotFound') {
-                    // save data to sync state if more data available
+                if (isset($collectionData['syncState']) && $collectionData['syncState'] instanceof Syncope_Model_ISyncState) {
+                    // increment sync timestamp by 1 second
+                    $this->_syncTimeStamp->modify('+1 sec');
+                    
+                    // store pening data in sync state when needed
                     if($this->_moreAvailable === true) {
                         $collectionData['syncState']->pendingdata = array(
                             'serverAdds'    => (array)$serverAdds,
@@ -647,15 +647,17 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         $collectionData['syncState']->pendingdata = null;
                     }
                     
-                    $keepPreviousSyncKey = true;
-                    // increment sync timestamp by 1 second
-                    $this->_syncTimeStamp->modify('+1 sec');
+                    
                     if (!empty($collectionData['added'])) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " remove previous synckey as client added new entries");
+                        #if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                        #    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " remove previous synckey as client added new entries");
                         $keepPreviousSyncKey = false;
+                    } else {
+                        $keepPreviousSyncKey = true;
                     }
+                    
                     $collectionData['syncState']->lastsync = $this->_syncTimeStamp;
+                    
                     $this->_syncStateBackend->create($collectionData['syncState'], $keepPreviousSyncKey);
                     
                     // store current filter type

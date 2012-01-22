@@ -87,6 +87,9 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
                 'type'      => 'FolderSync',
                 'lastsync'  => $this->_syncTimeStamp
             ));
+            
+            // reset state of foldersync
+            $this->_syncStateBackend->resetState($this->_device, 'FolderSync');
         } else {
             if (($this->_syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', $syncKey)) instanceof Syncope_Model_SyncState) {
                 $this->_syncState->lastsync = $this->_syncTimeStamp;

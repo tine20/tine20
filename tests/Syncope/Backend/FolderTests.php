@@ -123,8 +123,8 @@ class Syncope_Backend_FolderTests extends PHPUnit_Framework_TestCase
         $folders = $this->_folderBackend->getFolderState($folder->device_id, Syncope_Data_Factory::CLASS_CONTACTS);
         
         $this->assertEquals(2, count($folders));
-        $this->assertArrayHasKey($folder1->id, $folders);
-        $this->assertArrayHasKey($folder2->id, $folders);
+        $this->assertArrayHasKey($folder1->folderid, $folders);
+        $this->assertArrayHasKey($folder2->folderid, $folders);
     }
     
     /**

@@ -32,9 +32,40 @@ class Syncope_Data_Contacts implements Syncope_Data_IData
         )
     );
     
+    /**
+     * used by unit tests only to simulated added folders
+     */
+    public static $entries = array(
+        'contact1' => array(
+        	'FirstName' => 'Lars', 
+        	'LastName'  => 'Kneschke'
+    	),
+        'contact2' => array(
+        	'FirstName' => 'Cornelius', 
+        	'LastName'  => 'Weiß'
+        )
+    );
+    
+    /**
+     * used by unit tests only to simulated added folders
+     */
+    public static $changedEntries = array(
+    );
+    
     public function appendXML(DOMElement $_domParrent, $_collectionData, $_serverId)
     {
         $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Contacts', 'uri:Contacts');
+        
+        foreach (self::$entries[$_serverId] as $key => $value) {
+            // create a new DOMElement ...
+            $node = new DOMElement($key, null, 'uri:Contacts');
+            
+            // ... append it to parent node aka append it to the document ...
+            $_domParrent->appendChild($node);
+            
+            // ... and now add the content (DomText takes care of special chars)
+            $node->appendChild(new DOMText($value));
+        }
         
     }
     
@@ -43,14 +74,21 @@ class Syncope_Data_Contacts implements Syncope_Data_IData
         return self::$folders;
     }
     
-    public function getServerEntries()
+    /**
+     * @param  Syncope_Model_IFolder|string  $_folderId
+     * @param  string                        $_filter
+     * @return array
+     */
+    public function getServerEntries($_folderId, $_filter)
     {
-        return array('serverContactId1', 'serverContactId2');
+        $folderId = $_folderId instanceof Syncope_Model_IFolder ? $_folderId->id : $_folderId;
+        
+        return array_keys(self::$entries);
     }
     
     public function getChanged()
     {
-        return array();
+        return self::$changedEntries;
     }
     
     public function getMultiple()

@@ -219,7 +219,7 @@ class Syncope_Command_SyncTests extends PHPUnit_Framework_TestCase
         $sync->handle();
         
         $syncDoc = $sync->getResponse();
-        #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
+        $syncDoc->formatOutput = true; echo $syncDoc->saveXML();
         
         $xpath = new DomXPath($syncDoc);
         $xpath->registerNamespace('AirSync', 'uri:AirSync');
