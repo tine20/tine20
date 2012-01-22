@@ -20,6 +20,18 @@
 
 class Syncope_Data_Contacts implements Syncope_Data_IData
 {
+    /**
+     * used by unit tests only to simulated added folders
+     */
+    public static $folders = array(
+    	'addressbookFolderId' => array(
+            'folderId'    => 'addressbookFolderId',
+            'parentId'    => null,
+            'displayName' => 'Default Contacts Folder',
+            'type'        => Syncope_Command_FolderSync::FOLDERTYPE_CONTACT
+        )
+    );
+    
     public function appendXML(DOMElement $_domParrent, $_collectionData, $_serverId)
     {
         $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Contacts', 'uri:Contacts');
@@ -28,14 +40,7 @@ class Syncope_Data_Contacts implements Syncope_Data_IData
     
     public function getAllFolders()
     {
-        return array(
-            'addressbookFolderId' => array(
-                'folderId'    => 'addressbookFolderId',
-                'parentId'    => null,
-                'displayName' => 'Default Contacts Folder',
-                'type'        => Syncope_Command_FolderSync::FOLDERTYPE_CONTACT
-            )
-        );
+        return self::$folders;
     }
     
     public function getServerEntries()

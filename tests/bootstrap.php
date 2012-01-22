@@ -40,11 +40,14 @@ function getTestDatabase()
         PRIMARY KEY (`id`)
 	)");
 
-    $db->query("CREATE TABLE IF NOT EXISTS `syncope_folderstates` (
+    $db->query("CREATE TABLE IF NOT EXISTS `syncope_folders` (
         `id` varchar(40) NOT NULL,
         `device_id` varchar(64) NOT NULL,
         `class` varchar(64) NOT NULL,
         `folderid` varchar(254) NOT NULL,
+        `parentid` varchar(254) DEFAULT NULL,
+        `displayname` varchar(254) NOT NULL,
+        `type` int(11) DEFAULT NULL,
         `creation_time` datetime NOT NULL,
         `lastfiltertype` int(11) DEFAULT NULL,
         PRIMARY KEY (`id`),
@@ -62,16 +65,15 @@ function getTestDatabase()
       	UNIQUE (`device_id`,`type`,`counter`)
     )");
     
-    $db->query("CREATE TABLE `syncope_contentstates` (
+    $db->query("CREATE TABLE `syncope_contents` (
         `id` varchar(40) NOT NULL,
         `device_id` varchar(64) NOT NULL,
-        `class` varchar(64) NOT NULL,
+        `folder_id` varchar(64) NOT NULL,
         `contentid` varchar(64) NOT NULL,
-        `collectionid` varchar(254) NOT NULL,
         `creation_time` datetime NOT NULL,
         `is_deleted` int(11) DEFAULT '0',
         PRIMARY KEY (`id`),
-        UNIQUE (`device_id`,`class`,`collectionid`,`contentid`)
+        UNIQUE (`device_id`,`folder_id`,`contentid`)
     )");
     
     return $db;

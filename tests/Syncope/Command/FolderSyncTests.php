@@ -28,7 +28,7 @@ class Syncope_Command_FolderSyncTests extends PHPUnit_Framework_TestCase
     /**
      * @var Syncope_Backend_IFolder
      */
-    protected $_folderStateBackend;
+    protected $_folderBackend;
     
     /**
      * @var Syncope_Backend_ISyncState
@@ -68,7 +68,7 @@ class Syncope_Command_FolderSyncTests extends PHPUnit_Framework_TestCase
         $this->_db->beginTransaction();
 
         $this->_deviceBackend       = new Syncope_Backend_Device($this->_db);
-        $this->_folderStateBackend  = new Syncope_Backend_Folder($this->_db);
+        $this->_folderBackend  = new Syncope_Backend_Folder($this->_db);
         $this->_syncStateBackend    = new Syncope_Backend_SyncState($this->_db);
         $this->_contentStateBackend = new Syncope_Backend_Content($this->_db);
 
@@ -77,7 +77,7 @@ class Syncope_Command_FolderSyncTests extends PHPUnit_Framework_TestCase
         );
         
         Zend_Registry::set('deviceBackend',       $this->_deviceBackend);
-        Zend_Registry::set('folderStateBackend',  $this->_folderStateBackend);
+        Zend_Registry::set('folderStateBackend',  $this->_folderBackend);
         Zend_Registry::set('syncStateBackend',    $this->_syncStateBackend);
         Zend_Registry::set('contentStateBackend', $this->_contentStateBackend);
     }
@@ -133,6 +133,13 @@ class Syncope_Command_FolderSyncTests extends PHPUnit_Framework_TestCase
     {
         $this->testGetFoldersSyncKey0();
         
+        Syncope_Data_Contacts::$folders['addressbookFolderId2'] = array(
+            'folderId'    => 'addressbookFolderId2',
+            'parentId'    => null,
+            'displayName' => 'User created Contacts Folder',
+            'type'        => Syncope_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED
+        );
+        
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
@@ -155,9 +162,9 @@ class Syncope_Command_FolderSyncTests extends PHPUnit_Framework_TestCase
         
         $nodes = $xpath->query('//FolderHierarchy:FolderSync/FolderHierarchy:SyncKey');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        $this->assertEquals(1, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        $this->assertEquals(2, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
 
-        $nodes = $xpath->query('//FolderHierarchy:FolderSync/FolderHierarchy:Changes');
+        $nodes = $xpath->query('//FolderHierarchy:FolderSync/FolderHierarchy:Changes/FolderHierarchy:Add');
         $this->assertGreaterThanOrEqual(1, $nodes->length, $responseDoc->saveXML());
     }
     

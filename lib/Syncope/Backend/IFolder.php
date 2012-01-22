@@ -42,5 +42,5 @@ interface Syncope_Backend_IFolder
      * @param string $_class
      * @return array
      */
-    public function getClientState($_deviceId, $_class);
+    public function getFolderState($_deviceId, $_class);
 }

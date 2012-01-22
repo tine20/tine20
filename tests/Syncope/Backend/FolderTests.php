@@ -16,19 +16,19 @@
 class Syncope_Backend_FolderTests extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Syncope_Model_IDevice
+     * @var Syncope_Model_Device
      */
     protected $_device;
     
     /**
-     * @var Syncope_Backend_IDevice
+     * @var Syncope_Backend_Device
      */
     protected $_deviceBackend;
 
     /**
-     * @var Syncope_Backend_IFolder
+     * @var Syncope_Backend_Folder
      */
-    protected $_folderStateBackend;
+    protected $_folderBackend;
     
     /**
      * @var Zend_Db_Adapter_Abstract
@@ -58,7 +58,7 @@ class Syncope_Backend_FolderTests extends PHPUnit_Framework_TestCase
         $this->_db->beginTransaction();
 
         $this->_deviceBackend      = new Syncope_Backend_Device($this->_db);
-        $this->_folderStateBackend = new Syncope_Backend_Folder($this->_db);
+        $this->_folderBackend = new Syncope_Backend_Folder($this->_db);
 
         $newDevice = Syncope_Backend_DeviceTests::getTestDevice();
         $this->_device    = $this->_deviceBackend->create($newDevice);
@@ -78,21 +78,16 @@ class Syncope_Backend_FolderTests extends PHPUnit_Framework_TestCase
     /**
      * @return Syncope_Model_IFolder
      */
-    public function testCreate()
+    public function testCreate(Syncope_Model_IFolder $_folder = null)
     {
-        $folderState = new Syncope_Model_Folder(array(
-            'device_id'         => $this->_device,
-            'class'             => Syncope_Data_Factory::CONTACTS,
-            'folderid'          => '1234567890',
-            'creation_time'     => new DateTime(null, new DateTimeZone('utc')),
-            'lastfiltertype'    => null
-        ));
+        $folder = $_folder instanceof Syncope_Model_IFolder ? $_folder : self::getTestFolder($this->_device);
         
-        $folderState = $this->_folderStateBackend->create($folderState);
+        $folder = $this->_folderBackend->create($folder);
+                
+        $this->assertTrue($folder->creation_time instanceof DateTime);
+        $this->assertNotEmpty($folder->displayname);
         
-        $this->assertTrue($folderState->creation_time instanceof DateTime);
-        
-        return $folderState;
+        return $folder;
     }
     
     /**
@@ -100,19 +95,53 @@ class Syncope_Backend_FolderTests extends PHPUnit_Framework_TestCase
      */
     public function testResetState()
     {
-        $this->_folderStateBackend->resetState($this->_device);
+        $this->_folderBackend->resetState($this->_device);
         
-        $state = $this->_folderStateBackend->getClientState($this->_device, 'Contact');
+        $state = $this->_folderBackend->getFolderState($this->_device, 'Contact');
         
         $this->assertEmpty($state);
     }
     
     public function testGetFolder()
     {
-        $folderState = $this->testCreate();
+        $folder = $this->testCreate();
         
-        $folderState = $this->_folderStateBackend->getFolder($folderState->device_id, $folderState->folderid);
+        $folder = $this->_folderBackend->getFolder($folder->device_id, $folder->folderid);
         
-        $this->assertTrue($folderState->creation_time instanceof DateTime);
+        $this->assertTrue($folder->creation_time instanceof DateTime);
+    }
+    
+    public function testGetFolderState()
+    {
+        $folder = self::getTestFolder($this->_device);
+        $folder1 = $this->testCreate($folder);
+        
+        $folder = self::getTestFolder($this->_device);
+        $folder->folderid = '1234567891';
+        $folder2 = $this->testCreate($folder);
+        
+        $folders = $this->_folderBackend->getFolderState($folder->device_id, Syncope_Data_Factory::CLASS_CONTACTS);
+        
+        $this->assertEquals(2, count($folders));
+        $this->assertArrayHasKey($folder1->id, $folders);
+        $this->assertArrayHasKey($folder2->id, $folders);
+    }
+    
+    /**
+     * 
+     * @return Syncope_Model_Device
+     */
+    public static function getTestFolder(Syncope_Model_IDevice $_device)
+    {
+        return new Syncope_Model_Folder(array(
+            'device_id'         => $_device,
+            'class'             => Syncope_Data_Factory::CLASS_CONTACTS,
+            'folderid'          => '1234567890',
+            'parentid'          => null,
+            'displayname'       => 'test contact folder',
+            'type'              => Syncope_Command_FolderSync::FOLDERTYPE_CONTACT,
+            'creation_time'     => new DateTime(null, new DateTimeZone('utc')),
+            'lastfiltertype'    => null
+        ));
     }
 }

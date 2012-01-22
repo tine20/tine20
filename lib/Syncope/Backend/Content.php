@@ -42,14 +42,14 @@ class Syncope_Backend_Content implements Syncope_Backend_IContent
     public function create(Syncope_Model_IContent $_state)
     {
         $id = sha1(mt_rand(). microtime());
+        
         $deviceId = $_state->device_id instanceof Syncope_Model_IDevice ? $_state->device_id->id : $_state->device_id;
         $folderId = $_state->folder_id instanceof Syncope_Model_IFolder ? $_state->folder_id->id : $_state->folder_id;
     
-        $this->_db->insert('syncope_contentstates', array(
+        $this->_db->insert('syncope_contents', array(
         	'id'            => $id, 
         	'device_id'     => $deviceId,
-        	'folder_id'     => $_state->folder_id,
-        	'collectionid'  => $_state->collectionid,
+        	'folder_id'     => $folderId,
         	'contentid'     => $_state->contentid,
         	'creation_time' => $_state->creation_time->format('Y-m-d H:i:s'),
         	'is_deleted'    => isset($_state->is_deleted) ? (int)!!$_state->is_deleted : 0
@@ -68,10 +68,10 @@ class Syncope_Backend_Content implements Syncope_Backend_IContent
     {
         $id = $_id instanceof Syncope_Model_IContent ? $_id->id : $_id;
         
-        $this->_db->update('syncope_contentstates', array(
-                	'is_deleted' => 1
+        $this->_db->update('syncope_contents', array(
+        	'is_deleted' => 1
         ), array(
-                	'id = ?' => $id
+        	'id = ?' => $id
         ));
         
     }
@@ -84,7 +84,7 @@ class Syncope_Backend_Content implements Syncope_Backend_IContent
     public function get($_id)
     {
         $select = $this->_db->select()
-            ->from('syncope_contentstates')
+            ->from('syncope_contents')
             ->where('id = ?', $_id);
     
         $stmt = $this->_db->query($select);
@@ -100,23 +100,23 @@ class Syncope_Backend_Content implements Syncope_Backend_IContent
     
         return $state;
     }
+    
     /**
-    * get array of ids which got send to the client for a given class
-    *
-    * @param Syncope_Model_IDevice $_deviceId
-    * @param string $_class
-    * @return array
-    */
-    public function getClientState($_deviceId, $_class, $_collectionId)
+     * get array of ids which got send to the client for a given class
+     *
+     * @param Syncope_Model_IDevice|string $_deviceId
+     * @param Syncope_Model_IFolder|string $_folderId
+     * @return array
+     */
+    public function getFolderState($_deviceId, $_folderId)
     {
         $deviceId = $_deviceId instanceof Syncope_Model_IDevice ? $_deviceId->id : $_deviceId;
+        $folderId = $_folderId instanceof Syncope_Model_IFolder ? $_folderId->id : $_folderId;
                 
         $select = $this->_db->select()
-            ->from('syncope_contentstates', 'contentid')
-            ->where($this->_db->quoteIdentifier('device_id') . ' = ?',    $deviceId)
-            ->where($this->_db->quoteIdentifier('class') . ' = ?',        $_class)
-            ->where($this->_db->quoteIdentifier('collectionid') . ' = ?', $_collectionId);
-
+            ->from('syncope_contents', 'contentid')
+            ->where($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
+            ->where($this->_db->quoteIdentifier('folder_id') . ' = ?', $folderId);
         
         $stmt = $this->_db->query($select);
         $result = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
@@ -124,16 +124,22 @@ class Syncope_Backend_Content implements Syncope_Backend_IContent
         return $result;
     }
     
-    public function resetState($_deviceId, $_class, $_collectionId)
+    /**
+     * reset list of stored id
+     *
+     * @param Syncope_Model_IDevice|string $_deviceId
+     * @param Syncope_Model_IFolder|string $_folderId
+     */
+    public function resetState($_deviceId, $_folderId)
     {
         $deviceId = $_deviceId instanceof Syncope_Model_IDevice ? $_deviceId->id : $_deviceId;
+        $folderId = $_folderId instanceof Syncope_Model_IFolder ? $_folderId->id : $_folderId;
          
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('device_id') . ' = ?',    $deviceId),
-            $this->_db->quoteInto($this->_db->quoteIdentifier('class') . ' = ?',        $_class),
-            $this->_db->quoteInto($this->_db->quoteIdentifier('collectionid') . ' = ?', $_collectionId)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('folder_id') . ' = ?', $folderId)
         );
         
-        $this->_db->delete('syncope_contentstates', $where);
+        $this->_db->delete('syncope_contents', $where);
     }
 }

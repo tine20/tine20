@@ -20,10 +20,10 @@
 
 class Syncope_Data_Factory
 {
-    const CALENDAR = 'Calendar';
-    const CONTACTS = 'Contacts';
-    const EMAIL    = 'Email';
-    const TASKS    = 'Tasks';
+    const CLASS_CALENDAR = 'Calendar';
+    const CLASS_CONTACTS = 'Contacts';
+    const CLASS_EMAIL    = 'Email';
+    const CLASS_TASKS    = 'Tasks';
     
     /**
      * @param unknown_type $_class
@@ -35,19 +35,19 @@ class Syncope_Data_Factory
     public static function factory($_class, Syncope_Model_IDevice $_device, DateTime $_timeStamp)
     {
         switch($_class) {
-            case self::CALENDAR:
+            case self::CLASS_CALENDAR:
                 $class = new Syncope_Data_Calendar($_device, $_timeStamp);
                 break;
                 
-            case self::CONTACTS:
+            case self::CLASS_CONTACTS:
                 $class = new Syncope_Data_Contacts($_device, $_timeStamp);
                 break;
                 
-            case self::EMAIL:
+            case self::CLASS_EMAIL:
                 $class = new Syncope_Data_Email($_device, $_timeStamp);
                 break;
                 
-            case self::TASKS:
+            case self::CLASS_TASKS:
                 $class = new Syncope_Data_Tasks($_device, $_timeStamp);
                 break;
                 

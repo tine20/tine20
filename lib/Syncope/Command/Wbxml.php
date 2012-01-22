@@ -40,7 +40,7 @@ abstract class Syncope_Command_Wbxml implements Syncope_Command_Interface
      *
      * @var Syncope_Backend_IFolder
      */
-    protected $_folderStateBackend;
+    protected $_folderBackend;
     
     /**
      * @var Syncope_Backend_ISyncState
@@ -121,7 +121,7 @@ abstract class Syncope_Command_Wbxml implements Syncope_Command_Interface
         $this->_device    = $_device;
         
         $this->_deviceBackend       = Zend_Registry::get('deviceBackend');
-        $this->_folderStateBackend  = Zend_Registry::get('folderStateBackend');
+        $this->_folderBackend  = Zend_Registry::get('folderStateBackend');
         $this->_syncStateBackend    = Zend_Registry::get('syncStateBackend');
         $this->_contentStateBackend = Zend_Registry::get('contentStateBackend');
         

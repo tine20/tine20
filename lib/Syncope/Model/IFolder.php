@@ -20,6 +20,8 @@
  * @property    string   device_id
  * @property    string   class
  * @property    string   folderid
+ * @property    string   parentid
+ * @property    string   displayname
  * @property    string   creation_time
  * @property    string   lastfiltertype
  */

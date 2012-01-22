@@ -20,7 +20,7 @@ class Syncope_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Syncope All Tests');
         
         $suite->addTestSuite('Syncope_Backend_AllTests');
-        #$suite->addTestSuite('Syncope_Command_AllTests');
+        $suite->addTestSuite('Syncope_Command_AllTests');
         
         return $suite;
     }

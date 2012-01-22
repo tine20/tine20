@@ -167,7 +167,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
             
             // got the folder synchronized to the device already
             try {
-                $folder = $this->_folderStateBackend->getFolder($this->_device, $collectionData['collectionId']);
+                $folder = $this->_folderBackend->getFolder($this->_device, $collectionData['collectionId']);
                 
                 $collectionData['class'] = $folder->class;
                 
@@ -205,7 +205,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                 
                 continue;
             }
-            
+            die('fix validate');
             // check for invalid sycnkey
             if(($collectionData['syncState'] = $this->_syncStateBackend->validate($this->_device, $collectionData['syncKey'], $collectionData['class'], $collectionData['collectionId'])) === false) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
@@ -490,7 +490,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                             } else {
                                 // fetch entries added since last sync
                                 
-                                $allClientEntries = $this->_contentStateBackend->getClientState($this->_device, $collectionData['class'], $collectionData['collectionId']);
+                                $allClientEntries = $this->_contentStateBackend->getFolderState($this->_device, $collectionData['class'], $collectionData['collectionId']);
                                 $allServerEntries = $dataController->getServerEntries($collectionData['collectionId'], $collectionData['filterType']);
                                 
                                 // add entries
@@ -660,9 +660,9 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     
                     // store current filter type
                     try {
-                        $folderState = $this->_folderStateBackend->getFolder($this->_device, $collectionData['collectionId']);
+                        $folderState = $this->_folderBackend->getFolder($this->_device, $collectionData['collectionId']);
                         $folderState->lastfiltertype = $collectionData['filterType'];
-                        $this->_folderStateBackend->update($folderState);
+                        $this->_folderBackend->update($folderState);
                     } catch (Syncope_Exception_NotFound $senf) {
                         // failed to get folderstate => should not happen but is also no problem in this state
                         if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) 
@@ -718,7 +718,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                 'value'     => $_folderId
             )
         ));
-        $folderStates = $this->_folderStateBackend->search($filter);
+        $folderStates = $this->_folderBackend->search($filter);
 
         if ($folderStates->count() == 0) {
             throw new Tinebase_Exception_NotFound('folderstate for device not found');

@@ -21,6 +21,16 @@ class Syncope_Backend_ContentTests extends PHPUnit_Framework_TestCase
     protected $_device;
     
     /**
+     * @var Syncope_Model_Folder
+     */
+    protected $_folder;
+    
+    /**
+     * @var Syncope_Backend_Content
+     */
+    protected $_contentBackend;
+    
+    /**
      * @var Syncope_Backend_Device
      */
     protected $_deviceBackend;
@@ -28,7 +38,7 @@ class Syncope_Backend_ContentTests extends PHPUnit_Framework_TestCase
     /**
      * @var Syncope_Backend_Folder
      */
-    protected $_folderStateBackend;
+    protected $_folderBackend;
     
     /**
      * @var Syncope_Backend_SyncState
@@ -62,12 +72,17 @@ class Syncope_Backend_ContentTests extends PHPUnit_Framework_TestCase
         
         $this->_db->beginTransaction();
 
-        $this->_deviceBackend      = new Syncope_Backend_Device($this->_db);
-        $this->_folderStateBackend = new Syncope_Backend_Folder($this->_db);
-        $this->_syncStateBackend   = new Syncope_Backend_SyncState($this->_db);
+        $this->_contentBackend   = new Syncope_Backend_Content($this->_db);
+        $this->_deviceBackend    = new Syncope_Backend_Device($this->_db);
+        $this->_folderBackend    = new Syncope_Backend_Folder($this->_db);
+        $this->_syncStateBackend = new Syncope_Backend_SyncState($this->_db);
 
-        $newDevice = Syncope_Backend_DeviceTests::getTestDevice();
-        $this->_device    = $this->_deviceBackend->create($newDevice);
+        $this->_device = $this->_deviceBackend->create(
+            Syncope_Backend_DeviceTests::getTestDevice()
+        );
+        $this->_folder = $this->_folderBackend->create(
+            Syncope_Backend_FolderTests::getTestFolder($this->_device)
+        );
     }
 
     /**
@@ -86,129 +101,57 @@ class Syncope_Backend_ContentTests extends PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $syncState = new Syncope_Model_Content(array(
-            'device_id'     => $this->_device,
-            'folder_id'     => $this->_folder,
-            'contentid'     => '0',
-            'creation_time' => new DateTime(null, new DateTimeZone('utc')),
-            'is_deleted'    => null
-        ));
+        $content = self::getTestContent($this->_device, $this->_folder);
         
-        $syncState = $this->_syncStateBackend->create($syncState);
+        $content = $this->_contentBackend->create($content);
         
-        $this->assertTrue($syncState->lastsync instanceof DateTime);
+        $this->assertTrue($content->creation_time instanceof DateTime);
         
-        return $syncState;
+        return $content;
     }
     
     /**
-     * @return Syncope_Model_ISyncState
+     * 
      */
-    public function testUpdate()
+    public function testDelete()
     {
-        $syncState = $this->testCreate();
+        $content = $this->testCreate();
         
-        $syncState->counter++;
-    
-        $syncState = $this->_syncStateBackend->update($syncState);
-    
-        $this->assertEquals(1, $syncState->counter);
-        $this->assertTrue($syncState->lastsync instanceof DateTime);
-    
-        return $syncState;
+        $this->_contentBackend->delete($content);
+        
+        $content = $this->_contentBackend->get($content->id);
+        
+        $this->assertTrue($content instanceof Syncope_Model_IContent);
+        $this->assertEquals(1, $content->is_deleted);
+        $this->assertTrue($content->creation_time instanceof DateTime);
+    }  
+
+    public function testGetFolderState()
+    {
+        $content = $this->testCreate();
+        
+        $state = $this->_contentBackend->getFolderState($this->_device, $this->_folder);
+        
+        $this->assertContains($content->contentid, $state);
     }
     
-    /**
-     * test validating synckey
-     */
-    public function testValidateSyncKey()
+    public function testResetState()
     {
-        $syncState = $this->testUpdate();
-        
-        $validatedSyncState =  $this->_syncStateBackend->validate($this->_device, 1, 'FolderSync');
-        
-        $this->assertTrue($validatedSyncState instanceof Syncope_Model_ISyncState);
-        $this->assertEquals(1, $validatedSyncState->counter);
-        $this->assertTrue($validatedSyncState->lastsync instanceof DateTime);
-        
-        
-        // invalid synckey must return false
-        $validatedSyncState =  $this->_syncStateBackend->validate($this->_device, 2, 'FolderSync');
-        
-        $this->assertFalse($validatedSyncState);
-    }
-        
-    /**
-     * test if the previous synckey gets deleted after validating the lastest synckey
-     */
-    public function testDeletePreviousSynckeyAfterValidate()
-    {
-        $syncState = new Syncope_Model_SyncState(array(
-            'device_id'   => $this->_device,
-            'type'        => 'FolderSync',
-            'counter'     => '0',
-            'lastsync'    => new DateTime(null, new DateTimeZone('utc')),
-            'pendingdata' => null
-        ));
-        $syncState->lastsync->modify('-2 min');
-        $syncState = $this->_syncStateBackend->create($syncState);
-        
-        $syncState = new Syncope_Model_SyncState(array(
-            'device_id'   => $this->_device,
-            'type'        => 'FolderSync',
-            'counter'     => '1',
-            'lastsync'    => new DateTime(null, new DateTimeZone('utc')),
-            'pendingdata' => null
-        ));
-        
-        $syncState = $this->_syncStateBackend->create($syncState);
+        $content = $this->testCreate();
     
-        $syncState = $this->_syncStateBackend->validate($this->_device, '1', 'FolderSync');
+        $this->_contentBackend->resetState($this->_device, $this->_folder);
+        $state = $this->_contentBackend->getFolderState($this->_device, $this->_folder);
     
-        $this->assertEquals('FolderSync', $syncState->type);
-        $this->assertEquals(1,            $syncState->counter);
-        
-        
-        // the other synckey must be deleted now
-        $syncState = $this->_syncStateBackend->validate($this->_device, '0', 'FolderSync');
-    
-        $this->assertFalse($syncState);
+        $this->assertEmpty($state);
     }
     
-    /**
-     * test if the latest synckey gets deleted after validating the previous synckey
-     */
-    public function testDeleteLatestSynckeyAfterValidate()
+    public static function getTestContent(Syncope_Model_IDevice $_device, Syncope_Model_IFolder $_folder)
     {
-        $syncState = new Syncope_Model_SyncState(array(
-            'device_id'   => $this->_device,
-            'type'        => 'FolderSync',
-            'counter'     => '0',
-            'lastsync'    => new DateTime(null, new DateTimeZone('utc')),
-            'pendingdata' => null
+        return new Syncope_Model_Content(array(
+            'device_id'     => $_device,
+            'folder_id'     => $_folder,
+            'contentid'     => 'abc1234',
+            'creation_time' => new DateTime(null, new DateTimeZone('utc'))
         ));
-        $syncState->lastsync->modify('-2 min');
-        $syncState = $this->_syncStateBackend->create($syncState);
-        
-        $syncState = new Syncope_Model_SyncState(array(
-            'device_id'   => $this->_device,
-            'type'        => 'FolderSync',
-            'counter'     => '1',
-            'lastsync'    => new DateTime(null, new DateTimeZone('utc')),
-            'pendingdata' => null
-        ));
-        
-        $syncState = $this->_syncStateBackend->create($syncState);
-    
-        $syncState = $this->_syncStateBackend->validate($this->_device, '0', 'FolderSync');
-    
-        $this->assertEquals('FolderSync', $syncState->type);
-        $this->assertEquals(0,            $syncState->counter);
-        
-        
-        // the other synckey must be deleted now
-        $syncState = $this->_syncStateBackend->validate($this->_device, '1', 'FolderSync');
-    
-        $this->assertFalse($syncState);
     }
 }

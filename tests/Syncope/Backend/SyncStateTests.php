@@ -21,6 +21,11 @@ class Syncope_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
     protected $_device;
     
     /**
+     * @var Syncope_Model_Folder
+     */
+    protected $_folder;
+    
+    /**
      * @var Syncope_Backend_Device
      */
     protected $_deviceBackend;
@@ -28,7 +33,7 @@ class Syncope_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
     /**
      * @var Syncope_Backend_Folder
      */
-    protected $_folderStateBackend;
+    protected $_folderBackend;
     
     /**
      * @var Syncope_Backend_SyncState
@@ -62,12 +67,16 @@ class Syncope_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
         
         $this->_db->beginTransaction();
 
-        $this->_deviceBackend      = new Syncope_Backend_Device($this->_db);
-        $this->_folderStateBackend = new Syncope_Backend_Folder($this->_db);
-        $this->_syncStateBackend   = new Syncope_Backend_SyncState($this->_db);
+        $this->_deviceBackend     = new Syncope_Backend_Device($this->_db);
+        $this->_folderBackend     = new Syncope_Backend_Folder($this->_db);
+        $this->_syncStateBackend  = new Syncope_Backend_SyncState($this->_db);
 
-        $newDevice = Syncope_Backend_DeviceTests::getTestDevice();
-        $this->_device    = $this->_deviceBackend->create($newDevice);
+        $this->_device = $this->_deviceBackend->create(
+            Syncope_Backend_DeviceTests::getTestDevice()
+        );
+        $this->_folder = $this->_folderBackend->create(
+            Syncope_Backend_FolderTests::getTestFolder($this->_device)
+        );
     }
 
     /**
@@ -125,7 +134,7 @@ class Syncope_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
     {
         $syncState = $this->testUpdate();
         
-        $validatedSyncState =  $this->_syncStateBackend->validate($this->_device, 1, 'FolderSync');
+        $validatedSyncState =  $this->_syncStateBackend->validate($this->_device, 'FolderSync', 1);
         
         $this->assertTrue($validatedSyncState instanceof Syncope_Model_ISyncState);
         $this->assertEquals(1, $validatedSyncState->counter);
@@ -133,7 +142,7 @@ class Syncope_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
         
         
         // invalid synckey must return false
-        $validatedSyncState =  $this->_syncStateBackend->validate($this->_device, 2, 'FolderSync');
+        $validatedSyncState =  $this->_syncStateBackend->validate($this->_device, 'FolderSync', 2);
         
         $this->assertFalse($validatedSyncState);
     }
@@ -163,14 +172,14 @@ class Syncope_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
         
         $syncState = $this->_syncStateBackend->create($syncState);
     
-        $syncState = $this->_syncStateBackend->validate($this->_device, '1', 'FolderSync');
+        $syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', '1');
     
         $this->assertEquals('FolderSync', $syncState->type);
         $this->assertEquals(1,            $syncState->counter);
         
         
         // the other synckey must be deleted now
-        $syncState = $this->_syncStateBackend->validate($this->_device, '0', 'FolderSync');
+        $syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', '0');
     
         $this->assertFalse($syncState);
     }
@@ -200,14 +209,14 @@ class Syncope_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
         
         $syncState = $this->_syncStateBackend->create($syncState);
     
-        $syncState = $this->_syncStateBackend->validate($this->_device, '0', 'FolderSync');
+        $syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', '0');
     
         $this->assertEquals('FolderSync', $syncState->type);
         $this->assertEquals(0,            $syncState->counter);
         
         
         // the other synckey must be deleted now
-        $syncState = $this->_syncStateBackend->validate($this->_device, '1', 'FolderSync');
+        $syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', '1');
     
         $this->assertFalse($syncState);
     }

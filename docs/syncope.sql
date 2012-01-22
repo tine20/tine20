@@ -10,11 +10,14 @@ CREATE TABLE IF NOT EXISTS `syncope_devices` (
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `syncope_folderstates` (
+CREATE TABLE IF NOT EXISTS `syncope_folders` (
   `id` varchar(40) NOT NULL,
   `device_id` varchar(64) NOT NULL,
   `class` varchar(64) NOT NULL,
   `folderid` varchar(254) NOT NULL,
+  `parentid` varchar(254) DEFAULT NULL,
+  `displayname` varchar(254) NOT NULL,
+  `type` int(11) DEFAULT NULL,
   `creation_time` datetime NOT NULL,
   `lastfiltertype` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -36,13 +39,12 @@ CREATE TABLE `syncope_synckeys` (
 CREATE TABLE `syncope_contents` (                                                                                                                                           
   `id` varchar(40) NOT NULL,                                                                                                                                                                               
   `device_id` varchar(64) DEFAULT NULL,                                                                                                                                                                    
-  `class` varchar(64) DEFAULT NULL,                                                                                                                                                                        
+  `folder_id` varchar(64) DEFAULT NULL,                                                                                                                                                                        
   `contentid` varchar(64) DEFAULT NULL,                                                                                                                                                                    
-  `collectionid` varchar(254) DEFAULT NULL,                                                                                                                                                                
   `creation_time` datetime DEFAULT NULL,                                                                                                                                                                   
   `is_deleted` tinyint(1) unsigned DEFAULT '0',                                                                                                                                                            
   PRIMARY KEY (`id`),                                                                                                                                                                                      
-  UNIQUE KEY `device_id--class--collectionid--contentid` (`device_id`(40),`class`(40),`collectionid`(40),`contentid`(40)),                                                                                 
+  UNIQUE KEY `device_id--folder_id--contentid` (`device_id`(40),`folder_id`(40),`contentid`(40)),                                                                                 
   KEY `acsync_contents::device_id--acsync_devices::id` (`device_id`),                                                                                                                                        
   CONSTRAINT `acsync_contents::device_id--acsync_devices::id` FOREIGN KEY (`device_id`) REFERENCES `syncope_devices` (`id`) ON DELETE CASCADE ON UPDATE CASCADE                                         
 );

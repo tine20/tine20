@@ -44,11 +44,14 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
         $id = sha1(mt_rand(). microtime());
         $deviceId = $_folderState->device_id instanceof Syncope_Model_IDevice ? $_folderState->device_id->id : $_folderState->device_id;
     
-        $this->_db->insert('syncope_folderstates', array(
+        $this->_db->insert('syncope_folders', array(
         	'id'             => $id, 
         	'device_id'      => $deviceId,
         	'class'          => $_folderState->class,
-        	'folderid'       => $_folderState->folderid,
+        	'folderid'       => $_folderState->folderid instanceof Syncope_Model_IFolder ? $_folderState->folderid->id : $_folderState->folderid,
+        	'parentid'       => $_folderState->parentid,
+        	'displayname'    => $_folderState->displayname,
+        	'type'           => $_folderState->type,
         	'creation_time'  => $_folderState->creation_time->format('Y-m-d H:i:s'),
         	'lastfiltertype' => $_folderState->lastfiltertype
         ));
@@ -64,7 +67,7 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
     public function get($_id)
     {
         $select = $this->_db->select()
-            ->from('syncope_folderstates')
+            ->from('syncope_folders')
             ->where('id = ?', $_id);
     
         $stmt = $this->_db->query($select);
@@ -95,14 +98,14 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
             $this->_db->quoteInto($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
         );
         
-        $this->_db->delete('syncope_folderstates', $where);
+        $this->_db->delete('syncope_folders', $where);
     }
     
     public function update(Syncope_Model_IFolder $_state)
     {
         $deviceId = $_state->device_id instanceof Syncope_Model_IDevice ? $_state->device_id->id : $_state->device_id;
     
-        $this->_db->update('syncope_folderstates', array(
+        $this->_db->update('syncope_folders', array(
         	'lastfiltertype'     => $_state->lastfiltertype
         ), array(
         	'id = ?' => $_state->id
@@ -118,18 +121,22 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
      * @param string $_class
      * @return array
      */
-    public function getClientState($_deviceId, $_class)
+    public function getFolderState($_deviceId, $_class)
     {
         $deviceId = $_deviceId instanceof Syncope_Model_IDevice ? $_deviceId->id : $_deviceId;
         
         $select = $this->_db->select()
-            ->from('syncope_folderstates', array('folderid'))
+            ->from('syncope_folders')
             ->where($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
             ->where($this->_db->quoteIdentifier('class') . ' = ?', $_class);
         
+        $result = array();
+        
         $stmt = $this->_db->query($select);
-        $result = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
-
+        while ($row = $stmt->fetchObject("Syncope_Model_Folder")) {
+            $result[$row->folderid] = $row; 
+        }
+        
         return $result;
     }
     
@@ -145,7 +152,7 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
         $deviceId = $_deviceId instanceof Syncope_Model_IDevice ? $_deviceId->id : $_deviceId;
         
         $select = $this->_db->select()
-            ->from('syncope_folderstates')
+            ->from('syncope_folders')
             ->where($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
             ->where($this->_db->quoteIdentifier('folderid') . ' = ?', $_folderId);
         
