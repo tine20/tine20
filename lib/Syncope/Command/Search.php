@@ -13,7 +13,7 @@
  */
 
 /**
- * class to handle ActiveSync search command
+ * class to handle ActiveSync Search command
  *
  * @package     Syncope
  * @subpackage  Command
