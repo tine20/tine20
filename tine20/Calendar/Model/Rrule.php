@@ -3,9 +3,10 @@
  * Sql Calendar 
  * 
  * @package     Calendar
+ * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -17,6 +18,7 @@
  * @todo rrule models should  string-->model converted from backend and viceavice
  * 
  * @package Calendar
+ * @subpackage  Model
  */
 class Calendar_Model_Rrule extends Tinebase_Record_Abstract
 {
@@ -76,12 +78,18 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'freq'                 => array('allowEmpty' => true, 'InArray' => array(self::FREQ_DAILY, self::FREQ_MONTHLY, self::FREQ_WEEKLY, self::FREQ_YEARLY)),
+        'freq'                 => array(
+            'allowEmpty' => true,
+            array('InArray', array(self::FREQ_DAILY, self::FREQ_MONTHLY, self::FREQ_WEEKLY, self::FREQ_YEARLY)),
+        ),
         'interval'             => array('allowEmpty' => true, 'Int'   ),
         'byday'                => array('allowEmpty' => true, 'Regex' => '/^[\-0-9A_Z,]{2,}$/'),
         'bymonth'              => array('allowEmpty' => true, 'Int'   ),
         'bymonthday'           => array('allowEmpty' => true, 'Int'   ),
-        'wkst'                 => array('allowEmpty' => true, 'InArray' => array(self::WDAY_SUNDAY, self::WDAY_MONDAY, self::WDAY_TUESDAY, self::WDAY_WEDNESDAY, self::WDAY_THURSDAY, self::WDAY_FRIDAY, self::WDAY_SATURDAY)),
+        'wkst'                 => array(
+            'allowEmpty' => true,
+            array('InArray', array(self::WDAY_SUNDAY, self::WDAY_MONDAY, self::WDAY_TUESDAY, self::WDAY_WEDNESDAY, self::WDAY_THURSDAY, self::WDAY_FRIDAY, self::WDAY_SATURDAY)),
+        ),
         'until'                => array('allowEmpty' => true          ),
         'count'                => array('allowEmpty' => true, 'Int'   ),
     );

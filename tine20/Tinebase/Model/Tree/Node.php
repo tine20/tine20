@@ -74,7 +74,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
     	'name'           => array('presence' => 'required'),
     	'islink'         => array(
             Zend_Filter_Input::DEFAULT_VALUE => '0',
-            'InArray' => array(true, false)
+            array('InArray', array(true, false))
         ),
         
         // this is needed for ACL handling and should be sent by / delivered to client (not persistent in db atm)
@@ -82,7 +82,10 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'account_grants' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         
         // fields from filemanager_objects table (ro)
-        'type'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'InArray' => array(self::TYPE_FILE, self::TYPE_FOLDER)),
+        'type'           => array(
+            Zend_Filter_Input::ALLOW_EMPTY => true, 
+            array('InArray', array(self::TYPE_FILE, self::TYPE_FOLDER)),
+        ),
         'description'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contenttype'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'revision'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),

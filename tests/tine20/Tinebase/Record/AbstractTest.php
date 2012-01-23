@@ -5,11 +5,11 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  * 
  * @todo        implement some incomplete tests
- * @todo        fix exception tests
+ * @todo        fix testSetFromArrayException test
  */
 
 /**
@@ -30,8 +30,6 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
     protected $objects = array('TestRecord');
     protected $expectFailure = array();
     protected $expectSuccess = array();
-    
-
     
     /**
      * Sets up the fixture, for example
@@ -58,7 +56,8 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
     /**
      * Tests if exception is raised when extending class is broken
      */
-    public function testConstructorException() {
+    public function testConstructorException()
+    {
         $this->setExpectedException('Exception');
         try {
             $this->objects['TestRecordBroken'] = new Tinebase_Record_DummyRecordBroken();
@@ -72,7 +71,8 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
     /**
      * @covers Tinebase_Record_Abstract::setId
      */
-    public function testSetId() {
+    public function testSetId()
+    {
         
         if (isset($this->expectFailure['TestRecord']['testSetId'])) {
             foreach ($this->expectFailure['TestRecord']['testSetId'] as $pair) {
@@ -93,7 +93,11 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function testSetIdBypassFilters() {
+    /**
+     * testSetIdBypassFilters
+     */
+    public function testSetIdBypassFilters()
+    {
         
         if(isset($this->objects['TestRecordBypassFilters'])) {
             $this->objects['TestRecordBypassFilters']->setId('8');
@@ -106,7 +110,8 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
     /**
      * @covers Tinebase_Record_Abstract::getId()
      */
-    public function testGetId() {
+    public function testGetId()
+    {
         foreach ($this->objects as $record ) {
             $this->assertNotNull($record->getId());
         }
@@ -118,7 +123,8 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
      * @covers Tinebase_Record_Abstract::getIterator
      *
      */
-    public function testArrayIterator(){
+    public function testArrayIterator()
+    {
         foreach($this->objects['TestRecord'] as $key => $val ) {
             if (isset($this->objects['TestRecord'][$key])) { 
                 $this->objects['TestRecord'][$key] = $this->objects['TestRecord'][$key];
@@ -129,7 +135,8 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
     /**
      * @covers Tinebase_Record_Abstract::setFromArray
      */   
-    public function testSetFromArray() {
+    public function testSetFromArray()
+    {
         if (isset($this->expectSuccess['TestRecord']['testSetFromArray'])) {    
             foreach ($this->expectSuccess['TestRecord']['testSetFromArray'] as $pair) {
                 $this->objects['TestRecord']->setFromArray($pair[0], NULL);
@@ -140,7 +147,8 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
         }   
     }
     
-    public function testSetFromArrayWithFilterSet() {
+    public function testSetFromArrayWithFilterSet()
+    {
         if (isset($this->expectSuccess['TestRecord']['testSetFromArray'])) {
             foreach ($this->expectSuccess['TestRecord']['testSetFromArray'] as $pair) {
                 $this->objects['TestRecord']->setFromArray($pair[0], true);
@@ -156,7 +164,8 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
      *
      * @todo    implement else branch?
      */
-    public function testSetFromArrayException() {
+    public function testSetFromArrayException()
+    {
         if (isset($this->expectSuccess['TestRecord']['testSetFromArrayException'])) {
         
              foreach ($this->expectFailure['TestRecord']['testSetFromArrayException'] as $pair) {
@@ -179,10 +188,15 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
      *
      * @todo    implement
      */
-    public function testSetTimezone() {
+    public function testSetTimezone()
+    {
     }
     
-    public function testSetTimezoneException() {
+    /**
+     * testSetTimezoneException
+     */
+    public function testSetTimezoneException()
+    {
         if(isset($this->expectFailure['TestRecord']['testSetTimezoneException'])) {
             foreach ($this->expectFailure['TestRecord']['testSetTimezoneException'] as $pair) {
                 
@@ -205,7 +219,8 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
      *
      * @todo    implement
      */
-    public function testGetValidationErrors() {
+    public function testGetValidationErrors()
+    {
     }
     
     /**
@@ -213,11 +228,16 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
      *
      * @todo    implement
      */
-    public function testGetValidationErrorsBypassFilters() {
+    public function testGetValidationErrorsBypassFilters()
+    {
         //if(isset($this->objects['TestRecordBypassFilters'])) {        
-    }   
-        
-    public function testToArray()   {
+    }
+    
+    /**
+     * toArray test
+     */
+    public function testToArray()
+    {
         if(isset($this->expectSuccess['TestRecord']['testToArray'])) {  
             foreach ($this->expectSuccess['TestRecord']['testToArray'] as $pair) {   
                  $this->assertEquals($this->objects['TestRecord']->toArray(), $pair[0]);
@@ -228,21 +248,11 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
     }
         
     /**
-     * test is valid
-     *
-     * @todo    implement
+     * test __set
      */
-    public function testIsValid() {
-        //foreach ($this->objects as $record ) {
-        //  if (!$record->isValid()) {
-                //echo "Error in " . $record->getId() ;
-        //  }
-        //  $this->assertTrue($record->isValid());
-        //}     
-    }
-    
-    public function test__set() {
-        if(isset($this->expectSuccess['TestRecord']['__set'])) {        
+    public function test__set()
+    {
+        if(isset($this->expectSuccess['TestRecord']['__set'])) {
             foreach ($this->expectSuccess['TestRecord']['__set'] as $pair) { 
                 $this->objects['TestRecord']->__set($pair[0], $pair[1]);
                 $this->assertEquals($this->objects['TestRecord']->offsetGet($pair[0]), $pair[1]) ;
@@ -252,20 +262,24 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
                     $this->assertEquals($this->objects['TestRecordBypassFilters']->offsetGet($pair[0]), $pair[1]) ;
     
                 }
-            }   
+            }
         } else {
             $this->markTestIncomplete('This test has not been implemented yet.');
         }
     }
     
-    public function test__isset() {
+    /**
+     * test __isset
+     */
+    public function test__isset()
+    {
         if (isset($this->expectSuccess['TestRecord']['test__isset'])) { 
             foreach ($this->expectSuccess['TestRecord']['test__isset'] as $pair) { 
                 $this->assertTrue($this->objects['TestRecord']->__isset($pair[0]));
             }
         } else {
             $this->markTestIncomplete('This test has not been implemented yet.');
-        }   
+        }
 
         if (isset($this->expectFailure['TestRecord']['test__isset'])) { 
             foreach ($this->expectFailure['TestRecord']['test__isset'] as $pair) { 
@@ -273,11 +287,15 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
             }
         } else {
             $this->markTestIncomplete('This test has not been implemented yet.');
-        }   
+        }
         
     }
     
-    public function test__get() {
+    /**
+     * test __get
+     */
+    public function test__get()
+    {
         if (isset($this->expectSuccess['TestRecord']['__get'])) {
             foreach ($this->expectSuccess['TestRecord']['__get'] as $pair) { 
                 $this->objects['TestRecord']->__set($pair[0], $pair[1]);
@@ -288,7 +306,11 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
         }
     }
     
-    public function testOffsetUnset() {
+    /**
+     * testOffsetUnset
+     */
+    public function testOffsetUnset()
+    {
         if (isset($this->expectFailure['TestRecord']['testSetTimezoneException'])) {    
             foreach ($this->expectFailure['TestRecord']['testSetTimezoneException'] as $pair) {
                 $this->setExpectedException($pair[0]);
@@ -304,8 +326,6 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
             }
         } else {
             $this->markTestIncomplete('This test has not been implemented yet.');   
-        }    
+        }
     }
-
-}       
-    
+}

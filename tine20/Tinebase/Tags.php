@@ -68,7 +68,7 @@ class Tinebase_Tags
     /**
      * Searches tags according to filter and paging
      * The Current user needs to have the given right, unless $_ignoreAcl is true
-     *
+     * 
      * @param  Tinebase_Model_TagFilter $_filter
      * @param  Tinebase_Model_Pagination  $_paging
      * @return Tinebase_Record_RecordSet  Set of Tinebase_Model_Tag
@@ -76,10 +76,10 @@ class Tinebase_Tags
     public function searchTags($_filter, $_paging)
     {
         $select = $_filter->getSelect();
-
+        
         Tinebase_Model_TagRight::applyAclSql($select, $_filter->grant);
         $_paging->appendPaginationSql($select);
-
+        
         return new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $this->_db->fetchAssoc($select));
     }
 
@@ -296,6 +296,9 @@ class Tinebase_Tags
                 throw new Tinebase_Exception_UnexpectedValue('No such tag type.');
                 break;
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Created new tag ' . $_tag->name);
 
         // any context temporary
 
@@ -391,6 +394,10 @@ class Tinebase_Tags
                 throw new Tinebase_Exception_AccessDenied('You are not allowed to delete this tags');
             }
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Deleting ' . count($tags) . ' tags.');
+        
         $this->_db->update(SQL_TABLE_PREFIX . 'tags', array(
             'is_deleted'   => true,
             'deleted_by'   => $currentAccountId,
@@ -442,7 +449,7 @@ class Tinebase_Tags
         $recordIds = $_records->getArrayOfIds();
         if (count($recordIds) == 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Can\'t get tags for records without ids');
+                . ' Can\'t get tags for records without ids');
             // do nothing
             return;
         }

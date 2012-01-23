@@ -3,16 +3,17 @@
  * class to hold message cache data
  * 
  * @package     Felamimail
+ * @subpackage	Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
  */
 
 /**
  * class to hold message cache data
  * 
  * @package     Felamimail
+ * @subpackage	Model
  * @property    string  $subject        the subject of the email
  * @property    string  $from_email     the address of the sender (from)
  * @property    string  $from_name      the name of the sender (from)
@@ -127,7 +128,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'body_content_type'     => array(
             Zend_Filter_Input::ALLOW_EMPTY => true,
             Zend_Filter_Input::DEFAULT_VALUE => self::CONTENT_TYPE_PLAIN,
-            'InArray' => array(self::CONTENT_TYPE_HTML, self::CONTENT_TYPE_PLAIN)
+            array('InArray', array(self::CONTENT_TYPE_HTML, self::CONTENT_TYPE_PLAIN)),
         ),
         'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // save email as contact note

@@ -6,7 +6,7 @@
  * @subpackage  Tags
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        implement testTagsAcl test
  */
@@ -136,7 +136,7 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         $tags = $this->_instance->searchTags($filter, $paging);
         $count = $this->_instance->getSearchTagsCount($filter);
 
-        $this->assertTrue($count > 0);
+        $this->assertTrue($count > 0, 'did not find created tag');
         $this->assertContains('tag::', $tags->getFirstRecord()->name);
     }
 

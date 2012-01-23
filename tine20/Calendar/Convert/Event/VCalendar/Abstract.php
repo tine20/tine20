@@ -455,7 +455,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         if (!isset($vcalendar->METHOD)) {
             $this->_method = $vcalendar->METHOD;
         }
-                
+        
         // find the main event - the main event has no RECURRENCE-ID
         foreach($vcalendar->VEVENT as $vevent) {
             // "-" is not allowed in property names

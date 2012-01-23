@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -78,7 +78,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
         'type'                  => array(
             Zend_Filter_Input::ALLOW_EMPTY => true,
             Zend_Filter_Input::DEFAULT_VALUE => self::LISTTYPE_LIST,
-            'InArray' => array(self::LISTTYPE_LIST, self::LISTTYPE_GROUP)
+            array('InArray', array(self::LISTTYPE_LIST, self::LISTTYPE_GROUP)),
         ),
         'group_id'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true)

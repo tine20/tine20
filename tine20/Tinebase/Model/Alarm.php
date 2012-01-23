@@ -68,11 +68,11 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
         'alarm_time'        => array('presence' => 'required'),
         'minutes_before'    => array('allowEmpty' => TRUE),
         'sent_time'         => array('allowEmpty' => TRUE),
-        'sent_status'       => array('presence' => 'required', 'InArray' => array(
+        'sent_status'       => array('presence' => 'required', array('InArray', array(
             self::STATUS_PENDING, 
             self::STATUS_FAILURE, 
             self::STATUS_SUCCESS,
-        ), Zend_Filter_Input::DEFAULT_VALUE => self::STATUS_PENDING),
+        )), Zend_Filter_Input::DEFAULT_VALUE => self::STATUS_PENDING),
         'sent_message'      => array('allowEmpty' => TRUE),
     // xml field with app/model specific options
         'options'           => array('allowEmpty' => TRUE),

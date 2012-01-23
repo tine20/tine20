@@ -41,7 +41,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                                         'default'       => NULL         ),
         'dir'                  => array('presence'      => 'required',
                                         'allowEmpty'    => false,
-                                        'InArray'       => array('ASC', 'DESC'),
+                                        array('InArray', array('ASC', 'DESC')),
                                         'default'       => 'ASC'        )
     );
     

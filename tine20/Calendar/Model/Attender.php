@@ -3,7 +3,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -82,15 +82,27 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         'cal_event_id'         => array('allowEmpty' => true/*,  'Alnum'*/),
         'user_id'              => array('allowEmpty' => false,        ),
-        'user_type'            => array('allowEmpty' => true,  'InArray' => array(self::USERTYPE_USER, self::USERTYPE_GROUP, self::USERTYPE_GROUPMEMBER, self::USERTYPE_RESOURCE)),
-        'role'                 => array('allowEmpty' => true,  'InArray' => array(self::ROLE_OPTIONAL, self::ROLE_REQUIRED)),
+        'user_type'            => array(
+            'allowEmpty' => true,
+            array('InArray', array(self::USERTYPE_USER, self::USERTYPE_GROUP, self::USERTYPE_GROUPMEMBER, self::USERTYPE_RESOURCE))
+        ),
+        'role'                 => array(
+            'allowEmpty' => true,
+            array('InArray', array(self::ROLE_OPTIONAL, self::ROLE_REQUIRED))
+        ),
         'quantity'             => array('allowEmpty' => true, 'Int'   ),
-        'status'               => array('allowEmpty' => true,  'InArray' => array(self::STATUS_NEEDSACTION, self::STATUS_TENTATIVE, self::STATUS_ACCEPTED, self::STATUS_DECLINED)),
+        'status'               => array(
+            'allowEmpty' => true,
+            array('InArray', array(self::STATUS_NEEDSACTION, self::STATUS_TENTATIVE, self::STATUS_ACCEPTED, self::STATUS_DECLINED))
+        ),
         'status_authkey'       => array('allowEmpty' => true, 'Alnum' ),
         'displaycontainer_id'  => array('allowEmpty' => true, 'Int'   ),
         'alarm_ack_time'       => array('allowEmpty' => true),
-    	'alarm_snooze_time'    => array('allowEmpty' => true),
-    	'transp'               => array('allowEmpty' => true,  'InArray' => array(Calendar_Model_Event::TRANSP_TRANSP, Calendar_Model_Event::TRANSP_OPAQUE)),
+        'alarm_snooze_time'    => array('allowEmpty' => true),
+        'transp'               => array(
+            'allowEmpty' => true,
+            array('InArray', array(Calendar_Model_Event::TRANSP_TRANSP, Calendar_Model_Event::TRANSP_OPAQUE))
+        ),
     );
     
     /**
@@ -100,7 +112,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     protected $_datetimeFields = array(
         'alarm_ack_time',
-    	'alarm_snoze_time'
+        'alarm_snoze_time'
     );
     
     /**
@@ -115,10 +127,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
         
         try {
-	        $contact = Addressbook_Controller_Contact::getInstance()->get($this->user_id);
-	        return $contact->account_id ? $contact->account_id : NULL;
+            $contact = Addressbook_Controller_Contact::getInstance()->get($this->user_id);
+            return $contact->account_id ? $contact->account_id : NULL;
         } catch (Exception $e) {
-        	return NULL;
+            return NULL;
         }
     }
     
@@ -225,7 +237,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         if (isset($_data['user_id']) && is_array($_data['user_id'])) {
             if (array_key_exists('accountId', $_data['user_id'])) {
-            	// NOTE: we need to support accounts, cause the client might not have the contact, e.g. when the attender is generated from a container owner
+                // NOTE: we need to support accounts, cause the client might not have the contact, e.g. when the attender is generated from a container owner
                 $_data['user_id'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_data['user_id']['accountId'], TRUE)->getId();
             } elseif (array_key_exists('group_id', $_data['user_id'])) {
                 $_data['user_id'] = is_array($_data['user_id']['group_id']) ? $_data['user_id']['group_id'][0] : $_data['user_id']['group_id'];
@@ -262,9 +274,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         //       saves us from deleting attendee out of current users scope
         $emailsOfCurrentAttendees = array();
         foreach ($_event->attendee as $currentAttendee) {
-        	if ($currentAttendeeEmailAddress = $currentAttendee->getEmail()) {
-        	    $emailsOfCurrentAttendees[$currentAttendeeEmailAddress] = $currentAttendee;
-        	}
+            if ($currentAttendeeEmailAddress = $currentAttendee->getEmail()) {
+                $emailsOfCurrentAttendees[$currentAttendeeEmailAddress] = $currentAttendee;
+            }
         }
         
         // collect emails of new attendees
@@ -321,7 +333,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     $attendeeId = $lists->getFirstRecord()->group_id;
                 }
             }
-        	
+            
             if ($attendeeId !== NULL) {
                 // finally add to attendee
                 $_event->attendee->addRecord(new Calendar_Model_Attender(array(
@@ -582,9 +594,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     // first fetch the groups, then the lists identified by list_id
                     $typeMap[$type] = Tinebase_Group::getInstance()->getMultiple(array_unique($ids));
                     $typeMap[self::USERTYPE_LIST] = Addressbook_Controller_List::getInstance()->getMultiple($typeMap[$type]->list_id, true);
-                	break;
+                    break;
                 case self::USERTYPE_RESOURCE:
-                	$typeMap[$type] = Calendar_Controller_Resource::getInstance()->getMultiple(array_unique($ids));
+                    $typeMap[$type] = Calendar_Controller_Resource::getInstance()->getMultiple(array_unique($ids));
                     break;
                 default:
                     throw new Exception("type $type not supported");
