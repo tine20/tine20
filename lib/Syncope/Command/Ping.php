@@ -76,9 +76,9 @@ class Syncope_Command_Ping extends Syncope_Command_Wbxml
                         $folder = $this->_folderBackend->getFolder($this->_device, (string)$folderXml->Id);
                         
                         $folders[] = $folder;                
-                    } catch (Exception $e) {
+                    } catch (Syncope_Exception_NotFound $senf) {
                         if ($this->_logger instanceof Zend_Log) 
-                            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
+                            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " " . $senf->getMessage());
                         $status = self::STATUS_FOLDER_NOT_FOUND;
                         break;
                     }
