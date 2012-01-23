@@ -215,21 +215,35 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      * @param Tinebase_Record_Abstract $_record
      * @param string $_containerProperty
      */
-    public static function resolveContainer($_record, $_containerProperty = 'container_id')
+    public static function resolveContainerOfRecord($_record, $_containerProperty = 'container_id')
     {
         if (! $_record instanceof Tinebase_Record_Abstract) {
             return;
         }
         
-        $containerId = $_record->{$_containerProperty};
-        if ($containerId) {
-            $container = Tinebase_Container::getInstance()->getContainerById($containerId);
-            
-            $container->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $containerId)->toArray();
-            $container->path = $container->getPath();
-            
-            $_record->{$_containerProperty} = $container;
+        if (! $_record->has($_containerProperty) || empty($_record->{$_containerProperty})) {
+            return;
         }
+        
+        try {
+            $container = Tinebase_Container::getInstance()->getContainerById($_record->{$_containerProperty});
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf);
+            return;
+        }
+        
+        $container->resolveGrantsAndPath();
+        
+        $_record->{$_containerProperty} = $container;
+    }
+    
+    /**
+     * resolves container grants and path
+     */
+    public function resolveGrantsAndPath()
+    {
+        $this->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $this);
+        $this->path = $this->getPath();
     }
     
     /**

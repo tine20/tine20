@@ -4,19 +4,14 @@
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * 
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Sales_JsonTest::main');
-}
 
 /**
  * Test class for Tinebase_Group
@@ -197,6 +192,19 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         // check if delete worked
         $result = $this->_instance->searchProducts($this->_getProductFilter(), '');
         $this->assertEquals(0, $result['totalcount']);   
+    }
+    
+    /**
+     * testGetRegistryData (shared contracts container)
+     */
+    public function testGetRegistryData()
+    {
+        $data = $this->_instance->getRegistryData();
+        
+        $this->assertTrue(isset($data['DefaultContainer']));
+        $this->assertTrue(isset($data['DefaultContainer']['path']));
+        $this->assertTrue(isset($data['DefaultContainer']['account_grants']));
+        $this->assertTrue(is_array($data['DefaultContainer']['account_grants']));
     }
     
     /************ protected helper funcs *************/

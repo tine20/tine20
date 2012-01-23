@@ -59,10 +59,10 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getRegistryData()
     {
         $sharedContainer = Sales_Controller_Contract::getSharedContractsContainer();
-        $sharedContainer['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $sharedContainer['id'])->toArray();
+        $sharedContainer->resolveGrantsAndPath();
         
         return array(
-            'DefaultContainer' => $sharedContainer
+            'DefaultContainer' => $sharedContainer->toArray()
         );
     }
     
