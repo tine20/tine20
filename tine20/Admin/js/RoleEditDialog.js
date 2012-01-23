@@ -37,6 +37,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     windowNamePrefix: 'rolesEditWindow_',
     
     layout: 'fit',
+    border: false,
     id: 'roleDialog',
     labelWidth: 120,
     labelAlign: 'top',
@@ -387,7 +388,6 @@ Tine.Admin.Roles.EditDialog.openWindow = function (config) {
         width: 400,
         height: 600,
         name: Tine.Admin.Roles.EditDialog.prototype.windowNamePrefix + config.role.id,
-        layout: Tine.Admin.Roles.EditDialog.prototype.windowLayout,
         contentPanelConstructor: 'Tine.Admin.Roles.EditDialog',
         contentPanelConstructorConfig: config
     });

@@ -2,8 +2,8 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * TODO         refactor this (use more methods from Tine.widgets.dialog.EditRecord)
  */
@@ -27,6 +27,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     
     id: 'groupDialog',
     layout: 'fit',
+    border: false,
     labelWidth: 120,
     labelAlign: 'top',
     
@@ -82,9 +83,9 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      * function updateRecord
      */
     updateRecord: function (groupData) {
-    	// if groupData is empty (=array), set to empty object because array won't work!
+        // if groupData is empty (=array), set to empty object because array won't work!
         if (groupData.length === 0) {
-        	groupData = {};
+            groupData = {};
         }
         this.group = new Tine.Admin.Model.Group(groupData, groupData.id ? groupData.id : 0);
         
@@ -104,22 +105,14 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      * 
      */
     getFormContents: function () {
-        var accountPickerGridPanel = new Tine.widgets.account.PickerGridPanel({
-            title: this.translation.gettext('Group Members'),
-            store: this.membersStore,
-            region: 'center',
-            anchor: '100% 100%',
-            showHidden: true
-        });
-        
         var editGroupDialog = {
             layout: 'border',
             border: false,
             width: 600,
             height: 500,
             items: [{
-            	region: 'north',
-            	xtype: 'columnform',
+                region: 'north',
+                xtype: 'columnform',
                 border: false,
                 autoHeight: true,
                 items: [[{
@@ -156,9 +149,9 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                         }
                     }
                 }, {
-                	columnWidth: 0.5,
-                	xtype: 'tinerecordpickercombobox',
-                	fieldLabel: this.translation.gettext('Saved in Addressbook'),
+                    columnWidth: 0.5,
+                    xtype: 'tinerecordpickercombobox',
+                    fieldLabel: this.translation.gettext('Saved in Addressbook'),
                     name: 'container_id',
                     blurOnSelect: true,
                     listWidth: 250,
@@ -166,7 +159,14 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     recordProxy: Tine.Admin.sharedAddressbookBackend,
                     disabled: this.group.get('visibility') === 'hidden'
                 }]]
-			}, accountPickerGridPanel]
+            }, {
+                xtype: 'tinerecordpickergrid',
+                title: this.translation.gettext('Group Members'),
+                store: this.membersStore,
+                region: 'center',
+                anchor: '100% 100%',
+                showHidden: true
+            }]
         };
         
         return editGroupDialog;
@@ -179,14 +179,14 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.group = this.group ? this.group : new Tine.Admin.Model.Group({}, 0);
         
         if (this.group.id !== 0) {
-	        Ext.Ajax.request({
-	            scope: this,
-	            success: this.onRecordLoad,
-	            params: {
-	                method: 'Admin.getGroup',
-	                groupId: this.group.id
-	            }
-	        });
+            Ext.Ajax.request({
+                scope: this,
+                success: this.onRecordLoad,
+                params: {
+                    method: 'Admin.getGroup',
+                    groupId: this.group.id
+                }
+            });
         } else {
             this.group = new Tine.Admin.Model.Group(Tine.Admin.Model.Group.getDefaultData(), 0);
         }
@@ -218,7 +218,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         if (this.group.id !== 0) {
             this.loadMask.show();
         } else {
-        	this.window.setTitle(this.translation.gettext('Add new group'));
+            this.window.setTitle(this.translation.gettext('Add new group'));
             this.getForm().loadRecord(this.group);
         }
     },
@@ -251,7 +251,6 @@ Tine.Admin.Groups.EditDialog.openWindow = function (config) {
         width: 400,
         height: 600,
         name: Tine.Admin.Groups.EditDialog.prototype.windowNamePrefix + config.group.id,
-        layout: Tine.Admin.Groups.EditDialog.prototype.windowLayout,
         contentPanelConstructor: 'Tine.Admin.Groups.EditDialog',
         contentPanelConstructorConfig: config
     });

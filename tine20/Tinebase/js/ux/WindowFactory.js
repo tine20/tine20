@@ -175,27 +175,32 @@ ls[p].call(ls.scope, arguments[0], arguments[1], arguments[2], arguments[3], arg
      * brings window to front
      */
     getWindow: function (config) {
-        var windowType = (config.modal) ? 'Ext' : this.windowType;
-        
-        // Names are only allowed to be alnum
-        config.name = Ext.isString(config.name) ? config.name.replace(/[^a-zA-Z0-9_]/g, '') : config.name;
-        
-        if (! config.title && config.contentPanelConstructorConfig && config.contentPanelConstructorConfig.title) {
-        config.title = config.contentPanelConstructorConfig.title;
-            delete config.contentPanelConstructorConfig.title;
-        }
-        
-        switch (windowType) 
-        {
-        case 'Browser' :
-            return this.getBrowserWindow(config);
-        case 'Ext' :
-            return this.getExtWindow(config);
-        case 'Air' :
-            return this.getAirWindow(config);
-        default :
-            console.error('No such windowType: ' + this.windowType);
-            break;
+        try {
+            var windowType = (config.modal) ? 'Ext' : this.windowType;
+            
+            // Names are only allowed to be alnum
+            config.name = Ext.isString(config.name) ? config.name.replace(/[^a-zA-Z0-9_]/g, '') : config.name;
+            
+            if (! config.title && config.contentPanelConstructorConfig && config.contentPanelConstructorConfig.title) {
+            config.title = config.contentPanelConstructorConfig.title;
+                delete config.contentPanelConstructorConfig.title;
+            }
+            
+            switch (windowType) 
+            {
+            case 'Browser' :
+                return this.getBrowserWindow(config);
+            case 'Ext' :
+                return this.getExtWindow(config);
+            case 'Air' :
+                return this.getAirWindow(config);
+            default :
+                console.error('No such windowType: ' + this.windowType);
+                break;
+            }
+        } catch (e) {
+            Tine.log.error('Ext.ux.WindowFactory::getWindow');
+            Tine.log.error(e);
         }
     }
 };
