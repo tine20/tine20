@@ -3,9 +3,10 @@
  * class to hold Timeaccount data
  * 
  * @package     Timetracker
+ * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        update validators (default values, mandatory fields)
  * @todo        add setFromJson with relation handling
@@ -15,6 +16,7 @@
  * class to hold Timeaccount data
  * 
  * @package     Timetracker
+ * @subpackage  Model
  */
 class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
 {  
@@ -77,10 +79,7 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
         'deadline'              => array(
             Zend_Filter_Input::ALLOW_EMPTY      => true, 
             Zend_Filter_Input::DEFAULT_VALUE    => self::DEADLINE_NONE,
-            'InArray'                           => array(
-                self::DEADLINE_NONE, 
-                self::DEADLINE_LASTWEEK,
-            )
+            array('InArray', array(self::DEADLINE_NONE, self::DEADLINE_LASTWEEK)),
         ),    
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),

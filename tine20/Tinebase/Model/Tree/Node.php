@@ -58,7 +58,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
     	'name'           => array('presence' => 'required'),
     	'islink'         => array(
             Zend_Filter_Input::DEFAULT_VALUE => '0',
-            'InArray' => array(true, false)
+            array('InArray', array(true, false))
         ),
         
         // fields from filemanager_objects table (ro)

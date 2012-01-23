@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -13,14 +13,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Record_RecordTest::main');
-}
-
-require_once 'DummyRecord.php';
-require_once 'DummyRecordBroken.php';
-
 
 /**
  * Test class for Tinebase_Record
@@ -53,7 +45,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     protected function setUp()
     {
         // initial object
-        $this->objects['TestRecord'] = new Tinebase_Record_DummyRecord(array(), true) ; 
+        $this->objects['TestRecord'] = new Tinebase_Record_DummyRecord(array(), true);
         $this->objects['TestRecord']->setFromArray(array('id'=>'2', 'test_2'=>NULL, ), NULL);
         
         // date management
@@ -195,11 +187,6 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     }
     
     /**
-     * Constructor tests
-     *
-     */
-    
-    /**
      * Test standard record
      *
      */
@@ -315,11 +302,30 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
         ), true);
         $this->assertEquals((bool)1, (bool)$record->has('test_4'));
     }
+    
+    /**
+    * test is valid / test InArray validator
+    */
+    public function testIsValid()
+    {
+        // should throw an exception
+        try {
+            $recordToTest = new Tinebase_Record_DummyRecord(array(
+                'id'      => 256,
+                'string'  => '',
+            ));
+            $this->fail('should throw validation exeption');
+        } catch (Tinebase_Exception_Record_Validation $terv) {
+            $this->assertTrue(TRUE);
+        }
+        
+        $recordToTest = new Tinebase_Record_DummyRecord(array(
+            'id'      => 256,
+            'inarray' => 'value3',
+        ), TRUE);
+        $this->assertFalse($recordToTest->isValid(), 'InArray validator should detect invalid value!');
+        
+        $recordToTest->inarray = 'value1';
+        $this->assertTrue($recordToTest->isValid());
+    }
 }
-
-
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Record_RecordTest::main') {
-    Tinebase_Record_AbstractRecordTest::main();
-}
-?>

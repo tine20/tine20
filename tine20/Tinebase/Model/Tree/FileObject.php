@@ -79,7 +79,7 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
     	'hash'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'type'                  => array(
             'presence' => 'required',
-            'InArray' => array(self::TYPE_FOLDER, self::TYPE_FILE)
+            array('InArray', array(self::TYPE_FOLDER, self::TYPE_FILE))
         )
     );
     

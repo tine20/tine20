@@ -3,7 +3,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -91,10 +91,19 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         'cal_event_id'         => array('allowEmpty' => true,  'Alnum'),
         'user_id'              => array('allowEmpty' => false,        ),
-        'user_type'            => array('allowEmpty' => true,  'InArray' => array(self::USERTYPE_USER, self::USERTYPE_GROUP, self::USERTYPE_GROUPMEMBER, self::USERTYPE_RESOURCE)),
-        'role'                 => array('allowEmpty' => true,  'InArray' => array(self::ROLE_OPTIONAL, self::ROLE_REQUIRED)),
+        'user_type'            => array(
+            'allowEmpty' => true,
+            array('InArray', array(self::USERTYPE_USER, self::USERTYPE_GROUP, self::USERTYPE_GROUPMEMBER, self::USERTYPE_RESOURCE))
+        ),
+        'role'                 => array(
+            'allowEmpty' => true,
+            array('InArray', array(self::ROLE_OPTIONAL, self::ROLE_REQUIRED))
+        ),
         'quantity'             => array('allowEmpty' => true, 'Int'   ),
-        'status'               => array('allowEmpty' => true,  'InArray' => array(self::STATUS_NEEDSACTION, self::STATUS_TENTATIVE, self::STATUS_ACCEPTED, self::STATUS_DECLINED)),
+        'status'               => array(
+            'allowEmpty' => true,
+            array('InArray', array(self::STATUS_NEEDSACTION, self::STATUS_TENTATIVE, self::STATUS_ACCEPTED, self::STATUS_DECLINED))
+        ),
         'status_authkey'       => array('allowEmpty' => true, 'Alnum' ),
         'displaycontainer_id'  => array('allowEmpty' => true, 'Int'   ),
     );
@@ -118,10 +127,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
         
         try {
-	        $contact = Addressbook_Controller_Contact::getInstance()->get($this->user_id);
-	        return $contact->account_id ? $contact->account_id : NULL;
+            $contact = Addressbook_Controller_Contact::getInstance()->get($this->user_id);
+            return $contact->account_id ? $contact->account_id : NULL;
         } catch (Exception $e) {
-        	return NULL;
+            return NULL;
         }
     }
     
@@ -221,7 +230,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         if (isset($_data['user_id']) && is_array($_data['user_id'])) {
             if (array_key_exists('accountId', $_data['user_id'])) {
-            	// NOTE: we need to support accounts, cause the client might not have the contact, e.g. when the attender is generated from a container owner
+                // NOTE: we need to support accounts, cause the client might not have the contact, e.g. when the attender is generated from a container owner
                 $_data['user_id'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_data['user_id']['accountId'], TRUE)->getId();
             } elseif (array_key_exists('group_id', $_data['user_id'])) {
                 $_data['user_id'] = is_array($_data['user_id']['group_id']) ? $_data['user_id']['group_id'][0] : $_data['user_id']['group_id'];
@@ -243,9 +252,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     public static function emailsToAttendee(Calendar_Model_Event $_event, $_emails, $_ImplicitAddMissingContacts = TRUE)
     {
-    	$currentAttendee = $event->getId() ? 
-    	   Calendar_Controller_Event::getInstance()->get($event->getId())->attendee :
-    	   new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        $currentAttendee = $event->getId() ? 
+           Calendar_Controller_Event::getInstance()->get($event->getId())->attendee :
+           new Tinebase_Record_RecordSet('Calendar_Model_Attender');
        
         // resolve current attendee
         self::resolveAttendee($currentAttendee);
@@ -256,10 +265,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         //       saves us from deleting attendee out of current users scope
         $currentEmailMap = array();
         foreach ($currentAttendee as $currentAttender) {
-        	$currentAttenderEmailAdress = $currentAttender->getEmail();
-        	if ($currentAttenderEmailAdress) {
-        	    $currentEmailMap[$currentAttenderEmailAdress] = $currentAttender->getId();
-        	}
+            $currentAttenderEmailAdress = $currentAttender->getEmail();
+            if ($currentAttenderEmailAdress) {
+                $currentEmailMap[$currentAttenderEmailAdress] = $currentAttender->getId();
+            }
         }
         
         // initialize convertEmailMap
@@ -276,19 +285,19 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         // delete attendee from set
         foreach ($toDelete as $email => $attenderId) {
-        	unset($currentAttendee[$attenderId]);
+            unset($currentAttendee[$attenderId]);
         }
         
         // add attendee identified by their emailAdress
         foreach (array_keys($toAdd) as $email) {
-        	$contacts = $addressbook->search(new Addressbook_Model_ContactFilter(array(
-        	    array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
+            $contacts = $addressbook->search(new Addressbook_Model_ContactFilter(array(
+                array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
                 array('condition' => 'OR', 'filters' => array(
                     array('field' => 'email',      'operator'  => 'equals', 'value' => (string) $email),
                     array('field' => 'email_home', 'operator'  => 'equals', 'value' => (string) $email),
                 )),
-        	)));
-        	
+            )));
+            
             if(count($contacts) > 0) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of contacts " . count($contacts));
                 
@@ -302,7 +311,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 }
                 
                 if (! $contactId) {
-                	$contactId = $contacts->getFirstRecord()->getId();
+                    $contactId = $contacts->getFirstRecord()->getId();
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " taking contact with id " . $contactId);
                     
                 }
@@ -311,8 +320,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 $contactId = $contacts->getFirstRecord()->getId();
                 
             } else if ($_ImplicitAddMissingContacts) {
-            	$translation = Tinebase_Translation::getTranslation('Calendar');
-            	$i18nNote = $translation->_('This contact has been automatically added by the system as an event attender');
+                $translation = Tinebase_Translation::getTranslation('Calendar');
+                $i18nNote = $translation->_('This contact has been automatically added by the system as an event attender');
                 $contactData = array(
                     'note'        => $i18nNote,
                     'email'       => (string) $email,
@@ -323,9 +332,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 
                 $contactId = $addressbook->create($contact)->getId();
             } else {
-            	if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " discarding attender " . $email);
-            	
-            	$contactId = NULL;
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " discarding attender " . $email);
+                
+                $contactId = NULL;
             }
             
             // finally add to attendee
@@ -503,9 +512,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     // first fetch the groups, then the lists identified by list_id
                     $typeMap[$type] = Tinebase_Group::getInstance()->getMultiple(array_unique($ids));
                     $typeMap[self::USERTYPE_LIST] = Addressbook_Controller_List::getInstance()->getMultiple($typeMap[$type]->list_id, true);
-                	break;
+                    break;
                 case self::USERTYPE_RESOURCE:
-                	$typeMap[$type] = Calendar_Controller_Resource::getInstance()->getMultiple(array_unique($ids));
+                    $typeMap[$type] = Calendar_Controller_Resource::getInstance()->getMultiple(array_unique($ids));
                     break;
                 default:
                     throw new Exception("type $type not supported");

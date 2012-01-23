@@ -44,12 +44,13 @@ class Tinebase_Model_TagFilter extends Tinebase_Record_Abstract
         'description'          => array('allowEmpty' => true),
         'type'                 => array('presence'   => 'required',
                                         'allowEmpty' => true,
-                                        'InArray'    => array(Tinebase_Model_Tag::TYPE_PERSONAL, Tinebase_Model_Tag::TYPE_SHARED),
+                                        array('InArray', array(Tinebase_Model_Tag::TYPE_PERSONAL, Tinebase_Model_Tag::TYPE_SHARED)),
+                                        // tag type should have empty default value
                                         'default'    => ''
                                   ),
         'grant'                => array('presence'   => 'required',
                                         'allowEmpty' => false,
-                                        'InArray'    => array(Tinebase_Model_TagRight::VIEW_RIGHT, Tinebase_Model_TagRight::USE_RIGHT),
+                                        array('InArray', array(Tinebase_Model_TagRight::VIEW_RIGHT, Tinebase_Model_TagRight::USE_RIGHT)),
                                         'default'    => Tinebase_Model_TagRight::VIEW_RIGHT
                                   ),
     );

@@ -3,6 +3,7 @@
  * Tine 2.0
  * 
  * @package     Addressbook
+ * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -14,14 +15,15 @@
 /**
  * class to hold contact data
  * 
- * @property	account_id	id of associated user
- * @property	email		the email address of the contact
- * @property	n_family
- * @property	n_fileas 	display name
- * @property	n_fn		the full name
- * @property	n_given		
- * @property	type		type of contact
  * @package     Addressbook
+ * @subpackage  Model
+ * @property    account_id    id of associated user
+ * @property    email        the email address of the contact
+ * @property    n_family
+ * @property    n_fileas     display name
+ * @property    n_fn        the full name
+ * @property    n_given        
+ * @property    type        type of contact
  */
 class Addressbook_Model_Contact extends Tinebase_Record_Abstract
 {
@@ -155,7 +157,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'tel_pager'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_work'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_other'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-		'tel_prefer'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_prefer'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tz'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 		'geo'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'lon'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -168,7 +170,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'type'                  => array(
             Zend_Filter_Input::ALLOW_EMPTY => true,
             Zend_Filter_Input::DEFAULT_VALUE => self::CONTACTTYPE_CONTACT,
-            'InArray' => array(self::CONTACTTYPE_USER, self::CONTACTTYPE_CONTACT)
+            array('InArray', array(self::CONTACTTYPE_USER, self::CONTACTTYPE_CONTACT)),
         )
     );
     

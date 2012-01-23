@@ -85,11 +85,11 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
         $this->_validators = array(
             'id'          => array('Alnum', 'allowEmpty' => TRUE),
             'account_id'   => array('presence' => 'required', 'allowEmpty' => TRUE, 'default' => '0'),
-            'account_type' => array('presence' => 'required', 'InArray' => array(
+            'account_type' => array('presence' => 'required', array('InArray', array(
                 Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
                 Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                 Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP
-            )),
+            ))),
         );
         
         foreach ($this->getAllGrants() as $grant) {

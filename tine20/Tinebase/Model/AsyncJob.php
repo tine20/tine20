@@ -60,11 +60,11 @@ class Tinebase_Model_AsyncJob extends Tinebase_Record_Abstract
         'name'              => array('presence' => 'required'),
         'start_time'        => array('presence' => 'required'),
         'end_time'          => array('allowEmpty' => TRUE),
-        'status'            => array('presence' => 'required', 'allowEmpty' => FALSE, 'InArray' => array(
+        'status'            => array('presence' => 'required', 'allowEmpty' => FALSE, array('InArray', array(
             self::STATUS_RUNNING, 
             self::STATUS_FAILURE, 
             self::STATUS_SUCCESS,
-        )),
+        ))),
         'message'           => array('allowEmpty' => TRUE),
         'seq'               => array('allowEmpty' => TRUE),
     );

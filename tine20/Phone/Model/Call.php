@@ -3,15 +3,17 @@
  * class to hold call data
  * 
  * @package     Phone
+ * @subpackage	Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * class to hold lead data
  * 
  * @package     Phone
+ * @subpackage	Model
  */
 class Phone_Model_Call extends Tinebase_Record_Abstract
 {  
@@ -82,7 +84,7 @@ class Phone_Model_Call extends Tinebase_Record_Abstract
         ),
         'direction'             => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
-            'InArray' => array(self::TYPE_INCOMING, self::TYPE_OUTGOING)
+            array('InArray', array(self::TYPE_INCOMING, self::TYPE_OUTGOING)),
         ),
         'source'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'destination'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),    

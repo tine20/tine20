@@ -61,7 +61,7 @@ class Tinebase_Model_Tag extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                     => array('Alnum', 'allowEmpty' => true),
-        'type'                   => array('InArray' => array(self::TYPE_PERSONAL, self::TYPE_SHARED) ),
+        'type'                   => array(array('InArray', array(self::TYPE_PERSONAL, self::TYPE_SHARED))),
         'owner'                  => array('allowEmpty' => true),
         'name'                   => array('presence' => 'required'),
         'description'            => array('allowEmpty' => true),

@@ -46,17 +46,6 @@ class Voipmanager_Model_Snom_PhoneFilter extends Tinebase_Model_Filter_FilterGro
         ),
         'account_id'    => array('filter' => 'Tinebase_Model_Filter_Id'),
     );
-    /*
-    protected $_validators = array(
-        'id'                    => array('allowEmpty' => true,  'Int'   ),
-
-        'macaddress'            => array('allowEmpty' => true           ),
-        'ipaddress'             => array('allowEmpty' => true           ),
-        'description'           => array('allowEmpty' => true           ),
-        'query'                 => array('allowEmpty' => true           )
-        //'showClosed'          => array('allowEmpty' => true, 'InArray' => array(true,false)),
-    );
-    */
     
     /**
      * appends custom filters to a given select object

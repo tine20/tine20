@@ -3,6 +3,7 @@
  * class to hold Account data
  * 
  * @package     Felamimail
+ * @subpackage	Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -24,6 +25,7 @@
  * @property  string    delimiter
  * @property  string    type
  * @package   Felamimail
+ * @subpackage	Model
  */
 class Felamimail_Model_Account extends Tinebase_Record_Abstract
 {  
@@ -106,7 +108,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'type'        => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
             Zend_Filter_Input::DEFAULT_VALUE => 'user',
-            'InArray' => array(self::TYPE_USER, self::TYPE_SYSTEM)
+            array('InArray', array(self::TYPE_USER, self::TYPE_SYSTEM)),
         ),
     // imap server config
         'host'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -114,7 +116,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'ssl'                   => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
             Zend_Filter_Input::DEFAULT_VALUE => 'tls',
-            'InArray' => array(self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS)
+            array('InArray', array(self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS)),
         ),
         'credentials_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'user'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -129,7 +131,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'display_format'        => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
             Zend_Filter_Input::DEFAULT_VALUE => self::DISPLAY_HTML,
-            'InArray' => array(self::DISPLAY_HTML, self::DISPLAY_PLAIN, self::DISPLAY_CONTENT_TYPE)
+            array('InArray', array(self::DISPLAY_HTML, self::DISPLAY_PLAIN, self::DISPLAY_CONTENT_TYPE)),
         ),
     // namespaces
         'ns_personal'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -147,7 +149,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'smtp_ssl'=> array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
             Zend_Filter_Input::DEFAULT_VALUE => 'tls',
-            'InArray' => array(self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS)
+            array('InArray', array(self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS)),
         ),
         'smtp_credentials_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'smtp_user'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -158,7 +160,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'sieve_ssl'=> array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
             Zend_Filter_Input::DEFAULT_VALUE => 'tls',
-            'InArray' => array(self::SECURE_NONE, self::SECURE_TLS)
+            array('InArray', array(self::SECURE_NONE, self::SECURE_TLS)),
         ),
         'sieve_vacation_active' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         //'sieve_credentials_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),

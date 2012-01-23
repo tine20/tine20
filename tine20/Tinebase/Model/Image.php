@@ -48,7 +48,7 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
         'height'      => array('allowEmpty' => true, 'Int' ),
         'bits'        => array('allowEmpty' => true, 'Int' ),
         'channels'    => array('allowEmpty' => true, 'Int' ),
-        'mime'        => array('allowEmpty' => true, 'InArray' => array('image/png', 'image/jpeg', 'image/gif')),
+        'mime'        => array('allowEmpty' => true, array('InArray', array('image/png', 'image/jpeg', 'image/gif'))),
     
         // binary data
         'blob'        => array('allowEmpty' => true)

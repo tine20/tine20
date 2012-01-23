@@ -71,20 +71,20 @@ class Tinebase_Model_Preference extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                => array('allowEmpty' => TRUE),
         'account_id'        => array('presence' => 'required', 'allowEmpty' => TRUE, 'default' => '0'),
-        'account_type'      => array('presence' => 'required', 'allowEmpty' => FALSE, 'InArray' => array(
-            Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, 
-            Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, 
-            Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
-        )),
+        'account_type'      => array('presence' => 'required', 'allowEmpty' => FALSE, array('InArray', array(
+            Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+            Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP
+        ))),
         'application_id'    => array('presence' => 'required', 'allowEmpty' => FALSE, 'Alnum'),
         'name'              => array('presence' => 'required', 'allowEmpty' => FALSE, 'Alnum'),
         'value'             => array('presence' => 'required', 'allowEmpty' => TRUE),
-        'type'              => array('presence' => 'required', 'allowEmpty' => FALSE, 'InArray' => array(
+        'type'              => array('presence' => 'required', 'allowEmpty' => FALSE, array('InArray', array(
             self::TYPE_USER,        // user defined
             self::TYPE_DEFAULT,     // code default
             self::TYPE_ADMIN,       // admin default
             self::TYPE_FORCED,      // admin forced
-        )),
+        ))),
     // xml field with select options for this preference => only available in TYPE_DEFAULT prefs
         'options'            => array('allowEmpty' => TRUE),
     // don't allow to set this preference in admin mode

@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        rename unreadcount -> unseen
  */
@@ -121,11 +121,8 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
     // imap values
         'imap_status'            => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
-            Zend_Filter_Input::DEFAULT_VALUE => self::CACHE_STATUS_EMPTY, 
-            'InArray' => array(
-                self::IMAP_STATUS_OK,
-                self::IMAP_STATUS_DISCONNECT,
-            )
+            Zend_Filter_Input::DEFAULT_VALUE => self::CACHE_STATUS_EMPTY,
+            array('InArray', array(self::IMAP_STATUS_OK, self::IMAP_STATUS_DISCONNECT)),
         ),
         'imap_uidvalidity'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'imap_totalcount'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
@@ -133,13 +130,13 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
     // cache values 
         'cache_status'           => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
-            Zend_Filter_Input::DEFAULT_VALUE => self::CACHE_STATUS_EMPTY, 
-            'InArray' => array(
+            Zend_Filter_Input::DEFAULT_VALUE => self::CACHE_STATUS_EMPTY,
+            array('InArray', array(
                 self::CACHE_STATUS_EMPTY,
                 self::CACHE_STATUS_COMPLETE, 
                 self::CACHE_STATUS_INCOMPLETE, 
                 self::CACHE_STATUS_UPDATING
-            )
+            )),
         ),
         'cache_uidvalidity'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'cache_totalcount'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),

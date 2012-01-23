@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  CustomField
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -51,7 +51,14 @@ class Tinebase_Model_CustomField_Grant extends Tinebase_Record_Abstract
         'id'                => array('allowEmpty' => TRUE),
         'customfield_id'    => array('presence' => 'required'),
         'account_id'        => array('presence' => 'required', 'allowEmpty' => TRUE, 'default' => '0'),
-        'account_type'      => array('presence' => 'required', 'InArray' => array(Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP)),
+        'account_type'      => array(
+            'presence' => 'required',
+            array('InArray', array(
+                Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP
+            )),
+        ),
         'account_grant'     => array('presence' => 'required'),
     );
     
