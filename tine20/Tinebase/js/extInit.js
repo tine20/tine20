@@ -34,6 +34,11 @@ for (fn in {
 Ext.BLANK_IMAGE_URL = "library/ExtJS/resources/images/default/s.gif";
 
 /**
+ * use empty image as secure url
+ */
+Ext.SSL_SECURE_URL = "library/ExtJS/resources/images/default/s.gif";
+
+/**
  * don't fill yahoo stats
  */
 Ext.chart.Chart.CHART_URL = 'library/ExtJS/resources/charts.swf';
