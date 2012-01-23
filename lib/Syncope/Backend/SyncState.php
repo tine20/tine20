@@ -113,6 +113,38 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
     }
     
     /**
+     * @param  Syncope_Model_IDevice|string  $_deviceId
+     * @param  Syncope_Model_IFolder|string  $_folderId
+     * @return Syncope_Model_ISyncState
+     */
+    public function getSyncState($_deviceId, $_folderId)
+    {
+        $deviceId = $_deviceId instanceof Syncope_Model_IDevice ? $_deviceId->id : $_deviceId;
+        $folderId = $_folderId instanceof Syncope_Model_IFolder ? $_folderId->id : $_folderId;
+    
+        $select = $this->_db->select()
+            ->from('syncope_synckeys')
+            ->where($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
+            ->where($this->_db->quoteIdentifier('type')      . ' = ?', $folderId);
+    
+        $stmt = $this->_db->query($select);
+        $state = $stmt->fetchObject('Syncope_Model_SyncState');
+    
+        if (! $state instanceof Syncope_Model_ISyncState) {
+            throw new Syncope_Exception_NotFound('id not found');
+        }
+        
+        if (!empty($state->lastsync)) {
+            $state->lastsync = new DateTime($state->lastsync, new DateTimeZone('utc'));
+        }
+        if (!empty($state->pendingdata)) {
+            $state->pendingdata = Zend_Json::encode($state->pendingdata);
+        }
+        
+        return $state;
+    }
+    
+    /**
      * delete all stored synckeys for given type
      *
      * @param  Syncope_Model_IDevice|string  $_deviceId

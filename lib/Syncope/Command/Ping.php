@@ -45,6 +45,7 @@ class Syncope_Command_Ping extends Syncope_Command_Wbxml
     protected $_defaultNameSpace = 'uri:Ping';
     protected $_documentElement = 'Ping';
     
+    protected $_foldersWithChanges = array();
     
     /**
      * process the XML file and add, change, delete or fetches data 
@@ -55,54 +56,47 @@ class Syncope_Command_Ping extends Syncope_Command_Wbxml
      */
     public function handle()
     {
-        $controller = Syncope_Controller::getInstance();
-        
         $intervalStart = time();
         $status = self::STATUS_NO_CHANGES_FOUND;
 
         // the client does not send a wbxml document, if the Ping parameters did not change compared with the last request
         if($this->_inputDom instanceof DOMDocument) {
-            #$xml = simplexml_load_string($this->_inputDom->saveXML());
-            $xml = new SimpleXMLElement($this->_inputDom->saveXML(), LIBXML_NOWARNING);
+            $xml = simplexml_import_dom($this->_inputDom);
             $xml->registerXPathNamespace('Ping', 'Ping');    
 
             if(isset($xml->HeartBeatInterval)) {
-                $this->_device->pinglifetime = $xml->HeartBeatInterval;
+                $this->_device->pinglifetime = (int)$xml->HeartBeatInterval;
             }
             
             if(isset($xml->Folders->Folder)) {
+                $folders = array();
                 foreach ($xml->Folders->Folder as $folderXml) {
-                    #Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " folderType: " . print_r($folderXml, true));
-                    #$folderBackend = $this->_backend->factory((string)$folderXml->Class);
                     try {
                         // does the folder exist?
-            #            $folderBackend->getFolder($folderXml->Id);
-                        
-                        $folder = array(
-                            'serverEntryId' => (string)$folderXml->Id,
-                            'folderType'    => (string)$folderXml->Class
-                        );
+                        $folder = $this->_folderBackend->getFolder($this->_device, (string)$folderXml->Id);
                         
                         $folders[] = $folder;                
                     } catch (Exception $e) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
+                        if ($this->_logger instanceof Zend_Log) 
+                            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
                         $status = self::STATUS_FOLDER_NOT_FOUND;
                         break;
                     }
                 }
                 $this->_device->pingfolder = serialize($folders);
             }
-            $this->_device = $controller->updateDevice($this->_device);
+            $this->_device = $this->_deviceBackend->update($this->_device);
         }
         
         $lifeTime = $this->_device->pinglifetime;
-        Tinebase_Core::setExecutionLifeTime($lifeTime);
+        #Tinebase_Core::setExecutionLifeTime($lifeTime);
         
         $intervalEnd = $intervalStart + $lifeTime;
         $secondsLeft = $intervalEnd;
         $folders = unserialize($this->_device->pingfolder);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Folders to monitor($lifeTime / $intervalStart / $intervalEnd / $status): " . print_r($folders, true));
+        if ($this->_logger instanceof Zend_Log) 
+            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " Folders to monitor($lifeTime / $intervalStart / $intervalEnd / $status): " . print_r($folders, true));
         
         if($status === self::STATUS_NO_CHANGES_FOUND) {
 
@@ -110,29 +104,28 @@ class Syncope_Command_Ping extends Syncope_Command_Wbxml
             
             do {
                 foreach((array) $folders as $folder) {
-                    $dataController = Syncope_Controller::dataFactory($folder['folderType'], $this->_device, $this->_syncTimeStamp);
-                    #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($folder, true));
+                    $dataController = Syncope_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
+                    
                     try {
-                        $syncState = $controller->getSyncState($this->_device, $folder['folderType'], $folder['serverEntryId']);
+                        $syncState = $this->_syncStateBackend->getSyncState($this->_device, $folder);
                         
                         $count = $this->_getItemEstimate(
                             $dataController,
                             $folder,
                             $syncState->lastsync
                         );
-                    } catch (Syncope_Exception_SyncStateNotFound $e) {
+                    } catch (Syncope_Exception_NotFound $e) {
                         // folder got never synchronized to client
-                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
-                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' syncstate not found. enforce sync for folder: ' . $folder['serverEntryId']);
+                        if ($this->_logger instanceof Zend_Log) 
+                            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
+                        if ($this->_logger instanceof Zend_Log) 
+                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' syncstate not found. enforce sync for folder: ' . $folder['serverFolderId']);
                         
                         $count = 1;
                     }
                         
                     if($count > 0) {
-                        $folderWithChanges[] = array(
-                            'serverEntryId' => $folder['serverEntryId'],
-                            'folderType'    => $folder['folderType']
-                        );
+                        $this->_foldersWithChanges[] = $folder;
                         $status = self::STATUS_CHANGES_FOUND;
                     }
                 }
@@ -143,7 +136,8 @@ class Syncope_Command_Ping extends Syncope_Command_Wbxml
                 
                 // another process synchronized data already
                 if(isset($syncState) && $syncState->lastsync > $this->_syncTimeStamp) {
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " terminate ping process. Some other process updated data already.");
+                    if ($this->_logger instanceof Zend_Log) 
+                        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " terminate ping process. Some other process updated data already.");
                     break;
                 }
                 
@@ -153,16 +147,18 @@ class Syncope_Command_Ping extends Syncope_Command_Wbxml
             } while($secondsLeft > 0);
         }
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " Lifetime: $lifeTime SecondsLeft: $secondsLeft Status: $status)");
+        if ($this->_logger instanceof Zend_Log) 
+            $this->_logger->info(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " Lifetime: $lifeTime SecondsLeft: $secondsLeft Status: $status)");
         
         $ping = $this->_outputDom->documentElement;
         $ping->appendChild($this->_outputDom->createElementNS('uri:Ping', 'Status', $status));
         if($status === self::STATUS_CHANGES_FOUND) {
             $folders = $ping->appendChild($this->_outputDom->createElementNS('uri:Ping', 'Folders'));
-            foreach($folderWithChanges as $changedFolder) {
-                $folder = $folders->appendChild($this->_outputDom->createElementNS('uri:Ping', 'Folder', $changedFolder['serverEntryId']));
-                #$folder->appendChild($this->_outputDom->createElementNS('uri:Ping', 'Id', $changedFolder['serverEntryId']));
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " changes in folder: " . $changedFolder['serverEntryId']);
+            
+            foreach($this->_foldersWithChanges as $changedFolder) {
+                $folder = $folders->appendChild($this->_outputDom->createElementNS('uri:Ping', 'Folder', $changedFolder->folderid));
+                if ($this->_logger instanceof Zend_Log) 
+                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " changes in folder: " . $changedFolder->folderid);
             }
         }                
     }
@@ -173,8 +169,8 @@ class Syncope_Command_Ping extends Syncope_Command_Wbxml
      */
     public function getResponse()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_outputDom->saveXML());
+        if ($this->_logger instanceof Zend_Log) 
+            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_outputDom->saveXML());
     
         return $this->_outputDom;
     }
@@ -187,11 +183,13 @@ class Syncope_Command_Ping extends Syncope_Command_Wbxml
      * @param $_lastSyncTimeStamp
      * @return int number of changed entries
      */
-    private function _getItemEstimate($_dataController, $_collectionData, $_lastSyncTimeStamp)
+    protected function _getItemEstimate($_dataController, $_collectionData, $_lastSyncTimeStamp)
     {
+        return 1;
+        
         // hack to have the same variable names all over the place
-        $_collectionData['class']        = $_collectionData['folderType'];
-        $_collectionData['collectionId'] = $_collectionData['serverEntryId'];
+        $_collectionData['class']        = $_collectionData['class'];
+        $_collectionData['collectionId'] = $_collectionData['serverFolderId'];
         
         $contentStateBackend  = new Syncope_Backend_ContentState();
         $folderStateBackend   = new Syncope_Backend_FolderState();

@@ -45,6 +45,8 @@ abstract class Syncope_Command_ATestCase extends PHPUnit_Framework_TestCase
      */
     protected $_db;
     
+    protected $_logPriority = Zend_Log::ALERT;
+    
     /**
      * (non-PHPdoc)
      * @see Syncope/Syncope_TestCase::setUp()
@@ -57,7 +59,7 @@ abstract class Syncope_Command_ATestCase extends PHPUnit_Framework_TestCase
 
         #$writer = new Zend_Log_Writer_Null();
         
-        $filter = new Zend_Log_Filter_Priority(Zend_Log::CRIT);
+        $filter = new Zend_Log_Filter_Priority($this->_logPriority);
         $writer = new Zend_Log_Writer_Stream('php://output');
         $writer->addFilter($filter);
         

@@ -36,6 +36,15 @@ interface Syncope_Backend_IFolder
     public function resetState($_deviceId);
     
     /**
+     * get folder indentified by $_folderId
+     *
+     * @param  Syncope_Model_Device|string  $_deviceId
+     * @param  string                       $_folderId
+     * @return Syncope_Model_IFolder
+     */
+    public function getFolder($_deviceId, $_folderId);
+    
+    /**
      * get array of ids which got send to the client for a given class
      *
      * @param Syncope_Model_Device $_deviceId

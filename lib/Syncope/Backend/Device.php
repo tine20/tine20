@@ -88,9 +88,11 @@ class Syncope_Backend_Device implements Syncope_Backend_IDevice
     public function update(Syncope_Model_IDevice $_device)
     {
         $this->_db->update('syncope_devices', array(
-        	'acsversion' => $_device->acsversion,
-        	'policykey'  => $_device->policykey,
-        	'remotewipe' => $_device->remotewipe
+        	'acsversion'   => $_device->acsversion,
+        	'policykey'    => $_device->policykey,
+        	'pingfolder'   => $_device->pingfolder,
+        	'pinglifetime' => $_device->pinglifetime,
+        	'remotewipe'   => $_device->remotewipe
         ), array(
         	'id = ?' => $_device->id
         ));

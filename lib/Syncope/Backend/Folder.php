@@ -141,11 +141,11 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
     }
     
     /**
-     * get array of ids which got send to the client for a given class
+     * get folder indentified by $_folderId
      *
-     * @param Syncope_Model_Device|string $_deviceId
-     * @param string $_class
-     * @return array
+     * @param  Syncope_Model_Device|string  $_deviceId
+     * @param  string                       $_folderId
+     * @return Syncope_Model_IFolder
      */
     public function getFolder($_deviceId, $_folderId)
     {
@@ -160,7 +160,7 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
         $state = $stmt->fetchObject('Syncope_Model_Folder');
         
         if (! $state instanceof Syncope_Model_IFolder) {
-            throw new Syncope_Exception_NotFound('id not found');
+            throw new Syncope_Exception_NotFound('folder not found');
         }
         
         if (!empty($state->creation_time)) {

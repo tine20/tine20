@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `syncope_devices` (
     `acsversion` varchar(40) NOT NULL,
     `pinglifetime` int(11) DEFAULT NULL,
     `remotewipe` int(11) DEFAULT '0',
+    `pingfolder` longblob,
     PRIMARY KEY (`id`)
 );
 

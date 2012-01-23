@@ -22,6 +22,7 @@
  * @property    string   policykey
  * @property    string   owner_id
  * @property    string   acsversion
+ * @property    string   pingfolder
  * @property    string   pinglifetime
  * @property    string   remotewipe
  */

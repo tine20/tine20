@@ -109,7 +109,6 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
     public function handle()
     {
         // input xml
-        #$xml = new SimpleXMLElement($this->_inputDom->saveXML());
         $xml = simplexml_import_dom($this->_inputDom);
         
         foreach ($xml->Collections->Collection as $xmlCollection) {
