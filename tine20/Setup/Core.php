@@ -231,6 +231,8 @@ class Setup_Core extends Tinebase_Core
                 
             } catch (Zend_Db_Adapter_Exception $zae) {
                 Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $zae->getMessage());
+            } catch (Zend_Db_Exception $zde) {
+                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $zde->getMessage());
             }
         }
     }
