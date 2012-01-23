@@ -66,14 +66,12 @@ class Syncope_Backend_Device implements Syncope_Backend_IDevice
             ->from('syncope_devices')
             ->where('id = ?', $_id);
             
-        $stmt = $select->query();
-        $result = $stmt->fetchAll();
+        $stmt = $this->_db->query($select);
+        $device = $stmt->fetchObject('Syncope_Model_Device');
         
-        if (count($result) == 0) {
+        if (! $device instanceof Syncope_Model_IDevice) {
             throw new Syncope_Exception_NotFound('id not found');
         }
-        
-        $device = new Syncope_Model_Device($result[0]);
         
         return $device;
     }
@@ -89,6 +87,15 @@ class Syncope_Backend_Device implements Syncope_Backend_IDevice
     
     public function update(Syncope_Model_IDevice $_device)
     {
+        $this->_db->update('syncope_devices', array(
+        	'acsversion' => $_device->acsversion,
+        	'policykey'  => $_device->policykey,
+        	'remotewipe' => $_device->remotewipe
+        ), array(
+        	'id = ?' => $_device->id
+        ));
+        
+        return $this->get($_device->id);
         
     }
 }

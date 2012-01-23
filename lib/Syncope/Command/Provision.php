@@ -1,24 +1,23 @@
 <?php
 /**
- * Tine 2.0
+ * Syncope
  *
  * @package     Syncope
  * @subpackage  Command
  * @license     http://www.tine20.org/licenses/agpl-nonus.txt AGPL Version 1 (Non-US)
  *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL), 
- *              Version 1, the distribution of the Syncope module in or to the 
+ *              Version 1, the distribution of the Tine 2.0 ActiveSync module in or to the 
  *              United States of America is excluded from the scope of this license.
  * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * class documentation
+ * class to handle ActiveSync FolderSync command
  *
  * @package     Syncope
  * @subpackage  Command
  */
- 
 class Syncope_Command_Provision extends Syncope_Command_Wbxml
 {
     protected $_defaultNameSpace = 'uri:Provision';
@@ -38,7 +37,7 @@ class Syncope_Command_Provision extends Syncope_Command_Wbxml
     protected $_skipValidatePolicyKey = true;
     
     protected $_policyType;
-    protected $_policyKey;
+    protected $_sendPolicyKey;
     
     /**
      * process the XML file and add, change, delete or fetches data 
@@ -47,16 +46,14 @@ class Syncope_Command_Provision extends Syncope_Command_Wbxml
      */
     public function handle()
     {
-        $controller = Syncope_Controller::getInstance();
-        
         $xml = simplexml_import_dom($this->_inputDom);
         
-        $this->_policyType = isset($xml->Policies->Policy->PolicyType) ? (string) $xml->Policies->Policy->PolicyType : null;
-        $this->_policyKey  = isset($xml->Policies->Policy->PolicyKey)  ? (int) $xml->Policies->Policy->PolicyKey     : null;
+        $this->_policyType     = isset($xml->Policies->Policy->PolicyType) ? (string) $xml->Policies->Policy->PolicyType : null;
+        $this->_sendPolicyKey  = isset($xml->Policies->Policy->PolicyKey)  ? (int) $xml->Policies->Policy->PolicyKey     : null;
         
         if ($this->_device->remotewipe == self::REMOTEWIPE_REQUESTED && isset($xml->RemoteWipe->Status) && (int)$xml->RemoteWipe->Status == self::STATUS_SUCCESS) {
             $this->_device->remotewipe = self::REMOTEWIPE_CONFIRMED;
-            $this->_device = Syncope_Controller_Device::getInstance()->update($this->_device);
+            $this->_device = $this->_deviceBackend->update($this->_device);
         }
         
     }
@@ -71,10 +68,10 @@ class Syncope_Command_Provision extends Syncope_Command_Wbxml
         if ($this->_device->remotewipe >= self::REMOTEWIPE_REQUESTED) {
             $this->_sendRemoteWipe();
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' PolicyType: ' . $this->_policyType . ' PolicyKey: ' . $this->_policyKey);
+            if ($this->_logger instanceof Zend_Log) 
+                $this->_logger->debug(__METHOD__ . '::' . __LINE__ . ' PolicyType: ' . $this->_policyType . ' PolicyKey: ' . $this->_sendPolicyKey);
             
-            if($this->_policyKey === NULL) {
+            if($this->_sendPolicyKey === NULL) {
                 $this->_sendPolicy();
             } else {
                 $this->_acknowledgePolicy();
@@ -99,8 +96,8 @@ class Syncope_Command_Provision extends Syncope_Command_Wbxml
      */
     protected function _sendPolicy()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' send policy to device');
+        if ($this->_logger instanceof Zend_Log) 
+            $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' send policy to device');
         
         $policyData = '<wap-provisioningdoc>
             <characteristic type="SecurityPolicy">
@@ -127,7 +124,7 @@ class Syncope_Command_Provision extends Syncope_Command_Wbxml
             </characteristic>
         </wap-provisioningdoc>';
         
-        $newPolicyKey = $this->generatePolicyKey();
+        $this->_device->policykey = $this->generatePolicyKey();
                 
         $provision = $sync = $this->_outputDom->documentElement;
         $provision->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Status', 1));
@@ -135,7 +132,7 @@ class Syncope_Command_Provision extends Syncope_Command_Wbxml
         $policy = $policies->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Policy'));
         $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'PolicyType', $this->_policyType));
         $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Status', 1));
-        $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'PolicyKey', $newPolicyKey));
+        $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'PolicyKey', $this->_device->policykey));
         if ($this->_policyType == self::POLICYTYPE_XML) {
             $data = $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Data', $policyData));
         } else {
@@ -147,8 +144,7 @@ class Syncope_Command_Provision extends Syncope_Command_Wbxml
             #$easProvisionDoc->appendChild($this->_outputDom->createElementNS('uri:Provision', 'MaxInactivityTimeDeviceLock', 60));
         }
         
-        $this->_device->policykey = $newPolicyKey;
-        Syncope_Controller::getInstance()->updateDevice($this->_device);
+        $this->_deviceBackend->update($this->_device);
     }
     
     /**
@@ -156,8 +152,8 @@ class Syncope_Command_Provision extends Syncope_Command_Wbxml
      */
     protected function _sendRemoteWipe()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' send remote wipe to device');
+        if ($this->_logger instanceof Zend_Log) 
+            $this->_logger->warn(__METHOD__ . '::' . __LINE__ . ' send remote wipe to device');
         
         $provision = $sync = $this->_outputDom->documentElement;
         $provision->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Status', 1));
@@ -166,10 +162,10 @@ class Syncope_Command_Provision extends Syncope_Command_Wbxml
     
     protected function _acknowledgePolicy()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' acknowledge policy');
+        if ($this->_logger instanceof Zend_Log) 
+            $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' acknowledge policy');
         
-        $newPolicyKey = $this->generatePolicyKey();
+        $this->_device->policykey = $this->generatePolicyKey();
         
         $provision = $sync = $this->_outputDom->documentElement;
         $provision->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Status', 1));
@@ -177,10 +173,9 @@ class Syncope_Command_Provision extends Syncope_Command_Wbxml
         $policy = $policies->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Policy'));
         $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'PolicyType', $this->_policyType));
         $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Status', 1));
-        $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'PolicyKey', $newPolicyKey));
+        $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'PolicyKey', $this->_device->policykey));
 
-        $this->_device->policykey = $newPolicyKey;
-        Syncope_Controller::getInstance()->updateDevice($this->_device);
+        $this->_deviceBackend->update($this->_device);
     }
     
     public static function generatePolicyKey()
