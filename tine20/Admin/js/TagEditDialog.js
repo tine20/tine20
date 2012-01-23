@@ -27,6 +27,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     windowNamePrefix: 'AdminTagEditDialog_',
     id: 'tagDialog',
     layout: 'fit',
+    border: false,
     labelWidth: 120,
     labelAlign: 'top',
     
@@ -314,7 +315,6 @@ Tine.Admin.Tags.EditDialog.openWindow = function (config) {
         width: 650,
         height: 400,
         name: Tine.Admin.Tags.EditDialog.prototype.windowNamePrefix + config.tag.id,
-        layout: Tine.Admin.Tags.EditDialog.prototype.windowLayout,
         contentPanelConstructor: 'Tine.Admin.Tags.EditDialog',
         contentPanelConstructorConfig: config
     });

@@ -327,3 +327,4 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
         }
     }
 });
+Ext.reg('tinerecordpickergrid', Tine.widgets.account.PickerGridPanel);
