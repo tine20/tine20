@@ -1149,7 +1149,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
         $grantsFields = array(
             'account_id'     => $_accountId,
-            'account_type'   => 'account',
+            'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
         );
         $grantsFields = array_merge($grantsFields, $grants);
         
