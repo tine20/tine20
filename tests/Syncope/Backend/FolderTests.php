@@ -91,6 +91,19 @@ class Syncope_Backend_FolderTests extends PHPUnit_Framework_TestCase
     }
     
     /**
+     */
+    public function testDelete()
+    {
+        $folder = $this->testCreate();
+    
+        $this->_folderBackend->delete($folder);
+        
+        $this->setExpectedException('Syncope_Exception_NotFound');
+        
+        $folder = $this->_folderBackend->get($folder->id);
+    }
+    
+    /**
      * test sync with non existing collection id
      */
     public function testResetState()

@@ -74,16 +74,7 @@ class Syncope_Command_FolderCreate extends Syncope_Command_Wbxml
                 break;
         }
         
-        if ($syncKey == 0) {
-            $this->_syncState = new Syncope_Model_SyncState(array(
-                'device_id' => $this->_device,
-                'counter'   => 0,
-                'type'      => 'FolderSync',
-                'lastsync'  => $this->_syncTimeStamp
-            ));
-        } else {
-            $this->_syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', $syncKey);
-        }
+        $this->_syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', $syncKey);
     }
     
     /**
@@ -93,7 +84,7 @@ class Syncope_Command_FolderCreate extends Syncope_Command_Wbxml
     {
         $folderCreate = $this->_outputDom->documentElement;
         
-        if($this->_syncState == false || $this->_syncState->counter == 0) {
+        if($this->_syncState == false) {
             if ($this->_logger instanceof Zend_Log) 
                 $this->_logger->info(__METHOD__ . '::' . __LINE__ . " INVALID synckey");
             $folderCreate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', Syncope_Command_FolderSync::STATUS_INVALID_SYNC_KEY));

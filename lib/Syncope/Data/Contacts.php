@@ -88,6 +88,13 @@ class Syncope_Data_Contacts implements Syncope_Data_IData
         return self::$folders[$id];
     }
     
+    public function deleteFolder($_folderId)
+    {
+        $folderId = $_folderId instanceof Syncope_Model_IFolder ? $_folderId->folderid : $_folderId;
+        
+        unset(self::$folders[$folderId]);
+    }
+    
     /**
      * @param  Syncope_Model_IFolder|string  $_folderId
      * @param  string                        $_filter

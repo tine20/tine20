@@ -20,6 +20,7 @@ class Syncope_Command_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Syncope all ActiveSync command tests');
         
         $suite->addTestSuite('Syncope_Command_FolderCreateTests');
+        $suite->addTestSuite('Syncope_Command_FolderDeleteTests');
         $suite->addTestSuite('Syncope_Command_FolderSyncTests');
         $suite->addTestSuite('Syncope_Command_GetItemEstimateTests');
         $suite->addTestSuite('Syncope_Command_PingTests');

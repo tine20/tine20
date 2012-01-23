@@ -59,6 +59,15 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
         return $this->get($id);
     }
     
+    public function delete($_id)
+    {
+        $id = $_id instanceof Syncope_Model_IFolder ? $_id->id : $id;
+    
+        $result = $this->_db->delete('syncope_folders', array('id' => $id));
+    
+        return (bool) $result;
+    }
+    
     /**
      * @param string  $_id
      * @throws Syncope_Exception_NotFound

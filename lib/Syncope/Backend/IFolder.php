@@ -27,6 +27,8 @@ interface Syncope_Backend_IFolder
      */
     public function create(Syncope_Model_IFolder $_folderState);
     
+    public function delete($_id);
+    
     /**
      * delete all stored folderId's for given device
      *
