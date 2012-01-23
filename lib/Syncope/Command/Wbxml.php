@@ -92,6 +92,11 @@ abstract class Syncope_Command_Wbxml implements Syncope_Command_Interface
      * @var Tinebase_DateTime
      */
     protected $_syncTimeStamp;
+    
+    /**
+     * @var Zend_Log
+     */
+    protected $_logger;
         
     const FILTERTYPE_ALL            = 0;
     const FILTERTYPE_1DAY           = 1;
@@ -121,9 +126,12 @@ abstract class Syncope_Command_Wbxml implements Syncope_Command_Interface
         $this->_device    = $_device;
         
         $this->_deviceBackend       = Zend_Registry::get('deviceBackend');
-        $this->_folderBackend  = Zend_Registry::get('folderStateBackend');
+        $this->_folderBackend       = Zend_Registry::get('folderStateBackend');
         $this->_syncStateBackend    = Zend_Registry::get('syncStateBackend');
         $this->_contentStateBackend = Zend_Registry::get('contentStateBackend');
+        if (Zend_Registry::isRegistered('loggerBackend')) {
+            $this->_logger          = Zend_Registry::get('loggerBackend');
+        }
         
         if ($this->_skipValidatePolicyKey !== true && $this->_policyKey === null) {
             #throw new Syncope_Exception_PolicyKeyMissing();
@@ -142,8 +150,8 @@ abstract class Syncope_Command_Wbxml implements Syncope_Command_Interface
         
         $this->_syncTimeStamp = new DateTime(null, new DateTimeZone('UTC'));
         
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-        #    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " sync timestamp: " . $this->_syncTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG));
+        if ($this->_logger instanceof Zend_Log) 
+            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " sync timestamp: " . $this->_syncTimeStamp->format('Y-m-d H:i:s'));
         
         // Creates an instance of the DOMImplementation class
         $imp = new DOMImplementation();

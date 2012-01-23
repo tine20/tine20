@@ -109,8 +109,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
     public function handle()
     {
         // input xml
-        $xml = new SimpleXMLElement($this->_inputDom->saveXML());
-        #$xml = simplexml_import_dom($this->_inputDom);
+        #$xml = new SimpleXMLElement($this->_inputDom->saveXML());
+        $xml = simplexml_import_dom($this->_inputDom);
         
         foreach ($xml->Collections->Collection as $xmlCollection) {
             $collectionData = array(
@@ -172,20 +172,20 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                 #$collectionData['class'] = $folder->class;
                 
             } catch (Syncope_Exception_NotFound $senf) {
-                #if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
-                #    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " folder {$collectionData['collectionId']} not found");
+                if ($this->_logger instanceof Zend_Log) 
+                    $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " folder {$collectionData['collectionId']} not found");
                 
                 $this->_collections['invalidFolderId'][$collectionData['collectionId']] = $collectionData;
                 continue;
             }
             
-            #if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 
-            #    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " SyncKey is {$collectionData['syncKey']} Class: {$collectionData['class']} CollectionId: {$collectionData['collectionId']}");
+            if ($this->_logger instanceof Zend_Log) 
+                $this->_logger->info(__METHOD__ . '::' . __LINE__ . " SyncKey is {$collectionData['syncKey']} Class: {$collectionData['class']} CollectionId: {$collectionData['collectionId']}");
             
             // initial synckey
             if($collectionData['syncKey'] === 0) {
-                #if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                #    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " initial client synckey 0 provided");
+                if ($this->_logger instanceof Zend_Log) 
+                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " initial client synckey 0 provided");
                 
                 // reset sync state for this folder
                 $this->_syncStateBackend->resetState($this->_device, $collectionData['folder']);
@@ -205,8 +205,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
             
             // check for invalid sycnkey
             if(($collectionData['syncState'] = $this->_syncStateBackend->validate($this->_device, $collectionData['folder'], $collectionData['syncKey'])) === false) {
-                #if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-                #    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey {$collectionData['syncKey']} provided");
+                if ($this->_logger instanceof Zend_Log) 
+                    $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey {$collectionData['syncKey']} provided");
                 
                 // reset sync state for this folder
                 $this->_syncStateBackend->resetState($this->_device, $collectionData['folder']);
@@ -240,12 +240,12 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     
                     try {
                         if(count($existing) === 0) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " entry not found. adding as new");
+                            if ($this->_logger instanceof Zend_Log) 
+                                $this->_logger->info(__METHOD__ . '::' . __LINE__ . " entry not found. adding as new");
                             $added = $dataController->add($collectionData['collectionId'], $add->ApplicationData);
                         } else {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found matching entry. reuse existing entry");
+                            if ($this->_logger instanceof Zend_Log) 
+                                $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found matching entry. reuse existing entry");
                             // use the first found entry
                             $added = $existing[0];
                         }
@@ -253,8 +253,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         $collectionData['added'][(string)$add->ClientId]['status'] = self::STATUS_SUCCESS;
                         $this->_addContent($collectionData['folder']->class, $collectionData['collectionId'], $added->getId());
                     } catch (Exception $e) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " failed to add entry " . $e->getMessage());
+                        if ($this->_logger instanceof Zend_Log) 
+                            $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " failed to add entry " . $e->getMessage());
                         $collectionData['added'][(string)$add->ClientId]['status'] = self::STATUS_SERVER_ERROR;
                     }
                 }
@@ -263,8 +263,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
             // handle changes, but only if not first sync
             if($collectionData['syncKey'] > 1 && isset($xmlCollection->Commands->Change)) {
                 $changes = $xmlCollection->Commands->Change;
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($changes) . " entries to be updated on server");
+                if ($this->_logger instanceof Zend_Log) 
+                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found " . count($changes) . " entries to be updated on server");
                 
                 foreach ($changes as $change) {
                     $serverId = (string)$change->ServerId;
@@ -279,8 +279,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         // entry does not exist anymore, will get deleted automaticaly
                         $collectionData['changed'][$serverId] = self::STATUS_OBJECT_NOT_FOUND;
                     } catch (Exception $e) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " failed to update entry " . $e);
+                        if ($this->_logger instanceof Zend_Log) 
+                            $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " failed to update entry " . $e);
                         // something went wrong while trying to update the entry
                         $collectionData['changed'][$serverId] = self::STATUS_SERVER_ERROR;
                     }
@@ -290,8 +290,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
             // handle deletes, but only if not first sync
             if(isset($xmlCollection->Commands->Delete)) {
                 $deletes = $xmlCollection->Commands->Delete;
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($deletes) . " entries to be deleted on server");
+                if ($this->_logger instanceof Zend_Log) 
+                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found " . count($deletes) . " entries to be deleted on server");
                 
                 foreach ($deletes as $delete) {
                     $serverId = (string)$delete->ServerId;
@@ -303,16 +303,16 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         try {
                             $dataController->delete($collectionData['collectionId'], $serverId, $collectionData);
                         } catch(Tinebase_Exception_NotFound $e) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT))
-                                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but entry was not found');
+                            if ($this->_logger instanceof Zend_Log) 
+                                $this->_logger->crit(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but entry was not found');
                         } catch (Tinebase_Exception $e) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but a error occured: ' . $e->getMessage());
+                            if ($this->_logger instanceof Zend_Log) 
+                                $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but a error occured: ' . $e->getMessage());
                             $collectionData['forceAdd'][$serverId] = $serverId;
                         }
                     } catch (Tinebase_Exception_NotFound $tenf) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $serverId . ' should have been removed from client already');
+                        if ($this->_logger instanceof Zend_Log) 
+                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' ' . $serverId . ' should have been removed from client already');
                         // should we send a special status???
                         //$collectionData['deleted'][$serverId] = self::STATUS_SUCCESS;
                     }
@@ -332,8 +332,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                 }
                 
                 $fetches = $xmlCollection->Commands->Fetch;
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($fetches) . " entries to be fetched from server");
+                if ($this->_logger instanceof Zend_Log) 
+                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found " . count($fetches) . " entries to be fetched from server");
                 foreach ($fetches as $fetch) {
                     $serverId = (string)$fetch->ServerId;
                     
@@ -465,8 +465,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                                 
                                 $fetch->appendChild($applicationData);
                             } catch (Exception $e) {
-                                #if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                                #    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
+                                if ($this->_logger instanceof Zend_Log) 
+                                    $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
                                 $fetch->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_OBJECT_NOT_FOUND));
                             }
                         }
@@ -502,8 +502,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                                 foreach($serverAdds as $id => $serverId) {
                                     // skip entries added by client during this sync session
                                     if(isset($collectionData['added'][$serverId]) && !isset($collectionData['forceAdd'][$serverId])) {
-                                        #if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                                        #    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " skipped added entry: " . $serverId);
+                                        if ($this->_logger instanceof Zend_Log) 
+                                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped added entry: " . $serverId);
                                         unset($serverAdds[$id]);
                                     }
                                 }
@@ -519,8 +519,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                                     // skip entry, if it got changed by client during current sync
                                     // @todo $this->_collections[$class][$collectionId] should be equal to $collectionData ???
                                     if(isset($collectionData['changed'][$serverId]) && !isset($this->_collections[$class][$collectionId]['forceChange'][$serverId])) {
-                                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " skipped changed entry: " . $serverId);
+                                        if ($this->_logger instanceof Zend_Log) 
+                                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped changed entry: " . $serverId);
                                         unset($serverChanges[$id]);
                                     }
                                 }
@@ -562,8 +562,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                                 
                                 $this->_totalCount++;
                             } catch (Exception $e) {
-                                #if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                                #    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
+                                if ($this->_logger instanceof Zend_Log) 
+                                    $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
                             }
                             
                             // mark as send to the client, even the conversion to xml might have failed 
@@ -596,8 +596,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                                 
                                 $this->_totalCount++;
                             } catch (Exception $e) {
-                                #if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                                #    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
+                                if ($this->_logger instanceof Zend_Log) 
+                                    $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
                             }
 
                             unset($serverChanges[$id]);    
@@ -621,15 +621,15 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                                 
                                 $this->_totalCount++;
                             } catch (Exception $e) {
-                                #if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                                #    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
+                                if ($this->_logger instanceof Zend_Log) 
+                                    $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
                             }
                             
                             unset($serverDeletes[$id]);    
                         }
                     }
-                    #if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                    #    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " new synckey is ". $collectionData['syncState']->counter);                
+                    if ($this->_logger instanceof Zend_Log) 
+                        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " new synckey is ". $collectionData['syncState']->counter);                
                 }
                 
                 if (isset($collectionData['syncState']) && $collectionData['syncState'] instanceof Syncope_Model_ISyncState) {
@@ -649,8 +649,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     
                     
                     if (!empty($collectionData['added'])) {
-                        #if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                        #    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " remove previous synckey as client added new entries");
+                        if ($this->_logger instanceof Zend_Log) 
+                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . " remove previous synckey as client added new entries");
                         $keepPreviousSyncKey = false;
                     } else {
                         $keepPreviousSyncKey = true;
@@ -667,8 +667,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         $this->_folderBackend->update($folderState);
                     } catch (Syncope_Exception_NotFound $senf) {
                         // failed to get folderstate => should not happen but is also no problem in this state
-                        if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) 
-                            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' failed to get content state for: ' . $collectionData['collectionId']);
+                        if ($this->_logger instanceof Zend_Log) 
+                            $this->_logger->crit(__METHOD__ . '::' . __LINE__ . ' failed to get content state for: ' . $collectionData['collectionId']);
                     }
                 }
             }
@@ -684,7 +684,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
      * @param string $_collectionId the collection id from the xml
      * @param string $_contentId the Tine 2.0 id of the entry
      */
-    protected function _markContentAsDeleted($_class, $_collectionId, $_contentId)
+    protected function __markContentAsDeleted($_class, $_collectionId, $_contentId)
     {
         $contentState = new Syncope_Model_Content(array(
                 'device_id'     => $this->_device->getId(),
@@ -695,37 +695,5 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
         ));
     
         $this->_controller->markContentAsDeleted($contentState);
-    }
-    
-    /**
-     * @param unknown_type $_deviceId
-     * @param unknown_type $_class
-     * @param unknown_type $_folderId
-     * @return Syncope_Model_Folder
-     */
-    public function __getFolder($_deviceId, $_folderId)
-    {
-        $deviceId = $_deviceId instanceof Syncope_Model_Device ? $_deviceId->getId() : $_deviceId;
-        
-        // store current filter type
-        $filter = new Syncope_Model_FolderFilter(array(
-            array(
-                'field'     => 'device_id',
-                'operator'  => 'equals',
-                'value'     => $deviceId,
-            ),
-            array(
-                'field'     => 'folderid',
-                'operator'  => 'equals',
-                'value'     => $_folderId
-            )
-        ));
-        $folderStates = $this->_folderBackend->search($filter);
-
-        if ($folderStates->count() == 0) {
-            throw new Tinebase_Exception_NotFound('folderstate for device not found');
-        }
-        
-        return $folderStates->getFirstRecord();
-    }
+    }    
 }

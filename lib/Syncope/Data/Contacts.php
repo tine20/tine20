@@ -74,6 +74,20 @@ class Syncope_Data_Contacts implements Syncope_Data_IData
         return self::$folders;
     }
     
+    public function createFolder($_parentId, $_displayName, $_type)
+    {
+        $id = sha1(mt_rand(). microtime());
+        
+        self::$folders[$id] = array(
+            'folderId'    => $id,
+            'parentId'    => $_parentId,
+            'displayName' => $_displayName,
+            'type'        => $_type
+        );
+        
+        return self::$folders[$id];
+    }
+    
     /**
      * @param  Syncope_Model_IFolder|string  $_folderId
      * @param  string                        $_filter

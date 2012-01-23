@@ -28,9 +28,15 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
      */
     protected $_db;
     
-    public function __construct(Zend_Db_Adapter_Abstract $_db)
+    /**
+     * @var Zend_Log
+     */
+    protected $_logger;
+    
+    public function __construct(Zend_Db_Adapter_Abstract $_db, Zend_Log $_logger = null)
     {
-        $this->_db = $_db;
+        $this->_db     = $_db;
+        $this->_logger = $_logger;
     }
     
     /**

@@ -13,38 +13,8 @@
  * 
  * @package     Tests
  */
-class Syncope_Command_SyncTests extends PHPUnit_Framework_TestCase
+class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
 {
-    /**
-     * @var Syncope_Model_IDevice
-     */
-    protected $_device;
-    
-    /**
-     * @var Syncope_Backend_IDevice
-     */
-    protected $_deviceBackend;
-
-    /**
-     * @var Syncope_Backend_IFolder
-     */
-    protected $_folderBackend;
-    
-    /**
-     * @var Syncope_Backend_ISyncState
-     */
-    protected $_syncStateBackend;
-    
-    /**
-     * @var Syncope_Backend_IContent
-     */
-    protected $_contentStateBackend;
-    
-    /**
-     * @var Zend_Db_Adapter_Abstract
-     */
-    protected $_db;
-        
     /**
      * Runs the test methods of this class.
      *
@@ -55,42 +25,6 @@ class Syncope_Command_SyncTests extends PHPUnit_Framework_TestCase
     {
         $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync Sync Command Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see ActiveSync/ActiveSync_TestCase::setUp()
-     */
-    protected function setUp()
-    {
-        $this->_db = getTestDatabase();
-        
-        $this->_db->beginTransaction();
-        
-        $this->_deviceBackend       = new Syncope_Backend_Device($this->_db);
-        $this->_folderBackend  = new Syncope_Backend_Folder($this->_db);
-        $this->_syncStateBackend    = new Syncope_Backend_SyncState($this->_db);
-        $this->_contentStateBackend = new Syncope_Backend_Content($this->_db);
-        
-        $this->_device = $this->_deviceBackend->create(
-            Syncope_Backend_DeviceTests::getTestDevice()
-        );
-        
-        Zend_Registry::set('deviceBackend',       $this->_deviceBackend);
-        Zend_Registry::set('folderStateBackend',  $this->_folderBackend);
-        Zend_Registry::set('syncStateBackend',    $this->_syncStateBackend);
-        Zend_Registry::set('contentStateBackend', $this->_contentStateBackend);
-    }
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        $this->_db->rollBack();
     }
     
     /**
@@ -219,7 +153,7 @@ class Syncope_Command_SyncTests extends PHPUnit_Framework_TestCase
         $sync->handle();
         
         $syncDoc = $sync->getResponse();
-        $syncDoc->formatOutput = true; echo $syncDoc->saveXML();
+        #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
         
         $xpath = new DomXPath($syncDoc);
         $xpath->registerNamespace('AirSync', 'uri:AirSync');
