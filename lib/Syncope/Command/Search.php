@@ -18,7 +18,7 @@
  * @package     Syncope
  * @subpackage  Command
  */
-class Syncope_Command_Search extends ActiveSync_Command_Wbxml 
+class Syncope_Command_Search extends Syncope_Command_Wbxml 
 {        
     const STATUS_SUCCESS      = 1;
     const STATUS_SERVER_ERROR = 3;

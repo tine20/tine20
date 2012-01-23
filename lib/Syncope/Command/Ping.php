@@ -1,25 +1,24 @@
 <?php
 /**
- * Tine 2.0
+ * Syncope
  *
- * @package     ActiveSync
- * @subpackage  ActiveSync
+ * @package     Syncope
+ * @subpackage  Command
  * @license     http://www.tine20.org/licenses/agpl-nonus.txt AGPL Version 1 (Non-US)
  *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL), 
  *              Version 1, the distribution of the Tine 2.0 ActiveSync module in or to the 
  *              United States of America is excluded from the scope of this license.
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * class documentation
+ * class to handle ActiveSync Ping command
  *
- * @package     ActiveSync
- * @subpackage  ActiveSync
+ * @package     Syncope
+ * @subpackage  Command
  */
- 
-class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml 
+class Syncope_Command_Ping extends Syncope_Command_Wbxml 
 {
     const STATUS_NO_CHANGES_FOUND           = 1;
     const STATUS_CHANGES_FOUND              = 2;
@@ -39,7 +38,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
     /**
      * Enter description here...
      *
-     * @var ActiveSync_Backend_StandAlone_Abstract
+     * @var Syncope_Backend_StandAlone_Abstract
      */
     protected $_dataBackend;
 
@@ -56,7 +55,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
      */
     public function handle()
     {
-        $controller = ActiveSync_Controller::getInstance();
+        $controller = Syncope_Controller::getInstance();
         
         $intervalStart = time();
         $status = self::STATUS_NO_CHANGES_FOUND;
@@ -111,7 +110,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
             
             do {
                 foreach((array) $folders as $folder) {
-                    $dataController = ActiveSync_Controller::dataFactory($folder['folderType'], $this->_device, $this->_syncTimeStamp);
+                    $dataController = Syncope_Controller::dataFactory($folder['folderType'], $this->_device, $this->_syncTimeStamp);
                     #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($folder, true));
                     try {
                         $syncState = $controller->getSyncState($this->_device, $folder['folderType'], $folder['serverEntryId']);
@@ -121,7 +120,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
                             $folder,
                             $syncState->lastsync
                         );
-                    } catch (ActiveSync_Exception_SyncStateNotFound $e) {
+                    } catch (Syncope_Exception_SyncStateNotFound $e) {
                         // folder got never synchronized to client
                         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
                         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' syncstate not found. enforce sync for folder: ' . $folder['serverEntryId']);
@@ -194,10 +193,10 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
         $_collectionData['class']        = $_collectionData['folderType'];
         $_collectionData['collectionId'] = $_collectionData['serverEntryId'];
         
-        $contentStateBackend  = new ActiveSync_Backend_ContentState();
-        $folderStateBackend   = new ActiveSync_Backend_FolderState();
+        $contentStateBackend  = new Syncope_Backend_ContentState();
+        $folderStateBackend   = new Syncope_Backend_FolderState();
         // get current filterType
-        $filter = new ActiveSync_Model_FolderStateFilter(array(
+        $filter = new Syncope_Model_FolderStateFilter(array(
             array(
                 'field'     => 'device_id',
                 'operator'  => 'equals',
@@ -216,7 +215,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
         ));
         $folderState = $folderStateBackend->search($filter)->getFirstRecord();
         
-        if($folderState instanceof ActiveSync_Model_FolderState) {
+        if($folderState instanceof Syncope_Model_FolderState) {
             $filterType = $folderState->lastfiltertype;
         } else {
             $filterType = 0;
