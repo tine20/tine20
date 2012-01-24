@@ -350,25 +350,25 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         
         self::enforceEventParameters($event);
         
-        if ($this->getRecord()->organizer == Tinebase_Core::getUser()->contact_id) {
+        #if ($this->getRecord()->organizer == Tinebase_Core::getUser()->contact_id) {
             $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " current user is not organizer => update attendee status only ");
-            
-            if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($this->getRecord()->attendee)) !== null) {
-                $ownAttendee->displaycontainer_id = $this->_container->getId();
-                
-                try {
-                    $this->_event = Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($event, $ownAttendee);
-                } catch (Tinebase_Exception_AccessDenied $tead) {
-                    throw new Sabre_DAV_Exception_Forbidden($tead->getMessage());
-                }
-            } else {
-                throw new Sabre_DAV_Exception_Forbidden('not attendee of this event');
-            }
-            
-        }
+        #} else {
+        #    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+        #        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " current user is not organizer => update attendee status only ");
+        #    
+        #    if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($this->getRecord()->attendee)) !== null) {
+        #        $ownAttendee->displaycontainer_id = $this->_container->getId();
+        #        
+        #        try {
+        #            $this->_event = Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($event, $ownAttendee);
+        #        } catch (Tinebase_Exception_AccessDenied $tead) {
+        #            throw new Sabre_DAV_Exception_Forbidden($tead->getMessage());
+        #        }
+        #    } else {
+        #        throw new Sabre_DAV_Exception_Forbidden('not attendee of this event');
+        #    }
+        #    
+        #}
         
         // avoid sending headers during unit tests
         if (php_sapi_name() != 'cli') {
