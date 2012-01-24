@@ -134,12 +134,12 @@ class Tinebase_AsyncJob
     /**
      * create new job
      * 
-     * @param string $_name
-     * @param integer $_maxSeq
-     * @param int $timeout
+     * @param string    $_name
+     * @param integer   $_nextSequence
+     * @param int       $timeout
      * @return Tinebase_Model_AsyncJob
      */
-    protected function _createNewJob($_name, $_maxSeq, $_timeout)
+    protected function _createNewJob($_name, $_nextSequence, $_timeout)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . ' Creating new Job ' . $_name);
@@ -152,7 +152,7 @@ class Tinebase_AsyncJob
             'start_time'        => new Tinebase_DateTime(),
             'end_time'          => $date,
             'status'            => Tinebase_Model_AsyncJob::STATUS_RUNNING,
-            'seq'               => $_maxSeq + 1
+            'seq'               => $_nextSequence
         ));
         
         return $this->_backend->create($job);
