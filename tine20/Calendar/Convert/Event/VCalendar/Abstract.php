@@ -322,7 +322,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             }
         }
         
-        if ($event->alarms) {
+        // add alarms only to vcalendar if current user attends to this event
+        if ($event->alarms && ($ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee)) !== null) {
             foreach($event->alarms as $alarm) {
                 $valarm = new Sabre_VObject_Component('VALARM');
                 $valarm->add('ACTION', 'DISPLAY');
@@ -363,17 +364,15 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                 $vevent->add($valarm);
             }
             
-            if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee)) !== null) {
-                if ($ownAttendee->alarm_ack_time instanceof Tinebase_DateTime) {
-                    $xMozLastAck = new Sabre_VObject_Element_DateTime('X-MOZ-LASTACK');
-                    $xMozLastAck->setDateTime(Tinebase_DateTime::now(), Sabre_VObject_Element_DateTime::UTC);
-                    $vevent->add($xMozLastAck);
-                }
-                if ($ownAttendee->alarm_snooze_time instanceof Tinebase_DateTime) {
-                    $xMozSnoozeTime = new Sabre_VObject_Element_DateTime('X-MOZ-SNOOZE-TIME');
-                    $xMozSnoozeTime->setDateTime(Tinebase_DateTime::now(), Sabre_VObject_Element_DateTime::UTC);
-                    $vevent->add($xMozSnoozeTime);
-                }
+            if ($ownAttendee->alarm_ack_time instanceof Tinebase_DateTime) {
+                $xMozLastAck = new Sabre_VObject_Element_DateTime('X-MOZ-LASTACK');
+                $xMozLastAck->setDateTime(Tinebase_DateTime::now(), Sabre_VObject_Element_DateTime::UTC);
+                $vevent->add($xMozLastAck);
+            }
+            if ($ownAttendee->alarm_snooze_time instanceof Tinebase_DateTime) {
+                $xMozSnoozeTime = new Sabre_VObject_Element_DateTime('X-MOZ-SNOOZE-TIME');
+                $xMozSnoozeTime->setDateTime(Tinebase_DateTime::now(), Sabre_VObject_Element_DateTime::UTC);
+                $vevent->add($xMozSnoozeTime);
             }
         }
         
