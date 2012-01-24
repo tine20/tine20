@@ -96,7 +96,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'id';    
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to
@@ -104,7 +104,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      * @var string
      */
     protected $_application = 'Felamimail';
-
+    
     /**
      * list of zend validator
      * 
@@ -119,7 +119,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     // account type (system/user defined)
         'type'        => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
-            Zend_Filter_Input::DEFAULT_VALUE => 'user',
+            Zend_Filter_Input::DEFAULT_VALUE => self::TYPE_USER,
             array('InArray', array(self::TYPE_USER, self::TYPE_SYSTEM)),
         ),
     // imap server config
@@ -127,7 +127,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'port'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 143),
         'ssl'                   => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
-            Zend_Filter_Input::DEFAULT_VALUE => 'tls',
+            Zend_Filter_Input::DEFAULT_VALUE => self::SECURE_TLS,
             array('InArray', array(self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS)),
         ),
         'credentials_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -163,9 +163,9 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'smtp_port'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 25),
         'smtp_hostname'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'smtp_auth'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'login'),
-        'smtp_ssl'=> array(
+        'smtp_ssl'              => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
-            Zend_Filter_Input::DEFAULT_VALUE => 'tls',
+            Zend_Filter_Input::DEFAULT_VALUE => self::SECURE_TLS,
             array('InArray', array(self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS)),
         ),
         'smtp_credentials_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -176,7 +176,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'sieve_hostname'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'sieve_ssl'=> array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
-            Zend_Filter_Input::DEFAULT_VALUE => 'tls',
+            Zend_Filter_Input::DEFAULT_VALUE => self::SECURE_TLS,
             array('InArray', array(self::SECURE_NONE, self::SECURE_TLS)),
         ),
         'sieve_vacation_active' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
@@ -192,7 +192,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
-
+    
     /**
      * name of fields containing datetime or an array of datetime information
      *
@@ -229,16 +229,16 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         // set some fields to default if not set
-        $this->_filters['ssl']              = new Zend_Filter_Empty('tls');
-        $this->_filters['smtp_ssl']         = new Zend_Filter_Empty('tls');
+        $this->_filters['ssl']              = array(new Zend_Filter_Empty(self::SECURE_TLS), 'StringTrim', 'StringToLower');
+        $this->_filters['smtp_ssl']         = array(new Zend_Filter_Empty(self::SECURE_TLS), 'StringTrim', 'StringToLower');
+        $this->_filters['sieve_ssl']        = array(new Zend_Filter_Empty(NULL), 'StringTrim', 'StringToLower');
+        $this->_filters['display_format']   = array(new Zend_Filter_Empty(self::DISPLAY_HTML), 'StringTrim', 'StringToLower');
         $this->_filters['smtp_port']        = new Zend_Filter_Empty(NULL);
-        $this->_filters['sieve_ssl']        = new Zend_Filter_Empty(NULL);
         $this->_filters['sieve_port']       = new Zend_Filter_Empty(NULL);
-        $this->_filters['display_format']   = new Zend_Filter_Empty('html');
         
         return parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
-        
+    
     /**
      * get imap config array
      * - decrypt pwd/user with user password
