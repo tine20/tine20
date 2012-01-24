@@ -29,7 +29,9 @@ class ActiveSync_Backend_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync Controller All Tests');
         
         $suite->addTestSuite('ActiveSync_Backend_DeviceTests');
+        $suite->addTestSuite('ActiveSync_Backend_FolderTests');
         $suite->addTestSuite('ActiveSync_Backend_PolicyTests');
+        $suite->addTestSuite('ActiveSync_Backend_SyncStateTests');
         
         return $suite;
     }

@@ -53,7 +53,7 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function handleOptions()
     {
-        $command = new ActiveSync_Command_Options();
+        $command = new Syncope_Command_Options();
         
         $command->getResponse();            
     }
@@ -82,11 +82,11 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         $device = ActiveSync_Controller::getInstance()->getUserDevice($_deviceId, $_deviceType, $userAgent, $_version);
         
-        if(!class_exists('ActiveSync_Command_' . $_command)) {
+        $className = 'Syncope_Command_' . $_command;
+        
+        if(!class_exists($className)) {
             throw new Exception('unsupported command ' . $_command);
         }
-    
-        $className = 'ActiveSync_Command_' . $_command;
         
         #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " class name: " . print_r($_SERVER, true));
         
@@ -112,12 +112,12 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             header("MS-Server-ActiveSync: 8.3");
             
             $response = $command->getResponse();            
-        } catch (ActiveSync_Exception_PolicyKeyMissing $asepkm) {
+        } catch (Syncope_Exception_PolicyKeyMissing $asepkm) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " X-MS-POLICYKEY missing (" . $_command. ')');
             header("HTTP/1.1 400 header X-MS-POLICYKEY not found");
             return;
-        } catch (ActiveSync_Exception_ProvisioningNeeded $asepn) {
+        } catch (Syncope_Exception_ProvisioningNeeded $asepn) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " provisioning needed");
             header("HTTP/1.1 449 Retry after sending a PROVISION command");

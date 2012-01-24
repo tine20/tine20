@@ -49,10 +49,12 @@ class ActiveSync_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {   	
-        $this->_backend = new ActiveSync_Backend_SyncState();
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
-        $deviceBackend = new ActiveSync_Backend_Device();
+        $this->_deviceBackend = new ActiveSync_Backend_DeviceFacade();
         $this->_device = $deviceBackend->create(ActiveSync_Backend_DeviceTests::getTestDevice());
+        
+        $this->_syncStatebackend = new ActiveSync_Backend_SyncState();
     }
     
     /**

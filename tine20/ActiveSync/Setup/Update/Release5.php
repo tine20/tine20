@@ -117,4 +117,48 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->setTableVersion('acsync_content', '2');
         $this->setApplicationVersion('ActiveSync', '5.2');
     }
+    
+    /**
+     * update to 5.3
+     * - added new columns to folder table
+     * 
+     * @return void
+     */
+    public function update_2()
+    {
+        $this->validateTableVersion('acsync_folder', '1');
+        
+        $this->_backend->truncateTable('acsync_folder');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>parentid</name>
+                <type>text</type>
+                <length>254</length>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_folder', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>displayname</name>
+                <type>text</type>
+                <length>254</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_folder', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>type</name>
+                <type>integer</type>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_folder', $declaration);
+        
+        $this->setTableVersion('acsync_folder', '2');
+        $this->setApplicationVersion('ActiveSync', '5.3');
+    }
 }

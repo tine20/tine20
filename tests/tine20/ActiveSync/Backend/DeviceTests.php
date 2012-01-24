@@ -24,6 +24,10 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  */
 class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var ActiveSync_Backend_Device
+     */
+    protected $_deviceBackend;
     
     /**
      * @var ActiveSync_Backend_Device backend
@@ -47,28 +51,11 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
-    /**
-     * create ActiveSync_Model_Device to be used in tests
-     * 
-     * @return ActiveSync_Model_Device
-     */
-    public static function getTestDevice()
-    {
-        $testDevice = new ActiveSync_Model_Device(array(
-            'deviceid'      => Tinebase_Record_Abstract::generateUID(64),
-            'devicetype'    => 'iPhone',
-            'owner_id'      => Tinebase_Core::getUser()->getId(),
-            'policy_id'     => 1,
-            'acsversion'    => '2.5',
-            'useragent'     => 'Apple-iPhone/703.144',
-            'policykey'     => mt_rand(0, 100000)
-        ));
-        
-        return $testDevice;
-    }
-    
     protected function setUp()
-    {   	
+    {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
+        $this->_deviceBackend = new ActiveSync_Backend_DeviceFacade();
     }
     
     /**
@@ -79,15 +66,86 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
-    
-    public function testGetChanged()
+    /**
+    * test sync with non existing collection id
+    */
+    public function testCreateDevice()
     {
-        $this->markTestIncomplete();
-    }
-}
+        $newDevice = ActiveSync_Backend_DeviceTests::getTestDevice();
     
-if (PHPUnit_MAIN_METHOD == 'ActiveSync_Backend_Device::main') {
-    ActiveSync_Backend_Device::main();
+        $device = $this->_deviceBackend->create($newDevice);
+    
+        #var_dump($device);
+    
+        return $device;
+    }
+    
+    public function testDeleteDevice()
+    {
+        $device = $this->testCreateDevice();
+    
+        $this->_deviceBackend->delete($device);
+        
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        
+        $this->_deviceBackend->get($device);
+    }
+    
+    /**
+     * create ActiveSync_Model_Device to be used in tests
+     * 
+     * @return ActiveSync_Model_Device
+     */
+    public static function getTestDevice($_type = null)
+    {
+        switch($_type) {
+            case Syncope_Model_Device::TYPE_ANDROID:
+                $device = new ActiveSync_Model_Device(array(
+                	'deviceid'   => Tinebase_Record_Abstract::generateUID(64),
+                	'devicetype' => Syncope_Model_Device::TYPE_ANDROID,
+                	'owner_id'   => Tinebase_Core::getUser()->getId(),
+                	'policy_id'  => 1,
+                	'useragent'  => 'blabla',
+                	'policykey'  => 1,
+                	'useragent'  => 'blabla',
+                	'acsversion' => '12.0',
+                	'remotewipe' => 0
+                )); 
+                break;
+            
+            case Syncope_Model_Device::TYPE_WEBOS:
+                $device = new ActiveSync_Model_Device(array(
+                	'deviceid'   => Tinebase_Record_Abstract::generateUID(64),
+                	'devicetype' => Syncope_Model_Device::TYPE_ANDROID,
+                	'owner_id'   => Tinebase_Core::getUser()->getId(),
+                	'policy_id'  => 1,
+                	'useragent'  => 'blabla',
+                	'policykey'  => 1,
+                	'useragent'  => 'blabla',
+                	'acsversion' => '12.0',
+                	'remotewipe' => 0
+                )); 
+                break;
+            
+            case Syncope_Model_Device::TYPE_IPHONE:
+            default:
+                $device = new ActiveSync_Model_Device(array(
+                	'deviceid'   => Tinebase_Record_Abstract::generateUID(64),
+                	'devicetype' => Syncope_Model_Device::TYPE_IPHONE,
+                	'owner_id'   => Tinebase_Core::getUser()->getId(),
+                	'policy_id'  => 1,
+                	'useragent'  => 'blabla',
+                	'policykey'  => 1,
+                	'useragent'  => 'blabla',
+                	'acsversion' => '2.5',
+                	'remotewipe' => 0
+                )); 
+                break;
+        }
+
+        return $device; 
+    }
 }

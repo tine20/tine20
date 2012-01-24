@@ -17,7 +17,7 @@
  * 
  * @package     ActiveSync
  */
-class ActiveSync_Model_FolderState extends Tinebase_Record_Abstract
+class ActiveSync_Model_Folder extends Tinebase_Record_Abstract implements Syncope_Model_IFolder
 {  
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -46,7 +46,10 @@ class ActiveSync_Model_FolderState extends Tinebase_Record_Abstract
         'device_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'class'             => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'folderid'          => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'parentid'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'     => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+    	'displayname'       => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+    	'type'              => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'lastfiltertype'    => array(Zend_Filter_Input::ALLOW_EMPTY => true, /*'presence'=>'required',*/ 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
     );
     

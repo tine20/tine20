@@ -17,7 +17,7 @@
  *
  * @package     ActiveSync
  */
-class ActiveSync_Backend_FolderState extends Tinebase_Backend_Sql_Abstract
+class ActiveSync_Backend_Folder extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix
@@ -31,15 +31,15 @@ class ActiveSync_Backend_FolderState extends Tinebase_Backend_Sql_Abstract
      *
      * @var string
      */
-    protected $_modelName = 'ActiveSync_Model_FolderState';
+    protected $_modelName = 'ActiveSync_Model_Folder';
         
     /**
      * delete all stored folderId's for given device
      *
-     * @param ActiveSync_Model_Device $_deviceId
+     * @param Syncope_Model_IDevice  $_deviceId
      * @param string $_class
      */
-    public function resetState(ActiveSync_Model_Device $_deviceId)
+    public function resetState(Syncope_Model_IDevice $_deviceId)
     {
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('device_id') . ' = ?', $_deviceId->getId())
@@ -51,11 +51,11 @@ class ActiveSync_Backend_FolderState extends Tinebase_Backend_Sql_Abstract
     /**
      * get array of ids which got send to the client for a given class
      *
-     * @param ActiveSync_Model_Device $_deviceId
+     * @param Syncope_Model_IDevice  $_deviceId
      * @param string $_class
      * @return array
      */
-    public function getClientState(ActiveSync_Model_Device $_deviceId, $_class)
+    public function getClientState(Syncope_Model_IDevice  $_deviceId, $_class)
     {
         $select = $this->_getSelect('folderid');
         $select->where($this->_db->quoteIdentifier('device_id') . ' = ?', $_deviceId->getId())

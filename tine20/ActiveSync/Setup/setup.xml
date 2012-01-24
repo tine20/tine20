@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>5.2</version>
+    <version>5.3</version>
     <order>90</order>
     <depends>
-        <application>Addressbook</application>
-        <application>Tasks</application>
-        <application>Calendar</application>
-        <application>Felamimail</application>
+        <application>Tinebase</application>
     </depends>
     <tables>
         <table>
@@ -312,6 +309,98 @@
             </declaration>
         </table>
         <table>
+            <name>acsync_folder</name>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+            <version>2</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>device_id</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>class</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>folderid</name>
+                    <type>text</type>
+                    <length>254</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                    <notnull>true</notnull>
+                </field> 
+                <field>
+                    <name>lastfiltertype</name>
+                    <type>integer</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>parentid</name>
+                    <type>text</type>
+                    <length>254</length>
+                </field>
+                <field>
+                    <name>displayname</name>
+                    <type>text</type>
+                    <length>254</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>type</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>device_id--class--folderid</name>
+                    <unique>true</unique>
+                    <length>40</length>
+                    <field>
+                        <name>device_id</name>
+                    </field>
+                    <field>
+                        <name>class</name>
+                    </field>
+                    <field>
+                        <name>folderid</name>
+                    </field>
+                </index>
+                <index>
+                    <name>acsync_folder::device_id--acsync_device::id</name>
+                    <field>
+                        <name>device_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>acsync_device</table>
+                        <field>id</field>
+                    </reference>
+                    <ondelete>cascade</ondelete>
+                    <onupdate>cascade</onupdate>
+                </index>   
+            </declaration>
+        </table>
+        <table>
             <name>acsync_content</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
@@ -392,82 +481,6 @@
                         <ondelete>cascade</ondelete>
                         <onupdate>cascade</onupdate>
                     </reference>
-                </index>   
-            </declaration>
-        </table>
-        <table>
-            <name>acsync_folder</name>
-            <engine>InnoDB</engine>
-            <charset>utf8</charset>
-            <version>1</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>device_id</name>
-                    <type>text</type>
-                    <length>64</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>class</name>
-                    <type>text</type>
-                    <length>64</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>folderid</name>
-                    <type>text</type>
-                    <length>254</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>creation_time</name>
-                    <type>datetime</type>
-                    <notnull>true</notnull>
-                </field> 
-                <field>
-                    <name>lastfiltertype</name>
-                    <type>integer</type>
-                    <notnull>false</notnull>
-                </field>
-                <index>
-                    <name>id</name>
-                    <primary>true</primary>
-                    <field>
-                        <name>id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>device_id--class--folderid</name>
-                    <unique>true</unique>
-                    <length>40</length>
-                    <field>
-                        <name>device_id</name>
-                    </field>
-                    <field>
-                        <name>class</name>
-                    </field>
-                    <field>
-                        <name>folderid</name>
-                    </field>
-                </index>
-                <index>
-                    <name>acsync_folder::device_id--acsync_device::id</name>
-                    <field>
-                        <name>device_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>acsync_device</table>
-                        <field>id</field>
-                    </reference>
-                    <ondelete>cascade</ondelete>
-                    <onupdate>cascade</onupdate>
                 </index>   
             </declaration>
         </table>

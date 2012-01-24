@@ -16,14 +16,14 @@
  * folder state filter class
  * @package     ActiveSync
  */
-class ActiveSync_Model_FolderStateFilter extends Tinebase_Model_Filter_FilterGroup
+class ActiveSync_Model_FolderFilter extends Tinebase_Model_Filter_FilterGroup
 {    
     /**
      * @var string class name of this filter group
      *      this is needed to overcome the static late binding
      *      limitation in php < 5.3
      */
-    protected $_className = 'ActiveSync_Model_FolderStateFilter';
+    protected $_className = 'ActiveSync_Model_FolderFilter';
     
     /**
      * application the record belongs to
