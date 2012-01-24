@@ -808,10 +808,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $exceptions = $this->getRecurExceptions($_record);
             $options = Zend_Json::decode($_alarm->options);
             $_alarm->minutes_before = isset($options['minutes_before']) ? $options['minutes_before'] : $_alarm->minutes_before;
-            $eventLength = $_record->dtstart->diff($_record->dtend);
             
-            // compute next occurance from now+minutes_before!
-            $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($_record, $exceptions, Tinebase_DateTime::now()->addMinute($_alarm->minutes_before));
+            // NOTE nextOccurrence finds events currently running. So we add evenlength+alarm time to now
+            $eventLength = $_record->dtstart->diff($_record->dtend);
+            $from = Tinebase_DateTime::now()->add($eventLength)->addMinute((int) $_alarm->minutes_before);
+            
+            $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($_record, $exceptions, $from);
             
             if (! $nextOccurrence) {
                 $_alarm->sent_status = Tinebase_Model_Alarm::STATUS_SUCCESS;
