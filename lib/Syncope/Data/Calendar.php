@@ -20,6 +20,32 @@
 
 class Syncope_Data_Calendar implements Syncope_Data_IData
 {
+    public function appendXML(DOMElement $_domParrent, $_collectionData, $_serverId)
+    {
+        // @todo is this correct?
+        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Calendar', 'uri:Calendar');
+    
+    }
+    
+    public function createEntry($_folderId, SimpleXMLElement $_entry)
+    {
+        #$xmlData = $_entry->children('uri:Contacts');
+    
+        $id = sha1(mt_rand(). microtime());
+    
+        self::$entries[$id] = array(
+        #    	'FirstName' => (string)$xmlData->FirstName, 
+        #    	'LastName'  => (string)$xmlData->LastName
+        );
+    
+        return $id;
+    }
+    
+    public function deleteEntry($_folderId, $_serverId)
+    {
+        unset(self::$entries[$_serverId]);
+    }
+    
     public function getAllFolders()
     {
         return array(
@@ -30,6 +56,10 @@ class Syncope_Data_Calendar implements Syncope_Data_IData
                 'type'        => Syncope_Command_FolderSync::FOLDERTYPE_CALENDAR
             )
         );
+    }
+    
+    public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry)
+    {
     }
 }
 

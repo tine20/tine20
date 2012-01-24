@@ -68,10 +68,10 @@ class Syncope_Command_FolderDeleteTests extends Syncope_Command_ATestCase
         
         // delete folder created above
         $doc = new DOMDocument();
-        $doc->loadXML(str_replace('REPLACEME', $newFolderId, '<?xml version="1.0" encoding="utf-8"?>
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <FolderDelete xmlns="uri:FolderHierarchy"><SyncKey>2</SyncKey><ServerId>REPLACEME</ServerId></FolderDelete>'
-        ));
+            <FolderDelete xmlns="uri:FolderHierarchy"><SyncKey>2</SyncKey><ServerId>' . $newFolderId . '</ServerId></FolderDelete>'
+        );
         $folderDelete = new Syncope_Command_FolderDelete($doc, $this->_device, null);
         $folderDelete->handle();
         $responseDoc = $folderDelete->getResponse();

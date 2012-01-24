@@ -45,7 +45,7 @@ class Syncope_Backend_Content implements Syncope_Backend_IContent
         
         $deviceId = $_state->device_id instanceof Syncope_Model_IDevice ? $_state->device_id->id : $_state->device_id;
         $folderId = $_state->folder_id instanceof Syncope_Model_IFolder ? $_state->folder_id->id : $_state->folder_id;
-    
+        
         $this->_db->insert('syncope_contents', array(
         	'id'            => $id, 
         	'device_id'     => $deviceId,
@@ -102,6 +102,38 @@ class Syncope_Backend_Content implements Syncope_Backend_IContent
     }
     
     /**
+     * @param Syncope_Model_IDevice|string $_deviceId
+     * @param Syncope_Model_IFolder|string $_folderId
+     * @param string $_contentId
+     * @return Syncope_Model_IContent
+     */
+    public function getContentState($_deviceId, $_folderId, $_contentId)
+    {
+        $deviceId = $_deviceId instanceof Syncope_Model_IDevice ? $_deviceId->id : $_deviceId;
+        $folderId = $_folderId instanceof Syncope_Model_IFolder ? $_folderId->id : $_folderId;
+    
+        $select = $this->_db->select()
+            ->from('syncope_contents')
+            ->where($this->_db->quoteIdentifier('device_id')  . ' = ?', $deviceId)
+            ->where($this->_db->quoteIdentifier('folder_id')  . ' = ?', $folderId)
+            ->where($this->_db->quoteIdentifier('contentid')  . ' = ?', $_contentId)
+            ->where($this->_db->quoteIdentifier('is_deleted') . ' = ?', 0);
+    
+        $stmt = $this->_db->query($select);
+        $state = $stmt->fetchObject('Syncope_Model_Content');
+        
+        if (! $state instanceof Syncope_Model_IContent) {
+            throw new Syncope_Exception_NotFound('id not found');
+        }
+        
+        if (!empty($state->creation_time)) {
+            $state->creation_time = new DateTime($state->creation_time, new DateTimeZone('utc'));
+        }
+    
+        return $state;
+    }
+    
+    /**
      * get array of ids which got send to the client for a given class
      *
      * @param Syncope_Model_IDevice|string $_deviceId
@@ -115,8 +147,9 @@ class Syncope_Backend_Content implements Syncope_Backend_IContent
                 
         $select = $this->_db->select()
             ->from('syncope_contents', 'contentid')
-            ->where($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
-            ->where($this->_db->quoteIdentifier('folder_id') . ' = ?', $folderId);
+            ->where($this->_db->quoteIdentifier('device_id')  . ' = ?', $deviceId)
+            ->where($this->_db->quoteIdentifier('folder_id')  . ' = ?', $folderId)
+            ->where($this->_db->quoteIdentifier('is_deleted') . ' = ?', 0);
         
         $stmt = $this->_db->query($select);
         $result = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);

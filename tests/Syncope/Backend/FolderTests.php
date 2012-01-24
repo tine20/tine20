@@ -149,7 +149,7 @@ class Syncope_Backend_FolderTests extends PHPUnit_Framework_TestCase
         return new Syncope_Model_Folder(array(
             'device_id'         => $_device,
             'class'             => Syncope_Data_Factory::CLASS_CONTACTS,
-            'folderid'          => '1234567890',
+            'folderid'          => sha1(mt_rand(). microtime()),
             'parentid'          => null,
             'displayname'       => 'test contact folder',
             'type'              => Syncope_Command_FolderSync::FOLDERTYPE_CONTACT,

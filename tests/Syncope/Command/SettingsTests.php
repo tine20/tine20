@@ -43,7 +43,7 @@ class Syncope_Command_SettingsTests extends Syncope_Command_ATestCase
         $folderDelete = new Syncope_Command_Settings($doc, $this->_device, null);
         $folderDelete->handle();
         $responseDoc = $folderDelete->getResponse();
-        $responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
         
         $xpath = new DomXPath($responseDoc);
         $xpath->registerNamespace('Settings', 'uri:Settings');

@@ -26,6 +26,7 @@ class Syncope_Command_AllTests
         $suite->addTestSuite('Syncope_Command_PingTests');
         $suite->addTestSuite('Syncope_Command_ProvisionTests');
         $suite->addTestSuite('Syncope_Command_SearchTests');
+        $suite->addTestSuite('Syncope_Command_SettingsTests');
         $suite->addTestSuite('Syncope_Command_SyncTests');
         
         return $suite;

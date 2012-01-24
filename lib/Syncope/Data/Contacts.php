@@ -20,6 +20,7 @@
 
 class Syncope_Data_Contacts implements Syncope_Data_IData
 {
+    protected $_specialFolderName = 'addressbook-root';
     /**
      * used by unit tests only to simulated added folders
      */
@@ -52,6 +53,41 @@ class Syncope_Data_Contacts implements Syncope_Data_IData
     public static $changedEntries = array(
     );
     
+    public function __construct(Syncope_Model_IDevice $_device, DateTime $_timeStamp)
+    {
+        $this->_device = $_device;
+        $this->_timestamp = $_timeStamp;
+    }
+    
+    public function createEntry($_folderId, SimpleXMLElement $_entry)
+    {
+        $xmlData = $_entry->children('uri:Contacts');
+        
+        $id = sha1(mt_rand(). microtime());
+        
+        self::$entries[$id] = array(
+        	'FirstName' => (string)$xmlData->FirstName, 
+        	'LastName'  => (string)$xmlData->LastName
+        );
+        
+        return $id;
+    }
+    
+    public function deleteEntry($_folderId, $_serverId)
+    {
+        unset(self::$entries[$_serverId]);
+    }
+    
+    public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry)
+    {
+        $xmlData = $_entry->children('uri:Contacts');
+        
+        self::$entries[$_serverId] = array(
+        	'FirstName' => (string)$xmlData->FirstName, 
+        	'LastName'  => (string)$xmlData->LastName
+        );
+    }
+    
     public function appendXML(DOMElement $_domParrent, $_collectionData, $_serverId)
     {
         $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Contacts', 'uri:Contacts');
@@ -71,6 +107,17 @@ class Syncope_Data_Contacts implements Syncope_Data_IData
     
     public function getAllFolders()
     {
+        if (!$this->_supportsMultipleFolders()) {
+            return array(
+                $this->_specialFolderName => array(
+                    'folderId'    => $this->_specialFolderName,
+                    'parentId'    => null,
+                    'displayName' => 'Default Contacts Folder',
+                    'type'        => Syncope_Command_FolderSync::FOLDERTYPE_CONTACT
+                )
+            );
+        }
+        
         return self::$folders;
     }
     
@@ -107,14 +154,24 @@ class Syncope_Data_Contacts implements Syncope_Data_IData
         return array_keys(self::$entries);
     }
     
-    public function getChanged()
+    public function getChangedEntries()
     {
         return self::$changedEntries;
     }
     
-    public function getMultiple()
+    #public function getMultiple()
+    #{
+    #    return array();
+    #}
+    
+    protected function _supportsMultipleFolders()
     {
-        return array();
+        if (in_array($this->_device->devicetype, array(Syncope_Model_Device::TYPE_ANDROID, Syncope_Model_Device::TYPE_WEBOS))) {
+            return false;
+        }
+        
+        return true;
     }
+    
 }
 

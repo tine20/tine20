@@ -8,7 +8,7 @@
  * @author      Jonas Fischer <j.fischer@metaways.de>
  */
 
-class Syncope_AllTests
+class Syncope_Data_AllTests
 {
     public static function main ()
     {
@@ -17,11 +17,9 @@ class Syncope_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Syncope All Tests');
+        $suite = new PHPUnit_Framework_TestSuite('Syncope all data backend tests');
         
-        $suite->addTestSuite('Syncope_Backend_AllTests');
-        $suite->addTestSuite('Syncope_Command_AllTests');
-        $suite->addTestSuite('Syncope_Data_AllTests');
+        $suite->addTestSuite('Syncope_Data_ContactsTests');
         
         return $suite;
     }

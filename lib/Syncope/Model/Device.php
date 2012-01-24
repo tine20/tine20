@@ -20,6 +20,10 @@
 
 class Syncope_Model_Device implements Syncope_Model_IDevice
 {
+    const TYPE_IPHONE  = 'iphone';
+    const TYPE_WEBOS   = 'webos';
+    const TYPE_ANDROID = 'android';
+    
     public function __construct(array $_data = array())
     {
         $this->setFromArray($_data);

@@ -27,5 +27,21 @@ interface Syncope_Backend_IContent
      * @param Syncope_Model_IContent $_contentState
      * @return Syncope_Model_IContent
      */
-    public function create(Syncope_Model_IContent $_contentState);    
+    public function create(Syncope_Model_IContent $_contentState);
+        
+    /**
+     * mark state as deleted. The state gets removed finally, 
+     * when the synckey gets validated during next sync.
+     * 
+     * @param Syncope_Model_IContent|string $_id
+     */
+    public function delete($_id);
+    
+    /**
+     * @param Syncope_Model_IDevice|string $_deviceId
+     * @param Syncope_Model_IFolder|string $_folderId
+     * @param string $_contentId
+     * @return Syncope_Model_IContent
+     */
+    public function getContentState($_deviceId, $_folderId, $_contentId);
 }

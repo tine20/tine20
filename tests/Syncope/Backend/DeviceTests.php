@@ -87,16 +87,44 @@ class Syncope_Backend_DeviceTests extends PHPUnit_Framework_TestCase
      * 
      * @return Syncope_Model_Device
      */
-    public static function getTestDevice()
+    public static function getTestDevice($_type = null)
     {
-        return new Syncope_Model_Device(array(
-        	'deviceid'   => '1234',
-        	'devicetype' => 'iphone',
-        	'policykey'  => 1,
-        	'owner_id'   => '1234',
-        	'acsversion' => '12.0',
-        	'remotewipe' => 0
-        ));
-        
+        switch($_type) {
+            case Syncope_Model_Device::TYPE_ANDROID:
+                $device = new Syncope_Model_Device(array(
+                	'deviceid'   => 'android-abcd',
+                	'devicetype' => Syncope_Model_Device::TYPE_ANDROID,
+                	'policykey'  => 1,
+                	'owner_id'   => '1234',
+                	'acsversion' => '12.0',
+                	'remotewipe' => 0
+                )); 
+                break;
+            
+            case Syncope_Model_Device::TYPE_WEBOS:
+                $device = new Syncope_Model_Device(array(
+                	'deviceid'   => 'webos-abcd',
+                	'devicetype' => Syncope_Model_Device::TYPE_ANDROID,
+                	'policykey'  => 1,
+                	'owner_id'   => '1234',
+                	'acsversion' => '12.0',
+                	'remotewipe' => 0
+                )); 
+                break;
+            
+            case Syncope_Model_Device::TYPE_IPHONE:
+            default:
+                $device = new Syncope_Model_Device(array(
+                	'deviceid'   => 'iphone-abcd',
+                	'devicetype' => Syncope_Model_Device::TYPE_IPHONE,
+                	'policykey'  => 1,
+                	'owner_id'   => '1234',
+                	'acsversion' => '2.5',
+                	'remotewipe' => 0
+                )); 
+                break;
+        }
+
+        return $device; 
     }
 }

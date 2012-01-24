@@ -20,6 +20,14 @@
 
 interface Syncope_Data_IData
 {
+    public function appendXML(DOMElement $_domParrent, $_collectionData, $_serverId);
+    
+    public function createEntry($_folderId, SimpleXMLElement $_entry);
+    
+    public function deleteEntry($_folderId, $_serverId);
+    
     public function getAllFolders();
+    
+    public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry);
 }
 

@@ -168,8 +168,6 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
             try {
                 $collectionData['folder'] = $this->_folderBackend->getFolder($this->_device, $collectionData['collectionId']);
                 
-                #$collectionData['class'] = $folder->class;
-                
             } catch (Syncope_Exception_NotFound $senf) {
                 if ($this->_logger instanceof Zend_Log) 
                     $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " folder {$collectionData['collectionId']} not found");
@@ -221,40 +219,39 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
             // handle incoming data
             if(isset($xmlCollection->Commands->Add)) {
                 $adds = $xmlCollection->Commands->Add;
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($adds) . " entries to be added to server");
+                if ($this->_logger instanceof Zend_Log) 
+                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found " . count($adds) . " entries to be added to server");
                 
                 foreach ($adds as $add) {
-                	if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                	    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add entry with clientId " . (string) $add->ClientId);
-                    // search for existing entries if first sync
-                    // @todo: maybe this can be removed
-                    // good phones don't send entries at synckey 1
-                    // and if they sent, maybe they also send entries at synckey 2 too
-                    if($collectionData['syncKey'] == 1) {
-                        $existing = $dataController->search($collectionData['collectionId'], $add->ApplicationData);
-                    } else {
-                        $existing = array(); // count() == 0
-                    }
-                    
+                	if ($this->_logger instanceof Zend_Log) 
+                	    $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " add entry with clientId " . (string) $add->ClientId);
+
                     try {
-                        if(count($existing) === 0) {
-                            if ($this->_logger instanceof Zend_Log) 
-                                $this->_logger->info(__METHOD__ . '::' . __LINE__ . " entry not found. adding as new");
-                            $added = $dataController->add($collectionData['collectionId'], $add->ApplicationData);
-                        } else {
-                            if ($this->_logger instanceof Zend_Log) 
-                                $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found matching entry. reuse existing entry");
-                            // use the first found entry
-                            $added = $existing[0];
-                        }
-                        $collectionData['added'][(string)$add->ClientId]['serverId'] = $added->getId(); 
-                        $collectionData['added'][(string)$add->ClientId]['status'] = self::STATUS_SUCCESS;
-                        $this->_addContent($collectionData['folder']->class, $collectionData['collectionId'], $added->getId());
+                        if ($this->_logger instanceof Zend_Log) 
+                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . " adding entry as new");
+                        
+                        $serverId = $dataController->createEntry($collectionData['collectionId'], $add->ApplicationData);
+                        
+                        $collectionData['added'][$serverId] = array(
+                            'clientId' => (string)$add->ClientId,
+                            'serverId' => $serverId,
+                            'status'   => self::STATUS_SUCCESS
+                        );
+                        
+                        $this->_contentStateBackend->create(new Syncope_Model_Content(array(
+                        	'device_id'     => $this->_device,
+                            'folder_id'     => $collectionData['folder'],
+                            'contentid'     => $serverId,
+                            'creation_time' => $this->_syncTimeStamp
+                        
+                        )));
                     } catch (Exception $e) {
                         if ($this->_logger instanceof Zend_Log) 
                             $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " failed to add entry " . $e->getMessage());
-                        $collectionData['added'][(string)$add->ClientId]['status'] = self::STATUS_SERVER_ERROR;
+                        $collectionData['added'][] = array(
+                            'clientId' => (string)$add->ClientId,
+                            'status'   => self::STATUS_SERVER_ERROR
+                        );
                     }
                 }
             }
@@ -269,12 +266,12 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     $serverId = (string)$change->ServerId;
                     
                     try {
-                        $changed = $dataController->change($collectionData['collectionId'], $serverId, $change->ApplicationData);
+                        $dataController->updateEntry($collectionData['collectionId'], $serverId, $change->ApplicationData);
                         $collectionData['changed'][$serverId] = self::STATUS_SUCCESS;
-                    } catch (Tinebase_Exception_AccessDenied $e) {
+                    } catch (Syncope_Exception_AccessDenied $e) {
                         $collectionData['changed'][$serverId] = self::STATUS_CONFLICT_MATCHING_THE_CLIENT_AND_SERVER_OBJECT;
                         $collectionData['forceChange'][$serverId] = $serverId;
-                    } catch (Tinebase_Exception_NotFound $e) {
+                    } catch (Syncope_Exception_NotFound $e) {
                         // entry does not exist anymore, will get deleted automaticaly
                         $collectionData['changed'][$serverId] = self::STATUS_OBJECT_NOT_FOUND;
                     } catch (Exception $e) {
@@ -296,20 +293,22 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     $serverId = (string)$delete->ServerId;
                     
                     try {
-                        // check if we have send this entry to the phone
-                        $this->_controller->getContent($this->_device, $collectionData['folder']->class, $collectionData['collectionId'], $serverId);
+                        // check if we have sent this entry to the phone
+                        $state = $this->_contentStateBackend->getContentState($this->_device, $collectionData['folder'], $serverId);
                         
                         try {
-                            $dataController->delete($collectionData['collectionId'], $serverId, $collectionData);
-                        } catch(Tinebase_Exception_NotFound $e) {
+                            $dataController->deleteEntry($collectionData['collectionId'], $serverId);
+                        } catch(Syncope_Exception_NotFound $e) {
                             if ($this->_logger instanceof Zend_Log) 
                                 $this->_logger->crit(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but entry was not found');
-                        } catch (Tinebase_Exception $e) {
+                        } catch (Syncope_Exception $e) {
                             if ($this->_logger instanceof Zend_Log) 
                                 $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but a error occured: ' . $e->getMessage());
                             $collectionData['forceAdd'][$serverId] = $serverId;
                         }
-                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        $this->_contentStateBackend->delete($state);
+                        
+                    } catch (Syncope_Exception_NotFound $senf) {
                         if ($this->_logger instanceof Zend_Log) 
                             $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' ' . $serverId . ' should have been removed from client already');
                         // should we send a special status???
@@ -317,7 +316,6 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     }
                     
                     $collectionData['deleted'][$serverId] = self::STATUS_SUCCESS;
-                    $this->_deleteContent($collectionData['folder']->class, $collectionData['collectionId'], $serverId);
                 }
             }
                         
@@ -350,9 +348,6 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
      */
     public function getResponse()
     {
-        // add aditional namespaces for tasks and email
-        $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Tasks'       , 'uri:Tasks');
-        $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Email'       , 'uri:Email');
         $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:AirSyncBase' , 'uri:AirSyncBase');
         
         $sync = $this->_outputDom->documentElement;
@@ -421,9 +416,9 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         if($responses === NULL) {
                             $responses = $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Responses'));
                         }
-                        foreach($collectionData['added'] as $clientId => $entryData) {
+                        foreach($collectionData['added'] as $entryData) {
                             $add = $responses->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Add'));
-                            $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ClientId', $clientId));
+                            $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ClientId', $entryData['clientId']));
                             if(isset($entryData['serverId'])) {
                                 $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $entryData['serverId']));
                             }
@@ -487,8 +482,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                                 $serverDeletes = $collectionData['syncState']->pendingdata['serverDeletes'];
                             } else {
                                 // fetch entries added since last sync
-                                
-                                $allClientEntries = $this->_contentStateBackend->getFolderState($this->_device, $collectionData['folder']->class, $collectionData['collectionId']);
+                                $allClientEntries = $this->_contentStateBackend->getFolderState($this->_device, $collectionData['folder']);
                                 $allServerEntries = $dataController->getServerEntries($collectionData['collectionId'], $collectionData['filterType']);
                                 
                                 // add entries
@@ -497,7 +491,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                                 $serverAdds = $collectionData['forceAdd'];
                                 // add entries not yet sent to client
                                 $serverAdds = array_unique(array_merge($serverAdds, $serverDiff));
-                                
+
+                                # @todo still needed?
                                 foreach($serverAdds as $id => $serverId) {
                                     // skip entries added by client during this sync session
                                     if(isset($collectionData['added'][$serverId]) && !isset($collectionData['forceAdd'][$serverId])) {
@@ -511,13 +506,12 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                                 $serverDeletes = array_diff($allClientEntries, $allServerEntries);
                                 
                                 // fetch entries changed since last sync
-                                $serverChanges = $dataController->getChanged($collectionData['collectionId'], $collectionData['syncState']->lastsync, $this->_syncTimeStamp);
+                                $serverChanges = $dataController->getChangedEntries($collectionData['collectionId'], $collectionData['syncState']->lastsync, $this->_syncTimeStamp);
                                 $serverChanges = array_merge($serverChanges, $collectionData['forceChange']);
-                                
+
                                 foreach($serverChanges as $id => $serverId) {
                                     // skip entry, if it got changed by client during current sync
-                                    // @todo $this->_collections[$class][$collectionId] should be equal to $collectionData ???
-                                    if(isset($collectionData['changed'][$serverId]) && !isset($this->_collections[$class][$collectionId]['forceChange'][$serverId])) {
+                                    if(isset($collectionData['changed'][$serverId]) && !isset($collectionData['forceChange'][$serverId])) {
                                         if ($this->_logger instanceof Zend_Log) 
                                             $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped changed entry: " . $serverId);
                                         unset($serverChanges[$id]);
@@ -530,8 +524,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                             }                        
                         }
                         
-                        #if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                        #    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found (added/changed/deleted) " . count($serverAdds) . '/' . count($serverChanges) . '/' . count($serverDeletes)  . ' entries for sync from server to client');
+                        if ($this->_logger instanceof Zend_Log) 
+                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found (added/changed/deleted) " . count($serverAdds) . '/' . count($serverChanges) . '/' . count($serverDeletes)  . ' entries for sync from server to client');
     
                         if ((count($serverAdds) + count($serverChanges) + count($serverDeletes)) > $collectionData['windowSize'] ) {
                             $this->_moreAvailable = true;
@@ -611,10 +605,13 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                             }
                                                         
                             try {
+                                // check if we have sent this entry to the phone
+                                $state = $this->_contentStateBackend->getContentState($this->_device, $collectionData['folder'], $serverId);
+                                
                                 $delete = $this->_outputDom->createElementNS('uri:AirSync', 'Delete');
                                 $delete->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
                                 
-                                $this->_markContentAsDeleted($collectionData['folder']->class, $collectionData['collectionId'], $serverId);
+                                $this->_contentStateBackend->delete($state);
                                 
                                 $commands->appendChild($delete);
                                 
