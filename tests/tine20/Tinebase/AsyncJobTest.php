@@ -41,7 +41,7 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($job instanceof Tinebase_Model_AsyncJob);
         $this->assertFalse($async->getNextSequence('Test_Job'));
         $async->finishJob($job);
-        $this->assertGreaterThan($sequence + 1, $async->getNextSequence('Test_Job'));
+        $this->assertGreaterThan($sequence, $async->getNextSequence('Test_Job'));
     }
     
     /**
