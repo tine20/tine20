@@ -127,6 +127,8 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
      */
     public function testSearch()
     {
+        $this->markTestIncomplete();
+        
         $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
 
         $xml = simplexml_import_dom($this->_getInputDOMDocument());

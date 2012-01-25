@@ -228,10 +228,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      * 
      * @param DOMElement  $_domParrent   the parrent xml node
      * @param string      $_folderId  the local folder id
-     * @param string      $_serverId  the local entry id
      * @param boolean     $_withBody  retrieve body of entry
      */
-    #public function appendXML(DOMElement $_domParrent, $_folderId, $_serverId, array $_options, $_neverTruncate = false)
     public function appendXML(DOMElement $_domParrent, $_collectionData, $_serverId)
     {
         $data = $_serverId instanceof Tinebase_Record_Abstract ? $_serverId : $this->_contentController->get($_serverId);

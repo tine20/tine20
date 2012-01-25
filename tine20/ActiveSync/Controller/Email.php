@@ -141,7 +141,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      */
     public function appendFileReference(DOMElement $_xmlNode, $_fileReference)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " append fileReference " . $_fileReference/* . ' options ' . print_r($_options, true)*/);
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " append fileReference " . $_fileReference/* . ' options ' . print_r($_collectionData, true)*/);
         
         list($messageId, $partId) = explode('-', $_fileReference, 2);
         
@@ -159,9 +159,10 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      * @param string      $_serverId  the local entry id
      * @param boolean     $_withBody  retrieve body of entry
      */
-    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_options, $_neverTruncate = false)
+    #public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_collectionData, $_neverTruncate = false)
+    public function appendXML(DOMElement $_domParrent, $_collectionData, $_serverId)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " append email " . $_serverId/* . ' options ' . print_r($_options, true)*/);
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " append email " . $_serverId/* . ' options ' . print_r($_collectionData, true)*/);
         
         $data = $_serverId instanceof Tinebase_Record_Abstract ? $_serverId : $this->_contentController->get($_serverId);
         
@@ -237,51 +238,49 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         // get truncation
         $truncateAt = null;
         
-        if (isset($_options['mimeSupport']) && $_options['mimeSupport'] == 2 && (version_compare($this->_device->acsversion, '12.0', '<=') || isset($_options['bodyPreferences'][4]))) {
-            if ($_neverTruncate === false && isset($_options['bodyPreferences'][4]) && isset($_options['bodyPreferences'][4]['truncationSize'])) {
-                $truncateAt = $_options['bodyPreferences'][4]['truncationSize'];
+        if (isset($_collectionData['mimeSupport']) && $_collectionData['mimeSupport'] == 2 && (version_compare($this->_device->acsversion, '12.0', '<=') || isset($_collectionData['bodyPreferences'][4]))) {
+            if ($_neverTruncate === false && isset($_collectionData['bodyPreferences'][4]) && isset($_collectionData['bodyPreferences'][4]['truncationSize'])) {
+                $truncateAt = $_collectionData['bodyPreferences'][4]['truncationSize'];
             }
             $airSyncBaseType = 4;
-        } elseif (isset($_options['bodyPreferences'][2])) {
-            if ($_neverTruncate === false && isset($_options['bodyPreferences'][2]['truncationSize'])) {
-                $truncateAt = $_options['bodyPreferences'][2]['truncationSize'];
+        } elseif (isset($_collectionData['bodyPreferences'][2])) {
+            if ($_neverTruncate === false && isset($_collectionData['bodyPreferences'][2]['truncationSize'])) {
+                $truncateAt = $_collectionData['bodyPreferences'][2]['truncationSize'];
             }
             $airSyncBaseType = 2;
         } else {
-            if ($_neverTruncate === false && isset($_options['bodyPreferences'][1]) && isset($_options['bodyPreferences'][1]['truncationSize'])) {
-                $truncateAt = $_options['bodyPreferences'][1]['truncationSize'];
+            if ($_neverTruncate === false && isset($_collectionData['bodyPreferences'][1]) && isset($_collectionData['bodyPreferences'][1]['truncationSize'])) {
+                $truncateAt = $_collectionData['bodyPreferences'][1]['truncationSize'];
             }
             $airSyncBaseType = 1;
         }
         
-        if ($_neverTruncate === false) {
-            if (isset($_options['mimeTruncation']) && $_options['mimeTruncation'] < 8) {
-                switch($_options['mimeTruncation']) {
-                    case ActiveSync_Command_Sync::TRUNCATE_ALL:
-                        $truncateAt = 0;
-                        break;
-                    case ActiveSync_Command_Sync::TRUNCATE_4096:
-                        $truncateAt = 4096;
-                        break;
-                    case ActiveSync_Command_Sync::TRUNCATE_5120:
-                        $truncateAt = 5120;
-                        break;
-                    case ActiveSync_Command_Sync::TRUNCATE_7168:
-                        $truncateAt = 7168;
-                        break;
-                    case ActiveSync_Command_Sync::TRUNCATE_10240:
-                        $truncateAt = 10240;
-                        break;
-                    case ActiveSync_Command_Sync::TRUNCATE_20480:
-                        $truncateAt = 20480;
-                        break;
-                    case ActiveSync_Command_Sync::TRUNCATE_51200:
-                        $truncateAt = 51200;
-                        break;
-                    case ActiveSync_Command_Sync::TRUNCATE_102400:
-                        $truncateAt = 102400;
-                        break;
-                }
+        if (isset($_collectionData['mimeTruncation']) && $_collectionData['mimeTruncation'] < 8) {
+            switch($_collectionData['mimeTruncation']) {
+                case ActiveSync_Command_Sync::TRUNCATE_ALL:
+                    $truncateAt = 0;
+                    break;
+                case ActiveSync_Command_Sync::TRUNCATE_4096:
+                    $truncateAt = 4096;
+                    break;
+                case ActiveSync_Command_Sync::TRUNCATE_5120:
+                    $truncateAt = 5120;
+                    break;
+                case ActiveSync_Command_Sync::TRUNCATE_7168:
+                    $truncateAt = 7168;
+                    break;
+                case ActiveSync_Command_Sync::TRUNCATE_10240:
+                    $truncateAt = 10240;
+                    break;
+                case ActiveSync_Command_Sync::TRUNCATE_20480:
+                    $truncateAt = 20480;
+                    break;
+                case ActiveSync_Command_Sync::TRUNCATE_51200:
+                    $truncateAt = 51200;
+                    break;
+                case ActiveSync_Command_Sync::TRUNCATE_102400:
+                    $truncateAt = 102400;
+                    break;
             }
         }
         
@@ -376,16 +375,16 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      *
      * @param  string  $_collectionId
      * @param  string  $_id
-     * @param  array   $_options
+     * @param  array   $_collectionData
      */
-    public function delete($_collectionId, $_id, $_options)
+    public function delete($_collectionId, $_id, $_collectionData)
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " delete ColectionId: $_collectionId Id: $_id");
         
         $folder  = Felamimail_Controller_Folder::getInstance()->get($_collectionId);
         $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
         
-        if ($_options['deletesAsMoves'] === true && !empty($account->trash_folder)) {
+        if ($_collectionData['deletesAsMoves'] === true && !empty($account->trash_folder)) {
             // move message to trash folder
             $trashFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account, $account->trash_folder);
             Felamimail_Controller_Message_Move::getInstance()->moveMessages($_id, $trashFolder);

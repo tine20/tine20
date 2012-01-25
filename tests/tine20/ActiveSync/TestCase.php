@@ -201,7 +201,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
         $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
         
         $xml = simplexml_import_dom($this->_getInputDOMDocument());
-        $record = $controller->add($this->_getContainerWithSyncGrant()->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        $record = $controller->createEntry($this->_getContainerWithSyncGrant()->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
         
         $this->_validateGetServerEntries($record);        
     }

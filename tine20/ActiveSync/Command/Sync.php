@@ -496,7 +496,13 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                             
                             try {
                                 $applicationData = $this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData');
-                                $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverId, $collectionData, true);
+                                // don't limit size during fetch
+                                $collectionFetchData = $collectionData;
+                                unset($collectionFetchData['bodyPreferences'][1]['truncationSize']);
+                                unset($collectionFetchData['bodyPreferences'][2]['truncationSize']);
+                                unset($collectionFetchData['bodyPreferences'][4]['truncationSize']);
+                                unset($collectionFetchData['mimeTruncation']);
+                                $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverId, $collectionData);
                                 
                                 $fetch->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_SUCCESS));
                                 
