@@ -28,12 +28,14 @@ function getTestDatabase()
     // enable foreign keys
     #$db->query('PRAGMA foreign_keys = ON');
     
-    $db->query("CREATE TABLE IF NOT EXISTS `syncope_devices` (
+    $db->query("CREATE TABLE IF NOT EXISTS `syncope_device` (
         `id` varchar(40) NOT NULL,
         `deviceid` varchar(64) NOT NULL,                                                                                                                                                                         
         `devicetype` varchar(64) NOT NULL,
         `policykey` varchar(64) DEFAULT NULL,
         `owner_id` varchar(40) NOT NULL,
+        `useragent` varchar(255) NOT NULL,
+        `policy_id` varchar(40) NOT NULL,
         `acsversion` varchar(40) NOT NULL,
         `pinglifetime` int(11) DEFAULT NULL,
         `remotewipe` int(11) DEFAULT '0',
@@ -48,14 +50,14 @@ function getTestDatabase()
         `folderid` varchar(254) NOT NULL,
         `parentid` varchar(254) DEFAULT NULL,
         `displayname` varchar(254) NOT NULL,
-        `type` int(11) DEFAULT NULL,
+        `type` int(11) NOT NULL,
         `creation_time` datetime NOT NULL,
         `lastfiltertype` int(11) DEFAULT NULL,
         PRIMARY KEY (`id`),
         UNIQUE (`device_id`,`class`,`folderid`)
 	)");
     
-    $db->query("CREATE TABLE `syncope_synckeys` (
+    $db->query("CREATE TABLE `syncope_synckey` (
     	`id` varchar(40) NOT NULL,
       	`device_id` varchar(64) NOT NULL,
       	`type` varchar(64) NOT NULL,

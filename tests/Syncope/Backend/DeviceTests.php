@@ -81,6 +81,10 @@ class Syncope_Backend_DeviceTests extends PHPUnit_Framework_TestCase
         $device = $this->testCreateDevice();
         
         $this->_deviceBackend->delete($device);
+        
+        $this->setExpectedException('Syncope_Exception_NotFound');
+        
+        $this->_deviceBackend->get($device->id);
     }
     
     /**
@@ -95,7 +99,9 @@ class Syncope_Backend_DeviceTests extends PHPUnit_Framework_TestCase
                 	'deviceid'   => 'android-abcd',
                 	'devicetype' => Syncope_Model_Device::TYPE_ANDROID,
                 	'policykey'  => 1,
+                	'policy_id'  => 1,
                 	'owner_id'   => '1234',
+                	'useragent'  => 'blabla',
                 	'acsversion' => '12.0',
                 	'remotewipe' => 0
                 )); 
@@ -106,7 +112,9 @@ class Syncope_Backend_DeviceTests extends PHPUnit_Framework_TestCase
                 	'deviceid'   => 'webos-abcd',
                 	'devicetype' => Syncope_Model_Device::TYPE_ANDROID,
                 	'policykey'  => 1,
+                	'policy_id'  => 1,
                 	'owner_id'   => '1234',
+                	'useragent'  => 'blabla',
                 	'acsversion' => '12.0',
                 	'remotewipe' => 0
                 )); 
@@ -118,7 +126,9 @@ class Syncope_Backend_DeviceTests extends PHPUnit_Framework_TestCase
                 	'deviceid'   => 'iphone-abcd',
                 	'devicetype' => Syncope_Model_Device::TYPE_IPHONE,
                 	'policykey'  => 1,
+                	'policy_id'  => 1,
                 	'owner_id'   => '1234',
+                	'useragent'  => 'blabla',
                 	'acsversion' => '2.5',
                 	'remotewipe' => 0
                 )); 

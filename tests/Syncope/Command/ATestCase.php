@@ -65,10 +65,10 @@ abstract class Syncope_Command_ATestCase extends PHPUnit_Framework_TestCase
         
         $logger = new Zend_Log($writer);
         
-        $this->_deviceBackend       = new Syncope_Backend_Device($this->_db, $logger);
-        $this->_folderBackend       = new Syncope_Backend_Folder($this->_db, $logger);
-        $this->_syncStateBackend    = new Syncope_Backend_SyncState($this->_db, $logger);
-        $this->_contentStateBackend = new Syncope_Backend_Content($this->_db, $logger);
+        $this->_deviceBackend       = new Syncope_Backend_Device($this->_db);
+        $this->_folderBackend       = new Syncope_Backend_Folder($this->_db);
+        $this->_syncStateBackend    = new Syncope_Backend_SyncState($this->_db);
+        $this->_contentStateBackend = new Syncope_Backend_Content($this->_db);
 
         $this->_device = $this->_deviceBackend->create(
             Syncope_Backend_DeviceTests::getTestDevice()

@@ -20,6 +20,7 @@
  * @property    string   deviceid
  * @property    string   devicetype
  * @property    string   policykey
+ * @property    string   policy_id
  * @property    string   owner_id
  * @property    string   acsversion
  * @property    string   pingfolder

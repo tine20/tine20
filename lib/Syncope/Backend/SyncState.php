@@ -28,15 +28,12 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
      */
     protected $_db;
     
-    /**
-     * @var Zend_Log
-     */
-    protected $_logger;
+    protected $_tablePrefix;
     
-    public function __construct(Zend_Db_Adapter_Abstract $_db, Zend_Log $_logger = null)
+    public function __construct(Zend_Db_Adapter_Abstract $_db, $_tablePrefix = 'syncope_')
     {
-        $this->_db     = $_db;
-        $this->_logger = $_logger;
+        $this->_db          = $_db;
+        $this->_tablePrefix = $_tablePrefix;
     }
     
     /**
@@ -50,7 +47,7 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
         $id = sha1(mt_rand(). microtime());
         $deviceId = $_syncState->device_id instanceof Syncope_Model_IDevice ? $_syncState->device_id->id : $_syncState->device_id;
     
-        $this->_db->insert('syncope_synckeys', array(
+        $this->_db->insert($this->_tablePrefix . 'synckey', array(
         	'id'          => $id, 
         	'device_id'   => $deviceId,
         	'type'        => $_syncState->type instanceof Syncope_Model_IFolder ? $_syncState->type->id : $_syncState->type,
@@ -78,7 +75,7 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
             'counter != ?'  => $_state->counter
         );
     
-        $this->_db->delete('syncope_synckeys', $where);
+        $this->_db->delete($this->_tablePrefix . 'synckey', $where);
     
         return true;
     
@@ -92,11 +89,12 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
     public function get($_id)
     {
         $select = $this->_db->select()
-            ->from('syncope_synckeys')
+            ->from($this->_tablePrefix . 'synckey')
             ->where('id = ?', $_id);
     
         $stmt = $this->_db->query($select);
         $state = $stmt->fetchObject('Syncope_Model_SyncState');
+        $stmt = null; # see https://bugs.php.net/bug.php?id=44081
         
         if (! $state instanceof Syncope_Model_ISyncState) {
             throw new Syncope_Exception_NotFound('id not found');
@@ -123,13 +121,14 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
         $folderId = $_folderId instanceof Syncope_Model_IFolder ? $_folderId->id : $_folderId;
     
         $select = $this->_db->select()
-            ->from('syncope_synckeys')
+            ->from($this->_tablePrefix . 'synckey')
             ->where($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
             ->where($this->_db->quoteIdentifier('type')      . ' = ?', $folderId);
     
         $stmt = $this->_db->query($select);
         $state = $stmt->fetchObject('Syncope_Model_SyncState');
-    
+        $stmt = null; # see https://bugs.php.net/bug.php?id=44081
+        
         if (! $state instanceof Syncope_Model_ISyncState) {
             throw new Syncope_Exception_NotFound('id not found');
         }
@@ -160,14 +159,14 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
             $this->_db->quoteInto($this->_db->quoteIdentifier('type') . ' = ?',      $folderId)
         );
     
-        $this->_db->delete('syncope_synckeys', $where);
+        $this->_db->delete($this->_tablePrefix . 'synckey', $where);
     }
     
     public function update(Syncope_Model_ISyncState $_syncState)
     {
         $deviceId = $_syncState->device_id instanceof Syncope_Model_IDevice ? $_syncState->device_id->id : $_syncState->device_id;
         
-        $this->_db->update('syncope_synckeys', array(
+        $this->_db->update($this->_tablePrefix . 'synckey', array(
         	'counter'     => $_syncState->counter,
         	'lastsync'    => $_syncState->lastsync->format('Y-m-d H:i:s'),
         	'pendingdata' => isset($_syncState->pendingdata) ? $_syncState->pendingdata : null
@@ -191,13 +190,14 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
         $folderId = $_folderId instanceof Syncope_Model_IFolder ? $_folderId->id : $_folderId;
         
         $select = $this->_db->select()
-            ->from('syncope_synckeys')
+            ->from($this->_tablePrefix . 'synckey')
             ->where($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
             ->where($this->_db->quoteIdentifier('counter')   . ' = ?', $_syncKey)
             ->where($this->_db->quoteIdentifier('type')      . ' = ?', $folderId);
         
         $stmt = $this->_db->query($select);
         $state = $stmt->fetchObject('Syncope_Model_SyncState');
+        $stmt = null; # see https://bugs.php.net/bug.php?id=44081
         
         if (! $state instanceof Syncope_Model_ISyncState) {
             return false;
@@ -212,18 +212,19 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
         
         // check if this was the latest syncKey
         $select = $this->_db->select()
-            ->from('syncope_synckeys')
+            ->from($this->_tablePrefix . 'synckey')
             ->where($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
             ->where($this->_db->quoteIdentifier('counter') . ' = ?', $_syncKey + 1)
             ->where($this->_db->quoteIdentifier('type') . ' = ?', $folderId);
         
         $stmt = $this->_db->query($select);
         $moreRecentState = $stmt->fetchObject('Syncope_Model_SyncState');
+        $stmt = null; # see https://bugs.php.net/bug.php?id=44081
         
         // found more recent synckey => the last sync repsone got not received by the client
         if ($moreRecentState instanceof Syncope_Model_ISyncState) {
             // undelete entries marked as deleted in syncope_contents table
-            $this->_db->update('syncope_contents', array(
+            $this->_db->update($this->_tablePrefix . 'contents', array(
             	'is_deleted'  => 0,
             ), array(
             	'device_id = ?'  => $deviceId,
@@ -232,7 +233,7 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
             ));
             
             // remove entries added during latest sync in syncope_contents table
-            $this->_db->delete('syncope_contents', array(
+            $this->_db->delete($this->_tablePrefix . 'contents', array(
             	'device_id = ?'     => $deviceId,
             	'folder_id = ?'     => $folderId,
             	'creation_time > ?' => $state->lastsync->format('Y-m-d H:i:s'),
@@ -240,7 +241,7 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
             
         } else {
             // finaly delete all entries marked for removal in syncope_contents table    
-            $this->_db->delete('syncope_contents', array(
+            $this->_db->delete($this->_tablePrefix . 'contents', array(
             	'device_id = ?'  => $deviceId,
             	'folder_id = ?'  => $folderId,
             	'is_deleted = ?' => 1

@@ -28,32 +28,36 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
      */
     protected $_db;
     
-    public function __construct(Zend_Db_Adapter_Abstract $_db)
+    protected $_tablePrefix;
+    
+    public function __construct(Zend_Db_Adapter_Abstract $_db, $_tablePrefix = 'syncope_')
     {
         $this->_db = $_db;
+        
+        $this->_tablePrefix = $_tablePrefix;
     }
     
     /**
      * create new folder state
      *
-     * @param Syncope_Model_IFolder $_folderState
+     * @param Syncope_Model_IFolder $_folder
      * @return Syncope_Model_IFolder
      */
-    public function create(Syncope_Model_IFolder $_folderState)
+    public function create(Syncope_Model_IFolder $_folder)
     {
         $id = sha1(mt_rand(). microtime());
-        $deviceId = $_folderState->device_id instanceof Syncope_Model_IDevice ? $_folderState->device_id->id : $_folderState->device_id;
+        $deviceId = $_folder->device_id instanceof Syncope_Model_IDevice ? $_folder->device_id->id : $_folder->device_id;
     
-        $this->_db->insert('syncope_folders', array(
+        $this->_db->insert($this->_tablePrefix . 'folders', array(
         	'id'             => $id, 
         	'device_id'      => $deviceId,
-        	'class'          => $_folderState->class,
-        	'folderid'       => $_folderState->folderid instanceof Syncope_Model_IFolder ? $_folderState->folderid->id : $_folderState->folderid,
-        	'parentid'       => $_folderState->parentid,
-        	'displayname'    => $_folderState->displayname,
-        	'type'           => $_folderState->type,
-        	'creation_time'  => $_folderState->creation_time->format('Y-m-d H:i:s'),
-        	'lastfiltertype' => $_folderState->lastfiltertype
+        	'class'          => $_folder->class,
+        	'folderid'       => $_folder->folderid instanceof Syncope_Model_IFolder ? $_folder->folderid->id : $_folder->folderid,
+        	'parentid'       => $_folder->parentid,
+        	'displayname'    => $_folder->displayname,
+        	'type'           => $_folder->type,
+        	'creation_time'  => $_folder->creation_time->format('Y-m-d H:i:s'),
+        	'lastfiltertype' => $_folder->lastfiltertype
         ));
         
         return $this->get($id);
@@ -63,7 +67,7 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
     {
         $id = $_id instanceof Syncope_Model_IFolder ? $_id->id : $id;
     
-        $result = $this->_db->delete('syncope_folders', array('id' => $id));
+        $result = $this->_db->delete($this->_tablePrefix . 'folders', array('id' => $id));
     
         return (bool) $result;
     }
@@ -76,7 +80,7 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
     public function get($_id)
     {
         $select = $this->_db->select()
-            ->from('syncope_folders')
+            ->from($this->_tablePrefix . 'folders')
             ->where('id = ?', $_id);
     
         $stmt = $this->_db->query($select);
@@ -107,20 +111,20 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
             $this->_db->quoteInto($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
         );
         
-        $this->_db->delete('syncope_folders', $where);
+        $this->_db->delete($this->_tablePrefix . 'folders', $where);
     }
     
-    public function update(Syncope_Model_IFolder $_state)
+    public function update(Syncope_Model_IFolder $_folder)
     {
-        $deviceId = $_state->device_id instanceof Syncope_Model_IDevice ? $_state->device_id->id : $_state->device_id;
+        $deviceId = $_folder->device_id instanceof Syncope_Model_IDevice ? $_folder->device_id->id : $_folder->device_id;
     
-        $this->_db->update('syncope_folders', array(
-        	'lastfiltertype'     => $_state->lastfiltertype
+        $this->_db->update($this->_tablePrefix . 'folders', array(
+        	'lastfiltertype'     => $_folder->lastfiltertype
         ), array(
-        	'id = ?' => $_state->id
+        	'id = ?' => $_folder->id
         ));
     
-        return $this->get($_state->id);
+        return $this->get($_folder->id);
     }
     
     /**
@@ -135,7 +139,7 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
         $deviceId = $_deviceId instanceof Syncope_Model_IDevice ? $_deviceId->id : $_deviceId;
         
         $select = $this->_db->select()
-            ->from('syncope_folders')
+            ->from($this->_tablePrefix . 'folders')
             ->where($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
             ->where($this->_db->quoteIdentifier('class') . ' = ?', $_class);
         
@@ -161,21 +165,21 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
         $deviceId = $_deviceId instanceof Syncope_Model_IDevice ? $_deviceId->id : $_deviceId;
         
         $select = $this->_db->select()
-            ->from('syncope_folders')
+            ->from($this->_tablePrefix . 'folders')
             ->where($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
             ->where($this->_db->quoteIdentifier('folderid') . ' = ?', $_folderId);
         
         $stmt = $this->_db->query($select);
-        $state = $stmt->fetchObject('Syncope_Model_Folder');
+        $folder = $stmt->fetchObject('Syncope_Model_Folder');
         
-        if (! $state instanceof Syncope_Model_IFolder) {
+        if (! $folder instanceof Syncope_Model_IFolder) {
             throw new Syncope_Exception_NotFound('folder not found');
         }
         
-        if (!empty($state->creation_time)) {
-            $state->creation_time = new DateTime($state->creation_time, new DateTimeZone('utc'));
+        if (!empty($folder->creation_time)) {
+            $folder->creation_time = new DateTime($folder->creation_time, new DateTimeZone('utc'));
         }
         
-        return $state;
+        return $folder;
     }
 }

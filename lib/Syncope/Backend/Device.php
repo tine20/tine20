@@ -27,9 +27,12 @@ class Syncope_Backend_Device implements Syncope_Backend_IDevice
      */
     protected $_db;
     
-    public function __construct(Zend_Db_Adapter_Abstract $_db)
+    protected $_tablePrefix;
+    
+    public function __construct(Zend_Db_Adapter_Abstract $_db, $_tablePrefix = 'syncope_')
     {
-        $this->_db = $_db;
+        $this->_db          = $_db;
+        $this->_tablePrefix = $_tablePrefix;
     }
 
     /**
@@ -42,12 +45,14 @@ class Syncope_Backend_Device implements Syncope_Backend_IDevice
     {
         $id = sha1(mt_rand(). microtime());
         
-        $this->_db->insert('syncope_devices', array(
+        $this->_db->insert($this->_tablePrefix . 'device', array(
         	'id'         => $id, 
         	'deviceid'   => $_device->deviceid,
         	'devicetype' => $_device->devicetype,
+        	'policy_id'  => $_device->policy_id,
         	'policykey'  => $_device->policykey,
         	'owner_id'   => $_device->owner_id,
+        	'useragent'  => $_device->useragent,
         	'acsversion' => $_device->acsversion,
         	'remotewipe' => $_device->remotewipe
         ));
@@ -63,7 +68,7 @@ class Syncope_Backend_Device implements Syncope_Backend_IDevice
     public function get($_id)
     {
         $select = $this->_db->select()
-            ->from('syncope_devices')
+            ->from($this->_tablePrefix . 'device')
             ->where('id = ?', $_id);
             
         $stmt = $this->_db->query($select);
@@ -80,14 +85,14 @@ class Syncope_Backend_Device implements Syncope_Backend_IDevice
     {
         $id = $_id instanceof Syncope_Model_IDevice ? $_id->id : $id;
         
-        $result = $this->_db->delete('syncope_devices', array('id' => $id));
+        $result = $this->_db->delete($this->_tablePrefix . 'device', array('id' => $id));
         
         return (bool) $result;
     }
     
     public function update(Syncope_Model_IDevice $_device)
     {
-        $this->_db->update('syncope_devices', array(
+        $this->_db->update($this->_tablePrefix . 'device', array(
         	'acsversion'   => $_device->acsversion,
         	'policykey'    => $_device->policykey,
         	'pingfolder'   => $_device->pingfolder,
