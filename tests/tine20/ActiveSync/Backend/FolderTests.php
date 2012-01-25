@@ -63,8 +63,9 @@ class ActiveSync_Backend_FolderTests extends PHPUnit_Framework_TestCase
         $this->_deviceBackend = new ActiveSync_Backend_DeviceFacade();
         $this->_folderBackend = new ActiveSync_Backend_FolderFacade();
 
-        $newDevice = ActiveSync_Backend_DeviceTests::getTestDevice();
-        $this->_device    = $this->_deviceBackend->create($newDevice);
+        $this->_device = $this->_deviceBackend->create(
+            ActiveSync_Backend_DeviceTests::getTestDevice()
+        );
     }
 
     /**
