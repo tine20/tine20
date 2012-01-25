@@ -120,7 +120,7 @@ abstract class Syncope_Command_Wbxml implements Syncope_Command_Interface
      * @param  Syncope_Model_Device  $_device
      * @param  string                   $_policyKey
      */
-    public function __construct($_requestBody, Syncope_Model_Device $_device, $_policyKey)
+    public function __construct($_requestBody, Syncope_Model_IDevice $_device, $_policyKey)
     {
         $this->_policyKey = $_policyKey;
         $this->_device    = $_device;

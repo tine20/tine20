@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `syncope_device` (
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `syncope_folders` (
+CREATE TABLE IF NOT EXISTS `syncope_folder` (
   `id` varchar(40) NOT NULL,
   `device_id` varchar(40) NOT NULL,
   `class` varchar(64) NOT NULL,

@@ -154,7 +154,7 @@ class Syncope_Data_Contacts implements Syncope_Data_IData
         return array_keys(self::$entries);
     }
     
-    public function getChangedEntries()
+    public function getChangedEntries($_folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL)
     {
         return self::$changedEntries;
     }

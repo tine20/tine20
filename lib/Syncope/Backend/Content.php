@@ -28,9 +28,12 @@ class Syncope_Backend_Content implements Syncope_Backend_IContent
      */
     protected $_db;
     
-    public function __construct(Zend_Db_Adapter_Abstract $_db)
+    protected $_tablePrefix;
+    
+    public function __construct(Zend_Db_Adapter_Abstract $_db, $_tablePrefix = 'syncope_')
     {
-        $this->_db = $_db;
+        $this->_db          = $_db;
+        $this->_tablePrefix = $_tablePrefix;
     }
     
     /**
@@ -46,7 +49,7 @@ class Syncope_Backend_Content implements Syncope_Backend_IContent
         $deviceId = $_state->device_id instanceof Syncope_Model_IDevice ? $_state->device_id->id : $_state->device_id;
         $folderId = $_state->folder_id instanceof Syncope_Model_IFolder ? $_state->folder_id->id : $_state->folder_id;
         
-        $this->_db->insert('syncope_content', array(
+        $this->_db->insert($this->_tablePrefix . 'content', array(
         	'id'            => $id, 
         	'device_id'     => $deviceId,
         	'folder_id'     => $folderId,
@@ -68,7 +71,7 @@ class Syncope_Backend_Content implements Syncope_Backend_IContent
     {
         $id = $_id instanceof Syncope_Model_IContent ? $_id->id : $_id;
         
-        $this->_db->update('syncope_content', array(
+        $this->_db->update($this->_tablePrefix . 'content', array(
         	'is_deleted' => 1
         ), array(
         	'id = ?' => $id
@@ -84,7 +87,7 @@ class Syncope_Backend_Content implements Syncope_Backend_IContent
     public function get($_id)
     {
         $select = $this->_db->select()
-            ->from('syncope_content')
+            ->from($this->_tablePrefix . 'content')
             ->where('id = ?', $_id);
     
         $stmt = $this->_db->query($select);
@@ -113,7 +116,7 @@ class Syncope_Backend_Content implements Syncope_Backend_IContent
         $folderId = $_folderId instanceof Syncope_Model_IFolder ? $_folderId->id : $_folderId;
     
         $select = $this->_db->select()
-            ->from('syncope_content')
+            ->from($this->_tablePrefix . 'content')
             ->where($this->_db->quoteIdentifier('device_id')  . ' = ?', $deviceId)
             ->where($this->_db->quoteIdentifier('folder_id')  . ' = ?', $folderId)
             ->where($this->_db->quoteIdentifier('contentid')  . ' = ?', $_contentId)
@@ -146,7 +149,7 @@ class Syncope_Backend_Content implements Syncope_Backend_IContent
         $folderId = $_folderId instanceof Syncope_Model_IFolder ? $_folderId->id : $_folderId;
                 
         $select = $this->_db->select()
-            ->from('syncope_content', 'contentid')
+            ->from($this->_tablePrefix . 'content', 'contentid')
             ->where($this->_db->quoteIdentifier('device_id')  . ' = ?', $deviceId)
             ->where($this->_db->quoteIdentifier('folder_id')  . ' = ?', $folderId)
             ->where($this->_db->quoteIdentifier('is_deleted') . ' = ?', 0);
@@ -173,6 +176,6 @@ class Syncope_Backend_Content implements Syncope_Backend_IContent
             $this->_db->quoteInto($this->_db->quoteIdentifier('folder_id') . ' = ?', $folderId)
         );
         
-        $this->_db->delete('syncope_content', $where);
+        $this->_db->delete($this->_tablePrefix . 'content', $where);
     }
 }

@@ -58,6 +58,11 @@ class Syncope_Data_Calendar implements Syncope_Data_IData
         );
     }
     
+    public function getChangedEntries($_folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL)
+    {
+        return self::$changedEntries;
+    }
+    
     public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry)
     {
     }

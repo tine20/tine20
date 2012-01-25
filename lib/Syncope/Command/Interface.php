@@ -26,7 +26,7 @@ interface Syncope_Command_Interface
      *
      * @param  mixed                    $_requestBody
      */
-    public function __construct($_requestBody, Syncope_Model_Device $_device, $_policyKey);
+    public function __construct($_requestBody, Syncope_Model_IDevice $_device, $_policyKey);
     
     /**
      * process the XML file and add, change, delete or fetches data 

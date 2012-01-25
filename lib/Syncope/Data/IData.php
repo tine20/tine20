@@ -28,6 +28,8 @@ interface Syncope_Data_IData
     
     public function getAllFolders();
     
+    public function getChangedEntries($_folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL);
+    
     public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry);
 }
 

@@ -43,7 +43,7 @@ function getTestDatabase()
         PRIMARY KEY (`id`)
 	)");
 
-    $db->query("CREATE TABLE IF NOT EXISTS `syncope_folders` (
+    $db->query("CREATE TABLE IF NOT EXISTS `syncope_folder` (
         `id` varchar(40) NOT NULL,
         `device_id` varchar(40) NOT NULL,
         `class` varchar(64) NOT NULL,

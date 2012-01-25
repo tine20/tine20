@@ -48,7 +48,7 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
         $id = sha1(mt_rand(). microtime());
         $deviceId = $_folder->device_id instanceof Syncope_Model_IDevice ? $_folder->device_id->id : $_folder->device_id;
     
-        $this->_db->insert($this->_tablePrefix . 'folders', array(
+        $this->_db->insert($this->_tablePrefix . 'folder', array(
         	'id'             => $id, 
         	'device_id'      => $deviceId,
         	'class'          => $_folder->class,
@@ -67,7 +67,7 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
     {
         $id = $_id instanceof Syncope_Model_IFolder ? $_id->id : $id;
     
-        $result = $this->_db->delete($this->_tablePrefix . 'folders', array('id' => $id));
+        $result = $this->_db->delete($this->_tablePrefix . 'folder', array('id' => $id));
     
         return (bool) $result;
     }
@@ -80,7 +80,7 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
     public function get($_id)
     {
         $select = $this->_db->select()
-            ->from($this->_tablePrefix . 'folders')
+            ->from($this->_tablePrefix . 'folder')
             ->where('id = ?', $_id);
     
         $stmt = $this->_db->query($select);
@@ -111,14 +111,14 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
             $this->_db->quoteInto($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
         );
         
-        $this->_db->delete($this->_tablePrefix . 'folders', $where);
+        $this->_db->delete($this->_tablePrefix . 'folder', $where);
     }
     
     public function update(Syncope_Model_IFolder $_folder)
     {
         $deviceId = $_folder->device_id instanceof Syncope_Model_IDevice ? $_folder->device_id->id : $_folder->device_id;
     
-        $this->_db->update($this->_tablePrefix . 'folders', array(
+        $this->_db->update($this->_tablePrefix . 'folder', array(
         	'lastfiltertype'     => $_folder->lastfiltertype
         ), array(
         	'id = ?' => $_folder->id
@@ -139,7 +139,7 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
         $deviceId = $_deviceId instanceof Syncope_Model_IDevice ? $_deviceId->id : $_deviceId;
         
         $select = $this->_db->select()
-            ->from($this->_tablePrefix . 'folders')
+            ->from($this->_tablePrefix . 'folder')
             ->where($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
             ->where($this->_db->quoteIdentifier('class') . ' = ?', $_class);
         
@@ -165,7 +165,7 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
         $deviceId = $_deviceId instanceof Syncope_Model_IDevice ? $_deviceId->id : $_deviceId;
         
         $select = $this->_db->select()
-            ->from($this->_tablePrefix . 'folders')
+            ->from($this->_tablePrefix . 'folder')
             ->where($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
             ->where($this->_db->quoteIdentifier('folderid') . ' = ?', $_folderId);
         

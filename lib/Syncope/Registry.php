@@ -12,8 +12,8 @@
  * obtain it through the world-wide-web, please send an email
  * to license@zend.com so we can send you a copy immediately.
  *
- * @category   Zend
- * @package    Zend_Registry
+ * @category   Syncope
+ * @package    Syncope_Registry
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: Registry.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
@@ -22,29 +22,29 @@
 /**
  * Generic storage class helps to manage global data.
  *
- * @category   Zend
- * @package    Zend_Registry
+ * @category   Syncope
+ * @package    Syncope_Registry
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Registry extends ArrayObject
+class Syncope_Registry extends ArrayObject
 {
     /**
      * Class name of the singleton registry object.
      * @var string
      */
-    private static $_registryClassName = 'Zend_Registry';
+    private static $_registryClassName = 'Syncope_Registry';
 
     /**
      * Registry object provides storage for shared objects.
-     * @var Zend_Registry
+     * @var Syncope_Registry
      */
     private static $_registry = null;
 
     /**
      * Retrieves the default registry instance.
      *
-     * @return Zend_Registry
+     * @return Syncope_Registry
      */
     public static function getInstance()
     {
@@ -58,12 +58,12 @@ class Zend_Registry extends ArrayObject
     /**
      * Set the default registry instance to a specified instance.
      *
-     * @param Zend_Registry $registry An object instance of type Zend_Registry,
+     * @param Syncope_Registry $registry An object instance of type Syncope_Registry,
      *   or a subclass.
      * @return void
      * @throws Zend_Exception if registry is already initialized.
      */
-    public static function setInstance(Zend_Registry $registry)
+    public static function setInstance(Syncope_Registry $registry)
     {
         if (self::$_registry !== null) {
             require_once 'Zend/Exception.php';
@@ -94,7 +94,7 @@ class Zend_Registry extends ArrayObject
      * @throws Zend_Exception if the registry is initialized or if the
      *   class name is not valid.
      */
-    public static function setClassName($registryClassName = 'Zend_Registry')
+    public static function setClassName($registryClassName = 'Syncope_Registry')
     {
         if (self::$_registry !== null) {
             require_once 'Zend/Exception.php';
@@ -130,7 +130,7 @@ class Zend_Registry extends ArrayObject
     /**
      * getter method, basically same as offsetGet().
      *
-     * This method can be called from an object of type Zend_Registry, or it
+     * This method can be called from an object of type Syncope_Registry, or it
      * can be called statically.  In the latter case, it uses the default
      * static instance stored in the class.
      *
@@ -153,7 +153,7 @@ class Zend_Registry extends ArrayObject
     /**
      * setter method, basically same as offsetSet().
      *
-     * This method can be called from an object of type Zend_Registry, or it
+     * This method can be called from an object of type Syncope_Registry, or it
      * can be called statically.  In the latter case, it uses the default
      * static instance stored in the class.
      *

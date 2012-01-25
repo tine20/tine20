@@ -25,6 +25,8 @@ class Syncope_Data_Factory
     const CLASS_EMAIL    = 'Email';
     const CLASS_TASKS    = 'Tasks';
     
+    protected static $_classMap = array();
+    
     /**
      * @param unknown_type $_class
      * @param Syncope_Model_IDevice $_device
@@ -32,31 +34,45 @@ class Syncope_Data_Factory
      * @throws InvalidArgumentException
      * @return Syncope_Data_IData
      */
-    public static function factory($_class, Syncope_Model_IDevice $_device, DateTime $_timeStamp)
+    public static function factory($_classFactory, Syncope_Model_IDevice $_device, DateTime $_timeStamp)
     {
-        switch($_class) {
+        switch($_classFactory) {
             case self::CLASS_CALENDAR:
-                $class = new Syncope_Data_Calendar($_device, $_timeStamp);
+                $className = isset(self::$_classMap[$_classFactory]) ? self::$_classMap[$_classFactory] : 'Syncope_Data_Calendar';
                 break;
                 
             case self::CLASS_CONTACTS:
-                $class = new Syncope_Data_Contacts($_device, $_timeStamp);
+                $className = isset(self::$_classMap[$_classFactory]) ? self::$_classMap[$_classFactory] : 'Syncope_Data_Contacts';
                 break;
                 
             case self::CLASS_EMAIL:
-                $class = new Syncope_Data_Email($_device, $_timeStamp);
+                $className = isset(self::$_classMap[$_classFactory]) ? self::$_classMap[$_classFactory] : 'Syncope_Data_Email';
                 break;
                 
             case self::CLASS_TASKS:
-                $class = new Syncope_Data_Tasks($_device, $_timeStamp);
+                $className = isset(self::$_classMap[$_classFactory]) ? self::$_classMap[$_classFactory] : 'Syncope_Data_Tasks';
                 break;
                 
             default:
-                throw new InvalidArgumentException('invalid class name provided');
+                throw new InvalidArgumentException('invalid class type provided');
                 breeak;
         }
-            
+        
+        $class = new $className($_device, $_timeStamp);
+        
+        if (! $class instanceof Syncope_Data_IData) {
+            throw new RuntimeException('class must be instanceof Syncope_Data_IData');
+        }
+                    
         return $class;
+    }
+    
+    public static function registerClass($_classFactory, $_className)
+    {
+        if (!class_exists($_className)) {
+            throw new InvalidArgumentException('invalid $_className provided');
+        }
+        self::$_classMap[$_classFactory] = $_className;
     }
 }
 
