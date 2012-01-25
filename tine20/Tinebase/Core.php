@@ -466,10 +466,16 @@ class Tinebase_Core
                 $logger->addWriter($writer);
             }
         } else {
-            $writer = new Zend_Log_Writer_Syslog;
+            $writer = new Zend_Log_Writer_Syslog(array(
+                'application'   => 'Tine 2.0'
+            ));
+            
+            $filter = new Zend_Log_Filter_Priority(Zend_Log::WARN);
+            $writer->addFilter($filter);
+            
             $logger->addWriter($writer);
         }
-
+        
         self::set(self::LOGGER, $logger);
 
         $logger->info(__METHOD__ . '::' . __LINE__ .' logger initialized');
