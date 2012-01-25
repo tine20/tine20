@@ -201,10 +201,10 @@ class Sabre_DAV_Server {
             $this->invokeMethod($this->httpRequest->getMethod(), $this->getRequestUri());
 
         } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) 
-                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " webdav exception " . $e->getMessage());
-            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT))
-                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " webdav exception stacktrace " . $e->getTraceAsString());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " webdav exception " . $e->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " webdav exception stacktrace " . $e->getTraceAsString());
             
             $DOM = new DOMDocument('1.0','utf-8');
             $DOM->formatOutput = true;
