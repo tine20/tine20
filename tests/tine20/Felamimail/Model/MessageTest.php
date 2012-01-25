@@ -64,7 +64,7 @@ class Felamimail_Model_MessageTest extends PHPUnit_Framework_TestCase
         ));
         
         $result = $message->getPlainTextBody();
-        echo $result;
+        //echo $result;
         
         $this->assertEquals("blabla\n" .
             "> lalülüüla\n" .
