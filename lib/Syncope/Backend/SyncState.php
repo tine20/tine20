@@ -223,8 +223,8 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
         
         // found more recent synckey => the last sync repsone got not received by the client
         if ($moreRecentState instanceof Syncope_Model_ISyncState) {
-            // undelete entries marked as deleted in syncope_contents table
-            $this->_db->update($this->_tablePrefix . 'contents', array(
+            // undelete entries marked as deleted in syncope_content table
+            $this->_db->update($this->_tablePrefix . 'content', array(
             	'is_deleted'  => 0,
             ), array(
             	'device_id = ?'  => $deviceId,
@@ -232,16 +232,16 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
             	'is_deleted = ?' => 1
             ));
             
-            // remove entries added during latest sync in syncope_contents table
-            $this->_db->delete($this->_tablePrefix . 'contents', array(
+            // remove entries added during latest sync in syncope_content table
+            $this->_db->delete($this->_tablePrefix . 'content', array(
             	'device_id = ?'     => $deviceId,
             	'folder_id = ?'     => $folderId,
             	'creation_time > ?' => $state->lastsync->format('Y-m-d H:i:s'),
             ));
             
         } else {
-            // finaly delete all entries marked for removal in syncope_contents table    
-            $this->_db->delete($this->_tablePrefix . 'contents', array(
+            // finaly delete all entries marked for removal in syncope_content table    
+            $this->_db->delete($this->_tablePrefix . 'content', array(
             	'device_id = ?'  => $deviceId,
             	'folder_id = ?'  => $folderId,
             	'is_deleted = ?' => 1

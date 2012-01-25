@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `syncope_device` (
 
 CREATE TABLE IF NOT EXISTS `syncope_folders` (
   `id` varchar(40) NOT NULL,
-  `device_id` varchar(64) NOT NULL,
+  `device_id` varchar(40) NOT NULL,
   `class` varchar(64) NOT NULL,
   `folderid` varchar(254) NOT NULL,
   `parentid` varchar(254) DEFAULT NULL,
@@ -30,7 +30,8 @@ CREATE TABLE IF NOT EXISTS `syncope_folders` (
 );
 
 CREATE TABLE `syncope_synckey` (
-  `device_id` varchar(64) NOT NULL DEFAULT '',
+  `id` varchar(40) NOT NULL,
+  `device_id` varchar(40) NOT NULL DEFAULT '',
   `type` varchar(64) NOT NULL DEFAULT '',
   `counter` int(11) unsigned NOT NULL DEFAULT '0',
   `lastsync` datetime DEFAULT NULL,
@@ -39,10 +40,10 @@ CREATE TABLE `syncope_synckey` (
   CONSTRAINT `syncope_synckey::device_id--syncope_device::id` FOREIGN KEY (`device_id`) REFERENCES `syncope_device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE `syncope_contents` (                                                                                                                                           
+CREATE TABLE `syncope_content` (                                                                                                                                           
   `id` varchar(40) NOT NULL,                                                                                                                                                                               
-  `device_id` varchar(64) DEFAULT NULL,                                                                                                                                                                    
-  `folder_id` varchar(64) DEFAULT NULL,                                                                                                                                                                        
+  `device_id` varchar(40) DEFAULT NULL,                                                                                                                                                                    
+  `folder_id` varchar(40) DEFAULT NULL,                                                                                                                                                                        
   `contentid` varchar(64) DEFAULT NULL,                                                                                                                                                                    
   `creation_time` datetime DEFAULT NULL,                                                                                                                                                                   
   `is_deleted` tinyint(1) unsigned DEFAULT '0',                                                                                                                                                            

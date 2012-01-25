@@ -45,7 +45,7 @@ function getTestDatabase()
 
     $db->query("CREATE TABLE IF NOT EXISTS `syncope_folders` (
         `id` varchar(40) NOT NULL,
-        `device_id` varchar(64) NOT NULL,
+        `device_id` varchar(40) NOT NULL,
         `class` varchar(64) NOT NULL,
         `folderid` varchar(254) NOT NULL,
         `parentid` varchar(254) DEFAULT NULL,
@@ -59,7 +59,7 @@ function getTestDatabase()
     
     $db->query("CREATE TABLE `syncope_synckey` (
     	`id` varchar(40) NOT NULL,
-      	`device_id` varchar(64) NOT NULL,
+      	`device_id` varchar(40) NOT NULL,
       	`type` varchar(64) NOT NULL,
       	`counter` int(11) NOT NULL DEFAULT '0',
       	`lastsync` datetime NOT NULL,
@@ -68,10 +68,10 @@ function getTestDatabase()
       	UNIQUE (`device_id`,`type`,`counter`)
     )");
     
-    $db->query("CREATE TABLE `syncope_contents` (
+    $db->query("CREATE TABLE `syncope_content` (
         `id` varchar(40) NOT NULL,
-        `device_id` varchar(64) NOT NULL,
-        `folder_id` varchar(64) NOT NULL,
+        `device_id` varchar(40) NOT NULL,
+        `folder_id` varchar(40) NOT NULL,
         `contentid` varchar(64) NOT NULL,
         `creation_time` datetime NOT NULL,
         `is_deleted` int(11) DEFAULT '0',
