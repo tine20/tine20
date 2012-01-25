@@ -15,6 +15,9 @@
  *
  * @package     Filemanager
  * @subpackage  Frontend
+ * 
+ * @TODO extend from Filemanager_Frontend_WebDAV_Directory 
+ *       and remove Tinebase_WebDav_Container_Abstract
  */
 class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract
 {
@@ -52,6 +55,8 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
      */
     public function createDirectory($name)
     {
+        Filemanager_Frontend_WebDAV_Node::checkForbiddenFile($name);
+        
         if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_ADD)) {
             throw new Sabre_DAV_Exception_Forbidden('Forbidden to create folder: ' . $name);
         }
@@ -74,10 +79,12 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
      */
     public function createFile($name, $data = null)
     {
+        Filemanager_Frontend_WebDAV_Node::checkForbiddenFile($name);
+        
         if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_ADD)) {
             throw new Sabre_DAV_Exception_Forbidden('Forbidden to create file: ' . $this->_path . '/' . $name);
         }
-    
+        
         $path = $this->_path . '/' . $name;
     
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
@@ -125,7 +132,9 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path . '/' . $name);
-    
+        
+        Filemanager_Frontend_WebDAV_Node::checkForbiddenFile($name);
+        
         try {
             $childNode = Tinebase_FileSystem::getInstance()->stat($this->_path . '/' . $name);
         } catch (Tinebase_Exception_NotFound $tenf) {
@@ -185,6 +194,7 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
     #    
         return $response;
     }
+    
     /**
      * Renames the node
      * 
@@ -194,6 +204,8 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
      */
     public function setName($name) 
     {
+        Filemanager_Frontend_WebDAV_Node::checkForbiddenFile($name);
+        
         if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_EDIT)) {
             throw new Sabre_DAV_Exception_Forbidden('Forbidden to rename file: ' . $this->_path);
         }

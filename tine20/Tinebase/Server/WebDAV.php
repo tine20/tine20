@@ -18,6 +18,11 @@
  */
 class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
 {
+   /**
+    * @var Sabre_DAV_Server
+    */
+    protected static $_server;
+    
     public function handle()
     {
         try {
@@ -55,33 +60,43 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
             return;                            
         }
         
-        $server = new Sabre_DAV_Server(new Tinebase_WebDav_Root());
+        self::$_server = new Sabre_DAV_Server(new Tinebase_WebDav_Root());
         
         // compute base uri
-        #$decodedUri = Sabre_DAV_URLUtil::decodePath($server->getRequestUri());
+        #$decodedUri = Sabre_DAV_URLUtil::decodePath(self::$_server->getRequestUri());
         #$baseUri = substr($decodedUri, 0, strpos($decodedUri, 'carddav/') + strlen('carddav/'));
-        $server->setBaseUri('/');
+        self::$_server->setBaseUri('/');
         
         $tempDir = Tinebase_Core::getTempDir();
         if (!empty($tempDir)) {
             $lockBackend = new Sabre_DAV_Locks_Backend_File($tempDir . '/webdav.lock');
             $lockPlugin = new Sabre_DAV_Locks_Plugin($lockBackend);
-            $server->addPlugin($lockPlugin);
+            self::$_server->addPlugin($lockPlugin);
         }
         
         $authPlugin = new Sabre_DAV_Auth_Plugin(new Tinebase_WebDav_Auth(), null);
-        $server->addPlugin($authPlugin);
+        self::$_server->addPlugin($authPlugin);
         
         $aclPlugin = new Sabre_DAVACL_Plugin();
         $aclPlugin->defaultUsernamePath = 'principals/users';
         $aclPlugin->principalCollectionSet = array($aclPlugin->defaultUsernamePath/*, 'principals/groups'*/);
-        $server->addPlugin($aclPlugin);
+        self::$_server->addPlugin($aclPlugin);
         
-        $server->addPlugin(new Sabre_CardDAV_Plugin());
-        $server->addPlugin(new Sabre_CalDAV_Plugin());
-        $server->addPlugin(new Sabre_CalDAV_Schedule_Plugin());
-        $server->addPlugin(new Sabre_DAV_Browser_Plugin());
+        self::$_server->addPlugin(new Sabre_CardDAV_Plugin());
+        self::$_server->addPlugin(new Sabre_CalDAV_Plugin());
+        self::$_server->addPlugin(new Sabre_CalDAV_Schedule_Plugin());
+        self::$_server->addPlugin(new Sabre_DAV_Browser_Plugin());
         
-        $server->exec();
+        self::$_server->exec();
+    }
+    
+   /**
+    * helper to return request
+    *
+    * @return Sabre_HTTP_Request
+    */
+    public static function getRequest()
+    {
+        return self::$_server ? self::$_server->httpRequest : new Sabre_HTTP_Request();
     }
 }

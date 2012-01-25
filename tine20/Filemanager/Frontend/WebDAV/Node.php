@@ -25,6 +25,11 @@ abstract class Filemanager_Frontend_WebDAV_Node implements Sabre_DAV_INode
     
     protected $_container;
     
+    /**
+     * @var array list of forbidden file names
+     */
+    protected static $_forbiddenNames = array('.DS_Store', 'Thumbs.db');
+    
     public function __construct($_path) 
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
@@ -78,6 +83,8 @@ abstract class Filemanager_Frontend_WebDAV_Node implements Sabre_DAV_INode
      */
     public function setName($name) 
     {
+        self::checkForbiddenFile($name);
+        
         if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_EDIT)) {
             throw new Sabre_DAV_Exception_Forbidden('Forbidden to rename file: ' . $this->_path);
         }
@@ -110,5 +117,20 @@ abstract class Filemanager_Frontend_WebDAV_Node implements Sabre_DAV_INode
         }
         
         return $this->_container;
+    }
+    
+   /**
+    * checks if filename is acceptable
+    *
+    * @param  string $name
+    * @throws Sabre_DAV_Exception_Forbidden
+    */
+    public static function checkForbiddenFile($name)
+    {
+        if (in_array($name, self::$_forbiddenNames)) {
+            throw new Sabre_DAV_Exception_Forbidden('forbidden name');
+        } else if (substr($name, 0, 2) == '._') {
+            throw new Sabre_DAV_Exception_Forbidden('no resource files accepted');
+        }
     }
 }

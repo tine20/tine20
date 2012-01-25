@@ -35,10 +35,19 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
         return $children;
     }
     
+    /**
+     * get child by name
+     * 
+     * @param  string $name
+     * @throws Sabre_DAV_Exception_FileNotFound
+     * @return Filemanager_Frontend_WebDAV_Directory|Filemanager_Frontend_WebDAV_File
+     */
     public function getChild($name) 
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path . '/' . $name);
+        
+        Filemanager_Frontend_WebDAV_Node::checkForbiddenFile($name);
         
         try {
             $childNode = Tinebase_FileSystem::getInstance()->stat($this->_path . '/' . $name);
@@ -58,6 +67,8 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__ . ' exists: ' . $this->_path . '/' . $name);
         
+        Filemanager_Frontend_WebDAV_Node::checkForbiddenFile($name);
+        
         return Tinebase_FileSystem::getInstance()->fileExists($this->_path . '/' . $name);
     }
 
@@ -71,6 +82,8 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
      */
     public function createFile($name, $data = null) 
     {
+        Filemanager_Frontend_WebDAV_Node::checkForbiddenFile($name);
+        
         if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_ADD)) {
             throw new Sabre_DAV_Exception_Forbidden('Forbidden to create file: ' . $this->_path . '/' . $name);
         }
@@ -100,6 +113,8 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
      */
     public function createDirectory($name) 
     {
+        Filemanager_Frontend_WebDAV_Node::checkForbiddenFile($name);
+        
         if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_ADD)) {
             throw new Sabre_DAV_Exception_Forbidden('Forbidden to create folder: ' . $name);
         }
@@ -136,4 +151,5 @@ class Filemanager_Frontend_WebDAV_Directory extends Filemanager_Frontend_WebDAV_
             throw new Sabre_DAV_Exception_Forbidden('Permission denied to delete node');
         }
     }
+    
 }
