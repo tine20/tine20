@@ -19,7 +19,7 @@
  * @subpackage  Controller
  */
  
-abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_Interface
+abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
 {
     /**
      * information about the current device
@@ -162,7 +162,7 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
      *
      * @return array
      */
-    public function getSupportedFolders()
+    public function getAllFolders()
     {
         // device supports multiple folders ?
         if(in_array(strtolower($this->_device->devicetype), array('iphone', 'ipad', 'thundertine', 'windowsphone'))) {
@@ -288,11 +288,12 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
      * @param SimpleXMLElement $_data
      * @return Tinebase_Record_Abstract
      */
-    public function add($_folderId, SimpleXMLElement $_data)
+    public function createEntry($_folderId, SimpleXMLElement $_entry)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add entry");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " create entry");
         
-        $entry = $this->toTineModel($_data);
+        $entry = $this->toTineModel($_entry);
         $entry->creation_time = $this->_syncTimeStamp;
         $entry->created_by = Tinebase_Core::getUser()->getId();
         
@@ -322,18 +323,17 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
      * @param SimpleXMLElement $_data
      * @return Tinebase_Record_Abstract
      */
-    public function change($_folderId, $_id, SimpleXMLElement $_data)
+    public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_folderId Id: $_id");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " update CollectionId: $_folderId Id: $_serverId");
         
-        $oldEntry = $this->_contentController->get($_id); 
+        $oldEntry = $this->_contentController->get($_serverId); 
         
-        $entry = $this->toTineModel($_data, $oldEntry);
+        $entry = $this->toTineModel($_entry, $oldEntry);
         $entry->last_modified_time = $this->_syncTimeStamp;
         
         $entry = $this->_contentController->update($entry);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updated entry id " . $entry->getId());
 
         return $entry;
     }
@@ -345,13 +345,12 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
      * @param  string  $_id
      * @param  array   $_options
      */
-    public function delete($_folderId, $_id, $_options)
+    public function deleteEntry($_folderId, $_serverId)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " ColectionId: $_folderId Id: $_id");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " delete ColectionId: $_folderId Id: $_serverId");
         
-        $this->_contentController->delete($_id);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " deleted entry id " . $_id);
+        $this->_contentController->delete($_serverId);
     }
     
     /**
@@ -361,21 +360,21 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
      * @param SimpleXMLElement  $_data
      * @return Tinebase_Record_Abstract
      */
-    public function search($_folderId, SimpleXMLElement $_data)
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_folderId");
-        
-        $filterArray  = $this->_toTineFilterArray($_data);
-        $filter       = new $this->_contentFilterClass($filterArray);
-        
-        $this->_getContainerFilter($filter, $_folderId);
-        
-        $foundEmtries = $this->_contentController->search($filter);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundEmtries));
-            
-        return $foundEmtries;
-    }
+    #public function search($_folderId, SimpleXMLElement $_data)
+    #{
+    #    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_folderId");
+    #    
+    #    $filterArray  = $this->_toTineFilterArray($_data);
+    #    $filter       = new $this->_contentFilterClass($filterArray);
+    #    
+    #    $this->_getContainerFilter($filter, $_folderId);
+    #    
+    #    $foundEmtries = $this->_contentController->search($filter);
+#
+    #    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundEmtries));
+    #        
+    #    return $foundEmtries;
+    #}
     
     /**
      * used by the mail backend only. Used to update the folder cache
@@ -439,7 +438,7 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
      * @param unknown_type $_endTimeStamp
      * @return array
      */
-    public function getChanged($_folderId, $_startTimeStamp, $_endTimeStamp = NULL)
+    public function getChangedEntries($_folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL)
     {
         $filter = new $this->_contentFilterClass();
         
@@ -456,8 +455,8 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
         $this->_getContentFilter($filter, 0);
         $this->_getContainerFilter($filter, $_folderId);
 
-        $startTimeStamp = ($_startTimeStamp instanceof DateTime) ? $_startTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
-        $endTimeStamp = ($_endTimeStamp instanceof DateTime) ? $_endTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_endTimeStamp;
+        $startTimeStamp = ($_startTimeStamp instanceof DateTime) ? $_startTimeStamp->format(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
+        $endTimeStamp = ($_endTimeStamp instanceof DateTime) ? $_endTimeStamp->format(Tinebase_Record_Abstract::ISO8601LONG) : $_endTimeStamp;
         
         $filter->addFilter(new Tinebase_Model_Filter_DateTime(
             'last_modified_time',
@@ -573,7 +572,7 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
      * @param string      $_serverId  the local entry id
      * @param boolean     $_withBody  retrieve body of entry
      */
-    abstract public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_options, $_neverTruncate = false);
+    #abstract public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_options, $_neverTruncate = false);
     
     /**
      * removed control chars from string which are not allowd in ActiveSync

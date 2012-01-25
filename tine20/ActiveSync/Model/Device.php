@@ -92,7 +92,7 @@ class ActiveSync_Model_Device extends Tinebase_Record_Abstract implements Syncop
     public function getMajorVersion()
     {
         switch ($this->devicetype) {
-            case ActiveSync_Backend_Device::TYPE_IPHONE:
+            case Syncope_Model_Device::TYPE_IPHONE:
                 if (preg_match('/(.+)\/(\d+)\.(\d+)/', $this->useragent, $matches)) {
                     list(, $name, $majorVersion, $minorVersion) = $matches;
                     return $majorVersion;
