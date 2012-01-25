@@ -125,12 +125,12 @@ abstract class Syncope_Command_Wbxml implements Syncope_Command_Interface
         $this->_policyKey = $_policyKey;
         $this->_device    = $_device;
         
-        $this->_deviceBackend       = Zend_Registry::get('deviceBackend');
-        $this->_folderBackend       = Zend_Registry::get('folderStateBackend');
-        $this->_syncStateBackend    = Zend_Registry::get('syncStateBackend');
-        $this->_contentStateBackend = Zend_Registry::get('contentStateBackend');
-        if (Zend_Registry::isRegistered('loggerBackend')) {
-            $this->_logger          = Zend_Registry::get('loggerBackend');
+        $this->_deviceBackend       = Syncope_Registry::get('deviceBackend');
+        $this->_folderBackend       = Syncope_Registry::get('folderStateBackend');
+        $this->_syncStateBackend    = Syncope_Registry::get('syncStateBackend');
+        $this->_contentStateBackend = Syncope_Registry::get('contentStateBackend');
+        if (Syncope_Registry::isRegistered('loggerBackend')) {
+            $this->_logger          = Syncope_Registry::get('loggerBackend');
         }
         
         if ($this->_skipValidatePolicyKey !== true && $this->_policyKey === null) {

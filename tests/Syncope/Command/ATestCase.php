@@ -74,11 +74,11 @@ abstract class Syncope_Command_ATestCase extends PHPUnit_Framework_TestCase
             Syncope_Backend_DeviceTests::getTestDevice()
         );
         
-        Zend_Registry::set('deviceBackend',       $this->_deviceBackend);
-        Zend_Registry::set('folderStateBackend',  $this->_folderBackend);
-        Zend_Registry::set('syncStateBackend',    $this->_syncStateBackend);
-        Zend_Registry::set('contentStateBackend', $this->_contentStateBackend);
-        Zend_Registry::set('loggerBackend',       $logger);
+        Syncope_Registry::set('deviceBackend',       $this->_deviceBackend);
+        Syncope_Registry::set('folderStateBackend',  $this->_folderBackend);
+        Syncope_Registry::set('syncStateBackend',    $this->_syncStateBackend);
+        Syncope_Registry::set('contentStateBackend', $this->_contentStateBackend);
+        Syncope_Registry::set('loggerBackend',       $logger);
     }
 
     /**
