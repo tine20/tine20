@@ -38,19 +38,19 @@ class Syncope_Data_Factory
     {
         switch($_classFactory) {
             case self::CLASS_CALENDAR:
-                $className = isset(self::$_classMap[$_classFactory]) ? self::$_classMap[$_classFactory] : 'Syncope_Data_Calendar';
+                $className = Syncope_Registry::isRegistered(Syncope_Registry::CALENDAR_DATA_CLASS) ? Syncope_Registry::get(Syncope_Registry::CALENDAR_DATA_CLASS) : 'Syncope_Data_Calendar';
                 break;
                 
             case self::CLASS_CONTACTS:
-                $className = isset(self::$_classMap[$_classFactory]) ? self::$_classMap[$_classFactory] : 'Syncope_Data_Contacts';
+                $className = Syncope_Registry::isRegistered(Syncope_Registry::CONTACTS_DATA_CLASS) ? Syncope_Registry::get(Syncope_Registry::CONTACTS_DATA_CLASS) : 'Syncope_Data_Contacts';
                 break;
                 
             case self::CLASS_EMAIL:
-                $className = isset(self::$_classMap[$_classFactory]) ? self::$_classMap[$_classFactory] : 'Syncope_Data_Email';
+                $className = Syncope_Registry::isRegistered(Syncope_Registry::EMAIL_DATA_CLASS) ? Syncope_Registry::get(Syncope_Registry::EMAIL_DATA_CLASS) : 'Syncope_Data_Email';
                 break;
                 
             case self::CLASS_TASKS:
-                $className = isset(self::$_classMap[$_classFactory]) ? self::$_classMap[$_classFactory] : 'Syncope_Data_Tasks';
+                $className = Syncope_Registry::isRegistered(Syncope_Registry::TASKS_DATA_CLASS) ? Syncope_Registry::get(Syncope_Registry::TASKS_DATA_CLASS) : 'Syncope_Data_Tasks';
                 break;
                 
             default:
@@ -65,14 +65,6 @@ class Syncope_Data_Factory
         }
                     
         return $class;
-    }
-    
-    public static function registerClass($_classFactory, $_className)
-    {
-        if (!class_exists($_className)) {
-            throw new InvalidArgumentException('invalid $_className provided');
-        }
-        self::$_classMap[$_classFactory] = $_className;
     }
 }
 

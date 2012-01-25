@@ -29,6 +29,10 @@
  */
 class Syncope_Registry extends ArrayObject
 {
+    const CALENDAR_DATA_CLASS = 'calendar_data_class';
+    const CONTACTS_DATA_CLASS = 'contacts_data_class';
+    const EMAIL_DATA_CLASS    = 'email_data_class';
+    const TASKS_DATA_CLASS    = 'tasks_data_class';
     /**
      * Class name of the singleton registry object.
      * @var string
@@ -168,6 +172,42 @@ class Syncope_Registry extends ArrayObject
         $instance->offsetSet($index, $value);
     }
 
+    public static function setCalendarDataClass($className)
+    {
+        if (!class_exists($className)) {
+            throw new InvalidArgumentException('invalid $_className provided');
+        }
+        
+        self::set(self::CALENDAR_DATA_CLASS, $className);
+    }
+    
+    public static function setContactsDataClass($className)
+    {
+        if (!class_exists($className)) {
+            throw new InvalidArgumentException('invalid $_className provided');
+        }
+    
+        self::set(self::CONTACTS_DATA_CLASS, $className);
+    }
+    
+    public static function setEmailDataClass($className)
+    {
+        if (!class_exists($className)) {
+            throw new InvalidArgumentException('invalid $_className provided');
+        }
+    
+        self::set(self::EMAIL_DATA_CLASS, $className);
+    }
+    
+    public static function setTasksDataClass($className)
+    {
+        if (!class_exists($className)) {
+            throw new InvalidArgumentException('invalid $_className provided');
+        }
+    
+        self::set(self::TASKS_DATA_CLASS, $className);
+    }
+    
     /**
      * Returns TRUE if the $index is a named value in the registry,
      * or FALSE if $index was not found in the registry.
