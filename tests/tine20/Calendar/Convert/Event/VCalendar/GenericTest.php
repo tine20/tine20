@@ -263,14 +263,52 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     }    
 
     /**
-     * 
-     * @depends testConvertToTine20Model
+     * @ddepends testConvertToTine20Model
      */
     public function testConvertFromTine20Model()
     {
         $event = $this->testConvertToTine20Model();
         $event->creation_time      = new Tinebase_DateTime('2011-11-11 11:11', 'UTC');
         $event->last_modified_time = new Tinebase_DateTime('2011-11-11 12:12', 'UTC');
+        
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        
+        $vevent = $converter->fromTine20Model($event)->serialize();
+        // var_dump($vevent);
+        // required fields
+        $this->assertContains('VERSION:2.0',                                    $vevent, $vevent);
+        $this->assertContains('PRODID:-//tine20.org//Tine 2.0 Calendar V',      $vevent, $vevent);
+        $this->assertContains('CREATED;VALUE=DATE-TIME:20111111T111100Z',       $vevent, $vevent);
+        $this->assertContains('LAST-MODIFIED;VALUE=DATE-TIME:20111111T121200Z', $vevent, $vevent);
+        $this->assertContains('DTSTAMP;VALUE=DATE-TIME:20111111T121200Z',       $vevent, $vevent);
+        $this->assertContains('TZID:Europe/Berlin',               $vevent, $vevent);
+        $this->assertContains('UID:' . $event->uid,               $vevent, $vevent);
+        $this->assertContains('LOCATION:' . $event->location,     $vevent, $vevent);
+        $this->assertContains('CLASS:PRIVATE',                    $vevent, $vevent);
+        $this->assertNotContains('TRIGGER;VALUE=DURATION:-PT1H15M',  $vevent, $vevent);
+        $this->assertContains('TZOFFSETFROM:+0100',  $vevent, $vevent);
+        $this->assertContains('TZOFFSETTO:+0200',  $vevent, $vevent);
+        $this->assertContains('TZNAME:CEST',  $vevent, $vevent);
+        $this->assertContains('TZOFFSETFROM:+0200',  $vevent, $vevent);
+        $this->assertContains('TZOFFSETTO:+0100',  $vevent, $vevent);
+        $this->assertContains('TZNAME:CET',  $vevent, $vevent);
+        
+    }
+    
+    /**
+     * @ddepends testConvertToTine20Model
+     */
+    public function testConvertFromTine20ModelWithCurrentUserAsAttendee()
+    {
+        $event = $this->testConvertToTine20Model();
+        $event->creation_time      = new Tinebase_DateTime('2011-11-11 11:11', 'UTC');
+        $event->last_modified_time = new Tinebase_DateTime('2011-11-11 12:12', 'UTC');
+        $event->attendee->addRecord(new Calendar_Model_Attender(array(
+            'user_id'   => Tinebase_Core::getUser()->contact_id,
+        	'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+        	'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+        	'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
+        )));
         
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
@@ -305,6 +343,12 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $event = $this->testConvertAllDayEventToTine20Model();
         $event->creation_time      = new Tinebase_DateTime('2011-11-11 11:11', 'UTC');
         $event->last_modified_time = new Tinebase_DateTime('2011-11-11 12:12', 'UTC');
+        $event->attendee->addRecord(new Calendar_Model_Attender(array(
+            'user_id'   => Tinebase_Core::getUser()->contact_id,
+        	'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+        	'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+        	'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
+        )));
         
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
