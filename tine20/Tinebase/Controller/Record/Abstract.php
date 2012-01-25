@@ -558,6 +558,8 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param   boolean $_duplicateCheck
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
+     * 
+     * @todo	fix duplicate check on update / merge needs to remove the changed record / ux discussion
      */
     public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
     {
@@ -580,9 +582,10 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_concurrencyManagement($_record, $currentRecord);
             $this->_inspectBeforeUpdate($_record, $currentRecord);
             
-            if ($_duplicateCheck) {
-                $this->_duplicateCheck($_record);
-            }
+            // NOTE removed the duplicate check because we can not remove the changed record yet
+//             if ($_duplicateCheck) {
+//                 $this->_duplicateCheck($_record);
+//             }
             
             $updatedRecord = $this->_backend->update($_record);
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

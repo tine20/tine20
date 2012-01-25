@@ -609,7 +609,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 recordClass: this.recordClass,
                 recordProxy: this.recordProxy,
                 data: {
-                    clientRecord: this.record, //exception.clientRecord,
+                    clientRecord: exception.clientRecord,
                     duplicates: exception.duplicates
                 }
             }),
@@ -617,7 +617,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 '->',
                 this.action_cancel,
                 this.action_saveAndClose
-           ]
+            ]
         });
         
         // intercept save handler

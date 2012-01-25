@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets.dialog');
 
@@ -457,10 +457,12 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
                 location = 'mine';
             }
             
-            // spechial merge for tags
-            // @TODO generalize me
+            // special merge for tags
+            // TODO generalize me
             if (resolveRecord.get('fieldName') == 'tags') {
                 resolveRecord.set('finalValue', Tine.Tinebase.common.assertComparable([].concat(mine).concat(theirs)));
+                Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::applyStrategy() resolved record (tags field)');
+                Tine.log.debug(resolveRecord);
             } else {
                 resolveRecord.set('finalValue', location === 'mine' ? mine : theirs);
             }
@@ -482,7 +484,7 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
             
             // also record changes
             if (modified.hasOwnProperty('finalValue')) {
-//                Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::getResolvedRecord ' + fieldName + ' changed from ' + modified.finalValue + ' to ' + finalValue);
+                Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::getResolvedRecord ' + fieldName + ' changed from ' + modified.finalValue + ' to ' + finalValue);
                 record.set(fieldName, Tine.Tinebase.common.assertComparable(modified.finalValue));
             }
             

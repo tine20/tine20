@@ -666,8 +666,8 @@ class Tinebase_Tags
      */
     protected function _createTagsOnTheFly($_mixedTags)
     {
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' creating tags on the fly: ' . print_r($_mixedTags, true));
-
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Creating tags on the fly: ' . print_r($_mixedTags, true));
+        
         $tagIds = array();
         foreach ($_mixedTags as $tag) {
             if (is_string($tag)) {
@@ -675,8 +675,13 @@ class Tinebase_Tags
                 continue;
             } else {
                 if (is_array($tag)) {
+                    if (! isset($tag['name']) || empty($tag['name'])) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                            . ' Do not create tag without a name.');
+                        continue;
+                    }
                     $tag = new Tinebase_Model_Tag($tag);
-                } elseif (!$tag instanceof Tinebase_Model_Tag) {
+                } elseif (! $tag instanceof Tinebase_Model_Tag) {
                     throw new Tinebase_Exception_UnexpectedValue('Tag could not be identified.');
                 }
                 if (!$tag->getId()) {
@@ -686,7 +691,7 @@ class Tinebase_Tags
                 $tagIds[] = $tag->getId();
             }
         }
-        return($this->getTagsById($tagIds, Tinebase_Model_TagRight::USE_RIGHT));
+        return $this->getTagsById($tagIds, Tinebase_Model_TagRight::USE_RIGHT);
     }
 
     /**

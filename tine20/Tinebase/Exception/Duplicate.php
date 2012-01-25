@@ -71,9 +71,32 @@ class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
      */
     protected function _clientRecordToArray()
     {
+        $this->_resolveClientRecordTags();
+
         $converter = new Tinebase_Convert_Json();
         $result = $converter->fromTine20Model($this->_clientRecord);
         
         return $result;
+    }
+    
+    /**
+     * resolve tag ids to tag record
+     * 
+     * @todo find a generic solution for this!
+     */
+    protected function _resolveClientRecordTags()
+    {
+        if (! $this->_clientRecord->has('tags') || empty($this->_clientRecord->tags)) {
+            return;
+        }
+        
+        $tags = new Tinebase_Record_RecordSet('Tinebase_Model_Tag');
+        foreach ($this->_clientRecord->tags as $tag) {
+            if (is_string($tag)) {
+                $tag = Tinebase_Tags::getInstance()->get($tag);
+            }
+            $tags->addRecord($tag);
+        }
+        $this->_clientRecord->tags = $tags;
     }
 }
