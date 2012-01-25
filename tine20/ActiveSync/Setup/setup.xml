@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>5.4</version>
+    <version>5.5</version>
     <order>90</order>
     <depends>
         <application>Tinebase</application>
@@ -410,7 +410,7 @@
             <name>acsync_content</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -421,30 +421,25 @@
                 <field>
                     <name>device_id</name>
                     <type>text</type>
-                    <length>64</length>
-                    <notnull>false</notnull>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>class</name>
+                    <name>folder_id</name>
                     <type>text</type>
-                    <length>64</length>
-                    <notnull>false</notnull>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>contentid</name>
                     <type>text</type>
                     <length>64</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>collectionid</name>
-                    <type>text</type>
-                    <length>254</length>
-                    <notnull>false</notnull>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>creation_time</name>
                     <type>datetime</type>
+                    <notnull>true</notnull>
                 </field> 
                 <field>
                     <name>is_deleted</name>

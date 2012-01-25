@@ -161,4 +161,89 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->setTableVersion('acsync_folder', '2');
         $this->setApplicationVersion('ActiveSync', '5.3');
     }
+    
+    /**
+     * update to 5.4
+     * - added id column to synckey table
+     * 
+     * @return void
+     */
+    public function update_3()
+    {
+        $this->validateTableVersion('acsync_synckey', '2');
+        
+        $this->_backend->truncateTable('acsync_synckey');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_synckey', $declaration);
+                
+        $this->setTableVersion('acsync_synckey', '3');
+        $this->setApplicationVersion('ActiveSync', '5.4');
+    }
+    
+    /**
+     * update to 5.5
+     * - added folder_id column and drop class and collectionid column
+     * - set some columns to NOT NULL
+     * 
+     * @return void
+     */
+    public function update_4()
+    {
+        $this->validateTableVersion('acsync_content', '2');
+        
+        $this->_backend->truncateTable('acsync_content');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>folder_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_content', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>device_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('acsync_content', $declaration);
+
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>contentid</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>true</notnull>
+            </field>
+	    ');
+        $this->_backend->alterCol('acsync_content', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>creation_time</name>
+                <type>datetime</type>
+                <notnull>true</notnull>
+            </field>
+	    ');
+        $this->_backend->alterCol('acsync_content', $declaration);
+        
+        $this->_backend->dropCol('acsync_content', 'class');
+        $this->_backend->dropCol('acsync_content', 'collectionid');
+                
+        $this->setTableVersion('acsync_content', '3');
+        $this->setApplicationVersion('ActiveSync', '5.5');
+    }
 }
