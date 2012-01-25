@@ -55,7 +55,7 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
     {
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
-        $this->_deviceBackend = new ActiveSync_Backend_DeviceFacade();
+        $this->_deviceBackend = new ActiveSync_Backend_Device();
     }
     
     /**
@@ -105,7 +105,7 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
             case Syncope_Model_Device::TYPE_ANDROID:
                 $device = new ActiveSync_Model_Device(array(
                 	'deviceid'   => Tinebase_Record_Abstract::generateUID(64),
-                	'devicetype' => Syncope_Model_Device::TYPE_ANDROID,
+                	'devicetype' => $_type,
                 	'owner_id'   => Tinebase_Core::getUser()->getId(),
                 	'policy_id'  => 1,
                 	'useragent'  => 'blabla',
@@ -119,7 +119,7 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
             case Syncope_Model_Device::TYPE_WEBOS:
                 $device = new ActiveSync_Model_Device(array(
                 	'deviceid'   => Tinebase_Record_Abstract::generateUID(64),
-                	'devicetype' => Syncope_Model_Device::TYPE_ANDROID,
+                	'devicetype' => $_type,
                 	'owner_id'   => Tinebase_Core::getUser()->getId(),
                 	'policy_id'  => 1,
                 	'useragent'  => 'blabla',
@@ -134,7 +134,7 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
             default:
                 $device = new ActiveSync_Model_Device(array(
                 	'deviceid'   => Tinebase_Record_Abstract::generateUID(64),
-                	'devicetype' => Syncope_Model_Device::TYPE_IPHONE,
+                	'devicetype' => $_type,
                 	'owner_id'   => Tinebase_Core::getUser()->getId(),
                 	'policy_id'  => 1,
                 	'useragent'  => 'blabla',

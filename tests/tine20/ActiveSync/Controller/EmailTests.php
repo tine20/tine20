@@ -109,7 +109,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     public function testAppendFileReference()
     {
-    	$controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM)); 
+    	$controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS)); 
     	
     	$message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
     	
@@ -132,7 +132,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     public function testInvalidBodyChars()
     {
         //invalid_body_chars.eml
-        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM)); 
+        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS)); 
     	
     	$message = $this->_emailTestClass->messageTestHelper('invalid_body_chars.eml', 'invalidBodyChars');
     	
@@ -151,7 +151,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     public function testAppendXML()
     {
-        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM)); 
+        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS)); 
         
         $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         
@@ -171,13 +171,13 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * validate getSupportedFolders
+     * validate getAllFolders
      */
     public function testGetSupportedFolders()
     {
-        $controller = ActiveSync_Controller::dataFactory(ActiveSync_Controller::CLASS_EMAIL, $this->_getDevice(ActiveSync_Backend_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
+        $controller = ActiveSync_Controller::dataFactory(ActiveSync_Controller::CLASS_EMAIL, $this->_getDevice(Syncope_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
         
-        $folders = $controller->getSupportedFolders();
+        $folders = $controller->getAllFolders();
         
         $this->assertGreaterThanOrEqual(1, count($folders));
     }
@@ -195,7 +195,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         }
         
         switch ($_deviceType) {
-            case ActiveSync_Backend_Device::TYPE_IPHONE:
+            case Syncope_Model_Device::TYPE_IPHONE:
                 $device = ActiveSync_Backend_DeviceTests::getTestDevice();
                 $device->devicetype   = $_deviceType;
                 $device->owner_id     = $this->_testUser->getId();
@@ -203,7 +203,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
                 
                 break;
                 
-            case ActiveSync_Backend_Device::TYPE_PALM:
+            case Syncope_Model_Device::TYPE_WEBOS:
                 $device = ActiveSync_Backend_DeviceTests::getTestDevice();
                 $device->devicetype   = $_deviceType;
                 $device->owner_id     = $this->_testUser->getId();

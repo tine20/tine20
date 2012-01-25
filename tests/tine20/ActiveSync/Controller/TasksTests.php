@@ -78,7 +78,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         $dom     = $this->_getOutputDOMDocument();
         $appData = $dom->getElementsByTagNameNS('uri:AirSync', 'ApplicationData')->item(0);
 
-        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM)); 
+        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS)); 
         
         $task = Tasks_TestCase::getTestRecord();
         $task->description = "Hello\r\nTask\nLars";
@@ -111,7 +111,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
     {
         $xml = simplexml_import_dom($this->_getInputDOMDocument());
         
-        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));   
+        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));   
         
         $task = $controller->toTineModel($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
         
@@ -127,7 +127,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
      */
     public function testSearch()
     {
-        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
+        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
 
         $xml = simplexml_import_dom($this->_getInputDOMDocument());
         
@@ -157,7 +157,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
     {
         $this->objects['tasks'][] = $_record;
         
-        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
+        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
         $records = $controller->getServerEntries($this->_specialFolderName, ActiveSync_Command_Sync::FILTER_NOTHING);
         
         $this->assertContains($_record->getId(), $records);

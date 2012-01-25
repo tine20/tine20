@@ -202,21 +202,15 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         
         
         ########### define test devices
-        $palm = ActiveSync_Backend_DeviceTests::getTestDevice();
-        $palm->devicetype   = 'palm';
-        $palm->owner_id     = $user->getId();
+        $palm = ActiveSync_Backend_DeviceTests::getTestDevice(Syncope_Model_Device::TYPE_WEBOS);
         $palm->contactsfilter_id = $this->objects['filter']->getId();
-        $this->objects['devicePalm']   = ActiveSync_Controller_Device::getInstance()->create($palm);
+        $this->objects['deviceWebOS']   = ActiveSync_Controller_Device::getInstance()->create($palm);
         
-        $iphone = ActiveSync_Backend_DeviceTests::getTestDevice();
-        $iphone->devicetype = 'iphone';
-        $iphone->owner_id   = $user->getId();
+        $iphone = ActiveSync_Backend_DeviceTests::getTestDevice(Syncope_Model_Device::TYPE_IPHONE);
         $iphone->contactsfilter_id = $this->objects['filter']->getId();
         $this->objects['deviceIPhone'] = ActiveSync_Controller_Device::getInstance()->create($iphone);
         
-        $htcAndroid = ActiveSync_Backend_DeviceTests::getTestDevice();
-        $htcAndroid->devicetype = 'htcsaga';
-        $htcAndroid->owner_id   = $user->getId();
+        $htcAndroid = ActiveSync_Backend_DeviceTests::getTestDevice(Syncope_Model_Device::TYPE_ANDROID);
         $htcAndroid->contactsfilter_id = $this->objects['filter']->getId();
         $this->objects['deviceAndroid'] = ActiveSync_Controller_Device::getInstance()->create($htcAndroid);
     }
@@ -241,7 +235,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         Tinebase_Container::getInstance()->deleteContainer($this->objects['containerWithSyncGrant']);
         Tinebase_Container::getInstance()->deleteContainer($this->objects['containerWithoutSyncGrant']);
         
-        ActiveSync_Controller_Device::getInstance()->delete($this->objects['devicePalm']);
+        ActiveSync_Controller_Device::getInstance()->delete($this->objects['deviceWebOS']);
         ActiveSync_Controller_Device::getInstance()->delete($this->objects['deviceIPhone']);
         
         $filterBackend = new Tinebase_PersistentFilter_Backend_Sql();
@@ -253,9 +247,9 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
      */
     public function testGetFoldersPalm()
     {
-    	$controller = new ActiveSync_Controller_Contacts($this->objects['devicePalm'], new Tinebase_DateTime(null, null, 'de_DE'));
+    	$controller = new ActiveSync_Controller_Contacts($this->objects['deviceWebOS'], new Tinebase_DateTime(null, null, 'de_DE'));
     	
-    	$folders = $controller->getSupportedFolders();
+    	$folders = $controller->getAllFolders();
     	
     	$this->assertArrayHasKey("addressbook-root", $folders, "key addressbook-root not found");
     }
@@ -267,7 +261,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
     {
         $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
         
-        $folders = $controller->getSupportedFolders();
+        $folders = $controller->getAllFolders();
         
         foreach($folders as $folder) {
         	$this->assertTrue(Tinebase_Core::getUser()->hasGrant($folder['folderId'], Tinebase_Model_Grants::GRANT_SYNC));
@@ -291,7 +285,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $testDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:Contacts', 'uri:Contacts');
         $testNode = $testDom->documentElement->appendChild($testDom->createElementNS('uri:AirSync', 'TestAppendXml'));
         
-        $controller = new ActiveSync_Controller_Contacts($this->objects['devicePalm'], new Tinebase_DateTime());   	
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceWebOS'], new Tinebase_DateTime());   	
         
     	$controller->appendXML($testNode, null, $this->objects['contact']->getId(), array());
     	
@@ -308,7 +302,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $controller = new ActiveSync_Controller_Contacts($this->objects['deviceAndroid'], new Tinebase_DateTime());
         
         $xml = new SimpleXMLElement($this->_xmlContactBirthdayWithoutTimeAndroid);
-        $result = $controller->add($this->objects['containerWithSyncGrant']->getId(), $xml->Collections->Collection->Commands->Add->ApplicationData);
+        $result = $controller->createEntry($this->objects['containerWithSyncGrant']->getId(), $xml->Collections->Collection->Commands->Add->ApplicationData);
         
         $userTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
         $bday = new Tinebase_DateTime('1969-12-31', $userTimezone);
@@ -413,7 +407,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         Addressbook_Controller_Contact::getInstance()->update($this->objects['contact'], FALSE);
         Addressbook_Controller_Contact::getInstance()->update($this->objects['unSyncableContact'], FALSE);
         
-        $entries = $controller->getChanged('addressbook-root', Tinebase_DateTime::now()->subMinute(1));
+        $entries = $controller->getChangedEntries('addressbook-root', Tinebase_DateTime::now()->subMinute(1));
         #var_dump($entries);
         $this->assertContains($this->objects['contact']->getId(), $entries);
         $this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
@@ -423,20 +417,20 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
      * test search contacts
      * 
      */
-    public function testSearch()
-    {
-        $controller = new ActiveSync_Controller_Contacts($this->objects['devicePalm'], new Tinebase_DateTime(null, null, 'de_DE'));
+    #public function testSearch()
+    #{
+    #    $controller = new ActiveSync_Controller_Contacts($this->objects['deviceWebOS'], new Tinebase_DateTime(null, null, 'de_DE'));
 
         // search for non existing contact
-        $xml = new SimpleXMLElement($this->_exampleXMLNotExisting);
-        $existing = $controller->search('addressbook-root', $xml->Collections->Collection->Commands->Add->ApplicationData);
+    #    $xml = new SimpleXMLElement($this->_exampleXMLNotExisting);
+    #    $existing = $controller->search('addressbook-root', $xml->Collections->Collection->Commands->Add->ApplicationData);
         
-        $this->assertEquals(count($existing), 0);
+     #   $this->assertEquals(count($existing), 0);
         
         // search for existing contact
-        $xml = new SimpleXMLElement($this->_exampleXMLExisting);
-        $existing = $controller->search('addressbook-root', $xml->Collections->Collection->Commands->Add->ApplicationData);
-        
-        $this->assertGreaterThanOrEqual(1, count($existing));
-    }
+    #    $xml = new SimpleXMLElement($this->_exampleXMLExisting);
+    #    $existing = $controller->search('addressbook-root', $xml->Collections->Collection->Commands->Add->ApplicationData);
+     #   
+    #    $this->assertGreaterThanOrEqual(1, count($existing));
+    #}
 }
