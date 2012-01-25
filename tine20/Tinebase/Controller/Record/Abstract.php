@@ -142,7 +142,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
-    	$this->_checkRight($_action);
+        $this->_checkRight($_action);
         $this->checkFilterACL($_filter, $_action);
         $this->_addDefaultFilter($_filter);
 
@@ -250,7 +250,7 @@ abstract class Tinebase_Controller_Record_Abstract
         return $currValue;
     }
 
-	/**
+    /**
      * set/get modlog active
      *
      * @param  boolean optional
@@ -258,11 +258,11 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function modlogActive()
     {
-    	if (! $this->_backend) {
-    		throw new Tinebase_Exception_NotFound('Backend not defined');
-    	}
+        if (! $this->_backend) {
+            throw new Tinebase_Exception_NotFound('Backend not defined');
+        }
 
-		$currValue = $this->_backend->getModlogActive();
+        $currValue = $this->_backend->getModlogActive();
         if (func_num_args() === 1) {
             $paramValue = (bool) func_get_arg(0);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resetting modlog active to ' . (int) $paramValue);
@@ -282,7 +282,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function get($_id, $_containerId = NULL)
     {
-    	$this->_checkRight('get');
+        $this->_checkRight('get');
 
         if (!$_id) { // yes, we mean 0, null, false, ''
             $record = new $this->_modelName(array(), true);
@@ -316,8 +316,8 @@ abstract class Tinebase_Controller_Record_Abstract
             }
 
             if ($this->_doResolveCustomfields()) {
-	            Tinebase_CustomField::getInstance()->resolveRecordCustomFields($record);
-	        }
+                Tinebase_CustomField::getInstance()->resolveRecordCustomFields($record);
+            }
         }
 
         return $record;
@@ -332,16 +332,16 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function getMultiple($_ids, $_ignoreACL = FALSE)
     {
-    	$this->_checkRight('get');
+        $this->_checkRight('get');
 
-    	// get all allowed containers and add them to getMultiple query
-    	$containerIds = ($this->_doContainerACLChecks && $_ignoreACL !== TRUE)
-    	   ? Tinebase_Container::getInstance()->getContainerByACL(
-    	       $this->_currentAccount,
-    	       $this->_applicationName,
-    	       Tinebase_Model_Grants::GRANT_READ,
-    	       TRUE)
-    	   : NULL;
+        // get all allowed containers and add them to getMultiple query
+        $containerIds = ($this->_doContainerACLChecks && $_ignoreACL !== TRUE)
+           ? Tinebase_Container::getInstance()->getContainerByACL(
+               $this->_currentAccount,
+               $this->_applicationName,
+               Tinebase_Model_Grants::GRANT_READ,
+               TRUE)
+           : NULL;
         $records = $this->_backend->getMultiple($_ids, $containerIds);
 
         if ($this->_doResolveCustomfields()) {
@@ -361,7 +361,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function getAll($_orderBy = 'id', $_orderDirection = 'ASC')
     {
-    	$this->_checkRight('get');
+        $this->_checkRight('get');
 
         $records = $this->_backend->getAll($_orderBy, $_orderDirection);
 
@@ -559,7 +559,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      * 
-     * @todo	fix duplicate check on update / merge needs to remove the changed record / ux discussion
+     * @todo    fix duplicate check on update / merge needs to remove the changed record / ux discussion
      */
     public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
     {
@@ -806,9 +806,9 @@ abstract class Tinebase_Controller_Record_Abstract
         
         $iterator = new Tinebase_Record_Iterator(array(
             'iteratable' => $this,
-        	'controller' => $this,
-        	'filter'     => $_filter,
-        	'function'	 => 'processUpdateMultipleIteration',
+            'controller' => $this,
+            'filter'     => $_filter,
+            'function'     => 'processUpdateMultipleIteration',
         ));
         $result = $iterator->iterate($_data);
     
@@ -834,18 +834,18 @@ abstract class Tinebase_Controller_Record_Abstract
             $data = array_merge($oldRecordArray, $_data);
             
             try {
-            	$record = new $this->_modelName($data);
-            	$updatedRecord = $this->update($record, FALSE);
-            	
-            	$this->_updateMultipleResult['results']->addRecord($updatedRecord);
-            	$this->_updateMultipleResult['totalcount'] ++;
-            	
+                $record = new $this->_modelName($data);
+                $updatedRecord = $this->update($record, FALSE);
+                
+                $this->_updateMultipleResult['results']->addRecord($updatedRecord);
+                $this->_updateMultipleResult['totalcount'] ++;
+                
             } catch (Tinebase_Exception_Record_Validation $e) {
                 
                 $this->_updateMultipleResult['exceptions']->addRecord(new Tinebase_Model_UpdateMultipleException(array(
                     'id'         => $currentRecord->getId(),
                     'exception'  => $e,
-                    'record'	 => $currentRecord,
+                    'record'     => $currentRecord,
                     'code'       => $e->getCode(),
                     'message'    => $e->getMessage()
                 )));

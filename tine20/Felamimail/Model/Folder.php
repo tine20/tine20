@@ -121,7 +121,7 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
     // imap values
         'imap_status'            => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
-            Zend_Filter_Input::DEFAULT_VALUE => self::CACHE_STATUS_EMPTY,
+            Zend_Filter_Input::DEFAULT_VALUE => self::IMAP_STATUS_OK,
             array('InArray', array(self::IMAP_STATUS_OK, self::IMAP_STATUS_DISCONNECT)),
         ),
         'imap_uidvalidity'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),

@@ -214,29 +214,32 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * Gets one entry (by property)
      *
-     * @param  mixed  $_value
-     * @param  string $_property
-     * @param  bool   $_getDeleted
+     * @param  mixed  $value
+     * @param  string $property
+     * @param  bool   $getDeleted
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_NotFound
      */
-    public function getByProperty($_value, $_property = 'name', $_getDeleted = FALSE) 
+    public function getByProperty($value, $property = 'name', $getDeleted = FALSE) 
     {
-        $select = $this->_getSelect('*', $_getDeleted);
-        $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $_property) . ' = ?', $_value)
-               ->limit(1);
-
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        $select = $this->_getSelect('*', $getDeleted)
+            ->limit(1);
+        
+        if ($value !== NULL) {
+            $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $property) . ' = ?', $value);
+        } else {
+            $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $property) . ' IS NULL');
+        }
 
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
         $stmt->closeCursor();
-                
+        
         if (!$queryResult) {
-            throw new Tinebase_Exception_NotFound($this->_modelName . " record with $_property " . $_value . ' not found!');
+            $messageValue = ($value !== NULL) ? $value : 'NULL';
+            throw new Tinebase_Exception_NotFound($this->_modelName . " record with $property = $messageValue not found!");
         }
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));        
         $result = $this->_rawDataToRecord($queryResult);
         
         return $result;
