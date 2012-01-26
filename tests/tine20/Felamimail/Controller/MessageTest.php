@@ -4,7 +4,7 @@
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -846,8 +846,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function getEmailAddress()
     {
         $config = TestServer::getInstance()->getConfig();
-        $email = ($config->email) ? $config->email : 'unittest@tine20.org';
-
+        $email = ($config->email) ? $config->email : Tinebase_Core::getUser()->accountEmailAddress;
+        
         return $email;
     }
 
