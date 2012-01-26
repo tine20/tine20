@@ -2,7 +2,8 @@
 /**
  * Syncope
  *
- * @package     Command
+ * @package     Syncope
+ * @subpackage  Command
  * @license     http://www.tine20.org/licenses/agpl-nonus.txt AGPL Version 1 (Non-US)
  *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL), 
  *              Version 1, the distribution of the Tine 2.0 Syncope module in or to the 
@@ -14,9 +15,9 @@
 /**
  * class to handle ActiveSync Sync command
  *
- * @package     Command
+ * @package     Syncope
+ * @subpackage  Command
  */
- 
 class Syncope_Command_Sync extends Syncope_Command_Wbxml 
 {
     const STATUS_SUCCESS                                = 1;

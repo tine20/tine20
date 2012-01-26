@@ -123,7 +123,14 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
             $deletes = array();
             
             foreach($this->_classes as $class) {
-                $dataController = Syncope_Data_Factory::factory($class, $this->_device, $this->_syncTimeStamp);
+                try {
+                    $dataController = Syncope_Data_Factory::factory($class, $this->_device, $this->_syncTimeStamp);
+                } catch (Zend_Exception $ze) {
+                    // backend not defined
+                    if ($this->_logger instanceof Zend_Log)
+                        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " no data backend defined for class: " . $class);
+                    continue;
+                }
 
                 // is this the first sync?
                 if($this->_syncState->counter == 0) {
@@ -248,7 +255,8 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
         if(count($state) > 0) {
             $this->_folderBackend->delete($state[0]);
         } else {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " no folderstate found for " . print_r($folderStateFilter->toArray(), true));
+            if ($this->_logger instanceof Zend_Log)
+                $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " no folderstate found for " . print_r($folderStateFilter->toArray(), true));
         }
     }    
 }

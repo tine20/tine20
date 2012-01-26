@@ -30,6 +30,12 @@
 
 interface Syncope_Model_IDevice
 {
+    /**
+     * Returns major firmware version of this device
+     *
+     * @return int/string
+     */
+    public function getMajorVersion();
     
 }
 

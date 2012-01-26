@@ -79,6 +79,11 @@ abstract class Syncope_Command_ATestCase extends PHPUnit_Framework_TestCase
         Syncope_Registry::set('syncStateBackend',    $this->_syncStateBackend);
         Syncope_Registry::set('contentStateBackend', $this->_contentStateBackend);
         Syncope_Registry::set('loggerBackend',       $logger);
+        
+        Syncope_Registry::setContactsDataClass('Syncope_Data_Contacts');
+        Syncope_Registry::setCalendarDataClass('Syncope_Data_Calendar');
+        Syncope_Registry::setEmailDataClass('Syncope_Data_Email');
+        Syncope_Registry::setTasksDataClass('Syncope_Data_Tasks');
     }
 
     /**

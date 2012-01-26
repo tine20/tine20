@@ -24,6 +24,7 @@ class Syncope_Data_Factory
     const CLASS_CONTACTS = 'Contacts';
     const CLASS_EMAIL    = 'Email';
     const CLASS_TASKS    = 'Tasks';
+    const STORE_EMAIL    = 'Mailbox';
     
     protected static $_classMap = array();
     
@@ -38,19 +39,20 @@ class Syncope_Data_Factory
     {
         switch($_classFactory) {
             case self::CLASS_CALENDAR:
-                $className = Syncope_Registry::isRegistered(Syncope_Registry::CALENDAR_DATA_CLASS) ? Syncope_Registry::get(Syncope_Registry::CALENDAR_DATA_CLASS) : 'Syncope_Data_Calendar';
+                $className = Syncope_Registry::get(Syncope_Registry::CALENDAR_DATA_CLASS);
                 break;
                 
             case self::CLASS_CONTACTS:
-                $className = Syncope_Registry::isRegistered(Syncope_Registry::CONTACTS_DATA_CLASS) ? Syncope_Registry::get(Syncope_Registry::CONTACTS_DATA_CLASS) : 'Syncope_Data_Contacts';
+                $className = Syncope_Registry::get(Syncope_Registry::CONTACTS_DATA_CLASS);
                 break;
                 
+            case self::STORE_EMAIL:
             case self::CLASS_EMAIL:
-                $className = Syncope_Registry::isRegistered(Syncope_Registry::EMAIL_DATA_CLASS) ? Syncope_Registry::get(Syncope_Registry::EMAIL_DATA_CLASS) : 'Syncope_Data_Email';
+                $className = Syncope_Registry::get(Syncope_Registry::EMAIL_DATA_CLASS);
                 break;
                 
             case self::CLASS_TASKS:
-                $className = Syncope_Registry::isRegistered(Syncope_Registry::TASKS_DATA_CLASS) ? Syncope_Registry::get(Syncope_Registry::TASKS_DATA_CLASS) : 'Syncope_Data_Tasks';
+                $className = Syncope_Registry::get(Syncope_Registry::TASKS_DATA_CLASS);
                 break;
                 
             default:

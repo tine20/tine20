@@ -21,6 +21,7 @@
 class Syncope_Data_Contacts implements Syncope_Data_IData
 {
     protected $_specialFolderName = 'addressbook-root';
+    
     /**
      * used by unit tests only to simulated added folders
      */
