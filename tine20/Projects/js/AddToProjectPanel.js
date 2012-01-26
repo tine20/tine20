@@ -119,11 +119,8 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
     },
     
     getFormItems : function() {
-        this.searchBox = new Tine.Projects.SearchCombo({
-            fieldLabel: this.app.i18n._('Select Project'),
-            anchor : '100% 100%'
-            });
-        
+
+        this.searchBox = Tine.widgets.form.RecordPickerManager.get('Projects', 'Project', {fieldLabel: this.app.i18n._('Select Project'), anchor : '100% 100%'});
         var records = [];
          
         return {
@@ -149,6 +146,7 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
                         {
                             fieldLabel: this.app.i18n._('Role'),
                             emptyText: this.app.i18n._('Select Role'),
+                            anchor: '100% 100%',
                             xtype: 'widget-keyfieldcombo',
                             app:   'Projects',
                             value: 'COWORKER',

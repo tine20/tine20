@@ -138,3 +138,5 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.form.ComboBox, {
 
 
 });
+
+Tine.widgets.form.RecordPickerManager.register('Calendar', 'Event', Tine.Calendar.SearchCombo);

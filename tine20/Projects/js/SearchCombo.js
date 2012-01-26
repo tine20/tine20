@@ -99,3 +99,5 @@ Tine.Projects.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerCo
     }
 
 });
+
+Tine.widgets.form.RecordPickerManager.register('Projects', 'Project', Tine.Projects.SearchCombo);

@@ -185,7 +185,9 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
      * @return Object
      */
     getFormItems: function() {
-        this.searchBox = new Tine.Calendar.SearchCombo({});
+
+        this.searchBox = Tine.widgets.form.RecordPickerManager.get('Calendar', 'Event', {});
+
         this.searchBox.on('filterupdate', function() {
             this.store.removeAll();
             this.store.load();
