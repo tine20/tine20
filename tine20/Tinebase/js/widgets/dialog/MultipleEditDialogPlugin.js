@@ -103,7 +103,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                     if(!referenceSelectionData) {
                         referenceSelectionData = selection[fieldKey];
                         if(referenceSelectionData) {
-                           if(typeof referenceSelectionData == 'object') {
+                           if(Ext.isObject(referenceSelectionData)) {
                                 if(fieldKey == 'account_id') {
                                     field.originalValue = referenceSelectionData.accountId;
                                     field.isClearable = false;
@@ -192,17 +192,18 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         });
         
         this.form.items.each(function(item) {
-
-            if ((!(item instanceof Ext.form.TextField)) && (!(item instanceof Ext.form.Checkbox))) {
+            Tine.log.err(item.getXType());
+            Tine.log.err(item);
+            if ((!(item.isXType('textfield'))) && (!(item.isXType('checkbox')))) {
                 item.disable();
                 return true;
             }
-            if (item instanceof Ext.form.TextField) {
+            if (item.isXType('textfield')) {
                 
                 item.on('focus', function() {
-                  if (!(item instanceof Ext.form.DateField) && (item.isClearable !== false)) {
+                  if (!(item.isXType('extuxclearabledatefield', true)) && (item.isClearable !== false)) {
                     var subLeft = 0;
-                    if (item instanceof Ext.form.TriggerField) subLeft += 17;
+                    if (item.isXType('trigger')) subLeft += 17;
 
                     var el = this.el.parent().select('.tinebase-editmultipledialog-clearer'), 
                         width = this.getWidth(), 
@@ -217,7 +218,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                     // create Button
                     var button = new Ext.Element(document.createElement('img'));
                     button.set({
-                        'src': '../../library/ExtJS/resources/images/default/s.gif',
+                        'src': Ext.BLANK_IMAGE_URL,
                         'title': _('Delete value from all selected records'),
                         'class': 'tinebase-editmultipledialog-clearer',
                         'style': 'left:' + left
@@ -253,8 +254,10 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                             } else {
                                 var arrow = new Ext.Element(document.createElement('img'));
                                 arrow.set({
-                                    'src': '../../library/ExtJS/resources/images/default/grid/dirty.gif',
-                                    'class': 'tinebase-editmultipledialog-dirty'
+                                    'src': Ext.BLANK_IMAGE_URL,
+                                    'class': 'tinebase-editmultipledialog-dirty',
+                                    'height': 5,
+                                    'width': 5
                                 });
                                 this.el.insertSibling(arrow);
                             }
@@ -327,6 +330,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                     Ext.MessageBox.wait(_('Please wait'),_('Applying changes'));
                     Ext.Ajax.request({
                         url: 'index.php',
+                        timeout: 120000,
                         params: {
                             method: 'Tinebase.updateMultipleRecords',
                             appName: this.editDialog.recordClass.getMeta('appName'),

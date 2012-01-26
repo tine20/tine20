@@ -843,18 +843,23 @@ textarea.tinebase-editmultipledialog-noneedit {
     background: transparent url(../../images/oxygen/16x16/actions/edit-undo.png) 0 3px no-repeat;
     }
     
-.tinebase-editmultipledialog-dirty {position:absolute;left:0}    
+.tinebase-editmultipledialog-dirty {
+    position:absolute;
+    left:0;
+    background-image: url(../../library/ExtJS/resources/images/default/grid/dirty.gif);
+    background-repeat: no-repeat;
+}    
     
 .tinebase-editmultipledialog-clearer.click {background-position: -33px 0}
 
 .tinebase-editmultipledialog-clearer.over {background-position: -67px 0}
 
 .tine-wordbox {
-	border: 1px solid gray;
-	margin-left: 3px;
-	border-radius: 50px;
-	padding: 0px 5px;
-	background-color: white;
+    border: 1px solid gray;
+    margin-left: 3px;
+    border-radius: 50px;
+    padding: 0px 5px;
+    background-color: white;
 }
 
 /* token mode edit dialog */
