@@ -80,7 +80,7 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
         $syncKey = (int)$xml->SyncKey;
         
         if ($this->_logger instanceof Zend_Log) 
-            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " synckey is $this->_syncKey");
+            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " synckey is $syncKey");
         
         if ($syncKey == 0) {
             $this->_syncState = new Syncope_Model_SyncState(array(
@@ -91,6 +91,7 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
             ));
             
             // reset state of foldersync
+            $this->_folderBackend->resetState($this->_device);
             $this->_syncStateBackend->resetState($this->_device, 'FolderSync');
         } else {
             if (($this->_syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', $syncKey)) instanceof Syncope_Model_SyncState) {
