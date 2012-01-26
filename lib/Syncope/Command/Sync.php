@@ -115,7 +115,6 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
         foreach ($xml->Collections->Collection as $xmlCollection) {
             $collectionData = array(
                 'syncKey'         => (int)$xmlCollection->SyncKey,
-                'syncKeyValid'    => true,
                 'class'           => isset($xmlCollection->Class) ? (string)$xmlCollection->Class : null,
                 'collectionId'    => (string)$xmlCollection->CollectionId,
                 'windowSize'      => isset($xmlCollection->WindowSize) ? (int)$xmlCollection->WindowSize : 100,
@@ -629,7 +628,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         $this->_logger->info(__METHOD__ . '::' . __LINE__ . " new synckey is ". $collectionData['syncState']->counter);                
                 }
                 
-                if (isset($collectionData['syncState']) && $collectionData['syncState'] instanceof Syncope_Model_ISyncState) {
+                if (isset($collectionData['syncState']) && $collectionData['syncState'] instanceof Syncope_Model_ISyncState && 
+                    $collectionData['syncState']->counter != $collectionData['syncKey']) {
                     // increment sync timestamp by 1 second
                     $this->_syncTimeStamp->modify('+1 sec');
                     

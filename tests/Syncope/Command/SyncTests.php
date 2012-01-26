@@ -403,4 +403,38 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
         $this->assertEquals($serverId, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
     }
+    
+    public function testSyncWithNoChanges()
+    {
+        $serverId = $this->testSyncOfContacts();
+        
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
+            	<Collection>
+            		<Class>Contacts</Class><SyncKey>2</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+            		<Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
+            	</Collection>
+        	</Collections></Sync>'
+        );
+        
+        $sync = new Syncope_Command_Sync($doc, $this->_device, $this->_device->policykey);
+        
+        $sync->handle();
+        
+        $syncDoc = $sync->getResponse();
+        #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
+
+        $xpath = new DomXPath($syncDoc);
+        $xpath->registerNamespace('AirSync', 'uri:AirSync');
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(3, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(Syncope_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+    }
 }

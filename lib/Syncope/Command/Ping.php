@@ -108,6 +108,8 @@ class Syncope_Command_Ping extends Syncope_Command_Wbxml
                     
                     try {
                         $syncState = $this->_syncStateBackend->getSyncState($this->_device, $folder);
+
+                        $count = $dataController->hasChanges($folder, $syncState);
                         
                         $count = $this->_getItemEstimate(
                             $dataController,

@@ -111,6 +111,9 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
             $this->_db->quoteInto($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
         );
         
+        // clear all rows in all tables which belong to this device
+        $this->_db->delete($this->_tablePrefix . 'content', $where);
+        $this->_db->delete($this->_tablePrefix . 'synckey', $where);
         $this->_db->delete($this->_tablePrefix . 'folder', $where);
     }
     
