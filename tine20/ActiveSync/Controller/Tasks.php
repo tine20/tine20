@@ -26,7 +26,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      * @var array
      */
     protected $_filterArray = array(
-        ActiveSync_Command_Sync::FILTER_INCOMPLETE
+        Syncope_Command_Sync::FILTER_INCOMPLETE
     );
     
     protected $_mapping = array(
@@ -80,7 +80,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      *
      * @var int
      */
-    protected $_defaultFolderType   = ActiveSync_Command_FolderSync::FOLDERTYPE_TASK;
+    protected $_defaultFolderType   = Syncope_Command_FolderSync::FOLDERTYPE_TASK;
     
     /**
      * default container for new entries
@@ -94,7 +94,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      *
      * @var int
      */
-    protected $_folderType          = ActiveSync_Command_FolderSync::FOLDERTYPE_TASK_USER_CREATED;
+    protected $_folderType          = Syncope_Command_FolderSync::FOLDERTYPE_TASK_USER_CREATED;
     
     /**
      * name of property which defines the filterid for different content classes
@@ -285,7 +285,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
     {
         if(in_array($_filterType, $this->_filterArray)) {
             switch($_filterType) {
-                case ActiveSync_Command_Sync::FILTER_INCOMPLETE:
+                case Syncope_Command_Sync::FILTER_INCOMPLETE:
                     $_filter->removeFilter('status_id');
                     
                     $status = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)

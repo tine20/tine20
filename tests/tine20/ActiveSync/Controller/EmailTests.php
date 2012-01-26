@@ -109,7 +109,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     public function testAppendFileReference()
     {
-    	$controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS)); 
+    	$controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
     	
     	$message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
     	
@@ -155,12 +155,12 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         
         $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         
-        $options = array();
+        $options = array('collectionId' => $message->folder_id);
         $properties = $this->_domDocument->createElementNS('uri:ItemOperations', 'Properties');
-        $controller->appendXML($properties, $message->folder_id, $message->getId(), $options);
+        $controller->appendXML($properties, $options, $message->getId());
         $this->_domDocument->documentElement->appendChild($properties);
         
-        #$this->_domDocument->formatOutput = true;
+        $this->_domDocument->formatOutput = true;
         #echo $this->_domDocument->saveXML();
 
         $this->assertEquals('[gentoo-dev] Automated Package Removal and Addition Tracker, for the week ending 2009-04-12 23h59 UTC', @$this->_domDocument->getElementsByTagNameNS('uri:Email', 'Subject')->item(0)->nodeValue, $this->_domDocument->saveXML());
@@ -173,9 +173,9 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     /**
      * validate getAllFolders
      */
-    public function testGetSupportedFolders()
+    public function testGetAllFolders()
     {
-        $controller = ActiveSync_Controller::dataFactory(ActiveSync_Controller::CLASS_EMAIL, $this->_getDevice(Syncope_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
+        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_IPHONE));
         
         $folders = $controller->getAllFolders();
         
@@ -194,29 +194,9 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
             return $this->objects['devices'][$_deviceType];
         }
         
-        switch ($_deviceType) {
-            case Syncope_Model_Device::TYPE_IPHONE:
-                $device = ActiveSync_Backend_DeviceTests::getTestDevice();
-                $device->devicetype   = $_deviceType;
-                $device->owner_id     = $this->_testUser->getId();
-                #$palm->contactsfilter_id = $this->objects['filter']->getId();
-                
-                break;
-                
-            case Syncope_Model_Device::TYPE_WEBOS:
-                $device = ActiveSync_Backend_DeviceTests::getTestDevice();
-                $device->devicetype   = $_deviceType;
-                $device->owner_id     = $this->_testUser->getId();
-                $device->acsversion   = '12.0';
-                #$palm->contactsfilter_id = $this->objects['filter']->getId();
-                
-                break;
-                
-            default:
-                throw new Exception('unsupported device: ' , $_deviceType);
-        }
-        
-        $this->objects['devices'][$_deviceType] = ActiveSync_Controller_Device::getInstance()->create($device);
+        $this->objects['devices'][$_deviceType] = ActiveSync_Controller_Device::getInstance()->create(
+            ActiveSync_Backend_DeviceTests::getTestDevice($_deviceType)
+        );
 
         return $this->objects['devices'][$_deviceType];
     }

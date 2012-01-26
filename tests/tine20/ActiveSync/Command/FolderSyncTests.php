@@ -82,6 +82,8 @@ class ActiveSync_Command_FolderSyncTests extends PHPUnit_Framework_TestCase
 
         Syncope_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
         Syncope_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
+        Syncope_Registry::setEmailDataClass('ActiveSync_Controller_Email');
+        Syncope_Registry::setTasksDataClass('ActiveSync_Controller_Tasks');
     }
 
     /**

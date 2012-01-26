@@ -88,7 +88,7 @@ class ActiveSync_Command_SendMailTests extends PHPUnit_Framework_TestCase
         $email = str_replace('gentoo-dev@lists.gentoo.org, webmaster@changchung.org', $this->_emailTestClass->getEmailAddress(), $email);
         $stream = fopen('data://text/plain;base64,' . base64_encode($email), 'r');
         
-        $sendMail = new ActiveSync_Command_SendMail($stream);
+        $sendMail = new Syncope_Command_SendMail($stream);
         $sendMail->handle();
         $sendMail->getResponse();
         

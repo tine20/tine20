@@ -69,10 +69,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      * @var array
      */
     protected $_filterArray = array(
-        ActiveSync_Command_Sync::FILTER_2_WEEKS_BACK,
-        ActiveSync_Command_Sync::FILTER_1_MONTH_BACK,
-        ActiveSync_Command_Sync::FILTER_3_MONTHS_BACK,
-        ActiveSync_Command_Sync::FILTER_6_MONTHS_BACK
+        Syncope_Command_Sync::FILTER_2_WEEKS_BACK,
+        Syncope_Command_Sync::FILTER_1_MONTH_BACK,
+        Syncope_Command_Sync::FILTER_3_MONTHS_BACK,
+        Syncope_Command_Sync::FILTER_6_MONTHS_BACK
     );
     
     /**
@@ -190,7 +190,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      *
      * @var int
      */
-    protected $_defaultFolderType   = ActiveSync_Command_FolderSync::FOLDERTYPE_CALENDAR;
+    protected $_defaultFolderType   = Syncope_Command_FolderSync::FOLDERTYPE_CALENDAR;
     
     /**
      * default container for new entries
@@ -204,7 +204,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      *
      * @var int
      */
-    protected $_folderType          = ActiveSync_Command_FolderSync::FOLDERTYPE_CALENDAR_USER_CREATED;
+    protected $_folderType          = Syncope_Command_FolderSync::FOLDERTYPE_CALENDAR_USER_CREATED;
     
     /**
      * name of property which defines the filterid for different content classes
@@ -866,16 +866,16 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     {
         if(in_array($_filterType, $this->_filterArray)) {
             switch($_filterType) {
-                case ActiveSync_Command_Sync::FILTER_2_WEEKS_BACK:
+                case Syncope_Command_Sync::FILTER_2_WEEKS_BACK:
                     $from = Tinebase_DateTime::now()->subWeek(2);
                     break;
-                case ActiveSync_Command_Sync::FILTER_1_MONTH_BACK:
+                case Syncope_Command_Sync::FILTER_1_MONTH_BACK:
                     $from = Tinebase_DateTime::now()->subMonth(2);
                     break;
-                case ActiveSync_Command_Sync::FILTER_3_MONTHS_BACK:
+                case Syncope_Command_Sync::FILTER_3_MONTHS_BACK:
                     $from = Tinebase_DateTime::now()->subMonth(3);
                     break;
-                case ActiveSync_Command_Sync::FILTER_6_MONTHS_BACK:
+                case Syncope_Command_Sync::FILTER_6_MONTHS_BACK:
                     $from = Tinebase_DateTime::now()->subMonth(6);
                     break;
             }

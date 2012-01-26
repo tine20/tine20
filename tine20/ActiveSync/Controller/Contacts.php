@@ -99,7 +99,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      *
      * @var int
      */
-    protected $_defaultFolderType   = ActiveSync_Command_FolderSync::FOLDERTYPE_CONTACT;
+    protected $_defaultFolderType   = Syncope_Command_FolderSync::FOLDERTYPE_CONTACT;
     
     /**
      * default container for new entries
@@ -113,7 +113,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      *
      * @var int
      */
-    protected $_folderType          = ActiveSync_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED;
+    protected $_folderType          = Syncope_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED;
 
     /**
      * name of property which defines the filterid for different content classes

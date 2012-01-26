@@ -134,7 +134,7 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
             default:
                 $device = new ActiveSync_Model_Device(array(
                 	'deviceid'   => Tinebase_Record_Abstract::generateUID(64),
-                	'devicetype' => $_type,
+                	'devicetype' => Syncope_Model_Device::TYPE_IPHONE,
                 	'owner_id'   => Tinebase_Core::getUser()->getId(),
                 	'policy_id'  => 1,
                 	'useragent'  => 'blabla',
