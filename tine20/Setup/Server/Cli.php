@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -36,7 +36,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                            setup.php --setconfig -- configkey=sample1 configvalue=value11
                            setup.php --setconfig -- configkey=sample2 configvalue=arrayKey1:Value1,arrayKey2:value2',
                 'check_requirements'        => 'Check if all requirements are met to install and run tine20',
-            
+                'create_admin'              => 'Create new admin user (or reactivate if already exists)',
                 'install-s'                 => 'Install applications [All] or comma separated list;'
                     . ' To specify the login name and login password of the admin user that is created during installation, append \' -- adminLoginName="admin" adminPassword="password"\''
                     . ' To add imap or smtp settings, append (for example) \' -- imap="host:mail.example.org,port:143,dbmail_host:localhost" smtp="ssl:tls"\'',
@@ -48,8 +48,8 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                          Examples: 
                           setup.php --egw14import egwdbhost egwdbuser egwdbpass egwdbname latin1
                           setup.php --egw14import egwdbhost egwdbuser egwdbpass egwdbname utf8'
-                #'username'             => 'Username [required]',              
-                #'password'             => 'Password [required]',              
+                #'username'             => 'Username [required]',
+                #'password'             => 'Password [required]',
             ));
             $opts->parse();
         } catch (Zend_Console_Getopt_Exception $e) {
@@ -58,7 +58,17 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             exit;
         }
 
-        if (count($opts->toArray()) === 0 || $opts->h || (empty($opts->install) && empty($opts->update) && empty($opts->uninstall) && empty($opts->list) && empty($opts->sync_accounts_from_ldap) && empty($opts->egw14import) && empty($opts->check_requirements) && empty($opts->setconfig))) {
+        if (count($opts->toArray()) === 0 || $opts->h || 
+            (empty($opts->install) && 
+            empty($opts->update) && 
+            empty($opts->uninstall) && 
+            empty($opts->list) && 
+            empty($opts->sync_accounts_from_ldap) && 
+            empty($opts->egw14import) && 
+            empty($opts->check_requirements) && 
+            empty($opts->create_admin) && 
+            empty($opts->setconfig))) 
+        {
             echo $opts->getUsageMessage();
             exit;
         }

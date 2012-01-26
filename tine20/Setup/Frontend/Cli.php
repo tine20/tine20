@@ -4,7 +4,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add ext check again
  */
@@ -64,6 +64,8 @@ class Setup_Frontend_Cli
             $this->_checkRequirements($_opts);
         } elseif(isset($_opts->setconfig)) {
             $this->_setConfig($_opts);
+        } elseif(isset($_opts->create_admin)) {
+            $this->_createAdminUser($_opts);
         }
     }
     
@@ -145,20 +147,30 @@ class Setup_Frontend_Cli
             
             // initial password
             if (! isset($_options['adminPassword'])) {
-                $password1 = Tinebase_Server_Cli::promptInput('Inital Admin Users Password', TRUE);
-                if (! $password1) {
-                    echo "error: password must not be empty! exiting \n";
-                    exit (1);
-                }
-                $password2 = Tinebase_Server_Cli::promptInput('Confirm Password', TRUE);
-                if ($password1 == $password2) {
-                    $_options['adminPassword'] = $password1;
-                } else {
-                    echo "error: passwords do not match! exiting \n";
-                    exit (1);
-                }
+                $_options['adminPassword'] = $this->_promptPassword();
             }
         }
+    }
+    
+    /**
+     * prompt password
+     * 
+     * @return string
+     */
+    protected function _promptPassword()
+    {
+        $password1 = Tinebase_Server_Cli::promptInput('Admin user password', TRUE);
+        if (! $password1) {
+            echo "Error: Password must not be empty! Exiting ... \n";
+            exit (1);
+        }
+        $password2 = Tinebase_Server_Cli::promptInput('Confirm password', TRUE);
+        if ($password1 !== $password2) {
+            echo "Error: Passwords do not match! Exiting ... \n";
+            exit (1);
+        }
+        
+        return $password1;
     }
     
     /**
@@ -344,6 +356,43 @@ class Setup_Frontend_Cli
             foreach ($errors as $error) {
                 echo "- " . $error . "\n";
             }
+        }
+    }
+    
+    /**
+     * create admin user / activate existing user / allow to reset password
+     * 
+     * @param Zend_Console_Getopt $_opts
+     */
+    protected function _createAdminUser(Zend_Console_Getopt $_opts)
+    {
+        echo "Please enter a username. If the user already exists, he is reactivated and you can reset the password.\n";
+        $username = Tinebase_Server_Cli::promptInput('Username');
+        $tomorrow = Tinebase_DateTime::now()->addDay(1);
+        
+        try {
+            $user = Tinebase_User::getInstance()->getFullUserByLoginName($username);
+            echo "User $username already exists.\n";
+            $user->accountExpires = $tomorrow;
+            $user->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_ENABLED;
+            Tinebase_User::getInstance()->updateUser($user);
+            echo "Activated admin user '$username' (expires tomorrow).\n";
+            
+            $resetPw = Tinebase_Server_Cli::promptInput('Do you want to reset the password (default: "no", "y" or "yes" for reset)?');
+            if ($resetPw === 'y' or $resetPw === 'yes') {
+                $password = $this->_promptPassword();
+                Tinebase_User::getInstance()->setPassword($user, $password);
+                echo "User password has been reset.\n";
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // create new admin user that expires tomorrow
+            $password = $this->_promptPassword();
+            Tinebase_User::createInitialAccounts(array(
+                'adminLoginName' => $username,
+                'adminPassword'  => $password,
+                'expires'        => $tomorrow,
+            ));
+            echo "Created new admin user '$username' that expires tomorrow.\n";
         }
     }
     

@@ -477,6 +477,7 @@ class Tinebase_User
      *  'adminFirstName'    => 'Tine 2.0',
      *  'adminLastName'     => 'Admin Account',
      *  'adminEmailAddress' => 'admin@tine20domain.org',
+     *  'expires'			=> Tinebase_DateTime object
      * );
      * </code>
      *
@@ -511,7 +512,7 @@ class Tinebase_User
             'accountLastName'       => $adminLastName,
             'accountDisplayName'    => $adminLastName . ', ' . $adminFirstName,
             'accountFirstName'      => $adminFirstName,
-            'accountExpires'        => NULL,
+            'accountExpires'        => (isset($_options['expires'])) ? $_options['expires'] : NULL,
             'accountEmailAddress'   => $adminEmailAddress
         ));
         
