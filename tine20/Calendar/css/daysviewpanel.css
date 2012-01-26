@@ -364,6 +364,10 @@
     top: 3px;
 }
 
+.cal-daysviewpanel-wholedayheader .cal-daysviewpanel-event-cropright  .cal-daysviewpanel-event-header-icons {
+    background: transparent;
+}
+
 .cal-daysviewpanel-event-drop-ok .cal-daysviewpanel-event-header-inner,
 .cal-daysviewpanel-event-drop-nodrop .cal-daysviewpanel-event-header-inner {
     left: 17px;
