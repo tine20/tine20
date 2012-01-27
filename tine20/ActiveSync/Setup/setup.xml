@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>5.5</version>
+    <version>5.6</version>
     <order>90</order>
     <depends>
         <application>Tinebase</application>
@@ -410,7 +410,7 @@
             <name>acsync_content</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -454,17 +454,14 @@
                     </field>
                 </index>
                 <index>
-                    <name>device_id--class--collectionid--contentid</name>
+                    <name>device_id--folder_id--contentid</name>
                     <unique>true</unique>
                     <length>40</length>
                     <field>
                         <name>device_id</name>
                     </field>
                     <field>
-                        <name>class</name>
-                    </field>
-                    <field>
-                        <name>collectionid</name>
+                        <name>folder_id</name>
                     </field>
                     <field>
                         <name>contentid</name>
@@ -478,6 +475,19 @@
                     <foreign>true</foreign>
                     <reference>
                         <table>acsync_device</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                        <onupdate>cascade</onupdate>
+                    </reference>
+                </index>   
+                <index>
+                    <name>acsync_content::folder_id--acsync_folder::id</name>
+                    <field>
+                        <name>folder_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>acsync_folder</table>
                         <field>id</field>
                         <ondelete>cascade</ondelete>
                         <onupdate>cascade</onupdate>
