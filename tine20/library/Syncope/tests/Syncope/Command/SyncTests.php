@@ -223,7 +223,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Responses/AirSync:Add/AirSync:ServerId');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertNotEmpty($nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertFalse(empty($nodes->item(0)->nodeValue), $syncDoc->saveXML());
         
         return $nodes->item(0)->nodeValue;
     }
@@ -269,7 +269,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Responses/AirSync:Change/AirSync:ServerId');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertNotEmpty($nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertFalse(empty($nodes->item(0)->nodeValue), $syncDoc->saveXML());
     }
             
     public function testDeletingContactOnServer()
@@ -316,7 +316,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
     {
         $serverId = $this->testAddingContactToServer();
         
-        Syncope_Data_Contacts::$changedEntries[] = $serverId;
+        Syncope_Data_Contacts::$changedEntries['Syncope_Data_Contacts'][] = $serverId;
         
         // lets add one contact
         $doc = new DOMDocument();
@@ -337,7 +337,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         $syncDoc = $sync->getResponse();
         #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
 
-        Syncope_Data_Contacts::$changedEntries = array();
+        Syncope_Data_Contacts::$changedEntries['Syncope_Data_Contacts'] = array();
         
         $xpath = new DomXPath($syncDoc);
         $xpath->registerNamespace('AirSync', 'uri:AirSync');
@@ -363,7 +363,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
     {
         $serverId = $this->testAddingContactToServer();
         
-        unset(Syncope_Data_Contacts::$entries[$serverId]);
+        unset(Syncope_Data_Contacts::$entries['Syncope_Data_Contacts']['addressbookFolderId'][$serverId]);
         
         // lets add one contact
         $doc = new DOMDocument();

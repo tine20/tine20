@@ -20,80 +20,11 @@
 
 class Syncope_Data_Contacts extends Syncope_Data_AData
 {
-    protected $_specialFolderName = 'addressbook-root';
-    
-    /**
-     * used by unit tests only to simulated added folders
-     */
-    public static $folders = array(
-    	'addressbookFolderId' => array(
-            'folderId'    => 'addressbookFolderId',
-            'parentId'    => null,
-            'displayName' => 'Default Contacts Folder',
-            'type'        => Syncope_Command_FolderSync::FOLDERTYPE_CONTACT
-        )
-    );
-    
-    /**
-     * used by unit tests only to simulated added folders
-     */
-    public static $entries = array(
-        'contact1' => array(
-        	'FirstName' => 'Lars', 
-        	'LastName'  => 'Kneschke'
-    	),
-        'contact2' => array(
-        	'FirstName' => 'Cornelius', 
-        	'LastName'  => 'Weiß'
-        )
-    );
-    
-    /**
-     * used by unit tests only to simulated added folders
-     */
-    public static $changedEntries = array(
-    );
-    
-    public function __construct(Syncope_Model_IDevice $_device, DateTime $_timeStamp)
-    {
-        $this->_device = $_device;
-        $this->_timestamp = $_timeStamp;
-    }
-    
-    public function createEntry($_folderId, SimpleXMLElement $_entry)
-    {
-        $xmlData = $_entry->children('uri:Contacts');
-        
-        $id = sha1(mt_rand(). microtime());
-        
-        self::$entries[$id] = array(
-        	'FirstName' => (string)$xmlData->FirstName, 
-        	'LastName'  => (string)$xmlData->LastName
-        );
-        
-        return $id;
-    }
-    
-    public function deleteEntry($_folderId, $_serverId)
-    {
-        unset(self::$entries[$_serverId]);
-    }
-    
-    public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry)
-    {
-        $xmlData = $_entry->children('uri:Contacts');
-        
-        self::$entries[$_serverId] = array(
-        	'FirstName' => (string)$xmlData->FirstName, 
-        	'LastName'  => (string)$xmlData->LastName
-        );
-    }
-    
     public function appendXML(DOMElement $_domParrent, $_collectionData, $_serverId)
     {
         $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Contacts', 'uri:Contacts');
         
-        foreach (self::$entries[$_serverId] as $key => $value) {
+        foreach (Syncope_Data_AData::$entries[get_class($this)][$_collectionData["collectionId"]][$_serverId] as $key => $value) {
             // create a new DOMElement ...
             $node = new DOMElement($key, null, 'uri:Contacts');
             
@@ -106,12 +37,39 @@ class Syncope_Data_Contacts extends Syncope_Data_AData
         
     }
     
-    public function getAllFolders()
+    public function createEntry($_folderId, SimpleXMLElement $_entry)
     {
-        if (!$this->_supportsMultipleFolders()) {
-            return array(
-                $this->_specialFolderName => array(
-                    'folderId'    => $this->_specialFolderName,
+        $xmlData = $_entry->children('uri:Contacts');
+        
+        $id = sha1(mt_rand(). microtime());
+        
+        Syncope_Data_AData::$entries[get_class($this)][$_folderId][$id] = array(
+        	'FirstName' => (string)$xmlData->FirstName, 
+        	'LastName'  => (string)$xmlData->LastName
+        );
+        
+        return $id;
+    }
+    
+    public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry)
+    {
+        $xmlData = $_entry->children('uri:Contacts');
+        
+        Syncope_Data_AData::$entries[get_class($this)][$_folderId][$_serverId] = array(
+        	'FirstName' => (string)$xmlData->FirstName, 
+        	'LastName'  => (string)$xmlData->LastName
+        );
+    }        
+    
+    protected function _initData()
+    {
+        /**
+        * used by unit tests only to simulated added folders
+        */
+        if (!isset(Syncope_Data_AData::$folders[get_class($this)])) {
+            Syncope_Data_AData::$folders[get_class($this)] = array(
+            	'addressbookFolderId' => array(
+                    'folderId'    => 'addressbookFolderId',
                     'parentId'    => null,
                     'displayName' => 'Default Contacts Folder',
                     'type'        => Syncope_Command_FolderSync::FOLDERTYPE_CONTACT
@@ -119,65 +77,23 @@ class Syncope_Data_Contacts extends Syncope_Data_AData
             );
         }
         
-        return self::$folders;
-    }
-    
-    public function createFolder($_parentId, $_displayName, $_type)
-    {
-        $id = sha1(mt_rand(). microtime());
-        
-        self::$folders[$id] = array(
-            'folderId'    => $id,
-            'parentId'    => $_parentId,
-            'displayName' => $_displayName,
-            'type'        => $_type
-        );
-        
-        return self::$folders[$id];
-    }
-    
-    public function deleteFolder($_folderId)
-    {
-        $folderId = $_folderId instanceof Syncope_Model_IFolder ? $_folderId->folderid : $_folderId;
-        
-        unset(self::$folders[$folderId]);
-    }
-    
-    /**
-     * @param  Syncope_Model_IFolder|string  $_folderId
-     * @param  string                        $_filter
-     * @return array
-     */
-    public function getServerEntries($_folderId, $_filter)
-    {
-        $folderId = $_folderId instanceof Syncope_Model_IFolder ? $_folderId->id : $_folderId;
-        
-        return array_keys(self::$entries);
-    }
-    
-    public function getChangedEntries($_folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL)
-    {
-        return self::$changedEntries;
-    }
-    
-    public function hasChanges(Syncope_Backend_IContent $contentBackend, Syncope_Model_IFolder $folder, Syncope_Model_ISyncState $syncState)
-    {
-        return true;
-    }
-    
-    #public function getMultiple()
-    #{
-    #    return array();
-    #}
-    
-    protected function _supportsMultipleFolders()
-    {
-        if (in_array($this->_device->devicetype, array(Syncope_Model_Device::TYPE_ANDROID, Syncope_Model_Device::TYPE_WEBOS))) {
-            return false;
+        /**
+         * used by unit tests only to simulated added folders
+         */
+        if (!isset(Syncope_Data_AData::$entries[get_class($this)])) {
+            Syncope_Data_AData::$entries[get_class($this)] = array(
+            		'addressbookFolderId' => array(
+                        'contact1' => array(
+                            	'FirstName' => 'Lars', 
+                            	'LastName'  => 'Kneschke'
+            	        ),
+                        'contact2' => array(
+                        	'FirstName' => 'Cornelius', 
+                        	'LastName'  => 'Weiß'
+                	    )
+            	    )
+            );
         }
-        
-        return true;
     }
-    
 }
 

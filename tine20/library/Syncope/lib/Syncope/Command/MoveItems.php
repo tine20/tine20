@@ -69,7 +69,7 @@ class Syncope_Command_MoveItems extends Syncope_Command_Wbxml
                 $sourceFolder      = $this->_folderBackend->getFolder($this->_device, $move['srcFldId']);
                 $destinationFolder = $this->_folderBackend->getFolder($this->_device, $move['dstFldId']);
 
-                $dataController    = Syncope_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
+                $dataController    = Syncope_Data_Factory::factory($sourceFolder->class, $this->_device, $this->_syncTimeStamp);
                 
                 $newId             = $dataController->moveItem($move['srcFldId'], $move['srcMsgId'], $move['dstFldId']);
                 

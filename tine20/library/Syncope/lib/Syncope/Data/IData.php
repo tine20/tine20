@@ -24,7 +24,7 @@ interface Syncope_Data_IData
     
     public function createEntry($_folderId, SimpleXMLElement $_entry);
     
-    public function deleteEntry($_folderId, $_serverId);
+    public function deleteEntry($_folderId, $_serverId, $_collectionData);
     
     public function getAllFolders();
     

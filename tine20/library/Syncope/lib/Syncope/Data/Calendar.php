@@ -41,35 +41,27 @@ class Syncope_Data_Calendar extends Syncope_Data_AData
         return $id;
     }
     
-    public function deleteEntry($_folderId, $_serverId)
+    protected function _initData()
     {
-        unset(self::$entries[$_serverId]);
-    }
-    
-    public function getAllFolders()
-    {
-        return array(
-            'calenderFolderId' => array(
-                'folderId'    => 'calenderFolderId',
-                'parentId'    => null,
-                'displayName' => 'Default Calendar Folder',
-                'type'        => Syncope_Command_FolderSync::FOLDERTYPE_CALENDAR
-            )
+        /**
+        * used by unit tests only to simulated added folders
+        */
+        Syncope_Data_AData::$folders[get_class($this)] = array(
+            	'calendarFolderId' => array(
+                    'folderId'    => 'calendarFolderId',
+                    'parentId'    => null,
+                    'displayName' => 'Default Contacts Folder',
+                    'type'        => Syncope_Command_FolderSync::FOLDERTYPE_CALENDAR
+                )
         );
-    }
-    
-    public function getChangedEntries($_folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL)
-    {
-        return self::$changedEntries;
-    }
-    
-    public function hasChanges(Syncope_Backend_IContent $contentBackend, Syncope_Model_IFolder $folder, Syncope_Model_ISyncState $syncState)
-    {
-        return true;
-    }
-    
-    public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry)
-    {
+        
+        /**
+         * used by unit tests only to simulated added folders
+         */
+        Syncope_Data_AData::$entries[get_class($this)] = array(
+        		'calendarFolderId' => array(
+        	    )
+        );
     }
 }
 
