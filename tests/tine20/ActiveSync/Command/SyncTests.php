@@ -300,7 +300,18 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
      * test sync of existing imap folder
      */
     public function testSyncOfEmails()
-    {        
+    {
+        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
+        if (! $imapConfig || ! isset($imapConfig->useSystemAccount) || $imapConfig->useSystemAccount != TRUE) {
+            $this->markTestSkipped('IMAP backend not configured');
+        }
+        
+        // this test needs at least one email in the INBOX
+        $emailTest = new Felamimail_Controller_MessageTest();
+        $emailTest->setUp();
+        $inbox = $emailTest->getFolder('INBOX');
+        $emailTest->messageTestHelper('multipart_mixed.eml', 'multipart/mixed', $inbox);
+        
         $emailController = new ActiveSync_Controller_Email($this->_device, new Tinebase_DateTime(null, null, 'de_DE'));
 
         $folders = $emailController->getAllFolders();
@@ -385,5 +396,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
         
         $this->assertEquals("uri:Email", $syncDoc->lookupNamespaceURI('Email'), $syncDoc->saveXML());
+        
+        $emailTest->tearDown();
     }
 }

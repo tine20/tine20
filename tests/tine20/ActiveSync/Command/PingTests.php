@@ -354,15 +354,24 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
             <Ping xmlns="uri:Ping"><HeartBeatInterval>10</HeartBeatInterval><Folders><Folder><Id>' . $folder['folderId'] . '</Id><Class>Email</Class></Folder></Folders></Ping>'
         );
 
-        // @todo add test email message to folder
-        return;
         
-        sleep(1);
+        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
+        if (! $imapConfig || ! isset($imapConfig->useSystemAccount) || $imapConfig->useSystemAccount != TRUE) {
+            return;
+        }
         
+        // add test email message to folder
+        $emailTest = new Felamimail_Controller_MessageTest();
+        $emailTest->setUp();
+        $inbox = $emailTest->getFolder('INBOX');
+        $email = file_get_contents(dirname(__FILE__) . '/../../Felamimail/files/text_plain.eml');
+        Felamimail_Controller_Message::getInstance()->appendMessage($inbox, $email);
+                
         $ping = new Syncope_Command_Ping($doc, $this->_device, null);
         $ping->handle();
         $responseDoc = $ping->getResponse();
-        $responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        $responseDoc->formatOutput = true;
+        //echo $responseDoc->saveXML();
         
         $xpath = new DomXPath($responseDoc);
         $xpath->registerNamespace('Ping', 'uri:Ping');
@@ -374,5 +383,8 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
         $nodes = $xpath->query('//Ping:Ping/Ping:Folders/Ping:Folder');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertEquals($folder['folderId'], $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        
+        $message = $emailTest->searchAndCacheMessage('text/plain', $inbox);
+        Felamimail_Controller_Message_Flags::getInstance()->addFlags(array($message), array(Zend_Mail_Storage::FLAG_DELETED));
     }
 }
