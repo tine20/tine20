@@ -32,6 +32,8 @@ interface Syncope_Data_IData
     
     public function hasChanges(Syncope_Backend_IContent $contentBackend, Syncope_Model_IFolder $folder, Syncope_Model_ISyncState $syncState);
     
+    public function moveItem($_srcFolderId, $_serverId, $_dstFolderId);
+    
     public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry);
 }
 

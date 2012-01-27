@@ -18,13 +18,8 @@
  * @package     Model
  */
 
-class Syncope_Data_Tasks extends Syncope_Data_AData
+abstract class Syncope_Data_AData implements Syncope_Data_IData
 {
-    public function appendXML(DOMElement $_domParrent, $_collectionData, $_serverId)
-    {
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Tasks', 'uri:Tasks');
-    }
-    
     public function createEntry($_folderId, SimpleXMLElement $_entry)
     {
         #$xmlData = $_entry->children('uri:Contacts');
@@ -47,11 +42,11 @@ class Syncope_Data_Tasks extends Syncope_Data_AData
     public function getAllFolders()
     {
         return array(
-            'tasksFolderId' => array(
-                'folderId'    => 'tasksFolderId',
+            'calenderFolderId' => array(
+                'folderId'    => 'calenderFolderId',
                 'parentId'    => null,
-                'displayName' => 'Default Tasks Folder',
-                'type'        => Syncope_Command_FolderSync::FOLDERTYPE_TASK
+                'displayName' => 'Default Calendar Folder',
+                'type'        => Syncope_Command_FolderSync::FOLDERTYPE_CALENDAR
             )
         );
     }
@@ -64,6 +59,11 @@ class Syncope_Data_Tasks extends Syncope_Data_AData
     public function hasChanges(Syncope_Backend_IContent $contentBackend, Syncope_Model_IFolder $folder, Syncope_Model_ISyncState $syncState)
     {
         return true;
+    }
+    
+    public function moveItem($_srcFolderId, $_serverId, $_dstFolderId)
+    {
+        return 'newId';
     }
     
     public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry)

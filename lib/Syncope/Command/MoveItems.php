@@ -66,9 +66,12 @@ class Syncope_Command_MoveItems extends Syncope_Command_Wbxml
             $response->appendChild($this->_outputDom->createElementNS('uri:Move', 'SrcMsgId', $move['srcMsgId']));
             
             try {
-                $folder         = $this->_folderBackend->getFolder($this->_device, $move['srcFldId']);
-                $dataController = Syncope_Controller::dataFactory($folder->class, $this->_device, $this->_syncTimeStamp);
-                $newId          = $dataController->moveItem($move['srcFldId'], $move['srcMsgId'], $move['dstFldId']);
+                $sourceFolder      = $this->_folderBackend->getFolder($this->_device, $move['srcFldId']);
+                $destinationFolder = $this->_folderBackend->getFolder($this->_device, $move['dstFldId']);
+
+                $dataController    = Syncope_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
+                
+                $newId             = $dataController->moveItem($move['srcFldId'], $move['srcMsgId'], $move['dstFldId']);
                 
                 $response->appendChild($this->_outputDom->createElementNS('uri:Move', 'Status', Syncope_Command_MoveItems::STATUS_SUCCESS));
                 $response->appendChild($this->_outputDom->createElementNS('uri:Move', 'DstMsgId', $newId));

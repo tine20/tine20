@@ -214,7 +214,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                 continue;
             }
             
-            $dataController = Syncope_Data_Factory::factory($collectionData['folder']->class , $this->_device, $this->_syncTimeStamp);
+            $dataController = Syncope_Data_Factory::factory($collectionData['folder']->class, $this->_device, $this->_syncTimeStamp);
             
             // handle incoming data
             if(isset($xmlCollection->Commands->Add)) {
@@ -565,7 +565,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                                 'folder_id'     => $collectionData['folder'],
                                 'contentid'     => $serverId,
                                 'creation_time' => $this->_syncTimeStamp
-                            )));                
+                            )));
                             
                             unset($serverAdds[$id]);    
                         }

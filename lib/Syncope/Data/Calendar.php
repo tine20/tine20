@@ -18,7 +18,7 @@
  * @package     Model
  */
 
-class Syncope_Data_Calendar implements Syncope_Data_IData
+class Syncope_Data_Calendar extends Syncope_Data_AData
 {
     public function appendXML(DOMElement $_domParrent, $_collectionData, $_serverId)
     {

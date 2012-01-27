@@ -18,7 +18,7 @@
  * @package     Model
  */
 
-class Syncope_Data_Contacts implements Syncope_Data_IData
+class Syncope_Data_Contacts extends Syncope_Data_AData
 {
     protected $_specialFolderName = 'addressbook-root';
     

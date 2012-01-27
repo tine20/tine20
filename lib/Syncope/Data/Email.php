@@ -18,7 +18,7 @@
  * @package     Model
  */
 
-class Syncope_Data_Email implements Syncope_Data_IData
+class Syncope_Data_Email extends Syncope_Data_AData
 {
     /**
      * used by unit tests only to simulated added folders

@@ -192,7 +192,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
             	<Collection>
-            		<Class>Contacts</Class><SyncKey>1</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+            		<Class>Contacts</Class><SyncKey>2</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
             		<Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
             		<Commands><Add><ClientId>42</ClientId><ApplicationData></ApplicationData></Add></Commands>
             	</Collection>
@@ -215,7 +215,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(2, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(3, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
@@ -238,7 +238,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
             	<Collection>
-            		<Class>Contacts</Class><SyncKey>2</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+            		<Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
             		<Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
             		<Commands><Change><ServerId>' . $serverId . '</ServerId><ApplicationData></ApplicationData></Change></Commands>
             	</Collection>
@@ -261,7 +261,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(3, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(4, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
@@ -282,7 +282,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
             	<Collection>
-            		<Class>Contacts</Class><SyncKey>2</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+            		<Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
             		<Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
             		<Commands><Delete><ServerId>' . $serverId . '</ServerId></Delete></Commands>
             	</Collection>
@@ -305,7 +305,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(3, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(4, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
@@ -324,7 +324,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
             	<Collection>
-            		<Class>Contacts</Class><SyncKey>2</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+            		<Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
             		<Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
             	</Collection>
         	</Collections></Sync>'
@@ -348,7 +348,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(3, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(4, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
@@ -371,7 +371,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
             	<Collection>
-            		<Class>Contacts</Class><SyncKey>2</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+            		<Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
             		<Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
             	</Collection>
         	</Collections></Sync>'
@@ -393,7 +393,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(3, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(4, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
