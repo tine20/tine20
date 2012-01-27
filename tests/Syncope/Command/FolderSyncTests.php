@@ -67,7 +67,7 @@ class Syncope_Command_FolderSyncTests extends Syncope_Command_ATestCase
     {
         $this->testGetFoldersSyncKey0();
         
-        Syncope_Data_Contacts::$folders['addressbookFolderId2'] = array(
+        Syncope_Data_AData::$folders['Syncope_Data_Contacts']['addressbookFolderId2'] = array(
             'folderId'    => 'addressbookFolderId2',
             'parentId'    => null,
             'displayName' => 'User created Contacts Folder',

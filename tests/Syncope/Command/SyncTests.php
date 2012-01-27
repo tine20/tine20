@@ -316,7 +316,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
     {
         $serverId = $this->testAddingContactToServer();
         
-        Syncope_Data_Contacts::$changedEntries[] = $serverId;
+        Syncope_Data_Contacts::$changedEntries['Syncope_Data_Contacts'][] = $serverId;
         
         // lets add one contact
         $doc = new DOMDocument();
@@ -337,7 +337,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         $syncDoc = $sync->getResponse();
         #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
 
-        Syncope_Data_Contacts::$changedEntries = array();
+        Syncope_Data_Contacts::$changedEntries['Syncope_Data_Contacts'] = array();
         
         $xpath = new DomXPath($syncDoc);
         $xpath->registerNamespace('AirSync', 'uri:AirSync');
@@ -363,7 +363,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
     {
         $serverId = $this->testAddingContactToServer();
         
-        unset(Syncope_Data_Contacts::$entries[$serverId]);
+        unset(Syncope_Data_Contacts::$entries['Syncope_Data_Contacts']['addressbookFolderId'][$serverId]);
         
         // lets add one contact
         $doc = new DOMDocument();

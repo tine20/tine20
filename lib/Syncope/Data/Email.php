@@ -23,33 +23,7 @@ class Syncope_Data_Email extends Syncope_Data_AData
     /**
      * used by unit tests only to simulated added folders
      */
-    public static $folders = array(
-        'emailInboxFolderId' => array(
-            'folderId'    => 'emailInboxFolderId',
-            'parentId'    => null,
-            'displayName' => 'Inbox',
-            'type'        => Syncope_Command_FolderSync::FOLDERTYPE_INBOX
-        ),
-        'emailSentFolderId' => array(
-            'folderId'    => 'emailSentFolderId',
-            'parentId'    => null,
-            'displayName' => 'Sent',
-            'type'        => Syncope_Command_FolderSync::FOLDERTYPE_SENTMAIL
-        )
-    );
-    
-    /**
-     * used by unit tests only to simulated added folders
-     */
-    public static $entries = array(
-        'email1' => array(
-        	'FirstName' => 'Lars', 
-        	'LastName'  => 'Kneschke'
-    	),
-        'email2' => array(
-        	'FirstName' => 'Cornelius', 
-        	'LastName'  => 'Weiß'
-        )
+    public static $eentries = array(
     );
     
     /**
@@ -87,29 +61,46 @@ class Syncope_Data_Email extends Syncope_Data_AData
         return $id;
     }
     
-    public function deleteEntry($_folderId, $_serverId)
-    {
-        unset(self::$entries[$_serverId]);
-    }
-    
-    public function getAllFolders()
-    {
-        return self::$folders;
-    }
-    
-    public function getChangedEntries($_folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL)
-    {
-        return self::$changedEntries;
-    }
-    
-    public function hasChanges(Syncope_Backend_IContent $contentBackend, Syncope_Model_IFolder $folder, Syncope_Model_ISyncState $syncState)
-    {
-        return true;
-    }
-    
     public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry)
     {
         // not used by email
+    }
+
+    protected function _initData()
+    {
+        /**
+        * used by unit tests only to simulated added folders
+        */
+        Syncope_Data_AData::$folders[get_class($this)] = array(
+                'emailInboxFolderId' => array(
+                    'folderId'    => 'emailInboxFolderId',
+                    'parentId'    => null,
+                    'displayName' => 'Inbox',
+                    'type'        => Syncope_Command_FolderSync::FOLDERTYPE_INBOX
+                ),
+                'emailSentFolderId' => array(
+                    'folderId'    => 'emailSentFolderId',
+                    'parentId'    => null,
+                    'displayName' => 'Sent',
+                    'type'        => Syncope_Command_FolderSync::FOLDERTYPE_SENTMAIL
+                )
+        );
+        
+        /**
+         * used by unit tests only to simulated added folders
+         */
+        Syncope_Data_AData::$entries[get_class($this)] = array(
+        		'emailInboxFolderId' => array(
+                    'email1' => array(
+                    	'FirstName' => 'Lars', 
+                    	'LastName'  => 'Kneschke'
+                	),
+                    'email2' => array(
+                    	'FirstName' => 'Cornelius', 
+                    	'LastName'  => 'Weiß'
+                    )
+                )
+        );
     }
 }
 

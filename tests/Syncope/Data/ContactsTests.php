@@ -46,22 +46,6 @@ class Syncope_Data_ContactsTests extends Syncope_Command_ATestCase
     }
     
     /**
-     * validate getFolders for all devices except IPhone
-     */
-    public function testGetFoldersPalm()
-    {
-        $device = $this->_deviceBackend->create(
-            Syncope_Backend_DeviceTests::getTestDevice(Syncope_Model_Device::TYPE_WEBOS)
-        );
-        
-        $dataController = Syncope_Data_Factory::factory(Syncope_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
-        
-    	$folders = $dataController->getAllFolders();
-    	
-    	$this->assertArrayHasKey("addressbook-root", $folders, "key addressbook-root not found");
-    }
-    
-    /**
      * validate getFolders for IPhones
      */
     public function testGetFoldersIPhone()
@@ -99,7 +83,7 @@ class Syncope_Data_ContactsTests extends Syncope_Command_ATestCase
         
         $dataController = Syncope_Data_Factory::factory(Syncope_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
                 
-    	$dataController->appendXML($testNode, array(), 'contact1');
+    	$dataController->appendXML($testNode, array('collectionId' => 'addressbookFolderId'), 'contact1');
     	#echo $testDoc->saveXML();
     	
     	$xpath = new DomXPath($testDoc);
@@ -128,7 +112,7 @@ class Syncope_Data_ContactsTests extends Syncope_Command_ATestCase
         $xml = new SimpleXMLElement($this->_xmlContactBirthdayWithoutTimeAndroid);
         $id = $dataController->createEntry('addressbookFolderId', $xml->Collections->Collection->Commands->Add->ApplicationData);
         
-        $entry = Syncope_Data_Contacts::$entries[$id];
+        $entry = Syncope_Data_AData::$entries['Syncope_Data_Contacts']['addressbookFolderId'][$id];
         
         #$userTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
         #$bday = new Tinebase_DateTime('1969-12-31', $userTimezone);
@@ -166,7 +150,7 @@ class Syncope_Data_ContactsTests extends Syncope_Command_ATestCase
         );
         $dataController = Syncope_Data_Factory::factory(Syncope_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
                 
-        $dataController->appendXML($appData, array(), 'contact1');
+        $dataController->appendXML($appData, array('collectionId' => 'addressbookFolderId'), 'contact1');
         
         // no offset and namespace === uri:Contacts
         #$this->assertEquals('1975-01-02T03:00:00.000Z', @$testDoc->getElementsByTagNameNS('uri:Contacts', 'Birthday')->item(0)->nodeValue, $testDoc->saveXML());
@@ -194,7 +178,7 @@ class Syncope_Data_ContactsTests extends Syncope_Command_ATestCase
         );
         $dataController = Syncope_Data_Factory::factory(Syncope_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
         
-    	$entries = $dataController->getServerEntries('addressbook-root', null);
+    	$entries = $dataController->getServerEntries('addressbookFolderId', null);
     	
     	$this->assertContains('contact1', $entries);
     }
@@ -209,7 +193,7 @@ class Syncope_Data_ContactsTests extends Syncope_Command_ATestCase
         );
         $dataController = Syncope_Data_Factory::factory(Syncope_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
         
-        Syncope_Data_Contacts::$changedEntries[] = 'contact1';
+        Syncope_Data_AData::$changedEntries['Syncope_Data_Contacts'][] = 'contact1';
         
         $entries = $dataController->getChangedEntries('addressbook-root', new DateTime(null, new DateTimeZone('UTC')));
         #var_dump($entries);
@@ -224,12 +208,12 @@ class Syncope_Data_ContactsTests extends Syncope_Command_ATestCase
         );
         $dataController = Syncope_Data_Factory::factory(Syncope_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
         
-        Syncope_Data_Contacts::$entries['foobar'] = array();
+        Syncope_Data_AData::$entries['Syncope_Data_Contacts']['addressbookFolderId']['foobar'] = array();
         
-        $this->assertArrayHasKey('foobar', Syncope_Data_Contacts::$entries);
+        $this->assertArrayHasKey('foobar', Syncope_Data_Contacts::$entries['Syncope_Data_Contacts']['addressbookFolderId']);
         
-        $dataController->deleteEntry('folderId', 'foobar');
+        $dataController->deleteEntry('addressbookFolderId', 'foobar', array());
         
-        $this->assertArrayNotHasKey('foobar', Syncope_Data_Contacts::$entries);
+        $this->assertArrayNotHasKey('foobar', Syncope_Data_Contacts::$entries['Syncope_Data_Contacts']['addressbookFolderId']);
     }
 }

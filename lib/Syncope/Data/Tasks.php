@@ -39,35 +39,35 @@ class Syncope_Data_Tasks extends Syncope_Data_AData
         return $id;
     }
     
-    public function deleteEntry($_folderId, $_serverId)
+    protected function _initData()
     {
-        unset(self::$entries[$_serverId]);
-    }
-    
-    public function getAllFolders()
-    {
-        return array(
-            'tasksFolderId' => array(
+        /**
+        * used by unit tests only to simulated added folders
+        */
+        Syncope_Data_AData::$folders[get_class($this)] = array(
+        	'tasksFolderId' => array(
                 'folderId'    => 'tasksFolderId',
                 'parentId'    => null,
                 'displayName' => 'Default Tasks Folder',
                 'type'        => Syncope_Command_FolderSync::FOLDERTYPE_TASK
             )
         );
-    }
-    
-    public function getChangedEntries($_folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL)
-    {
-        return self::$changedEntries;
-    }
-    
-    public function hasChanges(Syncope_Backend_IContent $contentBackend, Syncope_Model_IFolder $folder, Syncope_Model_ISyncState $syncState)
-    {
-        return true;
-    }
-    
-    public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry)
-    {
+        
+        /**
+         * used by unit tests only to simulated added folders
+         */
+        Syncope_Data_AData::$entries[get_class($this)] = array(
+    		'tasksFolderId' => array(
+                'contact1' => array(
+                    	'FirstName' => 'Lars', 
+                    	'LastName'  => 'Kneschke'
+    	        ),
+                'contact2' => array(
+                	'FirstName' => 'Cornelius', 
+                	'LastName'  => 'Weiß'
+        	    )
+    	    )
+        );
     }
 }
 
