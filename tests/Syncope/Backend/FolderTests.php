@@ -112,7 +112,7 @@ class Syncope_Backend_FolderTests extends PHPUnit_Framework_TestCase
         
         $state = $this->_folderBackend->getFolderState($this->_device, 'Contact');
         
-        $this->assertEmpty($state);
+        $this->assertTrue(is_empty($state));
     }
     
     public function testGetFolder()
