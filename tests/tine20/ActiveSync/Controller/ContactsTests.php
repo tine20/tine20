@@ -58,6 +58,8 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {   	
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
+        
     	$appName = 'Addressbook';
     	
     	############# TEST USER ##########
@@ -240,6 +242,8 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         
         $filterBackend = new Tinebase_PersistentFilter_Backend_Sql();
         $filterBackend->delete($this->objects['filter']->getId());
+        
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(Tinebase_Config::getInstance()->getConfig(Tinebase_Config::MAPPANEL, NULL, TRUE)->value);
     }
     
     /**
