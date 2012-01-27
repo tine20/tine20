@@ -109,13 +109,8 @@ class Syncope_Command_Ping extends Syncope_Command_Wbxml
                     try {
                         $syncState = $this->_syncStateBackend->getSyncState($this->_device, $folder);
 
-                        $count = $dataController->hasChanges($folder, $syncState);
+                        $foundChanges = $dataController->hasChanges($this->_contentStateBackend, $folder, $syncState);
                         
-                        $count = $this->_getItemEstimate(
-                            $dataController,
-                            $folder,
-                            $syncState->lastsync
-                        );
                     } catch (Syncope_Exception_NotFound $e) {
                         // folder got never synchronized to client
                         if ($this->_logger instanceof Zend_Log) 
@@ -123,10 +118,10 @@ class Syncope_Command_Ping extends Syncope_Command_Wbxml
                         if ($this->_logger instanceof Zend_Log) 
                             $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' syncstate not found. enforce sync for folder: ' . $folder['serverFolderId']);
                         
-                        $count = 1;
+                        $foundChanges = true;
                     }
-                        
-                    if($count > 0) {
+                    
+                    if($foundChanges == true) {
                         $this->_foldersWithChanges[] = $folder;
                         $status = self::STATUS_CHANGES_FOUND;
                     }
@@ -176,61 +171,4 @@ class Syncope_Command_Ping extends Syncope_Command_Wbxml
     
         return $this->_outputDom;
     }
-    
-    /**
-     * return number of chnaged entries
-     * 
-     * @param $_dataController
-     * @param array $_collectionData
-     * @param $_lastSyncTimeStamp
-     * @return int number of changed entries
-     */
-    protected function _getItemEstimate($_dataController, $_collectionData, $_lastSyncTimeStamp)
-    {
-        return 1;
-        
-        // hack to have the same variable names all over the place
-        $_collectionData['class']        = $_collectionData['class'];
-        $_collectionData['collectionId'] = $_collectionData['serverFolderId'];
-        
-        $contentStateBackend  = new Syncope_Backend_ContentState();
-        $folderStateBackend   = new Syncope_Backend_FolderState();
-        // get current filterType
-        $filter = new Syncope_Model_FolderStateFilter(array(
-            array(
-                'field'     => 'device_id',
-                'operator'  => 'equals',
-                'value'     => $this->_device->getId(),
-            ),
-            array(
-                'field'     => 'class',
-                'operator'  => 'equals',
-                'value'     => $_collectionData['class'],
-            ),
-            array(
-                'field'     => 'folderid',
-                'operator'  => 'equals',
-                'value'     => $_collectionData['collectionId']
-            )
-        ));
-        $folderState = $folderStateBackend->search($filter)->getFirstRecord();
-        
-        if($folderState instanceof Syncope_Model_FolderState) {
-            $filterType = $folderState->lastfiltertype;
-        } else {
-            $filterType = 0;
-        }
-
-        $allClientEntries   = $contentStateBackend->getClientState($this->_device, $_collectionData['class'], $_collectionData['collectionId']);
-        
-        $_dataController->updateCache($_collectionData['collectionId']);
-        $allServerEntries   = $_dataController->getServerEntries($_collectionData['collectionId'], $filterType);
-            
-        $addedEntries       = array_diff($allServerEntries, $allClientEntries);
-        $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
-        $changedEntries     = $_dataController->getChanged($_collectionData['collectionId'], $_lastSyncTimeStamp);
-        
-        return count($addedEntries) + count($deletedEntries) + count($changedEntries);
-    }
-    
 }

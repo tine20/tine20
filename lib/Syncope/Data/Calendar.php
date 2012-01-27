@@ -63,7 +63,7 @@ class Syncope_Data_Calendar implements Syncope_Data_IData
         return self::$changedEntries;
     }
     
-    public function hasChanges(Syncope_Model_IFolder $folder, Syncope_Model_ISyncState $syncState)
+    public function hasChanges(Syncope_Backend_IContent $contentBackend, Syncope_Model_IFolder $folder, Syncope_Model_ISyncState $syncState)
     {
         return true;
     }

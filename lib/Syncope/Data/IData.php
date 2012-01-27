@@ -30,7 +30,7 @@ interface Syncope_Data_IData
     
     public function getChangedEntries($_folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL);
     
-    public function hasChanges(Syncope_Model_IFolder $folder, Syncope_Model_ISyncState $syncState);
+    public function hasChanges(Syncope_Backend_IContent $contentBackend, Syncope_Model_IFolder $folder, Syncope_Model_ISyncState $syncState);
     
     public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry);
 }

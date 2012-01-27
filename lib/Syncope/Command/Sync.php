@@ -467,9 +467,9 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     }
                     
                     if($collectionData['getChanges'] === true) {
-                        if($collectionData['syncState']->counter === 1) {
+                        if($collectionData['syncKey'] === 1) {
                             // all entries available
-                            $serverAdds    = $dataController->getServerEntries($collectionData['folder'], $collectionData['filterType']);
+                            $serverAdds    = $dataController->getServerEntries($collectionData['collectionId'], $collectionData['filterType']);
                             $serverChanges = array();
                             $serverDeletes = array();
                         } else {

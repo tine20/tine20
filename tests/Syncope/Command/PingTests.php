@@ -58,7 +58,7 @@ class Syncope_Command_PingTests extends Syncope_Command_ATestCase
     /**
      * 
      */
-    public function testPing()
+    public function testPingContacts()
     {
         // first do a foldersync
         $doc = new DOMDocument();
