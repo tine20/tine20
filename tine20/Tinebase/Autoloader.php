@@ -27,7 +27,16 @@ class Tinebase_Autoloader implements Zend_Loader_Autoloader_Interface
         
         $topLevelDirectory = (($pos = strpos($class, '_')) !== false) ? substr($class, 0, $pos) : $class;
         
-        $file = $topLevelDirectory . DIRECTORY_SEPARATOR . str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
+        switch ($topLevelDirectory) {
+            case 'Syncope':
+                $file = $topLevelDirectory . '/lib/' . str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
+                break;
+                
+            case 'HTMLPurifier':
+            default;
+                $file = $topLevelDirectory . DIRECTORY_SEPARATOR . str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
+                break;
+        }
         
         /**
          * Security check
@@ -37,7 +46,7 @@ class Tinebase_Autoloader implements Zend_Loader_Autoloader_Interface
             throw new Zend_Exception('Security check: Illegal character in filename');
         }
         
-        $fullPath = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . $file;
+        $fullPath = dirname(dirname(__FILE__)) . '/library/' . $file;
         
         include_once $fullPath;
         
@@ -86,7 +95,7 @@ class Tinebase_Autoloader implements Zend_Loader_Autoloader_Interface
      */
     public static function initialize(Zend_Loader_Autoloader $_autoloader)
     {
-        $_autoloader->unshiftAutoloader(new self(), array('Rediska', 'HTMLPurifier'));
+        $_autoloader->unshiftAutoloader(new self(), array('Syncope', 'HTMLPurifier'));
         $_autoloader->pushAutoloader(array('Tinebase_Autoloader', 'qCal'), 'qCal');
         $_autoloader->pushAutoloader(array('Tinebase_Autoloader', 'idna_convert'), 'idna_convert');
     }
