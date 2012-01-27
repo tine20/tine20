@@ -374,26 +374,26 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     /**
      * delete entry
      *
-     * @param  string  $_collectionId
-     * @param  string  $_id
+     * @param  string  $_folderId
+     * @param  string  $_serverId
      * @param  array   $_collectionData
      */
-    public function delete($_collectionId, $_id, $_collectionData)
+    public function deleteEntry($_folderId, $_serverId, $_collectionData)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " delete ColectionId: $_collectionId Id: $_id");
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " delete ColectionId: $_folderId Id: $_serverId");
         
-        $folder  = Felamimail_Controller_Folder::getInstance()->get($_collectionId);
+        $folder  = Felamimail_Controller_Folder::getInstance()->get($_folderId);
         $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
         
         if ($_collectionData['deletesAsMoves'] === true && !empty($account->trash_folder)) {
             // move message to trash folder
             $trashFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account, $account->trash_folder);
-            Felamimail_Controller_Message_Move::getInstance()->moveMessages($_id, $trashFolder);
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " moved entry $_id to trash folder");
+            Felamimail_Controller_Message_Move::getInstance()->moveMessages($_serverId, $trashFolder);
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " moved entry $_serverId to trash folder");
         } else {
             // set delete flag
-            Felamimail_Controller_Message_Flags::getInstance()->addFlags($_id, Zend_Mail_Storage::FLAG_DELETED);
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " deleted entry " . $_id);
+            Felamimail_Controller_Message_Flags::getInstance()->addFlags($_serverId, Zend_Mail_Storage::FLAG_DELETED);
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " deleted entry " . $_serverId);
         }
     }
     
@@ -421,26 +421,27 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     /**
      * update existing entry
      *
-     * @param  string  $_collectionId
-     * @param  string  $_id
+     * @param  string  $_folderId
+     * @param  string  $_serverId
      * @param SimpleXMLElement $_data
      * @return Tinebase_Record_Abstract
      */
-    public function change($_collectionId, $_id, SimpleXMLElement $_data)
+    public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Id: $_id");
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " CollectionId: $_folderId Id: $_serverId");
         
-        $xmlData = $_data->children('uri:Email');
+        $xmlData = $_entry->children('uri:Email');
         
         if(isset($xmlData->Read)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Id: $_id set read flag: $xmlData->Read");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_folderId Id: $_serverId set read flag: $xmlData->Read");
             if((int)$xmlData->Read === 1) {
-                Felamimail_Controller_Message_Flags::getInstance()->addFlags($_id, Zend_Mail_Storage::FLAG_SEEN);
+                Felamimail_Controller_Message_Flags::getInstance()->addFlags($_serverId, Zend_Mail_Storage::FLAG_SEEN);
             } else {
-                Felamimail_Controller_Message_Flags::getInstance()->clearFlags($_id, Zend_Mail_Storage::FLAG_SEEN);
+                Felamimail_Controller_Message_Flags::getInstance()->clearFlags($_serverId, Zend_Mail_Storage::FLAG_SEEN);
             }
             
-            $message = $this->_contentController->get($_id);
+            $message = $this->_contentController->get($_serverId);
             $message->timestamp = $this->_syncTimeStamp;
             $this->_contentController->update($message);
         }
@@ -561,23 +562,19 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         return $result;
     }
     
-    /**
-     * (non-PHPdoc)
-     * @see ActiveSync/Controller/ActiveSync_Controller_Interface#moveItem()
-     */
-    public function moveItem($_srcFolder, $_srcItem, $_dstFolder)
+    public function moveItem($_srcFolderId, $_serverId, $_dstFolderId)
     {
         $filter = new Felamimail_Model_MessageFilter(array(
             array(
                 'field'     => 'id',
                 'operator'  => 'equals',
-                'value'     => $_srcItem
+                'value'     => $_serverId
             )
         ));
         
-        Felamimail_Controller_Message_Move::getInstance()->moveMessages($filter, $_dstFolder);
+        Felamimail_Controller_Message_Move::getInstance()->moveMessages($filter, $_dstFolderId);
         
-        return $_srcItem;
+        return $_serverId;
     }
     
     /**

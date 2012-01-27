@@ -224,15 +224,11 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
         return $records;
     }
     
-    /**
-     * (non-PHPdoc)
-     * @see ActiveSync/Controller/ActiveSync_Controller_Interface#moveItem()
-     */
-    public function moveItem($_srcFolder, $_srcItem, $_dstFolder)
+    public function moveItem($_srcFolderId, $_serverId, $_dstFolderId)
     {
-        $item = $this->_contentController->get($_srcItem);
+        $item = $this->_contentController->get($_serverId);
         
-        $item->container_id = $_dstFolder;
+        $item->container_id = $_dstFolderId;
         
         $item = $this->_contentController->update($item);
         
@@ -345,7 +341,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
      * @param  string  $_id
      * @param  array   $_options
      */
-    public function deleteEntry($_folderId, $_serverId)
+    public function deleteEntry($_folderId, $_serverId, $_collectionData)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " delete ColectionId: $_folderId Id: $_serverId");
@@ -536,7 +532,24 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
         
         return $result;
     }
+    
+    public function hasChanges(Syncope_Backend_IContent $contentBackend, Syncope_Model_IFolder $folder, Syncope_Model_ISyncState $syncState)
+    {
+        $filterType = $folder->lastfiltertype;
+        
+        $this->updateCache($folder->folderid);
+        
+        $allClientEntries   = $contentBackend->getFolderState($this->_device, $folder);
+        $allServerEntries   = $this->getServerEntries($folder->folderid, $filterType);
+        
+        $addedEntries       = array_diff($allServerEntries, $allClientEntries);
+        $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
+        $changedEntries     = $this->getChangedEntries($folder->folderid, $syncState->lastsync);
 
+        return !!(count($addedEntries) + count($deletedEntries) + count($changedEntries));
+    }
+    
+    
     /**
      * return contentfilter array
      * 
