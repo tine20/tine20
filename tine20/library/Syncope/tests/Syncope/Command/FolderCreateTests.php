@@ -72,7 +72,7 @@ class Syncope_Command_FolderCreateTests extends Syncope_Command_ATestCase
         
         $nodes = $xpath->query('//FolderHierarchy:FolderCreate/FolderHierarchy:ServerId');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        $this->assertNotEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
-        $this->assertArrayHasKey($nodes->item(0)->nodeValue, Syncope_Data_Contacts::$folders);
+        $this->assertFalse(empty($nodes->item(0)->nodeValue), $responseDoc->saveXML());
+        $this->assertArrayHasKey($nodes->item(0)->nodeValue, Syncope_Data_AData::$folders['Syncope_Data_Contacts']);
     }    
 }

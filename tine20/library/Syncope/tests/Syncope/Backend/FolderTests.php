@@ -85,7 +85,7 @@ class Syncope_Backend_FolderTests extends PHPUnit_Framework_TestCase
         $folder = $this->_folderBackend->create($folder);
                 
         $this->assertTrue($folder->creation_time instanceof DateTime);
-        $this->assertNotEmpty($folder->displayname);
+        $this->assertFalse(empty($folder->displayname));
         
         return $folder;
     }
@@ -112,7 +112,7 @@ class Syncope_Backend_FolderTests extends PHPUnit_Framework_TestCase
         
         $state = $this->_folderBackend->getFolderState($this->_device, 'Contact');
         
-        $this->assertEmpty($state);
+        $this->assertTrue(empty($state));
     }
     
     public function testGetFolder()

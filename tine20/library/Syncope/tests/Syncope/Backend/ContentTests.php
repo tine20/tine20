@@ -142,7 +142,7 @@ class Syncope_Backend_ContentTests extends PHPUnit_Framework_TestCase
         $this->_contentBackend->resetState($this->_device, $this->_folder);
         $state = $this->_contentBackend->getFolderState($this->_device, $this->_folder);
     
-        $this->assertEmpty($state);
+        $this->assertTrue(empty($state));
     }
     
     public static function getTestContent(Syncope_Model_IDevice $_device, Syncope_Model_IFolder $_folder)

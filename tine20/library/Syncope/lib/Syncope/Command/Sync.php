@@ -297,7 +297,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         $state = $this->_contentStateBackend->getContentState($this->_device, $collectionData['folder'], $serverId);
                         
                         try {
-                            $dataController->deleteEntry($collectionData['collectionId'], $serverId);
+                            $dataController->deleteEntry($collectionData['collectionId'], $serverId, $collectionData);
                         } catch(Syncope_Exception_NotFound $e) {
                             if ($this->_logger instanceof Zend_Log) 
                                 $this->_logger->crit(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but entry was not found');
