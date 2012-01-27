@@ -223,7 +223,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Responses/AirSync:Add/AirSync:ServerId');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertNotEmpty($nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertFalse(empty($nodes->item(0)->nodeValue), $syncDoc->saveXML());
         
         return $nodes->item(0)->nodeValue;
     }
