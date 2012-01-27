@@ -298,9 +298,15 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
      */
     public function testPingForEmails()
     {        
+        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
+        if (! $imapConfig || ! isset($imapConfig->useSystemAccount) || $imapConfig->useSystemAccount != TRUE) {
+            $this->markTestSkipped('IMAP backend not configured');
+        }
+        
         $emailController = new ActiveSync_Controller_Email($this->_device, new Tinebase_DateTime(null, null, 'de_DE'));
 
         $folders = $emailController->getAllFolders();
+        $this->assertGreaterThan(0, count($folders));
         
         foreach ($folders as $folder) {
             if (strtoupper($folder['displayName']) == 'INBOX') {
@@ -353,12 +359,6 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Ping xmlns="uri:Ping"><HeartBeatInterval>10</HeartBeatInterval><Folders><Folder><Id>' . $folder['folderId'] . '</Id><Class>Email</Class></Folder></Folders></Ping>'
         );
-
-        
-        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
-        if (! $imapConfig || ! isset($imapConfig->useSystemAccount) || $imapConfig->useSystemAccount != TRUE) {
-            return;
-        }
         
         // add test email message to folder
         $emailTest = new Felamimail_Controller_MessageTest();
