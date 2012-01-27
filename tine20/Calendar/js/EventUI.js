@@ -196,7 +196,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
     
     render: function(view) {
         this.event.view = view;
-        
+
         this.colorSet = Tine.Calendar.colorMgr.getColor(this.event);
         this.event.colorSet = this.colorSet;
         
@@ -235,7 +235,14 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 status: 'recur',
                 text: this.app.i18n._('recurring event')
             });
+        } else if (this.event.isRecurException()) {
+            this.statusIcons.push({
+                status: 'recurex',
+                text: this.app.i18n._('recurring event exception')
+            });            
         }
+
+        
         
         if (! Ext.isEmpty(this.event.get('alarms'))) {
             this.statusIcons.push({

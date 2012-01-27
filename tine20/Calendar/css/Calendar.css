@@ -195,10 +195,28 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
     cursor: pointer;
 }
 
+
+
+.cal-recurring {
+	background-image:url(../../images/calendar-recurring.png);
+    background-repeat:no-repeat;
+    width: 12px;
+    height: 12px;
+    padding: 0 2px;
+    margin-left: 10px;
+    vertical-align: text-bottom;
+}
+
+.cal-recurring.exception {
+    background-image:url(../../images/calendar-recurring-exception.png) !important;
+}
+
 .private-white      { background-position:   0px   0px; }
 .private-black      { background-position:   0px -10px; }
 .recur-white        { background-position: -10px   0px; }
 .recur-black        { background-position: -10px -10px; }
+.recurex-white      { background-position: -70px   0px; }
+.recurex-black      { background-position: -70px -10px; }
 .alarm-white        { background-position: -20px   0px; }
 .alarm-black        { background-position: -20px -10px; }
 .NEEDS-ACTION-white { background-position: -30px   0px; }
