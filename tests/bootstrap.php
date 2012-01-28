@@ -17,7 +17,7 @@ function getTestDatabase()
         unlink('/tmp/syncope_test.sq3');
     }
     
-    // create temp database by default 
+    // create in memory database by default 
     $params = array (
     	#'dbname' => '/tmp/syncope_test.sq3',
     	'dbname' => ':memory:'
