@@ -26,7 +26,7 @@ function getTestDatabase()
     $db = Zend_Db::factory('PDO_SQLITE', $params);
     
     // enable foreign keys
-    #$db->query('PRAGMA foreign_keys = ON');
+    #$db->query('PRAGMA read_uncommitted = true');
     
     $db->query("CREATE TABLE IF NOT EXISTS `syncope_device` (
         `id` varchar(40) NOT NULL,
