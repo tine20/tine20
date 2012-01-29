@@ -86,6 +86,13 @@ class Syncope_Backend_DeviceTests extends PHPUnit_Framework_TestCase
         #$this->assertTrue($result);
     }
     
+    public function testGetExceptionNotFound()
+    {
+        $this->setExpectedException('Syncope_Exception_NotFound');
+    
+        $this->_deviceBackend->get('invalidId');
+    }
+    
     /**
      * 
      * @return Syncope_Model_Device
