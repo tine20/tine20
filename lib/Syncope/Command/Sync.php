@@ -673,24 +673,4 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
         
         return $this->_outputDom;
     }
-
-    /**
-     * delete contentstate (aka: forget that we have sent the entry to the client)
-     *
-     * @param string $_class the class from the xml
-     * @param string $_collectionId the collection id from the xml
-     * @param string $_contentId the Tine 2.0 id of the entry
-     */
-    protected function __markContentAsDeleted($_class, $_collectionId, $_contentId)
-    {
-        $contentState = new Syncope_Model_Content(array(
-                'device_id'     => $this->_device->getId(),
-                'class'         => $_class,
-                'collectionid'  => $_collectionId,
-                'contentid'     => $_contentId,
-                'creation_time' => $this->_syncTimeStamp
-        ));
-    
-        $this->_controller->markContentAsDeleted($contentState);
-    }    
 }
