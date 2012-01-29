@@ -124,7 +124,8 @@ class Syncope_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
     
         $this->assertEquals(1, $syncState->counter);
         $this->assertTrue($syncState->lastsync instanceof DateTime);
-    
+        $this->assertArrayHasKey('foobar', $syncState->pendingdata);
+        
         return $syncState;
     }
     

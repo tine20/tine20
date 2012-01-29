@@ -169,7 +169,7 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
         $this->_db->update($this->_tablePrefix . 'synckey', array(
         	'counter'     => $_syncState->counter,
         	'lastsync'    => $_syncState->lastsync->format('Y-m-d H:i:s'),
-        	'pendingdata' => isset($_syncState->pendingdata) ? $_syncState->pendingdata : null
+        	'pendingdata' => isset($_syncState->pendingdata) && is_array($_syncState->pendingdata) ? Zend_Json::encode($_syncState->pendingdata) : null
         ), array(
         	'id = ?' => $_syncState->id
         ));
