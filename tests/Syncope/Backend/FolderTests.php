@@ -139,6 +139,13 @@ class Syncope_Backend_FolderTests extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey($folder2->folderid, $folders);
     }
     
+    public function testGetExceptionNotFound()
+    {
+        $this->setExpectedException('Syncope_Exception_NotFound');
+    
+        $this->_folderBackend->get('invalidId');
+    }
+    
     /**
      * 
      * @return Syncope_Model_Device
