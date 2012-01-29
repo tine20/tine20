@@ -222,4 +222,18 @@ class Syncope_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
     
         $this->assertFalse($syncState);
     }
+    
+    public function testGetExceptionNotFound()
+    {
+        $this->setExpectedException('Syncope_Exception_NotFound');
+        
+        $this->_syncStateBackend->get('invalidId');
+    }
+    
+    public function testGetSyncStateExceptionNotFound()
+    {
+        $this->setExpectedException('Syncope_Exception_NotFound');
+        
+        $this->_syncStateBackend->getSyncState('invalidId', 'invalidId');
+    }
 }
