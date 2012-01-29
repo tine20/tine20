@@ -40,7 +40,7 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
      * create new sync state
      *
      * @param Syncope_Model_ISyncState $_syncState
-     * @return Syncope_Model_ISyncState
+     * @return Syncope_Model_SyncState
      */
     public function create(Syncope_Model_ISyncState $_syncState, $_keepPreviousSyncState = true)
     {
@@ -84,7 +84,7 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
     /**
      * @param string  $_id
      * @throws Syncope_Exception_NotFound
-     * @return Syncope_Model_ISyncState
+     * @return Syncope_Model_SyncState
      */
     public function get($_id)
     {
@@ -118,7 +118,7 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
     /**
      * @param  Syncope_Model_IDevice|string  $_deviceId
      * @param  Syncope_Model_IFolder|string  $_folderId
-     * @return Syncope_Model_ISyncState
+     * @return Syncope_Model_SyncState
      */
     public function getSyncState($_deviceId, $_folderId)
     {
@@ -182,7 +182,7 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
      *
      * @param  Syncope_Model_IDevice|string  $_deviceId
      * @param  Syncope_Model_IFolder|string  $_folderId
-     * @return Syncope_Model_ISyncState
+     * @return Syncope_Model_SyncState
      */
     public function validate($_deviceId, $_folderId, $_syncKey)
     {
