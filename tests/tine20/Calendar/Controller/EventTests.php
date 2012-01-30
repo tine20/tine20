@@ -961,7 +961,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $nextAlarmEventStart = new Tinebase_DateTime(substr($updatedEvent->alarms->getFirstRecord()->getOption('recurid'), -19));
         
-        $this->assertTrue($nextOccurance->dtstart->equals($nextAlarmEventStart), 'updated alarm is not at expected time');
+        $this->assertEquals($nextAlarmEventStart->toString(), $nextOccurance->dtstart->toString(), 'updated alarm is not at expected time');
     }
     
     public function testSetAlarmOfRecurSeriesException()
