@@ -3,8 +3,8 @@
 
                     TINE 2.0 RELEASENOTES
                     
-Release:    Milan (2012/03)
-
+Release:     Milan (2012/03)
+Last change: 2012-01-30
 
 Contents
 --
@@ -17,6 +17,7 @@ Contents
 6. New Addressbook features
 7. ActiveSync improvements
 8. Add or reactivate admin user
+9. Calendar Frontend JSON API change
 
 -----------------
 
@@ -81,3 +82,11 @@ Contents
     
     Confirm password> 
     User password has been reset.
+    
+9. Calendar Frontend JSON API change
+-----------------
+
+- A small API change took place in Calendar/Frontend/Json.php:
+ All occurrences of the function parameter "checkBusyConficts" have been replaced by the correct "checkBusyConflicts".
+ 
+ 
