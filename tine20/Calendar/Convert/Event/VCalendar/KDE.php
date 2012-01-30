@@ -32,7 +32,7 @@ class Calendar_Convert_Event_VCalendar_KDE extends Calendar_Convert_Event_VCalen
         'priority',
         'summary',
         'url',
-        #'alarms',
+        'alarms',
         #'tags',
         'dtstart',
         'exdate',

@@ -29,7 +29,7 @@ class Calendar_Convert_Event_VCalendar_Generic extends Calendar_Convert_Event_VC
         'priority',
         'summary',
         'url',
-        #'alarms',
+        'alarms',
         #'tags',
         'dtstart',
         'exdate',

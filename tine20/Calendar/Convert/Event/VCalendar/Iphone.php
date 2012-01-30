@@ -34,7 +34,7 @@ class Calendar_Convert_Event_VCalendar_Iphone extends Calendar_Convert_Event_VCa
         'priority',
         'summary',
         'url',
-        #'alarms',
+        'alarms',
         #'tags',
         'dtstart',
         'exdate',

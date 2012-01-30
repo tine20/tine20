@@ -34,7 +34,7 @@ class Calendar_Convert_Event_VCalendar_Thunderbird extends Calendar_Convert_Even
         'priority',
         'summary',
         'url',
-        #'alarms',
+        'alarms',
         #'tags',
         'dtstart',
         'exdate',

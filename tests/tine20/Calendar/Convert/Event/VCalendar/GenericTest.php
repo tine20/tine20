@@ -71,7 +71,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         $event = $converter->toTine20Model($vcalendarStream);
         
-        #var_dump($event->toArray());
+        //var_dump($event->toArray());
         
         $this->assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->class);
         $this->assertEquals('Hamburg',                           $event->location);
@@ -82,6 +82,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertEquals("75",                                (string)$event->alarms[0]->minutes_before);
         $this->assertEquals("This is a descpription\nwith a linebreak and a ; , and :", $event->description);
         $this->assertEquals(2, count($event->attendee));
+        $this->assertEquals(1, count($event->alarms));
         
         return $event;
     }
@@ -256,10 +257,14 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         // status_authkey must be kept after second convert
         $event->attendee[0]->quantity = 10;
         
-        rewind($vcalendarStream);
-        $event = $converter->toTine20Model($vcalendarStream, $event);
-
+        $vcalendar = file_get_contents(dirname(__FILE__) . '/../../../Import/files/lightning.ics');
+        // remove alarm part from vcalendar
+        $vcalendar = preg_replace('/BEGIN:VALARM.*END:VALARM\n/s', null, $vcalendar);
+        
+        $event = $converter->toTine20Model($vcalendar, $event);
+        
         $this->assertEquals(10, $event->attendee[0]->quantity);
+        $this->assertEquals(null, $event->alarms);
     }    
 
     /**
