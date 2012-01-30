@@ -17,7 +17,6 @@
  * @subpackage Zend_Cache_Backend
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Redis.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
  */
 
 
@@ -159,7 +158,12 @@ class Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_
      */
     public function test($id)
     {
-        $tmp = $this->_redis->get($id);
+        try {
+            $tmp = $this->_redis->get($id);
+        } catch (Exception $e) {
+            $this->_log("Zend_Cache_Backend_Redis::test() : Got an exception trying to access redis cache: " . $e);
+            return false;
+        }
         if (is_array($tmp)) {
             return $tmp[1];
         }
