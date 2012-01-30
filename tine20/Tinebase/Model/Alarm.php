@@ -108,16 +108,19 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
     public function setMinutesBefore(DateTime $_date)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), TRUE));
-        
+
         $dtStartTS = $_date->getTimestamp();
-        $alarmTimeTS = $this->alarm_time->getTimestamp();
-        
-        if ($dtStartTS < $alarmTimeTS) {
-            $this->minutes_before = 0;
+        if($this->alarm_time instanceof DateTime) {
+            $alarmTimeTS = $this->alarm_time->getTimestamp();
+
+            if ($dtStartTS < $alarmTimeTS) {
+                $this->minutes_before = 0;
+            } else {
+                $this->minutes_before = ($dtStartTS - $alarmTimeTS) / 60;
+            }
         } else {
-            $this->minutes_before = ($dtStartTS - $alarmTimeTS) / 60;
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ': Alarm was not saved properly (#5470)');
         }
-        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' result: ' . $this->minutes_before);
     }
 }
