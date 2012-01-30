@@ -10,7 +10,7 @@ Ext.ns('Tine.widgets.grid');
 Tine.widgets.grid.FilterPanel = function(config) {
     this.filterToolbarConfig = config;
     
-    // @TODO find quickfilter plungin an pick quickFilterField and criteriaIgnores from it
+    // @TODO find quickfilter plugin an pick quickFilterField and criteriaIgnores from it
     this.criteriaIgnores = config.criteriaIgnores || [
         {field: 'container_id', operator: 'equals', value: {path: '/'}},
         {field: 'query',        operator: 'contains',    value: ''}
@@ -418,13 +418,29 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     },
     
     getValue: function() {
-        var quickFilterValue = this.quickFilter.getValue();
+        var quickFilterValue = this.quickFilter.getValue(),
+            filters = [];
         
         if (quickFilterValue) {
-            return [{field: this.quickFilterField, operator: 'contains', value: quickFilterValue, id: 'quickFilter'}];
+            filters.push({field: this.quickFilterField, operator: 'contains', value: quickFilterValue, id: 'quickFilter'});
+            
+            // add implicit / ignored fields (important e.g. for container_id)
+            Ext.each(this.criteriaIgnores, function(criteria) {
+                if (criteria.field != this.quickFilterField) {
+                    var filterIdx = this.activeFilterPanel.filterStore.find('field', criteria.field),
+                        filter = filterIdx >= 0  ? this.activeFilterPanel.filterStore.getAt(filterIdx) : null,
+                        filterModel = filter ? this.activeFilterPanel.getFilterModel(filter) : null;
+                    
+                    if (filter) {
+                        filters.push(Ext.isFunction(filterModel.getFilterData) ? filterModel.getFilterData(filter) : this.activeFilterPanel.getFilterData(filter));
+                    }
+                }
+                
+            }, this);
+            
+            return filters;
         }
         
-        var filters = [];
         for (var id in this.filterPanels) {
             if (this.filterPanels.hasOwnProperty(id) && this.filterPanels[id].isActive) {
                 filters.push({'condition': 'AND', 'filters': this.filterPanels[id].getValue(), 'id': id, label: this.filterPanels[id].title});
