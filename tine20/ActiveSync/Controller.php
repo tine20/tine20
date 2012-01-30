@@ -339,7 +339,7 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
                 'policy_id'  => 1,
                 'useragent'  => $_userAgent,
                 'acsversion' => $_acsVersion,
-                'policykey'  => ActiveSync_Command_Provision::generatePolicyKey()
+                'policykey'  => Syncope_Command_Provision::generatePolicyKey()
             ));
 
             $device = $this->createDevice($device);
