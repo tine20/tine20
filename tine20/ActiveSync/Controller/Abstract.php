@@ -24,7 +24,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
     /**
      * information about the current device
      *
-     * @var ActiveSync_Model_Device
+     * @var Syncope_Model_IDevice
      */
     protected $_device;
     
@@ -125,7 +125,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
      *
      * @param Tinebase_DateTime $_syncTimeStamp
      */
-    public function __construct(ActiveSync_Model_Device $_device, DateTime $_syncTimeStamp)
+    public function __construct(Syncope_Model_IDevice $_device, DateTime $_syncTimeStamp)
     {
         if(empty($this->_applicationName)) {
             throw new Tinebase_Exception_UnexpectedValue('$this->_applicationName can not be empty');
