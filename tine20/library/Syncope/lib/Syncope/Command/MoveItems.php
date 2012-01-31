@@ -67,18 +67,27 @@ class Syncope_Command_MoveItems extends Syncope_Command_Wbxml
             
             try {
                 $sourceFolder      = $this->_folderBackend->getFolder($this->_device, $move['srcFldId']);
+            } catch (Syncope_Exception_NotFound $senf) {
+                $sourceFolder = null;
+            }
+            
+            try {
                 $destinationFolder = $this->_folderBackend->getFolder($this->_device, $move['dstFldId']);
-
+            } catch (Syncope_Exception_NotFound $senf) {
+                $destinationFolder = null;
+            }
+                
+            if ($sourceFolder === null) {
+                $response->appendChild($this->_outputDom->createElementNS('uri:Move', 'Status', Syncope_Command_MoveItems::STATUS_INVALID_SOURCE));
+            } else if ($destinationFolder === null) {
+                $response->appendChild($this->_outputDom->createElementNS('uri:Move', 'Status', Syncope_Command_MoveItems::STATUS_INVALID_DESTINATION));
+            } else {
                 $dataController    = Syncope_Data_Factory::factory($sourceFolder->class, $this->_device, $this->_syncTimeStamp);
                 
                 $newId             = $dataController->moveItem($move['srcFldId'], $move['srcMsgId'], $move['dstFldId']);
                 
                 $response->appendChild($this->_outputDom->createElementNS('uri:Move', 'Status', Syncope_Command_MoveItems::STATUS_SUCCESS));
                 $response->appendChild($this->_outputDom->createElementNS('uri:Move', 'DstMsgId', $newId));
-            } catch (Syncope_Exception_NotFound $senf) {
-                $response->appendChild($this->_outputDom->createElementNS('uri:Move', 'Status', Syncope_Command_MoveItems::STATUS_INVALID_SOURCE));
-            } catch (Exception $e) {
-                $response->appendChild($this->_outputDom->createElementNS('uri:Move', 'Status', Syncope_Command_MoveItems::STATUS_INVALID_DESTINATION));
             }
         }
         

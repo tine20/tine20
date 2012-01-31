@@ -100,12 +100,13 @@ class Syncope_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
             'type'        => 'FolderSync',
             'counter'     => '0',
             'lastsync'    => new DateTime(null, new DateTimeZone('utc')),
-            'pendingdata' => null
+            'pendingdata' => array('foobar' => 'test')
         ));
         
         $syncState = $this->_syncStateBackend->create($syncState);
         
         $this->assertTrue($syncState->lastsync instanceof DateTime);
+        $this->assertArrayHasKey('foobar', $syncState->pendingdata);
         
         return $syncState;
     }
@@ -123,7 +124,8 @@ class Syncope_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
     
         $this->assertEquals(1, $syncState->counter);
         $this->assertTrue($syncState->lastsync instanceof DateTime);
-    
+        $this->assertArrayHasKey('foobar', $syncState->pendingdata);
+        
         return $syncState;
     }
     
@@ -194,7 +196,7 @@ class Syncope_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
             'type'        => 'FolderSync',
             'counter'     => '0',
             'lastsync'    => new DateTime(null, new DateTimeZone('utc')),
-            'pendingdata' => null
+            'pendingdata' => array()
         ));
         $syncState->lastsync->modify('-2 min');
         $syncState = $this->_syncStateBackend->create($syncState);
@@ -204,7 +206,7 @@ class Syncope_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
             'type'        => 'FolderSync',
             'counter'     => '1',
             'lastsync'    => new DateTime(null, new DateTimeZone('utc')),
-            'pendingdata' => null
+            'pendingdata' => array()
         ));
         
         $syncState = $this->_syncStateBackend->create($syncState);
@@ -219,5 +221,19 @@ class Syncope_Backend_SyncStateTests extends PHPUnit_Framework_TestCase
         $syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', '1');
     
         $this->assertFalse($syncState);
+    }
+    
+    public function testGetExceptionNotFound()
+    {
+        $this->setExpectedException('Syncope_Exception_NotFound');
+        
+        $this->_syncStateBackend->get('invalidId');
+    }
+    
+    public function testGetSyncStateExceptionNotFound()
+    {
+        $this->setExpectedException('Syncope_Exception_NotFound');
+        
+        $this->_syncStateBackend->getSyncState('invalidId', 'invalidId');
     }
 }

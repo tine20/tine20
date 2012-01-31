@@ -145,6 +145,20 @@ class Syncope_Backend_ContentTests extends PHPUnit_Framework_TestCase
         $this->assertTrue(empty($state));
     }
     
+    public function testGetExceptionNotFound()
+    {
+        $this->setExpectedException('Syncope_Exception_NotFound');
+    
+        $this->_contentBackend->get('invalidId');
+    }
+    
+    public function testGetContentStateExceptionNotFound()
+    {
+        $this->setExpectedException('Syncope_Exception_NotFound');
+    
+        $this->_contentBackend->getContentState('invalidId', 'invalidId', 'invalidId');
+    }
+    
     public static function getTestContent(Syncope_Model_IDevice $_device, Syncope_Model_IFolder $_folder)
     {
         return new Syncope_Model_Content(array(

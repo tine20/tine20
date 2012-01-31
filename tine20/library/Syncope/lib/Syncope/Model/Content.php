@@ -1,9 +1,9 @@
 <?php
-
 /**
  * Syncope
  *
- * @package     Model
+ * @package     Syncope
+ * @subpackage  Model
  * @license     http://www.tine20.org/licenses/agpl-nonus.txt AGPL Version 1 (Non-US)
  *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL),
  *              Version 1, the distribution of the Tine 2.0 Syncope module in or to the
@@ -13,11 +13,11 @@
  */
 
 /**
- * class to handle ActiveSync Sync command
+ * model for content sent to device
  *
- * @package     Model
+ * @package     Syncope
+ * @subpackage  Model
  */
-
 class Syncope_Model_Content implements Syncope_Model_IContent
 {
     public function __construct(array $_data = array())

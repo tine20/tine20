@@ -73,6 +73,12 @@ class Syncope_Data_Contacts extends Syncope_Data_AData
                     'parentId'    => null,
                     'displayName' => 'Default Contacts Folder',
                     'type'        => Syncope_Command_FolderSync::FOLDERTYPE_CONTACT
+                ),
+            	'anotherAddressbookFolderId' => array(
+                    'folderId'    => 'anotherAddressbookFolderId',
+                    'parentId'    => null,
+                    'displayName' => 'Another Contacts Folder',
+                    'type'        => Syncope_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED
                 )
             );
         }

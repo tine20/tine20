@@ -224,40 +224,5 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
         }
         
         return $this->_outputDom;
-    }
-    
-    /**
-     * delete folderstate (aka: forget that we have sent the folder to the client)
-     *
-     * @param string $_class the class from the xml
-     * @param string $_contentId the Tine 2.0 id of the folder
-     */
-    protected function __deleteFolder($_class, $_folderId)
-    {
-        $folderStateFilter = new Syncope_Model_FolderFilter(array(
-            array(
-                    'field'     => 'device_id',
-                    'operator'  => 'equals',
-                    'value'     => $this->_device->getId()
-            ),
-            array(
-                    'field'     => 'class',
-                    'operator'  => 'equals',
-                    'value'     => $_class
-            ),
-            array(
-                    'field'     => 'folderid',
-                    'operator'  => 'equals',
-                    'value'     => $_folderId
-            )
-        ));
-        $state = $this->_folderBackend->search($folderStateFilter, NULL, true);
-        
-        if(count($state) > 0) {
-            $this->_folderBackend->delete($state[0]);
-        } else {
-            if ($this->_logger instanceof Zend_Log)
-                $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " no folderstate found for " . print_r($folderStateFilter->toArray(), true));
-        }
     }    
 }

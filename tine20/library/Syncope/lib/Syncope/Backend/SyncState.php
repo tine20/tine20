@@ -40,7 +40,7 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
      * create new sync state
      *
      * @param Syncope_Model_ISyncState $_syncState
-     * @return Syncope_Model_ISyncState
+     * @return Syncope_Model_SyncState
      */
     public function create(Syncope_Model_ISyncState $_syncState, $_keepPreviousSyncState = true)
     {
@@ -55,7 +55,7 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
         	'lastsync'    => $_syncState->lastsync->format('Y-m-d H:i:s'),
         	'pendingdata' => isset($_syncState->pendingdata) && is_array($_syncState->pendingdata) ? Zend_Json::encode($_syncState->pendingdata) : null
         ));
-
+        
         $state = $this->get($id);
         
         if ($_keepPreviousSyncState !== true) {
@@ -84,7 +84,7 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
     /**
      * @param string  $_id
      * @throws Syncope_Exception_NotFound
-     * @return Syncope_Model_ISyncState
+     * @return Syncope_Model_SyncState
      */
     public function get($_id)
     {
@@ -100,20 +100,25 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
             throw new Syncope_Exception_NotFound('id not found');
         }
         
+        $this->_convertFields($state);
+        
+        return $state;
+    }
+    
+    protected function _convertFields(Syncope_Model_SyncState $state)
+    {
         if (!empty($state->lastsync)) {
             $state->lastsync = new DateTime($state->lastsync, new DateTimeZone('utc'));
         }
-        if (!empty($state->pendingdata)) {
-            $state->pendingdata = Zend_Json::encode($state->pendingdata);
+        if ($state->pendingdata !== NULL) {
+            $state->pendingdata = Zend_Json::decode($state->pendingdata);
         }
-        
-        return $state;
     }
     
     /**
      * @param  Syncope_Model_IDevice|string  $_deviceId
      * @param  Syncope_Model_IFolder|string  $_folderId
-     * @return Syncope_Model_ISyncState
+     * @return Syncope_Model_SyncState
      */
     public function getSyncState($_deviceId, $_folderId)
     {
@@ -133,12 +138,7 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
             throw new Syncope_Exception_NotFound('id not found');
         }
         
-        if (!empty($state->lastsync)) {
-            $state->lastsync = new DateTime($state->lastsync, new DateTimeZone('utc'));
-        }
-        if (!empty($state->pendingdata)) {
-            $state->pendingdata = Zend_Json::encode($state->pendingdata);
-        }
+        $this->_convertFields($state);
         
         return $state;
     }
@@ -169,7 +169,7 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
         $this->_db->update($this->_tablePrefix . 'synckey', array(
         	'counter'     => $_syncState->counter,
         	'lastsync'    => $_syncState->lastsync->format('Y-m-d H:i:s'),
-        	'pendingdata' => isset($_syncState->pendingdata) ? $_syncState->pendingdata : null
+        	'pendingdata' => isset($_syncState->pendingdata) && is_array($_syncState->pendingdata) ? Zend_Json::encode($_syncState->pendingdata) : null
         ), array(
         	'id = ?' => $_syncState->id
         ));
@@ -182,7 +182,7 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
      *
      * @param  Syncope_Model_IDevice|string  $_deviceId
      * @param  Syncope_Model_IFolder|string  $_folderId
-     * @return Syncope_Model_ISyncState
+     * @return Syncope_Model_SyncState
      */
     public function validate($_deviceId, $_folderId, $_syncKey)
     {
@@ -203,12 +203,7 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
             return false;
         }
 
-        if (!empty($state->lastsync)) {
-            $state->lastsync = new DateTime($state->lastsync, new DateTimeZone('utc'));
-        }
-        if (!empty($state->pendingdata)) {
-            $state->pendingdata = Zend_Json::encode($state->pendingdata);
-        }
+        $this->_convertFields($state);
         
         // check if this was the latest syncKey
         $select = $this->_db->select()
