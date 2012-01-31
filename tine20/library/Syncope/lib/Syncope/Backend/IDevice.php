@@ -45,10 +45,18 @@ interface Syncope_Backend_IDevice
     public function get($_id);
     
     /**
+     * @param unknown_type $userId
+     * @param unknown_type $deviceId
+     * @param unknown_type $deviceType
+     * @return Syncope_Model_IDevice
+     */
+    public function getUserDevice($userId, $deviceId, $deviceType);
+    
+    /**
      * Upates an existing persistent record
      *
      * @param  Syncope_Model_IDevice $_device
      * @return Syncope_Model_IDevice
      */
-    public function update(Syncope_Model_IDevice $_device);
+    public function update(Syncope_Model_IDevice $_device);    
 }

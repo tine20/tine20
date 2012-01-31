@@ -49,12 +49,12 @@ class Syncope_Backend_Device implements Syncope_Backend_IDevice
         	'id'         => $id, 
         	'deviceid'   => $_device->deviceid,
         	'devicetype' => $_device->devicetype,
-        	'policy_id'  => $_device->policy_id,
-        	'policykey'  => $_device->policykey,
         	'owner_id'   => $_device->owner_id,
-        	'useragent'  => $_device->useragent,
-        	'acsversion' => $_device->acsversion,
-        	'remotewipe' => $_device->remotewipe
+        	'policy_id'  => isset($_device->policy_id)  ? $_device->policy_id  : null,
+        	'policykey'  => isset($_device->policykey)  ? $_device->policykey  : null ,
+        	'useragent'  => isset($_device->useragent)  ? $_device->useragent  : null ,
+        	'acsversion' => isset($_device->acsversion) ? $_device->acsversion : null ,
+        	'remotewipe' => isset($_device->remotewipe) ? $_device->remotewipe : null 
         ));
         
         return $this->get($id);
@@ -79,6 +79,40 @@ class Syncope_Backend_Device implements Syncope_Backend_IDevice
         }
         
         return $device;
+    }
+    
+    /**
+     * return device for this user
+     * either we found an existing device or we create a new one
+     * 
+     * @param  string  $userId
+     * @param  string  $deviceId
+     * @param  string  $deviceType
+     * @return Syncope_Model_Device
+     */
+    public function getUserDevice($ownerId, $deviceId, $deviceType)
+    {
+        $select = $this->_db->select()
+            ->from($this->_tablePrefix . 'device')
+            ->where('owner_id = ?', $ownerId)
+            ->where('deviceid = ?', $deviceId)
+            ->where('devicetype = ?', $deviceType);
+        
+        $stmt = $this->_db->query($select);
+        $device = $stmt->fetchObject('Syncope_Model_Device');
+        
+        if ($device instanceof Syncope_Model_IDevice) {
+            return $device;
+        }
+        
+        // device not found
+        $newDevice = new Syncope_Model_Device(array(
+            'owner_id'   => $ownerId,
+            'deviceid'   => $deviceId,
+            'devicetype' => $deviceType
+        ));
+        
+        return $this->create($newDevice);
     }
     
     public function delete($_id)
