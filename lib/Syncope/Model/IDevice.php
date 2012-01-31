@@ -26,6 +26,7 @@
  * @property    string   pingfolder
  * @property    string   pinglifetime
  * @property    string   remotewipe
+ * @property    string   useragent
  */
 
 interface Syncope_Model_IDevice
