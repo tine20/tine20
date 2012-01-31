@@ -173,7 +173,7 @@ class Tinebase_Core
         ) {
             $server = new Tinebase_Server_Json();
 
-            /**************************** SNOM API *****************************/
+        /**************************** SNOM API *****************************/
         } elseif(
             isset($_SERVER['HTTP_USER_AGENT']) &&
             preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $_SERVER['HTTP_USER_AGENT'])
@@ -181,38 +181,38 @@ class Tinebase_Core
             $server = new Voipmanager_Server_Snom();
 
 
-            /**************************** ASTERISK API *****************************/
+        /**************************** ASTERISK API *****************************/
         } elseif(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] == 'asterisk-libcurl-agent/1.0') {
             $server = new Voipmanager_Server_Asterisk();
 
 
-            /**************************** ActiveSync API ****************************
-             * RewriteRule ^/Microsoft-Server-ActiveSync(.*) /index.php?frontend=activesync [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
-             */
+        /**************************** ActiveSync API ****************************
+         * RewriteRule ^/Microsoft-Server-ActiveSync /index.php?frontend=activesync [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+         */
         } elseif((isset($_SERVER['REDIRECT_ACTIVESYNC']) && $_SERVER['REDIRECT_ACTIVESYNC'] == 'true') ||
-                 (isset($_REQUEST['frontend']) && $_REQUEST['frontend'] == 'activesync')) {
+                 (isset($_GET['frontend']) && $_GET['frontend'] == 'activesync')) {
             $server = new ActiveSync_Server_Http();
 
 
-            /**************************** WebDAV / CardDAV / CalDAV API **********************************
-             * RewriteCond %{REQUEST_METHOD} !^(GET|POST)$
-             * RewriteRule ^/$            /index.php [E=WEBDAV:true,E=REDIRECT_WEBDAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
-             *
-             * RewriteRule ^/addressbooks /index.php [E=WEBDAV:true,E=REDIRECT_WEBDAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
-             * RewriteRule ^/calendars    /index.php [E=WEBDAV:true,E=REDIRECT_WEBDAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
-             * RewriteRule ^/principals   /index.php [E=WEBDAV:true,E=REDIRECT_WEBDAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
-             * RewriteRule ^/webdav       /index.php [E=WEBDAV:true,E=REDIRECT_WEBDAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
-             */
-        } elseif(isset($_SERVER['REDIRECT_WEBDAV']) && $_SERVER['REDIRECT_WEBDAV'] == 'true') {
+        /**************************** WebDAV / CardDAV / CalDAV API **********************************
+         * RewriteCond %{REQUEST_METHOD} !^(GET|POST)$
+         * RewriteRule ^/$            /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+         *
+         * RewriteRule ^/addressbooks /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+         * RewriteRule ^/calendars    /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+         * RewriteRule ^/principals   /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+         * RewriteRule ^/webdav       /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+         */
+        } elseif(isset($_GET['frontend']) && $_GET['frontend'] == 'webdav') {
             $server = new Tinebase_Server_WebDAV();
 
             
-            /**************************** CLI API *****************************/
+        /**************************** CLI API *****************************/
         } elseif (php_sapi_name() == 'cli') {
             $server = new Tinebase_Server_Cli();
 
 
-            /**************************** HTTP API ****************************/
+        /**************************** HTTP API ****************************/
         } else {
 
             /**************************** OpenID ****************************
