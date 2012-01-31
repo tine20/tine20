@@ -127,7 +127,7 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
                 this[contentType + 'ActionToolbar'] = new Ext.Panel({html: 'ERROR'});
             }
         }
-        
+
         return this[contentType + 'ActionToolbar'];
     },
     

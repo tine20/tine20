@@ -260,6 +260,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.i18nContainersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
         this.i18nEmptyText = this.i18nEmptyText || String.format(Tine.Tinebase.translation._("No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, this.i18nContainersName);
         
+        this.i18nEditActionText = this.i18nEditActionText ? this.i18nEditActionText : [String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 1), this.i18nRecordName), String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 2), this.i18nRecordsName)];
+
         this.editDialogConfig = this.editDialogConfig || {};
         
         this.editBuffer = [];
@@ -276,7 +278,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             evalGrants: this.evalGrants
         });
         this.initActions();
-        
+
         this.initLayout();
         
         // for some reason IE looses split height when outer layout is layouted
@@ -288,7 +290,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
             }, this);
         }
-        
+
         Tine.widgets.grid.GridPanel.superclass.initComponent.call(this);
     },
     
@@ -354,6 +356,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @private
      */
     initActions: function() {
+        
         this.action_editInNewWindow = new Ext.Action({
             requiredGrant: 'readGrant',
             text: this.i18nEditActionText ? this.i18nEditActionText[0] : String.format(_('Edit {0}'), this.i18nRecordName),
@@ -769,6 +772,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.selectionModel.on('selectionchange', function(sm) {
             //Tine.widgets.actionUpdater(sm, this.actions, this.recordClass.getMeta('containerProperty'), !this.evalGrants);
             this.actionUpdater.updateActions(sm);
+
             this.ctxNode = this.selectionModel.getSelections();
             if (this.updateOnSelectionChange && this.detailsPanel) {
                 this.detailsPanel.onDetailsUpdate(sm);
@@ -897,56 +901,62 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @return {Ext.Toolbar}
      */
     getActionToolbar: function() {
-        if (! this.actionToolbar) {
-            var additionalItems = this.getActionToolbarItems();
-            
-            this.actionToolbar = new Ext.Toolbar({
-                items: [{
-                    xtype: 'buttongroup',
-//                    columns: 3 + (Ext.isArray(additionalItems) ? additionalItems.length : 0),
-                    plugins: [{
-                        ptype: 'ux.itemregistry',
-                        key:   this.app.appName + '-GridPanel-ActionToolbar-leftbtngrp'
-                    }],
-                    items: [
-                        Ext.apply(new Ext.SplitButton(this.action_addInNewWindow), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top',
-                            arrowAlign:'right',
-                            menu: new Ext.menu.Menu({
-                                items: [],
-                                plugins: [{
-                                    ptype: 'ux.itemregistry',
-                                    key:   'Tine.widgets.grid.GridPanel.addButton'
-                                }]
+        try {
+            if (! this.actionToolbar) {
+                var additionalItems = this.getActionToolbarItems();
+                
+                this.actionToolbar = new Ext.Toolbar({
+                    items: [{
+                        xtype: 'buttongroup',
+    //                    columns: 3 + (Ext.isArray(additionalItems) ? additionalItems.length : 0),
+                        plugins: [{
+                            ptype: 'ux.itemregistry',
+                            key:   this.app.appName + '-GridPanel-ActionToolbar-leftbtngrp'
+                        }],
+                        items: [
+                            Ext.apply(new Ext.SplitButton(this.action_addInNewWindow), {
+                                scale: 'medium',
+                                rowspan: 2,
+                                iconAlign: 'top',
+                                arrowAlign:'right',
+                                menu: new Ext.menu.Menu({
+                                    items: [],
+                                    plugins: [{
+                                        ptype: 'ux.itemregistry',
+                                        key:   'Tine.widgets.grid.GridPanel.addButton'
+                                    }]
+                                })
+                            }),
+                            Ext.apply(new Ext.Button(this.action_editInNewWindow), {
+                                scale: 'medium',
+                                rowspan: 2,
+                                iconAlign: 'top'
+                            }),
+                            Ext.apply(new Ext.Button(this.action_deleteRecord), {
+                                scale: 'medium',
+                                rowspan: 2,
+                                iconAlign: 'top'
+                            }),
+                            Ext.apply(new Ext.Button(this.actions_print), {
+                                scale: 'medium',
+                                rowspan: 2,
+                                iconAlign: 'top'
                             })
-                        }),
-                        Ext.apply(new Ext.Button(this.action_editInNewWindow), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top'
-                        }),
-                        Ext.apply(new Ext.Button(this.action_deleteRecord), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top'
-                        }),
-                        Ext.apply(new Ext.Button(this.actions_print), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top'
-                        })
-                    ].concat(Ext.isArray(additionalItems) ? additionalItems : [])
-                }].concat(Ext.isArray(additionalItems) ? [] : [additionalItems])
-            });
-            
-            if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
-                this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
+                        ].concat(Ext.isArray(additionalItems) ? additionalItems : [])
+                    }].concat(Ext.isArray(additionalItems) ? [] : [additionalItems])
+                });
+                
+                if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
+                    this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
+                } 
             }
+
+            return this.actionToolbar;
+
+        } catch (e) {
+            Tine.log.err('Tine.widgets.grid.GridPanel::getActionToolbar');
+            Tine.log.err(e.stack ? e.stack : e);
         }
-        
-        return this.actionToolbar;
     },
     
     /**

@@ -80,5 +80,3 @@ Tine.Sales.productBackend = new Tine.Tinebase.data.RecordProxy({
     modelName: 'Product',
     recordClass: Tine.Sales.Model.Product
 });
-
-

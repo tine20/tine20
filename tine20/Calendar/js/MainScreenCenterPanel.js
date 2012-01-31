@@ -81,6 +81,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             this.i18nContainerName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1);
             this.i18nContainersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
             
+            this.i18nEditActionText = String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 1), this.i18nRecordName);
+            
             this.loadMaskText = this.app.i18n._hidden(this.loadMaskText);
             
             var state = Ext.state.Manager.get(this.stateId, {});
