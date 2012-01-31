@@ -942,29 +942,36 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             ), TRUE)
         ));
         $persistentEvent = $this->_controller->create($event);
-
-        // assert alarm time is just before next occurence
-        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($persistentEvent, $exceptions, new Tinebase_DateTime());
-        
-        $nextAlarmEventStart = new Tinebase_DateTime(substr($persistentEvent->alarms->getFirstRecord()->getOption('recurid'), -19));
-        
-        $this->assertTrue($nextOccurance->dtstart->equals($nextAlarmEventStart), 'initial alarm is not at expected time');
+        $this->_checkAlarmOfRecurEvent($persistentEvent, 'initial');
         
         // move whole series
         $persistentEvent->dtstart->addHour(5);
         $persistentEvent->dtend->addHour(5);
         $updatedEvent = $this->_controller->update($persistentEvent);
-
-        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        // need to substract 30 minutes from now() because the alarm is set to 30 minutes before
-        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($updatedEvent, $exceptions, Tinebase_DateTime::now()->subMinute(30));
-        
-        $nextAlarmEventStart = new Tinebase_DateTime(substr($updatedEvent->alarms->getFirstRecord()->getOption('recurid'), -19));
-        
-        $this->assertEquals($nextAlarmEventStart->toString(), $nextOccurance->dtstart->toString(), 'updated alarm is not at expected time');
+        $this->_checkAlarmOfRecurEvent($updatedEvent, 'updated');
     }
     
+    /**
+     * check alarm of recurring event
+     * 
+     * @param Calendar_Model_Event $_event
+     * @param string $_text
+     */
+    protected function _checkAlarmOfRecurEvent($_event, $_text)
+    {
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        // need add 30 minutes from now() because the alarm is set to 30 minutes before
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($_event, $exceptions, Tinebase_DateTime::now()->addMinute(30));
+        $nextAlarmEventStart = new Tinebase_DateTime(substr($_event->alarms->getFirstRecord()->getOption('recurid'), -19));
+        
+        // assert alarm time is just before next occurence
+        $this->assertEquals($nextAlarmEventStart->toString(), $nextOccurance->dtstart->toString(), $_text . ' alarm is not at expected time');
+    }
+
+    /**
+     * testSetAlarmOfRecurSeriesException
+     */
     public function testSetAlarmOfRecurSeriesException()
     {
         $event = $this->_getEvent();
