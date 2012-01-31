@@ -58,10 +58,8 @@ abstract class Syncope_Command_ATestCase extends PHPUnit_Framework_TestCase
         $this->_db->beginTransaction();
 
         #$writer = new Zend_Log_Writer_Null();
-        
-        $filter = new Zend_Log_Filter_Priority($this->_logPriority);
         $writer = new Zend_Log_Writer_Stream('php://output');
-        $writer->addFilter($filter);
+        $writer->addFilter(new Zend_Log_Filter_Priority($this->_logPriority));
         
         $logger = new Zend_Log($writer);
         
