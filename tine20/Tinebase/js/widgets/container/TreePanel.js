@@ -562,11 +562,14 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * clears selection silently
      */
     onFilterChange: function() {
+        /* 2012-01-30 cweiss: i have no idea what this was for.
+         * if its needed please document here!
         var sm = this.getSelectionModel();
         
         sm.suspendEvents();
         sm.clearSelections();
         sm.resumeEvents();
+        */
     },
     
     /**

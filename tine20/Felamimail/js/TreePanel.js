@@ -280,17 +280,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         }
     },
     
-    /**
-     * called on filtertrigger of filter toolbar
-     * clears selection silently
-     */
-    onFilterChange: function() {
-        var sm = this.getSelectionModel();
-        
-        sm.suspendEvents();
-        sm.clearSelections();
-        sm.resumeEvents();
-    },    
+    onFilterChange: Tine.widgets.container.TreePanel.prototype.onFilterChange,
     
    /**
      * returns a filter plugin to be used in a grid
@@ -302,12 +292,21 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 treePanel: this,
                 field: 'path',
                 nodeAttributeField: 'path',
-                singleNodeOperator: 'in',
-                selectNodes: false
+                singleNodeOperator: 'in'
             });
         }
         
         return this.filterPlugin;
+    },
+    
+    /**
+     * convert containerPath to treePath
+     * 
+     * @param {String}  containerPath
+     * @return {String} treePath
+     */
+    getTreePath: function(path) {
+        return '/root' + path;
     },
     
     /**

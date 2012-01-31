@@ -117,6 +117,11 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
     selectValue: function(value) {
         var values = Ext.isArray(value) ? value : [value];
         Ext.each(values, function(value) {
+            // value might already be a path
+            if (Ext.isString(value) && value.charAt(0) == '/') {
+                value = {path: value};
+            }
+            
             var treePath = this.treePanel.getTreePath(value.path);
             this.selectPath.call(this.treePanel, treePath, null, function() {
                 // mark this expansion as done and check if all are done
@@ -129,7 +134,7 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
                 if (allValuesExpanded) {
                     this.treePanel.getSelectionModel().resumeEvents();
                 }
-            }.createDelegate(this), true)
+            }.createDelegate(this), true);
         }, this);
     },
     
