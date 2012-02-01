@@ -28,7 +28,8 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
         try {
             Tinebase_Core::initFramework();
         } catch (Zend_Session_Exception $exception) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' invalid session. Delete session cookie.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' invalid session. Delete session cookie.');
             Zend_Session::expireSessionCookie();
             
             header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
@@ -37,11 +38,11 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
             return;
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is CardDav request.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is CalDav, CardDAV or WebDAV request.');
         
         if(empty($_SERVER['PHP_AUTH_USER']) && empty($_SERVER['REMOTE_USER']) && empty($_SERVER['REDIRECT_REMOTE_USER'])) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' ' . print_r($_SERVER, true));
-        	header('WWW-Authenticate: Basic realm="WebDav for Tine 2.0"');
+            header('WWW-Authenticate: Basic realm="WebDav for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             
             return;

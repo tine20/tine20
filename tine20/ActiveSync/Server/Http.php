@@ -29,15 +29,16 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         try {
             Tinebase_Core::initFramework();
         } catch (Zend_Session_Exception $exception) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' invalid session. Delete session cookie.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' invalid session. Delete session cookie.');
             Zend_Session::expireSessionCookie();
             header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             return;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is ActiveSync request.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is ActiveSync request.');
         
         // when used with (f)cgi no PHP_AUTH* variables are available without defining a special rewrite rule
         if(!isset($_SERVER['PHP_AUTH_USER'])) {
@@ -79,13 +80,13 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         
         if($activeSync->status != 'enabled') {
             header('HTTP/1.1 403 ActiveSync not enabled for account ' . $_SERVER['PHP_AUTH_USER']);
-            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' ActiveSync is not enabled');
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ActiveSync is not enabled');
             return;
         }
         
         if(Tinebase_Core::getUser()->hasRight($activeSync, Tinebase_Acl_Rights::RUN) !== true) {
             header('HTTP/1.1 403 ActiveSync not enabled for account ' . $_SERVER['PHP_AUTH_USER']);
-            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' ActiveSync is not enabled for account');
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ActiveSync is not enabled for account');
             return;
         }
         
