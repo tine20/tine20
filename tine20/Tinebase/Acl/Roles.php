@@ -709,7 +709,7 @@ class Tinebase_Acl_Roles
      */
     public function createInitialRoles()
     {
-        $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
+        $groupsBackend = Tinebase_Group::getInstance();
         
         $adminGroup = $groupsBackend->getDefaultAdminGroup();
         $userGroup  = $groupsBackend->getDefaultGroup();

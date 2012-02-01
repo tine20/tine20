@@ -161,7 +161,17 @@ abstract class Tinebase_Group_Abstract
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $configKey . ' not found. Check your user backend configuration.');
             $defaultGroupName = $_name;
         }
-        return $this->getGroupByName($defaultGroupName);        
+        
+        try {
+            $result = $this->getGroupByName($defaultGroupName);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // create group on the fly
+            $result = $this->addGroup(new Tinebase_Model_Group(array(
+                'name'    => $defaultGroupName,
+            )));
+        }
+        
+        return $result;
     }
     
     /**

@@ -35,11 +35,13 @@ class Setup_Initialize
      */
     public static function initialize(Tinebase_Model_Application $_application, $_options = null)
     {
-    	$applicationName = $_application->name;
-    	$classname = "{$applicationName}_Setup_Initialize"; 	
-    	$instance = new $classname;
-    	
-    	$instance->_initialize($_application, $_options);
+        $applicationName = $_application->name;
+        $classname = "{$applicationName}_Setup_Initialize";
+        $instance = new $classname;
+        
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Initializing application: ' . $applicationName);
+        
+        $instance->_initialize($_application, $_options);
     }
     
     /**
@@ -51,10 +53,10 @@ class Setup_Initialize
      */
     public static function initializeApplicationRights(Tinebase_Model_Application $_application, $_options = null)
     {
-    	$applicationName = $_application->name;
-    	$classname = "{$applicationName}_Setup_Initialize"; 	
-    	$instance = new $classname;
-    	$instance->_createInitialRights($_application);
+        $applicationName = $_application->name;
+        $classname = "{$applicationName}_Setup_Initialize";     
+        $instance = new $classname;
+        $instance->_createInitialRights($_application);
     }
     
     /**
@@ -71,7 +73,7 @@ class Setup_Initialize
         $reflectionClass = new ReflectionClass($this);
         $methods = $reflectionClass->getMethods();
         foreach ($methods as $method) {
-        	$methodName = $method->name;
+            $methodName = $method->name;
             if (preg_match('/^_initialize.+/', $methodName)) {
                 $this->$methodName($_application, $_options);
             }
@@ -89,8 +91,8 @@ class Setup_Initialize
     protected function _createInitialRights(Tinebase_Model_Application $_application)
     {   
         $roleRights = array(
-        	'user role'     => $this->_userRoleRights,
-        	'admin role'	=> Tinebase_Application::getInstance()->getAllRights($_application->getId()),
+            'user role'     => $this->_userRoleRights,
+            'admin role'    => Tinebase_Application::getInstance()->getAllRights($_application->getId()),
         );
         
         foreach ($roleRights as $roleName => $rights) {
@@ -107,7 +109,7 @@ class Setup_Initialize
                 } catch(Exception $e) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
                         . ' Cannot add right: ' . $right . ' for application: ' . $_application->name
-            			. ' - ' . $roleName . ' - ' . print_r($e->getMessage(), true)
+                        . ' - ' . $roleName . ' - ' . print_r($e->getMessage(), true)
                     );
                 }
             }

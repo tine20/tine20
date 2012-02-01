@@ -371,7 +371,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             // add modlog info
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'create');
     
-            $contact = $contactsBackend->create($contact);        
+            $contact = $contactsBackend->create($contact);
         }
         
         return $contact;

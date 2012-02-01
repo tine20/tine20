@@ -45,11 +45,6 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         Tinebase_Core::set(Tinebase_Core::USER, $initialUser);
         
         parent::_initialize($_application, $_options);
-        
-        // those should be called automatically in parent::_initialize
-//         $this->_initializeUserContacts();
-//         $this->_initializeGroupLists();
-//         $this->_initializeConfig();
     }
     
     /**
@@ -230,8 +225,12 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      */
     protected function _initializeConfig()
     {
-        Admin_Controller::getInstance()->saveConfigSettings(array(
-            Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK => $this->_getInternalAddressbook()->getId()
-        ));
+        Tinebase_Config::getInstance()->setConfigForApplication(
+            Tinebase_Config::APPDEFAULTS,
+            Zend_Json::encode(array(
+                Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK => $this->_getInternalAddressbook()->getId()
+            )),
+            'Admin'
+        );
     }
 }

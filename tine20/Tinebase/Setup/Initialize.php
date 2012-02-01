@@ -31,7 +31,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         $this->_setConfigOptions($_options);
         
         // import groups(ldap)/create initial groups(sql)
-        if(Tinebase_User::getInstance() instanceof Tinebase_User_Interface_SyncAble) {
+        if (Tinebase_User::getInstance() instanceof Tinebase_User_Interface_SyncAble) {
             Tinebase_Group::syncGroups();
         } else {
             Tinebase_Group::createInitialGroups();

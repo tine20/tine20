@@ -1134,6 +1134,8 @@ class Setup_Controller
      */
     public function installApplications($_applications, $_options = null)
     {
+        $this->_clearCache();
+        
         // check requirements for initial install / add required apps to list
         if (! $this->isInstalled('Tinebase')) {
     
@@ -1272,7 +1274,8 @@ class Setup_Controller
             
             Setup_Initialize::initialize($application, $_options);
         } catch (Exception $e) {
-            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error at installing: ' . $_xml->name . ' Table: ' . $currentTable  . 'Exception: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString());
+            $table = (isset($currentTable)) ? ' Table: ' . $currentTable : '';
+            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error at installing: ' . $_xml->name . $table . ' Exception: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString());
             throw $e;
         }
     }
@@ -1523,6 +1526,7 @@ class Setup_Controller
         $result = TRUE;
         try {
             $app = Tinebase_Application::getInstance()->getApplicationByName($appname);
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Appname ' . $appname . ' already installed.');
         } catch (Exception $e) {
             $result = FALSE;
         }
@@ -1544,5 +1548,8 @@ class Setup_Controller
         
         // clear cache
         $cache = Setup_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
+        
+        // deactivate cache again
+        Tinebase_Core::setupCache(FALSE);
     }
 }

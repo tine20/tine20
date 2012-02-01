@@ -107,6 +107,8 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     /**
      * (non-PHPdoc)
      * @see Tinebase/Record/Tinebase_Record_Abstract#setFromArray($_data)
+     * 
+     * @todo need to discuss if this is the right place to do this. perhaps the client should send the fullname (and displayname), too.
      */
     public function setFromArray(array $_data)
     {
@@ -116,9 +118,12 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
             if (!empty($_data['accountFirstName'])) {
                 $_data['accountDisplayName'] .= ', ' . $_data['accountFirstName'];
             }
-            $_data['accountFullName'] = $_data['accountLastName'];
-            if (!empty($_data['accountFirstName'])) {
-                $_data['accountFullName'] = $_data['accountFirstName'] . ' ' . $_data['accountLastName'];
+            
+            if (! array_key_exists('accountFullName', $_data)) {
+                $_data['accountFullName'] = $_data['accountLastName'];
+                if (!empty($_data['accountFirstName'])) {
+                    $_data['accountFullName'] = $_data['accountFirstName'] . ' ' . $_data['accountLastName'];
+                }
             }
         }
         

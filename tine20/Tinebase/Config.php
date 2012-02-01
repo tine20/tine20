@@ -517,7 +517,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     /**
      * set config for application
      *
-     * @deprecated use set / __set
+     * @deprecated use set / __set (if $_applicationName !== 'Tinebase' this needs a $_applicationName_Config class)
      * @param string $_name
      * @param string $_value
      * @param string $_applicationName [optional]

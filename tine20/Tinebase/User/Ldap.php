@@ -383,7 +383,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         $ldapEntry = $this->_getLdapEntry('accountId', $_account);
 
         $ldapData = $this->_user2ldap($_account, $ldapEntry);
-
+        
         foreach ($this->_ldapPlugins as $plugin) {
             $plugin->inspectUpdateUser($_account, $ldapData, $ldapEntry);
         }

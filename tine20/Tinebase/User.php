@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -17,12 +17,20 @@
  */
 class Tinebase_User
 {
+    /**
+     * backend constants
+     * 
+     * @var string
+     */
     const SQL = 'Sql';
-    
     const LDAP = 'Ldap';
-    
     const TYPO3 = 'Typo3';
     
+    /**
+     * user status constants
+     * 
+     * @var string
+     */
     const STATUS_BLOCKED  = 'blocked';
     const STATUS_DISABLED = 'disabled';
     const STATUS_ENABLED  = 'enabled';
@@ -94,7 +102,7 @@ class Tinebase_User
             'username' => '',
             'password' => '',
             'bindRequiresDn' => true,
-            'useRfc2307bis' => true,
+            'useRfc2307bis' => false,
             'userDn' => '',
             'userFilter' => 'objectclass=posixaccount',
             'userSearchScope' => Zend_Ldap::SEARCH_SCOPE_SUB,
@@ -122,7 +130,7 @@ class Tinebase_User
     public static function getInstance() 
     {
         $backendType = self::getConfiguredBackend();
-		
+        
         if (self::$_instance === NULL) {
             $backendType = self::getConfiguredBackend();
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' accounts backend: ' . $backendType);
@@ -134,15 +142,18 @@ class Tinebase_User
     }
         
     /**
-     * return an instance of the current rs backend
+     * return an instance of the current user backend
      *
-     * @param   string $_backendType name of the rs backend
+     * @param   string $backendType name of the user backend
      * @return  Tinebase_User_Abstract
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public static function factory($_backendType) 
+    public static function factory($backendType) 
     {
         $options = self::getBackendConfiguration();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
+            . print_r($options, TRUE));
         
         $options['plugins'] = array();
         
@@ -154,13 +165,13 @@ class Tinebase_User
             $options['plugins'][] = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
         }
         
-        switch ($_backendType) {
+        switch ($backendType) {
             case self::LDAP:
                 
-		        // manage samba sam?
-		        if (isset(Tinebase_Core::getConfig()->samba) && Tinebase_Core::getConfig()->samba->get('manageSAM', FALSE) == true) {
-		            $options['plugins'][] = new Tinebase_User_Plugin_Samba(Tinebase_Core::getConfig()->samba->toArray());
-		        }
+                // manage samba sam?
+                if (isset(Tinebase_Core::getConfig()->samba) && Tinebase_Core::getConfig()->samba->get('manageSAM', FALSE) == true) {
+                    $options['plugins'][] = new Tinebase_User_Plugin_Samba(Tinebase_Core::getConfig()->samba->toArray());
+                }
                 
                 $result  = new Tinebase_User_Ldap($options);
                 
@@ -177,8 +188,11 @@ class Tinebase_User
                 break;
                 
             default:
-                throw new Tinebase_Exception_InvalidArgument("User backend type $_backendType not implemented.");
+                throw new Tinebase_Exception_InvalidArgument("User backend type $backendType not implemented.");
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Created user backend of type ' . $backendType);
         
         return $result;
     }
@@ -192,7 +206,7 @@ class Tinebase_User
     {
         if (!isset(self::$_backendType)) {
             if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-                self::setBackendType(Tinebase_Config::getInstance()->getConfig(Tinebase_Config::USERBACKENDTYPE, null, self::SQL)->value);
+                self::setBackendType(Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKENDTYPE, self::SQL));
             } else {
                 self::setBackendType(self::SQL); 
             }
@@ -477,7 +491,7 @@ class Tinebase_User
      *  'adminFirstName'    => 'Tine 2.0',
      *  'adminLastName'     => 'Admin Account',
      *  'adminEmailAddress' => 'admin@tine20domain.org',
-     *  'expires'			=> Tinebase_DateTime object
+     *  'expires'            => Tinebase_DateTime object
      * );
      * </code>
      *

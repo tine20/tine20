@@ -335,6 +335,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $account = new Tinebase_Model_FullUser();
         
+        // always re-evaluate fullname
+        unset($recordData['accountFullName']);
+        
         try {
             $account->setFromArray($recordData);
             if (isset($recordData['sambaSAM'])) {

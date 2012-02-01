@@ -315,12 +315,11 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($result['success']);
         
         // try to get deleted group
-        $this->setExpectedException('Tinebase_Exception_Record_NotDefined');
+        $this->setExpectedException('Tinebase_Exception_NotFound');
         
         // get group by name
-        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']->name); 
-            
-    }    
+        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']->name);
+    }
     
     /**
      * try to get all access log entries

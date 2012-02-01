@@ -519,7 +519,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
 	                    Ext.applyIf({
 	                        name: 'accounts_Ldap_useRfc2307bis',
 	                        fieldLabel: this.app.i18n._('Use Rfc 2307 bis'),
-	                        store: [['1', this.app.i18n._('Yes')], ['0', this.app.i18n._('No')]],
+	                        store: [['0', this.app.i18n._('No')], ['1', this.app.i18n._('Yes')]],
 	                        value: '0'
 	                    }, commonComboConfig), 
 	                    {

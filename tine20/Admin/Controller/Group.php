@@ -468,7 +468,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         }
         
         foreach ($_userIds as $userId) {
-            $fullUser = Admin_Controller_User::getInstance()->get($userId);
+            $fullUser = Tinebase_User::getInstance()->getUserById($userId, 'Tinebase_Model_FullUser');
             if (!empty($fullUser->contact_id)) {
                 $contactIds[] = $fullUser->contact_id;
             }

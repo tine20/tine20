@@ -366,6 +366,10 @@ class Setup_Frontend_Cli
      */
     protected function _createAdminUser(Zend_Console_Getopt $_opts)
     {
+        if (! Setup_Controller::getInstance()->isInstalled('Tinebase')) {
+            die('Install Tinebase first.');
+        }
+        
         echo "Please enter a username. If the user already exists, he is reactivated and you can reset the password.\n";
         $username = Tinebase_Server_Cli::promptInput('Username');
         $tomorrow = Tinebase_DateTime::now()->addDay(1);
@@ -384,7 +388,20 @@ class Setup_Frontend_Cli
                 Tinebase_User::getInstance()->setPassword($user, $password);
                 echo "User password has been reset.\n";
             }
+            
+            // check admin group membership
+            $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+            $memberships = Tinebase_Group::getInstance()->getGroupMemberships($user);
+            if (! in_array($adminGroup->getId(), $memberships)) {
+                Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);
+                echo "Added user to default admin group\n";
+            }
+            
         } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
+                die('It is not possible to create a new user with LDAP user backend here.');
+            }
+            
             // create new admin user that expires tomorrow
             $password = $this->_promptPassword();
             Tinebase_User::createInitialAccounts(array(
