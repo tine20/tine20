@@ -121,6 +121,11 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     ctxNode: null,
     
     /**
+     * If WestPanel applies an existing state, this becomes true
+     * @type boolean
+     */
+    stateApplied: null,
+    /**
      * init this treePanel
      */
     initComponent: function() {
@@ -134,6 +139,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         if (this.allowMultiSelection) {
             this.selModel = new Ext.tree.MultiSelectionModel({});
         }
+        
+        this.on('stateapplied', function() {this.stateApplied = true;}, this);
         
         var containerName = this.recordClass ? this.recordClass.getMeta('containerName') : 'container';
         var containersName = this.recordClass ? this.recordClass.getMeta('containersName') : 'containers';
@@ -355,9 +362,23 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     afterRender: function() {
         Tine.widgets.container.TreePanel.superclass.afterRender.call(this);
-        
-        if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
-            this.filterPlugin.getGridPanel().filterToolbar.on('change', this.onFilterChange, this);
+
+        try {
+            
+            if((this.stateApplied !== true) && (this.getDefaultContainerPath() != '/')) {
+                var root = '/' + this.getRootNode().id;
+                var path = this.getDefaultContainerPath();
+                this.expand();
+                this.expandPath(root + path);
+                Tine.log.debug('Expanding defaultPath: '. root+path);
+                this.stateApplied = true;
+            }
+            
+            if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
+                this.filterPlugin.getGridPanel().filterToolbar.on('change', this.onFilterChange, this);
+            }
+        } catch (e) {
+            Tine.log.error(e.stack ? e.stack : e);   
         }
     },
     

@@ -10,7 +10,7 @@
  */
  
  
-.SalesIconCls {
+.SalesIconCls, .x-tree-node-icon.SalesProduct, .x-tree-node-icon.SalesContract {
     background-image:url(../../images/oxygen/16x16/apps/kcalc.png) !important;
 }
 .x-btn-medium .SalesIconCls {

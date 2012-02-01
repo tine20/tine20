@@ -88,6 +88,8 @@ Ext.extend(Tine.Crm.FilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
     filter: [{field: 'model', operator: 'equals', value: 'Crm_Model_LeadFilter'}]
 });
 
+
+
 /**
  * @namespace Tine.Crm
  * @class Tine.Crm.leadBackend

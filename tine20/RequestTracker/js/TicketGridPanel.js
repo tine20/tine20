@@ -7,9 +7,9 @@
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
- Ext.ns('Tine.RequestTracker');
+Ext.ns('Tine.RequestTracker');
  
- Tine.RequestTracker.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
+Tine.RequestTracker.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     // model generics
     recordClass: Tine.RequestTracker.Model.Ticket,
     recordProxy: Tine.RequestTracker.ticketBackend,

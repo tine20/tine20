@@ -207,7 +207,6 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         if (! this.app && this.store) {
             this.app = Tine.Tinebase.appMgr.get(this.store.proxy.recordClass.getMeta('appName'));
         }
-        
         // automatically enable saving
         if (! this.neverAllowSaving && this.app && this.app.getMainScreen() && typeof this.app.getMainScreen().getWestPanel == 'function' && this.app.getMainScreen().getWestPanel().hasFavoritesPanel) {
             this.allowSaving = true;
@@ -341,7 +340,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         if (! filterModel) {
             Tine.log.warn('Tine.widgets.grid.FilterToolbar::renderFilterRow no filterModel found');
-            Tine.log.warn(filter)
+            Tine.log.warn(filter);
             this.filterStore.remove(filter);
             return;
         }
@@ -667,7 +666,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     getFilterModel: function(field) {
         var fieldName = Ext.isFunction(field.get) ? field.get('field') : field;
-        
+  
         if (! fieldName && field.data && field.data.condition) {
             return this.ownRecordFilterModel;
         }

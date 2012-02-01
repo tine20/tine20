@@ -35,7 +35,10 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      *      (defaults to null -> root node)
      */
     filterMountId : null,
-
+    /**
+     * @cfg {String} contentType mainscreen.activeContentType  
+     */
+    contentType: null,
     /**
      * @private
      */
@@ -58,7 +61,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      */
     initComponent : function() {
         
-        this.stateId = 'widgets-persistentfilter-pickerpanel_' + this.app.name;
+        this.stateId = 'widgets-persistentfilter-pickerpanel_' + this.app.name + '_' + this.contentType;
 
         this.store = this.store || Tine.widgets.persistentfilter.store.getPersistentFilterStore(this.stateId);
 
@@ -68,7 +71,8 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
 
         this.loader = new Tine.widgets.persistentfilter.PickerTreePanelLoader({
                     app : this.app,
-                    store : this.store
+                    store : this.store,
+                    contentType: this.contentType
                 });
 
         new Ext.tree.TreeSorter(this, {
@@ -373,17 +377,22 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * save persistent filter
      */
     saveFilter : function() {
-        var ftb = this.getFilterToolbar();
-        
-        var record = this.getNewEmptyRecord();
-        record.set('filters', ftb.getAllFilterData());
-        
-        // recheck that current ftb is saveable
-        if (!ftb.isSaveAllowed()) {
-            Ext.Msg.alert(_('Could not save Favorite'), _('Your current view does not support favorites'));
-            return;
+        try {
+            var ftb = this.getFilterToolbar();
+            
+            var record = this.getNewEmptyRecord();
+            
+            record.set('filters', ftb.getAllFilterData());
+            
+            // recheck that current ftb is saveable
+            if (!ftb.isSaveAllowed()) {
+                Ext.Msg.alert(_('Could not save Favorite'), _('Your current view does not support favorites'));
+                return;
+            }
+            this.getEditWindow(record);
+        } catch (e) {
+            Tine.log.err(e.stack ? e.stack : e);
         }
-        this.getEditWindow(record);
     },
     
     getEditWindow: function(record) {
@@ -466,23 +475,28 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     
     
     getNewEmptyRecord: function() {
-                var model = this.filterModel;
-                if (!model) {
-                    var recordClass = this.recordClass || this.treePanel
-                        ? this.treePanel.recordClass
-                        : ftb.store.reader.recordType;
-                    model = recordClass.getMeta('appName') + '_Model_' + recordClass.getMeta('modelName') + 'Filter';
-                }
+        try {
+            var model = this.filterModel;
+            if (!model) {
+                var recordClass = this.recordClass || this.treePanel
+                    ? this.treePanel.recordClass
+                    : ftb.store.reader.recordType;
+                model = recordClass.getMeta('appName') + '_Model_' + recordClass.getMeta('modelName') + 'Filter';
+            }
 
-                var record = new Tine.widgets.persistentfilter.model.PersistentFilter({
-                    application_id : this.app.id,
-                    account_id : Tine.Tinebase.registry.get('currentAccount').accountId,
-                    model : model,
-                    filters : null,
-                    name : null,
-                    description : null
-                });
-                return record;
+            var record = new Tine.widgets.persistentfilter.model.PersistentFilter({
+                application_id : this.app.id,
+                account_id : Tine.Tinebase.registry.get('currentAccount').accountId,
+                model : model,
+                filters : null,
+                name : null,
+                description : null
+            });
+            
+            return record;
+        } catch (e) {
+            Tine.log.err(e.stack ? e.stack : e);
+        }
     }
 
 });
@@ -708,9 +722,23 @@ Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(
              */
             requestData : function(node, callback, scope) {
                 if (this.fireEvent("beforeload", this, node, callback) !== false) {
-                    var recordCollection = this.store.query('application_id',
-                            this.app.id);
 
+                    var recordCollection = this.store.queryBy(function(record, id) {
+                        if(record.get('application_id') == this.app.id) {
+                            if(this.contentType) {
+                                var modelName = this.app.appName + '_Model_' + this.contentType + 'Filter'; 
+                                if(record.get('model') == modelName) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            } else {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }, this);
+                    
                     node.beginUpdate();
                     recordCollection.each(function(record) {
                                 var n = this.createNode(record.copy().data);

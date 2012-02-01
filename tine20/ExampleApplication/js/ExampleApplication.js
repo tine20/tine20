@@ -38,12 +38,12 @@ Tine.ExampleApplication.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     
 /**
  * @namespace   Tine.ExampleApplication
- * @class       Tine.ExampleApplication.TreePanel
+ * @class       Tine.ExampleApplication.ExampleRecordTreePanel
  * @extends     Tine.widgets.container.TreePanel
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-Tine.ExampleApplication.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
+Tine.ExampleApplication.ExampleRecordTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     id: 'ExampleApplication_Tree',
     filterMode: 'filterToolbar',
     recordClass: Tine.ExampleApplication.Model.ExampleRecord
@@ -52,15 +52,15 @@ Tine.ExampleApplication.TreePanel = Ext.extend(Tine.widgets.container.TreePanel,
 /**
  * favorites panel
  * 
- * @class       Tine.ExampleApplication.FilterPanel
+ * @class       Tine.ExampleApplication.ExampleRecordFilterPanel
  * @extends     Tine.widgets.persistentfilter.PickerPanel
  *  
  * @param {Object} config
  */
-Tine.ExampleApplication.FilterPanel = function(config) {
+Tine.ExampleApplication.ExampleRecordFilterPanel = function(config) {
     Ext.apply(this, config);
-    Tine.ExampleApplication.FilterPanel.superclass.constructor.call(this);
+    Tine.ExampleApplication.ExampleRecordFilterPanel.superclass.constructor.call(this);
 };
-Ext.extend(Tine.ExampleApplication.FilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
+Ext.extend(Tine.ExampleApplication.ExampleRecordFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
     filter: [{field: 'model', operator: 'equals', value: 'ExampleApplication_Model_ExampleRecordFilter'}]
 });

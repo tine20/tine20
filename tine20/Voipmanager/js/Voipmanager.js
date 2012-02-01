@@ -11,9 +11,7 @@
  
 Ext.namespace('Tine.Voipmanager');
 
-
-
-Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
+Tine.Voipmanager.PhoneTreePanel = Ext.extend(Ext.tree.TreePanel,{
     rootVisible: false,
     border: false,
     
@@ -170,7 +168,7 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 		    }]
         };
         
-    	Tine.Voipmanager.TreePanel.superclass.initComponent.call(this);
+    	Tine.Voipmanager.PhoneTreePanel.superclass.initComponent.call(this);
         
         this.on('click', function(node) {
             if (node.disabled) {
@@ -193,7 +191,7 @@ Tine.Voipmanager.TreePanel = Ext.extend(Ext.tree.TreePanel,{
      * @private
      */
     afterRender: function() {
-        Tine.Voipmanager.TreePanel.superclass.afterRender.call(this);
+        Tine.Voipmanager.PhoneTreePanel.superclass.afterRender.call(this);
         var type = this.app.getMainScreen().activeContentType;
 
         this.expandPath('/root/snom');

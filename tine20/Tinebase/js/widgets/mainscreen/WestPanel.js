@@ -22,20 +22,38 @@ Ext.ns('Tine.widgets.mainscreen');
 Tine.widgets.mainscreen.WestPanel = function(config) {
     Ext.apply(this, config);
     
-    if (this.hasContainerTreePanel || this.hasContainerTreePanel === null) {
-        this.hasContainerTreePanel = true;
-    }
-    
-    if (this.hasFavoritesPanel || (this.hasFavoritesPanel === null && Tine[this.app.appName].FilterPanel)) {
-        this.hasFavoritesPanel = true;
-    }
-    
     this.defaults = {};
     
     Tine.widgets.mainscreen.WestPanel.superclass.constructor.apply(this, arguments);
 };
 
 Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
+    
+    /**
+     * @cfg {String} moduleTreeClass
+     * name of module tree class in namespace of this app (defaults to ContentTypeTreePanel)
+     * the class name will be expanded to Tine[this.appName][this.ContentTypeTreePanelClassName]
+     */
+    moduleTreePanelClassName: 'ContentTypeTreePanel',
+    
+    /**
+     * @cfg {Array} contentTypes
+     * Array of Objects
+     * Object Properties: "model", "requiredRight"
+     * Prop. model (e.g. "Abc") will be expanded to Tine.Application.Model.Abc
+     * Prop. requiredRight (e.g. "read") will be expanded to Tine.Tinebase.common.hasRight('read', this.app.appName, recordClass.getMeta('recordsName').toLowerCase())
+     * Prop. singularContainerMode (bool): when true, the records of the model doesn't have containers, so no containertreepanel is rendered
+     *                                     but a containertreenode must be defined in Application.js
+     * Prop. genericCtxActions (Array of Strings e.g. "['rename','grant']") Creates a Tine.widgets.tree.ContextMenu with the actions in this array                                    
+     */
+    contentTypes: null,
+
+    /**
+     * @cfg {String} contentType
+     * defines the contentType (e.g. Xyz), which will be expanded to Tine.Application.Model.Xyz, this panel controls 
+     */
+    contentType: null,
+    
     /**
      * @cfg {String} containerTreeClass
      * name of container tree class in namespace of this app (defaults to TreePanel)
@@ -49,6 +67,12 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      * the class name will be expanded to Tine[this.appName][this.favoritesPanelClassName]
      */
     favoritesPanelClassName: 'FilterPanel',
+    
+    /**
+     * @cfg {Bool} hasContentTypeTreePanel
+     * west panel has modulePanel (defaults to null -> autodetection)
+     */
+    hasContentTypeTreePanel: null,
     
     /**
      * @cfg {Bool} hasContainerTreePanel
@@ -69,6 +93,31 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
 
     stateful: true,
     stateEvents: ['collapse', 'expand', 'drop'],
+
+    /**
+     * inits this west panel
+     */
+    initComponent: function() {
+        this.stateId = this.app.appName + this.getContentType() + '-mainscreen-westpanel';
+        var fpcn = this.getContentType() + this.favoritesPanelClassName;
+        this.hasFavoritesPanel = (Tine[this.app.appName][fpcn]);
+        this.hasContentTypeTreePanel = ((this.contentTypes) && (this.contentTypes.length > 1));
+        
+        if (this.hasContainerTreePanel === null) {
+            this.hasContainerTreePanel = true;            
+            if(this.contentTypes) {
+                Ext.each(this.contentTypes, function(ct) {
+                    if ((ct.model == this.contentType) && (ct.singularContainerMode)) {
+                        this.hasContainerTreePanel = false;
+                        return false;
+                    }
+                }, this);
+            }
+        }
+        
+        this.items = this.getPortalColumn();
+        Tine.widgets.mainscreen.WestPanel.superclass.initComponent.apply(this, arguments);
+    },    
     
     /**
      * called after rendering process
@@ -114,6 +163,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         collection.fireEvent('sort', collection);
         
         collection.each(function(item, idx) {
+            if(item.containerName) item.fireEvent('stateapplied');
             if (typeof item.addFill === 'function') return;
             if (item.getEl()) {
                 item[state.collapsed[idx] ? 'collapse' : 'expand'](false);
@@ -133,17 +183,26 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
     getAdditionalItems: function() {
         return this.additionalItems || [];
     },
+
+    getContentType: function() {
+        return (this.contentType) ? this.contentType : '';  
+    },
     
     /**
-     * returns containerTree panel
+     * returns module panel
      * 
-     * @return {Tine.Tinebase.widgets.ContainerTreePanel}
+     * @return {Tine.Tinebase.widgets.ContentTypeTreePanel}
      */
-    getContainerTreePanel: function() {
-        if (this.hasContainerTreePanel && !this.containerTreePanel) {
-            this.containerTreePanel = new Tine[this.app.appName][this.containerTreePanelClassName]({app: this.app});
-            
-            this.containerTreePanel.on('click', function (node, event) {
+    getContentTypeTreePanel: function() {
+        
+        if (this.hasContentTypeTreePanel && !this.contentTypeTreePanel) {
+            this.contentTypeTreePanel = new Tine.widgets.ContentTypeTreePanel({
+                app: this.app, 
+                contentTypes: this.contentTypes,
+                contentType: this.contentType
+                });
+
+            this.contentTypeTreePanel.on('click', function (node, event) {
                 if(node != this.lastClickedNode) {
                     this.lastClickedNode = node;
                     this.fireEvent('selectionchange');
@@ -151,8 +210,29 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
             });
             
         }
+        return this.contentTypeTreePanel;
+    },    
+    
+    /**
+     * returns containerTree panel
+     * 
+     * @return {Tine.Tinebase.widgets.ContainerTreePanel}
+     */
+    getContainerTreePanel: function() {
+        var panelName = this.app.getMainScreen().getActiveContentType() + 'TreePanel';
+        if(!this[panelName]) {            
+            if(Tine[this.app.appName].hasOwnProperty(panelName)) this[panelName] = new Tine[this.app.appName][panelName]({app: this.app});
+            else this[panelName] = new Tine.widgets.persistentfilter.PickerPanel({app: this.app});
+            this[panelName].on('click', function (node, event) {
+                if(node != this.lastClickedNode) {
+                    this.lastClickedNode = node;
+                    this.fireEvent('selectionchange');
+                }
+            });
+        }
         
-        return this.containerTreePanel;
+        return this[panelName];     
+
     },
     
     /**
@@ -161,21 +241,43 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      * @return {Ext.Panel}
      */
     getFavoritesPanel: function() {
-        if (this.hasFavoritesPanel && !this.favoritesPanel) {
-            this.favoritesPanel = new Tine[this.app.appName][this.favoritesPanelClassName]({
-                app: this.app,
-                treePanel: this.getContainerTreePanel()
-            });
-            
-            this.favoritesPanel.on('click', function (node, event) {
-                if(node != this.lastClickedNode) {
-                    this.lastClickedNode = node;
-                    this.fireEvent('selectionchange');
-                }
-            });
+        var ct = this.app.getMainScreen().getActiveContentType(),
+            panelName = ct + 'FilterPanel';
+
+        try {
+            if(!this[panelName]) {
+                this[panelName] = new Tine[this.app.appName][panelName]({
+                    
+                    rootVisible : false,
+                    border : false,
+                    collapsible : true,
+                    
+                    root: null,
+                    
+                    titleCollapse: true,
+                    title: '',
+                    baseCls: 'ux-arrowcollapse',
+                    
+                    app: this.app,
+                    contentType: ct,
+                                        
+                    treePanel: (this.hasContainerTreePanel) ? this.getContainerTreePanel() : this.getContentTypeTreePanel(),
+                    listeners: {
+                        scope: this,
+                        click: function (node, event) {
+                            if(node != this.lastClickedNode) {
+                                this.lastClickedNode = node;
+                                this.fireEvent('selectionchange');
+                            }
+                        }
+                    }
+                });
+            }
+        } catch(e) {
+            Tine.log.info('No Favorites Panel created');
         }
         
-        return this.favoritesPanel;
+        return this[panelName];
     },
     
     /**
@@ -185,7 +287,16 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      * @return {Tine.widgets.grid.FilterPlugin}
      */
     getFilterPlugin: function(contentType) {
-        return this.getContainerTreePanel().getFilterPlugin();
+        if(this.hasContainerTreePanel) {
+            return this.getContainerTreePanel().getFilterPlugin();
+        } else {
+            return new Tine.widgets.grid.FilterPlugin({
+                getValue: function() {
+                    return [
+                    ];
+                }
+            });
+        }
     },
     
     /**
@@ -195,9 +306,9 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      */
     getPortalColumn: function() {
         if (! this.portalColumn) {
-            
+
             var items = [];
-        
+            
             if (this.hasContainerTreePanel) {
                 var containerTreePanel = this.getContainerTreePanel();
                 
@@ -233,20 +344,38 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                     title: _('Favorites')
                 }, this.defaults));
                 
-                // save as favorite btn
-                items.unshift(new Ext.Toolbar({
-                    buttonAlign : 'center',
-                    items: [{
-                        xtype: 'button',
-                        text: _('Save current view as favorite'),
-                        iconCls: 'action_saveFilter',
-                        handler: this.getFavoritesPanel().saveFilter.createDelegate(this.getFavoritesPanel())
-                    }]
+            if (this.hasContentTypeTreePanel) {
+                
+                this.defaults = {
+                    collapsible: true,
+                    baseCls: 'ux-arrowcollapse',
+                    animCollapse: true,
+                    titleCollapse:true,
+                    draggable : true,
+                    autoScroll: false
+                };
+                
+                items.unshift(Ext.apply(this.getContentTypeTreePanel(), {
+                    title: _('Modules'),
+                    collapsed: false
                 }));
+                
+            }    
+                
+            // save as favorite btn
+            items.unshift(new Ext.Toolbar({
+                buttonAlign : 'center',
+                items: [{
+                    xtype: 'button',
+                    text: _('Save current view as favorite'),
+                    iconCls: 'action_saveFilter',
+                    handler: this.getFavoritesPanel().saveFilter.createDelegate(this.getFavoritesPanel())
+                }]
+            }));
             }
             
             items = items.concat(this.getAdditionalItems());
-            
+
             // save origianl/programatical position
             // NOTE: this has to be done before applyState!
             Ext.each(items, function(item, idx) {
@@ -277,19 +406,6 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         }, this);
         
         return state;
-    },
-    
-    /**
-     * inits this west panel
-     */
-    initComponent: function() {
-        this.stateId = this.app.appName + '-mainscreen-westpanel';
-        
-        this.items = this.getPortalColumn();
-
-
-        
-        Tine.widgets.mainscreen.WestPanel.superclass.initComponent.apply(this, arguments);
     },
     
     /**

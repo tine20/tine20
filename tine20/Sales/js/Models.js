@@ -42,7 +42,7 @@ Tine.Sales.Model.Product = Tine.Tinebase.data.Record.create(Tine.Sales.Model.Pro
     recordsName: 'Products',
     containerProperty: 'container_id',
     // ngettext('record list', 'record lists', n);
-    containerName: 'Products',
+    containerName: 'All Products',
     containersName: 'Products',
     getTitle: function() {
         return this.get('name') ? this.get('name') : false;
@@ -110,11 +110,11 @@ Tine.Sales.Model.Contract = Tine.Tinebase.data.Record.create(Tine.Sales.Model.Co
     idProperty: 'id',
     titleProperty: 'title',
     // ngettext('Contract', 'Contracts', n);
-    recordName: 'Contracts',
+    recordName: 'Contract',
     recordsName: 'Contracts',
     containerProperty: 'container_id',
     // ngettext('contracts list', 'contracts lists', n);
-    containerName: 'contracts list',
+    containerName: 'All Contracts',
     containersName: 'contracts lists'
 });
 
@@ -128,8 +128,16 @@ Tine.Sales.Model.Contract = Tine.Tinebase.data.Record.create(Tine.Sales.Model.Co
  */
 Tine.Sales.Model.Contract.getDefaultData = function() { 
     return {
-        container_id: Tine.Sales.registry.get('DefaultContainer')
+        container_id: Tine.Sales.registry.get('defaultContainer')
     };
 };
 
-
+Tine.Sales.Model.Contract.getFilterModel = function() {
+    var app = Tine.Tinebase.appMgr.get('Sales');
+    
+    return [
+        {label: _('Quick search'), field: 'query', operators: ['contains']},
+        {label: app.i18n._('Contract name'),   field: 'name' },
+        {filtertype: 'tinebase.tag', app: app}
+    ];
+};

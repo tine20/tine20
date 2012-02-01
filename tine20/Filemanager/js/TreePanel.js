@@ -53,6 +53,8 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     
     allowMultiSelection : false, 
     
+    defaultContainerPath: '/personal',
+    
     ddGroup: 'fileDDGroup',
     
     enableDD: true,
@@ -707,7 +709,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     onUpdate: function(change, upload, fileRecord) {
     	
     	var app = Tine.Tinebase.appMgr.get('Filemanager'),
-    		grid = app.getMainScreen().getCenterPanel()
+    		grid = app.getMainScreen().getCenterPanel(),
     		treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
     		rowsToUpdate = grid.getStore().query('name', fileRecord.get('name'));
     	

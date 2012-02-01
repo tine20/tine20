@@ -1,7 +1,7 @@
 <?php
 /**
  * Tine 2.0 - http://www.tine20.org
- * 
+ *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -22,7 +22,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
      * @var Sales_Frontend_Json
      */
     protected $_instance = array();
-    
+
     /**
      * Runs the test methods of this class.
      *
@@ -31,9 +31,9 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales Json Tests');
+	    $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales Json Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -43,7 +43,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_instance = new Sales_Frontend_Json();        
+        $this->_instance = new Sales_Frontend_Json();
     }
 
     /**
@@ -53,9 +53,9 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
      * @access protected
      */
     protected function tearDown()
-    {        
+    {
     }
-    
+
     /**
      * try to add a contract
      *
@@ -64,16 +64,16 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
     {
         $contract = $this->_getContract();
         $contractData = $this->_instance->saveContract($contract->toArray());
-        
+
         // checks
         $this->assertGreaterThan(0, $contractData['number']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $contractData['created_by']);
-        
+
         // cleanup
         $this->_instance->deleteContracts($contractData['id']);
         $this->_decreaseNumber();
     }
-    
+
     /**
      * try to get a contract
      *
@@ -83,11 +83,11 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $contract = $this->_getContract();
         $contractData = $this->_instance->saveContract($contract->toArray());
         $contractData = $this->_instance->getContract($contractData['id']);
-        
+
         // checks
         $this->assertGreaterThan(0, $contractData['number']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $contractData['created_by']);
-        
+
         // cleanup
         $this->_instance->deleteContracts($contractData['id']);
         $this->_decreaseNumber();
@@ -100,11 +100,11 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetEmptyContract()
     {
         $contractData = $this->_instance->getContract(0);
-        
+
         // checks
-        $this->assertEquals(Tinebase_Container::getInstance()->getContainerByName('Sales', 'Shared Contracts', 'shared')->getId(), $contractData['container_id']['id']);        
+        $this->assertEquals(Tinebase_Container::getInstance()->getContainerByName('Sales', 'Shared Contracts', 'shared')->getId(), $contractData['container_id']['id']);
     }
-    
+
     /**
      * try to update a contract (with relations)
      *
@@ -114,16 +114,16 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $contract = $this->_getContract();
         $contractData = $this->_instance->saveContract($contract->toArray());
         $contractData = $this->_instance->getContract($contractData['id']);
-        
+
         // add account and contact + update contract
         $contractData['relations'] = $this->_getRelations();
 
         //print_r($contractData);
-        
+
         $contractUpdated = $this->_instance->saveContract($contractData);
-        
+
         //print_r($contractUpdated);
-        
+
         // check
         $this->assertEquals($contractData['id'], $contractUpdated['id']);
         $this->assertGreaterThan(0, count($contractUpdated['relations']));
@@ -131,13 +131,13 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Sales_Model_Contract::RELATION_TYPE_CUSTOMER, $contractUpdated['relations'][0]['type']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $contractUpdated['relations'][1]['related_id']);
         $this->assertEquals(Sales_Model_Contract::RELATION_TYPE_ACCOUNT, $contractUpdated['relations'][1]['type']);
-        
+
         // cleanup
         $this->_instance->deleteContracts($contractData['id']);
         Addressbook_Controller_Contact::getInstance()->delete($contractUpdated['relations'][0]['related_id']);
         $this->_decreaseNumber();
     }
-    
+
     /**
      * try to get a contract
      *
@@ -147,20 +147,20 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         // create
         $contract = $this->_getContract();
         $contractData = $this->_instance->saveContract($contract->toArray());
-        
+
         // search & check
         $search = $this->_instance->searchContracts($this->_getFilter(), $this->_getPaging());
         $this->assertEquals($contract->title, $search['results'][0]['title']);
         $this->assertEquals(1, $search['totalcount']);
-        
+
         // cleanup
         $this->_instance->deleteContracts($contractData['id']);
-        $this->_decreaseNumber();        
+        $this->_decreaseNumber();
     }
-    
+
     /**
      * test product json api
-     * 
+     *
      * @todo generalize this
      */
     public function testAddGetSearchDeleteProduct()
@@ -169,16 +169,16 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $productData = $product->toArray();
         // add note
         $note = array(
-            'note'              => 'phpunit test note',            
+            'note'              => 'phpunit test note',
         );
-        $productData['notes'] = array($note);        
-        
+        $productData['notes'] = array($note);
+
         $savedProduct = $this->_instance->saveProduct($productData);
         $getProduct = $this->_instance->getProduct($savedProduct['id']);
         $searchProducts = $this->_instance->searchProducts($this->_getProductFilter(), '');
-        
+
         //print_r($getProduct);
-        
+
         // assertions
         $this->assertEquals($getProduct, $savedProduct);
         $this->assertTrue(count($getProduct['notes']) > 0, 'no notes found');
@@ -188,27 +188,27 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
 
         // delete all
         $this->_instance->deleteProducts($savedProduct['id']);
-        
+
         // check if delete worked
         $result = $this->_instance->searchProducts($this->_getProductFilter(), '');
-        $this->assertEquals(0, $result['totalcount']);   
+        $this->assertEquals(0, $result['totalcount']);
     }
-    
+
     /**
      * testGetRegistryData (shared contracts container)
      */
     public function testGetRegistryData()
     {
         $data = $this->_instance->getRegistryData();
-        
-        $this->assertTrue(isset($data['DefaultContainer']));
-        $this->assertTrue(isset($data['DefaultContainer']['path']));
-        $this->assertTrue(isset($data['DefaultContainer']['account_grants']));
-        $this->assertTrue(is_array($data['DefaultContainer']['account_grants']));
+
+        $this->assertTrue(isset($data['defaultContainer']));
+        $this->assertTrue(isset($data['defaultContainer']['path']));
+        $this->assertTrue(isset($data['defaultContainer']['account_grants']));
+        $this->assertTrue(is_array($data['defaultContainer']['account_grants']));
     }
-    
+
     /************ protected helper funcs *************/
-    
+
     /**
      * get contract
      *
@@ -245,10 +245,10 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
     protected function _getFilter()
     {
         return array(
-            array('field' => 'query', 'operator' => 'contains', 'value' => 'blabla'),     
-        );        
+            array('field' => 'query', 'operator' => 'contains', 'value' => 'blabla'),
+        );
     }
-    
+
     /**
      * get relations
      *
@@ -257,14 +257,14 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
     protected function _getRelations()
     {
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-            Zend_Registry::get('currentAccount'), 
-            'Addressbook', 
-            Zend_Registry::get('currentAccount'), 
+            Zend_Registry::get('currentAccount'),
+            'Addressbook',
+            Zend_Registry::get('currentAccount'),
             Tinebase_Model_Grants::GRANT_EDIT
         );
-        
+
         $currentUser = Tinebase_Core::getUser();
-        
+
         return array(
             array(
                 'type'              => Sales_Model_Contract::RELATION_TYPE_CUSTOMER,
@@ -278,12 +278,12 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
                 'related_id'        => $currentUser->getId(),
                 'related_record'    => $currentUser->toArray()
             ),
-        );        
+        );
     }
-    
+
     /**
      * get product
-     * 
+     *
      * @return Sales_Model_Product
      */
     protected function _getProduct()
@@ -291,13 +291,13 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         return new Sales_Model_Product(array(
             'name'          => 'PHPUnit test product',
             'price'         => 10000,
-            'description'   => 'test product description'   
+            'description'   => 'test product description'
         ));
     }
-    
+
     /**
      * get product filter
-     * 
+     *
      * @return array
      */
     protected function _getProductFilter()
@@ -306,7 +306,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
             array('field' => 'query',           'operator' => 'contains',       'value' => 'PHPUnit'),
         );
     }
-    
+
     /**
      * decrease contracts number
      *

@@ -46,23 +46,22 @@ Tine.Addressbook.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
 });
 
 
-
-Tine.Addressbook.TreePanel = function(config) {
+Tine.Addressbook.ContactTreePanel = function(config) {
     Ext.apply(this, config);
     
     this.id = 'Addressbook_Tree';
     this.filterMode = 'filterToolbar';
     this.recordClass = Tine.Addressbook.Model.Contact;
-    Tine.Addressbook.TreePanel.superclass.constructor.call(this);
+    Tine.Addressbook.ContactTreePanel.superclass.constructor.call(this);
 };
-Ext.extend(Tine.Addressbook.TreePanel , Tine.widgets.container.TreePanel);
+Ext.extend(Tine.Addressbook.ContactTreePanel , Tine.widgets.container.TreePanel);
 
 
-Tine.Addressbook.FilterPanel = function(config) {
+Tine.Addressbook.ContactFilterPanel = function(config) {
     Ext.apply(this, config);
-    Tine.Addressbook.FilterPanel.superclass.constructor.call(this);
+    Tine.Addressbook.ContactFilterPanel.superclass.constructor.call(this);
 };
 
-Ext.extend(Tine.Addressbook.FilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
+Ext.extend(Tine.Addressbook.ContactFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
     filter: [{field: 'model', operator: 'equals', value: 'Addressbook_Model_ContactFilter'}]
 });

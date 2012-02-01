@@ -47,110 +47,32 @@ Tine.Timetracker.Application = Ext.extend(Tine.Tinebase.Application, {
  */
 Tine.Timetracker.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     activeContentType: 'Timesheet',
-    westPanelXType: 'tine.timetracker.treepanel'
+    contentTypes: [
+        {model: 'Timesheet', requiredRight: null, singularContainerMode: true},
+        {model: 'Timeaccount', requiredRight: 'manage', singularContainerMode: true}]
 });
 
 /**
- * @namespace   Tine.Timetracker
- * @class       Tine.Timetracker.TreePanel
- * @extends     Tine.widgets.persistentfilter.PickerPanel
- * 
- * @author      Philipp Schüle <p.schuele@metaways.de>
- * 
- * @constructor
- * @xtype       tine.timetracker.treepanel
+ * default filter panels
  */
-Tine.Timetracker.TreePanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel, {
-    
-    filter: [{field: 'model', operator: 'equals', value: 'Timetracker_Model_TimesheetFilter'}],
-    
-    // quick hack to get filter saving grid working
-    //recordClass: Tine.Timetracker.Model.Timesheet,
-    initComponent: function() {
-        this.filterMountId = 'Timesheet';
-        
-        this.root = {
-            id: 'root',
-            leaf: false,
-            expanded: true,
-            children: [{
-                text: this.app.i18n._('Timesheets'),
-                id : 'Timesheet',
-                iconCls: 'TimetrackerTimesheet',
-                expanded: true,
-                children: [{
-                    text: this.app.i18n._('All Timesheets'),
-                    id: 'alltimesheets',
-                    leaf: true
-                }]
-            }]
-        };
-        
-        if (Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts')) {
-            this.root.children.push({
-                text: this.app.i18n._('Timeaccounts'),
-                id: 'Timeaccount',
-                iconCls: 'TimetrackerTimeaccount',
-                expanded: true,
-                children: [{
-                    text: this.app.i18n._('All Timeaccounts'),
-                    id: 'alltimeaccounts',
-                    leaf: true
-                }]
-            });
-        }
-        
-    	Tine.Timetracker.TreePanel.superclass.initComponent.call(this);
-        
-        this.on('click', function(node) {
-            if (node.attributes.isPersistentFilter != true) {
-                var contentType = node.getPath().split('/')[2];
-                
-                this.app.getMainScreen().activeContentType = contentType;
-                this.app.getMainScreen().show();
-            }
-        }, this);
-	},
-    
-    /**
-     * @private
-     */
-    afterRender: function() {
-        Tine.Timetracker.TreePanel.superclass.afterRender.call(this);
-        var type = this.app.getMainScreen().activeContentType;
+Tine.Timetracker.TimesheetFilterPanel = function(config) {
+    Ext.apply(this, config);
+    Tine.Timetracker.TimesheetFilterPanel.superclass.constructor.call(this);
+};
 
-        this.expandPath('/root/' + type + '/alltimesheets');
-        this.selectPath('/root/' + type + '/alltimesheets');
-    },
-    
-    /**
-     * load grid from saved filter
-     */
-    onFilterSelect: function() {
-        this.app.getMainScreen().activeContentType = 'Timesheet';
-        this.app.getMainScreen().show();
-        
-        this.supr().onFilterSelect.apply(this, arguments);
-    },
-    
-    /**
-     * returns a filter plugin to be used in a grid
-     */
-    getFilterPlugin: function() {
-        if (!this.filterPlugin) {
-            var scope = this;
-            this.filterPlugin = new Tine.widgets.grid.FilterPlugin({});
-        }
-        
-        return this.filterPlugin;
-    },
-    
-    getFavoritesPanel: function() {
-        return this;
-    }
+Ext.extend(Tine.Timetracker.TimesheetFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
+    filter: [{field: 'model', operator: 'equals', value: 'Timetracker_Model_TimesheetFilter'}]
 });
 
-Ext.reg('tine.timetracker.treepanel', Tine.Timetracker.TreePanel);
+Tine.Timetracker.TimeaccountFilterPanel = function(config) {
+    Ext.apply(this, config);
+    Tine.Timetracker.TimeaccountFilterPanel.superclass.constructor.call(this);
+};
+
+Ext.extend(Tine.Timetracker.TimeaccountFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
+    filter: [{field: 'model', operator: 'equals', value: 'Timetracker_Model_TimeaccountFilter'}]
+});
+
 
 
 /**

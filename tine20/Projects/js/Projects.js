@@ -40,7 +40,7 @@ Tine.Projects.Application = Ext.extend(Tine.Tinebase.Application, {
 Tine.Projects.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     activeContentType: 'Project'
 });
-    
+
 /**
  * @namespace   Tine.Projects
  * @class       Tine.Projects.TreePanel
@@ -48,7 +48,7 @@ Tine.Projects.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
  * 
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-Tine.Projects.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
+Tine.Projects.ProjectTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     id: 'Projects_Tree',
     filterMode: 'filterToolbar',
     recordClass: Tine.Projects.Model.Project
@@ -60,10 +60,11 @@ Tine.Projects.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
  *  
  * @param {Object} config
  */
-Tine.Projects.FilterPanel = function(config) {
+Tine.Projects.ProjectFilterPanel = function(config) {
     Ext.apply(this, config);
-    Tine.Projects.FilterPanel.superclass.constructor.call(this);
+    Tine.Projects.ProjectFilterPanel.superclass.constructor.call(this);
 };
-Ext.extend(Tine.Projects.FilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
+
+Ext.extend(Tine.Projects.ProjectFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
     filter: [{field: 'model', operator: 'equals', value: 'Projects_Model_ProjectFilter'}]
 });

@@ -534,9 +534,6 @@ Tine.Voipmanager.Model.AsteriskVoicemail.getDefaultData = function() {
     };
 };
 
-
-
-
 Tine.Voipmanager.Model.AsteriskMeetmeArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'id'},
     {name: 'confno'},

@@ -1279,6 +1279,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 selectedRecords.push(record.data);
             }, this );
         }
+        
         var editDialogClass = this.editDialogClass || Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'],
             config = null,
             popupWindow = editDialogClass.openWindow(Ext.copyTo(

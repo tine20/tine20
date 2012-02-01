@@ -30,11 +30,21 @@ Tine.widgets.form.RecordPickerManager = {
     get: function(appName, modelName, config) {
         try {
             if(!config) var config = {};
+
+            if (!appName) {
+                Tine.log.debug('Tine.widgets.form.RecordPickerManager::get - No appName given!');
+                return {};
+            }
+
+            if (!modelName) {
+                Tine.log.debug('Tine.widgets.form.RecordPickerManager::get - No modelName given!');
+                return {};
+            }            
             
             if(Ext.isObject(appName)) {
                 appName = appName.name;
             }
-            
+            Tine.log.err('app',appName);
             if(Ext.isObject(modelName)) {
                 modelName = modelName.getMeta('modelName');
             }
@@ -70,6 +80,17 @@ Tine.widgets.form.RecordPickerManager = {
      */
     register: function(appName, modelName, component) {
         try {
+            
+            if (!appName) {
+                Tine.log.debug('Tine.widgets.form.RecordPickerManager::register - No appName given!');
+                return {};
+            }
+
+            if (!modelName) {
+                Tine.log.debug('Tine.widgets.form.RecordPickerManager::register - No modelName given!');
+                return {};
+            }            
+            
             if(Ext.isObject(appName)) {
                 appName = appName.name;
             }

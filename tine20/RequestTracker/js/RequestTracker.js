@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
- Ext.ns('Tine.RequestTracker');
+Ext.ns('Tine.RequestTracker');
  
- // default mainscreen
+// default mainscreen
 Tine.RequestTracker.MainScreen = Tine.widgets.MainScreen;

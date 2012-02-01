@@ -84,12 +84,9 @@ Tine.Calendar.MainScreen = function(config) {
     Tine.Calendar.colorMgr = new Tine.Calendar.ColorManager({});
     
     Tine.Calendar.MainScreen.superclass.constructor.apply(this, arguments);
-}
+};
 
 Ext.extend(Tine.Calendar.MainScreen, Tine.widgets.MainScreen, {
-    
-    
-    westPanelXType: 'tine.calendar.mainscreenwestpanel',
     
     /**
      * Get content panel of calendar application

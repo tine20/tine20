@@ -25,120 +25,40 @@ Ext.namespace('Tine.Sales');
  * Constructs mainscreen of the Sales application
  */
 Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
-    activeContentType: 'Product'
+    activeContentType: 'Product',
+    contentTypes: [
+        {model: 'Product',  requiredRight: null, singularContainerMode: true},
+        {model: 'Contract', requiredRight: null, singularContainerMode: true, genericCtxActions: ['grants']}]
 });
 
 /**
  * @namespace Tine.Sales
- * @class Tine.Sales.TreePanel
+ * @class Tine.Sales.FilterPanel
  * @extends Tine.widgets.persistentfilter.PickerPanel
+ * Sales Filter Panel<br>
  * 
- * <pre>
- * TODO         generalize this
- * </pre>
- */ 
-Tine.Sales.TreePanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel,{
-    
-    filter: [{field: 'model', operator: 'equals', value: 'Sales_Model_ProductFilter'}],
-    
-    initComponent: function() {
-        
-        this.filterMountId = 'Product';
-        
-        this.root = {
-            id: 'root',
-            leaf: false,
-            expanded: true,
-            children: [{
-                text: this.app.i18n._('Products'),
-                id: 'Product',
-                iconCls: 'SalesProduct',
-                expanded: true,
-                children: [{
-                    text: this.app.i18n._('All Products'),
-                    id: 'allproducts',
-                    leaf: true
-                }]
-            }, {
-                text: this.app.i18n._('Contracts'),
-                id : 'Contract',
-                iconCls: 'SalesContracts',
-                expanded: true,
-                children: [{
-                    text: this.app.i18n._('All Contracts'),
-                    id: 'allcontracts',
-                    leaf: true,
-                    containerType: Tine.Tinebase.container.TYPE_SHARED,
-                    container: Tine.Sales.registry.get('DefaultContainer')
-                }]
-            }]
-        };
-        
-        this.initContextMenu();
-        
-        Tine.Sales.TreePanel.superclass.initComponent.call(this);
-        
-        this.on('click', function(node) {
-            if (node.attributes.isPersistentFilter != true) {
-                var contentType = node.getPath().split('/')[2];
-                
-                this.app.getMainScreen().activeContentType = contentType;
-                this.app.getMainScreen().show();
-            }
-        }, this);
-        
-        this.on('contextmenu', function(node, event){
-            this.ctxNode = node;
-            if (node.id == 'allcontracts') {
-                this.contextMenu.showAt(event.getXY());
-            }
-        }, this);
-    },
-    
-    /**
-     * @private
-     */
-    initContextMenu: function() {
-        this.contextMenu = Tine.widgets.tree.ContextMenu.getMenu({
-            nodeName: this.app.i18n._('All Contracts'),
-            actions: ['grants'],
-            scope: this,
-            backend: 'Tinebase_Container',
-            backendModel: 'Container'
-        });
-    },
-    
-    /**
-     * @private
-     */
-    afterRender: function() {
-        Tine.Sales.TreePanel.superclass.afterRender.call(this);
-        var type = this.app.getMainScreen().activeContentType;
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Alexander Stintzing <a.stintzing@metaways.de>
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ */
+Tine.Sales.ProductFilterPanel = function(config) {
+    Ext.apply(this, config);
+    Tine.Sales.ProductFilterPanel.superclass.constructor.call(this);
+};
 
-        this.expandPath('/root/' + type + '/allproducts');
-        this.selectPath('/root/' + type + '/allproducts');
-    },
-    
-    /**
-     * returns a filter plugin to be used in a grid
-     * 
-     * TODO     can we remove that?
-     */
-    getFilterPlugin: function() {
-        if (!this.filterPlugin) {
-            var scope = this;
-            this.filterPlugin = new Tine.widgets.grid.FilterPlugin({
-                getValue: function() {
-                    return [
-                    ];
-                }
-            });
-        }
-        
-        return this.filterPlugin;
-    }
+Ext.extend(Tine.Sales.ProductFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
+    filter: [{field: 'model', operator: 'equals', value: 'Sales_Model_ProductFilter'}]
 });
-    
+
+Tine.Sales.ContractFilterPanel = function(config) {
+    Ext.apply(this, config);
+    Tine.Sales.ContractFilterPanel.superclass.constructor.call(this);
+};
+
+Ext.extend(Tine.Sales.ContractFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
+    filter: [{field: 'model', operator: 'equals', value: 'Sales_Model_ContractFilter'}]
+});
+
 /**
  * default contracts backend
  */
@@ -160,3 +80,5 @@ Tine.Sales.productBackend = new Tine.Tinebase.data.RecordProxy({
     modelName: 'Product',
     recordClass: Tine.Sales.Model.Product
 });
+
+

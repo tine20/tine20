@@ -16,6 +16,17 @@ Tine.Voipmanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     
     activeContentType: 'Phone',
     activeContentGroup: 'Snom',
+
+    /**
+     * returns active content type
+     * 
+     * @return {String}
+     */
+    getActiveContentType: function() {
+        var ac = (this.activeContentType) ? this.activeContentType : '';
+        var ag = (this.activeContentGroup) ? this.activeContentGroup : '';
+        return ag + ac;
+    },    
     
     showCenterPanel: function() {
         
@@ -47,5 +58,17 @@ Tine.Voipmanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
         }
         
         Tine.Tinebase.MainScreen.setActiveToolbar(this[group + type + 'ActionToolbar'], true); 
+    },
+    
+    /**
+     * overwrite default
+     * @return Tine.Voipmanager.PhoneTreePanel
+     */
+    getWestPanel: function() { 
+
+        if(!this.westPanel) {
+            this.westPanel = new Tine.Voipmanager.PhoneTreePanel({app: this.app});
+        }
+        return this.westPanel;
     }
 });

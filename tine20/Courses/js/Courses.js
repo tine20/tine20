@@ -14,7 +14,16 @@ Tine.Courses.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     westPanelXType: 'tine.courses.treepanel'
 });
 
-Tine.Courses.TreePanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel, {
+Tine.Courses.CourseFilterPanel = function(config) {
+    Ext.apply(this, config);
+    Tine.Courses.CourseFilterPanel.superclass.constructor.call(this);
+};
+
+Ext.extend(Tine.Courses.CourseFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
+    filter: [{field: 'model', operator: 'equals', value: 'Courses_Model_CourseFilter'}]
+});
+
+Tine.Courses.CourseTreePanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel, {
     
     filter: [{field: 'model', operator: 'equals', value: 'Courses_Model_CourseFilter'}],
 
@@ -41,7 +50,7 @@ Tine.Courses.TreePanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel, {
             }]
         };
         
-    	Tine.Courses.TreePanel.superclass.initComponent.call(this);
+    	Tine.Courses.CourseTreePanel.superclass.initComponent.call(this);
         
     	/*
         this.on('click', function(node) {
@@ -59,7 +68,7 @@ Tine.Courses.TreePanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel, {
      * @private
      */
     afterRender: function() {
-        Tine.Courses.TreePanel.superclass.afterRender.call(this);
+        Tine.Courses.CourseTreePanel.superclass.afterRender.call(this);
         var type = this.app.getMainScreen().activeContentType;
 
         this.expandPath('/root/' + type + '/allrecords');
@@ -106,7 +115,7 @@ Tine.Courses.TreePanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel, {
 //    }
 });
 
-Ext.reg('tine.courses.treepanel', Tine.Courses.TreePanel);
+//Ext.reg('tine.courses.treepanel', Tine.Courses.TreePanel);
 
 //Tine.Courses.FilterPanel = Tine.widgets.persistentfilter.PickerPanel
 

@@ -31,24 +31,24 @@ Tine.SimpleFAQ.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     activeContentType: 'Faq'
 });
 
-Tine.SimpleFAQ.TreePanel = function(config) {
+Tine.SimpleFAQ.FaqTreePanel = function(config) {
     Ext.apply(this, config);
     
     this.id = 'SimpleFAQTreePanel';
     this.recordClass = Tine.SimpleFAQ.Model.Faq;
 
     this.filterMode = 'filterToolbar';
-    Tine.SimpleFAQ.TreePanel.superclass.constructor.call(this);
+    Tine.SimpleFAQ.FaqTreePanel.superclass.constructor.call(this);
 };
 
-Ext.extend(Tine.SimpleFAQ.TreePanel , Tine.widgets.container.TreePanel);
+Ext.extend(Tine.SimpleFAQ.FaqTreePanel , Tine.widgets.container.TreePanel);
 
-Tine.SimpleFAQ.FilterPanel = function(config) {
+Tine.SimpleFAQ.FaqFilterPanel = function(config) {
     Ext.apply(this, config);
-    Tine.SimpleFAQ.FilterPanel.superclass.constructor.call(this);
+    Tine.SimpleFAQ.FaqFilterPanel.superclass.constructor.call(this);
 };
 
-Ext.extend(Tine.SimpleFAQ.FilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
+Ext.extend(Tine.SimpleFAQ.FaqFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
     filter: [{field: 'model', operator: 'equals', value: 'SimpleFAQ_Model_FaqFilter'}]
 });
 

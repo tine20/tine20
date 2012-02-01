@@ -47,7 +47,11 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
     /**
      * @cfg {String} activeContentType
      */
-    activeContentType: '',
+    activeContentType: null,
+    /**
+     * @cfg {Array} contentTypes
+     */
+    contentTypes: null,
     
     /**
      * @cfg {String} centerPanelClassName
@@ -55,22 +59,16 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
      * the class name will be expanded to Tine[this.appName][contentType + this.centerPanelClassNameSuffix]
      */
     centerPanelClassNameSuffix: 'GridPanel',
-    
-    /**
-     * @cfg {Function} westPanelXType
-     * constructor of westpanel class 
-     */
-    westPanelXType: 'tine.widgets.mainscreen.westpanel',
-    
+
     /**
      * returns active content type
      * 
      * @return {String}
      */
     getActiveContentType: function() {
-        return this.activeContentType;
+        return (this.activeContentType) ? this.activeContentType : '';
     },
-    
+     
     /**
      * get center panel for given contentType
      * 
@@ -125,7 +123,7 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
                 this[contentType + 'ActionToolbar'] = this[contentType + this.centerPanelClassNameSuffix].getActionToolbar();
             } catch (e) {
                 Tine.log.err('Could not create northPanel');
-                Tine.log.err(e);
+                Tine.log.err(e.stack ? e.stack : e);
                 this[contentType + 'ActionToolbar'] = new Ext.Panel({html: 'ERROR'});
             }
         }
@@ -140,38 +138,47 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
      * 
      * @return {Ext.Panel}
      */
-    getWestPanel: function() {
-        if (! this.westPanel) {
-            try {
-                this.westPanel = Ext.ComponentMgr.create({
-                    app: this.app
-                }, this.westPanelXType);
-                
-                this.westPanel.on('selectionchange', function(){
-                    var cp = this.getCenterPanel();
-                    if(cp) {
-                        try {
-                            var grid = cp.getGrid();
-                            if(grid) {
-                                var sm = grid.getSelectionModel();
-                                if(sm) {
-                                    sm.clearSelections();
-                                    cp.actionUpdater.updateActions(sm.getSelectionsCollection());
+    getWestPanel: function() { 
+
+        var contentType = this.getActiveContentType(),
+            wpName = contentType + 'WestPanel';
+            
+        if (! this[wpName]) {
+            var wpconfig = {
+                    app: this.app, 
+                    contentTypes: this.contentTypes,
+                    contentType: contentType,
+                    listeners: {
+                        scope: this,
+                        selectionchange: function() {
+                            var cp = this.getCenterPanel();
+                            if(cp) {
+                                try {
+                                    var grid = cp.getGrid();
+                                    if(grid) {
+                                        var sm = grid.getSelectionModel();
+                                        if(sm) {
+                                            sm.clearSelections();
+                                            cp.actionUpdater.updateActions(sm.getSelectionsCollection());
+                                        }
+                                    }
+                                } catch (e) {
+                                    // do nothing - no grid
                                 }
                             }
-                        } catch (e) {
                         }
                     }
-                }, this);
-                
+                };
+            try {
+                if(Tine[this.app.name].hasOwnProperty(wpName)) this[wpName] = new Tine[this.app.appName][wpName](wpconfig);
+                else this[wpName] = new Tine.widgets.mainscreen.WestPanel(wpconfig);
             } catch (e) {
                 Tine.log.err('Could not create westPanel');
-                Tine.log.err(e);
-                this.westPanel = new Ext.Panel({html: 'ERROR'});
+                Tine.log.err(e.stack ? e.stack : e);
+                this[wpName] = new Ext.Panel({html: 'ERROR'});
             }
         }
-        
-        return this.westPanel;
+        return this[wpName];
     },
     
     /**

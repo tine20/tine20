@@ -436,9 +436,8 @@ Tine.widgets.tree.ContextMenu = {
     managePermissions: function() {
 
         if (this.scope.ctxNode) {
-            var node = this.scope.ctxNode;
-                        
-            var grantsContainer;
+            var node = this.scope.ctxNode,
+                grantsContainer;
             if(node.attributes.container) {
                 grantsContainer = node.attributes.container;
             }

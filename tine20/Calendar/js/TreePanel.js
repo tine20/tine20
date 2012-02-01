@@ -66,7 +66,7 @@ Tine.Calendar.FilterPanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
+Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
     recordClass: Tine.Calendar.Model.Event,
     ddGroup: 'cal-event',
