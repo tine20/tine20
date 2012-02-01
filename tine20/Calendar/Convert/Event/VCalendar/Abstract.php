@@ -629,7 +629,11 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         
         // unset supported fields
         foreach ($this->_supportedFields as $field) {
-            $event->$field = null;
+            if ($field == 'alarms') {
+                $event->$field = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+            } else {
+                $event->$field = null;
+            }
         }
         
         foreach($_vevent->children() as $property) {
@@ -802,8 +806,6 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     break;
                     
                 case 'VALARM':
-                    $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
-                    
                     foreach($property as $valarm) {
                         switch(strtoupper($valarm->TRIGGER['VALUE']->value)) {
                             # TRIGGER;VALUE=DATE-TIME:20111031T130000Z

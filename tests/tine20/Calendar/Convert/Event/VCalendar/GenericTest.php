@@ -264,7 +264,8 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $event = $converter->toTine20Model($vcalendar, $event);
         
         $this->assertEquals(10, $event->attendee[0]->quantity);
-        $this->assertEquals(null, $event->alarms);
+        $this->assertTrue($event->alarms instanceof Tinebase_Record_RecordSet);
+        $this->assertEquals(0, count($event->alarms));
     }    
 
     /**
