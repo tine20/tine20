@@ -578,8 +578,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             status: status,
             progress: 0,
             input: this.file,
-            uploadKey: this.id,
-            type: 'file'
+            uploadKey: this.id
         });
         
         this.fireEvent('update', 'uploadprogress', this, this.fileRecord);
