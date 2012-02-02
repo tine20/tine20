@@ -44,6 +44,7 @@ class Voipmanager_Setup_Update_Release3 extends Setup_Update_Abstract
      */
     public function update_1()
     {
+        // why the heck is the table dropped here??
         $this->_backend->dropTable('asterisk_redirects');
         
         $declaration = new Setup_Backend_Schema_Field_Xml('

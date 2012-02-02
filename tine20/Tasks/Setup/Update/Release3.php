@@ -83,15 +83,30 @@ class Tasks_Setup_Update_Release3 extends Setup_Update_Abstract
         $defaultFavorite = $pfe->getByProperty(Tasks_Preference::DEFAULTPERSISTENTFILTER_NAME, 'name');
         $defaultFavorite->bypassFilters = TRUE;
         
-        $closedStatus = Tasks_Controller_Status::getInstance()->getAllStatus()->filter('status_is_open', 0);
-        
-        $defaultFavorite->filters =  array(
+        $closedIds = $this->_getClosedStatusIds();
+        $defaultFavorite->filters = array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => '/personal/' . Tinebase_Model_User::CURRENTACCOUNT),
-            array('field' => 'status_id',    'operator' => 'notin',  'value' => $closedStatus->getId()),
+            array('field' => 'status_id',    'operator' => 'notin',  'value' => $closedIds),
         );
         $pfe->update($defaultFavorite);
-        
         $this->setApplicationVersion('Tasks', '3.3');
+    }
+    
+    /**
+     * get closed status ids
+     * 
+     * @return array
+     */
+    protected function _getClosedStatusIds()
+    {
+        $stmt = $this->_db->query("SELECT id FROM `" . SQL_TABLE_PREFIX . "tasks_status` where status_is_open = 0");
+        $statusDatas = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        $closedIds = array();
+        foreach ($statusDatas as $status) {
+            $closedIds[] = $status['id'];
+        }
+        
+        return $closedIds;
     }
     
     /**
@@ -107,14 +122,14 @@ class Tasks_Setup_Update_Release3 extends Setup_Update_Abstract
             'model'             => 'Tasks_Model_TaskFilter',
         );
         
-        $closedStatus = Tasks_Controller_Status::getInstance()->getAllStatus()->filter('status_is_open', 0);
+        $closedIds = $this->_getClosedStatusIds();
         
         $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "My open tasks",
             'description'       => "My open tasks",
             'filters'           => array(
                 array('field' => 'organizer',    'operator' => 'equals', 'value' => Tinebase_Model_User::CURRENTACCOUNT),
-                array('field' => 'status_id',    'operator' => 'notin',  'value' => $closedStatus->getId()),
+                array('field' => 'status_id',    'operator' => 'notin',  'value' => $closedIds),
             )
         ))));
         
@@ -124,7 +139,7 @@ class Tasks_Setup_Update_Release3 extends Setup_Update_Abstract
             'filters'           => array(
                 array('field' => 'organizer',    'operator' => 'equals', 'value' => Tinebase_Model_User::CURRENTACCOUNT),
                 array('field' => 'due',          'operator' => 'within', 'value' => 'weekThis'),
-                array('field' => 'status_id',    'operator' => 'notin',  'value' => $closedStatus->getId()),
+                array('field' => 'status_id',    'operator' => 'notin',  'value' => $closedIds),
             )
         ))));
 

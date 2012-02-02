@@ -1470,7 +1470,7 @@
                     <name>cfd_time</name>
                     <type>integer</type>
                     <length>11</length>
-                </field>                                
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -1492,8 +1492,6 @@
                     <onupdate>cascade</onupdate>
                 </index>   
             </declaration>
-        </table> 
-        
-        
+        </table>
      </tables>    
 </application>

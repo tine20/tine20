@@ -61,8 +61,9 @@ class Tinebase_PersistentFilter_Backend_Sql extends Tinebase_Backend_Sql_Abstrac
      */
     protected function _recordToRawData($_record)
     {
-    	
-        $_record->filters->removeId();
+        if (is_object($_record->filters)) {
+            $_record->filters->removeId();
+        }
         $rawData = $_record->toArray();
         $rawData['filters'] = Zend_Json::encode($rawData['filters']);
         

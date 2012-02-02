@@ -6,7 +6,7 @@
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -138,6 +138,7 @@ class Voipmanager_Setup_Update_Release5 extends Setup_Update_Abstract
         );
         
         foreach ($tables as $table => $data) {
+            //if ($table === 'asterisk_redirects' && )
             foreach ($data['fields'] as $field => $fieldData) {
                 $declaration = new Setup_Backend_Schema_Field_Xml('
                     <field>
@@ -146,11 +147,106 @@ class Voipmanager_Setup_Update_Release5 extends Setup_Update_Abstract
                         <length>32</length>
                         ' . ((! empty($fieldData)) ? '<default>' . $fieldData['default'] . '</default><notnull>true</notnull>' : '') . '
                     </field>');
-                $this->_backend->alterCol($table, $declaration);
+                try {
+                    $this->_backend->alterCol($table, $declaration);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if ($table === 'asterisk_redirects') {
+                        // this table has been accidentally droppen in Voipmanager_Setup_Update_Release3::update_1();
+                        $this->_addAsteriskRedirects();
+                    } else {
+                        throw $zdse;
+                    }
+                }
             }
             $this->setTableVersion($table, $data['version']);
         }
         
         $this->setApplicationVersion('Voipmanager', '5.2');
+    }
+    
+    /**
+     * add asterisk_redirects table
+     */
+    protected function _addAsteriskRedirects()
+    {
+        $tableDefinition = '
+        <table>
+            <name>asterisk_redirects</name>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+            <version>2</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>cfi_mode</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <default>off</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>cfi_number</name>
+                    <type>text</type>
+                    <length>80</length>
+                </field>
+                <field>
+                    <name>cfb_mode</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <default>off</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>cfb_number</name>
+                    <type>text</type>
+                    <length>80</length>
+                </field>
+                <field>
+                    <name>cfd_mode</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <default>off</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>cfd_number</name>
+                    <type>text</type>
+                    <length>80</length>
+                </field>
+                <field>
+                    <name>cfd_time</name>
+                    <type>integer</type>
+                    <length>11</length>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>asterisk_redirect::id--asterisk_sip_peers::id</name>
+                    <field>
+                        <name>id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>asterisk_sip_peers</table>
+                        <field>id</field>
+                    </reference>
+                    <ondelete>cascade</ondelete>
+                    <onupdate>cascade</onupdate>
+                </index>   
+            </declaration>
+        </table>';
+        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
+        $this->createTable('asterisk_redirects', $table, 'Voipmanager', 2);
     }
 }
