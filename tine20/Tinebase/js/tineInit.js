@@ -503,7 +503,7 @@ Tine.Tinebase.tineInit = {
             var mainWindow = Ext.ux.PopupWindowMgr.getMainWindow();
             
             for (var p in mainWindow.Tine) {
-                if (mainWindow.Tine[p].hasOwnProperty('registry') && Tine.hasOwnProperty(p)) {
+                if (Object.prototype.hasOwnProperty.call(mainWindow.Tine[p], 'registry') && Tine.hasOwnProperty(p)) {
                     Tine[p].registry = mainWindow.Tine[p].registry;
                 }
             }

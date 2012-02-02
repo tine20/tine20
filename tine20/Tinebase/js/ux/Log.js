@@ -9,7 +9,7 @@ Ext.ns('Ext.ux');
  * @namespace   Ext.ux.log
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-Ext.ux.log = Ext.isIE ? {} : console;
+Ext.ux.log = window.console || {};
 
 Ext.apply(Ext.ux.log, {
     /**
@@ -26,6 +26,7 @@ Ext.apply(Ext.ux.log, {
         ALERT:    1,  // Alert: action must be taken immediately
         CRIT:     2,  // Critical: critical conditions
         ERR:      3,  // Error: error conditions
+        ERROR:    3,  // Error: error conditions
         WARN:     4,  // Warning: warning conditions
         NOTICE:   5,  // Notice: normal but significant condition
         INFO:     6,  // Informational: informational messages
@@ -40,6 +41,7 @@ Ext.apply(Ext.ux.log, {
         ALERT:    console.error,
         CRIT:     console.error,
         ERR:      console.error,
+        ERROR:    console.error,
         WARN:     console.warn,
         NOTICE:   console.info,
         INFO:     console.info,
@@ -73,5 +75,5 @@ Ext.apply(Ext.ux.log, {
 // init Ext.ux.log
 Ext.onReady(function() {
     Ext.ux.log.setPrio(Ext.LOGLEVEL);
-    Ext.ux.log.DEBUG('logger initialized');
+    Ext.ux.log.debug('logger initialized');
 });

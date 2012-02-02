@@ -66,7 +66,9 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
     },
 
     setValue : function(color){
+        color = color || '#FFFFFF';
         Ext.ux.form.ColorField.superclass.setValue.call(this, color);
+        
         this.el.setStyle('background', color);
         this.el.setStyle('color', color);
     },
