@@ -116,10 +116,10 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
      */
     selectValue: function(value) {
         var values = Ext.isArray(value) ? value : [value];
-        Ext.each(values, function(value) {
+        Ext.each(values, function(value, idx) {
             // value might already be a path
             if (Ext.isString(value) && value.charAt(0) == '/') {
-                value = {path: value};
+                value = values[idx] = {path: value};
             }
             
             var treePath = this.treePanel.getTreePath(value.path);
