@@ -290,7 +290,9 @@ class Tinebase_Auth
             }
         } else {
             if ( ! array_key_exists($_key, $defaultValues)) {
-                throw new Tinebase_Exception_InvalidArgument("Cannot set backend configuration option '$_key' for authentication provider " . self::getConfiguredBackend());
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+                    "Cannot set backend configuration option '$_key' for accounts storage " . self::getConfiguredBackend());
+                return;
             }
             self::$_backendConfiguration[$_key] = $_value;
         }

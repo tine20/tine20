@@ -548,7 +548,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $stmt->closeCursor();
         
         if (!$queryResult) {
-            throw new Tinebase_Exception_NotFound('Group not found.');
+            throw new Tinebase_Exception_Record_NotDefined('Group not found.');
         }
 
         $result = new Tinebase_Model_Group($queryResult, TRUE);
@@ -568,7 +568,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $groupdId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
         
         $select = $this->_getSelect();
-                
+        
         $select->where($this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ?', $groupdId);
         
         $stmt = $this->_db->query($select);
@@ -578,7 +578,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         if (!$queryResult) {
             throw new Tinebase_Exception_Record_NotDefined('Group not found.');
         }
-
+        
         $result = new Tinebase_Model_Group($queryResult, TRUE);
         
         return $result;

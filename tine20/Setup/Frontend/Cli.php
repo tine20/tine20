@@ -421,15 +421,19 @@ class Setup_Frontend_Cli
      */
     public static function parseConfigValue($_value)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_value, TRUE));
+        
         $result = array(
             'active' => 1
         );
         
-        $_value = preg_replace('/\s*/', '', $_value);
+        $_value = preg_replace(array('/\s*/', '/\\\,/'), array('', ';'), $_value);
         $parts = explode(',', $_value);
         foreach ($parts as $part) {
-            if (preg_match('/_/', $part)) {
-                list($key, $sub) = explode('_', $part);
+            $part = str_replace(';', ',', $part);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $part);
+            if (strpos($part, '_') !== FALSE) {
+                list($key, $sub) = preg_split('/_/', $part, 2);
                 if (preg_match('/:/', $sub)) {
                     list($subKey, $value) = explode(':', $sub);
                     $result[$key][$subKey] = $value;
@@ -444,13 +448,11 @@ class Setup_Frontend_Cli
                     }
                 }
             } else {
-                if (preg_match('/:/', $part)) {
-                    $exploded = explode(':', $part);
-                    // first element is always the key -> no ':' allowed in keys
-                    $key = array_shift($exploded);
-                    $result[$key] = implode(':', $exploded);
+                if (strpos($part, ':') !== FALSE) {
+                    list($key, $value) = preg_split('/:/', $part, 2);
+                    $result[$key] = $value;
                 } else {
-                    $result = $value;
+                    $result = $part;
                 }
             }
         }
@@ -466,14 +468,15 @@ class Setup_Frontend_Cli
      */
     protected function _parseRemainingArgs($_args)
     {
-    	$options = array();
-    	foreach ($_args as $arg) {
-    	    if (strpos($arg, '=') !== FALSE) {
-        		list($key, $value) = explode('=', $arg);
-        		$options[$key] = $value;
-    	    }
-    	}
-    	
-    	return $options;
+        $options = array();
+        foreach ($_args as $arg) {
+            if (strpos($arg, '=') !== FALSE) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $arg);
+                list($key, $value) = preg_split('/=/', $arg, 2);
+                $options[$key] = $value;
+            }
+        }
+        
+        return $options;
     }
 }

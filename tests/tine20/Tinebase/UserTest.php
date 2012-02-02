@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Jonas Fischer <j.fischer@metaways.de>
  */
 
@@ -14,21 +14,15 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_UserTest::main');
-}
-
 /**
  * Test class for Tinebase_User_Abstract
  */
 class Tinebase_UserTest extends PHPUnit_Framework_TestCase
 {
-
     /**
      * @var array test objects
      */
     protected $_objects = array();
-    
     protected $_originalBackendConfiguration = null;
     protected $_originalBackendType = null;
 
@@ -102,6 +96,9 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * delete backend config
+     */
     public function testDeleteBackendConfiguration()
     {
         Tinebase_User::setBackendType(Tinebase_User::LDAP);   
@@ -116,12 +113,10 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
         Tinebase_User::deleteBackendConfiguration('non-existing-key');
         $this->assertEquals($configOptionsCount, count(Tinebase_User::getBackendConfiguration()));
         
-        $this->assertTrue($configOptionsCount > 0);
+        $this->assertTrue($configOptionsCount > 0, 'user backend config should be not empty');
         Tinebase_User::deleteBackendConfiguration();
-        $this->assertTrue(count(Tinebase_User::getBackendConfiguration()) == 0);
+        $this->assertTrue(count(Tinebase_User::getBackendConfiguration()) == 0, 'should be empty: ' . print_r(Tinebase_User::getBackendConfiguration(), TRUE));
     }
-    
-    
     
     public function testGetBackendConfigurationDefaults()
     {
@@ -135,6 +130,4 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(array_key_exists('host', $defaults));
         $this->assertFalse(array_key_exists(Tinebase_User::LDAP, $defaults));
     }
-
-
-}       
+}

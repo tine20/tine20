@@ -92,6 +92,7 @@ abstract class Tinebase_Group_Abstract
      *
      * @param int $_groupId
      * @return Tinebase_Model_Group
+     * @throws  Tinebase_Exception_Record_NotDefined
      */
     abstract public function getGroupById($_groupId);
     
@@ -100,6 +101,7 @@ abstract class Tinebase_Group_Abstract
      *
      * @param string $_groupName
      * @return Tinebase_Model_Group
+     * @throws  Tinebase_Exception_Record_NotDefined
      */
     abstract public function getGroupByName($_groupName);
 
@@ -164,7 +166,7 @@ abstract class Tinebase_Group_Abstract
         
         try {
             $result = $this->getGroupByName($defaultGroupName);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_Record_NotDefined $tenf) {
             // create group on the fly
             $result = $this->addGroup(new Tinebase_Model_Group(array(
                 'name'    => $defaultGroupName,

@@ -5,18 +5,14 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_GroupTest::main');
-}
 
 /**
  * Test class for Tinebase_Group
@@ -245,39 +241,31 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
 
     /**
      * try to delete a group
-     *
      */
     public function testDeleteGroup()
     {
         Tinebase_Group::getInstance()->deleteGroups($this->objects['initialGroup']);
-
-        $this->setExpectedException('Exception');
-
+        
+        $this->setExpectedException('Tinebase_Exception_Record_NotDefined');
         $group = Tinebase_Group::getInstance()->getGroupById($this->objects['initialGroup']);
     }
 
   /**
      * try to convert group id and check if correct exceptions are thrown 
-     *
      */
     public function testConvertGroupIdToInt()
     {
-        $this->setExpectedException('Exception');
-    	
+        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
         Tinebase_Model_Group::convertGroupIdToInt (0);
-  
     }
 
   	/**
      * try to convert id of group object and check if correct exceptions are thrown 
-     *
      */
     public function testConvertGroupIdToIntWithGroup()
     {
-        $this->setExpectedException('Exception');
-    	
-        Tinebase_Model_Group::convertGroupIdToInt ( $this->objects['noIdGroup'] );
-  
+        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
+        Tinebase_Model_Group::convertGroupIdToInt($this->objects['noIdGroup']);
     }
     
     public function testGetDefaultGroup()
@@ -311,8 +299,4 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($currentGroupMemberships, $newGroupMemberships);
     }
     
-}
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_GroupTest::main') {
-    Tinebase_GroupTest::main();
 }

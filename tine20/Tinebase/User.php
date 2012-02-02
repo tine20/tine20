@@ -94,8 +94,8 @@ class Tinebase_User
     private static $_backendConfigurationDefaults = array(
         self::SQL => array(
             'changepw' => true,
-            self::DEFAULT_USER_GROUP_NAME_KEY => 'Users',
-            self::DEFAULT_ADMIN_GROUP_NAME_KEY => 'Administrators',
+            self::DEFAULT_USER_GROUP_NAME_KEY  => Tinebase_Group::DEFAULT_USER_GROUP,
+            self::DEFAULT_ADMIN_GROUP_NAME_KEY => Tinebase_Group::DEFAULT_ADMIN_GROUP,
         ),
         self::LDAP => array(
             'host' => '',
@@ -116,8 +116,8 @@ class Tinebase_User
             'maxGroupId' => '11099',
             'groupUUIDAttribute' => 'entryUUID',
             'userUUIDAttribute' => 'entryUUID',
-            self::DEFAULT_USER_GROUP_NAME_KEY => 'Users',
-            self::DEFAULT_ADMIN_GROUP_NAME_KEY => 'Administrators',
+            self::DEFAULT_USER_GROUP_NAME_KEY  => Tinebase_Group::DEFAULT_USER_GROUP,
+            self::DEFAULT_ADMIN_GROUP_NAME_KEY => Tinebase_Group::DEFAULT_ADMIN_GROUP,
             'changepw' => true
          )
     );
@@ -220,12 +220,20 @@ class Tinebase_User
      * 
      * @todo persist in db
      * 
-     * @param string $_backendType
+     * @param string $backendType
      * @return void
      */
-    public static function setBackendType($_backendType)
+    public static function setBackendType($backendType)
     {
-        self::$_backendType = ucfirst($_backendType);
+        if (empty($backendType)) {
+            throw new Tinebase_Exception_InvalidArgument('Backend type can not be empty!');
+        }
+        
+        $newBackendType = ucfirst($backendType);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+            ' Setting backend type to ' . $newBackendType);
+        
+        self::$_backendType = $newBackendType;
     }
     
     /**
@@ -251,8 +259,12 @@ class Tinebase_User
             }
         } else {
             if ( ! array_key_exists($_key, $defaultValues)) {
-                throw new Tinebase_Exception_InvalidArgument("Cannot set backend configuration option '$_key' for accounts storage " . self::getConfiguredBackend());
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+                    " Cannot set backend configuration option '$_key' for accounts storage " . self::getConfiguredBackend());
+                return;
             }
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' Setting backend key ' . $_key . ' to ' . $_value);
             self::$_backendConfiguration[$_key] = $_value;
         }
     }

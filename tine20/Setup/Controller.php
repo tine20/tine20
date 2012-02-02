@@ -280,7 +280,7 @@ class Setup_Controller
         
         return $applications;
     }
-                 
+    
     /**
      * updates installed applications. does nothing if no applications are installed
      *
@@ -785,10 +785,10 @@ class Setup_Controller
     public function loadAuthenticationData()
     {
         return array(
-                'authentication'    => $this->_getAuthProviderData(),
-                'accounts'          => $this->_getAccountsStorageData(),
-                'redirectSettings'  => $this->_getRedirectSettings()
-            );
+            'authentication'    => $this->_getAuthProviderData(),
+            'accounts'          => $this->_getAccountsStorageData(),
+            'redirectSettings'  => $this->_getRedirectSettings()
+        );
     }
     
     /**
@@ -861,15 +861,16 @@ class Setup_Controller
     protected function _updateAuthenticationProvider($_data)
     {
         Tinebase_Auth::setBackendType($_data['backend']);
+        $config = (isset($_data[$_data['backend']])) ? $_data[$_data['backend']] : $_data;
         
         $excludeKeys = array('adminLoginName', 'adminPassword', 'adminPasswordConfirmation');
         foreach ($excludeKeys as $key) {
-            if (array_key_exists($key, $_data[$_data['backend']])) {
-                unset($_data[$_data['backend']][$key]);
+            if (array_key_exists($key, $config)) {
+                unset($config[$key]);
             }
         }
         
-        Tinebase_Auth::setBackendConfiguration($_data[$_data['backend']]);
+        Tinebase_Auth::setBackendConfiguration($config);
         Tinebase_Auth::saveBackendConfiguration();
     }
     
@@ -885,7 +886,8 @@ class Setup_Controller
         $newBackend = $_data['backend'];
         
         Tinebase_User::setBackendType($_data['backend']);
-        Tinebase_User::setBackendConfiguration($_data[$_data['backend']]);
+        $config = (isset($_data[$_data['backend']])) ? $_data[$_data['backend']] : $_data;
+        Tinebase_User::setBackendConfiguration($config);
         Tinebase_User::saveBackendConfiguration();
         
         if ($originalBackend != $newBackend && $this->isInstalled('Addressbook') && $originalBackend == Tinebase_User::SQL) {
@@ -1033,6 +1035,8 @@ class Setup_Controller
      */
     public function saveEmailConfig($_data)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, TRUE));
+        
         $this->_enableCaching();
         
         foreach ($this->_emailConfigKeys as $configName => $configKey) {
@@ -1526,7 +1530,6 @@ class Setup_Controller
         $result = TRUE;
         try {
             $app = Tinebase_Application::getInstance()->getApplicationByName($appname);
-            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Appname ' . $appname . ' already installed.');
         } catch (Exception $e) {
             $result = FALSE;
         }

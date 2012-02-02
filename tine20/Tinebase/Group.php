@@ -22,7 +22,21 @@ class Tinebase_Group
     const LDAP = 'Ldap';
     
     const TYPO3 = 'Typo3';
-
+    
+    /**
+     * default admin group name
+     * 
+     * @var string
+     */
+    const DEFAULT_ADMIN_GROUP = 'Administrators';
+    
+    /**
+     * default user group name
+     * 
+     * @var string
+     */
+    const DEFAULT_USER_GROUP = 'Users';
+    
     /**
      * the constructor
      *
@@ -177,16 +191,20 @@ class Tinebase_Group
      */
     public static function createInitialGroups()
     {
-        // add the admin group
+        $defaultAdminGroupName = (Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY)) 
+            ? Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY)
+            : self::DEFAULT_ADMIN_GROUP; 
         $adminGroup = new Tinebase_Model_Group(array(
-            'name'          => Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY),
+            'name'          => $defaultAdminGroupName,
             'description'   => 'Group of administrative accounts'
         ));
         Tinebase_Group::getInstance()->addGroup($adminGroup);
 
-        // add the user group
+        $defaultUserGroupName = (Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY))
+            ? Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY)
+            : self::DEFAULT_USER_GROUP;
         $userGroup = new Tinebase_Model_Group(array(
-            'name'          => Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY),
+            'name'          => $defaultUserGroupName,
             'description'   => 'Group of user accounts'
         ));
         Tinebase_Group::getInstance()->addGroup($userGroup);
