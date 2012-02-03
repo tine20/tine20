@@ -98,7 +98,7 @@ class Admin_Controller_Role extends Tinebase_Controller_Abstract
         
         $role = Tinebase_Acl_Roles::getInstance()->getRoleById($_roleId);
 
-        return $role;            
+        return $role;
     }  
     
    /**

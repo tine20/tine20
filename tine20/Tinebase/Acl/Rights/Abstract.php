@@ -62,7 +62,7 @@ abstract class Tinebase_Acl_Rights_Abstract implements Tinebase_Acl_Rights_Inter
      * 
      * @return  array with translated descriptions for this applications rights
      */
-    private function getTranslatedRightDescriptions()
+    public static function getTranslatedRightDescriptions()
     {
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         
@@ -79,27 +79,4 @@ abstract class Tinebase_Acl_Rights_Abstract implements Tinebase_Acl_Rights_Inter
         
         return $rightDescriptions;
     }
-    
-    /**
-     * get right description
-     * 
-     * @param   string right
-     * @return  array with text + description
-     */
-    public function getRightDescription($_right)
-    {        
-        $result = array(
-            'text'          => $_right,
-            'description'   => $_right . " right",
-        );
-        
-        $rightDescriptions = self::getTranslatedRightDescriptions();
-        
-        if ( isset($rightDescriptions[$_right]) ) {
-            $result = $rightDescriptions[$_right];
-        }
-
-        return $result;
-    }
-    
 }

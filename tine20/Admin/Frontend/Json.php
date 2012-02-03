@@ -976,17 +976,19 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @return array with all rights for applications
      * 
-     * @todo    get right description from Tinebase_Application/Acl_Rights
-     * @todo    get only active applications rights?
+     * @todo    get only rights of active applications?
      */
     public function getAllRoleRights()
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get all rights of all apps.');
+        
         $result = array();
         
-        // get all applications
         $applications = Admin_Controller_Application::getInstance()->search(NULL, 'name', 'ASC', NULL, NULL);
         
-        foreach ( $applications as $application ) {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($applications->toArray(), TRUE));
+        
+        foreach ($applications as $application) {
             $appId = $application->getId();
             $rightsForApplication = array(
                 "application_id"    => $appId,
@@ -994,10 +996,11 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 "children"          => array()
             );
             
-            $allAplicationRights = Tinebase_Application::getInstance()->getAllRights($appId);
+            $allAplicationRights = Tinebase_Application::getInstance()->getAllRightDescriptions($appId);
             
-            foreach ( $allAplicationRights as $right ) {
-                $description = Tinebase_Application::getInstance()->getRightDescription($appId, $right);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($allAplicationRights, TRUE));
+            
+            foreach ($allAplicationRights as $right => $description) {
                 $rightsForApplication["children"][] = array(
                     "text"      => $description['text'],
                     "qtip"      => $description['description'],

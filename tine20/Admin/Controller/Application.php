@@ -71,7 +71,7 @@ class Admin_Controller_Application extends Tinebase_Controller_Abstract
      */
     public function search($filter, $sort, $dir, $start, $limit)
     {
-        $this->checkRight('VIEW_APPS');        
+        $this->checkRight('VIEW_APPS');
         
         $tineApplications = Tinebase_Application::getInstance();
         

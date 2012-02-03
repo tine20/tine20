@@ -5,8 +5,8 @@
  * @package     Admin
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -14,10 +14,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Admin_Acl_RightsTest::main');
-}
 
 /**
  * Test class for Tinebase_Acl_Roles
@@ -77,16 +73,17 @@ class Admin_Acl_RightsTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to check getting application rights
-     *
      */   
-    public function testGetRightDescription()
+    public function testGetTranslatedRightDescriptions()
     {
-        $text = Admin_Acl_Rights::getInstance()->getRightDescription(Admin_Acl_Rights::MANAGE_ROLES);
+        $all = Admin_Acl_Rights::getTranslatedRightDescriptions();
+        $text = $all[Admin_Acl_Rights::MANAGE_ROLES];
         
-        //print_r($text);
-
         $this->assertNotEquals('', $text['text']);
         $this->assertNotEquals('', $text['description']);
         $this->assertNotEquals(Admin_Acl_Rights::MANAGE_ROLES . ' right', $text['description']);
+        
+        $translate = Tinebase_Translation::getTranslation('Admin');
+        $this->assertEquals($translate->_('manage roles'), $text['text']);
     } 
 }

@@ -88,7 +88,7 @@ class Filemanager_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * 
      * @return  array with translated descriptions for this applications rights
      */
-    private function getTranslatedRightDescriptions()
+    public static function getTranslatedRightDescriptions()
     {
         $translate = Tinebase_Translation::getTranslation('Filemanager');
         
@@ -99,25 +99,8 @@ class Filemanager_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             ),
         );
         
+        $rightDescriptions = array_merge($rightDescriptions, parent::getTranslatedRightDescriptions());
         return $rightDescriptions;
     }
 
-    /**
-     * get right description
-     * 
-     * @param   string right
-     * @return  array with text + description
-     */
-    public function getRightDescription($_right)
-    {        
-        $result = parent::getRightDescription($_right);
-        
-        $rightDescriptions = self::getTranslatedRightDescriptions();
-        
-        if ( isset($rightDescriptions[$_right]) ) {
-            $result = $rightDescriptions[$_right];
-        }
-
-        return $result;
-    }
 }

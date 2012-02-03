@@ -282,7 +282,6 @@ class Tinebase_Acl_Roles
         $result = new Tinebase_Model_Role($row->toArray());
         
         return $result;
-        
     }
     
 

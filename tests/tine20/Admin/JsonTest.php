@@ -4,7 +4,7 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -477,7 +477,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * try to add role and set members/rights
-     *
      */
     public function testAddRole()
     {
@@ -501,7 +500,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $result = $this->_json->saveRole($roledData, $roleMembers, $roleRights);
         
-        
         // get role id from result
         $roleId = $result['id'];
         
@@ -510,7 +508,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($role->getId(), $roleId);
 
         // check role members
-        $result = $this->_json->getRoleMembers($role->getId());        
+        $result = $this->_json->getRoleMembers($role->getId());
         $this->assertGreaterThan(0, $result['totalcount']);
     }
 
@@ -572,14 +570,15 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * try to get all role rights
-     *
-     * @todo    check structure of return array
      */
     public function testGetAllRoleRights()
     {
         $allRights = $this->_json->getAllRoleRights();
         
         $this->assertGreaterThan(0, $allRights);
+        $this->assertTrue(isset($allRights[0]['text']));
+        $this->assertTrue(isset($allRights[0]['application_id']));
+        $this->assertGreaterThan(0, $allRights[0]['children']);
     }
 
     /**

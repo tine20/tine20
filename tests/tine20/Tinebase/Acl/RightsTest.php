@@ -15,10 +15,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Acl_RightsTest::main');
-}
-
 /**
  * Test class for Tinebase_Acl_Roles
  */
@@ -79,14 +75,13 @@ class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
      * try to check getting application rights
      *
      */   
-    public function testGetRightDescription()
+    public function testGetTranslatedRightDescriptions()
     {
-        $text = Admin_Acl_Rights::getInstance()->getRightDescription(Admin_Acl_Rights::MANAGE_SHARED_TAGS);
+        $all = Admin_Acl_Rights::getTranslatedRightDescriptions();
+        $text = $all[Admin_Acl_Rights::ADMIN];
         
-        //print_r($text);
-
         $this->assertNotEquals('', $text['text']);
         $this->assertNotEquals('', $text['description']);
-        $this->assertNotEquals(Admin_Acl_Rights::MANAGE_SHARED_TAGS . ' right', $text['description']);
+        $this->assertNotEquals(Admin_Acl_Rights::ADMIN . ' right', $text['description']);
     } 
 }

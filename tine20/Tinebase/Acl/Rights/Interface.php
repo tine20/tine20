@@ -23,12 +23,4 @@ interface Tinebase_Acl_Rights_Interface
      * @return  array   all application rights
      */
     public function getAllApplicationRights();
-    
-    /**
-     * get right description
-     * 
-     * @param   string right
-     * @return  array with text + description
-     */
-    public function getRightDescription($_right);            
 }
