@@ -40,6 +40,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
     titleCollapse: true,
     title: '',
     baseCls: 'ux-arrowcollapse',
+
     recordClass: null,
     
     /**

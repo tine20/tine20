@@ -38,5 +38,60 @@ class Sales_Setup_Update_Release5 extends Setup_Update_Abstract
         }
         
         $this->setApplicationVersion('Sales', '5.1');
+    }    
+    
+    /**
+     * update from 5.1 -> 5.2
+     * - default contracts & products
+     * 
+     * @return void
+     */
+    public function update_1() {
+        
+        // Products
+        $commonValues = array(
+                    'account_id'        => NULL,
+                    'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId(),
+                    'model'             => 'Sales_Model_ProductFilter',
+        );
+        
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name'              => "My Products", // _('My Products')
+                'description'       => "Products created by me", // _('Products created by myself')
+                'filters'           => array(
+                    array(
+                        'field'     => 'created_by',
+                        'operator'  => 'equals',
+                        'value'     => Tinebase_Model_User::CURRENTACCOUNT
+                    )
+                ),
+            ))
+        ));
+        
+        // Contracts
+        $commonValues = array(
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId(),
+            'model'             => 'Sales_Model_ContractFilter',
+        );
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name'              => "My Contracts", // _('My Contracts')
+                'description'       => "Contracts created by me", // _('Contracts created by myself')
+                'filters'           => array(
+                    array(
+                        'field'     => 'created_by',
+                        'operator'  => 'equals',
+                        'value'     => Tinebase_Model_User::CURRENTACCOUNT
+                    )
+                ),
+            ))
+        ));
+        
+        $this->setApplicationVersion('Sales', '5.2');
     }
 }

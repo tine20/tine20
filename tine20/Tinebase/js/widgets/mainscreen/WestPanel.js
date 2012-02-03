@@ -243,7 +243,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
     getFavoritesPanel: function() {
         var ct = this.app.getMainScreen().getActiveContentType(),
             panelName = ct + 'FilterPanel';
-
+        
         try {
             if(!this[panelName]) {
                 this[panelName] = new Tine[this.app.appName][panelName]({
@@ -251,7 +251,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                     rootVisible : false,
                     border : false,
                     collapsible : true,
-                    
+                
                     root: null,
                     
                     titleCollapse: true,
@@ -260,7 +260,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                     
                     app: this.app,
                     contentType: ct,
-                                        
+
                     treePanel: (this.hasContainerTreePanel) ? this.getContainerTreePanel() : this.getContentTypeTreePanel(),
                     listeners: {
                         scope: this,

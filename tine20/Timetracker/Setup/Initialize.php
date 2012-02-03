@@ -1,7 +1,7 @@
 <?php
 /**
  * Tine 2.0
- * 
+ *
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
@@ -11,7 +11,7 @@
 
 /**
  * class for Timetracker initialization
- * 
+ *
  * @package     Setup
  */
 class Timetracker_Setup_Initialize extends Setup_Initialize
@@ -22,13 +22,13 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
     protected function _initializeFavorites()
     {
         $pfe = new Tinebase_PersistentFilter_Backend_Sql();
-        
+
         $commonValues = array(
             'account_id'        => NULL,
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId(),
             'model'             => 'Timetracker_Model_TimesheetFilter',
         );
-        
+
         $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Timesheets today", // _("Timesheets today")
             'description'       => "Timesheets today",
@@ -56,7 +56,7 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
                 'value'     => 'weekThis',
             )),
         ))));
-        
+
         $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Timesheets last week", // _("Timesheets last week")
             'description'       => "Timesheets last week",
@@ -98,5 +98,57 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
                 'value'     => 'monthLast',
             )),
         ))));
+        
+        
+        // Timeaccounts
+        $commonValues = array(
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId(),
+            'model'             => 'Timetracker_Model_TimeaccountFilter',
+        );
+
+        $pfe->create(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name'              => "Timeaccounts to bill", // _('Timeaccounts to bill')
+                'description'       => "Timeaccounts to bill",
+                'filters'           => array(
+                    array(
+                        'field'     => 'status',
+                        'operator'  => 'equals',
+                        'value'     => 'to bill',
+                    )
+                ),
+            ))
+        ));
+
+        $pfe->create(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name'              => "Timeaccounts not yet billed", // _('Timeaccounts not yet billed')
+                'description'       => "Timeaccounts not yet billed",
+                'filters'           => array(
+                    array(
+                        'field'     => 'status',
+                        'operator'  => 'equals',
+                        'value'     => 'not yet billed',
+                    )
+                ),
+            ))
+        ));
+
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name'              => "Timeaccounts already billed", // _('Timeaccounts already billed')
+                'description'       => "Timeaccounts already billed",
+               	'filters'           => array(
+                    array(
+                        'field'     => 'status',
+                		'operator'  => 'equals',
+                        'value'     => 'billed',
+                    )
+                ),
+            ))
+        ));
+        
     }
 }

@@ -391,6 +391,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
             }
             this.getEditWindow(record);
         } catch (e) {
+            Tine.log.err('Tine.widgets.persistentfilter.PickerPanel::saveFilter');
             Tine.log.err(e.stack ? e.stack : e);
         }
     },

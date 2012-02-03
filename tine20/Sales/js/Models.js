@@ -77,7 +77,8 @@ Tine.Sales.Model.Product.getFilterModel = function() {
     return [
         {label: _('Quick search'), field: 'query', operators: ['contains']},
         {label: app.i18n._('Product name'),   field: 'name' },
-        {filtertype: 'tinebase.tag', app: app}
+        {filtertype: 'tinebase.tag', app: app},
+        {label: app.i18n._('Creator'), field: 'created_by', valueType: 'user'}
     ];
 };
 
@@ -138,6 +139,8 @@ Tine.Sales.Model.Contract.getFilterModel = function() {
     return [
         {label: _('Quick search'), field: 'query', operators: ['contains']},
         {label: app.i18n._('Contract name'),   field: 'name' },
+        {label: app.i18n._('Creator'), field: 'created_by', valueType: 'user'},
         {filtertype: 'tinebase.tag', app: app}
+        
     ];
 };
