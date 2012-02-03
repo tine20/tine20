@@ -160,34 +160,6 @@ class Tinebase_Filesystem_StreamWrapper
     }
     
     /**
-     * generate hash checksum for file (stream)
-     * 
-     * - uses system shasum command if it exists
-     * 
-     * @return string sha1 hash of file
-     */
-    protected function _generateHash()
-    {
-        if (function_exists('shell_exec') && shell_exec('command -v shasum > /dev/null && echo 1 || echo 0')) {
-            $tempfile = tempnam(Tinebase_Core::getTempDir(), 'tine20_hash');
-            $tempfileHandle = fopen($tempfile, 'w');
-            stream_copy_to_stream($this->_stream, $tempfileHandle);
-            rewind($this->_stream);
-            
-            $output = shell_exec('shasum ' . escapeshellarg($tempfile));
-            list($hash, $filename) = preg_split('/\s/', $output); 
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Generated hash with shasum: ' . $hash);
-        } else {
-            $ctx = hash_init('sha1');
-            hash_update_stream($ctx, $this->_stream);
-            $hash = hash_final($ctx);
-        }
-        
-        return $hash;
-    }
-    
-    /**
      * stream_eof
      * 
      * @return boolean
