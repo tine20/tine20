@@ -4,10 +4,7 @@
  *
  * @package     Syncope
  * @subpackage  Backend
- * @license     http://www.tine20.org/licenses/agpl-nonus.txt AGPL Version 1 (Non-US)
- *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL), 
- *              Version 1, the distribution of the Syncope module in or to the 
- *              United States of America is excluded from the scope of this license.
+ * @license     http://www.tine20.org/licenses/lgpl.html LGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
