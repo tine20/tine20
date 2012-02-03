@@ -369,6 +369,42 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
     }
     
     /**
+     * if not resheduled, attendee status must be preserved
+     */
+    public function testCreateRecurExceptionAllFollowingAttendeeStatus()
+    {
+        $from = new Tinebase_DateTime('2012-02-01 00:00:00');
+        $until = new Tinebase_DateTime('2012-02-29 23:59:59');
+        
+        $event = new Calendar_Model_Event(array(
+            'summary'       => 'Some Daily Event',
+            'dtstart'       => '2012-02-03 09:00:00',
+            'dtend'         => '2012-02-03 10:00:00',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1',
+            'container_id'  => $this->_testCalendar->getId(),
+            'attendee'      => $this->_getAttendee(),
+        ));
+        
+        $persistentEvent = $this->_controller->create($event);
+        $persistentSClever = Calendar_Model_Attender::getAttendee($persistentEvent->attendee, $event->attendee[1]);
+        
+        // accept series for sclever
+        $persistentSClever->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $this->_controller->attenderStatusUpdate($persistentEvent, $persistentSClever, $persistentSClever->status_authkey);
+        
+        // update "allfollowing" w.o. scheduling change
+        $persistentEvent = $this->_controller->get($persistentEvent->getId());
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
+        
+        $recurSet[5]->description = 'From now on, everything will be better'; //2012-02-09 
+        $updatedPersistentEvent = $this->_controller->createRecurException($recurSet[5], FALSE, TRUE);
+        
+        $updatedPersistentSClever = Calendar_Model_Attender::getAttendee($updatedPersistentEvent->attendee, $event->attendee[1]);
+        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedPersistentSClever->status, 'status must not change');
+    }
+    
+    /**
      * returns a simple recure event
      *
      * @return Calendar_Model_Event

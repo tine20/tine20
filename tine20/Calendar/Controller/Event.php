@@ -727,7 +727,24 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $_event->exdate = $futureExdates;
                 $futurePersistentExceptionEvents->setRecurId();
                 
+                $attendees = $_event->attendee; unset($_event->attendee);
+                $note = $_event->notes; unset($_event->notes);
                 $persistentExceptionEvent = $this->create($_event, $_checkBusyConflicts && $dtStartHasDiff);
+                
+                // we save attendee seperatly to preserve their attributes
+                if ($attendees instanceof Tinebase_Record_RecordSet) {
+                    $attendees->cal_event_id = $persistentExceptionEvent->getId();
+                    
+                    foreach($attendees as $attendee) {
+                        $this->_backend->createAttendee($attendee);
+                    }
+                }
+                
+                // @todo save notes and add a update note -> what was updated? -> modlog is also missing
+                
+                
+                $persistentExceptionEvent = $this->get($persistentExceptionEvent->getId());
+                
                 foreach($futurePersistentExceptionEvents as $futurePersistentExceptionEvent) {
                     $this->update($futurePersistentExceptionEvent, FALSE);
                 }
