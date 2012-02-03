@@ -666,6 +666,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             height: Math.max(12, event.ui.getEls()[0].getHeight() -18),
             style: 'background-color: transparent; background: 0: border: 0; position: absolute; top: 0px;',
             value: this.newEventSummary,
+            maxLength: 255,
+            maxLengthText: this.app.i18n._('The summary must not be longer than 255 characters.'),
+            minLength: 1,
+            minLengthText: this.app.i18n._('The summary must have at least 1 character.'),
             enableKeyEvents: true,
             listeners: {
                 scope: this,
@@ -681,13 +685,13 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     },
     
     endEditSummary: function(field, e) {
-    	var event   = field.event;
-    	var summary = field.getValue();
-    	
-        if (! this.editing) {
+        var event   = field.event;
+        var summary = field.getValue();
+
+        if (!e || ! this.editing || this.validateMsg) {
             return;
         }
-        
+
         // abort edit on ESC key
         if (e && e.getKey() == e.ESC) {
             return this.abortCreateEvent(event);
@@ -698,10 +702,26 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             return;
         }
         
-        if (! summary) {
-            return this.abortCreateEvent(event);
+        // Validate Summary maxLength
+        if (summary.length > field.maxLength) {
+            field.markInvalid();
+            this.validateMsg = Ext.Msg.alert(this.app.i18n._('Summary too Long'), field.maxLengthText, function(){
+                field.focus();
+                this.validateMsg = false;
+                }, this);
+            return;
         }
-        
+
+        // Validate Summary minLength
+        if (!summary || summary.length < field.minLength) {
+            field.markInvalid();
+            this.validateMsg = Ext.Msg.alert(this.app.i18n._('Summary too Short'), field.minLengthText, function(){
+                field.focus();
+                this.validateMsg = false;
+                }, this);
+            return;
+        }
+
         this.editing = false;
         event.summaryEditor = false;
         
