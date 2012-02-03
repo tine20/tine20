@@ -148,13 +148,14 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
             if(!empty($data->$value)) {
                 switch($value) {
                     case 'bday':
+                        /* webos < 2.1 
                         if ($this->_device->devicetype == Syncope_Model_Device::TYPE_WEBOS) {
                             $userTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
                             $data->bday->setTimezone($userTimezone);
                             $data->bday->addHour(12);
                             $data->bday = new Tinebase_DateTime($data->bday->format(Tinebase_Record_Abstract::ISO8601LONG), 'UTC');
                         }
-                        
+                        */
                         $nodeContent = $data->bday->format("Y-m-d\TH:i:s") . '.000Z';
                         break;
                         
@@ -286,11 +287,11 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                         $contact->bday = new Tinebase_DateTime($isoDate);
                         
                         if (
-                            ($this->_device->devicetype == Syncope_Model_Device::TYPE_WEBOS) ||
+                            // ($this->_device->devicetype == Syncope_Model_Device::TYPE_WEBOS) || // only valid versions < 2.1
                             ($this->_device->devicetype == Syncope_Model_Device::TYPE_IPHONE && $this->_device->getMajorVersion() < 800) ||
                             preg_match("/^\d{4}-\d{2}-\d{2}$/", $isoDate)
                         ) {
-                            // iOS < 4 & palm send birthdays to the entered date, but the time the birthday got entered on the device
+                            // iOS < 4 & webow < 2.1 send birthdays to the entered date, but the time the birthday got entered on the device
                             // acutally iOS < 4 somtimes sends the bday at noon but the timezone is not clear
                             // -> we don't trust the time part and set the birthdays timezone to the timezone the user has set in tine
                             $userTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
