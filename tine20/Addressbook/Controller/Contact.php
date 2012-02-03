@@ -167,14 +167,15 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * can be called to activate/deactivate if geodata should be set for contacts (ignoring the config setting)
-     * 
-     * @param boolean $_value
-     * @return void
-     */
-    public function setGeoDataForContacts($_value)
+    * can be called to activate/deactivate if geodata should be set for contacts (ignoring the config setting)
+    *
+    * @param  boolean optional
+    * @return boolean
+    */
+    public function setGeoDataForContacts()
     {
-        $this->_setGeoDataForContacts = (boolean) $_value;
+        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
+        return $this->_setBooleanMemberVar('_setGeoDataForContacts', $value);
     }
     
     /**
