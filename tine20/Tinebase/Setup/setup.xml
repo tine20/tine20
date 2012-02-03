@@ -102,6 +102,7 @@
                         <table>applications</table>
                         <field>id</field>
                         <ondelete>cascade</ondelete>
+                        <!-- add onupdate? -->
                     </reference>
                 </index>
             </declaration>
@@ -720,6 +721,7 @@
                         <table>container</table>
                         <field>id</field>
                         <ondelete>cascade</ondelete>
+                        <!-- add onupdate? -->
                     </reference>
                 </index>
             </declaration>
@@ -1362,6 +1364,7 @@
                     <reference>
                         <table>tags</table>
                         <field>id</field>
+                        <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>
 
@@ -1434,6 +1437,7 @@
                     <reference>
                         <table>tags</table>
                         <field>id</field>
+                        <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>
             </declaration>
@@ -1552,6 +1556,7 @@
                     <reference>
                         <table>applications</table>
                         <field>id</field>
+                        <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>
                 <index>
@@ -1563,6 +1568,7 @@
                     <reference>
                         <table>roles</table>
                         <field>id</field>
+                        <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>
 
@@ -1628,6 +1634,7 @@
                     <reference>
                         <table>roles</table>
                         <field>id</field>
+                        <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>
             </declaration>
@@ -1742,6 +1749,7 @@
                     <reference>
                         <table>applications</table>
                         <field>id</field>
+                        <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>
             </declaration>
@@ -1832,6 +1840,7 @@
                         <table>applications</table>
                         <field>id</field>
                         <ondelete>cascade</ondelete>
+                        <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>
                 <index>
@@ -1950,6 +1959,7 @@
                     <reference>
                         <table>applications</table>
                         <field>id</field>
+                        <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>
             </declaration>
@@ -2030,6 +2040,7 @@
                         <table>customfield_config</table>
                         <field>id</field>
                         <ondelete>cascade</ondelete>
+                        <!-- add onupdate? -->
                     </reference>
                 </index>
             </declaration>
@@ -2189,6 +2200,7 @@
                     <reference>
                         <table>note_types</table>
                         <field>id</field>
+                        <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>
             </declaration>
@@ -2285,6 +2297,7 @@
                     <reference>
                         <table>applications</table>
                         <field>id</field>
+                        <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>
             </declaration>
@@ -2404,6 +2417,7 @@
                     <reference>
                         <table>applications</table>
                         <field>id</field>
+                        <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>
             </declaration>
@@ -2653,6 +2667,7 @@
                     <reference>
                         <table>accounts</table>
                         <field>id</field>
+                        <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>
             </declaration>
@@ -2988,6 +3003,7 @@
                         <table>tree_fileobjects</table>
                         <field>id</field>
                         <onupdate>cascade</onupdate>
+                        <!-- add ondelete? -->
                     </reference>
                 </index>            
                 <index>
@@ -3000,6 +3016,7 @@
                         <table>tree_nodes</table>
                         <field>id</field>
                         <onupdate>cascade</onupdate>
+                        <!-- add ondelete? -->
                     </reference>
                 </index>            
             </declaration>

@@ -244,8 +244,8 @@
                         <table>cal_events</table>
                         <field>id</field>
                         <ondelete>CASCADE</ondelete>
+                        <!-- add onupdate? -->
                     </reference>
-                    <ondelete>cascade</ondelete>
                 </index>
                 <index>
                     <name>exdate</name>
@@ -347,8 +347,8 @@
                         <table>cal_events</table>
                         <field>id</field>
                         <ondelete>CASCADE</ondelete>
+                        <!-- add onupdate? -->
                     </reference>
-                    <ondelete>cascade</ondelete>
                 </index>
                 <index>
                     <name>user_id</name>
