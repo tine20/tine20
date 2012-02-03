@@ -144,14 +144,21 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var apps = sm.getSelections();
         var disabled = sm.getCount() == 0;
         
-        var nIn = disabled, nUp = disabled, nUn = disabled;
+        var nIn = disabled, nUp = disabled, nUn = disabled,        
+            addressbook, admin, tinebase;
         
         for(var i=0; i<apps.length; i++) {
             var status = apps[i].get('install_status');
             nIn = nIn || status == 'uptodate' || status == 'updateable';
             nUp = nUp || status == 'uptodate' || status == 'uninstalled';
             nUn = nUn || status == 'uninstalled';
+            if (apps[i].id == 'Addressbook') addressbook = true;
+            else if (apps[i].id == 'Tinebase') tinebase = true;
+            else if (apps[i].id == 'Admin') admin = true;
         }
+        
+        if(this.store.getById('Tinebase').get('install_status') == 'uninstalled') tinebase = false;
+        if((addressbook || admin ) && !tinebase) nUn = true;
         
         this.action_installApplications.setDisabled(nIn);
         this.action_uninstallApplications.setDisabled(nUn);
