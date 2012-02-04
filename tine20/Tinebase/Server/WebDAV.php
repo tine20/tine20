@@ -64,9 +64,8 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
         self::$_server = new Sabre_DAV_Server(new Tinebase_WebDav_Root());
         
         // compute base uri
-        #$decodedUri = Sabre_DAV_URLUtil::decodePath(self::$_server->getRequestUri());
-        #$baseUri = substr($decodedUri, 0, strpos($decodedUri, 'carddav/') + strlen('carddav/'));
-        self::$_server->setBaseUri('/');
+        $request = new Zend_Controller_Request_Http();
+        self::$_server->setBaseUri($request->getBaseUrl());
         
         $tempDir = Tinebase_Core::getTempDir();
         if (!empty($tempDir)) {
