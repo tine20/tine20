@@ -58,7 +58,7 @@ class Syncope_Server
                 break;
         
             case 'GET':
-                echo "It works!<br>Your username is: {$this->_username} and your IP address is: {$_SERVER['REMOTE_ADDR']}.";
+                echo "It works!<br>Your userid is: {$this->_userId} and your IP address is: {$_SERVER['REMOTE_ADDR']}.";
                 break;
         }       
     }
