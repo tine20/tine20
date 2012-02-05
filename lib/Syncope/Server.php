@@ -30,14 +30,8 @@ class Syncope_Server
         }
         
         $this->_userId  = $userId;
-        if ($this->_logger instanceof Zend_Log)
-            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . ' REQUEST METHOD: ');
         $this->_request = $request !== null ? $request : new Zend_Controller_Request_Http();
-        if ($this->_logger instanceof Zend_Log)
-            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . ' REQUEST METHOD: ');
         $this->_body    = $body    !== null ? $body    : fopen('php://input', 'r');
-        if ($this->_logger instanceof Zend_Log)
-            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . ' REQUEST METHOD: ');
         
         $this->_deviceBackend = Syncope_Registry::get('deviceBackend');
         
