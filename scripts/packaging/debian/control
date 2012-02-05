@@ -24,7 +24,6 @@ Architecture: all
 Depends: ${misc:Depends}, 
     httpd, 
     libapache2-mod-php5 | php5 | php5-cgi | php5-fpm, 
-    mysql-client, 
     dbconfig-common, 
     wwwconfig-common, 
     php5-mysql | php5-mysqli, 
@@ -39,6 +38,13 @@ Description: webbased groupware and crm - core + addressbook module
  This packages contains the core librarys of Tine 2.0 and the addressbook module.
  Installing this package enables you to manage user accounts and contacts. Also
  provides integration with openstreet map.
+
+Package: tine20-activesync
+Architecture: all
+Depends: tine20-tinebase (= ${binary:Version})
+Description: webbased groupware and crm - activesync module
+ This package contains the activesync module of Tine 2.0. Installing this package
+ enables you to syncronize contacts, event, tasks and emails with your mobile phone.
 
 Package: tine20-calendar
 Architecture: all
