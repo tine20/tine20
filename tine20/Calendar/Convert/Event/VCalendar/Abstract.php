@@ -484,9 +484,9 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     foreach ($event->attendee as $attendee) {
                         $recurException->attendee->addRecord(new Calendar_Model_Attender(array(
                             'user_id'   => $attendee->user_id,
-                        	'user_type' => $attendee->user_type,
-                        	'role'      => $attendee->role,
-                        	'status'    => $attendee->status
+                            'user_type' => $attendee->user_type,
+                            'role'      => $attendee->role,
+                            'status'    => $attendee->status
                         )));
                     }
                 }
@@ -607,7 +607,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         $attendee = array(
             'userType'  => $type,
             'firstName' => $firstName,
-        	'lastName'  => $lastName,
+            'lastName'  => $lastName,
             'partStat'  => $status,
             'role'      => $role,
             'email'     => $email
@@ -662,19 +662,16 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     
                 case 'DTEND':
                     
-
                     if (isset($property['VALUE']) && strtoupper($property['VALUE']) == 'DATE') {
                         // all day event
                         $event->is_all_day_event = true;
-                        
-                        $dtend = new Tinebase_DateTime($property->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                        $dtend = $this->_convertToTinebaseDateTime($property, TRUE);
                         
                         // whole day events ends at 23:59:59 in Tine 2.0 but 00:00 the next day in vcalendar
                         $dtend->subSecond(1);
                     } else {
                         $event->is_all_day_event = false;
-                        
-                        $dtend = new Tinebase_DateTime($property->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), $property->getDateTime()->getTimezone());
+                        $dtend = $this->_convertToTinebaseDateTime($property);
                     }
                     
                     $event->dtend = $dtend;
@@ -685,16 +682,13 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     if (isset($property['VALUE']) && strtoupper($property['VALUE']) == 'DATE') {
                         // all day event
                         $event->is_all_day_event = true;
-
-                        $dtstart = new Tinebase_DateTime($property->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                        $dtstart = $this->_convertToTinebaseDateTime($property, TRUE);
                     } else {
                         $event->is_all_day_event = false;
-                        
-                        $dtstart = new Tinebase_DateTime($property->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), $property->getDateTime()->getTimezone());
+                        $dtstart = $this->_convertToTinebaseDateTime($property);
                     }
                     
                     $event->originator_tz = $dtstart->getTimezone()->getName();
-                    
                     $event->dtstart = $dtstart;
                     
                     break;
@@ -716,7 +710,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                         $name = isset($property['CN']) ? $property['CN']->value : $matches['email'];
                         $contact = Calendar_Model_Attender::resolveEmailToContact(array(
                             'email'     => $matches['email'],
-                            'lastName'	=> $name,
+                            'lastName'    => $name,
                         ));
                         
                         // it's not possible to change the organizer by spec
@@ -734,7 +728,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
 
                 case 'RECURRENCE-ID':
                     // original start of the event
-                    $event->recurid = new Tinebase_DateTime($property->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), $property->getDateTime()->getTimezone());
+                    $event->recurid = $this->_convertToTinebaseDateTime($property);
                     
                     // convert recurrence id to utc
                     $event->recurid->setTimezone('UTC');
@@ -773,8 +767,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                                 $recurid->setTimezone(new DateTimeZone('UTC'));
                                                         
                                 $eventException = new Calendar_Model_Event(array(
-                                	'recurid'    => $recurid,
-                                	'is_deleted' => true
+                                    'recurid'    => $recurid,
+                                    'is_deleted' => true
                                 ));
                         
                                 $exdates->addRecord($eventException);
@@ -810,7 +804,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                         switch(strtoupper($valarm->TRIGGER['VALUE']->value)) {
                             # TRIGGER;VALUE=DATE-TIME:20111031T130000Z
                             case 'DATE-TIME':
-                                $alarmTime = new Tinebase_DateTime($_vevent->DTSTART->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), $_vevent->DTSTART->getDateTime()->getTimezone());
+                                $alarmTime = $this->_convertToTinebaseDateTime($_vevent->DTSTART);
                                 $alarmTime->setTimezone('UTC');
                                 
                                 $alarm = new Tinebase_Model_Alarm(array(
@@ -826,7 +820,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                             # TRIGGER;VALUE=DURATION:-PT1H15M
                             case 'DURATION':
                             default:
-                                $alarmTime = new Tinebase_DateTime($_vevent->DTSTART->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), $_vevent->DTSTART->getDateTime()->getTimezone());
+                                $alarmTime = $this->_convertToTinebaseDateTime($_vevent->DTSTART);
                                 $alarmTime->setTimezone('UTC');
                                 
                                 preg_match('/(?P<invert>[+-]?)(?P<spec>P.*)/', $valarm->TRIGGER->value, $matches);
@@ -852,11 +846,11 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     break;
                     
                 case 'X-MOZ-LASTACK':
-                    $lastAck = new Tinebase_DateTime($property->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), $property->getDateTime()->getTimezone());
+                    $lastAck = $this->_convertToTinebaseDateTime($property);
                     break;
                     
                 case 'X-MOZ-SNOOZE-TIME':
-                    $snoozeTime = new Tinebase_DateTime($property->getDateTime()->format(Tinebase_Record_Abstract::ISO8601LONG), $property->getDateTime()->getTimezone());
+                    $snoozeTime = $this->_convertToTinebaseDateTime($property);
                     break;
                     
                 default:
@@ -887,5 +881,30 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         
         // convert all datetime fields to UTC
         $event->setTimezone('UTC');
+    }
+    
+    /**
+     * get datetime from sabredav datetime property (user TZ is fallback)
+     * 
+     * @param Sabre_VObject_Element_DateTime $dateTime
+     * @param boolean $_useUserTZ
+     * @return Tinebase_DateTime
+     * 
+     * @todo try to guess some common timezones
+     */
+    protected function _convertToTinebaseDateTime(Sabre_VObject_Element_DateTime $dateTimeProperty, $_useUserTZ = FALSE)
+    {
+        try {
+            $dateTime = $dateTimeProperty->getDateTime();
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Error: ' . $e->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))  Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+            $dateTimeProperty['TZID'] = (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+            $dateTime = $dateTimeProperty->getDateTime();
+        }
+        $tz = ($_useUserTZ) ? (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE) : $dateTime->getTimezone();
+        $result = new Tinebase_DateTime($dateTime->format(Tinebase_Record_Abstract::ISO8601LONG), $tz);
+        
+        return $result;
     }
 }
