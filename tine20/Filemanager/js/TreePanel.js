@@ -608,7 +608,9 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         fileRecord.set('name', record.name);
         fileRecord.set('path', record.path);
         fileRecord.commit(false);
-
+        
+        upload.fireEvent('update', 'uploadfinished', upload, fileRecord);
+        
         grid.pagingToolbar.refresh.enable();
 
     },
@@ -620,11 +622,12 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      * @param file  {Ext.ux.file.Upload.file} 
      */
     onUploadComplete: function(upload, file) {
-             
+        Tine.log.error('TreePanel::onUploadComplete');
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
-        	treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(); 
+            treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(); 
         
-        Tine.Tinebase.uploadManager.onUploadComplete();
+     // check if we are responsible for the upload
+        if (upload.fmDirector != treePanel) return;
         
         // $filename, $type, $tempFileId, $forceOverwrite
         Ext.Ajax.request({
@@ -774,15 +777,16 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         Ext.each(files, function (file) {
 
             var fileName = file.name || file.fileName,
-                filePath = targetNodePath + '/' + fileName;           
+                filePath = targetNodePath + '/' + fileName;
 
             var upload = new Ext.ux.file.Upload({
+                fmDirector: treePanel,
                 file: file,
                 fileSelector: fileSelector,
                 id: filePath
             });
 
-        var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);     
+        var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
             
             filePathsArray.push(filePath);
             uploadKeyArray.push(uploadKey);

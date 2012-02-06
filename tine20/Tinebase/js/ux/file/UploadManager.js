@@ -13,6 +13,8 @@ Ext.ux.file.UploadManager = function(config) {
     Ext.apply(this, config);
     Ext.ux.file.UploadManager.superclass.constructor.apply(this, arguments);
     
+    this.uploads = {};
+    
     this.addEvents(
         /**
          * @event uploadcomplete
@@ -72,7 +74,7 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
         /**
          * holds the uploads
          */
-        uploads: new Object(),
+        uploads: null,
 
         /**
          * counts session uploads
@@ -82,7 +84,7 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
         /**
          * every upload in the upload manager gets queued initially
          * 
-         * @param upload (Ext.ux.file.Upload} Upload object
+         * @param upload {Ext.ux.file.Upload} Upload object
          * @returns {String} upload id
          */
         queueUpload: function(upload) {
@@ -92,8 +94,10 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
             }
             upload.id = uploadId;
             
-            this.uploads[uploadId] = upload;            
+            this.uploads[uploadId] = upload;
             this.relayEvents(upload, ['update']);
+            
+            upload.on('uploadcomplete', this.onUploadComplete, this);
             
             return uploadId;
         },
@@ -104,7 +108,7 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
          * @param id {String} upload id
          * @returns {Ext.ux.file.Upload.file} upload file record
          */
-        upload: function(id) {            
+        upload: function(id) {
             return this.uploads[id].upload();
         },
 
