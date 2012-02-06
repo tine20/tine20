@@ -54,16 +54,8 @@ if [ "$1" = "purge" ]; then
         ucf --purge /etc/tine20/config.inc.php
     fi
  
-#     # remove the database user
-#     db_get tine20/mysql/dbuser || true
-#     dbuser=$RET
-#	  if [ -f /usr/share/wwwconfig-common/mysql-dropuser.sh ]; then
-#             . /usr/share/wwwconfig-common/mysql-dropuser.sh
-#	  fi
-
-    rm -rf /var/lib/tine20/sessions/*
-    rm -rf /var/lib/tine20/cache/*
-    rm -rf /var/log/tine20/*
+    rm -rf /var/lib/tine20
+    rm -rf /var/log/tine20
     
 fi
 
