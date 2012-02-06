@@ -832,7 +832,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Array} [ids]
      */
     onAfterDelete: function(ids) {
+        this.deleteQueue = this.deleteQueue.diff(ids);
         this.editBuffer = this.editBuffer.diff(ids);
+        
         this.movingOrDeleting = false;
 
         if (this.noDeleteRequestInProgress()) {
@@ -1090,16 +1092,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         Tine.log.debug('Tine.Felamimail.GridPanel::onStoreLoad(): store loaded new records.');
         
-        this.updateQuotaBar(options.params.filter);
+        this.updateQuotaBar();
     },
     
     /**
      * update quotaBar / only do it if we have a path filter with a single account id
      * 
-     * @param {Array} filter
+     * @param {Record} accountInbox
      */
-    updateQuotaBar: function(filter, accountInbox) {
-        var accountId = this.extractAccountIdFromFilter(filter);
+    updateQuotaBar: function(accountInbox) {
+        var accountId = this.extractAccountIdFromFilter();
         
         if (accountId === null) {
             Tine.log.debug('No or multiple account ids in filter. Resetting quota bar.');
@@ -1150,7 +1152,15 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (! filter) {
             filter = this.filterToolbar.getValue();
         }
-
+        
+        // use first OR panel in case of filterPanel
+        Ext.each(filter, function(filterData) {
+            if (filterData.condition && filterData.condition == 'OR') {
+                filter = filterData.filters[0].filters;
+                return false;
+            }
+        }, this);
+        
         // condition from filterPanel
         while (filter.filters || (Ext.isArray(filter) && filter.length > 0 && filter[0].filters)) {
             filter = (filter.filters) ? filter.filters : filter[0].filters;
