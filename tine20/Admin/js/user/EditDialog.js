@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
 /*global Ext, Tine*/
@@ -91,12 +91,12 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         // load stores for memberships
         if (this.record.id) {
-        	this.storeGroups.loadData(this.record.get('groups'));
-        	this.storeRoles.loadData(this.record.get('accountRoles'));
+            this.storeGroups.loadData(this.record.get('groups'));
+            this.storeRoles.loadData(this.record.get('accountRoles'));
         }
         // add to store default primary group
         else {
-        	this.storeGroups.add(new Tine.Admin.Model.Group(this.record.get('accountPrimaryGroup')));
+            this.storeGroups.add(new Tine.Admin.Model.Group(this.record.get('accountPrimaryGroup')));
         }
         
         Tine.Admin.UserEditDialog.superclass.onRecordLoad.call(this);
@@ -107,6 +107,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordUpdate: function () {
         Tine.Admin.UserEditDialog.superclass.onRecordUpdate.call(this);
+        
+        Tine.log.debug('Tine.Admin.UserEditDialog::onRecordUpdate()');
         
         var form = this.getForm();
         form.updateRecord(this.samRecord);
@@ -120,26 +122,31 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         form.updateRecord(this.emailRecord);
         // get aliases / forwards
         if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
+            // forcing blur of quickadd grids
+            this.aliasesGrid.doBlur();
+            this.forwardsGrid.doBlur();
             this.emailRecord.set('emailAliases', this.aliasesGrid.getFromStoreAsArray());
             this.emailRecord.set('emailForwards', this.forwardsGrid.getFromStoreAsArray());
+            Tine.log.debug('Tine.Admin.UserEditDialog::onRecordUpdate() -> setting aliases and forwards in email record');
+            Tine.log.debug(this.emailRecord);
         }
         this.unsetLocalizedDateTimeFields(this.emailRecord, ['emailLastLogin']);
         this.record.set('emailUser', '');
         this.record.set('emailUser', this.emailRecord.data);
         
         var newGroups = [],
-        	newRoles = [];
-        	
+            newRoles = [];
+            
         this.storeGroups.each(function (rec) {
-        	newGroups.push(rec.data.id);	        
+            newGroups.push(rec.data.id);
         });
         // add selected primary group to new groups if not exists
         if (newGroups.indexOf(this.record.get('accountPrimaryGroup')) === -1) {
-        	newGroups.push(this.record.get('accountPrimaryGroup'));
+            newGroups.push(this.record.get('accountPrimaryGroup'));
         }   
          
         this.storeRoles.each(function (rec) {
-        	newRoles.push(rec.data.id);	        
+            newRoles.push(rec.data.id);
         });
         
         this.record.set('groups', newGroups);
@@ -213,10 +220,10 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onPasswordConfirm: function () {
         var confirmForm = this.passwordConfirmWindow.items.first().getForm(),
-        	confirmValues = confirmForm.getValues(),
-        	passwordStatus = confirmForm.findField('passwordStatus'),
-        	passwordField = this.getForm().findField('accountPassword');
-        	         
+            confirmValues = confirmForm.getValues(),
+            passwordStatus = confirmForm.findField('passwordStatus'),
+            passwordField = this.getForm().findField('accountPassword');
+                     
         if (! passwordField) {
             // oops: something went wrong, this should not happen
             return false;
@@ -229,9 +236,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             passwordField.passwordsMatch = false;
             passwordField.markInvalid(this.app.i18n.gettext('Passwords do not match!'));
         } else {
-        	passwordStatus.el.setStyle('color', 'green');
-        	passwordStatus.setValue(this.app.i18n.gettext('Passwords match!'));
-        	        	
+            passwordStatus.el.setStyle('color', 'green');
+            passwordStatus.setValue(this.app.i18n.gettext('Passwords match!'));
+                        
             passwordField.passwordsMatch = true;
             passwordField.clearInvalid();
         }
@@ -245,7 +252,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {String} - id of current primary group
      */
     getCurrentPrimaryGroupId: function () {
-    	return this.getForm().findField('accountPrimaryGroup').getValue() || this.record.get('accountPrimaryGroup').id;
+        return this.getForm().findField('accountPrimaryGroup').getValue() || this.record.get('accountPrimaryGroup').id;
     },
     
     /**
@@ -254,42 +261,42 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Tine.widgets.account.PickerGridPanel}
      */
     initUserGroups: function () {
-    	this.storeGroups = new Ext.data.JsonStore({
+        this.storeGroups = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
             fields: Tine.Admin.Model.Group
         });
-    	
-    	var self = this;
-    	
+        
+        var self = this;
+        
         this.pickerGridGroups = new Tine.widgets.account.PickerGridPanel({
-        	border: false,
-        	frame: false,
+            border: false,
+            frame: false,
             store: this.storeGroups,
             selectType: 'group',
             selectAnyone: false,
             selectTypeDefault: 'group',
             groupRecordClass: Tine.Admin.Model.Group,
             getColumnModel: function () {
-				return new Ext.grid.ColumnModel({
-		            defaults: { sortable: true },
-		            columns:  [
-		                {id: 'name', header: _('Name'), dataIndex: this.recordPrefix + 'name', renderer: function (val, meta, record) {
-		                	return record.data.id === self.getCurrentPrimaryGroupId() ? (record.data.name + '<span class="x-item-disabled"> (' + self.app.i18n.gettext('Primary group') + ')<span>') : record.data.name;
-		                }}
-		            ]
-		        });
-		    }
+                return new Ext.grid.ColumnModel({
+                    defaults: { sortable: true },
+                    columns:  [
+                        {id: 'name', header: _('Name'), dataIndex: this.recordPrefix + 'name', renderer: function (val, meta, record) {
+                            return record.data.id === self.getCurrentPrimaryGroupId() ? (record.data.name + '<span class="x-item-disabled"> (' + self.app.i18n.gettext('Primary group') + ')<span>') : record.data.name;
+                        }}
+                    ]
+                });
+            }
         }); 
         // disable remove of group if equal to current primary group
         this.pickerGridGroups.selModel.on('beforerowselect', function (sm, index, keep, record) {
-        	if (record.data.id === this.getCurrentPrimaryGroupId()) {
-        		return false;
-        	}
+            if (record.data.id === this.getCurrentPrimaryGroupId()) {
+                return false;
+            }
         }, this);
         
-    	return this.pickerGridGroups;
+        return this.pickerGridGroups;
     },
     
     /**
@@ -298,50 +305,50 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Tine.widgets.account.PickerGridPanel}
      */
     initUserRoles: function () {
-    	this.storeRoles = new Ext.data.JsonStore({
+        this.storeRoles = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
             fields: Tine.Tinebase.Model.Role
         });
-    	
-        this.pickerGridRoles = new Tine.widgets.grid.PickerGridPanel({
-        	border: false,
-        	frame: false,
-			autoExpandColumn: 'name',
-			store: this.storeRoles,
-			recordClass: Tine.Tinebase.Model.Role,
-			columns: [{id: 'name', header: Tine.Tinebase.translation.gettext('Name'), sortable: true, dataIndex: 'name'}],
-			initActionsAndToolbars: function () {
-				// for now removed abillity to edit role membership				
-//		    	Tine.widgets.grid.PickerGridPanel.prototype.initActionsAndToolbars.call(this);
-//		    	
-//		    	this.comboPanel = new Ext.Container({
-//		            layout: 'hfit',
-//		            border: false,
-//		            items: this.getSearchCombo(),
-//		            columnWidth: 1
-//		        });
-//		    	
-//		    	this.tbar = new Ext.Toolbar({
-//		            items: this.comboPanel,
-//		            layout: 'column'
-//		        });
-		    },
-		    onAddRecordFromCombo: function (recordToAdd) {	        
-		        // check if already in
-		        if (! this.recordStore.getById(recordToAdd.id)) {
-		            this.recordStore.add([recordToAdd]);
-		        }
-		        this.collapse();
-		        this.clearValue();
-		        this.reset();
-		    }
-		});
-		// remove listeners for this grid selection model
-		this.pickerGridRoles.selModel.purgeListeners();
         
-    	return this.pickerGridRoles; 
+        this.pickerGridRoles = new Tine.widgets.grid.PickerGridPanel({
+            border: false,
+            frame: false,
+            autoExpandColumn: 'name',
+            store: this.storeRoles,
+            recordClass: Tine.Tinebase.Model.Role,
+            columns: [{id: 'name', header: Tine.Tinebase.translation.gettext('Name'), sortable: true, dataIndex: 'name'}],
+            initActionsAndToolbars: function () {
+                // for now removed abillity to edit role membership                
+//                Tine.widgets.grid.PickerGridPanel.prototype.initActionsAndToolbars.call(this);
+//                
+//                this.comboPanel = new Ext.Container({
+//                    layout: 'hfit',
+//                    border: false,
+//                    items: this.getSearchCombo(),
+//                    columnWidth: 1
+//                });
+//                
+//                this.tbar = new Ext.Toolbar({
+//                    items: this.comboPanel,
+//                    layout: 'column'
+//                });
+            },
+            onAddRecordFromCombo: function (recordToAdd) {            
+                // check if already in
+                if (! this.recordStore.getById(recordToAdd.id)) {
+                    this.recordStore.add([recordToAdd]);
+                }
+                this.collapse();
+                this.clearValue();
+                this.reset();
+            }
+        });
+        // remove listeners for this grid selection model
+        this.pickerGridRoles.selModel.purgeListeners();
+        
+        return this.pickerGridRoles; 
     },
     
     /**
@@ -350,8 +357,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Array} - array ff fileserver tab items
      */
     initFileserver: function () {
-    	if (this.ldapBackend) {
-    		return [{
+        if (this.ldapBackend) {
+            return [{
                 xtype: 'fieldset',
                 title: this.app.i18n.gettext('Unix'),
                 autoHeight: true,
@@ -442,9 +449,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }]]
                 }]
             }];
-    	}
-    	
-    	return [];
+        }
+        
+        return [];
     },
     
     /**
@@ -453,9 +460,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Array} - array of IMAP tab items
      */
     initImap: function () {
-    	if (Tine.Admin.registry.get('manageImapEmailUser')) {
-    		return [{
-    			xtype: 'fieldset',
+        if (Tine.Admin.registry.get('manageImapEmailUser')) {
+            return [{
+                xtype: 'fieldset',
                 title: this.app.i18n.gettext('IMAP Quota (MB)'),
                 autoHeight: true,
                 checkboxToggle: true,
@@ -552,85 +559,86 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }]]
                 }]
             }];
-    	}
-    	
-    	return [];
+        }
+        
+        return [];
     },
     
     /**
      * @private
      * 
      * init email grids
+     * @return Array
      * 
      * TODO     add ctx menu
      * TODO     make border work
      */
     initSmtp: function () {
-    	if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
-			var commonConfig = {
-	            autoExpandColumn: 'email',
-	            quickaddMandatory: 'email',
-	            frame: false,
-	            useBBar: true,
-	            dataField: 'email',
-	            height: 200,
-	            columnWidth: 0.5,
-	            recordClass: Ext.data.Record.create([
-	                { name: 'email' }
-	            ])
-	        };
-    		
-    		this.aliasesGrid = new Tine.widgets.grid.QuickaddGridPanel(
-	            Ext.apply(commonConfig, {
-	                cm: new Ext.grid.ColumnModel([{ 
-	                    id: 'email', 
-	                    header: this.app.i18n.gettext('Email Alias'), 
-	                    dataIndex: 'email', 
-	                    width: 300, 
-	                    hideable: false, 
-	                    sortable: true,
-	                    quickaddField: new Ext.form.TextField({
-	                        emptyText: this.app.i18n.gettext('Add an alias address...'),
-	                        vtype: 'email'
-	                    }),
-	                    editor: new Ext.form.TextField({allowBlank: false}) 
-	                }])
-	            })
-	        );
-	        this.aliasesGrid.render(document.body);
-	
-	        this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
-	            Ext.apply(commonConfig, {
-	                cm: new Ext.grid.ColumnModel([{ 
-	                    id: 'email', 
-	                    header: this.app.i18n.gettext('Email Forward'), 
-	                    dataIndex: 'email', 
-	                    width: 300, 
-	                    hideable: false, 
-	                    sortable: true,
-	                    quickaddField: new Ext.form.TextField({
-	                        emptyText: this.app.i18n.gettext('Add a forward address...'),
-	                        vtype: 'email'
-	                    }),
-	                    editor: new Ext.form.TextField({allowBlank: false}) 
-	                }])
-	            })
-	        );
-	        this.forwardsGrid.render(document.body);
-	        
-	        return [
-	            [this.aliasesGrid, this.forwardsGrid],
-		        [{
-		            fieldLabel: this.app.i18n.gettext('Forward Only'),
-		            name: 'emailForwardOnly',
-		            xtype: 'checkbox',
-		            columnWidth: 0.666,
-		            readOnly: false
-		        }]
-			];
+        if (! Tine.Admin.registry.get('manageSmtpEmailUser')) {
+            return [];
         }
         
-        return [];
+        var commonConfig = {
+            autoExpandColumn: 'email',
+            quickaddMandatory: 'email',
+            frame: false,
+            useBBar: true,
+            dataField: 'email',
+            height: 200,
+            columnWidth: 0.5,
+            recordClass: Ext.data.Record.create([
+                { name: 'email' }
+            ])
+        };
+        
+        this.aliasesGrid = new Tine.widgets.grid.QuickaddGridPanel(
+            Ext.apply(commonConfig, {
+                cm: new Ext.grid.ColumnModel([{ 
+                    id: 'email', 
+                    header: this.app.i18n.gettext('Email Alias'), 
+                    dataIndex: 'email', 
+                    width: 300, 
+                    hideable: false, 
+                    sortable: true,
+                    quickaddField: new Ext.form.TextField({
+                        emptyText: this.app.i18n.gettext('Add an alias address...'),
+                        vtype: 'email'
+                    }),
+                    editor: new Ext.form.TextField({allowBlank: false}) 
+                }])
+            })
+        );
+        this.aliasesGrid.render(document.body);
+
+        this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
+            Ext.apply(commonConfig, {
+                cm: new Ext.grid.ColumnModel([{ 
+                    id: 'email', 
+                    header: this.app.i18n.gettext('Email Forward'), 
+                    dataIndex: 'email', 
+                    width: 300, 
+                    hideable: false, 
+                    sortable: true,
+                    quickaddField: new Ext.form.TextField({
+                        emptyText: this.app.i18n.gettext('Add a forward address...'),
+                        vtype: 'email'
+                    }),
+                    editor: new Ext.form.TextField({allowBlank: false}) 
+                }])
+            })
+        );
+        this.forwardsGrid.render(document.body);
+        
+        return [
+            [this.aliasesGrid, this.forwardsGrid],
+            [{
+                fieldLabel: this.app.i18n.gettext('Forward Only'),
+                name: 'emailForwardOnly',
+                xtype: 'checkbox',
+                columnWidth: 0.666,
+                readOnly: false
+            }]
+        ];
     },
     
     /**
@@ -668,16 +676,16 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         scope: this,
                         specialkey: function (field, event) {
                             if (event.getKey() === event.ENTER) {
-                            	// call OK button handler
+                                // call OK button handler
                                 this.passwordConfirmWindow.items.first().buttons[1].handler.call(this);
                             }
                         }
                     }
                 }, {
-                	xtype: 'displayfield',
-                	hideLabel: true,
-                	id: 'passwordStatus',
-                	value: this.app.i18n.gettext('Passwords do not match!')
+                    xtype: 'displayfield',
+                    hideLabel: true,
+                    id: 'passwordStatus',
+                    value: this.app.i18n.gettext('Passwords do not match!')
                 }],
                 buttons: [{
                     text: _('Cancel'),
@@ -685,7 +693,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     scope: this,
                     handler: function () {
                         this.passwordConfirmWindow.hide();
-//                        this.passwordConfirmWindow.items.first().getForm().reset();
                     }
                 }, {
                     text: _('Ok'),
@@ -693,16 +700,14 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     iconCls: 'action_saveAndClose',
                     scope: this,
                     handler: function () {
-                    	var confirmForm = this.passwordConfirmWindow.items.first().getForm();
-                    	
-                    	// check if confirm form is valid (we need this if special key called button handler)
-                    	if (confirmForm.isValid()) {
-                    		this.passwordConfirmWindow.hide();
-//    						confirmForm.reset();
-    						
-    						// focus email field
-        					this.getForm().findField('accountEmailAddress').focus(true, 100);
-                    	}            			
+                        var confirmForm = this.passwordConfirmWindow.items.first().getForm();
+                        
+                        // check if confirm form is valid (we need this if special key called button handler)
+                        if (confirmForm.isValid()) {
+                            this.passwordConfirmWindow.hide();
+                            // focus email field
+                            this.getForm().findField('accountEmailAddress').focus(true, 100);
+                        }
                     }
                 }]
             }],
@@ -744,11 +749,11 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name: 'accountFirstName',
                         columnWidth: 0.5,
                         listeners: {
-                			render: function (field) {
-                    			field.focus(false, 250); 
-                    			field.selectText();
-            				}
-        				}
+                            render: function (field) {
+                                field.focus(false, 250); 
+                                field.selectText();
+                            }
+                        }
                     }, {
                         fieldLabel: this.app.i18n.gettext('Last Name'),
                         name: 'accountLastName',
@@ -778,10 +783,10 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     this.passwordConfirmWindow.show.defer(100, this.passwordConfirmWindow);
                                 }
                             },
-							destroy: function () {
-								// destroy password confirm window
-								this.passwordConfirmWindow.destroy();
-							},
+                            destroy: function () {
+                                // destroy password confirm window
+                                this.passwordConfirmWindow.destroy();
+                            },
                             keydown: function (field) {
                                 field.passwordsMatch = false;
                             }
@@ -802,7 +807,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name: 'openid',
                         columnWidth: 0.5
                     }], [{
-                    	xtype: 'tinerecordpickercombobox',
+                        xtype: 'tinerecordpickercombobox',
                         fieldLabel: this.app.i18n.gettext('Primary group'),
                         listWidth: 250,
                         name: 'accountPrimaryGroup',
@@ -810,13 +815,13 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         allowBlank: false,
                         recordClass: Tine.Admin.Model.Group,
                         listeners: {
-                        	scope: this,
-                        	'select': function (combo, record, index) {
-                        		// refresh grid
-                        		if (this.pickerGridGroups) {
-									this.pickerGridGroups.getView().refresh();	
-                        		}
-                        	}
+                            scope: this,
+                            'select': function (combo, record, index) {
+                                // refresh grid
+                                if (this.pickerGridGroups) {
+                                    this.pickerGridGroups.getView().refresh();
+                                }
+                            }
                         }
                     }, {
                         xtype: 'combo',
@@ -832,7 +837,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n.gettext('Expires'),
                         name: 'accountExpires',
                         emptyText: this.app.i18n.gettext('never')
-					}], [{
+                    }], [{
                         xtype: 'combo',
                         fieldLabel: this.app.i18n.gettext('Visibility'),
                         name: 'visibility',
@@ -853,7 +858,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }
                         }
                     }, {
-                    	xtype: 'tinerecordpickercombobox',
+                        xtype: 'tinerecordpickercombobox',
                         fieldLabel: this.app.i18n.gettext('Saved in Addressbook'),
                         name: 'container_id',
                         blurOnSelect: true,
@@ -864,36 +869,36 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         disabled: this.record.get('visibility') === 'hidden',
                         recordProxy: Tine.Admin.sharedAddressbookBackend
                     }]] 
-				}, {
+                }, {
                     xtype: 'fieldset',
                     title: this.app.i18n.gettext('Information'),
                     autoHeight: true,
                     checkboxToggle: false,
                     layout: 'hfit',
                     items: [{
-	                	xtype: 'columnform',
-	                    labelAlign: 'top',
-	                    formDefaults: {
-                    		xtype: 'displayfield',
-	                        anchor: '100%',
-	                        labelSeparator: '',
-	                        columnWidth: 0.333,
-                    		style: this.displayFieldStyle
-	                    },
-	                    items: [[{
-	                        fieldLabel: this.app.i18n.gettext('Last login at'),
-	                        name: 'accountLastLogin',
-	                        emptyText: this.ldapBackend ? this.app.i18n.gettext("don't know") : this.app.i18n.gettext('never logged in')
-	                    }, {
-	                        fieldLabel: this.app.i18n.gettext('Last login from'),
-	                        name: 'accountLastLoginfrom',
-	                        emptyText: this.ldapBackend ? this.app.i18n.gettext("don't know") : this.app.i18n.gettext('never logged in')
-	                    }, {
-	                        fieldLabel: this.app.i18n.gettext('Password set'),
-	                        name: 'accountLastPasswordChange',
-	                        emptyText: this.app.i18n.gettext('never')
-	                    }]]
-	                }]
+                        xtype: 'columnform',
+                        labelAlign: 'top',
+                        formDefaults: {
+                            xtype: 'displayfield',
+                            anchor: '100%',
+                            labelSeparator: '',
+                            columnWidth: 0.333,
+                            style: this.displayFieldStyle
+                        },
+                        items: [[{
+                            fieldLabel: this.app.i18n.gettext('Last login at'),
+                            name: 'accountLastLogin',
+                            emptyText: this.ldapBackend ? this.app.i18n.gettext("don't know") : this.app.i18n.gettext('never logged in')
+                        }, {
+                            fieldLabel: this.app.i18n.gettext('Last login from'),
+                            name: 'accountLastLoginfrom',
+                            emptyText: this.ldapBackend ? this.app.i18n.gettext("don't know") : this.app.i18n.gettext('never logged in')
+                        }, {
+                            fieldLabel: this.app.i18n.gettext('Password set'),
+                            name: 'accountLastPasswordChange',
+                            emptyText: this.app.i18n.gettext('never')
+                        }]]
+                    }]
                 }]
             }, {
                 title: this.app.i18n.gettext('User groups'),
@@ -921,7 +926,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 frame: true,
                 layout: 'hfit',
                 items: this.initImap()
-			}, {
+            }, {
                 xtype: 'columnform',
                 title: this.app.i18n.gettext('SMTP'),
                 disabled: ! Tine.Admin.registry.get('manageSmtpEmailUser'),
