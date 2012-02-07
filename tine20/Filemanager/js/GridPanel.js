@@ -540,7 +540,9 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 			text: nodeName,
 			scope: this,
 			handler: function(button){
-				if (nodes && button == 'yes') {	                
+				if (nodes && button == 'yes') {
+                    this.store.remove(nodes);
+                    this.pagingToolbar.refresh.disable();
 	                Tine.Filemanager.fileRecordBackend.deleteItems(nodes);
 	            }
 				

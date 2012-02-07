@@ -169,7 +169,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         }
 
         var params = {
-            application: this.appName,                                
+            application: this.appName,
             filenames: filenames,
             method: this.appName + ".deleteNodes",
             timeout: 300000 // 5 minutes
@@ -198,6 +198,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             
             grid.getStore().remove(nodeData);
             grid.selectionModel.deselectRange(0, grid.getStore().getCount());
+            grid.pagingToolbar.refresh.enable();
 //            this.fireEvent('containerdelete', nodeData);
 
         }).createDelegate({items: items});
