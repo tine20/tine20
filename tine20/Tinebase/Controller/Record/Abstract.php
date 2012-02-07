@@ -983,10 +983,15 @@ abstract class Tinebase_Controller_Record_Abstract
         $filter = new $filterClass(array(
             array('field' => 'id', 'operator' => 'in', 'value' => $idsToMove)
         ));
-        $this->updateMultiple($filter, array(
+        $updateResult = $this->updateMultiple($filter, array(
             $_containerProperty => $targetContainerId
         ));
-
+        
+        foreach ($updateResult['results'] as $record) {
+            // only increase original container content seq of successfully updated records
+            $this->_increaseContainerContentSequence($records->getById($record->getId()));
+        }
+        
         return $idsToMove;
     }
 
