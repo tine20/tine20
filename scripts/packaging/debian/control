@@ -13,11 +13,23 @@ Architecture: all
 Depends: ${misc:Depends}, tine20-tinebase, 
     ${tine20:Modules}
 Description: webbased groupware and crm - metapackage
- Tine 2.0 is an webbased open source project which combines groupware and 
- CRM in one consistent interface. 
- This is a metapackage which depends on all other Tine 2.0 packages. Install 
- this package to get all Tine 2.0 applications installed. 
-
+ Tine 2.0 is an open source project which combines groupware and CRM in one
+ consistent interface. Tine 2.0 is web-based and optimises collaboration and
+ organisation of groups in a lasting manner. Tine 2.0 unites all the
+ advantages of open source software with an extraordinarily high level of
+ usability and an equally high standard of professional software development.
+ This is what makes the difference between Tine 2.0 and many other existing
+ groupware solutions.
+ Tine 2.0 includes address book, calendar, email, tasks, time tracking and
+ CRM. Intelligent functions and links make collaboration in Tine 2.0 a true
+ pleasure and include:
+  * Synchronising mobile telephones
+  * VoiP integration
+  * Flexible assigning of authorisation rights
+  * Dynamic lists
+  * Search functions
+  * History
+  * PDF export
 
 Package: tine20-tinebase
 Architecture: all
