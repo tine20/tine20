@@ -34,21 +34,23 @@ if [ "$1" = "configure" ]; then
     
             case "$webserver" in
                 apache2)
-                    if [ -d /etc/$webserver/mods-enabled ]; then
-                        if [ ! -f /etc/$webserver/mods-enabled/expires.load -a ! -h /etc/$webserver/mods-enabled/expires.load ]; then
+                    if [ -d /etc/apache2/mods-enabled ]; then
+                        if [ ! -f /etc/apache2/mods-enabled/rewrite.load -a ! -h /etc/apache2/mods-enabled/rewrite.load ]; then
+                            /usr/sbin/a2enmod rewrite
+                        fi
+                        if [ ! -f /etc/apache2/mods-enabled/expires.load -a ! -h /etc/apache2/mods-enabled/expires.load ]; then
                             /usr/sbin/a2enmod expires
                         fi
                         if [ -f /etc/apache2/mods-available/php5.load ]; then
-                            if [ ! -f /etc/$webserver/mods-enabled/php5.load -a ! -h /etc/$webserver/mods-enabled/php5.load ]; then
+                            if [ ! -f /etc/apache2/mods-enabled/php5.load -a ! -h /etc/apache2/mods-enabled/php5.load ]; then
                                 /usr/sbin/a2enmod php5
                             fi 
                         fi
                     fi
 
                     # create vhost configuration links
-                    servers="$webserver"
+                    servers="apache2"
                     linkdestination_apache="../../tine20/apache.conf"
-                    linkdestination_lighttpd="../../tine20/lighttpd.conf"
                     linkname="tine20"
         
                     if [ -e /usr/share/wwwconfig-common/confd-link.sh ]; then
