@@ -284,7 +284,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 enableFileDrop: false,
                 disable: true
             }],
-            iconCls: this.app.appName + 'IconCls'            
+            iconCls: this.app.appName + 'IconCls'
         };
     },
     
@@ -687,7 +687,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param file  {Ext.ux.file.Upload.file} 
      */
     onUploadComplete: function(upload, file) {
-        Tine.log.error('GridPanel::onUploadComplete');
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
             grid = app.getMainScreen().getCenterPanel(); 
         
@@ -805,13 +804,17 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             grid.pagingToolbar.refresh.disable();
         }
         
-        
         var filePathsArray = [], uploadKeyArray = [];
         
         Ext.each(files, function (file) {
-
-            var fileName = file.name || file.fileName;
-            var filePath = targetFolderPath + '/' + fileName;
+            var fileRecord = Tine.Filemanager.Model.Node.createFromFile(file),
+                filePath = targetFolderPath + '/' + fileRecord.get('name');
+            
+            fileRecord.set('path', filePath);
+            var existingRecordIdx = gridStore.find('name', fileRecord.get('name'));
+            if(existingRecordIdx < 0) {
+                gridStore.add(fileRecord);
+            }
             
             var upload = new Ext.ux.file.Upload({
                 fmDirector: grid,
@@ -819,14 +822,14 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 fileSelector: fileSelector,
                 id: filePath
             });
-
-            var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);   
+            
+            var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
             
             filePathsArray.push(filePath);
             uploadKeyArray.push(uploadKey);
             
         }, this);
-
+        
         var params = {
                 filenames: filePathsArray,
                 type: "file",
@@ -834,8 +837,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 forceOverwrite: false
         };
         Tine.Filemanager.fileRecordBackend.createNodes(params, uploadKeyArray, true);
-
-        
     },
     
     /**

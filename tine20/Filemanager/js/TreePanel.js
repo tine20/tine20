@@ -622,7 +622,6 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      * @param file  {Ext.ux.file.Upload.file} 
      */
     onUploadComplete: function(upload, file) {
-        Tine.log.error('TreePanel::onUploadComplete');
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
             treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(); 
         
