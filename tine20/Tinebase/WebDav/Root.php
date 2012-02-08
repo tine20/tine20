@@ -22,30 +22,35 @@ class Tinebase_WebDav_Root extends Sabre_DAV_SimpleCollection
 {
     public function __construct()
     {
-        $webdavApps = array();
+        $caldavChildren  = array();
+        $carddavChildren = array();
+        $webdavChildren  = array();
+        
+        if(Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
+            $caldavChildren[] = new Calendar_Frontend_CalDAV();
+        }
+
+        if(Tinebase_Core::getUser()->hasRight('Addressbook', Tinebase_Acl_Rights::RUN)) {
+            $carddavChildren[] = new Addressbook_Frontend_CardDAV();
+        }
         
         foreach(array('Addressbook', 'Calendar', 'Filemanager') as $application) {
             if(Tinebase_Core::getUser()->hasRight($application, Tinebase_Acl_Rights::RUN)) {
                 $applicationClass = $application . '_Frontend_WebDAV';
-                $webdavApps[] = new $applicationClass($application);
+                $webdavChildren[] = new $applicationClass($application);
             }
         }
         
         parent::__construct('root', array(
-            new Sabre_DAV_SimpleCollection(Sabre_CardDAV_Plugin::ADDRESSBOOK_ROOT, array(
-                new Addressbook_Frontend_CardDAV()
-            )),
-            new Sabre_DAV_SimpleCollection(Sabre_CalDAV_Plugin::CALENDAR_ROOT, array(
-                new Calendar_Frontend_CalDAV()
-            )),
+            new Sabre_DAV_SimpleCollection(Sabre_CardDAV_Plugin::ADDRESSBOOK_ROOT, $carddavChildren),
+            new Sabre_DAV_SimpleCollection(Sabre_CalDAV_Plugin::CALENDAR_ROOT, $caldavChildren),
             new Sabre_DAV_SimpleCollection('webdav', 
-                $webdavApps
+                $webdavChildren
             ),
             new Sabre_DAV_SimpleCollection('principals', array(
                 new Sabre_DAVACL_PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), 'principals/users'),
                 new Sabre_DAVACL_PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), 'principals/groups')
-            )),
-            
+            ))
         ));
     }
 }
