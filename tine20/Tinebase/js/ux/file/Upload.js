@@ -397,7 +397,9 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             this.fileRecord.beginEdit();
             this.fileRecord.set('size', response.size);
             this.fileRecord.set('id', response.id);
-        	this.fileRecord.set('progress', 99);
+            this.fileRecord.set('progress', 99);
+            this.fileRecord.set('tempFile', '');
+            this.fileRecord.set('tempFile', response);
             this.fileRecord.commit(false);
             this.fireEvent('uploadcomplete', this, this.fileRecord);  
             this.fireEvent('update', 'uploadcomplete', this, this.fileRecord);
@@ -407,6 +409,8 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             this.fileRecord.beginEdit();
             this.fileRecord.set('status', 'failure');
             this.fileRecord.set('progress', -1);
+            this.fileRecord.set('tempFile', '');
+            this.fileRecord.set('tempFile', response);
             this.fileRecord.commit(false);
             this.fireEvent('update', 'uploadfailure', this, this.fileRecord);
                        
