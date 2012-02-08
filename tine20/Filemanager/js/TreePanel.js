@@ -65,10 +65,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         this.on('containerrename', this.onFolderRename, this);
         this.on('containerdelete', this.onFolderDelete, this);
         this.on('nodedragover', this.onNodeDragOver, this);
-
-        this.selModel = new Ext.ux.tree.FileTreeSelectionModel({});
-                
-        this.getSelectionModel().on('initDrag', this.onInitDrag, this);
+        
         Tine.Tinebase.uploadManager.on('update', this.onUpdate);
 
         Tine.Filemanager.TreePanel.superclass.initComponent.call(this);
@@ -150,6 +147,23 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             }
         };
         
+        this.dragConfig = {
+            ddGroup: this.ddGroup || 'fileDDGroup',
+            scroll: this.ddScroll,
+            /**
+             * tree node dragzone modified, dragged node doesn't get selected
+             * 
+             * @param e
+             */
+            onInitDrag: function(e) {
+                var data = this.dragData;
+                this.tree.eventModel.disable();
+                this.proxy.update("");
+                data.node.ui.appendDDGhost(this.proxy.ghost.dom);
+                this.tree.fireEvent("startdrag", this.tree, data.node, e); 
+            }
+        };
+        
         this.plugins = this.plugins || [];
         this.plugins.push({
             ptype : 'ux.browseplugin',
@@ -157,8 +171,6 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             multiple : true,
             handler : this.dropIntoTree
         });
-        
-
     },
     
     /**
@@ -279,16 +291,6 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         var nodeData = Ext.copyTo({}, attr, Tine.Filemanager.Model.Node.getFieldNames());
         attr.nodeRecord = new Tine.Filemanager.Model.Node(nodeData);
         
-    },
-    
-    /**
-     * treePanel on click handler
-     * 
-     * @param {Ext.tree.TreeNode} node
-     * @param {Ext.EventObject} e
-     */
-    onClick: function(node, e) {
-        Tine.Filemanager.TreePanel.superclass.onClick.call(this, node, e);
     },
     
     /**

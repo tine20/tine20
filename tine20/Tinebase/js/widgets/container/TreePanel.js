@@ -434,6 +434,15 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @param {} e
      */
     onClick: function(node, e) {
+        var sm = this.getSelectionModel(),
+            selectedNode = sm.getSelectedNode();
+    
+        // NOTE: in single select mode, a node click on a selected node does not trigger 
+        //       a selection change. We need to do this by hand here
+        if (! this.allowMultiSelection && node == selectedNode) {
+            this.onSelectionChange(sm, node);
+        }
+        
         node.expand();
     },
     

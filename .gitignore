@@ -3,6 +3,7 @@
 .project
 .cache
 .settings
+.DS_Store
 nbproject
 tine20/config.inc.php
 tests/tine20/phpunitconfig.inc.php

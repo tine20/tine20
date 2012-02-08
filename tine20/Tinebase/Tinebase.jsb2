@@ -252,10 +252,6 @@
           "path": "js/ux/tree/"
         },
         {
-          "text": "FileTreeSelectionModel.js",
-          "path": "js/ux/tree/"
-        },
-        {
           "text": "DisplayPanel.js",
           "path": "js/ux/display/"
         },
