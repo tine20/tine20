@@ -36,24 +36,19 @@ Ext.ux.TabPanelKeyPlugin.prototype = {
             this.onRender.defer(250, this);
             return;
         }
+
+        var tabCount = this.panel.items.length;
         
-        try {
-            var tabCount = this.panel.items.length;
-            
-            for (var index = 0; index < tabCount; index++) {
-                var item = this.panel.items.items[index];
-                if(item.disabled !== true) {
-                    new Ext.KeyMap(this.panel.el, [{
-                        key: index + 49,
-                        ctrl: true,
-                        scope: this,
-                        fn: this.switchTab
-                    }]);
-                }
+        for (var index = 0; index < tabCount; index++) {
+            var item = this.panel.items.items[index];
+            if(item.disabled !== true) {
+                new Ext.KeyMap(this.panel.el, [{
+                    key: index + 49,
+                    ctrl: true,
+                    scope: this,
+                    fn: this.switchTab
+                }]);
             }
-        } catch (e) {
-            Tine.log.error('Ext.ux.TabPanelKeyPlugin::onRender');
-            Tine.log.error(e.stack ? e.stack : e);
         }
     },
     

@@ -83,27 +83,21 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
     },
 
     onStoreUpdate: function(store, record, operation) {
-        try {
-            if (this.alwaysShowAdminGrant || (this.grantContainer && this.grantContainer.type == 'shared')) {
-                if (record.get('adminGrant')) {
-                    // set all grants and mask other checkboxes
-                    Ext.each(this.getColumnModel().columns, function(col, colIdx) {
-                        var matches;
-                        if ((matches = col.dataIndex.match(/^([a-z]+)Grant$/)) && matches[1] != 'admin') {
+        if (this.alwaysShowAdminGrant || (this.grantContainer && this.grantContainer.type == 'shared')) {
+            if (record.get('adminGrant')) {
+                // set all grants and mask other checkboxes
+                Ext.each(this.getColumnModel().columns, function(col, colIdx) {
+                    var matches;
+                    if ((matches = col.dataIndex.match(/^([a-z]+)Grant$/)) && matches[1] != 'admin') {
 //                          //Ext.fly(this.getView().getCell(store.indexOf(record), colIdx)).mask('test');
-                            record.set(col.dataIndex, true);
-                        }
-                    }, this);
-                    
-                } else {
-                    // make sure grants are not masked
-                }
+                        record.set(col.dataIndex, true);
+                    }
+                }, this);
+                
+            } else {
+                // make sure grants are not masked
             }
-        } catch (e) {
-            Tine.log.err(e);
-            Tine.log.err(e.stack);
         }
-            
     },
     
     /**

@@ -107,27 +107,22 @@ Tine.widgets.grid.RendererManager = function() {
          * @param {String} category {gridPanel|displayPanel} optional.
          */
         get: function(appName, modelName, fieldName, category) {
-            try  {
-                var appName = Ext.isString(appName) ? appName : appName.appName,
-                    modelName = Ext.isFunction(modelName) ? modelName.getMeta('modelName') : modelName,
-                    categoryKey = [appName, modelName, fieldName, category].join('_'),
-                    genericKey = [appName, modelName, fieldName].join('_');
-                    
-                // check for registered renderer
-                var renderer = renderers[categoryKey] ? renderers[categoryKey] : renderers[genericKey];
+            var appName = Ext.isString(appName) ? appName : appName.appName,
+                modelName = Ext.isFunction(modelName) ? modelName.getMeta('modelName') : modelName,
+                categoryKey = [appName, modelName, fieldName, category].join('_'),
+                genericKey = [appName, modelName, fieldName].join('_');
                 
-                // check for common names
-                if (! renderer) {
-                    renderer = this.getByFieldname(fieldName);
-                }
-                
-                // check for known datatypes
-                if (! renderer) {
-                    renderer = this.getByDataType(appName, modelName, fieldName);
-                }
-            } catch (e) {
-                Tine.log.err('Tine.widgets.grid.RendererManager::get');
-                Tine.log.err(e.stack ? e.stack : e);
+            // check for registered renderer
+            var renderer = renderers[categoryKey] ? renderers[categoryKey] : renderers[genericKey];
+            
+            // check for common names
+            if (! renderer) {
+                renderer = this.getByFieldname(fieldName);
+            }
+            
+            // check for known datatypes
+            if (! renderer) {
+                renderer = this.getByDataType(appName, modelName, fieldName);
             }
             
             return renderer ? renderer : this.defaultRenderer;
@@ -143,17 +138,12 @@ Tine.widgets.grid.RendererManager = function() {
          * @param {String} category {gridPanel|displayPanel} optional.
          */
         register: function(appName, modelName, fieldName, renderer, category) {
-            try  {
-                var appName = Ext.isString(appName) ? appName : appName.appName,
-                    modelName = Ext.isFunction(modelName) ? modelName.getMeta('modelName') : modelName,
-                    categoryKey = [appName, modelName, fieldName, category].join('_'),
-                    genericKey = [appName, modelName, fieldName].join('_');
-                    
-                renderers[category ? categoryKey : genericKey] = renderer;
-            } catch (e) {
-                Tine.log.err('Tine.widgets.grid.RendererManager::register');
-                Tine.log.err(e.stack ? e.stack : e);
-            }
+            var appName = Ext.isString(appName) ? appName : appName.appName,
+                modelName = Ext.isFunction(modelName) ? modelName.getMeta('modelName') : modelName,
+                categoryKey = [appName, modelName, fieldName, category].join('_'),
+                genericKey = [appName, modelName, fieldName].join('_');
+                
+            renderers[category ? categoryKey : genericKey] = renderer;
         }
     };
 }();

@@ -335,28 +335,22 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
     },
     
     onLimitRender: function() {
-        try {
-            var untilradioel = Ext.get(this.limitId + 'untilRadio');
-            var untilel = Ext.get(this.limitId + 'until');
-            
-            var countradioel = Ext.get(this.limitId + 'countRadio');
-            var countel = Ext.get(this.limitId + 'count');
-            
-            if (! (untilradioel && countradioel)) {
-                return this.onLimitRender.defer(100, this, arguments);
-            }
-            
-            this.untilRadio.render(untilradioel);
-            this.until.render(untilel);
-            this.until.wrap.setWidth(80);
-            
-            this.countRadio.render(countradioel);
-            this.count.render(countel);
-             
-        } catch (e) {
-            Tine.log.error('Tine.Calendar.RrulePanel::onLimitRender');
-            Tine.log.error(e);
+        var untilradioel = Ext.get(this.limitId + 'untilRadio');
+        var untilel = Ext.get(this.limitId + 'until');
+        
+        var countradioel = Ext.get(this.limitId + 'countRadio');
+        var countel = Ext.get(this.limitId + 'count');
+        
+        if (! (untilradioel && countradioel)) {
+            return this.onLimitRender.defer(100, this, arguments);
         }
+        
+        this.untilRadio.render(untilradioel);
+        this.until.render(untilel);
+        this.until.wrap.setWidth(80);
+        
+        this.countRadio.render(countradioel);
+        this.count.render(countel);
     },
     
     onLimitRadioCheck: function(radio, checked) {

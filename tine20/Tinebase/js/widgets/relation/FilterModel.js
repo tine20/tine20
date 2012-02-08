@@ -58,21 +58,17 @@ Tine.widgets.relation.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
         console.log(operator);
         console.log(Tine.Tinebase.data.RecordMgr.get(operator));
         
-        try {
-            if (! filter.sheet) {
-                filter.sheet = new Tine.widgets.grid.FilterToolbar({
-                    recordClass: Tine.Tinebase.data.RecordMgr.get(operator),
-                    defaultFilter: 'query'
-                });
-                
-                this.ftb.addFilterSheet(filter.sheet);
-            }
+        if (! filter.sheet) {
+            filter.sheet = new Tine.widgets.grid.FilterToolbar({
+                recordClass: Tine.Tinebase.data.RecordMgr.get(operator),
+                defaultFilter: 'query'
+            });
             
-            this.ftb.setActiveSheet(filter.sheet);
-            filter.formFields.value.setText(_('Defined by ...'));
-        } catch (e) {
-            console.error(e.stack);
+            this.ftb.addFilterSheet(filter.sheet);
         }
+        
+        this.ftb.setActiveSheet(filter.sheet);
+        filter.formFields.value.setText(_('Defined by ...'));
     },
     
     /**

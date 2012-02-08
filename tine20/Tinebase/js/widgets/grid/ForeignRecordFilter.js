@@ -173,16 +173,12 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     },
     
     onDefineRelatedRecord: function(filter) {
-        try {
-            if (! filter.toolbar) {
-                this.createRelatedRecordToolbar(filter);
-            }
-            
-            this.ftb.setActiveSheet(filter.toolbar);
-            filter.formFields.value.setText((this.editDefinitionText));
-        } catch (e) {
-            console.error(e.stack ? e.stack : e);
+        if (! filter.toolbar) {
+            this.createRelatedRecordToolbar(filter);
         }
+        
+        this.ftb.setActiveSheet(filter.toolbar);
+        filter.formFields.value.setText((this.editDefinitionText));
     },
     
     /**
@@ -348,29 +344,24 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             foreignRecordClass = foreignRecordDefinition.foreignRecordClass,
             filterModels = foreignRecordClass.getFilterModel(),
             ftb = this.ftb;
-            
-        try {
-            if (! filter.toolbar) {
-                // add our subfilters in this toolbar (right hand)
-                if (Ext.isFunction(this.getSubFilters)) {
-                    filterModels = filterModels.concat(this.getSubFilters());
-                }
-                
-                filter.toolbar = new Tine.widgets.grid.FilterToolbar({
-                    recordClass: foreignRecordClass,
-                    filterModels: filterModels,
-                    defaultFilter: 'query'
-                });
-                
-                ftb.addFilterSheet(filter.toolbar);
-                
-                // force rendering as we can't set values on non rendered toolbar atm.
-                this.ftb.setActiveSheet(filter.toolbar);
-                this.ftb.setActiveSheet(this.ftb);
+
+        if (! filter.toolbar) {
+            // add our subfilters in this toolbar (right hand)
+            if (Ext.isFunction(this.getSubFilters)) {
+                filterModels = filterModels.concat(this.getSubFilters());
             }
             
-        } catch (e) {
-            console.error(e.stack ? e.stack : e);
+            filter.toolbar = new Tine.widgets.grid.FilterToolbar({
+                recordClass: foreignRecordClass,
+                filterModels: filterModels,
+                defaultFilter: 'query'
+            });
+            
+            ftb.addFilterSheet(filter.toolbar);
+            
+            // force rendering as we can't set values on non rendered toolbar atm.
+            this.ftb.setActiveSheet(filter.toolbar);
+            this.ftb.setActiveSheet(this.ftb);
         }
     },
     

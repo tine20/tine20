@@ -212,38 +212,33 @@ Tine.widgets.dialog.TokenModeEditDialogPlugin.prototype = {
     },
     
     getDragData: function(e) {
-        try {
-            var target = e.getTarget('.tinebase-tokenedit-token', 10, true);
-                
-            if (target) {
-                // autoselect token
-                if (this.selection.indexOf(target) < 0) {
-                    this.onClick(e);
-                }
-                this.processedEvent = e.browserEvent;
-                
-                var ddel = new Ext.Element(document.createElement('div'));
-                ddel.id = Ext.id();
-                
-                var sourceFields = [];
-                
-                Ext.each(this.selection, function(el) {
-                    sourceFields.push(Ext.getCmp(el.parent('div[class^=tinebase-tokenedit-tokenbox]').parent('div').child('*[id^=ext-comp]').id));
-                    
-                    var clone = el.dom.cloneNode(true);
-                    clone.id = Ext.id();
-                    ddel.appendChild(clone);
-                }, this);
-                
-                return {
-                    ddel: ddel.dom,
-                    sourceFields: sourceFields
-                    
-                }
+        var target = e.getTarget('.tinebase-tokenedit-token', 10, true);
+            
+        if (target) {
+            // autoselect token
+            if (this.selection.indexOf(target) < 0) {
+                this.onClick(e);
             }
-        } catch (e) {
-            Tine.log.error('Tine.widgets.dialog.TokenModeEditDialogPlugin::getDragData');
-            Tine.log.error(e.stack ? e.stack : e);
+            this.processedEvent = e.browserEvent;
+            
+            var ddel = new Ext.Element(document.createElement('div'));
+            ddel.id = Ext.id();
+            
+            var sourceFields = [];
+            
+            Ext.each(this.selection, function(el) {
+                sourceFields.push(Ext.getCmp(el.parent('div[class^=tinebase-tokenedit-tokenbox]').parent('div').child('*[id^=ext-comp]').id));
+                
+                var clone = el.dom.cloneNode(true);
+                clone.id = Ext.id();
+                ddel.appendChild(clone);
+            }, this);
+            
+            return {
+                ddel: ddel.dom,
+                sourceFields: sourceFields
+                
+            }
         }
     },
     
@@ -296,34 +291,28 @@ Tine.widgets.dialog.TokenModeEditDialogPlugin.prototype = {
     },
     
     onNodeDrop : function(target, dd, e, data) {
-        try {
-            var field = Ext.getCmp(target.up('div').child('*[id^=ext-comp]').id),
-                positionEl = this.getPositionEl();
+        var field = Ext.getCmp(target.up('div').child('*[id^=ext-comp]').id),
+            positionEl = this.getPositionEl();
+        
+        positionEl.setStyle('display', 'none');
+        
+        Ext.each(this.selection, function(el) {
+            el.insertBefore(positionEl);
+        }, this);
+        
+        // update source and target fields
+        Ext.each([field].concat(data.sourceFields), function(f) {
+            var value = [];
             
-            positionEl.setStyle('display', 'none');
-            
-            Ext.each(this.selection, function(el) {
-                el.insertBefore(positionEl);
+            Ext.each(f.itemCt.query('.tinebase-tokenedit-token'), function(el) {
+                value.push(el.innerHTML);
             }, this);
             
-            // update source and target fields
-            Ext.each([field].concat(data.sourceFields), function(f) {
-                var value = [];
-                
-                Ext.each(f.itemCt.query('.tinebase-tokenedit-token'), function(el) {
-                    value.push(el.innerHTML);
-                }, this);
-                
-                value = value.join(' ');
-                value = Ext.util.Format.htmlDecode(value.replace(/\s*\u21A9\s*/g, '\n'));
-                
-                f.setValue(value);
-            }, this);
+            value = value.join(' ');
+            value = Ext.util.Format.htmlDecode(value.replace(/\s*\u21A9\s*/g, '\n'));
             
-        } catch (e) {
-            Tine.log.error('Tine.widgets.dialog.TokenModeEditDialogPlugin::onNodeDrop');
-            Tine.log.error(e.stack ? e.stack : e);
-        }
+            f.setValue(value);
+        }, this);
     },
     
     getPositionEl: function() {

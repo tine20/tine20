@@ -28,47 +28,42 @@ Tine.widgets.form.RecordPickerManager = {
      * @return {Object} recordpicker
      */
     get: function(appName, modelName, config) {
-        try {
-            if(!config) var config = {};
+        if(!config) var config = {};
 
-            if (!appName) {
-                Tine.log.debug('Tine.widgets.form.RecordPickerManager::get - No appName given!');
-                return {};
-            }
+        if (!appName) {
+            Tine.log.debug('Tine.widgets.form.RecordPickerManager::get - No appName given!');
+            return {};
+        }
 
-            if (!modelName) {
-                Tine.log.debug('Tine.widgets.form.RecordPickerManager::get - No modelName given!');
-                return {};
-            }            
-            
-            if(Ext.isObject(appName)) {
-                appName = appName.name;
+        if (!modelName) {
+            Tine.log.debug('Tine.widgets.form.RecordPickerManager::get - No modelName given!');
+            return {};
+        }            
+        
+        if(Ext.isObject(appName)) {
+            appName = appName.name;
+        }
+        Tine.log.err('app',appName);
+        if(Ext.isObject(modelName)) {
+            modelName = modelName.getMeta('modelName');
+        }
+        
+        var key = appName+modelName;
+        
+        if(this.items[key]) {   // if registered
+            if(Ext.isString(this.items[key])) { // xtype
+                return Ext.ComponentMgr.create(config, this.items[key]);
+            } else { 
+                return new this.items[key](config);   
             }
-            Tine.log.err('app',appName);
-            if(Ext.isObject(modelName)) {
-                modelName = modelName.getMeta('modelName');
-            }
-            
-            var key = appName+modelName;
-            
-            if(this.items[key]) {   // if registered
-                if(Ext.isString(this.items[key])) { // xtype
-                    return Ext.ComponentMgr.create(config, this.items[key]);
-                } else { 
-                    return new this.items[key](config);   
-                }
-            } else {    // not registered, create default
-                var defaultconfig = {
-                    recordClass: Tine[appName].Model[modelName],
-                    recordProxy: Tine[appName][modelName.toLowerCase() + 'Backend'],
-                    loadingText: _('Searching...')
-                };
-                Ext.apply(defaultconfig, config);
-                return new Tine.Tinebase.widgets.form.RecordPickerComboBox(defaultconfig);
-            }
-        } catch(e) {
-            Tine.log.error('Tine.widgets.form.RecordPickerManager::get');
-            Tine.log.error(e.stack ? e.stack : e);
+        } else {    // not registered, create default
+            var defaultconfig = {
+                recordClass: Tine[appName].Model[modelName],
+                recordProxy: Tine[appName][modelName.toLowerCase() + 'Backend'],
+                loadingText: _('Searching...')
+            };
+            Ext.apply(defaultconfig, config);
+            return new Tine.Tinebase.widgets.form.RecordPickerComboBox(defaultconfig);
         }
     },
     
@@ -79,34 +74,27 @@ Tine.widgets.form.RecordPickerManager = {
      * @param {String/Object} component the component or xtype to register 
      */
     register: function(appName, modelName, component) {
-        try {
-            
-            if (!appName) {
-                Tine.log.debug('Tine.widgets.form.RecordPickerManager::register - No appName given!');
-                return {};
-            }
+        if (!appName) {
+            Tine.log.debug('Tine.widgets.form.RecordPickerManager::register - No appName given!');
+            return {};
+        }
 
-            if (!modelName) {
-                Tine.log.debug('Tine.widgets.form.RecordPickerManager::register - No modelName given!');
-                return {};
-            }            
-            
-            if(Ext.isObject(appName)) {
-                appName = appName.name;
-            }
-            if(Ext.isObject(modelName)) {
-                modelName = modelName.getMeta('modelName');
-            }
-            
-            var key = appName+modelName;
-            if(!this.items[key]) {
-                Tine.log.debug('RecordPickerManager::registerItem: ' + appName + modelName);
-                this.items[key] = component;
-            }
-         } catch(e) {
-            Tine.log.error('Tine.widgets.form.RecordPickerManager::register');
-            Tine.log.error(e.stack ? e.stack : e);
+        if (!modelName) {
+            Tine.log.debug('Tine.widgets.form.RecordPickerManager::register - No modelName given!');
+            return {};
+        }            
+        
+        if(Ext.isObject(appName)) {
+            appName = appName.name;
+        }
+        if(Ext.isObject(modelName)) {
+            modelName = modelName.getMeta('modelName');
+        }
+        
+        var key = appName+modelName;
+        if(!this.items[key]) {
+            Tine.log.debug('RecordPickerManager::registerItem: ' + appName + modelName);
+            this.items[key] = component;
         }
     }
-
 };

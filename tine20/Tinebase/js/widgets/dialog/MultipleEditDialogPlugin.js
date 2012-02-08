@@ -342,17 +342,12 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                             Ext.MessageBox.hide();
                             var resp = Ext.decode(_result.responseText);
                             if(resp.failcount > 0) {
-                                try {
-                                    var window = Tine.widgets.dialog.MultipleEditResultSummary.openWindow({
-                                        response: _result.responseText,
-                                        appName: this.app.appName,
-                                        recordClass: this.editDialog.recordClass
-                                    });
-                                } catch (e) {
-                                    Tine.log.err('Tine.widgets.dialog.MultipleEditDialogPlugin::onRecordUpdate::openSummaryWindow');
-                                    Tine.log.err(e.stack ? e.stack : e);
-                                }
-                                
+                                var window = Tine.widgets.dialog.MultipleEditResultSummary.openWindow({
+                                    response: _result.responseText,
+                                    appName: this.app.appName,
+                                    recordClass: this.editDialog.recordClass
+                                });
+
                                 window.on('close', function() {
                                     this.editDialog.fireEvent('update');
                                     this.editDialog.purgeListeners();
