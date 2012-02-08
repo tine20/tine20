@@ -465,6 +465,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 sortInfo: this.defaultSortInfo,
                 listeners: {
                     scope: this,
+                    'add': this.onStoreAdd,
+                    'remove': this.onStoreRemove,
                     'update': this.onStoreUpdate,
                     'beforeload': this.onStoreBeforeload,
                     'load': this.onStoreLoad,
@@ -553,6 +555,22 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             preserveScroller:   true, 
             removeStrategy:     'default'
         });
+    },
+    
+    /**
+     * called when Records have been added to the Store
+     */
+    onStoreAdd: function(store, records, index) {
+        this.store.totalLength += records.length;
+        this.pagingToolbar.updateInfo();
+    },
+    
+    /**
+     * called when a Record has been removed from the Store
+     */
+    onStoreRemove: function(store, record, index) {
+        this.store.totalLength--;
+        this.pagingToolbar.updateInfo();
     },
     
     /**
