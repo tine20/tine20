@@ -24,10 +24,6 @@
           "path": "js/"
         },
         {
-          "text": "TimeaccountSelect.js",
-          "path": "js/"
-        },
-        {
           "text": "TimeAccountFilterModel.js",
           "path": "js/"
         },

@@ -139,11 +139,10 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         labelSeparator: '',
                         columnWidth: .333
                     },
-                    items: [[new Tine.Timetracker.TimeAccountSelect({
+                    items: [[Tine.widgets.form.RecordPickerManager.get('Timetracker', 'Timeaccount', {
                         columnWidth: 1,
                         fieldLabel: this.app.i18n.ngettext('Time Account', 'Time Accounts', 1),
                         emptyText: this.app.i18n._('Select Time Account...'),
-                        loadingText: this.app.i18n._('Searching...'),
                         allowBlank: false,
                         forceSelection: true,
                         name: 'timeaccount_id',

@@ -130,7 +130,7 @@ Tine.Timetracker.Model.Timeaccount = Tine.Tinebase.data.Record.create(Tine.Timet
     containerName: 'All Timeaccounts',
     containersName: 'timeaccount lists',
     getTitle: function() {
-        return this.get('number') ? (this.get('number') + ' ' + this.get('title')) : false;
+        return this.get('number') ? (this.get('number') + ' - ' + this.get('title')) : false;
     }
 });
 
