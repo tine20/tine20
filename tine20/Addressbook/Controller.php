@@ -85,6 +85,8 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
      *
      * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
      * @return Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
+     * 
+     * @todo replace this with Tinebase_Container::getInstance()->getDefaultContainer
      */
     public function createPersonalFolder($_account)
     {

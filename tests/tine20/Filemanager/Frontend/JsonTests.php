@@ -100,7 +100,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
      */
     protected function _setupTestContainers()
     {
-        $this->_personalContainer = Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Filemanager');
+        $this->_personalContainer = Tinebase_Container::getInstance()->getDefaultContainer('Filemanager');
         
         $search = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter(array(
             'application_id' => $this->_application->getId(),
@@ -117,7 +117,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
             )));
             
         $personas = Zend_Registry::get('personas');
-        $this->_otherUserContainer = Tinebase_Container::getInstance()->getDefaultContainer($personas['sclever']->getId(), 'Filemanager');
+        $this->_otherUserContainer = Tinebase_Container::getInstance()->getDefaultContainer('Filemanager', $personas['sclever']->getId());
         Tinebase_Container::getInstance()->addGrants($this->_otherUserContainer->getId(), Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, NULL, array(
             Tinebase_Model_Grants::GRANT_READ
         ), TRUE);
