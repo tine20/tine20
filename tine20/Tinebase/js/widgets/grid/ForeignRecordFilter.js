@@ -469,11 +469,8 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
 
         switch(operator) {
             case 'equals':
-                // @TODO invent a picker registry
-                var picker = this.foreignRecordClass == Tine.Addressbook.Model.Contact ?  Tine.Addressbook.SearchCombo : Tine.Tinebase.widgets.form.RecordPickerComboBox;
                 
-                value = new picker ({
-                    recordClass: this.foreignRecordClass,
+                value = Tine.widgets.form.RecordPickerManager.get(this.foreignRecordClass.getMeta('appName'), this.foreignRecordClass, {
                     filter: filter,
                     blurOnSelect: true,
                     width: this.filterValueWidth,
