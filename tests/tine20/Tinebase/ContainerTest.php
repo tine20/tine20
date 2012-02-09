@@ -401,7 +401,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     public function testMoveContactToContainer()
     {
         // add contact to container
-        $personalContainer = $this->_instance->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Addressbook');
+        $personalContainer = $this->_instance->getDefaultContainer('Addressbook');
         $contact = new Addressbook_Model_Contact(array(
             'n_family'              => 'Tester',
             'container_id'          => $personalContainer->getId()
