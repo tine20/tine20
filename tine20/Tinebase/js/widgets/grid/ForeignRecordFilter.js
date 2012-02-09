@@ -330,7 +330,6 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 filter.toolbar.setValue(value);
                 
                 filter.formFields.operator.setValue('definedBy');
-                this.onOperatorChange(filter, 'definedBy', false);
             }
         }
         
