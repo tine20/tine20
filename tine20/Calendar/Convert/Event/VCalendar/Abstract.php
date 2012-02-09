@@ -430,7 +430,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
      */
     public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null)
     {
-        $vcalendar = $this->_getVcal($_blob);
+        $vcalendar = self::getVcal($_blob);
         
         // contains the VCALENDAR any VEVENTS
         if (!isset($vcalendar->VEVENT)) {
@@ -507,7 +507,13 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         return $event;
     }
     
-    protected function _getVcal($_blob)
+    /**
+     * returns VObject of input data
+     * 
+     * @param mixed $_blob
+     * @return Sabre_VObject_Component
+     */
+    public static function getVcal($_blob)
     {
         if ($_blob instanceof Sabre_VObject_Component) {
             $vcalendar = $_blob;
@@ -528,7 +534,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         if ($this->_method) {
             $result = $this->_method;
         } else if ($_blob !== NULL) {
-            $vcalendar = $this->_getVcal($_blob);
+            $vcalendar = self::getVcal($_blob);
             $result = $vcalendar->METHOD;
         }
         
