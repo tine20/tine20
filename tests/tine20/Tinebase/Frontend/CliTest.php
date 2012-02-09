@@ -180,7 +180,7 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
     {
         $newLead = new Crm_Model_Lead(array(
             'lead_name'     => 'PHPUNIT Lead',
-            'container_id'  => Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Crm')->getId(),
+            'container_id'  => Tinebase_Container::getInstance()->getDefaultContainer('Crm')->getId(),
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,

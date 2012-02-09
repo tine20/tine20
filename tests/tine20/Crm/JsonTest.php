@@ -87,7 +87,7 @@ class Crm_JsonTest extends Crm_AbstractTest
             'leadsource_id' => $registry['defaults']['leadsource_id'],
         ));
         $this->assertEquals(
-            Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Crm')->getId(),
+            Tinebase_Container::getInstance()->getDefaultContainer('Crm')->getId(),
             $registry['defaults']['container_id']['id']
         );
         //print_r($registry);
@@ -158,9 +158,9 @@ class Crm_JsonTest extends Crm_AbstractTest
         // add note
         $note = array(
             'note_type_id'      => 1,
-            'note'              => 'phpunit test note',            
+            'note'              => 'phpunit test note',
         );
-        $leadData['notes'] = array($note);        
+        $leadData['notes'] = array($note);
         
         $savedLead = $this->_instance->saveLead($leadData);
         $getLead = $this->_instance->getLead($savedLead['id']);
@@ -176,7 +176,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $this->assertEquals($lead->description, $searchLeads['results'][0]['description']);
         $this->assertEquals($price, $searchLeads['results'][0]['turnover'], 'turnover has not been calculated using product prices');
         $this->assertEquals($searchLeads['results'][0]['turnover']*$lead->probability/100, $searchLeads['results'][0]['probableTurnover']);
-        $this->assertTrue(count($searchLeads['results'][0]['relations']) == 3, 'did not get all relations');     
+        $this->assertTrue(count($searchLeads['results'][0]['relations']) == 3, 'did not get all relations');
 
         // get related records and check relations
         foreach ($searchLeads['results'][0]['relations'] as $relation) {
@@ -196,8 +196,11 @@ class Crm_JsonTest extends Crm_AbstractTest
         }
         $this->assertTrue(isset($relatedContact), 'contact not found');
         $this->assertEquals($contact->n_fn, $relatedContact['n_fn'], 'contact name does not match');
+        
         $this->assertTrue(isset($relatedTask), 'task not found');
         $this->assertEquals($task->summary, $relatedTask['summary'], 'task summary does not match');
+        $defaultTaskContainerId = Tinebase_Core::getPreference('Tasks')->getValue(Tasks_Preference::DEFAULTTASKLIST);
+        $this->assertEquals($defaultTaskContainerId, $relatedTask['container_id']);
         $this->assertTrue(isset($relatedProduct), 'product not found');
         $this->assertEquals($product->name, $relatedProduct['name'], 'product name does not match');
          
@@ -338,8 +341,8 @@ class Crm_JsonTest extends Crm_AbstractTest
             'creation_time'        => Tinebase_DateTime::now(),
             'percent'              => 70,
             'due'                  => Tinebase_DateTime::now()->addMonth(1),
-            'summary'              => 'phpunit: crm test task',        
-        ));        
+            'summary'              => 'phpunit: crm test task',
+        ));
     }
     
     /**
@@ -354,7 +357,7 @@ class Crm_JsonTest extends Crm_AbstractTest
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
-            'container_id'  => Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Crm')->getId(),
+            'container_id'  => Tinebase_Container::getInstance()->getDefaultContainer('Crm')->getId(),
             'start'         => Tinebase_DateTime::now(),
             'description'   => 'Description',
             'end'           => NULL,

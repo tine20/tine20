@@ -74,7 +74,7 @@ class Tasks_Controller extends Tinebase_Controller_Event implements Tinebase_Con
         if (isset($taskConfig->$configString)) {
             $defaultContainer = Tinebase_Container::getInstance()->getContainerById((int)$taskConfig->$configString);
         } else {
-            $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer($this->_currentAccount->accountId, 'Tasks');
+            $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer('Tasks');
         }
         
         return $defaultContainer;
