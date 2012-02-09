@@ -19,6 +19,7 @@
  * @property    string                      containerOwner
  * @property    string                      flatpath
  * @property    string                      statpath
+ * @property    string                      realpath           path without app/type/container stuff 
  * @property    string                      streamwrapperpath
  * @property    Tinebase_Model_Application  application
  * @property    Tinebase_Model_Container    container
@@ -78,6 +79,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         'containerOwner'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'flatpath'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'statpath'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'realpath'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'streamwrapperpath' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'application'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'container'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -193,6 +195,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         $this->application          = $this->_getApplication($pathParts);
         $this->container            = $this->_getContainer($pathParts);
         $this->statpath             = $this->_getStatPath($pathParts);
+        $this->realpath             = $this->_getRealPath($pathParts);
         $this->streamwrapperpath    = self::STREAMWRAPPERPREFIX . $this->statpath;
     }
     
@@ -205,6 +208,9 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      */
     protected function _getPathParts($_path)
     {
+        if (! is_string($_path)) {
+            throw new Tinebase_Exception_InvalidArgument('Path needs to be an array!');
+        }
         $pathParts = explode('/', trim($_path, '/'));
         if (count($pathParts) < 1) {
             throw new Tinebase_Exception_InvalidArgument('Invalid path: ' . $_path);
@@ -323,19 +329,55 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     /**
      * do path replacements (container name => container id, account name => account id)
      * 
-     * @param array $_pathParts
+     * @param array $pathParts
      * @return string
      */
-    protected function _getStatPath($_pathParts)
+    protected function _getStatPath($pathParts = NULL)
     {
-        $pathParts = $_pathParts;
+        if ($pathParts === NULL) {
+            $pathParts = array(
+                $this->application->getId(),
+                'folders',
+                $this->containerType,
+            );
+            
+            if ($this->containerOwner) {
+                $pathParts[] = $this->containerOwner;
+            }
+            
+            if ($this->container) {
+                $pathParts[] = $this->container->name;
+            }
+            
+            if ($this->realpath) {
+                $pathParts += explode('/', $this->realpath);
+            }
+            $this->flatpath = '/' . implode('/', $pathParts);
+        }
+        $result = $this->_createStatPathFromParts($pathParts);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Path to stat: ' . $result);
+        
+        return $result;
+    }
+    
+    /**
+     * create stat path from path parts
+     * 
+     * @param array $pathParts
+     * @return string
+     */
+    protected function _createStatPathFromParts($pathParts)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($pathParts, TRUE));
         
         if (count($pathParts) > 3) {
             // replace account login name with id
             if ($this->containerOwner) {
                 $pathParts[3] = Tinebase_User::getInstance()->getFullUserByLoginName($this->containerOwner)->getId();
             }
-            
+        
             // replace container name with id
             $containerPartIdx = ($this->containerType === Tinebase_Model_Container::TYPE_SHARED) ? 3 : 4;
             if (isset($pathParts[$containerPartIdx]) && $this->container && $pathParts[$containerPartIdx] === $this->container->name) {
@@ -344,10 +386,55 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         }
         
         $result = '/' . implode('/', $pathParts);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Path to stat: ' . $result);
+        return $result;
+    }
+    
+    /**
+     * get real path
+     * 
+     * @param array $pathParts
+     * @return NULL|string
+     */
+    protected function _getRealPath($pathParts)
+    {
+        $result = NULL;
+        $firstRealPartIdx = ($this->containerType === Tinebase_Model_Container::TYPE_SHARED) ? 4 : 5;
+        if (isset($pathParts[$firstRealPartIdx])) {
+            $result = implode('/', array_slice($pathParts, $firstRealPartIdx));
+        }
         
         return $result;
+    }
+    
+    /**
+     * check if this path has a matching container (toplevel path) 
+     * 
+     * @return boolean
+     */
+    public function isToplevelPath()
+    {
+        return (! $this->getParent()->container instanceof Tinebase_Model_Container);
+    }
+    
+    /**
+     * set new container / statpath has to be reset
+     * 
+     * @param Tinebase_Model_Container $container
+     */
+    public function setContainer($container)
+    {
+        $this->container            = $container;
+        $this->containerType        = $container->type;
+        $ownerAccountId             = Tinebase_Container::getInstance()->getContainerOwner($container);
+        if ($ownerAccountId) {
+            $this->containerOwner = Tinebase_User::getInstance()->getFullUserById($ownerAccountId)->accountLoginName;
+        } else if ($this->containerType === Tinebase_Model_Container::TYPE_PERSONAL) {
+            throw new Tinebase_Exception_InvalidArgument('Personal container needs an owner!');
+        } else {
+            $this->containerOwner = NULL;
+        }
+        
+        $this->statpath             = $this->_getStatPath();
+        $this->streamwrapperpath    = self::STREAMWRAPPERPREFIX . $this->statpath;
     }
 }

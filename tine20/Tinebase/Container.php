@@ -1147,12 +1147,21 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     public function getContainerOwner(Tinebase_Model_Container $_container)
     {
         if ($_container->type !== Tinebase_Model_Container::TYPE_PERSONAL) {
-            // only personal containers have an owner
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Only personal containers have an owner.');
+            return FALSE;
+        }
+        
+        $grants = (! $_container->account_grants) ? $this->getGrantsOfContainer($_container) : $_container->account_grants;
+        
+        if (count($grants) === 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Container ' . $_container->name . ' has no account grants.');
             return FALSE;
         }
         
         // return first admin user
-        foreach ($_container->account_grants as $grant) {
+        foreach ($grants as $grant) {
             if ($grant->{Tinebase_Model_Grants::GRANT_ADMIN} && $grant->account_type == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
                 return $grant->account_id;
             }

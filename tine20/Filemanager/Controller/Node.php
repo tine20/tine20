@@ -569,7 +569,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         $flatpathWithoutBasepath = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($_path->flatpath, $app);
         
         foreach ($records as $record) {
-            // path
             $record->path = $flatpathWithoutBasepath . '/' . $record->name;
             
             $aclContainer = NULL;
@@ -808,10 +807,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     protected function _moveNode(Tinebase_Model_Tree_Node_Path $_source, Tinebase_Model_Tree_Node_Path $_destination, $_forceOverwrite = FALSE)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Move Node ' . $_source->flatpath . ' to ' . $_destination->flatpath);
+            . ' Move Node ' . $_source->flatpath . ' to ' . $_destination->flatpath);
         
         $sourceNode = $this->_backend->stat($_source->statpath);
-                
+        
         switch ($sourceNode->type) {
             case Tinebase_Model_Tree_Node::TYPE_FILE:
                 $movedNode = $this->_copyOrMoveFileNode($_source, $_destination, 'move', $_forceOverwrite);
@@ -827,49 +826,64 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     /**
      * move folder node
      * 
-     * @param Tinebase_Model_Tree_Node_Path $_source
-     * @param Tinebase_Model_Tree_Node $_sourceNode
-     * @param Tinebase_Model_Tree_Node_Path $_destination
+     * @param Tinebase_Model_Tree_Node_Path $source
+     * @param Tinebase_Model_Tree_Node $sourceNode [unused]
+     * @param Tinebase_Model_Tree_Node_Path $destination
      * @return Tinebase_Model_Tree_Node
-     * 
-     * @todo create new container if it did not exist before
      */
-    protected function _moveFolderNode($_source, $_sourceNode, $_destination)
+    protected function _moveFolderNode($source, $sourceNode, $destination)
     {
-        $this->_checkPathACL($_source, 'get', FALSE);
+        $this->_checkPathACL($source, 'get', FALSE);
         
-        $destinationParentPathRecord = $_destination->getParent();
-        
+        $destinationParentPathRecord = $destination->getParent();
+        $destinationNodeName = NULL;
         if (! $destinationParentPathRecord->container) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Moving container ' . $_source->container->name . ' to ' . $_destination->flatpath);
-                
-            $this->_checkACLContainer($_source->container, 'update');
-            $_sourceNode->name = $_source->container->getId();
-            
-            if ($_source->container->name !== $_destination->name) {
-                $_source->container->name = $_destination->name;
-                $_source->container = Tinebase_Container::getInstance()->update($_source->container);
-            }
-            
-            if (! $_source->getParent()->container) {
-                // just renamed the container
-                return $_sourceNode;
-            } else {
-                throw new Tinebase_Exception_NotImplemented('TODO: create new container');
-            }
-            
+            // destination has no container yet (toplevel)
+            $this->_moveFolderContainer($source, $destination);
+            $destinationNodeName = $destination->container->getId();
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' rename ' . $_source->statpath . ' -> ' . $_destination->statpath);
-            
             $this->_checkPathACL($destinationParentPathRecord, 'update');
-            $this->_backend->rename($_source->statpath, $_destination->statpath);
         }
         
-        $movedNode = $this->_backend->stat($_destination->statpath);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Rename Folder ' . $source->statpath . ' -> ' . $destination->statpath);
+        
+        $this->_backend->rename($source->statpath, $destination->statpath);
+        $movedNode = $this->_backend->stat($destination->statpath);
+        if ($destinationNodeName !== NULL) {
+            $movedNode->name = $destinationNodeName;
+        }
         
         return $movedNode;
+    }
+    
+    /**
+     * move folder container
+     * 
+     * @param Tinebase_Model_Tree_Node_Path $source
+     * @param Tinebase_Model_Tree_Node_Path $destination
+     * @return Tinebase_Model_Tree_Node
+     */
+    protected function _moveFolderContainer($source, $destination)
+    {
+        if ($source->isToplevelPath()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Moving container ' . $source->container->name . ' to ' . $destination->flatpath);
+        
+            $this->_checkACLContainer($source->container, 'update');
+        
+            $container = $source->container;
+            if ($container->name !== $destination->name) {
+                $container->name = $destination->name;
+                $container = Tinebase_Container::getInstance()->update($container);
+            }
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Creating container ' . $destination->name);
+            $container = $this->_createContainer($destination->name, $destination->containerType);
+        }
+        
+        $destination->setContainer($container);
     }
     
     /**
