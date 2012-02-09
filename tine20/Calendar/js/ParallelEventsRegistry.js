@@ -116,13 +116,11 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
      * @param {Ext.data.Record} event
      */
     unregister: function(event) {
-        var ri =  event.parallelEventRegistry;
-        
-        // unregister event
+        var ri = event.parallelEventRegistry;
         var frame = this.getFrame(ri.position);
-        
+
         if (! this.skipIntegrityChecks) {
-            for (var idx=ri.startIdx; idx<=ri.endIdx; idx++) {
+            for (var idx=ri.startIdx; idx <= ri.endIdx; idx++) {
                 if (frame[idx] !== event) {
                     throw new Ext.Error('event is not registered at expected position');
                 }
@@ -130,7 +128,6 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
         }
         
         this.unregisterSlice(frame, ri.startIdx, ri.endIdx);
-        
         event.parallelEventRegistry = null;
     },
     
