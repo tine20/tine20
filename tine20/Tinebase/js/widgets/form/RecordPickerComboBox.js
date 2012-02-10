@@ -45,6 +45,12 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
     recordProxy: null,
     
     /**
+     * @property app
+     * @type Tine.Tinebase.Application
+     */
+    app: null,
+    
+    /**
      * @type Tine.Tinebase.data.Record selectedRecord
      * @property selectedRecord 
      * The last record which was selected
@@ -63,6 +69,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
     forceSelection: true,
     
     initComponent: function () {
+        this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
         this.displayField = this.recordClass.getMeta('titleProperty');
         this.valueField = this.recordClass.getMeta('idProperty');
         
@@ -88,7 +95,10 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
         if (! this.tpl) {
             this.tpl = new Ext.XTemplate('<tpl for="."><div class="x-combo-list-item">{[this.getTitle(values.' + this.recordClass.getMeta('idProperty') + ')]}</div></tpl>', {
                 getTitle: (function(id) {
-                    return Ext.util.Format.htmlEncode(this.getStore().getById(id).getTitle());
+                    var record = this.getStore().getById(id),
+                        title = record ? record.getTitle() : '&nbsp';
+                    
+                    return Ext.util.Format.htmlEncode(title);
                 }).createDelegate(this)
             });
         }
@@ -204,7 +214,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
             // value is a js object
             else if (Ext.isObject(value)) {
                 if (! this.store.getById(value)) {
-                    this.store.addSorted(new this.recordClass(value));
+                    var record = this.recordProxy ? this.recordProxy.recordReader({responseText: Ext.encode(value)}) : new this.recordClass(value)
+                    this.store.addSorted(record);
                 }
                 value = value[this.valueField] || '';
             }
