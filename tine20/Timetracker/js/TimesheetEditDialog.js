@@ -41,6 +41,9 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @param {} timeaccount
      */
     onTimeaccountUpdate: function(field, timeaccount) {
+        
+        if(this.useMultiple) return;
+        
         // check for manage_timeaccounts right
         var manageRight = Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts');
         
@@ -81,27 +84,9 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @todo    add prompt later?
      */
     onClearedUpdate: function(field, checked) {
-        
-        this.getForm().findField('billed_in').setDisabled(! checked);
-
-        // open modal window to type in billed in value
-        /*
-        if (checked && this.getForm().findField('billed_in').getValue() == '') {
-            
-            Ext.Msg.prompt(
-                this.app.i18n._('Billed in ...'),
-                this.app.i18n._('Billed in ...'), 
-                function(btn, text) {
-                    if (btn == 'ok'){
-                        this.getForm().findField('billed_in').setValue(text);
-                    }
-                },
-                this
-            );                        
-        } else {
-            this.getForm().findField('billed_in').setValue('');
+        if (!this.useMultiple) {
+            this.getForm().findField('billed_in').setDisabled(! checked);
         }
-        */
     },
     
     initComponent: function() {
@@ -115,12 +100,15 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
      */
-    getFormItems: function() {        
+    getFormItems: function() {            
         return {
             xtype: 'tabpanel',
             border: false,
             plain:true,
             activeTab: 0,
+            plugins: [{
+                ptype : 'ux.tabpanelkeyplugin'
+            }],
             items:[
                 {                
                 title: this.app.i18n.ngettext('Timesheet', 'Timesheets', 1),
@@ -144,6 +132,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         emptyText: this.app.i18n._('Select Time Account...'),
                         allowBlank: false,
                         forceSelection: true,
+                        multiEditable: false,
                         name: 'timeaccount_id',
                         listeners: {
                             scope: this,
@@ -154,17 +143,20 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         fieldLabel: this.app.i18n._('Duration'),
                         name: 'duration',
                         allowBlank: false,
-                        xtype: 'tinedurationspinner'
+                        xtype: 'tinedurationspinner',
+                        multiEditable: false
                         }, {
                         fieldLabel: this.app.i18n._('Date'),
                         name: 'start_date',
                         allowBlank: false,
-                        xtype: 'datefield'
+                        xtype: 'datefield',
+                        multiEditable: false
                         }, {
                         fieldLabel: this.app.i18n._('Start'),
                         emptyText: this.app.i18n._('not set'),
                         name: 'start_time',
-                        xtype: 'timefield'
+                        xtype: 'timefield',
+                        multiEditable: false
                     }], [{
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Description'),
@@ -172,10 +164,12 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         name: 'description',
                         allowBlank: false,
                         xtype: 'textarea',
-                        height: 150
+                        height: 150,
+                        multiEditable: false
                     }], [new Tine.Addressbook.SearchCombo({
                         allowBlank: false,
                         forceSelection: true,
+                        multiEditable: false,
                         columnWidth: 1,
                         disabled: true,
                         useAccountRecord: true,
@@ -185,13 +179,13 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         name: 'account_id'
                     }), {
                         columnWidth: .25,
-                        disabled: true,
+                        disabled: (this.useMultiple) ? false : true,
                         boxLabel: this.app.i18n._('Billable'),
                         name: 'is_billable',
                         xtype: 'checkbox'
                     }, {
                         columnWidth: .25,
-                        disabled: true,
+                        disabled: (this.useMultiple) ? false : true,
                         boxLabel: this.app.i18n._('Cleared'),
                         name: 'is_cleared',
                         xtype: 'checkbox',
@@ -201,7 +195,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         }                        
                     }, {
                         columnWidth: .5,
-                        disabled: true,
+                        disabled: (this.useMultiple) ? false : true,
                         fieldLabel: this.app.i18n._('Cleared In'),
                         name: 'billed_in',
                         xtype: 'textfield'

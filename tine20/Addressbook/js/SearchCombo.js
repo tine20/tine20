@@ -66,7 +66,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
         this.recordProxy = Tine.Addressbook.contactBackend;
         
         this.initTemplate();
-        
+        this.on('added', Tine.widgets.dialog.EditDialog.prototype.addToDisableOnEditMultiple, this);
         Tine.Addressbook.SearchCombo.superclass.initComponent.call(this);
     },
     
