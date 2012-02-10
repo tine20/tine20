@@ -290,7 +290,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " create entry");
         
         $entry = $this->toTineModel($_entry);
-        $entry->creation_time = $this->_syncTimeStamp;
+        $entry->creation_time = new Tinebase_DateTime($this->_syncTimeStamp);
         $entry->created_by = Tinebase_Core::getUser()->getId();
         
         // container_id gets set to personal folder in application specific controller if missing
@@ -308,7 +308,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " added entry id " . $entry->getId());
 
-        return $entry;
+        return $entry->getId();
     }
         
     /**
@@ -327,11 +327,11 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
         $oldEntry = $this->_contentController->get($_serverId); 
         
         $entry = $this->toTineModel($_entry, $oldEntry);
-        $entry->last_modified_time = $this->_syncTimeStamp;
+        $entry->last_modified_time = new Tinebase_DateTime($this->_syncTimeStamp);
         
         $entry = $this->_contentController->update($entry);
 
-        return $entry;
+        return $entry->getId();
     }
         
     /**

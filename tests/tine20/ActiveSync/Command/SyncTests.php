@@ -186,6 +186,73 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         $this->assertEquals("uri:Contacts", $syncDoc->lookupNamespaceURI('Contacts'), $syncDoc->saveXML());
     }
     
+    public function testCreateContact()
+    {
+        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
+            Tinebase_Core::getUser(),
+            'Addressbook', 
+            Tinebase_Core::getUser(),
+            Tinebase_Model_Grants::GRANT_EDIT
+        )->getFirstRecord();
+        
+        $this->testSyncOfContacts();
+        
+        // lets add one contact
+        $doc = new DOMDocument();
+        $doc->preserveWhiteSpace = false;
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Sync xmlns="uri:AirSync" xmlns:Contacts="uri:Contacts" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
+                <Collection>
+                    <Class>Contacts</Class><SyncKey>2</SyncKey><CollectionId>' . $personalContainer->getId() . '</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+                    <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
+                    <Commands><Add><ClientId>42</ClientId><ApplicationData><Contacts:FirstName>aaaadde</Contacts:FirstName><Contacts:LastName>aaaaade</Contacts:LastName></ApplicationData></Add></Commands>
+                </Collection>
+            </Collections></Sync>'
+        );
+        
+        // decode to wbxml and back again to test the wbxml en-/decoder
+        $xmlStream = fopen("php://temp", 'r+');
+        
+        $encoder = new Wbxml_Encoder($xmlStream, 'UTF-8', 3);
+        $encoder->encode($doc);
+        
+        rewind($xmlStream);
+        
+        $decoder = new Wbxml_Decoder($xmlStream);
+        $doc = $decoder->decode();
+        #$doc->formatOutput = true; echo $doc->saveXML();
+        $sync = new Syncope_Command_Sync($doc, $this->_device, $this->_device->policykey);
+        
+        $sync->handle();
+        
+        $syncDoc = $sync->getResponse();
+        #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
+        
+        $xpath = new DomXPath($syncDoc);
+        $xpath->registerNamespace('AirSync', 'uri:AirSync');
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Class');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals('Contacts', $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(3, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(Syncope_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Responses/AirSync:Add/AirSync:ServerId');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertFalse(empty($nodes->item(0)->nodeValue), $syncDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Responses/AirSync:Add/AirSync:Status');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(Syncope_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+    }
+    
     /**
      * test sync of existing events folder
      */
