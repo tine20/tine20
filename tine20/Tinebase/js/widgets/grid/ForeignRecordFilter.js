@@ -61,6 +61,11 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     editDefinitionText: 'Edit definition', // _('Edit definition')
     
     /**
+     * @cfg {Object} optional picker config
+     */
+    pickerConfig: null,
+    
+    /**
      * @cfg {String} startDefinitionText untranslated start definition button text
      */
     startDefinitionText: 'Start defintion', // _('Start defintion')
@@ -470,7 +475,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         switch(operator) {
             case 'equals':
                 
-                value = Tine.widgets.form.RecordPickerManager.get(this.foreignRecordClass.getMeta('appName'), this.foreignRecordClass, {
+                value = Tine.widgets.form.RecordPickerManager.get(this.foreignRecordClass.getMeta('appName'), this.foreignRecordClass, Ext.apply({
                     filter: filter,
                     blurOnSelect: true,
                     width: this.filterValueWidth,
@@ -479,7 +484,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     id: 'tw-ftb-frow-valuefield-' + filter.id,
                     value: filter.data.value ? filter.data.value : this.defaultValue,
                     renderTo: el
-                });
+                }, this.pickerConfig));
                 
                 value.on('specialkey', function(field, e){
                      if(e.getKey() == e.ENTER){
