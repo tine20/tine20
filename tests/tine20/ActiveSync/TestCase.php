@@ -184,14 +184,12 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
         $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
         
         $xml = simplexml_import_dom($this->_getInputDOMDocument());
-        $record = $controller->createEntry($this->_getContainerWithSyncGrant()->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        $recordId = $controller->createEntry($this->_getContainerWithSyncGrant()->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
 
-        $this->_validateAddEntryToBackend($record);
+        $this->assertNotEmpty($recordId);
         
-        return $record;
+        return $recordId;
     }
-    
-    abstract protected function _validateAddEntryToBackend(Tinebase_Record_Abstract $_record);
     
     /**
      * test get list all record ids
@@ -206,7 +204,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
         $this->_validateGetServerEntries($record);        
     }
     
-    abstract protected function _validateGetServerEntries(Tinebase_Record_Abstract $_record);
+    abstract protected function _validateGetServerEntries($_recordId);
     
     /**
      * test search records

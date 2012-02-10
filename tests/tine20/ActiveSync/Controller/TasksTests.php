@@ -144,25 +144,12 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         $this->assertEquals('Testaufgabe auf mfe', $task[0]->summary);
     }
     
-    protected function _validateAddEntryToBackend(Tinebase_Record_Abstract $_record)
+    protected function _validateGetServerEntries($_recordId)
     {
-        $this->objects['tasks'][] = $_record;
-        
-        #var_dump($_record->toArray());
-        
-        $this->assertEquals('Testaufgabe auf mfe', $_record->summary);
-        $this->assertEquals(0,                     $_record->percent);
-        $this->assertEquals("test beschreibung zeile 1\r\nZeile 2\r\nZeile 3", $_record->description);
-    }
-    
-    protected function _validateGetServerEntries(Tinebase_Record_Abstract $_record)
-    {
-        $this->objects['tasks'][] = $_record;
-        
         $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
         $records = $controller->getServerEntries($this->_specialFolderName, Syncope_Command_Sync::FILTER_NOTHING);
         
-        $this->assertContains($_record->getId(), $records);
+        $this->assertContains($_recordId, $records);
         #$this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
     }
     

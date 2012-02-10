@@ -303,16 +303,16 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
      */
     public function testChangeEntryInBackend()
     {
-        $record = $this->testAddEntryToBackend();
+        $recordId = $this->testAddEntryToBackend();
         
         $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
     
         $xml = simplexml_import_dom($this->_getInputDOMDocument());
-        $record = $controller->change($this->_getContainerWithSyncGrant()->getId(), $record->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        $recordId = $controller->change($this->_getContainerWithSyncGrant()->getId(), $recordId, $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
     
-        $this->_validateAddEntryToBackend($record);
+        $this->assertNotEmpty($recordId);
     
-        return $record;
+        return $recordId;
     }
         
     /**
@@ -331,14 +331,12 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
      * (non-PHPdoc)
      * @see ActiveSync/ActiveSync_TestCase::_validateGetServerEntries()
      */
-    protected function _validateGetServerEntries(Tinebase_Record_Abstract $_record)
+    protected function _validateGetServerEntries($_recordId)
     {
-        $this->objects['events'][] = $_record;
-        
         $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
         $records = $controller->getServerEntries($this->_specialFolderName, Syncope_Command_Sync::FILTER_NOTHING);
         
-        $this->assertContains($_record->getId(), $records, 'event not found');
+        $this->assertContains($_recordId, $records, 'event not found');
     }
     
     /**
@@ -394,21 +392,6 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         $this->assertEquals('2010-12-20 09:00:00', $event->dtstart->format(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2010-12-20 10:00:00', $event->dtend->format(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2010-12-23 22:59:59', $event->rrule->until->format(Tinebase_Record_Abstract::ISO8601LONG));
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see ActiveSync/ActiveSync_TestCase::_validateAddEntryToBackend()
-     */
-    protected function _validateAddEntryToBackend(Tinebase_Record_Abstract $_record)
-    {
-        $this->objects['events'][] = $_record;
-        
-        #var_dump($_record->toArray());
-        
-        $this->assertEquals('Repeat', $_record->summary);
-        $this->assertEquals('FREQ=DAILY;INTERVAL=1;UNTIL=2010-11-28 22:59:59', $_record->rrule);
-        $this->assertEquals(2,        count($_record->exdate));
     }
     
     /**
