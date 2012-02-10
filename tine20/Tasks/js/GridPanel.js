@@ -217,19 +217,13 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 200,
             dataIndex: 'organizer',
             renderer: Tine.Tinebase.common.accountRenderer,
-            quickaddField: new Tine.Addressbook.SearchCombo({
-                // at the moment we support accounts only
+            quickaddField: Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                 userOnly: true,
+                useAccountRecord: true,
                 nameField: 'n_fileas',
                 blurOnSelect: true,
                 selectOnFocus: true,
-                value: Tine.Tinebase.registry.get('currentAccount').accountDisplayName,
-                selectedRecord: new Tine.Addressbook.Model.Contact(Tine.Tinebase.registry.get('userContact')),
-                getValue: function() {
-                    if (this.selectedRecord) {
-                        return this.selectedRecord.get('account_id');
-                    }
-                }
+                value: Tine.Tinebase.registry.get('currentAccount').accountDisplayName
             })
         }]
         });

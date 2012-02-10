@@ -59,6 +59,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
     
     itemSelector: 'div.search-item',
     minListWidth: 200,
+    enableKeyEvents: true,
     
     //private
     initComponent: function(){
@@ -66,8 +67,22 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
         this.recordProxy = Tine.Addressbook.contactBackend;
         
         this.initTemplate();
-        this.on('added', Tine.widgets.dialog.EditDialog.prototype.addToDisableOnEditMultiple, this);
+
+//        this.on('added', Tine.widgets.dialog.EditDialog.prototype.addToDisableOnEditMultiple, this);
+
+        if(this.useAccountRecord) {
+            this.on('keyup', this.onKeyUp);
+        }
+
         Tine.Addressbook.SearchCombo.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * is called in accountMode to reset the value
+     * @param event e
+     */
+    onKeyUp: function(e) {
+        if(this.getRawValue() == '') this.setValue(null);
     },
     
     /**
@@ -127,18 +142,22 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
     },
     
     getValue: function() {
+        var ret = null;
         if (this.useAccountRecord) {
             if (this.selectedRecord) {
-                return this.selectedRecord.get('account_id');
+                ret = this.selectedRecord.get('account_id');
             } else {
-                return this.accountId;
+                ret = this.accountId;
             }
         } else {
-            return Tine.Addressbook.SearchCombo.superclass.getValue.call(this);
+            ret = Tine.Addressbook.SearchCombo.superclass.getValue.call(this);
         }
+
+        return ret;
     },
 
     setValue: function (value) {
+
         if (this.useAccountRecord) {
             if (value) {
                 if(value.accountId) {
@@ -152,9 +171,10 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
                 }
             } else {
                 this.accountId = null;
+                this.selectedRecord = null;
+                
             }
         }
-        
         return Tine.Addressbook.SearchCombo.superclass.setValue.call(this, value);
     }
 

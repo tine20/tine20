@@ -34,7 +34,7 @@ Tine.widgets.form.RecordPickerManager = function() {
             var appName = Ext.isString(appName) ? appName : appName.appName,
                 modelName = Ext.isFunction(modelName) ? modelName.getMeta('modelName') : modelName,
                 key = appName+modelName;
-            
+
             if(items[key]) {   // if registered
                 if(Ext.isString(items[key])) { // xtype
                     return Ext.ComponentMgr.create(config, items[key]);

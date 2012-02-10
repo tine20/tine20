@@ -211,13 +211,14 @@ Ext.namespace('Tine.Tasks');
                             keyFieldName: 'taskPriority',
                             value: 'NORMAL'
                         }),
-	                    new Tine.Addressbook.SearchCombo({
+                        Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                            fieldLabel: this.app.i18n._('Organizer'),
                             emptyText: _('Add Responsible ...'),
                             userOnly: true,
+                            useAccountRecord: true,
                             name: 'organizer',
-                            nameField: 'n_fileas',
-                            useAccountRecord: true
-                    	})
+                            nameField: 'n_fileas'
+                        })	                    
                     ], [{
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Notes'),
