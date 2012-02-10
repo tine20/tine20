@@ -1,139 +1,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-14 15:23+0100\n"
-"Last-Translator: Ronny Gonzales <gonzito@online.no>\n"
+"PO-Revision-Date: 2012-01-13 13:48+0000\n"
+"Last-Translator: Cirion <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Norwegian Bokmål\n"
-"X-Poedit-Country: NOT SPECIFIED / ANY\n"
-"X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-
-#: js/Phone.js:29 js/Phone.js:479 js/Phone.js:480
-msgid "Edit phone settings"
-msgstr "Rediger telefon instillinger"
-
-#: js/Phone.js:59 js/Phone.js:254 js/Models.js:69
-#, fuzzy
-msgid "Phone"
-msgid_plural "Phones"
-msgstr[0] "Telefon"
-msgstr[1] "Telefon"
-
-#: js/Phone.js:70
-msgid "Phones"
-msgstr "Telefoner"
-
-#: js/Phone.js:277
-msgid "Line"
-msgstr "Linje"
-
-#: js/Phone.js:286
-msgid "Number"
-msgstr "Nummer"
-
-#: js/Phone.js:295
-msgid "Cancel"
-msgstr "Avbryt"
-
-#: js/Phone.js:305
-msgid "Dial"
-msgstr "Ring"
-
-#: js/Phone.js:325
-msgid "Error"
-msgstr ""
-
-#: js/Phone.js:326
-msgid "Not possible to dial."
-msgstr ""
-
-#: js/Phone.js:469
-msgid "Dial number"
-msgstr "Ring nummer"
-
-#: js/Phone.js:470
-msgid "Initiate a new outgoing call"
-msgstr "Initsier en ny utgående samtale"
-
-#: js/Phone.js:531
-msgid "Incoming call"
-msgstr "Innkommende samtale"
-
-#: js/Phone.js:535
-msgid "Outgoing call"
-msgstr "Utgående samtale"
-
-#: js/Phone.js:543
-msgid "unknown number"
-msgstr "ukjent nummer"
-
-#: js/Phone.js:580
-msgid "Search:"
-msgstr "Søk:"
-
-#: js/Phone.js:665
-msgid "Source or Destination"
-msgstr "Kilde eller Destinasjon"
-
-#: js/Phone.js:681
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Viser samtaler {0} - {1} av {2}"
-
-#: js/Phone.js:682 js/Phone.js:725
-msgid "No calls to display"
-msgstr "Ingen samtaler å vise"
-
-#: js/Phone.js:692
-msgid "Direction"
-msgstr "Retning"
-
-#: js/Phone.js:693
-msgid "Source"
-msgstr "Kilde"
-
-#: js/Phone.js:694
-msgid "Caller Id"
-msgstr "Samtale ID"
-
-#: js/Phone.js:695
-msgid "Destination"
-msgstr "Destinasjon"
-
-#: js/Phone.js:696
-msgid "Start"
-msgstr "Start"
-
-#: js/Phone.js:697
-msgid "Connected"
-msgstr "Tilkoblet"
-
-#: js/Phone.js:698
-msgid "Disconnected"
-msgstr "Frakoblet"
-
-#: js/Phone.js:699
-msgid "Duration"
-msgstr "Varighet"
-
-#: js/Phone.js:700
-msgid "Ringing"
-msgstr "Ringer"
-
-#: js/Phone.js:701
-msgid "Call ID"
-msgstr "Samtale ID"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] ""
-msgstr[1] ""
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
+"X-Poedit-Country: NOT SPECIFIED / ANY\n"
+"X-Poedit-Language: Norwegian Bokmål\n"
+"X-Poedit-SourceCharset: utf-8\n"
 
 #: js/AddressbookGridPanelHook.js:35
 msgid "Call contact"
@@ -155,143 +37,263 @@ msgstr ""
 msgid "Cell private"
 msgstr ""
 
-#~ msgid "Dial phone number"
-#~ msgstr "Tast telefon nummer"
+#: js/Models.js:69 js/Phone.js:59 js/Phone.js:264
+msgid "Phone"
+msgid_plural "Phones"
+msgstr[0] ""
+msgstr[1] ""
 
-#~ msgid "Name"
-#~ msgstr "Navn"
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] ""
+msgstr[1] ""
 
-#~ msgid "Phone Model"
-#~ msgstr "Telefon Modell"
+#: js/Phone.js:29 js/Phone.js:489 js/Phone.js:490
+msgid "Edit phone settings"
+msgstr "Rediger telefon instillinger"
 
-#~ msgid "MAC Address"
-#~ msgstr "MAC Adresse"
+#: js/Phone.js:70
+msgid "Phones"
+msgstr "Telefoner"
 
-#~ msgid "infos"
-#~ msgstr "informasjoner"
+#: js/Phone.js:287
+msgid "Line"
+msgstr "Linje"
 
-#~ msgid "Current IP Address"
-#~ msgstr "Gjeldende IP Adresse"
+#: js/Phone.js:296
+msgid "Number"
+msgstr "Nummer"
 
-#~ msgid "Firmware last checked at"
-#~ msgstr "Fimware sist kontrollert på"
+#: js/Phone.js:305
+msgid "Cancel"
+msgstr "Avbryt"
 
-#~ msgid "Current Software Version"
-#~ msgstr "Gjeldende Programvare Versjon"
+#: js/Phone.js:315
+msgid "Dial"
+msgstr "Ring"
 
-#~ msgid "Settings Loaded at"
-#~ msgstr "Innstillinger Lastet på"
+#: js/Phone.js:335
+msgid "Error"
+msgstr ""
 
-#~ msgid "redirection"
-#~ msgstr "viderekobling"
+#: js/Phone.js:336
+msgid "Not possible to dial."
+msgstr ""
 
-#~ msgid "redirect_event"
-#~ msgstr "viderekoblet_hendelse"
+#: js/Phone.js:479
+msgid "Dial number"
+msgstr "Ring nummer"
 
-#~ msgid "all"
-#~ msgstr "alle"
+#: js/Phone.js:480
+msgid "Initiate a new outgoing call"
+msgstr "Initsier en ny utgående samtale"
 
-#~ msgid "busy"
-#~ msgstr "opptatt"
+#: js/Phone.js:541
+msgid "Incoming call"
+msgstr "Innkommende samtale"
 
-#~ msgid "none"
-#~ msgstr "ingen"
+#: js/Phone.js:545
+msgid "Outgoing call"
+msgstr "Utgående samtale"
 
-#~ msgid "time"
-#~ msgstr "tid"
+#: js/Phone.js:553
+msgid "unknown number"
+msgstr "ukjent nummer"
 
-#~ msgid "redirect_number"
-#~ msgstr "vidrekoble_nummer"
+#: js/Phone.js:590
+msgid "Search:"
+msgstr "Søk:"
 
-#~ msgid "redirect_time"
-#~ msgstr "viderekoblings_tid"
+#: js/Phone.js:675
+msgid "Source or Destination"
+msgstr "Kilde eller Destinasjon"
 
-#~ msgid "Settings"
-#~ msgstr "Instillinger"
+#: js/Phone.js:691
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr "Viser samtaler {0} - {1} av {2}"
 
-#~ msgid "web_language"
-#~ msgstr "web_språk"
+#: js/Phone.js:692 js/Phone.js:735
+msgid "No calls to display"
+msgstr "Ingen samtaler å vise"
 
-#~ msgid "- factory default -"
-#~ msgstr "- fabrikk standard -"
+#: js/Phone.js:702
+msgid "Direction"
+msgstr "Retning"
 
-#~ msgid "language"
-#~ msgstr "språk"
+#: js/Phone.js:703
+msgid "Source"
+msgstr "Kilde"
 
-#~ msgid "display_method"
-#~ msgstr "visnings_metode"
+#: js/Phone.js:704
+msgid "Caller Id"
+msgstr "Samtale ID"
 
-#~ msgid "whole url"
-#~ msgstr "hele url"
+#: js/Phone.js:705
+msgid "Destination"
+msgstr "Destinasjon"
 
-#~ msgid "name"
-#~ msgstr "navn"
+#: js/Phone.js:706
+msgid "Start"
+msgstr "Start"
 
-#~ msgid "number"
-#~ msgstr "numme"
+#: js/Phone.js:707
+msgid "Connected"
+msgstr "Tilkoblet"
 
-#~ msgid "name + number"
-#~ msgstr "navn + nummer"
+#: js/Phone.js:708
+msgid "Disconnected"
+msgstr "Frakoblet"
 
-#~ msgid "number + name"
-#~ msgstr "nummer + navn"
+#: js/Phone.js:709
+msgid "Duration"
+msgstr "Varighet"
 
-#~ msgid "call_waiting"
-#~ msgstr "samtale_venter"
+#: js/Phone.js:710
+msgid "Ringing"
+msgstr "Ringer"
 
-#~ msgid "on"
-#~ msgstr "på"
+#: js/Phone.js:711
+msgid "Call ID"
+msgstr "Samtale ID"
 
-#~ msgid "visual"
-#~ msgstr "visuell"
+msgid "Dial phone number"
+msgstr "Tast telefon nummer"
 
-#~ msgid "ringer"
-#~ msgstr "ringer"
+msgid "Name"
+msgstr "Navn"
 
-#~ msgid "off"
-#~ msgstr "av"
+msgid "Phone Model"
+msgstr "Telefon Modell"
 
-#~ msgid "mwi_notification"
-#~ msgstr "mwi_varsling"
+msgid "MAC Address"
+msgstr "MAC Adresse"
 
-#~ msgid "silent"
-#~ msgstr "stille"
+msgid "infos"
+msgstr "informasjoner"
 
-#~ msgid "beep"
-#~ msgstr "pip"
+msgid "Current IP Address"
+msgstr "Gjeldende IP Adresse"
 
-#~ msgid "reminder"
-#~ msgstr "varsel"
+msgid "Firmware last checked at"
+msgstr "Fimware sist kontrollert på"
 
-#~ msgid "mwi_dialtone"
-#~ msgstr "mwi_ringetone"
+msgid "Current Software Version"
+msgstr "Gjeldende Programvare Versjon"
 
-#~ msgid "normal"
-#~ msgstr "normal"
+msgid "Settings Loaded at"
+msgstr "Innstillinger Lastet på"
 
-#~ msgid "stutter"
-#~ msgstr "hakking"
+msgid "redirection"
+msgstr "viderekobling"
 
-#~ msgid "headset_device"
-#~ msgstr "hodesett_enhet"
+msgid "redirect_event"
+msgstr "viderekoblet_hendelse"
 
-#~ msgid "headset_rj"
-#~ msgstr "hodesett_rj"
+msgid "all"
+msgstr "alle"
 
-#~ msgid "lineactive"
-#~ msgstr "linjeaktiv"
+msgid "busy"
+msgstr "opptatt"
 
-#~ msgid "Idle Text"
-#~ msgstr "Vente Tekst"
+msgid "none"
+msgstr "ingen"
 
-#~ msgid "Lines"
-#~ msgstr "Linjer"
+msgid "time"
+msgstr "tid"
 
-#~ msgid "Users"
-#~ msgstr "Brukere"
+msgid "redirect_number"
+msgstr "vidrekoble_nummer"
 
-#~ msgid "Rights"
-#~ msgstr "Rettigheter"
+msgid "redirect_time"
+msgstr "viderekoblings_tid"
 
-#~ msgid "enter searchfilter"
-#~ msgstr "tast inn søkefilter"
+msgid "Settings"
+msgstr "Instillinger"
+
+msgid "web_language"
+msgstr "web_språk"
+
+msgid "- factory default -"
+msgstr "- fabrikk standard -"
+
+msgid "language"
+msgstr "språk"
+
+msgid "display_method"
+msgstr "visnings_metode"
+
+msgid "whole url"
+msgstr "hele url"
+
+msgid "name"
+msgstr "navn"
+
+msgid "number"
+msgstr "numme"
+
+msgid "name + number"
+msgstr "navn + nummer"
+
+msgid "number + name"
+msgstr "nummer + navn"
+
+msgid "call_waiting"
+msgstr "samtale_venter"
+
+msgid "on"
+msgstr "på"
+
+msgid "visual"
+msgstr "visuell"
+
+msgid "ringer"
+msgstr "ringer"
+
+msgid "off"
+msgstr "av"
+
+msgid "mwi_notification"
+msgstr "mwi_varsling"
+
+msgid "silent"
+msgstr "stille"
+
+msgid "beep"
+msgstr "pip"
+
+msgid "reminder"
+msgstr "varsel"
+
+msgid "mwi_dialtone"
+msgstr "mwi_ringetone"
+
+msgid "normal"
+msgstr "normal"
+
+msgid "stutter"
+msgstr "hakking"
+
+msgid "headset_device"
+msgstr "hodesett_enhet"
+
+msgid "headset_rj"
+msgstr "hodesett_rj"
+
+msgid "lineactive"
+msgstr "linjeaktiv"
+
+msgid "Idle Text"
+msgstr "Vente Tekst"
+
+msgid "Lines"
+msgstr "Linjer"
+
+msgid "Users"
+msgstr "Brukere"
+
+msgid "Rights"
+msgstr "Rettigheter"
+
+msgid "enter searchfilter"
+msgstr "tast inn søkefilter"

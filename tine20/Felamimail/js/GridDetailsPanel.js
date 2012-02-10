@@ -202,29 +202,23 @@ Ext.ns('Tine.Felamimail');
      * @param {Tine.Felamimail.Model.Message} record
      */
     handlePreparedParts: function(record) {
-        try {
-            var firstPreparedPart = this.record.get('preparedParts')[0],
-                mimeType = String(firstPreparedPart.contentType).split(/[ ;]/)[0],
-                mainType = Tine.Felamimail.MimeDisplayManager.getMainType(mimeType);
-                
-            if (! mainType) {
-                Tine.log.info('Tine.Felamimail.GridDetailsPanel::handlePreparedParts nothing found to handle ' + mimeType);
-                return;
-            }
+        var firstPreparedPart = this.record.get('preparedParts')[0],
+            mimeType = String(firstPreparedPart.contentType).split(/[ ;]/)[0],
+            mainType = Tine.Felamimail.MimeDisplayManager.getMainType(mimeType);
             
-            var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0],
-                detailsPanel = Tine.Felamimail.MimeDisplayManager.create(mainType, {
-                    preparedPart: firstPreparedPart
-                });
-                
-            // quick hack till we have a card body here 
-            Ext.fly(bodyEl).update('');
-            detailsPanel.render(bodyEl);
-
-        } catch (e) {
-            Tine.log.err('Tine.Felamimail.GridDetailsPanel::handlePreparedParts');
-            Tine.log.err(e.stack ? e.stack : e);
+        if (! mainType) {
+            Tine.log.info('Tine.Felamimail.GridDetailsPanel::handlePreparedParts nothing found to handle ' + mimeType);
+            return;
         }
+        
+        var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0],
+            detailsPanel = Tine.Felamimail.MimeDisplayManager.create(mainType, {
+                preparedPart: firstPreparedPart
+            });
+            
+        // quick hack till we have a card body here 
+        Ext.fly(bodyEl).update('');
+        detailsPanel.render(bodyEl);
     },
     
     /**

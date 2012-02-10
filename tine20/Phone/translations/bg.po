@@ -1,138 +1,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-09-13 18:22+0100\n"
-"Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
+"PO-Revision-Date: 2012-01-13 13:38+0000\n"
+"Last-Translator: Dimitrina Mileva <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Language: Bulgarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-
-#: js/Phone.js:29 js/Phone.js:479 js/Phone.js:480
-msgid "Edit phone settings"
-msgstr "Редактирай условията на телефонниране"
-
-#: js/Phone.js:59 js/Phone.js:254 js/Models.js:69
-#, fuzzy
-msgid "Phone"
-msgid_plural "Phones"
-msgstr[0] "Телефон"
-msgstr[1] "Телефон"
-
-#: js/Phone.js:70
-msgid "Phones"
-msgstr "Телефони"
-
-#: js/Phone.js:277
-msgid "Line"
-msgstr "Линия"
-
-#: js/Phone.js:286
-msgid "Number"
-msgstr "Номер"
-
-#: js/Phone.js:295
-msgid "Cancel"
-msgstr "Прекъсване"
-
-#: js/Phone.js:305
-msgid "Dial"
-msgstr "Набиране"
-
-#: js/Phone.js:325
-msgid "Error"
-msgstr ""
-
-#: js/Phone.js:326
-msgid "Not possible to dial."
-msgstr ""
-
-#: js/Phone.js:469
-msgid "Dial number"
-msgstr "Набран номер"
-
-#: js/Phone.js:470
-msgid "Initiate a new outgoing call"
-msgstr "Въведи ново изходящо обаждане"
-
-#: js/Phone.js:531
-msgid "Incoming call"
-msgstr "Влизащи позвънявания"
-
-#: js/Phone.js:535
-msgid "Outgoing call"
-msgstr "Излизащи позвънявания"
-
-#: js/Phone.js:543
-msgid "unknown number"
-msgstr "непознат номер"
-
-#: js/Phone.js:580
-msgid "Search:"
-msgstr "Търси:"
-
-#: js/Phone.js:665
-msgid "Source or Destination"
-msgstr "Източник или предназначение"
-
-#: js/Phone.js:681
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Намерени позвънявания {0} - {1} от{2}"
-
-#: js/Phone.js:682 js/Phone.js:725
-msgid "No calls to display"
-msgstr "Няма намерении позвънявания"
-
-#: js/Phone.js:692
-msgid "Direction"
-msgstr "Направление"
-
-#: js/Phone.js:693
-msgid "Source"
-msgstr "Източник"
-
-#: js/Phone.js:694
-msgid "Caller Id"
-msgstr "Идентификатор на обаждащият се"
-
-#: js/Phone.js:695
-msgid "Destination"
-msgstr "Предназначение"
-
-#: js/Phone.js:696
-msgid "Start"
-msgstr "Старт"
-
-#: js/Phone.js:697
-msgid "Connected"
-msgstr "Свързан"
-
-#: js/Phone.js:698
-msgid "Disconnected"
-msgstr "Несвързан (прекъсната връзка)"
-
-#: js/Phone.js:699
-msgid "Duration"
-msgstr "Продължителност"
-
-#: js/Phone.js:700
-msgid "Ringing"
-msgstr "Позвъняване"
-
-#: js/Phone.js:701
-msgid "Call ID"
-msgstr "Идентификатор (ID) на обаждането"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] ""
-msgstr[1] ""
 
 #: js/AddressbookGridPanelHook.js:35
 msgid "Call contact"
@@ -154,164 +36,284 @@ msgstr ""
 msgid "Cell private"
 msgstr ""
 
-#~ msgid "Dial phone number"
-#~ msgstr "Набран телефонен номер"
+#: js/Models.js:69 js/Phone.js:59 js/Phone.js:264
+msgid "Phone"
+msgid_plural "Phones"
+msgstr[0] ""
+msgstr[1] ""
 
-#~ msgid "Name"
-#~ msgstr "Име"
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] ""
+msgstr[1] ""
 
-#~ msgid "Phone Model"
-#~ msgstr "Модел Телефон"
+#: js/Phone.js:29 js/Phone.js:489 js/Phone.js:490
+msgid "Edit phone settings"
+msgstr "Редактирай условията на телефонниране"
 
-#~ msgid "MAC Address"
-#~ msgstr "MAC адрес"
+#: js/Phone.js:70
+msgid "Phones"
+msgstr "Телефони"
 
-#~ msgid "infos"
-#~ msgstr "информации"
+#: js/Phone.js:287
+msgid "Line"
+msgstr "Линия"
 
-#~ msgid "Current IP Address"
-#~ msgstr "Актуален IP адрес"
+#: js/Phone.js:296
+msgid "Number"
+msgstr "Номер"
 
-#~ msgid "Firmware last checked at"
-#~ msgstr "Последна проверка на фирменният продукт"
+#: js/Phone.js:305
+msgid "Cancel"
+msgstr "Прекъсване"
 
-#~ msgid "Current Software Version"
-#~ msgstr "Актуална програмна версия"
+#: js/Phone.js:315
+msgid "Dial"
+msgstr "Набиране"
 
-#~ msgid "Settings Loaded at"
-#~ msgstr "Качени настройки"
+#: js/Phone.js:335
+msgid "Error"
+msgstr ""
 
-#~ msgid "redirection"
-#~ msgstr "прехвърлена връзка"
+#: js/Phone.js:336
+msgid "Not possible to dial."
+msgstr ""
 
-#~ msgid "redirect_event"
-#~ msgstr "причина за прехвърляне на връзка"
+#: js/Phone.js:479
+msgid "Dial number"
+msgstr "Набран номер"
 
-#~ msgid "all"
-#~ msgstr "всички"
+#: js/Phone.js:480
+msgid "Initiate a new outgoing call"
+msgstr "Въведи ново изходящо обаждане"
 
-#~ msgid "busy"
-#~ msgstr "заето"
+#: js/Phone.js:541
+msgid "Incoming call"
+msgstr "Влизащи позвънявания"
 
-#~ msgid "none"
-#~ msgstr "нищо"
+#: js/Phone.js:545
+msgid "Outgoing call"
+msgstr "Излизащи позвънявания"
 
-#~ msgid "time"
-#~ msgstr "време"
+#: js/Phone.js:553
+msgid "unknown number"
+msgstr "непознат номер"
 
-#~ msgid "redirect_number"
-#~ msgstr "номер на прехвърляне"
+#: js/Phone.js:590
+msgid "Search:"
+msgstr "Търси:"
 
-#~ msgid "redirect_time"
-#~ msgstr "време на прехвърляне"
+#: js/Phone.js:675
+msgid "Source or Destination"
+msgstr "Източник или предназначение"
 
-#~ msgid "Settings"
-#~ msgstr "Настройки"
+#: js/Phone.js:691
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr "Намерени позвънявания {0} - {1} от{2}"
 
-#~ msgid "web_language"
-#~ msgstr "език на програмната маска"
+#: js/Phone.js:692 js/Phone.js:735
+msgid "No calls to display"
+msgstr "Няма намерении позвънявания"
 
-#~ msgid "- factory default -"
-#~ msgstr "- фирмени настройки -"
+#: js/Phone.js:702
+msgid "Direction"
+msgstr "Направление"
 
-#~ msgid "language"
-#~ msgstr "език"
+#: js/Phone.js:703
+msgid "Source"
+msgstr "Източник"
 
-#~ msgid "display_method"
-#~ msgstr "метод на показване"
+#: js/Phone.js:704
+msgid "Caller Id"
+msgstr "Идентификатор на обаждащият се"
 
-#~ msgid "whole url"
-#~ msgstr "пълен адрес (url)"
+#: js/Phone.js:705
+msgid "Destination"
+msgstr "Предназначение"
 
-#~ msgid "name"
-#~ msgstr "име"
+#: js/Phone.js:706
+msgid "Start"
+msgstr "Старт"
 
-#~ msgid "number"
-#~ msgstr "номер"
+#: js/Phone.js:707
+msgid "Connected"
+msgstr "Свързан"
 
-#~ msgid "name + number"
-#~ msgstr "име + номер"
+#: js/Phone.js:708
+msgid "Disconnected"
+msgstr "Несвързан (прекъсната връзка)"
 
-#~ msgid "number + name"
-#~ msgstr "номер + име"
+#: js/Phone.js:709
+msgid "Duration"
+msgstr "Продължителност"
 
-#~ msgid "call_waiting"
-#~ msgstr "изчакващо обаждане"
+#: js/Phone.js:710
+msgid "Ringing"
+msgstr "Позвъняване"
 
-#~ msgid "on"
-#~ msgstr "включено"
+#: js/Phone.js:711
+msgid "Call ID"
+msgstr "Идентификатор (ID) на обаждането"
 
-#~ msgid "visual"
-#~ msgstr "показва"
+msgid "Dial phone number"
+msgstr "Набран телефонен номер"
 
-#~ msgid "ringer"
-#~ msgstr "линия"
+msgid "Name"
+msgstr "Име"
 
-#~ msgid "off"
-#~ msgstr "изключено"
+msgid "Phone Model"
+msgstr "Модел Телефон"
 
-#~ msgid "mwi_notification"
-#~ msgstr "MWI осведомяване"
+msgid "MAC Address"
+msgstr "MAC адрес"
 
-#~ msgid "silent"
-#~ msgstr "без звук"
+msgid "infos"
+msgstr "информации"
 
-#~ msgid "beep"
-#~ msgstr "сигнален тон"
+msgid "Current IP Address"
+msgstr "Актуален IP адрес"
 
-#~ msgid "reminder"
-#~ msgstr "напомняне"
+msgid "Firmware last checked at"
+msgstr "Последна проверка на фирменният продукт"
 
-#~ msgid "mwi_dialtone"
-#~ msgstr "MWI сигнал"
+msgid "Current Software Version"
+msgstr "Актуална програмна версия"
 
-#~ msgid "normal"
-#~ msgstr "нормално"
+msgid "Settings Loaded at"
+msgstr "Качени настройки"
 
-#~ msgid "stutter"
-#~ msgstr "прекъсвач"
+msgid "redirection"
+msgstr "прехвърлена връзка"
 
-#~ msgid "headset_device"
-#~ msgstr "headset уред"
+msgid "redirect_event"
+msgstr "причина за прехвърляне на връзка"
 
-#~ msgid "headset_rj"
-#~ msgstr "Headset RJ"
+msgid "all"
+msgstr "всички"
 
-#~ msgid "message_led_other"
-#~ msgstr "други LED"
+msgid "busy"
+msgstr "заето"
 
-#~ msgid "global_missed_counter"
-#~ msgstr "Брояч пропуснати"
+msgid "none"
+msgstr "нищо"
 
-#~ msgid "scroll_outgoing"
-#~ msgstr "прелиства изходящи"
+msgid "time"
+msgstr "време"
 
-#~ msgid "show_local_line"
-#~ msgstr "собствен номер"
+msgid "redirect_number"
+msgstr "номер на прехвърляне"
 
-#~ msgid "show_call_status"
-#~ msgstr "показва статус на повиквания"
+msgid "redirect_time"
+msgstr "време на прехвърляне"
 
-#~ msgid "lineactive"
-#~ msgstr "активна линия"
+msgid "Settings"
+msgstr "Настройки"
 
-#~ msgid "sipCombo"
-#~ msgstr "SIP Избор"
+msgid "web_language"
+msgstr "език на програмната маска"
 
-#~ msgid "Idle Text"
-#~ msgstr "Текст при ненабрано състояние"
+msgid "- factory default -"
+msgstr "- фирмени настройки -"
 
-#~ msgid "Lines"
-#~ msgstr "Линии"
+msgid "language"
+msgstr "език"
 
-#~ msgid "Users"
-#~ msgstr "Потребитили"
+msgid "display_method"
+msgstr "метод на показване"
 
-#~ msgid "Rights"
-#~ msgstr "Права"
+msgid "whole url"
+msgstr "пълен адрес (url)"
 
-#~ msgid "enter searchfilter"
-#~ msgstr "включи филтър за търсене"
+msgid "name"
+msgstr "име"
 
-#~ msgid "Incoming"
-#~ msgstr "Входящ"
+msgid "number"
+msgstr "номер"
+
+msgid "name + number"
+msgstr "име + номер"
+
+msgid "number + name"
+msgstr "номер + име"
+
+msgid "call_waiting"
+msgstr "изчакващо обаждане"
+
+msgid "on"
+msgstr "включено"
+
+msgid "visual"
+msgstr "показва"
+
+msgid "ringer"
+msgstr "линия"
+
+msgid "off"
+msgstr "изключено"
+
+msgid "mwi_notification"
+msgstr "MWI осведомяване"
+
+msgid "silent"
+msgstr "без звук"
+
+msgid "beep"
+msgstr "сигнален тон"
+
+msgid "reminder"
+msgstr "напомняне"
+
+msgid "mwi_dialtone"
+msgstr "MWI сигнал"
+
+msgid "normal"
+msgstr "нормално"
+
+msgid "stutter"
+msgstr "прекъсвач"
+
+msgid "headset_device"
+msgstr "headset уред"
+
+msgid "headset_rj"
+msgstr "Headset RJ"
+
+msgid "message_led_other"
+msgstr "други LED"
+
+msgid "global_missed_counter"
+msgstr "Брояч пропуснати"
+
+msgid "scroll_outgoing"
+msgstr "прелиства изходящи"
+
+msgid "show_local_line"
+msgstr "собствен номер"
+
+msgid "show_call_status"
+msgstr "показва статус на повиквания"
+
+msgid "lineactive"
+msgstr "активна линия"
+
+msgid "sipCombo"
+msgstr "SIP Избор"
+
+msgid "Idle Text"
+msgstr "Текст при ненабрано състояние"
+
+msgid "Lines"
+msgstr "Линии"
+
+msgid "Users"
+msgstr "Потребитили"
+
+msgid "Rights"
+msgstr "Права"
+
+msgid "enter searchfilter"
+msgstr "включи филтър за търсене"
+
+msgid "Incoming"
+msgstr "Входящ"

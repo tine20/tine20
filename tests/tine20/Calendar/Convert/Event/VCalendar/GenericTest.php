@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -12,10 +12,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Convert_Event_VCalendar_GenericTest::main');
-}
 
 /**
  * Test class for Calendar_Convert_Event_VCalendar_Generic
@@ -60,15 +56,14 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     }
     
     /**
-     * test converting vcard from sogo connector to Calendar_Model_Event 
+     * test converting vcard from lighting to Calendar_Model_Event
+     * 
      * @return Calendar_Model_Event
      */
     public function testConvertToTine20Model()
     {
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/lightning.ics', 'r');
-        
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
-        
         $event = $converter->toTine20Model($vcalendarStream);
         
         //var_dump($event->toArray());
@@ -85,6 +80,18 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertEquals(1, count($event->alarms));
         
         return $event;
+    }
+
+    /**
+    * test converting vcard from lighting to Calendar_Model_Event (with unrecognized timezone)
+    */
+    public function testConvertToTine20ModelWithBadTZ()
+    {
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/lightning_badTZ.ics', 'r');
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $event = $converter->toTine20Model($vcalendarStream);
+        
+        $this->assertEquals('Europe/Berlin', $event->originator_tz);
     }
     
     /**

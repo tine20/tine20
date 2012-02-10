@@ -80,7 +80,7 @@
             <identifier>room</identifier>
         </column>
         <column>
-            <identifier>salutation_id</identifier>
+            <identifier>salutation</identifier>
         </column>
         <column>
             <identifier>title</identifier>

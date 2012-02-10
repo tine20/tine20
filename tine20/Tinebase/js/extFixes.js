@@ -126,8 +126,20 @@ Ext.applyIf(Ext.tree.MultiSelectionModel.prototype, {
  * @private
  */
  Ext.form.DateField.prototype.setValue = function(date){
+    // get value must not return a string representation, so we convert this always here
+    // before memorisation
+    if (Ext.isString(date)) {
+        var v = Date.parseDate(date, Date.patterns.ISO8601Long);
+        if (Ext.isDate(v)) {
+            date = v;
+        } else {
+            date = Ext.form.DateField.prototype.parseDate.call(this, date);
+        }
+    }
+    
     // preserve original datetime information
     this.fullDateTime = date;
+    
     Ext.form.DateField.superclass.setValue.call(this, this.formatDate(this.parseDate(date)));
 };
 /**

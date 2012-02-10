@@ -151,7 +151,7 @@ class Voipmanager_Setup_Update_Release5 extends Setup_Update_Abstract
                     $this->_backend->alterCol($table, $declaration);
                 } catch (Zend_Db_Statement_Exception $zdse) {
                     if ($table === 'asterisk_redirects') {
-                        // this table has been accidentally droppen in Voipmanager_Setup_Update_Release3::update_1();
+                        // this table has been accidentally dropped in Voipmanager_Setup_Update_Release3::update_1();
                         $this->_addAsteriskRedirects();
                     } else {
                         throw $zdse;
@@ -248,5 +248,33 @@ class Voipmanager_Setup_Update_Release5 extends Setup_Update_Abstract
         
         $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
         $this->createTable('asterisk_redirects', $table, 'Voipmanager', 2);
+    }
+
+    /**
+     * fix index asterisk_redirect::id--asterisk_sip_peers::id
+     * 
+     * @return void
+     */
+    public function update_2()
+    {
+        $this->_backend->dropForeignKey('asterisk_redirects', 'asterisk_redirect::id--asterisk_sip_peers::id');
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+        <index>
+            <name>asterisk_redirect::id--asterisk_sip_peers::id</name>
+            <field>
+                <name>id</name>
+            </field>
+            <foreign>true</foreign>
+            <reference>
+                <table>asterisk_sip_peers</table>
+                <field>id</field>
+                <ondelete>cascade</ondelete>
+                <onupdate>cascade</onupdate>
+            </reference>
+        </index>');
+        $this->_backend->addForeignKey('asterisk_redirects', $declaration);
+        
+        $this->setTableVersion('asterisk_redirects', 3);
+        $this->setApplicationVersion('Voipmanager', '5.3');
     }
 }

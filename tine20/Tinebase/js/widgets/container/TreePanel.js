@@ -363,22 +363,17 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     afterRender: function() {
         Tine.widgets.container.TreePanel.superclass.afterRender.call(this);
 
-        try {
-            
-            if((this.stateApplied !== true) && (this.getDefaultContainerPath() != '/')) {
-                var root = '/' + this.getRootNode().id;
-                var path = this.getDefaultContainerPath();
-                this.expand();
-                this.expandPath(root + path);
-                Tine.log.debug('Expanding defaultPath: '. root+path);
-                this.stateApplied = true;
-            }
-            
-            if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
-                this.filterPlugin.getGridPanel().filterToolbar.on('change', this.onFilterChange, this);
-            }
-        } catch (e) {
-            Tine.log.error(e.stack ? e.stack : e);   
+        if((this.stateApplied !== true) && (this.getDefaultContainerPath() != '/')) {
+            var root = '/' + this.getRootNode().id;
+            var path = this.getDefaultContainerPath();
+            this.expand();
+            this.expandPath(root + path);
+            Tine.log.debug('Expanding defaultPath: '. root+path);
+            this.stateApplied = true;
+        }
+        
+        if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
+            this.filterPlugin.getGridPanel().filterToolbar.on('change', this.onFilterChange, this);
         }
     },
     
@@ -434,6 +429,15 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @param {} e
      */
     onClick: function(node, e) {
+        var sm = this.getSelectionModel(),
+            selectedNode = sm.getSelectedNode();
+    
+        // NOTE: in single select mode, a node click on a selected node does not trigger 
+        //       a selection change. We need to do this by hand here
+        if (! this.allowMultiSelection && node == selectedNode) {
+            this.onSelectionChange(sm, node);
+        }
+        
         node.expand();
     },
     

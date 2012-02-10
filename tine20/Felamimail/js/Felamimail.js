@@ -551,7 +551,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             Tine.log.info('Folder "' + record.get('localname') + '" updated with quota values: ' 
                 + record.get('quota_usage') + ' / ' + record.get('quota_limit'));
 
-            this.getMainScreen().getCenterPanel().updateQuotaBar(null, record);
+            this.getMainScreen().getCenterPanel().updateQuotaBar(record);
         }
     },
     

@@ -204,13 +204,25 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function sendNotifications()
     {
-        $currValue = $this->_sendNotifications;
-        if (func_num_args() === 1) {
-            $paramValue = (bool) func_get_arg(0);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resetting sendNotifications to ' . (int) $paramValue);
-            $this->_sendNotifications = $paramValue;
+        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
+        return $this->_setBooleanMemberVar('_sendNotifications', $value);
+    }
+    
+    /**
+     * set/get a boolean member var
+     * 
+     * @param string $name
+     * @param boolean $value
+     * @return boolean
+     */
+    protected function _setBooleanMemberVar($name, $value = NULL)
+    {
+        $currValue = $this->{$name};
+        if ($value !== NULL) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resetting ' . $name . ' to ' . (int) $value);
+            $this->{$name} = $value;
         }
-
+        
         return $currValue;
     }
 
@@ -222,14 +234,8 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function purgeRecords()
     {
-        $currValue = $this->_purgeRecords;
-        if (func_num_args() === 1) {
-            $paramValue = (bool) func_get_arg(0);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resetting purgeRecords to ' . (int) $paramValue);
-            $this->_purgeRecords = $paramValue;
-        }
-
-        return $currValue;
+        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
+        return $this->_setBooleanMemberVar('_purgeRecords', $value);
     }
 
     /**
@@ -240,14 +246,8 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function doContainerACLChecks()
     {
-        $currValue = $this->_doContainerACLChecks;
-        if (func_num_args() === 1) {
-            $paramValue = (bool) func_get_arg(0);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resetting doContainerACLChecks to ' . (int) $paramValue);
-            $this->_doContainerACLChecks = $paramValue;
-        }
-
-        return $currValue;
+        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
+        return $this->_setBooleanMemberVar('_doContainerACLChecks', $value);
     }
 
     /**
@@ -983,10 +983,15 @@ abstract class Tinebase_Controller_Record_Abstract
         $filter = new $filterClass(array(
             array('field' => 'id', 'operator' => 'in', 'value' => $idsToMove)
         ));
-        $this->updateMultiple($filter, array(
+        $updateResult = $this->updateMultiple($filter, array(
             $_containerProperty => $targetContainerId
         ));
-
+        
+        foreach ($updateResult['results'] as $record) {
+            // only increase original container content seq of successfully updated records
+            $this->_increaseContainerContentSequence($records->getById($record->getId()));
+        }
+        
         return $idsToMove;
     }
 

@@ -1,56 +1,74 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Sipgate\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-12-05 11:28+0100\n"
-"Last-Translator: Faragó Tamás <tamas@kemenyfem.hu>\n"
+"PO-Revision-Date: 2012-01-13 14:32+0000\n"
+"Last-Translator: Faragó Tamás <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: en\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:22+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: Preference.php:72
-msgid "Your phone"
-msgstr "Telefonod"
+#: js/AddressbookGridPanelHook.js:38
+msgid "Call contact"
+msgstr "Kapcsolat hívása"
 
-#: Preference.php:73
-msgid "This is your phone"
-msgstr "Ez a te telefonod"
+#: js/AddressbookGridPanelHook.js:62
+msgid "Compose SMS"
+msgstr "SMS írása"
 
-#: Preference.php:76
-msgid "Your fax"
-msgstr "Faxod"
+#: js/AddressbookGridPanelHook.js:256
+msgid "Work"
+msgstr "Munkahelyi"
 
-#: Preference.php:77
-msgid "This is your fax"
-msgstr "Ez a te faxod"
+#: js/AddressbookGridPanelHook.js:266
+msgid "Home"
+msgstr "Otthoni"
 
-#: Preference.php:80
-msgid "Your mobile number"
-msgstr "Mobilszámod"
+#: js/AddressbookGridPanelHook.js:276 js/AddressbookGridPanelHook.js:321
+msgid "Cell"
+msgstr "Mobil"
 
-#: Preference.php:81
-msgid "Used when sending SMS"
-msgstr "Használata SMS küldéskor"
+#: js/AddressbookGridPanelHook.js:286 js/AddressbookGridPanelHook.js:331
+msgid "Cell private"
+msgstr "Mobil privát"
+
+#: js/CallStateWindow.js:50 js/DialNumberDialog.js:64
+#: js/SearchAddressDialog.js:64 js/SmsEditDialog.js:60
+msgid "Cancel"
+msgstr "Megszakítás"
+
+#: js/CallStateWindow.js:106
+msgid "connecting..."
+msgstr "kapcsolódás..."
+
+#: js/CallStateWindow.js:144
+msgid "Connecting to: "
+msgstr "Kapcsolódás ide: "
+
+#: js/DialNumberDialog.js:56 js/DialNumberDialog.js:152
+msgid "Dial Number"
+msgstr "Szám tárcsázása"
+
+#: js/DialNumberDialog.js:72 js/SearchAddressDialog.js:72
+#: js/SmsEditDialog.js:68
+msgid "Close"
+msgstr "Bezárás"
+
+#: js/DialNumberDialog.js:120
+msgid "Number to call"
+msgstr "Hívandó szám"
 
 #: js/SearchAddressDialog.js:56
 msgid "Add Number"
 msgstr "Szám hozzáadása"
-
-#: js/SearchAddressDialog.js:64 js/SmsEditDialog.js:60
-#: js/CallStateWindow.js:50 js/DialNumberDialog.js:64
-msgid "Cancel"
-msgstr "Megszakítás"
-
-#: js/SearchAddressDialog.js:72 js/SmsEditDialog.js:68
-#: js/DialNumberDialog.js:72
-msgid "Close"
-msgstr "Bezárás"
 
 #: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
 msgid "Phone"
@@ -99,18 +117,6 @@ msgstr "Eszköz kiválasztása"
 #: js/SearchAddressDialog.js:214
 msgid "Choose Address"
 msgstr "Cím kiválasztása"
-
-#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:181
-msgid "Send"
-msgstr "Send"
-
-#: js/CallStateWindow.js:106
-msgid "connecting..."
-msgstr "kapcsolódás..."
-
-#: js/CallStateWindow.js:144
-msgid "Connecting to: "
-msgstr "Kapcsolódás ide: "
 
 #: js/Sipgate.js:30
 msgid "Edit phone settings"
@@ -224,34 +230,30 @@ msgstr "megszakítás másik hívás előtt"
 msgid "hungup"
 msgstr "megszakítás"
 
-#: js/DialNumberDialog.js:56 js/DialNumberDialog.js:152
-msgid "Dial Number"
-msgstr "Szám tárcsázása"
+#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:181
+msgid "Send"
+msgstr "Send"
 
-#: js/DialNumberDialog.js:120
-msgid "Number to call"
-msgstr "Hívandó szám"
+#: Preference.php:72
+msgid "Your phone"
+msgstr "Telefonod"
 
-#: js/AddressbookGridPanelHook.js:38
-msgid "Call contact"
-msgstr "Kapcsolat hívása"
+#: Preference.php:73
+msgid "This is your phone"
+msgstr "Ez a te telefonod"
 
-#: js/AddressbookGridPanelHook.js:62
-msgid "Compose SMS"
-msgstr "SMS írása"
+#: Preference.php:76
+msgid "Your fax"
+msgstr "Faxod"
 
-#: js/AddressbookGridPanelHook.js:256
-msgid "Work"
-msgstr "Munkahelyi"
+#: Preference.php:77
+msgid "This is your fax"
+msgstr "Ez a te faxod"
 
-#: js/AddressbookGridPanelHook.js:266
-msgid "Home"
-msgstr "Otthoni"
+#: Preference.php:80
+msgid "Your mobile number"
+msgstr "Mobilszámod"
 
-#: js/AddressbookGridPanelHook.js:276 js/AddressbookGridPanelHook.js:321
-msgid "Cell"
-msgstr "Mobil"
-
-#: js/AddressbookGridPanelHook.js:286 js/AddressbookGridPanelHook.js:331
-msgid "Cell private"
-msgstr "Mobil privát"
+#: Preference.php:81
+msgid "Used when sending SMS"
+msgstr "Használata SMS küldéskor"

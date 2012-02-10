@@ -187,6 +187,7 @@
                         <table>tasks</table>
                         <field>id</field>
                         <ondelete>CASCADE</ondelete>
+                        <!-- add onupdate? -->
                     </reference>
                 </index>   
             </declaration>

@@ -101,17 +101,23 @@ class Tinebase_Acl_Roles
      */
     public function hasRight($_application, $_accountId, $_right) 
     {   
-        $appId = Tinebase_Model_Application::convertApplicationIdToInt($_application);
+        try {
+            $appId = Tinebase_Model_Application::convertApplicationIdToInt($_application);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Application ' . $_application . ' is not installed.');
+            return false;
+            
+        }
         $application = Tinebase_Application::getInstance()->getApplicationById($appId);
         if ($application->status != 'enabled') {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Application ' . $_application . ' is disabled!');
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Application ' . $_application . ' is disabled.');
             return false;
         }
         
         $roleMemberships = $this->getRoleMemberships($_accountId);
         
         if (empty($roleMemberships)) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $_accountId . ' has no role memberships!');
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $_accountId . ' has no role memberships.');
             return false;
         }
 

@@ -688,20 +688,21 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var event   = field.event;
         var summary = field.getValue();
 
-        if (!e || ! this.editing || this.validateMsg) {
+        if (! this.editing || this.validateMsg || !Ext.isDefined(e)) {
             return;
         }
 
         // abort edit on ESC key
-        if (e && e.getKey() == e.ESC) {
-            return this.abortCreateEvent(event);
+        if (e && (e.getKey() == e.ESC)) {
+            this.abortCreateEvent(event);
+            return;
         }
-        
+
         // only commit edit on Enter & blur
         if (e && e.getKey() != e.ENTER) {
             return;
         }
-        
+
         // Validate Summary maxLength
         if (summary.length > field.maxLength) {
             field.markInvalid();
@@ -838,7 +839,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         var targetEvent = this.getTargetEvent(e);
         if (this.editing && this.editing.summaryEditor && (targetEvent != this.editing)) {
-            this.editing.summaryEditor.fireEvent('blur', this.editing.summaryEditor);
+            this.editing.summaryEditor.fireEvent('blur', this.editing.summaryEditor, null);
         }
         
         var dtStart = this.getTargetDateTime(e);

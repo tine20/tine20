@@ -214,21 +214,14 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
         var fieldName = record.get('fieldName'),
             dataIndex = this.getColumnModel().getDataIndex(colIndex),
             renderer = Tine.widgets.grid.RendererManager.get(this.app, this.store.recordClass, fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
-        
-        try {
-            // color management
-            if (dataIndex && dataIndex.match(/clientValue|value\d+/) && !this.store.resolveStrategy.match(/(keep|discard)/)) {
-                
-                var action = record.get('finalValue') == value ? 'keep' : 'discard';
-                metaData.css = 'tine-duplicateresolve-' + action + 'value';
-//                metaData.css = 'tine-duplicateresolve-adoptedvalue';
-            }
-            
-            return renderer.apply(this, arguments);
-        } catch (e) {
-            Tine.log.err('Tine.widgets.dialog.DuplicateResolveGridPanel::valueRenderer');
-            Tine.log.err(e.stack ? e.stack : e);
+
+        // color management
+        if (dataIndex && dataIndex.match(/clientValue|value\d+/) && !this.store.resolveStrategy.match(/(keep|discard)/)) {
+            var action = record.get('finalValue') == value ? 'keep' : 'discard';
+            metaData.css = 'tine-duplicateresolve-' + action + 'value';
         }
+        
+        return renderer.apply(this, arguments);
     }
     
 });
@@ -384,40 +377,35 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
     sortData: function(f, direction) {
         direction = direction || 'ASC';
         
-        try {
-            var groupConflictScore = {};
-                
-            this.each(function(r) {
-                var group = r.get('group'),
-                    myValue = String(r.get('clientValue')).replace(/^undefined$|^null$|^\[\]$/, ''),
-                    theirValue = String(r.get('value' + this.duplicateIdx)).replace(/^undefined$|^null$|^\[\]$/, '');
-                
-                if (! groupConflictScore.hasOwnProperty(group)) {
-                    groupConflictScore[group] = 990;
-                }
-                
-                if (myValue || theirValue) {
-                    groupConflictScore[group] -= 1;
-                }
-                
-                if (myValue != theirValue) {
-                    groupConflictScore[group] -= 10;
-                }
-                
-            }, this);
+        var groupConflictScore = {};
             
-            this.data.sort('ASC', function(r1, r2) {
-                var g1 = r1.get('group'),
-                    v1 = String(groupConflictScore[g1]) + g1,
-                    g2 = r2.get('group'),
-                    v2 = String(groupConflictScore[g2]) + g2;
-                    
-                return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
-            });
-        } catch (e) {
-            Tine.log.err('Tine.widgets.dialog.DuplicateResolveStore::sortData');
-            Tine.log.err(e.stack ? e.stack : e);
-        }
+        this.each(function(r) {
+            var group = r.get('group'),
+                myValue = String(r.get('clientValue')).replace(/^undefined$|^null$|^\[\]$/, ''),
+                theirValue = String(r.get('value' + this.duplicateIdx)).replace(/^undefined$|^null$|^\[\]$/, '');
+            
+            if (! groupConflictScore.hasOwnProperty(group)) {
+                groupConflictScore[group] = 990;
+            }
+            
+            if (myValue || theirValue) {
+                groupConflictScore[group] -= 1;
+            }
+            
+            if (myValue != theirValue) {
+                groupConflictScore[group] -= 10;
+            }
+            
+        }, this);
+        
+        this.data.sort('ASC', function(r1, r2) {
+            var g1 = r1.get('group'),
+                v1 = String(groupConflictScore[g1]) + g1,
+                g2 = r2.get('group'),
+                v2 = String(groupConflictScore[g2]) + g2;
+                
+            return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
+        });
     },
     
     /**

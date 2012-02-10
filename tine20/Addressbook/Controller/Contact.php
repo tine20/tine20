@@ -98,26 +98,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * returns the default addressbook
      * 
      * @return Tinebase_Model_Container
-     * 
-     * @todo replace this with Tinebase_Container::getInstance()->getDefaultContainer
      */
     public function getDefaultAddressbook()
     {
-        $defaultAddressbookId = Tinebase_Core::getPreference($this->_applicationName)->getValue(Addressbook_Preference::DEFAULTADDRESSBOOK);
-        try {
-            $defaultAddressbook = Tinebase_Container::getInstance()->getContainerById($defaultAddressbookId);
-        } catch (Tinebase_Exception $te) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Create new default addressbook. (' . $te->getMessage() . ')');
-            
-            // default may be gone -> remove default adb pref
-            Tinebase_Core::getPreference($this->_applicationName)->deleteUserPref(Addressbook_Preference::DEFAULTADDRESSBOOK);
-            
-            // generate a new one
-            $defaultAddressbookId = Tinebase_Core::getPreference($this->_applicationName)->getValue(Addressbook_Preference::DEFAULTADDRESSBOOK);
-            $defaultAddressbook = Tinebase_Container::getInstance()->getContainerById($defaultAddressbookId);
-        }
-        
-        return $defaultAddressbook;
+        return Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName, NULL, Addressbook_Preference::DEFAULTADDRESSBOOK);
     }
     
     /**
@@ -167,14 +151,15 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * can be called to activate/deactivate if geodata should be set for contacts (ignoring the config setting)
-     * 
-     * @param boolean $_value
-     * @return void
-     */
-    public function setGeoDataForContacts($_value)
+    * can be called to activate/deactivate if geodata should be set for contacts (ignoring the config setting)
+    *
+    * @param  boolean optional
+    * @return boolean
+    */
+    public function setGeoDataForContacts()
     {
-        $this->_setGeoDataForContacts = (boolean) $_value;
+        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
+        return $this->_setBooleanMemberVar('_setGeoDataForContacts', $value);
     }
     
     /**

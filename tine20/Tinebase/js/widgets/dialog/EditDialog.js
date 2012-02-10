@@ -133,94 +133,89 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     
     //private
     initComponent: function() {
-        try {
-            this.addEvents(
-                /**
-                 * @event cancel
-                 * Fired when user pressed cancel button
-                 */
-                'cancel',
-                /**
-                 * @event saveAndClose
-                 * Fired when user pressed OK button
-                 */
-                'saveAndClose',
-                /**
-                 * @event update
-                 * @desc  Fired when the record got updated
-                 * @param {Json String} data data of the entry
-                 * @pram  {String} this.mode
-                 */
-                'update',
-                /**
-                 * @event apply
-                 * Fired when user pressed apply button
-                 */
-                'apply',
-                /**
-                 * @event load
-                 * Fired when record is loaded
-                 */
-                'load',
-                /**
-                 * @event save
-                 * Fired when remote record is saving
-                 */
-                'save'
-            );
-            
-            if (this.recordClass) {
-                this.appName    = this.appName    ? this.appName    : this.recordClass.getMeta('appName');
-                this.modelName  = this.modelName  ? this.modelName  : this.recordClass.getMeta('modelName');
-            }
-            
-            if (! this.app) {
-                this.app = Tine.Tinebase.appMgr.get(this.appName);
-            }
-            
-            Tine.log.debug('initComponent: appName: ', this.appName);
-            Tine.log.debug('initComponent: modelName: ', this.modelName);
-            Tine.log.debug('initComponent: app: ', this.app);
-            
-            this.selectedRecords = Ext.decode(this.selectedRecords);
-            this.selectionFilter = Ext.decode(this.selectionFilter);
-            
-            // init some translations
-            if (this.app.i18n && this.recordClass !== null) {
-                this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
-                this.i18nRecordsName = this.app.i18n._hidden(this.recordClass.getMeta('recordsName'));
-            }
+        this.addEvents(
+            /**
+             * @event cancel
+             * Fired when user pressed cancel button
+             */
+            'cancel',
+            /**
+             * @event saveAndClose
+             * Fired when user pressed OK button
+             */
+            'saveAndClose',
+            /**
+             * @event update
+             * @desc  Fired when the record got updated
+             * @param {Json String} data data of the entry
+             * @pram  {String} this.mode
+             */
+            'update',
+            /**
+             * @event apply
+             * Fired when user pressed apply button
+             */
+            'apply',
+            /**
+             * @event load
+             * Fired when record is loaded
+             */
+            'load',
+            /**
+             * @event save
+             * Fired when remote record is saving
+             */
+            'save'
+        );
         
-            if (! this.recordProxy && this.recordClass) {
-                Tine.log.debug('no record proxy given, creating a new one...');
-                this.recordProxy = new Tine.Tinebase.data.RecordProxy({
-                    recordClass: this.recordClass
-                });
-            }
-            
-            // init plugins
-            this.plugins = this.plugins ? this.plugins : [];
-            this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
-            this.plugins.push(this.tokenModePlugin = new Tine.widgets.dialog.TokenModeEditDialogPlugin({}));
-            
-            if(this.useMultiple) this.plugins.push(new Tine.widgets.dialog.MultipleEditDialogPlugin({}));
-            
-            // init actions
-            this.initActions();
-            // init buttons and tbar
-            this.initButtons();
-            // init container selector
-            this.initContainerSelector();
-            // init record 
-            this.initRecord();
-            // get items for this dialog
-            this.items = this.getFormItems();
-            
-            Tine.widgets.dialog.EditDialog.superclass.initComponent.call(this);
-        } catch (e) {
-            Tine.log.error('Tine.widgets.dialog.EditDialog::initComponent');
-            Tine.log.error(e.stack ? e.stack : e);
+        if (this.recordClass) {
+            this.appName    = this.appName    ? this.appName    : this.recordClass.getMeta('appName');
+            this.modelName  = this.modelName  ? this.modelName  : this.recordClass.getMeta('modelName');
         }
+        
+        if (! this.app) {
+            this.app = Tine.Tinebase.appMgr.get(this.appName);
+        }
+        
+        Tine.log.debug('initComponent: appName: ', this.appName);
+        Tine.log.debug('initComponent: modelName: ', this.modelName);
+        Tine.log.debug('initComponent: app: ', this.app);
+        
+        this.selectedRecords = Ext.decode(this.selectedRecords);
+        this.selectionFilter = Ext.decode(this.selectionFilter);
+        
+        // init some translations
+        if (this.app.i18n && this.recordClass !== null) {
+            this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
+            this.i18nRecordsName = this.app.i18n._hidden(this.recordClass.getMeta('recordsName'));
+        }
+    
+        if (! this.recordProxy && this.recordClass) {
+            Tine.log.debug('no record proxy given, creating a new one...');
+            this.recordProxy = new Tine.Tinebase.data.RecordProxy({
+                recordClass: this.recordClass
+            });
+        }
+        
+        // init plugins
+        this.plugins = this.plugins ? this.plugins : [];
+        this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
+        this.plugins.push(this.tokenModePlugin = new Tine.widgets.dialog.TokenModeEditDialogPlugin({}));
+        
+        if(this.useMultiple) this.plugins.push(new Tine.widgets.dialog.MultipleEditDialogPlugin({}));
+        
+        // init actions
+        this.initActions();
+        // init buttons and tbar
+        this.initButtons();
+        // init container selector
+        this.initContainerSelector();
+        // init record 
+        this.initRecord();
+        // get items for this dialog
+        this.items = this.getFormItems();
+        
+        Tine.widgets.dialog.EditDialog.superclass.initComponent.call(this);
     },
     
     /**
@@ -380,31 +375,26 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             return;
         }
         
-        try {
-            Tine.log.debug('loading of the following record completed:');
-            Tine.log.debug(this.record);
-            
-            if (this.copyRecord) {
-                this.doCopyRecord();
-                this.window.setTitle(String.format(_('Copy {0}'), this.i18nRecordName));
+        Tine.log.debug('loading of the following record completed:');
+        Tine.log.debug(this.record);
+        
+        if (this.copyRecord) {
+            this.doCopyRecord();
+            this.window.setTitle(String.format(_('Copy {0}'), this.i18nRecordName));
+        } else {
+            if (! this.record.id) {
+                this.window.setTitle(String.format(_('Add New {0}'), this.i18nRecordName));
             } else {
-                if (! this.record.id) {
-                    this.window.setTitle(String.format(_('Add New {0}'), this.i18nRecordName));
-                } else {
-                    this.window.setTitle(String.format(_('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));
-                }
+                this.window.setTitle(String.format(_('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));
             }
+        }
+        
+        if (this.fireEvent('load', this) !== false) {
+            this.getForm().loadRecord(this.record);
+            this.getForm().clearInvalid();
+            this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
             
-            if (this.fireEvent('load', this) !== false) {
-                this.getForm().loadRecord(this.record);
-                this.getForm().clearInvalid();
-                this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
-                
-                this.loadMask.hide();
-            }
-        } catch (e) {
-            Tine.log.error('Tine.widgets.dialog.EditDialog::onRecordLoad');
-            Tine.log.error(e.stack ? e.stack : e);
+            this.loadMask.hide();
         }
     },
     
@@ -422,35 +412,30 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @private
      */
     onRender : function(ct, position){
-        try {
-            Tine.widgets.dialog.EditDialog.superclass.onRender.call(this, ct, position);
-            
-            // generalized keybord map for edit dlgs
-            var map = new Ext.KeyMap(this.el, [
-                {
-                    key: [10,13], // ctrl + return
-                    ctrl: true,
-                    scope: this,
-                    fn: function() {
-                        // focus ok btn
-                        if (this.action_saveAndClose.items) {
-                            this.action_saveAndClose.items[0].focus();
-                        }
-                        this.onSaveAndClose.defer(10, this);
+        Tine.widgets.dialog.EditDialog.superclass.onRender.call(this, ct, position);
+        
+        // generalized keybord map for edit dlgs
+        var map = new Ext.KeyMap(this.el, [
+            {
+                key: [10,13], // ctrl + return
+                ctrl: true,
+                scope: this,
+                fn: function() {
+                    // focus ok btn
+                    if (this.action_saveAndClose.items) {
+                        this.action_saveAndClose.items[0].focus();
                     }
+                    this.onSaveAndClose.defer(10, this);
                 }
-            ]);
-    
-            // should be fixed in WindowFactory
-            //this.setHeight(Ext.fly(this.el.dom.parentNode).getHeight());
-                
-            this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transferring {0}...'), this.i18nRecordName)});
-            if (this.mode !== 'local' && this.recordProxy !== null && this.recordProxy.isLoading(this.loadRequest)) {
-                this.loadMask.show();
             }
-        } catch (e) {
-            Tine.log.error('Tine.widgets.dialog.EditDialog::onRender');
-            Tine.log.error(e.stack ? e.stack : e);
+        ]);
+
+        // should be fixed in WindowFactory
+        //this.setHeight(Ext.fly(this.el.dom.parentNode).getHeight());
+            
+        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transferring {0}...'), this.i18nRecordName)});
+        if (this.mode !== 'local' && this.recordProxy !== null && this.recordProxy.isLoading(this.loadRequest)) {
+            this.loadMask.show();
         }
     },
     

@@ -38,9 +38,9 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_ContainerTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_ContainerTest');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -50,16 +50,17 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         $this->_instance = Tinebase_Container::getInstance();
         
         $this->objects['initialContainer'] = $this->_instance->addContainer(new Tinebase_Model_Container(array(
             'name'              => 'tine20phpunit',
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-        	'owner_id'          => Tinebase_Core::getUser(),
+            'owner_id'          => Tinebase_Core::getUser(),
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
         )));
-        $this->objects['containerToDelete'][] = $this->objects['initialContainer']->getId();
 
         $this->objects['grants'] = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
             array(
@@ -72,8 +73,6 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
                 Tinebase_Model_Grants::GRANT_ADMIN     => true
             )            
         ));
-        
-        $this->objects['contactsToDelete'] = array();
     }
 
     /**
@@ -84,17 +83,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        foreach ($this->objects['contactsToDelete'] as $contactId) {
-            Addressbook_Controller_Contact::getInstance()->delete($contactId);
-        }
-
-        foreach ($this->objects['containerToDelete'] as $containerId) {
-            try {
-                $this->_instance->deleteContainer($containerId);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                // do nothing
-            }
-        }
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
@@ -456,27 +445,36 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to move a contact to another container 
+     * try to move a contact to another container and check content sequence
      */
     public function testMoveContactToContainer()
     {
-        // add contact to container
-        $personalContainer = $this->_instance->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Addressbook');
+        $sharedContainer = $this->_instance->addContainer(new Tinebase_Model_Container(array(
+            'name'              => 'tine20shared',
+            'type'              => Tinebase_Model_Container::TYPE_SHARED,
+            'owner_id'          => Tinebase_Core::getUser(),
+            'backend'           => 'Sql',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+        )));
+        $initialContainer = $this->_instance->get($this->objects['initialContainer']);
         $contact = new Addressbook_Model_Contact(array(
             'n_family'              => 'Tester',
-            'container_id'          => $personalContainer->getId()
+            'container_id'          => $sharedContainer->getId()
         ));
         $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
-        $this->objects['contactsToDelete'][] = $contact->getId();
         
         $filter = array(array('field' => 'id', 'operator' => 'in', 'value' => array($contact->getId())));
         $containerJson = new Tinebase_Frontend_Json_Container();
-        $result = $containerJson->moveRecordsToContainer($this->objects['initialContainer']->getId(), $filter, 'Addressbook', 'Contact');
+        $result = $containerJson->moveRecordsToContainer($initialContainer->getId(), $filter, 'Addressbook', 'Contact');
         $this->assertEquals($contact->getId(), $result['results'][0]);
         
         $movedContact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
         
-        $this->assertEquals($this->objects['initialContainer']->getId(), $movedContact->container_id, 'contact has not been moved');
+        $this->assertEquals($initialContainer->getId(), $movedContact->container_id, 'contact has not been moved');
+        
+        $contentSeqs = $this->_instance->getContentSequence(array($sharedContainer->getId(), $initialContainer->getId()));
+        $this->assertEquals(2, $contentSeqs[$sharedContainer->getId()], 'content seq mismatch: ' . print_r($contentSeqs, TRUE));
+        $this->assertEquals(1, $contentSeqs[$initialContainer->getId()], 'content seq mismatch: ' . print_r($contentSeqs, TRUE));
     }
     
     /**
@@ -536,7 +534,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             Tinebase_Model_Grants::GRANT_READ
         ));
         
-        Tinebase_User::getInstance()->setStatus($user2, 'enabled');        
+        Tinebase_User::getInstance()->setStatus($user2, 'enabled');
         Tinebase_Container::getInstance()->setGrants($container->getFirstRecord()->id, $oldGrants, TRUE); 
         
         $this->assertEquals(0, $otherUsers->filter('accountId', $user2->accountId)->count());

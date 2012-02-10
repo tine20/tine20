@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>5.2</version>
+    <version>5.3</version>
     <order>50</order>
     <depends>
         <application>Admin</application>
@@ -256,6 +256,7 @@
                     <reference>
                         <table>snom_software</table>
                         <field>id</field>
+                        <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>   
             </declaration>
@@ -380,6 +381,7 @@
                     <reference>
                         <table>snom_templates</table>
                         <field>id</field>
+                        <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>   
                 <index>
@@ -391,6 +393,7 @@
                     <reference>
                         <table>snom_location</table>
                         <field>id</field>
+                        <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>   
                 <index>
@@ -789,6 +792,7 @@
                     <reference>
                         <table>asterisk_context</table>
                         <field>id</field>
+                        <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>
             </declaration>
@@ -858,6 +862,7 @@
                         <table>snom_phones</table>
                         <field>id</field>
                         <ondelete>cascade</ondelete>
+                        <!-- add onupdate? -->
                     </reference>
                 </index>   
                 <index>
@@ -869,6 +874,7 @@
                     <reference>
                         <table>asterisk_sip_peers</table>
                         <field>id</field>
+                        <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>   
             </declaration>
@@ -1021,6 +1027,7 @@
                     <reference>
                         <table>asterisk_context</table>
                         <field>id</field>
+                        <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>
            </declaration>
@@ -1332,7 +1339,8 @@
                     <reference>
                         <table>snom_phones</table>
                         <field>id</field>
-                        <ondelete>cascade</ondelete>                    
+                        <ondelete>cascade</ondelete> 
+                        <!-- add onupdate? -->
                     </reference>
                 </index>
             </declaration>
@@ -1412,7 +1420,8 @@
                     <reference>
                         <table>snom_phones</table>
                         <field>id</field>
-                        <ondelete>cascade</ondelete>                    
+                        <ondelete>cascade</ondelete>
+                        <!-- add onupdate? -->
                     </reference>
                 </index>
             </declaration>
@@ -1422,7 +1431,7 @@
             <name>asterisk_redirects</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1487,11 +1496,11 @@
                     <reference>
                         <table>asterisk_sip_peers</table>
                         <field>id</field>
+                        <ondelete>cascade</ondelete>
+                        <onupdate>cascade</onupdate>
                     </reference>
-                    <ondelete>cascade</ondelete>
-                    <onupdate>cascade</onupdate>
-                </index>   
+                </index>
             </declaration>
         </table>
-     </tables>    
+     </tables>
 </application>

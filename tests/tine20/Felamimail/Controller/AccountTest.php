@@ -4,7 +4,7 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -30,25 +30,11 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
     protected $_account = NULL;
     
     /**
-     * user pw has changed
-     * 
-     * @var boolean
-     */
-    protected $_passwordChanged = FALSE;
-    
-    /**
      * folders to delete in tearDown
      * 
      * @var array
      */
     protected $_foldersToDelete = array();
-    
-    /**
-     * accounts to delete in tearDown
-     * 
-     * @var array
-     */
-    protected $_accountsToDelete = array();
     
     /**
      * Runs the test methods of this class.
@@ -70,6 +56,8 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         $this->_controller = Felamimail_Controller_Account::getInstance();
         $this->_account = $this->_controller->search()->getFirstRecord();
     }
@@ -82,9 +70,7 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        // reset old account settings
-        $accountBackend = new Felamimail_Backend_Account();
-        $accountBackend->update($this->_account);
+        Tinebase_TransactionManager::getInstance()->rollBack();
         
         foreach ($this->_foldersToDelete as $foldername) {
             try {
@@ -92,16 +78,6 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
             } catch (Felamimail_Exception_IMAP $fei) {
                 // do nothing
             }
-        }
-        
-        if ($this->_passwordChanged) {
-            // reset password
-            $testConfig = Zend_Registry::get('testConfig');
-            $this->_setCredentials($testConfig->username, $testConfig->password);
-        }
-        
-        foreach ($this->_accountsToDelete as $account) {
-            Felamimail_Controller_Account::getInstance()->delete($account);
         }
     }
     
@@ -135,7 +111,6 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         unset($userAccount->id);
         $userAccount->type = Felamimail_Model_Account::TYPE_USER;
         $userAccount = $this->_controller->create($userAccount);
-        $this->_accountsToDelete[] = $userAccount;
 
         // deleting original account and check if user account is new default account
         $this->_controller->delete($this->_account->getId());
@@ -193,12 +168,10 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         }
         $account->password = $testConfig->password;
         $account = $this->_controller->create($account);
-        $this->_accountsToDelete[] = $account;
         
         $testPw = 'testpwd';
         
         // change pw & update credential cache
-        $this->_passwordChanged = TRUE;
         $this->_setCredentials($testConfig->username, $testPw);
         $account = $this->_controller->get($account->getId());
 
@@ -213,5 +186,18 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         }
         
         $this->assertTrue($loginSuccessful, 'wrong credentials');
+    }
+    
+    /**
+     * test create trash on the fly
+     */
+    public function testCreateTrashOnTheFly()
+    {
+        // set another trash folder
+        $this->_account->trash_folder = 'newtrash';
+        $this->_foldersToDelete[] = 'newtrash';
+        $accountBackend = new Felamimail_Backend_Account();
+        $account = $accountBackend->update($this->_account);
+        $newtrash = $this->_controller->getSystemFolder($account, Felamimail_Model_Folder::FOLDER_TRASH);
     }
 }

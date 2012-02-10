@@ -6,12 +6,12 @@ msgstr ""
 msgid "add, edit and delete products"
 msgstr ""
 
-#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:85
+#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:82
 msgid "Title"
 msgstr ""
 
-#: js/ContractEditDialog.js:100 js/ProductGridPanel.js:123
-#: js/ProductEditDialog.js:123
+#: js/ContractEditDialog.js:100 js/ProductEditDialog.js:123
+#: js/ProductGridPanel.js:123
 msgid "Description"
 msgstr ""
 
@@ -19,56 +19,12 @@ msgstr ""
 msgid "Enter description..."
 msgstr ""
 
-#: js/ContractGridPanel.js:59 js/Models.js:78
-msgid "Quick search"
-msgstr ""
-
-#: js/ContractGridPanel.js:60
-msgid "Summary"
-msgstr ""
-
-#: js/ContractGridPanel.js:79
+#: js/ContractGridPanel.js:76
 msgid "Contract number"
 msgstr ""
 
-#: js/ContractGridPanel.js:91
+#: js/ContractGridPanel.js:88
 msgid "Status"
-msgstr ""
-
-#: js/Sales.js:53
-msgid "Products"
-msgstr ""
-
-#: js/Sales.js:58
-msgid "All Products"
-msgstr ""
-
-#: js/Sales.js:63
-msgid "Contracts"
-msgstr ""
-
-#: js/Sales.js:68 js/Sales.js:103
-msgid "All Contracts"
-msgstr ""
-
-#: js/ProductGridPanel.js:119
-msgid "Tags"
-msgstr ""
-
-#: js/ProductGridPanel.js:120 js/ProductEditDialog.js:102
-msgid "Name"
-msgstr ""
-
-#: js/ProductGridPanel.js:121 js/ProductEditDialog.js:115
-msgid "Manufacturer"
-msgstr ""
-
-#: js/ProductGridPanel.js:122 js/ProductEditDialog.js:119
-msgid "Category"
-msgstr ""
-
-#: js/ProductGridPanel.js:124 js/ProductEditDialog.js:108
-msgid "Price"
 msgstr ""
 
 #: js/Models.js:40
@@ -83,18 +39,66 @@ msgid_plural "record lists"
 msgstr[0] ""
 msgstr[1] ""
 
+#: js/Models.js:78 js/Models.js:140
+msgid "Quick search"
+msgstr ""
+
 #: js/Models.js:79
 msgid "Product name"
 msgstr ""
 
-#: js/Models.js:112
+#: js/Models.js:81 js/Models.js:142
+msgid "Creator"
+msgstr ""
+
+#: js/Models.js:113
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:116
+#: js/Models.js:117
 msgid "contracts list"
 msgid_plural "contracts lists"
 msgstr[0] ""
 msgstr[1] ""
+
+#: js/Models.js:141
+msgid "Contract name"
+msgstr ""
+
+#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
+msgid "Name"
+msgstr ""
+
+#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
+msgid "Price"
+msgstr ""
+
+#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
+msgid "Manufacturer"
+msgstr ""
+
+#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
+msgid "Category"
+msgstr ""
+
+#: js/ProductGridPanel.js:119
+msgid "Tags"
+msgstr ""
+
+#: Setup/Initialize.php:34 Setup/Update/Release5.php:62
+msgid "My Products"
+msgstr ""
+
+#: Setup/Initialize.php:35 Setup/Update/Release5.php:63
+msgid "Products created by myself"
+msgstr ""
+
+#: Setup/Initialize.php:55 Setup/Update/Release5.php:83
+msgid "My Contracts"
+msgstr ""
+
+#: Setup/Initialize.php:56 Setup/Update/Release5.php:84
+msgid "Contracts created by myself"
+msgstr ""

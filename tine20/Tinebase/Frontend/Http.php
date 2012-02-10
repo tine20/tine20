@@ -290,7 +290,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('update.php');
-        exit();        
+        exit();
     }
     
     /**

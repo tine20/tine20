@@ -65,7 +65,6 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
     protected function tearDown()
     {
         // set grants again
-        //$container = Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Crm')->getId();
         if ($this->_container !== null) {
             Tinebase_Container::getInstance()->setGrants($this->_container, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
                 'account_id'    => Tinebase_Core::getUser()->getId(),
@@ -117,7 +116,7 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
     public function testExportOdsWithoutGrant()
     {
         // remove all grants for container
-        $this->_container = Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Crm')->getId();
+        $this->_container = Tinebase_Container::getInstance()->getDefaultContainer('Crm')->getId();
         Tinebase_Container::getInstance()->setGrants($this->_container, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',

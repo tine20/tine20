@@ -53,35 +53,29 @@ Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
     recordClass: null,
     
     initComponent: function() {
-        try {
-            this.response = Ext.decode(this.response);
-            
-            if (!this.app) {
-                this.app = Tine.Tinebase.appMgr.get(this.appName);
-            }
-            
-            // init some translations
-            if (this.app.i18n && this.recordClass !== null) {
-                this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
-                this.i18nRecordsName = this.app.i18n._hidden(this.recordClass.getMeta('recordsName'));
-            }
-            
-            // init actions
-            this.initActions();
-            // init buttons and tbar
-            this.initButtons();
-            
-            this.initStore();
-            
-            // get items for this dialog
-            this.items = this.getFormItems();
-           
-            Tine.widgets.dialog.MultipleEditResultSummary.superclass.initComponent.call(this);
+        this.response = Ext.decode(this.response);
         
-        } catch (e) {
-            Tine.log.err('Tine.widgets.dialog.MultipleEditResultSummary::initComponent');
-            Tine.log.err(e.stack ? e.stack : e);
+        if (!this.app) {
+            this.app = Tine.Tinebase.appMgr.get(this.appName);
         }
+        
+        // init some translations
+        if (this.app.i18n && this.recordClass !== null) {
+            this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
+            this.i18nRecordsName = this.app.i18n._hidden(this.recordClass.getMeta('recordsName'));
+        }
+        
+        // init actions
+        this.initActions();
+        // init buttons and tbar
+        this.initButtons();
+        
+        this.initStore();
+        
+        // get items for this dialog
+        this.items = this.getFormItems();
+       
+        Tine.widgets.dialog.MultipleEditResultSummary.superclass.initComponent.call(this);
     },
     
     /**
@@ -144,74 +138,68 @@ Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
         this.window.close();
     },    
     
-    getFormItems: function() {
+    getFormItems: function() { 
+        if(this.items) return this.items;
+        var allrecs = this.response.totalcount + this.response.failcount;
         
-        try {        
-            if(this.items) return this.items;
-            var allrecs = this.response.totalcount + this.response.failcount;
+        var rn = (allrecs>1) ? this.i18nRecordsName : this.i18nRecordName;
+        var summary = String.format( (allrecs>1) ? _('You edited {0} {1}.') : _('You edited {0} {1}.'), allrecs, rn);
+        summary += '<br />';
+        rn = (this.response.totalcount>1) ? this.i18nRecordsName : this.i18nRecordName;
+        summary += String.format( (this.response.totalcount>1) ? _('{0} {1} have been updated properly.') : _('{0} {1} has been updated properly.'), this.response.totalcount, rn);
+        summary += '<br />';
+        rn = (this.response.failcount>1) ? this.i18nRecordsName : this.i18nRecordName;
+        summary += String.format( (this.response.failcount>1) ? _('{0} {1} have invalid data after updating. These {1} have not been changed.') : _('{0} {1} has invalid data after updating. This {1} has not been changed.'), this.response.failcount, rn);
+       
+        return {
+            border: false,            
+            cls : 'x-ux-display',
+            layout: 'ux.display',
             
-            var rn = (allrecs>1) ? this.i18nRecordsName : this.i18nRecordName;
-            var summary = String.format( (allrecs>1) ? _('You edited {0} {1}.') : _('You edited {0} {1}.'), allrecs, rn);
-            summary += '<br />';
-            rn = (this.response.totalcount>1) ? this.i18nRecordsName : this.i18nRecordName;
-            summary += String.format( (this.response.totalcount>1) ? _('{0} {1} have been updated properly.') : _('{0} {1} has been updated properly.'), this.response.totalcount, rn);
-            summary += '<br />';
-            rn = (this.response.failcount>1) ? this.i18nRecordsName : this.i18nRecordName;
-            summary += String.format( (this.response.failcount>1) ? _('{0} {1} have invalid data after updating. These {1} have not been changed.') : _('{0} {1} has invalid data after updating. This {1} has not been changed.'), this.response.failcount, rn);
-           
-            return {
-                border: false,            
-                cls : 'x-ux-display',
-                layout: 'ux.display',
-                
-                frame: true,
-                autoScroll: true,
-                items: [
-                    {
-                        height: 100,
-                        border: false,
-                        items: [{
-                            hideLabel: true,
-                            xtype: 'ux.displayfield',
-                            value: summary,
-                            htmlEncode: false,
-                            style: 'padding: 0 5px; color: black',
-                            cls: 'x-panel-mc'
-                        }],
+            frame: true,
+            autoScroll: true,
+            items: [
+                {
+                    height: 100,
+                    border: false,
+                    items: [{
                         hideLabel: true,
-                        ref: '../../summaryPanelInfo',
-                        layout: 'ux.display',
-                        layoutConfig: {
-                            background: 'border'
-                        }
-                    }, {
-                        baseCls: 'ux-arrowcollapse',
-                        cls: 'ux-arrowcollapse-plain',
-                        collapsible: true,
-                        hidden: false,
-                        flex: 1,
-                        title:'',
-                        ref: '../../summaryPanelFailures',
-                        items: [{
-                            xtype: 'grid',
-                            store: this.store,
-                            autoHeight: true,
-                            columns: [
-                                { id: 'id', header: _('Index'), width: 60, sortable: false, dataIndex: 'id', hidden: true}, 
-                                { id: 'record', header: this.i18nRecordName, width: 160, sortable: true, dataIndex: 'record', renderer: function(value) {
-                                    return value.n_fn;
-                                }},
-                                { id: 'failure', header: _('Failure'), width: 60, sortable: true, dataIndex: 'message'}
-                            ],
-                            autoExpandColumn: 'failure'
-                        }]
+                        xtype: 'ux.displayfield',
+                        value: summary,
+                        htmlEncode: false,
+                        style: 'padding: 0 5px; color: black',
+                        cls: 'x-panel-mc'
+                    }],
+                    hideLabel: true,
+                    ref: '../../summaryPanelInfo',
+                    layout: 'ux.display',
+                    layoutConfig: {
+                        background: 'border'
                     }
-                ]
-            };
-        } catch (e) {
-            Tine.log.err('Tine.widgets.dialog.MultipleEditResultSummary::getFormItems');
-            Tine.log.err(e.stack ? e.stack : e);
-        }
+                }, {
+                    baseCls: 'ux-arrowcollapse',
+                    cls: 'ux-arrowcollapse-plain',
+                    collapsible: true,
+                    hidden: false,
+                    flex: 1,
+                    title:'',
+                    ref: '../../summaryPanelFailures',
+                    items: [{
+                        xtype: 'grid',
+                        store: this.store,
+                        autoHeight: true,
+                        columns: [
+                            { id: 'id', header: _('Index'), width: 60, sortable: false, dataIndex: 'id', hidden: true}, 
+                            { id: 'record', header: this.i18nRecordName, width: 160, sortable: true, dataIndex: 'record', renderer: function(value) {
+                                return value.n_fn;
+                            }},
+                            { id: 'failure', header: _('Failure'), width: 60, sortable: true, dataIndex: 'message'}
+                        ],
+                        autoExpandColumn: 'failure'
+                    }]
+                }
+            ]
+        };
     }
 
 });

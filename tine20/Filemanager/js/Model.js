@@ -84,6 +84,20 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     }
 });
 
+/**
+ * create Node from File
+ * 
+ * @param {File} file
+ */
+Tine.Filemanager.Model.Node.createFromFile = function(file) {
+    return new Tine.Filemanager.Model.Node({
+        name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
+        size: file.size || 0,
+        type: 'file',
+        contenttype: file.type ? file.type : file.fileType, // missing if safari and chrome 
+        revision: 0
+    });
+} 
 
 
 /**
@@ -155,7 +169,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         }
 
         var params = {
-            application: this.appName,                                
+            application: this.appName,
             filenames: filenames,
             method: this.appName + ".deleteNodes",
             timeout: 300000 // 5 minutes
@@ -184,6 +198,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             
             grid.getStore().remove(nodeData);
             grid.selectionModel.deselectRange(0, grid.getStore().getCount());
+            grid.pagingToolbar.refresh.enable();
 //            this.fireEvent('containerdelete', nodeData);
 
         }).createDelegate({items: items});
@@ -408,33 +423,33 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             grid = app.getMainScreen().getCenterPanel(),
             gridStore = grid.store;
         
-        params.application = 'Filemanager';                              
+        params.application = 'Filemanager';
         params.method = 'Filemanager.createNodes';
         params.uploadKeyArray = uploadKeyArray;
         params.addToGridStore = addToGridStore;
 
         
         var onSuccess = (function(response, request){ 
-                       
+            
             var nodeData = Ext.util.JSON.decode(response.responseText);
-        	
+            
             for(var i=0; i<this.uploadKeyArray.length; i++) {
-                var fileRecord = Tine.Tinebase.uploadManager.upload(this.uploadKeyArray[i]);  
-    
+                var fileRecord = Tine.Tinebase.uploadManager.upload(this.uploadKeyArray[i]);
+                
                 if(addToGridStore) {
-        
-                	var recordToRemove = gridStore.query('name', fileRecord.get('name'));
-                	if(recordToRemove.items[0]) {
-                		gridStore.remove(recordToRemove.items[0]);
-                	}
-
                 	fileRecord = Tine.Filemanager.fileRecordBackend.updateNodeRecord(nodeData[i], fileRecord);
                 	var nodeRecord = new Tine.Filemanager.Model.Node(nodeData[i]);
                 	
                 	nodeRecord.fileRecord = fileRecord;
-                	gridStore.add(nodeRecord);
-                    
-                }   
+                	
+                	var existingRecordIdx = gridStore.find('name', fileRecord.get('name'));
+                    if(existingRecordIdx > -1) {
+                        gridStore.removeAt(existingRecordIdx);
+                        gridStore.insert(existingRecordIdx, nodeRecord);
+                    } else {
+                        gridStore.add(nodeRecord);
+                    }
+                }
             }
 
         }).createDelegate({uploadKeyArray: uploadKeyArray, addToGridStore: addToGridStore});

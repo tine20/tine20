@@ -91,20 +91,16 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     onRender: function(ct, position) {
-        try {
-            Tine.Calendar.CalendarPanel.superclass.onRender.apply(this, arguments);
-            
-            var c = this.body;
-            this.el.addClass('cal-panel');
-            this.view.init(this);
-            
-            c.on("keydown", this.onKeyDown, this);
-            //this.relayEvents(c, ["keypress"]);
-            
-            this.view.render();
-        } catch (e) {
-            console.err(e.stack ? e.stack : e);
-        }
+        Tine.Calendar.CalendarPanel.superclass.onRender.apply(this, arguments);
+        
+        var c = this.body;
+        this.el.addClass('cal-panel');
+        this.view.init(this);
+        
+        c.on("keydown", this.onKeyDown, this);
+        //this.relayEvents(c, ["keypress"]);
+        
+        this.view.render();
     },
     
     /**

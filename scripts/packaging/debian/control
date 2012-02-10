@@ -13,18 +13,29 @@ Architecture: all
 Depends: ${misc:Depends}, tine20-tinebase, 
     ${tine20:Modules}
 Description: webbased groupware and crm - metapackage
- Tine 2.0 is an webbased open source project which combines groupware and 
- CRM in one consistent interface. 
- This is a metapackage which depends on all other Tine 2.0 packages. Install 
- this package to get all Tine 2.0 applications installed. 
-
+ Tine 2.0 is an open source project which combines groupware and CRM in one
+ consistent interface. Tine 2.0 is web-based and optimises collaboration and
+ organisation of groups in a lasting manner. Tine 2.0 unites all the
+ advantages of open source software with an extraordinarily high level of
+ usability and an equally high standard of professional software development.
+ This is what makes the difference between Tine 2.0 and many other existing
+ groupware solutions.
+ Tine 2.0 includes address book, calendar, email, tasks, time tracking and
+ CRM. Intelligent functions and links make collaboration in Tine 2.0 a true
+ pleasure and include:
+  * Synchronising mobile telephones
+  * VoiP integration
+  * Flexible assigning of authorisation rights
+  * Dynamic lists
+  * Search functions
+  * History
+  * PDF export
 
 Package: tine20-tinebase
 Architecture: all
 Depends: ${misc:Depends}, 
     httpd, 
     libapache2-mod-php5 | php5 | php5-cgi | php5-fpm, 
-    mysql-client, 
     dbconfig-common, 
     wwwconfig-common, 
     php5-mysql | php5-mysqli, 
@@ -39,6 +50,13 @@ Description: webbased groupware and crm - core + addressbook module
  This packages contains the core librarys of Tine 2.0 and the addressbook module.
  Installing this package enables you to manage user accounts and contacts. Also
  provides integration with openstreet map.
+
+Package: tine20-activesync
+Architecture: all
+Depends: tine20-tinebase (= ${binary:Version})
+Description: webbased groupware and crm - activesync module
+ This package contains the activesync module of Tine 2.0. Installing this package
+ enables you to syncronize contacts, event, tasks and emails with your mobile phone.
 
 Package: tine20-calendar
 Architecture: all

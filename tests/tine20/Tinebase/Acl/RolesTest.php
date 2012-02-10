@@ -254,6 +254,15 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertFalse($result, 'has admin right for application ' . $this->objects['application']->name);
+        
+        // test for not installed application
+        $result = Tinebase_Acl_Roles::getInstance()->hasRight(
+            'FooBar', 
+            $this->objects['user']->getId(), 
+            Tinebase_Acl_Rights::ADMIN
+        );
+
+        $this->assertFalse($result, 'user has admin right for not installed application');
     }    
 
     /**

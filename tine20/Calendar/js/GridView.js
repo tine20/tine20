@@ -193,6 +193,9 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
             getTargetDateTime: Ext.emptyFn,
             getSelectionModel: function() {
                 return this.grid.getSelectionModel();
+            },
+            print: function() {
+                Ext.ux.Printer.print(this.grid);
             }
         }));
     },

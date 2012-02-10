@@ -77,60 +77,56 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
      * init import wizard
      */
     initComponent: function() {
-        try {
-            Tine.log.debug('Tine.widgets.dialog.ImportDialog::initComponent this');
-            Tine.log.debug(this);
-            
-            this.app = Tine.Tinebase.appMgr.get(this.appName);
-            this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.appName, this.modelName);
-            
-            this.allowedFileExtensions = [];
-            
-            // init definitions
-            this.definitionsStore = new Ext.data.JsonStore({
-                fields: Tine.Tinebase.Model.ImportExportDefinition,
-                root: 'results',
-                totalProperty: 'totalcount',
-                remoteSort: false
-            });
-            
-            if (Tine[this.appName].registry.get('importDefinitions')) {
-                Ext.each(Tine[this.appName].registry.get('importDefinitions').results, function(defData) {
-                    var options = defData.plugin_options,
-                        extension = options ? options.extension : null;
-                    
-                    defData.label = this.app.i18n._hidden(options && options.label ? options.label : defData.name);
-                    
-                    this.allowedFileExtensions = this.allowedFileExtensions.concat(extension);
-                    
-                    this.definitionsStore.addSorted(new Tine.Tinebase.Model.ImportExportDefinition(defData, defData.id));
-                }, this);
-            }
-            if (! this.selectedDefinition && Tine.Addressbook.registry.get('defaultImportDefinition')) {
-                this.selectedDefinition = this.definitionsStore.getById(Tine.Addressbook.registry.get('defaultImportDefinition').id);
-            }
+
+        Tine.log.debug('Tine.widgets.dialog.ImportDialog::initComponent this');
+        Tine.log.debug(this);
+
+        this.app = Tine.Tinebase.appMgr.get(this.appName);
+        this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.appName, this.modelName);
+
+        this.allowedFileExtensions = [];
+
+        // init definitions
+        this.definitionsStore = new Ext.data.JsonStore({
+            fields: Tine.Tinebase.Model.ImportExportDefinition,
+            root: 'results',
+            totalProperty: 'totalcount',
+            remoteSort: false
+        });
+
+        if (Tine[this.appName].registry.get('importDefinitions')) {
+            Ext.each(Tine[this.appName].registry.get('importDefinitions').results, function(defData) {
+                var options = defData.plugin_options,
+                    extension = options ? options.extension : null;
                 
-            // init exception store
-            this.exceptionStore = new Ext.data.JsonStore({
-                mode: 'local',
-                idProperty: 'index',
-                fields: ['index', 'code', 'message', 'exception', 'resolveStrategy', 'resolvedRecord', 'isResolved']
-            });
-        
-            this.items = [
-                this.getFilePanel(),
-                this.getOptionsPanel(),
-                this.getConflictsPanel(),
-                this.getSummaryPanel()
-            ];
-            
-            Tine.widgets.dialog.ImportDialog.superclass.initComponent.call(this);
-        } catch (e) {
-            Tine.log.err('Tine.widgets.dialog.ImportDialog::initComponent');
-            Tine.log.err(e.stack ? e.stack : e);
+                defData.label = this.app.i18n._hidden(options && options.label ? options.label : defData.name);
+                
+                this.allowedFileExtensions = this.allowedFileExtensions.concat(extension);
+                
+                this.definitionsStore.addSorted(new Tine.Tinebase.Model.ImportExportDefinition(defData, defData.id));
+            }, this);
         }
+        if (! this.selectedDefinition && Tine.Addressbook.registry.get('defaultImportDefinition')) {
+            this.selectedDefinition = this.definitionsStore.getById(Tine.Addressbook.registry.get('defaultImportDefinition').id);
+        }
+
+        // init exception store
+        this.exceptionStore = new Ext.data.JsonStore({
+            mode: 'local',
+            idProperty: 'index',
+            fields: ['index', 'code', 'message', 'exception', 'resolveStrategy', 'resolvedRecord', 'isResolved']
+        });
+
+        this.items = [
+            this.getFilePanel(),
+            this.getOptionsPanel(),
+            this.getConflictsPanel(),
+            this.getSummaryPanel()
+        ];
+
+        Tine.widgets.dialog.ImportDialog.superclass.initComponent.call(this);
     },
-    
+
     /**
      * close window on cancel
      */
@@ -138,7 +134,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         this.fireEvent('cancel', this, this.layout.activeItem);
         this.window.close();
     },
-    
+
     /**
      * do import request
      * 
@@ -146,28 +142,21 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
      * @param {Object}   importOptions
      */
     doImport: function(callback, importOptions, clientRecordData) {
-        try {
-            Ext.Ajax.request({
-                scope: this,
-                timeout: 1800000, // 30 minutes
-                callback: this.onImportResponse.createDelegate(this, [callback], true),
-                params: {
-                    method: this.appName + '.import' + this.recordClass.getMeta('recordsName'),
-                    tempFileId: this.uploadButton.getTempFileId(),
-                    definitionId: this.definitionCombo.getValue(),
-                    importOptions: Ext.apply({
-                        container_id: this.containerCombo.getValue(),
-                        autotags: this.tagsPanel.getFormField().getValue()
-                    }, importOptions || {}),
-                    clientRecordData: clientRecordData
-                }
-            });
-            
-        } catch (e) {
-            Tine.log.err('Tine.widgets.dialog.ImportDialog::doImport');
-            Tine.log.err(e.stack ? e.stack : e);
-        }
-        
+        Ext.Ajax.request({
+            scope: this,
+            timeout: 1800000, // 30 minutes
+            callback: this.onImportResponse.createDelegate(this, [callback], true),
+            params: {
+                method: this.appName + '.import' + this.recordClass.getMeta('recordsName'),
+                tempFileId: this.uploadButton.getTempFileId(),
+                definitionId: this.definitionCombo.getValue(),
+                importOptions: Ext.apply({
+                    container_id: this.containerCombo.getValue(),
+                    autotags: this.tagsPanel.getFormField().getValue()
+                }, importOptions || {}),
+                clientRecordData: clientRecordData
+            }
+        });
     },
     
     /**
@@ -179,35 +168,29 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
      * @param {Function} callback
      */
     onImportResponse: function(request, success, response, callback) {
-        try {
-            response = Ext.util.JSON.decode(response.responseText);
-            
-            Tine.log.debug('Tine.widgets.dialog.ImportDialog::onImportResponse server response');
-            Tine.log.debug(response);
-            
-            this.lastImportResponse = response;
-            
-            // load exception store
-            this.exceptionStore.loadData(response.exceptions);
-            this.exceptionStore.filterBy(this.exceptionStoreFilter, this);
-            
-            // update conflict panel
+        response = Ext.util.JSON.decode(response.responseText);
+        
+        Tine.log.debug('Tine.widgets.dialog.ImportDialog::onImportResponse server response');
+        Tine.log.debug(response);
+        
+        this.lastImportResponse = response;
+        
+        // load exception store
+        this.exceptionStore.loadData(response.exceptions);
+        this.exceptionStore.filterBy(this.exceptionStoreFilter, this);
+        
+        // update conflict panel
 //            var duplicatecount = response.duplicatecount || 0,
 //                recordsName = this.app.i18n.n_(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), duplicatecount);
 //                
 //            this.conflictsLabel.setText(String.format(this.conflictsLabel.rawText, duplicatecount, recordsName), false);
-            if (this.exceptionStore.getCount()) {
-                this.loadConflict(0);
-            }
-            
-            // finlay apply callback
-            if (Ext.isFunction(callback)) {
-                callback.call(this, request, success, response);
-            }
-            
-        } catch (e) {
-            Tine.log.err('Tine.widgets.dialog.ImportDialog::onImportResponse');
-            Tine.log.err(e.stack ? e.stack : e);
+        if (this.exceptionStore.getCount()) {
+            this.loadConflict(0);
+        }
+        
+        // finlay apply callback
+        if (Ext.isFunction(callback)) {
+            callback.call(this, request, success, response);
         }
     },
     
@@ -377,25 +360,20 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             listeners: {
                 scope: this,
                 show: function() {
-                   try {
-                       var options = this.getImportPluginOptions();
-                    
-                        if (options.autotags) {
-                            var tags = options.autotags;
-                            
-                            Ext.each([].concat(tags), function(tag) {
-                                tag.name = this.app.i18n._hidden(tag.name);
-                                tag.description = this.app.i18n._hidden(tag.description);
-                            }, this);
-                            
-                            this.tagsPanel.getFormField().setValue(tags);
-                        }
+                   var options = this.getImportPluginOptions();
+                
+                    if (options.autotags) {
+                        var tags = options.autotags;
                         
-                        this.containerCombo.setValue(options.container_id ? options.container_id : this.defaultImportContainer);
-                    } catch (e) {
-                        Tine.log.err('Tine.widgets.dialog.ImportDialog::optionsPanelShow');
-                        Tine.log.err(e.stack ? e.stack : e);
+                        Ext.each([].concat(tags), function(tag) {
+                            tag.name = this.app.i18n._hidden(tag.name);
+                            tag.description = this.app.i18n._hidden(tag.description);
+                        }, this);
+                        
+                        this.tagsPanel.getFormField().setValue(tags);
                     }
+                    
+                    this.containerCombo.setValue(options.container_id ? options.container_id : this.defaultImportContainer);
                 }
             },
             
@@ -575,51 +553,45 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             
             return this.loadConflict.defer(200, this, arguments);
         }
-        
-        try {
             
-            var thisRecord = this.exceptionStore.getAt(this.conflictPagingToolbar.cursor),
-                nextRecord = this.exceptionStore.getAt(index),
-                resolveStore = this.duplicateResolveGridPanel.getStore();
-                
-            // preserv changes
-            if (this.conflictPagingToolbar.cursor != index && thisRecord && resolveStore.getCount()) {
-                thisRecord.set('resolvedRecord', resolveStore.getResolvedRecord());
-                thisRecord.set('resolveStrategy', resolveStore.resolveStrategy);
-            }
+        var thisRecord = this.exceptionStore.getAt(this.conflictPagingToolbar.cursor),
+            nextRecord = this.exceptionStore.getAt(index),
+            resolveStore = this.duplicateResolveGridPanel.getStore();
             
-            if (nextRecord) {
-                resolveStore.loadData(nextRecord.get('exception'), nextRecord.get('resolveStrategy') || resolveStore.resolveStrategy, nextRecord.get('resolvedRecord'));
-            } else {
-                resolveStore.removeAll();
-                this.duplicateResolveGridPanel.getView().mainBody.update('<br />  ' + _('No conflict to resolve'));
-                this.navigate(+1);
-            }
-            
-            
-            // update paging toolbar
-            var p = this.conflictPagingToolbar,
-                ap = index+1,
-                ps = this.exceptionStore.getCount();
-                
-            p.cursor = index;
-            p.afterTextItem.setText(String.format(p.afterPageText, ps));
-            p.inputItem.setValue(ap);
-            p.first.setDisabled(ap == 1);
-            p.prev.setDisabled(ap == 1);
-            p.next.setDisabled(ap == ps);
-            p.last.setDisabled(ap == ps);
-            this.conflictIndexText.setText(nextRecord ? 
-                String.format(_('(This is record {0} in you import file)'), nextRecord.get('index') + 1) :
-                _('No conflict to resolve')
-            );
-            
-            this.conflictMask.hide();
-            this.conflictMask.hidden = true;
-        } catch (e) {
-            Tine.log.err('Tine.widgets.dialog.ImportDialog::loadConflict');
-            Tine.log.err(e.stack ? e.stack : e);
+        // preserv changes
+        if (this.conflictPagingToolbar.cursor != index && thisRecord && resolveStore.getCount()) {
+            thisRecord.set('resolvedRecord', resolveStore.getResolvedRecord());
+            thisRecord.set('resolveStrategy', resolveStore.resolveStrategy);
         }
+        
+        if (nextRecord) {
+            resolveStore.loadData(nextRecord.get('exception'), nextRecord.get('resolveStrategy') || resolveStore.resolveStrategy, nextRecord.get('resolvedRecord'));
+        } else {
+            resolveStore.removeAll();
+            this.duplicateResolveGridPanel.getView().mainBody.update('<br />  ' + _('No conflict to resolve'));
+            this.navigate(+1);
+        }
+        
+        
+        // update paging toolbar
+        var p = this.conflictPagingToolbar,
+            ap = index+1,
+            ps = this.exceptionStore.getCount();
+            
+        p.cursor = index;
+        p.afterTextItem.setText(String.format(p.afterPageText, ps));
+        p.inputItem.setValue(ap);
+        p.first.setDisabled(ap == 1);
+        p.prev.setDisabled(ap == 1);
+        p.next.setDisabled(ap == ps);
+        p.last.setDisabled(ap == ps);
+        this.conflictIndexText.setText(nextRecord ? 
+            String.format(_('(This is record {0} in you import file)'), nextRecord.get('index') + 1) :
+            _('No conflict to resolve')
+        );
+        
+        this.conflictMask.hide();
+        this.conflictMask.hidden = true;
     },
     
     /********************************************************** SUMMARY PANEL **********************************************************/
@@ -711,72 +683,66 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         if (! this.summaryPanelInfo.rendered) {
             return this.onSummaryPanelShow.defer(100, this);
         }
+
+        // calc metrics
+        var rsp = this.lastImportResponse,
+            totalcount = rsp.totalcount,
+            failcount = 0,
+            mergecount = 0
+            discardcount = 0;
+            
+        this.exceptionStore.clearFilter();
+        this.exceptionStore.each(function(r) {
+            var strategy = r.get('resolveStrategy');
+            if (! strategy || !Ext.isString(strategy)) {
+                failcount++;
+            } else if (strategy == 'keep') {
+                totalcount++;
+            } else if (strategy.match(/^merge.*/)) {
+                mergecount++;
+            } else if (strategy == 'discard') {
+                discardcount++;
+            }
+        }, this);
         
-        try {
-            // calc metrics
-            var rsp = this.lastImportResponse,
-                totalcount = rsp.totalcount,
-                failcount = 0,
-                mergecount = 0
-                discardcount = 0;
-                
-            this.exceptionStore.clearFilter();
-            this.exceptionStore.each(function(r) {
-                var strategy = r.get('resolveStrategy');
-                if (! strategy || !Ext.isString(strategy)) {
-                    failcount++;
-                } else if (strategy == 'keep') {
-                    totalcount++;
-                } else if (strategy.match(/^merge.*/)) {
-                    mergecount++;
-                } else if (strategy == 'discard') {
-                    discardcount++;
-                }
-            }, this);
+        var tags = this.tagsPanel.getFormField().getValue(),
+            container = this.containerCombo.selectedContainer,
+            info = [String.format(_('In total we found {0} records in your import file.'), rsp.totalcount + rsp.duplicatecount + rsp.failcount)];
             
-            var tags = this.tagsPanel.getFormField().getValue(),
-                container = this.containerCombo.selectedContainer,
-                info = [String.format(_('In total we found {0} records in your import file.'), rsp.totalcount + rsp.duplicatecount + rsp.failcount)];
-                
-                if (totalcount) {
-                    info.push(String.format(_('{0} of them will be added as new records into: "{1}".'), 
-                        totalcount, 
-                        Tine.Tinebase.common.containerRenderer(container).replace('<div', '<span').replace('</div>', '</span>')
-                    ));
-                }
-                
-                if (mergecount + discardcount) {
-                    info.push(String.format(_('{0} of them where identified as duplicates.'), mergecount + discardcount));
-                    
-                    if (mergecount) {
-                        info.push(String.format(_('From the identified duplicates {0} will be merged into the existing records.'), mergecount));
-                    }
-                    
-                    if (discardcount) {
-                        info.push(String.format(_('From the identified duplicates {0} will be discarded.'), discardcount));
-                    }
-                }
-                
-                if (Ext.isArray(tags) && tags.length) {
-                    var tagNames = [];
-                    Ext.each(tags, function(tag) {tagNames.push(tag.name)});
-                    info.push(String.format(_('All records will be tagged with: "{0}" so you can find them easily.'), tagNames.join(',')));
-                }
-                
-                
-            this.summaryPanelInfo.update('<div style="padding: 5px;">' + info.join('<br />') + '</div>');
-            
-            // failures
-            if (failcount) {
-                this.exceptionStore.filter('code', 0);
-                this.summaryPanelFailures.show();
-                this.summaryPanelFailures.setTitle(String.format(_('{0} records have failures and will be discarded.'), failcount));
-                
+            if (totalcount) {
+                info.push(String.format(_('{0} of them will be added as new records into: "{1}".'), 
+                    totalcount, 
+                    Tine.Tinebase.common.containerRenderer(container).replace('<div', '<span').replace('</div>', '</span>')
+                ));
             }
             
-        } catch (e) {
-            Tine.log.err('Tine.widgets.dialog.ImportDialog::onSummaryPanelShow');
-            Tine.log.err(e.stack ? e.stack : e);
+            if (mergecount + discardcount) {
+                info.push(String.format(_('{0} of them where identified as duplicates.'), mergecount + discardcount));
+                
+                if (mergecount) {
+                    info.push(String.format(_('From the identified duplicates {0} will be merged into the existing records.'), mergecount));
+                }
+                
+                if (discardcount) {
+                    info.push(String.format(_('From the identified duplicates {0} will be discarded.'), discardcount));
+                }
+            }
+            
+            if (Ext.isArray(tags) && tags.length) {
+                var tagNames = [];
+                Ext.each(tags, function(tag) {tagNames.push(tag.name)});
+                info.push(String.format(_('All records will be tagged with: "{0}" so you can find them easily.'), tagNames.join(',')));
+            }
+            
+            
+        this.summaryPanelInfo.update('<div style="padding: 5px;">' + info.join('<br />') + '</div>');
+        
+        // failures
+        if (failcount) {
+            this.exceptionStore.filter('code', 0);
+            this.summaryPanelFailures.show();
+            this.summaryPanelFailures.setTitle(String.format(_('{0} records have failures and will be discarded.'), failcount));
+            
         }
     }
 });

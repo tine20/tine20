@@ -194,6 +194,17 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     }
     
     /**
+     * checks if container is a personal container of given account
+     * 
+     * @param mixed $account
+     */
+    public function isPersonalOf($account)
+    {
+        return $this->type == Tinebase_Model_Container::TYPE_PERSONAL 
+            && $this->owner_id == Tinebase_Model_User::convertUserIdToInt($account);
+    }
+    
+    /**
      * returns containerId if given path represents a (single) container
      * 
      * @static

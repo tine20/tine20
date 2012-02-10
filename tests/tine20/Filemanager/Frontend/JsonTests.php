@@ -88,6 +88,8 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         $this->_json = new Filemanager_Frontend_Json();
         $this->_fsController = Tinebase_FileSystem::getInstance();
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName('Filemanager');
@@ -100,7 +102,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
      */
     protected function _setupTestContainers()
     {
-        $this->_personalContainer = Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Filemanager');
+        $this->_personalContainer = Tinebase_Container::getInstance()->getDefaultContainer('Filemanager');
         
         $search = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter(array(
             'application_id' => $this->_application->getId(),
@@ -117,7 +119,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
             )));
             
         $personas = Zend_Registry::get('personas');
-        $this->_otherUserContainer = Tinebase_Container::getInstance()->getDefaultContainer($personas['sclever']->getId(), 'Filemanager');
+        $this->_otherUserContainer = Tinebase_Container::getInstance()->getDefaultContainer('Filemanager', $personas['sclever']->getId());
         Tinebase_Container::getInstance()->addGrants($this->_otherUserContainer->getId(), Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, NULL, array(
             Tinebase_Model_Grants::GRANT_READ
         ), TRUE);
@@ -180,6 +182,8 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
                 Tinebase_Container::getInstance()->delete($containerId);
             }
         }
+        
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
@@ -623,7 +627,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         
         $result = $this->_json->moveNodes($dirsToMove, $targetNode['path'], FALSE);
         $this->assertEquals(2, count($result));
-        $this->assertEquals($targetNode['path'] . '/dir1', $result[0]['path']);
+        $this->assertEquals($targetNode['path'] . '/dir1', $result[0]['path'], 'no new path: ' . print_r($result, TRUE));
         
         $filter = array(array(
             'field'    => 'path', 
@@ -637,7 +641,22 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         $result = $this->_json->searchNodes($filter, array());
         $this->assertEquals(0, $result['totalcount']);
     }
-
+    
+    /**
+    * testMoveFolderNodesToTopLevel
+    */
+    public function testMoveFolderNodesToTopLevel()
+    {
+        $dirsToMove = $this->testCreateDirectoryNodesInShared();
+        $targetPath = '/personal/' . Tinebase_Core::getUser()->accountLoginName;
+        $this->_objects['paths'][] = Filemanager_Controller_Node::getInstance()->addBasePath($targetPath . '/dir1');
+        $this->_objects['paths'][] = Filemanager_Controller_Node::getInstance()->addBasePath($targetPath . '/dir2');
+        
+        $result = $this->_json->moveNodes($dirsToMove, $targetPath, FALSE);
+        $this->assertEquals(2, count($result));
+        $this->assertEquals($targetPath . '/dir1', $result[0]['path']);
+    }
+    
     /**
      * testMoveContainerFolderNodesToContainerFolder
      */
@@ -648,7 +667,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         $newPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainermoved';
         $result = $this->_json->moveNodes($sourceNode['path'], array($newPath), FALSE);
         $this->assertEquals(1, count($result));
-        $this->assertEquals($newPath, $result[0]['path']);
+        $this->assertEquals($newPath, $result[0]['path'], 'no new path: ' . print_r($result, TRUE));
         $this->_objects['containerids'][] = $result[0]['name']['id'];
         
         $filter = array(array(
@@ -747,7 +766,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         $this->_objects['paths'][] = Filemanager_Controller_Node::getInstance()->addBasePath($target . '/testcontainer');
         $result = $this->_json->moveNodes($children[0], $target, FALSE);
         $this->assertEquals(1, count($result));
-        $this->assertTrue(is_array($result[0]['name']));
+        $this->assertTrue(is_array($result[0]['name']), 'array with container data expected: ' . print_r($result[0], TRUE));
         $this->_objects['containerids'][] = $result[0]['name']['id'];
     }
     
@@ -825,5 +844,24 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         // check if node is deleted
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $node = $this->_fsController->stat(Filemanager_Controller_Node::getInstance()->addBasePath($dirpaths[0]));
+    }
+    
+    /**
+     * testSetContainerInPathRecord
+     * 
+     * @todo move this to Tinebase?
+     */
+    public function testSetContainerInPathRecord()
+    {
+        $flatpath = Filemanager_Controller_Node::getInstance()->addBasePath(
+            '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_personalContainer->name);
+        $path = Tinebase_Model_Tree_Node_Path::createFromPath($flatpath);
+        $path->setContainer($this->_sharedContainer);
+        $this->assertEquals('/' . $this->_application->getId() . '/folders/shared/' . $this->_sharedContainer->getId(), $path->statpath);
+        
+        // move it back
+        $path->setContainer($this->_personalContainer);
+        $this->assertEquals('/' . $this->_application->getId() . '/folders/personal/' 
+            . Tinebase_Core::getUser()->getId() . '/' . $this->_personalContainer->getId(), $path->statpath, 'wrong statpath: ' . print_r($path->toArray(), TRUE));
     }
 }

@@ -4,7 +4,7 @@
                     TINE 2.0 RELEASENOTES
                     
 Release:     Milan (2012/03)
-Last change: 2012-01-30
+Last change: 2012-02-08
 
 Contents
 --
@@ -18,6 +18,7 @@ Contents
 7. ActiveSync improvements
 8. Add or reactivate admin user
 9. Calendar Frontend JSON API change
+10. Improved search / filtering options
 
 -----------------
 
@@ -89,4 +90,10 @@ Contents
 - A small API change took place in Calendar/Frontend/Json.php:
  All occurrences of the function parameter "checkBusyConficts" have been replaced by the correct "checkBusyConflicts".
  
+ 10. Improved search / filtering options
+ -----------------
+ 
+ - The filtertoolbar has been extended to support OR filtering and it is now possible to filter in related records
+ and the relations themselves. For example you could search for contacts that are attender of events that are scheduled
+ this week and whose attender status is 'Tentative'.
  

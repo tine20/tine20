@@ -46,25 +46,20 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
      * init this component
      */
     initComponent: function() {
-        try {
-            this.app = Tine.Tinebase.appMgr.get('Calendar');
-            
-            this.iMIPrecord = new Tine.Calendar.Model.iMIP(this.preparedPart.preparedData);
-            if (! Ext.isFunction(this.iMIPrecord.get('event').beginEdit)) {
-                this.iMIPrecord.set('event', Tine.Calendar.backend.recordReader({
-                    responseText: Ext.util.JSON.encode(this.preparedPart.preparedData.event)
-                }));
-            }
-            
-            this.initIMIPToolbar();
-            
-            this.on('afterrender', this.showIMIP, this);
-                
-            Tine.Calendar.iMIPDetailsPanel.superclass.initComponent.call(this);
-        } catch (e) {
-            Tine.log.error('Tine.Calendar.iMIPDetailsPanel::initComponent');
-            Tine.log.error(e.stack ? e.stack : e);
+        this.app = Tine.Tinebase.appMgr.get('Calendar');
+
+        this.iMIPrecord = new Tine.Calendar.Model.iMIP(this.preparedPart.preparedData);
+        if (! Ext.isFunction(this.iMIPrecord.get('event').beginEdit)) {
+            this.iMIPrecord.set('event', Tine.Calendar.backend.recordReader({
+                responseText: Ext.util.JSON.encode(this.preparedPart.preparedData.event)
+            }));
         }
+
+        this.initIMIPToolbar();
+
+        this.on('afterrender', this.showIMIP, this);
+
+        Tine.Calendar.iMIPDetailsPanel.superclass.initComponent.call(this);
     },
     
     /**
@@ -180,88 +175,81 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
      * show/layout iMIP panel
      */
     showIMIP: function() {
-        try {
-            var singleRecordPanel = this.getSingleRecordPanel(),
-                preconditions = this.iMIPrecord.get('preconditions'),
-                method = this.iMIPrecord.get('method'),
-                event = this.iMIPrecord.get('event'),
-                existingEvent = this.iMIPrecord.get('existing_event'),
-                myAttenderRecord = event.getMyAttenderRecord(),
-                myAttenderstatus = myAttenderRecord ? myAttenderRecord.get('status') : null;
-                
-            // show container from existing event if exists
-            if (existingEvent && existingEvent.container_id) {
-                event.set('container_id', existingEvent.container_id);
-            }
-                
-            // reset actions
-            Ext.each(this.actions, function(action) {action.setHidden(true)});
+        var singleRecordPanel = this.getSingleRecordPanel(),
+            preconditions = this.iMIPrecord.get('preconditions'),
+            method = this.iMIPrecord.get('method'),
+            event = this.iMIPrecord.get('event'),
+            existingEvent = this.iMIPrecord.get('existing_event'),
+            myAttenderRecord = event.getMyAttenderRecord(),
+            myAttenderstatus = myAttenderRecord ? myAttenderRecord.get('status') : null;
             
-            // check preconditions
-            if (preconditions) {
-                if (preconditions.hasOwnProperty('EVENTEXISTS')) {
-                    this.iMIPclause.setText(this.app.i18n._("The event of this message does not exist"));
-                }
-                
-                else if (preconditions.hasOwnProperty('ORIGINATOR')) {
-                    // display spam box -> might be accepted by user?
-                    this.iMIPclause.setText(this.app.i18n._("The sender is not authorised to update the event"));
-                }
-                
-                else if (preconditions.hasOwnProperty('RECENT')) {
-    //            else if (preconditions.hasOwnProperty('TOPROCESS')) {
-                    this.iMIPclause.setText(this.app.i18n._("This message is already processed"));
-                }
-                
-                else if (preconditions.hasOwnProperty('ATTENDEE')) {
-                    // party crush button?
-                    this.iMIPclause.setText(this.app.i18n._("You are not an attendee of this event"));
-                } 
-                
-                else {
-                    this.iMIPclause.setText(this.app.i18n._("Unsupported message"));
-                }
+        // show container from existing event if exists
+        if (existingEvent && existingEvent.container_id) {
+            event.set('container_id', existingEvent.container_id);
+        }
+            
+        // reset actions
+        Ext.each(this.actions, function(action) {action.setHidden(true)});
+        
+        // check preconditions
+        if (preconditions) {
+            if (preconditions.hasOwnProperty('EVENTEXISTS')) {
+                this.iMIPclause.setText(this.app.i18n._("The event of this message does not exist"));
+            }
+            
+            else if (preconditions.hasOwnProperty('ORIGINATOR')) {
+                // display spam box -> might be accepted by user?
+                this.iMIPclause.setText(this.app.i18n._("The sender is not authorised to update the event"));
+            }
+            
+            else if (preconditions.hasOwnProperty('RECENT')) {
+//            else if (preconditions.hasOwnProperty('TOPROCESS')) {
+                this.iMIPclause.setText(this.app.i18n._("This message is already processed"));
+            }
+            
+            else if (preconditions.hasOwnProperty('ATTENDEE')) {
+                // party crush button?
+                this.iMIPclause.setText(this.app.i18n._("You are not an attendee of this event"));
             } 
             
-            // method specific text / actions
             else {
-                switch (method) {
-                    case 'REQUEST':
-                        if (! myAttenderRecord) {
-                            // might happen in shared folders -> we might want to become a party crusher?
-                            this.iMIPclause.setText(this.app.i18n._("This is an event invitation for someone else."));
-                        } else if (myAttenderstatus !== 'NEEDS-ACTION') {
-                            this.iMIPclause.setText(this.app.i18n._("You have already replied to this event invitation."));
-                        } else {
-                            this.iMIPclause.setText(this.app.i18n._('You received an event invitation. Set your response to:'));
-                            Ext.each(this.statusActions, function(action) {action.setHidden(false)});
-                        }
-                        break;
-                        
-                        
-                    case 'REPLY':
-                        // Someone replied => autoprocessing atm.
-                        this.iMIPclause.setText(this.app.i18n._('An invited attendee responded to the invitation.'));
-                        break;
-                        
-                    default:            
-                        this.iMIPclause.setText(this.app.i18n._("Unsupported method"));
-                        break;
-                }
+                this.iMIPclause.setText(this.app.i18n._("Unsupported message"));
             }
-            
-            this.getLoadMask().hide();
-            singleRecordPanel.setVisible(true);
-            singleRecordPanel.setHeight(150);
-            
-            
-            this.record = event;
-            singleRecordPanel.loadRecord(event);
-        } catch (e) {
-            Tine.log.error('Tine.Calendar.iMIPDetailsPanel::showIMIP');
-            Tine.log.error(e.stack ? e.stack : e);
-            
-            singleRecordPanel.setVisible(false);
+        } 
+        
+        // method specific text / actions
+        else {
+            switch (method) {
+                case 'REQUEST':
+                    if (! myAttenderRecord) {
+                        // might happen in shared folders -> we might want to become a party crusher?
+                        this.iMIPclause.setText(this.app.i18n._("This is an event invitation for someone else."));
+                    } else if (myAttenderstatus !== 'NEEDS-ACTION') {
+                        this.iMIPclause.setText(this.app.i18n._("You have already replied to this event invitation."));
+                    } else {
+                        this.iMIPclause.setText(this.app.i18n._('You received an event invitation. Set your response to:'));
+                        Ext.each(this.statusActions, function(action) {action.setHidden(false)});
+                    }
+                    break;
+                    
+                    
+                case 'REPLY':
+                    // Someone replied => autoprocessing atm.
+                    this.iMIPclause.setText(this.app.i18n._('An invited attendee responded to the invitation.'));
+                    break;
+                    
+                default:            
+                    this.iMIPclause.setText(this.app.i18n._("Unsupported method"));
+                    break;
+            }
         }
+        
+        this.getLoadMask().hide();
+        singleRecordPanel.setVisible(true);
+        singleRecordPanel.setHeight(150);
+        
+        
+        this.record = event;
+        singleRecordPanel.loadRecord(event);
     }
 });

@@ -52,6 +52,10 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         $this->_container = $_container;
         $this->_event     = $_event;
         
+        if (! $this->_event instanceof Calendar_Model_Event) {
+            $this->_event = ($pos = strpos($this->_event, '.')) === false ? $this->_event : substr($this->_event, 0, $pos);
+        }
+        
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         
         $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
@@ -192,10 +196,26 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     public function delete() 
     {
-        $id = $this->_event instanceof Calendar_Model_Event ? $this->_event->getId() : $this->_event;
+        // allow delete only if deleted in origin calendar
+        if ($this->getRecord()->container_id == $this->_container->getId()) {
+            if (strpos($_SERVER['REQUEST_URI'], Calendar_Frontend_CalDAV_ScheduleInbox::NAME) === false) {
+                Calendar_Controller_MSEventFacade::getInstance()->delete($this->_event);
+            }
+        }
         
-        if (strpos($_SERVER['REQUEST_URI'], Calendar_Frontend_CalDAV_ScheduleInbox::NAME) === false) {
-            Calendar_Controller_MSEventFacade::getInstance()->delete($id);
+        // implicitly DECLINE event 
+        else {
+            $attendee = $this->getRecord()->attendee instanceof Tinebase_Record_RecordSet ? 
+                $this->getRecord()->attendee->filter('displaycontainer_id', $this->_container->getId())->getFirstRecord() :
+                NULL;
+            
+            // NOTE: organizer can only delete in the origin calendar, otherwise we can't handle move @see{Calendar_Frontend_WebDAV_EventTest::testMoveOriginPersonalToShared}
+            if ($attendee && $attendee->user_id != $this->getRecord()->organizer) {
+                $attendee->status = Calendar_Model_Attender::STATUS_DECLINED;
+                
+                self::enforceEventParameters($event);
+                $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
+            }
         }
     }
     
@@ -345,8 +365,54 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         
         Sabre_CalDAV_ICalendarUtil::validateICalendarObject($cardData, array('VEVENT', 'VFREEBUSY'));
         
-        $event = $this->_converter->toTine20Model($cardData, $this->getRecord());
-        $event->container_id = $this->_container->getId();
+        $vobject = Calendar_Convert_Event_VCalendar_Abstract::getVcal($cardData);
+        $event = $this->_converter->toTine20Model($vobject, $this->getRecord());
+        
+        $currentContainer = Tinebase_Container::getInstance()->getContainerById($this->getRecord()->container_id);
+        $ownAttendee = Calendar_Model_Attender::getOwnAttender($this->getRecord()->attendee);
+        
+        // event 'belongs' current user -> allow container move
+        if ($currentContainer->isPersonalOf(Tinebase_Core::getUser())) {
+            $event->container_id = $this->_container->getId();
+        }
+        
+        // client sends CalDAV event -> handle a container move
+        else if (isset($vobject->{'X-TINE20-CONTAINER'})) {
+            if ($vobject->{'X-TINE20-CONTAINER'} == $currentContainer->getId()) {
+                $event->container_id = $this->_container->getId();
+            } else {
+                if (! $ownAttendee) {
+                    throw new Sabre_DAV_Exception_Forbidden('not attendee of this event');
+                }
+        
+                if ($this->_container->type != Tinebase_Model_Container::TYPE_PERSONAL) {
+                    // @TODO allow organizer to move original cal when he edits the displaycal event?
+                    throw new Sabre_DAV_Exception_Forbidden('displaycontainer must be of type personal');
+                }
+        
+                $ownAttendee->displaycontainer_id = $this->_container->getId();
+            }
+        }
+        
+        // client sends event from iMIP invitation -> only allow displaycontainer move
+        else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " X-TINE20-CONTAINER not present -> restrict container moves");
+            if (! $ownAttendee) {
+                throw new Sabre_DAV_Exception_Forbidden('not attendee of this event');
+            }
+            
+            if ($this->_container->type != Tinebase_Model_Container::TYPE_PERSONAL) {
+                throw new Sabre_DAV_Exception_Forbidden('displaycontainer must be of type personal');
+            }
+            
+            if ($ownAttendee->displaycontainer_id == $currentContainer->getId()) {
+                $event->container_id = $this->_container->getId();
+            }
+            
+            $ownAttendee->displaycontainer_id = $this->_container->getId();
+        }
+        
+        
         
         self::enforceEventParameters($event);
         
@@ -398,10 +464,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
     public function getRecord()
     {
         if (! $this->_event instanceof Calendar_Model_Event) {
-            $id = ($pos = strpos($this->_event, '.')) === false ? $this->_event : substr($this->_event, 0, $pos);
-            
-            $this->_event = Calendar_Controller_MSEventFacade::getInstance()->get($id);
-            
+            $this->_event = Calendar_Controller_MSEventFacade::getInstance()->get($this->_event);
         }
 
         // resolve alarms
@@ -421,8 +484,11 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
     {
         if ($this->_vevent == null) {
             $this->_vevent = $this->_converter->fromTine20Model($this->getRecord());
+            
+            // NOTE: we store the requested container here to have an origin when the event is moved
+            $this->_vevent->{'X-TINE20-CONTAINER'} = $this->_container->getId();
         }
-                
+        
         return $this->_vevent->serialize();
     }
 }

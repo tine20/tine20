@@ -1,18 +1,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - SimpleFAQ\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"PO-Revision-Date: 2012-01-13 12:39+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Bulgarian\n"
-"X-Poedit-Country: \n"
-"X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:22+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
+"X-Poedit-Country: \n"
+"X-Poedit-Language: Bulgarian\n"
+"X-Poedit-SourceCharset: utf-8\n"
 
 #: Controller.php:109
 #, python-format
@@ -39,51 +42,23 @@ msgstr ""
 msgid "Public"
 msgstr ""
 
-#: Setup/Initialize.php:33
-msgid "All FAQs of my FAQ Lists"
-msgstr ""
-
-#: Setup/Initialize.php:40
-msgid "Last modified by me"
-msgstr ""
-
-#: Setup/Initialize.php:41
-msgid "All FAQs that I have last modified"
-msgstr ""
-
-#: Preference.php:28
-msgid "All my FAQs"
-msgstr ""
-
-#: Preference.php:70
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:71
-msgid "The default favorite which is loaded on FAQ startup"
-msgstr ""
-
-#: Preference.php:74
-msgid "Default FAQ List"
-msgstr ""
-
-#: Preference.php:75
-msgid "The default FAQ list to create new FAQ in."
-msgstr ""
-
-#: js/FaqStatusFilterModel.js:27 js/AdminPanel.js:93 js/AdminPanel.js:125
-#: js/FaqStatus.js:26 js/FaqGridDetailsPanel.js:205
+#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqGridDetailsPanel.js:205
+#: js/FaqStatus.js:26 js/FaqStatusFilterModel.js:27
 msgid "FAQ Status"
 msgid_plural "FAQ Status"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/FaqTypeFilterModel.js:27 js/AdminPanel.js:97 js/AdminPanel.js:132
-#: js/FaqType.js:26 js/FaqGridDetailsPanel.js:210
+#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqGridDetailsPanel.js:210
+#: js/FaqType.js:26 js/FaqTypeFilterModel.js:27
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
 msgstr[0] ""
 msgstr[1] ""
+
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr ""
 
 #: js/FaqEditDialog.js:108 js/FaqGridDetailsPanel.js:157
 #: js/FaqGridPanel.js:120
@@ -111,38 +86,6 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: js/AdminPanel.js:105
-msgid "Defaults"
-msgstr ""
-
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr ""
-
-#: js/SimpleFAQ.js:19 js/Model.js:33
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr ""
-
-#: js/Model.js:37
-msgid "FAQ List"
-msgid_plural "FAQ Lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:37
-msgid "FAQ Lists"
-msgstr ""
-
-#: js/Model.js:72
-msgid "Quick search"
-msgstr ""
-
 #: js/FaqGridDetailsPanel.js:103 js/FaqGridDetailsPanel.js:188
 msgid "FAQ Infos"
 msgstr ""
@@ -165,4 +108,64 @@ msgstr ""
 
 #: js/FaqGridPanel.js:94
 msgid "FAQ id"
+msgstr ""
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr ""
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr ""
+
+#: js/Model.js:33 js/SimpleFAQ.js:19
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:37
+msgid "FAQ List"
+msgid_plural "FAQ Lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:37
+msgid "FAQ Lists"
+msgstr ""
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr ""
+
+#: Preference.php:28
+msgid "All my FAQs"
+msgstr ""
+
+#: Preference.php:70
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:71
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr ""
+
+#: Preference.php:74
+msgid "Default FAQ List"
+msgstr ""
+
+#: Preference.php:75
+msgid "The default FAQ list to create new FAQ in."
+msgstr ""
+
+#: Setup/Initialize.php:33
+msgid "All FAQs of my FAQ Lists"
+msgstr ""
+
+#: Setup/Initialize.php:40
+msgid "Last modified by me"
+msgstr ""
+
+#: Setup/Initialize.php:41
+msgid "All FAQs that I have last modified"
 msgstr ""

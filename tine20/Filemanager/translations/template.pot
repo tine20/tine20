@@ -1,8 +1,3 @@
-#: Controller.php:95
-#, python-format
-msgid "%s's personal files"
-msgstr ""
-
 #: Acl/Rights.php:97
 msgid "manage shared folders"
 msgstr ""
@@ -11,151 +6,21 @@ msgstr ""
 msgid "Create new shared folders"
 msgstr ""
 
-#: js/Model.js:37
-msgid "user file"
+#: Controller/Node.php:163
+msgid "My folders"
 msgstr ""
 
-#: js/Model.js:38
-msgid "user files"
+#: Controller/Node.php:170
+msgid "Shared folders"
 msgstr ""
 
-#: js/Model.js:40 js/GridPanel.js:491
-msgid "user file folder"
+#: Controller/Node.php:177
+msgid "Other users folders"
 msgstr ""
 
-#: js/Model.js:41
-msgid "user file folders"
-msgstr ""
-
-#: js/Model.js:252 js/Model.js:268
-msgid "Copying data .. {0}"
-msgstr ""
-
-#: js/Model.js:255 js/Model.js:270
-msgid "Moving data .. {0}"
-msgstr ""
-
-#: js/Model.js:274
-msgid "Please wait"
-msgstr ""
-
-#: js/Model.js:507
-msgid "Quick search"
-msgstr ""
-
-#: js/Model.js:508
-msgid "Type"
-msgstr ""
-
-#: js/Model.js:509 js/GridPanel.js:146
-msgid "Contenttype"
-msgstr ""
-
-#: js/Model.js:510 js/GridPanel.js:178
-msgid "Creation Time"
-msgstr ""
-
-#: js/GridPanel.js:132
-msgid "Name"
-msgstr ""
-
-#: js/GridPanel.js:139
-msgid "Size"
-msgstr ""
-
-#: js/GridPanel.js:154
-msgid "Folder"
-msgstr ""
-
-#: js/GridPanel.js:163
-msgid "Revision"
-msgstr ""
-
-#: js/GridPanel.js:186
-msgid "Created By"
-msgstr ""
-
-#: js/GridPanel.js:193
-msgid "Last Modified Time"
-msgstr ""
-
-#: js/GridPanel.js:200
-msgid "Last Modified By"
-msgstr ""
-
-#: js/GridPanel.js:234
-msgid "Show closed"
-msgstr ""
-
-#: js/GridPanel.js:278
-msgid "Upload"
-msgstr ""
-
-#: js/GridPanel.js:304
-msgid "Create Folder"
-msgstr ""
-
-#: js/GridPanel.js:315
-msgid "Folder Up"
-msgstr ""
-
-#: js/GridPanel.js:326
-msgid "Save locally"
-msgstr ""
-
-#: js/GridPanel.js:337 js/GridPanel.js:338 js/GridPanel.js:340
-msgid "Delete"
-msgstr ""
-
-#: js/GridPanel.js:350 js/GridPanel.js:351 js/GridPanel.js:353
-msgid "Rename"
-msgstr ""
-
-#: js/GridPanel.js:361
-msgid "Pause upload"
-msgstr ""
-
-#: js/GridPanel.js:368
-msgid "Resume upload"
-msgstr ""
-
-#: js/GridPanel.js:493
-msgid "New {0}"
-msgstr ""
-
-#: js/GridPanel.js:493
-msgid "Please enter the name of the new {0}:"
-msgstr ""
-
-#: js/GridPanel.js:498
-msgid "No {0} added"
-msgstr ""
-
-#: js/GridPanel.js:498 js/GridContextMenu.js:42
-msgid "You have to supply a {0} name!"
-msgstr ""
-
-#: js/GridPanel.js:542 js/GridContextMenu.js:146
-msgid "Do you really want to delete the following files?"
-msgstr ""
-
-#: js/GridPanel.js:642 js/GridPanel.js:798 js/TreePanel.js:650
-#: js/TreePanel.js:760
-msgid "Upload Failed"
-msgstr ""
-
-#: js/GridPanel.js:643 js/TreePanel.js:651
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
-
-#: js/GridPanel.js:799 js/TreePanel.js:761
-msgid "Putting files in this folder is not allowed!"
-msgstr ""
-
-#: js/PathFilterModel.js:50
-msgid "path"
+#: Controller.php:95
+#, python-format
+msgid "%s's personal files"
 msgstr ""
 
 #: js/Filemanager.js:26
@@ -186,14 +51,149 @@ msgstr ""
 msgid "Not renamed {0}"
 msgstr ""
 
-#: Controller/Node.php:163
-msgid "My folders"
+#: js/GridContextMenu.js:42 js/GridPanel.js:495
+msgid "You have to supply a {0} name!"
 msgstr ""
 
-#: Controller/Node.php:170
-msgid "Shared folders"
+#: js/GridContextMenu.js:146 js/GridPanel.js:539
+msgid "Do you really want to delete the following files?"
 msgstr ""
 
-#: Controller/Node.php:177
-msgid "Other users folders"
+#: js/GridPanel.js:131
+msgid "Name"
+msgstr ""
+
+#: js/GridPanel.js:138
+msgid "Size"
+msgstr ""
+
+#: js/GridPanel.js:145 js/Model.js:524
+msgid "Contenttype"
+msgstr ""
+
+#: js/GridPanel.js:153
+msgid "Folder"
+msgstr ""
+
+#: js/GridPanel.js:162
+msgid "Revision"
+msgstr ""
+
+#: js/GridPanel.js:177 js/Model.js:525
+msgid "Creation Time"
+msgstr ""
+
+#: js/GridPanel.js:185
+msgid "Created By"
+msgstr ""
+
+#: js/GridPanel.js:192
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/GridPanel.js:199
+msgid "Last Modified By"
+msgstr ""
+
+#: js/GridPanel.js:233
+msgid "Show closed"
+msgstr ""
+
+#: js/GridPanel.js:277
+msgid "Upload"
+msgstr ""
+
+#: js/GridPanel.js:303
+msgid "Create Folder"
+msgstr ""
+
+#: js/GridPanel.js:314
+msgid "Folder Up"
+msgstr ""
+
+#: js/GridPanel.js:325
+msgid "Save locally"
+msgstr ""
+
+#: js/GridPanel.js:336 js/GridPanel.js:337 js/GridPanel.js:339
+msgid "Delete"
+msgstr ""
+
+#: js/GridPanel.js:349 js/GridPanel.js:350 js/GridPanel.js:352
+msgid "Rename"
+msgstr ""
+
+#: js/GridPanel.js:360
+msgid "Pause upload"
+msgstr ""
+
+#: js/GridPanel.js:367
+msgid "Resume upload"
+msgstr ""
+
+#: js/GridPanel.js:488 js/Model.js:40
+msgid "user file folder"
+msgstr ""
+
+#: js/GridPanel.js:490
+msgid "New {0}"
+msgstr ""
+
+#: js/GridPanel.js:490
+msgid "Please enter the name of the new {0}:"
+msgstr ""
+
+#: js/GridPanel.js:495
+msgid "No {0} added"
+msgstr ""
+
+#: js/GridPanel.js:641 js/GridPanel.js:796 js/TreePanel.js:656
+#: js/TreePanel.js:766
+msgid "Upload Failed"
+msgstr ""
+
+#: js/GridPanel.js:642 js/TreePanel.js:657
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr ""
+
+#: js/GridPanel.js:797 js/TreePanel.js:767
+msgid "Putting files in this folder is not allowed!"
+msgstr ""
+
+#: js/Model.js:37
+msgid "user file"
+msgstr ""
+
+#: js/Model.js:38
+msgid "user files"
+msgstr ""
+
+#: js/Model.js:41
+msgid "user file folders"
+msgstr ""
+
+#: js/Model.js:267 js/Model.js:283
+msgid "Copying data .. {0}"
+msgstr ""
+
+#: js/Model.js:270 js/Model.js:285
+msgid "Moving data .. {0}"
+msgstr ""
+
+#: js/Model.js:289
+msgid "Please wait"
+msgstr ""
+
+#: js/Model.js:522
+msgid "Quick search"
+msgstr ""
+
+#: js/Model.js:523
+msgid "Type"
+msgstr ""
+
+#: js/PathFilterModel.js:50
+msgid "path"
 msgstr ""

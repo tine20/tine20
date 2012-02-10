@@ -49,7 +49,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         $defaults['accounts'][Tinebase_User::getConfiguredBackend()] = array_merge($defaults['accounts'][Tinebase_User::getConfiguredBackend()], $defaultGroupNames);
         
         $emailConfigKeys = Setup_Controller::getInstance()->getEmailConfigKeys();
-        $configsToSet = array_merge($emailConfigKeys, array('authentication', 'accounts', 'redirectSettings'));
+        $configsToSet = array_merge($emailConfigKeys, array('authentication', 'accounts', 'redirectSettings', 'acceptedTermsVersion'));
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($configsToSet, TRUE));
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($defaults, TRUE));

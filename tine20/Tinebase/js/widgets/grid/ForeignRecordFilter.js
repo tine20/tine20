@@ -61,6 +61,11 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     editDefinitionText: 'Edit definition', // _('Edit definition')
     
     /**
+     * @cfg {Object} optional picker config
+     */
+    pickerConfig: null,
+    
+    /**
      * @cfg {String} startDefinitionText untranslated start definition button text
      */
     startDefinitionText: 'Start defintion', // _('Start defintion')
@@ -173,16 +178,12 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     },
     
     onDefineRelatedRecord: function(filter) {
-        try {
-            if (! filter.toolbar) {
-                this.createRelatedRecordToolbar(filter);
-            }
-            
-            this.ftb.setActiveSheet(filter.toolbar);
-            filter.formFields.value.setText((this.editDefinitionText));
-        } catch (e) {
-            console.error(e.stack ? e.stack : e);
+        if (! filter.toolbar) {
+            this.createRelatedRecordToolbar(filter);
         }
+        
+        this.ftb.setActiveSheet(filter.toolbar);
+        filter.formFields.value.setText((this.editDefinitionText));
     },
     
     /**
@@ -334,7 +335,6 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 filter.toolbar.setValue(value);
                 
                 filter.formFields.operator.setValue('definedBy');
-                this.onOperatorChange(filter, 'definedBy', false);
             }
         }
         
@@ -348,29 +348,24 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             foreignRecordClass = foreignRecordDefinition.foreignRecordClass,
             filterModels = foreignRecordClass.getFilterModel(),
             ftb = this.ftb;
-            
-        try {
-            if (! filter.toolbar) {
-                // add our subfilters in this toolbar (right hand)
-                if (Ext.isFunction(this.getSubFilters)) {
-                    filterModels = filterModels.concat(this.getSubFilters());
-                }
-                
-                filter.toolbar = new Tine.widgets.grid.FilterToolbar({
-                    recordClass: foreignRecordClass,
-                    filterModels: filterModels,
-                    defaultFilter: 'query'
-                });
-                
-                ftb.addFilterSheet(filter.toolbar);
-                
-                // force rendering as we can't set values on non rendered toolbar atm.
-                this.ftb.setActiveSheet(filter.toolbar);
-                this.ftb.setActiveSheet(this.ftb);
+
+        if (! filter.toolbar) {
+            // add our subfilters in this toolbar (right hand)
+            if (Ext.isFunction(this.getSubFilters)) {
+                filterModels = filterModels.concat(this.getSubFilters());
             }
             
-        } catch (e) {
-            console.error(e.stack ? e.stack : e);
+            filter.toolbar = new Tine.widgets.grid.FilterToolbar({
+                recordClass: foreignRecordClass,
+                filterModels: filterModels,
+                defaultFilter: 'query'
+            });
+            
+            ftb.addFilterSheet(filter.toolbar);
+            
+            // force rendering as we can't set values on non rendered toolbar atm.
+            this.ftb.setActiveSheet(filter.toolbar);
+            this.ftb.setActiveSheet(this.ftb);
         }
     },
     
@@ -479,11 +474,8 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
 
         switch(operator) {
             case 'equals':
-                // @TODO invent a picker registry
-                var picker = this.foreignRecordClass == Tine.Addressbook.Model.Contact ?  Tine.Addressbook.SearchCombo : Tine.Tinebase.widgets.form.RecordPickerComboBox;
                 
-                value = new picker ({
-                    recordClass: this.foreignRecordClass,
+                value = Tine.widgets.form.RecordPickerManager.get(this.foreignRecordClass.getMeta('appName'), this.foreignRecordClass, Ext.apply({
                     filter: filter,
                     blurOnSelect: true,
                     width: this.filterValueWidth,
@@ -492,7 +484,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     id: 'tw-ftb-frow-valuefield-' + filter.id,
                     value: filter.data.value ? filter.data.value : this.defaultValue,
                     renderTo: el
-                });
+                }, this.pickerConfig));
                 
                 value.on('specialkey', function(field, e){
                      if(e.getKey() == e.ENTER){

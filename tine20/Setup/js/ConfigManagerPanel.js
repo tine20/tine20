@@ -4,7 +4,7 @@
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -144,7 +144,10 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
         	name: 'database_adapter',
             fieldLabel: this.app.i18n._('Adapter'),
             value: 'pdo_mysql',
-            store: [ ['pdo_mysql', 'MySQL'], ['pdo_pgsql', 'PostgreSQL'] ],
+            store: [
+                ['pdo_mysql', 'MySQL']
+                //['pdo_pgsql', 'PostgreSQL']
+            ],
             listeners: {
                 scope: this,
                 change: this.onChangeSqlBackend,

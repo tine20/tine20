@@ -1,137 +1,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-10-19 23:06-0800\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2012-01-13 13:42+0000\n"
+"Last-Translator: Lars Kneschke <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Chinese\n"
-"X-Poedit-Country: CHINA\n"
-"X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-
-#: js/Phone.js:29 js/Phone.js:479 js/Phone.js:480
-msgid "Edit phone settings"
-msgstr "编辑电话设置"
-
-#: js/Phone.js:59 js/Phone.js:254 js/Models.js:69
-#, fuzzy
-msgid "Phone"
-msgid_plural "Phones"
-msgstr[0] "电话"
-
-#: js/Phone.js:70
-msgid "Phones"
-msgstr "电话"
-
-#: js/Phone.js:277
-msgid "Line"
-msgstr "线路"
-
-#: js/Phone.js:286
-msgid "Number"
-msgstr "号码"
-
-#: js/Phone.js:295
-msgid "Cancel"
-msgstr "取消"
-
-#: js/Phone.js:305
-msgid "Dial"
-msgstr "拨号"
-
-#: js/Phone.js:325
-msgid "Error"
-msgstr ""
-
-#: js/Phone.js:326
-msgid "Not possible to dial."
-msgstr ""
-
-#: js/Phone.js:469
-msgid "Dial number"
-msgstr "拨号"
-
-#: js/Phone.js:470
-msgid "Initiate a new outgoing call"
-msgstr "初始化一个新的向外呼叫"
-
-#: js/Phone.js:531
-msgid "Incoming call"
-msgstr "打进的电话"
-
-#: js/Phone.js:535
-msgid "Outgoing call"
-msgstr "打出的电话"
-
-#: js/Phone.js:543
-msgid "unknown number"
-msgstr "未知号码"
-
-#: js/Phone.js:580
-msgid "Search:"
-msgstr "搜索："
-
-#: js/Phone.js:665
-msgid "Source or Destination"
-msgstr "源或者目的"
-
-#: js/Phone.js:681
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "显示呼叫 {0} - {1} of {2}"
-
-#: js/Phone.js:682 js/Phone.js:725
-msgid "No calls to display"
-msgstr "没有呼叫要显示"
-
-#: js/Phone.js:692
-msgid "Direction"
-msgstr "方向"
-
-#: js/Phone.js:693
-msgid "Source"
-msgstr "源"
-
-#: js/Phone.js:694
-msgid "Caller Id"
-msgstr "来电号码"
-
-#: js/Phone.js:695
-msgid "Destination"
-msgstr "目的"
-
-#: js/Phone.js:696
-msgid "Start"
-msgstr "开始"
-
-#: js/Phone.js:697
-msgid "Connected"
-msgstr "已连接"
-
-#: js/Phone.js:698
-msgid "Disconnected"
-msgstr "已断开"
-
-#: js/Phone.js:699
-msgid "Duration"
-msgstr "持续时间"
-
-#: js/Phone.js:700
-msgid "Ringing"
-msgstr "振铃"
-
-#: js/Phone.js:701
-msgid "Call ID"
-msgstr "来电号码"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] ""
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
+"X-Poedit-Country: CHINA\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-SourceCharset: utf-8\n"
 
 #: js/AddressbookGridPanelHook.js:35
 msgid "Call contact"
@@ -153,48 +37,168 @@ msgstr ""
 msgid "Cell private"
 msgstr ""
 
-#~ msgid "Dial phone number"
-#~ msgstr "拨号"
+#: js/Models.js:69 js/Phone.js:59 js/Phone.js:264
+msgid "Phone"
+msgid_plural "Phones"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Phone.js:29 js/Phone.js:489 js/Phone.js:490
+msgid "Edit phone settings"
+msgstr "编辑电话设置"
+
+#: js/Phone.js:70
+msgid "Phones"
+msgstr "电话"
+
+#: js/Phone.js:287
+msgid "Line"
+msgstr "线路"
+
+#: js/Phone.js:296
+msgid "Number"
+msgstr "号码"
+
+#: js/Phone.js:305
+msgid "Cancel"
+msgstr "取消"
+
+#: js/Phone.js:315
+msgid "Dial"
+msgstr "拨号"
+
+#: js/Phone.js:335
+msgid "Error"
+msgstr ""
+
+#: js/Phone.js:336
+msgid "Not possible to dial."
+msgstr ""
+
+#: js/Phone.js:479
+msgid "Dial number"
+msgstr "拨号"
+
+#: js/Phone.js:480
+msgid "Initiate a new outgoing call"
+msgstr "初始化一个新的向外呼叫"
+
+#: js/Phone.js:541
+msgid "Incoming call"
+msgstr "打进的电话"
+
+#: js/Phone.js:545
+msgid "Outgoing call"
+msgstr "打出的电话"
+
+#: js/Phone.js:553
+msgid "unknown number"
+msgstr "未知号码"
+
+#: js/Phone.js:590
+msgid "Search:"
+msgstr "搜索："
+
+#: js/Phone.js:675
+msgid "Source or Destination"
+msgstr "源或者目的"
+
+#: js/Phone.js:691
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr "显示呼叫 {0} - {1} of {2}"
+
+#: js/Phone.js:692 js/Phone.js:735
+msgid "No calls to display"
+msgstr "没有呼叫要显示"
+
+#: js/Phone.js:702
+msgid "Direction"
+msgstr "方向"
+
+#: js/Phone.js:703
+msgid "Source"
+msgstr "源"
+
+#: js/Phone.js:704
+msgid "Caller Id"
+msgstr "来电号码"
+
+#: js/Phone.js:705
+msgid "Destination"
+msgstr "目的"
+
+#: js/Phone.js:706
+msgid "Start"
+msgstr "开始"
+
+#: js/Phone.js:707
+msgid "Connected"
+msgstr "已连接"
+
+#: js/Phone.js:708
+msgid "Disconnected"
+msgstr "已断开"
+
+#: js/Phone.js:709
+msgid "Duration"
+msgstr "持续时间"
+
+#: js/Phone.js:710
+msgid "Ringing"
+msgstr "振铃"
+
+#: js/Phone.js:711
+msgid "Call ID"
+msgstr "来电号码"
+
+msgid "Dial phone number"
+msgstr "拨号"
 
 #, fuzzy
-#~ msgid "Name"
-#~ msgstr "号码"
+msgid "Name"
+msgstr "号码"
 
 #, fuzzy
-#~ msgid "Phone Model"
-#~ msgstr "电话"
+msgid "Phone Model"
+msgstr "电话"
 
 #, fuzzy
-#~ msgid "redirection"
-#~ msgstr "方向"
+msgid "redirection"
+msgstr "方向"
 
 #, fuzzy
-#~ msgid "all"
-#~ msgstr "来电号码"
+msgid "all"
+msgstr "来电号码"
 
 #, fuzzy
-#~ msgid "none"
-#~ msgstr "电话"
+msgid "none"
+msgstr "电话"
 
 #, fuzzy
-#~ msgid "number"
-#~ msgstr "号码"
+msgid "number"
+msgstr "号码"
 
 #, fuzzy
-#~ msgid "name + number"
-#~ msgstr "拨号"
+msgid "name + number"
+msgstr "拨号"
 
 #, fuzzy
-#~ msgid "visual"
-#~ msgstr "拨号"
+msgid "visual"
+msgstr "拨号"
 
 #, fuzzy
-#~ msgid "ringer"
-#~ msgstr "线路"
+msgid "ringer"
+msgstr "线路"
 
 #, fuzzy
-#~ msgid "Lines"
-#~ msgstr "线路"
+msgid "Lines"
+msgstr "线路"
 
-#~ msgid "enter searchfilter"
-#~ msgstr "输入搜索过滤器"
+msgid "enter searchfilter"
+msgstr "输入搜索过滤器"

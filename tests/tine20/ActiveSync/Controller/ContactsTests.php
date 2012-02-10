@@ -43,6 +43,8 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
 <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
 <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Contacts="uri:Contacts"><Collections><Collection><Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbook-root</CollectionId><DeletesAsMoves/><WindowSize>100</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options><Commands><Add><ClientId>4600</ClientId><ApplicationData><Contacts:FileAs>Fritzchen</Contacts:FileAs><Contacts:FirstName>Fritzchen</Contacts:FirstName><Contacts:LastName>Meinen</Contacts:LastName><Contacts:Birthday>1969-12-31</Contacts:Birthday><AirSyncBase:Body><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:EstimatedDataSize>0</AirSyncBase:EstimatedDataSize><AirSyncBase:Data></AirSyncBase:Data></AirSyncBase:Body><Contacts:Categories/><Contacts:Picture/></ApplicationData></Add></Commands></Collection></Collections></Sync>';
     
+    protected $_setGeoData = TRUE;
+    
     /**
      * Runs the test methods of this class.
      *
@@ -57,13 +59,13 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
     
     
     protected function setUp()
-    {   	
-        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
+    {       
+        $this->_setGeoData = Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
         
-    	$appName = 'Addressbook';
-    	
-    	############# TEST USER ##########
-    	$user = new Tinebase_Model_FullUser(array(
+        $appName = 'Addressbook';
+        
+        ############# TEST USER ##########
+        $user = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => 'tine20phpunit',
             'accountDisplayName'    => 'tine20phpunit',
             'accountStatus'         => 'enabled',
@@ -86,14 +88,14 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         try {
             $containerWithSyncGrant = Tinebase_Container::getInstance()->getContainerByName($appName, 'ContainerWithSyncGrant', Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
         } catch (Tinebase_Exception_NotFound $e) {
-	        $containerWithSyncGrant = new Tinebase_Model_Container(array(
-	            'name'              => 'ContainerWithSyncGrant',
-	            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-	            'owner_id'          => Tinebase_Core::getUser(),
-	            'backend'           => 'Sql',
-	            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId()
-	        ));
-	        $containerWithSyncGrant = Tinebase_Container::getInstance()->addContainer($containerWithSyncGrant);
+            $containerWithSyncGrant = new Tinebase_Model_Container(array(
+                'name'              => 'ContainerWithSyncGrant',
+                'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+                'owner_id'          => Tinebase_Core::getUser(),
+                'backend'           => 'Sql',
+                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId()
+            ));
+            $containerWithSyncGrant = Tinebase_Container::getInstance()->addContainer($containerWithSyncGrant);
         }
         $this->objects['containerWithSyncGrant'] = $containerWithSyncGrant;
         
@@ -110,13 +112,13 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
                 //Tinebase_Model_Grants::GRANT_EXPORT    => true,
                 //Tinebase_Model_Grants::GRANT_SYNC      => true,
                 Tinebase_Model_Grants::GRANT_ADMIN     => true,
-            );        	
-        	$grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($creatorGrants));
-        	
+            );            
+            $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($creatorGrants));
+            
             $containerWithoutSyncGrant = new Tinebase_Model_Container(array(
                 'name'              => 'ContainerWithoutSyncGrant',
                 'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            	'owner_id'          => Tinebase_Core::getUser(),
+                'owner_id'          => Tinebase_Core::getUser(),
                 'backend'           => 'Sql',
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId()
             ));
@@ -243,7 +245,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $filterBackend = new Tinebase_PersistentFilter_Backend_Sql();
         $filterBackend->delete($this->objects['filter']->getId());
         
-        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(Tinebase_Config::getInstance()->getConfig(Tinebase_Config::MAPPANEL, NULL, TRUE)->value);
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_setGeoData);
     }
     
     /**
@@ -251,11 +253,11 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
      */
     public function testGetFoldersPalm()
     {
-    	$controller = new ActiveSync_Controller_Contacts($this->objects['deviceWebOS'], new Tinebase_DateTime(null, null, 'de_DE'));
-    	
-    	$folders = $controller->getAllFolders();
-    	
-    	$this->assertArrayHasKey("addressbook-root", $folders, "key addressbook-root not found");
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceWebOS'], new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        $folders = $controller->getAllFolders();
+        
+        $this->assertArrayHasKey("addressbook-root", $folders, "key addressbook-root not found");
     }
     
     /**
@@ -268,7 +270,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $folders = $controller->getAllFolders();
         
         foreach($folders as $folder) {
-        	$this->assertTrue(Tinebase_Core::getUser()->hasGrant($folder['folderId'], Tinebase_Model_Grants::GRANT_SYNC));
+            $this->assertTrue(Tinebase_Core::getUser()->hasGrant($folder['folderId'], Tinebase_Model_Grants::GRANT_SYNC));
         }
         $this->assertArrayNotHasKey("addressbook-root", $folders, "key addressbook-root found");
         $this->assertEquals(1, count($folders));
@@ -289,7 +291,9 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $testDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:Contacts', 'uri:Contacts');
         $testNode = $testDom->documentElement->appendChild($testDom->createElementNS('uri:AirSync', 'TestAppendXml'));
         
-        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceWebOS'], new Tinebase_DateTime());   	
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceWebOS'], new Tinebase_DateTime());       
+        
+        $controller->appendXML($testNode, null, $this->objects['contact']->getId(), array());
         
         $controller->appendXML($testNode, null, $this->objects['contact']->getId(), array());
         
@@ -322,8 +326,8 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
      */
     public function testAppendXmlIPhone()
     {
-		$imp                   = new DOMImplementation();
-		
+        $imp                   = new DOMImplementation();
+        
         $dtd                   = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
         $testDom               = $imp->createDocument('uri:AirSync', 'Sync', $dtd);
         $testDom->formatOutput = true;
@@ -362,12 +366,12 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
      */
     public function testGetServerEntries()
     {
-    	$controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
-    	
-    	$entries = $controller->getServerEntries('addressbook-root', null);
-    	
-    	$this->assertContains($this->objects['contact']->getId(), $entries);
-    	$this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        $entries = $controller->getServerEntries('addressbook-root', null);
+        
+        $this->assertContains($this->objects['contact']->getId(), $entries);
+        $this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
     }
     
     /**

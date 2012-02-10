@@ -45,6 +45,12 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
     recordProxy: null,
     
     /**
+     * @property app
+     * @type Tine.Tinebase.Application
+     */
+    app: null,
+    
+    /**
      * @type Tine.Tinebase.data.Record selectedRecord
      * @property selectedRecord 
      * The last record which was selected
@@ -63,6 +69,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
     forceSelection: true,
     
     initComponent: function () {
+        this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
         this.displayField = this.recordClass.getMeta('titleProperty');
         this.valueField = this.recordClass.getMeta('idProperty');
         
@@ -76,8 +83,27 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
         this.on('beforequery', this.onBeforeQuery, this);
         this.store.on('beforeloadrecords', this.onStoreBeforeLoadRecords, this);
         
+        this.initTemplate();
+        
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.initComponent.call(this);
     },
+    
+    /**
+     * respect record.getTitle method
+     */
+    initTemplate: function() {
+        if (! this.tpl) {
+            this.tpl = new Ext.XTemplate('<tpl for="."><div class="x-combo-list-item">{[this.getTitle(values.' + this.recordClass.getMeta('idProperty') + ')]}</div></tpl>', {
+                getTitle: (function(id) {
+                    var record = this.getStore().getById(id),
+                        title = record ? record.getTitle() : '&nbsp';
+                    
+                    return Ext.util.Format.htmlEncode(title);
+                }).createDelegate(this)
+            });
+        }
+    },
+    
     
     /**
      * prepare paging
@@ -86,8 +112,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
      * @param {Object} options
      */
     onBeforeLoad: function (store, options) {
-    	Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.onBeforeLoad.call(this, store, options);
-    	
+        Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.onBeforeLoad.call(this, store, options);
+        
         this.lastStoreTransactionId = options.transactionId = Ext.id();
         
         options.params.paging = {
@@ -186,11 +212,12 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
             }
             
             // value is a js object
-            else if (value[this.valueField]) {
+            else if (Ext.isObject(value)) {
                 if (! this.store.getById(value)) {
-                    this.store.addSorted(new this.recordClass(value));
+                    var record = this.recordProxy ? this.recordProxy.recordReader({responseText: Ext.encode(value)}) : new this.recordClass(value)
+                    this.store.addSorted(record);
                 }
-                value = value[this.valueField];
+                value = value[this.valueField] || '';
             }
             
             // value is the current id
@@ -199,7 +226,21 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
             }
         }
         
-        return Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.setValue.call(this, value);
+        var r = this.findRecord(this.valueField, value),
+            text = value;
+        
+        if(r){
+            text = r.getTitle();
+        }else if(Ext.isDefined(this.valueNotFoundText)){
+            text = this.valueNotFoundText;
+        }
+        this.lastSelectionText = text;
+        if(this.hiddenField){
+            this.hiddenField.value = Ext.value(value, '');
+        }
+        Ext.form.ComboBox.superclass.setValue.call(this, text);
+        this.value = value;
+        return this;
     }
 });
 Ext.reg('tinerecordpickercombobox', Tine.Tinebase.widgets.form.RecordPickerComboBox);
