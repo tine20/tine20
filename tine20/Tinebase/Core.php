@@ -455,7 +455,6 @@ class Tinebase_Core
                 if (isset($loggerConfig->filter->user)) {
                     $logger->addFilter(new Tinebase_Log_Filter_User($loggerConfig->filter->user));
                 }
-
                 if (isset($loggerConfig->filter->message)) {
                     $logger->addFilter(new Zend_Log_Filter_Message($loggerConfig->filter->message));
                 }
@@ -478,7 +477,9 @@ class Tinebase_Core
         
         self::set(self::LOGGER, $logger);
 
-        $logger->info(__METHOD__ . '::' . __LINE__ .' logger initialized');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) $logger->info(__METHOD__ . '::' . __LINE__ .' Logger initialized');
+        if (isset($loggerConfig) && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) $logger->trace(__METHOD__ . '::' . __LINE__ 
+            .' Logger settings: ' . print_r($loggerConfig->toArray(), TRUE));
     }
 
     /**
