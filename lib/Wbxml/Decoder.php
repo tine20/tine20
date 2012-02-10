@@ -4,7 +4,7 @@
  *
  * @package     Wbxml
  * @subpackage  Wbxml
- * @license     http://www.tine20.org/licenses/lgpl.html LGPL Version 3
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id:Decoder.php 4968 2008-10-17 09:09:33Z l.kneschke@metaways.de $
@@ -146,7 +146,7 @@ class Wbxml_Decoder extends Wbxml_Abstract
                                     $newNode = $this->_dom->importNode($newNode, true);
                                     $node->appendChild($newNode);
                                 }
-                            }                            
+                            }
                         } catch (Exception $e) {
                             // if not, just treat it as a string
                             $node->appendChild($this->_dom->createTextNode($opaque)); 
@@ -181,13 +181,11 @@ class Wbxml_Decoder extends Wbxml_Abstract
                         // create the domdocument
                         $node = $this->_createDomDocument($nameSpace, $tag);
                         $newNode = $node->documentElement;
-                    } else {        
-                        if($this->_dom->isDefaultNamespace($nameSpace)) {
-                            $newNode = $node->appendChild($this->_dom->createElement($tag));
-                        } else {
+                    } else {
+                        if(!$this->_dom->isDefaultNamespace($nameSpace)) {
                             $this->_dom->documentElement->setAttribute('xmlns:' . $codePageName, $nameSpace);
-                            $newNode = $node->appendChild($this->_dom->createElement($codePageName . ':' . $tag));
                         }
+                        $newNode = $node->appendChild($this->_dom->createElementNS('uri:' . $codePageName, $tag));
                     }
                     
                     if($tagHasAttributes) {
