@@ -129,8 +129,12 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     {
         $this->_availableUpdateTime = NULL;
         
-        $folders = Felamimail_Controller_Folder::getInstance()->search($_filter);
+        // add user account ids to filter and use the folder backend to search as the folder controller has some special handling in its search function
+        $_filter->createFilter(array('field' => 'account_id', 'operator' => 'in', 'value' => Felamimail_Controller_Account::getInstance()->search()->getArrayOfIds()));
+        $folderBackend = new Felamimail_Backend_Folder();
+        $folders = $folderBackend->search($_filter);
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .  ' ' . print_r($_filter->toArray(), TRUE));
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .  " Checking status of " . count($folders) . ' folders.');
         
         $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
