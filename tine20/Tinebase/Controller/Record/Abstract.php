@@ -829,10 +829,11 @@ abstract class Tinebase_Controller_Record_Abstract
         if (count($_records) === 0) {
             return;
         }
+        
         foreach ($_records as $currentRecord) {
             $oldRecordArray = $currentRecord->toArray();
             $data = array_merge($oldRecordArray, $_data);
-            
+
             try {
                 $record = new $this->_modelName($data);
                 $updatedRecord = $this->update($record, FALSE);

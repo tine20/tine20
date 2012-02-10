@@ -741,7 +741,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 foreach($data as $fieldName => $valueArray) {
                     $userProfileData[$fieldName] = $valueArray['value'];
                 }
-                $this->updateUserPofile($userProfileData);
+                $this->updateUserProfile($userProfileData);
 
             } else {
                 $backend = Tinebase_Core::getPreference($applicationName);
@@ -794,7 +794,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  array $profileData
      * @return array
      */
-    public function updateUserPofile($profileData)
+    public function updateUserProfile($profileData)
     {
         $contact = new Addressbook_Model_Contact(array(), TRUE);
         $contact->setFromJsonInUsersTimezone($profileData);

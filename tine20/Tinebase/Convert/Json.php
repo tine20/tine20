@@ -61,14 +61,14 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         if (count($_records) == 0) {
             return array();
         }
-        
+
         Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($_records, $_resolveUserFields);
-        
+
         $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $_records->convertDates = true;
-        
+
         $result = $_records->toArray();
-        
+
         return $result;
     }
 }

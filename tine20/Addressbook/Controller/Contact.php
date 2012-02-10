@@ -177,6 +177,50 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         
         return $userProfile;
     }
+
+
+    /**
+     * update multiple records in an iteration
+     * @see Tinebase_Record_Iterator / self::updateMultiple()
+     *
+     * @param Tinebase_Record_RecordSet $_records
+     * @param array $_data
+     *
+	 *	Overwrites Tinebase_Controller_Record_Abstract::processUpdateMultipleIteration: jpegphoto is set to null, so no deletion of photos on multipleUpdate happens
+	 *	@TODO: Can be removed when "0000284: modlog of contact images / move images to vfs" is resolved. 
+     * 
+     */
+    public function processUpdateMultipleIteration($_records, $_data)
+    {
+        if (count($_records) === 0) {
+            return;
+        }
+
+        foreach ($_records as $currentRecord) {
+            $oldRecordArray = $currentRecord->toArray();
+            $data = array_merge($oldRecordArray, $_data);
+
+            try {
+                $record = new $this->_modelName($data);
+                $record->__set('jpegphoto', NULL);
+                $updatedRecord = $this->update($record, FALSE);
+
+                $this->_updateMultipleResult['results']->addRecord($updatedRecord);
+                $this->_updateMultipleResult['totalcount'] ++;
+
+            } catch (Tinebase_Exception_Record_Validation $e) {
+
+                $this->_updateMultipleResult['exceptions']->addRecord(new Tinebase_Model_UpdateMultipleException(array(
+                    'id'         => $currentRecord->getId(),
+                    'exception'  => $e,
+                        'record'     => $currentRecord,
+                        'code'       => $e->getCode(),
+                        'message'    => $e->getMessage()
+                )));
+                $this->_updateMultipleResult['failcount'] ++;
+            }
+        }
+    }
     
     /**
      * update profile portion of given contact

@@ -66,14 +66,11 @@ class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
      * convert client record to array
      * 
      * @return array
-     * 
-     * @todo check if model has a specific json converter (use factory?)
      */
     protected function _clientRecordToArray()
     {
         $this->_resolveClientRecordTags();
-
-        $converter = new Tinebase_Convert_Json();
+        $converter = Tinebase_Convert_Factory::factory($this->_clientRecord);
         $result = $converter->fromTine20Model($this->_clientRecord);
         
         return $result;

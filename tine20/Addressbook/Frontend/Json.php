@@ -34,7 +34,20 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_resolveUserFields = array(
         'Addressbook_Model_Contact' => array('created_by', 'last_modified_by')
     );
-    
+
+    /**
+     * resolve images
+     * @param Tinebase_Record_RecordSet $_records
+     */
+    public static function resolveImages(Tinebase_Record_RecordSet $_records)
+    {
+        foreach($_records as &$record) {
+            if($record['jpegphoto'] == '1') {
+                $record['jpegphoto'] = Tinebase_Model_Image::getImageUrl('Addressbook', $record->__get('id'), '');
+            }
+        }
+    }
+
     /**
      * get one contact identified by $id
      *
@@ -218,7 +231,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $link = 'images/empty_photo_blank.png';
         if (! empty($contactArray['jpegphoto'])) {
-            $link = 'index.php?method=Tinebase.getImage&application=Addressbook&location=&id=' . $contactArray['id'] . '&width=90&height=90&ratiomode=0';
+            $link = Tinebase_Model_Image::getImageUrl('Addressbook', $contactArray['id'], '');
         } else if (isset($contactArray['salutation']) && ! empty($contactArray['salutation'])) {
     	    $salutationRecord = Addressbook_Config::getInstance()->contactSalutation->records->getById($contactArray['salutation']);
     	    if ($salutationRecord->image) {
