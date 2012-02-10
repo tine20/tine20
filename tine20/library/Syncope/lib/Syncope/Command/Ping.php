@@ -113,7 +113,7 @@ class Syncope_Command_Ping extends Syncope_Command_Wbxml
                         if ($this->_logger instanceof Zend_Log) 
                             $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
                         if ($this->_logger instanceof Zend_Log) 
-                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' syncstate not found. enforce sync for folder: ' . $folder['serverFolderId']);
+                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' syncstate not found. enforce sync for folder: ' . $folder->folderid);
                         
                         $foundChanges = true;
                     }

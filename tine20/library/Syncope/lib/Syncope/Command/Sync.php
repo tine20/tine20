@@ -476,8 +476,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         } else {
                             // continue sync session
                             if(is_array($collectionData['syncState']->pendingdata)) {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " restored from sync state ");
+                                if ($this->_logger instanceof Zend_Log) 
+                                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " restored from sync state ");
                                 $serverAdds    = $collectionData['syncState']->pendingdata['serverAdds'];
                                 $serverChanges = $collectionData['syncState']->pendingdata['serverChanges'];
                                 $serverDeletes = $collectionData['syncState']->pendingdata['serverDeletes'];

@@ -43,15 +43,15 @@ class Syncope_Backend_Device implements Syncope_Backend_IDevice
         $id = sha1(mt_rand(). microtime());
         
         $this->_db->insert($this->_tablePrefix . 'device', array(
-        	'id'         => $id, 
-        	'deviceid'   => $_device->deviceid,
-        	'devicetype' => $_device->devicetype,
-        	'owner_id'   => $_device->owner_id,
-        	'policy_id'  => isset($_device->policy_id)  ? $_device->policy_id  : null,
-        	'policykey'  => isset($_device->policykey)  ? $_device->policykey  : null ,
-        	'useragent'  => isset($_device->useragent)  ? $_device->useragent  : null ,
-        	'acsversion' => isset($_device->acsversion) ? $_device->acsversion : null ,
-        	'remotewipe' => isset($_device->remotewipe) ? $_device->remotewipe : null 
+            'id'         => $id, 
+            'deviceid'   => $_device->deviceid,
+            'devicetype' => $_device->devicetype,
+            'owner_id'   => $_device->owner_id,
+            'policy_id'  => isset($_device->policy_id)  ? $_device->policy_id  : 1,
+            'policykey'  => isset($_device->policykey)  ? $_device->policykey  : null,
+            'useragent'  => isset($_device->useragent)  ? $_device->useragent  : '',
+            'acsversion' => isset($_device->acsversion) ? $_device->acsversion : '',
+            'remotewipe' => isset($_device->remotewipe) ? $_device->remotewipe : null 
         ));
         
         return $this->get($id);
@@ -124,13 +124,13 @@ class Syncope_Backend_Device implements Syncope_Backend_IDevice
     public function update(Syncope_Model_IDevice $_device)
     {
         $this->_db->update($this->_tablePrefix . 'device', array(
-        	'acsversion'   => $_device->acsversion,
-        	'policykey'    => $_device->policykey,
-        	'pingfolder'   => $_device->pingfolder,
-        	'pinglifetime' => $_device->pinglifetime,
-        	'remotewipe'   => $_device->remotewipe
+            'acsversion'   => $_device->acsversion,
+            'policykey'    => $_device->policykey,
+            'pingfolder'   => $_device->pingfolder,
+            'pinglifetime' => $_device->pinglifetime,
+            'remotewipe'   => $_device->remotewipe
         ), array(
-        	'id = ?' => $_device->id
+            'id = ?' => $_device->id
         ));
         
         return $this->get($_device->id);
