@@ -100,7 +100,7 @@ class Tinebase_Relations
             if(empty($relations[$idx]->related_id)) {
                 $this->_setAppRecord($relations[$idx]);
             }
-        	$this->_addRelation($relations[$idx]);
+            $this->_addRelation($relations[$idx]);
         }
         
         // break relations
@@ -294,16 +294,22 @@ class Tinebase_Relations
         
         // fill related_record
         foreach ($modelMap as $modelName => $relations) {
-        	$getMultipleMethod = 'getMultiple';
-        	
+            $getMultipleMethod = 'getMultiple';
+            
             if ($modelName === 'Tinebase_Model_User') {
                 // @todo add related backend here
                 //$appController = Tinebase_User::factory($relations->related_backend);
                 $appController = Tinebase_User::factory(Tinebase_User::getConfiguredBackend());
                 $records = $appController->$getMultipleMethod($relations->related_id);
             } else {
-                $appController = Tinebase_Core::getApplicationInstance($modelName);
-                $records = $appController->$getMultipleMethod($relations->related_id, $_ignoreACL);
+                try {
+                    $appController = Tinebase_Core::getApplicationInstance($modelName);
+                    $records = $appController->$getMultipleMethod($relations->related_id, $_ignoreACL);
+                } catch (Tinebase_Exception_AccessDenied $tea) {
+                    // remove relations, user has no permission
+                    $_relations->removeRecords($relations);
+                    continue;
+                }
             }
             
             foreach ($relations as $relation) {
@@ -312,7 +318,7 @@ class Tinebase_Relations
                 if ($recordIndex !== false) {
                     $_relations[$relationIndex]->related_record = $records[$recordIndex];
                 } else {
-                    // delete relation from set, as READ ACL is abviously not granted 
+                    // delete relation from set, as READ ACL is obviously not granted 
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                         " removing $relation->related_model $relation->related_backend $relation->related_id (ACL)");
                     unset($_relations[$relationIndex]);
