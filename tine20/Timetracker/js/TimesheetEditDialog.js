@@ -48,7 +48,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         var notClearable = false;
 
         var grants = timeaccount ? timeaccount.get('account_grants') : (this.record.get('timeaccount_id') ? this.record.get('timeaccount_id').account_grants : {});
-        Tine.log.debug(grants);
         
         if (grants) {
             this.getForm().findField('account_id').setDisabled(! (grants.bookAllGrant || grants.adminGrant || manageRight));
