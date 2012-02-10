@@ -293,7 +293,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _deleteByFilter($_filter, Tinebase_Controller_Record_Interface $_controller, $_filterModel)
     {
-    	$filter = $this->_decodeFilter($_filter, $_filterModel, TRUE);
+        $filter = $this->_decodeFilter($_filter, $_filterModel, TRUE);
 
         $_controller->deleteByFilter($filter);
         return array(
@@ -324,9 +324,13 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL)
     {
-        $converter = new Tinebase_Convert_Json();
-        $result = $converter->fromTine20RecordSet($_records, $this->_resolveUserFields);
-
+        $result = array();
+        
+        if($_records->getFirstRecord()) {
+            $converter = Tinebase_Convert_Factory::factory($_records->getFirstRecord());
+            $result = $converter->fromTine20RecordSet($_records, $this->_resolveUserFields);
+        }
+        
         return $result;
     }
 }

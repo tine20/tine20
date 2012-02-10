@@ -103,7 +103,7 @@ class Tinebase_Exception_Data extends Tinebase_Exception
     */
     protected function _dataToArray()
     {
-        $converter = new Tinebase_Convert_Json();
+        $converter = Tinebase_Convert_Factory::factory($this->_modelName);
         $result = $converter->fromTine20RecordSet($this->_exceptionData);
     
         return $result;

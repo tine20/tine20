@@ -206,7 +206,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             item.setDisabled(true);
             item.multiEditable = false;
         });
-        
+
         Ext.each(this.form.record.store.fields.keys, function(fieldKey) {
             var item = this.form.findField(fieldKey);
             if(!item) return true;
