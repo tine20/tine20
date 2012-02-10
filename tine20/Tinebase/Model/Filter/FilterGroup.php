@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  * @todo        finish implementation of to/from json functions
@@ -202,9 +202,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             
             // if a condition is given, we create a new filtergroup from this class
             if (isset($filterData['condition'])) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
                     . ' Adding FilterGroup: ' . $this->_className);
-                    
+                
                 if (empty($this->_className)) {
                     throw new Tinebase_Exception_NotFound('className needs to be set in filtergroup');
                 }
@@ -219,7 +219,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 
                 $this->addFilterGroup($filtergroup);
             } else if (isset($filterData['field']) && $filterData['field'] == 'foreignRecord') {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
                     . ' Adding ForeignRecordFilter of type: ' . $filterData['value']['linkType']);
                 $this->_createForeignRecordFilterFromArray($filterData);
                 
@@ -411,7 +411,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         if (is_array($_fieldOrData)) {
             $data = $_fieldOrData;
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
                 . 'Using deprecated function syntax. Please pass all filter data in one array.');
             
             $data = array(
