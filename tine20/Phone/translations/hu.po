@@ -1,138 +1,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-12-05 11:30+0100\n"
-"Last-Translator: Faragó Tamás <tamas@kemenyfem.hu>\n"
+"PO-Revision-Date: 2012-01-13 13:41+0000\n"
+"Last-Translator: Faragó Tamás <Unknown>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Hungarian\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: HUNGARY\n"
+"X-Poedit-Language: Hungarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: js/Phone.js:29 js/Phone.js:479 js/Phone.js:480
-msgid "Edit phone settings"
-msgstr "Telefon beállítások szerkesztése"
-
-#: js/Phone.js:59 js/Phone.js:254 js/Models.js:69
-msgid "Phone"
-msgid_plural "Phones"
-msgstr[0] "Telefon"
-msgstr[1] "Telefonok"
-
-#: js/Phone.js:70
-msgid "Phones"
-msgstr "Telefonok"
-
-#: js/Phone.js:277
-msgid "Line"
-msgstr "Vonal"
-
-#: js/Phone.js:286
-msgid "Number"
-msgstr "Szám"
-
-#: js/Phone.js:295
-msgid "Cancel"
-msgstr "Mégse"
-
-#: js/Phone.js:305
-msgid "Dial"
-msgstr "Tárcsázás"
-
-#: js/Phone.js:325
-msgid "Error"
-msgstr "Hiba"
-
-#: js/Phone.js:326
-msgid "Not possible to dial."
-msgstr "Nem lehetséges tárcsázni."
-
-#: js/Phone.js:469
-msgid "Dial number"
-msgstr "Szám tárcsázása"
-
-#: js/Phone.js:470
-msgid "Initiate a new outgoing call"
-msgstr "Új kimenő hívás letesítése"
-
-#: js/Phone.js:531
-msgid "Incoming call"
-msgstr "Bejövő hívás"
-
-#: js/Phone.js:535
-msgid "Outgoing call"
-msgstr "Kimenő hívás"
-
-#: js/Phone.js:543
-msgid "unknown number"
-msgstr "ismeretlen szám"
-
-#: js/Phone.js:580
-msgid "Search:"
-msgstr "Keresés:"
-
-#: js/Phone.js:665
-msgid "Source or Destination"
-msgstr "Forrás vagy Cél"
-
-#: js/Phone.js:681
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Hívások megjelenítése {0} - {1} / {2}"
-
-#: js/Phone.js:682 js/Phone.js:725
-msgid "No calls to display"
-msgstr "Nincs megjeleníthető hívás"
-
-#: js/Phone.js:692
-msgid "Direction"
-msgstr "Irány"
-
-#: js/Phone.js:693
-msgid "Source"
-msgstr "Forrás"
-
-#: js/Phone.js:694
-msgid "Caller Id"
-msgstr "Hívó azonosító"
-
-#: js/Phone.js:695
-msgid "Destination"
-msgstr "Cél"
-
-#: js/Phone.js:696
-msgid "Start"
-msgstr "Kezdés"
-
-#: js/Phone.js:697
-msgid "Connected"
-msgstr "Kapcsolódva"
-
-#: js/Phone.js:698
-msgid "Disconnected"
-msgstr "Kapcsolat bontva"
-
-#: js/Phone.js:699
-msgid "Duration"
-msgstr "Időtartam"
-
-#: js/Phone.js:700
-msgid "Ringing"
-msgstr "Csörgés"
-
-#: js/Phone.js:701
-msgid "Call ID"
-msgstr "Hívás azonosító"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "telefon lista"
-msgstr[1] "telefon listák"
 
 #: js/AddressbookGridPanelHook.js:35
 msgid "Call contact"
@@ -153,3 +36,123 @@ msgstr "Mobil"
 #: js/AddressbookGridPanelHook.js:199
 msgid "Cell private"
 msgstr "Mobil privát"
+
+#: js/Models.js:69 js/Phone.js:59 js/Phone.js:264
+msgid "Phone"
+msgid_plural "Phones"
+msgstr[0] "Telefon"
+msgstr[1] "Telefonok"
+
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "telefon lista"
+msgstr[1] "telefon listák"
+
+#: js/Phone.js:29 js/Phone.js:489 js/Phone.js:490
+msgid "Edit phone settings"
+msgstr "Telefon beállítások szerkesztése"
+
+#: js/Phone.js:70
+msgid "Phones"
+msgstr "Telefonok"
+
+#: js/Phone.js:287
+msgid "Line"
+msgstr "Vonal"
+
+#: js/Phone.js:296
+msgid "Number"
+msgstr "Szám"
+
+#: js/Phone.js:305
+msgid "Cancel"
+msgstr "Mégse"
+
+#: js/Phone.js:315
+msgid "Dial"
+msgstr "Tárcsázás"
+
+#: js/Phone.js:335
+msgid "Error"
+msgstr "Hiba"
+
+#: js/Phone.js:336
+msgid "Not possible to dial."
+msgstr "Nem lehetséges tárcsázni."
+
+#: js/Phone.js:479
+msgid "Dial number"
+msgstr "Szám tárcsázása"
+
+#: js/Phone.js:480
+msgid "Initiate a new outgoing call"
+msgstr "Új kimenő hívás letesítése"
+
+#: js/Phone.js:541
+msgid "Incoming call"
+msgstr "Bejövő hívás"
+
+#: js/Phone.js:545
+msgid "Outgoing call"
+msgstr "Kimenő hívás"
+
+#: js/Phone.js:553
+msgid "unknown number"
+msgstr "ismeretlen szám"
+
+#: js/Phone.js:590
+msgid "Search:"
+msgstr "Keresés:"
+
+#: js/Phone.js:675
+msgid "Source or Destination"
+msgstr "Forrás vagy Cél"
+
+#: js/Phone.js:691
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr "Hívások megjelenítése {0} - {1} / {2}"
+
+#: js/Phone.js:692 js/Phone.js:735
+msgid "No calls to display"
+msgstr "Nincs megjeleníthető hívás"
+
+#: js/Phone.js:702
+msgid "Direction"
+msgstr "Irány"
+
+#: js/Phone.js:703
+msgid "Source"
+msgstr "Forrás"
+
+#: js/Phone.js:704
+msgid "Caller Id"
+msgstr "Hívó azonosító"
+
+#: js/Phone.js:705
+msgid "Destination"
+msgstr "Cél"
+
+#: js/Phone.js:706
+msgid "Start"
+msgstr "Kezdés"
+
+#: js/Phone.js:707
+msgid "Connected"
+msgstr "Kapcsolódva"
+
+#: js/Phone.js:708
+msgid "Disconnected"
+msgstr "Kapcsolat bontva"
+
+#: js/Phone.js:709
+msgid "Duration"
+msgstr "Időtartam"
+
+#: js/Phone.js:710
+msgid "Ringing"
+msgstr "Csörgés"
+
+#: js/Phone.js:711
+msgid "Call ID"
+msgstr "Hívás azonosító"

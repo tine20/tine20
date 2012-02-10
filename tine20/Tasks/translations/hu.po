@@ -1,124 +1,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-12-05 11:26+0100\n"
-"Last-Translator: Faragó Tamás <tamas@kemenyfem.hu>\n"
+"PO-Revision-Date: 2012-01-13 12:46+0000\n"
+"Last-Translator: Faragó Tamás <Unknown>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Hungarian\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: HUNGARY\n"
+"X-Poedit-Language: Hungarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: Config.php:38
-msgid "Tasks status available"
-msgstr ""
-
-#: Config.php:40
-msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
-msgstr "Lehetséges feladat állapot. Kérlek jegyezd meg, hogy a további résztvevő állapot hatással lehet másik Feladat rendszerre exportáláskor vagy szinkronizáláskor."
-
-#: Config.php:48
-msgid "Task priorities available"
-msgstr ""
-
-#: Config.php:50
-msgid "Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation."
-msgstr ""
-
-#: Controller.php:96
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s személyes feladatok"
-
-#: Setup/Update/Release3.php:65 Setup/Initialize.php:81
-msgid "All tasks of my taskslists"
-msgstr "Minden feladat a feladatlistámon"
-
-#: Setup/Update/Release5.php:65 Setup/Initialize.php:34
-msgid "No response"
-msgstr "Nincs válasz"
-
-#: Setup/Update/Release5.php:66 Setup/Initialize.php:35 js/GridPanel.js:209
-#: js/TaskEditDialog.js:242
-msgid "Completed"
-msgstr "Teljesítve"
-
-#: Setup/Update/Release5.php:67 Setup/Initialize.php:36
-msgid "Cancelled"
-msgstr "Lemondva"
-
-#: Setup/Update/Release5.php:68 Setup/Initialize.php:37
-msgid "In process"
-msgstr "Folyamatban"
-
-#: Setup/Update/Release5.php:154 Setup/Initialize.php:50
-msgid "low"
-msgstr ""
-
-#: Setup/Update/Release5.php:155 Setup/Initialize.php:51
-msgid "normal"
-msgstr ""
-
-#: Setup/Update/Release5.php:156 Setup/Initialize.php:52
-msgid "high"
-msgstr ""
-
-#: Setup/Update/Release5.php:157 Setup/Initialize.php:53
-msgid "urgent"
-msgstr ""
-
-#: Setup/Initialize.php:90
-msgid "My open tasks"
-msgstr "Nyitott feladataim"
-
-#: Setup/Initialize.php:99
-msgid "My open tasks this week"
-msgstr "Nyitott feladataim erre a hétre"
-
-#: Setup/Initialize.php:108
-msgid "All tasks for me"
-msgstr "Minden feladataim"
-
-#: Setup/Initialize.php:109
-msgid "All tasks that I am responsible for"
-msgstr "Minden feladat amiért felelős vagyok"
-
-#: Setup/Initialize.php:116
-msgid "Last modified by me"
-msgstr "Utoljára módosítottam"
-
-#: Setup/Initialize.php:117
-msgid "All tasks that I have last modified"
-msgstr "Minden feladat amit utoljára én módosítottam"
-
-#: Setup/Initialize.php:126
-msgid "Tasks without responsible"
-msgstr "Feladatok felelős nélkül"
-
-#: Preference.php:25
-msgid "All my tasks"
-msgstr "Minden feladatom"
-
-#: Preference.php:67
-msgid "Default Favorite"
-msgstr "Alapértelmezett kedvenc"
-
-#: Preference.php:68
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "Alapértelmezett kedvenc, ami a Feladatok indításakor betöltődik"
-
-#: Preference.php:71
-msgid "Default Task List"
-msgstr "Alap Feladat Lista"
-
-#: Preference.php:72
-msgid "The default task list to create new tasks in."
-msgstr "Az alapértelmezett feladat lista amiben az új feladatokat létrehozom."
 
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
@@ -136,6 +33,38 @@ msgstr "kedvenc megosztott feladatok kezelése"
 msgid "Create or update shared tasks favorites"
 msgstr "Kedvenc megosztott feladatok készítése vagy frissítése"
 
+#: Config.php:38
+msgid "Tasks status available"
+msgstr ""
+
+#: Config.php:40
+msgid ""
+"Possible tasks status. Please note that additional attendee status might "
+"impact other Tasks systems on export or syncronisation."
+msgstr ""
+"Lehetséges feladat állapot. Kérlek jegyezd meg, hogy a további résztvevő "
+"állapot hatással lehet másik Feladat rendszerre exportáláskor vagy "
+"szinkronizáláskor."
+
+#: Config.php:48
+msgid "Task priorities available"
+msgstr ""
+
+#: Config.php:50
+msgid ""
+"Possible task priorities. Please note that additional priorities might "
+"impact other Tasks systems on export or syncronisation."
+msgstr ""
+
+#: Controller/Task.php:165
+msgid "Notification for Task "
+msgstr "Értesítés a Feladathoz "
+
+#: Controller.php:96
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s személyes feladatok"
+
 #: js/GridPanel.js:54
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
@@ -146,7 +75,7 @@ msgstr[1] "Biztosan törlöd a kiválasztott feladatokat?"
 msgid "Tags"
 msgstr "Címkék"
 
-#: js/GridPanel.js:128 Model/Task.php:194
+#: js/GridPanel.js:128 Model/Task.php:199
 msgid "Lead"
 msgstr "Ügylet"
 
@@ -162,16 +91,16 @@ msgstr "Feladat hozzáadása..."
 msgid "Due Date"
 msgstr "Lejárati idő"
 
-#: js/GridPanel.js:157 js/TaskEditDialog.js:208 Model/Task.php:185
+#: js/GridPanel.js:157 js/TaskEditDialog.js:208 Model/Task.php:190
 msgid "Priority"
 msgstr "Prioritás"
 
-#: js/GridPanel.js:173 Model/Task.php:187
+#: js/GridPanel.js:173 Model/Task.php:192
 msgid "Percent"
 msgstr "Százalék"
 
 #: js/GridPanel.js:186 js/TaskEditDialog.js:237 js/Tasks.js:151
-#: js/Tasks.js:211 Model/Task.php:186
+#: js/Tasks.js:211 Model/Task.php:191
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "Állapot"
@@ -180,6 +109,11 @@ msgstr[1] "Állapot"
 #: js/GridPanel.js:202 js/Tasks.js:163
 msgid "Creation Time"
 msgstr "Készítés ideje"
+
+#: js/GridPanel.js:209 js/TaskEditDialog.js:242 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:66
+msgid "Completed"
+msgstr "Teljesítve"
 
 #: js/GridPanel.js:216 js/Tasks.js:159
 msgid "Responsible"
@@ -253,47 +187,123 @@ msgstr "Utolsó módosító"
 msgid "Creator"
 msgstr "Készítő"
 
-#: Model/Task.php:182
+#: Model/Task.php:187
 msgid "Due"
 msgstr "Esedékes"
 
-#: Model/Task.php:183
+#: Model/Task.php:188
 msgid "Organizer"
 msgstr "Szervező"
 
-#: Model/Task.php:184
+#: Model/Task.php:189
 msgid "Description"
 msgstr "Leírás"
 
-#: Model/Task.php:200
+#: Model/Task.php:205
 msgid "Telephone"
 msgstr "Telefon"
 
-#: Model/Task.php:201
+#: Model/Task.php:206
 msgid "Email"
 msgstr "Email"
 
-#: Controller/Task.php:165
-msgid "Notification for Task "
-msgstr "Értesítés a Feladathoz"
+#: Preference.php:25
+msgid "All my tasks"
+msgstr "Minden feladatom"
 
-#~ msgid "Tasks Status Available"
-#~ msgstr "Feladat állapot elérhető"
+#: Preference.php:67
+msgid "Default Favorite"
+msgstr "Alapértelmezett kedvenc"
 
-#~ msgid "NEEDS-ACTION"
-#~ msgstr "TEVÉKENYSÉG-SZÜKSÉGES"
+#: Preference.php:68
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "Alapértelmezett kedvenc, ami a Feladatok indításakor betöltődik"
 
-#~ msgid "COMPLETED"
-#~ msgstr "ELKÉSZÜLT"
+#: Preference.php:71
+msgid "Default Task List"
+msgstr "Alap Feladat Lista"
 
-#~ msgid "IN-PROCESS"
-#~ msgstr "FELDOLGOZÁS ALATT"
+#: Preference.php:72
+msgid "The default task list to create new tasks in."
+msgstr "Az alapértelmezett feladat lista amiben az új feladatokat létrehozom."
 
-#~ msgid "CANCELLED"
-#~ msgstr "TÖRÖLVE"
+#: Setup/Initialize.php:34 Setup/Update/Release5.php:65
+msgid "No response"
+msgstr "Nincs válasz"
 
-#~ msgid "Failed"
-#~ msgstr "Sikertelen"
+#: Setup/Initialize.php:36 Setup/Update/Release5.php:67
+msgid "Cancelled"
+msgstr "Lemondva"
 
-#~ msgid "Could not save task."
-#~ msgstr "Feladat nem menthető."
+#: Setup/Initialize.php:37 Setup/Update/Release5.php:68
+msgid "In process"
+msgstr "Folyamatban"
+
+#: Setup/Initialize.php:50 Setup/Update/Release5.php:154
+msgid "low"
+msgstr ""
+
+#: Setup/Initialize.php:51 Setup/Update/Release5.php:155
+msgid "normal"
+msgstr ""
+
+#: Setup/Initialize.php:52 Setup/Update/Release5.php:156
+msgid "high"
+msgstr ""
+
+#: Setup/Initialize.php:53 Setup/Update/Release5.php:157
+msgid "urgent"
+msgstr ""
+
+#: Setup/Initialize.php:81 Setup/Update/Release3.php:65
+msgid "All tasks of my taskslists"
+msgstr "Minden feladat a feladatlistámon"
+
+#: Setup/Initialize.php:90
+msgid "My open tasks"
+msgstr "Nyitott feladataim"
+
+#: Setup/Initialize.php:99
+msgid "My open tasks this week"
+msgstr "Nyitott feladataim erre a hétre"
+
+#: Setup/Initialize.php:108
+msgid "All tasks for me"
+msgstr "Minden feladataim"
+
+#: Setup/Initialize.php:109
+msgid "All tasks that I am responsible for"
+msgstr "Minden feladat amiért felelős vagyok"
+
+#: Setup/Initialize.php:116
+msgid "Last modified by me"
+msgstr "Utoljára módosítottam"
+
+#: Setup/Initialize.php:117
+msgid "All tasks that I have last modified"
+msgstr "Minden feladat amit utoljára én módosítottam"
+
+#: Setup/Initialize.php:126
+msgid "Tasks without responsible"
+msgstr "Feladatok felelős nélkül"
+
+msgid "Tasks Status Available"
+msgstr "Feladat állapot elérhető"
+
+msgid "NEEDS-ACTION"
+msgstr "TEVÉKENYSÉG-SZÜKSÉGES"
+
+msgid "COMPLETED"
+msgstr "ELKÉSZÜLT"
+
+msgid "IN-PROCESS"
+msgstr "FELDOLGOZÁS ALATT"
+
+msgid "CANCELLED"
+msgstr "TÖRÖLVE"
+
+msgid "Failed"
+msgstr "Sikertelen"
+
+msgid "Could not save task."
+msgstr "Feladat nem menthető."

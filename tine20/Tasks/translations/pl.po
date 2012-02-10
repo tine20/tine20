@@ -1,125 +1,23 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-09-08 21:14+0100\n"
-"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
+"PO-Revision-Date: 2012-01-13 12:42+0000\n"
+"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
 "Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Polish\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: POLAND\n"
+"X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-Bookmarks: 0,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-
-#: Config.php:38
-msgid "Tasks status available"
-msgstr ""
-
-#: Config.php:40
-msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
-msgstr "Status zadania: Możliwe. Zauważ proszę, że dodatkowy status zadania może wpływać w innych zadaniach na eksport albo synchronizację."
-
-#: Config.php:48
-msgid "Task priorities available"
-msgstr ""
-
-#: Config.php:50
-msgid "Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation."
-msgstr ""
-
-#: Controller.php:96
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s zadania własne"
-
-#: Setup/Update/Release3.php:65 Setup/Initialize.php:81
-msgid "All tasks of my taskslists"
-msgstr "Wszystkie zadania z mojej listy zadań"
-
-#: Setup/Update/Release5.php:65 Setup/Initialize.php:34
-msgid "No response"
-msgstr "Brak odpowiedzi"
-
-#: Setup/Update/Release5.php:66 Setup/Initialize.php:35 js/GridPanel.js:209
-#: js/TaskEditDialog.js:242
-msgid "Completed"
-msgstr "Zakończone dnia"
-
-#: Setup/Update/Release5.php:67 Setup/Initialize.php:36
-msgid "Cancelled"
-msgstr "Anulowane"
-
-#: Setup/Update/Release5.php:68 Setup/Initialize.php:37
-msgid "In process"
-msgstr "W opracowaniu"
-
-#: Setup/Update/Release5.php:154 Setup/Initialize.php:50
-msgid "low"
-msgstr ""
-
-#: Setup/Update/Release5.php:155 Setup/Initialize.php:51
-msgid "normal"
-msgstr ""
-
-#: Setup/Update/Release5.php:156 Setup/Initialize.php:52
-msgid "high"
-msgstr ""
-
-#: Setup/Update/Release5.php:157 Setup/Initialize.php:53
-msgid "urgent"
-msgstr ""
-
-#: Setup/Initialize.php:90
-msgid "My open tasks"
-msgstr "Moje, rozpoczęte zadania"
-
-#: Setup/Initialize.php:99
-msgid "My open tasks this week"
-msgstr "Moje zadania rozpoczęte w tym tygodniu"
-
-#: Setup/Initialize.php:108
-msgid "All tasks for me"
-msgstr "Zadania przypisane do mnie"
-
-#: Setup/Initialize.php:109
-msgid "All tasks that I am responsible for"
-msgstr "Wszystkie zadania, za które odpowiadam"
-
-#: Setup/Initialize.php:116
-msgid "Last modified by me"
-msgstr "Ostatnio zmienione przeze mnie"
-
-#: Setup/Initialize.php:117
-msgid "All tasks that I have last modified"
-msgstr "Wszystkie zadania zmienione ostatnio przeze mnie"
-
-#: Setup/Initialize.php:126
-msgid "Tasks without responsible"
-msgstr "Nieprzypisane zadania"
-
-#: Preference.php:25
-msgid "All my tasks"
-msgstr "Wszystkie moje zadania"
-
-#: Preference.php:67
-msgid "Default Favorite"
-msgstr "Domyślne ulubione"
-
-#: Preference.php:68
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "Domyślne ulubione zadanie ładowane przy uruchamianiu zadań"
-
-#: Preference.php:71
-msgid "Default Task List"
-msgstr "Domyślna lista zadań"
-
-#: Preference.php:72
-msgid "The default task list to create new tasks in."
-msgstr "Domyślna lista zadań dla nowych zadań"
 
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
@@ -137,6 +35,37 @@ msgstr "zarządzanie ulubionymi ze wspólnych zadań"
 msgid "Create or update shared tasks favorites"
 msgstr "Utwórz albo uaktualnij ulubione ze wspólnych zadań"
 
+#: Config.php:38
+msgid "Tasks status available"
+msgstr ""
+
+#: Config.php:40
+msgid ""
+"Possible tasks status. Please note that additional attendee status might "
+"impact other Tasks systems on export or syncronisation."
+msgstr ""
+"Status zadania: Możliwe. Zauważ proszę, że dodatkowy status zadania może "
+"wpływać w innych zadaniach na eksport albo synchronizację."
+
+#: Config.php:48
+msgid "Task priorities available"
+msgstr ""
+
+#: Config.php:50
+msgid ""
+"Possible task priorities. Please note that additional priorities might "
+"impact other Tasks systems on export or syncronisation."
+msgstr ""
+
+#: Controller/Task.php:165
+msgid "Notification for Task "
+msgstr "Powiadomienie o zadaniu "
+
+#: Controller.php:96
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s zadania własne"
+
 #: js/GridPanel.js:54
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
@@ -148,7 +77,7 @@ msgstr[2] "Czy na pewno chcesz usunąć zaznaczone zadania?"
 msgid "Tags"
 msgstr "Znaczniki"
 
-#: js/GridPanel.js:128 Model/Task.php:194
+#: js/GridPanel.js:128 Model/Task.php:199
 msgid "Lead"
 msgstr "Zapytanie wstępne"
 
@@ -164,16 +93,16 @@ msgstr "Dodaj zadanie..."
 msgid "Due Date"
 msgstr "Data zakończenia"
 
-#: js/GridPanel.js:157 js/TaskEditDialog.js:208 Model/Task.php:185
+#: js/GridPanel.js:157 js/TaskEditDialog.js:208 Model/Task.php:190
 msgid "Priority"
 msgstr "Priorytet"
 
-#: js/GridPanel.js:173 Model/Task.php:187
+#: js/GridPanel.js:173 Model/Task.php:192
 msgid "Percent"
 msgstr "W procentach"
 
 #: js/GridPanel.js:186 js/TaskEditDialog.js:237 js/Tasks.js:151
-#: js/Tasks.js:211 Model/Task.php:186
+#: js/Tasks.js:211 Model/Task.php:191
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "Status"
@@ -183,6 +112,11 @@ msgstr[2] "statusy"
 #: js/GridPanel.js:202 js/Tasks.js:163
 msgid "Creation Time"
 msgstr "Czas utworzenia"
+
+#: js/GridPanel.js:209 js/TaskEditDialog.js:242 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:66
+msgid "Completed"
+msgstr "Zakończone dnia"
 
 #: js/GridPanel.js:216 js/Tasks.js:159
 msgid "Responsible"
@@ -258,122 +192,198 @@ msgstr "Ostatnio zmieniony przez"
 msgid "Creator"
 msgstr "Utworzył(a)"
 
-#: Model/Task.php:182
+#: Model/Task.php:187
 msgid "Due"
 msgstr "Termin"
 
-#: Model/Task.php:183
+#: Model/Task.php:188
 msgid "Organizer"
 msgstr "Notatnik elektroniczny"
 
-#: Model/Task.php:184
+#: Model/Task.php:189
 msgid "Description"
 msgstr "Opis"
 
-#: Model/Task.php:200
+#: Model/Task.php:205
 msgid "Telephone"
 msgstr "Telefon"
 
-#: Model/Task.php:201
+#: Model/Task.php:206
 msgid "Email"
 msgstr "E-mail"
 
-#: Controller/Task.php:165
-msgid "Notification for Task "
-msgstr "Powiadomienie o zadaniu"
+#: Preference.php:25
+msgid "All my tasks"
+msgstr "Wszystkie moje zadania"
 
-#~ msgid "Tasks Status Available"
-#~ msgstr "Status zadania: Dostępne"
+#: Preference.php:67
+msgid "Default Favorite"
+msgstr "Domyślne ulubione"
 
-#~ msgid "NEEDS-ACTION"
-#~ msgstr "WYMAGA DZIAŁANIA"
+#: Preference.php:68
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "Domyślne ulubione zadanie ładowane przy uruchamianiu zadań"
 
-#~ msgid "COMPLETED"
-#~ msgstr "ZAKOŃCZONE"
+#: Preference.php:71
+msgid "Default Task List"
+msgstr "Domyślna lista zadań"
 
-#~ msgid "IN-PROCESS"
-#~ msgstr "W OPRACOWANIU"
+#: Preference.php:72
+msgid "The default task list to create new tasks in."
+msgstr "Domyślna lista zadań dla nowych zadań"
 
-#~ msgid "CANCELLED"
-#~ msgstr "ODWOŁANE"
+#: Setup/Initialize.php:34 Setup/Update/Release5.php:65
+msgid "No response"
+msgstr "Brak odpowiedzi"
 
-#~ msgid "Failed"
-#~ msgstr "Próba nieudana"
+#: Setup/Initialize.php:36 Setup/Update/Release5.php:67
+msgid "Cancelled"
+msgstr "Anulowane"
 
-#~ msgid "Could not save task."
-#~ msgstr "Zapisanie zadania było niemożliwe."
+#: Setup/Initialize.php:37 Setup/Update/Release5.php:68
+msgid "In process"
+msgstr "W opracowaniu"
 
-#~ msgid "to to list"
-#~ msgstr "Lista zadań"
+#: Setup/Initialize.php:50 Setup/Update/Release5.php:154
+msgid "low"
+msgstr ""
 
-#~ msgid "Tasks) "
-#~ msgstr "Zadania)"
+#: Setup/Initialize.php:51 Setup/Update/Release5.php:155
+msgid "normal"
+msgstr ""
 
-#~ msgid "Could not delete task(s)."
-#~ msgstr "Usunięcie zadania / zdań było niemożliwe."
+#: Setup/Initialize.php:52 Setup/Update/Release5.php:156
+msgid "high"
+msgstr ""
 
-#~ msgid "Edit task"
-#~ msgstr "Edytuj zadanie"
+#: Setup/Initialize.php:53 Setup/Update/Release5.php:157
+msgid "urgent"
+msgstr ""
 
-#~ msgid "Add task"
-#~ msgstr "Dodaj zadanie"
+#: Setup/Initialize.php:81 Setup/Update/Release3.php:65
+msgid "All tasks of my taskslists"
+msgstr "Wszystkie zadania z mojej listy zadań"
 
-#~ msgid "Delete task"
-#~ msgid_plural "Delete tasks"
-#~ msgstr[0] "Usuń zadanie"
-#~ msgstr[1] "Usuń zadania"
-#~ msgstr[2] "Usuń zadania"
+#: Setup/Initialize.php:90
+msgid "My open tasks"
+msgstr "Moje, rozpoczęte zadania"
 
-#~ msgid "Enter searchfilter"
-#~ msgstr "wpisz szukaną frazę"
+#: Setup/Initialize.php:99
+msgid "My open tasks this week"
+msgstr "Moje zadania rozpoczęte w tym tygodniu"
 
-#~ msgid "Search:"
-#~ msgstr "Znajdź:"
+#: Setup/Initialize.php:108
+msgid "All tasks for me"
+msgstr "Zadania przypisane do mnie"
 
-#~ msgid "Displaying tasks {0} - {1} of {2}"
-#~ msgstr "Wyświetlane zadania {0} - {1} z {2}"
+#: Setup/Initialize.php:109
+msgid "All tasks that I am responsible for"
+msgstr "Wszystkie zadania, za które odpowiadam"
 
-#~ msgid "No tasks to display"
-#~ msgstr "Brak zadań"
+#: Setup/Initialize.php:116
+msgid "Last modified by me"
+msgstr "Ostatnio zmienione przeze mnie"
 
-#~ msgid "No Tasks to display"
-#~ msgstr "Brak zadań"
+#: Setup/Initialize.php:117
+msgid "All tasks that I have last modified"
+msgstr "Wszystkie zadania zmienione ostatnio przeze mnie"
 
-#~ msgid "Loading Task..."
-#~ msgstr "Ładowanie zadania..."
+#: Setup/Initialize.php:126
+msgid "Tasks without responsible"
+msgstr "Nieprzypisane zadania"
 
-#~ msgid "Please Wait"
-#~ msgstr "Proszę czekać"
+msgid "Tasks Status Available"
+msgstr "Status zadania: Dostępne"
 
-#~ msgid "Add New Task"
-#~ msgstr "Dodaj nowe zadanie"
+msgid "NEEDS-ACTION"
+msgstr "WYMAGA DZIAŁANIA"
 
-#~ msgid "Edit Task \"{0}\""
-#~ msgstr "Edytuj zadanie \"{0}\""
+msgid "COMPLETED"
+msgstr "ZAKOŃCZONE"
 
-#~ msgid "Please wait"
-#~ msgstr "Proszę czekać"
+msgid "IN-PROCESS"
+msgstr "W OPRACOWANIU"
 
-#~ msgid "Saving Task"
-#~ msgstr "Zapisywanie zadania"
+msgid "CANCELLED"
+msgstr "ODWOŁANE"
 
-#~ msgid "Errors"
-#~ msgstr "Błędy"
+msgid "Failed"
+msgstr "Próba nieudana"
 
-#~ msgid "Please fix the errors noted."
-#~ msgstr "Proszę poprawić wskazane błędy."
+msgid "Could not save task."
+msgstr "Zapisanie zadania było niemożliwe."
 
-#~ msgid "Confirm"
-#~ msgstr "Potwierdzenie"
+msgid "to to list"
+msgstr "Lista zadań"
 
-#~ msgid "Do you really want to delete this task?"
-#~ msgstr "Czy na pewno chcesz usunąć to zadanie?"
+msgid "Tasks) "
+msgstr "Zadania)"
 
-#~ msgid "Please wait a moment..."
-#~ msgstr "Proszę chwileczkę poczekać …"
+msgid "Could not delete task(s)."
+msgstr "Usunięcie zadania / zdań było niemożliwe."
 
-#~ msgid "Enter short name..."
-#~ msgstr "wpisz swoją nazwę..."
+msgid "Edit task"
+msgstr "Edytuj zadanie"
 
-#~ msgid "Saved in"
-#~ msgstr "Zapisz w"
+msgid "Add task"
+msgstr "Dodaj zadanie"
+
+msgid "Delete task"
+msgid_plural "Delete tasks"
+msgstr[0] "Usuń zadanie"
+msgstr[1] "Usuń zadania"
+msgstr[2] "Usuń zadania"
+
+msgid "Enter searchfilter"
+msgstr "wpisz szukaną frazę"
+
+msgid "Search:"
+msgstr "Znajdź:"
+
+msgid "Displaying tasks {0} - {1} of {2}"
+msgstr "Wyświetlane zadania {0} - {1} z {2}"
+
+msgid "No tasks to display"
+msgstr "Brak zadań"
+
+msgid "No Tasks to display"
+msgstr "Brak zadań"
+
+msgid "Loading Task..."
+msgstr "Ładowanie zadania..."
+
+msgid "Please Wait"
+msgstr "Proszę czekać"
+
+msgid "Add New Task"
+msgstr "Dodaj nowe zadanie"
+
+msgid "Edit Task \"{0}\""
+msgstr "Edytuj zadanie \"{0}\""
+
+msgid "Please wait"
+msgstr "Proszę czekać"
+
+msgid "Saving Task"
+msgstr "Zapisywanie zadania"
+
+msgid "Errors"
+msgstr "Błędy"
+
+msgid "Please fix the errors noted."
+msgstr "Proszę poprawić wskazane błędy."
+
+msgid "Confirm"
+msgstr "Potwierdzenie"
+
+msgid "Do you really want to delete this task?"
+msgstr "Czy na pewno chcesz usunąć to zadanie?"
+
+msgid "Please wait a moment..."
+msgstr "Proszę chwileczkę poczekać …"
+
+msgid "Enter short name..."
+msgstr "wpisz swoją nazwę..."
+
+msgid "Saved in"
+msgstr "Zapisz w"

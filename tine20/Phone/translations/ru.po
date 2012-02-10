@@ -1,140 +1,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-07-22 00:50+0300\n"
-"Last-Translator: Nikolay Parukhin <nik@sevpinro.ru>\n"
+"PO-Revision-Date: 2012-01-13 13:37+0000\n"
+"Last-Translator: Nkolay Parukhin <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Language: Russian\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-
-#: js/Phone.js:29 js/Phone.js:479 js/Phone.js:480
-msgid "Edit phone settings"
-msgstr "Изменить настройки телефона"
-
-#: js/Phone.js:59 js/Phone.js:254 js/Models.js:69
-#, fuzzy
-msgid "Phone"
-msgid_plural "Phones"
-msgstr[0] "Телефон"
-msgstr[1] "Телефон"
-msgstr[2] "Телефон"
-
-#: js/Phone.js:70
-msgid "Phones"
-msgstr "Телефоны"
-
-#: js/Phone.js:277
-msgid "Line"
-msgstr "Линия"
-
-#: js/Phone.js:286
-msgid "Number"
-msgstr "Номер"
-
-#: js/Phone.js:295
-msgid "Cancel"
-msgstr "Отменить"
-
-#: js/Phone.js:305
-msgid "Dial"
-msgstr "Набрать"
-
-#: js/Phone.js:325
-msgid "Error"
-msgstr ""
-
-#: js/Phone.js:326
-msgid "Not possible to dial."
-msgstr ""
-
-#: js/Phone.js:469
-msgid "Dial number"
-msgstr "Наберите номер"
-
-#: js/Phone.js:470
-msgid "Initiate a new outgoing call"
-msgstr "Начните новый исходящий звонок"
-
-#: js/Phone.js:531
-msgid "Incoming call"
-msgstr "Входящий звонок"
-
-#: js/Phone.js:535
-msgid "Outgoing call"
-msgstr "Исходящий звонок"
-
-#: js/Phone.js:543
-msgid "unknown number"
-msgstr "неизвестный номер"
-
-#: js/Phone.js:580
-msgid "Search:"
-msgstr "Поиск:"
-
-#: js/Phone.js:665
-msgid "Source or Destination"
-msgstr "Источник или Назначение"
-
-#: js/Phone.js:681
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Показаны звонки {0} - {1} из {2}"
-
-#: js/Phone.js:682 js/Phone.js:725
-msgid "No calls to display"
-msgstr "Нет звонков"
-
-#: js/Phone.js:692
-msgid "Direction"
-msgstr "Направление"
-
-#: js/Phone.js:693
-msgid "Source"
-msgstr "Источник"
-
-#: js/Phone.js:694
-msgid "Caller Id"
-msgstr "Id звонящего по телефону"
-
-#: js/Phone.js:695
-msgid "Destination"
-msgstr "Назначение"
-
-#: js/Phone.js:696
-msgid "Start"
-msgstr "Старт"
-
-#: js/Phone.js:697
-msgid "Connected"
-msgstr "Соединение"
-
-#: js/Phone.js:698
-msgid "Disconnected"
-msgstr "Разъединение"
-
-#: js/Phone.js:699
-msgid "Duration"
-msgstr "Продолжительность"
-
-#: js/Phone.js:700
-msgid "Ringing"
-msgstr "Звонок"
-
-#: js/Phone.js:701
-msgid "Call ID"
-msgstr "ID звонка"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: js/AddressbookGridPanelHook.js:35
 msgid "Call contact"
@@ -156,152 +37,272 @@ msgstr ""
 msgid "Cell private"
 msgstr ""
 
-#~ msgid "Dial phone number"
-#~ msgstr "Набрать телефонный номер"
+#: js/Models.js:69 js/Phone.js:59 js/Phone.js:264
+msgid "Phone"
+msgid_plural "Phones"
+msgstr[0] ""
+msgstr[1] ""
 
-#~ msgid "Name"
-#~ msgstr "Имя"
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] ""
+msgstr[1] ""
 
-#~ msgid "Phone Model"
-#~ msgstr "Модель телефона"
+#: js/Phone.js:29 js/Phone.js:489 js/Phone.js:490
+msgid "Edit phone settings"
+msgstr "Изменить настройки телефона"
 
-#~ msgid "MAC Address"
-#~ msgstr "MAC адрес"
+#: js/Phone.js:70
+msgid "Phones"
+msgstr "Телефоны"
 
-#~ msgid "infos"
-#~ msgstr "данные"
+#: js/Phone.js:287
+msgid "Line"
+msgstr "Линия"
 
-#~ msgid "Current IP Address"
-#~ msgstr "Текущий IP адрес"
+#: js/Phone.js:296
+msgid "Number"
+msgstr "Номер"
 
-#~ msgid "Firmware last checked at"
-#~ msgstr "Прошивка проверена"
+#: js/Phone.js:305
+msgid "Cancel"
+msgstr "Отменить"
 
-#~ msgid "Current Software Version"
-#~ msgstr "Текущая версия ПО"
+#: js/Phone.js:315
+msgid "Dial"
+msgstr "Набрать"
 
-#~ msgid "Settings Loaded at"
-#~ msgstr "Настройки загружены"
+#: js/Phone.js:335
+msgid "Error"
+msgstr ""
 
-#~ msgid "redirection"
-#~ msgstr "переадресация"
+#: js/Phone.js:336
+msgid "Not possible to dial."
+msgstr ""
 
-#~ msgid "all"
-#~ msgstr "все"
+#: js/Phone.js:479
+msgid "Dial number"
+msgstr "Наберите номер"
 
-#~ msgid "busy"
-#~ msgstr "занято"
+#: js/Phone.js:480
+msgid "Initiate a new outgoing call"
+msgstr "Начните новый исходящий звонок"
 
-#~ msgid "none"
-#~ msgstr "нет"
+#: js/Phone.js:541
+msgid "Incoming call"
+msgstr "Входящий звонок"
 
-#~ msgid "time"
-#~ msgstr "время"
+#: js/Phone.js:545
+msgid "Outgoing call"
+msgstr "Исходящий звонок"
 
-#~ msgid "redirect_number"
-#~ msgstr "номер_переадресации"
+#: js/Phone.js:553
+msgid "unknown number"
+msgstr "неизвестный номер"
 
-#~ msgid "redirect_time"
-#~ msgstr "время_переадресации"
+#: js/Phone.js:590
+msgid "Search:"
+msgstr "Поиск:"
 
-#~ msgid "Settings"
-#~ msgstr "Настройки"
+#: js/Phone.js:675
+msgid "Source or Destination"
+msgstr "Источник или Назначение"
 
-#~ msgid "web_language"
-#~ msgstr "язык_веб"
+#: js/Phone.js:691
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr "Показаны звонки {0} - {1} из {2}"
 
-#~ msgid "- factory default -"
-#~ msgstr "- заводские установки -"
+#: js/Phone.js:692 js/Phone.js:735
+msgid "No calls to display"
+msgstr "Нет звонков"
 
-#~ msgid "language"
-#~ msgstr "язык"
+#: js/Phone.js:702
+msgid "Direction"
+msgstr "Направление"
 
-#~ msgid "display_method"
-#~ msgstr "способ_показа"
+#: js/Phone.js:703
+msgid "Source"
+msgstr "Источник"
 
-#~ msgid "whole url"
-#~ msgstr "весь url"
+#: js/Phone.js:704
+msgid "Caller Id"
+msgstr "Id звонящего по телефону"
 
-#~ msgid "name"
-#~ msgstr "имя"
+#: js/Phone.js:705
+msgid "Destination"
+msgstr "Назначение"
 
-#~ msgid "number"
-#~ msgstr "номер"
+#: js/Phone.js:706
+msgid "Start"
+msgstr "Старт"
 
-#~ msgid "name + number"
-#~ msgstr "имя + номер"
+#: js/Phone.js:707
+msgid "Connected"
+msgstr "Соединение"
 
-#~ msgid "number + name"
-#~ msgstr "номер + имя"
+#: js/Phone.js:708
+msgid "Disconnected"
+msgstr "Разъединение"
 
-#~ msgid "call_waiting"
-#~ msgstr "ожидание_звонка"
+#: js/Phone.js:709
+msgid "Duration"
+msgstr "Продолжительность"
 
-#~ msgid "on"
-#~ msgstr "вкл"
+#: js/Phone.js:710
+msgid "Ringing"
+msgstr "Звонок"
+
+#: js/Phone.js:711
+msgid "Call ID"
+msgstr "ID звонка"
+
+msgid "Dial phone number"
+msgstr "Набрать телефонный номер"
+
+msgid "Name"
+msgstr "Имя"
+
+msgid "Phone Model"
+msgstr "Модель телефона"
+
+msgid "MAC Address"
+msgstr "MAC адрес"
+
+msgid "infos"
+msgstr "данные"
+
+msgid "Current IP Address"
+msgstr "Текущий IP адрес"
+
+msgid "Firmware last checked at"
+msgstr "Прошивка проверена"
+
+msgid "Current Software Version"
+msgstr "Текущая версия ПО"
+
+msgid "Settings Loaded at"
+msgstr "Настройки загружены"
+
+msgid "redirection"
+msgstr "переадресация"
+
+msgid "all"
+msgstr "все"
+
+msgid "busy"
+msgstr "занято"
+
+msgid "none"
+msgstr "нет"
+
+msgid "time"
+msgstr "время"
+
+msgid "redirect_number"
+msgstr "номер_переадресации"
+
+msgid "redirect_time"
+msgstr "время_переадресации"
+
+msgid "Settings"
+msgstr "Настройки"
+
+msgid "web_language"
+msgstr "язык_веб"
+
+msgid "- factory default -"
+msgstr "- заводские установки -"
+
+msgid "language"
+msgstr "язык"
+
+msgid "display_method"
+msgstr "способ_показа"
+
+msgid "whole url"
+msgstr "весь url"
+
+msgid "name"
+msgstr "имя"
+
+msgid "number"
+msgstr "номер"
+
+msgid "name + number"
+msgstr "имя + номер"
+
+msgid "number + name"
+msgstr "номер + имя"
+
+msgid "call_waiting"
+msgstr "ожидание_звонка"
+
+msgid "on"
+msgstr "вкл"
 
 #, fuzzy
-#~ msgid "visual"
-#~ msgstr "видимый"
+msgid "visual"
+msgstr "видимый"
 
-#~ msgid "ringer"
-#~ msgstr "звонок"
+msgid "ringer"
+msgstr "звонок"
 
-#~ msgid "off"
-#~ msgstr "выкл"
+msgid "off"
+msgstr "выкл"
 
-#~ msgid "silent"
-#~ msgstr "беззвучный"
+msgid "silent"
+msgstr "беззвучный"
 
-#~ msgid "reminder"
-#~ msgstr "напоминание"
+msgid "reminder"
+msgstr "напоминание"
 
-#~ msgid "normal"
-#~ msgstr "нормальный"
+msgid "normal"
+msgstr "нормальный"
 
-#~ msgid "stutter"
-#~ msgstr "заикание"
+msgid "stutter"
+msgstr "заикание"
 
-#~ msgid "headset_device"
-#~ msgstr "гарнитура"
+msgid "headset_device"
+msgstr "гарнитура"
 
-#~ msgid "headset_rj"
-#~ msgstr "разъём_гарнитуры"
+msgid "headset_rj"
+msgstr "разъём_гарнитуры"
 
-#~ msgid "global_missed_counter"
-#~ msgstr "общий_счётчик_пропущенных"
-
-#, fuzzy
-#~ msgid "scroll_outgoing"
-#~ msgstr "прокрутка_исходящего"
-
-#~ msgid "show_local_line"
-#~ msgstr "показывать_местное_время"
-
-#~ msgid "show_call_status"
-#~ msgstr "показать_состояние_звонка"
+msgid "global_missed_counter"
+msgstr "общий_счётчик_пропущенных"
 
 #, fuzzy
-#~ msgid "lineactive"
-#~ msgstr "активная линия"
+msgid "scroll_outgoing"
+msgstr "прокрутка_исходящего"
 
-#~ msgid "sipCombo"
-#~ msgstr "sipCombo"
+msgid "show_local_line"
+msgstr "показывать_местное_время"
 
-#~ msgid "Idle Text"
-#~ msgstr "Текст при ожидании"
+msgid "show_call_status"
+msgstr "показать_состояние_звонка"
 
-#~ msgid "Lines"
-#~ msgstr "Линии"
+#, fuzzy
+msgid "lineactive"
+msgstr "активная линия"
 
-#~ msgid "Users"
-#~ msgstr "Пользователи"
+msgid "sipCombo"
+msgstr "sipCombo"
 
-#~ msgid "Rights"
-#~ msgstr "Права"
+msgid "Idle Text"
+msgstr "Текст при ожидании"
 
-#~ msgid "enter searchfilter"
-#~ msgstr "ввести поисковый фильтр"
+msgid "Lines"
+msgstr "Линии"
 
-#~ msgid "Incoming"
-#~ msgstr "Входящий"
+msgid "Users"
+msgstr "Пользователи"
+
+msgid "Rights"
+msgstr "Права"
+
+msgid "enter searchfilter"
+msgstr "ввести поисковый фильтр"
+
+msgid "Incoming"
+msgstr "Входящий"

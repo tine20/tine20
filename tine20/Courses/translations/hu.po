@@ -1,28 +1,87 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: \n"
-"Last-Translator: Faragó Tamás <tamas@kemenyfem.hu>\n"
+"PO-Revision-Date: 2012-01-13 13:11+0000\n"
+"Last-Translator: Faragó Tamás <Unknown>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Language: Hungarian\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: HUNGARY\n"
+"X-Poedit-Language: Hungarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Frontend/Json.php:254 js/Models.js:41 js/CourseEditDialog.js:141
+#: Controller/Course.php:107
+msgid "teacher"
+msgstr "tanár"
+
+#: Controller/Course.php:115
+msgid "Teacher"
+msgstr "Tanár"
+
+#: Controller/Course.php:116
+msgid "Teacher Account"
+msgstr "Tanár felhasználó"
+
+#: Frontend/Json.php:254 js/CourseEditDialog.js:144 js/Models.js:41
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Kurzus"
 msgstr[1] "Kurzusok"
 
-#: Setup/setup.xml:4 js/Courses.js:32
-msgid "Courses"
-msgstr "Kurzusok"
+#: js/CourseEditDialog.js:31
+msgid "Import course members"
+msgstr "Kurzus tagok importálása"
+
+#: js/CourseEditDialog.js:160
+msgid "Course Name"
+msgstr "Kurzus név"
+
+#: js/CourseEditDialog.js:167
+msgid "Course / School Type"
+msgstr "Kurzus / Iskola típus"
+
+#: js/CourseEditDialog.js:178
+msgid "Description"
+msgstr "Leírás"
+
+#: js/CourseEditDialog.js:185 js/CourseGridPanel.js:85
+msgid "Internet Access"
+msgstr "Internet elérés"
+
+#: js/CourseEditDialog.js:191 js/CourseGridPanel.js:93
+msgid "Fileserver Access"
+msgstr "Fileszerver elérés"
+
+#: js/CourseEditDialog.js:222
+msgid "Members"
+msgstr "Tagok"
+
+#: js/CourseEditDialog.js:248
+msgid "Login"
+msgstr "Bejelentkezés"
+
+#: js/CourseEditDialog.js:252
+msgid "unknown"
+msgstr "ismeretlen"
+
+#: js/CourseEditDialog.js:257
+msgid "Reset Password"
+msgstr "Jelszó újraállítása"
+
+#: js/CourseEditDialog.js:275
+msgid "Set new password"
+msgstr "Új jelszó beállítása"
+
+#: js/CourseEditDialog.js:275
+msgid "Please enter the new password:"
+msgstr "Kérlek írd be az új jelszót:"
 
 #: js/CourseGridPanel.js:49
 msgid "Quick search"
@@ -35,14 +94,6 @@ msgstr "Név"
 #: js/CourseGridPanel.js:78
 msgid "Type"
 msgstr "Típus"
-
-#: js/CourseGridPanel.js:85 js/CourseEditDialog.js:182
-msgid "Internet Access"
-msgstr "Internet elérés"
-
-#: js/CourseGridPanel.js:93 js/CourseEditDialog.js:188
-msgid "Fileserver Access"
-msgstr "Fileszerver elérés"
 
 #: js/CourseGridPanel.js:119
 msgid "Internet Access On"
@@ -68,6 +119,14 @@ msgstr "Hibás"
 msgid "Some error occured while trying to update the courses."
 msgstr "Néhány hiba történt a kurzus frissítése közben."
 
+#: js/Courses.js:41 Setup/setup.xml:4
+msgid "Courses"
+msgstr "Kurzusok"
+
+#: js/Courses.js:46
+msgid "All Courses"
+msgstr "Minden kurzus"
+
 #: js/Models.js:45
 msgid "record list"
 msgid_plural "record lists"
@@ -79,59 +138,3 @@ msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "Kurzus típus"
 msgstr[1] "Kurzus típusok"
-
-#: js/Courses.js:37
-msgid "All Courses"
-msgstr "Minden kurzus"
-
-#: js/CourseEditDialog.js:31
-msgid "Import course members"
-msgstr "Kurzus tagok importálása"
-
-#: js/CourseEditDialog.js:157
-msgid "Course Name"
-msgstr "Kurzus név"
-
-#: js/CourseEditDialog.js:164
-msgid "Course / School Type"
-msgstr "Kurzus / Iskola típus"
-
-#: js/CourseEditDialog.js:175
-msgid "Description"
-msgstr "Leírás"
-
-#: js/CourseEditDialog.js:219
-msgid "Members"
-msgstr "Tagok"
-
-#: js/CourseEditDialog.js:245
-msgid "Login"
-msgstr "Bejelentkezés"
-
-#: js/CourseEditDialog.js:249
-msgid "unknown"
-msgstr "ismeretlen"
-
-#: js/CourseEditDialog.js:254
-msgid "Reset Password"
-msgstr "Jelszó újraállítása"
-
-#: js/CourseEditDialog.js:272
-msgid "Set new password"
-msgstr "Új jelszó beállítása"
-
-#: js/CourseEditDialog.js:272
-msgid "Please enter the new password:"
-msgstr "Kérlek írd be az új jelszót:"
-
-#: Controller/Course.php:107
-msgid "teacher"
-msgstr "tanár"
-
-#: Controller/Course.php:115
-msgid "Teacher"
-msgstr "Tanár"
-
-#: Controller/Course.php:116
-msgid "Teacher Account"
-msgstr "Tanár felhasználó"

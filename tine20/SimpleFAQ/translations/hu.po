@@ -1,171 +1,171 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - SimpleFAQ\n"
+"Project-Id-Version: Tine 2.0 - Sipgate\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-12-05 11:28+0100\n"
-"Last-Translator: Faragó Tamás <tamas@kemenyfem.hu>\n"
+"PO-Revision-Date: 2012-01-13 20:13+0000\n"
+"Last-Translator: Faragó Tamás <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Hungarian\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:22+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
+"X-Poedit-Country: GB\n"
+"Language: \n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: Controller.php:109
 #, python-format
 msgid "%s's personal FAQs"
-msgstr "%s személyes GYIK"
-
-#: Controller.php:147
-msgid "Draft"
-msgstr "Sablon"
+msgstr ""
 
 #: Controller.php:148
-msgid "released"
-msgstr "kiadott"
+msgid "Draft"
+msgstr ""
 
 #: Controller.php:149
-msgid "obsolete"
-msgstr "elavult"
+msgid "released"
+msgstr ""
 
-#: Controller.php:152
-msgid "Internal"
-msgstr "Belső"
+#: Controller.php:150
+msgid "obsolete"
+msgstr ""
 
 #: Controller.php:153
-msgid "Public"
-msgstr "Publikus"
+msgid "Internal"
+msgstr ""
 
-#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqGridDetailsPanel.js:205
-#: js/FaqStatus.js:26 js/FaqStatusFilterModel.js:27
+#: Controller.php:154
+msgid "Public"
+msgstr ""
+
+#: Setup/Initialize.php:33
+msgid "All FAQs of my FAQ Lists"
+msgstr ""
+
+#: Setup/Initialize.php:40
+msgid "Last modified by me"
+msgstr ""
+
+#: Setup/Initialize.php:41
+msgid "All FAQs that I have last modified"
+msgstr ""
+
+#: Preference.php:28
+msgid "All my FAQs"
+msgstr ""
+
+#: Preference.php:70
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:71
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr ""
+
+#: Preference.php:74
+msgid "Default FAQ List"
+msgstr ""
+
+#: Preference.php:75
+msgid "The default FAQ list to create new FAQ in."
+msgstr ""
+
+#: js/FaqStatusFilterModel.js:27 js/AdminPanel.js:93 js/AdminPanel.js:125
+#: js/FaqStatus.js:26 js/FaqGridDetailsPanel.js:205
 msgid "FAQ Status"
 msgid_plural "FAQ Status"
-msgstr[0] "GYIK állapot"
-msgstr[1] "GYIK állapot"
+msgstr[0] ""
+msgstr[1] ""
 
-#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqGridDetailsPanel.js:210
-#: js/FaqType.js:26 js/FaqTypeFilterModel.js:27
+#: js/FaqTypeFilterModel.js:27 js/AdminPanel.js:97 js/AdminPanel.js:132
+#: js/FaqType.js:26 js/FaqGridDetailsPanel.js:210
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
-msgstr[0] "GYIK típus"
-msgstr[1] "GYIK típusok"
-
-#: js/AdminPanel.js:105
-msgid "Defaults"
-msgstr "Alapérelmezettek"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/FaqEditDialog.js:108 js/FaqGridDetailsPanel.js:157
 #: js/FaqGridPanel.js:120
 msgid "Question"
-msgstr "Kérdés"
+msgstr ""
 
 #: js/FaqEditDialog.js:109
 msgid "Enter a question..."
-msgstr "Írj be egy kérdést..."
+msgstr ""
 
 #: js/FaqEditDialog.js:115 js/FaqGridDetailsPanel.js:163
 #: js/FaqGridPanel.js:127
 msgid "Answer"
-msgstr "Válasz"
+msgstr ""
 
 #: js/FaqEditDialog.js:116
 msgid "Enter a answer..."
-msgstr "Írj be egy választ..."
+msgstr ""
 
 #: js/FaqEditDialog.js:124 js/FaqGridPanel.js:114
 msgid "Type"
-msgstr "Típus"
+msgstr ""
 
 #: js/FaqEditDialog.js:136 js/FaqGridPanel.js:108
 msgid "Status"
 msgstr "Állapot"
 
-#: js/FaqGridDetailsPanel.js:103 js/FaqGridDetailsPanel.js:188
-msgid "FAQ Infos"
-msgstr "GYIK információk"
-
-#: js/FaqGridDetailsPanel.js:169 js/FaqGridPanel.js:101
-msgid "Tags"
-msgstr "Címkék"
-
-#: js/FaqGridDetailsPanel.js:195
-msgid "Creation Time"
-msgstr "Létrehozás ideje"
-
-#: js/FaqGridDetailsPanel.js:200
-msgid "Created By"
-msgstr "Készítette"
-
-#: js/FaqGridDetailsPanel.js:232
-msgid "No answer yet"
-msgstr "Nincs még válasz"
-
-#: js/FaqGridPanel.js:94
-msgid "FAQ id"
-msgstr "GYIK id"
-
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr "Új GYIK állapot hozzáadása..."
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr ""
 
 #: js/FaqType.js:144
 msgid "Add a new FAQ Type..."
-msgstr "Új GYIK típus hozzáadása..."
+msgstr ""
 
-#: js/Model.js:33 js/SimpleFAQ.js:19
+#: js/SimpleFAQ.js:19 js/Model.js:33
 msgid "FAQ"
 msgid_plural "FAQs"
-msgstr[0] "GYIK"
-msgstr[1] "GYIK"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr ""
 
 #: js/Model.js:37
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
-msgstr[0] "GYIK lista"
-msgstr[1] "GYIK listák"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/Model.js:37
 msgid "FAQ Lists"
-msgstr "GYIK listák"
-
-#: js/Model.js:37
-msgid "FAQ Lists"
-msgstr "GYIK lista"
+msgstr ""
 
 #: js/Model.js:72
 msgid "Quick search"
-msgstr "Gyors keresés"
+msgstr ""
 
-#: Preference.php:28
-msgid "All my FAQs"
-msgstr "Minden GYIKom"
+#: js/FaqGridDetailsPanel.js:103 js/FaqGridDetailsPanel.js:188
+msgid "FAQ Infos"
+msgstr ""
 
-#: Preference.php:70
-msgid "Default Favorite"
-msgstr "Alapértelmezett kedvenc"
+#: js/FaqGridDetailsPanel.js:169 js/FaqGridPanel.js:101
+msgid "Tags"
+msgstr ""
 
-#: Preference.php:71
-msgid "The default favorite which is loaded on FAQ startup"
-msgstr "Az alapértelmezett kedvenc, amelyik a GYIK indításakor betöltődik"
+#: js/FaqGridDetailsPanel.js:195
+msgid "Creation Time"
+msgstr ""
 
-#: Preference.php:74
-msgid "Default FAQ List"
-msgstr "Alapértelmezett GYIK lista"
+#: js/FaqGridDetailsPanel.js:200
+msgid "Created By"
+msgstr ""
 
-#: Preference.php:75
-msgid "The default FAQ list to create new FAQ in."
-msgstr "Az alapértelmezett GYIK lista új GYIK létrehozására."
+#: js/FaqGridDetailsPanel.js:232
+msgid "No answer yet"
+msgstr ""
 
-#: Setup/Initialize.php:33
-msgid "All FAQs of my FAQ Lists"
-msgstr "Minden GYIK a GYIK listámból"
-
-#: Setup/Initialize.php:40
-msgid "Last modified by me"
-msgstr "Utoljára álltalam módosított"
-
-#: Setup/Initialize.php:41
-msgid "All FAQs that I have last modified"
-msgstr "Minden GYIK amit utoljára én módosítottam"
+#: js/FaqGridPanel.js:94
+msgid "FAQ id"
+msgstr ""

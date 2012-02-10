@@ -22,126 +22,85 @@ msgstr ""
 msgid "{0}"
 msgstr ""
 
-#: js/TimeaccountSelect.js:71 js/TimeaccountEditDialog.js:115
-msgid "closed"
+#: js/DurationSpinner.js:62 js/DurationSpinner.js:72
+msgid "Not a valid time"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:92 js/TimeaccountGridPanel.js:91
-msgid "Tags"
+#: js/Models.js:45 js/TimesheetEditDialog.js:127
+msgid "Timesheet"
+msgid_plural "Timesheets"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:49
+msgid "timesheets list"
+msgid_plural "timesheets lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:78 js/Models.js:147
+msgid "Quick search"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:94 js/TimesheetEditDialog.js:161 js/Models.js:80
+#: js/Models.js:79 js/TimesheetEditDialog.js:186 js/TimesheetGridPanel.js:108
+msgid "Account"
+msgstr ""
+
+#: js/Models.js:80 js/TimesheetEditDialog.js:161 js/TimesheetGridPanel.js:94
 msgid "Date"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:96
-msgid "Start time"
+#: js/Models.js:81 js/Models.js:150 js/TimeaccountEditDialog.js:92
+#: js/TimeaccountEditDialog.js:168 js/TimesheetEditDialog.js:172
+#: js/TimesheetGridPanel.js:102 js/TimesheetGridPanel.js:250
+msgid "Description"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:98 js/TimeaccountEditDialog.js:66
-#: js/TimesheetEditDialog.js:144 js/Models.js:125
+#: js/Models.js:82 js/TimesheetEditDialog.js:191 js/TimesheetGridPanel.js:103
+#: js/TimesheetGridPanel.js:389
+msgid "Billable"
+msgstr ""
+
+#: js/Models.js:83 js/TimesheetEditDialog.js:197 js/TimesheetGridPanel.js:105
+#: js/TimesheetGridPanel.js:394
+msgid "Cleared"
+msgstr ""
+
+#: js/Models.js:125 js/TimeaccountEditDialog.js:66
+#: js/TimesheetEditDialog.js:144 js/TimesheetGridPanel.js:98
 msgid "Time Account"
 msgid_plural "Time Accounts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/TimesheetGridPanel.js:100
-msgid "Time Account closed"
-msgstr ""
+#: js/Models.js:129
+msgid "timeaccount list"
+msgid_plural "timeaccount lists"
+msgstr[0] ""
+msgstr[1] ""
 
-#: js/TimesheetGridPanel.js:102 js/TimesheetGridPanel.js:250
-#: js/TimeaccountEditDialog.js:92 js/TimeaccountEditDialog.js:168
-#: js/TimesheetEditDialog.js:172 js/Models.js:81 js/Models.js:150
-msgid "Description"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:103 js/TimesheetGridPanel.js:389
-#: js/TimesheetEditDialog.js:191 js/Models.js:82
-msgid "Billable"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:105 js/TimesheetGridPanel.js:394
-#: js/TimesheetEditDialog.js:197 js/Models.js:83
-msgid "Cleared"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:107 js/TimesheetGridPanel.js:399
-#: js/TimeaccountGridPanel.js:116
-msgid "Cleared in"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:108 js/TimesheetEditDialog.js:186 js/Models.js:79
-msgid "Account"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:110 js/TimesheetEditDialog.js:156
-msgid "Duration"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:163
-msgid "timeframe"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:187
-msgid "summary"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:190
-msgid "Total Timesheets"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:191
-msgid "Billable Timesheets"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:192
-msgid "Total Time"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:193
-msgid "Time of Billable Timesheets"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:264
-msgid "Detail"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:315
-msgid "Export Timesheets"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:324 js/TimeaccountGridPanel.js:152
-msgid "Export as ODS"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:331 js/TimeaccountGridPanel.js:159
-msgid "Export as CSV"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:338
-msgid "Export as ..."
-msgstr ""
-
-#: js/TimesheetGridPanel.js:381
-msgid "Mass Update"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:387
-msgid "Update field:"
-msgstr ""
-
-#: js/DurationSpinner.js:62 js/DurationSpinner.js:72
-msgid "Not a valid time"
-msgstr ""
-
-#: js/TimeaccountEditDialog.js:82 js/TimeaccountGridPanel.js:94
-#: js/Models.js:148
+#: js/Models.js:148 js/TimeaccountEditDialog.js:82
+#: js/TimeaccountGridPanel.js:94
 msgid "Number"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:87 js/TimeaccountGridPanel.js:99
-#: js/Models.js:149
+#: js/Models.js:149 js/TimeaccountEditDialog.js:87
+#: js/TimeaccountGridPanel.js:99
 msgid "Title"
+msgstr ""
+
+#: js/Models.js:151
+msgid "Created By"
+msgstr ""
+
+#: js/Models.js:152 js/TimeaccountEditDialog.js:109
+#: js/TimeaccountGridPanel.js:104
+msgid "Status"
+msgstr ""
+
+#: js/Models.js:153 js/TimeaccountEditDialog.js:136
+#: js/TimeaccountGridPanel.js:122
+msgid "Booking deadline"
 msgstr ""
 
 #: js/TimeaccountEditDialog.js:97
@@ -156,9 +115,8 @@ msgstr ""
 msgid "Budget"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:109 js/TimeaccountGridPanel.js:104
-#: js/Models.js:152
-msgid "Status"
+#: js/TimeaccountEditDialog.js:115 js/TimeaccountSelect.js:71
+msgid "closed"
 msgstr ""
 
 #: js/TimeaccountEditDialog.js:115
@@ -190,11 +148,6 @@ msgstr ""
 
 #: js/TimeaccountEditDialog.js:132 js/TimesheetEditDialog.js:207
 msgid "Cleared In"
-msgstr ""
-
-#: js/TimeaccountEditDialog.js:136 js/TimeaccountGridPanel.js:122
-#: js/Models.js:153
-msgid "Booking deadline"
 msgstr ""
 
 #: js/TimeaccountEditDialog.js:144
@@ -269,19 +222,34 @@ msgstr ""
 msgid "Permissions"
 msgstr ""
 
+#: js/TimeaccountGridPanel.js:91 js/TimesheetGridPanel.js:92
+msgid "Tags"
+msgstr ""
+
+#: js/TimeaccountGridPanel.js:116 js/TimesheetGridPanel.js:107
+#: js/TimesheetGridPanel.js:399
+msgid "Cleared in"
+msgstr ""
+
+#: js/TimeaccountGridPanel.js:152 js/TimesheetGridPanel.js:324
+msgid "Export as ODS"
+msgstr ""
+
+#: js/TimeaccountGridPanel.js:159 js/TimesheetGridPanel.js:331
+msgid "Export as CSV"
+msgstr ""
+
 #: js/TimeaccountGridPanel.js:170
 msgid "Show closed"
+msgstr ""
+
+#: js/TimeAccountStatusFilterModel.js:24
+msgid "Time Account - Status"
 msgstr ""
 
 #: js/TimesheetEditDialog.js:93 js/TimesheetEditDialog.js:94
 msgid "Billed in ..."
 msgstr ""
-
-#: js/TimesheetEditDialog.js:127 js/Models.js:45
-msgid "Timesheet"
-msgid_plural "Timesheets"
-msgstr[0] ""
-msgstr[1] ""
 
 #: js/TimesheetEditDialog.js:145
 msgid "Select Time Account..."
@@ -289,6 +257,10 @@ msgstr ""
 
 #: js/TimesheetEditDialog.js:146
 msgid "Searching..."
+msgstr ""
+
+#: js/TimesheetEditDialog.js:156 js/TimesheetGridPanel.js:110
+msgid "Duration"
 msgstr ""
 
 #: js/TimesheetEditDialog.js:166
@@ -323,48 +295,60 @@ msgstr ""
 msgid "You need to set a Timeaccount this Timesheet belongs to."
 msgstr ""
 
-#: js/TimeAccountStatusFilterModel.js:24
-msgid "Time Account - Status"
+#: js/TimesheetGridPanel.js:96
+msgid "Start time"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:100
+msgid "Time Account closed"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:163
+msgid "timeframe"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:187
+msgid "summary"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:190
+msgid "Total Timesheets"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:191
+msgid "Billable Timesheets"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:192
+msgid "Total Time"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:193
+msgid "Time of Billable Timesheets"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:264
+msgid "Detail"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:315
+msgid "Export Timesheets"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:338
+msgid "Export as ..."
+msgstr ""
+
+#: js/TimesheetGridPanel.js:381
+msgid "Mass Update"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:387
+msgid "Update field:"
 msgstr ""
 
 #: js/Timetracker.js:25
 msgid "New Timesheet"
-msgstr ""
-
-#: js/Timetracker.js:77
-msgid "Timesheets"
-msgstr ""
-
-#: js/Timetracker.js:82
-msgid "All Timesheets"
-msgstr ""
-
-#: js/Timetracker.js:91
-msgid "Timeaccounts"
-msgstr ""
-
-#: js/Timetracker.js:96
-msgid "All Timeaccounts"
-msgstr ""
-
-#: js/Models.js:49
-msgid "timesheets list"
-msgid_plural "timesheets lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Models.js:78 js/Models.js:147
-msgid "Quick search"
-msgstr ""
-
-#: js/Models.js:129
-msgid "timeaccount list"
-msgid_plural "timeaccount lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Models.js:151
-msgid "Created By"
 msgstr ""
 
 #: Preference.php:64
@@ -377,10 +361,6 @@ msgstr ""
 
 #: Preference.php:116
 msgid "default"
-msgstr ""
-
-#: Setup/setup.xml:4
-msgid "Timetracker"
 msgstr ""
 
 #: Setup/Initialize.php:33
@@ -401,4 +381,20 @@ msgstr ""
 
 #: Setup/Initialize.php:89
 msgid "Timesheets last month"
+msgstr ""
+
+#: Setup/Initialize.php:112 Setup/Update/Release5.php:81
+msgid "Timeaccounts to bill"
+msgstr ""
+
+#: Setup/Initialize.php:126 Setup/Update/Release5.php:95
+msgid "Timeaccounts not yet billed"
+msgstr ""
+
+#: Setup/Initialize.php:141 Setup/Update/Release5.php:109
+msgid "Timeaccounts already billed"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Timetracker"
 msgstr ""

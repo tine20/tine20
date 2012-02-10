@@ -1,22 +1,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-11-23 20:39+0100\n"
-"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
+"PO-Revision-Date: 2012-01-13 13:18+0000\n"
+"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-
-#: Controller.php:95
-#, python-format
-msgid "%s's personal files"
-msgstr "%s's osobistych plików"
 
 #: Acl/Rights.php:97
 msgid "manage shared folders"
@@ -26,158 +23,22 @@ msgstr "zarządzanie wspólnymi katalogami"
 msgid "Create new shared folders"
 msgstr "Utwórz nowe, wspólne katalogi"
 
-#: js/GridPanel.js:132
-msgid "Name"
-msgstr "Nazwa"
+#: Controller/Node.php:163
+msgid "My folders"
+msgstr "Moje katalogi"
 
-#: js/GridPanel.js:139
-msgid "Size"
-msgstr "Rozmiar"
+#: Controller/Node.php:170
+msgid "Shared folders"
+msgstr "Katalogi współdzielone"
 
-#: js/GridPanel.js:146 js/Model.js:509
-msgid "Contenttype"
-msgstr "Typ zawartości"
+#: Controller/Node.php:177
+msgid "Other users folders"
+msgstr "Katalogi innych użytkowników"
 
-#: js/GridPanel.js:154
-msgid "Folder"
-msgstr "Katalog"
-
-#: js/GridPanel.js:163
-msgid "Revision"
-msgstr "Rewizja"
-
-#: js/GridPanel.js:178 js/Model.js:510
-msgid "Creation Time"
-msgstr "Czas utworzenia"
-
-#: js/GridPanel.js:186
-msgid "Created By"
-msgstr "Utworzone przez"
-
-#: js/GridPanel.js:193
-msgid "Last Modified Time"
-msgstr "Data ostatniej modyfikacji"
-
-#: js/GridPanel.js:200
-msgid "Last Modified By"
-msgstr "Ostatnio zmodyfikowane przez"
-
-#: js/GridPanel.js:234
-msgid "Show closed"
-msgstr "Pokaż zamknięte"
-
-#: js/GridPanel.js:278
-msgid "Upload"
-msgstr "Przesyłanie"
-
-#: js/GridPanel.js:304
-msgid "Create Folder"
-msgstr "Utwórz katalog"
-
-#: js/GridPanel.js:315
-msgid "Folder Up"
-msgstr "Katalog nadrzędny"
-
-#: js/GridPanel.js:326
-msgid "Save locally"
-msgstr "Zapisz lokalnie"
-
-#: js/GridPanel.js:337 js/GridPanel.js:338 js/GridPanel.js:340
-msgid "Delete"
-msgstr "Usuń"
-
-#: js/GridPanel.js:350 js/GridPanel.js:351 js/GridPanel.js:353
-msgid "Rename"
-msgstr "Zmień nazwę"
-
-#: js/GridPanel.js:361
-msgid "Pause upload"
-msgstr "Zatrzymaj przesyłanie"
-
-#: js/GridPanel.js:368
-msgid "Resume upload"
-msgstr "Kontynuuj przesyłanie"
-
-#: js/GridPanel.js:491 js/Model.js:40
-msgid "user file folder"
-msgstr "katalog pliku użytkownika"
-
-#: js/GridPanel.js:493
-msgid "New {0}"
-msgstr "Nowy {0}"
-
-#: js/GridPanel.js:493
-msgid "Please enter the name of the new {0}:"
-msgstr "Proszę wpisać nazwę nowego {0}:"
-
-#: js/GridPanel.js:498
-msgid "No {0} added"
-msgstr "{0} nie został dodany"
-
-#: js/GridPanel.js:498 js/GridContextMenu.js:42
-msgid "You have to supply a {0} name!"
-msgstr "Musisz wprowadzić nazwę {0}!"
-
-#: js/GridPanel.js:542 js/GridContextMenu.js:146
-msgid "Do you really want to delete the following files?"
-msgstr "Czy na pewno chcesz usunąć następujące pliki?"
-
-#: js/GridPanel.js:642 js/GridPanel.js:798 js/TreePanel.js:650
-#: js/TreePanel.js:760
-msgid "Upload Failed"
-msgstr "Przesyłanie zakończone niepowodzeniem"
-
-#: js/GridPanel.js:643 js/TreePanel.js:651
-msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
-msgstr "Plik nie został przesłany. Być może jego rozmiar jest za duży. Proszę powiadomić swojego administratora. Maksymalny rozmiar przesyłanego pliku:"
-
-#: js/GridPanel.js:799 js/TreePanel.js:761
-msgid "Putting files in this folder is not allowed!"
-msgstr "Wstawianie plików do tego katalogu jest niedozwolone!"
-
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr "ścieżka"
-
-#: js/GridContextMenu.js:36
-msgid "Please enter the new name of the {0}:"
-msgstr "Proszę wpisać nową nazwę dla {0}:"
-
-#: js/GridContextMenu.js:42
-msgid "Not renamed {0}"
-msgstr "Nazwa {0} nie została zmieniona"
-
-#: js/Model.js:37
-msgid "user file"
-msgstr "plik użytkownika"
-
-#: js/Model.js:38
-msgid "user files"
-msgstr "pliki użytkownika"
-
-#: js/Model.js:41
-msgid "user file folders"
-msgstr "katalogi plików użytkownika"
-
-#: js/Model.js:251 js/Model.js:267
-msgid "Copying data .. {0}"
-msgstr "Kopiowanie danych .. {0}"
-
-#: js/Model.js:254 js/Model.js:269
-msgid "Moving data .. {0}"
-msgstr "Przenoszenie danych .. {0}"
-
-#: js/Model.js:273
-msgid "Please wait"
-msgstr "Proszę czekać"
-
-#: js/Model.js:507
-msgid "Quick search"
-msgstr "Szybkie wyszukiwanie"
-
-#: js/Model.js:508
-msgid "Type"
-msgstr "Typ"
+#: Controller.php:95
+#, python-format
+msgid "%s's personal files"
+msgstr "%s's osobistych plików"
 
 #: js/Filemanager.js:26
 msgid "Filemanager"
@@ -199,38 +60,183 @@ msgstr "Błąd podczas tworzenia katalogu"
 msgid "Item with this name already exists!"
 msgstr "Obiekt o takiej nazwie już istnieje!"
 
-#: Controller/Node.php:163
-msgid "My folders"
-msgstr "Moje katalogi"
+#: js/GridContextMenu.js:36
+msgid "Please enter the new name of the {0}:"
+msgstr "Proszę wpisać nową nazwę dla {0}:"
 
-#: Controller/Node.php:170
-msgid "Shared folders"
-msgstr "Katalogi współdzielone"
+#: js/GridContextMenu.js:42
+msgid "Not renamed {0}"
+msgstr "Nazwa {0} nie została zmieniona"
 
-#: Controller/Node.php:177
-msgid "Other users folders"
-msgstr "Katalogi innych użytkowników"
+#: js/GridContextMenu.js:42 js/GridPanel.js:495
+msgid "You have to supply a {0} name!"
+msgstr "Musisz wprowadzić nazwę {0}!"
 
-#~ msgid "Do you want to replace the files?"
-#~ msgstr "Czy chcesz zastąpić niniejsze pliki?"
+#: js/GridContextMenu.js:146 js/GridPanel.js:539
+msgid "Do you really want to delete the following files?"
+msgstr "Czy na pewno chcesz usunąć następujące pliki?"
 
-#~ msgid "Updating {0} \"{1}\""
-#~ msgstr "Aktualizuję {0} \"{1}\""
+#: js/GridPanel.js:131
+msgid "Name"
+msgstr "Nazwa"
 
-#~ msgid "Confirm"
-#~ msgstr "Potwierdź"
+#: js/GridPanel.js:138
+msgid "Size"
+msgstr "Rozmiar"
 
-#~ msgid "Do you really want to delete \"{0}\"?"
-#~ msgstr "Czy na pewno chcesz usunąć \"{0}\"?"
+#: js/GridPanel.js:145 js/Model.js:524
+msgid "Contenttype"
+msgstr "Typ zawartości"
 
-#~ msgid "Deleting {0} \"{1}\""
-#~ msgstr "Usuwanie {0} \"{1}\""
+#: js/GridPanel.js:153
+msgid "Folder"
+msgstr "Katalog"
 
-#~ msgid "Creating {0}..."
-#~ msgstr "Tworzenie {0}..."
+#: js/GridPanel.js:162
+msgid "Revision"
+msgstr "Rewizja"
 
-#~ msgid "Deleting {0} "
-#~ msgstr "Usuwanie {0}..."
+#: js/GridPanel.js:177 js/Model.js:525
+msgid "Creation Time"
+msgstr "Czas utworzenia"
 
-#~ msgid "Dropping on this folder not allowed!"
-#~ msgstr "Usunięcie niniejszego katalogu jest niedozwolone!"
+#: js/GridPanel.js:185
+msgid "Created By"
+msgstr "Utworzone przez"
+
+#: js/GridPanel.js:192
+msgid "Last Modified Time"
+msgstr "Data ostatniej modyfikacji"
+
+#: js/GridPanel.js:199
+msgid "Last Modified By"
+msgstr "Ostatnio zmodyfikowane przez"
+
+#: js/GridPanel.js:233
+msgid "Show closed"
+msgstr "Pokaż zamknięte"
+
+#: js/GridPanel.js:277
+msgid "Upload"
+msgstr "Przesyłanie"
+
+#: js/GridPanel.js:303
+msgid "Create Folder"
+msgstr "Utwórz katalog"
+
+#: js/GridPanel.js:314
+msgid "Folder Up"
+msgstr "Katalog nadrzędny"
+
+#: js/GridPanel.js:325
+msgid "Save locally"
+msgstr "Zapisz lokalnie"
+
+#: js/GridPanel.js:336 js/GridPanel.js:337 js/GridPanel.js:339
+msgid "Delete"
+msgstr "Usuń"
+
+#: js/GridPanel.js:349 js/GridPanel.js:350 js/GridPanel.js:352
+msgid "Rename"
+msgstr "Zmień nazwę"
+
+#: js/GridPanel.js:360
+msgid "Pause upload"
+msgstr "Zatrzymaj przesyłanie"
+
+#: js/GridPanel.js:367
+msgid "Resume upload"
+msgstr "Kontynuuj przesyłanie"
+
+#: js/GridPanel.js:488 js/Model.js:40
+msgid "user file folder"
+msgstr "katalog pliku użytkownika"
+
+#: js/GridPanel.js:490
+msgid "New {0}"
+msgstr "Nowy {0}"
+
+#: js/GridPanel.js:490
+msgid "Please enter the name of the new {0}:"
+msgstr "Proszę wpisać nazwę nowego {0}:"
+
+#: js/GridPanel.js:495
+msgid "No {0} added"
+msgstr "{0} nie został dodany"
+
+#: js/GridPanel.js:641 js/GridPanel.js:796 js/TreePanel.js:656
+#: js/TreePanel.js:766
+msgid "Upload Failed"
+msgstr "Przesyłanie zakończone niepowodzeniem"
+
+#: js/GridPanel.js:642 js/TreePanel.js:657
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr ""
+"Plik nie został przesłany. Być może jego rozmiar jest za duży. Proszę "
+"powiadomić swojego administratora. Maksymalny rozmiar przesyłanego pliku: "
+
+#: js/GridPanel.js:797 js/TreePanel.js:767
+msgid "Putting files in this folder is not allowed!"
+msgstr "Wstawianie plików do tego katalogu jest niedozwolone!"
+
+#: js/Model.js:37
+msgid "user file"
+msgstr "plik użytkownika"
+
+#: js/Model.js:38
+msgid "user files"
+msgstr "pliki użytkownika"
+
+#: js/Model.js:41
+msgid "user file folders"
+msgstr "katalogi plików użytkownika"
+
+#: js/Model.js:267 js/Model.js:283
+msgid "Copying data .. {0}"
+msgstr "Kopiowanie danych .. {0}"
+
+#: js/Model.js:270 js/Model.js:285
+msgid "Moving data .. {0}"
+msgstr "Przenoszenie danych .. {0}"
+
+#: js/Model.js:289
+msgid "Please wait"
+msgstr "Proszę czekać"
+
+#: js/Model.js:522
+msgid "Quick search"
+msgstr "Szybkie wyszukiwanie"
+
+#: js/Model.js:523
+msgid "Type"
+msgstr "Typ"
+
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "ścieżka"
+
+msgid "Do you want to replace the files?"
+msgstr "Czy chcesz zastąpić niniejsze pliki?"
+
+msgid "Updating {0} \"{1}\""
+msgstr "Aktualizuję {0} \"{1}\""
+
+msgid "Confirm"
+msgstr "Potwierdź"
+
+msgid "Do you really want to delete \"{0}\"?"
+msgstr "Czy na pewno chcesz usunąć \"{0}\"?"
+
+msgid "Deleting {0} \"{1}\""
+msgstr "Usuwanie {0} \"{1}\""
+
+msgid "Creating {0}..."
+msgstr "Tworzenie {0}..."
+
+msgid "Deleting {0} "
+msgstr "Usuwanie {0}..."
+
+msgid "Dropping on this folder not allowed!"
+msgstr "Usunięcie niniejszego katalogu jest niedozwolone!"

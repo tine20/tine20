@@ -1,137 +1,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: \n"
-"Last-Translator: Damià Verger <dverger@joomla.cat>\n"
+"PO-Revision-Date: 2012-01-13 13:47+0000\n"
+"Last-Translator: Damià Verger <Unknown>\n"
 "Language-Team: Tine 2.0 Translators <dverger@joomla.cat>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:22+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: js/Phone.js:29 js/Phone.js:479 js/Phone.js:480
-msgid "Edit phone settings"
-msgstr "Edita la configuració de telèfon"
-
-#: js/Phone.js:59 js/Phone.js:254 js/Models.js:69
-msgid "Phone"
-msgid_plural "Phones"
-msgstr[0] "Telèfon"
-msgstr[1] "Telèfons"
-
-#: js/Phone.js:70
-msgid "Phones"
-msgstr "Telèfons"
-
-#: js/Phone.js:277
-msgid "Line"
-msgstr "Línia"
-
-#: js/Phone.js:286
-msgid "Number"
-msgstr "Número"
-
-#: js/Phone.js:295
-msgid "Cancel"
-msgstr "Cancel·la"
-
-#: js/Phone.js:305
-msgid "Dial"
-msgstr "To"
-
-#: js/Phone.js:325
-msgid "Error"
-msgstr "Error"
-
-#: js/Phone.js:326
-msgid "Not possible to dial."
-msgstr "No ha estat possible agafar to."
-
-#: js/Phone.js:469
-msgid "Dial number"
-msgstr "Número a marcar"
-
-#: js/Phone.js:470
-msgid "Initiate a new outgoing call"
-msgstr "Inicia una nova trucada"
-
-#: js/Phone.js:531
-msgid "Incoming call"
-msgstr "Trucada entrant"
-
-#: js/Phone.js:535
-msgid "Outgoing call"
-msgstr "Trucada sortint"
-
-#: js/Phone.js:543
-msgid "unknown number"
-msgstr "número desconegut"
-
-#: js/Phone.js:580
-msgid "Search:"
-msgstr "Cerca:"
-
-#: js/Phone.js:665
-msgid "Source or Destination"
-msgstr "Font o destinació"
-
-#: js/Phone.js:681
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Es mostren les trucades {0} - {1} de {2}"
-
-#: js/Phone.js:682 js/Phone.js:725
-msgid "No calls to display"
-msgstr "No hi ha cap trucada a mostrar"
-
-#: js/Phone.js:692
-msgid "Direction"
-msgstr "Direcció"
-
-#: js/Phone.js:693
-msgid "Source"
-msgstr "Font"
-
-#: js/Phone.js:694
-msgid "Caller Id"
-msgstr "Identificador de qui truca"
-
-#: js/Phone.js:695
-msgid "Destination"
-msgstr "Destinació"
-
-#: js/Phone.js:696
-msgid "Start"
-msgstr "Inici"
-
-#: js/Phone.js:697
-msgid "Connected"
-msgstr "Connectat"
-
-#: js/Phone.js:698
-msgid "Disconnected"
-msgstr "Desconnectat"
-
-#: js/Phone.js:699
-msgid "Duration"
-msgstr "Durada"
-
-#: js/Phone.js:700
-msgid "Ringing"
-msgstr "Sonant"
-
-#: js/Phone.js:701
-msgid "Call ID"
-msgstr "Identificador de trucada"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "llista de telèfons"
-msgstr[1] "llistes de telèfons"
 
 #: js/AddressbookGridPanelHook.js:35
 msgid "Call contact"
@@ -152,3 +35,123 @@ msgstr ""
 #: js/AddressbookGridPanelHook.js:199
 msgid "Cell private"
 msgstr ""
+
+#: js/Models.js:69 js/Phone.js:59 js/Phone.js:264
+msgid "Phone"
+msgid_plural "Phones"
+msgstr[0] "Telèfon"
+msgstr[1] "Telèfons"
+
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "llista de telèfons"
+msgstr[1] "llistes de telèfons"
+
+#: js/Phone.js:29 js/Phone.js:489 js/Phone.js:490
+msgid "Edit phone settings"
+msgstr "Edita la configuració de telèfon"
+
+#: js/Phone.js:70
+msgid "Phones"
+msgstr "Telèfons"
+
+#: js/Phone.js:287
+msgid "Line"
+msgstr "Línia"
+
+#: js/Phone.js:296
+msgid "Number"
+msgstr "Número"
+
+#: js/Phone.js:305
+msgid "Cancel"
+msgstr "Cancel·la"
+
+#: js/Phone.js:315
+msgid "Dial"
+msgstr "To"
+
+#: js/Phone.js:335
+msgid "Error"
+msgstr "Error"
+
+#: js/Phone.js:336
+msgid "Not possible to dial."
+msgstr "No ha estat possible agafar to."
+
+#: js/Phone.js:479
+msgid "Dial number"
+msgstr "Número a marcar"
+
+#: js/Phone.js:480
+msgid "Initiate a new outgoing call"
+msgstr "Inicia una nova trucada"
+
+#: js/Phone.js:541
+msgid "Incoming call"
+msgstr "Trucada entrant"
+
+#: js/Phone.js:545
+msgid "Outgoing call"
+msgstr "Trucada sortint"
+
+#: js/Phone.js:553
+msgid "unknown number"
+msgstr "número desconegut"
+
+#: js/Phone.js:590
+msgid "Search:"
+msgstr "Cerca:"
+
+#: js/Phone.js:675
+msgid "Source or Destination"
+msgstr "Font o destinació"
+
+#: js/Phone.js:691
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr "Es mostren les trucades {0} - {1} de {2}"
+
+#: js/Phone.js:692 js/Phone.js:735
+msgid "No calls to display"
+msgstr "No hi ha cap trucada a mostrar"
+
+#: js/Phone.js:702
+msgid "Direction"
+msgstr "Direcció"
+
+#: js/Phone.js:703
+msgid "Source"
+msgstr "Font"
+
+#: js/Phone.js:704
+msgid "Caller Id"
+msgstr "Identificador de qui truca"
+
+#: js/Phone.js:705
+msgid "Destination"
+msgstr "Destinació"
+
+#: js/Phone.js:706
+msgid "Start"
+msgstr "Inici"
+
+#: js/Phone.js:707
+msgid "Connected"
+msgstr "Connectat"
+
+#: js/Phone.js:708
+msgid "Disconnected"
+msgstr "Desconnectat"
+
+#: js/Phone.js:709
+msgid "Duration"
+msgstr "Durada"
+
+#: js/Phone.js:710
+msgid "Ringing"
+msgstr "Sonant"
+
+#: js/Phone.js:711
+msgid "Call ID"
+msgstr "Identificador de trucada"

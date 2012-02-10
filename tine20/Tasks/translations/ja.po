@@ -1,123 +1,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine2.0\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: \n"
-"Last-Translator: kitamura yuuki <ykitamura@clasi-co.jp>\n"
+"PO-Revision-Date: 2012-01-13 12:38+0000\n"
+"Last-Translator: kitamura yuuki <Unknown>\n"
 "Language-Team: Yuuki ’Taisa’ Kitamura <ykitamura@clasi-co.jp>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Poedit-Language: Japanese\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: JAPAN\n"
-
-#: Config.php:38
-msgid "Tasks status available"
-msgstr ""
-
-#: Config.php:40
-msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
-msgstr ""
-
-#: Config.php:48
-msgid "Task priorities available"
-msgstr ""
-
-#: Config.php:50
-msgid "Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation."
-msgstr ""
-
-#: Controller.php:96
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s のパーソナルタスク"
-
-#: Setup/Update/Release3.php:65 Setup/Initialize.php:81
-msgid "All tasks of my taskslists"
-msgstr ""
-
-#: Setup/Update/Release5.php:65 Setup/Initialize.php:34
-msgid "No response"
-msgstr ""
-
-#: Setup/Update/Release5.php:66 Setup/Initialize.php:35 js/GridPanel.js:209
-#: js/TaskEditDialog.js:242
-msgid "Completed"
-msgstr "完了"
-
-#: Setup/Update/Release5.php:67 Setup/Initialize.php:36
-msgid "Cancelled"
-msgstr ""
-
-#: Setup/Update/Release5.php:68 Setup/Initialize.php:37
-msgid "In process"
-msgstr ""
-
-#: Setup/Update/Release5.php:154 Setup/Initialize.php:50
-msgid "low"
-msgstr ""
-
-#: Setup/Update/Release5.php:155 Setup/Initialize.php:51
-msgid "normal"
-msgstr ""
-
-#: Setup/Update/Release5.php:156 Setup/Initialize.php:52
-msgid "high"
-msgstr ""
-
-#: Setup/Update/Release5.php:157 Setup/Initialize.php:53
-msgid "urgent"
-msgstr ""
-
-#: Setup/Initialize.php:90
-msgid "My open tasks"
-msgstr ""
-
-#: Setup/Initialize.php:99
-msgid "My open tasks this week"
-msgstr ""
-
-#: Setup/Initialize.php:108
-msgid "All tasks for me"
-msgstr ""
-
-#: Setup/Initialize.php:109
-msgid "All tasks that I am responsible for"
-msgstr ""
-
-#: Setup/Initialize.php:116
-msgid "Last modified by me"
-msgstr ""
-
-#: Setup/Initialize.php:117
-msgid "All tasks that I have last modified"
-msgstr ""
-
-#: Setup/Initialize.php:126
-msgid "Tasks without responsible"
-msgstr ""
-
-#: Preference.php:25
-msgid "All my tasks"
-msgstr ""
-
-#: Preference.php:67
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:68
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr ""
-
-#: Preference.php:71
-msgid "Default Task List"
-msgstr ""
-
-#: Preference.php:72
-msgid "The default task list to create new tasks in."
-msgstr ""
+"X-Poedit-Language: Japanese\n"
 
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
@@ -135,17 +32,45 @@ msgstr ""
 msgid "Create or update shared tasks favorites"
 msgstr ""
 
+#: Config.php:38
+msgid "Tasks status available"
+msgstr ""
+
+#: Config.php:40
+msgid ""
+"Possible tasks status. Please note that additional attendee status might "
+"impact other Tasks systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:48
+msgid "Task priorities available"
+msgstr ""
+
+#: Config.php:50
+msgid ""
+"Possible task priorities. Please note that additional priorities might "
+"impact other Tasks systems on export or syncronisation."
+msgstr ""
+
+#: Controller/Task.php:165
+msgid "Notification for Task "
+msgstr ""
+
+#: Controller.php:96
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s のパーソナルタスク"
+
 #: js/GridPanel.js:54
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "選択されたタスクを本当に削除しますか？"
 
 #: js/GridPanel.js:127
-#, fuzzy
 msgid "Tags"
-msgstr "タスク"
+msgstr ""
 
-#: js/GridPanel.js:128 Model/Task.php:194
+#: js/GridPanel.js:128 Model/Task.php:199
 msgid "Lead"
 msgstr ""
 
@@ -161,24 +86,29 @@ msgstr "タスクを追加しています..."
 msgid "Due Date"
 msgstr "期日"
 
-#: js/GridPanel.js:157 js/TaskEditDialog.js:208 Model/Task.php:185
+#: js/GridPanel.js:157 js/TaskEditDialog.js:208 Model/Task.php:190
 msgid "Priority"
 msgstr "重要度"
 
-#: js/GridPanel.js:173 Model/Task.php:187
+#: js/GridPanel.js:173 Model/Task.php:192
 msgid "Percent"
 msgstr "パーセント"
 
 #: js/GridPanel.js:186 js/TaskEditDialog.js:237 js/Tasks.js:151
-#: js/Tasks.js:211 Model/Task.php:186
-#, fuzzy
+#: js/Tasks.js:211 Model/Task.php:191
 msgid "Status"
 msgid_plural "Status"
-msgstr[0] "ステータス"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/GridPanel.js:202 js/Tasks.js:163
 msgid "Creation Time"
 msgstr "作成時間"
+
+#: js/GridPanel.js:209 js/TaskEditDialog.js:242 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:66
+msgid "Completed"
+msgstr "完了"
 
 #: js/GridPanel.js:216 js/Tasks.js:159
 msgid "Responsible"
@@ -197,9 +127,8 @@ msgid "Due date"
 msgstr "期日"
 
 #: js/TaskEditDialog.js:215
-#, fuzzy
 msgid "Add Responsible ..."
-msgstr "責任担当"
+msgstr ""
 
 #: js/TaskEditDialog.js:223
 msgid "Notes"
@@ -251,45 +180,120 @@ msgstr ""
 msgid "Creator"
 msgstr ""
 
-#: Model/Task.php:182
+#: Model/Task.php:187
 msgid "Due"
 msgstr ""
 
-#: Model/Task.php:183
+#: Model/Task.php:188
 msgid "Organizer"
 msgstr ""
 
-#: Model/Task.php:184
-#, fuzzy
+#: Model/Task.php:189
 msgid "Description"
-msgstr "説明を入力してください..."
+msgstr ""
 
-#: Model/Task.php:200
+#: Model/Task.php:205
 msgid "Telephone"
 msgstr ""
 
-#: Model/Task.php:201
+#: Model/Task.php:206
 msgid "Email"
 msgstr ""
 
-#: Controller/Task.php:165
-msgid "Notification for Task "
+#: Preference.php:25
+msgid "All my tasks"
 msgstr ""
 
-#~ msgid "NEEDS-ACTION"
-#~ msgstr "要アクション"
+#: Preference.php:67
+msgid "Default Favorite"
+msgstr ""
 
-#~ msgid "COMPLETED"
-#~ msgstr "完了"
+#: Preference.php:68
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr ""
 
-#~ msgid "IN-PROCESS"
-#~ msgstr "進行中"
+#: Preference.php:71
+msgid "Default Task List"
+msgstr ""
 
-#~ msgid "CANCELLED"
-#~ msgstr "キャンセル"
+#: Preference.php:72
+msgid "The default task list to create new tasks in."
+msgstr ""
 
-#~ msgid "Failed"
-#~ msgstr "失敗"
+#: Setup/Initialize.php:34 Setup/Update/Release5.php:65
+msgid "No response"
+msgstr ""
 
-#~ msgid "Could not save task."
-#~ msgstr "タスクの保存に失敗しました"
+#: Setup/Initialize.php:36 Setup/Update/Release5.php:67
+msgid "Cancelled"
+msgstr ""
+
+#: Setup/Initialize.php:37 Setup/Update/Release5.php:68
+msgid "In process"
+msgstr ""
+
+#: Setup/Initialize.php:50 Setup/Update/Release5.php:154
+msgid "low"
+msgstr ""
+
+#: Setup/Initialize.php:51 Setup/Update/Release5.php:155
+msgid "normal"
+msgstr ""
+
+#: Setup/Initialize.php:52 Setup/Update/Release5.php:156
+msgid "high"
+msgstr ""
+
+#: Setup/Initialize.php:53 Setup/Update/Release5.php:157
+msgid "urgent"
+msgstr ""
+
+#: Setup/Initialize.php:81 Setup/Update/Release3.php:65
+msgid "All tasks of my taskslists"
+msgstr ""
+
+#: Setup/Initialize.php:90
+msgid "My open tasks"
+msgstr ""
+
+#: Setup/Initialize.php:99
+msgid "My open tasks this week"
+msgstr ""
+
+#: Setup/Initialize.php:108
+msgid "All tasks for me"
+msgstr ""
+
+#: Setup/Initialize.php:109
+msgid "All tasks that I am responsible for"
+msgstr ""
+
+#: Setup/Initialize.php:116
+msgid "Last modified by me"
+msgstr ""
+
+#: Setup/Initialize.php:117
+msgid "All tasks that I have last modified"
+msgstr ""
+
+#: Setup/Initialize.php:126
+msgid "Tasks without responsible"
+msgstr ""
+
+msgid "NEEDS-ACTION"
+msgstr "要アクション"
+
+msgid "COMPLETED"
+msgstr "完了"
+
+msgid "IN-PROCESS"
+msgstr "進行中"
+
+msgid "CANCELLED"
+msgstr "キャンセル"
+
+msgid "Failed"
+msgstr "失敗"
+
+msgid "Could not save task."
+msgstr "タスクの保存に失敗しました"

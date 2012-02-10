@@ -1,18 +1,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-12-05 11:34+0100\n"
-"Last-Translator: Faragó Tamás <tamas@kemenyfem.hu>\n"
+"PO-Revision-Date: 2012-01-13 11:21+0000\n"
+"Last-Translator: Faragó Tamás <Unknown>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Hungarian\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:20+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: HUNGARY\n"
+"X-Poedit-Language: Hungarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: Acl/Rights.php:185
 msgid "manage access log"
@@ -28,7 +31,9 @@ msgstr "fiókok kezelése"
 
 #: Acl/Rights.php:190
 msgid "add and edit users and groups, add group members, change user passwords"
-msgstr "felhasználók és csoportok hozzáadása, szerkesztése, csoporttag hozzáadása, felhasználó jelszó megváltoztatása"
+msgstr ""
+"felhasználók és csoportok hozzáadása, szerkesztése, csoporttag hozzáadása, "
+"felhasználó jelszó megváltoztatása"
 
 #: Acl/Rights.php:193
 msgid "manage applications"
@@ -43,8 +48,11 @@ msgid "manage roles"
 msgstr "szerepek kezelése"
 
 #: Acl/Rights.php:198
-msgid "add and edit roles, add new members to roles, add application rights to roles"
-msgstr "szerepek hozzáadása és szerkesztése, új szerep hozzáadása felhasználóhóz, alkalmazás hozzáférések szerepekhez adása"
+msgid ""
+"add and edit roles, add new members to roles, add application rights to roles"
+msgstr ""
+"szerepek hozzáadása és szerkesztése, új szerep hozzáadása felhasználóhóz, "
+"alkalmazás hozzáférések szerepekhez adása"
 
 #: Acl/Rights.php:201
 msgid "manage shared tags"
@@ -68,7 +76,8 @@ msgstr "konténerek kezelése"
 
 #: Acl/Rights.php:210
 msgid "add, delete and edit containers and manage container grants"
-msgstr "konténerek hozzáadása, szerkesztése, törlése és konténer jogok kezelése"
+msgstr ""
+"konténerek hozzáadása, szerkesztése, törlése és konténer jogok kezelése"
 
 #: Acl/Rights.php:213
 msgid "view access log"
@@ -118,60 +127,237 @@ msgstr "konténerek megtekintése"
 msgid "view personal and shared containers"
 msgstr "személyes és megosztott konténerek megtekintése"
 
-#: js/customfield/GridPanel.js:70 js/customfield/EditDialog.js:283
-#: js/SambaMachineGrid.js:79 js/user/GridPanel.js:175 js/Groups.js:234
-#: js/container/GridPanel.js:70 js/Roles.js:237
-msgid "ID"
-msgstr "ID"
+#: Controller/Container.php:187
+msgid "Your container has been changed"
+msgstr "Konténered megváltozott"
 
-#: js/customfield/GridPanel.js:71 js/customfield/EditDialog.js:601
-msgid "Label"
-msgstr "Osztályozás"
+#: Controller/Container.php:188
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr "Konténeredet megváltozotta %1$s %2$sFeljegyzés: %3$s"
 
-#: js/customfield/GridPanel.js:72 js/customfield/EditDialog.js:595
-#: js/SambaMachineGrid.js:86 js/user/EditDialog.js:278
-#: js/user/EditDialog.js:314 js/Groups.js:235 js/Applications.js:278
-#: js/AccessLog.js:131 js/Tags.js:225 js/container/EditDialog.js:123
-#: js/Roles.js:238
+#: js/AccessLog.js:105 js/Admin.js:87 js/Models.js:51
+msgid "Access Log"
+msgid_plural "Access Logs"
+msgstr[0] "Hozzáférési Napló"
+msgstr[1] "Hozzáférési Napló"
+
+#: js/AccessLog.js:106 js/AccessLog.js:132
+msgid "IP Address"
+msgstr "IP Cím"
+
+#: js/AccessLog.js:107 js/Admin.js:23 js/user/GridPanel.js:98
+#: js/user/Users.js:72
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Felhasználó"
+msgstr[1] "Felhasználók"
+
+#: js/AccessLog.js:108 js/AccessLog.js:133
+msgid "Login Time"
+msgstr "Bejelentkezés ideje"
+
+#: js/AccessLog.js:109 js/AccessLog.js:134
+msgid "Logout Time"
+msgstr "Kijelentkezés ideje"
+
+#: js/AccessLog.js:110 js/AccessLog.js:136
+msgid "Client Type"
+msgstr "Kliens típus"
+
+#: js/AccessLog.js:129
+msgid "Session ID"
+msgstr "Hozzáférés ID"
+
+#: js/AccessLog.js:130 js/user/EditDialog.js:763 js/user/EditDialog.js:806
+msgid "Login Name"
+msgstr "Bejelentkezési név"
+
+#: js/AccessLog.js:131 js/Applications.js:278 js/container/EditDialog.js:123
+#: js/customfield/EditDialog.js:595 js/customfield/GridPanel.js:72
+#: js/Groups.js:235 js/Roles.js:238 js/SambaMachineGrid.js:86 js/Tags.js:225
+#: js/user/EditDialog.js:285 js/user/EditDialog.js:321
 msgid "Name"
 msgstr "Név"
 
-#: js/customfield/GridPanel.js:73 js/customfield/EditDialog.js:583
-#: js/container/GridPanel.js:73 js/container/GridPanel.js:104
-#: js/container/EditDialog.js:144
-msgid "Type"
-msgstr "Típus"
+#: js/AccessLog.js:135
+msgid "Result"
+msgstr "Eredmény"
 
-#: js/customfield/GridPanel.js:74 js/customfield/EditDialog.js:387
-#: js/customfield/EditDialog.js:528 js/Models.js:128
-#: js/container/GridPanel.js:72 js/container/EditDialog.js:135
-#: js/ApplicationFilter.js:33
+#: js/AccessLog.js:156
+msgid "user blocked"
+msgstr "felhasználó blokkolva"
+
+#: js/AccessLog.js:160
+msgid "password expired"
+msgstr "jelszó lejárt"
+
+#: js/AccessLog.js:164
+msgid "user disabled"
+msgstr "felhasználó letiltva"
+
+#: js/AccessLog.js:168
+msgid "invalid password"
+msgstr "érvénytelen jelszó"
+
+#: js/AccessLog.js:172
+msgid "ambiguous username"
+msgstr "kétértelmű felhasználó név"
+
+#: js/AccessLog.js:176
+msgid "user not found"
+msgstr "felhasználó nem található"
+
+#: js/AccessLog.js:180
+msgid "failure"
+msgstr "hiba"
+
+#: js/AccessLog.js:184
+msgid "success"
+msgstr "siker"
+
+#: js/Admin.js:36 js/Models.js:87
+msgid "Groups"
+msgstr "Csoportok"
+
+#: js/Admin.js:49
+msgid "Roles"
+msgstr "Szerepek"
+
+#: js/Admin.js:61
+msgid "Computers"
+msgstr "Számítógépek"
+
+#: js/Admin.js:74 js/Models.js:128
+msgid "Applications"
+msgstr "Alkalmazások"
+
+#: js/Admin.js:100
+msgid "Shared Tags"
+msgstr "Megosztott címkék"
+
+#: js/Admin.js:113
+msgid "Containers"
+msgstr "Konténerek"
+
+#: js/Admin.js:125
+msgid "Customfields"
+msgstr "Egyedi mezők"
+
+#: js/Admin.js:161
+msgid "Admin"
+msgstr "Admin"
+
+#: js/AdminPanel.js:46
+msgid "Default Addressbook for new contacts and groups"
+msgstr "Alapértelmezett Címjegyzék új kapcsolatokhoz és csoportokhoz"
+
+#: js/ApplicationFilter.js:33 js/container/EditDialog.js:135
+#: js/container/GridPanel.js:72 js/customfield/EditDialog.js:387
+#: js/customfield/EditDialog.js:528 js/customfield/GridPanel.js:74
+#: js/Models.js:128
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Alkalmazás"
 msgstr[1] "Alkalmazások"
 
-#: js/customfield/GridPanel.js:75 js/customfield/EditDialog.js:549
-msgid "Model"
-msgstr "Modell"
+#: js/Applications.js:43
+msgid "{0} Settings"
+msgstr "{0} Beállítások"
 
-#: js/customfield/GridPanel.js:115 js/customfield/Customfield.js:44
+#: js/Applications.js:144
+msgid "enable application"
+msgstr "alkalmazás engedélyezése"
+
+#: js/Applications.js:145
+msgid "disable application"
+msgstr "alkalmazás felfüggesztése"
+
+#: js/Applications.js:146
+msgid "settings"
+msgstr "beállítások"
+
+#: js/Applications.js:183 js/Groups.js:176 js/Roles.js:176 js/Tags.js:169
+msgid "Search:"
+msgstr "Keresés:"
+
+#: js/Applications.js:226 js/user/EditDialog.js:834
+msgid "disabled"
+msgstr "felfüggesztve"
+
+#: js/Applications.js:229 js/user/EditDialog.js:834
+msgid "enabled"
+msgstr "engedélyezve"
+
+#: js/Applications.js:233
+msgid "unknown status ({0})"
+msgstr "ismeretlen állapot ({0})"
+
+#: js/Applications.js:267
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Alkalmazások megjelenítése {0} - {1} / {2}"
+
+#: js/Applications.js:268
+msgid "No applications to display"
+msgstr "Nincs megjeleníthető alkalamazás"
+
+#: js/Applications.js:277 js/customfield/EditDialog.js:625
+msgid "Order"
+msgstr "Sorrend"
+
+#: js/Applications.js:279 js/user/EditDialog.js:828 js/user/GridPanel.js:176
+msgid "Status"
+msgstr "Állapot"
+
+#: js/Applications.js:280
+msgid "Version"
+msgstr "Verzió"
+
+#: js/container/Container.js:46 js/container/GridPanel.js:103
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] "Konténer"
+msgstr[1] "Konténerek"
+
+#: js/container/EditDialog.js:144 js/container/GridPanel.js:73
+#: js/container/GridPanel.js:104 js/customfield/EditDialog.js:583
+#: js/customfield/GridPanel.js:73
+msgid "Type"
+msgstr "Típus"
+
+#: js/container/EditDialog.js:145
+msgid "personal"
+msgstr "személyes"
+
+#: js/container/EditDialog.js:145
+msgid "shared"
+msgstr "megosztott"
+
+#: js/container/EditDialog.js:159 js/TagEditDialog.js:232 js/Tags.js:222
+msgid "Color"
+msgstr "Szín"
+
+#: js/container/EditDialog.js:164
+msgid "Note for Owner"
+msgstr "Feljegyzés a tulajdonosnak"
+
+#: js/container/GridPanel.js:70 js/customfield/EditDialog.js:283
+#: js/customfield/GridPanel.js:70 js/Groups.js:234 js/Roles.js:237
+#: js/SambaMachineGrid.js:79 js/user/GridPanel.js:175
+msgid "ID"
+msgstr "ID"
+
+#: js/container/GridPanel.js:71
+msgid "Container Name"
+msgstr "Konténer Név"
+
+#: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:115
 msgid "Customfield"
 msgid_plural "Customfields"
 msgstr[0] "Egyedi mező"
 msgstr[1] "Egyedi mezők"
 
-#: js/customfield/GridPanel.js:131 js/Groups.js:52 js/Tags.js:64
-#: js/Roles.js:47
-msgid "Confirm"
-msgstr "Megerősít"
-
-#: js/customfield/GridPanel.js:131
-msgid "Restart application to apply new cusomfields?"
-msgstr "Újraindítsam az alkalmazást, hogy az új egyedi mezők életbe lépjenek?"
-
 #: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
-#: js/GroupEditDialog.js:77 js/RoleEditDialog.js:113 js/TagEditDialog.js:87
+#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:114 js/TagEditDialog.js:88
 msgid "Errors"
 msgstr "Hibák"
 
@@ -219,13 +405,17 @@ msgstr "Megadott adat osztály nem találató"
 msgid "OK"
 msgstr "OK"
 
-#: js/customfield/EditDialog.js:470 js/user/EditDialog.js:683
+#: js/customfield/EditDialog.js:470 js/user/EditDialog.js:691
 msgid "Cancel"
 msgstr "Megszakítás"
 
 #: js/customfield/EditDialog.js:503
 msgid "Configure store"
 msgstr "Tárolás beállítása"
+
+#: js/customfield/EditDialog.js:549 js/customfield/GridPanel.js:75
+msgid "Model"
+msgstr "Modell"
 
 #: js/customfield/EditDialog.js:560
 msgid "Custom field definition"
@@ -256,9 +446,8 @@ msgid "Boolean"
 msgstr "Logikai"
 
 #: js/customfield/EditDialog.js:577
-#, fuzzy
 msgid "Search Combo"
-msgstr "Kombó keresés"
+msgstr ""
 
 #: js/customfield/EditDialog.js:578
 msgid "Key Field"
@@ -268,6 +457,10 @@ msgstr "Kulcs mező"
 msgid "Record"
 msgstr "Adat"
 
+#: js/customfield/EditDialog.js:601 js/customfield/GridPanel.js:71
+msgid "Label"
+msgstr "Osztályozás"
+
 #: js/customfield/EditDialog.js:607
 msgid "Length"
 msgstr "Hossz"
@@ -276,475 +469,87 @@ msgstr "Hossz"
 msgid "Custom field additional properties"
 msgstr "Egyedi mező további beállításai"
 
-#: js/customfield/EditDialog.js:620 js/GroupEditDialog.js:216 js/Models.js:87
+#: js/customfield/EditDialog.js:620 js/GroupEditDialog.js:222 js/Models.js:87
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] "Csoport"
 msgstr[1] "Csoport"
 
-#: js/customfield/EditDialog.js:625 js/Applications.js:277
-msgid "Order"
-msgstr "Sorrend"
-
 #: js/customfield/EditDialog.js:648
 msgid "Customfield already exists. Please choose another name."
 msgstr ""
 
-#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:61
-msgid "Computer Name"
-msgstr "Számítógép Név"
+#: js/customfield/GridPanel.js:131 js/Groups.js:52 js/Roles.js:47
+#: js/Tags.js:64
+msgid "Confirm"
+msgstr "Megerősít"
 
-#: js/Admin.js:23 js/user/GridPanel.js:98 js/user/Users.js:72
-#: js/AccessLog.js:107
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "Felhasználó"
-msgstr[1] "Felhasználók"
+#: js/customfield/GridPanel.js:131
+msgid "Restart application to apply new cusomfields?"
+msgstr "Újraindítsam az alkalmazást, hogy az új egyedi mezők életbe lépjenek?"
 
-#: js/Admin.js:36 js/Models.js:87
-msgid "Groups"
-msgstr "Csoportok"
-
-#: js/Admin.js:49
-msgid "Roles"
-msgstr "Szerepek"
-
-#: js/Admin.js:61
-msgid "Computers"
-msgstr "Számítógépek"
-
-#: js/Admin.js:74 js/Models.js:128
-msgid "Applications"
-msgstr "Alkalmazások"
-
-#: js/Admin.js:87 js/Models.js:51 js/AccessLog.js:105
-msgid "Access Log"
-msgid_plural "Access Logs"
-msgstr[0] "Hozzáférési Napló"
-msgstr[1] "Hozzáférési Napló"
-
-#: js/Admin.js:100
-msgid "Shared Tags"
-msgstr "Megosztott címkék"
-
-#: js/Admin.js:113
-msgid "Containers"
-msgstr "Konténerek"
-
-#: js/Admin.js:125
-msgid "Customfields"
-msgstr "Egyedi mezők"
-
-#: js/Admin.js:161
-msgid "Admin"
-msgstr "Admin"
-
-#: js/GroupEditDialog.js:37 js/RoleEditDialog.js:69 js/TagEditDialog.js:37
+#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
 msgid "Please wait"
 msgstr "Kérlek várj"
 
-#: js/GroupEditDialog.js:37 js/RoleEditDialog.js:69
+#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
 msgid "Updating Memberships"
 msgstr "Tagságok frissítése"
 
-#: js/GroupEditDialog.js:72 js/RoleEditDialog.js:106 js/RoleEditDialog.js:134
-#: js/Groups.js:74 js/TagEditDialog.js:82 js/Roles.js:69
+#: js/GroupEditDialog.js:73 js/Groups.js:74 js/RoleEditDialog.js:107
+#: js/RoleEditDialog.js:135 js/Roles.js:69 js/TagEditDialog.js:83
 msgid "Failed"
 msgstr "Nem sikerült"
 
-#: js/GroupEditDialog.js:72
+#: js/GroupEditDialog.js:73
 msgid "Could not save group."
 msgstr "Nem sikerült a csoportot menteni."
 
-#: js/GroupEditDialog.js:77 js/RoleEditDialog.js:113 js/TagEditDialog.js:87
+#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:114 js/TagEditDialog.js:88
 msgid "Please fix the errors noted."
 msgstr "Kérjük javítsa kis a jelölt hibákat."
 
-#: js/GroupEditDialog.js:108
-msgid "Group Members"
-msgstr "Csoport tagok"
-
-#: js/GroupEditDialog.js:128
+#: js/GroupEditDialog.js:121
 msgid "Group Name"
 msgstr "Csoport neve"
 
-#: js/GroupEditDialog.js:136 js/SambaMachineGrid.js:62
-#: js/SambaMachineGrid.js:92 js/RoleEditDialog.js:292 js/user/GridPanel.js:99
-#: js/Groups.js:236 js/TagEditDialog.js:226 js/Tags.js:226 js/Roles.js:239
+#: js/GroupEditDialog.js:129 js/Groups.js:236 js/RoleEditDialog.js:293
+#: js/Roles.js:239 js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92
+#: js/TagEditDialog.js:226 js/Tags.js:226 js/user/GridPanel.js:99
 msgid "Description"
 msgstr "Leírás"
 
-#: js/GroupEditDialog.js:144 js/user/EditDialog.js:837
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:842
 msgid "Visibility"
 msgstr "Láthatóság"
 
-#: js/GroupEditDialog.js:150 js/user/EditDialog.js:843
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:848
 msgid "Display in addressbook"
 msgstr "Megjelenítés a címjegyzékben"
 
-#: js/GroupEditDialog.js:150 js/user/EditDialog.js:843
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:848
 msgid "Hide from addressbook"
 msgstr "Elrejtés a címjegyzékben"
 
-#: js/GroupEditDialog.js:161 js/user/EditDialog.js:857
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:862
 msgid "Saved in Addressbook"
 msgstr "Címjegyzékben mentve"
 
-#: js/GroupEditDialog.js:216 js/RoleEditDialog.js:359 js/TagEditDialog.js:290
+#: js/GroupEditDialog.js:170
+msgid "Group Members"
+msgstr "Csoport tagok"
+
+#: js/GroupEditDialog.js:222 js/RoleEditDialog.js:360 js/TagEditDialog.js:290
 msgid "Transferring {0}..."
 msgstr "{0} átvitele..."
 
-#: js/GroupEditDialog.js:221 js/GroupEditDialog.js:232
+#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
 msgid "Add new group"
 msgstr "Új csoport"
 
-#: js/GroupEditDialog.js:234
+#: js/GroupEditDialog.js:240
 msgid "Edit Group \"{0}\""
 msgstr "Csoport szerkesztése  \"{0}\""
-
-#: js/AdminPanel.js:46
-msgid "Default Addressbook for new contacts and groups"
-msgstr "Alapértelmezett Címjegyzék új kapcsolatokhoz és csoportokhoz"
-
-#: js/RoleEditDialog.js:106
-msgid "Could not save role."
-msgstr "Szerep mentése nem sikerült."
-
-#: js/RoleEditDialog.js:126
-msgid "Deleting role..."
-msgstr "Szerep törlése..."
-
-#: js/RoleEditDialog.js:134 js/Roles.js:69
-msgid "Some error occurred while trying to delete the role."
-msgstr "Valamilyen hiba történt a szerep mentése közben."
-
-#: js/RoleEditDialog.js:158
-msgid "Rights"
-msgstr "Jogok"
-
-#: js/RoleEditDialog.js:260
-msgid "Members"
-msgstr "Tagok"
-
-#: js/RoleEditDialog.js:284
-msgid "Role Name"
-msgstr "Szerep neve"
-
-#: js/RoleEditDialog.js:359
-msgid "Role"
-msgstr "Szerep"
-
-#: js/RoleEditDialog.js:369
-msgid "Add New Role"
-msgstr "Új szerep hozzáadása"
-
-#: js/RoleEditDialog.js:371
-msgid "Edit Role \"{0}\""
-msgstr "Szerep szerkesztése \"{0}\""
-
-#: js/user/GridPanel.js:56
-msgid "enable account"
-msgstr "fiók engedélyezése"
-
-#: js/user/GridPanel.js:66
-msgid "disable account"
-msgstr "fiók felfüggesztése"
-
-#: js/user/GridPanel.js:76
-msgid "reset password"
-msgstr "jelszó nullázása"
-
-#: js/user/GridPanel.js:176 js/user/EditDialog.js:823 js/Applications.js:279
-msgid "Status"
-msgstr "Állapot"
-
-#: js/user/GridPanel.js:177
-msgid "Displayname"
-msgstr "Megjelenési név"
-
-#: js/user/GridPanel.js:178
-msgid "Loginname"
-msgstr "Bejelentkezés név"
-
-#: js/user/GridPanel.js:179
-msgid "Last name"
-msgstr "Vezetéknév"
-
-#: js/user/GridPanel.js:180
-msgid "First name"
-msgstr "Keresztnév"
-
-#: js/user/GridPanel.js:181
-msgid "Email"
-msgstr "Email"
-
-#: js/user/GridPanel.js:182 js/user/EditDialog.js:800
-msgid "OpenID"
-msgstr "OpenID"
-
-#: js/user/GridPanel.js:183 js/user/EditDialog.js:884
-msgid "Last login at"
-msgstr "Utolsó bejelentkezés"
-
-#: js/user/GridPanel.js:184 js/user/EditDialog.js:888
-msgid "Last login from"
-msgstr "Utolsó bejelentkezés helye"
-
-#: js/user/GridPanel.js:185
-msgid "Password changed"
-msgstr "Jelszó megváltoztatása"
-
-#: js/user/GridPanel.js:186 js/user/EditDialog.js:832
-msgid "Expires"
-msgstr "Lejár"
-
-#: js/user/GridPanel.js:243
-msgid "Set new password"
-msgstr "Új jelszó beállítása"
-
-#: js/user/GridPanel.js:243
-msgid "Please enter the new password:"
-msgstr "Kérjük adja meg az új jelszavat:"
-
-#: js/user/EditDialog.js:180
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr "Domain nem engedélyezett. Nézd meg az SMTP domain konfigurációt."
-
-#: js/user/EditDialog.js:227 js/user/EditDialog.js:230
-#: js/user/EditDialog.js:680
-msgid "Passwords do not match!"
-msgstr "A jelszavak nem egyeznek!"
-
-#: js/user/EditDialog.js:233
-msgid "Passwords match!"
-msgstr "Jelszó megegyezik!"
-
-#: js/user/EditDialog.js:279 js/user/EditDialog.js:806
-msgid "Primary group"
-msgstr "Elsődleges csoport"
-
-#: js/user/EditDialog.js:356
-msgid "Unix"
-msgstr "Unix"
-
-#: js/user/EditDialog.js:370
-msgid "Home Directory"
-msgstr "Home könyvtár"
-
-#: js/user/EditDialog.js:374
-msgid "Login Shell"
-msgstr "Bejelentkezési Környezet"
-
-#: js/user/EditDialog.js:380
-msgid "Windows"
-msgstr "Windows"
-
-#: js/user/EditDialog.js:394
-msgid "Home Drive"
-msgstr "Home meghajtó"
-
-#: js/user/EditDialog.js:399
-msgid "Logon Time"
-msgstr "Bejelentkezés ideje"
-
-#: js/user/EditDialog.js:401 js/user/EditDialog.js:886
-#: js/user/EditDialog.js:890
-msgid "never logged in"
-msgstr "sosem jelentkezett be"
-
-#: js/user/EditDialog.js:404
-msgid "Home Path"
-msgstr "Home útvonal"
-
-#: js/user/EditDialog.js:409
-msgid "Logoff Time"
-msgstr "Kijelentkezés ideje"
-
-#: js/user/EditDialog.js:411
-msgid "never logged off"
-msgstr "sosem jelentkezett ki"
-
-#: js/user/EditDialog.js:414
-msgid "Profile Path"
-msgstr "Profil útvonal"
-
-#: js/user/EditDialog.js:419
-msgid "Password Last Set"
-msgstr "Utolsónak megadott jelszó"
-
-#: js/user/EditDialog.js:421 js/user/EditDialog.js:834
-#: js/user/EditDialog.js:894
-msgid "never"
-msgstr "soha"
-
-#: js/user/EditDialog.js:424
-msgid "Logon Script"
-msgstr "Bejelentkezési Script"
-
-#: js/user/EditDialog.js:429
-msgid "Password Can Change"
-msgstr "A jelszó megváltozhat"
-
-#: js/user/EditDialog.js:431 js/user/EditDialog.js:436
-#: js/user/EditDialog.js:441
-msgid "not set"
-msgstr "nincs beállítva"
-
-#: js/user/EditDialog.js:434
-msgid "Password Must Change"
-msgstr "A jelszót meg kell változtatni"
-
-#: js/user/EditDialog.js:439
-msgid "Kick Off Time"
-msgstr "Kirúgás ideje"
-
-#: js/user/EditDialog.js:459
-msgid "IMAP Quota (MB)"
-msgstr "IMAP kvóta (MB)"
-
-#: js/user/EditDialog.js:478 js/user/EditDialog.js:516
-msgid "Quota"
-msgstr "Kvóta"
-
-#: js/user/EditDialog.js:479 js/user/EditDialog.js:517
-msgid "no quota set"
-msgstr "nincs kvóta beállítva"
-
-#: js/user/EditDialog.js:489
-msgid "Current Mailbox size"
-msgstr "Mostani Postafiók mérete"
-
-#: js/user/EditDialog.js:497
-msgid "Sieve Quota (MB)"
-msgstr "Sieve Kvóta (MB)"
-
-#: js/user/EditDialog.js:527
-msgid "Current Sieve size"
-msgstr "Mostani Sieve mérete"
-
-#: js/user/EditDialog.js:536 js/user/EditDialog.js:869
-msgid "Information"
-msgstr "Információ"
-
-#: js/user/EditDialog.js:550
-msgid "Last Login"
-msgstr "Utolsó bejelentkezés"
-
-#: js/user/EditDialog.js:587
-msgid "Email Alias"
-msgstr "Email Aliasz"
-
-#: js/user/EditDialog.js:593
-msgid "Add an alias address..."
-msgstr "Aliasz cím hozzáadása..."
-
-#: js/user/EditDialog.js:606
-msgid "Email Forward"
-msgstr "Email Továbbítás"
-
-#: js/user/EditDialog.js:612
-msgid "Add a forward address..."
-msgstr "Továbbítási cím hozzáadása..."
-
-#: js/user/EditDialog.js:624
-msgid "Forward Only"
-msgstr "Csak továbbítás"
-
-#: js/user/EditDialog.js:647
-msgid "Password confirmation"
-msgstr "Jelszó megerősítés"
-
-#: js/user/EditDialog.js:664
-msgid "Repeat password"
-msgstr "Jelszó ismétlése"
-
-#: js/user/EditDialog.js:691
-msgid "Ok"
-msgstr "OK"
-
-#: js/user/EditDialog.js:728
-msgid "Account"
-msgstr "Fiók"
-
-#: js/user/EditDialog.js:743
-msgid "First Name"
-msgstr "Keresztnév"
-
-#: js/user/EditDialog.js:753
-msgid "Last Name"
-msgstr "Vezetéknév"
-
-#: js/user/EditDialog.js:758 js/user/EditDialog.js:801 js/AccessLog.js:130
-msgid "Login Name"
-msgstr "Bejelentkezési név"
-
-#: js/user/EditDialog.js:763
-msgid "Password"
-msgstr "Jelszó"
-
-#: js/user/EditDialog.js:767
-msgid "no password set"
-msgstr "Nincs jelszó"
-
-#: js/user/EditDialog.js:794
-msgid "Emailaddress"
-msgstr "Email cím"
-
-#: js/user/EditDialog.js:829 js/Applications.js:229
-msgid "enabled"
-msgstr "engedélyezve"
-
-#: js/user/EditDialog.js:829 js/Applications.js:226
-msgid "disabled"
-msgstr "felfüggesztve"
-
-#: js/user/EditDialog.js:829
-msgid "expired"
-msgstr "lejárt"
-
-#: js/user/EditDialog.js:829
-msgid "blocked"
-msgstr "blokkolt"
-
-#: js/user/EditDialog.js:886 js/user/EditDialog.js:890
-msgid "don't know"
-msgstr "nem tudom"
-
-#: js/user/EditDialog.js:892
-msgid "Password set"
-msgstr "Beállított jelszó"
-
-#: js/user/EditDialog.js:899
-msgid "User groups"
-msgstr "Felhasználói csoportok"
-
-#: js/user/EditDialog.js:905
-msgid "User roles"
-msgstr "Felhasználó szerepek"
-
-#: js/user/EditDialog.js:911
-msgid "Fileserver"
-msgstr "Fileserver"
-
-#: js/user/EditDialog.js:917
-msgid "IMAP"
-msgstr "IMAP"
-
-#: js/user/EditDialog.js:926
-msgid "SMTP"
-msgstr "SMTP"
-
-#: js/user/Users.js:118
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "Samba User"
-msgstr[1] "Samba Users"
-
-#: js/user/Users.js:144
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] "Email User"
-msgstr[1] "Email Users"
 
 #: js/Groups.js:52
 msgid "Do you really want to delete the selected groups?"
@@ -770,10 +575,6 @@ msgstr "csoport szerkesztése"
 msgid "delete group"
 msgstr "csoport törlése"
 
-#: js/Groups.js:176 js/Applications.js:183 js/Tags.js:169 js/Roles.js:176
-msgid "Search:"
-msgstr "Keresés:"
-
 #: js/Groups.js:223
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr "Csoportok megjelenítése {0} - {1} / {2}"
@@ -782,73 +583,111 @@ msgstr "Csoportok megjelenítése {0} - {1} / {2}"
 msgid "No groups to display"
 msgstr "Nincs megjeleníthető csoport"
 
-#: js/Applications.js:43
-msgid "{0} Settings"
-msgstr "{0} Beállítások"
+#: js/RoleEditDialog.js:107
+msgid "Could not save role."
+msgstr "Szerep mentése nem sikerült."
 
-#: js/Applications.js:144
-msgid "enable application"
-msgstr "alkalmazás engedélyezése"
+#: js/RoleEditDialog.js:127
+msgid "Deleting role..."
+msgstr "Szerep törlése..."
 
-#: js/Applications.js:145
-msgid "disable application"
-msgstr "alkalmazás felfüggesztése"
+#: js/RoleEditDialog.js:135 js/Roles.js:69
+msgid "Some error occurred while trying to delete the role."
+msgstr "Valamilyen hiba történt a szerep mentése közben."
 
-#: js/Applications.js:146
-msgid "settings"
-msgstr "beállítások"
+#: js/RoleEditDialog.js:159
+msgid "Rights"
+msgstr "Jogok"
 
-#: js/Applications.js:233
-msgid "unknown status ({0})"
-msgstr "ismeretlen állapot ({0})"
+#: js/RoleEditDialog.js:261
+msgid "Members"
+msgstr "Tagok"
 
-#: js/Applications.js:267
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Alkalmazások megjelenítése {0} - {1} / {2}"
+#: js/RoleEditDialog.js:285
+msgid "Role Name"
+msgstr "Szerep neve"
 
-#: js/Applications.js:268
-msgid "No applications to display"
-msgstr "Nincs megjeleníthető alkalamazás"
+#: js/RoleEditDialog.js:360
+msgid "Role"
+msgstr "Szerep"
 
-#: js/Applications.js:280
-msgid "Version"
-msgstr "Verzió"
+#: js/RoleEditDialog.js:370
+msgid "Add New Role"
+msgstr "Új szerep hozzáadása"
 
-#: js/TagEditDialog.js:37
+#: js/RoleEditDialog.js:372
+msgid "Edit Role \"{0}\""
+msgstr "Szerep szerkesztése \"{0}\""
+
+#: js/Roles.js:47
+msgid "Do you really want to delete the selected roles?"
+msgstr "Biztos törölni akarod a kiválasztott szerepeket?"
+
+#: js/Roles.js:64
+msgid "Deleting role(s)..."
+msgstr "Szerep(ek) törlése..."
+
+#: js/Roles.js:102
+msgid "add role"
+msgstr "szerep hozzáadása"
+
+#: js/Roles.js:110
+msgid "edit role"
+msgstr "szerep szerkesztése"
+
+#: js/Roles.js:118
+msgid "delete role"
+msgstr "szerep törlése"
+
+#: js/Roles.js:226
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Szerepek megjelenítése{0} - {1} / {2}"
+
+#: js/Roles.js:227 js/Roles.js:281
+msgid "No roles to display"
+msgstr "Nincs megjelenthető szerep"
+
+#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:61
+msgid "Computer Name"
+msgstr "Számítógép Név"
+
+#: js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Számítógép"
+msgstr[1] "Számítógépek"
+
+#: js/TagEditDialog.js:38
 msgid "Updating Tag"
 msgstr "Címke frissítése"
 
-#: js/TagEditDialog.js:82
+#: js/TagEditDialog.js:83
 msgid "Could not save tag."
 msgstr "Nem lehetett a címkét menteni."
 
-#: js/TagEditDialog.js:168
+#: js/TagEditDialog.js:169
 msgid "Allowed Contexts"
 msgstr "Megengedett kontextus"
 
-#: js/TagEditDialog.js:174
+#: js/TagEditDialog.js:175
 msgid "Context"
 msgstr "Kontextus"
 
-#: js/TagEditDialog.js:187
+#: js/TagEditDialog.js:188
 msgid "Account Rights"
 msgstr "Fiók jogok"
 
-#: js/TagEditDialog.js:196
+#: js/TagEditDialog.js:197
 msgid "View"
 msgstr "Megtekintés"
 
-#: js/TagEditDialog.js:201
+#: js/TagEditDialog.js:202
 msgid "Use"
 msgstr "Használ"
 
 #: js/TagEditDialog.js:219
 msgid "Tag Name"
 msgstr "Címke név"
-
-#: js/TagEditDialog.js:232 js/Tags.js:222 js/container/EditDialog.js:159
-msgid "Color"
-msgstr "Szín"
 
 #: js/TagEditDialog.js:290
 msgid "Tag"
@@ -861,68 +700,6 @@ msgstr "Új címke hozzáadása"
 #: js/TagEditDialog.js:302
 msgid "Edit Tag \"{0}\""
 msgstr "Címke szerkesztése  \"{0}\""
-
-#: js/SambaMachineModel.js:39
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Számítógép"
-msgstr[1] "Számítógépek"
-
-#: js/AccessLog.js:106 js/AccessLog.js:132
-msgid "IP Address"
-msgstr "IP Cím"
-
-#: js/AccessLog.js:108 js/AccessLog.js:133
-msgid "Login Time"
-msgstr "Bejelentkezés ideje"
-
-#: js/AccessLog.js:109 js/AccessLog.js:134
-msgid "Logout Time"
-msgstr "Kijelentkezés ideje"
-
-#: js/AccessLog.js:110 js/AccessLog.js:136
-msgid "Client Type"
-msgstr "Kliens típus"
-
-#: js/AccessLog.js:129
-msgid "Session ID"
-msgstr "Hozzáférés ID"
-
-#: js/AccessLog.js:135
-msgid "Result"
-msgstr "Eredmény"
-
-#: js/AccessLog.js:156
-msgid "user blocked"
-msgstr "felhasználó blokkolva"
-
-#: js/AccessLog.js:160
-msgid "password expired"
-msgstr "jelszó lejárt"
-
-#: js/AccessLog.js:164
-msgid "user disabled"
-msgstr "felhasználó letiltva"
-
-#: js/AccessLog.js:168
-msgid "invalid password"
-msgstr "érvénytelen jelszó"
-
-#: js/AccessLog.js:172
-msgid "ambiguous username"
-msgstr "kétértelmű felhasználó név"
-
-#: js/AccessLog.js:176
-msgid "user not found"
-msgstr "felhasználó nem található"
-
-#: js/AccessLog.js:180
-msgid "failure"
-msgstr "hiba"
-
-#: js/AccessLog.js:184
-msgid "success"
-msgstr "siker"
 
 #: js/Tags.js:64
 msgid "Do you really want to delete the selected tags?"
@@ -956,117 +733,347 @@ msgstr "Nincs megjeleníthető címke"
 msgid "Usage:&#160;"
 msgstr ""
 
-#: js/container/GridPanel.js:71
-msgid "Container Name"
-msgstr "Konténer Név"
+#: js/user/EditDialog.js:187
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr "Domain nem engedélyezett. Nézd meg az SMTP domain konfigurációt."
 
-#: js/container/GridPanel.js:103 js/container/Container.js:46
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] "Konténer"
-msgstr[1] "Konténerek"
+#: js/user/EditDialog.js:234 js/user/EditDialog.js:237
+#: js/user/EditDialog.js:688
+msgid "Passwords do not match!"
+msgstr "A jelszavak nem egyeznek!"
 
-#: js/container/EditDialog.js:145
-msgid "personal"
-msgstr "személyes"
+#: js/user/EditDialog.js:240
+msgid "Passwords match!"
+msgstr "Jelszó megegyezik!"
 
-#: js/container/EditDialog.js:145
-msgid "shared"
-msgstr "megosztott"
+#: js/user/EditDialog.js:286 js/user/EditDialog.js:811
+msgid "Primary group"
+msgstr "Elsődleges csoport"
 
-#: js/container/EditDialog.js:164
-msgid "Note for Owner"
-msgstr "Feljegyzés a tulajdonosnak"
+#: js/user/EditDialog.js:363
+msgid "Unix"
+msgstr "Unix"
 
-#: js/Roles.js:47
-msgid "Do you really want to delete the selected roles?"
-msgstr "Biztos törölni akarod a kiválasztott szerepeket?"
+#: js/user/EditDialog.js:377
+msgid "Home Directory"
+msgstr "Home könyvtár"
 
-#: js/Roles.js:64
-msgid "Deleting role(s)..."
-msgstr "Szerep(ek) törlése..."
+#: js/user/EditDialog.js:381
+msgid "Login Shell"
+msgstr "Bejelentkezési Környezet"
 
-#: js/Roles.js:102
-msgid "add role"
-msgstr "szerep hozzáadása"
+#: js/user/EditDialog.js:387
+msgid "Windows"
+msgstr "Windows"
 
-#: js/Roles.js:110
-msgid "edit role"
-msgstr "szerep szerkesztése"
+#: js/user/EditDialog.js:401
+msgid "Home Drive"
+msgstr "Home meghajtó"
 
-#: js/Roles.js:118
-msgid "delete role"
-msgstr "szerep törlése"
+#: js/user/EditDialog.js:406
+msgid "Logon Time"
+msgstr "Bejelentkezés ideje"
 
-#: js/Roles.js:226
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Szerepek megjelenítése{0} - {1} / {2}"
+#: js/user/EditDialog.js:408 js/user/EditDialog.js:891
+#: js/user/EditDialog.js:895
+msgid "never logged in"
+msgstr "sosem jelentkezett be"
 
-#: js/Roles.js:227 js/Roles.js:281
-msgid "No roles to display"
-msgstr "Nincs megjelenthető szerep"
+#: js/user/EditDialog.js:411
+msgid "Home Path"
+msgstr "Home útvonal"
 
-#: Controller/Container.php:185
-msgid "Your container has been changed"
-msgstr "Konténered megváltozott"
+#: js/user/EditDialog.js:416
+msgid "Logoff Time"
+msgstr "Kijelentkezés ideje"
 
-#: Controller/Container.php:186
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr "Konténeredet megváltozotta %1$s %2$sFeljegyzés: %3$s"
+#: js/user/EditDialog.js:418
+msgid "never logged off"
+msgstr "sosem jelentkezett ki"
 
-#~ msgid "Quota (MB)"
-#~ msgstr "Kvóta (MB)"
+#: js/user/EditDialog.js:421
+msgid "Profile Path"
+msgstr "Profil útvonal"
 
-#~ msgid "Current Mail Size"
-#~ msgstr "Jelenlegi levél méret"
+#: js/user/EditDialog.js:426
+msgid "Password Last Set"
+msgstr "Utolsónak megadott jelszó"
 
-#~ msgid "Sieve Quota"
-#~ msgstr "Sieve Kvóta"
+#: js/user/EditDialog.js:428 js/user/EditDialog.js:839
+#: js/user/EditDialog.js:899
+msgid "never"
+msgstr "soha"
 
-#~ msgid "Sieve Size"
-#~ msgstr "Sieve Méret"
+#: js/user/EditDialog.js:431
+msgid "Logon Script"
+msgstr "Bejelentkezési Script"
 
-#~ msgid "Aliases"
-#~ msgstr "Aliaszok"
+#: js/user/EditDialog.js:436
+msgid "Password Can Change"
+msgstr "A jelszó megváltozhat"
 
-#~ msgid "Forwards"
-#~ msgstr "Továbbítások"
+#: js/user/EditDialog.js:438 js/user/EditDialog.js:443
+#: js/user/EditDialog.js:448
+msgid "not set"
+msgstr "nincs beállítva"
 
-#~ msgid "User memberships"
-#~ msgstr "Fiók tagságok"
+#: js/user/EditDialog.js:441
+msgid "Password Must Change"
+msgstr "A jelszót meg kell változtatni"
 
-#~ msgid "Transfering {0}..."
-#~ msgstr "Átadás alatt: {0}..."
+#: js/user/EditDialog.js:446
+msgid "Kick Off Time"
+msgstr "Kirúgás ideje"
 
-#~ msgid "Loading Tag..."
-#~ msgstr "Címke betöltése..."
+#: js/user/EditDialog.js:466
+msgid "IMAP Quota (MB)"
+msgstr "IMAP kvóta (MB)"
 
-#~ msgid "Please Wait"
-#~ msgstr "Kérlek várj"
+#: js/user/EditDialog.js:485 js/user/EditDialog.js:523
+msgid "Quota"
+msgstr "Kvóta"
 
-#~ msgid "Do you really want to delete the selected access log entries?"
-#~ msgstr "Biztos törölni akarja a kiválaszott hozzáférési napló bejegyzéseket?"
+#: js/user/EditDialog.js:486 js/user/EditDialog.js:524
+msgid "no quota set"
+msgstr "nincs kvóta beállítva"
 
-#~ msgid "delete entry"
-#~ msgstr "bejegyzés törlése"
+#: js/user/EditDialog.js:496
+msgid "Current Mailbox size"
+msgstr "Mostani Postafiók mérete"
 
-#~ msgid "select all"
-#~ msgstr "mind kijelölése"
+#: js/user/EditDialog.js:504
+msgid "Sieve Quota (MB)"
+msgstr "Sieve Kvóta (MB)"
 
-#~ msgid "Display from:"
-#~ msgstr "Megjelenítés innen:"
+#: js/user/EditDialog.js:534
+msgid "Current Sieve size"
+msgstr "Mostani Sieve mérete"
 
-#~ msgid "to:"
-#~ msgstr "eddig:"
+#: js/user/EditDialog.js:543 js/user/EditDialog.js:874
+msgid "Information"
+msgstr "Információ"
 
-#~ msgid "Displaying access log entries {0} - {1} of {2}"
-#~ msgstr "Hozzáférési napló bejegyzések megjelenítése {0} - {1} / {2}"
+#: js/user/EditDialog.js:557
+msgid "Last Login"
+msgstr "Utolsó bejelentkezés"
 
-#~ msgid "No access log entries to display"
-#~ msgstr "Nincs megjeleníthető bejegyzés"
+#: js/user/EditDialog.js:598
+msgid "Email Alias"
+msgstr "Email Aliasz"
 
-#~ msgid "Account ID"
-#~ msgstr "Fiók ID"
+#: js/user/EditDialog.js:604
+msgid "Add an alias address..."
+msgstr "Aliasz cím hozzáadása..."
 
-#~ msgid "Loading Role..."
-#~ msgstr "Szerep betöltése..."
+#: js/user/EditDialog.js:617
+msgid "Email Forward"
+msgstr "Email Továbbítás"
+
+#: js/user/EditDialog.js:623
+msgid "Add a forward address..."
+msgstr "Továbbítási cím hozzáadása..."
+
+#: js/user/EditDialog.js:635
+msgid "Forward Only"
+msgstr "Csak továbbítás"
+
+#: js/user/EditDialog.js:655
+msgid "Password confirmation"
+msgstr "Jelszó megerősítés"
+
+#: js/user/EditDialog.js:672
+msgid "Repeat password"
+msgstr "Jelszó ismétlése"
+
+#: js/user/EditDialog.js:698
+msgid "Ok"
+msgstr "OK"
+
+#: js/user/EditDialog.js:733
+msgid "Account"
+msgstr "Fiók"
+
+#: js/user/EditDialog.js:748
+msgid "First Name"
+msgstr "Keresztnév"
+
+#: js/user/EditDialog.js:758
+msgid "Last Name"
+msgstr "Vezetéknév"
+
+#: js/user/EditDialog.js:768
+msgid "Password"
+msgstr "Jelszó"
+
+#: js/user/EditDialog.js:772
+msgid "no password set"
+msgstr "Nincs jelszó"
+
+#: js/user/EditDialog.js:799
+msgid "Emailaddress"
+msgstr "Email cím"
+
+#: js/user/EditDialog.js:805 js/user/GridPanel.js:182
+msgid "OpenID"
+msgstr "OpenID"
+
+#: js/user/EditDialog.js:834
+msgid "expired"
+msgstr "lejárt"
+
+#: js/user/EditDialog.js:834
+msgid "blocked"
+msgstr "blokkolt"
+
+#: js/user/EditDialog.js:837 js/user/GridPanel.js:186
+msgid "Expires"
+msgstr "Lejár"
+
+#: js/user/EditDialog.js:889 js/user/GridPanel.js:183
+msgid "Last login at"
+msgstr "Utolsó bejelentkezés"
+
+#: js/user/EditDialog.js:891 js/user/EditDialog.js:895
+msgid "don't know"
+msgstr "nem tudom"
+
+#: js/user/EditDialog.js:893 js/user/GridPanel.js:184
+msgid "Last login from"
+msgstr "Utolsó bejelentkezés helye"
+
+#: js/user/EditDialog.js:897
+msgid "Password set"
+msgstr "Beállított jelszó"
+
+#: js/user/EditDialog.js:904
+msgid "User groups"
+msgstr "Felhasználói csoportok"
+
+#: js/user/EditDialog.js:910
+msgid "User roles"
+msgstr "Felhasználó szerepek"
+
+#: js/user/EditDialog.js:916
+msgid "Fileserver"
+msgstr "Fileserver"
+
+#: js/user/EditDialog.js:922
+msgid "IMAP"
+msgstr "IMAP"
+
+#: js/user/EditDialog.js:931
+msgid "SMTP"
+msgstr "SMTP"
+
+#: js/user/GridPanel.js:56
+msgid "enable account"
+msgstr "fiók engedélyezése"
+
+#: js/user/GridPanel.js:66
+msgid "disable account"
+msgstr "fiók felfüggesztése"
+
+#: js/user/GridPanel.js:76
+msgid "reset password"
+msgstr "jelszó nullázása"
+
+#: js/user/GridPanel.js:177
+msgid "Displayname"
+msgstr "Megjelenési név"
+
+#: js/user/GridPanel.js:178
+msgid "Loginname"
+msgstr "Bejelentkezés név"
+
+#: js/user/GridPanel.js:179
+msgid "Last name"
+msgstr "Vezetéknév"
+
+#: js/user/GridPanel.js:180
+msgid "First name"
+msgstr "Keresztnév"
+
+#: js/user/GridPanel.js:181
+msgid "Email"
+msgstr "Email"
+
+#: js/user/GridPanel.js:185
+msgid "Password changed"
+msgstr "Jelszó megváltoztatása"
+
+#: js/user/GridPanel.js:243
+msgid "Set new password"
+msgstr "Új jelszó beállítása"
+
+#: js/user/GridPanel.js:243
+msgid "Please enter the new password:"
+msgstr "Kérjük adja meg az új jelszavat:"
+
+#: js/user/Users.js:118
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "Samba User"
+msgstr[1] "Samba Users"
+
+#: js/user/Users.js:144
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "Email User"
+msgstr[1] "Email Users"
+
+msgid "Quota (MB)"
+msgstr "Kvóta (MB)"
+
+msgid "Current Mail Size"
+msgstr "Jelenlegi levél méret"
+
+msgid "Sieve Quota"
+msgstr "Sieve Kvóta"
+
+msgid "Sieve Size"
+msgstr "Sieve Méret"
+
+msgid "Aliases"
+msgstr "Aliaszok"
+
+msgid "Forwards"
+msgstr "Továbbítások"
+
+msgid "User memberships"
+msgstr "Fiók tagságok"
+
+msgid "Transfering {0}..."
+msgstr "Átadás alatt: {0}..."
+
+msgid "Loading Tag..."
+msgstr "Címke betöltése..."
+
+msgid "Please Wait"
+msgstr "Kérlek várj"
+
+msgid "Do you really want to delete the selected access log entries?"
+msgstr "Biztos törölni akarja a kiválaszott hozzáférési napló bejegyzéseket?"
+
+msgid "delete entry"
+msgstr "bejegyzés törlése"
+
+msgid "select all"
+msgstr "mind kijelölése"
+
+msgid "Display from:"
+msgstr "Megjelenítés innen:"
+
+msgid "to:"
+msgstr "eddig:"
+
+msgid "Displaying access log entries {0} - {1} of {2}"
+msgstr "Hozzáférési napló bejegyzések megjelenítése {0} - {1} / {2}"
+
+msgid "No access log entries to display"
+msgstr "Nincs megjeleníthető bejegyzés"
+
+msgid "Account ID"
+msgstr "Fiók ID"
+
+msgid "Loading Role..."
+msgstr "Szerep betöltése..."
