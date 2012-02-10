@@ -29,6 +29,11 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
      * @cfg {Boolean} showTodayBtn
      */ 
     showTodayBtn: true,
+    /**
+     * shows if the periodpicker is active
+     * @type boolean
+     */
+    periodPickerActive: null,
     
     /**
      * @private
@@ -63,7 +68,9 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
                 change: function(picker, view, period) {
                     this.dtStart = period.from.clone();
                     this.fireEvent('change', this, view, period);
-                }
+                },
+                menushow: function(){this.periodPickerActive = true; },
+                menuhide: function(){this.periodPickerActive = false;}
             }
         });
         
@@ -159,8 +166,6 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
         }
     },
 
-
-    
     /**
      * Unbinds the paging toolbar from the specified {@link Ext.data.Store}
      * @param {Ext.data.Store} store The data store to unbind
@@ -185,6 +190,11 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
         this.store = store;
     },
 
+    /**
+     * just needed when inserted in an eventpickercombobox
+     */
+    bindStore: function() {},
+    
     // private
     onDestroy : function(){
         if(this.store){
@@ -242,6 +252,7 @@ Tine.Calendar.PagingToolbar.DayPeriodPicker = Ext.extend(Tine.Calendar.PagingToo
             menu: new Ext.menu.DateMenu({
                 listeners: {
                     scope: this,
+                    
                     select: function(field) {
                         if (typeof(field.getValue) == 'function') {
                             this.update(field.getValue());
@@ -406,9 +417,11 @@ Tine.Calendar.PagingToolbar.MonthPeriodPicker = Ext.extend(Tine.Calendar.PagingT
                 menushow: function(btn, menu) {
                     menu.picker.showMonthPicker();
                     menu.picker.monthPickerActive = true;
+                    this.fireEvent('menushow');
                 },
                 menuhide: function(btn, menu) {
                     menu.picker.monthPickerActive = false;
+                    this.fireEvent('menuhide');
                 }
             }
         });

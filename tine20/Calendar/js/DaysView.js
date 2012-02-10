@@ -583,6 +583,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         return this.activeEvent;
     },
     
+    /**
+     * returns the selectionModel of the active panel
+     * @return {}
+     */
     getSelectionModel: function() {
         return this.calPanel.getSelectionModel();
     },

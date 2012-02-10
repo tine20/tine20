@@ -58,7 +58,7 @@ class Calendar_Model_GrantFilter extends Tinebase_Model_Filter_Abstract implemen
         
         foreach ($this->_requiredGrants as $grant) {
             $_select->orHaving($db->quoteInto($db->quoteIdentifier($grant) . ' = ?', 1, Zend_Db::INT_TYPE));
-        }
+        }       
     }
     
     /**

@@ -18,8 +18,8 @@ Ext.ns('Tine.widgets.form');
 
 Tine.widgets.form.RecordPickerManager = function() {
 
-    var items = {}
-    
+    var items = {};
+  
     return {
         /**
          * returns a registered recordpicker or creates the default one

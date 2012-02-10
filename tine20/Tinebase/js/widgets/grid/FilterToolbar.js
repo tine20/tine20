@@ -847,7 +847,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         filter.endEdit();
         
-        return filter
+        return filter;
     },
     
     setValue: function(filters) {

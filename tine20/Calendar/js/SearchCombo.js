@@ -27,8 +27,6 @@ Ext.ns('Tine.Calendar');
  * @param       {Object} config
  * @constructor
  * Create a new Tine.Calendar.SearchCombo
- * 
- * TODO         add     forceSelection: true ?
  */
 
 Tine.Calendar.SearchCombo = Ext.extend(Ext.form.ComboBox, {
@@ -38,44 +36,129 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.form.ComboBox, {
     app: null,
     appName: 'Calendar',
 
-    /**
-     * date filter from datepicker
-     */
-    addFilter: null,
     store: null,
     
     triggerAction: 'all',
     itemSelector: 'div.search-item',
     minChars: 3,
+    
     forceSelection: true,
+    
+    /*
+     * shows date pager on bottom of the resultlist
+     */
+    showDatePager: true,
+    
+    /*
+     * shows an reload button in the datepager
+     */
+    showReloadBtn: null,
+    
+    /*
+     * shows an today button in the datepager
+     */
+    showTodayBtn: null,
     
     initComponent: function() {
         if (!this.app) {
             this.app = Tine.Tinebase.appMgr.get(this.appName);
         }
-        
+
+        this.listEmptyText = this.app.i18n._('no events found');
         this.loadingText = _('Searching...');
-        
+
         this.recordClass = Tine.Calendar.Model.Event;
         this.recordProxy = Tine.Calendar.eventBackend;      
-        
+
         this.displayField = this.recordClass.getMeta('titleProperty');
         this.valueField = this.recordClass.getMeta('idProperty');
-        
+
         this.fieldLabel = this.app.i18n._('Event'),
         this.emptyText = this.app.i18n._('Search Event'),
-        
+
         this.store = new Tine.Tinebase.data.RecordStore(Ext.copyTo({
             readOnly: true,
+            sortInfo: {
+                field: 'dtstart',
+                direction: 'ASC'
+            },
             proxy: this.recordProxy || undefined
         }, this, 'totalProperty,root,recordClass'));
-        
-        this.on('beforequery', this.onBeforeQuery, this);
-        
+
+        this.store.on('beforeload', this.onBeforeStoreLoad, this);
+        this.store.on('load', this.onStoreLoad, this);
+
         this.initTemplate();
-        
+
         Tine.Calendar.SearchCombo.superclass.initComponent.call(this);
     },
+
+    
+    /**
+     * is called, when records has been fetched
+     * records without edit grant are removed
+     * @param {} store
+     * @param {} records
+     */
+    onStoreLoad: function(store, records) {
+        store.each(function(record) {
+            if(!record.data.editGrant) store.remove(record);
+        });
+    },
+    
+    /**
+     * sets period ans searchword as query parameter
+     * @param {} store
+     */
+    onBeforeStoreLoad: function(store) {
+        store.baseParams.filter = [
+            {field: 'period', operator: 'within', value: this.pageTb.getPeriod()},
+            {field: 'query', operator: 'contains', value: this.getRawValue()}
+        ];
+    },
+    
+    /**
+     * collapses the result list only when periodpicker is not active
+     * @return {Boolean}
+     */
+    collapse: function() {
+        if(this.pageTb.periodPickerActive == true) {
+            return false;
+        } else {
+            Tine.Calendar.SearchCombo.superclass.collapse.call(this);
+        }
+    },
+    
+    /**
+     * is called, when list is initialized, appends a date-paging-toolbar instead a normal one
+     */
+    initList: function() {
+        Tine.Calendar.SearchCombo.superclass.initList.call(this);
+        var startDate = new Date().clearTime();
+
+        this.footer = this.list.createChild({cls:'list-ft'});
+        this.pageTb = new Tine.Calendar.PagingToolbar({
+            view: 'month',
+            anchor: '100% 100%',
+            store: this.store,
+            dtStart: startDate,
+            showReloadBtn: this.showReloadBtn,
+            showTodayBtn: this.showTodayBtn,
+            renderTo: this.footer,
+            listeners: {
+                scope: this,
+                change: function() {
+                    this.store.removeAll();
+                    this.store.load(); 
+                    }
+            }
+        }); 
+
+        this.assetHeight += this.footer.getHeight();      
+    },
+    
+    onBlur: Ext.emptyFn,
+    assertValue: Ext.emptyFn,
     
     /**
      * init template
@@ -106,7 +189,7 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.form.ComboBox, {
                         }
                     },
                     encodeDate: function(values) {
-                        var start = values.dtstart;
+                        var start = values.dtstart,
                             end   = values.dtend;
 
                         var duration = values.is_all_day_event ? Tine.Tinebase.appMgr.get('Calendar').i18n._('whole day') : 
@@ -119,24 +202,7 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.form.ComboBox, {
                 }
             );
         }
-    },
-    
-    /**
-     * sets the filter
-     * @param {} filter
-     */
-    setFilter: function(filter) {      
-        this.addFilter = filter;
-        this.store.baseParams.filter = [this.addFilter];
-        this.fireEvent('filterupdate');
-    },
-    
-    onBeforeQuery: function (qevent) {
-        this.store.baseParams.filter = [this.addFilter];
-        this.store.baseParams.filter.push({field: 'query', operator: 'contains', value: qevent.query });
     }
-
-
 });
 
 Tine.widgets.form.RecordPickerManager.register('Calendar', 'Event', Tine.Calendar.SearchCombo);

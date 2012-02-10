@@ -59,61 +59,63 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     applyState: Ext.emptyFn,
     
     initComponent: function () {
-        var me = this;
+        try {
+            var me = this;
+            
+            this.addEvents(
+            /**
+             * @event changeview
+             * fired if an event got clicked
+             * @param {Tine.Calendar.MainScreenCenterPanel} mspanel
+             * @param {String} view
+             */
+            'changeview');
+            
+            this.recordClass = Tine.Calendar.Model.Event;
+            
+            this.app = Tine.Tinebase.appMgr.get('Calendar');
+            
+            // init some translations
+            this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
+            this.i18nRecordsName = this.app.i18n._hidden(this.recordClass.getMeta('recordsName'));
+            this.i18nContainerName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1);
+            this.i18nContainersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
+            
+            this.loadMaskText = this.app.i18n._hidden(this.loadMaskText);
+            
+            var state = Ext.state.Manager.get(this.stateId, {});
+            Ext.apply(this, state);
+            
+            this.defaultFilters = [
+                {field: 'attender', operator: 'in', value: [Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
+                    user_id: Tine.Tinebase.registry.get('currentAccount')
+                })]},
+                {field: 'attender_status', operator: 'notin', value: ['DECLINED']}
+            ];
+            this.filterToolbar = this.getFilterToolbar({
+                onFilterChange: this.refresh.createDelegate(this, [false]),
+                getAllFilterData: this.getAllFilterData.createDelegate(this)
+            });
+            
+            this.filterToolbar.getQuickFilterPlugin().criteriaIgnores.push(
+                {field: 'period'},
+                {field: 'grants'}
+            );
+            
+            this.startDates = [];
+            this.initActions();
+            this.initLayout();
+            
+            // init autoRefresh
+            this.autoRefreshTask = new Ext.util.DelayedTask(this.refresh.createDelegate(this, [true]), this, [{
+                refresh: true,
+                autoRefresh: true
+            }]);
         
-        this.addEvents(
-        /**
-         * @event changeview
-         * fired if an event got clicked
-         * @param {Tine.Calendar.MainScreenCenterPanel} mspanel
-         * @param {String} view
-         */
-        'changeview');
-        
-        this.recordClass = Tine.Calendar.Model.Event;
-        
-        this.app = Tine.Tinebase.appMgr.get('Calendar');
-        
-        // init some translations
-        this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
-        this.i18nRecordsName = this.app.i18n._hidden(this.recordClass.getMeta('recordsName'));
-        this.i18nContainerName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1);
-        this.i18nContainersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
-        
-        this.i18nEditActionText = String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 1), this.i18nRecordName);
-        
-        this.loadMaskText = this.app.i18n._hidden(this.loadMaskText);
-        
-        var state = Ext.state.Manager.get(this.stateId, {});
-        Ext.apply(this, state);
-        
-        this.defaultFilters = [
-            {field: 'attender', operator: 'in', value: [Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
-                user_id: Tine.Tinebase.registry.get('currentAccount')
-            })]},
-            {field: 'attender_status', operator: 'notin', value: ['DECLINED']}
-        ];
-        this.filterToolbar = this.getFilterToolbar({
-            onFilterChange: this.refresh.createDelegate(this, [false]),
-            getAllFilterData: this.getAllFilterData.createDelegate(this)
-        });
-        
-        this.filterToolbar.getQuickFilterPlugin().criteriaIgnores.push(
-            {field: 'period'},
-            {field: 'grants'}
-        );
-        
-        this.startDates = [];
-        this.initActions();
-        this.initLayout();
-        
-        // init autoRefresh
-        this.autoRefreshTask = new Ext.util.DelayedTask(this.refresh.createDelegate(this, [true]), this, [{
-            refresh: true,
-            autoRefresh: true
-        }]);
-    
-        Tine.Calendar.MainScreenCenterPanel.superclass.initComponent.call(this);
+            Tine.Calendar.MainScreenCenterPanel.superclass.initComponent.call(this);
+        } catch (e) {
+            console.err(e.stack ? e.stack : e);
+        }
     },
     
     initActions: function () {
@@ -323,57 +325,61 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
     
     changeView: function (view, startDate) {
-        // autocomplete view
-        var viewParts = this.getViewParts(view);
-        view = viewParts.toString();
-        
-        Tine.log.debug('Tine.Calendar.MainScreenCenterPanel::changeView(' + view + ',' + startDate + ')');
-        
-        // save current startDate
-        this.startDates[this.activeView] = this.startDate.clone();
-        
-        if (startDate && Ext.isDate(startDate)) {
-            this.startDate = startDate.clone();
-        } else {
-            // see if a recent startDate of that view fits
-            var lastStartDate = this.startDates[view],
-                currentPeriod = this.getCalendarPanel(this.activeView).getView().getPeriod();
-                
-            if (Ext.isDate(lastStartDate) && lastStartDate.between(currentPeriod.from, currentPeriod.until)) {
-                this.startDate = this.startDates[view].clone();
+        try {
+            // autocomplete view
+            var viewParts = this.getViewParts(view);
+            view = viewParts.toString();
+            
+            Tine.log.debug('Tine.Calendar.MainScreenCenterPanel::changeView(' + view + ',' + startDate + ')');
+            
+            // save current startDate
+            this.startDates[this.activeView] = this.startDate.clone();
+            
+            if (startDate && Ext.isDate(startDate)) {
+                this.startDate = startDate.clone();
+            } else {
+                // see if a recent startDate of that view fits
+                var lastStartDate = this.startDates[view],
+                    currentPeriod = this.getCalendarPanel(this.activeView).getView().getPeriod();
+                    
+                if (Ext.isDate(lastStartDate) && lastStartDate.between(currentPeriod.from, currentPeriod.until)) {
+                    this.startDate = this.startDates[view].clone();
+                }
             }
+            
+            var panel = this.getCalendarPanel(view);
+            var cardPanel = this.items.first();
+            
+            if (panel.rendered) {
+                cardPanel.layout.setActiveItem(panel.id);
+            } else {
+                cardPanel.add(panel);
+                cardPanel.layout.setActiveItem(panel.id);
+                cardPanel.doLayout();
+            }
+            
+            this.activeView = view;
+            
+            // move around changeViewButtons
+            var rightRow = Ext.get(Ext.DomQuery.selectNode('tr[class=x-toolbar-right-row]', panel.tbar.dom));
+            
+            for (var i = this.changeViewActions.length - 1; i >= 0; i--) {
+                rightRow.insertFirst(this.changeViewActions[i].getEl().parent().dom);
+            }
+            this['show' + Ext.util.Format.capitalize(viewParts.period) +  'View'].toggle(true);
+            this['show' + Ext.util.Format.capitalize(viewParts.presentation) +  'View'].toggle(true);
+            
+            // update actions
+            this.updateEventActions();
+            
+            // update data
+            panel.getView().updatePeriod({from: this.startDate});
+            panel.getStore().load({});
+            
+            this.fireEvent('changeview', this, view);
+        } catch (e) {
+            console.err(e.stack ? e.stack : e);
         }
-        
-        var panel = this.getCalendarPanel(view);
-        var cardPanel = this.items.first();
-        
-        if (panel.rendered) {
-            cardPanel.layout.setActiveItem(panel.id);
-        } else {
-            cardPanel.add(panel);
-            cardPanel.layout.setActiveItem(panel.id);
-            cardPanel.doLayout();
-        }
-        
-        this.activeView = view;
-        
-        // move around changeViewButtons
-        var rightRow = Ext.get(Ext.DomQuery.selectNode('tr[class=x-toolbar-right-row]', panel.tbar.dom));
-        
-        for (var i = this.changeViewActions.length - 1; i >= 0; i--) {
-            rightRow.insertFirst(this.changeViewActions[i].getEl().parent().dom);
-        }
-        this['show' + Ext.util.Format.capitalize(viewParts.period) +  'View'].toggle(true);
-        this['show' + Ext.util.Format.capitalize(viewParts.presentation) +  'View'].toggle(true);
-        
-        // update actions
-        this.updateEventActions();
-        
-        // update data
-        panel.getView().updatePeriod({from: this.startDate});
-        panel.getStore().load({});
-        
-        this.fireEvent('changeview', this, view);
     },
     
     /**
@@ -493,31 +499,32 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 ],
                 
                 handler: function(option) {
-                    switch (option) {
-                        case 'yes':
-                            if (actionType == 'update') this.onUpdateEvent(event, true, actionType);
-                            else this.onAddEvent(event, checkBusyConflicts, true);
-                            break;
-                        case 'no':
-                        default:
-                            try {
-                                var panel = this.getCalendarPanel(this.activeView);
-                                if(panel) {
-                                    var store = panel.getStore(),
-                                        view = panel.getView();
+                    try {
+                        switch (option) {
+                            case 'yes':
+                                if (actionType == 'update') this.onUpdateEvent(event, true, actionType);
+                                else this.onAddEvent(event, checkBusyConflicts, true);
+                                break;
+                            case 'no':
+                            default:
+                                try {
+                                    var panel = this.getCalendarPanel(this.activeView);
+                                    if(panel) {
+                                        var store = panel.getStore(),
+                                            view = panel.getView();
+                                    }
+                                } catch(e) {
+                                    var panel = null, 
+                                        store = null,
+                                        view = null;
                                 }
-                            } catch(e) {
-                                var panel = null, 
-                                    store = null,
-                                    view = null;
-                            }
-                            
-                            if (actionType == 'add') {
-                                if(store) store.remove(event);
-                            } else {
-                                if (view && view.calPanel && view.rendered) {
-                                    this.loadMask.show();
-                                    store.reload();
+                                
+                                if (actionType == 'add') {
+                                    if(store) store.remove(event);
+                                } else {
+                                    if (view && view.calPanel && view.rendered) {
+                                        this.loadMask.show();
+                                        store.reload();
 //                                        TODO: restore original event so no reload is needed
 //                                        var updatedEvent = event;
 //                                        updatedEvent.dirty = false;
@@ -526,11 +533,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
 //                                        
 //                                        store.replaceRecord(event, updatedEvent);
 //                                        view.getSelectionModel().select(event);
+                                    }
+                                    this.setLoading(false);
                                 }
-                                this.setLoading(false);
-                            }
+                        }
+                    } catch (e) {
+                        Tine.log.error('Tine.Calendar.MainScreenCenterPanel::checkPastEvent::handler');
+                        Tine.log.error(e);
                     }
-
                 }             
             });
         } else {
@@ -610,10 +620,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     var panel = this.getCalendarPanel(this.activeView),
                         store = panel.getStore(),
                         view = panel.getView();
-                        
+
                     switch (option) {
                         case 'series':
-                            this.loadMask.show();
+                            if(this.loadMask) this.loadMask.show();
                             
                             var options = {
                                 scope: this,
@@ -636,7 +646,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                                         
                                         store.replaceRecord(event ,updatedEvent);
                                         this.setLoading(false);
-                                        view.getSelectionModel().select(updatedEvent);
+                                        if(view.rendered) {
+                                            view.getSelectionModel().select(updatedEvent);
+                                        }
                                     } else {
                                         store.load({refresh: true});
                                     }
@@ -647,10 +659,13 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                             Tine.Calendar.backend.createRecurException(event, false, option == 'future', options);
                                 
                         default:
-                            this.loadMask.show();
-                            store.load({refresh: true});
+                            if(this.loadMask) { //no loadMask called from another app
+                                this.loadMask.show();
+                                store.load({refresh: true});
+                            }
                             break;
                     }
+
                 } 
             });
         } else {
@@ -659,48 +674,53 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
     
     onUpdateEventAction: function(event) {
-        var panel = this.getCalendarPanel(this.activeView),
-            store = panel.getStore(),
-            view = panel.getView();
-            
-        Tine.Calendar.backend.saveRecord(event, {
-            scope: this,
-            success: function(updatedEvent) {
-                if (updatedEvent.isRecurBase()) {
-                    store.load({refresh: true});
-                } else {
-                    
-                    // no sm when called from another app
-                    if (view && view.calPanel && view.rendered) {
+        try {
+            var panel = this.getCalendarPanel(this.activeView),
+                store = panel.getStore(),
+                view = panel.getView();
+                
+            Tine.Calendar.backend.saveRecord(event, {
+                scope: this,
+                success: function(updatedEvent) {
+                    if (updatedEvent.isRecurBase()) {
+                        store.load({refresh: true});
+                    } else {
                         
-                        // find out if filter still matches for this record
-                        var filterData = this.getAllFilterData();
-                        filterData[0].filters[0].filters.push({field: 'id', operator: 'in', value: [ event.get('id') ]});
-                        
-                        Tine.Calendar.searchEvents(filterData, {}, function(r) {
+                        // no sm when called from another app
+                        if (view && view.calPanel && view.rendered) {
+                            
+                            // find out if filter still matches for this record
+                            var filterData = this.getAllFilterData();
+                            filterData[0].filters[0].filters.push({field: 'id', operator: 'in', value: [ event.get('id') ]});
+                            
+                            Tine.Calendar.searchEvents(filterData, {}, function(r) {
+                                if(event) store.replaceRecord(event, updatedEvent);
+                                else store.add(updatedEvent);
+                                
+                                view.getSelectionModel().select(updatedEvent);
+                                var selection = view.getSelectionModel().getSelected();
+                                
+                                if(r.totalcount == 0) {   
+                                    selection.ui.markOutOfFilter();
+                                } 
+    
+                                this.setLoading(false);                            
+                            }, this);
+                        } else {
                             if(event) store.replaceRecord(event, updatedEvent);
                             else store.add(updatedEvent);
-                            
-                            view.getSelectionModel().select(updatedEvent);
-                            var selection = view.getSelectionModel().getSelected();
-                            
-                            if(r.totalcount == 0) {   
-                                selection.ui.markOutOfFilter();
-                            } 
-
-                            this.setLoading(false);                            
-                        }, this);
-                    } else {
-                        if(event) store.replaceRecord(event, updatedEvent);
-                        else store.add(updatedEvent);
-                        this.setLoading(false);
-                    }
-               }
-            },
-            failure: this.onProxyFail.createDelegate(this, [event], true)
-        }, {
-            checkBusyConflicts: 1
-        });
+                            this.setLoading(false);
+                        }
+                   }
+                },
+                failure: this.onProxyFail.createDelegate(this, [event], true)
+            }, {
+                checkBusyConflicts: 1
+            });
+        } catch(e) {
+            Tine.log.error('Tine.Calendar.MainScreenCenterPanel::onUpdateEventAction');
+            Tine.log.error(e.stack ? e.stack : e);
+        } 
     },
        
     onDeleteRecords: function () {
@@ -747,39 +767,45 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     {text: this.app.i18n._('Delete nothing'), name: 'nothing'}
                 ],
                 handler: function (option) {
-                    switch (option) {
-                        case 'all':
-                        case 'this':
-                        case 'future':
-                            panel.getTopToolbar().beforeLoad();
-                            if (option !== 'this') {
-                                this.loadMask.show();
-                            }
-                            
-                            var options = {
-                                scope: this,
-                                success: function () {
-                                    if (option === 'this') {
-                                        Ext.each(selection, function (event) {
-                                            panel.getStore().remove(event);
-                                        });
-                                        panel.getTopToolbar().onLoad();
-                                    } else {
-                                        this.refresh(true);
-                                    }
-                                    
+                    try {
+                        switch (option) {
+                            case 'all':
+                            case 'this':
+                            case 'future':
+                                panel.getTopToolbar().beforeLoad();
+                                if (option !== 'this') {
+                                    this.loadMask.show();
                                 }
-                            };
-                            
-                            if (option === 'all') {
-                                Tine.Calendar.backend.deleteRecurSeries(selection[0], options);
-                            } else {
-                                Tine.Calendar.backend.createRecurException(selection[0], true, option === 'future', options);
-                            }
-                            break;
-                        default:
-                            this.onDeleteRecordsConfirmFail(panel, selection);
-                            break;
+                                
+                                var options = {
+                                    scope: this,
+                                    success: function () {
+                                        if (option === 'this') {
+                                            Ext.each(selection, function (event) {
+                                                panel.getStore().remove(event);
+                                            });
+                                            panel.getTopToolbar().onLoad();
+                                        } else {
+                                            this.refresh(true);
+                                        }
+                                        
+                                    }
+                                };
+                                
+                                if (option === 'all') {
+                                    Tine.Calendar.backend.deleteRecurSeries(selection[0], options);
+                                } else {
+                                    Tine.Calendar.backend.createRecurException(selection[0], true, option === 'future', options);
+                                }
+                                break;
+                            default:
+                                this.onDeleteRecordsConfirmFail(panel, selection);
+                                break;
+                    }
+                    
+                    } catch (e) {
+                        Tine.log.error('Tine.Calendar.MainScreenCenterPanel::onDeleteRecords::handle');
+                        Tine.log.error(e);
                     }
                 }
             });
@@ -970,11 +996,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             return;
         }
         
+        if (this.rendered) {
         // update filtertoolbar
-        this.filterToolbar.setValue(store.proxy.jsonReader.jsonData.filter);
-        
-        // update tree
-        Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getWestPanel().getContainerTreePanel().getFilterPlugin().setValue(store.proxy.jsonReader.jsonData.filter);
+            if(this.filterToolbar) {
+                this.filterToolbar.setValue(store.proxy.jsonReader.jsonData.filter);
+            }
+            // update tree
+            Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getWestPanel().getContainerTreePanel().getFilterPlugin().setValue(store.proxy.jsonReader.jsonData.filter);
+        }
     },
     
     /**
