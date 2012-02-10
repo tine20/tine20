@@ -101,8 +101,8 @@ Tine.Timetracker.Model.TimeaccountArray = Tine.Tinebase.Model.genericFields.conc
     { name: 'budget_unit' },
     { name: 'price' },
     { name: 'price_unit' },
-    { name: 'is_open' },
-    { name: 'is_billable' },
+    { name: 'is_open', type: 'bool'},
+    { name: 'is_billable', type: 'bool' },
     { name: 'billed_in' },
     { name: 'status' },
     { name: 'deadline' },
@@ -130,7 +130,9 @@ Tine.Timetracker.Model.Timeaccount = Tine.Tinebase.data.Record.create(Tine.Timet
     containerName: 'All Timeaccounts',
     containersName: 'timeaccount lists',
     getTitle: function() {
-        return this.get('number') ? (this.get('number') + ' - ' + this.get('title')) : false;
+        var closedText = this.get('is_open') ? '' : (' (' + Tine.Tinebase.appMgr.get('Timetracker').i18n._('closed') + ')');
+        
+        return this.get('number') ? (this.get('number') + ' - ' + this.get('title') + closedText) : '';
     }
 });
 
