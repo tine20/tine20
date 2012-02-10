@@ -60,7 +60,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(Syncope_Command_Sync::STATUS_FOLDER_HIERARCHY_HAS_CHANGED, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(Syncope_Command_Sync::STATUS_OBJECT_NOT_FOUND, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
     }
     
     /**
@@ -94,7 +94,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(Syncope_Command_Sync::STATUS_FOLDER_HIERARCHY_HAS_CHANGED, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(Syncope_Command_Sync::STATUS_OBJECT_NOT_FOUND, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
     }
     
     /**
@@ -236,11 +236,11 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
+            <Sync xmlns="uri:AirSync" xmlns:Contacts="uri:Contacts" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
             	<Collection>
             		<Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
             		<Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
-            		<Commands><Change><ServerId>' . $serverId . '</ServerId><ApplicationData></ApplicationData></Change></Commands>
+            		<Commands><Change><ServerId>' . $serverId . '</ServerId><ApplicationData><Contacts:FirstName>aaaadde</Contacts:FirstName><Contacts:LastName>aaaaade</Contacts:LastName></ApplicationData></Change></Commands>
             	</Collection>
         	</Collections></Sync>'
         );
@@ -270,6 +270,9 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Responses/AirSync:Change/AirSync:ServerId');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
         $this->assertFalse(empty($nodes->item(0)->nodeValue), $syncDoc->saveXML());
+        
+        $this->assertEquals('aaaadde', Syncope_Data_AData::$entries['Syncope_Data_Contacts']['addressbookFolderId'][$serverId]['FirstName']);
+        $this->assertEquals('aaaaade', Syncope_Data_AData::$entries['Syncope_Data_Contacts']['addressbookFolderId'][$serverId]['LastName']);
     }
             
     public function testDeletingContactOnServer()

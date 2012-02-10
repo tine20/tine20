@@ -41,8 +41,8 @@ class Syncope_Data_Contacts extends Syncope_Data_AData
         $id = sha1(mt_rand(). microtime());
         
         Syncope_Data_AData::$entries[get_class($this)][$_folderId][$id] = array(
-        	'FirstName' => (string)$xmlData->FirstName, 
-        	'LastName'  => (string)$xmlData->LastName
+            'FirstName' => (string)$xmlData->FirstName, 
+            'LastName'  => (string)$xmlData->LastName
         );
         
         return $id;
@@ -53,8 +53,8 @@ class Syncope_Data_Contacts extends Syncope_Data_AData
         $xmlData = $_entry->children('uri:Contacts');
         
         Syncope_Data_AData::$entries[get_class($this)][$_folderId][$_serverId] = array(
-        	'FirstName' => (string)$xmlData->FirstName, 
-        	'LastName'  => (string)$xmlData->LastName
+            'FirstName' => (string)$xmlData->FirstName, 
+            'LastName'  => (string)$xmlData->LastName
         );
     }        
     
@@ -65,13 +65,13 @@ class Syncope_Data_Contacts extends Syncope_Data_AData
         */
         if (!isset(Syncope_Data_AData::$folders[get_class($this)])) {
             Syncope_Data_AData::$folders[get_class($this)] = array(
-            	'addressbookFolderId' => array(
+                'addressbookFolderId' => array(
                     'folderId'    => 'addressbookFolderId',
                     'parentId'    => null,
                     'displayName' => 'Default Contacts Folder',
                     'type'        => Syncope_Command_FolderSync::FOLDERTYPE_CONTACT
                 ),
-            	'anotherAddressbookFolderId' => array(
+                'anotherAddressbookFolderId' => array(
                     'folderId'    => 'anotherAddressbookFolderId',
                     'parentId'    => null,
                     'displayName' => 'Another Contacts Folder',
