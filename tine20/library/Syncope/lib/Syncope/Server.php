@@ -30,14 +30,8 @@ class Syncope_Server
         }
         
         $this->_userId  = $userId;
-        if ($this->_logger instanceof Zend_Log)
-            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . ' REQUEST METHOD: ');
         $this->_request = $request !== null ? $request : new Zend_Controller_Request_Http();
-        if ($this->_logger instanceof Zend_Log)
-            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . ' REQUEST METHOD: ');
         $this->_body    = $body    !== null ? $body    : fopen('php://input', 'r');
-        if ($this->_logger instanceof Zend_Log)
-            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . ' REQUEST METHOD: ');
         
         $this->_deviceBackend = Syncope_Registry::get('deviceBackend');
         
@@ -58,7 +52,7 @@ class Syncope_Server
                 break;
         
             case 'GET':
-                echo "It works!<br>Your username is: {$this->_username} and your IP address is: {$_SERVER['REMOTE_ADDR']}.";
+                echo "It works!<br>Your userid is: {$this->_userId} and your IP address is: {$_SERVER['REMOTE_ADDR']}.";
                 break;
         }       
     }

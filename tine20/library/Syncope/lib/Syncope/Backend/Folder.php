@@ -46,15 +46,15 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
         $deviceId = $_folder->device_id instanceof Syncope_Model_IDevice ? $_folder->device_id->id : $_folder->device_id;
     
         $this->_db->insert($this->_tablePrefix . 'folder', array(
-        	'id'             => $id, 
-        	'device_id'      => $deviceId,
-        	'class'          => $_folder->class,
-        	'folderid'       => $_folder->folderid instanceof Syncope_Model_IFolder ? $_folder->folderid->id : $_folder->folderid,
-        	'parentid'       => $_folder->parentid,
-        	'displayname'    => $_folder->displayname,
-        	'type'           => $_folder->type,
-        	'creation_time'  => $_folder->creation_time->format('Y-m-d H:i:s'),
-        	'lastfiltertype' => $_folder->lastfiltertype
+            'id'             => $id, 
+            'device_id'      => $deviceId,
+            'class'          => $_folder->class,
+            'folderid'       => $_folder->folderid instanceof Syncope_Model_IFolder ? $_folder->folderid->id : $_folder->folderid,
+            'parentid'       => $_folder->parentid,
+            'displayname'    => $_folder->displayname,
+            'type'           => $_folder->type,
+            'creation_time'  => $_folder->creation_time->format('Y-m-d H:i:s'),
+            'lastfiltertype' => $_folder->lastfiltertype
         ));
         
         return $this->get($id);
@@ -108,9 +108,6 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
             $this->_db->quoteInto($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
         );
         
-        // clear all rows in all tables which belong to this device
-        $this->_db->delete($this->_tablePrefix . 'content', $where);
-        $this->_db->delete($this->_tablePrefix . 'synckey', $where);
         $this->_db->delete($this->_tablePrefix . 'folder', $where);
     }
     
@@ -119,9 +116,9 @@ class Syncope_Backend_Folder implements Syncope_Backend_IFolder
         $deviceId = $_folder->device_id instanceof Syncope_Model_IDevice ? $_folder->device_id->id : $_folder->device_id;
     
         $this->_db->update($this->_tablePrefix . 'folder', array(
-        	'lastfiltertype'     => $_folder->lastfiltertype
+            'lastfiltertype'     => $_folder->lastfiltertype
         ), array(
-        	'id = ?' => $_folder->id
+            'id = ?' => $_folder->id
         ));
     
         return $this->get($_folder->id);

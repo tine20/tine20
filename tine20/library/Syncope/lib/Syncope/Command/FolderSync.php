@@ -88,13 +88,11 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
             ));
             
             // reset state of foldersync
-            $this->_folderBackend->resetState($this->_device);
             $this->_syncStateBackend->resetState($this->_device, 'FolderSync');
         } else {
             if (($this->_syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', $syncKey)) instanceof Syncope_Model_SyncState) {
                 $this->_syncState->lastsync = $this->_syncTimeStamp;
             } else  {
-                $this->_folderBackend->resetState($this->_device);
                 $this->_syncStateBackend->resetState($this->_device, 'FolderSync');
             }
         }
@@ -104,14 +102,14 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
      * generate FolderSync response
      * 
      * @todo changes are missing in response (folder got renamed for example)
-     * @todo handle ParentId => getParent()
      */
     public function getResponse()
     {
         $folderSync = $this->_outputDom->documentElement;
         
         if($this->_syncState === false) {
-            #Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " INVALID synckey provided");
+            if ($this->_logger instanceof Zend_Log) 
+                $this->_logger->info(__METHOD__ . '::' . __LINE__ . " INVALID synckey provided");
             $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', self::STATUS_INVALID_SYNC_KEY));
 
         } else {
@@ -129,38 +127,27 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
                         $this->_logger->info(__METHOD__ . '::' . __LINE__ . " no data backend defined for class: " . $class);
                     continue;
                 }
-
+                
+                // retrieve all folders available in data backend
+                $serverFolders = $dataController->getAllFolders();
+                // retrieve all folders sent to client
+                $clientFolders = $this->_folderBackend->getFolderState($this->_device, $class);
+                
+                $serverFoldersIds = array_keys($serverFolders);
+                
                 // is this the first sync?
                 if($this->_syncState->counter == 0) {
-                    // retrieve all folders available in data backend
-                    $serverFolders = $dataController->getAllFolders();
-                
-                    foreach($serverFolders as $folderId => $folderData) {
-                        $adds[] = new Syncope_Model_Folder(array(
-                            'device_id'         => $this->_device,
-                            'class'             => $class,
-                            'folderid'          => $folderData['folderId'],
-                        	'parentid'          => $folderData['parentId'],
-                        	'displayname'       => $folderData['displayName'],
-                        	'type'              => $folderData['type'],
-                            'creation_time'     => $this->_syncTimeStamp,
-                            'lastfiltertype'    => null
-                        ));
-                    }
+                    $clientFoldersIds = array();
                 } else {
-                    // retrieve all folders available in data backend
-                    $serverFolders = $dataController->getAllFolders();
-                    
-                    // all folders sent to client
-                    $clientFolders = $this->_folderBackend->getFolderState($this->_device, $class);
-                    
-                    $serverFoldersIds = array_keys($serverFolders);
                     $clientFoldersIds = array_keys($clientFolders);
-                    
-                    // added entries
-                    $serverDiff = array_diff($serverFoldersIds, $clientFoldersIds);
-                    foreach($serverDiff as $serverFolderId) {
-                        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add $class $folderId");
+                } 
+                               
+                // calculate added entries
+                $serverDiff = array_diff($serverFoldersIds, $clientFoldersIds);
+                foreach($serverDiff as $serverFolderId) {
+                    if (isset($clientFolders[$serverFolderId])) {
+                        $adds[] = $clientFolders[$serverFolderId];
+                    } else {
                         $adds[] = new Syncope_Model_Folder(array(
                             'device_id'         => $this->_device,
                             'class'             => $class,
@@ -172,14 +159,13 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
                             'lastfiltertype'    => null
                         ));
                     }
-                    
-                    // deleted entries
-                    $serverDiff = array_diff($clientFoldersIds, $serverFoldersIds);
-                    foreach($serverDiff as $serverFolderId) {
-                        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " delete $class $folderId");
-                        $deletes[] = $clientFolders[$serverFolderId];
-                    }
-                }                
+                }
+                
+                // calculate deleted entries
+                $serverDiff = array_diff($clientFoldersIds, $serverFoldersIds);
+                foreach($serverDiff as $serverFolderId) {
+                    $deletes[] = $clientFolders[$serverFolderId];
+                }
             }
             
             $count = count($adds) + /*count($changes) + */count($deletes);
@@ -192,6 +178,7 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
             
             $changes = $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Changes'));            
             $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Count', $count));
+            
             foreach($adds as $folder) {
                 
                 $add = $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Add'));
@@ -200,10 +187,10 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
                 $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'DisplayName', $folder->displayname));
                 $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Type', $folder->type));
                 
-                #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $class => " . $folder['folderId']);
-                
-                // store folder in backend and retrieve $folder-id
-                $this->_folderBackend->create($folder);
+                // store folder in backend
+                if (empty($folder->id)) {
+                    $this->_folderBackend->create($folder);
+                }
             }
             
             foreach($deletes as $folder) {

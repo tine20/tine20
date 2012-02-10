@@ -28,7 +28,7 @@ class Syncope_Command_FolderSyncTests extends Syncope_Command_ATestCase
     }
     
     /**
-     * test xml generation for IPhone
+     * test reponse with synckey 0
      */
     public function testGetFoldersSyncKey0()
     {
@@ -61,7 +61,7 @@ class Syncope_Command_FolderSyncTests extends Syncope_Command_ATestCase
     }
     
     /**
-     * test xml generation for IPhone
+     * test reponse with synckey 1
      */
     public function testGetFoldersSyncKey1()
     {
@@ -103,7 +103,7 @@ class Syncope_Command_FolderSyncTests extends Syncope_Command_ATestCase
     }
     
     /**
-     * test xml generation for IPhone
+     * test reponse with invalid synckey
      */
     public function testGetFoldersInvalidSyncKey()
     {
@@ -130,5 +130,21 @@ class Syncope_Command_FolderSyncTests extends Syncope_Command_ATestCase
         $nodes = $xpath->query('//FolderHierarchy:FolderSync');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
 
+    }
+    
+    /**
+     * this test should throw no error if the foldersync got restarted after an invalid synckey
+     */
+    public function testFolderSyncAfterInvalidSyncKey()
+    {
+        $this->testGetFoldersSyncKey0();
+        $clientFolders1 = $this->_folderBackend->getFolderState($this->_device, 'Contacts');
+        
+        $this->testGetFoldersInvalidSyncKey();
+        
+        $this->testGetFoldersSyncKey0();
+        $clientFolders2 = $this->_folderBackend->getFolderState($this->_device, 'Contacts');
+        
+        $this->assertEquals($clientFolders1["addressbookFolderId"], $clientFolders2["addressbookFolderId"]);
     }
 }
