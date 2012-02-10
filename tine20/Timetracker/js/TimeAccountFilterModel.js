@@ -38,6 +38,9 @@ Tine.Timetracker.TimeAccountFilterModel = Ext.extend(Tine.widgets.grid.ForeignRe
         this.app = Tine.Tinebase.appMgr.get('Timetracker');
         this.label = this.app.i18n.n_hidden(this.foreignRecordClass.getMeta('recordName'), this.foreignRecordClass.getMeta('recordsName'), 1);
         
+        this.pickerConfig = this.pickerConfig || {};
+        Ext.applyIf(this.pickerConfig, {showClosed: true});
+        
         Tine.Timetracker.TimeAccountFilterModel.superclass.initComponent.call(this);
     }
 });
