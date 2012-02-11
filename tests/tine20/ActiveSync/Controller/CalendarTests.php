@@ -310,7 +310,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         $xml = simplexml_import_dom($this->_getInputDOMDocument());
         $recordId = $controller->change($this->_getContainerWithSyncGrant()->getId(), $recordId, $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
     
-        $this->assertNotEmpty($recordId);
+        $this->assertTrue(!empty($recordId));
     
         return $recordId;
     }

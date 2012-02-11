@@ -186,7 +186,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
         $xml = simplexml_import_dom($this->_getInputDOMDocument());
         $recordId = $controller->createEntry($this->_getContainerWithSyncGrant()->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
 
-        $this->assertNotEmpty($recordId);
+        $this->assertTrue(!empty($recordId));
         
         return $recordId;
     }
