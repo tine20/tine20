@@ -176,6 +176,10 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
         #$this->assertEquals(Syncope_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
+        // there should be no responses element
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Responses');
+        $this->assertEquals(0, $nodes->length, $syncDoc->saveXML());
+                
         $this->assertEquals("uri:Contacts", $syncDoc->lookupNamespaceURI('Contacts'), $syncDoc->saveXML());
     }
         
