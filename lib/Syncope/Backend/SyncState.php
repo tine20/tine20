@@ -45,12 +45,12 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
         $deviceId = $_syncState->device_id instanceof Syncope_Model_IDevice ? $_syncState->device_id->id : $_syncState->device_id;
     
         $this->_db->insert($this->_tablePrefix . 'synckey', array(
-        	'id'          => $id, 
-        	'device_id'   => $deviceId,
-        	'type'        => $_syncState->type instanceof Syncope_Model_IFolder ? $_syncState->type->id : $_syncState->type,
-        	'counter'     => $_syncState->counter,
-        	'lastsync'    => $_syncState->lastsync->format('Y-m-d H:i:s'),
-        	'pendingdata' => isset($_syncState->pendingdata) && is_array($_syncState->pendingdata) ? Zend_Json::encode($_syncState->pendingdata) : null
+            'id'          => $id, 
+            'device_id'   => $deviceId,
+            'type'        => $_syncState->type instanceof Syncope_Model_IFolder ? $_syncState->type->id : $_syncState->type,
+            'counter'     => $_syncState->counter,
+            'lastsync'    => $_syncState->lastsync->format('Y-m-d H:i:s'),
+            'pendingdata' => isset($_syncState->pendingdata) && is_array($_syncState->pendingdata) ? Zend_Json::encode($_syncState->pendingdata) : null
         ));
         
         $state = $this->get($id);
@@ -164,11 +164,11 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
         $deviceId = $_syncState->device_id instanceof Syncope_Model_IDevice ? $_syncState->device_id->id : $_syncState->device_id;
         
         $this->_db->update($this->_tablePrefix . 'synckey', array(
-        	'counter'     => $_syncState->counter,
-        	'lastsync'    => $_syncState->lastsync->format('Y-m-d H:i:s'),
-        	'pendingdata' => isset($_syncState->pendingdata) && is_array($_syncState->pendingdata) ? Zend_Json::encode($_syncState->pendingdata) : null
+            'counter'     => $_syncState->counter,
+            'lastsync'    => $_syncState->lastsync->format('Y-m-d H:i:s'),
+            'pendingdata' => isset($_syncState->pendingdata) && is_array($_syncState->pendingdata) ? Zend_Json::encode($_syncState->pendingdata) : null
         ), array(
-        	'id = ?' => $_syncState->id
+            'id = ?' => $_syncState->id
         ));
         
         return $this->get($_syncState->id);
@@ -217,26 +217,26 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
         if ($moreRecentState instanceof Syncope_Model_ISyncState) {
             // undelete entries marked as deleted in syncope_content table
             $this->_db->update($this->_tablePrefix . 'content', array(
-            	'is_deleted'  => 0,
+                'is_deleted'  => 0,
             ), array(
-            	'device_id = ?'  => $deviceId,
-            	'folder_id = ?'  => $folderId,
-            	'is_deleted = ?' => 1
+                'device_id = ?'  => $deviceId,
+                'folder_id = ?'  => $folderId,
+                'is_deleted = ?' => 1
             ));
             
             // remove entries added during latest sync in syncope_content table
             $this->_db->delete($this->_tablePrefix . 'content', array(
-            	'device_id = ?'     => $deviceId,
-            	'folder_id = ?'     => $folderId,
-            	'creation_time > ?' => $state->lastsync->format('Y-m-d H:i:s'),
+                'device_id = ?'     => $deviceId,
+                'folder_id = ?'     => $folderId,
+                'creation_time > ?' => $state->lastsync->format('Y-m-d H:i:s'),
             ));
             
         } else {
             // finaly delete all entries marked for removal in syncope_content table    
             $this->_db->delete($this->_tablePrefix . 'content', array(
-            	'device_id = ?'  => $deviceId,
-            	'folder_id = ?'  => $folderId,
-            	'is_deleted = ?' => 1
+                'device_id = ?'  => $deviceId,
+                'folder_id = ?'  => $folderId,
+                'is_deleted = ?' => 1
             ));
             
         }
