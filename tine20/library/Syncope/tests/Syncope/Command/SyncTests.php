@@ -176,6 +176,10 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
         #$this->assertEquals(Syncope_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
+        // there should be no responses element
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Responses');
+        $this->assertEquals(0, $nodes->length, $syncDoc->saveXML());
+                
         $this->assertEquals("uri:Contacts", $syncDoc->lookupNamespaceURI('Contacts'), $syncDoc->saveXML());
     }
         
@@ -267,9 +271,8 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
         $this->assertEquals(Syncope_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
-        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Responses/AirSync:Change/AirSync:ServerId');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertFalse(empty($nodes->item(0)->nodeValue), $syncDoc->saveXML());
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Responses');
+        $this->assertEquals(0, $nodes->length, $syncDoc->saveXML());
         
         $this->assertEquals('aaaadde', Syncope_Data_AData::$entries['Syncope_Data_Contacts']['addressbookFolderId'][$serverId]['FirstName']);
         $this->assertEquals('aaaaade', Syncope_Data_AData::$entries['Syncope_Data_Contacts']['addressbookFolderId'][$serverId]['LastName']);
@@ -434,7 +437,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(3, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(2, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());

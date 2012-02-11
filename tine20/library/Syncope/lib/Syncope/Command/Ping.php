@@ -163,9 +163,6 @@ class Syncope_Command_Ping extends Syncope_Command_Wbxml
      */
     public function getResponse()
     {
-        if ($this->_logger instanceof Zend_Log) 
-            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_outputDom->saveXML());
-    
         return $this->_outputDom;
     }
 }
