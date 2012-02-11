@@ -402,6 +402,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     $serverAdds    = array();
                     $serverChanges = array();
                     $serverDeletes = array();
+                    $moreAvailable = false;
                     
                     if($collectionData['getChanges'] === true) {
                         if($collectionData['syncKey'] === 1) {
@@ -534,15 +535,18 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     }
                     
                     if ((count($serverAdds) + count($serverChanges) + count($serverDeletes)) > $collectionData['windowSize'] ) {
-                        $this->_moreAvailable = true;
+                        $moreAvailable = true;
                         $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'MoreAvailable'));
                     }
                     
                     $commands = $this->_outputDom->createElementNS('uri:AirSync', 'Commands');
                     
+                    
                     /**
-                     * process added entries
+                     * process entries added on server side
                      */
+                    $newContentStates = array();
+                    
                     foreach($serverAdds as $id => $serverId) {
                         if($this->_totalCount === $collectionData['windowSize']) {
                             break;
@@ -552,21 +556,21 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                          * somewhere is a problem in the logic for handling moreAvailable
                          * 
                          * it can happen, that we have a contentstate (which means we sent the entry to the client
-                         * and that the entry is yet in $collectionData['syncState']->pendingdata['serverAdds']
-                         * I have no idea how this can happen, but the next lines of code work around this situation
+                         * and that this entry is yet in $collectionData['syncState']->pendingdata['serverAdds']
+                         * I have no idea how this can happen, but the next lines of code work around this problem
                          */
-                        try {
-                            $this->_contentStateBackend->getContentState($this->_device, $collectionData['folder'], $serverId);
-
-                            if ($this->_logger instanceof Zend_Log) 
-                                $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped an entry($serverId) which is already on the client");
-                            
-                            unset($serverAdds[$id]);
-                            continue;
-                            
-                        } catch (Syncope_Exception_NotFound $senf) {
-                            // do nothing => content state should not exist yet
-                        }
+                        #try {
+                        #    $this->_contentStateBackend->getContentState($this->_device, $collectionData['folder'], $serverId);
+                        #
+                        #    if ($this->_logger instanceof Zend_Log) 
+                        #        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped an entry($serverId) which is already on the client");
+                        #    
+                        #    unset($serverAdds[$id]);
+                        #    continue;
+                        #    
+                        #} catch (Syncope_Exception_NotFound $senf) {
+                        #    // do nothing => content state should not exist yet
+                        #}
                         
                         try {
                             $add = $this->_outputDom->createElementNS('uri:AirSync', 'Add');
@@ -584,18 +588,17 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         }
                         
                         // mark as send to the client, even the conversion to xml might have failed 
-                        $contentState = $this->_contentStateBackend->create(new Syncope_Model_Content(array(
+                        $newContentStates[] = new Syncope_Model_Content(array(
                             'device_id'     => $this->_device,
                             'folder_id'     => $collectionData['folder'],
                             'contentid'     => $serverId,
                             'creation_time' => $this->_syncTimeStamp
-                        )));
-                        
+                        ));
                         unset($serverAdds[$id]);    
                     }
 
                     /**
-                     * process changed entries
+                     * process entries changed on server side
                      */
                     foreach($serverChanges as $id => $serverId) {
                         if($this->_totalCount === $collectionData['windowSize']) {
@@ -621,8 +624,10 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     }
 
                     /**
-                     * process deleted entries
+                     * process entries deleted on server side
                      */
+                    $deletedContentStates = array();
+                    
                     foreach($serverDeletes as $id => $serverId) {
                         if($this->_totalCount === $collectionData['windowSize']) {
                             break;
@@ -635,7 +640,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                             $delete = $this->_outputDom->createElementNS('uri:AirSync', 'Delete');
                             $delete->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
                             
-                            $this->_contentStateBackend->delete($state);
+                            $deletedContentStates[] = $state;
                             
                             $commands->appendChild($delete);
                             
@@ -661,8 +666,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     // increment sync timestamp by 1 second
                     $this->_syncTimeStamp->modify('+1 sec');
                     
-                    // store pening data in sync state when needed
-                    if($this->_moreAvailable === true) {
+                    // store pending data in sync state when needed
+                    if(isset($moreAvailable) && $moreAvailable === true) {
                         $collectionData['syncState']->pendingdata = array(
                             'serverAdds'    => (array)$serverAdds,
                             'serverChanges' => (array)$serverChanges,
@@ -683,7 +688,22 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     
                     $collectionData['syncState']->lastsync = $this->_syncTimeStamp;
                     
+                    // store new synckey
                     $this->_syncStateBackend->create($collectionData['syncState'], $keepPreviousSyncKey);
+                    
+                    // store contentstates for new entries
+                    if (isset($newContentStates)) {
+                        foreach($newContentStates as $state) {
+                            $this->_contentStateBackend->create($state);
+                        }
+                    }
+                    
+                    // removed contentstates for deleted entries
+                    if (isset($deletedContentStates)) {
+                        foreach($deletedContentStates as $state) {
+                            $this->_contentStateBackend->delete($state);
+                        }
+                    }
                     
                     // store current filter type
                     try {
