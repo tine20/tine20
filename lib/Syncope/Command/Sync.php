@@ -411,12 +411,10 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $collectionData['collectionId']));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_SUCCESS));
                     
-                    $responses = NULL;
+                    $responses = $this->_outputDom->createElementNS('uri:AirSync', 'Responses');
+                    
                     // sent reponse for newly added entries
                     if(!empty($collectionData['added'])) {
-                        if($responses === NULL) {
-                            $responses = $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Responses'));
-                        }
                         foreach($collectionData['added'] as $entryData) {
                             $add = $responses->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Add'));
                             $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ClientId', $entryData['clientId']));
@@ -431,9 +429,6 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     // sent reponse for changed entries
                     // not really needed
                     if(!empty($collectionData['changed'])) {
-                        if($responses === NULL) {
-                            $responses = $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Responses'));
-                        }
                         foreach($collectionData['changed'] as $serverId => $status) {
                             $change = $responses->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Change'));
                             $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
@@ -445,9 +440,6 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     
                     // sent response for to be fetched entries
                     if(!empty($collectionData['toBeFetched'])) {
-                        if($responses === NULL) {
-                            $responses = $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Responses'));
-                        }
                         foreach($collectionData['toBeFetched'] as $serverId) {
                             $fetch = $responses->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Fetch'));
                             $fetch->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
@@ -466,6 +458,10 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                                 $fetch->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_OBJECT_NOT_FOUND));
                             }
                         }
+                    }
+                    
+                    if ($responses->hasChildNodes() === true) {
+                        $collection->appendChild($responses);
                     }
                     
                     if($collectionData['getChanges'] === true) {
@@ -534,9 +530,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                             $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'MoreAvailable'));
                         }
                         
-                        if (count($serverAdds) > 0 || count($serverChanges) > 0 || count($serverDeletes) > 0) {
-                            $commands = $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Commands'));
-                        }
+                        $commands = $this->_outputDom->createElementNS('uri:AirSync', 'Commands');
                         
                         /**
                          * process added entries
@@ -645,6 +639,11 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                             
                             unset($serverDeletes[$id]);    
                         }
+                        
+                        if ($commands->hasChildNodes() === true) {
+                            $collection->appendChild($commands);
+                        }
+                        
                     }
                     if ($this->_logger instanceof Zend_Log) 
                         $this->_logger->info(__METHOD__ . '::' . __LINE__ . " new synckey is ". $collectionData['syncState']->counter);                
