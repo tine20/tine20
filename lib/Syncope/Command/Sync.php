@@ -220,8 +220,8 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found " . count($adds) . " entries to be added to server");
                 
                 foreach ($adds as $add) {
-                	if ($this->_logger instanceof Zend_Log) 
-                	    $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " add entry with clientId " . (string) $add->ClientId);
+                    if ($this->_logger instanceof Zend_Log) 
+                        $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " add entry with clientId " . (string) $add->ClientId);
 
                     try {
                         if ($this->_logger instanceof Zend_Log) 
@@ -236,7 +236,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         );
                         
                         $this->_contentStateBackend->create(new Syncope_Model_Content(array(
-                        	'device_id'     => $this->_device,
+                            'device_id'     => $this->_device,
                             'folder_id'     => $collectionData['folder'],
                             'contentid'     => $serverId,
                             'creation_time' => $this->_syncTimeStamp
@@ -252,7 +252,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     }
                 }
             }
-        
+            
             // handle changes, but only if not first sync
             if($collectionData['syncKey'] > 1 && isset($xmlCollection->Commands->Change)) {
                 $changes = $xmlCollection->Commands->Change;
@@ -279,7 +279,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     }
                 }
             }
-        
+            
             // handle deletes, but only if not first sync
             if(isset($xmlCollection->Commands->Delete)) {
                 $deletes = $xmlCollection->Commands->Delete;
@@ -315,7 +315,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     $collectionData['deleted'][$serverId] = self::STATUS_SUCCESS;
                 }
             }
-                        
+            
             // handle fetches, but only if not first sync
             if($collectionData['syncKey'] > 1 && isset($xmlCollection->Commands->Fetch)) {
                 // the default value for GetChanges is 1. If the phone don't want the changes it must set GetChanges to 0
@@ -333,11 +333,11 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     
                     $collectionData['toBeFetched'][$serverId] = $serverId;
                 }
-            }            
+            }
             
             $this->_collections[$collectionData['folder']->class][$collectionData['collectionId']] = $collectionData;
-        }  
-    }    
+        }
+    }
     
     /**
      * (non-PHPdoc)
@@ -420,6 +420,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         foreach($collectionData['added'] as $entryData) {
                             $add = $responses->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Add'));
                             $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ClientId', $entryData['clientId']));
+                            // we have no serverId is the add failed
                             if(isset($entryData['serverId'])) {
                                 $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $entryData['serverId']));
                             }
