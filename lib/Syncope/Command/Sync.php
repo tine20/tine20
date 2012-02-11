@@ -396,9 +396,80 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_SUCCESS));
                     
                 } else {
-                    if (empty($collectionData['added']) && empty($collectionData['changed']) && empty($collectionData['deleted']) && $collectionData['getChanges'] === false) {
-                        // keep synckey during fetch requests
-                    } else {
+
+                    $dataController = Syncope_Data_Factory::factory($collectionData['folder']->class , $this->_device, $this->_syncTimeStamp);
+                    
+                    $serverAdds    = array();
+                    $serverChanges = array();
+                    $serverDeletes = array();
+                    
+                    if($collectionData['getChanges'] === true) {
+                        if($collectionData['syncKey'] === 1) {
+                            // get all available entries
+                            $serverAdds    = $dataController->getServerEntries($collectionData['collectionId'], $collectionData['filterType']);
+                            
+                        } else {
+                            // continue sync session?
+                            if(is_array($collectionData['syncState']->pendingdata)) {
+                                if ($this->_logger instanceof Zend_Log)
+                                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " restored from sync state ");
+                                
+                                $serverAdds    = $collectionData['syncState']->pendingdata['serverAdds'];
+                                $serverChanges = $collectionData['syncState']->pendingdata['serverChanges'];
+                                $serverDeletes = $collectionData['syncState']->pendingdata['serverDeletes'];
+                            } else {
+                                // fetch entries added since last sync
+                                $allClientEntries = $this->_contentStateBackend->getFolderState($this->_device, $collectionData['folder']);
+                                $allServerEntries = $dataController->getServerEntries($collectionData['collectionId'], $collectionData['filterType']);
+                    
+                                // add entries
+                                $serverDiff = array_diff($allServerEntries, $allClientEntries);
+                                // add entries which produced problems during delete from client
+                                $serverAdds = $collectionData['forceAdd'];
+                                // add entries not yet sent to client
+                                $serverAdds = array_unique(array_merge($serverAdds, $serverDiff));
+                    
+                                # @todo still needed?
+                                foreach($serverAdds as $id => $serverId) {
+                                    // skip entries added by client during this sync session
+                                    if(isset($collectionData['added'][$serverId]) && !isset($collectionData['forceAdd'][$serverId])) {
+                                        if ($this->_logger instanceof Zend_Log)
+                                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped added entry: " . $serverId);
+                                        unset($serverAdds[$id]);
+                                    }
+                                }
+                    
+                                // entries to be deleted
+                                $serverDeletes = array_diff($allClientEntries, $allServerEntries);
+                    
+                                // fetch entries changed since last sync
+                                $serverChanges = $dataController->getChangedEntries($collectionData['collectionId'], $collectionData['syncState']->lastsync, $this->_syncTimeStamp);
+                                $serverChanges = array_merge($serverChanges, $collectionData['forceChange']);
+                    
+                                foreach($serverChanges as $id => $serverId) {
+                                    // skip entry, if it got changed by client during current sync
+                                    if(isset($collectionData['changed'][$serverId]) && !isset($collectionData['forceChange'][$serverId])) {
+                                        if ($this->_logger instanceof Zend_Log)
+                                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped changed entry: " . $serverId);
+                                        unset($serverChanges[$id]);
+                                    }
+                                }
+                    
+                                // entries comeing in scope are already in $serverAdds and do not need to
+                                // be send with $serverCanges
+                                $serverChanges = array_diff($serverChanges, $serverAdds);
+                            }
+                        }
+                    
+                        if ($this->_logger instanceof Zend_Log)
+                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found (added/changed/deleted) " . count($serverAdds) . '/' . count($serverChanges) . '/' . count($serverDeletes)  . ' entries for sync from server to client');
+                    }
+                    
+                    
+                    
+                    
+                    if (!empty($collectionData['added']) || !empty($collectionData['changed']) || !empty($collectionData['deleted']) ||
+                        !empty($serverAdds) || !empty($serverChanges) || !empty($serverDeletes)) {
                         $collectionData['syncState']->counter++;
                     }
                     
@@ -413,7 +484,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     
                     $responses = $this->_outputDom->createElementNS('uri:AirSync', 'Responses');
                     
-                    // sent reponse for newly added entries
+                    // send reponse for newly added entries
                     if(!empty($collectionData['added'])) {
                         foreach($collectionData['added'] as $entryData) {
                             $add = $responses->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Add'));
@@ -426,24 +497,22 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         }
                     }
                     
-                    // sent reponse for changed entries
-                    // not really needed
+                    // send reponse for changed entries
                     if(!empty($collectionData['changed'])) {
                         foreach($collectionData['changed'] as $serverId => $status) {
-                            $change = $responses->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Change'));
-                            $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
-                            $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', $status));
+                            if ($status !== Syncope_Command_Sync::STATUS_SUCCESS) {
+                                $change = $responses->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Change'));
+                                $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
+                                $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', $status));
+                            }
                         }
                     }
                     
-                    $dataController = Syncope_Data_Factory::factory($collectionData['folder']->class , $this->_device, $this->_syncTimeStamp);
-                    
-                    // sent response for to be fetched entries
+                    // send response for to be fetched entries
                     if(!empty($collectionData['toBeFetched'])) {
                         foreach($collectionData['toBeFetched'] as $serverId) {
                             $fetch = $responses->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Fetch'));
                             $fetch->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
-
                             
                             try {
                                 $applicationData = $this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData');
@@ -464,187 +533,125 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         $collection->appendChild($responses);
                     }
                     
-                    if($collectionData['getChanges'] === true) {
-                        if($collectionData['syncKey'] === 1) {
-                            // all entries available
-                            $serverAdds    = $dataController->getServerEntries($collectionData['collectionId'], $collectionData['filterType']);
-                            $serverChanges = array();
-                            $serverDeletes = array();
-                        } else {
-                            // continue sync session
-                            if(is_array($collectionData['syncState']->pendingdata)) {
-                                if ($this->_logger instanceof Zend_Log) 
-                                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " restored from sync state ");
-                                $serverAdds    = $collectionData['syncState']->pendingdata['serverAdds'];
-                                $serverChanges = $collectionData['syncState']->pendingdata['serverChanges'];
-                                $serverDeletes = $collectionData['syncState']->pendingdata['serverDeletes'];
-                            } else {
-                                // fetch entries added since last sync
-                                $allClientEntries = $this->_contentStateBackend->getFolderState($this->_device, $collectionData['folder']);
-                                $allServerEntries = $dataController->getServerEntries($collectionData['collectionId'], $collectionData['filterType']);
-                                
-                                // add entries
-                                $serverDiff = array_diff($allServerEntries, $allClientEntries);
-                                // add entries which produced problems during delete from client
-                                $serverAdds = $collectionData['forceAdd'];
-                                // add entries not yet sent to client
-                                $serverAdds = array_unique(array_merge($serverAdds, $serverDiff));
-
-                                # @todo still needed?
-                                foreach($serverAdds as $id => $serverId) {
-                                    // skip entries added by client during this sync session
-                                    if(isset($collectionData['added'][$serverId]) && !isset($collectionData['forceAdd'][$serverId])) {
-                                        if ($this->_logger instanceof Zend_Log) 
-                                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped added entry: " . $serverId);
-                                        unset($serverAdds[$id]);
-                                    }
-                                }
-                                
-                                // entries to be deleted
-                                $serverDeletes = array_diff($allClientEntries, $allServerEntries);
-                                
-                                // fetch entries changed since last sync
-                                $serverChanges = $dataController->getChangedEntries($collectionData['collectionId'], $collectionData['syncState']->lastsync, $this->_syncTimeStamp);
-                                $serverChanges = array_merge($serverChanges, $collectionData['forceChange']);
-
-                                foreach($serverChanges as $id => $serverId) {
-                                    // skip entry, if it got changed by client during current sync
-                                    if(isset($collectionData['changed'][$serverId]) && !isset($collectionData['forceChange'][$serverId])) {
-                                        if ($this->_logger instanceof Zend_Log) 
-                                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped changed entry: " . $serverId);
-                                        unset($serverChanges[$id]);
-                                    }
-                                }
-                                
-                                // entries comeing in scope are already in $serverAdds and do not need to
-                                // be send with $serverCanges
-                                $serverChanges = array_diff($serverChanges, $serverAdds);
-                            }                        
-                        }
-                        
-                        if ($this->_logger instanceof Zend_Log) 
-                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found (added/changed/deleted) " . count($serverAdds) . '/' . count($serverChanges) . '/' . count($serverDeletes)  . ' entries for sync from server to client');
-    
-                        if ((count($serverAdds) + count($serverChanges) + count($serverDeletes)) > $collectionData['windowSize'] ) {
-                            $this->_moreAvailable = true;
-                            $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'MoreAvailable'));
-                        }
-                        
-                        $commands = $this->_outputDom->createElementNS('uri:AirSync', 'Commands');
-                        
-                        /**
-                         * process added entries
-                         */
-                        foreach($serverAdds as $id => $serverId) {
-                            if($this->_totalCount === $collectionData['windowSize']) {
-                                break;
-                            }
-                            
-                            /**
-                             * somewhere is a problem in the logic for handling moreAvailable
-                             * 
-                             * it can happen, that we have a contentstate (which means we sent the entry to the client
-                             * and that the entry is yet in $collectionData['syncState']->pendingdata['serverAdds']
-                             * I have no idea how this can happen, but the next lines of code work around this situation
-                             */
-                            try {
-                                $this->_contentStateBackend->getContentState($this->_device, $collectionData['folder'], $serverId);
-
-                                if ($this->_logger instanceof Zend_Log) 
-                                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped an entry($serverId) which is already on the client");
-                                
-                                unset($serverAdds[$id]);
-                                continue;
-                                
-                            } catch (Syncope_Exception_NotFound $senf) {
-                                // do nothing => content state should not exist yet
-                            }
-                            
-                            try {
-                                $add = $this->_outputDom->createElementNS('uri:AirSync', 'Add');
-                                $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
-                                
-                                $applicationData = $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
-                                $dataController->appendXML($applicationData, $collectionData, $serverId);
-        
-                                $commands->appendChild($add);
-                                
-                                $this->_totalCount++;
-                            } catch (Exception $e) {
-                                if ($this->_logger instanceof Zend_Log) 
-                                    $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
-                            }
-                            
-                            // mark as send to the client, even the conversion to xml might have failed 
-                            $contentState = $this->_contentStateBackend->create(new Syncope_Model_Content(array(
-                                'device_id'     => $this->_device,
-                                'folder_id'     => $collectionData['folder'],
-                                'contentid'     => $serverId,
-                                'creation_time' => $this->_syncTimeStamp
-                            )));
-                            
-                            unset($serverAdds[$id]);    
-                        }
-    
-                        /**
-                         * process changed entries
-                         */
-                        foreach($serverChanges as $id => $serverId) {
-                            if($this->_totalCount === $collectionData['windowSize']) {
-                                break;
-                            }
-
-                            try {
-                                $change = $this->_outputDom->createElementNS('uri:AirSync', 'Change');
-                                $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
-                                
-                                $applicationData = $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
-                                $dataController->appendXML($applicationData, $collectionData, $serverId);
-        
-                                $commands->appendChild($change);
-                                
-                                $this->_totalCount++;
-                            } catch (Exception $e) {
-                                if ($this->_logger instanceof Zend_Log) 
-                                    $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
-                            }
-
-                            unset($serverChanges[$id]);    
-                        }
-    
-                        /**
-                         * process deleted entries
-                         */
-                        foreach($serverDeletes as $id => $serverId) {
-                            if($this->_totalCount === $collectionData['windowSize']) {
-                                break;
-                            }
-                                                        
-                            try {
-                                // check if we have sent this entry to the phone
-                                $state = $this->_contentStateBackend->getContentState($this->_device, $collectionData['folder'], $serverId);
-                                
-                                $delete = $this->_outputDom->createElementNS('uri:AirSync', 'Delete');
-                                $delete->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
-                                
-                                $this->_contentStateBackend->delete($state);
-                                
-                                $commands->appendChild($delete);
-                                
-                                $this->_totalCount++;
-                            } catch (Exception $e) {
-                                if ($this->_logger instanceof Zend_Log) 
-                                    $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
-                            }
-                            
-                            unset($serverDeletes[$id]);    
-                        }
-                        
-                        if ($commands->hasChildNodes() === true) {
-                            $collection->appendChild($commands);
-                        }
-                        
+                    if ((count($serverAdds) + count($serverChanges) + count($serverDeletes)) > $collectionData['windowSize'] ) {
+                        $this->_moreAvailable = true;
+                        $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'MoreAvailable'));
                     }
+                    
+                    $commands = $this->_outputDom->createElementNS('uri:AirSync', 'Commands');
+                    
+                    /**
+                     * process added entries
+                     */
+                    foreach($serverAdds as $id => $serverId) {
+                        if($this->_totalCount === $collectionData['windowSize']) {
+                            break;
+                        }
+                        
+                        /**
+                         * somewhere is a problem in the logic for handling moreAvailable
+                         * 
+                         * it can happen, that we have a contentstate (which means we sent the entry to the client
+                         * and that the entry is yet in $collectionData['syncState']->pendingdata['serverAdds']
+                         * I have no idea how this can happen, but the next lines of code work around this situation
+                         */
+                        try {
+                            $this->_contentStateBackend->getContentState($this->_device, $collectionData['folder'], $serverId);
+
+                            if ($this->_logger instanceof Zend_Log) 
+                                $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped an entry($serverId) which is already on the client");
+                            
+                            unset($serverAdds[$id]);
+                            continue;
+                            
+                        } catch (Syncope_Exception_NotFound $senf) {
+                            // do nothing => content state should not exist yet
+                        }
+                        
+                        try {
+                            $add = $this->_outputDom->createElementNS('uri:AirSync', 'Add');
+                            $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
+                            
+                            $applicationData = $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
+                            $dataController->appendXML($applicationData, $collectionData, $serverId);
+    
+                            $commands->appendChild($add);
+                            
+                            $this->_totalCount++;
+                        } catch (Exception $e) {
+                            if ($this->_logger instanceof Zend_Log) 
+                                $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
+                        }
+                        
+                        // mark as send to the client, even the conversion to xml might have failed 
+                        $contentState = $this->_contentStateBackend->create(new Syncope_Model_Content(array(
+                            'device_id'     => $this->_device,
+                            'folder_id'     => $collectionData['folder'],
+                            'contentid'     => $serverId,
+                            'creation_time' => $this->_syncTimeStamp
+                        )));
+                        
+                        unset($serverAdds[$id]);    
+                    }
+
+                    /**
+                     * process changed entries
+                     */
+                    foreach($serverChanges as $id => $serverId) {
+                        if($this->_totalCount === $collectionData['windowSize']) {
+                            break;
+                        }
+
+                        try {
+                            $change = $this->_outputDom->createElementNS('uri:AirSync', 'Change');
+                            $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
+                            
+                            $applicationData = $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
+                            $dataController->appendXML($applicationData, $collectionData, $serverId);
+    
+                            $commands->appendChild($change);
+                            
+                            $this->_totalCount++;
+                        } catch (Exception $e) {
+                            if ($this->_logger instanceof Zend_Log) 
+                                $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
+                        }
+
+                        unset($serverChanges[$id]);    
+                    }
+
+                    /**
+                     * process deleted entries
+                     */
+                    foreach($serverDeletes as $id => $serverId) {
+                        if($this->_totalCount === $collectionData['windowSize']) {
+                            break;
+                        }
+                                                    
+                        try {
+                            // check if we have sent this entry to the phone
+                            $state = $this->_contentStateBackend->getContentState($this->_device, $collectionData['folder'], $serverId);
+                            
+                            $delete = $this->_outputDom->createElementNS('uri:AirSync', 'Delete');
+                            $delete->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
+                            
+                            $this->_contentStateBackend->delete($state);
+                            
+                            $commands->appendChild($delete);
+                            
+                            $this->_totalCount++;
+                        } catch (Exception $e) {
+                            if ($this->_logger instanceof Zend_Log) 
+                                $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
+                        }
+                        
+                        unset($serverDeletes[$id]);    
+                    }
+                    
+                    if ($commands->hasChildNodes() === true) {
+                        $collection->appendChild($commands);
+                    }
+                    
                     if ($this->_logger instanceof Zend_Log) 
                         $this->_logger->info(__METHOD__ . '::' . __LINE__ . " new synckey is ". $collectionData['syncState']->counter);                
                 }
