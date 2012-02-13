@@ -311,7 +311,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
      */
     onRecordUpdate : function() {
         this.changes = [];
-        this.changedHuman = _('<br /><br /><ul>');
+        this.changedHuman = '<br /><br /><ul>';
         
         Ext.each(this.form.record.store.fields.keys, function(fieldKey) {
             var item = this.form.findField(fieldKey);
