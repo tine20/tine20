@@ -30,9 +30,7 @@ msgstr "アカウントの管理"
 
 #: Acl/Rights.php:190
 msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
-"グループとユーザの追加と編集、グループにメンバーの追加、ユーザパスワードの変"
-"更"
+msgstr "グループとユーザの追加と編集、グループにメンバーの追加、ユーザパスワードの変更"
 
 #: Acl/Rights.php:193
 msgid "manage applications"
@@ -47,11 +45,8 @@ msgid "manage roles"
 msgstr "役割の管理"
 
 #: Acl/Rights.php:198
-msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"ロールの追加と編集、メンバーにロールの新規追加、アプリケーション権限のロール"
-"への付与"
+msgid "add and edit roles, add new members to roles, add application rights to roles"
+msgstr "ロールの追加と編集、メンバーにロールの新規追加、アプリケーション権限のロールへの付与"
 
 #: Acl/Rights.php:201
 msgid "manage shared tags"
@@ -125,11 +120,11 @@ msgstr ""
 msgid "view personal and shared containers"
 msgstr ""
 
-#: Controller/Container.php:187
+#: Controller/Container.php:199
 msgid "Your container has been changed"
 msgstr ""
 
-#: Controller/Container.php:188
+#: Controller/Container.php:200
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr ""
 
@@ -1019,110 +1014,110 @@ msgid_plural "Email Users"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Loading Tag..."
-msgstr "タグをロードしています..."
+#~ msgid "Loading Tag..."
+#~ msgstr "タグをロードしています..."
 
-msgid "Please Wait"
-msgstr "お待ちください"
+#~ msgid "Please Wait"
+#~ msgstr "お待ちください"
 
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "本当に選択したアクセスログエントリを削除しますか？"
+#~ msgid "Do you really want to delete the selected access log entries?"
+#~ msgstr "本当に選択したアクセスログエントリを削除しますか？"
 
-msgid "delete entry"
-msgstr "エントリの削除"
+#~ msgid "delete entry"
+#~ msgstr "エントリの削除"
 
-msgid "select all"
-msgstr "全て選択"
+#~ msgid "select all"
+#~ msgstr "全て選択"
 
-msgid "Display from:"
-msgstr "表示："
+#~ msgid "Display from:"
+#~ msgstr "表示："
 
-msgid "to:"
-msgstr "ＴＯ："
+#~ msgid "to:"
+#~ msgstr "ＴＯ："
 
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "アクセスログエントリの表示 {0} - {1} 件中 {2}"
+#~ msgid "Displaying access log entries {0} - {1} of {2}"
+#~ msgstr "アクセスログエントリの表示 {0} - {1} 件中 {2}"
 
-msgid "No access log entries to display"
-msgstr "表示するアクセスログエントリがありません"
+#~ msgid "No access log entries to display"
+#~ msgstr "表示するアクセスログエントリがありません"
 
-msgid "Account ID"
-msgstr "アカウントＩＤ"
+#~ msgid "Account ID"
+#~ msgstr "アカウントＩＤ"
 
-msgid "Loading Role..."
-msgstr "ロールをロードしています..."
+#~ msgid "Loading Role..."
+#~ msgstr "ロールをロードしています..."
 
-msgid "Do you really want to delete the selected account(s)?"
-msgstr "選択されたアカウントを本当に削除しますか？"
+#~ msgid "Do you really want to delete the selected account(s)?"
+#~ msgstr "選択されたアカウントを本当に削除しますか？"
 
-msgid "Deleting account(s)..."
-msgstr "アカウントを削除しています..."
+#~ msgid "Deleting account(s)..."
+#~ msgstr "アカウントを削除しています..."
 
-msgid "Some error occurred while trying to delete the account(s)."
-msgstr "アカウントの削除中にエラーが発生しました"
+#~ msgid "Some error occurred while trying to delete the account(s)."
+#~ msgstr "アカウントの削除中にエラーが発生しました"
 
-msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "アカウントの表示 {0} - {1} 件中 {2}"
+#~ msgid "Displaying accounts {0} - {1} of {2}"
+#~ msgstr "アカウントの表示 {0} - {1} 件中 {2}"
 
-msgid "No accounts to display"
-msgstr "表示するアカウントがありません"
+#~ msgid "No accounts to display"
+#~ msgstr "表示するアカウントがありません"
 
-msgid "add account"
-msgstr "アカウントの追加"
+#~ msgid "add account"
+#~ msgstr "アカウントの追加"
 
-msgid "edit account"
-msgstr "アカウントの編集"
+#~ msgid "edit account"
+#~ msgstr "アカウントの編集"
 
-msgid "delete account"
-msgstr "アカウントの削除"
+#~ msgid "delete account"
+#~ msgstr "アカウントの削除"
 
-msgid "Deleting group..."
-msgstr "グループを削除しています..."
-
-#, fuzzy
-msgid "Email UID"
-msgstr "Eメール"
+#~ msgid "Deleting group..."
+#~ msgstr "グループを削除しています..."
 
 #, fuzzy
-msgid "Email GID"
-msgstr "Eメール"
+#~ msgid "Email UID"
+#~ msgstr "Eメール"
 
 #, fuzzy
-msgid "Email Username"
-msgstr "Eメール"
+#~ msgid "Email GID"
+#~ msgstr "Eメール"
 
-msgid "enter searchfilter"
-msgstr "サーチフィルタの入力"
+#, fuzzy
+#~ msgid "Email Username"
+#~ msgstr "Eメール"
 
-msgid "remove account"
-msgstr "アカウントの削除"
+#~ msgid "enter searchfilter"
+#~ msgstr "サーチフィルタの入力"
 
-msgid "Role members"
-msgstr "ロールメンバー"
+#~ msgid "remove account"
+#~ msgstr "アカウントの削除"
 
-msgid "Deleting tag..."
-msgstr "タグを削除しています..."
+#~ msgid "Role members"
+#~ msgstr "ロールメンバー"
 
-msgid "name"
-msgstr "名前"
+#~ msgid "Deleting tag..."
+#~ msgstr "タグを削除しています..."
 
-msgid "status"
-msgstr "状態"
+#~ msgid "name"
+#~ msgstr "名前"
 
-msgid "Deleting account..."
-msgstr "アカウントを削除しています..."
+#~ msgid "status"
+#~ msgstr "状態"
 
-msgid "Some error occurred while trying to delete the account."
-msgstr "アカウントの削除中にエラーが発生しました。"
+#~ msgid "Deleting account..."
+#~ msgstr "アカウントを削除しています..."
 
-msgid "Saving User Account"
-msgstr "アカウントを保存しています"
+#~ msgid "Some error occurred while trying to delete the account."
+#~ msgstr "アカウントの削除中にエラーが発生しました。"
 
-msgid "Could not save user account."
-msgstr "アカウントを保存できません"
+#~ msgid "Saving User Account"
+#~ msgstr "アカウントを保存しています"
 
-msgid "Add New User Account"
-msgstr "新規ユーザアカウントの追加"
+#~ msgid "Could not save user account."
+#~ msgstr "アカウントを保存できません"
 
-msgid "Edit User Account \"{0}\""
-msgstr "ユーザアカウントの編集 \"{0}\""
+#~ msgid "Add New User Account"
+#~ msgstr "新規ユーザアカウントの追加"
+
+#~ msgid "Edit User Account \"{0}\""
+#~ msgstr "ユーザアカウントの編集 \"{0}\""

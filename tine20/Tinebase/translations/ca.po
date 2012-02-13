@@ -248,7 +248,7 @@ msgid "About {0}"
 msgstr "Quant a {0}"
 
 #: js/AboutDialog.js:59 js/PasswordChangeDialog.js:66
-#: js/ux/form/LayerCombo.js:186 js/widgets/ActivitiesPanel.js:314
+#: js/ux/form/LayerCombo.js:186 js/widgets/ActivitiesPanel.js:311
 #: js/widgets/container/ContainerSelect.js:459
 #: js/widgets/dialog/EditDialog.js:227
 #: js/widgets/dialog/MultiOptionsDialog.js:102
@@ -296,11 +296,8 @@ msgid "Missing Applications"
 msgstr "Aplicacions que falten"
 
 #: js/AppManager.js:209
-msgid ""
-"There are no applications enabled for you. Please contact your administrator."
-msgstr ""
-"No hi ha aplicacions per les quals esteu habilitat. Contacteu amb "
-"l'administrador."
+msgid "There are no applications enabled for you. Please contact your administrator."
+msgstr "No hi ha aplicacions per les quals esteu habilitat. Contacteu amb l'administrador."
 
 #: js/common.js:178
 msgid "Usage:&#160;"
@@ -363,7 +360,7 @@ msgstr[0] "llista de coses a fer"
 msgstr[1] "llistes de coses a fer"
 
 #: js/ExceptionDialog.js:72 js/PasswordChangeDialog.js:60
-#: js/ux/form/LayerCombo.js:193 js/widgets/ActivitiesPanel.js:306
+#: js/ux/form/LayerCombo.js:193 js/widgets/ActivitiesPanel.js:303
 #: js/widgets/container/ContainerSelect.js:450
 #: js/widgets/dialog/EditDialog.js:245
 #: js/widgets/dialog/MultiOptionsDialog.js:109
@@ -384,12 +381,8 @@ msgid "The last action you made was potentially not performed correctly."
 msgstr "La vostra darrera acció potser no s'hagi realitzat correctament."
 
 #: js/ExceptionDialog.js:108
-msgid ""
-"Please help improving this software and notify the vendor. Include a brief "
-"description of what you where doing when the error occurred."
-msgstr ""
-"Ajudeu a la millora del programa i notifiqueu l'autor. Incloeu una breu "
-"descripció del que estàveu fent quan l'error es va produir."
+msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
+msgstr "Ajudeu a la millora del programa i notifiqueu l'autor. Incloeu una breu descripció del que estàveu fent quan l'error es va produir."
 
 #: js/ExceptionDialog.js:114 js/widgets/persistentfilter/PickerPanel.js:639
 #: js/widgets/tags/TagsPanel.js:612
@@ -441,36 +434,23 @@ msgid "Not Found"
 msgstr "No s'ha trobat"
 
 #: js/ExceptionHandler.js:165
-msgid ""
-"Sorry, your request could not be completed because the required data could "
-"not be found. In most cases this means that someone already deleted the "
-"data. Please refresh your current view."
-msgstr ""
-"La vostra petició no s'ha pogut completar perquè no s'ha pogut trobar la "
-"informació demanada. La majoria dels casos això significa que algú ja ha "
-"eliminat la informació. Refresqueu la visualització actual."
+msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
+msgstr "La vostra petició no s'ha pogut completar perquè no s'ha pogut trobar la informació demanada. La majoria dels casos això significa que algú ja ha eliminat la informació. Refresqueu la visualització actual."
 
 #: js/ExceptionHandler.js:174
 msgid "Concurrent Updates"
 msgstr "Actualitzacions concurrents"
 
 #: js/ExceptionHandler.js:175
-msgid ""
-"Someone else saved this record while you where editing the data. You need to "
-"reload and make your changes again."
-msgstr ""
-"Algú ha desat aquest registre quan estàveu editant la informació. Cal que el "
-"torneu a carregar i apliqueu els canvis altra vegada."
+msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
+msgstr "Algú ha desat aquest registre quan estàveu editant la informació. Cal que el torneu a carregar i apliqueu els canvis altra vegada."
 
 #: js/ExceptionHandler.js:185
 msgid "Service Unavailable"
 msgstr "El servei no es troba disponible"
 
 #: js/ExceptionHandler.js:186
-msgid ""
-"The server is currently unable to handle the request due to a temporary "
-"overloading, maintenance or misconfiguration of the server. Please try again "
-"or contact your administrator."
+msgid "The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator."
 msgstr ""
 
 #: js/ExceptionHandler.js:200 js/LoginPanel.js:362
@@ -482,33 +462,23 @@ msgid "Timeout"
 msgstr "El plaç de temps ha expirat"
 
 #: js/ExceptionHandler.js:207
-msgid ""
-"Sorry, some timeout occured while processing your request. Please reload "
-"your browser, try again or contact your administrator."
-msgstr ""
-"S'ha produït un temps excedit mentre es processava la vostra petició. "
-"Actualitzeu el navegador, toneu-ho a provar o contacteu l'administrador."
+msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
+msgstr "S'ha produït un temps excedit mentre es processava la vostra petició. Actualitzeu el navegador, toneu-ho a provar o contacteu l'administrador."
 
 #: js/ExceptionHandler.js:216
 msgid "No Response"
 msgstr "Sense resposta"
 
 #: js/ExceptionHandler.js:217
-msgid ""
-"Sorry, the Server did not respond any data. Please reload your browser, try "
-"again or contact your administrator."
-msgstr ""
-"El servidor no ha respost amb cap informació. Actualitzeu el navegador, "
-"toneu-ho a provar o contacteu l'administrador."
+msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
+msgstr "El servidor no ha respost amb cap informació. Actualitzeu el navegador, toneu-ho a provar o contacteu l'administrador."
 
 #: js/ExceptionHandler.js:226
 msgid "Out of Resources"
 msgstr ""
 
 #: js/ExceptionHandler.js:227
-msgid ""
-"Sorry, the Server stated a \"memory exhausted\" condition. Please contact "
-"your administrator."
+msgid "Sorry, the Server stated a \"memory exhausted\" condition. Please contact your administrator."
 msgstr ""
 
 #: js/ExceptionHandler.js:236
@@ -516,10 +486,8 @@ msgid "No Role Memberships"
 msgstr "Sense rol"
 
 #: js/ExceptionHandler.js:237
-msgid ""
-"Your user account has no role memberships. Please contact your administrator."
-msgstr ""
-"El vostre compte d'usuari no disposa de rol. Contacteu l'administrador."
+msgid "Your user account has no role memberships. Please contact your administrator."
+msgstr "El vostre compte d'usuari no disposa de rol. Contacteu l'administrador."
 
 #: js/LoginPanel.js:80 js/LoginPanel.js:118
 msgid "Login"
@@ -538,14 +506,8 @@ msgid "Tine 2.0 is made for you"
 msgstr "El Tine 2.0 s'ha fet per a vós"
 
 #: js/LoginPanel.js:139
-msgid ""
-"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
-"for your needs! So you are warmly welcome to discuss with us, bring in ideas "
-"and get help."
-msgstr ""
-"El Tine 2.0 pretèn que el treball col·laboratiu sigui més fàcil i més "
-"divertit segons les vostres necessitats! Per tant sentiu-vos plenament "
-"convidats a debatre amb nosaltres, a aportar idees i a obtenir ajuda."
+msgid "Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
+msgstr "El Tine 2.0 pretèn que el treball col·laboratiu sigui més fàcil i més divertit segons les vostres necessitats! Per tant sentiu-vos plenament convidats a debatre amb nosaltres, a aportar idees i a obtenir ajuda."
 
 #: js/LoginPanel.js:145
 msgid "Tine 2.0 Homepage"
@@ -564,13 +526,8 @@ msgid "Tine 2.0 needs your help"
 msgstr "El Tine 2.0 necessita de la vostra ajuda"
 
 #: js/LoginPanel.js:198 js/LoginPanel.js:423
-msgid ""
-"We regularly need your feedback to make the next Tine 2.0 releases fit your "
-"needs even better. Help us and yourself by participating:"
-msgstr ""
-"Freqüentment necessitem la vostra opinió per tal que la següent versió del "
-"Tine 2.0 acompleixi les vostres necessitats encara millor. Ajudeu-nos i "
-"participeu:"
+msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
+msgstr "Freqüentment necessitem la vostra opinió per tal que la següent versió del Tine 2.0 acompleixi les vostres necessitats encara millor. Ajudeu-nos i participeu:"
 
 #: js/LoginPanel.js:204
 msgid "participate!"
@@ -597,9 +554,7 @@ msgid "Browser incompatible?"
 msgstr ""
 
 #: js/LoginPanel.js:277
-msgid ""
-"You are using an unrecognized browser. This could result in unexpected "
-"behaviour."
+msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
 msgstr ""
 
 #: js/LoginPanel.js:283
@@ -611,7 +566,7 @@ msgid "Logging you in..."
 msgstr "Iniciant sessió..."
 
 #: js/LoginPanel.js:341 js/widgets/container/GrantsDialog.js:95
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:330
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 #: js/widgets/persistentfilter/PickerPanel.js:323
 #: js/widgets/persistentfilter/PickerPanel.js:365
 #: js/widgets/persistentfilter/PickerPanel.js:417
@@ -637,7 +592,7 @@ msgstr "El vostre nom d'usuari i/o la vostra contrasenya són incorrectes!!!"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:547 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:316
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:338
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Errors"
@@ -645,7 +600,7 @@ msgstr "Errors"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:557 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:371
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:392
 msgid "Please fix the errors noted."
 msgstr "Arregleu els errors notificats."
 
@@ -698,7 +653,7 @@ msgid "Install Tine 2.0 as web app in your browser."
 msgstr ""
 
 #: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:564
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:327
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:348
 #: js/widgets/grid/GridPanel.js:1410
 #: js/widgets/persistentfilter/PickerPanel.js:321
 #: js/widgets/tree/ContextMenu.js:336
@@ -826,12 +781,8 @@ msgid "Remove Formatting"
 msgstr ""
 
 #: js/tineInit.js:589
-msgid ""
-"Fatal Error: Client self-update failed, please contact your administrator "
-"and/or restart/reload your browser."
-msgstr ""
-"S'ha produït un error greu: Ha fallat l'actualització del client, contacteu "
-"l'administrador i/o reinicieu/actualitzeu el navegador."
+msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
+msgstr "S'ha produït un error greu: Ha fallat l'actualització del client, contacteu l'administrador i/o reinicieu/actualitzeu el navegador."
 
 #: js/UserRegistration.js:37
 msgid "Registration Wizard"
@@ -858,12 +809,8 @@ msgid "Congratulations!"
 msgstr "Enhorabona!"
 
 #: js/UserRegistration.js:171
-msgid ""
-"You have entered all needed information. If you press the Finish button we "
-"will send you the registration email."
-msgstr ""
-"Heu introduït tota la informació requerida. Si premeu el botó Finalitza us "
-"enviarem el correu de registre."
+msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
+msgstr "Heu introduït tota la informació requerida. Si premeu el botó Finalitza us enviarem el correu de registre."
 
 #: js/ux/ConnectionStatus.js:56
 msgid "online"
@@ -946,11 +893,7 @@ msgid "(paused)"
 msgstr ""
 
 #: js/ux/PopupWindowManager.js:166
-msgid ""
-"The window you want to work with is backgrounded. Your browser does't "
-"support to forground the window for you, so you need to use your operating "
-"systems window switching features. Please send complaints to your browser "
-"vendor!"
+msgid "The window you want to work with is backgrounded. Your browser does't support to forground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"
 msgstr ""
 
 #: js/ux/SearchField.js:44
@@ -990,11 +933,11 @@ msgstr "Afegeix una nota..."
 msgid "Add"
 msgstr "Afegeix"
 
-#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:466
+#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:463
 msgid "Note"
 msgstr "Nota"
 
-#: js/widgets/ActivitiesPanel.js:175 js/widgets/ActivitiesPanel.js:388
+#: js/widgets/ActivitiesPanel.js:175 js/widgets/ActivitiesPanel.js:385
 msgid "Add new note"
 msgstr "Afegeix una nova nota"
 
@@ -1002,52 +945,52 @@ msgstr "Afegeix una nova nota"
 msgid "Notes"
 msgstr "Notes"
 
-#: js/widgets/ActivitiesPanel.js:285
+#: js/widgets/ActivitiesPanel.js:282
 msgid "Enter new note:"
 msgstr "Introduïu la nova nota:"
 
-#: js/widgets/ActivitiesPanel.js:322 js/widgets/ActivitiesPanel.js:387
+#: js/widgets/ActivitiesPanel.js:319 js/widgets/ActivitiesPanel.js:384
 msgid "Add Note"
 msgstr "Afegeix nota"
 
-#: js/widgets/ActivitiesPanel.js:374
+#: js/widgets/ActivitiesPanel.js:371
 msgid "Add a {0} Note"
 msgstr "Afegeix una nota de {0}"
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/ActivitiesPanel.js:601
+#: js/widgets/ActivitiesPanel.js:461 js/widgets/ActivitiesPanel.js:598
 #: js/widgets/grid/LinkGridPanel.js:105
 msgid "Type"
 msgstr "Tipus"
 
-#: js/widgets/ActivitiesPanel.js:467 js/widgets/grid/GridPanel.js:1083
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1083
 msgid "Created By"
 msgstr "Creat per"
 
-#: js/widgets/ActivitiesPanel.js:468
+#: js/widgets/ActivitiesPanel.js:465
 msgid "Timestamp"
 msgstr "Marca horària"
 
-#: js/widgets/ActivitiesPanel.js:482
+#: js/widgets/ActivitiesPanel.js:479
 msgid "Displaying history records {0} - {1} of {2}"
 msgstr "Es mostren els registres històrics {0} - {1} de {2}"
 
-#: js/widgets/ActivitiesPanel.js:483
+#: js/widgets/ActivitiesPanel.js:480
 msgid "No history to display"
 msgstr "Sense històrics a mostrar"
 
-#: js/widgets/ActivitiesPanel.js:583
+#: js/widgets/ActivitiesPanel.js:580
 msgid "History"
 msgstr "Historial"
 
-#: js/widgets/ActivitiesPanel.js:595
+#: js/widgets/ActivitiesPanel.js:592
 msgid "Quick search"
 msgstr "Cerca ràpida"
 
-#: js/widgets/ActivitiesPanel.js:596 js/widgets/ActivitiesPanel.js:597
+#: js/widgets/ActivitiesPanel.js:593 js/widgets/ActivitiesPanel.js:594
 msgid "Time"
 msgstr "Hora"
 
-#: js/widgets/ActivitiesPanel.js:599
+#: js/widgets/ActivitiesPanel.js:596
 msgid "User"
 msgstr "Usuari"
 
@@ -1094,8 +1037,7 @@ msgstr "S'ha produït un error"
 
 #: js/widgets/container/GrantsDialog.js:127
 msgid "You are not allowed to remove all admins for this container!"
-msgstr ""
-"No esteu autoritzat a eliminar tots els administradors d'aquest contenidor!"
+msgstr "No esteu autoritzat a eliminar tots els administradors d'aquest contenidor!"
 
 #: js/widgets/container/GrantsGrid.js:44
 msgid "The grant to read records of this container"
@@ -1139,9 +1081,7 @@ msgstr "Disponibilitat"
 
 #: js/widgets/container/GrantsGrid.js:59
 msgid "The grant to access free busy information of events in this calendar"
-msgstr ""
-"Permís per a accedir a la informació de disponibilitat dels esdeveniments "
-"d'aquest calendari"
+msgstr "Permís per a accedir a la informació de disponibilitat dels esdeveniments d'aquest calendari"
 
 #: js/widgets/container/GrantsGrid.js:60
 msgid "Private"
@@ -1149,8 +1089,7 @@ msgstr "Privat"
 
 #: js/widgets/container/GrantsGrid.js:61
 msgid "The grant to access records marked as private in this container"
-msgstr ""
-"Permís per a accedir a registres marcats com a privats d'aquest contenidor"
+msgstr "Permís per a accedir a registres marcats com a privats d'aquest contenidor"
 
 #: js/widgets/container/PropertiesDialog.js:87
 #: js/widgets/tree/ContextMenu.js:72
@@ -1376,8 +1315,7 @@ msgid "Choose Import File"
 msgstr ""
 
 #: js/widgets/dialog/ImportDialog.js:233
-msgid ""
-"Please choose the file that contains the {0} you want to add to Tine 2.0"
+msgid "Please choose the file that contains the {0} you want to add to Tine 2.0"
 msgstr ""
 
 #: js/widgets/dialog/ImportDialog.js:237
@@ -1389,15 +1327,11 @@ msgid "What should the file you upload look like?"
 msgstr ""
 
 #: js/widgets/dialog/ImportDialog.js:253
-msgid ""
-"Tine 2.0 does not understand all kind of files you might want to upload. You "
-"will have to manually adjust your file so Tine 2.0 can handle it."
+msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
 msgstr ""
 
 #: js/widgets/dialog/ImportDialog.js:256
-msgid ""
-"Following you find a list of all supported import formats and a sample file, "
-"how Tine 2.0 expects your file to look like."
+msgid "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
 msgstr ""
 
 #: js/widgets/dialog/ImportDialog.js:259
@@ -1499,8 +1433,7 @@ msgid "{0} of them where identified as duplicates."
 msgstr ""
 
 #: js/widgets/dialog/ImportDialog.js:723
-msgid ""
-"From the identified duplicates {0} will be merged into the existing records."
+msgid "From the identified duplicates {0} will be merged into the existing records."
 msgstr ""
 
 #: js/widgets/dialog/ImportDialog.js:727
@@ -1519,48 +1452,48 @@ msgstr ""
 msgid "Links"
 msgstr "Enllaços"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:57
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:61
 msgid "Either {0} or {1} must be given"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:57
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:61
 msgid "Last Name"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:57
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:61
 msgid "Company"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:66
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:70
 msgid "Field \"Description\" must not be empty"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:88
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:95
 msgid "multiple"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:90
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:97
 msgid "Edit {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:222
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:233
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:239
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:250
 msgid "Delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:238
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:255
 msgid "Undo delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:295
-msgid "<br /><ul style=\"padding:10px;border:1px\">"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:314
+msgid "<br /><br /><ul>"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:327
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:348
 msgid "Do you really want to change these {0} records?"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:330
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 msgid "Applying changes"
 msgstr ""
 
@@ -1582,8 +1515,7 @@ msgid "{0} {1} has been updated properly."
 msgstr ""
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:152
-msgid ""
-"{0} {1} have invalid data after updating. These {1} have not been changed."
+msgid "{0} {1} have invalid data after updating. These {1} have not been changed."
 msgstr ""
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:152
@@ -1609,9 +1541,7 @@ msgstr "Carregant ..."
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/form/ConfigPanel.js:134
 msgid "You need to correct the red marked fields before config could be saved"
-msgstr ""
-"Heu de corregir els camps marcats en vermell abans que es pugui desar la "
-"configuració"
+msgstr "Heu de corregir els camps marcats en vermell abans que es pugui desar la configuració"
 
 #: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Saving of preferences failed."
@@ -1669,18 +1599,14 @@ msgstr ""
 msgid "Please select a file with one of the following extensions:"
 msgstr ""
 
-#: js/widgets/form/RecordPickerComboBox.js:69
-#: js/widgets/form/RecordPickerManager.js:63 js/widgets/tags/TagsPanel.js:477
+#: js/widgets/form/RecordPickerComboBox.js:76
+#: js/widgets/form/RecordPickerManager.js:48 js/widgets/tags/TagsPanel.js:477
 msgid "Searching..."
 msgstr "Cercant..."
 
 #: js/widgets/grid/FileUploadGrid.js:116
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
-"No s'ha pogut carregar el fitxer. La mida del fitxer potser sigui massa "
-"gran. Aviseu l'administrador. Mida màxima per a càrregues: "
+msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
+msgstr "No s'ha pogut carregar el fitxer. La mida del fitxer potser sigui massa gran. Aviseu l'administrador. Mida màxima per a càrregues: "
 
 #: js/widgets/grid/FileUploadGrid.js:180
 msgid "Remove file"
@@ -1767,7 +1693,7 @@ msgid "defined by"
 msgstr ""
 
 #: js/widgets/grid/FilterModel.js:223
-#: js/widgets/grid/ForeignRecordFilter.js:390
+#: js/widgets/grid/ForeignRecordFilter.js:394
 #: js/widgets/relation/FilterModel.js:87
 msgid "select a operator"
 msgstr "seleccioneu un operador"
@@ -1922,21 +1848,17 @@ msgstr[1] "La visualització es troba limitada pels criteris {0}:"
 msgid "Edit definition"
 msgstr ""
 
-#: js/widgets/grid/ForeignRecordFilter.js:66
+#: js/widgets/grid/ForeignRecordFilter.js:71
 msgid "Start defintion"
 msgstr ""
 
-#: js/widgets/grid/ForeignRecordFilter.js:100
+#: js/widgets/grid/ForeignRecordFilter.js:105
 msgid "Related to"
 msgstr ""
 
 #: js/widgets/grid/GridPanel.js:259
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
-msgstr ""
-"No s'ha trobat cap {0}. Proveu a canviar el criteri de filtre, les opcions "
-"de visualització o bé el/la {1} on cerqueu."
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "No s'ha trobat cap {0}. Proveu a canviar el criteri de filtre, les opcions de visualització o bé el/la {1} on cerqueu."
 
 #: js/widgets/grid/GridPanel.js:261 js/widgets/grid/GridPanel.js:360
 #: js/widgets/grid/GridPanel.js:361 js/widgets/grid/GridPanel.js:362
@@ -2109,12 +2031,8 @@ msgid "Favorite not Saved"
 msgstr "El preferit no s'ha desat"
 
 #: js/widgets/persistentfilter/PickerPanel.js:590
-msgid ""
-"You have to supply a shorter name! Names of favorite can only be up to 40 "
-"characters long."
-msgstr ""
-"Heu de proporcionar un nom més curt! Els noms de preferits només poden esser "
-"com a màxim de 40 caràcters."
+msgid "You have to supply a shorter name! Names of favorite can only be up to 40 characters long."
+msgstr "Heu de proporcionar un nom més curt! Els noms de preferits només poden esser com a màxim de 40 caràcters."
 
 #: js/widgets/persistentfilter/PickerPanel.js:595
 msgid "You have to supply a name for the favorite!"
@@ -2244,11 +2162,8 @@ msgstr[1] "Esteu segur que voleu eliminar les etiquetes seleccionades?"
 #: js/widgets/tags/TagsPanel.js:271
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
-msgstr[0] ""
-"l'etiqueta seleccionada s'eliminarà i desapareixerà de totes les entrades"
-msgstr[1] ""
-"les etiquetes seleccionades s'eliminaran i desapareixeran de totes les "
-"entrades"
+msgstr[0] "l'etiqueta seleccionada s'eliminarà i desapareixerà de totes les entrades"
+msgstr[1] "les etiquetes seleccionades s'eliminaran i desapareixeran de totes les entrades"
 
 #: js/widgets/tags/TagsPanel.js:275
 msgid "Please wait a moment..."
@@ -2382,9 +2297,7 @@ msgstr "La versió \"{0}\" del Tine 2.0 es troba disponible."
 
 #: js/widgets/VersionCheck.js:46
 msgid "It's a critical update and must be installed as soon as possible!"
-msgstr ""
-"Es tracta d'una actualització crítica i l'hauríeu d'instal·lar el més aviat "
-"possible!"
+msgstr "Es tracta d'una actualització crítica i l'hauríeu d'instal·lar el més aviat possible!"
 
 #: js/widgets/VersionCheck.js:55
 msgid "Please consider updating!"
@@ -2423,11 +2336,8 @@ msgid "Window Type"
 msgstr "Tipus de finestra"
 
 #: Preference.php:100
-msgid ""
-"You can choose between ExtJs style windows or normal Browser popup windows."
-msgstr ""
-"Podeu triar entre finestres estil ExtJs o bé finestres emergents de "
-"navegador normals"
+msgid "You can choose between ExtJs style windows or normal Browser popup windows."
+msgstr "Podeu triar entre finestres estil ExtJs o bé finestres emergents de navegador normals"
 
 #: Preference.php:103
 msgid "Confirm Logout"
@@ -2485,157 +2395,140 @@ msgstr ""
 msgid "Please wait or contact your administrator"
 msgstr ""
 
-msgid "low"
-msgstr "baixa"
+#~ msgid "low"
+#~ msgstr "baixa"
 
-msgid "normal"
-msgstr "normal"
+#~ msgid "normal"
+#~ msgstr "normal"
 
-msgid "high"
-msgstr "alta"
+#~ msgid "high"
+#~ msgstr "alta"
 
-msgid "urgent"
-msgstr "urgent"
+#~ msgid "urgent"
+#~ msgstr "urgent"
 
-msgid "The grant to administrate this container"
-msgstr "Permís per a administrar aquest contenidor"
+#~ msgid "The grant to administrate this container"
+#~ msgstr "Permís per a administrar aquest contenidor"
 
-msgid ""
-"The server is currently unable to handle the request due to a temporary "
-"overloading or maintenance of the server. Please try again or contact your "
-"administrator."
-msgstr ""
-"El servidor en aquests moments no pot respondre a la petició degut a una "
-"sobrecàrrega puntual o per manteniment del servidor. Intenteu-ho altra "
-"vegada o contacteu l'administrador."
+#~ msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
+#~ msgstr "El servidor en aquests moments no pot respondre a la petició degut a una sobrecàrrega puntual o per manteniment del servidor. Intenteu-ho altra vegada o contacteu l'administrador."
 
-msgid "Files"
-msgstr "Fitxers"
+#~ msgid "Files"
+#~ msgstr "Fitxers"
 
-msgid "Import definition"
-msgstr "Definició de la importació"
+#~ msgid "Import definition"
+#~ msgstr "Definició de la importació"
 
-msgid "Import into {0}"
-msgstr "Importa a {0}"
+#~ msgid "Import into {0}"
+#~ msgstr "Importa a {0}"
 
-msgid "Dry run"
-msgstr "Executa en sec"
+#~ msgid "Dry run"
+#~ msgstr "Executa en sec"
 
-msgid "No files added"
-msgstr "No s'ha afegit cap fitxer"
+#~ msgid "No files added"
+#~ msgstr "No s'ha afegit cap fitxer"
 
-msgid "You need to add files to import."
-msgstr "Cal que afegiu fitxers a importar."
+#~ msgid "You need to add files to import."
+#~ msgstr "Cal que afegiu fitxers a importar."
 
-msgid "Dry run results"
-msgstr "Resultats de l'execució en sec"
+#~ msgid "Dry run results"
+#~ msgstr "Resultats de l'execució en sec"
 
-msgid ""
-"Import test successful for {0} records, import test failed for {1} records."
-msgstr ""
-"La prova d'importació ha anat bé per als registres de {0}, i ha fallat per "
-"als registres de {1}"
+#~ msgid "Import test successful for {0} records, import test failed for {1} records."
+#~ msgstr "La prova d'importació ha anat bé per als registres de {0}, i ha fallat per als registres de {1}"
 
-msgid "Import results"
-msgstr "Resultats de la importació"
+#~ msgid "Import results"
+#~ msgstr "Resultats de la importació"
 
-msgid ""
-"Import successful for {0} records / import failed for {1} records / {2} "
-"duplicates found"
-msgstr ""
-"La importació ha anat bé per a registres {0} / la importació ha fallat per a "
-"registres {1} / s'han trobat {2} duplicats"
+#~ msgid "Import successful for {0} records / import failed for {1} records / {2} duplicates found"
+#~ msgstr "La importació ha anat bé per a registres {0} / la importació ha fallat per a registres {1} / s'han trobat {2} duplicats"
 
-msgid "Tagging"
-msgstr "Etiquetatge"
+#~ msgid "Tagging"
+#~ msgstr "Etiquetatge"
 
-msgid "Favorite"
-msgid_plural "Favorites"
-msgstr[0] "Preferit"
-msgstr[1] "Preferits"
+#~ msgid "Favorite"
+#~ msgid_plural "Favorites"
+#~ msgstr[0] "Preferit"
+#~ msgstr[1] "Preferits"
 
-msgid "Events"
-msgstr "Esdeveniments"
+#~ msgid "Events"
+#~ msgstr "Esdeveniments"
 
-msgid "Rename Favorite"
-msgstr "Canvia el nom a un preferit"
+#~ msgid "Rename Favorite"
+#~ msgstr "Canvia el nom a un preferit"
 
-msgid "New Name"
-msgstr "Nou nom"
+#~ msgid "New Name"
+#~ msgstr "Nou nom"
 
-msgid "Please enter the new name for favorite \"{0}\"?"
-msgstr "Introduïu el nou nom per al preferit \"{0}\"?"
+#~ msgid "Please enter the new name for favorite \"{0}\"?"
+#~ msgstr "Introduïu el nou nom per al preferit \"{0}\"?"
 
-msgid "Renaming Favorite \"{0}\""
-msgstr "Es canvia el nom al preferit \"{0}\""
+#~ msgid "Renaming Favorite \"{0}\""
+#~ msgstr "Es canvia el nom al preferit \"{0}\""
 
-msgid "save filter"
-msgstr "desa el filtre"
+#~ msgid "save filter"
+#~ msgstr "desa el filtre"
 
-msgid "Please enter a name for the favorite"
-msgstr "Introduïu un nom per al preferit"
+#~ msgid "Please enter a name for the favorite"
+#~ msgstr "Introduïu un nom per al preferit"
 
-msgid "Saving favorite"
-msgstr "Es desa el preferit"
+#~ msgid "Saving favorite"
+#~ msgstr "Es desa el preferit"
 
-msgid "Updating {0} \"{1}\""
-msgstr "Actualitzant el {0} \"{1}\""
+#~ msgid "Updating {0} \"{1}\""
+#~ msgstr "Actualitzant el {0} \"{1}\""
 
-msgid "Deleting {0} \"{1}\""
-msgstr "Eliminant el {0} \"{1}\""
+#~ msgid "Deleting {0} \"{1}\""
+#~ msgstr "Eliminant el {0} \"{1}\""
 
-msgid "Rename {0}"
-msgstr "Canvia el nom del {0}"
+#~ msgid "Rename {0}"
+#~ msgstr "Canvia el nom del {0}"
 
-msgid "Reload {0}"
-msgstr "Torna a carregar el {0}"
+#~ msgid "Reload {0}"
+#~ msgstr "Torna a carregar el {0}"
 
-msgid "There are no custom fields yet"
-msgstr "Encara no hi ha camps personalitzats"
+#~ msgid "There are no custom fields yet"
+#~ msgstr "Encara no hi ha camps personalitzats"
 
-msgid "Do you really want to delete the selected record"
-msgid_plural "Do you really want to delete the selected records"
-msgstr[0] "Esteu segur que voleu eliminar el registre seleccionat"
-msgstr[1] "Esteu segur que voleu eliminar els registres seleccionats"
+#~ msgid "Do you really want to delete the selected record"
+#~ msgid_plural "Do you really want to delete the selected records"
+#~ msgstr[0] "Esteu segur que voleu eliminar el registre seleccionat"
+#~ msgstr[1] "Esteu segur que voleu eliminar els registres seleccionats"
 
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "Grup"
-msgstr[1] "Grups"
+#~ msgid "Group"
+#~ msgid_plural "Groups"
+#~ msgstr[0] "Grup"
+#~ msgstr[1] "Grups"
 
-msgid "Groups"
-msgstr "Grups"
+#~ msgid "Groups"
+#~ msgstr "Grups"
 
-msgid "About Tine 2.0"
-msgstr "Quant al Tine 2.0"
+#~ msgid "About Tine 2.0"
+#~ msgstr "Quant al Tine 2.0"
 
-msgid "Custom datetime"
-msgstr "Data i hora per defecte"
+#~ msgid "Custom datetime"
+#~ msgstr "Data i hora per defecte"
 
-msgid "Internal {0}"
-msgstr "{0} interns"
+#~ msgid "Internal {0}"
+#~ msgstr "{0} interns"
 
-msgid "Overwriteing system favorites is not yet supported"
-msgstr "Encara no s'admet la sobreescriptura de preferits de sistema"
+#~ msgid "Overwriteing system favorites is not yet supported"
+#~ msgstr "Encara no s'admet la sobreescriptura de preferits de sistema"
 
-msgid "Filter"
-msgstr "Filtre"
+#~ msgid "Filter"
+#~ msgstr "Filtre"
 
-msgid "Transfering Configuration..."
-msgstr "Es transfereix la configuració..."
+#~ msgid "Transfering Configuration..."
+#~ msgstr "Es transfereix la configuració..."
 
-msgid "Transfering {0}..."
-msgstr "Transferint {0}..."
+#~ msgid "Transfering {0}..."
+#~ msgstr "Transferint {0}..."
 
-msgid "Install Google Gears"
-msgstr "Instal·la el Google Gears"
+#~ msgid "Install Google Gears"
+#~ msgstr "Instal·la el Google Gears"
 
-msgid ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
-msgstr ""
-"La instal·lació del Gears millorarà el rendiment del Tine 2.0 emmagatzemant "
-"a cau els fitxers requerits localment en aquest ordinador."
+#~ msgid "Installing Gears will improve the performance of Tine 2.0 by caching all needed files locally on this computer."
+#~ msgstr "La instal·lació del Gears millorarà el rendiment del Tine 2.0 emmagatzemant a cau els fitxers requerits localment en aquest ordinador."
 
 #~ msgid "Select all visible ({0} records)"
 #~ msgstr "Selecciona tots els visibles ({0} registres)"

@@ -229,10 +229,9 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     {
         if (array_key_exists('parts', $this->structure)) {
             $bodyContentTypes = $this->_getBodyContentTypes($this->structure['parts']);
-            // HTML > plain
             $this->body_content_type = (in_array(self::CONTENT_TYPE_HTML, $bodyContentTypes)) ? self::CONTENT_TYPE_HTML : self::CONTENT_TYPE_PLAIN;
         } else {
-            $this->body_content_type = $this->content_type;
+            $this->body_content_type = (in_array($this->content_type, array(self::CONTENT_TYPE_HTML, self::CONTENT_TYPE_PLAIN))) ? $this->content_type : self::CONTENT_TYPE_PLAIN;
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set body content type to ' . $this->body_content_type);

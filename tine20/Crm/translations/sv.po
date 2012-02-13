@@ -360,15 +360,11 @@ msgid "Export as XLS"
 msgstr ""
 
 #: js/LeadEditDialog.js:287
-msgid ""
-"You do not have the run right for the Tasks application or it is not "
-"activated."
+msgid "You do not have the run right for the Tasks application or it is not activated."
 msgstr ""
 
 #: js/LeadEditDialog.js:298
-msgid ""
-"You do not have the run right for the Sales application or it is not "
-"activated."
+msgid "You do not have the run right for the Sales application or it is not activated."
 msgstr ""
 
 #: js/LeadEditDialog.js:339

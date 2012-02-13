@@ -41,21 +41,15 @@ msgid "Contact duplicate check fields"
 msgstr "Kapcsolat mezőinek duplikálási ellenőrzése"
 
 #: Config.php:47
-msgid ""
-"These fields are checked when a new contact is created. If a record with the "
-"same data in the fields is found, a duplicate exception is thrown."
-msgstr ""
-"Ezeket a mezőket ellenőrzi egy új kapcsolat felvételekor. Ha egy rekordt "
-"egyforma mező adatokkal megtalál, a duplikált kivételt eldobja."
+msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
+msgstr "Ezeket a mezőket ellenőrzi egy új kapcsolat felvételekor. Ha egy rekordt egyforma mező adatokkal megtalál, a duplikált kivételt eldobja."
 
 #: Config.php:59
 msgid "Contact salutations available"
 msgstr ""
 
 #: Config.php:61
-msgid ""
-"Possible contact salutations. Please note that additional values might "
-"impact other Addressbook systems on export or syncronisation."
+msgid "Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:69
@@ -197,12 +191,8 @@ msgid "Import list (###CURRENTDATE###)"
 msgstr "Import lista (###CURRENTDATE###)"
 
 #: Import/definitions/adb_tine_import_csv.xml:20
-msgid ""
-"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
-msgstr ""
-"Kapcsolatokat importálta ###USERFULLNAME### ekkor: ###CURRENTDATE###  "
-"###CURRENTTIME###"
+msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr "Kapcsolatokat importálta ###USERFULLNAME### ekkor: ###CURRENTDATE###  ###CURRENTTIME###"
 
 #: js/Addressbook.js:22
 msgid "New Contact"
@@ -687,26 +677,26 @@ msgstr "Minden kapcsolat amit utoljára én módosítottam"
 msgid "Internal Contacts"
 msgstr "Belső kapcsolatok"
 
-msgid "Searching..."
-msgstr "Keresés..."
+#~ msgid "Searching..."
+#~ msgstr "Keresés..."
 
-msgid "Call contact"
-msgstr "Kapcsolat hívása"
+#~ msgid "Call contact"
+#~ msgstr "Kapcsolat hívása"
 
-msgid "Compose email"
-msgstr "Email írása"
+#~ msgid "Compose email"
+#~ msgstr "Email írása"
 
-msgid "Work"
-msgstr "Üzlet"
+#~ msgid "Work"
+#~ msgstr "Üzlet"
 
-msgid "Home"
-msgstr "Otthon"
+#~ msgid "Home"
+#~ msgstr "Otthon"
 
-msgid "Cell"
-msgstr "Mobil"
+#~ msgid "Cell"
+#~ msgstr "Mobil"
 
-msgid "Cell private"
-msgstr "Mobil privát"
+#~ msgid "Cell private"
+#~ msgstr "Mobil privát"
 
-msgid "Last Modified Time"
-msgstr "Utolsó módosítás ideje"
+#~ msgid "Last Modified Time"
+#~ msgstr "Utolsó módosítás ideje"

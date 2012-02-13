@@ -82,14 +82,8 @@ msgid "Delete all existing users and groups"
 msgstr "Minden meglévő csoport és felhasználó törlése"
 
 #: js/AuthenticationPanel.js:127
-msgid ""
-"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
-"and Roles. Do you really want to switch the accounts storage backend to "
-"LDAP ?"
-msgstr ""
-"SQL-ről LDAP-ra váltás törölni fogja az összes meglévő Felhasználói "
-"fiókokat, Csoportokat és Szabályokat. Biztosan szeretnéd váltani az "
-"azonsítók tárolási hátterét LDAP-ra?"
+msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
+msgstr "SQL-ről LDAP-ra váltás törölni fogja az összes meglévő Felhasználói fiókokat, Csoportokat és Szabályokat. Biztosan szeretnéd váltani az azonsítók tárolási hátterét LDAP-ra?"
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
 #: js/ConfigManagerPanel.js:132 js/EmailPanel.js:146
@@ -560,12 +554,8 @@ msgid "Performing Environment Checks..."
 msgstr "Környezeti ellenörzés végrehajtása..."
 
 #: js/EnvCheckGridPanel.js:130
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
-msgstr ""
-"{0} nem található. Kérlek változtass a szűrési feltételeken, nézeti opciókon "
-"vagy a {1} amiben kerestél."
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "{0} nem található. Kérlek változtass a szűrési feltételeken, nézeti opciókon vagy a {1} amiben kerestél."
 
 #: js/EnvCheckGridPanel.js:160
 msgid "Check"

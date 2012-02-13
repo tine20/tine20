@@ -180,7 +180,12 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 {operator: 'startswith', label: _('starts with')},
                 {operator: 'endswith',   label: _('ends with')},
                 {operator: 'definedBy',  label: _('defined by')}
-            ].concat(this.getCustomOperators() || [])
+            ].concat(this.getCustomOperators() || []),
+            remoteSort: false,
+            sortInfo: {
+                field: 'label',
+                direction: 'ASC'
+            }
         });
 
         // filter operators
@@ -228,6 +233,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 displayField: 'label',
                 valueField: 'operator',
                 value: filter.get('operator') ? filter.get('operator') : this.defaultOperator,
+                tpl: '<tpl for="."><div class="x-combo-list-item tw-ftb-operator-{operator}">{label}</div></tpl>',
                 renderTo: el
             });
             operator.on('select', function(combo, newRecord, newKey) {

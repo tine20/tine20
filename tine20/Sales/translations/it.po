@@ -121,8 +121,8 @@ msgstr ""
 msgid "Contracts created by myself"
 msgstr ""
 
-msgid "Shared Contracts"
-msgstr "Contratti Condivisi"
+#~ msgid "Shared Contracts"
+#~ msgstr "Contratti Condivisi"
 
 #~ msgid "Summary"
 #~ msgstr "Sommario"

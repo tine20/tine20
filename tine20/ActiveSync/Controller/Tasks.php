@@ -121,7 +121,9 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Tasks', 'uri:Tasks');
         
         foreach ($this->_mapping as $key => $value) {
-            if (!empty($data->$value)) {
+            if(!empty($data->$value) || $data->$value == '0') {
+                $nodeContent = null;
+                
                 switch($value) {
                     case 'completed':
                         continue 2;
@@ -136,21 +138,32 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                         break;
                         
                     case 'priority':
-                        $priority = ($data->$value <= 2) ? $data->$value : 2;
-                        $_domParrent->appendChild(new DOMElement($key, $priority, 'uri:Tasks'));
+                        $nodeContent = ($data->$value <= 2) ? $data->$value : 2;
                         break;
                         
                     default:
-                        $node = new DOMElement($key, null, 'uri:Tasks');
-                        
-                        $_domParrent->appendChild($node);
-                        
-                        $node->appendChild(new DOMText($data->$value));
+                        $nodeContent = $data->$value;
                         
                         break;
                 }
+                
+                // skip empty elements
+                if($nodeContent === null || $nodeContent == '') {
+                    //Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Value for $key is empty. Skip element.");
+                    continue;
+                }
+                
+                // strip off any non printable control characters
+                if (!ctype_print($nodeContent)) {
+                    $nodeContent = $this->removeControlChars($nodeContent);
+                }
+                
+                $node = $_domParrent->ownerDocument->createElementNS('uri:Tasks', $key);
+                $node->appendChild($_domParrent->ownerDocument->createTextNode($nodeContent));
+                
+                $_domParrent->appendChild($node);
             }
-        }   
+        }
 
         // body aka description
         if (!empty($data->description) && version_compare($this->_device->acsversion, '12.0', '>=')) {

@@ -21,25 +21,16 @@ msgid "Project Status Available"
 msgstr "Verfügbare Projektstatus"
 
 #: Config.php:40
-msgid ""
-"Possible Project status. Please note that additional project status might "
-"impact other Projects systems on export or syncronisation."
-msgstr ""
-"Mögliche Projektstatuswerte. Bitte beachten Sie, dass Änderungen an dieser "
-"Stelle Auswirkungen auf Export und Synchronisation haben können."
+msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or syncronisation."
+msgstr "Mögliche Projektstatuswerte. Bitte beachten Sie, dass Änderungen an dieser Stelle Auswirkungen auf Export und Synchronisation haben können."
 
 #: Config.php:48
 msgid "Project Attendee Role Available"
 msgstr "Verfügbare Teilnehmerrollen"
 
 #: Config.php:50
-msgid ""
-"Possible Project attendee roles. Please note that additional project "
-"attendee roles might impact other Projects systems on export or "
-"syncronisation."
-msgstr ""
-"Mögliche Teilnehmerrollen. Bitte beachten Sie, dass Änderungen an dieser "
-"Stelle Auswirkungen auf Export und Synchronisation haben können."
+msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation."
+msgstr "Mögliche Teilnehmerrollen. Bitte beachten Sie, dass Änderungen an dieser Stelle Auswirkungen auf Export und Synchronisation haben können."
 
 #: Controller.php:74
 #, python-format
@@ -63,8 +54,7 @@ msgstr "OK"
 
 #: js/AddToProjectPanel.js:99
 msgid "Please choose the Project to add the contacts to"
-msgstr ""
-"Bitte wählen Sie ein Projekt, zu dem die Kontakte hinzugefügt werden sollen"
+msgstr "Bitte wählen Sie ein Projekt, zu dem die Kontakte hinzugefügt werden sollen"
 
 #: js/AddToProjectPanel.js:103
 msgid "Please select the attenders' role"
@@ -208,71 +198,71 @@ msgstr "Meine wartenden Projekte"
 msgid "My projects that are on hold"
 msgstr "Meine wartenden Projekte"
 
-msgid "Example Application"
-msgstr "Beispielanwendung"
+#~ msgid "Example Application"
+#~ msgstr "Beispielanwendung"
 
-msgid "Name"
-msgstr "Name"
+#~ msgid "Name"
+#~ msgstr "Name"
 
-msgid "Budget"
-msgstr "Budget"
+#~ msgid "Budget"
+#~ msgstr "Budget"
 
-msgid "Show closed"
-msgstr "Zeige geschlossene"
+#~ msgid "Show closed"
+#~ msgstr "Zeige geschlossene"
 
-msgid "ExampleRecord"
-msgstr "BeispielEintrag"
+#~ msgid "ExampleRecord"
+#~ msgstr "BeispielEintrag"
 
-msgid "example record"
-msgid_plural "example records"
-msgstr[0] "Beispieleintrag"
-msgstr[1] "Beispieleinträge"
+#~ msgid "example record"
+#~ msgid_plural "example records"
+#~ msgstr[0] "Beispieleintrag"
+#~ msgstr[1] "Beispieleinträge"
 
-msgid "example record list"
-msgid_plural "example record lists"
-msgstr[0] "Liste von Beispieleinträgen"
-msgstr[1] "Listen von Beispieleinträgen"
+#~ msgid "example record list"
+#~ msgid_plural "example record lists"
+#~ msgstr[0] "Liste von Beispieleinträgen"
+#~ msgstr[1] "Listen von Beispieleinträgen"
 
-msgid "ExampleApplication"
-msgstr "BeispielAnwendung"
+#~ msgid "ExampleApplication"
+#~ msgstr "BeispielAnwendung"
 
-msgid "%s's personal example records"
-msgstr "%s persönliche Beispieleinträge"
+#~ msgid "%s's personal example records"
+#~ msgstr "%s persönliche Beispieleinträge"
 
-msgid "ExampleRecords"
-msgstr "BeispielEinträge"
+#~ msgid "ExampleRecords"
+#~ msgstr "BeispielEinträge"
 
-msgid "All ExampleRecords"
-msgstr "Alle BeispielEinträge"
+#~ msgid "All ExampleRecords"
+#~ msgstr "Alle BeispielEinträge"
 
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "Eintrags Liste"
-msgstr[1] "Eintrags Listen"
+#~ msgid "record list"
+#~ msgid_plural "record lists"
+#~ msgstr[0] "Eintrags Liste"
+#~ msgstr[1] "Eintrags Listen"
 
-msgid "Unit"
-msgstr "Einheit"
+#~ msgid "Unit"
+#~ msgstr "Einheit"
 
-msgid "Unit Price"
-msgstr "Preis pro Einheit"
+#~ msgid "Unit Price"
+#~ msgstr "Preis pro Einheit"
 
-msgid "Timesheets are billable"
-msgstr "Stundenzettel sind abrechenbar"
+#~ msgid "Timesheets are billable"
+#~ msgstr "Stundenzettel sind abrechenbar"
 
-msgid "closed"
-msgstr "geschlossen"
+#~ msgid "closed"
+#~ msgstr "geschlossen"
 
-msgid "open"
-msgstr "offen"
+#~ msgid "open"
+#~ msgstr "offen"
 
-msgid "Billed"
-msgstr "Berechnet"
+#~ msgid "Billed"
+#~ msgstr "Berechnet"
 
-msgid "not yet billed"
-msgstr "noch nicht berechnet"
+#~ msgid "not yet billed"
+#~ msgstr "noch nicht berechnet"
 
-msgid "to bill"
-msgstr "zu berechnen"
+#~ msgid "to bill"
+#~ msgstr "zu berechnen"
 
-msgid "billed"
-msgstr "berechnet"
+#~ msgid "billed"
+#~ msgstr "berechnet"

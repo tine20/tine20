@@ -22,9 +22,7 @@ msgid "Project Status Available"
 msgstr ""
 
 #: Config.php:40
-msgid ""
-"Possible Project status. Please note that additional project status might "
-"impact other Projects systems on export or syncronisation."
+msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:48
@@ -32,10 +30,7 @@ msgid "Project Attendee Role Available"
 msgstr ""
 
 #: Config.php:50
-msgid ""
-"Possible Project attendee roles. Please note that additional project "
-"attendee roles might impact other Projects systems on export or "
-"syncronisation."
+msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation."
 msgstr ""
 
 #: Controller.php:74
@@ -204,29 +199,29 @@ msgstr ""
 msgid "My projects that are on hold"
 msgstr ""
 
-msgid "Name"
-msgstr "Nombre"
+#~ msgid "Name"
+#~ msgstr "Nombre"
 
-msgid "Budget"
-msgstr "Presupuesto"
+#~ msgid "Budget"
+#~ msgstr "Presupuesto"
 
-msgid "Show closed"
-msgstr "Función Cerrada"
+#~ msgid "Show closed"
+#~ msgstr "Función Cerrada"
 
 #, fuzzy
-msgid "ExampleRecord"
-msgstr "RegistroDeEjemplo"
+#~ msgid "ExampleRecord"
+#~ msgstr "RegistroDeEjemplo"
 
-msgid "ExampleApplication"
-msgstr "AplicaciónDeEjemplo"
+#~ msgid "ExampleApplication"
+#~ msgstr "AplicaciónDeEjemplo"
 
-msgid "ExampleRecords"
-msgstr "RegistrosDeEjemplo"
+#~ msgid "ExampleRecords"
+#~ msgstr "RegistrosDeEjemplo"
 
-msgid "All ExampleRecords"
-msgstr "Todos los RegistrosDeEjemplo"
+#~ msgid "All ExampleRecords"
+#~ msgstr "Todos los RegistrosDeEjemplo"
 
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "listado de registro"
-msgstr[1] "listado de registros"
+#~ msgid "record list"
+#~ msgid_plural "record lists"
+#~ msgstr[0] "listado de registro"
+#~ msgstr[1] "listado de registros"

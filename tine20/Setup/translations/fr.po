@@ -81,13 +81,8 @@ msgid "Delete all existing users and groups"
 msgstr "Supprimer tous les groupes et utilisateurs existants"
 
 #: js/AuthenticationPanel.js:127
-msgid ""
-"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
-"and Roles. Do you really want to switch the accounts storage backend to "
-"LDAP ?"
-msgstr ""
-"Basculer du SQL en LDAP supprimera tous les comptes, groupes et rôles. Êtes-"
-"vous sûrs de vouloir basculer en authentification LDAP?"
+msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
+msgstr "Basculer du SQL en LDAP supprimera tous les comptes, groupes et rôles. Êtes-vous sûrs de vouloir basculer en authentification LDAP?"
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
 #: js/ConfigManagerPanel.js:132 js/EmailPanel.js:146
@@ -293,8 +288,7 @@ msgstr "Paramètres de redirection"
 
 #: js/AuthenticationPanel.js:570
 msgid "Redirect Url (redirect to login screen if empty)"
-msgstr ""
-"URL de redirection (si laissé vide, redirigera vers la page de connexion)"
+msgstr "URL de redirection (si laissé vide, redirigera vers la page de connexion)"
 
 #: js/AuthenticationPanel.js:574
 msgid "Redirect Always (if No, only redirect after logout)"
@@ -559,12 +553,8 @@ msgid "Performing Environment Checks..."
 msgstr "Vérification en cours..."
 
 #: js/EnvCheckGridPanel.js:130
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
-msgstr ""
-"Pas de {0} trouve(e). Essayez de changer vos critères de recherche, les "
-"options d'affichage ou le critère {1} de recherche."
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "Pas de {0} trouve(e). Essayez de changer vos critères de recherche, les options d'affichage ou le critère {1} de recherche."
 
 #: js/EnvCheckGridPanel.js:160
 msgid "Check"
@@ -636,52 +626,50 @@ msgstr "Politique de confidentialité"
 msgid "Accept Terms and Conditions"
 msgstr "Accepter les conditions générales"
 
-msgid "Informations"
-msgstr "Informations"
+#~ msgid "Informations"
+#~ msgstr "Informations"
 
-msgid "Session files"
-msgstr "fichiers de session"
+#~ msgid "Session files"
+#~ msgstr "fichiers de session"
 
-msgid "Session Files Path"
-msgstr "Emplacement des fichiers de session"
+#~ msgid "Session Files Path"
+#~ msgstr "Emplacement des fichiers de session"
 
-msgid "Domain"
-msgstr "Domaine"
+#~ msgid "Domain"
+#~ msgstr "Domaine"
 
-msgid "Use as default account"
-msgstr "Utiliser comme compte par défaut"
+#~ msgid "Use as default account"
+#~ msgstr "Utiliser comme compte par défaut"
 
-msgid "Default account name"
-msgstr "Nome de compte par défaut"
+#~ msgid "Default account name"
+#~ msgstr "Nome de compte par défaut"
 
-msgid "Redirect Url (after Logout, redirect to login screen if empty)"
-msgstr ""
-"Url de renvoi (après déconnexion, renvoyer sur la page de login si vide)"
+#~ msgid "Redirect Url (after Logout, redirect to login screen if empty)"
+#~ msgstr "Url de renvoi (après déconnexion, renvoyer sur la page de login si vide)"
 
-msgid "Invalid configuration"
-msgstr "Configuration incorrecte"
+#~ msgid "Invalid configuration"
+#~ msgstr "Configuration incorrecte"
 
-msgid "Current Version"
-msgstr "Version actuelle"
+#~ msgid "Current Version"
+#~ msgstr "Version actuelle"
 
-msgid "Check again"
-msgstr "Nouvelle vérification"
+#~ msgid "Check again"
+#~ msgstr "Nouvelle vérification"
 
-msgid "Shit"
-msgstr "Oups"
+#~ msgid "Shit"
+#~ msgstr "Oups"
 
-msgid "Where are the backup tapes"
-msgstr "Où sont les bandes de sauvegarde?"
+#~ msgid "Where are the backup tapes"
+#~ msgstr "Où sont les bandes de sauvegarde?"
 
-msgid "You need to correct the red marked fields before config could be saved"
-msgstr ""
-"Vous devez corriger les champs en rouge avant d'enregistrer la configuration"
+#~ msgid "You need to correct the red marked fields before config could be saved"
+#~ msgstr "Vous devez corriger les champs en rouge avant d'enregistrer la configuration"
 
-msgid "Transfering Configuration..."
-msgstr "Transfert de la configuration..."
+#~ msgid "Transfering Configuration..."
+#~ msgstr "Transfert de la configuration..."
 
-msgid "Version"
-msgstr "Version"
+#~ msgid "Version"
+#~ msgstr "Version"
 
-msgid "Check config"
-msgstr "Vérifier la configuration"
+#~ msgid "Check config"
+#~ msgstr "Vérifier la configuration"

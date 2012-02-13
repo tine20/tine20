@@ -157,8 +157,8 @@ msgstr "響鈴中"
 msgid "Call ID"
 msgstr "來電ID"
 
-msgid "Dial phone number"
-msgstr "撥打電話"
+#~ msgid "Dial phone number"
+#~ msgstr "撥打電話"
 
-msgid "enter searchfilter"
-msgstr "輸入搜尋條件"
+#~ msgid "enter searchfilter"
+#~ msgstr "輸入搜尋條件"

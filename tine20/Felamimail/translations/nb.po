@@ -258,65 +258,63 @@ msgstr ""
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr ""
 
-#: js/Felamimail.js:504
+#: js/Felamimail.js:507
 msgid "New mails"
 msgstr "Ny E-post"
 
-#: js/Felamimail.js:505
+#: js/Felamimail.js:508
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr ""
 
-#: js/Felamimail.js:626
+#: js/Felamimail.js:629
 msgid "IMAP Credentials for {0}"
 msgstr "IMAP Konto informasjon for {0}"
 
-#: js/Felamimail.js:629
+#: js/Felamimail.js:632
 msgid "Credentials"
 msgstr "Konto informasjon"
 
-#: js/Felamimail.js:781 js/Felamimail.js:814
+#: js/Felamimail.js:784 js/Felamimail.js:817
 msgid "IMAP Error"
 msgstr ""
 
-#: js/Felamimail.js:782
+#: js/Felamimail.js:785
 msgid "No connection to IMAP server."
 msgstr "Ingen tilkobling til IMAP server."
 
-#: js/Felamimail.js:798
+#: js/Felamimail.js:801
 msgid "IMAP Credentials Error"
 msgstr ""
 
-#: js/Felamimail.js:799
+#: js/Felamimail.js:802
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr ""
 
-#: js/Felamimail.js:815
-msgid ""
-"One of your folders was deleted or renamed by another client. Please update "
-"the folder list of this account."
+#: js/Felamimail.js:818
+msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
 msgstr ""
 
-#: js/Felamimail.js:844
+#: js/Felamimail.js:847
 msgid "SMTP Error"
 msgstr ""
 
-#: js/Felamimail.js:845
+#: js/Felamimail.js:848
 msgid "No connection to SMTP server."
 msgstr ""
 
-#: js/Felamimail.js:853
+#: js/Felamimail.js:856
 msgid "Sieve Error"
 msgstr ""
 
-#: js/Felamimail.js:854
+#: js/Felamimail.js:857
 msgid "No connection to Sieve server."
 msgstr ""
 
-#: js/Felamimail.js:862
+#: js/Felamimail.js:865
 msgid "Save Sieve Script Error"
 msgstr ""
 
-#: js/Felamimail.js:863
+#: js/Felamimail.js:866
 msgid "Could not save script on Sieve server."
 msgstr ""
 
@@ -499,9 +497,7 @@ msgid "Save Email Note"
 msgstr ""
 
 #: js/MessageEditDialog.js:174
-msgid ""
-"Activate this toggle button to save the email text as a note attached to the "
-"recipient(s) contact(s)."
+msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
 msgstr ""
 
 #: js/MessageEditDialog.js:192
@@ -926,11 +922,8 @@ msgid "Email Update Interval"
 msgstr "E-post Oppdaterings Intervall"
 
 #: Preference.php:111
-msgid ""
-"How often should Felamimail check for new Emails (in minutes). \"0\" means "
-"never."
-msgstr ""
-"Hvor ofte bør Felamimail se etter nye E-post (i minutter). \"0\" betyr aldri."
+msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
+msgstr "Hvor ofte bør Felamimail se etter nye E-post (i minutter). \"0\" betyr aldri."
 
 #: Preference.php:114
 msgid "Use in Addressbook"
@@ -984,108 +977,104 @@ msgstr ""
 msgid "All mails with the draft flag"
 msgstr ""
 
-msgid "wrote"
-msgstr "skrev"
+#~ msgid "wrote"
+#~ msgstr "skrev"
 
-msgid "Write"
-msgstr "Skriv"
+#~ msgid "Write"
+#~ msgstr "Skriv"
 
-msgid "Invalid drop target"
-msgstr "Ugyldig slipp mål"
+#~ msgid "Invalid drop target"
+#~ msgstr "Ugyldig slipp mål"
 
-msgid "Could not move message(s)."
-msgstr "Klarte ikke å flytte melding(er)."
+#~ msgid "Could not move message(s)."
+#~ msgstr "Klarte ikke å flytte melding(er)."
 
-msgid "Marked"
-msgstr "Markert"
+#~ msgid "Marked"
+#~ msgstr "Markert"
 
-msgid "Contains marked messages"
-msgstr "Inneholder markerte meldinger"
+#~ msgid "Contains marked messages"
+#~ msgstr "Inneholder markerte meldinger"
 
-msgid "Unread"
-msgstr "Ulest"
+#~ msgid "Unread"
+#~ msgstr "Ulest"
 
-msgid "Contains unread messages"
-msgstr "Inneholder uleste meldinger"
+#~ msgid "Contains unread messages"
+#~ msgstr "Inneholder uleste meldinger"
 
-msgid "Show Intelligent Folders"
-msgstr "Vis Inteligente Mapper"
+#~ msgid "Show Intelligent Folders"
+#~ msgstr "Vis Inteligente Mapper"
 
-msgid "No"
-msgstr "Nei"
+#~ msgid "No"
+#~ msgstr "Nei"
 
-msgid "Yes"
-msgstr "Ja"
+#~ msgid "Yes"
+#~ msgstr "Ja"
 
-msgid "Toggle Flag"
-msgstr "Veksle Flagg"
+#~ msgid "Toggle Flag"
+#~ msgstr "Veksle Flagg"
 
-msgid "Recipients"
-msgstr "Mottagere"
+#~ msgid "Recipients"
+#~ msgstr "Mottagere"
 
-msgid "Save contact note"
-msgstr "Lagre kontakt notat"
+#~ msgid "Save contact note"
+#~ msgstr "Lagre kontakt notat"
 
-msgid "Error"
-msgstr "Feil"
+#~ msgid "Error"
+#~ msgstr "Feil"
 
-msgid "No Account configured"
-msgstr "Ingen Konto configurert"
+#~ msgid "No Account configured"
+#~ msgstr "Ingen Konto configurert"
 
-msgid "Re: "
-msgstr "Svar:"
+#~ msgid "Re: "
+#~ msgstr "Svar:"
 
-msgid "Original Message"
-msgstr "Orginal Melding"
+#~ msgid "Original Message"
+#~ msgstr "Orginal Melding"
 
-msgid "Fwd: "
-msgstr "Videresend:"
+#~ msgid "Fwd: "
+#~ msgstr "Videresend:"
 
-msgid "Some error occured while trying to update the messages."
-msgstr "En feil har oppstått ved forsøk på å oppdatere meldingene."
+#~ msgid "Some error occured while trying to update the messages."
+#~ msgstr "En feil har oppstått ved forsøk på å oppdatere meldingene."
 
-msgid "Totalcount"
-msgstr "Totalteller"
+#~ msgid "Totalcount"
+#~ msgstr "Totalteller"
 
-msgid "Cache"
-msgstr "Mellomlagring"
+#~ msgid "Cache"
+#~ msgstr "Mellomlagring"
 
-msgid "Supports \"has_children\""
-msgstr "Støtter \"has_children\""
+#~ msgid "Supports \"has_children\""
+#~ msgstr "Støtter \"has_children\""
 
-msgid "You got {0} new mail(s) in Folder "
-msgstr "Du har {0} nye E-post i mappe"
+#~ msgid "You got {0} new mail(s) in Folder "
+#~ msgstr "Du har {0} nye E-post i mappe"
 
-msgid "Create and edit email accounts"
-msgstr "Opprett og rediger e-post kontoer"
+#~ msgid "Create and edit email accounts"
+#~ msgstr "Opprett og rediger e-post kontoer"
 
-msgid "Upload Failed"
-msgstr "Opplasting Feilet"
+#~ msgid "Upload Failed"
+#~ msgstr "Opplasting Feilet"
 
-msgid ""
-"Could not upload attachment. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
-"Kunne ikke laste opp vedlegg. Filstørrelse kan være for stor. Vennligst "
-"informer din Administrator. Maks opplastings størrelse:"
+#~ msgid "Could not upload attachment. Filesize could be too big. Please notify your Administrator. Max upload size: "
+#~ msgstr "Kunne ikke laste opp vedlegg. Filstørrelse kan være for stor. Vennligst informer din Administrator. Maks opplastings størrelse:"
 
-msgid "Add Attachment"
-msgstr "Legg til Vedlegg"
+#~ msgid "Add Attachment"
+#~ msgstr "Legg til Vedlegg"
 
-msgid "Remove Attachment"
-msgstr "Fjern Vedlegg"
+#~ msgid "Remove Attachment"
+#~ msgstr "Fjern Vedlegg"
 
-msgid "User Email Account"
-msgstr "Bruker E-post Konto"
+#~ msgid "User Email Account"
+#~ msgstr "Bruker E-post Konto"
 
-msgid "Use user credentials for IMAP email account."
-msgstr "Bruk bruker konto informasjon for IMAP e-post konto."
+#~ msgid "Use user credentials for IMAP email account."
+#~ msgstr "Bruk bruker konto informasjon for IMAP e-post konto."
 
-msgid "Sort Folders (experimental)"
-msgstr "Sorter Mapper (eksperimentell)"
+#~ msgid "Sort Folders (experimental)"
+#~ msgstr "Sorter Mapper (eksperimentell)"
 
-msgid "Update Cache"
-msgstr "Oppdater Mellomlagring"
+#~ msgid "Update Cache"
+#~ msgstr "Oppdater Mellomlagring"
 
-msgid "Port"
-msgstr "Port"
+#~ msgid "Port"
+#~ msgstr "Port"

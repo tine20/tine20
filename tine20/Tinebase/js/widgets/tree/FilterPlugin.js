@@ -103,7 +103,7 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
         }, this);
         
         Ext.each(filters, function(filter) {
-            if (filter.field !== this.field) {
+            if (filter.field !== this.field || Ext.isEmpty(filter.value)) {
                 return;
             }
             
@@ -120,8 +120,7 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
     selectValue: function(value) {
         var values = Ext.isArray(value) ? value : [value];
         Ext.each(values, function(value, idx) {
-            // value might already be a path
-            if (Ext.isString(value) && value.charAt(0) == '/') {
+            if (Ext.isString(value) && ! value.path) {
                 value = values[idx] = {path: value};
             }
             

@@ -41,9 +41,7 @@ msgid "Contact duplicate check fields"
 msgstr ""
 
 #: Config.php:47
-msgid ""
-"These fields are checked when a new contact is created. If a record with the "
-"same data in the fields is found, a duplicate exception is thrown."
+msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
 msgstr ""
 
 #: Config.php:59
@@ -51,9 +49,7 @@ msgid "Contact salutations available"
 msgstr ""
 
 #: Config.php:61
-msgid ""
-"Possible contact salutations. Please note that additional values might "
-"impact other Addressbook systems on export or syncronisation."
+msgid "Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:69
@@ -195,9 +191,7 @@ msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
 #: Import/definitions/adb_tine_import_csv.xml:20
-msgid ""
-"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
+msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
 
 #: js/Addressbook.js:22
@@ -683,93 +677,93 @@ msgstr ""
 msgid "Internal Contacts"
 msgstr "Interne Kontakter"
 
-msgid "Searching..."
-msgstr "Søker..."
+#~ msgid "Searching..."
+#~ msgstr "Søker..."
 
-msgid "Call contact"
-msgstr "Ring kontakt"
+#~ msgid "Call contact"
+#~ msgstr "Ring kontakt"
 
-msgid "Compose email"
-msgstr "Ny e-post"
+#~ msgid "Compose email"
+#~ msgstr "Ny e-post"
 
-msgid "Work"
-msgstr "Jobb"
+#~ msgid "Work"
+#~ msgstr "Jobb"
 
-msgid "Home"
-msgstr "Hjem"
+#~ msgid "Home"
+#~ msgstr "Hjem"
 
-msgid "Cell"
-msgstr "Mobil"
+#~ msgid "Cell"
+#~ msgstr "Mobil"
 
-msgid "Cell private"
-msgstr "Mobil privat"
+#~ msgid "Cell private"
+#~ msgstr "Mobil privat"
 
-msgid "Last Modified Time"
-msgstr "Sist Endret Dato"
+#~ msgid "Last Modified Time"
+#~ msgstr "Sist Endret Dato"
 
-msgid "addressbook"
-msgid_plural "addressbooks"
-msgstr[0] "adressebok"
-msgstr[1] "adressebøker"
+#~ msgid "addressbook"
+#~ msgid_plural "addressbooks"
+#~ msgstr[0] "adressebok"
+#~ msgstr[1] "adressebøker"
 
-msgid "addressbooks"
-msgstr "adressebøker"
+#~ msgid "addressbooks"
+#~ msgstr "adressebøker"
 
-msgid "contacts"
-msgstr "kontakter"
+#~ msgid "contacts"
+#~ msgstr "kontakter"
 
-msgid "export as pdf"
-msgstr "eksporter som pdf"
+#~ msgid "export as pdf"
+#~ msgstr "eksporter som pdf"
 
-msgid "Loading Contact..."
-msgstr "Laster Kontakt..."
+#~ msgid "Loading Contact..."
+#~ msgstr "Laster Kontakt..."
 
-msgid "Please Wait"
-msgstr "Vennligst Vent"
+#~ msgid "Please Wait"
+#~ msgstr "Vennligst Vent"
 
-msgid "Add new contact"
-msgstr "Legg til ny kontakt"
+#~ msgid "Add new contact"
+#~ msgstr "Legg til ny kontakt"
 
-msgid "Edit Contact \"{0}\""
-msgstr "Rediger Kontakt \"{0}\""
+#~ msgid "Edit Contact \"{0}\""
+#~ msgstr "Rediger Kontakt \"{0}\""
 
-msgid "Please wait a moment..."
-msgstr "Lagrer vennligst vent..."
+#~ msgid "Please wait a moment..."
+#~ msgstr "Lagrer vennligst vent..."
 
-msgid "Saving Contact"
-msgstr "Lagrer Kontakt"
+#~ msgid "Saving Contact"
+#~ msgstr "Lagrer Kontakt"
 
-msgid "Failed"
-msgstr "Feilet"
+#~ msgid "Failed"
+#~ msgstr "Feilet"
 
-msgid "Could not save contact."
-msgstr "Kunne ikke lagre kontakt."
+#~ msgid "Could not save contact."
+#~ msgstr "Kunne ikke lagre kontakt."
 
-msgid "Either "
-msgstr "Enten"
+#~ msgid "Either "
+#~ msgstr "Enten"
 
-msgid "Start date is not valid"
-msgstr "Start dato er ikke gyldig"
+#~ msgid "Start date is not valid"
+#~ msgstr "Start dato er ikke gyldig"
 
-msgid "Errors"
-msgstr "Feil"
+#~ msgid "Errors"
+#~ msgstr "Feil"
 
-msgid "Please fix the errors noted."
-msgstr "Vennligst rett feilene listet."
+#~ msgid "Please fix the errors noted."
+#~ msgstr "Vennligst rett feilene listet."
 
-msgid "Deleting contact..."
-msgstr "Sletter kontakt..."
+#~ msgid "Deleting contact..."
+#~ msgstr "Sletter kontakt..."
 
-msgid "Some error occured while trying to delete the contact."
-msgstr "En feil oppsto ved forsøk på å slette kontakten."
+#~ msgid "Some error occured while trying to delete the contact."
+#~ msgstr "En feil oppsto ved forsøk på å slette kontakten."
 
-msgid "Custom Fields"
-msgstr "Egendefinerte Felter"
+#~ msgid "Custom Fields"
+#~ msgstr "Egendefinerte Felter"
 
-msgid "Link"
-msgid_plural "Links [%d]"
-msgstr[0] "Link"
-msgstr[1] "Linker [%d]"
+#~ msgid "Link"
+#~ msgid_plural "Links [%d]"
+#~ msgstr[0] "Link"
+#~ msgstr[1] "Linker [%d]"
 
-msgid "Export"
-msgstr "Eksporter"
+#~ msgid "Export"
+#~ msgstr "Eksporter"

@@ -81,10 +81,7 @@ msgid "Delete all existing users and groups"
 msgstr ""
 
 #: js/AuthenticationPanel.js:127
-msgid ""
-"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
-"and Roles. Do you really want to switch the accounts storage backend to "
-"LDAP ?"
+msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
 msgstr ""
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
@@ -556,12 +553,8 @@ msgid "Performing Environment Checks..."
 msgstr "Изпълнява проверка на работната среда"
 
 #: js/EnvCheckGridPanel.js:130
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
-msgstr ""
-"Няма намерени {0}. Моля опитайте отново с променен филтър за търсене, опции "
-"за предстовяне или {1} на търсенето."
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "Няма намерени {0}. Моля опитайте отново с променен филтър за търсене, опции за предстовяне или {1} на търсенето."
 
 #: js/EnvCheckGridPanel.js:160
 msgid "Check"
@@ -633,25 +626,23 @@ msgstr ""
 msgid "Accept Terms and Conditions"
 msgstr ""
 
-msgid "Informations"
-msgstr "Информации"
+#~ msgid "Informations"
+#~ msgstr "Информации"
 
-msgid "Shit"
-msgstr "По дяволите"
+#~ msgid "Shit"
+#~ msgstr "По дяволите"
 
-msgid "Where are the backup tapes"
-msgstr "Къде са запаметените записи"
+#~ msgid "Where are the backup tapes"
+#~ msgstr "Къде са запаметените записи"
 
-msgid "Invalid configuration"
-msgstr "Невалидна конфигурация"
+#~ msgid "Invalid configuration"
+#~ msgstr "Невалидна конфигурация"
 
-msgid "You need to correct the red marked fields before config could be saved"
-msgstr ""
-"Трябва да коригирате в червено маркираните полета, преди конфигурацията да "
-"може да бъде запаметена."
+#~ msgid "You need to correct the red marked fields before config could be saved"
+#~ msgstr "Трябва да коригирате в червено маркираните полета, преди конфигурацията да може да бъде запаметена."
 
-msgid "Transfering Configuration..."
-msgstr "Трансферира конфигурация"
+#~ msgid "Transfering Configuration..."
+#~ msgstr "Трансферира конфигурация"
 
-msgid "Check config"
-msgstr "Тествоне на конфигурацията"
+#~ msgid "Check config"
+#~ msgstr "Тествоне на конфигурацията"

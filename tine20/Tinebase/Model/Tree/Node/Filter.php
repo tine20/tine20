@@ -3,15 +3,17 @@
  * Tine 2.0
  * 
  * @package     Tinebase
+ * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * tree node filter class
  * 
  * @package     Tinebase
+ * @subpackage  Filter
  */
 class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_FilterGroup
 {
@@ -44,11 +46,28 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_FilterGroup
         'path'                 => array('filter' => 'Tinebase_Model_Tree_Node_PathFilter'),
         'parent_id'            => array('filter' => 'Tinebase_Model_Filter_Text'),
         'name'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
-        'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
-        'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
+        'object_id'            => array('filter' => 'Tinebase_Model_Filter_Text'),
+    // tree_fileobjects table
+        'last_modified_time'   => array(
+            'filter' => 'Tinebase_Model_Filter_Date',
+            'options' => array('tablename' => 'tree_fileobjects')
+        ),
+        'deleted_time'         => array(
+            'filter' => 'Tinebase_Model_Filter_DateTime',
+            'options' => array('tablename' => 'tree_fileobjects')
+        ),
+        'creation_time'        => array(
+            'filter' => 'Tinebase_Model_Filter_Date',
+            'options' => array('tablename' => 'tree_fileobjects')
+        ),
+        'last_modified_by'     => array(
+            'filter' => 'Tinebase_Model_Filter_User',
+            'options' => array('tablename' => 'tree_fileobjects'
+        )),
+        'created_by'           => array(
+            'filter' => 'Tinebase_Model_Filter_User',
+            'options' => array('tablename' => 'tree_fileobjects')
+        ),
         'type'                 => array(
             'filter' => 'Tinebase_Model_Filter_Text', 
             'options' => array('tablename' => 'tree_fileobjects')
@@ -57,11 +76,14 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_FilterGroup
             'filter' => 'Tinebase_Model_Filter_Text',
             'options' => array('tablename' => 'tree_fileobjects')
         ),
-        'description'          => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'description'          => array(
+            'filter' => 'Tinebase_Model_Filter_Text',
+            'options' => array('tablename' => 'tree_fileobjects')
+        ),
+    // tree_filerevisions table
         'size'                 => array(
             'filter' => 'Tinebase_Model_Filter_Int',
             'options' => array('tablename' => 'tree_filerevisions')
         ),
-        'object_id'            => array('filter' => 'Tinebase_Model_Filter_Text'),
-    );    
+    );
 }
