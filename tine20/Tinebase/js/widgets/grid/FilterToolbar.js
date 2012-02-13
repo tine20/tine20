@@ -362,7 +362,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             valueField: 'field',
             value: filterModel.field,
             renderTo: fRow.child('td[class=tw-ftb-frow-field]'),
-            validator: this.validateFilter.createDelegate(this)
+            validator: this.validateFilter.createDelegate(this),
+            tpl: '<tpl for="."><div class="x-combo-list-item tw-ftb-field-{field}">{label}</div></tpl>'
         });
         filter.formFields.field.on('select', function(combo, newRecord, newKey) {
             if (combo.value != combo.filter.get('field')) {
@@ -627,7 +628,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         // init filter selection
         this.fieldStore = new Ext.data.JsonStore({
             fields: ['field', 'label'],
-            data: filtersFields
+            data: filtersFields,
+            remoteSort: false,
+            sortInfo: {
+                field: 'label',
+                direction: 'ASC'
+            }
         });
     },
     
