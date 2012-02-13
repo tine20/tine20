@@ -328,13 +328,6 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                 $valarm = new Sabre_VObject_Component('VALARM');
                 $valarm->add('ACTION', 'DISPLAY');
                 $valarm->add('DESCRIPTION', $event->summary);
-
-                if (!empty($alarm->options)) {
-                    $options = Zend_Json::decode($alarm->options);
-                    if (is_array($options) && array_key_exists('custom', $options) && $options['custom'] === true) {
-                        $alarm->minutes_before = 'custom';
-                    }
-                }
                 
                 if (is_numeric($alarm->minutes_before)) {
                     if ($event->dtstart == $alarm->alarm_time) {
@@ -810,7 +803,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                         switch(strtoupper($valarm->TRIGGER['VALUE']->value)) {
                             # TRIGGER;VALUE=DATE-TIME:20111031T130000Z
                             case 'DATE-TIME':
-                                $alarmTime = $this->_convertToTinebaseDateTime($_vevent->DTSTART);
+                                //@TODO fixme
+                                $alarmTime = new Tinebase_DateTime($valarm->TRIGGER->value);
                                 $alarmTime->setTimezone('UTC');
                                 
                                 $alarm = new Tinebase_Model_Alarm(array(
