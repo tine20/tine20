@@ -326,7 +326,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     {
         $result = array();
         
-        if($_records->getFirstRecord()) {
+        if ($_records->getFirstRecord()) {
             $converter = Tinebase_Convert_Factory::factory($_records->getFirstRecord());
             $result = $converter->fromTine20RecordSet($_records, $this->_resolveUserFields);
         }
