@@ -44,7 +44,7 @@ try {
         'clean|c'         => 'Cleanup all tmp files',
         'wipe|w'         => 'wipe all local translations',
         'update|u'        => 'Update lang files (shortcut for --pot --potmerge --mo --clean)',
-        'package'         => 'Create a translation package',
+        'package=s'       => 'Create a translation package',
         'pot'             => '(re) generate xgettext po template files',
         'potmerge'        => 'merge pot contents into po files',
         'statistics'      => 'generate lang statistics',
@@ -53,7 +53,8 @@ try {
         'mo'              => 'Build mo files',
         'newlang=s'       => 'Add new language',
         'overwrite'       => '  overwrite existing lang files',
-        'git'             => '  add new lang files to git',
+        'git'             => 'Add new/updated lang files to git',
+        'lp:merge=s'      => 'merge langpackage from launchpad',
         'help|h'          => 'Display this help Message',
         //'filter=s'        => 'Filter for applications'
     ));
@@ -79,7 +80,7 @@ if (count($opts->toArray()) === 0  || $opts->h) {
     exit;
 }
 
-if ($opts->u || $opts->contribute) {
+if ($opts->u || $opts->contribute || $opts->{'lp:merge'}) {
     $opts->pot = $opts->potmerge = $opts->mo = $opts->c = true;
 }
 
@@ -119,6 +120,19 @@ if($opts->contribute) {
     echo "merging completed, don't forget to run ./release.php -t :-) \n";
 }
 
+if ($opts->{'lp:merge'}) {
+    if (! isset ($opts->{'lp:merge'})) {
+        echo "You need to specify an archive of the lang updates!  \n";
+        exit;
+    }
+    if (! is_readable($opts->{'lp:merge'})) {
+        echo "Archive file '" . $opts->{'lp:merge'} . "' could not be found! \n";
+        exit;
+    }
+    
+    launchpadMerge($opts->v, $opts->{'lp:merge'}, $opts->git);
+}
+
 if ($opts->mo) {
     msgfmt($opts->v);
 }
@@ -133,7 +147,7 @@ if ($opts->statistics) {
 }
 
 if ($opts->package) {
-    buildpackage($opts->v);
+    buildpackage($opts->v, $opts->{'package'} ?: NULL);
 }
 
 /**
@@ -331,6 +345,68 @@ function contributorsMerge($_verbose, $_language, $_archive)
         `cp '$contributedPoFile' $tinePoFile`;
     }
 }
+/**
+ * lanuchpad merge
+ *
+ * @TODO add auto git support
+ * 
+ * @param bool   $_verbose
+ * @param string $_archive
+ * @param bool   $_git
+ */
+function launchpadMerge($_verbose, $_archive, $_git)
+{
+    global $tine20path;
+    
+    if (is_dir($_archive)) {
+        $contributionDir = $_archive;
+        
+        if (is_dir("$contributionDir/.bzr")) {
+            `cd $contributionDir
+            bzr merge`;
+        }
+    } else {
+        $contributionDir = '/tmp/tinetranslations/';
+        `rm -Rf $contributionDir`;
+        `mkdir $contributionDir`;
+        
+        switch (substr($_archive, -7)) {
+            case '.tar.gz':
+                `tar -xz -C $contributionDir -f $_archive`;
+                break;
+            default:
+                echo "Error: Only tar.gz archives are supported \n";
+            exit;
+            break;
+        }
+    }
+    
+    foreach (scandir($contributionDir) as $appName) {
+        if ($appName{0} == '.' || $appName{0} == '_') continue;
+        if ($_verbose) echo "Processing translation updates for $appName \n";
+        
+        foreach (scandir("$contributionDir/$appName") as $poFile) {
+            if (substr($poFile, -3) != '.po') continue;
+            
+            $lang = str_ireplace(array("$appName-", '.po'), '', $poFile);
+            if ($_verbose) echo "Processing language '$lang' \n";
+            
+            $tinePoFile        = "$tine20path/$appName/translations/$lang.po";
+            $contributedPoFile = "$contributionDir/$appName/$poFile";
+            
+            if (! is_file($tinePoFile)) {
+                echo "Error: could not find Tine 2.0's langfile $tinePoFile\n";
+                continue;
+                exit;
+            }
+            
+            // do the actual merging
+            $output = $_verbose ? '' : '2> /dev/null';
+            `msgmerge --no-fuzzy-matching --update '$contributedPoFile'  $tinePoFile $output`;
+            `cp '$contributedPoFile' $tinePoFile`;
+        }
+    }
+}
 
 /**
  * msgfmt
@@ -355,20 +431,36 @@ function msgfmt ($_verbose)
     }
 }
 
-/**
- * build a translation package
- */
-function buildpackage($_verbose)
+function buildpackage($_verbose, $_archive)
 {
-    global $tine20path;
+    $destDir = __DIR__;
+    $tmpdir = '/tmp/tinetranslations/';
+    `rm -Rf $tmpdir`;
+    `mkdir $tmpdir`;
     
-    $zipFile = "$tine20path/translations.zip";
-    if (file_exists($zipFile)) `rm $zipFile`;
     foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
-        `cd "$tine20path"
-        zip $zipFile  $appName/translations/* `;
+        `mkdir $tmpdir/$appName`;
+        generateNewTranslationFile('en', 'GB', $appName, getPluralForm('English'), "$tmpdir/$appName/$appName.pot",  $_verbose);
+        `cat $translationPath/template.pot >> $tmpdir/$appName/$appName.pot`;
+        `cp $translationPath/*.po $tmpdir/$appName/`;
+    }
+    
+    if ($_archive && is_dir($_archive)) {
+        `cp -r $tmpdir/* $_archive`;
+        
+        if (is_dir("$_archive/.bzr")) {
+            `cd $_archive
+            bzr add *
+            bzr commit -m 'Tine 2.0 Translations'
+            bzr push`;
+        }
+    } else {
+        `cd "$tmpdir"
+         tar -czf lp-lang-package.tar.gz *`;
+        `mv $tmpdir/lp-lang-package.tar.gz {$destDir}`;
     }
 }
+
 /**
  * generate statistics
  *
