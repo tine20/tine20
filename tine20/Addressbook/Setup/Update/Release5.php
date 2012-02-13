@@ -154,17 +154,6 @@ class Addressbook_Setup_Update_Release5 extends Setup_Update_Abstract
     {
         $addressbookAppId = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId();
         
-        // alter salutation_id -> salutation
-        $declaration = new Setup_Backend_Schema_Field_Xml('
-            <field>
-                <name>salutation</name>
-                <type>text</type>
-                <length>40</length>
-                <notnull>false</notnull>
-            </field>');
-        
-        $this->_backend->alterCol('addressbook', $declaration, 'salutation_id');
-        
         // get all current salutation datas and drop old salutation table
         $stmt = $this->_db->query("SELECT * FROM `" . SQL_TABLE_PREFIX . "addressbook_salutations`");
         $salutationDatas = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -175,9 +164,19 @@ class Addressbook_Setup_Update_Release5 extends Setup_Update_Abstract
         foreach ($salutationDatas as $salutationData) {
             $salutationMap[$salutationData['id']] = $salutationData['name'];
             $this->_db->update(SQL_TABLE_PREFIX . 'addressbook', array(
-                'salutation' => strtoupper($salutationData['name']),
-            ), "`salutation` = '{$salutationData['id']}'");
+                'salutation_id' => strtoupper($salutationData['name']),
+            ), "`salutation_id` = '{$salutationData['id']}'");
         }
+        
+        // alter salutation_id -> salutation
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>salutation</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('addressbook', $declaration, 'salutation_id');
         
         $cb = new Tinebase_Backend_Sql(array(
             'modelName' => 'Tinebase_Model_Config', 
