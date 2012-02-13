@@ -220,9 +220,9 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             quickaddField: Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                 userOnly: true,
                 useAccountRecord: true,
-                nameField: 'n_fileas',
                 blurOnSelect: true,
                 selectOnFocus: true,
+                allowEmpty: true,
                 value: Tine.Tinebase.registry.get('currentAccount').accountDisplayName
             })
         }]

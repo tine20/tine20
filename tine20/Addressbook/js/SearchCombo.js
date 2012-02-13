@@ -71,17 +71,18 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
 //        this.on('added', Tine.widgets.dialog.EditDialog.prototype.addToDisableOnEditMultiple, this);
 
         if(this.useAccountRecord) {
-            this.on('keyup', this.onKeyUp);
+            this.on('keyup', this.doEmptyCheck);
         }
 
         Tine.Addressbook.SearchCombo.superclass.initComponent.call(this);
     },
     
     /**
+     * @todo see #5654
      * is called in accountMode to reset the value
      * @param event e
      */
-    onKeyUp: function(e) {
+    doEmptyCheck: function(e) {
         if(this.getRawValue() == '') this.setValue(null);
     },
     
