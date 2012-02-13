@@ -453,11 +453,11 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         $result = $this->_backend->searchMessageUids($filter, $pagination);
         
-        if(count($result) === 0) {
+        if (count($result) === 0) {
             return null;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' got last message uid: ' . print_r($result, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Got last message uid: ' . print_r($result, TRUE));
         
         return $result;
     }
