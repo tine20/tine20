@@ -227,7 +227,6 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     protected function _searchHelper($_filter, $_expectedName, $_toplevel = FALSE, $_checkAccountGrants = TRUE)
     {
         $result = $this->_json->searchNodes($_filter, array('sort' => 'size'));
-        #print_r($result);
         
         $this->assertGreaterThanOrEqual(1, $result['totalcount'], 'expected at least one entry');
         if ($_toplevel) {
@@ -327,6 +326,10 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
             'field'    => 'path', 
             'operator' => 'equals', 
             'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/sclever'
+        ), array(
+            'field'    => 'creation_time', 
+            'operator' => 'within', 
+            'value'    => 'weekThis',
         ));
         $result = $this->_searchHelper($filter, $this->_otherUserContainer->name, TRUE);
         

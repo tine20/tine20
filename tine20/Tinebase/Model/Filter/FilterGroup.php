@@ -441,6 +441,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             );
             $filter = NULL;
         } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
+                . print_r($definition, TRUE));
             $data['options'] = array_merge($this->_options, isset($definition['options']) ? (array)$definition['options'] : array());
             $filter = new $definition['filter']($data);
         }
