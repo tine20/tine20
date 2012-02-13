@@ -360,15 +360,11 @@ msgid "Export as XLS"
 msgstr "Esporta come XLS"
 
 #: js/LeadEditDialog.js:287
-msgid ""
-"You do not have the run right for the Tasks application or it is not "
-"activated."
+msgid "You do not have the run right for the Tasks application or it is not activated."
 msgstr ""
 
 #: js/LeadEditDialog.js:298
-msgid ""
-"You do not have the run right for the Sales application or it is not "
-"activated."
+msgid "You do not have the run right for the Sales application or it is not activated."
 msgstr ""
 
 #: js/LeadEditDialog.js:339
@@ -599,20 +595,20 @@ msgstr ""
 msgid "Leads with overdue tasks"
 msgstr ""
 
-msgid "Lead %s has been creaded"
-msgstr "Il cliente potenziale %s è stato creato"
+#~ msgid "Lead %s has been creaded"
+#~ msgstr "Il cliente potenziale %s è stato creato"
 
-msgid "Last Modified Time"
-msgstr "Data Ultima Modifica"
+#~ msgid "Last Modified Time"
+#~ msgstr "Data Ultima Modifica"
 
-msgid "Add task"
-msgstr "Aggiungi compito"
+#~ msgid "Add task"
+#~ msgstr "Aggiungi compito"
 
-msgid "Add task for selected lead"
-msgstr "Aggiungi compito per il cliente potenziale selezionato"
+#~ msgid "Add task for selected lead"
+#~ msgstr "Aggiungi compito per il cliente potenziale selezionato"
 
-msgid "Task"
-msgstr "Compito"
+#~ msgid "Task"
+#~ msgstr "Compito"
 
-msgid "History"
-msgstr "Storia"
+#~ msgid "History"
+#~ msgstr "Storia"

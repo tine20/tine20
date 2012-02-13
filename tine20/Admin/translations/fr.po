@@ -31,9 +31,7 @@ msgstr "gérer les comptes"
 
 #: Acl/Rights.php:190
 msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
-"ajouter et éditer les utilisateurs et les groupes, ajouter des membres de "
-"groupes, changer les mots de passe utilisateur"
+msgstr "ajouter et éditer les utilisateurs et les groupes, ajouter des membres de groupes, changer les mots de passe utilisateur"
 
 #: Acl/Rights.php:193
 msgid "manage applications"
@@ -48,11 +46,8 @@ msgid "manage roles"
 msgstr "gérer les rôles"
 
 #: Acl/Rights.php:198
-msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"ajouter et éditer les rôles, ajouter des membres aux rôles, ajouter des "
-"droits pour les applications"
+msgid "add and edit roles, add new members to roles, add application rights to roles"
+msgstr "ajouter et éditer les rôles, ajouter des membres aux rôles, ajouter des droits pour les applications"
 
 #: Acl/Rights.php:201
 msgid "manage shared tags"
@@ -126,11 +121,11 @@ msgstr ""
 msgid "view personal and shared containers"
 msgstr ""
 
-#: Controller/Container.php:187
+#: Controller/Container.php:199
 msgid "Your container has been changed"
 msgstr ""
 
-#: Controller/Container.php:188
+#: Controller/Container.php:200
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr ""
 
@@ -1020,132 +1015,131 @@ msgid_plural "Email Users"
 msgstr[0] "Envoyer un courriel à l'utilisateur"
 msgstr[1] "Envoyer un courriel aux utilisateurs"
 
-msgid "Current Mail Size"
-msgstr "Taille actuelle (Mail)"
+#~ msgid "Current Mail Size"
+#~ msgstr "Taille actuelle (Mail)"
 
-msgid "Sieve Quota"
-msgstr "Quota Sieve"
+#~ msgid "Sieve Quota"
+#~ msgstr "Quota Sieve"
 
-msgid "Aliases"
-msgstr "Aliases"
+#~ msgid "Aliases"
+#~ msgstr "Aliases"
 
-msgid "Forwards"
-msgstr "Transferts"
+#~ msgid "Forwards"
+#~ msgstr "Transferts"
 
-msgid "Loading Tag..."
-msgstr "Chargement..."
+#~ msgid "Loading Tag..."
+#~ msgstr "Chargement..."
 
-msgid "Please Wait"
-msgstr "Veuillez patienter"
+#~ msgid "Please Wait"
+#~ msgstr "Veuillez patienter"
 
-msgid "Do you really want to delete the selected access log entries?"
-msgstr ""
-"Êtes-vous sûr de vouloir supprimer les entrées de journal sélectionnées?"
+#~ msgid "Do you really want to delete the selected access log entries?"
+#~ msgstr "Êtes-vous sûr de vouloir supprimer les entrées de journal sélectionnées?"
 
-msgid "delete entry"
-msgstr "supprimer"
+#~ msgid "delete entry"
+#~ msgstr "supprimer"
 
-msgid "select all"
-msgstr "sélectionner tout"
+#~ msgid "select all"
+#~ msgstr "sélectionner tout"
 
-msgid "Display from:"
-msgstr "Afficher du: "
+#~ msgid "Display from:"
+#~ msgstr "Afficher du: "
 
-msgid "to:"
-msgstr "au:"
+#~ msgid "to:"
+#~ msgstr "au:"
 
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Affichage des entrées {0} - {1} de {2}"
+#~ msgid "Displaying access log entries {0} - {1} of {2}"
+#~ msgstr "Affichage des entrées {0} - {1} de {2}"
 
-msgid "No access log entries to display"
-msgstr "Pas d'entrée à afficher"
+#~ msgid "No access log entries to display"
+#~ msgstr "Pas d'entrée à afficher"
 
-msgid "Account ID"
-msgstr "ID de compte"
+#~ msgid "Account ID"
+#~ msgstr "ID de compte"
 
-msgid "Loading Role..."
-msgstr "Chargement..."
+#~ msgid "Loading Role..."
+#~ msgstr "Chargement..."
 
-msgid "Do you really want to delete the selected account(s)?"
-msgstr "êtes-vous sûr de vouloir supprimer le(s) compte(s) sélectionné(s)?"
+#~ msgid "Do you really want to delete the selected account(s)?"
+#~ msgstr "êtes-vous sûr de vouloir supprimer le(s) compte(s) sélectionné(s)?"
 
-msgid "Deleting account(s)..."
-msgstr "Suppression de(s) compte(s)..."
+#~ msgid "Deleting account(s)..."
+#~ msgstr "Suppression de(s) compte(s)..."
 
-msgid "Some error occurred while trying to delete the account(s)."
-msgstr "Une erreur des survenue lors de la suppression de(s) compte(s)."
+#~ msgid "Some error occurred while trying to delete the account(s)."
+#~ msgstr "Une erreur des survenue lors de la suppression de(s) compte(s)."
 
-msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "Affichage des comptes {0} - {1} de {2}"
+#~ msgid "Displaying accounts {0} - {1} of {2}"
+#~ msgstr "Affichage des comptes {0} - {1} de {2}"
 
-msgid "No accounts to display"
-msgstr "Pas de compte à afficher"
+#~ msgid "No accounts to display"
+#~ msgstr "Pas de compte à afficher"
 
-msgid "add account"
-msgstr "ajouter"
+#~ msgid "add account"
+#~ msgstr "ajouter"
 
-msgid "edit account"
-msgstr "éditer"
+#~ msgid "edit account"
+#~ msgstr "éditer"
 
-msgid "delete account"
-msgstr "supprimer"
+#~ msgid "delete account"
+#~ msgstr "supprimer"
 
-msgid "Deleting group..."
-msgstr "Suppression du groupe... "
+#~ msgid "Deleting group..."
+#~ msgstr "Suppression du groupe... "
 
-msgid "Email UID"
-msgstr "Email UID"
+#~ msgid "Email UID"
+#~ msgstr "Email UID"
 
-msgid "Email GID"
-msgstr "Email GID"
+#~ msgid "Email GID"
+#~ msgstr "Email GID"
 
-msgid "Email Username"
-msgstr "Nom affiché"
+#~ msgid "Email Username"
+#~ msgstr "Nom affiché"
 
-msgid "Current Sieve Size"
-msgstr "Taille actuelle (Sieve)"
+#~ msgid "Current Sieve Size"
+#~ msgstr "Taille actuelle (Sieve)"
 
-msgid "enter searchfilter"
-msgstr "saisir un filtre de recherche"
+#~ msgid "enter searchfilter"
+#~ msgstr "saisir un filtre de recherche"
 
-msgid "remove account"
-msgstr "retirer un compte"
+#~ msgid "remove account"
+#~ msgstr "retirer un compte"
 
-msgid "Role members"
-msgstr "Membres"
+#~ msgid "Role members"
+#~ msgstr "Membres"
 
-msgid "Deleting tag..."
-msgstr "Suppression..."
+#~ msgid "Deleting tag..."
+#~ msgstr "Suppression..."
 
-msgid "name"
-msgstr "nom"
+#~ msgid "name"
+#~ msgstr "nom"
 
-msgid "status"
-msgstr "statut"
+#~ msgid "status"
+#~ msgstr "statut"
 
-msgid "Deleting account..."
-msgstr "Suppression..."
+#~ msgid "Deleting account..."
+#~ msgstr "Suppression..."
 
-msgid "Some error occurred while trying to delete the account."
-msgstr "Une erreur des survenue lors de la suppression du compte."
+#~ msgid "Some error occurred while trying to delete the account."
+#~ msgstr "Une erreur des survenue lors de la suppression du compte."
 
-msgid "Saving User Account"
-msgstr "Enregistrement du compte utilisateur"
+#~ msgid "Saving User Account"
+#~ msgstr "Enregistrement du compte utilisateur"
 
-msgid "Could not save user account."
-msgstr "Erreur d'enregistrement."
+#~ msgid "Could not save user account."
+#~ msgstr "Erreur d'enregistrement."
 
-msgid "Add New User Account"
-msgstr "Créer un compte utilisateur"
+#~ msgid "Add New User Account"
+#~ msgstr "Créer un compte utilisateur"
 
-msgid "Edit User Account \"{0}\""
-msgstr "Editer le compte utilisateur  \"{0}\""
+#~ msgid "Edit User Account \"{0}\""
+#~ msgstr "Editer le compte utilisateur  \"{0}\""
 
-msgid "Quota (MB)"
-msgstr "Quota (Mo)"
+#~ msgid "Quota (MB)"
+#~ msgstr "Quota (Mo)"
 
-msgid "Sieve Size"
-msgstr "Taille de Sieve"
+#~ msgid "Sieve Size"
+#~ msgstr "Taille de Sieve"
 
-msgid "User memberships"
-msgstr "Appartenances de l'utilisateur"
+#~ msgid "User memberships"
+#~ msgstr "Appartenances de l'utilisateur"

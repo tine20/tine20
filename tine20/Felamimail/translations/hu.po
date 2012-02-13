@@ -258,68 +258,63 @@ msgstr "Aktív szabadság üzenet"
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "Email fiók \"{0}\" rendelkezik aktív szabadság üzenettel."
 
-#: js/Felamimail.js:504
+#: js/Felamimail.js:507
 msgid "New mails"
 msgstr "Új levelek"
 
-#: js/Felamimail.js:505
+#: js/Felamimail.js:508
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr "{0} új üzeneted van a {1} mappában ({2})."
 
-#: js/Felamimail.js:626
+#: js/Felamimail.js:629
 msgid "IMAP Credentials for {0}"
 msgstr "{0} IMAP belépési adatai"
 
-#: js/Felamimail.js:629
+#: js/Felamimail.js:632
 msgid "Credentials"
 msgstr "Belépési adatok"
 
-#: js/Felamimail.js:781 js/Felamimail.js:814
+#: js/Felamimail.js:784 js/Felamimail.js:817
 msgid "IMAP Error"
 msgstr "IMAP hiba"
 
-#: js/Felamimail.js:782
+#: js/Felamimail.js:785
 msgid "No connection to IMAP server."
 msgstr "Nincs kapcsolat az IMAP szerverrel."
 
-#: js/Felamimail.js:798
+#: js/Felamimail.js:801
 msgid "IMAP Credentials Error"
 msgstr "IMAP belépési adatok hibásak"
 
-#: js/Felamimail.js:799
+#: js/Felamimail.js:802
 msgid "Your email credentials are wrong. Please contact your administrator"
-msgstr ""
-"Az email belépési adataid rosszak. Lépj kapcsolatba a rendszergazdával."
+msgstr "Az email belépési adataid rosszak. Lépj kapcsolatba a rendszergazdával."
 
-#: js/Felamimail.js:815
-msgid ""
-"One of your folders was deleted or renamed by another client. Please update "
-"the folder list of this account."
-msgstr ""
-"Az egyik mappádat egy másik kliens törölte vagy átnevezte. Kérlek frissítsd "
-"a mappa listát."
+#: js/Felamimail.js:818
+msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
+msgstr "Az egyik mappádat egy másik kliens törölte vagy átnevezte. Kérlek frissítsd a mappa listát."
 
-#: js/Felamimail.js:844
+#: js/Felamimail.js:847
 msgid "SMTP Error"
 msgstr "SMTP hiba"
 
-#: js/Felamimail.js:845
+#: js/Felamimail.js:848
 msgid "No connection to SMTP server."
 msgstr "Nincs kapcsolat az SMTP szerverrel."
 
-#: js/Felamimail.js:853
+#: js/Felamimail.js:856
 msgid "Sieve Error"
 msgstr "Sieve hiba"
 
-#: js/Felamimail.js:854
+#: js/Felamimail.js:857
 msgid "No connection to Sieve server."
 msgstr "Nincs kapcsolat a Sieve szerverrel."
 
-#: js/Felamimail.js:862
+#: js/Felamimail.js:865
 msgid "Save Sieve Script Error"
 msgstr "Sieve script hiba mentése"
 
-#: js/Felamimail.js:863
+#: js/Felamimail.js:866
 msgid "Could not save script on Sieve server."
 msgstr "Nem menthető  script a Sieve szerveren."
 
@@ -502,12 +497,8 @@ msgid "Save Email Note"
 msgstr "Email Megjegyzésként mentése"
 
 #: js/MessageEditDialog.js:174
-msgid ""
-"Activate this toggle button to save the email text as a note attached to the "
-"recipient(s) contact(s)."
-msgstr ""
-"Aktiváld ezt a kapcsoló gombot, hogy az üzenet szövegét megjegyzésként "
-"mellékelje a címzett(ek) kapcsolatá(ai)hoz."
+msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
+msgstr "Aktiváld ezt a kapcsoló gombot, hogy az üzenet szövegét megjegyzésként mellékelje a címzett(ek) kapcsolatá(ai)hoz."
 
 #: js/MessageEditDialog.js:192
 msgid "Click to search for and add recipients from the Addressbook."
@@ -931,12 +922,8 @@ msgid "Email Update Interval"
 msgstr "Email frissítés intervalluma"
 
 #: Preference.php:111
-msgid ""
-"How often should Felamimail check for new Emails (in minutes). \"0\" means "
-"never."
-msgstr ""
-"Milyen gyakran keressen a Felamimail új emaileket (percben). \"0\" sohát "
-"jelent."
+msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
+msgstr "Milyen gyakran keressen a Felamimail új emaileket (percben). \"0\" sohát jelent."
 
 #: Preference.php:114
 msgid "Use in Addressbook"
@@ -990,80 +977,76 @@ msgstr "Összes piszkozat"
 msgid "All mails with the draft flag"
 msgstr "Összes levél piszkozat zászlóval"
 
-msgid "Fetching messages... ({0}% done)"
-msgstr "Üzenetek lekérdezése... ({0}% done) "
+#~ msgid "Fetching messages... ({0}% done)"
+#~ msgstr "Üzenetek lekérdezése... ({0}% done) "
 
-msgid "Quota unknown"
-msgstr "Kvóta ismeretlen"
+#~ msgid "Quota unknown"
+#~ msgstr "Kvóta ismeretlen"
 
-msgid "Re:"
-msgstr "Válasz:"
+#~ msgid "Re:"
+#~ msgstr "Válasz:"
 
-msgid ""
-"One of your folders was deleted from an other client, please reload you "
-"browser"
-msgstr ""
-"Egy a mappáid közül egy másik kliensen törölve lett, kérlek töltsd újra a "
-"böngésződet"
+#~ msgid "One of your folders was deleted from an other client, please reload you browser"
+#~ msgstr "Egy a mappáid közül egy másik kliensen törölve lett, kérlek töltsd újra a böngésződet"
 
-msgid "You got {0} new mail(s) in Folder {1}."
-msgstr "{0} új üzeneted van a {1} mappában."
+#~ msgid "You got {0} new mail(s) in Folder {1}."
+#~ msgstr "{0} új üzeneted van a {1} mappában."
 
-msgid "Recipients"
-msgstr "Címzettek"
+#~ msgid "Recipients"
+#~ msgstr "Címzettek"
 
 #, fuzzy
-msgid "wrote"
-msgstr "írt"
+#~ msgid "wrote"
+#~ msgstr "írt"
 
-msgid "Write"
-msgstr "Új üzenet"
+#~ msgid "Write"
+#~ msgstr "Új üzenet"
 
-msgid "Download"
-msgstr "Letöltés"
+#~ msgid "Download"
+#~ msgstr "Letöltés"
 
-msgid "Invalid drop target"
-msgstr "Érvénytelen áthelyezési cél"
+#~ msgid "Invalid drop target"
+#~ msgstr "Érvénytelen áthelyezési cél"
 
-msgid "Could not move message(s)."
-msgstr "Üzenetek áthelyezése sikertelen."
+#~ msgid "Could not move message(s)."
+#~ msgstr "Üzenetek áthelyezése sikertelen."
 
-msgid "Marked"
-msgstr "Megjelölt"
+#~ msgid "Marked"
+#~ msgstr "Megjelölt"
 
-msgid "Contains marked messages"
-msgstr "Megjelölt üzeneteket tartalmaz"
+#~ msgid "Contains marked messages"
+#~ msgstr "Megjelölt üzeneteket tartalmaz"
 
-msgid "Unread"
-msgstr "Olvasatlan"
+#~ msgid "Unread"
+#~ msgstr "Olvasatlan"
 
-msgid "Contains unread messages"
-msgstr "Olvasatlan üzeneteket tartalmaz"
+#~ msgid "Contains unread messages"
+#~ msgstr "Olvasatlan üzeneteket tartalmaz"
 
-msgid "Show Intelligent Folders"
-msgstr "Inteligens mappák mutatása"
+#~ msgid "Show Intelligent Folders"
+#~ msgstr "Inteligens mappák mutatása"
 
-msgid "No"
-msgstr "Nem"
+#~ msgid "No"
+#~ msgstr "Nem"
 
-msgid "Yes"
-msgstr "Igen"
+#~ msgid "Yes"
+#~ msgstr "Igen"
 
-msgid "Toggle Flag"
-msgstr "Megjelölés"
+#~ msgid "Toggle Flag"
+#~ msgstr "Megjelölés"
 
-msgid "Save contact note"
-msgstr "Kapcsolat megjegyzés mentése"
+#~ msgid "Save contact note"
+#~ msgstr "Kapcsolat megjegyzés mentése"
 
-msgid "Reload Folder List"
-msgstr "Mappa lista újratöltése"
+#~ msgid "Reload Folder List"
+#~ msgstr "Mappa lista újratöltése"
 
-msgid "Move to folder"
-msgstr "Áthelyezés mappába"
+#~ msgid "Move to folder"
+#~ msgstr "Áthelyezés mappába"
 
-msgid "Enabled"
-msgstr "Engedélyezve"
+#~ msgid "Enabled"
+#~ msgstr "Engedélyezve"
 
 #, fuzzy
-msgid "Argument"
-msgstr "Indok"
+#~ msgid "Argument"
+#~ msgstr "Indok"

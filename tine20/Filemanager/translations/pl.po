@@ -170,12 +170,8 @@ msgid "Upload Failed"
 msgstr "Przesyłanie zakończone niepowodzeniem"
 
 #: js/GridPanel.js:642 js/TreePanel.js:657
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
-"Plik nie został przesłany. Być może jego rozmiar jest za duży. Proszę "
-"powiadomić swojego administratora. Maksymalny rozmiar przesyłanego pliku: "
+msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
+msgstr "Plik nie został przesłany. Być może jego rozmiar jest za duży. Proszę powiadomić swojego administratora. Maksymalny rozmiar przesyłanego pliku: "
 
 #: js/GridPanel.js:797 js/TreePanel.js:767
 msgid "Putting files in this folder is not allowed!"
@@ -217,26 +213,26 @@ msgstr "Typ"
 msgid "path"
 msgstr "ścieżka"
 
-msgid "Do you want to replace the files?"
-msgstr "Czy chcesz zastąpić niniejsze pliki?"
+#~ msgid "Do you want to replace the files?"
+#~ msgstr "Czy chcesz zastąpić niniejsze pliki?"
 
-msgid "Updating {0} \"{1}\""
-msgstr "Aktualizuję {0} \"{1}\""
+#~ msgid "Updating {0} \"{1}\""
+#~ msgstr "Aktualizuję {0} \"{1}\""
 
-msgid "Confirm"
-msgstr "Potwierdź"
+#~ msgid "Confirm"
+#~ msgstr "Potwierdź"
 
-msgid "Do you really want to delete \"{0}\"?"
-msgstr "Czy na pewno chcesz usunąć \"{0}\"?"
+#~ msgid "Do you really want to delete \"{0}\"?"
+#~ msgstr "Czy na pewno chcesz usunąć \"{0}\"?"
 
-msgid "Deleting {0} \"{1}\""
-msgstr "Usuwanie {0} \"{1}\""
+#~ msgid "Deleting {0} \"{1}\""
+#~ msgstr "Usuwanie {0} \"{1}\""
 
-msgid "Creating {0}..."
-msgstr "Tworzenie {0}..."
+#~ msgid "Creating {0}..."
+#~ msgstr "Tworzenie {0}..."
 
-msgid "Deleting {0} "
-msgstr "Usuwanie {0}..."
+#~ msgid "Deleting {0} "
+#~ msgstr "Usuwanie {0}..."
 
-msgid "Dropping on this folder not allowed!"
-msgstr "Usunięcie niniejszego katalogu jest niedozwolone!"
+#~ msgid "Dropping on this folder not allowed!"
+#~ msgstr "Usunięcie niniejszego katalogu jest niedozwolone!"

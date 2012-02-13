@@ -120,8 +120,8 @@ msgstr ""
 msgid "Contracts created by myself"
 msgstr ""
 
-msgid "Shared Contracts"
-msgstr "已分享的合約"
+#~ msgid "Shared Contracts"
+#~ msgstr "已分享的合約"
 
 #~ msgid "Summary"
 #~ msgstr "總計"

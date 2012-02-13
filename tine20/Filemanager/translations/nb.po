@@ -171,9 +171,7 @@ msgid "Upload Failed"
 msgstr ""
 
 #: js/GridPanel.js:642 js/TreePanel.js:657
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
+msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
 msgstr ""
 
 #: js/GridPanel.js:797 js/TreePanel.js:767

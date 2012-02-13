@@ -257,65 +257,63 @@ msgstr "Message d'absence actuel"
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "L'alerte absence est activée sur le compte courriel \"{0}\"."
 
-#: js/Felamimail.js:504
+#: js/Felamimail.js:507
 msgid "New mails"
 msgstr "Nouveaux messages"
 
-#: js/Felamimail.js:505
+#: js/Felamimail.js:508
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr ""
 
-#: js/Felamimail.js:626
+#: js/Felamimail.js:629
 msgid "IMAP Credentials for {0}"
 msgstr "Authentification IMAP de {0}"
 
-#: js/Felamimail.js:629
+#: js/Felamimail.js:632
 msgid "Credentials"
 msgstr "Identifiants"
 
-#: js/Felamimail.js:781 js/Felamimail.js:814
+#: js/Felamimail.js:784 js/Felamimail.js:817
 msgid "IMAP Error"
 msgstr "Erreur IMAP"
 
-#: js/Felamimail.js:782
+#: js/Felamimail.js:785
 msgid "No connection to IMAP server."
 msgstr "Pas de connexion au serveur IMAP."
 
-#: js/Felamimail.js:798
+#: js/Felamimail.js:801
 msgid "IMAP Credentials Error"
 msgstr ""
 
-#: js/Felamimail.js:799
+#: js/Felamimail.js:802
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr ""
 
-#: js/Felamimail.js:815
-msgid ""
-"One of your folders was deleted or renamed by another client. Please update "
-"the folder list of this account."
+#: js/Felamimail.js:818
+msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
 msgstr ""
 
-#: js/Felamimail.js:844
+#: js/Felamimail.js:847
 msgid "SMTP Error"
 msgstr "Erreur SMTP"
 
-#: js/Felamimail.js:845
+#: js/Felamimail.js:848
 msgid "No connection to SMTP server."
 msgstr "Pas de connexion au serveur SMTP."
 
-#: js/Felamimail.js:853
+#: js/Felamimail.js:856
 msgid "Sieve Error"
 msgstr "Erreur Sieve"
 
-#: js/Felamimail.js:854
+#: js/Felamimail.js:857
 msgid "No connection to Sieve server."
 msgstr "Pas de connexion au serveur Sieve."
 
-#: js/Felamimail.js:862
+#: js/Felamimail.js:865
 msgid "Save Sieve Script Error"
 msgstr ""
 
-#: js/Felamimail.js:863
+#: js/Felamimail.js:866
 msgid "Could not save script on Sieve server."
 msgstr ""
 
@@ -498,18 +496,12 @@ msgid "Save Email Note"
 msgstr "Sauvegarder une note courriel"
 
 #: js/MessageEditDialog.js:174
-msgid ""
-"Activate this toggle button to save the email text as a note attached to the "
-"recipient(s) contact(s)."
-msgstr ""
-"Cocher cette case pour sauvegarder le texte du courriel en tant que note "
-"attachée aux destinataire(s)."
+msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
+msgstr "Cocher cette case pour sauvegarder le texte du courriel en tant que note attachée aux destinataire(s)."
 
 #: js/MessageEditDialog.js:192
 msgid "Click to search for and add recipients from the Addressbook."
-msgstr ""
-"Cliquer pour rechercher et ajouter des destinataires à partir du carnet "
-"d'adresses."
+msgstr "Cliquer pour rechercher et ajouter des destinataires à partir du carnet d'adresses."
 
 #: js/MessageEditDialog.js:304
 msgid "On {0}, {1} wrote"
@@ -929,11 +921,8 @@ msgid "Email Update Interval"
 msgstr "Intervalle de mise à jour des messages"
 
 #: Preference.php:111
-msgid ""
-"How often should Felamimail check for new Emails (in minutes). \"0\" means "
-"never."
-msgstr ""
-"Vérifier les nouveaux messages tous les (en minutes). \"0\" pour jamais."
+msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
+msgstr "Vérifier les nouveaux messages tous les (en minutes). \"0\" pour jamais."
 
 #: Preference.php:114
 msgid "Use in Addressbook"
@@ -957,8 +946,7 @@ msgstr "Confirmer la suppression"
 
 #: Preference.php:123
 msgid "Show confirmation dialog when deleting mails."
-msgstr ""
-"Afficher la fenêtre de confirmation lors de la suppression des courriels."
+msgstr "Afficher la fenêtre de confirmation lors de la suppression des courriels."
 
 #: Setup/Initialize.php:44
 msgid "All inboxes of my email accounts"
@@ -988,149 +976,137 @@ msgstr ""
 msgid "All mails with the draft flag"
 msgstr ""
 
-msgid "Fetching messages... ({0}% done)"
-msgstr "Récupération de {0}% des messages..."
+#~ msgid "Fetching messages... ({0}% done)"
+#~ msgstr "Récupération de {0}% des messages..."
 
-msgid "Re:"
-msgstr "Ré :"
+#~ msgid "Re:"
+#~ msgstr "Ré :"
 
-msgid ""
-"One of your folders was deleted from an other client, please reload you "
-"browser"
-msgstr ""
-"Un de vos dossiers a été supprimé par un autre client courriel, veuillez "
-"recharger votre navigateur"
+#~ msgid "One of your folders was deleted from an other client, please reload you browser"
+#~ msgstr "Un de vos dossiers a été supprimé par un autre client courriel, veuillez recharger votre navigateur"
 
-msgid "wrote"
-msgstr "a écrit"
+#~ msgid "wrote"
+#~ msgstr "a écrit"
 
-msgid "You got {0} new mail(s) in Folder {1}."
-msgstr "Vous avez {0} nouveau(x) courriel(s) dans le dossier {1}."
+#~ msgid "You got {0} new mail(s) in Folder {1}."
+#~ msgstr "Vous avez {0} nouveau(x) courriel(s) dans le dossier {1}."
 
-msgid "Write"
-msgstr "Écrire"
+#~ msgid "Write"
+#~ msgstr "Écrire"
 
-msgid "Invalid drop target"
-msgstr "Destination invalide invalide"
+#~ msgid "Invalid drop target"
+#~ msgstr "Destination invalide invalide"
 
-msgid "Could not move message(s)."
-msgstr "Impossible de déplacer le(s) message(s)."
+#~ msgid "Could not move message(s)."
+#~ msgstr "Impossible de déplacer le(s) message(s)."
 
-msgid "Marked"
-msgstr "Marqué"
+#~ msgid "Marked"
+#~ msgstr "Marqué"
 
-msgid "Contains marked messages"
-msgstr "Contient des messages marqués"
+#~ msgid "Contains marked messages"
+#~ msgstr "Contient des messages marqués"
 
-msgid "Unread"
-msgstr "Non-lu"
+#~ msgid "Unread"
+#~ msgstr "Non-lu"
 
-msgid "Contains unread messages"
-msgstr "Contient des messages non lus"
+#~ msgid "Contains unread messages"
+#~ msgstr "Contient des messages non lus"
 
-msgid "Show Intelligent Folders"
-msgstr "afficher les dossiers intelligents"
+#~ msgid "Show Intelligent Folders"
+#~ msgstr "afficher les dossiers intelligents"
 
-msgid "No"
-msgstr "Non"
+#~ msgid "No"
+#~ msgstr "Non"
 
-msgid "Yes"
-msgstr "Oui"
+#~ msgid "Yes"
+#~ msgstr "Oui"
 
-msgid "Toggle Flag"
-msgstr "Drapeau"
+#~ msgid "Toggle Flag"
+#~ msgstr "Drapeau"
 
-msgid "Recipients"
-msgstr "Destinataires"
+#~ msgid "Recipients"
+#~ msgstr "Destinataires"
 
-msgid "Save contact note"
-msgstr "Sauvegarder la note de contacte"
+#~ msgid "Save contact note"
+#~ msgstr "Sauvegarder la note de contacte"
 
-msgid "Error"
-msgstr "Erreur "
+#~ msgid "Error"
+#~ msgstr "Erreur "
 
-msgid "No Account configured"
-msgstr "Aucun compte configuré"
+#~ msgid "No Account configured"
+#~ msgstr "Aucun compte configuré"
 
-msgid "Re: "
-msgstr "Re: "
+#~ msgid "Re: "
+#~ msgstr "Re: "
 
-msgid "Original Message"
-msgstr "Message Original"
+#~ msgid "Original Message"
+#~ msgstr "Message Original"
 
-msgid "Fwd: "
-msgstr "Fwd: "
+#~ msgid "Fwd: "
+#~ msgstr "Fwd: "
 
-msgid "Some error occured while trying to update the messages."
-msgstr "Erreur lors du chargement des messages"
+#~ msgid "Some error occured while trying to update the messages."
+#~ msgstr "Erreur lors du chargement des messages"
 
-msgid "Totalcount"
-msgstr "Total"
+#~ msgid "Totalcount"
+#~ msgstr "Total"
 
-msgid "Cache"
-msgstr "Cache"
+#~ msgid "Cache"
+#~ msgstr "Cache"
 
-msgid "Supports \"has_children\""
-msgstr "Supporte \"has_children\""
+#~ msgid "Supports \"has_children\""
+#~ msgstr "Supporte \"has_children\""
 
-msgid "You got {0} new mail(s) in Folder "
-msgstr "{0} nouveau(x) message(s)"
+#~ msgid "You got {0} new mail(s) in Folder "
+#~ msgstr "{0} nouveau(x) message(s)"
 
-msgid "Create and edit email accounts"
-msgstr "Créer et éditer les comptes email"
+#~ msgid "Create and edit email accounts"
+#~ msgstr "Créer et éditer les comptes email"
 
-msgid "Upload Failed"
-msgstr "Échec du téléchargement"
+#~ msgid "Upload Failed"
+#~ msgstr "Échec du téléchargement"
 
-msgid ""
-"Could not upload attachment. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
-"Impossible d'ajouter la pièce jointe, le fichier est probablement trop gros. "
-"Veuillez contacter l'administrateur. Taille maximale autorisée:"
+#~ msgid "Could not upload attachment. Filesize could be too big. Please notify your Administrator. Max upload size: "
+#~ msgstr "Impossible d'ajouter la pièce jointe, le fichier est probablement trop gros. Veuillez contacter l'administrateur. Taille maximale autorisée:"
 
-msgid "Add Attachment"
-msgstr "ajouter une pièce jointe"
+#~ msgid "Add Attachment"
+#~ msgstr "ajouter une pièce jointe"
 
-msgid "Remove Attachment"
-msgstr "Supprimer la pièce jointe"
+#~ msgid "Remove Attachment"
+#~ msgstr "Supprimer la pièce jointe"
 
-msgid "User Email Account"
-msgstr "Compte Email utilisateur"
+#~ msgid "User Email Account"
+#~ msgstr "Compte Email utilisateur"
 
-msgid "Use user credentials for IMAP email account."
-msgstr "Utiliser les Identifiants utilisateur pour l'authentification IMAP."
+#~ msgid "Use user credentials for IMAP email account."
+#~ msgstr "Utiliser les Identifiants utilisateur pour l'authentification IMAP."
 
-msgid "Sort Folders (experimental)"
-msgstr "Tri des dossiers (expérimental)"
+#~ msgid "Sort Folders (experimental)"
+#~ msgstr "Tri des dossiers (expérimental)"
 
-msgid "Update Cache"
-msgstr "Mettre à jour le cache"
+#~ msgid "Update Cache"
+#~ msgstr "Mettre à jour le cache"
 
-msgid ""
-"Could not upload attachment. Filesize could be too big. Please notify your "
-"Administrator."
-msgstr ""
-"Impossible d'ajouter la pièce jointe, le fichier est probablement trop gros. "
-"Veuillez contacter l'administrateur"
+#~ msgid "Could not upload attachment. Filesize could be too big. Please notify your Administrator."
+#~ msgstr "Impossible d'ajouter la pièce jointe, le fichier est probablement trop gros. Veuillez contacter l'administrateur"
 
-msgid "Port"
-msgstr "Port"
+#~ msgid "Port"
+#~ msgstr "Port"
 
-msgid "All INBOXES of my email accounts"
-msgstr "Toutes les boites de réceptions de mes comptes courriels"
+#~ msgid "All INBOXES of my email accounts"
+#~ msgstr "Toutes les boites de réceptions de mes comptes courriels"
 
-msgid "All INBOXES"
-msgstr "Toutes les boites de réceptions"
+#~ msgid "All INBOXES"
+#~ msgstr "Toutes les boites de réceptions"
 
-msgid "Folder Selection"
-msgstr "Sélectionner un dossier"
+#~ msgid "Folder Selection"
+#~ msgstr "Sélectionner un dossier"
 
-msgid "Contacts"
-msgstr "Contacts"
+#~ msgid "Contacts"
+#~ msgstr "Contacts"
 
-msgid "Recipients (drag and drop contacts here to add)"
-msgstr "Destinataires (glisser/déposer des contacts pour les y ajouter) "
+#~ msgid "Recipients (drag and drop contacts here to add)"
+#~ msgstr "Destinataires (glisser/déposer des contacts pour les y ajouter) "
 
-msgid "Download"
-msgstr "Téléchargement"
+#~ msgid "Download"
+#~ msgstr "Téléchargement"

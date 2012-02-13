@@ -46,9 +46,7 @@ msgid "Fixed Calendars"
 msgstr "Fix Naptárak"
 
 #: Config.php:47
-msgid ""
-"Calendars always selected regardless of all filter parameters. A valid use "
-"case might be to force the display of an certain holiday calendar."
+msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
 msgstr ""
 
 #: Config.php:55
@@ -56,26 +54,16 @@ msgid "Attendee Status Available"
 msgstr "Résztvevők állapota elérhető"
 
 #: Config.php:57
-msgid ""
-"Possible event attendee status. Please note that additional attendee status "
-"might impact other calendar systems on export or syncronisation."
-msgstr ""
-"Lehetséges esemény résztvevő állapotok. Kérlek jegyezd meg, hogy a további "
-"résztvevő állapotok ütközhetnek a más naptár rendszerekkel exportálások vagy "
-"szinkronizáláskor."
+msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation."
+msgstr "Lehetséges esemény résztvevő állapotok. Kérlek jegyezd meg, hogy a további résztvevő állapotok ütközhetnek a más naptár rendszerekkel exportálások vagy szinkronizáláskor."
 
 #: Config.php:65
 msgid "Attendee Roles Available"
 msgstr "Résztvevő szabályok elérhetőek"
 
 #: Config.php:67
-msgid ""
-"Possible event attendee roles. Please note that additional attendee roles "
-"might impact other calendar systems on export or syncronisation."
-msgstr ""
-"Lehetséges esemény résztvevő szerepek. Kérlek jegyezd meg, hogy a további "
-"résztvevő szerepek ütközhetnek a más naptár rendszerekkel exportálások vagy "
-"szinkronizáláskor."
+msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation."
+msgstr "Lehetséges esemény résztvevő szerepek. Kérlek jegyezd meg, hogy a további résztvevő szerepek ütközhetnek a más naptár rendszerekkel exportálások vagy szinkronizáláskor."
 
 #: Controller/EventNotifications.php:242
 msgid "Alarm for event \"%1$s\" at %2$s"
@@ -123,42 +111,42 @@ msgid "%s's personal calendar"
 msgstr "%s személyes naptára"
 
 #: js/AddressbookGridPanelHook.js:33 js/AddressbookGridPanelHook.js:47
-#: js/Model.js:63 js/Model.js:362 js/SearchCombo.js:65
+#: js/Model.js:63 js/Model.js:362 js/SearchCombo.js:76
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Esemény"
 msgstr[1] "Események"
 
-#: js/AddToEventPanel.js:62
+#: js/AddToEventPanel.js:61
 msgid "Cancel"
 msgstr ""
 
-#: js/AddToEventPanel.js:70
+#: js/AddToEventPanel.js:69
 msgid "OK"
 msgstr ""
 
-#: js/AddToEventPanel.js:122
+#: js/AddToEventPanel.js:121
 msgid "Please choose the Event to add the contacts to"
 msgstr ""
 
-#: js/AddToEventPanel.js:243 js/AttendeeGridPanel.js:102
+#: js/AddToEventPanel.js:206 js/AttendeeGridPanel.js:102
 msgid "Role"
 msgstr "Szerep"
 
-#: js/AddToEventPanel.js:244
+#: js/AddToEventPanel.js:207
 msgid "Select Role"
 msgstr ""
 
-#: js/AddToEventPanel.js:253 js/AttendeeGridPanel.js:186
+#: js/AddToEventPanel.js:216 js/AttendeeGridPanel.js:186
 #: js/ContactEventsGridPanel.js:125 js/GridView.js:142 Model/Event.php:243
 msgid "Status"
 msgstr "Állapot"
 
-#: js/AddToEventPanel.js:254
+#: js/AddToEventPanel.js:217
 msgid "Select Status"
 msgstr ""
 
-#: js/AddToEventPanel.js:307
+#: js/AddToEventPanel.js:237
 msgid "Adding {0} Attendee to event"
 msgstr ""
 
@@ -263,19 +251,19 @@ msgstr "Kezdési idő"
 msgid "{0}, the {1}. of {2}"
 msgstr "{2} {1}., {0}"
 
-#: js/DaysView.js:670
+#: js/DaysView.js:674
 msgid "The summary must not be longer than 255 characters."
 msgstr ""
 
-#: js/DaysView.js:672
+#: js/DaysView.js:676
 msgid "The summary must have at least 1 character."
 msgstr ""
 
-#: js/DaysView.js:709
+#: js/DaysView.js:713
 msgid "Summary too Long"
 msgstr ""
 
-#: js/DaysView.js:719
+#: js/DaysView.js:723
 msgid "Summary too Short"
 msgstr ""
 
@@ -309,7 +297,7 @@ msgid "Organizer"
 msgstr "Szervező"
 
 #: js/EventEditDialog.js:127 js/GridView.js:118 js/Printer/Base.js:66
-#: js/SearchCombo.js:112
+#: js/SearchCombo.js:195
 msgid "whole day"
 msgstr "egész nap"
 
@@ -418,147 +406,137 @@ msgstr ""
 msgid "Loading events, please wait..."
 msgstr "Események betöltése, kérem várjion"
 
-#: js/MainScreenCenterPanel.js:83
-msgid "Edit {0}"
-msgid_plural "Edit {0}"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/MainScreenCenterPanel.js:151
+#: js/MainScreenCenterPanel.js:153
 msgid "Print Page"
 msgstr "Oldal nyomtatása"
 
-#: js/MainScreenCenterPanel.js:163
+#: js/MainScreenCenterPanel.js:165
 msgid "Sheet"
 msgstr "Naptár"
 
-#: js/MainScreenCenterPanel.js:177
+#: js/MainScreenCenterPanel.js:179
 msgid "Grid"
 msgstr "Táblázat"
 
-#: js/MainScreenCenterPanel.js:187
+#: js/MainScreenCenterPanel.js:189
 msgid "Day"
 msgstr "Nap"
 
-#: js/MainScreenCenterPanel.js:196 js/PagingToolbar.js:289
+#: js/MainScreenCenterPanel.js:198 js/PagingToolbar.js:300
 msgid "Week"
 msgstr "Hét"
 
-#: js/MainScreenCenterPanel.js:205
+#: js/MainScreenCenterPanel.js:207
 msgid "Month"
 msgstr "Hónap"
 
-#: js/MainScreenCenterPanel.js:435
+#: js/MainScreenCenterPanel.js:441
 msgid "Set my response"
 msgstr "Visszajelzésem beállítása"
 
-#: js/MainScreenCenterPanel.js:474
+#: js/MainScreenCenterPanel.js:480
 msgid "Updating event in the past"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:475
+#: js/MainScreenCenterPanel.js:481
 msgid "Update this event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:476
+#: js/MainScreenCenterPanel.js:482
 msgid "Do not update this event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:480
+#: js/MainScreenCenterPanel.js:486
 msgid "Creating event in the past"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:481
+#: js/MainScreenCenterPanel.js:487
 msgid "Create this event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:482
+#: js/MainScreenCenterPanel.js:488
 msgid "Do not create this event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:599
+#: js/MainScreenCenterPanel.js:609
 msgid "Update Event"
 msgstr "Esemény frissítése"
 
-#: js/MainScreenCenterPanel.js:603
+#: js/MainScreenCenterPanel.js:613
 msgid "Update this event only"
 msgstr "Mostani esemény frissítése"
 
-#: js/MainScreenCenterPanel.js:604
+#: js/MainScreenCenterPanel.js:614
 msgid "Update this and all future events"
 msgstr "Mostani és az összes jövőbeni esemény frissítése"
 
-#: js/MainScreenCenterPanel.js:605
+#: js/MainScreenCenterPanel.js:615
 msgid "Update whole series"
 msgstr "Egész sorozat frissítése"
 
-#: js/MainScreenCenterPanel.js:606
+#: js/MainScreenCenterPanel.js:616
 msgid "Update nothing"
 msgstr "Semmi frissítése"
 
-#: js/MainScreenCenterPanel.js:725
+#: js/MainScreenCenterPanel.js:745
 msgid "Please Change Selection"
 msgstr "Kérlek változtasd a kiválasztást"
 
-#: js/MainScreenCenterPanel.js:726
-msgid ""
-"Your selection contains recurring events. Recuring events must be deleted "
-"seperatly!"
-msgstr ""
-"A választásod ismétlődő eseményeket tartalmaz. Az ismétlődő eseményeket "
-"egyesével kell törölni!"
+#: js/MainScreenCenterPanel.js:746
+msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
+msgstr "A választásod ismétlődő eseményeket tartalmaz. Az ismétlődő eseményeket egyesével kell törölni!"
 
-#: js/MainScreenCenterPanel.js:740
+#: js/MainScreenCenterPanel.js:760
 msgid "Delete Event"
 msgstr "Esemény törlése"
 
-#: js/MainScreenCenterPanel.js:744
+#: js/MainScreenCenterPanel.js:764
 msgid "Delete this event only"
 msgstr "Csak a mostani esemény törlése"
 
-#: js/MainScreenCenterPanel.js:745
+#: js/MainScreenCenterPanel.js:765
 msgid "Delete this and all future events"
 msgstr "Mostani és az összes jövőbeni esemény törlése"
 
-#: js/MainScreenCenterPanel.js:746
+#: js/MainScreenCenterPanel.js:766
 msgid "Delete whole series"
 msgstr "Egész sorozat törlése"
 
-#: js/MainScreenCenterPanel.js:747
+#: js/MainScreenCenterPanel.js:767
 msgid "Delete nothing"
 msgstr "Semmi törlése"
 
-#: js/MainScreenCenterPanel.js:790
+#: js/MainScreenCenterPanel.js:816
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Biztosan törlöd ezt az eseményt?"
 msgstr[1] "Biztosan törlöd a(z) {0} kiválasztott eseményt?"
 
-#: js/MainScreenCenterPanel.js:913
+#: js/MainScreenCenterPanel.js:939
 msgid "Could not Print"
 msgstr "Nem lehet nyomtatni"
 
-#: js/MainScreenCenterPanel.js:913
+#: js/MainScreenCenterPanel.js:939
 msgid "Sorry, your current view does not support printing."
 msgstr "Bocsánat, a mostani nézeted nem támogatja a nyomtatást."
 
-#: js/MainScreenCenterPanel.js:1059
+#: js/MainScreenCenterPanel.js:1088
 msgid "Scheduling Conflict"
 msgstr "Ütemezési hiba"
 
-#: js/MainScreenCenterPanel.js:1061
+#: js/MainScreenCenterPanel.js:1090
 msgid "The following attendee are busy at the requested time:"
 msgstr "Az alábbi résztvevők elfoglaltak a kért időpontban:"
 
-#: js/MainScreenCenterPanel.js:1065
+#: js/MainScreenCenterPanel.js:1094
 msgid "Ignore Conflict"
 msgstr "Hiba figyelmen kívűl hagyása"
 
-#: js/MainScreenCenterPanel.js:1066
+#: js/MainScreenCenterPanel.js:1095
 msgid "Edit Event"
 msgstr "Esemény szerkesztése"
 
-#: js/MainScreenCenterPanel.js:1067
+#: js/MainScreenCenterPanel.js:1096
 msgid "Cancel this action"
 msgstr "Esemény megszakítása"
 
@@ -717,11 +695,15 @@ msgstr "Minden {0}. évben"
 msgid "of"
 msgstr "hónap"
 
-#: js/SearchCombo.js:57
+#: js/SearchCombo.js:67
+msgid "no events found"
+msgstr ""
+
+#: js/SearchCombo.js:68
 msgid "Searching..."
 msgstr ""
 
-#: js/SearchCombo.js:66
+#: js/SearchCombo.js:77
 msgid "Search Event"
 msgstr ""
 
@@ -734,10 +716,8 @@ msgid "unknown"
 msgstr "ismeretlen"
 
 #: Model/Attender.php:406
-msgid ""
-"This contact has been automatically added by the system as an event attender"
-msgstr ""
-"A rendszer ezt a kapcsolatot automatikusan hozzáadta, mint esemény résztvevő"
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr "A rendszer ezt a kapcsolatot automatikusan hozzáadta, mint esemény résztvevő"
 
 #: Model/Event.php:235
 msgid "Start"
@@ -804,14 +784,8 @@ msgid "Get Notification Emails"
 msgstr "Értesítő emailek fogadása"
 
 #: Preference.php:92
-msgid ""
-"The level of actions you want to be notified about. Please note that "
-"organizers will get notifications for all updates including attendee answers "
-"unless this preference is set to \"Never\""
-msgstr ""
-"Az esemény szintje, amiről értesítést szeretnél. Kérlek jegyezd meg, hogy a "
-"szervezők minden frissítésről (beleértve a résztvevők válaszait) értesítést "
-"kapnak ameddig a beállítás nem \"Soha\""
+msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
+msgstr "Az esemény szintje, amiről értesítést szeretnél. Kérlek jegyezd meg, hogy a szervezők minden frissítésről (beleértve a résztvevők válaszait) értesítést kapnak ameddig a beállítás nem \"Soha\""
 
 #: Preference.php:95
 msgid "Send Notifications Emails of own Actions"
@@ -933,33 +907,32 @@ msgstr "\"%2$s\" válasz tőle: %1$s"
 msgid "Event details"
 msgstr "Esemény részletei"
 
-msgid "forever"
-msgstr "örökre"
+#~ msgid "forever"
+#~ msgstr "örökre"
 
-msgid "Forever"
-msgstr "Örökre"
+#~ msgid "Forever"
+#~ msgstr "Örökre"
 
-msgid "Until"
-msgstr "Eddig:"
+#~ msgid "Until"
+#~ msgstr "Eddig:"
 
-msgid "Events I have not yet respondet to"
-msgstr "Események amire még jeleztem vissza"
+#~ msgid "Events I have not yet respondet to"
+#~ msgstr "Események amire még jeleztem vissza"
 
-msgid "Unknown calendar"
-msgstr "Ismeretlen naptár"
+#~ msgid "Unknown calendar"
+#~ msgstr "Ismeretlen naptár"
 
-msgid "unknown)"
-msgstr "ismeretlen)"
+#~ msgid "unknown)"
+#~ msgstr "ismeretlen)"
 
-msgid "Confirm Update of Series"
-msgstr "Sorozat frissítéseinek megerősítése"
+#~ msgid "Confirm Update of Series"
+#~ msgstr "Sorozat frissítéseinek megerősítése"
 
-msgid "Do you really want to update all events of this recurring event series?"
-msgstr "Biztosan frissíted az ismétlődő eseménysorozat összes eseményét?"
+#~ msgid "Do you really want to update all events of this recurring event series?"
+#~ msgstr "Biztosan frissíted az ismétlődő eseménysorozat összes eseményét?"
 
-msgid "Confirm Deletion of Series"
-msgstr "Erősitsd meg a sorozat törlését"
+#~ msgid "Confirm Deletion of Series"
+#~ msgstr "Erősitsd meg a sorozat törlését"
 
-msgid "Do you really want to delete all events of this recurring event series?"
-msgstr ""
-"Biztosan törlöd ennek az ismétlődő esemény sorozatnak az összes eseményét?"
+#~ msgid "Do you really want to delete all events of this recurring event series?"
+#~ msgstr "Biztosan törlöd ennek az ismétlődő esemény sorozatnak az összes eseményét?"

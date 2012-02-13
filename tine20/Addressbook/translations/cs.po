@@ -41,9 +41,7 @@ msgid "Contact duplicate check fields"
 msgstr ""
 
 #: Config.php:47
-msgid ""
-"These fields are checked when a new contact is created. If a record with the "
-"same data in the fields is found, a duplicate exception is thrown."
+msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
 msgstr ""
 
 #: Config.php:59
@@ -51,9 +49,7 @@ msgid "Contact salutations available"
 msgstr ""
 
 #: Config.php:61
-msgid ""
-"Possible contact salutations. Please note that additional values might "
-"impact other Addressbook systems on export or syncronisation."
+msgid "Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:69
@@ -195,9 +191,7 @@ msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
 #: Import/definitions/adb_tine_import_csv.xml:20
-msgid ""
-"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
+msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
 
 #: js/Addressbook.js:22
@@ -685,134 +679,134 @@ msgstr ""
 msgid "Internal Contacts"
 msgstr "Interní kontakty"
 
-msgid "Searching..."
-msgstr "Hledám..."
+#~ msgid "Searching..."
+#~ msgstr "Hledám..."
 
-msgid "Call contact"
-msgstr "Volat kontakt"
+#~ msgid "Call contact"
+#~ msgstr "Volat kontakt"
 
-msgid "Compose email"
-msgstr "Napsat email"
+#~ msgid "Compose email"
+#~ msgstr "Napsat email"
 
-msgid "Work"
-msgstr "Práce"
+#~ msgid "Work"
+#~ msgstr "Práce"
 
-msgid "Home"
-msgstr "Doma"
+#~ msgid "Home"
+#~ msgstr "Doma"
 
-msgid "Cell"
-msgstr "Mobil"
+#~ msgid "Cell"
+#~ msgstr "Mobil"
 
-msgid "Cell private"
-msgstr "Privátní mobil"
+#~ msgid "Cell private"
+#~ msgstr "Privátní mobil"
 
-msgid "Last Modified Time"
-msgstr "Naposledy změněno"
+#~ msgid "Last Modified Time"
+#~ msgstr "Naposledy změněno"
 
-msgid "addressbook"
-msgid_plural "addressbooks"
-msgstr[0] "adresář"
-msgstr[1] "adresáře"
-msgstr[2] "adresáře"
+#~ msgid "addressbook"
+#~ msgid_plural "addressbooks"
+#~ msgstr[0] "adresář"
+#~ msgstr[1] "adresáře"
+#~ msgstr[2] "adresáře"
 
-msgid "addressbooks"
-msgstr "adresáře"
+#~ msgid "addressbooks"
+#~ msgstr "adresáře"
 
-msgid "contacts"
-msgstr "kontakty"
+#~ msgid "contacts"
+#~ msgstr "kontakty"
 
-msgid "export as pdf"
-msgstr "exportovat do pdf"
+#~ msgid "export as pdf"
+#~ msgstr "exportovat do pdf"
 
-msgid "Loading Contact..."
-msgstr "Načítám kontakt..."
+#~ msgid "Loading Contact..."
+#~ msgstr "Načítám kontakt..."
 
-msgid "Please Wait"
-msgstr "Čekejte prosím"
+#~ msgid "Please Wait"
+#~ msgstr "Čekejte prosím"
 
-msgid "Add new contact"
-msgstr "Přidat nový kontakt"
+#~ msgid "Add new contact"
+#~ msgstr "Přidat nový kontakt"
 
-msgid "Edit Contact \"{0}\""
-msgstr "Editovat kontakt \"{0}\""
+#~ msgid "Edit Contact \"{0}\""
+#~ msgstr "Editovat kontakt \"{0}\""
 
-msgid "Please wait a moment..."
-msgstr "Počkejte prosím okamžik..."
+#~ msgid "Please wait a moment..."
+#~ msgstr "Počkejte prosím okamžik..."
 
-msgid "Saving Contact"
-msgstr "Ukládám kontakt"
+#~ msgid "Saving Contact"
+#~ msgstr "Ukládám kontakt"
 
-msgid "Failed"
-msgstr "Nepodařilo se"
+#~ msgid "Failed"
+#~ msgstr "Nepodařilo se"
 
-msgid "Could not save contact."
-msgstr "Nepodařilo se uložit kontakt."
+#~ msgid "Could not save contact."
+#~ msgstr "Nepodařilo se uložit kontakt."
 
-msgid "Either "
-msgstr "Buď"
+#~ msgid "Either "
+#~ msgstr "Buď"
 
-msgid "Start date is not valid"
-msgstr "Počáteční datum je neplatné"
+#~ msgid "Start date is not valid"
+#~ msgstr "Počáteční datum je neplatné"
 
-msgid "Errors"
-msgstr "Chyby"
+#~ msgid "Errors"
+#~ msgstr "Chyby"
 
-msgid "Please fix the errors noted."
-msgstr "Opravte prosím vyznačené chyby."
+#~ msgid "Please fix the errors noted."
+#~ msgstr "Opravte prosím vyznačené chyby."
 
-msgid "Deleting contact..."
-msgstr "Mažu kontakt..."
+#~ msgid "Deleting contact..."
+#~ msgstr "Mažu kontakt..."
 
-msgid "Some error occured while trying to delete the contact."
-msgstr "Při mazání kontaktu došlo k chybě."
+#~ msgid "Some error occured while trying to delete the contact."
+#~ msgstr "Při mazání kontaktu došlo k chybě."
 
-msgid "Custom Fields"
-msgstr "Volitelné položky"
+#~ msgid "Custom Fields"
+#~ msgstr "Volitelné položky"
 
-msgid "Link"
-msgid_plural "Links [%d]"
-msgstr[0] "Odkaz"
-msgstr[1] "Odkazy [%d]"
-msgstr[2] "Odkazů [%d]"
+#~ msgid "Link"
+#~ msgid_plural "Links [%d]"
+#~ msgstr[0] "Odkaz"
+#~ msgstr[1] "Odkazy [%d]"
+#~ msgstr[2] "Odkazů [%d]"
 
-msgid "manage shared folders"
-msgstr "spravovat sdílené složky"
+#~ msgid "manage shared folders"
+#~ msgstr "spravovat sdílené složky"
 
-msgid "Export"
-msgstr "Exportovat"
+#~ msgid "Export"
+#~ msgstr "Exportovat"
 
-msgid "Are you Sure?"
-msgstr "Jste si jistý(á)?"
+#~ msgid "Are you Sure?"
+#~ msgstr "Jste si jistý(á)?"
 
-msgid "Do you really want to delete the selected contact?"
-msgid_plural "Do you really want to delete the selected contacts?"
-msgstr[0] "Určitě chcete smazat vybraný kontakt?"
-msgstr[1] "Určitě chcete smazat vybrané kontakty?"
-msgstr[2] "Určitě chcete smazat vybrané kontakty?"
+#~ msgid "Do you really want to delete the selected contact?"
+#~ msgid_plural "Do you really want to delete the selected contacts?"
+#~ msgstr[0] "Určitě chcete smazat vybraný kontakt?"
+#~ msgstr[1] "Určitě chcete smazat vybrané kontakty?"
+#~ msgstr[2] "Určitě chcete smazat vybrané kontakty?"
 
-msgid "add contact"
-msgstr "přidat kontakt"
+#~ msgid "add contact"
+#~ msgstr "přidat kontakt"
 
-msgid "edit contact"
-msgstr "editovat kontakt"
+#~ msgid "edit contact"
+#~ msgstr "editovat kontakt"
 
-msgid "delete contact"
-msgid_plural "delete contacts"
-msgstr[0] "smazat kontakt"
-msgstr[1] "smazat kontakty"
-msgstr[2] "smazat kontakty"
+#~ msgid "delete contact"
+#~ msgid_plural "delete contacts"
+#~ msgstr[0] "smazat kontakt"
+#~ msgstr[1] "smazat kontakty"
+#~ msgstr[2] "smazat kontakty"
 
-msgid "Displaying contacts {0} - {1} of {2}"
-msgstr "Zobrazuji kontakty {0} - {1} z {2}"
+#~ msgid "Displaying contacts {0} - {1} of {2}"
+#~ msgstr "Zobrazuji kontakty {0} - {1} z {2}"
 
-msgid "No contacts to display"
-msgstr "Žádné kontakty ke zobrazení"
+#~ msgid "No contacts to display"
+#~ msgstr "Žádné kontakty ke zobrazení"
 
-msgid "Saved in"
-msgstr "Uloženo v"
+#~ msgid "Saved in"
+#~ msgstr "Uloženo v"
 
-msgid "History"
-msgstr "Historie"
+#~ msgid "History"
+#~ msgstr "Historie"
 
-msgid "Notes"
-msgstr "Poznámky"
+#~ msgid "Notes"
+#~ msgstr "Poznámky"

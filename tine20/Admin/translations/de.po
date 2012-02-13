@@ -31,9 +31,7 @@ msgstr "Benutzerkonten bearbeiten"
 
 #: Acl/Rights.php:190
 msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
-"Benutzer und Gruppen anlegen, Passwörter neu setzen, Benutzer zu Gruppen "
-"zuordnen."
+msgstr "Benutzer und Gruppen anlegen, Passwörter neu setzen, Benutzer zu Gruppen zuordnen."
 
 #: Acl/Rights.php:193
 msgid "manage applications"
@@ -48,11 +46,8 @@ msgid "manage roles"
 msgstr "Rollen bearbeiten"
 
 #: Acl/Rights.php:198
-msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"Benutzerkonten Rollen zuordnen, Rollen anlegen und bearbeiten, Rollen "
-"Applikations-Rechte zuweisen."
+msgid "add and edit roles, add new members to roles, add application rights to roles"
+msgstr "Benutzerkonten Rollen zuordnen, Rollen anlegen und bearbeiten, Rollen Applikations-Rechte zuweisen."
 
 #: Acl/Rights.php:201
 msgid "manage shared tags"
@@ -76,8 +71,7 @@ msgstr "Container bearbeiten"
 
 #: Acl/Rights.php:210
 msgid "add, delete and edit containers and manage container grants"
-msgstr ""
-"Container anlegen, löschen und ändern, sowie die Container-Rechte setzen."
+msgstr "Container anlegen, löschen und ändern, sowie die Container-Rechte setzen."
 
 #: Acl/Rights.php:213
 msgid "view access log"
@@ -127,11 +121,11 @@ msgstr "Container ansehen"
 msgid "view personal and shared containers"
 msgstr "Persönlichen und gemeinsame Container ansehen"
 
-#: Controller/Container.php:187
+#: Controller/Container.php:199
 msgid "Your container has been changed"
 msgstr "Ihr persönlicher Container wurde geändert"
 
-#: Controller/Container.php:188
+#: Controller/Container.php:200
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr "Ihr Container wurde von %1$s geändert %2$sNotiz: %3$s"
 
@@ -477,9 +471,7 @@ msgstr[1] "Gruppe"
 
 #: js/customfield/EditDialog.js:648
 msgid "Customfield already exists. Please choose another name."
-msgstr ""
-"Es gibt bereits ein Zusatzfeld mit diesem Namen. Bitte wählen Sie einen "
-"anderen Namen."
+msgstr "Es gibt bereits ein Zusatzfeld mit diesem Namen. Bitte wählen Sie einen anderen Namen."
 
 #: js/customfield/GridPanel.js:131 js/Groups.js:52 js/Roles.js:47
 #: js/Tags.js:64
@@ -488,8 +480,7 @@ msgstr "Bestätigen"
 
 #: js/customfield/GridPanel.js:131
 msgid "Restart application to apply new cusomfields?"
-msgstr ""
-"Wollen Sie die Applikation zum Anwenden der neuen Zusatzfelder neu starten?"
+msgstr "Wollen Sie die Applikation zum Anwenden der neuen Zusatzfelder neu starten?"
 
 #: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
 msgid "Please wait"
@@ -738,8 +729,7 @@ msgstr "Verwendung:&#160;"
 
 #: js/user/EditDialog.js:187
 msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr ""
-"Domäne ist nicht erlaubt. Bitte prüfen Sie Ihre SMTP-Domänen-Konfiguration."
+msgstr "Domäne ist nicht erlaubt. Bitte prüfen Sie Ihre SMTP-Domänen-Konfiguration."
 
 #: js/user/EditDialog.js:234 js/user/EditDialog.js:237
 #: js/user/EditDialog.js:688
@@ -1025,103 +1015,101 @@ msgid_plural "Email Users"
 msgstr[0] "Email Benutzer"
 msgstr[1] "Email Benutzer"
 
-msgid "Quota (MB)"
-msgstr "Quota (MB)"
+#~ msgid "Quota (MB)"
+#~ msgstr "Quota (MB)"
 
-msgid "Current Mail Size"
-msgstr "Momentane Mail Größe"
+#~ msgid "Current Mail Size"
+#~ msgstr "Momentane Mail Größe"
 
-msgid "Sieve Quota"
-msgstr "Sieve Quota"
+#~ msgid "Sieve Quota"
+#~ msgstr "Sieve Quota"
 
-msgid "Sieve Size"
-msgstr "Sieve Größe"
+#~ msgid "Sieve Size"
+#~ msgstr "Sieve Größe"
 
-msgid "Aliases"
-msgstr "Aliase"
+#~ msgid "Aliases"
+#~ msgstr "Aliase"
 
-msgid "Forwards"
-msgstr "Weiterleitungen"
+#~ msgid "Forwards"
+#~ msgstr "Weiterleitungen"
 
-msgid "User memberships"
-msgstr "Mitgliedschaften"
+#~ msgid "User memberships"
+#~ msgstr "Mitgliedschaften"
 
-msgid "Transfering {0}..."
-msgstr "Übertrage {0}..."
+#~ msgid "Transfering {0}..."
+#~ msgstr "Übertrage {0}..."
 
-msgid "Loading Tag..."
-msgstr "Lade Tag..."
+#~ msgid "Loading Tag..."
+#~ msgstr "Lade Tag..."
 
-msgid "Please Wait"
-msgstr "Bitte warten"
+#~ msgid "Please Wait"
+#~ msgstr "Bitte warten"
 
-msgid "Do you really want to delete the selected access log entries?"
-msgstr ""
-"Möchten Sie die markierten Einträge aus dem Zugriffsprotokoll wirklich "
-"löschen?"
+#~ msgid "Do you really want to delete the selected access log entries?"
+#~ msgstr "Möchten Sie die markierten Einträge aus dem Zugriffsprotokoll wirklich löschen?"
 
-msgid "delete entry"
-msgstr "Eintrag löschen"
+#~ msgid "delete entry"
+#~ msgstr "Eintrag löschen"
 
-msgid "select all"
-msgstr "Alles auswählen"
+#~ msgid "select all"
+#~ msgstr "Alles auswählen"
 
-msgid "Display from:"
-msgstr "Anzeigen von:"
+#~ msgid "Display from:"
+#~ msgstr "Anzeigen von:"
 
-msgid "to:"
-msgstr "bis:"
+#~ msgid "to:"
+#~ msgstr "bis:"
 
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Zeige Zugriffsprotokolleinträge {0} - {1} von {2}"
+#~ msgid "Displaying access log entries {0} - {1} of {2}"
+#~ msgstr "Zeige Zugriffsprotokolleinträge {0} - {1} von {2}"
 
-msgid "No access log entries to display"
-msgstr "Kein(e) Zugriffslog(s) anzuzeigen"
+#~ msgid "No access log entries to display"
+#~ msgstr "Kein(e) Zugriffslog(s) anzuzeigen"
 
-msgid "Account ID"
-msgstr "Benutzer-ID"
+#~ msgid "Account ID"
+#~ msgstr "Benutzer-ID"
 
-msgid "Loading Role..."
-msgstr "Lade Rolle..."
+#~ msgid "Loading Role..."
+#~ msgstr "Lade Rolle..."
 
-msgid "Do you really want to delete the selected account(s)?"
-msgstr "Möchten Sie den/die markierten Benutzer wirklich löschen?"
+#~ msgid "Do you really want to delete the selected account(s)?"
+#~ msgstr "Möchten Sie den/die markierten Benutzer wirklich löschen?"
 
-msgid "Deleting account(s)..."
-msgstr "Lösche Benutzer..."
+#~ msgid "Deleting account(s)..."
+#~ msgstr "Lösche Benutzer..."
 
-msgid "Some error occurred while trying to delete the account(s)."
-msgstr "Beim Löschen des/r Benutzer(s) traten Fehler auf."
+#~ msgid "Some error occurred while trying to delete the account(s)."
+#~ msgstr "Beim Löschen des/r Benutzer(s) traten Fehler auf."
 
-msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "Zeige Benutzer {0} - {1} von {2}"
+#~ msgid "Displaying accounts {0} - {1} of {2}"
+#~ msgstr "Zeige Benutzer {0} - {1} von {2}"
 
-msgid "No accounts to display"
-msgstr "Keine Benutzer anzuzeigen"
+#~ msgid "No accounts to display"
+#~ msgstr "Keine Benutzer anzuzeigen"
 
-msgid "add account"
-msgstr "Benutzer hinzufügen"
+#~ msgid "add account"
+#~ msgstr "Benutzer hinzufügen"
 
-msgid "edit account"
-msgstr "Benutzer bearbeiten"
+#~ msgid "edit account"
+#~ msgstr "Benutzer bearbeiten"
 
-msgid "delete account"
-msgstr "Benutzer löschen "
+#~ msgid "delete account"
+#~ msgstr "Benutzer löschen "
 
-msgid "Deleting group..."
-msgstr "Gruppen löschen."
+#~ msgid "Deleting group..."
+#~ msgstr "Gruppen löschen."
 
-msgid "Email UID"
-msgstr "Email UID"
+#~ msgid "Email UID"
+#~ msgstr "Email UID"
 
-msgid "Email GID"
-msgstr "Email GID"
+#~ msgid "Email GID"
+#~ msgstr "Email GID"
 
-msgid "Email Username"
-msgstr "Email Benutzername"
+#~ msgid "Email Username"
+#~ msgstr "Email Benutzername"
 
-msgid "Current Sieve Size"
-msgstr "Momentane Sieve Größe"
+#~ msgid "Current Sieve Size"
+#~ msgstr "Momentane Sieve Größe"
 
-msgid "enter searchfilter"
-msgstr "Suchbegriff eingeben"
+#~ msgid "enter searchfilter"
+#~ msgstr "Suchbegriff eingeben"

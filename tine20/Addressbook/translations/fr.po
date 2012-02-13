@@ -38,9 +38,7 @@ msgid "Contact duplicate check fields"
 msgstr ""
 
 #: Config.php:47
-msgid ""
-"These fields are checked when a new contact is created. If a record with the "
-"same data in the fields is found, a duplicate exception is thrown."
+msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
 msgstr ""
 
 #: Config.php:59
@@ -48,9 +46,7 @@ msgid "Contact salutations available"
 msgstr ""
 
 #: Config.php:61
-msgid ""
-"Possible contact salutations. Please note that additional values might "
-"impact other Addressbook systems on export or syncronisation."
+msgid "Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:69
@@ -192,9 +188,7 @@ msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
 #: Import/definitions/adb_tine_import_csv.xml:20
-msgid ""
-"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
+msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
 
 #: js/Addressbook.js:22
@@ -680,93 +674,93 @@ msgstr ""
 msgid "Internal Contacts"
 msgstr "Contacts internes"
 
-msgid "Searching..."
-msgstr "Recherche en cours..."
+#~ msgid "Searching..."
+#~ msgstr "Recherche en cours..."
 
-msgid "Call contact"
-msgstr "Appeler ce contact"
+#~ msgid "Call contact"
+#~ msgstr "Appeler ce contact"
 
-msgid "Compose email"
-msgstr "Écrire un courriel"
+#~ msgid "Compose email"
+#~ msgstr "Écrire un courriel"
 
-msgid "Work"
-msgstr "Bureau"
+#~ msgid "Work"
+#~ msgstr "Bureau"
 
-msgid "Home"
-msgstr "Domicile"
+#~ msgid "Home"
+#~ msgstr "Domicile"
 
-msgid "Cell"
-msgstr "Portable"
+#~ msgid "Cell"
+#~ msgstr "Portable"
 
-msgid "Cell private"
-msgstr "Portable personnel"
+#~ msgid "Cell private"
+#~ msgstr "Portable personnel"
 
-msgid "Last Modified Time"
-msgstr "Modifié le"
+#~ msgid "Last Modified Time"
+#~ msgstr "Modifié le"
 
-msgid "addressbook"
-msgid_plural "addressbooks"
-msgstr[0] "carnet d'adresses"
-msgstr[1] "carnets d'adresses"
+#~ msgid "addressbook"
+#~ msgid_plural "addressbooks"
+#~ msgstr[0] "carnet d'adresses"
+#~ msgstr[1] "carnets d'adresses"
 
-msgid "addressbooks"
-msgstr "carnets d'adresses"
+#~ msgid "addressbooks"
+#~ msgstr "carnets d'adresses"
 
-msgid "contacts"
-msgstr "contacts"
+#~ msgid "contacts"
+#~ msgstr "contacts"
 
-msgid "export as pdf"
-msgstr "exporter en pdf"
+#~ msgid "export as pdf"
+#~ msgstr "exporter en pdf"
 
-msgid "Loading Contact..."
-msgstr "Chargement du contact..."
+#~ msgid "Loading Contact..."
+#~ msgstr "Chargement du contact..."
 
-msgid "Please Wait"
-msgstr "Veuillez patienter"
+#~ msgid "Please Wait"
+#~ msgstr "Veuillez patienter"
 
-msgid "Add new contact"
-msgstr "Nouveau contact"
+#~ msgid "Add new contact"
+#~ msgstr "Nouveau contact"
 
-msgid "Edit Contact \"{0}\""
-msgstr "Éditer \"{0}\""
+#~ msgid "Edit Contact \"{0}\""
+#~ msgstr "Éditer \"{0}\""
 
-msgid "Please wait a moment..."
-msgstr "Veuillez patienter un instant..."
+#~ msgid "Please wait a moment..."
+#~ msgstr "Veuillez patienter un instant..."
 
-msgid "Saving Contact"
-msgstr "Sauvegarde du contact"
+#~ msgid "Saving Contact"
+#~ msgstr "Sauvegarde du contact"
 
-msgid "Failed"
-msgstr "Échoué"
+#~ msgid "Failed"
+#~ msgstr "Échoué"
 
-msgid "Could not save contact."
-msgstr "Erreur d'enregistrement du contact."
+#~ msgid "Could not save contact."
+#~ msgstr "Erreur d'enregistrement du contact."
 
-msgid "Either "
-msgstr "soit"
+#~ msgid "Either "
+#~ msgstr "soit"
 
-msgid "Start date is not valid"
-msgstr "Date de début non valide"
+#~ msgid "Start date is not valid"
+#~ msgstr "Date de début non valide"
 
-msgid "Errors"
-msgstr "Erreurs"
+#~ msgid "Errors"
+#~ msgstr "Erreurs"
 
-msgid "Please fix the errors noted."
-msgstr "Veuillez corriger les erreurs spécifiées."
+#~ msgid "Please fix the errors noted."
+#~ msgstr "Veuillez corriger les erreurs spécifiées."
 
-msgid "Deleting contact..."
-msgstr "Suppression du contact..."
+#~ msgid "Deleting contact..."
+#~ msgstr "Suppression du contact..."
 
-msgid "Some error occured while trying to delete the contact."
-msgstr "Erreur lors de la suppression du contact."
+#~ msgid "Some error occured while trying to delete the contact."
+#~ msgstr "Erreur lors de la suppression du contact."
 
-msgid "Custom Fields"
-msgstr "Champs personnalisés"
+#~ msgid "Custom Fields"
+#~ msgstr "Champs personnalisés"
 
-msgid "Link"
-msgid_plural "Links [%d]"
-msgstr[0] "lien"
-msgstr[1] "liens [%d]"
+#~ msgid "Link"
+#~ msgid_plural "Links [%d]"
+#~ msgstr[0] "lien"
+#~ msgstr[1] "liens [%d]"
 
-msgid "Export"
-msgstr "Exporter"
+#~ msgid "Export"
+#~ msgstr "Exporter"

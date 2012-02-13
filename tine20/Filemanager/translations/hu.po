@@ -171,12 +171,8 @@ msgid "Upload Failed"
 msgstr "Feltöltés sikertelen"
 
 #: js/GridPanel.js:642 js/TreePanel.js:657
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
-"File nem tölthető fel. Fileméret túl nagy lehet. Kérlek értesítsd a "
-"rendszergazdádat. Max. feltöltési méret: "
+msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
+msgstr "File nem tölthető fel. Fileméret túl nagy lehet. Kérlek értesítsd a rendszergazdádat. Max. feltöltési méret: "
 
 #: js/GridPanel.js:797 js/TreePanel.js:767
 msgid "Putting files in this folder is not allowed!"

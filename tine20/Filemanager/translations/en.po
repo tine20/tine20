@@ -1,217 +1,213 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 12:09+0000\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
-"X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
+"X-Poedit-Country: GB\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: Acl/Rights.php:97
 msgid "manage shared folders"
-msgstr ""
+msgstr "manage shared folders"
 
 #: Acl/Rights.php:98
 msgid "Create new shared folders"
-msgstr ""
+msgstr "Create new shared folders"
 
 #: Controller/Node.php:163
 msgid "My folders"
-msgstr ""
+msgstr "My folders"
 
 #: Controller/Node.php:170
 msgid "Shared folders"
-msgstr ""
+msgstr "Shared folders"
 
 #: Controller/Node.php:177
 msgid "Other users folders"
-msgstr ""
+msgstr "Other users folders"
 
 #: Controller.php:95
 #, python-format
 msgid "%s's personal files"
-msgstr ""
+msgstr "%s's personal files"
 
 #: js/Filemanager.js:26
 msgid "Filemanager"
-msgstr ""
+msgstr "Filemanager"
 
 #: js/Filemanager.js:64
 msgid "Files already exists"
-msgstr ""
+msgstr "Files already exists"
 
 #: js/Filemanager.js:64
 msgid "Do you want to replace the following file(s)?"
-msgstr ""
+msgstr "Do you want to replace the following file(s)?"
 
 #: js/Filemanager.js:98
 msgid "Failure on create folder"
-msgstr ""
+msgstr "Failure on create folder"
 
 #: js/Filemanager.js:99
 msgid "Item with this name already exists!"
-msgstr ""
+msgstr "Item with this name already exists!"
 
 #: js/GridContextMenu.js:36
 msgid "Please enter the new name of the {0}:"
-msgstr ""
+msgstr "Please enter the new name of the {0}:"
 
 #: js/GridContextMenu.js:42
 msgid "Not renamed {0}"
-msgstr ""
+msgstr "Not renamed {0}"
 
 #: js/GridContextMenu.js:42 js/GridPanel.js:495
 msgid "You have to supply a {0} name!"
-msgstr ""
+msgstr "You have to supply a {0} name!"
 
 #: js/GridContextMenu.js:146 js/GridPanel.js:539
 msgid "Do you really want to delete the following files?"
-msgstr ""
+msgstr "Do you really want to delete the following files?"
 
 #: js/GridPanel.js:131
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: js/GridPanel.js:138
 msgid "Size"
-msgstr ""
+msgstr "Size"
 
 #: js/GridPanel.js:145 js/Model.js:524
 msgid "Contenttype"
-msgstr ""
+msgstr "Contenttype"
 
 #: js/GridPanel.js:153
 msgid "Folder"
-msgstr ""
+msgstr "Folder"
 
 #: js/GridPanel.js:162
 msgid "Revision"
-msgstr ""
+msgstr "Revision"
 
 #: js/GridPanel.js:177 js/Model.js:525
 msgid "Creation Time"
-msgstr ""
+msgstr "Creation Time"
 
 #: js/GridPanel.js:185
 msgid "Created By"
-msgstr ""
+msgstr "Created By"
 
 #: js/GridPanel.js:192
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Last Modified Time"
 
 #: js/GridPanel.js:199
 msgid "Last Modified By"
-msgstr ""
+msgstr "Last Modified By"
 
 #: js/GridPanel.js:233
 msgid "Show closed"
-msgstr ""
+msgstr "Show closed"
 
 #: js/GridPanel.js:277
 msgid "Upload"
-msgstr ""
+msgstr "Upload"
 
 #: js/GridPanel.js:303
 msgid "Create Folder"
-msgstr ""
+msgstr "Create Folder"
 
 #: js/GridPanel.js:314
 msgid "Folder Up"
-msgstr ""
+msgstr "Folder Up"
 
 #: js/GridPanel.js:325
 msgid "Save locally"
-msgstr ""
+msgstr "Save locally"
 
 #: js/GridPanel.js:336 js/GridPanel.js:337 js/GridPanel.js:339
 msgid "Delete"
-msgstr ""
+msgstr "Delete"
 
 #: js/GridPanel.js:349 js/GridPanel.js:350 js/GridPanel.js:352
 msgid "Rename"
-msgstr ""
+msgstr "Rename"
 
 #: js/GridPanel.js:360
 msgid "Pause upload"
-msgstr ""
+msgstr "Pause upload"
 
 #: js/GridPanel.js:367
 msgid "Resume upload"
-msgstr ""
+msgstr "Resume upload"
 
 #: js/GridPanel.js:488 js/Model.js:40
 msgid "user file folder"
-msgstr ""
+msgstr "user file folder"
 
 #: js/GridPanel.js:490
 msgid "New {0}"
-msgstr ""
+msgstr "New {0}"
 
 #: js/GridPanel.js:490
 msgid "Please enter the name of the new {0}:"
-msgstr ""
+msgstr "Please enter the name of the new {0}:"
 
 #: js/GridPanel.js:495
 msgid "No {0} added"
-msgstr ""
+msgstr "No {0} added"
 
 #: js/GridPanel.js:641 js/GridPanel.js:796 js/TreePanel.js:656
 #: js/TreePanel.js:766
 msgid "Upload Failed"
-msgstr ""
+msgstr "Upload Failed"
 
 #: js/GridPanel.js:642 js/TreePanel.js:657
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
+msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
+msgstr "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
 
 #: js/GridPanel.js:797 js/TreePanel.js:767
 msgid "Putting files in this folder is not allowed!"
-msgstr ""
+msgstr "Putting files in this folder is not allowed!"
 
 #: js/Model.js:37
 msgid "user file"
-msgstr ""
+msgstr "user file"
 
 #: js/Model.js:38
 msgid "user files"
-msgstr ""
+msgstr "user files"
 
 #: js/Model.js:41
 msgid "user file folders"
-msgstr ""
+msgstr "user file folders"
 
 #: js/Model.js:267 js/Model.js:283
 msgid "Copying data .. {0}"
-msgstr ""
+msgstr "Copying data .. {0}"
 
 #: js/Model.js:270 js/Model.js:285
 msgid "Moving data .. {0}"
-msgstr ""
+msgstr "Moving data .. {0}"
 
 #: js/Model.js:289
 msgid "Please wait"
-msgstr ""
+msgstr "Please wait"
 
 #: js/Model.js:522
 msgid "Quick search"
-msgstr ""
+msgstr "Quick search"
 
 #: js/Model.js:523
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: js/PathFilterModel.js:50
 msgid "path"
-msgstr ""
+msgstr "path"

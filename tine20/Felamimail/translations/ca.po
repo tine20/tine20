@@ -257,65 +257,63 @@ msgstr ""
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr ""
 
-#: js/Felamimail.js:504
+#: js/Felamimail.js:507
 msgid "New mails"
 msgstr "Nous correus"
 
-#: js/Felamimail.js:505
+#: js/Felamimail.js:508
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr ""
 
-#: js/Felamimail.js:626
+#: js/Felamimail.js:629
 msgid "IMAP Credentials for {0}"
 msgstr "Credencials IMAP per a {0}"
 
-#: js/Felamimail.js:629
+#: js/Felamimail.js:632
 msgid "Credentials"
 msgstr "Credencials"
 
-#: js/Felamimail.js:781 js/Felamimail.js:814
+#: js/Felamimail.js:784 js/Felamimail.js:817
 msgid "IMAP Error"
 msgstr ""
 
-#: js/Felamimail.js:782
+#: js/Felamimail.js:785
 msgid "No connection to IMAP server."
 msgstr "Sense connexió amb el servidor IMAP."
 
-#: js/Felamimail.js:798
+#: js/Felamimail.js:801
 msgid "IMAP Credentials Error"
 msgstr ""
 
-#: js/Felamimail.js:799
+#: js/Felamimail.js:802
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr ""
 
-#: js/Felamimail.js:815
-msgid ""
-"One of your folders was deleted or renamed by another client. Please update "
-"the folder list of this account."
+#: js/Felamimail.js:818
+msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
 msgstr ""
 
-#: js/Felamimail.js:844
+#: js/Felamimail.js:847
 msgid "SMTP Error"
 msgstr ""
 
-#: js/Felamimail.js:845
+#: js/Felamimail.js:848
 msgid "No connection to SMTP server."
 msgstr ""
 
-#: js/Felamimail.js:853
+#: js/Felamimail.js:856
 msgid "Sieve Error"
 msgstr ""
 
-#: js/Felamimail.js:854
+#: js/Felamimail.js:857
 msgid "No connection to Sieve server."
 msgstr ""
 
-#: js/Felamimail.js:862
+#: js/Felamimail.js:865
 msgid "Save Sieve Script Error"
 msgstr ""
 
-#: js/Felamimail.js:863
+#: js/Felamimail.js:866
 msgid "Could not save script on Sieve server."
 msgstr ""
 
@@ -498,9 +496,7 @@ msgid "Save Email Note"
 msgstr ""
 
 #: js/MessageEditDialog.js:174
-msgid ""
-"Activate this toggle button to save the email text as a note attached to the "
-"recipient(s) contact(s)."
+msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
 msgstr ""
 
 #: js/MessageEditDialog.js:192
@@ -918,21 +914,15 @@ msgstr "Compte de correu electrònic per defecte"
 
 #: Preference.php:107
 msgid "The default email account to use when sending mails."
-msgstr ""
-"Compte de correu electrònic a utilitzar per defecte per a l'enviament de "
-"correus."
+msgstr "Compte de correu electrònic a utilitzar per defecte per a l'enviament de correus."
 
 #: Preference.php:110
 msgid "Email Update Interval"
 msgstr "Interval d'actualització de correu electrònic"
 
 #: Preference.php:111
-msgid ""
-"How often should Felamimail check for new Emails (in minutes). \"0\" means "
-"never."
-msgstr ""
-"Amb quina periodicitat hauria el Felamimail de comprovar si hi ha nous "
-"correus electrònics (en minuts). \"0\" significa mai."
+msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
+msgstr "Amb quina periodicitat hauria el Felamimail de comprovar si hi ha nous correus electrònics (en minuts). \"0\" significa mai."
 
 #: Preference.php:114
 msgid "Use in Addressbook"
@@ -940,8 +930,7 @@ msgstr "Utilitza-ho a la llibreta d'adreces"
 
 #: Preference.php:115
 msgid "Compose Emails from the Addressbook with Felamimail."
-msgstr ""
-"Redacta correus electrònics des de la llibreta d'adreces amb el Felamimail."
+msgstr "Redacta correus electrònics des de la llibreta d'adreces amb el Felamimail."
 
 #: Preference.php:118
 msgid "Use for NOTES"
@@ -987,74 +976,74 @@ msgstr ""
 msgid "All mails with the draft flag"
 msgstr ""
 
-msgid "wrote"
-msgstr "ha escrit"
+#~ msgid "wrote"
+#~ msgstr "ha escrit"
 
-msgid "You got {0} new mail(s) in Folder {1}."
-msgstr "Heu rebut {0} nou(s) correu(s) a la carpeta {1}."
+#~ msgid "You got {0} new mail(s) in Folder {1}."
+#~ msgstr "Heu rebut {0} nou(s) correu(s) a la carpeta {1}."
 
-msgid "Write"
-msgstr "Escriu"
+#~ msgid "Write"
+#~ msgstr "Escriu"
 
-msgid "Invalid drop target"
-msgstr "la destinació no és correcta"
+#~ msgid "Invalid drop target"
+#~ msgstr "la destinació no és correcta"
 
-msgid "Could not move message(s)."
-msgstr "No s'ha(n) pogut moure el(s) missatge(s)."
+#~ msgid "Could not move message(s)."
+#~ msgstr "No s'ha(n) pogut moure el(s) missatge(s)."
 
-msgid "Marked"
-msgstr "Marcat"
+#~ msgid "Marked"
+#~ msgstr "Marcat"
 
-msgid "Contains marked messages"
-msgstr "Conté missatges marcats"
+#~ msgid "Contains marked messages"
+#~ msgstr "Conté missatges marcats"
 
-msgid "Unread"
-msgstr "No llegit"
+#~ msgid "Unread"
+#~ msgstr "No llegit"
 
-msgid "Contains unread messages"
-msgstr "Conté missatges no llegits"
+#~ msgid "Contains unread messages"
+#~ msgstr "Conté missatges no llegits"
 
-msgid "Show Intelligent Folders"
-msgstr "Mostra les carpetes inteligents"
+#~ msgid "Show Intelligent Folders"
+#~ msgstr "Mostra les carpetes inteligents"
 
-msgid "No"
-msgstr "No"
+#~ msgid "No"
+#~ msgstr "No"
 
-msgid "Yes"
-msgstr "Sí"
+#~ msgid "Yes"
+#~ msgstr "Sí"
 
-msgid "Toggle Flag"
-msgstr "Commuta bandera"
+#~ msgid "Toggle Flag"
+#~ msgstr "Commuta bandera"
 
-msgid "Recipients"
-msgstr "Destinataris"
+#~ msgid "Recipients"
+#~ msgstr "Destinataris"
 
-msgid "Save contact note"
-msgstr "Desa la nota de contacte"
+#~ msgid "Save contact note"
+#~ msgstr "Desa la nota de contacte"
 
-msgid "Error"
-msgstr "Error"
+#~ msgid "Error"
+#~ msgstr "Error"
 
-msgid "No Account configured"
-msgstr "No hi ha cap compte configurat"
+#~ msgid "No Account configured"
+#~ msgstr "No hi ha cap compte configurat"
 
-msgid "Re: "
-msgstr "Re:"
+#~ msgid "Re: "
+#~ msgstr "Re:"
 
-msgid "Original Message"
-msgstr "Missatge original"
+#~ msgid "Original Message"
+#~ msgstr "Missatge original"
 
-msgid "Fwd: "
-msgstr "Fwd:"
+#~ msgid "Fwd: "
+#~ msgstr "Fwd:"
 
-msgid "Sort Folders"
-msgstr "Ordena les carpetes"
+#~ msgid "Sort Folders"
+#~ msgstr "Ordena les carpetes"
 
-msgid "Some error occured while trying to update the messages."
-msgstr "S'ha produït un error quan s'intentava actualitzar els missatges."
+#~ msgid "Some error occured while trying to update the messages."
+#~ msgstr "S'ha produït un error quan s'intentava actualitzar els missatges."
 
-msgid "Totalcount"
-msgstr "Recompte total"
+#~ msgid "Totalcount"
+#~ msgstr "Recompte total"
 
-msgid "Cache"
-msgstr "Cau"
+#~ msgid "Cache"
+#~ msgstr "Cau"

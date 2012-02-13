@@ -258,65 +258,63 @@ msgstr ""
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr ""
 
-#: js/Felamimail.js:504
+#: js/Felamimail.js:507
 msgid "New mails"
 msgstr "Nové zprávy"
 
-#: js/Felamimail.js:505
+#: js/Felamimail.js:508
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr ""
 
-#: js/Felamimail.js:626
+#: js/Felamimail.js:629
 msgid "IMAP Credentials for {0}"
 msgstr "IMAP přihlášovací údaje pro {0}"
 
-#: js/Felamimail.js:629
+#: js/Felamimail.js:632
 msgid "Credentials"
 msgstr "Přihlašovací údaje"
 
-#: js/Felamimail.js:781 js/Felamimail.js:814
+#: js/Felamimail.js:784 js/Felamimail.js:817
 msgid "IMAP Error"
 msgstr "IMAP chyba"
 
-#: js/Felamimail.js:782
+#: js/Felamimail.js:785
 msgid "No connection to IMAP server."
 msgstr "Není spojení na IMAP server."
 
-#: js/Felamimail.js:798
+#: js/Felamimail.js:801
 msgid "IMAP Credentials Error"
 msgstr ""
 
-#: js/Felamimail.js:799
+#: js/Felamimail.js:802
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr ""
 
-#: js/Felamimail.js:815
-msgid ""
-"One of your folders was deleted or renamed by another client. Please update "
-"the folder list of this account."
+#: js/Felamimail.js:818
+msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
 msgstr ""
 
-#: js/Felamimail.js:844
+#: js/Felamimail.js:847
 msgid "SMTP Error"
 msgstr "SMTP chyba"
 
-#: js/Felamimail.js:845
+#: js/Felamimail.js:848
 msgid "No connection to SMTP server."
 msgstr "Není spojení na SMTP server."
 
-#: js/Felamimail.js:853
+#: js/Felamimail.js:856
 msgid "Sieve Error"
 msgstr ""
 
-#: js/Felamimail.js:854
+#: js/Felamimail.js:857
 msgid "No connection to Sieve server."
 msgstr ""
 
-#: js/Felamimail.js:862
+#: js/Felamimail.js:865
 msgid "Save Sieve Script Error"
 msgstr ""
 
-#: js/Felamimail.js:863
+#: js/Felamimail.js:866
 msgid "Could not save script on Sieve server."
 msgstr ""
 
@@ -500,9 +498,7 @@ msgid "Save Email Note"
 msgstr ""
 
 #: js/MessageEditDialog.js:174
-msgid ""
-"Activate this toggle button to save the email text as a note attached to the "
-"recipient(s) contact(s)."
+msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
 msgstr ""
 
 #: js/MessageEditDialog.js:192
@@ -929,12 +925,8 @@ msgid "Email Update Interval"
 msgstr "Interval aktualizace emailu"
 
 #: Preference.php:111
-msgid ""
-"How often should Felamimail check for new Emails (in minutes). \"0\" means "
-"never."
-msgstr ""
-"Jak často má Felamimail kontrolovat nové zprávy (v minutách). \"0\" znamená "
-"nikdy."
+msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
+msgstr "Jak často má Felamimail kontrolovat nové zprávy (v minutách). \"0\" znamená nikdy."
 
 #: Preference.php:114
 msgid "Use in Addressbook"
@@ -988,120 +980,116 @@ msgstr ""
 msgid "All mails with the draft flag"
 msgstr ""
 
-msgid "Fetching messages... ({0}% done)"
-msgstr "Stahuji zprávy... ({0}% hotovo)"
+#~ msgid "Fetching messages... ({0}% done)"
+#~ msgstr "Stahuji zprávy... ({0}% hotovo)"
 
-msgid "wrote"
-msgstr "napsal(a)"
+#~ msgid "wrote"
+#~ msgstr "napsal(a)"
 
-msgid "You got {0} new mail(s) in Folder {1}."
-msgstr "Máte {0} nových zrpáv ve složce {1}."
+#~ msgid "You got {0} new mail(s) in Folder {1}."
+#~ msgstr "Máte {0} nových zrpáv ve složce {1}."
 
-msgid "Write"
-msgstr "Napsat"
+#~ msgid "Write"
+#~ msgstr "Napsat"
 
-msgid "Invalid drop target"
-msgstr "Neplatný cíl pro přesun"
+#~ msgid "Invalid drop target"
+#~ msgstr "Neplatný cíl pro přesun"
 
-msgid "Could not move message(s)."
-msgstr "Nepodařilo se přesunout zprávy."
+#~ msgid "Could not move message(s)."
+#~ msgstr "Nepodařilo se přesunout zprávy."
 
-msgid "Marked"
-msgstr "Označené"
+#~ msgid "Marked"
+#~ msgstr "Označené"
 
-msgid "Contains marked messages"
-msgstr "Obsahuje označené zprávy"
+#~ msgid "Contains marked messages"
+#~ msgstr "Obsahuje označené zprávy"
 
-msgid "Unread"
-msgstr "Nepřečtené"
+#~ msgid "Unread"
+#~ msgstr "Nepřečtené"
 
-msgid "Contains unread messages"
-msgstr "Obsahuje nepřečtené zprávy"
+#~ msgid "Contains unread messages"
+#~ msgstr "Obsahuje nepřečtené zprávy"
 
-msgid "Show Intelligent Folders"
-msgstr "Zobrazit inteligentní složky"
+#~ msgid "Show Intelligent Folders"
+#~ msgstr "Zobrazit inteligentní složky"
 
-msgid "No"
-msgstr "Ne"
+#~ msgid "No"
+#~ msgstr "Ne"
 
-msgid "Yes"
-msgstr "Ano"
+#~ msgid "Yes"
+#~ msgstr "Ano"
 
-msgid "Toggle Flag"
-msgstr "Překlopit příznak"
+#~ msgid "Toggle Flag"
+#~ msgstr "Překlopit příznak"
 
-msgid "Recipients"
-msgstr "Příjemci"
+#~ msgid "Recipients"
+#~ msgstr "Příjemci"
 
-msgid "Save contact note"
-msgstr "Uložit poznámku kontaktu"
+#~ msgid "Save contact note"
+#~ msgstr "Uložit poznámku kontaktu"
 
-msgid "Error"
-msgstr "Chyba"
+#~ msgid "Error"
+#~ msgstr "Chyba"
 
-msgid "No Account configured"
-msgstr "Žádný účet není nakonfigurován"
+#~ msgid "No Account configured"
+#~ msgstr "Žádný účet není nakonfigurován"
 
-msgid "Re: "
-msgstr "Re:"
+#~ msgid "Re: "
+#~ msgstr "Re:"
 
-msgid "Original Message"
-msgstr "Původní zpráva"
+#~ msgid "Original Message"
+#~ msgstr "Původní zpráva"
 
-msgid "Fwd: "
-msgstr "Fwd:"
+#~ msgid "Fwd: "
+#~ msgstr "Fwd:"
 
-msgid "Supports \"has_children\""
-msgstr "Podporuje \"has_children\""
+#~ msgid "Supports \"has_children\""
+#~ msgstr "Podporuje \"has_children\""
 
-msgid "Sort Folders (experimental)"
-msgstr "Řadit složky (experimentální)"
+#~ msgid "Sort Folders (experimental)"
+#~ msgstr "Řadit složky (experimentální)"
 
-msgid "Upload Failed"
-msgstr "Upload se nezdařil"
+#~ msgid "Upload Failed"
+#~ msgstr "Upload se nezdařil"
 
-msgid ""
-"Could not upload attachment. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
-"Nepodařilo se uploadovat přílohu. Možná je soubor příliš velký. Kontaktujte "
-"prosím svého administrátora."
+#~ msgid "Could not upload attachment. Filesize could be too big. Please notify your Administrator. Max upload size: "
+#~ msgstr "Nepodařilo se uploadovat přílohu. Možná je soubor příliš velký. Kontaktujte prosím svého administrátora."
 
-msgid "Add Attachment"
-msgstr "Připojit přílohu"
+#~ msgid "Add Attachment"
+#~ msgstr "Připojit přílohu"
 
-msgid "Remove Attachment"
-msgstr "Odebrat přílohu"
+#~ msgid "Remove Attachment"
+#~ msgstr "Odebrat přílohu"
 
-msgid "Some error occured while trying to update the messages."
-msgstr "Při aktualizaci zpráv došlo k chybě."
+#~ msgid "Some error occured while trying to update the messages."
+#~ msgstr "Při aktualizaci zpráv došlo k chybě."
 
-msgid "Totalcount"
-msgstr "Celkem"
+#~ msgid "Totalcount"
+#~ msgstr "Celkem"
 
-msgid "Cache"
-msgstr "Cache"
+#~ msgid "Cache"
+#~ msgstr "Cache"
 
-msgid "User Email Account"
-msgstr "Poštovní účet uživatele"
+#~ msgid "User Email Account"
+#~ msgstr "Poštovní účet uživatele"
 
-msgid "Use user credentials for IMAP email account."
-msgstr "Použít přihlašovací údaje uživatele pro IMAP účet."
+#~ msgid "Use user credentials for IMAP email account."
+#~ msgstr "Použít přihlašovací údaje uživatele pro IMAP účet."
 
-msgid "Initializing folder cache ..."
-msgstr "Inicializuji vyrovnávací paměť složek..."
+#~ msgid "Initializing folder cache ..."
+#~ msgstr "Inicializuji vyrovnávací paměť složek..."
 
-msgid "Port"
-msgstr "Port"
+#~ msgid "Port"
+#~ msgstr "Port"
 
-msgid "Failed to connect"
-msgstr "Spojení se nezdařilo"
+#~ msgid "Failed to connect"
+#~ msgstr "Spojení se nezdařilo"
 
-msgid "Could not connect to account."
-msgstr "Připojení k účtu se nezdařilo."
+#~ msgid "Could not connect to account."
+#~ msgstr "Připojení k účtu se nezdařilo."
 
-msgid "Felamimail"
-msgstr "Pošta"
+#~ msgid "Felamimail"
+#~ msgstr "Pošta"
 
-msgid "Write New Mail"
-msgstr "Napsat novou zprávu"
+#~ msgid "Write New Mail"
+#~ msgstr "Napsat novou zprávu"

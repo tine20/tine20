@@ -77,7 +77,7 @@ msgstr ""
 msgid "Percent"
 msgstr ""
 
-#: js/GridPanel.js:186 js/TaskEditDialog.js:237 js/Tasks.js:151
+#: js/GridPanel.js:186 js/TaskEditDialog.js:238 js/Tasks.js:151
 #: js/Tasks.js:211 Model/Task.php:191
 msgid "Status"
 msgid_plural "Status"
@@ -88,7 +88,7 @@ msgstr[1] ""
 msgid "Creation Time"
 msgstr ""
 
-#: js/GridPanel.js:209 js/TaskEditDialog.js:242 Setup/Initialize.php:35
+#: js/GridPanel.js:209 js/TaskEditDialog.js:243 Setup/Initialize.php:35
 #: Setup/Update/Release5.php:66
 msgid "Completed"
 msgstr ""
@@ -97,7 +97,7 @@ msgstr ""
 msgid "Responsible"
 msgstr ""
 
-#: js/GridPanel.js:265
+#: js/GridPanel.js:259
 msgid "Show closed"
 msgstr ""
 
@@ -109,19 +109,23 @@ msgstr ""
 msgid "Due date"
 msgstr ""
 
-#: js/TaskEditDialog.js:215
+#: js/TaskEditDialog.js:215 Model/Task.php:188
+msgid "Organizer"
+msgstr ""
+
+#: js/TaskEditDialog.js:216
 msgid "Add Responsible ..."
 msgstr ""
 
-#: js/TaskEditDialog.js:223
+#: js/TaskEditDialog.js:224
 msgid "Notes"
 msgstr ""
 
-#: js/TaskEditDialog.js:224
+#: js/TaskEditDialog.js:225
 msgid "Enter description..."
 msgstr ""
 
-#: js/TaskEditDialog.js:230
+#: js/TaskEditDialog.js:231
 msgid "Percentage"
 msgstr ""
 
@@ -167,10 +171,6 @@ msgstr ""
 
 #: Model/Task.php:187
 msgid "Due"
-msgstr ""
-
-#: Model/Task.php:188
-msgid "Organizer"
 msgstr ""
 
 #: Model/Task.php:189

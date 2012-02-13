@@ -946,14 +946,14 @@ msgstr "Téléphones"
 msgid "Templates"
 msgstr "Modèles"
 
-msgid "redirection"
-msgstr "renvoi"
+#~ msgid "redirection"
+#~ msgstr "renvoi"
 
-msgid "all"
-msgstr "tous"
+#~ msgid "all"
+#~ msgstr "tous"
 
-msgid "busy"
-msgstr "occupés"
+#~ msgid "busy"
+#~ msgstr "occupés"
 
-msgid "time"
-msgstr "heure"
+#~ msgid "time"
+#~ msgstr "heure"

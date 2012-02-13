@@ -81,13 +81,8 @@ msgid "Delete all existing users and groups"
 msgstr "Smazat všechny stávající uživatele a skupiny"
 
 #: js/AuthenticationPanel.js:127
-msgid ""
-"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
-"and Roles. Do you really want to switch the accounts storage backend to "
-"LDAP ?"
-msgstr ""
-"Přechod z SQL na LDAP smaže všechny stávající uživatelské účty, skupiny a "
-"role. Opravdu chcete změnit backend pro uložení účtů na LDAP?"
+msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
+msgstr "Přechod z SQL na LDAP smaže všechny stávající uživatelské účty, skupiny a role. Opravdu chcete změnit backend pro uložení účtů na LDAP?"
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
 #: js/ConfigManagerPanel.js:132 js/EmailPanel.js:146
@@ -293,9 +288,7 @@ msgstr "Nastavení přesměrování"
 
 #: js/AuthenticationPanel.js:570
 msgid "Redirect Url (redirect to login screen if empty)"
-msgstr ""
-"URL pro přesměrování (ponecháte-li prázdné, přesměrovat na přihlašovací "
-"obrazovku)"
+msgstr "URL pro přesměrování (ponecháte-li prázdné, přesměrovat na přihlašovací obrazovku)"
 
 #: js/AuthenticationPanel.js:574
 msgid "Redirect Always (if No, only redirect after logout)"
@@ -560,12 +553,8 @@ msgid "Performing Environment Checks..."
 msgstr "Provádím test prostředí"
 
 #: js/EnvCheckGridPanel.js:130
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
-msgstr ""
-"Nenalezeno {0}. Zkuste prosím změnit kritéria filtru, volby zobrazení nebo "
-"{1} ve kterém hledáte."
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "Nenalezeno {0}. Zkuste prosím změnit kritéria filtru, volby zobrazení nebo {1} ve kterém hledáte."
 
 #: js/EnvCheckGridPanel.js:160
 msgid "Check"
@@ -638,29 +627,29 @@ msgstr "Ujednání o ochraně soukromí"
 msgid "Accept Terms and Conditions"
 msgstr "Přijmout podmínky"
 
-msgid "Informations"
-msgstr "Informace"
+#~ msgid "Informations"
+#~ msgstr "Informace"
 
-msgid "Session files"
-msgstr "Soubory relací"
+#~ msgid "Session files"
+#~ msgstr "Soubory relací"
 
-msgid "Session Files Path"
-msgstr "Cesta pro soubory relací"
+#~ msgid "Session Files Path"
+#~ msgstr "Cesta pro soubory relací"
 
-msgid "Default account name"
-msgstr "Název výchozího účtu"
+#~ msgid "Default account name"
+#~ msgstr "Název výchozího účtu"
 
-msgid "Shit"
-msgstr "Zatraceně"
+#~ msgid "Shit"
+#~ msgstr "Zatraceně"
 
-msgid "Where are the backup tapes"
-msgstr "Kde jsou zálohovací pásky"
+#~ msgid "Where are the backup tapes"
+#~ msgstr "Kde jsou zálohovací pásky"
 
-msgid "You need to correct the red marked fields before config could be saved"
-msgstr "Než bude konfigurace uložena, musíte opravit červeně označená pole"
+#~ msgid "You need to correct the red marked fields before config could be saved"
+#~ msgstr "Než bude konfigurace uložena, musíte opravit červeně označená pole"
 
-msgid "Transfering Configuration..."
-msgstr "Přesouvám konfiguraci..."
+#~ msgid "Transfering Configuration..."
+#~ msgstr "Přesouvám konfiguraci..."
 
-msgid "Check config"
-msgstr "Zkontrolovat konfiguraci"
+#~ msgid "Check config"
+#~ msgstr "Zkontrolovat konfiguraci"

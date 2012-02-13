@@ -46,11 +46,8 @@ msgid "manage roles"
 msgstr "behandle roller"
 
 #: Acl/Rights.php:198
-msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"legg til og redgier roller, legg til nye medlemmer til roller, legg til "
-"program rettigheter til roller"
+msgid "add and edit roles, add new members to roles, add application rights to roles"
+msgstr "legg til og redgier roller, legg til nye medlemmer til roller, legg til program rettigheter til roller"
 
 #: Acl/Rights.php:201
 msgid "manage shared tags"
@@ -124,11 +121,11 @@ msgstr ""
 msgid "view personal and shared containers"
 msgstr ""
 
-#: Controller/Container.php:187
+#: Controller/Container.php:199
 msgid "Your container has been changed"
 msgstr ""
 
-#: Controller/Container.php:188
+#: Controller/Container.php:200
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr ""
 
@@ -1018,95 +1015,95 @@ msgid_plural "Email Users"
 msgstr[0] "E-post Bruker"
 msgstr[1] "E-Post Brukere"
 
-msgid "Current Mail Size"
-msgstr "Gjeldende E-post Størrelse"
+#~ msgid "Current Mail Size"
+#~ msgstr "Gjeldende E-post Størrelse"
 
-msgid "Sieve Quota"
-msgstr "Sieve Kvote"
+#~ msgid "Sieve Quota"
+#~ msgstr "Sieve Kvote"
 
-msgid "Aliases"
-msgstr "Aliaser"
+#~ msgid "Aliases"
+#~ msgstr "Aliaser"
 
-msgid "Forwards"
-msgstr "Vidresendinger"
+#~ msgid "Forwards"
+#~ msgstr "Vidresendinger"
 
-msgid "Loading Tag..."
-msgstr "Laster Overskrift..."
+#~ msgid "Loading Tag..."
+#~ msgstr "Laster Overskrift..."
 
-msgid "Please Wait"
-msgstr "Vennligst Vent"
+#~ msgid "Please Wait"
+#~ msgstr "Vennligst Vent"
 
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "Vil du virkelig slette valgte tilgangs logg poster?"
+#~ msgid "Do you really want to delete the selected access log entries?"
+#~ msgstr "Vil du virkelig slette valgte tilgangs logg poster?"
 
-msgid "delete entry"
-msgstr "slett post"
+#~ msgid "delete entry"
+#~ msgstr "slett post"
 
-msgid "select all"
-msgstr "velg alle"
+#~ msgid "select all"
+#~ msgstr "velg alle"
 
-msgid "Display from:"
-msgstr "Vis fra:"
+#~ msgid "Display from:"
+#~ msgstr "Vis fra:"
 
-msgid "to:"
-msgstr "til:"
+#~ msgid "to:"
+#~ msgstr "til:"
 
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Viser tilgangs logg poster {0} - {1} of {2}"
+#~ msgid "Displaying access log entries {0} - {1} of {2}"
+#~ msgstr "Viser tilgangs logg poster {0} - {1} of {2}"
 
-msgid "No access log entries to display"
-msgstr "Ingen tilgangs logg poster å vise"
+#~ msgid "No access log entries to display"
+#~ msgstr "Ingen tilgangs logg poster å vise"
 
-msgid "Account ID"
-msgstr "Konto ID"
+#~ msgid "Account ID"
+#~ msgstr "Konto ID"
 
-msgid "Loading Role..."
-msgstr "Laster Rolle..."
+#~ msgid "Loading Role..."
+#~ msgstr "Laster Rolle..."
 
-msgid "Do you really want to delete the selected account(s)?"
-msgstr "Vil du virkelig slette den valgte kontoen(e)?"
+#~ msgid "Do you really want to delete the selected account(s)?"
+#~ msgstr "Vil du virkelig slette den valgte kontoen(e)?"
 
-msgid "Deleting account(s)..."
-msgstr "Sletter konto(er)..."
+#~ msgid "Deleting account(s)..."
+#~ msgstr "Sletter konto(er)..."
 
-msgid "Some error occurred while trying to delete the account(s)."
-msgstr "En feil oppstå ved forsøk på å slette kontoen(e)."
+#~ msgid "Some error occurred while trying to delete the account(s)."
+#~ msgstr "En feil oppstå ved forsøk på å slette kontoen(e)."
 
-msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "Viser konto {0} - {1} of {2}"
+#~ msgid "Displaying accounts {0} - {1} of {2}"
+#~ msgstr "Viser konto {0} - {1} of {2}"
 
-msgid "No accounts to display"
-msgstr "Ingen kontoer å vise"
+#~ msgid "No accounts to display"
+#~ msgstr "Ingen kontoer å vise"
 
-msgid "add account"
-msgstr "legg til konto"
+#~ msgid "add account"
+#~ msgstr "legg til konto"
 
-msgid "edit account"
-msgstr "redigere konto"
+#~ msgid "edit account"
+#~ msgstr "redigere konto"
 
-msgid "delete account"
-msgstr "slette konto"
+#~ msgid "delete account"
+#~ msgstr "slette konto"
 
-msgid "Deleting group..."
-msgstr "Sletter gruppe..."
+#~ msgid "Deleting group..."
+#~ msgstr "Sletter gruppe..."
 
-msgid "Email UID"
-msgstr "E-post UID"
+#~ msgid "Email UID"
+#~ msgstr "E-post UID"
 
-msgid "Email GID"
-msgstr "E-post GID"
+#~ msgid "Email GID"
+#~ msgstr "E-post GID"
 
-msgid "Email Username"
-msgstr "E-post Brukernavn"
+#~ msgid "Email Username"
+#~ msgstr "E-post Brukernavn"
 
-msgid "Current Sieve Size"
-msgstr "Gjeldende Sieve Størrelse"
+#~ msgid "Current Sieve Size"
+#~ msgstr "Gjeldende Sieve Størrelse"
 
-msgid "enter searchfilter"
-msgstr "skriv inn søkefilter"
+#~ msgid "enter searchfilter"
+#~ msgstr "skriv inn søkefilter"
 
-msgid "remove account"
-msgstr "fjern konto"
+#~ msgid "remove account"
+#~ msgstr "fjern konto"
 
-msgid "Role members"
-msgstr "Rolle medlemmer"
+#~ msgid "Role members"
+#~ msgstr "Rolle medlemmer"

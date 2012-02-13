@@ -81,14 +81,8 @@ msgid "Delete all existing users and groups"
 msgstr "Cancella tutte gli utenti e i gruppi esistenti"
 
 #: js/AuthenticationPanel.js:127
-msgid ""
-"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
-"and Roles. Do you really want to switch the accounts storage backend to "
-"LDAP ?"
-msgstr ""
-"Il passaggio da SQL a LDAP cancellerà tutti gli Account Utente esistenti, i "
-"Gruppi e i Ruoli. Vuoi veramente migrare il sistema di memorizzazione "
-"account a LDAP?"
+msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
+msgstr "Il passaggio da SQL a LDAP cancellerà tutti gli Account Utente esistenti, i Gruppi e i Ruoli. Vuoi veramente migrare il sistema di memorizzazione account a LDAP?"
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
 #: js/ConfigManagerPanel.js:132 js/EmailPanel.js:146
@@ -559,12 +553,8 @@ msgid "Performing Environment Checks..."
 msgstr "Esecuzione Controlli di Ambiente..."
 
 #: js/EnvCheckGridPanel.js:130
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
-msgstr ""
-"Nessun {0} trovato. Per favore prova a cambiare i criteri di filtro, "
-"visualizza le opzioni o il {1} che stai cercando."
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "Nessun {0} trovato. Per favore prova a cambiare i criteri di filtro, visualizza le opzioni o il {1} che stai cercando."
 
 #: js/EnvCheckGridPanel.js:160
 msgid "Check"
@@ -636,20 +626,20 @@ msgstr "Informativa della Privacy"
 msgid "Accept Terms and Conditions"
 msgstr "Accetto i Termini e le Condizioni"
 
-msgid "Informations"
-msgstr "Informazioni"
+#~ msgid "Informations"
+#~ msgstr "Informazioni"
 
-msgid "Session files"
-msgstr "File Sessione"
+#~ msgid "Session files"
+#~ msgstr "File Sessione"
 
-msgid "Session Files Path"
-msgstr "Percorso File Sessione"
+#~ msgid "Session Files Path"
+#~ msgstr "Percorso File Sessione"
 
-msgid "Domain"
-msgstr "Dominio"
+#~ msgid "Domain"
+#~ msgstr "Dominio"
 
-msgid "Use as default account"
-msgstr "Usa account di default"
+#~ msgid "Use as default account"
+#~ msgstr "Usa account di default"
 
-msgid "Default account name"
-msgstr "Nome account di default"
+#~ msgid "Default account name"
+#~ msgstr "Nome account di default"

@@ -359,20 +359,12 @@ msgid "Export as XLS"
 msgstr "Exporta com a XLS"
 
 #: js/LeadEditDialog.js:287
-msgid ""
-"You do not have the run right for the Tasks application or it is not "
-"activated."
-msgstr ""
-"No disposeu dels permisos per a executar l'aplicació Tasques o bé aquesta no "
-"es troba activada."
+msgid "You do not have the run right for the Tasks application or it is not activated."
+msgstr "No disposeu dels permisos per a executar l'aplicació Tasques o bé aquesta no es troba activada."
 
 #: js/LeadEditDialog.js:298
-msgid ""
-"You do not have the run right for the Sales application or it is not "
-"activated."
-msgstr ""
-"No disposeu dels permisos per a executar l'aplicació Vendes o bé aquesta no "
-"es troba activada."
+msgid "You do not have the run right for the Sales application or it is not activated."
+msgstr "No disposeu dels permisos per a executar l'aplicació Vendes o bé aquesta no es troba activada."
 
 #: js/LeadEditDialog.js:339
 msgid "Enter short name"
@@ -602,14 +594,14 @@ msgstr ""
 msgid "Leads with overdue tasks"
 msgstr ""
 
-msgid "Lead %s has been creaded"
-msgstr "S'ha creat el client potencial %s"
+#~ msgid "Lead %s has been creaded"
+#~ msgstr "S'ha creat el client potencial %s"
 
-msgid "Last Modified Time"
-msgstr "Modificat per darrera vegada"
+#~ msgid "Last Modified Time"
+#~ msgstr "Modificat per darrera vegada"
 
-msgid "Add task"
-msgstr "Afegeix una tasca"
+#~ msgid "Add task"
+#~ msgstr "Afegeix una tasca"
 
-msgid "Add task for selected lead"
-msgstr "Afegeix una tasca per al client potencial seleccionat"
+#~ msgid "Add task for selected lead"
+#~ msgstr "Afegeix una tasca per al client potencial seleccionat"

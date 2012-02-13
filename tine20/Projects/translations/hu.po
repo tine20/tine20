@@ -22,27 +22,16 @@ msgid "Project Status Available"
 msgstr "Projekt állapot elérhető"
 
 #: Config.php:40
-msgid ""
-"Possible Project status. Please note that additional project status might "
-"impact other Projects systems on export or syncronisation."
-msgstr ""
-"Lehetséges projekt állapot. Kérlek jegyezd meg, hogy a további projekt "
-"állapotok ütközhetnek a más projekt rendszerekkel exportálások vagy "
-"szinkronizáláskor."
+msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or syncronisation."
+msgstr "Lehetséges projekt állapot. Kérlek jegyezd meg, hogy a további projekt állapotok ütközhetnek a más projekt rendszerekkel exportálások vagy szinkronizáláskor."
 
 #: Config.php:48
 msgid "Project Attendee Role Available"
 msgstr "Lehetséges projekt résztvevő szabályok"
 
 #: Config.php:50
-msgid ""
-"Possible Project attendee roles. Please note that additional project "
-"attendee roles might impact other Projects systems on export or "
-"syncronisation."
-msgstr ""
-"Lehetséges projekt résztvevő szerepek. Kérlek jegyezd meg, hogy a további "
-"projekt résztvevő szerepek ütközhetnek a más projekt rendszerekkel "
-"exportálások vagy szinkronizáláskor."
+msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation."
+msgstr "Lehetséges projekt résztvevő szerepek. Kérlek jegyezd meg, hogy a további projekt résztvevő szerepek ütközhetnek a más projekt rendszerekkel exportálások vagy szinkronizáláskor."
 
 #: Controller.php:74
 #, python-format
@@ -210,33 +199,33 @@ msgstr "Várakozó projektjeim"
 msgid "My projects that are on hold"
 msgstr "Tartásban lévő projektjeim"
 
-msgid "Example Application"
-msgstr "Példa Alkalmazás"
+#~ msgid "Example Application"
+#~ msgstr "Példa Alkalmazás"
 
-msgid "Name"
-msgstr "Név"
+#~ msgid "Name"
+#~ msgstr "Név"
 
-msgid "Budget"
-msgstr "Költség"
+#~ msgid "Budget"
+#~ msgstr "Költség"
 
-msgid "Show closed"
-msgstr "Mutasd a lezártakat"
+#~ msgid "Show closed"
+#~ msgstr "Mutasd a lezártakat"
 
-msgid "ExampleRecord"
-msgstr "PéldaRekord"
+#~ msgid "ExampleRecord"
+#~ msgstr "PéldaRekord"
 
-msgid "example record"
-msgid_plural "example records"
-msgstr[0] "példa rekord"
-msgstr[1] "példa rekordok"
+#~ msgid "example record"
+#~ msgid_plural "example records"
+#~ msgstr[0] "példa rekord"
+#~ msgstr[1] "példa rekordok"
 
-msgid "example record list"
-msgid_plural "example record lists"
-msgstr[0] "példa rekord lista"
-msgstr[1] "példa rekord listák"
+#~ msgid "example record list"
+#~ msgid_plural "example record lists"
+#~ msgstr[0] "példa rekord lista"
+#~ msgstr[1] "példa rekord listák"
 
-msgid "ExampleApplication"
-msgstr "PéldaAlkalmazás"
+#~ msgid "ExampleApplication"
+#~ msgstr "PéldaAlkalmazás"
 
-msgid "%s's personal example records"
-msgstr "%s személyes példa rekordjai"
+#~ msgid "%s's personal example records"
+#~ msgstr "%s személyes példa rekordjai"

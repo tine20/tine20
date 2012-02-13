@@ -39,9 +39,7 @@ msgid "Contact duplicate check fields"
 msgstr ""
 
 #: Config.php:47
-msgid ""
-"These fields are checked when a new contact is created. If a record with the "
-"same data in the fields is found, a duplicate exception is thrown."
+msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
 msgstr ""
 
 #: Config.php:59
@@ -49,9 +47,7 @@ msgid "Contact salutations available"
 msgstr ""
 
 #: Config.php:61
-msgid ""
-"Possible contact salutations. Please note that additional values might "
-"impact other Addressbook systems on export or syncronisation."
+msgid "Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:69
@@ -193,9 +189,7 @@ msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
 #: Import/definitions/adb_tine_import_csv.xml:20
-msgid ""
-"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
+msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
 
 #: js/Addressbook.js:22
@@ -681,117 +675,117 @@ msgstr ""
 msgid "Internal Contacts"
 msgstr "Международни контакти"
 
-msgid "Searching..."
-msgstr "Търси..."
+#~ msgid "Searching..."
+#~ msgstr "Търси..."
 
 #, fuzzy
-msgid "Call contact"
-msgstr "Отвори контакт"
+#~ msgid "Call contact"
+#~ msgstr "Отвори контакт"
 
-msgid "Work"
-msgstr "Работа"
+#~ msgid "Work"
+#~ msgstr "Работа"
 
-msgid "Home"
-msgstr "URL"
+#~ msgid "Home"
+#~ msgstr "URL"
 
-msgid "Cell"
-msgstr "Мобилен"
+#~ msgid "Cell"
+#~ msgstr "Мобилен"
 
-msgid "Cell private"
-msgstr "Мобилен (частен)"
+#~ msgid "Cell private"
+#~ msgstr "Мобилен (частен)"
 
-msgid "addressbook"
-msgid_plural "addressbooks"
-msgstr[0] "Списък адреси"
-msgstr[1] "Списъка на адреси"
+#~ msgid "addressbook"
+#~ msgid_plural "addressbooks"
+#~ msgstr[0] "Списък адреси"
+#~ msgstr[1] "Списъка на адреси"
 
-msgid "addressbooks"
-msgstr "Списъци на адреси"
+#~ msgid "addressbooks"
+#~ msgstr "Списъци на адреси"
 
-msgid "contacts"
-msgstr "Контакти"
+#~ msgid "contacts"
+#~ msgstr "Контакти"
 
-msgid "export as pdf"
-msgstr "Експортирай като pdf"
+#~ msgid "export as pdf"
+#~ msgstr "Експортирай като pdf"
 
-msgid "Loading Contact..."
-msgstr "Зарежда контакт..."
+#~ msgid "Loading Contact..."
+#~ msgstr "Зарежда контакт..."
 
-msgid "Please Wait"
-msgstr "Моля изчакайте"
+#~ msgid "Please Wait"
+#~ msgstr "Моля изчакайте"
 
-msgid "Add new contact"
-msgstr "Прибави нов контакт"
+#~ msgid "Add new contact"
+#~ msgstr "Прибави нов контакт"
 
-msgid "Edit Contact \"{0}\""
-msgstr "Редактирай контакт  \"{0}\""
+#~ msgid "Edit Contact \"{0}\""
+#~ msgstr "Редактирай контакт  \"{0}\""
 
-msgid "Please wait a moment..."
-msgstr "Моля изчакайте за момент..."
+#~ msgid "Please wait a moment..."
+#~ msgstr "Моля изчакайте за момент..."
 
-msgid "Saving Contact"
-msgstr "Съхранява контакт"
+#~ msgid "Saving Contact"
+#~ msgstr "Съхранява контакт"
 
-msgid "Failed"
-msgstr "Несполучливо"
+#~ msgid "Failed"
+#~ msgstr "Несполучливо"
 
-msgid "Could not save contact."
-msgstr "Не може да съхрани контакта."
+#~ msgid "Could not save contact."
+#~ msgstr "Не може да съхрани контакта."
 
-msgid "Errors"
-msgstr "Грешки"
+#~ msgid "Errors"
+#~ msgstr "Грешки"
 
-msgid "Please fix the errors noted."
-msgstr "Моля коригирайте грешките."
+#~ msgid "Please fix the errors noted."
+#~ msgstr "Моля коригирайте грешките."
 
-msgid "Deleting contact..."
-msgstr "Изтрива контакт..."
+#~ msgid "Deleting contact..."
+#~ msgstr "Изтрива контакт..."
 
-msgid "Some error occured while trying to delete the contact."
-msgstr "грешка при опит за изтриване на контакта."
+#~ msgid "Some error occured while trying to delete the contact."
+#~ msgstr "грешка при опит за изтриване на контакта."
 
-msgid "Custom Fields"
-msgstr "Допълнителни данни"
+#~ msgid "Custom Fields"
+#~ msgstr "Допълнителни данни"
 
-msgid "Link"
-msgid_plural "Links [%d]"
-msgstr[0] "Линк"
-msgstr[1] "Линкове"
+#~ msgid "Link"
+#~ msgid_plural "Links [%d]"
+#~ msgstr[0] "Линк"
+#~ msgstr[1] "Линкове"
 
-msgid "Export"
-msgstr "Ехрорт"
+#~ msgid "Export"
+#~ msgstr "Ехрорт"
 
-msgid "Are you Sure?"
-msgstr "Сигурни ли сте?"
+#~ msgid "Are you Sure?"
+#~ msgstr "Сигурни ли сте?"
 
-msgid "Do you really want to delete the selected contact?"
-msgid_plural "Do you really want to delete the selected contacts?"
-msgstr[0] "Наистина ли искате да изтриете селектираният контакт?"
-msgstr[1] "Наистина ли искате да изтриете селектираните контакти?"
+#~ msgid "Do you really want to delete the selected contact?"
+#~ msgid_plural "Do you really want to delete the selected contacts?"
+#~ msgstr[0] "Наистина ли искате да изтриете селектираният контакт?"
+#~ msgstr[1] "Наистина ли искате да изтриете селектираните контакти?"
 
 #, fuzzy
-msgid "Some error occured while trying to delete the conctact."
-msgstr "Настъпила е грешка при опит за изтриване но контакта."
+#~ msgid "Some error occured while trying to delete the conctact."
+#~ msgstr "Настъпила е грешка при опит за изтриване но контакта."
 
-msgid "add contact"
-msgstr "Прибави контакт"
+#~ msgid "add contact"
+#~ msgstr "Прибави контакт"
 
-msgid "edit contact"
-msgstr "Промени контакт"
+#~ msgid "edit contact"
+#~ msgstr "Промени контакт"
 
-msgid "delete contact"
-msgid_plural "delete contacts"
-msgstr[0] "Изтрий контакт"
-msgstr[1] "Изтрий контакти"
+#~ msgid "delete contact"
+#~ msgid_plural "delete contacts"
+#~ msgstr[0] "Изтрий контакт"
+#~ msgstr[1] "Изтрий контакти"
 
-msgid "Displaying contacts {0} - {1} of {2}"
-msgstr "Контакти {0} - {1} от {2}"
+#~ msgid "Displaying contacts {0} - {1} of {2}"
+#~ msgstr "Контакти {0} - {1} от {2}"
 
-msgid "No contacts to display"
-msgstr "Няма намерени контакти"
+#~ msgid "No contacts to display"
+#~ msgstr "Няма намерени контакти"
 
-msgid "Saved in"
-msgstr "Запаметен в"
+#~ msgid "Saved in"
+#~ msgstr "Запаметен в"
 
-msgid "call contact"
-msgstr "Отвори контакт"
+#~ msgid "call contact"
+#~ msgstr "Отвори контакт"

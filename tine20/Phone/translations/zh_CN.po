@@ -157,48 +157,48 @@ msgstr "振铃"
 msgid "Call ID"
 msgstr "来电号码"
 
-msgid "Dial phone number"
-msgstr "拨号"
+#~ msgid "Dial phone number"
+#~ msgstr "拨号"
 
 #, fuzzy
-msgid "Name"
-msgstr "号码"
+#~ msgid "Name"
+#~ msgstr "号码"
 
 #, fuzzy
-msgid "Phone Model"
-msgstr "电话"
+#~ msgid "Phone Model"
+#~ msgstr "电话"
 
 #, fuzzy
-msgid "redirection"
-msgstr "方向"
+#~ msgid "redirection"
+#~ msgstr "方向"
 
 #, fuzzy
-msgid "all"
-msgstr "来电号码"
+#~ msgid "all"
+#~ msgstr "来电号码"
 
 #, fuzzy
-msgid "none"
-msgstr "电话"
+#~ msgid "none"
+#~ msgstr "电话"
 
 #, fuzzy
-msgid "number"
-msgstr "号码"
+#~ msgid "number"
+#~ msgstr "号码"
 
 #, fuzzy
-msgid "name + number"
-msgstr "拨号"
+#~ msgid "name + number"
+#~ msgstr "拨号"
 
 #, fuzzy
-msgid "visual"
-msgstr "拨号"
+#~ msgid "visual"
+#~ msgstr "拨号"
 
 #, fuzzy
-msgid "ringer"
-msgstr "线路"
+#~ msgid "ringer"
+#~ msgstr "线路"
 
 #, fuzzy
-msgid "Lines"
-msgstr "线路"
+#~ msgid "Lines"
+#~ msgstr "线路"
 
-msgid "enter searchfilter"
-msgstr "输入搜索过滤器"
+#~ msgid "enter searchfilter"
+#~ msgstr "输入搜索过滤器"

@@ -257,65 +257,63 @@ msgstr ""
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr ""
 
-#: js/Felamimail.js:504
+#: js/Felamimail.js:507
 msgid "New mails"
 msgstr "Nuove mail"
 
-#: js/Felamimail.js:505
+#: js/Felamimail.js:508
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr ""
 
-#: js/Felamimail.js:626
+#: js/Felamimail.js:629
 msgid "IMAP Credentials for {0}"
 msgstr "Credenziali IMAP per {0}"
 
-#: js/Felamimail.js:629
+#: js/Felamimail.js:632
 msgid "Credentials"
 msgstr "Credenziali"
 
-#: js/Felamimail.js:781 js/Felamimail.js:814
+#: js/Felamimail.js:784 js/Felamimail.js:817
 msgid "IMAP Error"
 msgstr ""
 
-#: js/Felamimail.js:782
+#: js/Felamimail.js:785
 msgid "No connection to IMAP server."
 msgstr "Nessuna connessione al server IMAP."
 
-#: js/Felamimail.js:798
+#: js/Felamimail.js:801
 msgid "IMAP Credentials Error"
 msgstr ""
 
-#: js/Felamimail.js:799
+#: js/Felamimail.js:802
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr ""
 
-#: js/Felamimail.js:815
-msgid ""
-"One of your folders was deleted or renamed by another client. Please update "
-"the folder list of this account."
+#: js/Felamimail.js:818
+msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
 msgstr ""
 
-#: js/Felamimail.js:844
+#: js/Felamimail.js:847
 msgid "SMTP Error"
 msgstr ""
 
-#: js/Felamimail.js:845
+#: js/Felamimail.js:848
 msgid "No connection to SMTP server."
 msgstr ""
 
-#: js/Felamimail.js:853
+#: js/Felamimail.js:856
 msgid "Sieve Error"
 msgstr ""
 
-#: js/Felamimail.js:854
+#: js/Felamimail.js:857
 msgid "No connection to Sieve server."
 msgstr ""
 
-#: js/Felamimail.js:862
+#: js/Felamimail.js:865
 msgid "Save Sieve Script Error"
 msgstr ""
 
-#: js/Felamimail.js:863
+#: js/Felamimail.js:866
 msgid "Could not save script on Sieve server."
 msgstr ""
 
@@ -498,9 +496,7 @@ msgid "Save Email Note"
 msgstr ""
 
 #: js/MessageEditDialog.js:174
-msgid ""
-"Activate this toggle button to save the email text as a note attached to the "
-"recipient(s) contact(s)."
+msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
 msgstr ""
 
 #: js/MessageEditDialog.js:192
@@ -925,12 +921,8 @@ msgid "Email Update Interval"
 msgstr "Intervallo di Aggiornamento Email"
 
 #: Preference.php:111
-msgid ""
-"How often should Felamimail check for new Emails (in minutes). \"0\" means "
-"never."
-msgstr ""
-"Quanto spesso Felamimail controlla nuove Email (in minuti). \"0\" vuol dire "
-"mail."
+msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
+msgstr "Quanto spesso Felamimail controlla nuove Email (in minuti). \"0\" vuol dire mail."
 
 #: Preference.php:114
 msgid "Use in Addressbook"
@@ -984,84 +976,83 @@ msgstr ""
 msgid "All mails with the draft flag"
 msgstr ""
 
-msgid "wrote"
-msgstr "scritto"
+#~ msgid "wrote"
+#~ msgstr "scritto"
 
-msgid "Write"
-msgstr "Scrivi"
+#~ msgid "Write"
+#~ msgstr "Scrivi"
 
-msgid "Invalid drop target"
-msgstr "Destinazione rilascio non valida"
+#~ msgid "Invalid drop target"
+#~ msgstr "Destinazione rilascio non valida"
 
-msgid "Could not move message(s)."
-msgstr "Non puoi muover i messaggi."
+#~ msgid "Could not move message(s)."
+#~ msgstr "Non puoi muover i messaggi."
 
-msgid "Marked"
-msgstr "Evidenziata"
+#~ msgid "Marked"
+#~ msgstr "Evidenziata"
 
-msgid "Contains marked messages"
-msgstr "Contiene messaggi evidenziati"
+#~ msgid "Contains marked messages"
+#~ msgstr "Contiene messaggi evidenziati"
 
-msgid "Unread"
-msgstr "Non letto"
+#~ msgid "Unread"
+#~ msgstr "Non letto"
 
-msgid "Contains unread messages"
-msgstr "Contiene messaggi non letti"
+#~ msgid "Contains unread messages"
+#~ msgstr "Contiene messaggi non letti"
 
-msgid "Show Intelligent Folders"
-msgstr "Visualizza Cartelle Intelligenti"
+#~ msgid "Show Intelligent Folders"
+#~ msgstr "Visualizza Cartelle Intelligenti"
 
-msgid "No"
-msgstr "No"
+#~ msgid "No"
+#~ msgstr "No"
 
-msgid "Yes"
-msgstr "Sì"
+#~ msgid "Yes"
+#~ msgstr "Sì"
 
-msgid "Toggle Flag"
-msgstr "Flag di Spunta"
+#~ msgid "Toggle Flag"
+#~ msgstr "Flag di Spunta"
 
-msgid "Recipients"
-msgstr "Destinatari"
+#~ msgid "Recipients"
+#~ msgstr "Destinatari"
 
-msgid "Save contact note"
-msgstr "Salva nota contatto"
+#~ msgid "Save contact note"
+#~ msgstr "Salva nota contatto"
 
-msgid "Error"
-msgstr "Errore"
+#~ msgid "Error"
+#~ msgstr "Errore"
 
-msgid "No Account configured"
-msgstr "Nessun Account configurato"
+#~ msgid "No Account configured"
+#~ msgstr "Nessun Account configurato"
 
-msgid "Re: "
-msgstr "R: "
+#~ msgid "Re: "
+#~ msgstr "R: "
 
-msgid "Original Message"
-msgstr "Messaggio Originale"
+#~ msgid "Original Message"
+#~ msgstr "Messaggio Originale"
 
-msgid "Fwd: "
-msgstr "I: "
+#~ msgid "Fwd: "
+#~ msgstr "I: "
 
-msgid "Some error occured while trying to update the messages."
-msgstr "Si sono verificati alcuni errori durante l'aggiornamento dei messaggi."
+#~ msgid "Some error occured while trying to update the messages."
+#~ msgstr "Si sono verificati alcuni errori durante l'aggiornamento dei messaggi."
 
-msgid "Sort Folders"
-msgstr "Ordina Cartelle"
+#~ msgid "Sort Folders"
+#~ msgstr "Ordina Cartelle"
 
-msgid "Totalcount"
-msgstr "Totale"
+#~ msgid "Totalcount"
+#~ msgstr "Totale"
 
-msgid "Cache"
-msgstr "Cache"
+#~ msgid "Cache"
+#~ msgstr "Cache"
 
-msgid "Supports \"has_children\""
-msgstr "Supporta \"has_chilldren\""
+#~ msgid "Supports \"has_children\""
+#~ msgstr "Supporta \"has_chilldren\""
 
-msgid "You got {0} new mail(s) in Folder "
-msgstr "Hai {0} nuove mail nella Cartella"
+#~ msgid "You got {0} new mail(s) in Folder "
+#~ msgstr "Hai {0} nuove mail nella Cartella"
 
-msgid "Use System Account"
-msgstr "Usa Account di Sistema"
+#~ msgid "Use System Account"
+#~ msgstr "Usa Account di Sistema"
 
-msgid "Use user credentials and predefined settings for email account."
-msgstr ""
-"Usa le credenziali utente e le impostazioni predefinite per l'account email"
+#~ msgid "Use user credentials and predefined settings for email account."
+#~ msgstr "Usa le credenziali utente e le impostazioni predefinite per l'account email"

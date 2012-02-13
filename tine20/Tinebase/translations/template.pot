@@ -230,7 +230,7 @@ msgid "About {0}"
 msgstr ""
 
 #: js/AboutDialog.js:59 js/PasswordChangeDialog.js:66
-#: js/ux/form/LayerCombo.js:186 js/widgets/ActivitiesPanel.js:314
+#: js/ux/form/LayerCombo.js:186 js/widgets/ActivitiesPanel.js:311
 #: js/widgets/container/ContainerSelect.js:459
 #: js/widgets/dialog/EditDialog.js:227
 #: js/widgets/dialog/MultiOptionsDialog.js:102
@@ -343,7 +343,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: js/ExceptionDialog.js:72 js/PasswordChangeDialog.js:60
-#: js/ux/form/LayerCombo.js:193 js/widgets/ActivitiesPanel.js:306
+#: js/ux/form/LayerCombo.js:193 js/widgets/ActivitiesPanel.js:303
 #: js/widgets/container/ContainerSelect.js:450
 #: js/widgets/dialog/EditDialog.js:245
 #: js/widgets/dialog/MultiOptionsDialog.js:109
@@ -573,7 +573,7 @@ msgid "Logging you in..."
 msgstr ""
 
 #: js/LoginPanel.js:341 js/widgets/container/GrantsDialog.js:95
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:330
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 #: js/widgets/persistentfilter/PickerPanel.js:323
 #: js/widgets/persistentfilter/PickerPanel.js:365
 #: js/widgets/persistentfilter/PickerPanel.js:417
@@ -599,7 +599,7 @@ msgstr ""
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:547 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:316
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:338
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Errors"
@@ -607,7 +607,7 @@ msgstr ""
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:557 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:371
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:392
 msgid "Please fix the errors noted."
 msgstr ""
 
@@ -660,7 +660,7 @@ msgid "Install Tine 2.0 as web app in your browser."
 msgstr ""
 
 #: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:564
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:327
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:348
 #: js/widgets/grid/GridPanel.js:1410
 #: js/widgets/persistentfilter/PickerPanel.js:321
 #: js/widgets/tree/ContextMenu.js:336
@@ -947,11 +947,11 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:466
+#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:463
 msgid "Note"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:175 js/widgets/ActivitiesPanel.js:388
+#: js/widgets/ActivitiesPanel.js:175 js/widgets/ActivitiesPanel.js:385
 msgid "Add new note"
 msgstr ""
 
@@ -959,52 +959,52 @@ msgstr ""
 msgid "Notes"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:285
+#: js/widgets/ActivitiesPanel.js:282
 msgid "Enter new note:"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:322 js/widgets/ActivitiesPanel.js:387
+#: js/widgets/ActivitiesPanel.js:319 js/widgets/ActivitiesPanel.js:384
 msgid "Add Note"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:374
+#: js/widgets/ActivitiesPanel.js:371
 msgid "Add a {0} Note"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/ActivitiesPanel.js:601
+#: js/widgets/ActivitiesPanel.js:461 js/widgets/ActivitiesPanel.js:598
 #: js/widgets/grid/LinkGridPanel.js:105
 msgid "Type"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:467 js/widgets/grid/GridPanel.js:1083
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1083
 msgid "Created By"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:468
+#: js/widgets/ActivitiesPanel.js:465
 msgid "Timestamp"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:482
+#: js/widgets/ActivitiesPanel.js:479
 msgid "Displaying history records {0} - {1} of {2}"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:483
+#: js/widgets/ActivitiesPanel.js:480
 msgid "No history to display"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:583
+#: js/widgets/ActivitiesPanel.js:580
 msgid "History"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:595
+#: js/widgets/ActivitiesPanel.js:592
 msgid "Quick search"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:596 js/widgets/ActivitiesPanel.js:597
+#: js/widgets/ActivitiesPanel.js:593 js/widgets/ActivitiesPanel.js:594
 msgid "Time"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:599
+#: js/widgets/ActivitiesPanel.js:596
 msgid "User"
 msgstr ""
 
@@ -1472,48 +1472,48 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:57
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:61
 msgid "Either {0} or {1} must be given"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:57
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:61
 msgid "Last Name"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:57
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:61
 msgid "Company"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:66
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:70
 msgid "Field \"Description\" must not be empty"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:88
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:95
 msgid "multiple"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:90
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:97
 msgid "Edit {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:222
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:233
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:239
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:250
 msgid "Delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:238
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:255
 msgid "Undo delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:295
-msgid "<br /><ul style=\"padding:10px;border:1px\">"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:314
+msgid "<br /><br /><ul>"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:327
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:348
 msgid "Do you really want to change these {0} records?"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:330
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 msgid "Applying changes"
 msgstr ""
 
@@ -1620,8 +1620,8 @@ msgstr ""
 msgid "Please select a file with one of the following extensions:"
 msgstr ""
 
-#: js/widgets/form/RecordPickerComboBox.js:69
-#: js/widgets/form/RecordPickerManager.js:63 js/widgets/tags/TagsPanel.js:477
+#: js/widgets/form/RecordPickerComboBox.js:76
+#: js/widgets/form/RecordPickerManager.js:48 js/widgets/tags/TagsPanel.js:477
 msgid "Searching..."
 msgstr ""
 
@@ -1716,7 +1716,7 @@ msgid "defined by"
 msgstr ""
 
 #: js/widgets/grid/FilterModel.js:223
-#: js/widgets/grid/ForeignRecordFilter.js:390
+#: js/widgets/grid/ForeignRecordFilter.js:394
 #: js/widgets/relation/FilterModel.js:87
 msgid "select a operator"
 msgstr ""
@@ -1871,11 +1871,11 @@ msgstr[1] ""
 msgid "Edit definition"
 msgstr ""
 
-#: js/widgets/grid/ForeignRecordFilter.js:66
+#: js/widgets/grid/ForeignRecordFilter.js:71
 msgid "Start defintion"
 msgstr ""
 
-#: js/widgets/grid/ForeignRecordFilter.js:100
+#: js/widgets/grid/ForeignRecordFilter.js:105
 msgid "Related to"
 msgstr ""
 

@@ -103,11 +103,11 @@ msgstr ""
 msgid "view personal and shared containers"
 msgstr ""
 
-#: Controller/Container.php:187
+#: Controller/Container.php:199
 msgid "Your container has been changed"
 msgstr ""
 
-#: Controller/Container.php:188
+#: Controller/Container.php:200
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr ""
 
