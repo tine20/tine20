@@ -143,40 +143,31 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         
         $data = $_serverId instanceof Tinebase_Record_Abstract ? $_serverId : $this->_contentController->get($_serverId);
         
-        foreach($this->_mapping as $key => $value) {
-        	$nodeContent = null;
-            if(!empty($data->$value)) {
+        foreach ($this->_mapping as $key => $value) {
+            if(!empty($data->$value) || $data->$value == '0') {
+                $nodeContent = null;
+                
                 switch($value) {
                     case 'bday':
-                        /* webos < 2.1 
-                        if ($this->_device->devicetype == Syncope_Model_Device::TYPE_WEBOS) {
-                            $userTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
-                            $data->bday->setTimezone($userTimezone);
-                            $data->bday->addHour(12);
-                            $data->bday = new Tinebase_DateTime($data->bday->format(Tinebase_Record_Abstract::ISO8601LONG), 'UTC');
+                        if($data->$value instanceof DateTime) {
+                            $nodeContent = $data->bday->format("Y-m-d\TH:i:s") . '.000Z';
                         }
-                        */
-                        $nodeContent = $data->bday->format("Y-m-d\TH:i:s") . '.000Z';
                         break;
                         
                     case 'jpegphoto':
-                        if(! empty($data->$value)) {
-                            try {
-                                $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $data->getId());
-                                $jpegData = $image->getBlob('image/jpeg', 36000);
-                                $nodeContent = base64_encode($jpegData);
-                            } catch (Exception $e) {
-                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Image for contact {$data->getId()} not found or invalid");
-                            }
-
-                            
+                        try {
+                            $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $data->getId());
+                            $jpegData = $image->getBlob('image/jpeg', 36000);
+                            $nodeContent = base64_encode($jpegData);
+                        } catch (Exception $e) {
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Image for contact {$data->getId()} not found or invalid");
                         }
                         break;
                         
                     case 'adr_one_countryname':
                     case 'adr_two_countryname':
-                    	$nodeContent = Tinebase_Translation::getCountryNameByRegionCode($data->$value);
-                    	break;
+                        $nodeContent = Tinebase_Translation::getCountryNameByRegionCode($data->$value);
+                        break;
                         
                     default:
                         $nodeContent = $data->$value;
@@ -189,16 +180,15 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                     continue;
                 }
                 
-                // create a new DOMElement ...
-                $node = new DOMElement($key, null, 'uri:Contacts');
-
-                // ... append it to parent node aka append it to the document ...
+                // strip off any non printable control characters
+                if (!ctype_print($nodeContent)) {
+                    $nodeContent = $this->removeControlChars($nodeContent);
+                }
+                
+                $node = $_domParrent->ownerDocument->createElementNS('uri:Contacts', $key);
+                $node->appendChild($_domParrent->ownerDocument->createTextNode($nodeContent));
+                
                 $_domParrent->appendChild($node);
-                
-                // ... and now add the content (DomText takes care of special chars)
-                $node->appendChild(new DOMText($nodeContent));
-                
-                
             }
         }
         

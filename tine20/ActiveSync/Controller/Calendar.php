@@ -240,27 +240,29 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         // add calendar namespace
         $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:Calendar', 'uri:Calendar');
         
-        foreach($this->_mapping as $key => $value) {
-            $nodeContent = null;
-            
-            if(!empty($data->$value)) {
+        foreach ($this->_mapping as $key => $value) {
+            if(!empty($data->$value) || $data->$value == '0') {
+                $nodeContent = null;
                 
                 switch($value) {
                     case 'dtend':
-                        if ($data->is_all_day_event == true) {
-                            // whole day events ends at 23:59:59 in Tine 2.0 but 00:00 the next day in AS
-                            $dtend = clone $data->dtend;
-                            
-                            $dtend->addSecond($dtend->get('s') == 59 ? 1 : 0);
-                            $dtend->addMinute($dtend->get('i') == 59 ? 1 : 0);
-
-                            $nodeContent = $dtend->format('Ymd\THis') . 'Z';
-                        } else {
-                            $nodeContent = $data->dtend->format('Ymd\THis') . 'Z';
+                        if($data->$value instanceof DateTime) {
+                            if ($data->is_all_day_event == true) {
+                                // whole day events ends at 23:59:59 in Tine 2.0 but 00:00 the next day in AS
+                                $dtend = clone $data->dtend;
+                                $dtend->addSecond($dtend->get('s') == 59 ? 1 : 0);
+                                $dtend->addMinute($dtend->get('i') == 59 ? 1 : 0);
+    
+                                $nodeContent = $dtend->format('Ymd\THis') . 'Z';
+                            } else {
+                                $nodeContent = $data->dtend->format('Ymd\THis') . 'Z';
+                            }
                         }
                         break;
                     case 'dtstart':
-                        $nodeContent = $data->$value->format('Ymd\THis') . 'Z';
+                        if($data->$value instanceof DateTime) {
+                            $nodeContent = $data->$value->format('Ymd\THis') . 'Z';
+                        }
                         break;
                     default:
                         $nodeContent = $data->$value;
@@ -274,19 +276,15 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     continue;
                 }
                 
-                // create a new DOMElement ...
-                $node = new DOMElement($key, null, 'uri:Calendar');
-
-                // ... append it to parent node aka append it to the document ...
-                $_domParrent->appendChild($node);
-                
                 // strip off any non printable control characters
                 if (!ctype_print($nodeContent)) {
-                    $nodeContent = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', null, $nodeContent);
+                    $nodeContent = $this->removeControlChars($nodeContent);
                 }
                 
-                // ... and now add the content (DomText takes care of special chars)
-                $node->appendChild(new DOMText($nodeContent));
+                $node = $_domParrent->ownerDocument->createElementNS('uri:Calendar', $key);
+                $node->appendChild($_domParrent->ownerDocument->createTextNode($nodeContent));
+                
+                $_domParrent->appendChild($node);
             }
         }
         

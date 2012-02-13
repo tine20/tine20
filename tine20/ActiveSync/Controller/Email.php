@@ -167,13 +167,15 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         
         $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Email'       , 'uri:Email');
         
-        foreach($this->_mapping as $key => $value) {
-            if(!empty($data->$value) || $data->$value == 0) {
+        foreach ($this->_mapping as $key => $value) {
+            if(!empty($data->$value) || $data->$value == '0') {
                 $nodeContent = null;
                 
                 switch($value) {
                     case 'received':
-                        $nodeContent = $data->$value->toString('Y-m-d\TH:i:s') . '.000Z';
+                        if($data->$value instanceof DateTime) {
+                            $nodeContent = $data->$value->toString('Y-m-d\TH:i:s') . '.000Z';
+                        }
                         break;
                         
                     case 'from_email':
@@ -196,17 +198,15 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                     continue;
                 }
                 
-                // ... append it to parent node aka append it to the document ...
-                $node = $_domParrent->appendChild(new DOMElement($key, null, 'uri:Email'));
-                
                 // strip off any non printable control characters
                 if (!ctype_print($nodeContent)) {
-                    # another way to remove non printing characters
                     $nodeContent = $this->removeControlChars($nodeContent);
                 }
                 
-                // ... and now add the content (DomText takes care of special chars)
-                $node->appendChild(new DOMText($nodeContent));
+                $node = $_domParrent->ownerDocument->createElementNS('uri:Email', $key);
+                $node->appendChild($_domParrent->ownerDocument->createTextNode($nodeContent));
+                
+                $_domParrent->appendChild($node);
             }
         }
         
