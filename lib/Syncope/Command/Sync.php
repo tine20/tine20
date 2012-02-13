@@ -559,18 +559,18 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                          * and that this entry is yet in $collectionData['syncState']->pendingdata['serverAdds']
                          * I have no idea how this can happen, but the next lines of code work around this problem
                          */
-                        #try {
-                        #    $this->_contentStateBackend->getContentState($this->_device, $collectionData['folder'], $serverId);
-                        #
-                        #    if ($this->_logger instanceof Zend_Log) 
-                        #        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped an entry($serverId) which is already on the client");
-                        #    
-                        #    unset($serverAdds[$id]);
-                        #    continue;
-                        #    
-                        #} catch (Syncope_Exception_NotFound $senf) {
-                        #    // do nothing => content state should not exist yet
-                        #}
+                        try {
+                            $this->_contentStateBackend->getContentState($this->_device, $collectionData['folder'], $serverId);
+                        
+                            if ($this->_logger instanceof Zend_Log) 
+                                $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped an entry($serverId) which is already on the client");
+                            
+                            unset($serverAdds[$id]);
+                            continue;
+                            
+                        } catch (Syncope_Exception_NotFound $senf) {
+                            // do nothing => content state should not exist yet
+                        }
                         
                         try {
                             $add = $this->_outputDom->createElementNS('uri:AirSync', 'Add');
