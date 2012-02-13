@@ -337,10 +337,12 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                 $folderData['localName'] = Felamimail_Model_Folder::decodeFolderName($folderData['localName']);
                 $folderData['globalName'] = Felamimail_Model_Folder::decodeFolderName($folderData['globalName']);
                 $isSelectable = $this->_isSelectable($folderData, $_account);
-                                
+                
                 $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_account->getId(), $folderData['globalName']);
+                
                 $folder->is_selectable = $isSelectable;
-                $folder->has_children = ($folderData['hasChildren'] == '1');
+                $folder->imap_status   = Felamimail_Model_Folder::IMAP_STATUS_OK;
+                $folder->has_children  = ($folderData['hasChildren'] == '1');
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Update cached folder ' . $folderData['globalName']);
                 
@@ -362,6 +364,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                         'has_children'      => ($folderData['hasChildren'] == '1'),
                         'account_id'        => $_account->getId(),
                         'imap_timestamp'    => Tinebase_DateTime::now(),
+                        'imap_status'       => Felamimail_Model_Folder::IMAP_STATUS_OK,
                         'user_id'           => $this->_currentAccount->getId(),
                         'parent'            => $parentFolder,
                         'system_folder'     => in_array(strtolower($folderData['localName']), $systemFolders),
