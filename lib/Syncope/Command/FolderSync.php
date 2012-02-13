@@ -186,9 +186,9 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
                 $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ParentId', $folder->parentid));
                 
                 $displayName = $this->_outputDom->createElementNS('uri:FolderHierarchy', 'DisplayName');
+                $displayName->appendChild($this->_outputDom->createTextNode($folder->displayname));
                 $add->appendChild($displayName);
-                $displayName->appendChild(new DOMText($folder->displayname));
-
+                
                 $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Type', $folder->type));
                 
                 // store folder in backend
