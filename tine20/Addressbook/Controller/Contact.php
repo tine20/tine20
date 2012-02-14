@@ -38,9 +38,9 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $this->_purgeRecords = FALSE;
         $this->_resolveCustomFields = TRUE;
         $this->_duplicateCheckFields = Addressbook_Config::getInstance()->get(Addressbook_Config::CONTACT_DUP_FIELDS, array(
-                array('n_given', 'n_family', 'org_name'),
-                array('email'),
-            ));
+            array('n_given', 'n_family', 'org_name'),
+            array('email'),
+        ));
         
         // fields used for private and company address
         $this->_addressFields = array('locality', 'postalcode', 'street', 'countryname');

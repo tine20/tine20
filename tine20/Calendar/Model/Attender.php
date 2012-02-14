@@ -586,8 +586,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             switch ($type) {
                 case self::USERTYPE_USER:
                 case self::USERTYPE_GROUPMEMBER:
-                    //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(print_r(array_unique($ids), true));
+                    $resolveCf = Addressbook_Controller_Contact::getInstance()->resolveCustomfields(FALSE);
                     $typeMap[$type] = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($ids), TRUE);
+                    Addressbook_Controller_Contact::getInstance()->resolveCustomfields($resolveCf);
                     break;
                 case self::USERTYPE_GROUP:
                 case Calendar_Model_AttenderFilter::USERTYPE_MEMBEROF:

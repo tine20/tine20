@@ -152,7 +152,7 @@ abstract class Tinebase_Controller_Record_Abstract
             if ($_getRelations) {
                 $result->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName, $this->_backend->getType(), $result->getId()));
             }
-            if ($this->_doResolveCustomfields()) {
+            if ($this->resolveCustomfields()) {
                 Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($result);
             }
         }
@@ -168,16 +168,6 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _addDefaultFilter(Tinebase_Model_Filter_FilterGroup $_filter = NULL)
     {
         
-    }
-
-    /**
-     * do customfields of record(s) need to be resolved?
-     *
-     * @return boolean
-     */
-    protected function _doResolveCustomfields()
-    {
-        return ($this->_resolveCustomFields && Tinebase_CustomField::getInstance()->appHasCustomFields($this->_applicationName));
     }
 
     /**
@@ -249,6 +239,19 @@ abstract class Tinebase_Controller_Record_Abstract
         $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
         return $this->_setBooleanMemberVar('_doContainerACLChecks', $value);
     }
+    
+    /**
+     * set/get resolving of customfields
+     *
+     * @param  boolean optional
+     * @return boolean
+     */
+    public function resolveCustomfields()
+    {
+        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
+        $currentValue = ($this->_setBooleanMemberVar('_resolveCustomFields', $value) && Tinebase_CustomField::getInstance()->appHasCustomFields($this->_applicationName));
+        return $currentValue;
+    }
 
     /**
      * set/get modlog active
@@ -315,7 +318,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 $this->getAlarms($record);
             }
 
-            if ($this->_doResolveCustomfields()) {
+            if ($this->resolveCustomfields()) {
                 Tinebase_CustomField::getInstance()->resolveRecordCustomFields($record);
             }
         }
@@ -344,7 +347,7 @@ abstract class Tinebase_Controller_Record_Abstract
            : NULL;
         $records = $this->_backend->getMultiple($_ids, $containerIds);
 
-        if ($this->_doResolveCustomfields()) {
+        if ($this->resolveCustomfields()) {
             Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($records);
         }
 
@@ -365,7 +368,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
         $records = $this->_backend->getAll($_orderBy, $_orderDirection);
 
-        if ($this->_doResolveCustomfields()) {
+        if ($this->resolveCustomfields()) {
             Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($records);
         }
 

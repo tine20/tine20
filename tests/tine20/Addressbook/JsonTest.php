@@ -80,6 +80,9 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        // always resolve customfields
+        Addressbook_Controller_Contact::getInstance()->resolveCustomfields(TRUE);
+        
         $this->_instance = new Addressbook_Frontend_Json();
         
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
@@ -297,6 +300,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $record = array_pop($searchResult['results']);
 
         // check if customfieldvalue was updated properly
+        $this->assertTrue(isset($record['customfields']), 'No customfields in record');
         $this->assertEquals($record['customfields'][$createdCustomField->name],'PHPUNIT_multipleUpdate','Customfield was not updated as expected');
 
         // check if other default field value was updated properly
@@ -503,8 +507,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 
         if (Tinebase_Config::getInstance()->getConfig(Tinebase_Config::MAPPANEL, NULL, TRUE)->value) {
             // check geo data
-            $this->assertEquals('9.99489818142748', $updatedContact['adr_one_lon'], 'wrong geodata (lon)');
-            $this->assertEquals('53.5444309689663', $updatedContact['adr_one_lat'], 'wrong geodata (lat)');
+            $this->assertEquals('9.99489300545466', $updatedContact['adr_one_lon'], 'wrong geodata (lon)');
+            $this->assertEquals('53.5444258235736', $updatedContact['adr_one_lat'], 'wrong geodata (lat)');
 
             // try another address
             $updatedContact['adr_one_locality']    = 'Wien';
@@ -756,6 +760,10 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testProjectRelationFilter()
     {
+        if (! Setup_Controller::getInstance()->isInstalled('Projects')) {
+            $this->markTestSkipped('Projects not installed.');
+        }
+        
         $contact = $this->_instance->saveContact($this->_getContactData());
         $project = $this->_getProjectData($contact);
 

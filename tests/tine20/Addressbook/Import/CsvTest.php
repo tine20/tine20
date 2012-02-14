@@ -55,6 +55,8 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        // always resolve customfields
+        Addressbook_Controller_Contact::getInstance()->resolveCustomfields(TRUE);
     }
 
     /**

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  CustomField
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        add join to cf config to value backend to get name
@@ -203,6 +203,9 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      */
     public function appHasCustomFields($_applicationName)
     {
+        if (empty($_applicationName)) {
+            return FALSE;
+        }
         $app = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
         $result = $this->getCustomFieldsForApplication($app);
         return (count($result) > 0);
@@ -251,7 +254,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      */
     public function deleteCustomFieldsForApplication($_applicationId)
     {
-    	$this->_clearCache();
+        $this->_clearCache();
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
  
         $filterValues = array(array(
@@ -260,17 +263,17 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             'value'     => $applicationId
         ));
             
-      	$filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues);
-      	$filter->customfieldACLChecks(FALSE);
+          $filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues);
+          $filter->customfieldACLChecks(FALSE);
         $customFields = $this->_backendConfig->search($filter);
             
-    	$deletedCount = 0;
+        $deletedCount = 0;
         foreach ($customFields as $customField) {
-       		$this->deleteCustomField($customField);
-       		$deletedCount++;
-		}
-		
-		return $deletedCount;
+               $this->deleteCustomField($customField);
+               $deletedCount++;
+        }
+        
+        return $deletedCount;
     }
     
     /**
@@ -399,8 +402,6 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      */
     public function resolveRecordCustomFields(Tinebase_Record_Interface $_record, $_customFields = NULL, $_configs = NULL)
     {
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resolving custom fields for ' . get_class($_record));
-        
         $customFields = ($_customFields === NULL) ? $this->_getCustomFields($_record->getId()) : $_customFields;
         
         if (count($customFields) == 0) {
@@ -417,18 +418,18 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             if ($idx !== FALSE) {
                 $config = $_configs[$idx];
                 if (strtolower($config->definition['type']) == 'record') {
-                	try {
-	                	$modelParts = explode('.', $config->definition['recordConfig']['value']['records']); // get model parts from saved record class e.g. Tine.Admin.Model.Group
-	                	$controllerName = $modelParts[1] . '_Controller_' . $modelParts[3];	
-	                	$controller = call_user_func(array($controllerName, 'getInstance'));
-	                	$result[$config->name] = $controller->get($customField->value)->toArray();
-                	} catch (Exception $e) {
-                		if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error resolving custom field record: ' . $e->getMessage());
-                		$result[$config->name] = $customField->value;
-                	}
+                    try {
+                        $modelParts = explode('.', $config->definition['recordConfig']['value']['records']); // get model parts from saved record class e.g. Tine.Admin.Model.Group
+                        $controllerName = $modelParts[1] . '_Controller_' . $modelParts[3];    
+                        $controller = call_user_func(array($controllerName, 'getInstance'));
+                        $result[$config->name] = $controller->get($customField->value)->toArray();
+                    } catch (Exception $e) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error resolving custom field record: ' . $e->getMessage());
+                        $result[$config->name] = $customField->value;
+                    }
                 }
                 else {
-                	$result[$config->name] = $customField->value;
+                    $result[$config->name] = $customField->value;
                 }
             }
         }
@@ -442,7 +443,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      */
     public function resolveMultipleCustomfields(Tinebase_Record_RecordSet $_records)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Resolving custom fields for ' . count($_records) . ' records');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Resolving custom fields for ' . count($_records) . ' ' . $_records->getRecordClassName() . ' records.');
         
         $customFields = $this->_getCustomFields($_records->getArrayOfIds());
         $customFields->addIndices(array('record_id'));
