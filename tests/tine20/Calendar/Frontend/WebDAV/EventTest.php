@@ -355,11 +355,31 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         #var_dump($sharedVCalendar);
         $this->assertNotContains('X-MOZ-LASTACK;VALUE=DATE-TIME:21', $personalVCalendar, $personalVCalendar);
         $this->assertContains('X-MOZ-LASTACK;VALUE=DATE-TIME:21', $sharedVCalendar, $sharedVCalendar);
+    }
+    
+    public function testDeleteImplicitDecline()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
+        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/event_with_custom_alarm.ics');
         
-//         $this->assertContains('EXDATE;VALUE=DATE-TIME:20111005T080000Z', $vcalendar);
-//         $this->assertContains('RECURRENCE-ID;VALUE=DATE-TIME;TZID=Europe/Berlin:20111008T100000', $vcalendar);
-        // assert X-MOZ-LASTACK is in the far future
+        $id = Tinebase_Record_Abstract::generateUID();
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", $vcalendar);
+        
+        $pwulf = new Calendar_Model_Attender(array(
+            'user_type'  => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'    => array_value('pwulf', Zend_Registry::get('personas'))->contact_id
+        ));
+        
+        $pwulfAttendee = Calendar_Model_Attender::getAttendee($event->getRecord()->attendee, $pwulf);
+        $pwulfPersonalCal = Tinebase_Container::getInstance()->getContainerById($pwulfAttendee->displaycontainer_id);
+        $pwulfPersonalEvent = new Calendar_Frontend_WebDAV_Event($pwulfPersonalCal, "$id.ics");
+        $pwulfPersonalEvent->delete();
+        
+        $pwulfPersonalEvent = new Calendar_Frontend_WebDAV_Event($pwulfPersonalCal, "$id.ics");
+        $pwulfAttendee = Calendar_Model_Attender::getAttendee($pwulfPersonalEvent->getRecord()->attendee, $pwulf);
+        $this->assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $pwulfAttendee->status, 'event must be declined for pwulf');
+        $this->assertEquals(0, $pwulfPersonalEvent->getRecord()->is_deleted, 'event must not be deleted');
     }
     
     /**

@@ -213,8 +213,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
             if ($attendee && $attendee->user_id != $this->getRecord()->organizer) {
                 $attendee->status = Calendar_Model_Attender::STATUS_DECLINED;
                 
-                self::enforceEventParameters($event);
-                $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
+                self::enforceEventParameters($this->getRecord());
+                $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($this->getRecord());
             }
         }
     }
