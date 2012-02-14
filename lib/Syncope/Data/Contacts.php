@@ -22,14 +22,15 @@ class Syncope_Data_Contacts extends Syncope_Data_AData
         $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Contacts', 'uri:Contacts');
         
         foreach (Syncope_Data_AData::$entries[get_class($this)][$_collectionData["collectionId"]][$_serverId] as $key => $value) {
-            // create a new DOMElement ...
-            $node = new DOMElement($key, null, 'uri:Contacts');
+            // don't add empty values
+            if($value === null || $value == '') {
+                continue;
+            }
             
-            // ... append it to parent node aka append it to the document ...
+            $node = $_domParrent->ownerDocument->createElementNS('uri:Contacts', $key);
+            $node->appendChild($_domParrent->ownerDocument->createTextNode($value));
+            
             $_domParrent->appendChild($node);
-            
-            // ... and now add the content (DomText takes care of special chars)
-            $node->appendChild(new DOMText($value));
         }
         
     }

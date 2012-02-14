@@ -33,6 +33,10 @@ class Syncope_Registry extends ArrayObject
     const CONTACTS_DATA_CLASS = 'contacts_data_class';
     const EMAIL_DATA_CLASS    = 'email_data_class';
     const TASKS_DATA_CLASS    = 'tasks_data_class';
+    
+    const DATABASE            = 'database';
+    const TRANSACTIONMANAGER  = 'transactionmanager';
+    
     /**
      * Class name of the singleton registry object.
      * @var string
@@ -59,6 +63,24 @@ class Syncope_Registry extends ArrayObject
         return self::$_registry;
     }
 
+    /**
+     * @return Zend_Db_Adapter_Abstract
+     */
+    public static function getDatabase()
+    {
+        return self::get(self::DATABASE);
+    }
+    
+    /**
+     * return transaction manager class 
+     * 
+     * @return Syncope_TransactionManagerInterface
+     */
+    public static function getTransactionManager()
+    {
+        return self::get(self::TRANSACTIONMANAGER);
+    } 
+    
     /**
      * Set the default registry instance to a specified instance.
      *
@@ -172,12 +194,17 @@ class Syncope_Registry extends ArrayObject
         $instance->offsetSet($index, $value);
     }
 
+    public static function setDatabase(Zend_Db_Adapter_Abstract $db)
+    {
+        self::set(self::DATABASE, $db);
+    }
+    
     public static function setCalendarDataClass($className)
     {
         if (!class_exists($className)) {
             throw new InvalidArgumentException('invalid $_className provided');
         }
-        
+    
         self::set(self::CALENDAR_DATA_CLASS, $className);
     }
     
@@ -206,6 +233,11 @@ class Syncope_Registry extends ArrayObject
         }
     
         self::set(self::TASKS_DATA_CLASS, $className);
+    }
+    
+    public static function setTransactionManager(Syncope_TransactionManagerInterface $manager)
+    {
+        self::set(self::TRANSACTIONMANAGER, $manager);
     }
     
     /**
