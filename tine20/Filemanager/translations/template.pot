@@ -43,19 +43,19 @@ msgstr ""
 msgid "Item with this name already exists!"
 msgstr ""
 
-#: js/GridContextMenu.js:36
+#: js/GridContextMenu.js:35
 msgid "Please enter the new name of the {0}:"
 msgstr ""
 
-#: js/GridContextMenu.js:42
+#: js/GridContextMenu.js:41
 msgid "Not renamed {0}"
 msgstr ""
 
-#: js/GridContextMenu.js:42 js/GridPanel.js:495
+#: js/GridContextMenu.js:41 js/GridPanel.js:495
 msgid "You have to supply a {0} name!"
 msgstr ""
 
-#: js/GridContextMenu.js:146 js/GridPanel.js:539
+#: js/GridContextMenu.js:145 js/GridPanel.js:539
 msgid "Do you really want to delete the following files?"
 msgstr ""
 

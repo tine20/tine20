@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-01-13 12:42+0000\n"
+"PO-Revision-Date: 2012-02-13 12:03+0000\n"
 "Last-Translator: ph_il <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:54+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -38,16 +38,25 @@ msgid "Tasks status available"
 msgstr "Verfügbare Taskstatus"
 
 #: Config.php:40
-msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
-msgstr "Verfügbare Aufgabenstatus. Bitte beachten Sie, dass zusätzliche Werte beim Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt werden könnten."
+msgid ""
+"Possible tasks status. Please note that additional attendee status might "
+"impact other Tasks systems on export or syncronisation."
+msgstr ""
+"Verfügbare Aufgabenstatus. Bitte beachten Sie, dass zusätzliche Werte beim "
+"Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt "
+"werden könnten."
 
 #: Config.php:48
 msgid "Task priorities available"
 msgstr "Verfügbare Aufgabenprioritäten"
 
 #: Config.php:50
-msgid "Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation."
-msgstr "Verfügbare Aufgabenprioritäten. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
+msgid ""
+"Possible task priorities. Please note that additional priorities might "
+"impact other Tasks systems on export or syncronisation."
+msgstr ""
+"Verfügbare Aufgabenprioritäten. Please note that additional attendee status "
+"might impact other Tasks systems on export or syncronisation."
 
 #: Controller/Task.php:165
 msgid "Notification for Task "
@@ -92,7 +101,7 @@ msgstr "Priorität"
 msgid "Percent"
 msgstr "Prozent"
 
-#: js/GridPanel.js:186 js/TaskEditDialog.js:238 js/Tasks.js:151
+#: js/GridPanel.js:186 js/TaskEditDialog.js:237 js/Tasks.js:151
 #: js/Tasks.js:211 Model/Task.php:191
 msgid "Status"
 msgid_plural "Status"
@@ -103,7 +112,7 @@ msgstr[1] "Status"
 msgid "Creation Time"
 msgstr "Angelegt am"
 
-#: js/GridPanel.js:209 js/TaskEditDialog.js:243 Setup/Initialize.php:35
+#: js/GridPanel.js:209 js/TaskEditDialog.js:242 Setup/Initialize.php:35
 #: Setup/Update/Release5.php:66
 msgid "Completed"
 msgstr "Abgeschlossen"
@@ -132,15 +141,15 @@ msgstr "Organisator"
 msgid "Add Responsible ..."
 msgstr "Verantwortlichen hinzufügen ..."
 
-#: js/TaskEditDialog.js:224
+#: js/TaskEditDialog.js:223
 msgid "Notes"
 msgstr "Anmerkungen"
 
-#: js/TaskEditDialog.js:225
+#: js/TaskEditDialog.js:224
 msgid "Enter description..."
 msgstr "Beschreibung eingeben..."
 
-#: js/TaskEditDialog.js:231
+#: js/TaskEditDialog.js:230
 msgid "Percentage"
 msgstr "Prozent"
 
@@ -280,20 +289,20 @@ msgstr "Alle Aufgaben, die ich zuletzt bearbeitet habe"
 msgid "Tasks without responsible"
 msgstr "Aufgaben ohne Verantwortlichen"
 
-#~ msgid "NEEDS-ACTION"
-#~ msgstr "ZU BEARBEITEN"
+msgid "NEEDS-ACTION"
+msgstr "ZU BEARBEITEN"
 
-#~ msgid "COMPLETED"
-#~ msgstr "ERLEDIGT"
+msgid "COMPLETED"
+msgstr "ERLEDIGT"
 
-#~ msgid "IN-PROCESS"
-#~ msgstr "IN BEARBEITUNG"
+msgid "IN-PROCESS"
+msgstr "IN BEARBEITUNG"
 
-#~ msgid "CANCELLED"
-#~ msgstr "ZURÜCKGESTELLT"
+msgid "CANCELLED"
+msgstr "ZURÜCKGESTELLT"
 
-#~ msgid "Failed"
-#~ msgstr "Fehlgeschlagen"
+msgid "Failed"
+msgstr "Fehlgeschlagen"
 
-#~ msgid "Could not save task."
-#~ msgstr "Konnte Aufgabe nicht speichern."
+msgid "Could not save task."
+msgstr "Konnte Aufgabe nicht speichern."

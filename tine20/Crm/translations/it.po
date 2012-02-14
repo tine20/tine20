@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 12:07+0000\n"
-"Last-Translator: impiastro <Unknown>\n"
+"PO-Revision-Date: 2012-02-13 11:53+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:53+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Italian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -239,7 +239,7 @@ msgid "Cancel"
 msgstr ""
 
 #: js/AddToLeadPanel.js:64
-msgid "OK"
+msgid "Ok"
 msgstr ""
 
 #: js/AddToLeadPanel.js:99
@@ -360,11 +360,15 @@ msgid "Export as XLS"
 msgstr "Esporta come XLS"
 
 #: js/LeadEditDialog.js:287
-msgid "You do not have the run right for the Tasks application or it is not activated."
+msgid ""
+"You do not have the run right for the Tasks application or it is not "
+"activated."
 msgstr ""
 
 #: js/LeadEditDialog.js:298
-msgid "You do not have the run right for the Sales application or it is not activated."
+msgid ""
+"You do not have the run right for the Sales application or it is not "
+"activated."
 msgstr ""
 
 #: js/LeadEditDialog.js:339
@@ -595,20 +599,20 @@ msgstr ""
 msgid "Leads with overdue tasks"
 msgstr ""
 
-#~ msgid "Lead %s has been creaded"
-#~ msgstr "Il cliente potenziale %s è stato creato"
+msgid "Lead %s has been creaded"
+msgstr "Il cliente potenziale %s è stato creato"
 
-#~ msgid "Last Modified Time"
-#~ msgstr "Data Ultima Modifica"
+msgid "Last Modified Time"
+msgstr "Data Ultima Modifica"
 
-#~ msgid "Add task"
-#~ msgstr "Aggiungi compito"
+msgid "Add task"
+msgstr "Aggiungi compito"
 
-#~ msgid "Add task for selected lead"
-#~ msgstr "Aggiungi compito per il cliente potenziale selezionato"
+msgid "Add task for selected lead"
+msgstr "Aggiungi compito per il cliente potenziale selezionato"
 
-#~ msgid "Task"
-#~ msgstr "Compito"
+msgid "Task"
+msgstr "Compito"
 
-#~ msgid "History"
-#~ msgstr "Storia"
+msgid "History"
+msgstr "Storia"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 14:13+0000\n"
+"PO-Revision-Date: 2012-02-13 11:52+0000\n"
 "Last-Translator: ph_il <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:22+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:54+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -81,8 +81,13 @@ msgid "Delete all existing users and groups"
 msgstr "Lösche alle existierenden Benutzer und Gruppen"
 
 #: js/AuthenticationPanel.js:127
-msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
-msgstr "Der Wechsel von SQL nach LDAP wird alle bestehenden Benutzer, Gruppen und Rollen Löschen. Möchten sie den Wechsel wirklich vornehmen?"
+msgid ""
+"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
+"and Roles. Do you really want to switch the accounts storage backend to "
+"LDAP ?"
+msgstr ""
+"Der Wechsel von SQL nach LDAP wird alle bestehenden Benutzer, Gruppen und "
+"Rollen Löschen. Möchten sie den Wechsel wirklich vornehmen?"
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
 #: js/ConfigManagerPanel.js:132 js/EmailPanel.js:146
@@ -553,7 +558,9 @@ msgid "Performing Environment Checks..."
 msgstr "Führe Environment Prüfungen aus..."
 
 #: js/EnvCheckGridPanel.js:130
-msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgid ""
+"No {0} where found. Please try to change your filter-criteria, view-options "
+"or the {1} you search in."
 msgstr "Keine {0} gefunden. Bitte überprüfen Sie ihre Filterkriterien"
 
 #: js/EnvCheckGridPanel.js:160
@@ -626,29 +633,31 @@ msgstr "Datenschutzvereinbarung"
 msgid "Accept Terms and Conditions"
 msgstr "Bedingungen und Konditionen akzeptieren"
 
-#~ msgid "Informations"
-#~ msgstr "Informationen"
+msgid "Informations"
+msgstr "Informationen"
 
-#~ msgid "Session files"
-#~ msgstr "Sitzungs-Dateien"
+msgid "Session files"
+msgstr "Sitzungs-Dateien"
 
-#~ msgid "Session Files Path"
-#~ msgstr "Pfad für Sitzungs-Dateien"
+msgid "Session Files Path"
+msgstr "Pfad für Sitzungs-Dateien"
 
-#~ msgid "Domain"
-#~ msgstr "Domain"
+msgid "Domain"
+msgstr "Domain"
 
-#~ msgid "Use as default account"
-#~ msgstr "Benutze den Standard Zugang"
+msgid "Use as default account"
+msgstr "Benutze den Standard Zugang"
 
-#~ msgid "Default account name"
-#~ msgstr "Name des Standard Zuganges"
+msgid "Default account name"
+msgstr "Name des Standard Zuganges"
 
-#~ msgid "Redirect Url (after Logout, redirect to login screen if empty)"
-#~ msgstr "Weiterleitungs URL (Nach dem Logout. Standardverhalten ist der Login-Bildschrim)"
+msgid "Redirect Url (after Logout, redirect to login screen if empty)"
+msgstr ""
+"Weiterleitungs URL (Nach dem Logout. Standardverhalten ist der Login-"
+"Bildschrim)"
 
-#~ msgid "Shit"
-#~ msgstr "Scheiße"
+msgid "Shit"
+msgstr "Scheiße"
 
-#~ msgid "Where are the backup tapes"
-#~ msgstr "Wo sind nur die Backup Bänder"
+msgid "Where are the backup tapes"
+msgstr "Wo sind nur die Backup Bänder"

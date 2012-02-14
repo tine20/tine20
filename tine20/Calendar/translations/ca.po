@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 13:31+0000\n"
-"Last-Translator: Damià Verger <Unknown>\n"
+"PO-Revision-Date: 2012-02-13 11:41+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators <dverger@joomla.cat>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:52+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -45,7 +45,9 @@ msgid "Fixed Calendars"
 msgstr ""
 
 #: Config.php:47
-msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
+msgid ""
+"Calendars always selected regardless of all filter parameters. A valid use "
+"case might be to force the display of an certain holiday calendar."
 msgstr ""
 
 #: Config.php:55
@@ -53,7 +55,9 @@ msgid "Attendee Status Available"
 msgstr ""
 
 #: Config.php:57
-msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation."
+msgid ""
+"Possible event attendee status. Please note that additional attendee status "
+"might impact other calendar systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:65
@@ -61,7 +65,9 @@ msgid "Attendee Roles Available"
 msgstr ""
 
 #: Config.php:67
-msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation."
+msgid ""
+"Possible event attendee roles. Please note that additional attendee roles "
+"might impact other calendar systems on export or syncronisation."
 msgstr ""
 
 #: Controller/EventNotifications.php:242
@@ -482,8 +488,12 @@ msgid "Please Change Selection"
 msgstr "Canvieu la selecció"
 
 #: js/MainScreenCenterPanel.js:746
-msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
-msgstr "Aquesta selecció conté esdeveniments recurrents. Els esdeveniments recurrents s'han d'eliminar per separat!"
+msgid ""
+"Your selection contains recurring events. Recuring events must be deleted "
+"seperatly!"
+msgstr ""
+"Aquesta selecció conté esdeveniments recurrents. Els esdeveniments "
+"recurrents s'han d'eliminar per separat!"
 
 #: js/MainScreenCenterPanel.js:760
 msgid "Delete Event"
@@ -715,8 +725,11 @@ msgid "unknown"
 msgstr "desconegut"
 
 #: Model/Attender.php:406
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "El sistema ha afegit automàticament aquest contacte com a organitzador de l'esdeveniment"
+msgid ""
+"This contact has been automatically added by the system as an event attender"
+msgstr ""
+"El sistema ha afegit automàticament aquest contacte com a organitzador de "
+"l'esdeveniment"
 
 #: Model/Event.php:235
 msgid "Start"
@@ -783,8 +796,14 @@ msgid "Get Notification Emails"
 msgstr "Rep correus electrònics de notificació"
 
 #: Preference.php:92
-msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
-msgstr "El nivell de les accions de les quals voleu que se us notifiqui. Observeu que els organitzadors rebran notificacions de tota actualització incloent les respostes dels assistents a menys que establiu aquesta opció a \"Mai\""
+msgid ""
+"The level of actions you want to be notified about. Please note that "
+"organizers will get notifications for all updates including attendee answers "
+"unless this preference is set to \"Never\""
+msgstr ""
+"El nivell de les accions de les quals voleu que se us notifiqui. Observeu "
+"que els organitzadors rebran notificacions de tota actualització incloent "
+"les respostes dels assistents a menys que establiu aquesta opció a \"Mai\""
 
 #: Preference.php:95
 msgid "Send Notifications Emails of own Actions"
@@ -906,29 +925,33 @@ msgstr ""
 msgid "Event details"
 msgstr "Detalls de l'esdeveniment"
 
-#~ msgid "forever"
-#~ msgstr "per sempre"
+msgid "forever"
+msgstr "per sempre"
 
-#~ msgid "Forever"
-#~ msgstr "Per sempre"
+msgid "Forever"
+msgstr "Per sempre"
 
-#~ msgid "Until"
-#~ msgstr "Fins"
+msgid "Until"
+msgstr "Fins"
 
-#~ msgid "Unknown calendar"
-#~ msgstr "Calendari desconegut"
+msgid "Unknown calendar"
+msgstr "Calendari desconegut"
 
-#~ msgid "unknown)"
-#~ msgstr "desconegut)"
+msgid "unknown)"
+msgstr "desconegut)"
 
-#~ msgid "Confirm Update of Series"
-#~ msgstr "Confirma actualització de sèries"
+msgid "Confirm Update of Series"
+msgstr "Confirma actualització de sèries"
 
-#~ msgid "Do you really want to update all events of this recurring event series?"
-#~ msgstr "Esteu segur que voleu actualitzar tots els esdeveniments d'aquestes sèries d'esdeveniments recurrents?"
+msgid "Do you really want to update all events of this recurring event series?"
+msgstr ""
+"Esteu segur que voleu actualitzar tots els esdeveniments d'aquestes sèries "
+"d'esdeveniments recurrents?"
 
-#~ msgid "Confirm Deletion of Series"
-#~ msgstr "Confirma eliminació de sèries"
+msgid "Confirm Deletion of Series"
+msgstr "Confirma eliminació de sèries"
 
-#~ msgid "Do you really want to delete all events of this recurring event series?"
-#~ msgstr "Esteu segur que voleu eliminar tots els esdeveniments d'aquestes sèries d'esdeveniments recurrents?"
+msgid "Do you really want to delete all events of this recurring event series?"
+msgstr ""
+"Esteu segur que voleu eliminar tots els esdeveniments d'aquestes sèries "
+"d'esdeveniments recurrents?"

@@ -1,18 +1,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"PO-Revision-Date: 2012-02-13 11:37+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: en\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:52+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:96
 msgid "manage shared calendars"
@@ -43,24 +46,36 @@ msgid "Fixed Calendars"
 msgstr "Fixed Calendars"
 
 #: Config.php:47
-msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
-msgstr "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
+msgid ""
+"Calendars always selected regardless of all filter parameters. A valid use "
+"case might be to force the display of an certain holiday calendar."
+msgstr ""
+"Calendars always selected regardless of all filter parameters. A valid use "
+"case might be to force the display of an certain holiday calendar."
 
 #: Config.php:55
 msgid "Attendee Status Available"
 msgstr "Attendee Status Available"
 
 #: Config.php:57
-msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation."
-msgstr "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation."
+msgid ""
+"Possible event attendee status. Please note that additional attendee status "
+"might impact other calendar systems on export or syncronisation."
+msgstr ""
+"Possible event attendee status. Please note that additional attendee status "
+"might impact other calendar systems on export or syncronisation."
 
 #: Config.php:65
 msgid "Attendee Roles Available"
 msgstr "Attendee Roles Available"
 
 #: Config.php:67
-msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation."
-msgstr "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation."
+msgid ""
+"Possible event attendee roles. Please note that additional attendee roles "
+"might impact other calendar systems on export or syncronisation."
+msgstr ""
+"Possible event attendee roles. Please note that additional attendee roles "
+"might impact other calendar systems on export or syncronisation."
 
 #: Controller/EventNotifications.php:242
 msgid "Alarm for event \"%1$s\" at %2$s"
@@ -480,8 +495,12 @@ msgid "Please Change Selection"
 msgstr "Please Change Selection"
 
 #: js/MainScreenCenterPanel.js:746
-msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
-msgstr "Your selection contains recurring events. Recuring events must be deleted seperatly!"
+msgid ""
+"Your selection contains recurring events. Recuring events must be deleted "
+"seperatly!"
+msgstr ""
+"Your selection contains recurring events. Recuring events must be deleted "
+"seperatly!"
 
 #: js/MainScreenCenterPanel.js:760
 msgid "Delete Event"
@@ -713,8 +732,10 @@ msgid "unknown"
 msgstr "unknown"
 
 #: Model/Attender.php:406
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "This contact has been automatically added by the system as an event attender"
+msgid ""
+"This contact has been automatically added by the system as an event attender"
+msgstr ""
+"This contact has been automatically added by the system as an event attender"
 
 #: Model/Event.php:235
 msgid "Start"
@@ -781,8 +802,14 @@ msgid "Get Notification Emails"
 msgstr "Get Notification Emails"
 
 #: Preference.php:92
-msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
-msgstr "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
+msgid ""
+"The level of actions you want to be notified about. Please note that "
+"organizers will get notifications for all updates including attendee answers "
+"unless this preference is set to \"Never\""
+msgstr ""
+"The level of actions you want to be notified about. Please note that "
+"organizers will get notifications for all updates including attendee answers "
+"unless this preference is set to \"Never\""
 
 #: Preference.php:95
 msgid "Send Notifications Emails of own Actions"

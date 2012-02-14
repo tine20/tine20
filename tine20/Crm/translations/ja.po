@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 12:07+0000\n"
-"Last-Translator: kitamura yuuki <Unknown>\n"
+"PO-Revision-Date: 2012-02-13 11:56+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Yuuki ’Taisa’ Kitamura <ykitamura@clasi-co.jp>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:53+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Country: JAPAN\n"
 "X-Poedit-Language: Japanese\n"
 
@@ -238,7 +238,7 @@ msgid "Cancel"
 msgstr ""
 
 #: js/AddToLeadPanel.js:64
-msgid "OK"
+msgid "Ok"
 msgstr ""
 
 #: js/AddToLeadPanel.js:99
@@ -359,11 +359,15 @@ msgid "Export as XLS"
 msgstr ""
 
 #: js/LeadEditDialog.js:287
-msgid "You do not have the run right for the Tasks application or it is not activated."
+msgid ""
+"You do not have the run right for the Tasks application or it is not "
+"activated."
 msgstr ""
 
 #: js/LeadEditDialog.js:298
-msgid "You do not have the run right for the Sales application or it is not activated."
+msgid ""
+"You do not have the run right for the Sales application or it is not "
+"activated."
 msgstr ""
 
 #: js/LeadEditDialog.js:339
@@ -594,166 +598,166 @@ msgstr ""
 msgid "Leads with overdue tasks"
 msgstr ""
 
-#~ msgid "Lead %s has been creaded"
-#~ msgstr "リード　%s が作成されました"
+msgid "Lead %s has been creaded"
+msgstr "リード　%s が作成されました"
 
-#~ msgid "Add task"
-#~ msgstr "タスクの追加"
+msgid "Add task"
+msgstr "タスクの追加"
 
-#~ msgid "Add task for selected lead"
-#~ msgstr "選択されたリードにタスクを追加"
-
-#, fuzzy
-#~ msgid "Lead Name"
-#~ msgstr "リード名"
+msgid "Add task for selected lead"
+msgstr "選択されたリードにタスクを追加"
 
 #, fuzzy
-#~ msgid "Date Start"
-#~ msgstr "開始"
+msgid "Lead Name"
+msgstr "リード名"
 
 #, fuzzy
-#~ msgid "Date End Scheduled"
-#~ msgstr "スケジュールされた終了"
+msgid "Date Start"
+msgstr "開始"
 
 #, fuzzy
-#~ msgid "Created By"
-#~ msgstr "更新者"
-
-#~ msgid "Lead states"
-#~ msgstr "リードステータス"
-
-#~ msgid "Lead sources"
-#~ msgstr "リードソース"
-
-#~ msgid "Lead types"
-#~ msgstr "リードタイプ"
+msgid "Date End Scheduled"
+msgstr "スケジュールされた終了"
 
 #, fuzzy
-#~ msgid "Remove Option"
-#~ msgstr "プロダクトの削除"
+msgid "Created By"
+msgstr "更新者"
 
-#~ msgid "Type"
-#~ msgstr "タイプ"
+msgid "Lead states"
+msgstr "リードステータス"
 
-#, fuzzy
-#~ msgid "Select lead"
-#~ msgstr "リードの削除"
+msgid "Lead sources"
+msgstr "リードソース"
 
-#, fuzzy
-#~ msgid "Open tasks"
-#~ msgstr "タスクの削除"
+msgid "Lead types"
+msgstr "リードタイプ"
 
 #, fuzzy
-#~ msgid "Tasks status"
-#~ msgstr "リードステータス"
+msgid "Remove Option"
+msgstr "プロダクトの削除"
 
-#~ msgid "telephone"
-#~ msgstr "電話番号"
+msgid "Type"
+msgstr "タイプ"
 
-#~ msgid "email"
-#~ msgstr "Eメール"
+#, fuzzy
+msgid "Select lead"
+msgstr "リードの削除"
 
-#~ msgid "fair"
-#~ msgstr "フェア"
+#, fuzzy
+msgid "Open tasks"
+msgstr "タスクの削除"
 
-#~ msgid "customer"
-#~ msgstr "顧客"
+#, fuzzy
+msgid "Tasks status"
+msgstr "リードステータス"
 
-#~ msgid "partner"
-#~ msgstr "パートナ"
+msgid "telephone"
+msgstr "電話番号"
 
-#~ msgid "Are you sure you want to delete this lead?"
-#~ msgstr "このリードを本当に削除しますか？"
+msgid "email"
+msgstr "Eメール"
 
-#~ msgid "Deleting lead"
-#~ msgstr "リードを削除しています"
+msgid "fair"
+msgstr "フェア"
 
-#~ msgid "Some error occured while trying to delete the lead."
-#~ msgstr "リードの削除中にエラーが発生しました"
+msgid "customer"
+msgstr "顧客"
 
-#~ msgid "Show details"
-#~ msgstr "詳細の表示"
+msgid "partner"
+msgstr "パートナ"
 
-#~ msgid "Displaying leads {0} - {1} of {2}"
-#~ msgstr "リードの表示 {0} - {1} 件中 {2}"
+msgid "Are you sure you want to delete this lead?"
+msgstr "このリードを本当に削除しますか？"
 
-#~ msgid "No leads found."
-#~ msgstr "リードが見つかりません"
+msgid "Deleting lead"
+msgstr "リードを削除しています"
 
-#~ msgid "Add lead"
-#~ msgstr "リードの追加"
+msgid "Some error occured while trying to delete the lead."
+msgstr "リードの削除中にエラーが発生しました"
 
-#~ msgid "Edit lead"
-#~ msgstr "リードの編集"
+msgid "Show details"
+msgstr "詳細の表示"
 
-#~ msgid "Delete selected leads"
-#~ msgstr "選択されたリードの削除"
+msgid "Displaying leads {0} - {1} of {2}"
+msgstr "リードの表示 {0} - {1} 件中 {2}"
 
-#~ msgid "Export selected lead as PDF"
-#~ msgstr "選択されたリードをPDFでエクスポート"
+msgid "No leads found."
+msgstr "リードが見つかりません"
 
-#~ msgid "Please wait"
-#~ msgstr "お待ちください"
+msgid "Add lead"
+msgstr "リードの追加"
 
-#~ msgid "Saving lead"
-#~ msgstr "リードを保存しています"
+msgid "Edit lead"
+msgstr "リードの編集"
 
-#~ msgid "Failed"
-#~ msgstr "失敗しました"
+msgid "Delete selected leads"
+msgstr "選択されたリードの削除"
 
-#~ msgid "Could not save lead."
-#~ msgstr "リードを保存できませんでした"
+msgid "Export selected lead as PDF"
+msgstr "選択されたリードをPDFでエクスポート"
 
-#~ msgid "Please fix the errors noted."
-#~ msgstr "表示されているエラーを修正してください"
+msgid "Please wait"
+msgstr "お待ちください"
 
-#~ msgid "Contactdata"
-#~ msgstr "コンタクトデータ"
+msgid "Saving lead"
+msgstr "リードを保存しています"
 
-#~ msgid "Add new contact"
-#~ msgstr "コンタクトの新規追加"
+msgid "Failed"
+msgstr "失敗しました"
 
-#~ msgid "Add new customer contact"
-#~ msgstr "新規顧客コンタクトの追加"
+msgid "Could not save lead."
+msgstr "リードを保存できませんでした"
 
-#~ msgid "Edit contact"
-#~ msgstr "コンタクトの編集"
+msgid "Please fix the errors noted."
+msgstr "表示されているエラーを修正してください"
 
-#~ msgid "Edit selected contact"
-#~ msgstr "選択されたコンタクトの編集"
+msgid "Contactdata"
+msgstr "コンタクトデータ"
 
-#~ msgid "Unlink contact"
-#~ msgstr "コンタクトのアンリンク"
+msgid "Add new contact"
+msgstr "コンタクトの新規追加"
 
-#~ msgid "Add new task"
-#~ msgstr "新規タスクの追加"
+msgid "Add new customer contact"
+msgstr "新規顧客コンタクトの追加"
 
-#~ msgid "Edit task"
-#~ msgstr "タスクの編集"
+msgid "Edit contact"
+msgstr "コンタクトの編集"
 
-#~ msgid "Edit selected task"
-#~ msgstr "選択されたタスクの編集"
+msgid "Edit selected contact"
+msgstr "選択されたコンタクトの編集"
 
-#~ msgid "Add existing task to lead"
-#~ msgstr "既存タスクをリードに追加"
+msgid "Unlink contact"
+msgstr "コンタクトのアンリンク"
 
-#~ msgid "Remove selected tasks"
-#~ msgstr "選択されたタスクの削除"
+msgid "Add new task"
+msgstr "新規タスクの追加"
 
-#~ msgid "Remove selected products"
-#~ msgstr "選択されたプロダクトの削除"
+msgid "Edit task"
+msgstr "タスクの編集"
 
-#~ msgid "Leads"
-#~ msgstr "リード"
+msgid "Edit selected task"
+msgstr "選択されたタスクの編集"
 
-#~ msgid "Loading Lead..."
-#~ msgstr "リードのロード中..."
+msgid "Add existing task to lead"
+msgstr "既存タスクをリードに追加"
 
-#~ msgid "Please Wait"
-#~ msgstr "お待ちください"
+msgid "Remove selected tasks"
+msgstr "選択されたタスクの削除"
 
-#~ msgid "Add New Lead"
-#~ msgstr "リードの新規追加"
+msgid "Remove selected products"
+msgstr "選択されたプロダクトの削除"
 
-#~ msgid "Overview"
-#~ msgstr "概要"
+msgid "Leads"
+msgstr "リード"
+
+msgid "Loading Lead..."
+msgstr "リードのロード中..."
+
+msgid "Please Wait"
+msgstr "お待ちください"
+
+msgid "Add New Lead"
+msgstr "リードの新規追加"
+
+msgid "Overview"
+msgstr "概要"

@@ -236,8 +236,8 @@ msgid "Cancel"
 msgstr "Cancel"
 
 #: js/AddToLeadPanel.js:64
-msgid "OK"
-msgstr "OK"
+msgid "Ok"
+msgstr "Ok"
 
 #: js/AddToLeadPanel.js:99
 msgid "Please choose the Lead to add the contacts to"
@@ -357,12 +357,20 @@ msgid "Export as XLS"
 msgstr "Export as XLS"
 
 #: js/LeadEditDialog.js:287
-msgid "You do not have the run right for the Tasks application or it is not activated."
-msgstr "You do not have the run right for the Tasks application or it is not activated."
+msgid ""
+"You do not have the run right for the Tasks application or it is not "
+"activated."
+msgstr ""
+"You do not have the run right for the Tasks application or it is not "
+"activated."
 
 #: js/LeadEditDialog.js:298
-msgid "You do not have the run right for the Sales application or it is not activated."
-msgstr "You do not have the run right for the Sales application or it is not activated."
+msgid ""
+"You do not have the run right for the Sales application or it is not "
+"activated."
+msgstr ""
+"You do not have the run right for the Sales application or it is not "
+"activated."
 
 #: js/LeadEditDialog.js:339
 msgid "Enter short name"
@@ -591,3 +599,6 @@ msgstr "All leads that I am responsible for"
 #: Setup/Initialize.php:86
 msgid "Leads with overdue tasks"
 msgstr "Leads with overdue tasks"
+
+#~ msgid "OK"
+#~ msgstr "OK"

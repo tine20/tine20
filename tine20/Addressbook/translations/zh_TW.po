@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 09:47+0000\n"
-"Last-Translator: Frank <Unknown>\n"
+"PO-Revision-Date: 2012-02-13 11:58+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:52+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Country: TAIWAN\n"
 "X-Poedit-Language: Chinese\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -38,7 +38,9 @@ msgid "Contact duplicate check fields"
 msgstr ""
 
 #: Config.php:47
-msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
+msgid ""
+"These fields are checked when a new contact is created. If a record with the "
+"same data in the fields is found, a duplicate exception is thrown."
 msgstr ""
 
 #: Config.php:59
@@ -46,7 +48,9 @@ msgid "Contact salutations available"
 msgstr ""
 
 #: Config.php:61
-msgid "Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation."
+msgid ""
+"Possible contact salutations. Please note that additional values might "
+"impact other Addressbook systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:69
@@ -188,7 +192,9 @@ msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
 #: Import/definitions/adb_tine_import_csv.xml:20
-msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgid ""
+"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
 msgstr ""
 
 #: js/Addressbook.js:22
@@ -231,13 +237,15 @@ msgid "Middle Name"
 msgstr ""
 
 #: js/ContactEditDialog.js:134 js/ContactEditDialog.js:440
-#: js/ContactGrid.js:107 js/Model.js:19 js/Model.js:140
+#: js/ContactEditDialog.js:458 js/ContactGrid.js:107 js/Model.js:19
+#: js/Model.js:140
 msgid "Last Name"
 msgstr "姓氏"
 
 #: js/ContactEditDialog.js:143 js/ContactEditDialog.js:440
-#: js/ContactGrid.js:111 js/ContactGridDetailsPanel.js:131 js/Model.js:27
-#: js/Model.js:141 Setup/Initialize.php:65 Setup/Update/Release5.php:192
+#: js/ContactEditDialog.js:458 js/ContactGrid.js:111
+#: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
+#: Setup/Initialize.php:65 Setup/Update/Release5.php:191
 msgid "Company"
 msgstr "公司名稱"
 
@@ -354,23 +362,23 @@ msgstr "輸入說明"
 msgid "Export as pdf"
 msgstr ""
 
-#: js/ContactEditDialog.js:416 js/ContactEditDialog.js:484
+#: js/ContactEditDialog.js:416 js/ContactEditDialog.js:501
 msgid "Parse address"
 msgstr ""
 
-#: js/ContactEditDialog.js:440
+#: js/ContactEditDialog.js:440 js/ContactEditDialog.js:458
 msgid "Either {0} or {1} must be given"
 msgstr ""
 
-#: js/ContactEditDialog.js:476
+#: js/ContactEditDialog.js:493
 msgid "Paste address"
 msgstr ""
 
-#: js/ContactEditDialog.js:476
+#: js/ContactEditDialog.js:493
 msgid "Please paste an address that should be parsed:"
 msgstr ""
 
-#: js/ContactEditDialog.js:510
+#: js/ContactEditDialog.js:527
 msgid "End token mode"
 msgstr ""
 
@@ -633,11 +641,11 @@ msgstr ""
 msgid "The default favorite which is loaded on addressbook startup"
 msgstr ""
 
-#: Setup/Initialize.php:63 Setup/Update/Release5.php:190
+#: Setup/Initialize.php:63 Setup/Update/Release5.php:189
 msgid "Mr"
 msgstr "先生"
 
-#: Setup/Initialize.php:64 Setup/Update/Release5.php:191
+#: Setup/Initialize.php:64 Setup/Update/Release5.php:190
 msgid "Ms"
 msgstr "小姐"
 
@@ -674,60 +682,60 @@ msgid "Internal Contacts"
 msgstr "分機號碼"
 
 #, fuzzy
-#~ msgid "Call contact"
-#~ msgstr "撥打聯絡人"
+msgid "Call contact"
+msgstr "撥打聯絡人"
 
-#~ msgid "Work"
-#~ msgstr "工作"
+msgid "Work"
+msgstr "工作"
 
-#~ msgid "Home"
-#~ msgstr "家裡"
+msgid "Home"
+msgstr "家裡"
 
-#~ msgid "Cell"
-#~ msgstr "手機號碼"
+msgid "Cell"
+msgstr "手機號碼"
 
-#~ msgid "Cell private"
-#~ msgstr "個人手機號碼"
+msgid "Cell private"
+msgstr "個人手機號碼"
 
-#~ msgid "addressbook"
-#~ msgid_plural "addressbooks"
-#~ msgstr[0] "通訊錄"
+msgid "addressbook"
+msgid_plural "addressbooks"
+msgstr[0] "通訊錄"
 
-#~ msgid "addressbooks"
-#~ msgstr "通訊錄"
+msgid "addressbooks"
+msgstr "通訊錄"
 
-#~ msgid "contacts"
-#~ msgstr "聯絡人"
+msgid "contacts"
+msgstr "聯絡人"
 
-#~ msgid "export as pdf"
-#~ msgstr "匯出成pdf"
+msgid "export as pdf"
+msgstr "匯出成pdf"
 
-#~ msgid "Loading Contact..."
-#~ msgstr "載入聯絡人"
+msgid "Loading Contact..."
+msgstr "載入聯絡人"
 
-#~ msgid "Please Wait"
-#~ msgstr "請稍後..."
+msgid "Please Wait"
+msgstr "請稍後..."
 
-#~ msgid "Add new contact"
-#~ msgstr "新增聯絡人"
+msgid "Add new contact"
+msgstr "新增聯絡人"
 
-#~ msgid "Edit Contact \"{0}\""
-#~ msgstr "編輯聯絡人 \"{0}\""
+msgid "Edit Contact \"{0}\""
+msgstr "編輯聯絡人 \"{0}\""
 
-#~ msgid "Please wait a moment..."
-#~ msgstr "請稍後..."
+msgid "Please wait a moment..."
+msgstr "請稍後..."
 
-#~ msgid "Saving Contact"
-#~ msgstr "儲存聯絡人"
+msgid "Saving Contact"
+msgstr "儲存聯絡人"
 
-#~ msgid "Could not save contact."
-#~ msgstr "資料無法儲存"
+msgid "Could not save contact."
+msgstr "資料無法儲存"
 
-#~ msgid "Deleting contact..."
-#~ msgstr "刪除聯絡人"
+msgid "Deleting contact..."
+msgstr "刪除聯絡人"
 
-#~ msgid "Custom Fields"
-#~ msgstr "自定欄位"
+msgid "Custom Fields"
+msgstr "自定欄位"
 
-#~ msgid "Export"
-#~ msgstr "匯出"
+msgid "Export"
+msgstr "匯出"

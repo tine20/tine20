@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 09:48+0000\n"
-"Last-Translator: jason qi <Unknown>\n"
+"PO-Revision-Date: 2012-02-13 11:51+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:52+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Chinese\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -38,7 +38,9 @@ msgid "Contact duplicate check fields"
 msgstr ""
 
 #: Config.php:47
-msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
+msgid ""
+"These fields are checked when a new contact is created. If a record with the "
+"same data in the fields is found, a duplicate exception is thrown."
 msgstr ""
 
 #: Config.php:59
@@ -46,7 +48,9 @@ msgid "Contact salutations available"
 msgstr ""
 
 #: Config.php:61
-msgid "Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation."
+msgid ""
+"Possible contact salutations. Please note that additional values might "
+"impact other Addressbook systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:69
@@ -188,7 +192,9 @@ msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
 #: Import/definitions/adb_tine_import_csv.xml:20
-msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgid ""
+"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
 msgstr ""
 
 #: js/Addressbook.js:22
@@ -231,13 +237,15 @@ msgid "Middle Name"
 msgstr "中间名"
 
 #: js/ContactEditDialog.js:134 js/ContactEditDialog.js:440
-#: js/ContactGrid.js:107 js/Model.js:19 js/Model.js:140
+#: js/ContactEditDialog.js:458 js/ContactGrid.js:107 js/Model.js:19
+#: js/Model.js:140
 msgid "Last Name"
 msgstr "姓"
 
 #: js/ContactEditDialog.js:143 js/ContactEditDialog.js:440
-#: js/ContactGrid.js:111 js/ContactGridDetailsPanel.js:131 js/Model.js:27
-#: js/Model.js:141 Setup/Initialize.php:65 Setup/Update/Release5.php:192
+#: js/ContactEditDialog.js:458 js/ContactGrid.js:111
+#: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
+#: Setup/Initialize.php:65 Setup/Update/Release5.php:191
 msgid "Company"
 msgstr "公司"
 
@@ -354,23 +362,23 @@ msgstr "输入描述"
 msgid "Export as pdf"
 msgstr "导出 pdf 文件"
 
-#: js/ContactEditDialog.js:416 js/ContactEditDialog.js:484
+#: js/ContactEditDialog.js:416 js/ContactEditDialog.js:501
 msgid "Parse address"
 msgstr ""
 
-#: js/ContactEditDialog.js:440
+#: js/ContactEditDialog.js:440 js/ContactEditDialog.js:458
 msgid "Either {0} or {1} must be given"
 msgstr "必须给出{0}或者{1}"
 
-#: js/ContactEditDialog.js:476
+#: js/ContactEditDialog.js:493
 msgid "Paste address"
 msgstr ""
 
-#: js/ContactEditDialog.js:476
+#: js/ContactEditDialog.js:493
 msgid "Please paste an address that should be parsed:"
 msgstr ""
 
-#: js/ContactEditDialog.js:510
+#: js/ContactEditDialog.js:527
 msgid "End token mode"
 msgstr ""
 
@@ -633,11 +641,11 @@ msgstr ""
 msgid "The default favorite which is loaded on addressbook startup"
 msgstr ""
 
-#: Setup/Initialize.php:63 Setup/Update/Release5.php:190
+#: Setup/Initialize.php:63 Setup/Update/Release5.php:189
 msgid "Mr"
 msgstr "先生"
 
-#: Setup/Initialize.php:64 Setup/Update/Release5.php:191
+#: Setup/Initialize.php:64 Setup/Update/Release5.php:190
 msgid "Ms"
 msgstr "女士"
 
@@ -673,121 +681,121 @@ msgstr ""
 msgid "Internal Contacts"
 msgstr "内部联系人"
 
-#~ msgid "Searching..."
-#~ msgstr "搜索中... "
+msgid "Searching..."
+msgstr "搜索中... "
 
 #, fuzzy
-#~ msgid "Call contact"
-#~ msgstr "呼叫联系人"
+msgid "Call contact"
+msgstr "呼叫联系人"
 
-#~ msgid "Compose email"
-#~ msgstr "写邮件"
+msgid "Compose email"
+msgstr "写邮件"
 
-#~ msgid "Work"
-#~ msgstr "工作"
+msgid "Work"
+msgstr "工作"
 
-#~ msgid "Home"
-#~ msgstr "家里"
+msgid "Home"
+msgstr "家里"
 
-#~ msgid "Cell"
-#~ msgstr "手机"
+msgid "Cell"
+msgstr "手机"
 
-#~ msgid "Cell private"
-#~ msgstr "私人手机"
+msgid "Cell private"
+msgstr "私人手机"
 
-#~ msgid "Last Modified Time"
-#~ msgstr "最后修改时间"
+msgid "Last Modified Time"
+msgstr "最后修改时间"
 
-#~ msgid "addressbook"
-#~ msgid_plural "addressbooks"
-#~ msgstr[0] "地址本"
+msgid "addressbook"
+msgid_plural "addressbooks"
+msgstr[0] "地址本"
 
-#~ msgid "addressbooks"
-#~ msgstr "地址本"
+msgid "addressbooks"
+msgstr "地址本"
 
-#~ msgid "contacts"
-#~ msgstr "联系人"
+msgid "contacts"
+msgstr "联系人"
 
-#~ msgid "export as pdf"
-#~ msgstr "输入 pdf 文件"
+msgid "export as pdf"
+msgstr "输入 pdf 文件"
 
-#~ msgid "Loading Contact..."
-#~ msgstr "加载联系人..."
+msgid "Loading Contact..."
+msgstr "加载联系人..."
 
-#~ msgid "Please Wait"
-#~ msgstr "请稍等"
+msgid "Please Wait"
+msgstr "请稍等"
 
-#~ msgid "Add new contact"
-#~ msgstr "添加新联系人"
+msgid "Add new contact"
+msgstr "添加新联系人"
 
-#~ msgid "Edit Contact \"{0}\""
-#~ msgstr "编辑联系人\"{0}\""
+msgid "Edit Contact \"{0}\""
+msgstr "编辑联系人\"{0}\""
 
-#~ msgid "Please wait a moment..."
-#~ msgstr "请稍等..."
+msgid "Please wait a moment..."
+msgstr "请稍等..."
 
-#~ msgid "Saving Contact"
-#~ msgstr "保存联系人"
+msgid "Saving Contact"
+msgstr "保存联系人"
 
-#~ msgid "Failed"
-#~ msgstr "失败"
+msgid "Failed"
+msgstr "失败"
 
-#~ msgid "Could not save contact."
-#~ msgstr "不能保存联系人"
+msgid "Could not save contact."
+msgstr "不能保存联系人"
 
-#~ msgid "Either "
-#~ msgstr "任意一个"
+msgid "Either "
+msgstr "任意一个"
 
-#~ msgid "Start date is not valid"
-#~ msgstr "开始日期无效"
+msgid "Start date is not valid"
+msgstr "开始日期无效"
 
-#~ msgid "Errors"
-#~ msgstr "错误"
+msgid "Errors"
+msgstr "错误"
 
-#~ msgid "Please fix the errors noted."
-#~ msgstr "请修复注明的错误"
+msgid "Please fix the errors noted."
+msgstr "请修复注明的错误"
 
-#~ msgid "Deleting contact..."
-#~ msgstr "正删除联系人..."
+msgid "Deleting contact..."
+msgstr "正删除联系人..."
 
-#~ msgid "Some error occured while trying to delete the contact."
-#~ msgstr "当试图删除联系人的时候有错误发生"
+msgid "Some error occured while trying to delete the contact."
+msgstr "当试图删除联系人的时候有错误发生"
 
-#~ msgid "Custom Fields"
-#~ msgstr "定制字段"
+msgid "Custom Fields"
+msgstr "定制字段"
 
-#~ msgid "Link"
-#~ msgid_plural "Links [%d]"
-#~ msgstr[0] "链接 [%d]"
+msgid "Link"
+msgid_plural "Links [%d]"
+msgstr[0] "链接 [%d]"
 
-#~ msgid "Export"
-#~ msgstr "导出"
+msgid "Export"
+msgstr "导出"
 
-#~ msgid "Are you Sure?"
-#~ msgstr "确定？"
+msgid "Are you Sure?"
+msgstr "确定？"
 
-#~ msgid "Do you really want to delete the selected contact?"
-#~ msgid_plural "Do you really want to delete the selected contacts?"
-#~ msgstr[0] "你真的想删除选中的联系人？"
+msgid "Do you really want to delete the selected contact?"
+msgid_plural "Do you really want to delete the selected contacts?"
+msgstr[0] "你真的想删除选中的联系人？"
 
-#~ msgid "add contact"
-#~ msgstr "添加联系人"
+msgid "add contact"
+msgstr "添加联系人"
 
-#~ msgid "edit contact"
-#~ msgstr "编辑联系人"
+msgid "edit contact"
+msgstr "编辑联系人"
 
-#~ msgid "delete contact"
-#~ msgid_plural "delete contacts"
-#~ msgstr[0] "删除联系人"
+msgid "delete contact"
+msgid_plural "delete contacts"
+msgstr[0] "删除联系人"
 
-#~ msgid "Displaying contacts {0} - {1} of {2}"
-#~ msgstr "显示联系人 {0} - {1} of {2}"
+msgid "Displaying contacts {0} - {1} of {2}"
+msgstr "显示联系人 {0} - {1} of {2}"
 
-#~ msgid "No contacts to display"
-#~ msgstr "没有联系人"
+msgid "No contacts to display"
+msgstr "没有联系人"
 
-#~ msgid "Some error occured while trying to delete the conctact."
-#~ msgstr "当删除联系人的时候有错误发生"
+msgid "Some error occured while trying to delete the conctact."
+msgstr "当删除联系人的时候有错误发生"
 
-#~ msgid "Saved in"
-#~ msgstr "保存到"
+msgid "Saved in"
+msgstr "保存到"

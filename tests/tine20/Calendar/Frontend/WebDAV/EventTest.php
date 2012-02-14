@@ -337,6 +337,51 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttendee->status, 'event must not be declined');
     }
     
+    public function testGetAlarm()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+        
+        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
+        
+        $id = Tinebase_Record_Abstract::generateUID();
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", $vcalendar);
+        
+        $personalEvent = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], "$id.ics");
+        $sharedEvent = new Calendar_Frontend_WebDAV_Event($this->objects['sharedContainer'], "$id.ics");
+        
+        $personalVCalendar = stream_get_contents($personalEvent->get());
+        $sharedVCalendar = stream_get_contents($sharedEvent->get());
+        #var_dump($personalVCalendar);
+        #var_dump($sharedVCalendar);
+        $this->assertNotContains('X-MOZ-LASTACK;VALUE=DATE-TIME:21', $personalVCalendar, $personalVCalendar);
+        $this->assertContains('X-MOZ-LASTACK;VALUE=DATE-TIME:21', $sharedVCalendar, $sharedVCalendar);
+    }
+    
+    public function testDeleteImplicitDecline()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+        
+        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/event_with_custom_alarm.ics');
+        
+        $id = Tinebase_Record_Abstract::generateUID();
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", $vcalendar);
+        
+        $pwulf = new Calendar_Model_Attender(array(
+            'user_type'  => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'    => array_value('pwulf', Zend_Registry::get('personas'))->contact_id
+        ));
+        
+        $pwulfAttendee = Calendar_Model_Attender::getAttendee($event->getRecord()->attendee, $pwulf);
+        $pwulfPersonalCal = Tinebase_Container::getInstance()->getContainerById($pwulfAttendee->displaycontainer_id);
+        $pwulfPersonalEvent = new Calendar_Frontend_WebDAV_Event($pwulfPersonalCal, "$id.ics");
+        $pwulfPersonalEvent->delete();
+        
+        $pwulfPersonalEvent = new Calendar_Frontend_WebDAV_Event($pwulfPersonalCal, "$id.ics");
+        $pwulfAttendee = Calendar_Model_Attender::getAttendee($pwulfPersonalEvent->getRecord()->attendee, $pwulf);
+        $this->assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $pwulfAttendee->status, 'event must be declined for pwulf');
+        $this->assertEquals(0, $pwulfPersonalEvent->getRecord()->is_deleted, 'event must not be deleted');
+    }
+    
     /**
      * return vcalendar as string and replace organizers email address with emailaddess of current user
      * 

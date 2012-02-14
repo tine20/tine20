@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-24 09:38+0000\n"
+"PO-Revision-Date: 2012-02-13 11:33+0000\n"
 "Last-Translator: Fitoschido <fitoschido@gmail.com>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:22+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:54+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -45,7 +45,7 @@ msgstr "{0}"
 msgid "Not a valid time"
 msgstr "No es una hora válida"
 
-#: js/Models.js:45 js/TimesheetEditDialog.js:114
+#: js/Models.js:45 js/TimesheetEditDialog.js:122
 msgid "Timesheet"
 msgid_plural "Timesheets"
 msgstr[0] "Hoja de hora"
@@ -57,71 +57,71 @@ msgid_plural "timesheets lists"
 msgstr[0] "Listado de Hoja de Hora"
 msgstr[1] "Listado de Hojas de Horas"
 
-#: js/Models.js:78 js/Models.js:149
+#: js/Models.js:84 js/Models.js:155
 msgid "Quick search"
 msgstr "Búsqueda Rápida"
 
-#: js/Models.js:79 js/TimesheetEditDialog.js:178 js/TimesheetGridPanel.js:108
+#: js/Models.js:85 js/TimesheetEditDialog.js:186 js/TimesheetGridPanel.js:110
 msgid "Account"
 msgstr "Cuenta"
 
-#: js/Models.js:80 js/TimesheetEditDialog.js:149 js/TimesheetGridPanel.js:94
+#: js/Models.js:86 js/TimesheetEditDialog.js:157 js/TimesheetGridPanel.js:96
 msgid "Date"
 msgstr "Fecha"
 
-#: js/Models.js:81 js/Models.js:152 js/TimeaccountEditDialog.js:92
-#: js/TimeaccountEditDialog.js:168 js/TimesheetEditDialog.js:162
-#: js/TimesheetGridPanel.js:102 js/TimesheetGridPanel.js:250
+#: js/Models.js:87 js/Models.js:158 js/TimeaccountEditDialog.js:92
+#: js/TimeaccountEditDialog.js:168 js/TimesheetEditDialog.js:170
+#: js/TimesheetGridPanel.js:104 js/TimesheetGridPanel.js:252
 msgid "Description"
 msgstr "Descripción"
 
-#: js/Models.js:82 js/TimesheetEditDialog.js:183 js/TimesheetGridPanel.js:103
-#: js/TimesheetGridPanel.js:389
+#: js/Models.js:88 js/TimesheetEditDialog.js:191 js/TimesheetGridPanel.js:105
+#: js/TimesheetGridPanel.js:391
 msgid "Billable"
 msgstr "Facturable"
 
-#: js/Models.js:83 js/TimesheetEditDialog.js:189 js/TimesheetGridPanel.js:105
-#: js/TimesheetGridPanel.js:394
+#: js/Models.js:89 js/TimesheetEditDialog.js:197 js/TimesheetGridPanel.js:107
+#: js/TimesheetGridPanel.js:396
 msgid "Cleared"
 msgstr "Autorizado"
 
-#: js/Models.js:125 js/TimeaccountEditDialog.js:66
-#: js/TimesheetEditDialog.js:131 js/TimesheetGridPanel.js:98
+#: js/Models.js:131 js/TimeaccountEditDialog.js:66
+#: js/TimesheetEditDialog.js:139 js/TimesheetGridPanel.js:100
 msgid "Time Account"
 msgid_plural "Time Accounts"
 msgstr[0] "Cuenta de Hora"
 msgstr[1] "Cuentas de Horas"
 
-#: js/Models.js:129
+#: js/Models.js:135
 msgid "timeaccount list"
 msgid_plural "timeaccount lists"
 msgstr[0] "listado de cuenta de hora"
 msgstr[1] "listado de cuentas de horas"
 
-#: js/Models.js:133 js/TimeaccountEditDialog.js:115
+#: js/Models.js:139 js/TimeaccountEditDialog.js:115
 msgid "closed"
 msgstr "cerrado"
 
-#: js/Models.js:150 js/TimeaccountEditDialog.js:82
+#: js/Models.js:156 js/TimeaccountEditDialog.js:82
 #: js/TimeaccountGridPanel.js:94
 msgid "Number"
 msgstr "Número"
 
-#: js/Models.js:151 js/TimeaccountEditDialog.js:87
+#: js/Models.js:157 js/TimeaccountEditDialog.js:87
 #: js/TimeaccountGridPanel.js:99
 msgid "Title"
 msgstr "Título"
 
-#: js/Models.js:153
+#: js/Models.js:159
 msgid "Created By"
 msgstr "Creado Por"
 
-#: js/Models.js:154 js/TimeaccountEditDialog.js:109
+#: js/Models.js:160 js/TimeaccountEditDialog.js:109
 #: js/TimeaccountGridPanel.js:104
 msgid "Status"
 msgstr "Estado"
 
-#: js/Models.js:155 js/TimeaccountEditDialog.js:136
+#: js/Models.js:161 js/TimeaccountEditDialog.js:136
 #: js/TimeaccountGridPanel.js:122
 msgid "Booking deadline"
 msgstr ""
@@ -165,7 +165,7 @@ msgstr "facturado"
 msgid "not cleared yet..."
 msgstr "no autorizado aún..."
 
-#: js/TimeaccountEditDialog.js:132 js/TimesheetEditDialog.js:199
+#: js/TimeaccountEditDialog.js:132 js/TimesheetEditDialog.js:207
 msgid "Cleared In"
 msgstr "Autorizado El"
 
@@ -241,20 +241,20 @@ msgstr ""
 msgid "Permissions"
 msgstr "Permisos"
 
-#: js/TimeaccountGridPanel.js:91 js/TimesheetGridPanel.js:92
+#: js/TimeaccountGridPanel.js:91 js/TimesheetGridPanel.js:94
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: js/TimeaccountGridPanel.js:116 js/TimesheetGridPanel.js:107
-#: js/TimesheetGridPanel.js:399
+#: js/TimeaccountGridPanel.js:116 js/TimesheetGridPanel.js:109
+#: js/TimesheetGridPanel.js:401
 msgid "Cleared in"
 msgstr "Autorizado el"
 
-#: js/TimeaccountGridPanel.js:152 js/TimesheetGridPanel.js:324
+#: js/TimeaccountGridPanel.js:152 js/TimesheetGridPanel.js:326
 msgid "Export as ODS"
 msgstr "Exportar como ODS"
 
-#: js/TimeaccountGridPanel.js:159 js/TimesheetGridPanel.js:331
+#: js/TimeaccountGridPanel.js:159 js/TimesheetGridPanel.js:333
 msgid "Export as CSV"
 msgstr "Exportar como CVS"
 
@@ -266,95 +266,95 @@ msgstr "Función cerrada"
 msgid "Time Account - Status"
 msgstr "Cuenta de Horas - Estado"
 
-#: js/TimesheetEditDialog.js:132
+#: js/TimesheetEditDialog.js:140
 msgid "Select Time Account..."
 msgstr "Seleccionar una Cuenta de Hora..."
 
-#: js/TimesheetEditDialog.js:143 js/TimesheetGridPanel.js:110
+#: js/TimesheetEditDialog.js:151 js/TimesheetGridPanel.js:112
 msgid "Duration"
 msgstr "Duración"
 
-#: js/TimesheetEditDialog.js:155
+#: js/TimesheetEditDialog.js:163
 msgid "Start"
 msgstr "Comenzar"
 
-#: js/TimesheetEditDialog.js:156
+#: js/TimesheetEditDialog.js:164
 msgid "not set"
 msgstr "no establecido"
 
-#: js/TimesheetEditDialog.js:163
+#: js/TimesheetEditDialog.js:171
 msgid "Enter description..."
 msgstr "Escribir descripción..."
 
-#: js/TimesheetEditDialog.js:247
+#: js/TimesheetEditDialog.js:255
 msgid "Failed"
 msgstr ""
 
-#: js/TimesheetEditDialog.js:248 js/TimesheetEditDialog.js:256
+#: js/TimesheetEditDialog.js:256 js/TimesheetEditDialog.js:264
 msgid "Could not save {0}."
 msgstr ""
 
-#: js/TimesheetEditDialog.js:249
+#: js/TimesheetEditDialog.js:257
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr ""
 
-#: js/TimesheetEditDialog.js:255
+#: js/TimesheetEditDialog.js:263
 msgid "No Timeaccount set"
 msgstr ""
 
-#: js/TimesheetEditDialog.js:257
+#: js/TimesheetEditDialog.js:265
 msgid "You need to set a Timeaccount this Timesheet belongs to."
 msgstr ""
 
-#: js/TimesheetGridPanel.js:96
+#: js/TimesheetGridPanel.js:98
 msgid "Start time"
 msgstr "Hora de inicio"
 
-#: js/TimesheetGridPanel.js:100
+#: js/TimesheetGridPanel.js:102
 msgid "Time Account closed"
 msgstr "Cuenta de Horas cerrada"
 
-#: js/TimesheetGridPanel.js:163
+#: js/TimesheetGridPanel.js:165
 msgid "timeframe"
 msgstr "calendario"
 
-#: js/TimesheetGridPanel.js:187
+#: js/TimesheetGridPanel.js:189
 msgid "summary"
 msgstr "resumen"
 
-#: js/TimesheetGridPanel.js:190
+#: js/TimesheetGridPanel.js:192
 msgid "Total Timesheets"
 msgstr "Total de Hojas de Horas"
 
-#: js/TimesheetGridPanel.js:191
+#: js/TimesheetGridPanel.js:193
 msgid "Billable Timesheets"
 msgstr "Hojas de Horas Facturables"
 
-#: js/TimesheetGridPanel.js:192
+#: js/TimesheetGridPanel.js:194
 msgid "Total Time"
 msgstr "Tiempo Total"
 
-#: js/TimesheetGridPanel.js:193
+#: js/TimesheetGridPanel.js:195
 msgid "Time of Billable Timesheets"
 msgstr "Tiempo de Las Hojas de Horas Facturables"
 
-#: js/TimesheetGridPanel.js:264
+#: js/TimesheetGridPanel.js:266
 msgid "Detail"
 msgstr "Detalle"
 
-#: js/TimesheetGridPanel.js:315
+#: js/TimesheetGridPanel.js:317
 msgid "Export Timesheets"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:338
+#: js/TimesheetGridPanel.js:340
 msgid "Export as ..."
 msgstr ""
 
-#: js/TimesheetGridPanel.js:381
+#: js/TimesheetGridPanel.js:383
 msgid "Mass Update"
 msgstr "Actualización Masiva"
 
-#: js/TimesheetGridPanel.js:387
+#: js/TimesheetGridPanel.js:389
 msgid "Update field:"
 msgstr "Campo de actualización:"
 
@@ -410,62 +410,62 @@ msgstr ""
 msgid "Timetracker"
 msgstr "Rastreador de Tiempo"
 
+msgid "Update {0} records"
+msgstr "Actualizar {0} registors"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Ok"
+msgstr "Aceptar"
+
+msgid "Success"
+msgstr "Exitoso"
+
+msgid "Updated {0} records"
+msgstr "Actualizados {0} registros"
+
+msgid "Add, edit and delete timeaccounts"
+msgstr "Agregar, editar y  borrar cuentas de horas"
+
+msgid "Total Sum"
+msgstr "Suma Total"
+
+msgid "Not billable"
+msgstr "No Facturable"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "Timeaccount Number"
+msgstr "Número de Cuenta de Hora"
+
+msgid "Timeaccount"
+msgstr "Cuenta de Hora"
+
+msgid "Staff Member"
+msgstr "Integrante del Equipo"
+
+msgid "Creation Date"
+msgstr "Fecha de Creación"
+
+msgid "Open"
+msgstr "Abrir"
+
+msgid "Timesheets"
+msgstr "Hojas de horas"
+
+msgid "All Timesheets"
+msgstr "Todas las Hojas de Horas"
+
+msgid "Timeaccounts"
+msgstr "Cuentas de Horas"
+
+msgid "All Timeaccounts"
+msgstr "Todas las Cuentas de Horas"
+
 #~ msgid "Billed in ..."
 #~ msgstr "Facturado el ..."
 
 #~ msgid "Searching..."
 #~ msgstr "Buscando…"
-
-#~ msgid "Update {0} records"
-#~ msgstr "Actualizar {0} registors"
-
-#~ msgid "Cancel"
-#~ msgstr "Cancelar"
-
-#~ msgid "Ok"
-#~ msgstr "Aceptar"
-
-#~ msgid "Success"
-#~ msgstr "Exitoso"
-
-#~ msgid "Updated {0} records"
-#~ msgstr "Actualizados {0} registros"
-
-#~ msgid "Add, edit and delete timeaccounts"
-#~ msgstr "Agregar, editar y  borrar cuentas de horas"
-
-#~ msgid "Total Sum"
-#~ msgstr "Suma Total"
-
-#~ msgid "Not billable"
-#~ msgstr "No Facturable"
-
-#~ msgid "Total"
-#~ msgstr "Total"
-
-#~ msgid "Timeaccount Number"
-#~ msgstr "Número de Cuenta de Hora"
-
-#~ msgid "Timeaccount"
-#~ msgstr "Cuenta de Hora"
-
-#~ msgid "Staff Member"
-#~ msgstr "Integrante del Equipo"
-
-#~ msgid "Creation Date"
-#~ msgstr "Fecha de Creación"
-
-#~ msgid "Open"
-#~ msgstr "Abrir"
-
-#~ msgid "Timesheets"
-#~ msgstr "Hojas de horas"
-
-#~ msgid "All Timesheets"
-#~ msgstr "Todas las Hojas de Horas"
-
-#~ msgid "Timeaccounts"
-#~ msgstr "Cuentas de Horas"
-
-#~ msgid "All Timeaccounts"
-#~ msgstr "Todas las Cuentas de Horas"

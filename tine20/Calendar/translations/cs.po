@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-01-13 13:09+0000\n"
-"Last-Translator: Michal Sladek <Unknown>\n"
+"PO-Revision-Date: 2012-02-13 11:44+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:52+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Language: Czech\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -45,7 +45,9 @@ msgid "Fixed Calendars"
 msgstr ""
 
 #: Config.php:47
-msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
+msgid ""
+"Calendars always selected regardless of all filter parameters. A valid use "
+"case might be to force the display of an certain holiday calendar."
 msgstr ""
 
 #: Config.php:55
@@ -53,7 +55,9 @@ msgid "Attendee Status Available"
 msgstr ""
 
 #: Config.php:57
-msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation."
+msgid ""
+"Possible event attendee status. Please note that additional attendee status "
+"might impact other calendar systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:65
@@ -61,7 +65,9 @@ msgid "Attendee Roles Available"
 msgstr ""
 
 #: Config.php:67
-msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation."
+msgid ""
+"Possible event attendee roles. Please note that additional attendee roles "
+"might impact other calendar systems on export or syncronisation."
 msgstr ""
 
 #: Controller/EventNotifications.php:242
@@ -485,8 +491,12 @@ msgid "Please Change Selection"
 msgstr "Změňte prosím výběr"
 
 #: js/MainScreenCenterPanel.js:746
-msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
-msgstr "Vás výběr obsahuje opakované události. Opakované události je nutné smazat zvlášť!"
+msgid ""
+"Your selection contains recurring events. Recuring events must be deleted "
+"seperatly!"
+msgstr ""
+"Vás výběr obsahuje opakované události. Opakované události je nutné smazat "
+"zvlášť!"
 
 #: js/MainScreenCenterPanel.js:760
 msgid "Delete Event"
@@ -720,7 +730,8 @@ msgid "unknown"
 msgstr "neznámý"
 
 #: Model/Attender.php:406
-msgid "This contact has been automatically added by the system as an event attender"
+msgid ""
+"This contact has been automatically added by the system as an event attender"
 msgstr "Systém automaticky přídal kontakt jako účastníka události"
 
 #: Model/Event.php:235
@@ -788,8 +799,14 @@ msgid "Get Notification Emails"
 msgstr "Dostávat e-maily s upozorněním"
 
 #: Preference.php:92
-msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
-msgstr "Úroveň (re)akcí o nichž chcete být informován(a). Pamatujte prosím, že organizátoři dostávají upozornění na všechny změny, včetně odpovědí účastníků, pokud tato volba není nastavena na \"Nikdy\""
+msgid ""
+"The level of actions you want to be notified about. Please note that "
+"organizers will get notifications for all updates including attendee answers "
+"unless this preference is set to \"Never\""
+msgstr ""
+"Úroveň (re)akcí o nichž chcete být informován(a). Pamatujte prosím, že "
+"organizátoři dostávají upozornění na všechny změny, včetně odpovědí "
+"účastníků, pokud tato volba není nastavena na \"Nikdy\""
 
 #: Preference.php:95
 msgid "Send Notifications Emails of own Actions"
@@ -911,86 +928,92 @@ msgstr ""
 msgid "Event details"
 msgstr "Detaily události"
 
-#~ msgid "forever"
-#~ msgstr "navždy"
+msgid "forever"
+msgstr "navždy"
 
-#~ msgid "Forever"
-#~ msgstr "Navždy"
+msgid "Forever"
+msgstr "Navždy"
 
-#~ msgid "Until"
-#~ msgstr "Do"
+msgid "Until"
+msgstr "Do"
 
-#~ msgid "Unknown calendar"
-#~ msgstr "Neznámý kalendář"
+msgid "Unknown calendar"
+msgstr "Neznámý kalendář"
 
-#~ msgid "unknown)"
-#~ msgstr "neznámý)"
+msgid "unknown)"
+msgstr "neznámý)"
 
-#~ msgid "Confirm Update of Series"
-#~ msgstr "Potvrdit aktualizaci řady"
+msgid "Confirm Update of Series"
+msgstr "Potvrdit aktualizaci řady"
 
-#~ msgid "Do you really want to update all events of this recurring event series?"
-#~ msgstr "Opravdu chcete aktualizovat všechny události z této řady opakovaných událostí?"
+msgid "Do you really want to update all events of this recurring event series?"
+msgstr ""
+"Opravdu chcete aktualizovat všechny události z této řady opakovaných "
+"událostí?"
 
-#~ msgid "Confirm Deletion of Series"
-#~ msgstr "Potvrdit smazání řady"
+msgid "Confirm Deletion of Series"
+msgstr "Potvrdit smazání řady"
 
-#~ msgid "Do you really want to delete all events of this recurring event series?"
-#~ msgstr "Opravdu chcete smazat všechny události této řady opakovaných událostí?"
+msgid "Do you really want to delete all events of this recurring event series?"
+msgstr "Opravdu chcete smazat všechny události této řady opakovaných událostí?"
 
-#~ msgid "Do you want to update the whole series, or just this event"
-#~ msgstr "Chete aktuaklizovat celou řadu nebo jen tuto událost"
+msgid "Do you want to update the whole series, or just this event"
+msgstr "Chete aktuaklizovat celou řadu nebo jen tuto událost"
 
-#~ msgid "Failed not update recurring event series"
-#~ msgstr "Pokus neaktualizovat řadu opakovaných událostí se nezdařil"
+msgid "Failed not update recurring event series"
+msgstr "Pokus neaktualizovat řadu opakovaných událostí se nezdařil"
 
-#~ msgid "Failed not update event"
-#~ msgstr "Pokus neaktualizovat událost se nezdařil"
+msgid "Failed not update event"
+msgstr "Pokus neaktualizovat událost se nezdařil"
 
-#~ msgid "Resources {0}"
-#~ msgstr "Zdroje {0}"
+msgid "Resources {0}"
+msgstr "Zdroje {0}"
 
-#~ msgid "Show declined events"
-#~ msgstr "Zobrazit odmítnuté události"
+msgid "Show declined events"
+msgstr "Zobrazit odmítnuté události"
 
-#~ msgid "Do you want to delete the whole series, this and all future events of this series, or just this event"
-#~ msgstr "Chcete smazat celou řadu, tuto a všechny budoucí události této řady, nebo jen tuto událost"
+msgid ""
+"Do you want to delete the whole series, this and all future events of this "
+"series, or just this event"
+msgstr ""
+"Chcete smazat celou řadu, tuto a všechny budoucí události této řady, nebo "
+"jen tuto událost"
 
-#~ msgid "Every"
-#~ msgstr "Každý"
+msgid "Every"
+msgstr "Každý"
 
-#~ msgid ". Day"
-#~ msgstr ". den"
+msgid ". Day"
+msgstr ". den"
 
-#~ msgid ". Year"
-#~ msgstr ". rok"
+msgid ". Year"
+msgstr ". rok"
 
-#~ msgid "Publish Free/Busy Information"
-#~ msgstr "Publikovat informace o zaneprázdněnosti"
+msgid "Publish Free/Busy Information"
+msgstr "Publikovat informace o zaneprázdněnosti"
 
-#~ msgid "Allow all users to view your free/busy information"
-#~ msgstr "Povolit všem uživatelům prohlížet informaci o Vaší zaneprázdněnosti"
+msgid "Allow all users to view your free/busy information"
+msgstr "Povolit všem uživatelům prohlížet informaci o Vaší zaneprázdněnosti"
 
-#~ msgid "Here is your requested alarm for to following event:"
-#~ msgstr "Zde je Váš požadovaný alarm pro následující událost:"
+msgid "Here is your requested alarm for to following event:"
+msgstr "Zde je Váš požadovaný alarm pro následující událost:"
 
-#~ msgid "You have been invited to the following event:"
-#~ msgstr "Byl(a) jste pozván(a) na následující událost:"
+msgid "You have been invited to the following event:"
+msgstr "Byl(a) jste pozván(a) na následující událost:"
 
-#~ msgid "The following event has been canceled:"
-#~ msgstr "Následující událost byla zrušena:"
+msgid "The following event has been canceled:"
+msgstr "Následující událost byla zrušena:"
 
-#~ msgid "From"
-#~ msgstr "Od"
+msgid "From"
+msgstr "Od"
 
-#~ msgid "To"
-#~ msgstr "Do"
+msgid "To"
+msgstr "Do"
 
-#~ msgid "The following event has been updated:"
-#~ msgstr "Následující událost byla zaktualizována:"
+msgid "The following event has been updated:"
+msgstr "Následující událost byla zaktualizována:"
 
-#~ msgid "Ignore Scheduling Conflict?"
-#~ msgstr "Ignorovat konflikt plánování?"
+msgid "Ignore Scheduling Conflict?"
+msgstr "Ignorovat konflikt plánování?"
 
-#~ msgid "Event description:<br/>"
-#~ msgstr "Popis události:<br/>"
+msgid "Event description:<br/>"
+msgstr "Popis události:<br/>"

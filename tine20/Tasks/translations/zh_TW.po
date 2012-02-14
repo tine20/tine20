@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 12:42+0000\n"
-"Last-Translator: Frank <Unknown>\n"
+"PO-Revision-Date: 2012-02-13 11:58+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:54+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Country: TAIWAN\n"
 "X-Poedit-Language: Chinese\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -38,7 +38,9 @@ msgid "Tasks status available"
 msgstr ""
 
 #: Config.php:40
-msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
+msgid ""
+"Possible tasks status. Please note that additional attendee status might "
+"impact other Tasks systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:48
@@ -46,7 +48,9 @@ msgid "Task priorities available"
 msgstr ""
 
 #: Config.php:50
-msgid "Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation."
+msgid ""
+"Possible task priorities. Please note that additional priorities might "
+"impact other Tasks systems on export or syncronisation."
 msgstr ""
 
 #: Controller/Task.php:165
@@ -91,7 +95,7 @@ msgstr "優先權"
 msgid "Percent"
 msgstr "百分比"
 
-#: js/GridPanel.js:186 js/TaskEditDialog.js:238 js/Tasks.js:151
+#: js/GridPanel.js:186 js/TaskEditDialog.js:237 js/Tasks.js:151
 #: js/Tasks.js:211 Model/Task.php:191
 msgid "Status"
 msgid_plural "Status"
@@ -102,7 +106,7 @@ msgstr[1] ""
 msgid "Creation Time"
 msgstr "建立時間"
 
-#: js/GridPanel.js:209 js/TaskEditDialog.js:243 Setup/Initialize.php:35
+#: js/GridPanel.js:209 js/TaskEditDialog.js:242 Setup/Initialize.php:35
 #: Setup/Update/Release5.php:66
 msgid "Completed"
 msgstr "已完成"
@@ -131,15 +135,15 @@ msgstr ""
 msgid "Add Responsible ..."
 msgstr ""
 
-#: js/TaskEditDialog.js:224
+#: js/TaskEditDialog.js:223
 msgid "Notes"
 msgstr "備註"
 
-#: js/TaskEditDialog.js:225
+#: js/TaskEditDialog.js:224
 msgid "Enter description..."
 msgstr "輸入說明"
 
-#: js/TaskEditDialog.js:231
+#: js/TaskEditDialog.js:230
 msgid "Percentage"
 msgstr "百分比"
 
@@ -277,20 +281,20 @@ msgstr ""
 msgid "Tasks without responsible"
 msgstr ""
 
-#~ msgid "NEEDS-ACTION"
-#~ msgstr "需要被執行"
+msgid "NEEDS-ACTION"
+msgstr "需要被執行"
 
-#~ msgid "COMPLETED"
-#~ msgstr "已完成"
+msgid "COMPLETED"
+msgstr "已完成"
 
-#~ msgid "IN-PROCESS"
-#~ msgstr "正在處理中"
+msgid "IN-PROCESS"
+msgstr "正在處理中"
 
-#~ msgid "CANCELLED"
-#~ msgstr "已取消"
+msgid "CANCELLED"
+msgstr "已取消"
 
-#~ msgid "Failed"
-#~ msgstr "已失敗"
+msgid "Failed"
+msgstr "已失敗"
 
-#~ msgid "Could not save task."
-#~ msgstr "無法儲存任務"
+msgid "Could not save task."
+msgstr "無法儲存任務"
