@@ -860,7 +860,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.supressEvents = true;
         
         var oldFilters = [];
-        this.filterStore.each(function(filterRecord) {oldFilters.push(filterRecord)}, this);
+        this.filterStore.each(function(filterRecord) {oldFilters.push(filterRecord);}, this);
         
         var filterModel, filterData, filterRecord;
         
@@ -875,8 +875,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         for (var i=0; i<filters.length; i++) {
             filterRecord = null;
-            filterData = filters[i],
-//                filterData.filterValueWidth = this.filterValueWidth,
+            filterData = filters[i];
             filterModel = filterData.condition ? this.ownRecordFilterModel : this.filterModelMap[filterData.field];
             
             if (filterModel) {
@@ -986,7 +985,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 sheet.breadCrumb.enable();
                 rootSheet.tbar.add(sheet.breadCrumb);
             }, this);
-            ftb.breadCrumb.disable()
+            ftb.breadCrumb.disable();
             rootSheet.tbar.add(ftb.breadCrumb, '->', ftb.action_loadFilter);
             rootSheet.tbar.show();
             rootSheet.tbar.doLayout();

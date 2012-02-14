@@ -296,7 +296,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                     if (!this.edited) this.originalValue = this.getValue();
                 });
             }
-        };
+        }
         
         if (ff.isXType('checkbox')) {
             ff.on('check', function() {this.edited = (this.originalValue != this.getValue()); });
@@ -346,8 +346,11 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
 
         } else {
             var filter = this.editDialog.selectionFilter;
-            Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to change these {0} records?')
-            + this.changedHuman, this.editDialog.selectedRecords.length), function(_btn) {
+            Ext.MessageBox.confirm(
+                _('Confirm'),
+                String.format(_('Do you really want to change these {0} records?') + this.changedHuman,
+                this.editDialog.selectedRecords.length),
+                function(_btn) {
                 if (_btn == 'yes') {
                     Ext.MessageBox.wait(_('Please wait'),_('Applying changes'));
                     Ext.Ajax.request({
