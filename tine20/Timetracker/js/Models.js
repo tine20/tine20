@@ -50,13 +50,19 @@ Tine.Timetracker.Model.Timesheet = Tine.Tinebase.data.Record.create(Tine.Timetra
     containerName: 'All Timesheets',
     containersName: 'timesheets lists',
     getTitle: function() {
-        var timeaccount = this.get('timeaccount_id');
+        var timeaccount = this.get('timeaccount_id'),
+            description = this.get('description'),
+            timeaccountTitle = '';
+        
         if (timeaccount) {
             if (typeof(timeaccount.get) !== 'function') {
                 timeaccount = new Tine.Timetracker.Model.Timeaccount(timeaccount);
             }
-            return timeaccount.getTitle();
+            timeaccountTitle = timeaccount.getTitle();
         }
+        
+        timeaccountTitle = timeaccountTitle ? '[' + timeaccountTitle + '] ' : '';
+        return timeaccountTitle + description;
     },
     copyOmitFields: ['billed_in', 'is_cleared']
 });
@@ -75,7 +81,7 @@ Tine.Timetracker.Model.Timesheet.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Timetracker');
     
     return [
-        //{label: _('Quick search'),    field: 'query',    operators: ['contains']}, // query only searches description
+        {label: app.i18n._('Quick search'), field: 'query',    operators: ['contains']}, // query only searches description
         {label: app.i18n._('Account'),      field: 'account_id', valueType: 'user'},
         {label: app.i18n._('Date'),         field: 'start_date', valueType: 'date', pastOnly: true},
         {label: app.i18n._('Description'),  field: 'description', defaultOperator: 'contains'},
