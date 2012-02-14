@@ -59,33 +59,30 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
     
     itemSelector: 'div.search-item',
     minListWidth: 200,
-    enableKeyEvents: true,
     
     //private
     initComponent: function(){
         this.recordClass = Tine.Addressbook.Model.Contact;
         this.recordProxy = Tine.Addressbook.contactBackend;
-        
+
         this.initTemplate();
-
-//        this.on('added', Tine.widgets.dialog.EditDialog.prototype.addToDisableOnEditMultiple, this);
-
-        if(this.useAccountRecord) {
-            this.on('keyup', this.doEmptyCheck);
-        }
-
         Tine.Addressbook.SearchCombo.superclass.initComponent.call(this);
     },
     
     /**
-     * @todo see #5654
      * is called in accountMode to reset the value
-     * @param event e
+     * @param value
      */
-    doEmptyCheck: function(e) {
-        if(this.getRawValue() == '') this.setValue(null);
+    processValue: function(value) {
+        if (this.useAccountRecord) {
+            if(value == '') {
+                this.accountId = null;
+                this.selectedRecord = null;
+            }
+        }
+        return Tine.Addressbook.SearchCombo.superclass.processValue.call(this, value);        
     },
-    
+
     /**
      * use beforequery to set query filter
      * 
@@ -143,18 +140,15 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
     },
     
     getValue: function() {
-        var ret = null;
         if (this.useAccountRecord) {
             if (this.selectedRecord) {
-                ret = this.selectedRecord.get('account_id');
+                return this.selectedRecord.get('account_id');
             } else {
-                ret = this.accountId;
+                return this.accountId;
             }
         } else {
-            ret = Tine.Addressbook.SearchCombo.superclass.getValue.call(this);
+            return Tine.Addressbook.SearchCombo.superclass.getValue.call(this);
         }
-
-        return ret;
     },
 
     setValue: function (value) {

@@ -111,11 +111,11 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
         if(this.isValid()) {          
             var p = new Tine.Projects.Model.Project({id: this.searchBox.getValue()});
             var window = Tine.Projects.ProjectEditDialog.openWindow({record: p, selectedRecords: Ext.encode(this.attendee), attendeeRole: this.chooseRoleBox.getValue()});
-        }
         
-        window.on('close', function() {
-                this.onCancel();
-        },this);
+            window.on('close', function() {
+                    this.onCancel();
+            },this);
+        }
     },
     
     getFormItems : function() {

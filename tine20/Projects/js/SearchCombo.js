@@ -57,9 +57,6 @@ Tine.Projects.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerCo
      */
     onBeforeQuery: function(qevent){
         Tine.Projects.SearchCombo.superclass.onBeforeQuery.apply(this, arguments);
-        
-        var filter = this.store.baseParams.filter;
-
     },
     
     /**
