@@ -61,19 +61,19 @@ msgstr "Hiba a könyvtár létrehozásakor"
 msgid "Item with this name already exists!"
 msgstr "Ezen a néven már létezik adat!"
 
-#: js/GridContextMenu.js:36
+#: js/GridContextMenu.js:35
 msgid "Please enter the new name of the {0}:"
 msgstr "Kérlek írd be a {0} új nevét:"
 
-#: js/GridContextMenu.js:42
+#: js/GridContextMenu.js:41
 msgid "Not renamed {0}"
 msgstr "{0} átnevezése sikertelen"
 
-#: js/GridContextMenu.js:42 js/GridPanel.js:495
+#: js/GridContextMenu.js:41 js/GridPanel.js:495
 msgid "You have to supply a {0} name!"
 msgstr "Biztosítanos kell egy {0} nevet!"
 
-#: js/GridContextMenu.js:146 js/GridPanel.js:539
+#: js/GridContextMenu.js:145 js/GridPanel.js:539
 msgid "Do you really want to delete the following files?"
 msgstr "Biztosan szeretnéd törölni a következő filokat?"
 
@@ -171,8 +171,12 @@ msgid "Upload Failed"
 msgstr "Feltöltés sikertelen"
 
 #: js/GridPanel.js:642 js/TreePanel.js:657
-msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
-msgstr "File nem tölthető fel. Fileméret túl nagy lehet. Kérlek értesítsd a rendszergazdádat. Max. feltöltési méret: "
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr ""
+"File nem tölthető fel. Fileméret túl nagy lehet. Kérlek értesítsd a "
+"rendszergazdádat. Max. feltöltési méret: "
 
 #: js/GridPanel.js:797 js/TreePanel.js:767
 msgid "Putting files in this folder is not allowed!"

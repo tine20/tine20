@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 13:32+0000\n"
-"Last-Translator: Cirion <Unknown>\n"
+"PO-Revision-Date: 2012-02-13 11:44+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:53+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Norwegian Bokmål\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -46,7 +46,9 @@ msgid "Fixed Calendars"
 msgstr ""
 
 #: Config.php:47
-msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
+msgid ""
+"Calendars always selected regardless of all filter parameters. A valid use "
+"case might be to force the display of an certain holiday calendar."
 msgstr ""
 
 #: Config.php:55
@@ -54,7 +56,9 @@ msgid "Attendee Status Available"
 msgstr ""
 
 #: Config.php:57
-msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation."
+msgid ""
+"Possible event attendee status. Please note that additional attendee status "
+"might impact other calendar systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:65
@@ -62,7 +66,9 @@ msgid "Attendee Roles Available"
 msgstr ""
 
 #: Config.php:67
-msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation."
+msgid ""
+"Possible event attendee roles. Please note that additional attendee roles "
+"might impact other calendar systems on export or syncronisation."
 msgstr ""
 
 #: Controller/EventNotifications.php:242
@@ -483,8 +489,12 @@ msgid "Please Change Selection"
 msgstr "Vennligst Endre Valg"
 
 #: js/MainScreenCenterPanel.js:746
-msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
-msgstr "Dine valg inneholder gjentagende hendelser. Gjentagende hendelser må slettes separat!"
+msgid ""
+"Your selection contains recurring events. Recuring events must be deleted "
+"seperatly!"
+msgstr ""
+"Dine valg inneholder gjentagende hendelser. Gjentagende hendelser må slettes "
+"separat!"
 
 #: js/MainScreenCenterPanel.js:760
 msgid "Delete Event"
@@ -716,8 +726,11 @@ msgid "unknown"
 msgstr "ukjent"
 
 #: Model/Attender.php:406
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "Denne kontakten har blitt automatisk lagt til av systemet som en handligs deltager"
+msgid ""
+"This contact has been automatically added by the system as an event attender"
+msgstr ""
+"Denne kontakten har blitt automatisk lagt til av systemet som en handligs "
+"deltager"
 
 #: Model/Event.php:235
 msgid "Start"
@@ -784,8 +797,14 @@ msgid "Get Notification Emails"
 msgstr "Få Varslings E-post"
 
 #: Preference.php:92
-msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
-msgstr "Ønsket nivå du vil bli varslet om. Vennligst noter at organiserere vil få varslinger for alle oppdateringer inkludert deltager svar hvis ikke dette valget er satt til \"Aldri\""
+msgid ""
+"The level of actions you want to be notified about. Please note that "
+"organizers will get notifications for all updates including attendee answers "
+"unless this preference is set to \"Never\""
+msgstr ""
+"Ønsket nivå du vil bli varslet om. Vennligst noter at organiserere vil få "
+"varslinger for alle oppdateringer inkludert deltager svar hvis ikke dette "
+"valget er satt til \"Aldri\""
 
 #: Preference.php:95
 msgid "Send Notifications Emails of own Actions"
@@ -907,71 +926,78 @@ msgstr ""
 msgid "Event details"
 msgstr "Hendelse detaljer"
 
-#~ msgid "forever"
-#~ msgstr "for alltid"
+msgid "forever"
+msgstr "for alltid"
 
-#~ msgid "Forever"
-#~ msgstr "For alltid"
+msgid "Forever"
+msgstr "For alltid"
 
-#~ msgid "Until"
-#~ msgstr "Intill"
+msgid "Until"
+msgstr "Intill"
 
-#~ msgid "Unknown calendar"
-#~ msgstr "Ukjent kalender"
+msgid "Unknown calendar"
+msgstr "Ukjent kalender"
 
-#~ msgid "unknown)"
-#~ msgstr "ukjent)"
+msgid "unknown)"
+msgstr "ukjent)"
 
-#~ msgid "Confirm Update of Series"
-#~ msgstr "Bekreft Oppdatering av Serie"
+msgid "Confirm Update of Series"
+msgstr "Bekreft Oppdatering av Serie"
 
-#~ msgid "Do you really want to update all events of this recurring event series?"
-#~ msgstr "Vil du virkelig oppdatere alle hendelser for denne gjentagende hendelses serien?"
+msgid "Do you really want to update all events of this recurring event series?"
+msgstr ""
+"Vil du virkelig oppdatere alle hendelser for denne gjentagende hendelses "
+"serien?"
 
-#~ msgid "Confirm Deletion of Series"
-#~ msgstr "Bekreft Sletting av Serie"
+msgid "Confirm Deletion of Series"
+msgstr "Bekreft Sletting av Serie"
 
-#~ msgid "Do you really want to delete all events of this recurring event series?"
-#~ msgstr "Vil du virkelig slette alle hendelser av denne gjentagende hendelses serien?"
+msgid "Do you really want to delete all events of this recurring event series?"
+msgstr ""
+"Vil du virkelig slette alle hendelser av denne gjentagende hendelses serien?"
 
-#~ msgid "Event \"%1$s\" at %s has been canceled"
-#~ msgstr "Hendelse  \"%1$s\" på %2$s har blitt avlyst"
+msgid "Event \"%1$s\" at %s has been canceled"
+msgstr "Hendelse  \"%1$s\" på %2$s har blitt avlyst"
 
-#~ msgid "Resources {0}"
-#~ msgstr "Resurser {0}"
+msgid "Resources {0}"
+msgstr "Resurser {0}"
 
-#~ msgid "Show declined events"
-#~ msgstr "Vis aviste hendelser"
+msgid "Show declined events"
+msgstr "Vis aviste hendelser"
 
-#~ msgid "Publish Free/Busy Information"
-#~ msgstr "Utgi Ledig/Opptatt informasjon"
+msgid "Publish Free/Busy Information"
+msgstr "Utgi Ledig/Opptatt informasjon"
 
-#~ msgid "Allow all users to view your free/busy information"
-#~ msgstr "Tillat alle brukere å se din ledig/opptatt informasjon"
+msgid "Allow all users to view your free/busy information"
+msgstr "Tillat alle brukere å se din ledig/opptatt informasjon"
 
-#~ msgid "Do you want to update the whole series, or just this event"
-#~ msgstr "Vil du oppdatere hele serien, eller bare denne hendelsen"
+msgid "Do you want to update the whole series, or just this event"
+msgstr "Vil du oppdatere hele serien, eller bare denne hendelsen"
 
-#~ msgid "Failed not update recurring event series"
-#~ msgstr "Feilet, ikke oppdater gjentagende hendelses serie"
+msgid "Failed not update recurring event series"
+msgstr "Feilet, ikke oppdater gjentagende hendelses serie"
 
-#~ msgid "Failed not update event"
-#~ msgstr "Feilet, ikke oppdatert hendelse"
+msgid "Failed not update event"
+msgstr "Feilet, ikke oppdatert hendelse"
 
-#~ msgid "Do you want to delete the whole series, this and all future events of this series, or just this event"
-#~ msgstr "Vil du slette hele serien, dinne og alle framtidige hendelser av denne serien, eller bare denne hendelsen"
+msgid ""
+"Do you want to delete the whole series, this and all future events of this "
+"series, or just this event"
+msgstr ""
+"Vil du slette hele serien, dinne og alle framtidige hendelser av denne "
+"serien, eller bare denne hendelsen"
 
-#~ msgid "Every"
-#~ msgstr "Hver"
+msgid "Every"
+msgstr "Hver"
 
-#~ msgid ". Day"
-#~ msgstr ". Dag"
+msgid ". Day"
+msgstr ". Dag"
 
-#~ msgid ". Week at"
-#~ msgstr ". Uke på "
+msgid ". Week at"
+msgstr ". Uke på "
 
-#~ msgid ". Month"
-#~ msgstr ". Måned"
+msgid ". Month"
+msgstr ". Måned"
 
-#~ msgid ". Year"
-#~ msgstr ". År"
+msgid ". Year"
+msgstr ". År"

@@ -1,25 +1,30 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ExampleApplication\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-14 15:21+0100\n"
-"Last-Translator: Ronny Gonzales <gonzito@online.no>\n"
+"PO-Revision-Date: 2012-02-13 11:53+0000\n"
+"Last-Translator: Cirion <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Norwegian Bokmål\n"
-"X-Poedit-Country: NOT SPECIFIED / ANY\n"
-"X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:53+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
+"X-Poedit-Country: NOT SPECIFIED / ANY\n"
+"X-Poedit-Language: Norwegian Bokmål\n"
+"X-Poedit-SourceCharset: utf-8\n"
 
 #: Config.php:31
 msgid "Status Available"
 msgstr ""
 
 #: Config.php:33
-msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
+msgid ""
+"Possible status. Please note that additional status might impact other "
+"ExampleApplication systems on export or syncronisation."
 msgstr ""
 
 #: Controller.php:74
@@ -32,9 +37,8 @@ msgid "Example Application test"
 msgstr ""
 
 #: js/ExampleRecordEditDialog.js:87
-#, fuzzy
 msgid "ExampleRecord"
-msgstr "EksempelPost"
+msgstr ""
 
 #: js/ExampleRecordEditDialog.js:104 js/ExampleRecordGridPanel.js:83
 msgid "Name"
@@ -105,46 +109,46 @@ msgstr ""
 msgid "ExampleApplication"
 msgstr "EksempelApplikasjon"
 
-#~ msgid "ExampleRecords"
-#~ msgstr "EksempelPoster"
+msgid "ExampleRecords"
+msgstr "EksempelPoster"
 
-#~ msgid "All ExampleRecords"
-#~ msgstr "Alle EksempelPoster"
+msgid "All ExampleRecords"
+msgstr "Alle EksempelPoster"
 
-#~ msgid "Description"
-#~ msgstr "Beskrivelse"
+msgid "Description"
+msgstr "Beskrivelse"
 
-#~ msgid "record list"
-#~ msgid_plural "record lists"
-#~ msgstr[0] "lagre liste"
-#~ msgstr[1] "lagre lister"
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "lagre liste"
+msgstr[1] "lagre lister"
 
-#~ msgid "Number"
-#~ msgstr "Nummer"
+msgid "Number"
+msgstr "Nummer"
 
-#~ msgid "Unit"
-#~ msgstr "Enhet"
+msgid "Unit"
+msgstr "Enhet"
 
-#~ msgid "Unit Price"
-#~ msgstr "Enhets Pris"
+msgid "Unit Price"
+msgstr "Enhets Pris"
 
-#~ msgid "Timesheets are billable"
-#~ msgstr "Tidskjemaer er fakturerbare"
+msgid "Timesheets are billable"
+msgstr "Tidskjemaer er fakturerbare"
 
-#~ msgid "closed"
-#~ msgstr "lukket"
+msgid "closed"
+msgstr "lukket"
 
-#~ msgid "open"
-#~ msgstr "åpen"
+msgid "open"
+msgstr "åpen"
 
-#~ msgid "Billed"
-#~ msgstr "Fakturert"
+msgid "Billed"
+msgstr "Fakturert"
 
-#~ msgid "not yet billed"
-#~ msgstr "ikke fakturert enda"
+msgid "not yet billed"
+msgstr "ikke fakturert enda"
 
-#~ msgid "to bill"
-#~ msgstr "å fakturere"
+msgid "to bill"
+msgstr "å fakturere"
 
-#~ msgid "billed"
-#~ msgstr "fakturert"
+msgid "billed"
+msgstr "fakturert"

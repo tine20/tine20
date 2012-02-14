@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 14:14+0000\n"
-"Last-Translator: Damià Verger <Unknown>\n"
+"PO-Revision-Date: 2012-02-13 12:03+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators <dverger@joomla.cat>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:22+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:54+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Language: Catalan\n"
 
 #: js/ApplicationGridPanel.js:63
@@ -80,8 +80,14 @@ msgid "Delete all existing users and groups"
 msgstr "Elimina tots els usuaris i grups existents"
 
 #: js/AuthenticationPanel.js:127
-msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
-msgstr "El canvi d'SQL a LDAP eliminarà tots els comptes d'usuari, els grups i els rols existents. Esteu segur que voleu canviar l'administració d'emmagatzematge de comptes a LDAP?"
+msgid ""
+"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
+"and Roles. Do you really want to switch the accounts storage backend to "
+"LDAP ?"
+msgstr ""
+"El canvi d'SQL a LDAP eliminarà tots els comptes d'usuari, els grups i els "
+"rols existents. Esteu segur que voleu canviar l'administració "
+"d'emmagatzematge de comptes a LDAP?"
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
 #: js/ConfigManagerPanel.js:132 js/EmailPanel.js:146
@@ -287,11 +293,15 @@ msgstr "Configuració de redireccionament"
 
 #: js/AuthenticationPanel.js:570
 msgid "Redirect Url (redirect to login screen if empty)"
-msgstr "Url on redirigir (es redirigeix a la pantalla d'inici de sessió si ho deixeu buit)"
+msgstr ""
+"Url on redirigir (es redirigeix a la pantalla d'inici de sessió si ho deixeu "
+"buit)"
 
 #: js/AuthenticationPanel.js:574
 msgid "Redirect Always (if No, only redirect after logout)"
-msgstr "Sempre es redirigeix (si poseu No, només es redirigirà després d'un tancament de sessió)"
+msgstr ""
+"Sempre es redirigeix (si poseu No, només es redirigirà després d'un "
+"tancament de sessió)"
 
 #: js/AuthenticationPanel.js:580
 msgid "Redirect to referring site, if exists"
@@ -552,8 +562,12 @@ msgid "Performing Environment Checks..."
 msgstr "Es realitzen comprovacions d'entorn..."
 
 #: js/EnvCheckGridPanel.js:130
-msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr "No s'ha trobat cap {0}. Proveu a canviar els criteris de cerca, les opcions de visualització o el {1} en què cerqueu."
+msgid ""
+"No {0} where found. Please try to change your filter-criteria, view-options "
+"or the {1} you search in."
+msgstr ""
+"No s'ha trobat cap {0}. Proveu a canviar els criteris de cerca, les opcions "
+"de visualització o el {1} en què cerqueu."
 
 #: js/EnvCheckGridPanel.js:160
 msgid "Check"
@@ -625,11 +639,11 @@ msgstr "Acord de privadesa"
 msgid "Accept Terms and Conditions"
 msgstr "Accepta els termes i condicions"
 
-#~ msgid "Informations"
-#~ msgstr "Informacions"
+msgid "Informations"
+msgstr "Informacions"
 
-#~ msgid "Session files"
-#~ msgstr "Fitxers de sessió"
+msgid "Session files"
+msgstr "Fitxers de sessió"
 
-#~ msgid "Session Files Path"
-#~ msgstr "Camí als fitxers de sessió"
+msgid "Session Files Path"
+msgstr "Camí als fitxers de sessió"

@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 13:29+0000\n"
-"Last-Translator: Faragó Tamás <Unknown>\n"
+"PO-Revision-Date: 2012-02-13 11:41+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:53+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -46,7 +46,9 @@ msgid "Fixed Calendars"
 msgstr "Fix Naptárak"
 
 #: Config.php:47
-msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
+msgid ""
+"Calendars always selected regardless of all filter parameters. A valid use "
+"case might be to force the display of an certain holiday calendar."
 msgstr ""
 
 #: Config.php:55
@@ -54,16 +56,26 @@ msgid "Attendee Status Available"
 msgstr "Résztvevők állapota elérhető"
 
 #: Config.php:57
-msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation."
-msgstr "Lehetséges esemény résztvevő állapotok. Kérlek jegyezd meg, hogy a további résztvevő állapotok ütközhetnek a más naptár rendszerekkel exportálások vagy szinkronizáláskor."
+msgid ""
+"Possible event attendee status. Please note that additional attendee status "
+"might impact other calendar systems on export or syncronisation."
+msgstr ""
+"Lehetséges esemény résztvevő állapotok. Kérlek jegyezd meg, hogy a további "
+"résztvevő állapotok ütközhetnek a más naptár rendszerekkel exportálások vagy "
+"szinkronizáláskor."
 
 #: Config.php:65
 msgid "Attendee Roles Available"
 msgstr "Résztvevő szabályok elérhetőek"
 
 #: Config.php:67
-msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation."
-msgstr "Lehetséges esemény résztvevő szerepek. Kérlek jegyezd meg, hogy a további résztvevő szerepek ütközhetnek a más naptár rendszerekkel exportálások vagy szinkronizáláskor."
+msgid ""
+"Possible event attendee roles. Please note that additional attendee roles "
+"might impact other calendar systems on export or syncronisation."
+msgstr ""
+"Lehetséges esemény résztvevő szerepek. Kérlek jegyezd meg, hogy a további "
+"résztvevő szerepek ütközhetnek a más naptár rendszerekkel exportálások vagy "
+"szinkronizáláskor."
 
 #: Controller/EventNotifications.php:242
 msgid "Alarm for event \"%1$s\" at %2$s"
@@ -483,8 +495,12 @@ msgid "Please Change Selection"
 msgstr "Kérlek változtasd a kiválasztást"
 
 #: js/MainScreenCenterPanel.js:746
-msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
-msgstr "A választásod ismétlődő eseményeket tartalmaz. Az ismétlődő eseményeket egyesével kell törölni!"
+msgid ""
+"Your selection contains recurring events. Recuring events must be deleted "
+"seperatly!"
+msgstr ""
+"A választásod ismétlődő eseményeket tartalmaz. Az ismétlődő eseményeket "
+"egyesével kell törölni!"
 
 #: js/MainScreenCenterPanel.js:760
 msgid "Delete Event"
@@ -716,8 +732,10 @@ msgid "unknown"
 msgstr "ismeretlen"
 
 #: Model/Attender.php:406
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "A rendszer ezt a kapcsolatot automatikusan hozzáadta, mint esemény résztvevő"
+msgid ""
+"This contact has been automatically added by the system as an event attender"
+msgstr ""
+"A rendszer ezt a kapcsolatot automatikusan hozzáadta, mint esemény résztvevő"
 
 #: Model/Event.php:235
 msgid "Start"
@@ -784,8 +802,14 @@ msgid "Get Notification Emails"
 msgstr "Értesítő emailek fogadása"
 
 #: Preference.php:92
-msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
-msgstr "Az esemény szintje, amiről értesítést szeretnél. Kérlek jegyezd meg, hogy a szervezők minden frissítésről (beleértve a résztvevők válaszait) értesítést kapnak ameddig a beállítás nem \"Soha\""
+msgid ""
+"The level of actions you want to be notified about. Please note that "
+"organizers will get notifications for all updates including attendee answers "
+"unless this preference is set to \"Never\""
+msgstr ""
+"Az esemény szintje, amiről értesítést szeretnél. Kérlek jegyezd meg, hogy a "
+"szervezők minden frissítésről (beleértve a résztvevők válaszait) értesítést "
+"kapnak ameddig a beállítás nem \"Soha\""
 
 #: Preference.php:95
 msgid "Send Notifications Emails of own Actions"
@@ -907,32 +931,33 @@ msgstr "\"%2$s\" válasz tőle: %1$s"
 msgid "Event details"
 msgstr "Esemény részletei"
 
-#~ msgid "forever"
-#~ msgstr "örökre"
+msgid "forever"
+msgstr "örökre"
 
-#~ msgid "Forever"
-#~ msgstr "Örökre"
+msgid "Forever"
+msgstr "Örökre"
 
-#~ msgid "Until"
-#~ msgstr "Eddig:"
+msgid "Until"
+msgstr "Eddig:"
 
-#~ msgid "Events I have not yet respondet to"
-#~ msgstr "Események amire még jeleztem vissza"
+msgid "Events I have not yet respondet to"
+msgstr "Események amire még jeleztem vissza"
 
-#~ msgid "Unknown calendar"
-#~ msgstr "Ismeretlen naptár"
+msgid "Unknown calendar"
+msgstr "Ismeretlen naptár"
 
-#~ msgid "unknown)"
-#~ msgstr "ismeretlen)"
+msgid "unknown)"
+msgstr "ismeretlen)"
 
-#~ msgid "Confirm Update of Series"
-#~ msgstr "Sorozat frissítéseinek megerősítése"
+msgid "Confirm Update of Series"
+msgstr "Sorozat frissítéseinek megerősítése"
 
-#~ msgid "Do you really want to update all events of this recurring event series?"
-#~ msgstr "Biztosan frissíted az ismétlődő eseménysorozat összes eseményét?"
+msgid "Do you really want to update all events of this recurring event series?"
+msgstr "Biztosan frissíted az ismétlődő eseménysorozat összes eseményét?"
 
-#~ msgid "Confirm Deletion of Series"
-#~ msgstr "Erősitsd meg a sorozat törlését"
+msgid "Confirm Deletion of Series"
+msgstr "Erősitsd meg a sorozat törlését"
 
-#~ msgid "Do you really want to delete all events of this recurring event series?"
-#~ msgstr "Biztosan törlöd ennek az ismétlődő esemény sorozatnak az összes eseményét?"
+msgid "Do you really want to delete all events of this recurring event series?"
+msgstr ""
+"Biztosan törlöd ennek az ismétlődő esemény sorozatnak az összes eseményét?"

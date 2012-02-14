@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 13:01+0000\n"
-"Last-Translator: Dimitrina Mileva <Unknown>\n"
+"PO-Revision-Date: 2012-02-13 11:36+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:53+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Language: Bulgarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -290,7 +290,9 @@ msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr ""
 
 #: js/Felamimail.js:818
-msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
+msgid ""
+"One of your folders was deleted or renamed by another client. Please update "
+"the folder list of this account."
 msgstr ""
 
 #: js/Felamimail.js:847
@@ -496,7 +498,9 @@ msgid "Save Email Note"
 msgstr ""
 
 #: js/MessageEditDialog.js:174
-msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
+msgid ""
+"Activate this toggle button to save the email text as a note attached to the "
+"recipient(s) contact(s)."
 msgstr ""
 
 #: js/MessageEditDialog.js:192
@@ -921,7 +925,9 @@ msgid "Email Update Interval"
 msgstr ""
 
 #: Preference.php:111
-msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
+msgid ""
+"How often should Felamimail check for new Emails (in minutes). \"0\" means "
+"never."
 msgstr ""
 
 #: Preference.php:114
@@ -976,92 +982,98 @@ msgstr ""
 msgid "All mails with the draft flag"
 msgstr ""
 
-#~ msgid "wrote"
-#~ msgstr "написан"
+msgid "wrote"
+msgstr "написан"
 
-#~ msgid "Write"
-#~ msgstr "Пиши"
+msgid "Write"
+msgstr "Пиши"
 
-#~ msgid "Marked"
-#~ msgstr "Маркирани"
+msgid "Marked"
+msgstr "Маркирани"
 
-#~ msgid "Contains marked messages"
-#~ msgstr "Съдържа маркирани съобщения"
+msgid "Contains marked messages"
+msgstr "Съдържа маркирани съобщения"
 
-#~ msgid "Unread"
-#~ msgstr "Непрочетени"
+msgid "Unread"
+msgstr "Непрочетени"
 
-#~ msgid "Contains unread messages"
-#~ msgstr "Съдържа непрочетени съобщения"
+msgid "Contains unread messages"
+msgstr "Съдържа непрочетени съобщения"
 
-#~ msgid "Show Intelligent Folders"
-#~ msgstr "Показва Интелигентни папки"
+msgid "Show Intelligent Folders"
+msgstr "Показва Интелигентни папки"
 
-#~ msgid "No"
-#~ msgstr "Не"
+msgid "No"
+msgstr "Не"
 
-#~ msgid "Yes"
-#~ msgstr "Да"
+msgid "Yes"
+msgstr "Да"
 
-#~ msgid "Toggle Flag"
-#~ msgstr "Маркирай"
+msgid "Toggle Flag"
+msgstr "Маркирай"
 
-#~ msgid "Recipients"
-#~ msgstr "Получатели"
+msgid "Recipients"
+msgstr "Получатели"
 
-#~ msgid "Error"
-#~ msgstr "Грешка"
+msgid "Error"
+msgstr "Грешка"
 
-#~ msgid "No Account configured"
-#~ msgstr "Няма конфигурирано конто"
+msgid "No Account configured"
+msgstr "Няма конфигурирано конто"
 
-#~ msgid "Re: "
-#~ msgstr "Re:"
+msgid "Re: "
+msgstr "Re:"
 
-#~ msgid "Original Message"
-#~ msgstr "Оригинално съобщение"
+msgid "Original Message"
+msgstr "Оригинално съобщение"
 
-#~ msgid "Fwd: "
-#~ msgstr "Fwd:"
+msgid "Fwd: "
+msgstr "Fwd:"
 
-#~ msgid "Some error occured while trying to update the messages."
-#~ msgstr "Грешка при актуализиране на съобщението"
+msgid "Some error occured while trying to update the messages."
+msgstr "Грешка при актуализиране на съобщението"
 
-#~ msgid "Totalcount"
-#~ msgstr "Брой"
+msgid "Totalcount"
+msgstr "Брой"
 
-#~ msgid "Cache"
-#~ msgstr "Междинна памет"
+msgid "Cache"
+msgstr "Междинна памет"
 
-#~ msgid "Supports \"has_children\""
-#~ msgstr "Поддържа \"has_children\""
+msgid "Supports \"has_children\""
+msgstr "Поддържа \"has_children\""
 
-#~ msgid "Upload Failed"
-#~ msgstr "Грешка при качване (Upload)"
+msgid "Upload Failed"
+msgstr "Грешка при качване (Upload)"
 
-#~ msgid "Add Attachment"
-#~ msgstr "Прибави документ"
+msgid "Add Attachment"
+msgstr "Прибави документ"
 
-#~ msgid "Remove Attachment"
-#~ msgstr "Отстраняване на прикачен документ"
+msgid "Remove Attachment"
+msgstr "Отстраняване на прикачен документ"
 
-#~ msgid "User Email Account"
-#~ msgstr "Потребителски адрес"
+msgid "User Email Account"
+msgstr "Потребителски адрес"
 
-#~ msgid "Use user credentials for IMAP email account."
-#~ msgstr "Използвай (Tine 2.0) потребителски входни данни за да идентифицираш потребител с потребителско конто."
+msgid "Use user credentials for IMAP email account."
+msgstr ""
+"Използвай (Tine 2.0) потребителски входни данни за да идентифицираш "
+"потребител с потребителско конто."
 
-#~ msgid "Sort Folders (experimental)"
-#~ msgstr "Сортира папки (експериментално)"
+msgid "Sort Folders (experimental)"
+msgstr "Сортира папки (експериментално)"
 
-#~ msgid "Update Cache"
-#~ msgstr "Актуализирай междинната памет"
+msgid "Update Cache"
+msgstr "Актуализирай междинната памет"
 
-#~ msgid "Port"
-#~ msgstr "Port"
+msgid "Port"
+msgstr "Port"
 
-#~ msgid "Could not upload attachment. Filesize could be too big. Please notify your Administrator."
-#~ msgstr "Неуспешно качване на документ. Може би файла е твърде голям. Моля уведомете вашия администратор."
+msgid ""
+"Could not upload attachment. Filesize could be too big. Please notify your "
+"Administrator."
+msgstr ""
+"Неуспешно качване на документ. Може би файла е твърде голям. Моля уведомете "
+"вашия администратор."
 
-#~ msgid "Mark Unread"
-#~ msgstr "Маркирай непрочетени"
+msgid "Mark Unread"
+msgstr "Маркирай непрочетени"

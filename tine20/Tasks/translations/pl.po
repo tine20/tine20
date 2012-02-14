@@ -3,16 +3,17 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 12:42+0000\n"
-"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
+"PO-Revision-Date: 2012-02-13 11:53+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:54+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -39,15 +40,21 @@ msgid "Tasks status available"
 msgstr ""
 
 #: Config.php:40
-msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
-msgstr "Status zadania: Możliwe. Zauważ proszę, że dodatkowy status zadania może wpływać w innych zadaniach na eksport albo synchronizację."
+msgid ""
+"Possible tasks status. Please note that additional attendee status might "
+"impact other Tasks systems on export or syncronisation."
+msgstr ""
+"Status zadania: Możliwe. Zauważ proszę, że dodatkowy status zadania może "
+"wpływać w innych zadaniach na eksport albo synchronizację."
 
 #: Config.php:48
 msgid "Task priorities available"
 msgstr ""
 
 #: Config.php:50
-msgid "Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation."
+msgid ""
+"Possible task priorities. Please note that additional priorities might "
+"impact other Tasks systems on export or syncronisation."
 msgstr ""
 
 #: Controller/Task.php:165
@@ -94,7 +101,7 @@ msgstr "Priorytet"
 msgid "Percent"
 msgstr "W procentach"
 
-#: js/GridPanel.js:186 js/TaskEditDialog.js:238 js/Tasks.js:151
+#: js/GridPanel.js:186 js/TaskEditDialog.js:237 js/Tasks.js:151
 #: js/Tasks.js:211 Model/Task.php:191
 msgid "Status"
 msgid_plural "Status"
@@ -106,7 +113,7 @@ msgstr[2] "statusy"
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
-#: js/GridPanel.js:209 js/TaskEditDialog.js:243 Setup/Initialize.php:35
+#: js/GridPanel.js:209 js/TaskEditDialog.js:242 Setup/Initialize.php:35
 #: Setup/Update/Release5.php:66
 msgid "Completed"
 msgstr "Zakończone dnia"
@@ -135,15 +142,15 @@ msgstr "Notatnik elektroniczny"
 msgid "Add Responsible ..."
 msgstr "Dodaj osobę odpowiedzialną..."
 
-#: js/TaskEditDialog.js:224
+#: js/TaskEditDialog.js:223
 msgid "Notes"
 msgstr "Notatki"
 
-#: js/TaskEditDialog.js:225
+#: js/TaskEditDialog.js:224
 msgid "Enter description..."
 msgstr "Wprowadź opis..."
 
-#: js/TaskEditDialog.js:231
+#: js/TaskEditDialog.js:230
 msgid "Percentage"
 msgstr "Procentowo"
 
@@ -285,98 +292,98 @@ msgstr "Wszystkie zadania zmienione ostatnio przeze mnie"
 msgid "Tasks without responsible"
 msgstr "Nieprzypisane zadania"
 
-#~ msgid "Tasks Status Available"
-#~ msgstr "Status zadania: Dostępne"
+msgid "Tasks Status Available"
+msgstr "Status zadania: Dostępne"
 
-#~ msgid "NEEDS-ACTION"
-#~ msgstr "WYMAGA DZIAŁANIA"
+msgid "NEEDS-ACTION"
+msgstr "WYMAGA DZIAŁANIA"
 
-#~ msgid "COMPLETED"
-#~ msgstr "ZAKOŃCZONE"
+msgid "COMPLETED"
+msgstr "ZAKOŃCZONE"
 
-#~ msgid "IN-PROCESS"
-#~ msgstr "W OPRACOWANIU"
+msgid "IN-PROCESS"
+msgstr "W OPRACOWANIU"
 
-#~ msgid "CANCELLED"
-#~ msgstr "ODWOŁANE"
+msgid "CANCELLED"
+msgstr "ODWOŁANE"
 
-#~ msgid "Failed"
-#~ msgstr "Próba nieudana"
+msgid "Failed"
+msgstr "Próba nieudana"
 
-#~ msgid "Could not save task."
-#~ msgstr "Zapisanie zadania było niemożliwe."
+msgid "Could not save task."
+msgstr "Zapisanie zadania było niemożliwe."
 
-#~ msgid "to to list"
-#~ msgstr "Lista zadań"
+msgid "to to list"
+msgstr "Lista zadań"
 
-#~ msgid "Tasks) "
-#~ msgstr "Zadania)"
+msgid "Tasks) "
+msgstr "Zadania)"
 
-#~ msgid "Could not delete task(s)."
-#~ msgstr "Usunięcie zadania / zdań było niemożliwe."
+msgid "Could not delete task(s)."
+msgstr "Usunięcie zadania / zdań było niemożliwe."
 
-#~ msgid "Edit task"
-#~ msgstr "Edytuj zadanie"
+msgid "Edit task"
+msgstr "Edytuj zadanie"
 
-#~ msgid "Add task"
-#~ msgstr "Dodaj zadanie"
+msgid "Add task"
+msgstr "Dodaj zadanie"
 
-#~ msgid "Delete task"
-#~ msgid_plural "Delete tasks"
-#~ msgstr[0] "Usuń zadanie"
-#~ msgstr[1] "Usuń zadania"
-#~ msgstr[2] "Usuń zadania"
+msgid "Delete task"
+msgid_plural "Delete tasks"
+msgstr[0] "Usuń zadanie"
+msgstr[1] "Usuń zadania"
+msgstr[2] "Usuń zadania"
 
-#~ msgid "Enter searchfilter"
-#~ msgstr "wpisz szukaną frazę"
+msgid "Enter searchfilter"
+msgstr "wpisz szukaną frazę"
 
-#~ msgid "Search:"
-#~ msgstr "Znajdź:"
+msgid "Search:"
+msgstr "Znajdź:"
 
-#~ msgid "Displaying tasks {0} - {1} of {2}"
-#~ msgstr "Wyświetlane zadania {0} - {1} z {2}"
+msgid "Displaying tasks {0} - {1} of {2}"
+msgstr "Wyświetlane zadania {0} - {1} z {2}"
 
-#~ msgid "No tasks to display"
-#~ msgstr "Brak zadań"
+msgid "No tasks to display"
+msgstr "Brak zadań"
 
-#~ msgid "No Tasks to display"
-#~ msgstr "Brak zadań"
+msgid "No Tasks to display"
+msgstr "Brak zadań"
 
-#~ msgid "Loading Task..."
-#~ msgstr "Ładowanie zadania..."
+msgid "Loading Task..."
+msgstr "Ładowanie zadania..."
 
-#~ msgid "Please Wait"
-#~ msgstr "Proszę czekać"
+msgid "Please Wait"
+msgstr "Proszę czekać"
 
-#~ msgid "Add New Task"
-#~ msgstr "Dodaj nowe zadanie"
+msgid "Add New Task"
+msgstr "Dodaj nowe zadanie"
 
-#~ msgid "Edit Task \"{0}\""
-#~ msgstr "Edytuj zadanie \"{0}\""
+msgid "Edit Task \"{0}\""
+msgstr "Edytuj zadanie \"{0}\""
 
-#~ msgid "Please wait"
-#~ msgstr "Proszę czekać"
+msgid "Please wait"
+msgstr "Proszę czekać"
 
-#~ msgid "Saving Task"
-#~ msgstr "Zapisywanie zadania"
+msgid "Saving Task"
+msgstr "Zapisywanie zadania"
 
-#~ msgid "Errors"
-#~ msgstr "Błędy"
+msgid "Errors"
+msgstr "Błędy"
 
-#~ msgid "Please fix the errors noted."
-#~ msgstr "Proszę poprawić wskazane błędy."
+msgid "Please fix the errors noted."
+msgstr "Proszę poprawić wskazane błędy."
 
-#~ msgid "Confirm"
-#~ msgstr "Potwierdzenie"
+msgid "Confirm"
+msgstr "Potwierdzenie"
 
-#~ msgid "Do you really want to delete this task?"
-#~ msgstr "Czy na pewno chcesz usunąć to zadanie?"
+msgid "Do you really want to delete this task?"
+msgstr "Czy na pewno chcesz usunąć to zadanie?"
 
-#~ msgid "Please wait a moment..."
-#~ msgstr "Proszę chwileczkę poczekać …"
+msgid "Please wait a moment..."
+msgstr "Proszę chwileczkę poczekać …"
 
-#~ msgid "Enter short name..."
-#~ msgstr "wpisz swoją nazwę..."
+msgid "Enter short name..."
+msgstr "wpisz swoją nazwę..."
 
-#~ msgid "Saved in"
-#~ msgstr "Zapisz w"
+msgid "Saved in"
+msgstr "Zapisz w"

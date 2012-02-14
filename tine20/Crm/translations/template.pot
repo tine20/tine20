@@ -220,7 +220,7 @@ msgid "Cancel"
 msgstr ""
 
 #: js/AddToLeadPanel.js:64
-msgid "OK"
+msgid "Ok"
 msgstr ""
 
 #: js/AddToLeadPanel.js:99

@@ -1,18 +1,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"PO-Revision-Date: 2012-02-13 11:58+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: en\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:53+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: Acl/Rights.php:97
 msgid "manage shared folders"
@@ -59,19 +61,19 @@ msgstr "Failure on create folder"
 msgid "Item with this name already exists!"
 msgstr "Item with this name already exists!"
 
-#: js/GridContextMenu.js:36
+#: js/GridContextMenu.js:35
 msgid "Please enter the new name of the {0}:"
 msgstr "Please enter the new name of the {0}:"
 
-#: js/GridContextMenu.js:42
+#: js/GridContextMenu.js:41
 msgid "Not renamed {0}"
 msgstr "Not renamed {0}"
 
-#: js/GridContextMenu.js:42 js/GridPanel.js:495
+#: js/GridContextMenu.js:41 js/GridPanel.js:495
 msgid "You have to supply a {0} name!"
 msgstr "You have to supply a {0} name!"
 
-#: js/GridContextMenu.js:146 js/GridPanel.js:539
+#: js/GridContextMenu.js:145 js/GridPanel.js:539
 msgid "Do you really want to delete the following files?"
 msgstr "Do you really want to delete the following files?"
 
@@ -169,8 +171,12 @@ msgid "Upload Failed"
 msgstr "Upload Failed"
 
 #: js/GridPanel.js:642 js/TreePanel.js:657
-msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
-msgstr "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
 
 #: js/GridPanel.js:797 js/TreePanel.js:767
 msgid "Putting files in this folder is not allowed!"

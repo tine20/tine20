@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 13:31+0000\n"
-"Last-Translator: Lars Kneschke <Unknown>\n"
+"PO-Revision-Date: 2012-02-13 11:37+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:53+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -46,7 +46,9 @@ msgid "Fixed Calendars"
 msgstr ""
 
 #: Config.php:47
-msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
+msgid ""
+"Calendars always selected regardless of all filter parameters. A valid use "
+"case might be to force the display of an certain holiday calendar."
 msgstr ""
 
 #: Config.php:55
@@ -54,7 +56,9 @@ msgid "Attendee Status Available"
 msgstr ""
 
 #: Config.php:57
-msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation."
+msgid ""
+"Possible event attendee status. Please note that additional attendee status "
+"might impact other calendar systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:65
@@ -62,7 +66,9 @@ msgid "Attendee Roles Available"
 msgstr ""
 
 #: Config.php:67
-msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation."
+msgid ""
+"Possible event attendee roles. Please note that additional attendee roles "
+"might impact other calendar systems on export or syncronisation."
 msgstr ""
 
 #: Controller/EventNotifications.php:242
@@ -483,8 +489,12 @@ msgid "Please Change Selection"
 msgstr "Por favor Cambie la Selección"
 
 #: js/MainScreenCenterPanel.js:746
-msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
-msgstr "Los elementos seleccionados contienen eventos repetitivos. ¡Los eventos repetitivos deben eliminarse por separado!"
+msgid ""
+"Your selection contains recurring events. Recuring events must be deleted "
+"seperatly!"
+msgstr ""
+"Los elementos seleccionados contienen eventos repetitivos. ¡Los eventos "
+"repetitivos deben eliminarse por separado!"
 
 #: js/MainScreenCenterPanel.js:760
 msgid "Delete Event"
@@ -716,8 +726,11 @@ msgid "unknown"
 msgstr "desconocido"
 
 #: Model/Attender.php:406
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "Este contacto se a agregado automáticamente por el sistema como un asistente al evento"
+msgid ""
+"This contact has been automatically added by the system as an event attender"
+msgstr ""
+"Este contacto se a agregado automáticamente por el sistema como un asistente "
+"al evento"
 
 #: Model/Event.php:235
 msgid "Start"
@@ -784,8 +797,15 @@ msgid "Get Notification Emails"
 msgstr "Obtener Emails de Notificación"
 
 #: Preference.php:92
-msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
-msgstr "El nivel de acciones que desea se le notifice. Por favor considere que los organizadores obtendrán las notificaciones de todas actualizaciones acerca de la asistencia de los participantes, a no ser que Ud. lo configure de otra manera en las preferencias \"Nunca\""
+msgid ""
+"The level of actions you want to be notified about. Please note that "
+"organizers will get notifications for all updates including attendee answers "
+"unless this preference is set to \"Never\""
+msgstr ""
+"El nivel de acciones que desea se le notifice. Por favor considere que los "
+"organizadores obtendrán las notificaciones de todas actualizaciones acerca "
+"de la asistencia de los participantes, a no ser que Ud. lo configure de otra "
+"manera en las preferencias \"Nunca\""
 
 #: Preference.php:95
 msgid "Send Notifications Emails of own Actions"
@@ -907,71 +927,79 @@ msgstr ""
 msgid "Event details"
 msgstr "Detalles del Evento"
 
-#~ msgid "forever"
-#~ msgstr "para siempre"
+msgid "forever"
+msgstr "para siempre"
 
-#~ msgid "Forever"
-#~ msgstr "Para Siempre"
+msgid "Forever"
+msgstr "Para Siempre"
 
-#~ msgid "Until"
-#~ msgstr "Hasta"
+msgid "Until"
+msgstr "Hasta"
 
-#~ msgid "Unknown calendar"
-#~ msgstr "Calendario desconocido"
+msgid "Unknown calendar"
+msgstr "Calendario desconocido"
 
-#~ msgid "unknown)"
-#~ msgstr "desconocido)"
+msgid "unknown)"
+msgstr "desconocido)"
 
-#~ msgid "Confirm Update of Series"
-#~ msgstr "Confirmar Actualización de la Serie"
+msgid "Confirm Update of Series"
+msgstr "Confirmar Actualización de la Serie"
 
-#~ msgid "Do you really want to update all events of this recurring event series?"
-#~ msgstr "¿Está seguro que quiere actualizar todos los eventos para esta serie de eventos repetitivos?"
+msgid "Do you really want to update all events of this recurring event series?"
+msgstr ""
+"¿Está seguro que quiere actualizar todos los eventos para esta serie de "
+"eventos repetitivos?"
 
-#~ msgid "Confirm Deletion of Series"
-#~ msgstr "Confirme la Eliminación de las Series"
+msgid "Confirm Deletion of Series"
+msgstr "Confirme la Eliminación de las Series"
 
-#~ msgid "Do you really want to delete all events of this recurring event series?"
-#~ msgstr "¿Realmente desea eliminar todos los eventos de esta serie de eventos repetitivos?"
+msgid "Do you really want to delete all events of this recurring event series?"
+msgstr ""
+"¿Realmente desea eliminar todos los eventos de esta serie de eventos "
+"repetitivos?"
 
-#~ msgid "Event \"%1$s\" at %s has been canceled"
-#~ msgstr "Evento \"%1$s\" a las %s ha sido cancelado"
+msgid "Event \"%1$s\" at %s has been canceled"
+msgstr "Evento \"%1$s\" a las %s ha sido cancelado"
 
-#~ msgid "Resources {0}"
-#~ msgstr "Recursos {0}"
+msgid "Resources {0}"
+msgstr "Recursos {0}"
 
-#~ msgid "Show declined events"
-#~ msgstr "Mostrar eventos rechazados"
+msgid "Show declined events"
+msgstr "Mostrar eventos rechazados"
 
-#~ msgid "Publish Free/Busy Information"
-#~ msgstr "Publicar si está Libre/Ocupado"
+msgid "Publish Free/Busy Information"
+msgstr "Publicar si está Libre/Ocupado"
 
-#~ msgid "Allow all users to view your free/busy information"
-#~ msgstr "Permitir a todos los usuarios si está libre/ocupado"
+msgid "Allow all users to view your free/busy information"
+msgstr "Permitir a todos los usuarios si está libre/ocupado"
 
-#~ msgid "Do you want to update the whole series, or just this event"
-#~ msgstr "Desea actualizar toda la serie o solamente este evento"
+msgid "Do you want to update the whole series, or just this event"
+msgstr "Desea actualizar toda la serie o solamente este evento"
 
-#~ msgid "Failed not update recurring event series"
-#~ msgstr "Falló en actualizar la serie de eventos repetitivos"
+msgid "Failed not update recurring event series"
+msgstr "Falló en actualizar la serie de eventos repetitivos"
 
-#~ msgid "Failed not update event"
-#~ msgstr "Falló en actualizar el evento"
+msgid "Failed not update event"
+msgstr "Falló en actualizar el evento"
 
-#~ msgid "Do you want to delete the whole series, this and all future events of this series, or just this event"
-#~ msgstr "Desea eliminar la serie completa, éstsa y todos los eventos futuros de esta serie, o solamente éste evento"
+msgid ""
+"Do you want to delete the whole series, this and all future events of this "
+"series, or just this event"
+msgstr ""
+"Desea eliminar la serie completa, éstsa y todos los eventos futuros de esta "
+"serie, o solamente éste evento"
 
-#~ msgid "Every"
-#~ msgstr "Cada"
+msgid "Every"
+msgstr "Cada"
 
-#~ msgid ". Day"
-#~ msgstr ". Día"
+msgid ". Day"
+msgstr ". Día"
 
-#~ msgid ". Week at"
-#~ msgstr ". Semana de"
+msgid ". Week at"
+msgstr ". Semana de"
 
-#~ msgid ". Month"
-#~ msgstr ". Mes"
+msgid ". Month"
+msgstr ". Mes"
 
-#~ msgid ". Year"
-#~ msgstr ". Año"
+msgid ". Year"
+msgstr ". Año"

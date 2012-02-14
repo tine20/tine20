@@ -218,13 +218,15 @@ msgid "Middle Name"
 msgstr ""
 
 #: js/ContactEditDialog.js:134 js/ContactEditDialog.js:440
-#: js/ContactGrid.js:107 js/Model.js:19 js/Model.js:140
+#: js/ContactEditDialog.js:458 js/ContactGrid.js:107 js/Model.js:19
+#: js/Model.js:140
 msgid "Last Name"
 msgstr ""
 
 #: js/ContactEditDialog.js:143 js/ContactEditDialog.js:440
-#: js/ContactGrid.js:111 js/ContactGridDetailsPanel.js:131 js/Model.js:27
-#: js/Model.js:141 Setup/Initialize.php:65 Setup/Update/Release5.php:192
+#: js/ContactEditDialog.js:458 js/ContactGrid.js:111
+#: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
+#: Setup/Initialize.php:65 Setup/Update/Release5.php:191
 msgid "Company"
 msgstr ""
 
@@ -341,23 +343,23 @@ msgstr ""
 msgid "Export as pdf"
 msgstr ""
 
-#: js/ContactEditDialog.js:416 js/ContactEditDialog.js:484
+#: js/ContactEditDialog.js:416 js/ContactEditDialog.js:501
 msgid "Parse address"
 msgstr ""
 
-#: js/ContactEditDialog.js:440
+#: js/ContactEditDialog.js:440 js/ContactEditDialog.js:458
 msgid "Either {0} or {1} must be given"
 msgstr ""
 
-#: js/ContactEditDialog.js:476
+#: js/ContactEditDialog.js:493
 msgid "Paste address"
 msgstr ""
 
-#: js/ContactEditDialog.js:476
+#: js/ContactEditDialog.js:493
 msgid "Please paste an address that should be parsed:"
 msgstr ""
 
-#: js/ContactEditDialog.js:510
+#: js/ContactEditDialog.js:527
 msgid "End token mode"
 msgstr ""
 
@@ -621,11 +623,11 @@ msgstr ""
 msgid "The default favorite which is loaded on addressbook startup"
 msgstr ""
 
-#: Setup/Initialize.php:63 Setup/Update/Release5.php:190
+#: Setup/Initialize.php:63 Setup/Update/Release5.php:189
 msgid "Mr"
 msgstr ""
 
-#: Setup/Initialize.php:64 Setup/Update/Release5.php:191
+#: Setup/Initialize.php:64 Setup/Update/Release5.php:190
 msgid "Ms"
 msgstr ""
 

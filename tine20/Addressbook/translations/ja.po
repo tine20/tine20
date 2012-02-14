@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 09:48+0000\n"
-"Last-Translator: kitamura yuuki <Unknown>\n"
+"PO-Revision-Date: 2012-02-13 11:59+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Yuuki ’Taisa’ Kitamura <ykitamura@clasi-co.jp>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-02-14 06:52+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Country: JAPAN\n"
 "X-Poedit-Language: Japanese\n"
 
@@ -37,7 +37,9 @@ msgid "Contact duplicate check fields"
 msgstr ""
 
 #: Config.php:47
-msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
+msgid ""
+"These fields are checked when a new contact is created. If a record with the "
+"same data in the fields is found, a duplicate exception is thrown."
 msgstr ""
 
 #: Config.php:59
@@ -45,7 +47,9 @@ msgid "Contact salutations available"
 msgstr ""
 
 #: Config.php:61
-msgid "Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation."
+msgid ""
+"Possible contact salutations. Please note that additional values might "
+"impact other Addressbook systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:69
@@ -187,7 +191,9 @@ msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
 #: Import/definitions/adb_tine_import_csv.xml:20
-msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgid ""
+"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
 msgstr ""
 
 #: js/Addressbook.js:22
@@ -230,13 +236,15 @@ msgid "Middle Name"
 msgstr "ミドルネーム"
 
 #: js/ContactEditDialog.js:134 js/ContactEditDialog.js:440
-#: js/ContactGrid.js:107 js/Model.js:19 js/Model.js:140
+#: js/ContactEditDialog.js:458 js/ContactGrid.js:107 js/Model.js:19
+#: js/Model.js:140
 msgid "Last Name"
 msgstr "名"
 
 #: js/ContactEditDialog.js:143 js/ContactEditDialog.js:440
-#: js/ContactGrid.js:111 js/ContactGridDetailsPanel.js:131 js/Model.js:27
-#: js/Model.js:141 Setup/Initialize.php:65 Setup/Update/Release5.php:192
+#: js/ContactEditDialog.js:458 js/ContactGrid.js:111
+#: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
+#: Setup/Initialize.php:65 Setup/Update/Release5.php:191
 msgid "Company"
 msgstr "会社"
 
@@ -353,23 +361,23 @@ msgstr "説明を入力してください"
 msgid "Export as pdf"
 msgstr ""
 
-#: js/ContactEditDialog.js:416 js/ContactEditDialog.js:484
+#: js/ContactEditDialog.js:416 js/ContactEditDialog.js:501
 msgid "Parse address"
 msgstr ""
 
-#: js/ContactEditDialog.js:440
+#: js/ContactEditDialog.js:440 js/ContactEditDialog.js:458
 msgid "Either {0} or {1} must be given"
 msgstr ""
 
-#: js/ContactEditDialog.js:476
+#: js/ContactEditDialog.js:493
 msgid "Paste address"
 msgstr ""
 
-#: js/ContactEditDialog.js:476
+#: js/ContactEditDialog.js:493
 msgid "Please paste an address that should be parsed:"
 msgstr ""
 
-#: js/ContactEditDialog.js:510
+#: js/ContactEditDialog.js:527
 msgid "End token mode"
 msgstr ""
 
@@ -632,11 +640,11 @@ msgstr ""
 msgid "The default favorite which is loaded on addressbook startup"
 msgstr ""
 
-#: Setup/Initialize.php:63 Setup/Update/Release5.php:190
+#: Setup/Initialize.php:63 Setup/Update/Release5.php:189
 msgid "Mr"
 msgstr "ミスター"
 
-#: Setup/Initialize.php:64 Setup/Update/Release5.php:191
+#: Setup/Initialize.php:64 Setup/Update/Release5.php:190
 msgid "Ms"
 msgstr "ミス"
 
@@ -673,76 +681,76 @@ msgid "Internal Contacts"
 msgstr "内部コンタクト"
 
 #, fuzzy
-#~ msgid "Call contact"
-#~ msgstr "コールコンタクト"
+msgid "Call contact"
+msgstr "コールコンタクト"
 
-#~ msgid "Work"
-#~ msgstr "仕事"
+msgid "Work"
+msgstr "仕事"
 
-#~ msgid "Home"
-#~ msgstr "自宅"
+msgid "Home"
+msgstr "自宅"
 
-#~ msgid "Cell"
-#~ msgstr "携帯"
+msgid "Cell"
+msgstr "携帯"
 
-#~ msgid "Cell private"
-#~ msgstr "個人携帯"
+msgid "Cell private"
+msgstr "個人携帯"
 
-#~ msgid "addressbook"
-#~ msgid_plural "addressbooks"
-#~ msgstr[0] "アドレス帳"
+msgid "addressbook"
+msgid_plural "addressbooks"
+msgstr[0] "アドレス帳"
 
-#~ msgid "addressbooks"
-#~ msgstr "アドレス帳"
+msgid "addressbooks"
+msgstr "アドレス帳"
 
-#~ msgid "contacts"
-#~ msgstr "コンタクト"
+msgid "contacts"
+msgstr "コンタクト"
 
-#~ msgid "export as pdf"
-#~ msgstr "PDFにエキスポートする"
+msgid "export as pdf"
+msgstr "PDFにエキスポートする"
 
-#~ msgid "Loading Contact..."
-#~ msgstr "コンタクトのロード中..."
+msgid "Loading Contact..."
+msgstr "コンタクトのロード中..."
 
-#~ msgid "Please Wait"
-#~ msgstr "お待ちください"
+msgid "Please Wait"
+msgstr "お待ちください"
 
-#~ msgid "Add new contact"
-#~ msgstr "新しいコンタクトの追加"
+msgid "Add new contact"
+msgstr "新しいコンタクトの追加"
 
-#~ msgid "Edit Contact \"{0}\""
-#~ msgstr "コンタクトの編集 \"{0}\""
+msgid "Edit Contact \"{0}\""
+msgstr "コンタクトの編集 \"{0}\""
 
-#~ msgid "Please wait a moment..."
-#~ msgstr "しばらくお待ちください"
+msgid "Please wait a moment..."
+msgstr "しばらくお待ちください"
 
-#~ msgid "Saving Contact"
-#~ msgstr "コンタクトの保存"
+msgid "Saving Contact"
+msgstr "コンタクトの保存"
 
-#~ msgid "Failed"
-#~ msgstr "失敗"
+msgid "Failed"
+msgstr "失敗"
 
-#~ msgid "Could not save contact."
-#~ msgstr "コンタクトを保存できませんでした"
+msgid "Could not save contact."
+msgstr "コンタクトを保存できませんでした"
 
-#~ msgid "Errors"
-#~ msgstr "エラー"
+msgid "Errors"
+msgstr "エラー"
 
-#~ msgid "Please fix the errors noted."
-#~ msgstr "エラーを訂正してください"
+msgid "Please fix the errors noted."
+msgstr "エラーを訂正してください"
 
-#~ msgid "Deleting contact..."
-#~ msgstr "コンタクトを削除しています..."
+msgid "Deleting contact..."
+msgstr "コンタクトを削除しています..."
 
-#~ msgid "Some error occured while trying to delete the contact."
-#~ msgstr "削除中に問題が発生しました"
+msgid "Some error occured while trying to delete the contact."
+msgstr "削除中に問題が発生しました"
 
-#~ msgid "Custom Fields"
-#~ msgstr "カスタムフィールド"
+msgid "Custom Fields"
+msgstr "カスタムフィールド"
 
-#~ msgid "Link"
-#~ msgid_plural "Links [%d]"
-#~ msgstr[0] "リンク[%d]"
+msgid "Link"
+msgid_plural "Links [%d]"
+msgstr[0] "リンク[%d]"
 
-#~ msgid "Export"
-#~ msgstr "エクスポート"
+msgid "Export"
+msgstr "エクスポート"
