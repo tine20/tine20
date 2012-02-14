@@ -322,6 +322,6 @@ activateReleaseMode
 buildClient
 createArchives
 createSpecialArchives
-packageTranslations
+#packageTranslations
 buildChecksum
 prepareDebianPackaging
