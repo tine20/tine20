@@ -854,6 +854,13 @@ textarea.tinebase-editmultipledialog-noneedit {
 
 .tinebase-editmultipledialog-clearer.over {background-position: -67px 0}
 
+.tinebase-editmultipledialog-dirtycheck {
+    background-color: #F4F1D3; /*#F9F9A3;*/
+    border: 1px solid #B5B8C8;
+    padding: 0px 2px 3px 2px;
+    border-radius: 3px;
+}
+
 .tine-wordbox {
     border: 1px solid gray;
     margin-left: 3px;

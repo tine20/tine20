@@ -96,6 +96,14 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
     
     /**
+     * overwrites the isValid method on multipleEdit
+     */
+    isMultipleValid: function() {
+        // here validation is needed, because no required fields are editable in multi-edit
+        return true;
+    },
+    
+    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.

@@ -449,6 +449,23 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     },
     
     /**
+     * overwrites the isValid method on multipleEdit
+     */
+    isMultipleValid: function() {
+        var isValid = true;
+        if (((this.getForm().findField('n_family').getValue() === '') && (this.getForm().findField('n_family').edited)) 
+            && ((this.getForm().findField('org_name').getValue() === '') && (this.getForm().findField('org_name').edited))) {
+            var invalidString = String.format(this.app.i18n._('Either {0} or {1} must be given'), this.app.i18n._('Last Name'), this.app.i18n._('Company'));
+            this.getForm().findField('n_family').markInvalid(invalidString);
+            this.getForm().findField('org_name').markInvalid(invalidString);
+            
+            isValid = false;
+        }
+        
+        return isValid;
+    },
+    
+    /**
      * export pdf handler
      */
     onExportContact: function () {

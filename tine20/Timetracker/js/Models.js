@@ -161,7 +161,7 @@ Tine.Timetracker.Model.Timeaccount.getFilterModel = function() {
         {label: app.i18n._('Booking deadline'), field: 'deadline'},
         {filtertype: 'tinebase.tag', app: app}
     ];
-}
+};
 
 /**
  * Model of a grant

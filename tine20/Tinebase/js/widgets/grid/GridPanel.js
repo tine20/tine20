@@ -178,7 +178,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @cfg {Bool} multipleEdit
      */
     multipleEdit: false,
-
+    
+    /**
+     * set if multiple edit requires special right
+     * @type {String}  multipleEditRequiredRight
+     */
+    multipleEditRequiredRight: null,
+    
     /**
      * @property autoRefreshTask
      * @type Ext.util.DelayedTask
@@ -357,6 +363,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         this.action_editInNewWindow = new Ext.Action({
             requiredGrant: 'readGrant',
+            requiredMultipleGrant: this.multipleEditRequiredRight,
             text: this.i18nEditActionText ? this.i18nEditActionText[0] : String.format(_('Edit {0}'), this.i18nRecordName),
             singularText: this.i18nEditActionText ? this.i18nEditActionText[0] : String.format(_('Edit {0}'), this.i18nRecordName),
             pluralText:  this.i18nEditActionText ? this.i18nEditActionText[1] : String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 1), this.i18nRecordsName),
@@ -1104,7 +1111,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 header: cfConfig.get('definition').label,
                 dataIndex: 'customfields',
                 renderer: Tine.widgets.customfields.Renderer.get(this.app, cfConfig),
-//                renderer: Tine.Tinebase.common.customfieldRenderer.createDelegate(this, [allCfs[i].name], true),
                 sortable: false,
                 hidden: true
             });

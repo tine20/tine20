@@ -73,7 +73,7 @@
         // if action has to initialConfig it's no Ext.Action!
         if (action && action.initialConfig) {
             
-            // in some coses our actionUpdater config is not in the initial config
+            // in some cases our actionUpdater config is not in the initial config
             // this happens for direct extensions of button class, like the notes button
             if (action.requiredGrant) {
                 Ext.applyIf(action.initialConfig, {
@@ -135,6 +135,17 @@
         // @todo discuss if actions are only to be touched if requiredGrant is set
         if (action.initialConfig.requiredGrant && action.initialConfig.requiredGrant != 'addGrant') {
             action.setDisabled(! (grantCondition && nCondition));
+        }
+                 
+        if(action.initialConfig.requiredMultipleGrant) {
+            if(records && records.length > 1) {
+                var right = action.initialConfig.requiredMultipleGrant.split('_');
+                if(right.length == 2) {
+                    action.setDisabled(!Tine.Tinebase.common.hasRight(right[0], action.initialConfig.scope.app.name, right[1]));
+                } else {
+                    Tine.log.debug('multiple edit right was not properly applied');
+                }
+            }
         }
         
         if (action.initialConfig.singularText && action.initialConfig.pluralText && action.initialConfig.translationObject) {
