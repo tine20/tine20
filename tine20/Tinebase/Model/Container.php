@@ -170,27 +170,39 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     {
         switch ($this->type) {
             case Tinebase_Model_Container::TYPE_PERSONAL:
-                if (! $this->owner_id) {
-                    // we need to find out who has admin grant
-                    $allGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($this, true);
-                    
-                    // pick the first user with admin grants
-                    foreach ($allGrants as $grants) {
-                        if ($grants->{Tinebase_Model_Grants::GRANT_ADMIN} === true) {
-                            $this->owner_id = $grants->account_id;
-                            break;
-                        }
-                    }
-                    if (! $this->owner_id) {
-                        throw new Exception('could not find container admin');
-                    }
-                }
-                
-                $this->path = "/{$this->type}/{$this->owner_id}/{$this->getId()}";
+                $this->path = "/{$this->type}/{$this->getOwner()}/{$this->getId()}";
                 break;
         }
         
         return $this->path;
+    }
+    
+    /**
+     * returns owner of this container
+     * 
+     * @throws Exception
+     */
+    public function getOwner()
+    {
+        if ($this->type == self::TYPE_SHARED) return NULL;
+        
+        if (! $this->owner_id) {
+            // we need to find out who has admin grant
+            $allGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($this, true);
+            
+            // pick the first user with admin grants
+            foreach ($allGrants as $grants) {
+                if ($grants->{Tinebase_Model_Grants::GRANT_ADMIN} === true) {
+                    $this->owner_id = $grants->account_id;
+                    break;
+                }
+            }
+            if (! $this->owner_id) {
+                throw new Exception('could not find container admin');
+            }
+        }
+        
+        return $this->owner_id;
     }
     
     /**
@@ -201,7 +213,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     public function isPersonalOf($account)
     {
         return $this->type == Tinebase_Model_Container::TYPE_PERSONAL 
-            && $this->owner_id == Tinebase_Model_User::convertUserIdToInt($account);
+            && $this->getOwner() == Tinebase_Model_User::convertUserIdToInt($account);
     }
     
     /**

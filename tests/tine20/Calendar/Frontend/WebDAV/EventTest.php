@@ -337,6 +337,31 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttendee->status, 'event must not be declined');
     }
     
+    public function testGetAlarm()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+        
+        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
+        
+        $id = Tinebase_Record_Abstract::generateUID();
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", $vcalendar);
+        
+        $personalEvent = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], "$id.ics");
+        $sharedEvent = new Calendar_Frontend_WebDAV_Event($this->objects['sharedContainer'], "$id.ics");
+        
+        $personalVCalendar = stream_get_contents($personalEvent->get());
+        $sharedVCalendar = stream_get_contents($sharedEvent->get());
+        #var_dump($personalVCalendar);
+        #var_dump($sharedVCalendar);
+        $this->assertNotContains('X-MOZ-LASTACK;VALUE=DATE-TIME:21', $personalVCalendar, $personalVCalendar);
+        $this->assertContains('X-MOZ-LASTACK;VALUE=DATE-TIME:21', $sharedVCalendar, $sharedVCalendar);
+        
+        
+//         $this->assertContains('EXDATE;VALUE=DATE-TIME:20111005T080000Z', $vcalendar);
+//         $this->assertContains('RECURRENCE-ID;VALUE=DATE-TIME;TZID=Europe/Berlin:20111008T100000', $vcalendar);
+        // assert X-MOZ-LASTACK is in the far future
+    }
+    
     /**
      * return vcalendar as string and replace organizers email address with emailaddess of current user
      * 
