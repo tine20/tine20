@@ -404,6 +404,38 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedPersistentSClever->status, 'status must not change');
     }
     
+   /**
+    * @see {http://forge.tine20.org/mantisbt/view.php?id=5686}
+    */
+    public function testCreateRecurExceptionAllFollowingAttendeeAdd()
+    {
+        $from = new Tinebase_DateTime('2012-02-01 00:00:00');
+        $until = new Tinebase_DateTime('2012-02-29 23:59:59');
+        
+        $event = new Calendar_Model_Event(array(
+                    'summary'       => 'Some Daily Event',
+                    'dtstart'       => '2012-02-03 09:00:00',
+                    'dtend'         => '2012-02-03 10:00:00',
+                    'rrule'         => 'FREQ=DAILY;INTERVAL=1',
+                    'container_id'  => $this->_testCalendar->getId(),
+                    'attendee'      => $this->_getAttendee(),
+        ));
+        
+        $persistentEvent = $this->_controller->create($event);
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
+        
+        $recurSet[5]->attendee->addRecord(new Calendar_Model_Attender(array(
+            'user_type'   => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'     => $this->_personasContacts['pwulf']->getId()
+        )));
+        
+        $updatedPersistentEvent = $this->_controller->createRecurException($recurSet[5], FALSE, TRUE);
+        
+        $this->assertEquals(3, count($updatedPersistentEvent->attendee));
+    }
+    
     /**
      * returns a simple recure event
      *

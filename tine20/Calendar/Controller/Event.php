@@ -736,6 +736,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     $attendees->cal_event_id = $persistentExceptionEvent->getId();
                     
                     foreach($attendees as $attendee) {
+                        if (! $attendee->status_authkey) {
+                            // new invitations
+                            $attendee->status_authkey = Tinebase_Record_Abstract::generateUID();
+                        }
                         $this->_backend->createAttendee($attendee);
                     }
                 }
