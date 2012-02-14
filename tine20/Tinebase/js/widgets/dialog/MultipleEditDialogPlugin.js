@@ -277,7 +277,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             });
             
             if (ff.isXType('checkbox')) {
-                ff.getEl().wrap({tag: 'span', class: 'tinebase-editmultipledialog-dirtycheck'});
+                ff.getEl().wrap({tag: 'span', 'class': 'tinebase-editmultipledialog-dirtycheck'});
             } else {
                 ff.on('focus', function() {
                     if (this.readOnly) this.originalValue = this.getValue();
