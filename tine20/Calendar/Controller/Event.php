@@ -1152,11 +1152,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 throw new Exception('recurid must be present to create exceptions!');
             }
             
-            // check if this intance takes place
-            if (in_array($_recurInstance->dtstart, (array)$baseEvent->exdate)) {
-                throw new Tinebase_Exception_AccessDenied('Event instance is deleted and may not be recreated via status setting!');
-            }
-            
             try {
                 // check if we already have a persistent exception for this event
                 $eventInsance = $this->_backend->getByProperty($_recurInstance->recurid, $_property = 'recurid');
@@ -1166,6 +1161,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 if (! $exceptionAttender) {
                     throw new Tinebase_Exception_AccessDenied('not an attendee');
                 }
+                
                 
                 if ($exceptionAttender->status_authkey != $_authKey) {
                     // NOTE: it might happen, that the user set her status from the base event without knowing about 
@@ -1177,6 +1173,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 
             } catch (Tinebase_Exception_NotFound $e) {
                 // otherwise create it implicilty
+                
+                // check if this intance takes place
+                if (in_array($_recurInstance->dtstart, (array)$baseEvent->exdate)) {
+                    throw new Tinebase_Exception_AccessDenied('Event instance is deleted and may not be recreated via status setting!');
+                }
                 
                 if (! $baseEventAttendee) {
                     throw new Tinebase_Exception_AccessDenied('not an attendee');
