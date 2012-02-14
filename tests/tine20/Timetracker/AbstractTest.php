@@ -4,8 +4,8 @@
  *
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -17,16 +17,6 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
      * @var Timetracker_Frontend_Json
      */
     protected $_json = array();
-
-    /**
-     * customfields/timesheet/timeaccounts to delete
-     * @var array
-     */
-    protected $_toDeleteIds = array(
-        'ta'    => array(), // Timeaccounts
-        'cf'    => array(), // CustomFields
-        'ts'    => array()  // Timesheets
-    );
 
     /**
      * last record created by _getTime(account|sheet) or _getCustomField
@@ -54,6 +44,7 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_json = new Timetracker_Frontend_Json();
     }
 
@@ -62,16 +53,10 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
      * This method is called after a test is executed.
      *
      * @access protected
-     *
-     * @todo use this for all ts/ta that are created in the tests
      */
     protected function tearDown()
     {
-        $this->_json->deleteTimeaccounts($this->_toDeleteIds['ta']);
-        $this->_json->deleteTimesheets($this->_toDeleteIds['ts']);
-        foreach ($this->_toDeleteIds['cf'] as $cf) {
-            Tinebase_CustomField::getInstance()->deleteCustomField($cf);
-        }
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
 
     /************ protected helper funcs *************/
@@ -96,7 +81,6 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
 
         if($_forceCreation) {
             $taRec = $this->_json->saveTimeaccount($ta->toArray(), $_forceCreation);
-            $this->_toDeleteIds['ta'][] = $taRec['id'];
             $this->_lastCreatedRecord = $taRec;
         }
 
@@ -135,10 +119,11 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
     protected function _getTimesheet($_data = array(), $_forceCreation = false)
     {
         $defaultData = array('account_id'        => Tinebase_Core::getUser()->getId(),
-                             'description'       => 'blabla',
-                             'duration'          => 30,
-                             'timeaccount_id'    => NULL,
-                             'start_date'        => NULL);
+             'description'       => 'blabla',
+             'duration'          => 30,
+             'timeaccount_id'    => NULL,
+             'start_date'        => NULL
+        );
 
         $data = array_replace($defaultData, $_data);
 
@@ -155,7 +140,6 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
 
         if($_forceCreation) {
             $tsRec = $this->_json->saveTimesheet($ts->toArray(), $_forceCreation);
-            $this->_toDeleteIds['ts'][] = $tsRec['id'];
             $this->_lastCreatedRecord = $tsRec;
         }
 
@@ -188,7 +172,6 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
         $result = Tinebase_CustomField::getInstance()->addCustomField($record);
 
         $this->_lastCreatedRecord = $result;
-        $this->_toDeleteIds['cf'][] = $result->getId();
 
         return $result;
     }
@@ -381,9 +364,6 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
         $timesheetArray[$customField2->name] = Tinebase_Record_Abstract::generateUID();
 
         $timesheetData = $this->_json->saveTimesheet($timesheetArray);
-
-        // tearDown settings
-        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
 
         // checks
         $this->assertTrue(array_key_exists($_customField1->name, $timesheetData['customfields']), 'cf 1 not found');

@@ -105,7 +105,6 @@ class Timetracker_ExportTest extends Timetracker_AbstractTest
         // create
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
-        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
         
         // export & check
         $options = ($_definitionId === NULL) ? array('format' => 'ods') : array('definitionId' => $_definitionId);
@@ -114,8 +113,8 @@ class Timetracker_ExportTest extends Timetracker_AbstractTest
         
         $this->assertTrue(file_exists($result));
         
-        $xmlBody = $odsExportClass->getDocument()->asXML();    
-        $this->assertEquals(1, preg_match("/0.5/", $xmlBody), 'no duration'); 
+        $xmlBody = $odsExportClass->getDocument()->asXML();
+        $this->assertEquals(1, preg_match("/0.5/", $xmlBody), 'no duration');
         $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $xmlBody), 'no description'); 
         $this->assertEquals(1, preg_match("/Description/", $xmlBody), 'no headline'); 
         

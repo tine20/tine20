@@ -6,8 +6,8 @@
  * 
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        add test for manage_billable
  */
@@ -16,10 +16,6 @@
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Timetracker_ControllerTest::main');
-}
 
 /**
  * Test class for Tinebase_Group
@@ -77,19 +73,30 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $this->_objects['timesheet'] = $this->_getTimesheet();
         $this->_objects['timeaccount'] = $this->_timeaccountController->get($this->_objects['timesheet']->timeaccount_id);
         
-        // remove MANAGE_ALL & ADMIN for Timetracker right
+        $this->_roleRights = self::removeManageAllRight();
+    }
+    
+    /**
+     * remove MANAGE_ALL & ADMIN for Timetracker right
+     * 
+     * @return array
+     */
+    public static function removeManageAllRight()
+    {
         $role = Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role');
         $app = Tinebase_Application::getInstance()->getApplicationByName('Timetracker');
-        $this->_roleRights = Tinebase_Acl_Roles::getInstance()->getRoleRights($role->getId());
+        
+        $currentRights = Tinebase_Acl_Roles::getInstance()->getRoleRights($role->getId());
         $rightsWithoutManageAll = array();
-        foreach ($this->_roleRights as $right) {
-            if ($right['right'] != Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS 
-                && !($right['application_id'] == $app->getId() && $right['right'] == 'admin')
+        foreach ($currentRights as $right) {
+            if ($right['right'] != Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS
+            && !($right['application_id'] == $app->getId() && $right['right'] == 'admin')
             ) {
                 $rightsWithoutManageAll[] = $right;
             }
         }
         Tinebase_Acl_Roles::getInstance()->setRoleRights($role->getId(), $rightsWithoutManageAll);
+        return $currentRights;
     }
 
     /**

@@ -4,7 +4,7 @@
  *
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  * @todo        add test for contract <-> timeaccount relations
@@ -96,7 +96,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $timeaccount = $this->_getTimeaccount();
         $timeaccount->is_open = 0;
         $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
-        $this->_toDeleteIds['ta'][] = $timeaccountData['id'];
 
         // search & check
         $timeaccountFilter = $this->_getTimeaccountFilter();
@@ -188,7 +187,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
 
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
-        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
 
         $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(array(
             'field'     => 'customfield',
@@ -212,9 +210,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $timesheetArray = $this->_getTimesheet()->toArray();
         $timesheetArray[$cf->name] = $value;
         $ts = $this->_json->saveTimesheet($timesheetArray);
-
-        // tearDown settings
-        $this->_toDeleteIds['ta'][] = $ts['timeaccount_id']['id'];
 
         // test with default grants
         $this->assertTrue(array_key_exists($cf->name, $ts['customfields']), 'customfield should be readable');
@@ -256,10 +251,9 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     }
 
 
-    /*
+    /**
      * this test is for Tinebase_Frontend_Json updateMultipleRecords with timesheet data in the timetracker app
      */
-
     public function testUpdateMultipleRecords()
     {
 
@@ -309,10 +303,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
 
         // check if other default field value was updated properly
         $this->assertEquals($record['duration'],'111','DefaultField "duration" was not updated as expected');
-
     }
-
-
 
     /**
      * try to get a Timesheet
@@ -393,7 +384,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $timesheet = $this->_getTimesheet();
 
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
-        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
 
         // search & check
         $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(), $this->_getPaging());
@@ -472,7 +462,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         //$timesheet = $this->_getTimesheet(NULL, $_startDate);
         $timesheet = $this->_getTimesheet(array('timeaccount_id' => null, 'start_date' => $_startDate));
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
-        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
 
         $result = $this->_json->searchTimesheets($this->_getTimesheetDateFilter($_filterType), $this->_getPaging());
 
@@ -490,7 +479,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         // create
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
-        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
 
         // update timeaccount -> is_billable = false
         $ta = Timetracker_Controller_Timeaccount::getInstance()->get($timesheetData['timeaccount_id']['id']);
@@ -619,7 +607,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         ));
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
-        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
 
         // search persistent filter
         $persistentFilters = $persistentFiltersJson->searchPersistentFilter($this->_getPersistentFilterFilter($filterName), NULL);
@@ -643,7 +630,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     {
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
-        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
 
         $filter = array(
             array('field' => 'timeaccount_id', 'operator' => 'AND', 'value' => array(
@@ -667,9 +653,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $anotherTimesheet = $this->_getTimesheet();
         $anotherTimesheetData = $this->_json->saveTimesheet($anotherTimesheet->toArray());
 
-        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
-        $this->_toDeleteIds['ta'][] = $anotherTimesheetData['timeaccount_id']['id'];
-
         $filter = array(
             array('field' => 'timeaccount_id', 'operator' => 'AND', 'value' => array(
                 array('field' => ':id', 'operator' => 'equals', 'value' => $timesheetData['timeaccount_id']['id'])
@@ -692,13 +675,28 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
 
-        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
         $filterData = Zend_Json::decode('[{"condition":"OR","filters":[{"condition":"AND","filters":'
              . '[{"field":"start_date","operator":"within","value":"weekThis","id":"ext-record-1"},'
              . '{"field":"account_id","operator":"equals","value":"' . Tinebase_Core::getUser()->getId() . '","id":"ext-record-2"}]'
              . ',"id":"ext-comp-1076","label":"Stundenzettel"}]}]'
         );
         $search = $this->_json->searchTimesheets($filterData, array());
-        $this->assertTrue($search['totalcount'] > 0);
+        $this->assertEquals(1, $search['totalcount']);
+    }
+    
+    /**
+    * try to search timesheets with or filter + acl filtering (should find only 1 ts)
+    * @see http://forge.tine20.org/mantisbt/view.php?id=5684
+    */
+    public function testSearchTimesheetsWithOrAndAclFilter()
+    {
+        // add another ts that does not match the filter
+        $timesheet = $this->_getTimesheet(array(
+            'start_date' => Tinebase_DateTime::now()->subWeek(2)->toString('Y-m-d')
+        ));
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        
+        Timetracker_ControllerTest::removeManageAllRight();
+        $this->testSearchTimesheetsWithOrFilter();
     }
 }

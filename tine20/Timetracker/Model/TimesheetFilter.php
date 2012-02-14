@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -14,6 +14,8 @@
  * 
  * @package     Timetracker
  * @subpackage  Filter
+ * 
+ * @todo refactor this to comply to default acl filtering (@see Tinebase_Controller_Record_Abstract::checkFilterACL)
  */
 class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGroup implements Tinebase_Model_Filter_AclFilter 
 {
@@ -137,7 +139,16 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
      */
     protected function _appendAclSqlFilter($_select)
     {
+        if ($this->getCondition() === self::CONDITION_OR) {
+            // ACL filter with OR condition is useless and delivers wrong results!
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                . ' No ACL filter for OR condition!');
+            return;
+        }
+        
         if (Timetracker_Controller_Timesheet::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                . ' No ACL filter for MANAGE_TIMEACCOUNTS right!');
             return;
         }
         
@@ -167,5 +178,8 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
         }
                 
         $_select->where($where);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ACL filter: ' . $where);
     }
 }

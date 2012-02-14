@@ -291,5 +291,5 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             default:
                 throw new Timetracker_Exception_UnexpectedValue('Unknown action: ' . $_action);
         }
-    }     
+    }
 }
