@@ -1,10 +1,8 @@
 {
   "projectName": "Tine 2.0 - Tinebase",
   "deployDir": "Tinebase",
-  "licenseText": "Tine 2.0 - Tinebase \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
-  "resources": [
-    
-  ],
+  "licenseText": "Tine 2.0 - Tinebase \nCopyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [],
   "pkgs": [
     {
       "name": "Tinebase FAT Client",
@@ -54,7 +52,7 @@
         {
           "text": "ContentTypeTreePanel.js",
           "path": "js/widgets/"
-        },        
+        },
         {
           "text": "RecordPickerManager.js",
           "path": "js/widgets/form/"
@@ -158,7 +156,7 @@
         {
           "text": "Download.js",
           "path": "js/ux/file/"
-        },    
+        },
         {
           "text": "ColorField.js",
           "path": "js/ux/form/"
