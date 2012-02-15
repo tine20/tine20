@@ -152,9 +152,9 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
                             'device_id'         => $this->_device,
                             'class'             => $class,
                             'folderid'          => $serverFolders[$serverFolderId]['folderId'],
-                        	'parentid'          => $serverFolders[$serverFolderId]['parentId'],
-                        	'displayname'       => $serverFolders[$serverFolderId]['displayName'],
-                        	'type'              => $serverFolders[$serverFolderId]['type'],
+                            'parentid'          => $serverFolders[$serverFolderId]['parentId'],
+                            'displayname'       => $serverFolders[$serverFolderId]['displayName'],
+                            'type'              => $serverFolders[$serverFolderId]['type'],
                             'creation_time'     => $this->_syncTimeStamp,
                             'lastfiltertype'    => null
                         ));
