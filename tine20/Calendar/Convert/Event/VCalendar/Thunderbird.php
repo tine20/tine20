@@ -44,4 +44,32 @@ class Calendar_Convert_Event_VCalendar_Thunderbird extends Calendar_Convert_Even
         #'rrule_until',
         'originator_tz'
     );
+    
+    protected function _addEventAttendee(Sabre_VObject_Component $_vevent, Calendar_Model_Event $_event)
+    {
+        if (version_compare($this->_version, '1.0b2' , '>')) {
+            parent::_addEventAttendee($_vevent, $_event);
+        } else {
+            // special handling for Lightning <= 1.0b2
+            // attendees get screwed up, if the CN contains commas
+            Calendar_Model_Attender::resolveAttendee($_event->attendee, FALSE);
+            
+            foreach($_event->attendee as $eventAttendee) {
+                $attendeeEmail = $eventAttendee->getEmail();
+                if ($attendeeEmail) {
+                    $attendee = new Sabre_VObject_Property('ATTENDEE', (strpos($attendeeEmail, '@') !== false ? 'mailto:' : 'urn:uuid:') . $attendeeEmail);
+                    $attendee->add('CN',       str_replace(',', null, $eventAttendee->getName()));
+                    $attendee->add('CUTYPE',   Calendar_Convert_Event_VCalendar_Abstract::$cutypeMap[$eventAttendee->user_type]);
+                    $attendee->add('PARTSTAT', $eventAttendee->status);
+                    $attendee->add('ROLE',     "{$eventAttendee->role}-PARTICIPANT");
+                    $attendee->add('RSVP',     'FALSE');
+                    if (strpos($attendeeEmail, '@') !== false) {
+                        $attendee->add('EMAIL',    $attendeeEmail);
+                    }
+    
+                    $_vevent->add($attendee);
+                }
+            }
+        }
+    }
 }

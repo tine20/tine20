@@ -593,7 +593,9 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             $status = Calendar_Model_Attender::STATUS_NEEDSACTION;
         }
         
-        preg_match('/(?P<protocol>mailto:|urn:uuid:)(?P<email>.*)/', $_attendee->value, $matches);
+        if (!preg_match('/(?P<protocol>mailto:|urn:uuid:)(?P<email>.*)/', $_attendee->value, $matches)) {
+            throw new Tinebase_Exception_UnexpectedValue('invalid attendee provided: ' . $_attendee->value);
+        }
         $email = $matches['email'];
         
         $fullName = isset($_attendee['CN']) ? $_attendee['CN']->value : $email;
