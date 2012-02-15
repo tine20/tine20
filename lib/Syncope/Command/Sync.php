@@ -169,6 +169,13 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                 if ($this->_logger instanceof Zend_Log) 
                     $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " folder {$collectionData['collectionId']} not found");
                 
+                // trigger INVALID_SYNCKEY instead of OBJECT_NOTFOUND when synckey is bigger than 0
+                // to avoid a syncloop for the iPhone
+                if ($collectionData['syncKey'] > 0) {
+                    $collectionData['folder']    = 'foobar';
+                    $collectionData['syncState'] = false;
+                    
+                }
                 $this->_collections['invalidFolderId'][$collectionData['collectionId']] = $collectionData;
                 continue;
             }
