@@ -8,6 +8,7 @@
     <delimiter>,</delimiter>
     <description>exchange / outlook adb import</description>
     <extension>csv</extension>
+    <encoding>WINDOWS-1252</encoding>
     <label>Contact CSV import from Outlook address book</label>
     <!-- _("Contact CSV import from Outlook address book") -->
     <mapping>
