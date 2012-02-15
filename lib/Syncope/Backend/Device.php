@@ -116,7 +116,7 @@ class Syncope_Backend_Device implements Syncope_Backend_IDevice
     {
         $id = $_id instanceof Syncope_Model_IDevice ? $_id->id : $id;
         
-        $result = $this->_db->delete($this->_tablePrefix . 'device', array('id' => $id));
+        $result = $this->_db->delete($this->_tablePrefix . 'device', array('id = ?' => $id));
         
         return (bool) $result;
     }
