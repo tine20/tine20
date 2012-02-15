@@ -199,7 +199,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         // allow delete only if deleted in origin calendar
         if ($this->getRecord()->container_id == $this->_container->getId()) {
             if (strpos($_SERVER['REQUEST_URI'], Calendar_Frontend_CalDAV_ScheduleInbox::NAME) === false) {
-                Calendar_Controller_MSEventFacade::getInstance()->delete($this->_event);
+                Calendar_Controller_MSEventFacade::getInstance()->delete($this->getRecord()->getId());
             }
         }
         
@@ -209,13 +209,13 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
                 $this->getRecord()->attendee->filter('displaycontainer_id', $this->_container->getId())->getFirstRecord() :
                 NULL;
             
-            // NOTE: organizer can only delete in the origin calendar, otherwise we can't handle move @see{Calendar_Frontend_WebDAV_EventTest::testMoveOriginPersonalToShared}
-            if ($attendee && $attendee->user_id != $this->getRecord()->organizer) {
+            // NOTE: don't allow organizer to instantly delete after update, otherwise we can't handle move @see{Calendar_Frontend_WebDAV_EventTest::testMoveOriginPersonalToShared}
+            if ($attendee && $attendee->user_id != $this->getRecord()->organizer || Tinebase_DateTime::now()->subMinute(1) > $this->getRecord()->last_modified_time) {
                 $attendee->status = Calendar_Model_Attender::STATUS_DECLINED;
                 
                 self::enforceEventParameters($this->getRecord());
                 $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($this->getRecord());
-            }
+            } 
         }
     }
     
