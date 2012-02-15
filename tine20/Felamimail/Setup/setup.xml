@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>4.7</version>
+    <version>4.8</version>
     <order>30</order>
     <status>enabled</status>
     <depends>
         <application>Addressbook</application>
-    </depends>    
+    </depends>
     <tables>
         <table>
             <name>felamimail_account</name>

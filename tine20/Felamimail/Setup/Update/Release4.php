@@ -305,4 +305,23 @@ class Felamimail_Setup_Update_Release4 extends Setup_Update_Abstract
         $this->setApplicationVersion('Felamimail', '4.7');
     }
     
+    /**
+    * update to 4.8
+    * - set some account fields to valid default values
+    */
+    public function update_7()
+    {
+        $fields = array('ssl', 'smtp_ssl', 'sieve_ssl');
+        foreach ($fields as $field) {
+            $stmt = $this->_db->query("SELECT id FROM `" . SQL_TABLE_PREFIX . "felamimail_account` WHERE `$field` not in ('none', 'tls', 'ssl')");
+            $wrongFields = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+            foreach ($wrongFields as $data) {
+                $this->_db->update(SQL_TABLE_PREFIX . 'felamimail_account', array(
+                $field => Felamimail_Model_Account::SECURE_TLS
+                ), "`id` = '{$data['id']}'");
+            }
+        }
+    
+        $this->setApplicationVersion('Felamimail', '4.8');
+    }
 }
