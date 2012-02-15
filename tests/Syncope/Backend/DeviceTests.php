@@ -82,8 +82,7 @@ class Syncope_Backend_DeviceTests extends PHPUnit_Framework_TestCase
         
         $result = $this->_deviceBackend->delete($device);
 
-        // ignore the result as sometimes the delete fails, but this is a problem of the SQLite backend only
-        #$this->assertTrue($result);
+        $this->assertTrue($result);
     }
     
     public function testGetExceptionNotFound()
