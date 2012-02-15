@@ -284,7 +284,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             $customFields = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application, get_class($this))->name;
             $recordCustomFields = array();
         } else {
-            $customFields = array();    
+            $customFields = array();
         }
         
         // make sure we run through the setters
@@ -294,7 +294,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             if (array_key_exists ($key, $this->_validators)) {
                 $this->$key = $value;
             } else if (in_array($key, $customFields)) {
-                $recordCustomFields[$key] = $value;                
+                $recordCustomFields[$key] = $value;
             }
         }
         if (!empty($recordCustomFields)) {
@@ -304,7 +304,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         $this->bypassFilters = $bypassFilter;
         if ($this->bypassFilters !== true) {
             $this->isValid(true);
-        }        
+        }
     }
     
     /**

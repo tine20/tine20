@@ -11,6 +11,7 @@
  * @todo        add join to cf config to value backend to get name
  * @todo        use recordset instead of array to store cfs of record
  * @todo        move custom field handling from sql backend to abstract record controller
+ * @todo        remove the memory logging
  */
 
 /**
@@ -161,6 +162,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         $cacheId = convertCacheId('getCustomFieldsForApplication' . $cfIndex);
         $result = $cache->load($cacheId);
         
+        //Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' seconds  MEMORY: ' . memory_get_usage(true)/1024/1024 . ' MBytes');
+        
         if (!$result) {
             $filterValues = array(array(
                 'field'     => 'application_id', 
@@ -180,34 +183,35 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             $filter->setRequiredGrants((array)$_requiredGrant);
             $result = $this->_backendConfig->search($filter);
         
-            if (count($result) > 0) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                    . ' Got ' . count($result) . ' custom fields for app id ' . $applicationId
-                    . print_r($result->toArray(), TRUE)
-                );
-            }
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Got ' . count($result) . ' uncached custom fields for app id ' . $applicationId . ' (cacheid: ' . $cacheId . ')');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE) && (count($result) > 0)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . print_r($result->toArray(), TRUE));
             
             $cache->save($result, $cacheId, array('customfields'));
         }
         
         $this->_cfByApplicationCache[$cfIndex] = $result;
-            
+        
+        //Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' seconds  MEMORY: ' . memory_get_usage(true)/1024/1024 . ' MBytes');
+        
         return $result;
     }
     
     /**
      * check if app has customfield configs
      * 
-     * @param string $_applicationName
+     * @param string $applicationName
+     * @param string $modelName
      * @return boolean 
      */
-    public function appHasCustomFields($_applicationName)
+    public function appHasCustomFields($applicationName, $modelName = NULL)
     {
-        if (empty($_applicationName)) {
+        if (empty($applicationName)) {
             return FALSE;
         }
-        $app = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
-        $result = $this->getCustomFieldsForApplication($app);
+        $app = Tinebase_Application::getInstance()->getApplicationByName($applicationName);
+        $result = $this->getCustomFieldsForApplication($app, $modelName);
         return (count($result) > 0);
     }
     
@@ -412,6 +416,9 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             $_configs = $this->getCustomFieldsForApplication(Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication()));
         };
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Adding ' . count($customFields) . ' custom fields to record  ' . $_record->getId());
+        
         $result = array();
         foreach ($customFields as $customField) {
             $idx = $_configs->getIndexById($customField->customfield_id);
@@ -420,15 +427,14 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 if (strtolower($config->definition['type']) == 'record') {
                     try {
                         $modelParts = explode('.', $config->definition['recordConfig']['value']['records']); // get model parts from saved record class e.g. Tine.Admin.Model.Group
-                        $controllerName = $modelParts[1] . '_Controller_' . $modelParts[3];    
+                        $controllerName = $modelParts[1] . '_Controller_' . $modelParts[3];
                         $controller = call_user_func(array($controllerName, 'getInstance'));
                         $result[$config->name] = $controller->get($customField->value)->toArray();
                     } catch (Exception $e) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error resolving custom field record: ' . $e->getMessage());
                         $result[$config->name] = $customField->value;
                     }
-                }
-                else {
+                } else {
                     $result[$config->name] = $customField->value;
                 }
             }
@@ -443,6 +449,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      */
     public function resolveMultipleCustomfields(Tinebase_Record_RecordSet $_records)
     {
+        //Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' seconds  MEMORY: ' . memory_get_usage(true)/1024/1024 . ' MBytes');
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             . ' Resolving custom fields for ' . count($_records) . ' ' . $_records->getRecordClassName() . ' records.');
         
@@ -453,6 +460,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         foreach ($_records as $record) {
             $this->resolveRecordCustomFields($record, $customFields->filter('record_id', $record->getId()), $config);
         }
+        
+        //Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' seconds  MEMORY: ' . memory_get_usage(true)/1024/1024 . ' MBytes');
     }
     
     /**

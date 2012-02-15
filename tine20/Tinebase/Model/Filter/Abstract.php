@@ -256,7 +256,7 @@ abstract class Tinebase_Model_Filter_Abstract
      */
     protected function _getQuotedFieldName($_backend) {
         $tablename = (isset($this->_options['tablename'])) ? $this->_options['tablename'] : $_backend->getTableName();
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
             . 'Using tablename: ' . $tablename);
         
         return $_backend->getAdapter()->quoteIdentifier(
