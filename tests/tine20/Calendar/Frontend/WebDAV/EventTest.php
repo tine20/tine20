@@ -403,8 +403,8 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
      * NOTE: As noted in {@see testMoveOriginPersonalToShared} we can't delete/decline for organizer in his
      *       personal cal because a move personal->shared would delete/decline the event.
      *       
-     *       To support intentsional delete/declines we allow the delte/decline if the modification time of the event
-     *       is older than one minute
+     *       To support intensional delete/declines we allow the delte/decline only if ther is some
+     *       time between this and the last update
      */
     public function testDeleteImplicitDeclineOrganizer()
     {
@@ -420,7 +420,7 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
 //         $oldEvent = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], "$id.ics");
 //         $oldEvent->delete();
         
-        // wait a minute
+        // wait some time
         $cbs = new Calendar_Backend_Sql();
         $cbs->updateMultiple(array($id), array(
             'creation_time'      => Tinebase_DateTime::now()->subMinute(5),
