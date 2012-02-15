@@ -6,7 +6,7 @@
  * @package     HelperScripts
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add filter for applications
  */
@@ -431,6 +431,12 @@ function msgfmt ($_verbose)
     }
 }
 
+/**
+ * create package file for translators
+ * 
+ * @param boolean $_verbose
+ * @param string $_archive file or directory
+ */
 function buildpackage($_verbose, $_archive)
 {
     $destDir = __DIR__;
@@ -455,9 +461,10 @@ function buildpackage($_verbose, $_archive)
             bzr push`;
         }
     } else {
+        $filename = ($_archive && strpos($_archive, 'tar.gz') !== FALSE) ? $_archive : 'lp-lang-package.tar.gz';
         `cd "$tmpdir"
-         tar -czf lp-lang-package.tar.gz *`;
-        `mv $tmpdir/lp-lang-package.tar.gz {$destDir}`;
+         tar -czf $filename *`;
+        `mv $tmpdir/$filename {$destDir}`;
     }
 }
 

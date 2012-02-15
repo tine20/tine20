@@ -275,8 +275,8 @@ function setupPackageDir()
 function packageTranslations()
 {
     echo -n "building translation files for translators... "
-    php -d include_path=".:$TEMPDIR/tine20:$TEMPDIR/tine20/library"  -f $TEMPDIR/tine20/langHelper.php -- --package
-    mv $TEMPDIR/tine20/translations.zip $PACKAGEDIR
+    php -d include_path=".:$TEMPDIR/tine20:$TEMPDIR/tine20/library"  -f $TEMPDIR/tine20/langHelper.php -- --package=translations.tar.gz
+    mv $TEMPDIR/tine20/translations.tar.gz $PACKAGEDIR
     echo "done"
 }
 
@@ -322,6 +322,6 @@ activateReleaseMode
 buildClient
 createArchives
 createSpecialArchives
-#packageTranslations
+packageTranslations
 buildChecksum
 prepareDebianPackaging
