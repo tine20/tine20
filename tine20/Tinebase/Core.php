@@ -803,7 +803,7 @@ class Tinebase_Core
                         // set mysql timezone to utc and activate strict mode
                         $db->query("SET time_zone ='+0:00';");
                         $db->query("SET SQL_MODE = 'STRICT_ALL_TABLES'");
-                        $db->query("SET SESSION group_concat_max_len = 8192");
+                        $db->query("SET SESSION group_concat_max_len = 81920");
                     } catch (Exception $e) {
                         self::getLogger()->warn('Failed to set "SET SQL_MODE to STRICT_ALL_TABLES or timezone: ' . $e->getMessage());
                     }
