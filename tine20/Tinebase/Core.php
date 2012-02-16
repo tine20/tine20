@@ -921,7 +921,7 @@ class Tinebase_Core
                         . " Got locale from cookie: '$localeString'");
                     
                 } elseif (isset($session->currentAccount)) {
-                    $localeString = self::getPreference()->{Tinebase_Preference::LOCALE};
+                    $localeString = self::getPreference()->getValue(Tinebase_Preference::LOCALE, 'auto');
                     if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                         . " Got locale from preference: '$localeString'");
                 }
@@ -940,7 +940,7 @@ class Tinebase_Core
         self::set('locale', $locale);
         
         // save locale as preference
-        if (Tinebase_Core::isRegistered(self::USER) && ($saveaspreference || self::getPreference()->{Tinebase_Preference::LOCALE} === 'auto')) {
+        if (is_object(Tinebase_Core::getUser()) && ($saveaspreference || self::getPreference()->{Tinebase_Preference::LOCALE} === 'auto')) {
             self::getPreference()->{Tinebase_Preference::LOCALE} = (string)$locale;
         }
     }
