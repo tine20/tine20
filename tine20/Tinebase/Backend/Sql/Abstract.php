@@ -473,7 +473,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         if ($this->_useSubselectForCount) {
             // use normal search query as subselect to get count -> select count(*) from (select [...]) as count
-            $subselectCols = (count($searchCountCols) === 1) ? $this->_defaultCountCol : '*';
+            $subselectCols = (count($searchCountCols) === 1) 
+                ? array_merge(array_keys($this->_foreignTables), array($this->_defaultCountCol)) : '*';
+            
             $select = $this->_getSelect($subselectCols);
             $this->_addFilter($select, $_filter);
             $countSelect = $this->_db->select()->from($select, $searchCountCols);
