@@ -116,6 +116,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 }
             }
             $this->resolveContainerAndAddPath($result, $path);
+            $this->_sortContainerNodes($result, $path, $_pagination);
         }
         return $result;
     }
@@ -204,6 +205,28 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         }
         
         return $result;
+    }
+    
+    /**
+     * sort nodes (only checks if we are on the container level and sort by container_name then)
+     * 
+     * @param Tinebase_Record_RecordSet $nodes
+     * @param Tinebase_Model_Tree_Node_Path $path
+     * @param Tinebase_Model_Pagination $pagination
+     */
+    protected function _sortContainerNodes(Tinebase_Record_RecordSet $nodes, Tinebase_Model_Tree_Node_Path $path, Tinebase_Model_Pagination $pagination = NULL)
+    {
+        if ($path->container || ($pagination !== NULL && $pagination->sort && $pagination->sort !== 'name')) {
+            // no toplevel path or no sorting by name -> sorting should be already handled by search()
+            return;
+        }
+        
+        $dir = ($pagination !== NULL && $pagination->dir) ? $pagination->dir : 'ASC';
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Sorting container nodes by name (path: ' . $path->flatpath . ') / dir: ' . $dir);
+        
+        $nodes->sort('container_name', $dir);
     }
     
     /**
@@ -586,12 +609,14 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 $aclContainer = $_path->container;
             }
             
-            // account grants
             if ($aclContainer) {
                 $record->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(
                     Tinebase_Core::getUser(), 
                     $aclContainer
                 )->toArray();
+                
+                // needed for sorting
+                $record->container_name = $aclContainer->name;
             }
         }
     }
@@ -692,7 +717,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     protected function _copyNode(Tinebase_Model_Tree_Node_Path $_source, Tinebase_Model_Tree_Node_Path $_destination, $_forceOverwrite = FALSE)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Copy Node ' . $_source->flatpath . ' to ' . $_destination->flatpath);
+            . ' Copy Node ' . $_source->flatpath . ' to ' . $_destination->flatpath);
                 
         $newNode = NULL;
         
