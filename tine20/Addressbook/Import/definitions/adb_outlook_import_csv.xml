@@ -14,7 +14,7 @@
     <mapping>
         <field>
             <source>Anrede</source>
-            <destination>salutation_id</destination>
+            <destination>salutation</destination>
         </field>
         <field>
             <source>Vorname</source>

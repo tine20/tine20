@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -43,9 +43,9 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook Csv Import Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook Csv Import Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -80,27 +80,9 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test import data
-     */
-    public function testImport()
-    {
-        $result = $this->_doImport(array('dryrun' => 1), 'adb_tine_import_csv', new Addressbook_Model_ContactFilter(array(
-            array(
-                'field'    => 'n_fileas',
-                'operator' => 'equals',
-                'value'    =>  Tinebase_Core::getUser()->accountDisplayName
-            )
-        )));
-        
-        if ($this->_deletePersonalContacts) {
-            Addressbook_Controller_Contact::getInstance()->deleteByFilter(new Addressbook_Model_ContactFilter(array(array(
-                'field' => 'container_id', 'operator' => 'equals', 'value' => Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook()->getId()
-            ))));
-        }
-    }
-    
-    /**
      * test import duplicate data
+     * 
+     * @return array
      */
     public function testImportDuplicates()
     {
@@ -114,6 +96,33 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
         
         $this->assertGreaterThan(0, $result['duplicatecount'], 'no duplicates.');
         $this->assertTrue($result['exceptions'] instanceof Tinebase_Record_RecordSet);
+        
+        return $result;
+    }
+    
+    /**
+     * test import data
+     */
+    public function testImportSalutation()
+    {
+        $myContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        $salutation = Addressbook_Config::getInstance()->get(Addressbook_Config::CONTACT_SALUTATION)->records->getFirstRecord()->value;
+        $myContact->salutation = $salutation;
+        Addressbook_Controller_Contact::getInstance()->update($myContact);
+        
+        $result = $this->testImportDuplicates();
+        
+        $found = FALSE;
+        foreach ($result['exceptions'] as $exception) {
+            if ($exception['exception']['clientRecord']['n_fn'] === Tinebase_Core::getUser()->accountFullName) {
+                $found = TRUE;
+                $this->assertTrue(isset($exception['exception']['clientRecord']['salutation']), 'no salutation found: ' . print_r($exception['exception']['clientRecord'], TRUE));
+                $this->assertEquals($salutation, $exception['exception']['clientRecord']['salutation']);
+                break;
+            }
+        }
+        
+        $this->assertTrue($found);
     }
     
     /**
@@ -197,7 +206,7 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
             'name'              => 'Yomi Name',
             'model'             => 'Addressbook_Model_Contact',
             'definition'        => array(
-                'label' => Tinebase_Record_Abstract::generateUID(),        
+                'label' => Tinebase_Record_Abstract::generateUID(),
                 'type'  => 'string',
                 'uiconfig' => array(
                     'xtype'  => Tinebase_Record_Abstract::generateUID(),
