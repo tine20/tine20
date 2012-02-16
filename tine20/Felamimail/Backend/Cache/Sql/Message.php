@@ -31,6 +31,13 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     protected $_modelName = 'Felamimail_Model_Message';
     
     /**
+    * default column(s) for count
+    *
+    * @var string
+    */
+    protected $_defaultCountCol = 'id';
+    
+    /**
      * foreign tables (key => tablename)
      *
      * @var array
