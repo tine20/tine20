@@ -857,11 +857,22 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     /**
      * return contentfilter array
      * 
-     * @param $_filterType
+     * @param  int $_filterType
      * @return Tinebase_Model_Filter_FilterGroup
      */
-    protected function _getContentFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_filterType)
+    protected function _getContentFilter($_filterType)
     {
+        $filter = parent::_getContentFilter($_filterType);
+        
+        // no persistent filter set -> add default filter
+        if (! $filter ->getId()) {
+            $defaultFilter = $filter->createFilter('container_id', 'equals', array(
+                'path' => '/personal/' . Tinebase_Core::getUser()->getId()
+            ));
+            
+            $filter->addFilter($defaultFilter);
+        }
+        
         if(in_array($_filterType, $this->_filterArray)) {
             switch($_filterType) {
                 case Syncope_Command_Sync::FILTER_2_WEEKS_BACK:
@@ -881,13 +892,15 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             $to = Tinebase_DateTime::now()->addYear(10);
             
             // remove all 'old' period filters
-            $_filter->removeFilter('period');
+            $filter->removeFilter('period');
             
             // add period filter
-            $_filter->addFilter(new Calendar_Model_PeriodFilter('period', 'within', array(
+            $filter->addFilter(new Calendar_Model_PeriodFilter('period', 'within', array(
                 'from'  => $from,
                 'until' => $to
             )));
         }
+        
+        return $filter;
     }
 }

@@ -104,10 +104,8 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      */
     public function getChangedEntries($_folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL)
     {
-        $filter = new $this->_contentFilterClass();
-        
-        $this->_getContentFilter($filter, 0);
-        $this->_getContainerFilter($filter, $_folderId);
+        $filter = $this->_getContentFilter(0);
+        $this->_addContainerFilter($filter, $_folderId);
 
         $startTimeStamp = ($_startTimeStamp instanceof DateTime) ? $_startTimeStamp->format(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
         $endTimeStamp = ($_endTimeStamp instanceof DateTime) ? $_endTimeStamp->format(Tinebase_Record_Abstract::ISO8601LONG) : $_endTimeStamp;
@@ -397,27 +395,6 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         }
     }
     
-    #/**
-    # * get id's of all contacts available on the server
-    # *
-    # * @return array
-    # */
-    #protected function _getServerEntries($_folderId, $_filterType)
-    #{
-    #    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " get server entries for folder " . $_folderId);
-    #    
-    #    $filter = new $this->_contentFilterClass();
-    #    
-    #    $this->_getContentFilter($filter, $_filterType);
-    #    $this->_getContainerFilter($filter, $_folderId);
-    #    
-    #    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter " . print_r($filter->toArray(), true));
-    #    
-    #    $messages = $this->_contentController->search($filter, null, false, true);
-    #    
-    #	return $messages;    	
-    #}
-    
     /**
      * update existing entry
      *
@@ -623,14 +600,14 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     }
     
     /**
-     * return contentfilter object
+     * return contentfilter array
      * 
-     * @param $_filterType
+     * @param  int $_filterType
      * @return Tinebase_Model_Filter_FilterGroup
      */
-    protected function _getContentFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_filterType)
+    protected function _getContentFilter($_filterType)
     {
-        #$_filter->addFilter(new Tinebase_Model_Filter_Text('recurid', 'isnull', null));
+        $filter = parent::_getContentFilter($_filterType);
         
         if(in_array($_filterType, $this->_filterArray)) {
             $today = Tinebase_DateTime::now()->setTime(0,0,0);
@@ -654,11 +631,13 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             }
             
             // add period filter
-            $_filter->addFilter(new Tinebase_Model_Filter_DateTime('received', 'after', $received->get(Tinebase_Record_Abstract::ISO8601LONG)));
+            $filter->addFilter(new Tinebase_Model_Filter_DateTime('received', 'after', $received->get(Tinebase_Record_Abstract::ISO8601LONG)));
         }
+        
+        return $filter;
     }
     
-    protected function _getContainerFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_containerId)
+    protected function _addContainerFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_containerId)
     {
         // custom filter gets added when created
         $_filter->createFilter(

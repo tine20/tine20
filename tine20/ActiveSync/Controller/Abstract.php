@@ -171,20 +171,15 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
             $allowedFolders = $this->_getSyncableFolders();
             
             $wantedFolders = null;
-            // maybe the user has defined a filter to limit the search results
-            try {
-                if(!empty($this->_device->contactsfilter_id)) {
-                    $persistentFilter = Tinebase_PersistentFilter::getFilterById($this->_device->contactsfilter_id);
-                    
-                    foreach($persistentFilter as $filter) {
-                        if($filter instanceof Tinebase_Model_Filter_Container) {
-                            $wantedFolders = array_flip($filter->getContainerIds());
-                        }
-                    }
-                }
-            } catch (Tinebase_Exception_NotFound $tenf) {
-               // filter got deleted already
+            
+            // check if contentfilter has a container limitation
+            // @TODO discuss if we query distinct containers of contentfilters?
+            $filter = $this->_getContentFilter(0);
+            $containerFilter = $filter->getFilter('container_id');
+            if ($containerFilter && $containerFilter instanceof Tinebase_Model_Filter_Container) {
+                $wantedFolders = array_flip($containerFilter->getContainerIds());
             }
+            
             $folders = $wantedFolders === null ? $allowedFolders : array_intersect_key($allowedFolders, $wantedFolders);
         } else {
             
@@ -363,10 +358,10 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
     #    $filterArray  = $this->_toTineFilterArray($_data);
     #    $filter       = new $this->_contentFilterClass($filterArray);
     #    
-    #    $this->_getContainerFilter($filter, $_folderId);
+    #    $this->_addContainerFilter($filter, $_folderId);
     #    
     #    $foundEmtries = $this->_contentController->search($filter);
-#
+    #
     #    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundEmtries));
     #        
     #    return $foundEmtries;
@@ -383,12 +378,12 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
     }
     
     /**
-     * add container filter to filter group
+     * add container acl filter to filter group
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param string $_containerId
+     * @param string                            $_containerId
      */
-    protected function _getContainerFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_containerId)
+    protected function _addContainerFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_containerId)
     {
         $syncableContainers = $this->_getSyncableFolders();
         
@@ -436,20 +431,8 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
      */
     public function getChangedEntries($_folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL)
     {
-        $filter = new $this->_contentFilterClass();
-        
-        try {
-            $persistentFilterId = $this->_device->{$this->_filterProperty} ? 
-                $this->_device->{$this->_filterProperty} : 
-                Tinebase_Core::getPreference($this->_applicationName)->defaultpersistentfilter;
-                
-            $filter = Tinebase_PersistentFilter::getFilterById($persistentFilterId);
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            // filter got deleted already
-        }
-        
-        $this->_getContentFilter($filter, 0);
-        $this->_getContainerFilter($filter, $_folderId);
+        $filter = $this->_getContentFilter(0);
+        $this->_addContainerFilter($filter, $_folderId);
 
         $startTimeStamp = ($_startTimeStamp instanceof DateTime) ? $_startTimeStamp->format(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
         $endTimeStamp = ($_endTimeStamp instanceof DateTime) ? $_endTimeStamp->format(Tinebase_Record_Abstract::ISO8601LONG) : $_endTimeStamp;
@@ -482,42 +465,8 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
      */
     public function getServerEntries($_folderId, $_filterType)
     {
-        $filter = new $this->_contentFilterClass();
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter class: " . get_class($filter));
-                
-        // apply the default search filter only to devices which do not support multiple folders
-        if($this->_specialFolderName == $_folderId) {
-            $persistentFilterId = $this->_device->{$this->_filterProperty} ?
-                $this->_device->{$this->_filterProperty} :
-                Tinebase_Core::getPreference($this->_applicationName)->defaultpersistentfilter;
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " defaultpersistentfilter: " . Tinebase_Core::getPreference($this->_applicationName)->defaultpersistentfilter);
-        } else {
-            $persistentFilterId = $this->_device->{$this->_filterProperty} ?
-                $this->_device->{$this->_filterProperty} :
-                null;
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter id: " . $persistentFilterId);
-
-        if (!empty($persistentFilterId)) {
-            try {
-                $persistentFilter = Tinebase_PersistentFilter::getFilterById($persistentFilterId);
-                // @todo is this if statement really needed? either the filter got found or a Tinebase_Exception_NotFound got thrown
-                if ($persistentFilter) {
-                    $filter = $persistentFilter;
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter class: " . get_class($filter));
-                }
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                // filter got deleted already
-            }
-        }
-        
-        $this->_getContentFilter($filter, $_filterType);
-        $this->_getContainerFilter($filter, $_folderId);
+        $filter = $this->_getContentFilter($_filterType);
+        $this->_addContainerFilter($filter, $_folderId);
         
         if(!empty($this->_sortField)) {
             $pagination = new Tinebase_Model_Pagination(array(
@@ -551,14 +500,25 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
     
     
     /**
-     * return contentfilter array
+     * return (outer) contentfilter array
      * 
-     * @param int $_filterType
-     * @return array
+     * @param  int $_filterType
+     * @return Tinebase_Model_Filter_FilterGroup
      */
-    protected function _getContentFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_filterType)
+    protected function _getContentFilter($_filterType)
     {
-        return array();
+        $filter = new $this->_contentFilterClass();
+        
+        try {
+            $persistentFilterId = $this->_device->{$this->_filterProperty};
+            if ($persistentFilterId) {
+                $filter = Tinebase_PersistentFilter::getFilterById($persistentFilterId);
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // filter got deleted already
+        }
+        
+        return $filter;
     }
     
     /**
