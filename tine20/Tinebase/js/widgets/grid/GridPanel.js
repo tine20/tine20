@@ -567,7 +567,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     onStoreAdd: function(store, records, index) {
         this.store.totalLength += records.length;
-        this.pagingToolbar.updateInfo();
+        if (this.pagingToolbar) {
+            this.pagingToolbar.updateInfo();
+        }
     },
     
     /**
@@ -575,7 +577,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     onStoreRemove: function(store, record, index) {
         this.store.totalLength--;
-        this.pagingToolbar.updateInfo();
+        if (this.pagingToolbar) {
+            this.pagingToolbar.updateInfo();
+        }
     },
     
     /**
