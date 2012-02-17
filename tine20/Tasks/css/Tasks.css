@@ -35,3 +35,7 @@
 .tasks-grid-duetoday {
     color: #00aa00;
 }
+
+.tasks-grid-completed {
+    color: #777;
+}
