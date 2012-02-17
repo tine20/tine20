@@ -126,9 +126,6 @@ class Syncope_Server
             $requestBody = $this->_body;
         }
         
-        // wrap all requests in one transaction
-        $transactionId = Syncope_Registry::getTransactionManager()->startTransaction(Syncope_Registry::getDatabase());
-        
         try {
             $command = new $className($requestBody, $device, $policyKey);
         
@@ -180,8 +177,6 @@ class Syncope_Server
             rewind($outputStream);
             fpassthru($outputStream);
         }
-        
-        Syncope_Registry::getTransactionManager()->commitTransaction($transactionId);
     }
     
     /**
