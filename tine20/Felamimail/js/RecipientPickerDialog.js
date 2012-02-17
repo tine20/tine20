@@ -77,6 +77,7 @@ Ext.namespace('Tine.Felamimail');
         var adbApp = Tine.Tinebase.appMgr.get('Addressbook');
         
         this.treePanel = new Tine.widgets.container.TreePanel({
+            allowMultiSelection: true,
             region: 'west',
             filterMode: 'filterToolbar',
             recordClass: Tine.Addressbook.Model.Contact,
@@ -97,8 +98,9 @@ Ext.namespace('Tine.Felamimail');
         
         this.westPanel = new Tine.widgets.mainscreen.WestPanel({
             app: adbApp,
-            containerTreePanel: this.treePanel,
-            favoritesPanel: new Tine.widgets.persistentfilter.PickerPanel({
+            hasFavoritesPanel: true,
+            ContactTreePanel: this.treePanel,
+            ContactFilterPanel: new Tine.widgets.persistentfilter.PickerPanel({
                 filter: [{field: 'model', operator: 'equals', value: 'Addressbook_Model_ContactFilter'}],
                 app: adbApp,
                 grid: this.contactGrid
