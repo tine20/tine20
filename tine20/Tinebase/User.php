@@ -30,6 +30,8 @@ class Tinebase_User
      * user status constants
      * 
      * @var string
+     * 
+     * @todo use constants from model
      */
     const STATUS_BLOCKED  = 'blocked';
     const STATUS_DISABLED = 'disabled';

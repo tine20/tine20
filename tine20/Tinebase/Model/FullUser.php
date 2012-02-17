@@ -86,8 +86,9 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             'accountLastLoginfrom'  => array('allowEmpty' => true),
             'accountLastPasswordChange' => array('allowEmpty' => true),
             'accountStatus'         => array(new Zend_Validate_InArray(array(
-                Tinebase_Model_User::ACCOUNT_STATUS_ENABLED, 
+                Tinebase_Model_User::ACCOUNT_STATUS_ENABLED,
                 Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
+                Tinebase_Model_User::ACCOUNT_STATUS_BLOCKED,
                 Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED)
             ), Zend_Filter_Input::DEFAULT_VALUE => Tinebase_Model_User::ACCOUNT_STATUS_ENABLED),
             'accountExpires'        => array('allowEmpty' => true),

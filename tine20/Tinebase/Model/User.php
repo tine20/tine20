@@ -72,6 +72,13 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     const ACCOUNT_STATUS_EXPIRED = 'expired';
     
     /**
+     * account is blocked
+     * 
+     * @var string
+     */
+    const ACCOUNT_STATUS_BLOCKED  = 'blocked';
+    
+    /**
      * list of zend inputfilter
      * 
      * this filter get used when validating user generated content with Zend_Input_Filter
