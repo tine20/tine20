@@ -902,21 +902,37 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * 
      * @param Tinebase_Record_Abstract $_record
      * @param Tinebase_Model_Alarm $_alarm
+     * @param bool $_nextBy {instance|time} set recurr alarm to next from given instance or next by current time
      * @return void
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _inspectAlarmSet(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm)
+    protected function _inspectAlarmSet(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm, $_nextBy = 'time')
     {
         parent::_inspectAlarmSet($_record, $_alarm);
         
         if ($_record->rrule) {
+            
+            if ($_nextBy == 'time') {
+                // NOTE: this also finds instances running right now
+                $from = Tinebase_DateTime::now();
+                
+            } else {
+                $recurid = $_alarm->getOption('recurid');
+                $instanceStart = $recurid ? new Tinebase_DateTime(substr($recurid, -19)) : clone $_record->dtstart;
+                $eventLength = $_record->dtstart->diff($_record->dtend);
+                
+                // make sure we hit the next instance
+                $from = $instanceStart->add($eventLength)->addMinute(1); 
+            }
+            // this would break if minutes_before > interval
+            //$from->addMinute((int) $_alarm->getOption('minutes_before'));
+            
+            // compute next
             $exceptions = $this->getRecurExceptions($_record);
-            
-            $eventLength = $_record->dtstart->diff($_record->dtend);
-            $from = Tinebase_DateTime::now()->add($eventLength)->addMinute((int) $_alarm->getOption('minutes_before'));
-            
-            // compute next occurance from now+minutes_before!
             $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($_record, $exceptions, $from);
+            
+            // save recurid so we know for which recurrance the alarm is for
+            $_alarm->setOption('recurid', isset($nextOccurrence) ? $nextOccurrence->recurid : NULL);
             
             $_alarm->sent_status = $nextOccurrence ? Tinebase_Model_Alarm::STATUS_PENDING : Tinebase_Model_Alarm::STATUS_SUCCESS;
             $_alarm->sent_message = $nextOccurrence ?  '' : 'Nothing to send, series is over';
@@ -930,10 +946,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // save minutes before / compute it for custom alarms
         $_alarm->setOption('minutes_before', $_alarm->minutes_before == Tinebase_Model_Alarm::OPTION_CUSTOM ? ($_record->dtstart->getTimestamp() - $_alarm->alarm_time->getTimestamp()) / 60 : $_alarm->minutes_before);
-        //$_alarm->setOption('alarm_time', $_alarm->alarm_time->toString());
-        
-        // save recurid so we know for which recurrance the alarm is for
-        $_alarm->setOption('recurid', isset($nextOccurrence) ? $nextOccurrence->recurid : NULL);
         
         $_alarm->setTime($eventStart);
     }
@@ -1539,7 +1551,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $recurid = $_alarm->getOption('recurid');
             
             // NOTE: Alarm inspection adopts the (referenced) alarm and sets alarm time to next occurance
-            $this->_inspectAlarmSet($event, $_alarm);
+            $this->_inspectAlarmSet($event, $_alarm, 'instance');
             
             if ($recurid) {
                 // NOTE: In case of recuring events $event is always the baseEvent,
