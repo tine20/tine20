@@ -57,10 +57,8 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
-     *
-     * @access protected
      */
-    protected function setUp()
+    public function setUp()
     {
         $this->_json = new Voipmanager_Frontend_Json();
     }
@@ -624,7 +622,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateSnomPhone()
     {
-        $testPhone = $this->_getSnomPhone();
+        $testPhone = $this->getSnomPhone();
         
         $lineData = array();
         $rightsData = array();
@@ -660,7 +658,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateSnomPhone()
     {
-        $testPhone = $this->_getSnomPhone();
+        $testPhone = $this->getSnomPhone();
         
         $lineData = array();
         $rightsData = array();
@@ -693,7 +691,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateSnomPhoneWithLines()
     {
-        $testPhone = $this->_getSnomPhone();
+        $testPhone = $this->getSnomPhone();
         $sipPeer = $this->_json->saveAsteriskSipPeer($this->_getAsteriskSipPeer()->toArray());
         $this->_toDelete['sippeer'][] = $sipPeer;
         $sipPeer['context_id'] = $sipPeer['context_id']['value'];
@@ -721,7 +719,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchSnomPhone()
     {
-        $testPhone = $this->_getSnomPhone();
+        $testPhone = $this->getSnomPhone();
         
         $lineData = array();
         $rightsData = array();
@@ -731,7 +729,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $phoneTemplate = $this->_json->getSnomTemplate($testPhone['template_id']);
         $phoneLocation = $this->_json->getSnomLocation($testPhone['location_id']);
         
-        $searchResult = $this->_json->searchSnomPhones($this->_getSnomPhoneFilter($testPhone['description']), $this->_getPaging());
+        $searchResult = $this->_json->searchSnomPhones($this->getSnomPhoneFilter($testPhone['description']), $this->_getPaging());
         
         $this->assertEquals(1, $searchResult['totalcount']);
         $this->assertEquals($phoneTemplate['name'], $searchResult['results'][0]['template']);
@@ -749,7 +747,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    protected function _getSnomPhoneFilter($_name)
+    protected function getSnomPhoneFilter($_name)
     {
         return array(
             array(
@@ -770,7 +768,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     public function testResetHttpClientInfo()
     {
         /*
-        $testPhone = $this->_getSnomPhone();
+        $testPhone = $this->getSnomPhone();
         
         $lineData = array();
         $rightsData = array();
@@ -803,7 +801,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    protected function _getSnomPhone()
+    public function getSnomPhone()
     {
         $testLocation = $this->_getSnomLocation();
         $returnedLocation = $this->_json->saveSnomLocation($testLocation->toArray());
@@ -832,7 +830,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateSnomPhoneSettings()
     {
-        $test = $this->_getSnomPhoneSettings();
+        $test = $this->getSnomPhoneSettings();
         
         $returned = $this->_json->getSnomPhoneSettings($test['phone_id']);
         
@@ -866,9 +864,9 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    protected function _getSnomPhoneSettings()
+    protected function getSnomPhoneSettings()
     {
-        $testPhone = $this->_getSnomPhone();
+        $testPhone = $this->getSnomPhone();
         
         $lineData = array();
         $rightsData = array();

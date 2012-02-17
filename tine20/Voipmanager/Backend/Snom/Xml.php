@@ -207,8 +207,11 @@ class Voipmanager_Backend_Snom_Xml
             }
             
             $isWriteAbleProperty = $key . '_writable';
+            if (! $defaultPhoneSettings->has($isWriteAbleProperty)) {
+                continue;
+            }
             
-            if($defaultPhoneSettings->$isWriteAbleProperty == true && $value !== NULL) {
+            if ($defaultPhoneSettings->$isWriteAbleProperty == true && $value !== NULL) {
                 $userSettings[$key]['value'] = $value;
                 $userSettings[$key]['perms'] = 'RW';
             } elseif($defaultPhoneSettings->$key !== NULL) {
@@ -218,7 +221,7 @@ class Voipmanager_Backend_Snom_Xml
                 } else {
                     $userSettings[$key]['perms'] = 'RO';
                 }
-            }            
+            }
         }
         
         foreach($userSettings as $key => $value) {

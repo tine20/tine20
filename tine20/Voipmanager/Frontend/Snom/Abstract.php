@@ -47,7 +47,7 @@ abstract class Voipmanager_Frontend_Snom_Abstract extends Tinebase_Frontend_Abst
             header('WWW-Authenticate: Basic realm="Tine 2.0"');
             header('HTTP/1.0 401 Unauthorized');
             exit;
-        }                
+        }
     }
     
     /**
@@ -57,6 +57,10 @@ abstract class Voipmanager_Frontend_Snom_Abstract extends Tinebase_Frontend_Abst
      */
     protected function _getBaseUrl()
     {
+        if (! isset($_SERVER['HTTP_HOST']) && ! isset($_SERVER["SERVER_NAME"]) || ! isset($_SERVER['SERVER_PORT'])) {
+            throw new Voipmanager_Exception_UnexpectedValue('could not detect server name or port');
+        }
+        
         $protocol = !empty($_SERVER['HTTPS']) ? 'https://' : 'http://';
         $name = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
         $port = $_SERVER['SERVER_PORT'] != '80' && $_SERVER['SERVER_PORT'] != '443' ? ':' . $_SERVER['SERVER_PORT'] : '' ;
