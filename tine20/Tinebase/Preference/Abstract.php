@@ -155,11 +155,15 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             }
         }
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), TRUE));
+        
         $paging = new Tinebase_Model_Pagination(array(
             'dir'       => 'ASC',
             'sort'      => array('name')
         ));
         $allPrefs = parent::search($_filter, $_pagination, $_onlyIds);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($allPrefs->toArray(), TRUE));
         
         if (! $_onlyIds) {
             $this->_addDefaultAndRemoveUndefinedPrefs($allPrefs, $_filter);
@@ -488,7 +492,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             }
             // add default setting to the top of options
             $defaultLabel = Tinebase_Translation::getTranslation('Tinebase')->_('default') . 
-                            ' (' . $valueLabel . ')';
+                ' (' . $valueLabel . ')';
             
             array_unshift($options, array(
                 Tinebase_Model_Preference::DEFAULT_VALUE,
@@ -594,7 +598,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 $this->delete($preference->getId());
             } else {
                 $preference->value = $_data[$preference->getId()]['value'];
-                $preference->type = ($_data[$preference->getId()]['type'] == Tinebase_Model_Preference::TYPE_FORCED) ? $_data[$preference->getId()]['type'] : Tinebase_Model_Preference::TYPE_ADMIN;;
+                $preference->type = ($_data[$preference->getId()]['type'] == Tinebase_Model_Preference::TYPE_FORCED) ? $_data[$preference->getId()]['type'] : Tinebase_Model_Preference::TYPE_ADMIN;
                 $this->update($preference);
             }
         }

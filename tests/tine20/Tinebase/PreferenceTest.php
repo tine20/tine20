@@ -4,8 +4,8 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -13,10 +13,6 @@
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    Tinebase_PreferenceTest::main();
-}
 
 /**
  * Test class for Tinebase_PreferenceTest
@@ -28,11 +24,6 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
      * @var Tinebase_Preference
      */
     protected $_instance;
-
-    /**
-     * @var array test objects
-     */
-    protected $_createdPrefs = array();
 
     /**
      * Runs the test methods of this class.
@@ -55,6 +46,7 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_instance = Tinebase_Core::getPreference();
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
     }
 
     /**
@@ -65,9 +57,7 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        foreach ($this->_createdPrefs as $pref) {
-            $this->_instance->delete($pref);
-        }
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
@@ -202,31 +192,75 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(count($result) == 0);
     }
     
+    /**
+     * test search for preferences for anyone of calendar
+     * 
+     * @see http://forge.tine20.org/mantisbt/view.php?id=5298
+     */
+    public function testSearchCalendarPreferencesForAnyone()
+    {
+        $tasksPersistentFilter = Tinebase_PersistentFilter::getInstance()->getPreferenceValues('Tasks', Tinebase_Core::getUser()->getId());
+        $json = new Tinebase_Frontend_Json();
+        $filter = $this->_getPreferenceFilter(NULL, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
+        $result = $json->searchPreferencesForApplication('Tasks', $filter->toArray());
+        $prefData = $result['results'];
+        $prefToSave = array();
+        foreach ($prefData as $pref) {
+            if ($pref['name'] === Tasks_Preference::DEFAULTPERSISTENTFILTER) {
+                $prefToSave[$pref['id']] = array(
+                    'name'  => Tasks_Preference::DEFAULTPERSISTENTFILTER,
+                    'value' => $tasksPersistentFilter[5][0],
+                    'type'  => Tinebase_Model_Preference::TYPE_ADMIN,
+                );
+            }
+        }
+        Tinebase_Core::getPreference('Tasks')->saveAdminPreferences($prefToSave);
+
+        $result = $json->searchPreferencesForApplication('Calendar', $filter->toArray());
+        
+        $this->assertGreaterThan(0, $result['totalcount']);
+        
+        $filterPref = NULL;
+        foreach ($result['results'] as $pref) {
+            if ($pref['name'] === Calendar_Preference::DEFAULTPERSISTENTFILTER) {
+                $filterPref = $pref;
+            }
+        }
+        $this->assertTrue($filterPref !== NULL);
+        $this->assertEquals(Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(), $filterPref['application_id'], print_r($filterPref, TRUE));
+    }
+    
     /******************** protected helper funcs ************************/
     
     /**
      * get preference filter
      *
-     * @param string $_type
+     * @param string $type
+     * @param string $accountType
      * @return Tinebase_Model_PreferenceFilter
      */
-    protected function _getPreferenceFilter($_type = Tinebase_Model_Preference::TYPE_USER)
+    protected function _getPreferenceFilter($type = Tinebase_Model_Preference::TYPE_USER, $accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
-        return new Tinebase_Model_PreferenceFilter(array(
+        $filterData = array(
             array(
                 'field' => 'account', 
                 'operator' => 'equals', 
                 'value' => array(
-                    'accountId'     => Tinebase_Core::getUser()->getId(),
-                    'accountType'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
+                    'accountId'     => ($accountType === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) ? Tinebase_Core::getUser()->getId() : 0,
+                    'accountType'   => $accountType
                 )
             ),
-            array(
+        );
+        
+        if ($type !== NULL) {
+            $filterData[] = array(
                 'field' => 'type', 
                 'operator' => 'equals', 
-                'value' => $_type
-            )
-        ));
+                'value' => $type
+            );
+        }
+        
+        return new Tinebase_Model_PreferenceFilter($filterData);
     }
     
     /**
@@ -246,7 +280,6 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
             'type'              => Tinebase_Model_Preference::TYPE_FORCED
         ));
         $pref = $this->_instance->create($pref);
-        $this->_createdPrefs[] = $pref;
         
         return $pref;
     }

@@ -4,8 +4,8 @@
  * @package     Tinebase
  * @subpackage  widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        add filter toolbar
  * @todo        use proxy store?
@@ -153,7 +153,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * NOTE: when this method gets called, all initalisation is done.
      */
     getItems: function() {
-    	this.prefsCardPanel = new Tine.widgets.dialog.PreferencesCardPanel({
+        this.prefsCardPanel = new Tine.widgets.dialog.PreferencesCardPanel({
             region: 'center'
         });
         this.treePanel = new Tine.widgets.dialog.PreferencesTreePanel({
@@ -165,7 +165,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             initialNodeId: this.initialCardName
         })
         return [{
-        	xtype: 'panel',
+            xtype: 'panel',
             autoScroll: true,
             border: false,
             frame: false,
@@ -240,19 +240,19 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * apply changes handler
      */
     onApplyChanges: function(button, event, closeWindow) {
-    	
+        
         if (! this.isValid()) {
             Ext.MessageBox.alert(_('Errors'), _('You need to correct the red marked fields before config could be saved'));    
             return;
         }
         
-    	this.loadMask.show();
-    	
-    	// get values from card panels
+        this.loadMask.show();
+        
+        // get values from card panels
         var data = this.getValuesFromPanels();
-    	
-    	// save preference data
-    	Ext.Ajax.request({
+        
+        // save preference data
+        Ext.Ajax.request({
             scope: this,
             params: {
                 method: 'Tinebase.savePreferences',
@@ -363,12 +363,12 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * @todo enable/disable apps according to admin right for applications
      */
     onSwitchAdminMode: function(button, event) {
-    	this.adminMode = (!this.adminMode);
-    	
+        this.adminMode = (!this.adminMode);
+        
         if (this.adminMode) {
-        	this.prefsCardPanel.addClass('prefpanel_adminMode');
+            this.prefsCardPanel.addClass('prefpanel_adminMode');
         } else {
-        	this.prefsCardPanel.removeClass('prefpanel_adminMode');
+            this.prefsCardPanel.removeClass('prefpanel_adminMode');
         }
         
         // activate panel in card panel
@@ -380,7 +380,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         this.treePanel.checkGrants(this.adminMode);
     },
 
-	/**
+    /**
      * init app preferences store
      * 
      * @param {String} appName
@@ -388,11 +388,11 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * @todo use generic json backend here?
      */
     initPrefStore: function(appName) {
-    	this.loadMask.show();
-    	
-    	// set filter to get only default/forced values if in admin mode
-    	var filter = (this.adminMode) ? [{field: 'account', operator: 'equals', value: {accountId: 0, accountType: 'anyone'}}] : '';
-    	
+        this.loadMask.show();
+        
+        // set filter to get only default/forced values if in admin mode
+        var filter = (this.adminMode) ? [{field: 'account', operator: 'equals', value: {accountId: 0, accountType: 'anyone'}}] : '';
+        
         var store = new Ext.data.JsonStore({
             fields: Tine.Tinebase.Model.Preference,
             baseParams: {
@@ -431,15 +431,15 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         
         card.on('change', function(appName) {
             // mark card as changed in tree
-        	var node = this.treePanel.getNodeById(appName);
-        	node.setText(node.text + '*');
+            var node = this.treePanel.getNodeById(appName);
+            node.setText(node.text + '*');
         }, this);
         
         // add to panel registry
         if (this.adminMode) {
             this.adminPrefPanels[appName] = card;
         } else {
-        	this.prefPanels[appName] = card;
+            this.prefPanels[appName] = card;
         }
         
         this.activateCard(card, false);
@@ -453,12 +453,12 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * @param {boolean} exists
      */
     activateCard: function(panel, exists) {
-    	if (!exists) {
+        if (!exists) {
             this.prefsCardPanel.add(panel);
             this.prefsCardPanel.layout.container.add(panel);
-    	}
+        }
         this.prefsCardPanel.layout.setActiveItem(panel.id);
-        panel.doLayout();    	
+        panel.doLayout();
     },
     
     /**
@@ -481,19 +481,19 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             } 
         }
             
-    	var panel = (this.adminMode) ? this.adminPrefPanels[appName] : this.prefPanels[appName];
+        var panel = (this.adminMode) ? this.adminPrefPanels[appName] : this.prefPanels[appName];
 
-    	if (!this.adminMode) {
-    		// check grant for pref and enable/disable button
-			this.action_switchAdminMode.setDisabled(!Tine.Tinebase.common.hasRight('admin', appName));
-    	}
-    	
+        if (!this.adminMode) {
+            // check grant for pref and enable/disable button
+            this.action_switchAdminMode.setDisabled(!Tine.Tinebase.common.hasRight('admin', appName));
+        }
+        
         // check stores/panels
         if (!panel) {
             // add new card + store
             this.initPrefStore(appName);
         } else {
-        	this.activateCard(panel, true);
+            this.activateCard(panel, true);
         }
     }
 });

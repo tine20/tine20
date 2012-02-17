@@ -4,8 +4,8 @@
  * @package     Tinebase
  * @subpackage  widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * TODO         add pref description to input fields
  */
@@ -45,12 +45,12 @@ Tine.widgets.dialog.PreferencesCardPanel = Ext.extend(Ext.Panel, {
  */
 Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
     
-	/**
-	 * the prefs store
-	 * @cfg {Ext.data.Store}
-	 */
-	prefStore: null,
-	
+    /**
+     * the prefs store
+     * @cfg {Ext.data.Store}
+     */
+    prefStore: null,
+    
     /**
      * @cfg {String} appName
      */
@@ -77,7 +77,7 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initComponent: function() {
-    	
+        
         this.addEvents(
             /**
              * @event change
@@ -85,24 +85,25 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
              * Fired when a value is changed
              */
             'change'
-        );    	
-    	
+        );
+        
         if (this.prefStore && this.prefStore.getCount() > 0) {
+            Tine.log.debug('Tine.widgets.dialog.PreferencesPanel::initComponent() -> Adding pref items from store:');
+            Tine.log.debug(this.prefStore);
             
             this.items = [];
             this.prefStore.each(function(pref) {
-                
-        	    // check if options available -> use combobox or textfield
+                // check if options available -> use combobox or textfield
                 var fieldDef = {
                     fieldLabel: pref.get('label'),
                     name: pref.get('name'),
                     value: pref.get('value'),
                     listeners: {
-                    	scope: this,
-                    	change: function(field, newValue, oldValue) {
-                    		// fire change event
-                    		this.fireEvent('change', this.appName);
-                    	}
+                        scope: this,
+                        change: function(field, newValue, oldValue) {
+                            // fire change event
+                            this.fireEvent('change', this.appName);
+                        }
                     },
                     prefId: pref.id,
                     description: pref.get('description')
@@ -118,22 +119,22 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                 fieldDef.xtype = xtype;
                 
                 if (pref.get('options') && pref.get('options').length > 0) {
-                	// add additional combobox config
-                	fieldDef.store = pref.get('options');
-                	fieldDef.mode = 'local';
+                    // add additional combobox config
+                    fieldDef.store = pref.get('options');
+                    fieldDef.mode = 'local';
                     fieldDef.forceSelection = true;
                     fieldDef.allowBlank = false;
                     fieldDef.triggerAction = 'all';
                 }
                 
                 if (this.adminMode) {
-                	// set lock (value forced => hiddenFieldData = '0')
-                	fieldDef.hiddenFieldData = (pref.get('type') == 'forced') ? '0' : '1';
-                	fieldDef.hiddenFieldId = pref.get('name') + '_writable';
+                    // set lock (value forced => hiddenFieldData = '0')
+                    fieldDef.hiddenFieldData = (pref.get('type') == 'forced') ? '0' : '1';
+                    fieldDef.hiddenFieldId = pref.get('name') + '_writable';
                     // disable personal only fields (not quite sure why we get a string here in personal_only field)
                     fieldDef.disabled = (pref.get('personal_only') === '1' || pref.get('personal_only') === true);
                 } else {
-                	fieldDef.disabled = (pref.get('type') == 'forced');
+                    fieldDef.disabled = (pref.get('type') == 'forced');
                 }
                 
                 try {
@@ -171,14 +172,14 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
         
         if (this.items && this.items.items) {
             for (var i=0; i < this.items.items.length; i++) {
-            	var field = this.items.items[i];
+                var field = this.items.items[i];
                 Ext.QuickTips.register({
                     target: field,
                     dismissDelay: 30000,
                     title: field.fieldLabel,
                     text: field.description,
                     width: 200
-                });        	
+                });
             }
         }
     },

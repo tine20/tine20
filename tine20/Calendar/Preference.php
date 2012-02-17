@@ -45,7 +45,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     /**
      * @var string application
      */
-    protected $_application = 'Calendar';    
+    protected $_application = 'Calendar';
         
     /**
      * get all possible application prefs
