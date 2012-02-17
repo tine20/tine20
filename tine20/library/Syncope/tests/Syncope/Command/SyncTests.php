@@ -30,7 +30,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
     }
     
     /**
-     * test sync with non existing collection id
+     * test sync with non existing collection id and synckey > 0
      */
     public function testSyncWithInvalidCollectiondId()
     {
@@ -50,9 +50,35 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         $xpath = new DomXPath($syncDoc);
         $xpath->registerNamespace('AirSync', 'uri:AirSync');
         
-        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Class');
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals('Contacts', $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(0, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(Syncope_Command_Sync::STATUS_INVALID_SYNC_KEY, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+    }
+    
+    /**
+     * test sync with non existing collection id and synckey == 0
+     */
+    public function testSyncWithInvalidCollectiondIdAndSyncKey0()
+    {
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Contacts</Class><SyncKey>0</SyncKey><CollectionId>48ru47fhf7ghf7fgh4</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
+        );
+        
+        $sync = new Syncope_Command_Sync($doc, $this->_device, $this->_device->policykey);
+        
+        $sync->handle();
+        
+        $syncDoc = $sync->getResponse();
+        #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
+        
+        $xpath = new DomXPath($syncDoc);
+        $xpath->registerNamespace('AirSync', 'uri:AirSync');
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
@@ -83,10 +109,6 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         
         $xpath = new DomXPath($syncDoc);
         $xpath->registerNamespace('AirSync', 'uri:AirSync');
-        
-        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Class');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals('Contacts', $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());

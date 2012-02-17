@@ -98,8 +98,7 @@ class Syncope_Backend_FolderTests extends PHPUnit_Framework_TestCase
     
         $result = $this->_folderBackend->delete($folder);
         
-        // ignore the result as sometimes the delete fails, but this is a problem of the SQLite backend only
-        #$this->assertTrue($result);
+        $this->assertTrue($result);
     }
     
     /**

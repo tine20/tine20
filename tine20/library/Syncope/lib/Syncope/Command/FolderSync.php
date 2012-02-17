@@ -73,6 +73,9 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
      */
     public function handle()
     {
+        // wrap whole FolderSync command in one transaction
+        $this->_transactionId = Syncope_Registry::getTransactionManager()->startTransaction(Syncope_Registry::getDatabase());
+        
         $xml = simplexml_import_dom($this->_inputDom);
         $syncKey = (int)$xml->SyncKey;
         
@@ -152,9 +155,9 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
                             'device_id'         => $this->_device,
                             'class'             => $class,
                             'folderid'          => $serverFolders[$serverFolderId]['folderId'],
-                        	'parentid'          => $serverFolders[$serverFolderId]['parentId'],
-                        	'displayname'       => $serverFolders[$serverFolderId]['displayName'],
-                        	'type'              => $serverFolders[$serverFolderId]['type'],
+                            'parentid'          => $serverFolders[$serverFolderId]['parentId'],
+                            'displayname'       => $serverFolders[$serverFolderId]['displayName'],
+                            'type'              => $serverFolders[$serverFolderId]['type'],
                             'creation_time'     => $this->_syncTimeStamp,
                             'lastfiltertype'    => null
                         ));
@@ -186,9 +189,9 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
                 $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ParentId', $folder->parentid));
                 
                 $displayName = $this->_outputDom->createElementNS('uri:FolderHierarchy', 'DisplayName');
+                $displayName->appendChild($this->_outputDom->createTextNode($folder->displayname));
                 $add->appendChild($displayName);
-                $displayName->appendChild(new DOMText($folder->displayname));
-
+                
                 $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Type', $folder->type));
                 
                 // store folder in backend
@@ -210,6 +213,8 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
                 $this->_syncStateBackend->update($this->_syncState);
             }
         }
+        
+        Syncope_Registry::getTransactionManager()->commitTransaction($this->_transactionId);
         
         return $this->_outputDom;
     }    

@@ -53,21 +53,22 @@ abstract class Syncope_Command_ATestCase extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_db = getTestDatabase();
+        Syncope_Registry::setDatabase(getTestDatabase());
+        Syncope_Registry::setTransactionManager(Syncope_TransactionManager::getInstance());
         
-        $this->_db->beginTransaction();
-
+        Syncope_Registry::getTransactionManager()->startTransaction(Syncope_Registry::getDatabase());
+        
         #$writer = new Zend_Log_Writer_Null();
         $writer = new Zend_Log_Writer_Stream('php://output');
         $writer->addFilter(new Zend_Log_Filter_Priority($this->_logPriority));
         
         $logger = new Zend_Log($writer);
         
-        $this->_deviceBackend       = new Syncope_Backend_Device($this->_db);
-        $this->_folderBackend       = new Syncope_Backend_Folder($this->_db);
-        $this->_syncStateBackend    = new Syncope_Backend_SyncState($this->_db);
-        $this->_contentStateBackend = new Syncope_Backend_Content($this->_db);
-
+        $this->_deviceBackend       = new Syncope_Backend_Device(Syncope_Registry::getDatabase());
+        $this->_folderBackend       = new Syncope_Backend_Folder(Syncope_Registry::getDatabase());
+        $this->_syncStateBackend    = new Syncope_Backend_SyncState(Syncope_Registry::getDatabase());
+        $this->_contentStateBackend = new Syncope_Backend_Content(Syncope_Registry::getDatabase());
+        
         $this->_device = $this->_deviceBackend->create(
             Syncope_Backend_DeviceTests::getTestDevice()
         );
@@ -92,6 +93,6 @@ abstract class Syncope_Command_ATestCase extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $this->_db->rollBack();
-    }    
+        Syncope_Registry::getTransactionManager()->rollBack();
+    }
 }

@@ -1,5 +1,18 @@
 <?php
+/**
+ * Syncope
+ *
+ * @package     Syncope
+ * @license     http://www.tine20.org/licenses/lgpl.html LGPL Version 3
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ */
 
+/**
+ * class to handle incoming http ActiveSync requests
+ * 
+ * @package     Syncope
+ */
 class Syncope_Server
 {
     protected $_body;
@@ -123,19 +136,34 @@ class Syncope_Server
             }
         
             $response = $command->getResponse();
-        } catch (Syncope_Exception_PolicyKeyMissing $asepkm) {
+            
+        } catch (Syncope_Exception_PolicyKeyMissing $sepkm) {
             if ($this->_logger instanceof Zend_Log) 
                 $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " X-MS-POLICYKEY missing (" . $_command. ')');
             header("HTTP/1.1 400 header X-MS-POLICYKEY not found");
             return;
-        } catch (Syncope_Exception_ProvisioningNeeded $asepn) {
+            
+        } catch (Syncope_Exception_ProvisioningNeeded $sepn) {
             if ($this->_logger instanceof Zend_Log) 
                 $this->_logger->info(__METHOD__ . '::' . __LINE__ . " provisioning needed");
             header("HTTP/1.1 449 Retry after sending a PROVISION command");
             return;
+            
+        } catch (Exception $e) {
+            if ($this->_logger instanceof Zend_Log)
+                $this->_logger->crit(__METHOD__ . '::' . __LINE__ . " unexpected exception occured: " . get_class($e));
+            if ($this->_logger instanceof Zend_Log)
+                $this->_logger->crit(__METHOD__ . '::' . __LINE__ . " exception message: " . $e->getMessage());
+            if ($this->_logger instanceof Zend_Log)
+                $this->_logger->crit(__METHOD__ . '::' . __LINE__ . " " . $e->getTraceAsString());
+            
+            Syncope_Registry::getTransactionManager()->rollBack();
+            
+            header("HTTP/1.1 500 Internal server error");
+            return;
         }
         
-        if ($this->_request->getServer('CONTENT_TYPE') == 'application/vnd.ms-sync.wbxml') {
+        if ($this->_request->getServer('CONTENT_TYPE') == 'application/vnd.ms-sync.wbxml' && $response instanceof DOMDocument) {
             if ($this->_logger instanceof Zend_Log) 
                 $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " xml response: " . $response->saveXML());
         

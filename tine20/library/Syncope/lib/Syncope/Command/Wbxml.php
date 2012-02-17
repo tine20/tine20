@@ -91,6 +91,10 @@ abstract class Syncope_Command_Wbxml implements Syncope_Command_Interface
     protected $_syncTimeStamp;
     
     /**
+     * @var string
+     */
+    protected $_transactionId;
+    /**
      * @var Zend_Log
      */
     protected $_logger;
