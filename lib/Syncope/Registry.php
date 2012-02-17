@@ -235,7 +235,7 @@ class Syncope_Registry extends ArrayObject
         self::set(self::TASKS_DATA_CLASS, $className);
     }
     
-    public static function setTransactionManager(Syncope_TransactionManagerInterface $manager)
+    public static function setTransactionManager($manager)
     {
         self::set(self::TRANSACTIONMANAGER, $manager);
     }
