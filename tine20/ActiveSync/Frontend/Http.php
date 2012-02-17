@@ -104,6 +104,9 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $requestBody = fopen("php://input", "r");
         }
         
+        Syncope_Registry::setDatabase(Tinebase_Core::getDb());
+        Syncope_Registry::setTransactionManager(Tinebase_TransactionManager::getInstance());
+        
         Syncope_Registry::set('deviceBackend',       new ActiveSync_Backend_Device());
         Syncope_Registry::set('folderStateBackend',  new Syncope_Backend_Folder(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         Syncope_Registry::set('syncStateBackend',    new Syncope_Backend_SyncState(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));

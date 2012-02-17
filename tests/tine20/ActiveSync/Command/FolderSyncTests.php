@@ -64,7 +64,10 @@ class ActiveSync_Command_FolderSyncTests extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-
+        
+        Syncope_Registry::setDatabase(Tinebase_Core::getDb());
+        Syncope_Registry::setTransactionManager(Tinebase_TransactionManager::getInstance());
+        
         $this->_deviceBackend       = new Syncope_Backend_Device(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_');
         $this->_folderBackend       = new Syncope_Backend_Folder(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_');
         $this->_syncStateBackend    = new Syncope_Backend_SyncState(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_');

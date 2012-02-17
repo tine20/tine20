@@ -39,7 +39,10 @@ class ActiveSync_Command_ProvisionTests extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-
+        
+        Syncope_Registry::setDatabase(Tinebase_Core::getDb());
+        Syncope_Registry::setTransactionManager(Tinebase_TransactionManager::getInstance());
+        
         $testDevice = ActiveSync_Backend_DeviceTests::getTestDevice();
         
         $this->objects['device'] = ActiveSync_Controller_Device::getInstance()->create($testDevice);

@@ -65,6 +65,9 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
     {
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
+        Syncope_Registry::setDatabase(Tinebase_Core::getDb());
+        Syncope_Registry::setTransactionManager(Tinebase_TransactionManager::getInstance());
+        
         $this->_deviceBackend       = new Syncope_Backend_Device(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_');
         $this->_folderBackend       = new Syncope_Backend_Folder(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_');
         $this->_syncStateBackend    = new Syncope_Backend_SyncState(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_');
@@ -449,7 +452,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Class');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals('Calendar', $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals('Email', $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
