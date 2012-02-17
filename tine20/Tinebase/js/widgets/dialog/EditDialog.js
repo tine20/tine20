@@ -202,7 +202,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
         this.plugins.push(this.tokenModePlugin = new Tine.widgets.dialog.TokenModeEditDialogPlugin({}));
         
-        if(this.useMultiple) this.plugins.push(new Tine.widgets.dialog.MultipleEditDialogPlugin({}));
+        if(this.useMultiple) {
+            this.mode = 'local';
+            this.record = new this.recordClass({});
+            this.plugins.push(new Tine.widgets.dialog.MultipleEditDialogPlugin({}));
+        }
         
         // init actions
         this.initActions();

@@ -85,7 +85,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             var child = new Ext.tree.TreeNode({
                 id : 'treenode-' + recordClass.getMeta('modelName'),
                 iconCls: this.app.appName + ct.model,
-                text : this.app.i18n._hidden(recordClass.getMeta('recordsName')),
+                text: recordClass.getRecordsName(),
                 leaf : true,
                 containerType: Tine.Tinebase.container.TYPE_SHARED,
                 container: Ext.apply(Tine[this.app.name].registry.get('defaultContainer'), {name: this.app.i18n._hidden(recordClass.getMeta('containerName'))})                 

@@ -268,6 +268,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                     editable: false,
                     allowBlank: false,
                     forceSelection: true,
+                    width: 400,
                     value: this.selectedDefinition ? this.selectedDefinition.id : null,
                     listeners: {
                         scope: this,

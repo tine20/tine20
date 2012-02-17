@@ -194,7 +194,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
                 var dt = e.browserEvent.dataTransfer;
                 var files = dt.files;
                 
-                this.onInputFileChange(null, null, null, files, e);
+                this.onInputFileChange(e, null, null, files);
             }, this);
         }
     },
@@ -321,7 +321,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
      * @param {FileList} files when input comes from drop...
      * @private
      */
-    onInputFileChange: function(e, target, options, files, e){
+    onInputFileChange: function(e, target, options, files){
         if (window.FileList) { // HTML5 FileList support
             this.files = files ? files : this.input_file.dom.files;
         } else {

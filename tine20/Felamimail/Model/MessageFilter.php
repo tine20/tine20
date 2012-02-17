@@ -214,7 +214,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
                 $value[]      = '%' . $customValue . '%';
             }
         }
-                        
+        
         if ($_filterData['field'] == 'flags') {
             if ($_filterData['operator'] == 'equals' || $_filterData['operator'] == 'contains') {
                 $_select->having($db->quoteInto('flags LIKE ?', $value));
@@ -243,6 +243,6 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
                 $db->quoteInto($fieldName  . ' LIKE ?', $value) . ' OR ' .
                 $db->quoteInto($fieldEmail . ' LIKE ?', $value)
             );
-        }        
+        }
     }
 }

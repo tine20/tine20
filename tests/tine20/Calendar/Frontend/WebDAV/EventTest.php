@@ -357,6 +357,23 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         $this->assertContains('X-MOZ-LASTACK;VALUE=DATE-TIME:21', $sharedVCalendar, $sharedVCalendar);
     }
     
+    public function testDeleteOrignEvent()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+        
+        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/event_with_custom_alarm.ics');
+        
+        $id = Tinebase_Record_Abstract::generateUID();
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", $vcalendar);
+        
+        $loadedEvent = new Calendar_Frontend_WebDAV_Event($this->objects['sharedContainer'], "$id.ics");
+        $loadedEvent->delete();
+        
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $loadedEvent = new Calendar_Frontend_WebDAV_Event($this->objects['sharedContainer'], "$id.ics");
+        $loadedEvent->getRecord();
+    }
+    
     public function testDeleteImplicitDecline()
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
@@ -380,6 +397,42 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         $pwulfAttendee = Calendar_Model_Attender::getAttendee($pwulfPersonalEvent->getRecord()->attendee, $pwulf);
         $this->assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $pwulfAttendee->status, 'event must be declined for pwulf');
         $this->assertEquals(0, $pwulfPersonalEvent->getRecord()->is_deleted, 'event must not be deleted');
+    }
+    
+    /**
+     * NOTE: As noted in {@see testMoveOriginPersonalToShared} we can't delete/decline for organizer in his
+     *       personal cal because a move personal->shared would delete/decline the event.
+     *       
+     *       To support intensional delete/declines we allow the delte/decline only if ther is some
+     *       time between this and the last update
+     */
+    public function testDeleteImplicitDeclineOrganizer()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+        
+        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
+        
+        $id = Tinebase_Record_Abstract::generateUID();
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
+        
+        // move event origin to shared (origin and display where the same)
+        Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", stream_get_contents($event->get()));
+//         $oldEvent = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], "$id.ics");
+//         $oldEvent->delete();
+        
+        // wait some time
+        $cbs = new Calendar_Backend_Sql();
+        $cbs->updateMultiple(array($id), array(
+            'creation_time'      => Tinebase_DateTime::now()->subMinute(5),
+            'last_modified_time' => Tinebase_DateTime::now()->subMinute(3),
+        ));
+        
+        $personalEvent = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], "$id.ics");
+        $personalEvent->delete();
+        
+        $loadedEvent = new Calendar_Frontend_WebDAV_Event($this->objects['sharedContainer'], "$id.ics");
+        $ownAttendee = Calendar_Model_Attender::getOwnAttender($loadedEvent->getRecord()->attendee);
+        $this->assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $ownAttendee->status, 'event must be declined');
     }
     
     /**

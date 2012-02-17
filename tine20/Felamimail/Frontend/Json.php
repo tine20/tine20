@@ -107,6 +107,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function emptyFolder($folderId)
     {
+        // close session to allow other requests
+        Zend_Session::writeClose(true);
+        
         $result = Felamimail_Controller_Folder::getInstance()->emptyFolder($folderId, TRUE);
         return $this->_recordToJson($result);
     }
@@ -132,6 +135,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getFolderStatus($filterData)
     {
+        // close session to allow other requests
+        Zend_Session::writeClose(true);
+        
         $filter = new Felamimail_Model_FolderFilter($filterData);
         $result = Felamimail_Controller_Cache_Message::getInstance()->getFolderStatus($filter);
         return $this->_multipleRecordsToJson($result);

@@ -22,10 +22,10 @@ Tine.Timetracker.Model.TimesheetArray = Tine.Tinebase.Model.genericFields.concat
     { name: 'start_time', type: 'date', dateFormat: Date.patterns.ISO8601Time },
     { name: 'duration' },
     { name: 'description' },
-    { name: 'is_billable' },
-    { name: 'is_billable_combined' }, // ts & ta is_billable
-    { name: 'is_cleared' },
-    { name: 'is_cleared_combined' }, // ts is_cleared & ta status == 'billed'
+    { name: 'is_billable', type: 'bool' },
+    { name: 'is_billable_combined', type: 'bool' }, // ts & ta is_billable
+    { name: 'is_cleared', type: 'bool' },
+    { name: 'is_cleared_combined', type: 'bool' }, // ts is_cleared & ta status == 'billed'
     { name: 'billed_in' },
     // tine 2.0 notes + tags
     { name: 'notes'},

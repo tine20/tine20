@@ -393,8 +393,12 @@ class Setup_Frontend_Cli
             $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
             $memberships = Tinebase_Group::getInstance()->getGroupMemberships($user);
             if (! in_array($adminGroup->getId(), $memberships)) {
-                Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);
-                echo "Added user to default admin group\n";
+                try {
+                    Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);
+                    echo "Added user to default admin group\n";
+                } catch (Zend_Ldap_Exception $zle) {
+                    echo "Could not add user to default admin group: " . $zle->getMessage();
+                }
             }
             
         } catch (Tinebase_Exception_NotFound $tenf) {

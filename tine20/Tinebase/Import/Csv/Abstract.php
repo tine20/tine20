@@ -102,6 +102,9 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Only got 1 field in line. Wrong delimiter?');
         }
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Raw data: ' . print_r($lineData, true));
+        
         return $lineData;
     }
     
@@ -154,6 +157,9 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
                 $data[$field['destination']] = $_data_indexed[$field['source']];
             }
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Mapped data: ' . print_r($data, true));
         
         return $data;
     }

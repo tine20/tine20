@@ -118,8 +118,8 @@
             <destination>room</destination>
         </field>
         <field>
-            <source>salutation_id</source>
-            <destination>salutation_id</destination>
+            <source>salutation</source>
+            <destination>salutation</destination>
         </field>
         <field>
             <source>title</source>

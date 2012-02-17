@@ -118,6 +118,13 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected $_defaultSecondarySort = NULL;
     
     /**
+     * default column(s) for count
+     * 
+     * @var string
+     */
+    protected $_defaultCountCol = '*';
+    
+    /**
      * the constructor
      * 
      * allowed options:
@@ -462,11 +469,14 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {
-        $searchCountCols = array_merge(array('count' => 'COUNT(*)'), $this->_additionalSearchCountCols);
+        $searchCountCols = array_merge(array('count' => 'COUNT(' . $this->_defaultCountCol . ')'), $this->_additionalSearchCountCols);
         
         if ($this->_useSubselectForCount) {
             // use normal search query as subselect to get count -> select count(*) from (select [...]) as count
-            $select = $this->_getSelect();
+            $subselectCols = (count($searchCountCols) === 1) 
+                ? array_merge(array_keys($this->_foreignTables), array($this->_defaultCountCol)) : '*';
+            
+            $select = $this->_getSelect($subselectCols);
             $this->_addFilter($select, $_filter);
             $countSelect = $this->_db->select()->from($select, $searchCountCols);
             

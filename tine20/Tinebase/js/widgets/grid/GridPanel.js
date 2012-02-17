@@ -567,7 +567,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     onStoreAdd: function(store, records, index) {
         this.store.totalLength += records.length;
-        this.pagingToolbar.updateInfo();
+        if (this.pagingToolbar) {
+            this.pagingToolbar.updateInfo();
+        }
     },
     
     /**
@@ -575,7 +577,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     onStoreRemove: function(store, record, index) {
         this.store.totalLength--;
-        this.pagingToolbar.updateInfo();
+        if (this.pagingToolbar) {
+            this.pagingToolbar.updateInfo();
+        }
     },
     
     /**
@@ -1297,7 +1301,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         var useMultiple = ((this.selectionModel.getCount() > 1) && (this.multipleEdit) && (button.actionType == 'edit')),
             selectedRecords = [];
 
-        if (useMultiple && ! this.selectionModel.isFilterSelect ) {
+        if (useMultiple) {
             Ext.each(this.selectionModel.getSelections(), function(record) {
                 selectedRecords.push(record.data);
             }, this );
@@ -1311,6 +1315,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 useMultiple: useMultiple,
                 selectedRecords: Ext.encode(selectedRecords),
                 selectionFilter: Ext.encode(this.selectionModel.getSelectionFilter()),
+                isFilterSelect: this.selectionModel.isFilterSelect,
                 /* end multi edit stuff */
                 record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
                 copyRecord: (button.actionType == 'copy'),
@@ -1318,7 +1323,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     scope: this,
                     'update': ((this.selectionModel.getCount() > 1) && (this.multipleEdit)) ? this.onUpdateMultipleRecords : this.onUpdateRecord
                 }
-            }, 'useMultiple,selectedRecords,selectionFilter,record,listeners,copyRecord')
+            }, 'useMultiple,selectedRecords,selectionFilter,isFilterSelect,record,listeners,copyRecord')
         );
     },
 

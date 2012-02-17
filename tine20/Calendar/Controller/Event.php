@@ -691,8 +691,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             // update baseEvent
             $rrule = Calendar_Model_Rrule::getRruleFromString($baseEvent->rrule);
-            $rrule->until = clone $_event->dtend;
-            $rrule->until->subDay(1);
+            $rrule->until = $_event->getOriginalDtStart();
+            $rrule->until->subHour(1);
             $baseEvent->rrule = (string) $rrule;
             $baseEvent->exdate = $pastExdates;
             

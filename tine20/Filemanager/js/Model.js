@@ -343,7 +343,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             },
             failure: function(response, request) {
                 var nodeData = Ext.util.JSON.decode(response.responseText),
-                	request = Ext.util.JSON.decode(request.jsonData);
+                    request = Ext.util.JSON.decode(request.jsonData);
                 
                 this.loadMask.hide();
                 app.getMainScreen().getWestPanel().setDisabled(false);
@@ -375,19 +375,19 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         var onSuccess = (function(result, request){ 
             
             var nodeData = Ext.util.JSON.decode(response.responseText),
-            	fileRecord = Tine.Tinebase.uploadManager.upload(this.uploadKey);  
+                fileRecord = Tine.Tinebase.uploadManager.upload(this.uploadKey);  
 
             if(addToGridStore) {
-            	var recordToRemove = gridStore.query('name', fileRecord.get('name'));
-            	if(recordToRemove.items[0]) {
-            		gridStore.remove(recordToRemove.items[0]);
-            	}
+                var recordToRemove = gridStore.query('name', fileRecord.get('name'));
+                if(recordToRemove.items[0]) {
+                    gridStore.remove(recordToRemove.items[0]);
+                }
 
-            	fileRecord = Tine.Filemanager.fileRecordBackend.updateNodeRecord(nodeData[i], fileRecord);
-            	var nodeRecord = new Tine.Filemanager.Model.Node(nodeData[i]);
-            	
-            	nodeRecord.fileRecord = fileRecord;
-            	gridStore.add(nodeRecord);
+                fileRecord = Tine.Filemanager.fileRecordBackend.updateNodeRecord(nodeData[i], fileRecord);
+                var nodeRecord = new Tine.Filemanager.Model.Node(nodeData[i]);
+                
+                nodeRecord.fileRecord = fileRecord;
+                gridStore.add(nodeRecord);
 
             }           
         }).createDelegate({uploadKey: uploadKey, addToGridStore: addToGridStore});
@@ -437,12 +437,12 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 var fileRecord = Tine.Tinebase.uploadManager.upload(this.uploadKeyArray[i]);
                 
                 if(addToGridStore) {
-                	fileRecord = Tine.Filemanager.fileRecordBackend.updateNodeRecord(nodeData[i], fileRecord);
-                	var nodeRecord = new Tine.Filemanager.Model.Node(nodeData[i]);
-                	
-                	nodeRecord.fileRecord = fileRecord;
-                	
-                	var existingRecordIdx = gridStore.find('name', fileRecord.get('name'));
+                    fileRecord = Tine.Filemanager.fileRecordBackend.updateNodeRecord(nodeData[i], fileRecord);
+                    var nodeRecord = new Tine.Filemanager.Model.Node(nodeData[i]);
+                    
+                    nodeRecord.fileRecord = fileRecord;
+                    
+                    var existingRecordIdx = gridStore.find('name', fileRecord.get('name'));
                     if(existingRecordIdx > -1) {
                         gridStore.removeAt(existingRecordIdx);
                         gridStore.insert(existingRecordIdx, nodeRecord);
@@ -496,12 +496,12 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
      * updates given record with nodeData from from response
      */
     updateNodeRecord : function(nodeData, nodeRecord) {
-    	
-    	for(var field in nodeData) { 		
-    		nodeRecord.set(field, nodeData[field]);
-    	};
-    	
-    	return nodeRecord;
+        
+        for(var field in nodeData) {         
+            nodeRecord.set(field, nodeData[field]);
+        };
+        
+        return nodeRecord;
     }
     
 
@@ -518,12 +518,12 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
 Tine.Filemanager.Model.Node.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Filemanager');
        
-	return [ 	
-	    {label : _('Quick search'), field : 'query', operators : [ 'contains' ]}, 
-	    {label: app.i18n._('Type'), field: 'type'},
-	    {label: app.i18n._('Contenttype'), field: 'contenttype'},
+    return [
+        {label : _('Quick search'), field : 'query', operators : [ 'contains' ]}, 
+//        {label: app.i18n._('Type'), field: 'type'}, // -> should be a combo
+        {label: app.i18n._('Contenttype'), field: 'contenttype'},
         {label: app.i18n._('Creation Time'), field: 'creation_time', valueType: 'date'},
-	    {filtertype : 'tine.filemanager.pathfiltermodel', app : app}, 
-	    {filtertype : 'tinebase.tag', app : app} 
-	];
+        {filtertype : 'tine.filemanager.pathfiltermodel', app : app}, 
+        {filtertype : 'tinebase.tag', app : app} 
+    ];
 };

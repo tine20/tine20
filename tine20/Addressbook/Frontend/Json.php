@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -170,7 +170,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = Addressbook_Controller_Contact::getInstance()->parseAddressData($address);
         
         return array(
-        	'contact'             => $this->_recordToJson($result['contact']),
+            'contact'             => $this->_recordToJson($result['contact']),
             'unrecognizedTokens'  => $result['unrecognizedTokens'],
         );
     }
@@ -233,10 +233,10 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (! empty($contactArray['jpegphoto'])) {
             $link = Tinebase_Model_Image::getImageUrl('Addressbook', $contactArray['id'], '');
         } else if (isset($contactArray['salutation']) && ! empty($contactArray['salutation'])) {
-    	    $salutationRecord = Addressbook_Config::getInstance()->contactSalutation->records->getById($contactArray['salutation']);
-    	    if ($salutationRecord->image) {
-			    $link = $salutationRecord->image;
-    	    }	
+            $salutationRecord = Addressbook_Config::getInstance()->get(Addressbook_Config::CONTACT_SALUTATION)->records->getById($contactArray['salutation']);
+            if ($salutationRecord && $salutationRecord->image) {
+                $link = $salutationRecord->image;
+            }
         }
         
         return $link;

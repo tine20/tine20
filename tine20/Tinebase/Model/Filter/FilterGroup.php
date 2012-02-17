@@ -660,6 +660,16 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     }
     
     /**
+     * returns TRUE if this group has no filters
+     * 
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return empty($this->_filterObjects);
+    }
+    
+    /**
      * returns true if filter for a field is set in this group
      *
      * @param string $_field

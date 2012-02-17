@@ -102,20 +102,20 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         
         $filter = new Calendar_Model_EventFilter(array(
             array(
-            	'field' => 'containerType', 
-            	'operator' => 'equals', 
-            	'value' => 'all'
-        	),
+                'field' => 'containerType', 
+                'operator' => 'equals', 
+                'value' => 'all'
+            ),
             array(
-            	'field' => 'dtstart', 
-            	'operator' => 'equals', 
-            	'value' => $event->dtstart
-        	),
+                'field' => 'dtstart', 
+                'operator' => 'equals', 
+                'value' => $event->dtstart
+            ),
             array(
-            	'field' => 'dtend', 
-            	'operator' => 'equals', 
-            	'value' => $event->dtend
-        	),
+                'field' => 'dtend', 
+                'operator' => 'equals', 
+                'value' => $event->dtend
+            ),
             array('condition' => 'OR', 'filters' => array(
                 array(
                     'field'     => 'id',
@@ -164,7 +164,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         // the organizer must always be an attendee
         if ($_event->organizer === Tinebase_Core::getUser()->contact_id && ($ownAttendee = Calendar_Model_Attender::getOwnAttender($_event->attendee)) == null) {
             $_event->attendee->addRecord(new Calendar_Model_Attender(array(
-            	'user_id'   => Tinebase_Core::getUser()->contact_id,
+                'user_id'   => Tinebase_Core::getUser()->contact_id,
                 'user_type' => Calendar_Model_Attender::USERTYPE_USER,
                 'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
                 'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
@@ -182,6 +182,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
             foreach($_event->exdate as $exdate) {
                 if ($exdate->is_deleted == false) {
                     $exdate->container_id = $_event->container_id;
+                    $exdate->organizer    = $_event->organizer;
                     self::enforceEventParameters($exdate);
                 }
             }
@@ -196,26 +197,33 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     public function delete() 
     {
+        // when a move occurs, thunderbird first sends to delete command and immediately a put command
+        // we must delay the delete command, otherwise the put command fails
+        sleep(1);
+        
+        // (re) fetch event as tree move does not refresh src node before delete
+        $event = Calendar_Controller_MSEventFacade::getInstance()->get($this->_event);
+        
         // allow delete only if deleted in origin calendar
-        if ($this->getRecord()->container_id == $this->_container->getId()) {
+        if ($event->container_id == $this->_container->getId()) {
             if (strpos($_SERVER['REQUEST_URI'], Calendar_Frontend_CalDAV_ScheduleInbox::NAME) === false) {
-                Calendar_Controller_MSEventFacade::getInstance()->delete($this->_event);
+                Calendar_Controller_MSEventFacade::getInstance()->delete($event->getId());
             }
         }
         
         // implicitly DECLINE event 
         else {
-            $attendee = $this->getRecord()->attendee instanceof Tinebase_Record_RecordSet ? 
-                $this->getRecord()->attendee->filter('displaycontainer_id', $this->_container->getId())->getFirstRecord() :
+            $attendee = $event->attendee instanceof Tinebase_Record_RecordSet ? 
+                $event->attendee->filter('displaycontainer_id', $this->_container->getId())->getFirstRecord() :
                 NULL;
             
-            // NOTE: organizer can only delete in the origin calendar, otherwise we can't handle move @see{Calendar_Frontend_WebDAV_EventTest::testMoveOriginPersonalToShared}
-            if ($attendee && $attendee->user_id != $this->getRecord()->organizer) {
+            // NOTE: don't allow organizer to instantly delete after update, otherwise we can't handle move @see{Calendar_Frontend_WebDAV_EventTest::testMoveOriginPersonalToShared}
+            if ($attendee && $attendee->user_id != $event->organizer || Tinebase_DateTime::now()->subSecond(10) > $event->last_modified_time) {
                 $attendee->status = Calendar_Model_Attender::STATUS_DECLINED;
                 
-                self::enforceEventParameters($this->getRecord());
-                $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($this->getRecord());
-            }
+                self::enforceEventParameters($event);
+                $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
+            } 
         }
     }
     
@@ -387,60 +395,29 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
             if ($xContainerId == $currentContainer->getId()) {
                 $event->container_id = $this->_container->getId();
             } else {
-                if (! $ownAttendee) {
-                    throw new Sabre_DAV_Exception_Forbidden('not attendee of this event');
+                // @TODO allow organizer to move original cal when he edits the displaycal event?
+                if ($ownAttendee && $this->_container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
+                    $ownAttendee->displaycontainer_id = $this->_container->getId();
                 }
-        
-                if ($this->_container->type != Tinebase_Model_Container::TYPE_PERSONAL) {
-                    // @TODO allow organizer to move original cal when he edits the displaycal event?
-                    throw new Sabre_DAV_Exception_Forbidden('displaycontainer must be of type personal');
-                }
-        
-                $ownAttendee->displaycontainer_id = $this->_container->getId();
             }
         }
         
         // client sends event from iMIP invitation -> only allow displaycontainer move
         else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " X-TINE20-CONTAINER not present -> restrict container moves");
-            if (! $ownAttendee) {
-                throw new Sabre_DAV_Exception_Forbidden('not attendee of this event');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " X-TINE20-CONTAINER not present -> restrict container moves");
+            if ($ownAttendee && $this->_container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
+                if ($ownAttendee->displaycontainer_id == $currentContainer->getId()) {
+                    $event->container_id = $this->_container->getId();
+                }
+                
+                $ownAttendee->displaycontainer_id = $this->_container->getId();
             }
-            
-            if ($this->_container->type != Tinebase_Model_Container::TYPE_PERSONAL) {
-                throw new Sabre_DAV_Exception_Forbidden('displaycontainer must be of type personal');
-            }
-            
-            if ($ownAttendee->displaycontainer_id == $currentContainer->getId()) {
-                $event->container_id = $this->_container->getId();
-            }
-            
-            $ownAttendee->displaycontainer_id = $this->_container->getId();
         }
-        
-        
         
         self::enforceEventParameters($event);
         
-        #if ($this->getRecord()->organizer == Tinebase_Core::getUser()->contact_id) {
-            $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
-        #} else {
-        #    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-        #        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " current user is not organizer => update attendee status only ");
-        #    
-        #    if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($this->getRecord()->attendee)) !== null) {
-        #        $ownAttendee->displaycontainer_id = $this->_container->getId();
-        #        
-        #        try {
-        #            $this->_event = Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($event, $ownAttendee);
-        #        } catch (Tinebase_Exception_AccessDenied $tead) {
-        #            throw new Sabre_DAV_Exception_Forbidden($tead->getMessage());
-        #        }
-        #    } else {
-        #        throw new Sabre_DAV_Exception_Forbidden('not attendee of this event');
-        #    }
-        #    
-        #}
+        $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
         
         // avoid sending headers during unit tests
         if (php_sapi_name() != 'cli') {

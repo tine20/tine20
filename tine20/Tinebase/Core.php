@@ -730,7 +730,7 @@ class Tinebase_Core
                     $maxLifeTime = $config->get('gc_maxlifetime', 86400);
                 }
                 Zend_Session::setOptions(array(
-                	'gc_maxlifetime'     => $maxLifeTime
+                    'gc_maxlifetime'     => $maxLifeTime
                 ));
                 
                 $sessionSavepath = self::getSessionDir();
@@ -747,7 +747,7 @@ class Tinebase_Core
                 $prefix = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '_SESSION_';
                 
                 Zend_Session::setOptions(array(
-                	'gc_maxlifetime' => $maxLifeTime,
+                    'gc_maxlifetime' => $maxLifeTime,
                     'save_handler'   => 'redis',
                     'save_path'      => "tcp://$host:$port?prefix=$prefix"
                 ));
@@ -803,7 +803,7 @@ class Tinebase_Core
                         // set mysql timezone to utc and activate strict mode
                         $db->query("SET time_zone ='+0:00';");
                         $db->query("SET SQL_MODE = 'STRICT_ALL_TABLES'");
-                        $db->query("SET SESSION group_concat_max_len = 8192");
+                        $db->query("SET SESSION group_concat_max_len = 81920");
                     } catch (Exception $e) {
                         self::getLogger()->warn('Failed to set "SET SQL_MODE to STRICT_ALL_TABLES or timezone: ' . $e->getMessage());
                     }
@@ -860,15 +860,15 @@ class Tinebase_Core
         if ((bool) $config->profiler) {
             $profiler = Zend_Db_Table::getDefaultAdapter()->getProfiler();
 
-			if (! empty($config->profilerFilterElapsedSecs)) {
-				$profiler->setFilterElapsedSecs($config->profilerFilterElapsedSecs);	
-			}
+            if (! empty($config->profilerFilterElapsedSecs)) {
+                $profiler->setFilterElapsedSecs($config->profilerFilterElapsedSecs);    
+            }
 
             $data = array(
                 'totalNumQueries' => $profiler->getTotalNumQueries(),
                 'totalElapsedSec' => $profiler->getTotalElapsedSecs(),
-                'longestTime'  	  => 0,
-				'longestQuery' 	  => ''
+                'longestTime'        => 0,
+                'longestQuery'       => ''
             );
 
             if ((bool) $config->queryProfiles) {
@@ -880,9 +880,9 @@ class Tinebase_Core
                     );
                     
                     if ($profile->getElapsedSecs() > $data['longestTime']) {
-				        $data['longestTime']  = $profile->getElapsedSecs();
-				        $data['longestQuery'] = $profile->getQuery();
-				    }
+                        $data['longestTime']  = $profile->getElapsedSecs();
+                        $data['longestQuery'] = $profile->getQuery();
+                    }
                 }
             }
 
@@ -893,31 +893,37 @@ class Tinebase_Core
     /**
      * sets the user locale
      *
-     * @param  string $_localeString
-     * @param  bool   $_saveaspreference
+     * @param  string $localeString
+     * @param  bool   $saveaspreference
      */
-    public static function setupUserLocale($_localeString = 'auto', $_saveaspreference = FALSE)
+    public static function setupUserLocale($localeString = 'auto', $saveaspreference = FALSE)
     {
         $session = self::get(self::SESSION);
 
-        self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$_localeString'");
+        if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$localeString'");
 
         // get locale object from session or ...
-        if ($session !== NULL && isset($session->userLocale) && is_object($session->userLocale) && ($session->userLocale->toString() === $_localeString || $_localeString == 'auto')) {
+        if (   $session !== NULL 
+            && isset($session->userLocale) 
+            && is_object($session->userLocale) 
+            && ($session->userLocale->toString() === $localeString || $localeString === 'auto')
+        ) {
             $locale = $session->userLocale;
-            self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " session value: " . (string)$locale);
+            if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " session value: " . (string)$locale);
             
         // ... create new locale object
         } else {
-            $localeString = $_localeString;
-            
-            if ($_localeString == 'auto') {
-                // check if cookie with language is available
+            if ($localeString === 'auto') {
+                // check if cookie or pref with language is available
                 if (isset($_COOKIE['TINE20LOCALE'])) {
                     $localeString = $_COOKIE['TINE20LOCALE'];
+                    if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . " Got locale from cookie: '$localeString'");
+                    
                 } elseif (isset($session->currentAccount)) {
-                    $localeString = self::getPreference()->{Tinebase_Preference::LOCALE};
-                    self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " preference '$localeString'");
+                    $localeString = self::getPreference()->getValue(Tinebase_Preference::LOCALE, 'auto');
+                    if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                        . " Got locale from preference: '$localeString'");
                 }
             }
             
@@ -934,7 +940,7 @@ class Tinebase_Core
         self::set('locale', $locale);
         
         // save locale as preference
-        if ($_saveaspreference && Tinebase_Core::isRegistered(self::USER)) {
+        if (is_object(Tinebase_Core::getUser()) && ($saveaspreference || self::getPreference()->{Tinebase_Preference::LOCALE} === 'auto')) {
             self::getPreference()->{Tinebase_Preference::LOCALE} = (string)$locale;
         }
     }
@@ -984,27 +990,6 @@ class Tinebase_Core
         return $timezone;
     }
 
-//    /**
-//     * function to initialize the smtp connection
-//     *
-//     */
-//    public static function setupMailer()
-//    {
-//        $config = self::getConfig();
-//
-//        if (isset($config->smtp)) {
-//            $mailConfig = $config->smtp;
-//        } else {
-//            $mailConfig = new Zend_Config(array(
-//                'hostname' => 'localhost', 
-//                'port' => 25
-//            ));
-//        }
-//
-//        $transport = new Zend_Mail_Transport_Smtp($mailConfig->hostname,  $mailConfig->toArray());
-//        Zend_Mail::setDefaultTransport($transport);
-//    }
-
     /**
      * set php execution life (max) time
      *
@@ -1021,9 +1006,9 @@ class Tinebase_Core
                     Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' max_execution_time(' . $oldMaxExcecutionTime . ') is too low. Can\'t set limit to ' . $_seconds . ' because of safe mode restrictions.');    
                 }
             } else {
-            	if (Tinebase_Core::isRegistered(self::LOGGER)) {
-            	    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' setting execution life time to: ' . $_seconds);    
-            	}
+                if (Tinebase_Core::isRegistered(self::LOGGER)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' setting execution life time to: ' . $_seconds);    
+                }
                 set_time_limit($_seconds);
             }
         }

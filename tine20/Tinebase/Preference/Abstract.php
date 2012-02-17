@@ -225,7 +225,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      */
     public function getValue($_preferenceName, $_default = NULL)
     {
-        $accountId = (Tinebase_Core::getUser()) ? Tinebase_Core::getUser()->getId() : '0';
+        $accountId = $this->_getAccountId();
 
         try {
             $result = $this->getValueForUser(
@@ -247,6 +247,16 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         }
 
         return $result;
+    }
+    
+    /**
+     * get account id
+     * 
+     * @return string
+     */
+    protected function _getAccountId()
+    {
+        return (is_object(Tinebase_Core::getUser())) ? Tinebase_Core::getUser()->getId() : '0';
     }
 
     /**
@@ -369,8 +379,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      */
     public function setValue($_preferenceName, $_value)
     {
-        $accountId = (Tinebase_Core::isRegistered(Tinebase_Core::USER)) ? Tinebase_Core::getUser()->getId() : '0';
-
+        $accountId = $this->_getAccountId();
         return $this->setValueForUser($_preferenceName, $_value, $accountId);
     }
 
@@ -389,10 +398,10 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     {
         // check acl first
         if(!$_ignoreAcl){
-            $userId = Tinebase_Core::getUser()->getId();
+            $userId = $this->_getAccountId();
             if (
-            $_accountId !== $userId
-            && !Tinebase_Acl_Roles::getInstance()->hasRight($this->_application, $userId, Tinebase_Acl_Rights_Abstract::ADMIN)
+                $_accountId !== $userId
+                && !Tinebase_Acl_Roles::getInstance()->hasRight($this->_application, $userId, Tinebase_Acl_Rights_Abstract::ADMIN)
             ) {
                 throw new Tinebase_Exception_AccessDenied('You are not allowed to change the preferences.');
             }

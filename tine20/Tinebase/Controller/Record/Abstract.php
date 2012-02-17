@@ -249,7 +249,8 @@ abstract class Tinebase_Controller_Record_Abstract
     public function resolveCustomfields()
     {
         $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
-        $currentValue = ($this->_setBooleanMemberVar('_resolveCustomFields', $value) && Tinebase_CustomField::getInstance()->appHasCustomFields($this->_applicationName));
+        $currentValue = ($this->_setBooleanMemberVar('_resolveCustomFields', $value) 
+            && Tinebase_CustomField::getInstance()->appHasCustomFields($this->_applicationName, $this->_modelName));
         return $currentValue;
     }
 

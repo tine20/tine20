@@ -63,6 +63,19 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
     }
     
     /**
+    * (non-PHPdoc)
+    * @see ActiveSync/ActiveSync_TestCase::setUp()
+    */
+    protected function setUp()
+    {
+        parent::setUp();
+        
+        $iphone = ActiveSync_Backend_DeviceTests::getTestDevice(Syncope_Model_Device::TYPE_IPHONE);
+        $iphone->owner_id   = $this->_testUser->getId();
+        $this->objects['deviceIPhone'] = ActiveSync_Controller_Device::getInstance()->create($iphone);
+    }
+    
+    /**
      * validate getFolders for IPhones
      */
     public function testGetFoldersIPhone()
@@ -233,5 +246,21 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         $existing = $controller->search('addressbook-root', $xml->Collections->Collection->Commands->Add->ApplicationData);
         
         $this->assertEquals(count($existing), 1);
+    }
+    
+   /**
+    * test supported folders
+    */
+    public function testGetAllFolders()
+    {
+        $controller = new ActiveSync_Controller_Tasks($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        $syncable   = $this->_getContainerWithSyncGrant();
+        $unsyncable = $this->_getContainerWithoutSyncGrant();
+        $supportedFolders = $controller->getAllFolders();
+    
+        //$this->assertEquals(1, count($supportedFolders));
+        $this->assertTrue(isset($supportedFolders[$syncable->getId()]));
+        $this->assertFalse(isset($supportedFolders[$unsyncable->getId()]));
     }
 }

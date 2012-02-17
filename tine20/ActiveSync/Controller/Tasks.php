@@ -291,15 +291,26 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
     /**
      * return contentfilter array
      * 
-     * @param $_filterType
+     * @param  int $_filterType
      * @return Tinebase_Model_Filter_FilterGroup
      */
-    protected function _getContentFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_filterType)
+    protected function _getContentFilter($_filterType)
     {
+        $filter = parent::_getContentFilter($_filterType);
+        
+        // no persistent filter set -> add default filter
+        if (! $filter ->getId()) {
+            $defaultFilter = $filter->createFilter('container_id', 'equals', array(
+                'path' => '/personal/' . Tinebase_Core::getUser()->getId()
+            ));
+            
+            $filter->addFilter($defaultFilter);
+        }
+        
         if(in_array($_filterType, $this->_filterArray)) {
             switch($_filterType) {
                 case Syncope_Command_Sync::FILTER_INCOMPLETE:
-                    $_filter->removeFilter('status_id');
+                    $filter->removeFilter('status_id');
                     
                     $status = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)
                         ->records
@@ -307,7 +318,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
 
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter by status ids " . print_r($status->getArrayOfIds(), true));
                     
-                    $_filter->addFilter(new Tinebase_Model_Filter_Int(
+                    $filter->addFilter(new Tinebase_Model_Filter_Int(
                         'status_id', 
                         'in', 
                         $status->getArrayOfIds()
@@ -316,5 +327,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                     break;
             }
         }
+        
+        return $filter;
     }
 }

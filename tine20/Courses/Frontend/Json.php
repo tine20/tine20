@@ -320,7 +320,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'group_id'                      => $groupId,
             'accountEmailDomain'            => (isset($this->_config->domain)) ? $this->_config->domain : '',
             'accountHomeDirectoryPrefix'    => (isset($this->_config->basehomedir)) ? $this->_config->basehomedir . $schoolName . '/'. $course->name . '/' : '',
-            'password'                      => $course->name,
+            'password'                      => strtolower($course->name),
             'course'                        => $course,
             'samba'                         => (isset($this->_config->samba)) ? array(
                 'homePath'      => $this->_config->samba->basehomepath,
