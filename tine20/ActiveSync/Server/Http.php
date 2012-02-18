@@ -26,6 +26,8 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
      */
     public function handle()
     {
+        $request = new Zend_Controller_Request_Http();
+        
         try {
             Tinebase_Core::initFramework();
         } catch (Zend_Session_Exception $exception) {
@@ -95,6 +97,8 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         $syncFrontend = new Syncope_Server(Tinebase_Core::getUser()->accountId);
         
         $syncFrontend->handle();
+        
+        Tinebase_Controller::getInstance()->logout($request->getClientIp());
     }
         
     /**
@@ -120,6 +124,9 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
     
     protected function _initializeRegistry()
     {
+        Syncope_Registry::setDatabase(Tinebase_Core::getDb());
+        Syncope_Registry::setTransactionManager(Tinebase_TransactionManager::getInstance());
+        
         Syncope_Registry::set('deviceBackend',       new Syncope_Backend_Device(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         Syncope_Registry::set('folderStateBackend',  new Syncope_Backend_Folder(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         Syncope_Registry::set('syncStateBackend',    new Syncope_Backend_SyncState(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
