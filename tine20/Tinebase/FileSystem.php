@@ -6,7 +6,7 @@
  * @subpackage  FileSystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  FileSystem
  */
-class Tinebase_FileSystem
+class Tinebase_FileSystem implements Tinebase_Controller_Interface
 {
     /**
      * @var Tinebase_Tree_FileObject
