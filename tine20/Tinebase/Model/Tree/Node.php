@@ -102,4 +102,18 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time'
     );
+    
+    /**
+    * overwrite constructor to add more filters
+    *
+    * @param mixed $_data
+    * @param bool $_bypassFilters
+    * @param mixed $_convertDates
+    * @return void
+    */
+    public function __construct($_data = NULL, $_bypassFilters = FALSE, $_convertDates = TRUE)
+    {
+        $this->_filters['size'] = new Zend_Filter_Empty(0);
+        return parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
 }
