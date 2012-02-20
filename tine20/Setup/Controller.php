@@ -921,9 +921,20 @@ class Setup_Controller
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleting all user accounts, groups, roles and rights');
         Tinebase_User::factory(Tinebase_User::SQL)->deleteAllUsers();
         
+        $contactSQLBackend = new Addressbook_Backend_Sql();
+        $allUserContactIds = $contactSQLBackend->search(new Addressbook_Model_ContactFilter(array('type' => 'user')), null, true);
+        if (count($allUserContactIds) > 0) {
+            $contactSQLBackend->delete($allUserContactIds);
+        }
+        
+        
         Tinebase_Group::factory(Tinebase_Group::SQL)->deleteAllGroups();
-        $lists = new Addressbook_Backend_List();
-        $lists->deleteAllLists();
+        $listsSQLBackend = new Addressbook_Backend_List();
+        $allGroupListIds = $listsSQLBackend->search(new Addressbook_Model_ListFilter(array('type' => 'group')), null, true);
+        if (count($allGroupListIds) > 0) {
+            $listsSQLBackend->delete($allGroupListIds);
+        }
+        
         
         $roles = Tinebase_Acl_Roles::getInstance();
         $roles->deleteAllRoles();
