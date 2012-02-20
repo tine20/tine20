@@ -120,7 +120,8 @@ class Tinebase_User
             'userUUIDAttribute' => 'entryUUID',
             self::DEFAULT_USER_GROUP_NAME_KEY  => Tinebase_Group::DEFAULT_USER_GROUP,
             self::DEFAULT_ADMIN_GROUP_NAME_KEY => Tinebase_Group::DEFAULT_ADMIN_GROUP,
-            'changepw' => true
+            'changepw' => true,
+            'readonly' => false,
          )
     );
     
