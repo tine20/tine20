@@ -866,23 +866,23 @@ msgstr "Please wait"
 msgid "Creating {0}..."
 msgstr "Creating {0}..."
 
-#: js/TreeContextMenu.js:135
+#: js/TreeContextMenu.js:136
 msgid "Edit Account"
 msgstr "Edit Account"
 
-#: js/TreeContextMenu.js:163
+#: js/TreeContextMenu.js:164
 msgid "Set Vacation Message"
 msgstr "Set Vacation Message"
 
-#: js/TreeContextMenu.js:179
+#: js/TreeContextMenu.js:180
 msgid "Set Filter Rules"
 msgstr "Set Filter Rules"
 
-#: js/TreeContextMenu.js:193
+#: js/TreeContextMenu.js:194
 msgid "Mark Folder as read"
 msgstr "Mark Folder as read"
 
-#: js/TreeContextMenu.js:230
+#: js/TreeContextMenu.js:231
 msgid "Update Folder List"
 msgstr "Update Folder List"
 

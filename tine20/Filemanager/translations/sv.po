@@ -3,15 +3,15 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 12:09+0000\n"
+"PO-Revision-Date: 2012-02-10 12:00+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-02-17 05:34+0000\n"
+"X-Generator: Launchpad (build 14814)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Swedish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -24,15 +24,15 @@ msgstr ""
 msgid "Create new shared folders"
 msgstr ""
 
-#: Controller/Node.php:163
+#: Controller/Node.php:164
 msgid "My folders"
 msgstr ""
 
-#: Controller/Node.php:170
+#: Controller/Node.php:171
 msgid "Shared folders"
 msgstr ""
 
-#: Controller/Node.php:177
+#: Controller/Node.php:178
 msgid "Other users folders"
 msgstr ""
 

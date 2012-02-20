@@ -125,7 +125,7 @@ msgid "Select Role"
 msgstr ""
 
 #: js/AddToEventPanel.js:216 js/AttendeeGridPanel.js:186
-#: js/ContactEventsGridPanel.js:125 js/GridView.js:142 Model/Event.php:243
+#: js/ContactEventsGridPanel.js:125 js/GridView.js:149 Model/Event.php:243
 msgid "Status"
 msgstr ""
 
@@ -225,12 +225,12 @@ msgid "Events"
 msgstr ""
 
 #: js/ContactEventsGridPanel.js:112 js/EventEditDialog.js:90
-#: js/GridView.js:132 js/Model.js:201 Model/Event.php:244
+#: js/GridView.js:139 js/Model.js:201 Model/Event.php:244
 msgid "Summary"
 msgstr ""
 
 #: js/ContactEventsGridPanel.js:118 js/EventDetailsPanel.js:234
-#: js/EventEditDialog.js:104 js/GridView.js:106 Preference.php:79
+#: js/EventEditDialog.js:104 js/GridView.js:113 Preference.php:79
 msgid "Start Time"
 msgstr ""
 
@@ -266,7 +266,7 @@ msgstr ""
 msgid "recurring event exception"
 msgstr ""
 
-#: js/EventDetailsPanel.js:239 js/EventEditDialog.js:119 js/GridView.js:112
+#: js/EventDetailsPanel.js:239 js/EventEditDialog.js:119 js/GridView.js:119
 msgid "End Time"
 msgstr ""
 
@@ -274,7 +274,7 @@ msgstr ""
 msgid "Blocking"
 msgstr ""
 
-#: js/EventDetailsPanel.js:249 js/EventEditDialog.js:98 js/GridView.js:137
+#: js/EventDetailsPanel.js:249 js/EventEditDialog.js:98 js/GridView.js:144
 #: js/Model.js:202 js/ResourcesGridPanel.js:52 Model/Event.php:240
 msgid "Location"
 msgstr ""
@@ -283,7 +283,7 @@ msgstr ""
 msgid "Organizer"
 msgstr ""
 
-#: js/EventEditDialog.js:127 js/GridView.js:118 js/Printer/Base.js:66
+#: js/EventEditDialog.js:127 js/GridView.js:125 js/Printer/Base.js:66
 #: js/SearchCombo.js:195
 msgid "whole day"
 msgstr ""
@@ -325,7 +325,11 @@ msgstr ""
 msgid "has alarm"
 msgstr ""
 
-#: js/GridView.js:124
+#: js/GridView.js:106
+msgid "Tags"
+msgstr ""
+
+#: js/GridView.js:131
 msgid "blocking"
 msgstr ""
 

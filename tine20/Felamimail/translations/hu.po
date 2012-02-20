@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-13 12:02+0000\n"
+"PO-Revision-Date: 2012-02-16 11:37+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-14 06:53+0000\n"
-"X-Generator: Launchpad (build 14781)\n"
+"X-Launchpad-Export-Date: 2012-02-17 05:33+0000\n"
+"X-Generator: Launchpad (build 14814)\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -867,23 +867,23 @@ msgstr "Kérem várjon"
 msgid "Creating {0}..."
 msgstr "{0} elkészítése..."
 
-#: js/TreeContextMenu.js:135
+#: js/TreeContextMenu.js:136
 msgid "Edit Account"
 msgstr "Fiók szerkesztése"
 
-#: js/TreeContextMenu.js:163
+#: js/TreeContextMenu.js:164
 msgid "Set Vacation Message"
 msgstr "Szabadság üzenet megadása"
 
-#: js/TreeContextMenu.js:179
+#: js/TreeContextMenu.js:180
 msgid "Set Filter Rules"
 msgstr "Szűrő szabály megadása"
 
-#: js/TreeContextMenu.js:193
+#: js/TreeContextMenu.js:194
 msgid "Mark Folder as read"
 msgstr "Mappa megjelölése olvasottként"
 
-#: js/TreeContextMenu.js:230
+#: js/TreeContextMenu.js:231
 msgid "Update Folder List"
 msgstr "Mappa lista újratöltése"
 

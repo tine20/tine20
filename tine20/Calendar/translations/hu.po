@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-13 11:41+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-02-17 22:45+0000\n"
+"Last-Translator: Faragó Tamás <Unknown>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-14 06:53+0000\n"
-"X-Generator: Launchpad (build 14781)\n"
+"X-Launchpad-Export-Date: 2012-02-18 05:50+0000\n"
+"X-Generator: Launchpad (build 14814)\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -131,11 +131,11 @@ msgstr[1] "Események"
 
 #: js/AddToEventPanel.js:61
 msgid "Cancel"
-msgstr ""
+msgstr "Mégsem"
 
 #: js/AddToEventPanel.js:69
 msgid "OK"
-msgstr ""
+msgstr "Ok"
 
 #: js/AddToEventPanel.js:121
 msgid "Please choose the Event to add the contacts to"
@@ -150,7 +150,7 @@ msgid "Select Role"
 msgstr ""
 
 #: js/AddToEventPanel.js:216 js/AttendeeGridPanel.js:186
-#: js/ContactEventsGridPanel.js:125 js/GridView.js:142 Model/Event.php:243
+#: js/ContactEventsGridPanel.js:125 js/GridView.js:149 Model/Event.php:243
 msgid "Status"
 msgstr "Állapot"
 
@@ -250,12 +250,12 @@ msgid "Events"
 msgstr "Események"
 
 #: js/ContactEventsGridPanel.js:112 js/EventEditDialog.js:90
-#: js/GridView.js:132 js/Model.js:201 Model/Event.php:244
+#: js/GridView.js:139 js/Model.js:201 Model/Event.php:244
 msgid "Summary"
 msgstr "Összegzés"
 
 #: js/ContactEventsGridPanel.js:118 js/EventDetailsPanel.js:234
-#: js/EventEditDialog.js:104 js/GridView.js:106 Preference.php:79
+#: js/EventEditDialog.js:104 js/GridView.js:113 Preference.php:79
 msgid "Start Time"
 msgstr "Kezdési idő"
 
@@ -291,7 +291,7 @@ msgstr "ismétlődő esemény"
 msgid "recurring event exception"
 msgstr ""
 
-#: js/EventDetailsPanel.js:239 js/EventEditDialog.js:119 js/GridView.js:112
+#: js/EventDetailsPanel.js:239 js/EventEditDialog.js:119 js/GridView.js:119
 msgid "End Time"
 msgstr "Befejezési idő"
 
@@ -299,7 +299,7 @@ msgstr "Befejezési idő"
 msgid "Blocking"
 msgstr "Blokkolva"
 
-#: js/EventDetailsPanel.js:249 js/EventEditDialog.js:98 js/GridView.js:137
+#: js/EventDetailsPanel.js:249 js/EventEditDialog.js:98 js/GridView.js:144
 #: js/Model.js:202 js/ResourcesGridPanel.js:52 Model/Event.php:240
 msgid "Location"
 msgstr "Hely"
@@ -308,7 +308,7 @@ msgstr "Hely"
 msgid "Organizer"
 msgstr "Szervező"
 
-#: js/EventEditDialog.js:127 js/GridView.js:118 js/Printer/Base.js:66
+#: js/EventEditDialog.js:127 js/GridView.js:125 js/Printer/Base.js:66
 #: js/SearchCombo.js:195
 msgid "whole day"
 msgstr "egész nap"
@@ -350,7 +350,11 @@ msgstr "személyes besorolás"
 msgid "has alarm"
 msgstr "riasztást tartalmaz"
 
-#: js/GridView.js:124
+#: js/GridView.js:106
+msgid "Tags"
+msgstr ""
+
+#: js/GridView.js:131
 msgid "blocking"
 msgstr ""
 

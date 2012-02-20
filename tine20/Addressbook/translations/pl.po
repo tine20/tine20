@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-13 11:54+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-02-18 09:58+0000\n"
+"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
 "Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-14 06:52+0000\n"
-"X-Generator: Launchpad (build 14781)\n"
+"X-Launchpad-Export-Date: 2012-02-19 06:33+0000\n"
+"X-Generator: Launchpad (build 14814)\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -53,26 +53,28 @@ msgstr ""
 
 #: Config.php:59
 msgid "Contact salutations available"
-msgstr ""
+msgstr "Dostępne formy powitania"
 
 #: Config.php:61
 msgid ""
 "Possible contact salutations. Please note that additional values might "
 "impact other Addressbook systems on export or syncronisation."
 msgstr ""
+"Możliwe formy powitania. Pamiętaj proszę, że podczas eksportu albo "
+"synchronizacji dodatkowe wartości mogą nie być uwzględniane."
 
 #: Config.php:69
 msgid "Parsing rules for addresses"
-msgstr ""
+msgstr "Reguły parsowania adresów"
 
 #: Config.php:71
 msgid "Path to a XML file with address parsing rules."
-msgstr ""
+msgstr "Ścieżka do pliku XML zawierającego reguły parsowania adresów."
 
 #: Controller.php:98
 #, python-format
 msgid "%s's personal addressbook"
-msgstr "%s's osobista książka adresowa"
+msgstr "%s osobista książka adresowa"
 
 #: Export/Pdf.php:37
 msgid "Business Contact Data"
@@ -116,11 +118,9 @@ msgstr "Pager"
 msgid "URL"
 msgstr "URL"
 
-# The word "Rola" could not be clearly understood. The word "Funkcja" is a better choice.
-# Das Wort "Rola" koennte missverstanden werden. Das Wort "Funkcja" passt besser.
 #: Export/Pdf.php:73
 msgid "Role"
-msgstr "Funkcja"
+msgstr "Rola"
 
 #: Export/Pdf.php:76 js/ContactEditDialog.js:180 js/ContactGrid.js:115
 #: js/Model.js:33
@@ -191,7 +191,7 @@ msgstr "Import kontaktów z VCARD"
 msgid "Contact CSV import from mac address book"
 msgstr "Import kontaktów z CSV książki adresowej Mac"
 
-#: Import/definitions/adb_outlook_import_csv.xml:12
+#: Import/definitions/adb_outlook_import_csv.xml:13
 msgid "Contact CSV import from Outlook address book"
 msgstr "Import kontaktów CSW z książki adresowej Outlook"
 
@@ -381,7 +381,7 @@ msgstr "Eksportuj jako PDF"
 
 #: js/ContactEditDialog.js:416 js/ContactEditDialog.js:501
 msgid "Parse address"
-msgstr ""
+msgstr "Wczytaj adres"
 
 #: js/ContactEditDialog.js:440 js/ContactEditDialog.js:458
 msgid "Either {0} or {1} must be given"
@@ -389,15 +389,15 @@ msgstr "Należy wprowadzić {0} albo {1}"
 
 #: js/ContactEditDialog.js:493
 msgid "Paste address"
-msgstr ""
+msgstr "Wklej adres"
 
 #: js/ContactEditDialog.js:493
 msgid "Please paste an address that should be parsed:"
-msgstr ""
+msgstr "Proszę wpisać adres przeznaczony do wczytania."
 
 #: js/ContactEditDialog.js:527
 msgid "End token mode"
-msgstr ""
+msgstr "Zakończ tryb znakowy"
 
 #: js/ContactFilterModel.js:35 js/Model.js:94 js/Model.js:133
 msgid "Contact"

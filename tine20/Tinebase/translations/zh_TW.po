@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-13 11:58+0000\n"
+"PO-Revision-Date: 2012-02-16 11:33+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-02-14 06:55+0000\n"
-"X-Generator: Launchpad (build 14781)\n"
+"X-Launchpad-Export-Date: 2012-02-17 05:35+0000\n"
+"X-Generator: Launchpad (build 14814)\n"
 "X-Poedit-Country: TAIWAN\n"
 "X-Poedit-Language: Chinese\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -251,7 +251,7 @@ msgstr ""
 #: js/AboutDialog.js:59 js/PasswordChangeDialog.js:66
 #: js/ux/form/LayerCombo.js:186 js/widgets/ActivitiesPanel.js:311
 #: js/widgets/container/ContainerSelect.js:459
-#: js/widgets/dialog/EditDialog.js:227
+#: js/widgets/dialog/EditDialog.js:231
 #: js/widgets/dialog/MultiOptionsDialog.js:102
 #: js/widgets/dialog/PreferencesDialog.js:109 js/widgets/EditRecord.js:157
 #: js/widgets/tags/TagsMassAttachAction.js:100
@@ -262,7 +262,7 @@ msgstr "Ok"
 msgid "Profile Information"
 msgstr ""
 
-#: js/AdminPanel.js:79 js/widgets/dialog/EditDialog.js:237
+#: js/AdminPanel.js:79 js/widgets/dialog/EditDialog.js:241
 #: js/widgets/EditRecord.js:168
 msgid "Apply"
 msgstr "套用"
@@ -359,7 +359,7 @@ msgstr[0] "工作清單"
 #: js/ExceptionDialog.js:72 js/PasswordChangeDialog.js:60
 #: js/ux/form/LayerCombo.js:193 js/widgets/ActivitiesPanel.js:303
 #: js/widgets/container/ContainerSelect.js:450
-#: js/widgets/dialog/EditDialog.js:245
+#: js/widgets/dialog/EditDialog.js:249
 #: js/widgets/dialog/MultiOptionsDialog.js:109
 #: js/widgets/dialog/PreferencesDialog.js:117
 #: js/widgets/dialog/WizardPanel.js:187 js/widgets/EditRecord.js:178
@@ -587,7 +587,7 @@ msgid "Logging you in..."
 msgstr ""
 
 #: js/LoginPanel.js:341 js/widgets/container/GrantsDialog.js:95
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:352
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:359
 #: js/widgets/persistentfilter/PickerPanel.js:323
 #: js/widgets/persistentfilter/PickerPanel.js:365
 #: js/widgets/persistentfilter/PickerPanel.js:417
@@ -612,16 +612,16 @@ msgid "Your username and/or your password are wrong!!!"
 msgstr "使用者名稱 或 密碼錯誤"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
-#: js/widgets/dialog/EditDialog.js:547 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:339
+#: js/widgets/dialog/EditDialog.js:551 js/widgets/dialog/ExportDialog.js:140
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:342
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Errors"
 msgstr ""
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
-#: js/widgets/dialog/EditDialog.js:557 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:339
+#: js/widgets/dialog/EditDialog.js:561 js/widgets/dialog/ExportDialog.js:140
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:342
 msgid "Please fix the errors noted."
 msgstr ""
 
@@ -673,9 +673,9 @@ msgstr ""
 msgid "Install Tine 2.0 as web app in your browser."
 msgstr ""
 
-#: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:564
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:349
-#: js/widgets/grid/GridPanel.js:1416
+#: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:568
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:354
+#: js/widgets/grid/GridPanel.js:1421
 #: js/widgets/persistentfilter/PickerPanel.js:321
 #: js/widgets/tree/ContextMenu.js:336
 msgid "Confirm"
@@ -779,7 +779,7 @@ msgid "Your password has been changed."
 msgstr "密碼已變更完成"
 
 #: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
-#: js/widgets/dialog/ImportDialog.js:633
+#: js/widgets/dialog/ImportDialog.js:634
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
 msgid "Failure"
 msgstr "失敗"
@@ -990,7 +990,7 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1090
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1094
 msgid "Created By"
 msgstr ""
 
@@ -1267,50 +1267,50 @@ msgstr ""
 msgid "Keep both records"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:254 js/widgets/EditRecord.js:188
+#: js/widgets/dialog/EditDialog.js:258 js/widgets/EditRecord.js:188
 msgid "delete"
 msgstr "刪除"
 
-#: js/widgets/dialog/EditDialog.js:294 js/widgets/dialog/EditDialog.js:307
+#: js/widgets/dialog/EditDialog.js:298 js/widgets/dialog/EditDialog.js:311
 #: js/widgets/EditRecord.js:131
 msgid "Saved in"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:383 js/widgets/grid/GridPanel.js:382
+#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:382
 msgid "Copy {0}"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:386
+#: js/widgets/dialog/EditDialog.js:390
 msgid "Add New {0}"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:388
+#: js/widgets/dialog/EditDialog.js:392
 msgid "Edit {0} \"{1}\""
 msgstr "編輯 {0} \"{1}\""
 
-#: js/widgets/dialog/EditDialog.js:436
+#: js/widgets/dialog/EditDialog.js:440
 msgid "Transferring {0}..."
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:564
+#: js/widgets/dialog/EditDialog.js:568
 msgid "Do you really want to delete this {0}?"
 msgstr "你確定要刪除 {0}?"
 
-#: js/widgets/dialog/EditDialog.js:566 js/widgets/grid/GridPanel.js:1449
+#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1454
 msgid "Deleting {0}"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:576 js/widgets/grid/GridPanel.js:1466
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1471
 #: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:409
 #: js/widgets/tags/TagsPanel.js:442
 msgid "Failed"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:576 js/widgets/grid/GridPanel.js:1466
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1471
 msgid "Could not delete {0}."
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:628
+#: js/widgets/dialog/EditDialog.js:632
 msgid "Resolve Duplicate {0} Suspicion"
 msgstr ""
 
@@ -1383,114 +1383,114 @@ msgstr ""
 msgid "Please select the import format of the file you want to upload"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:279 js/widgets/dialog/ImportDialog.js:311
+#: js/widgets/dialog/ImportDialog.js:280 js/widgets/dialog/ImportDialog.js:312
 msgid "Download example file"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:282
+#: js/widgets/dialog/ImportDialog.js:283
 msgid "Import description"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:332
+#: js/widgets/dialog/ImportDialog.js:333
 msgid "Set Import Options"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:340
+#: js/widgets/dialog/ImportDialog.js:341
 msgid "Select {0} to add you {1} to:"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:392
+#: js/widgets/dialog/ImportDialog.js:393
 msgid "Checking Import"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:421
+#: js/widgets/dialog/ImportDialog.js:422
 msgid "Resolve Conflicts"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:430
+#: js/widgets/dialog/ImportDialog.js:431
 msgid "There are {0} {1} that might already exist."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:437
+#: js/widgets/dialog/ImportDialog.js:438
 msgid "Conflict"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:438
+#: js/widgets/dialog/ImportDialog.js:439
 msgid "First Conflict"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:439
+#: js/widgets/dialog/ImportDialog.js:440
 msgid "Previous Conflict"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:440
+#: js/widgets/dialog/ImportDialog.js:441
 msgid "Next Conflict"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:441
+#: js/widgets/dialog/ImportDialog.js:442
 msgid "Last Conflict"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:447
+#: js/widgets/dialog/ImportDialog.js:448
 msgid "Conflict is resolved"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:452
+#: js/widgets/dialog/ImportDialog.js:453
 msgid "Resolve all conflicts"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:546
+#: js/widgets/dialog/ImportDialog.js:547
 msgid "Processing Conflict Data"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:571 js/widgets/dialog/ImportDialog.js:590
+#: js/widgets/dialog/ImportDialog.js:572 js/widgets/dialog/ImportDialog.js:591
 msgid "No conflict to resolve"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:589
+#: js/widgets/dialog/ImportDialog.js:590
 msgid "(This is record {0} in you import file)"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:605
+#: js/widgets/dialog/ImportDialog.js:606
 #: js/widgets/dialog/MultipleEditResultSummary.js:213
 msgid "Summary"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:632
+#: js/widgets/dialog/ImportDialog.js:633
 #: js/widgets/dialog/MultipleEditResultSummary.js:192
 msgid "Index"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:648
+#: js/widgets/dialog/ImportDialog.js:649
 msgid "Importing {0}"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:710
+#: js/widgets/dialog/ImportDialog.js:711
 msgid "In total we found {0} records in your import file."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:713
+#: js/widgets/dialog/ImportDialog.js:714
 msgid "{0} of them will be added as new records into: \"{1}\"."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:720
+#: js/widgets/dialog/ImportDialog.js:721
 msgid "{0} of them where identified as duplicates."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:723
+#: js/widgets/dialog/ImportDialog.js:724
 msgid ""
 "From the identified duplicates {0} will be merged into the existing records."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:727
+#: js/widgets/dialog/ImportDialog.js:728
 msgid "From the identified duplicates {0} will be discarded."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:734
+#: js/widgets/dialog/ImportDialog.js:735
 msgid "All records will be tagged with: \"{0}\" so you can find them easily."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:744
+#: js/widgets/dialog/ImportDialog.js:745
 msgid "{0} records have failures and will be discarded."
 msgstr ""
 
@@ -1498,34 +1498,34 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:114
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:108
 msgid "Edit {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:187
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:198
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:181
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:192
 msgid "Delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:203
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:197
 msgid "Undo delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:274
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:271
 msgid "Different Values"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:275
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:272
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:349
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:355
 msgid "Do you really want to change these {0} records?"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:352
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:359
 msgid "Applying changes"
 msgstr ""
 
@@ -1580,7 +1580,7 @@ msgstr ""
 msgid "Saving of preferences failed."
 msgstr ""
 
-#: js/widgets/dialog/PreferencesPanel.js:154
+#: js/widgets/dialog/PreferencesPanel.js:155
 msgid "There are no preferences for this application."
 msgstr ""
 
@@ -1919,49 +1919,49 @@ msgid_plural "Delete {0}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:809
+#: js/widgets/grid/GridPanel.js:813
 msgid "Displaying records {0} - {1} of {2}"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:810
+#: js/widgets/grid/GridPanel.js:814
 msgid "No {0} to display"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1026
+#: js/widgets/grid/GridPanel.js:1030
 msgid "New..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1045
+#: js/widgets/grid/GridPanel.js:1049
 msgid "Add to..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1089
+#: js/widgets/grid/GridPanel.js:1093
 msgid "Creation Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1091
+#: js/widgets/grid/GridPanel.js:1095
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1092
+#: js/widgets/grid/GridPanel.js:1096
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1390
+#: js/widgets/grid/GridPanel.js:1395
 msgid "Not Allowed"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1391
+#: js/widgets/grid/GridPanel.js:1396
 msgid "You are not allowed to delete all pages at once"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1414
+#: js/widgets/grid/GridPanel.js:1419
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:1449
+#: js/widgets/grid/GridPanel.js:1454
 msgid " ... This may take a long time!"
 msgstr ""
 
@@ -2347,7 +2347,7 @@ msgstr ""
 msgid "Changed fields:"
 msgstr ""
 
-#: Preference/Abstract.php:481
+#: Preference/Abstract.php:494
 msgid "default"
 msgstr ""
 

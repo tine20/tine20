@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-13 12:43+0000\n"
+"PO-Revision-Date: 2012-02-16 11:34+0000\n"
 "Last-Translator: ph_il <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-14 06:53+0000\n"
-"X-Generator: Launchpad (build 14781)\n"
+"X-Launchpad-Export-Date: 2012-02-17 05:33+0000\n"
+"X-Generator: Launchpad (build 14814)\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -152,7 +152,7 @@ msgid "Select Role"
 msgstr "Rolle wählen"
 
 #: js/AddToEventPanel.js:216 js/AttendeeGridPanel.js:186
-#: js/ContactEventsGridPanel.js:125 js/GridView.js:142 Model/Event.php:243
+#: js/ContactEventsGridPanel.js:125 js/GridView.js:149 Model/Event.php:243
 msgid "Status"
 msgstr "Status"
 
@@ -252,12 +252,12 @@ msgid "Events"
 msgstr "Termine"
 
 #: js/ContactEventsGridPanel.js:112 js/EventEditDialog.js:90
-#: js/GridView.js:132 js/Model.js:201 Model/Event.php:244
+#: js/GridView.js:139 js/Model.js:201 Model/Event.php:244
 msgid "Summary"
 msgstr "Thema"
 
 #: js/ContactEventsGridPanel.js:118 js/EventDetailsPanel.js:234
-#: js/EventEditDialog.js:104 js/GridView.js:106 Preference.php:79
+#: js/EventEditDialog.js:104 js/GridView.js:113 Preference.php:79
 msgid "Start Time"
 msgstr "Beginn"
 
@@ -293,7 +293,7 @@ msgstr "Wiederholungstermin"
 msgid "recurring event exception"
 msgstr "Terminserien Ausnahme"
 
-#: js/EventDetailsPanel.js:239 js/EventEditDialog.js:119 js/GridView.js:112
+#: js/EventDetailsPanel.js:239 js/EventEditDialog.js:119 js/GridView.js:119
 msgid "End Time"
 msgstr "Ende"
 
@@ -301,7 +301,7 @@ msgstr "Ende"
 msgid "Blocking"
 msgstr "Blockierend"
 
-#: js/EventDetailsPanel.js:249 js/EventEditDialog.js:98 js/GridView.js:137
+#: js/EventDetailsPanel.js:249 js/EventEditDialog.js:98 js/GridView.js:144
 #: js/Model.js:202 js/ResourcesGridPanel.js:52 Model/Event.php:240
 msgid "Location"
 msgstr "Ort"
@@ -310,7 +310,7 @@ msgstr "Ort"
 msgid "Organizer"
 msgstr "Organisator"
 
-#: js/EventEditDialog.js:127 js/GridView.js:118 js/Printer/Base.js:66
+#: js/EventEditDialog.js:127 js/GridView.js:125 js/Printer/Base.js:66
 #: js/SearchCombo.js:195
 msgid "whole day"
 msgstr "ganztägig"
@@ -352,7 +352,11 @@ msgstr "Klassifizierung als privat"
 msgid "has alarm"
 msgstr "hat einen Alarm"
 
-#: js/GridView.js:124
+#: js/GridView.js:106
+msgid "Tags"
+msgstr ""
+
+#: js/GridView.js:131
 msgid "blocking"
 msgstr "blockiert"
 

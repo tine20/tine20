@@ -3,15 +3,15 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-13 11:42+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-02-18 09:50+0000\n"
+"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-14 06:53+0000\n"
-"X-Generator: Launchpad (build 14781)\n"
+"X-Launchpad-Export-Date: 2012-02-19 06:33+0000\n"
+"X-Generator: Launchpad (build 14814)\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -23,22 +23,22 @@ msgstr "zarządzanie wspólnymi katalogami"
 msgid "Create new shared folders"
 msgstr "Utwórz nowe, wspólne katalogi"
 
-#: Controller/Node.php:163
+#: Controller/Node.php:164
 msgid "My folders"
 msgstr "Moje katalogi"
 
-#: Controller/Node.php:170
+#: Controller/Node.php:171
 msgid "Shared folders"
-msgstr "Katalogi współdzielone"
+msgstr "Wspólne katalogi"
 
-#: Controller/Node.php:177
+#: Controller/Node.php:178
 msgid "Other users folders"
 msgstr "Katalogi innych użytkowników"
 
 #: Controller.php:95
 #, python-format
 msgid "%s's personal files"
-msgstr "%s's osobistych plików"
+msgstr "%s osobistych plików"
 
 #: js/Filemanager.js:26
 msgid "Filemanager"
@@ -110,7 +110,7 @@ msgstr "Data ostatniej modyfikacji"
 
 #: js/GridPanel.js:199
 msgid "Last Modified By"
-msgstr "Ostatnio zmodyfikowane przez"
+msgstr "Ostatnio zmienione przez"
 
 #: js/GridPanel.js:233
 msgid "Show closed"
@@ -174,8 +174,9 @@ msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
 msgstr ""
-"Plik nie został przesłany. Być może jego rozmiar jest za duży. Proszę "
-"powiadomić swojego administratora. Maksymalny rozmiar przesyłanego pliku: "
+"Przesłanie pliku było niemożliwe. Możliwe, że rozmiar pliku jest za duży. "
+"Proszę powiadomić swojego administratora. Maksymalny rozmiar przesyłanego "
+"pliku: "
 
 #: js/GridPanel.js:797 js/TreePanel.js:767
 msgid "Putting files in this folder is not allowed!"

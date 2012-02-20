@@ -6,15 +6,15 @@ msgstr ""
 msgid "Create new shared folders"
 msgstr ""
 
-#: Controller/Node.php:163
+#: Controller/Node.php:164
 msgid "My folders"
 msgstr ""
 
-#: Controller/Node.php:170
+#: Controller/Node.php:171
 msgid "Shared folders"
 msgstr ""
 
-#: Controller/Node.php:177
+#: Controller/Node.php:178
 msgid "Other users folders"
 msgstr ""
 

@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-13 12:02+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-02-17 20:01+0000\n"
+"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
 "Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-14 06:53+0000\n"
-"X-Generator: Launchpad (build 14781)\n"
+"X-Launchpad-Export-Date: 2012-02-18 05:50+0000\n"
+"X-Generator: Launchpad (build 14814)\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -240,31 +240,31 @@ msgstr[2] "zapytania"
 
 #: js/AddToLeadPanel.js:56
 msgid "Cancel"
-msgstr ""
+msgstr "Anuluj"
 
 #: js/AddToLeadPanel.js:64
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 #: js/AddToLeadPanel.js:99
 msgid "Please choose the Lead to add the contacts to"
-msgstr ""
+msgstr "Proszę wybrać zapytanie, do którego należy dodać kontakty"
 
 #: js/AddToLeadPanel.js:104
 msgid "Please select the attenders' role"
-msgstr ""
+msgstr "Proszę wybrać rolę uczestnika"
 
 #: js/AddToLeadPanel.js:145
 msgid "Select Lead"
-msgstr ""
+msgstr "Wybierz zapytanie"
 
 #: js/AddToLeadPanel.js:150
 msgid "Select Role"
-msgstr ""
+msgstr "Wybierz rolę"
 
 #: js/AddToLeadPanel.js:164
 msgid "Adding {0} Contacts to lead"
-msgstr ""
+msgstr "Dodaj {0} kontaktów do zapytania"
 
 #: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:194
 #: js/LeadGridDetailsPanel.js:227
