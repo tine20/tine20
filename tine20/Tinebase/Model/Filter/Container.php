@@ -169,9 +169,9 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
                     $containerData = array_merge($containerData, Tinebase_Container::getInstance()->getContainerById($containerId, TRUE)->toArray());
                 } else if (($ownerId = Tinebase_Model_Container::pathIsPersonalNode($path))) {
                     // transform current user 
-                    $ownerId = $ownerId == "/personal/" . Tinebase_Model_User::CURRENTACCOUNT ? "/personal/" . Tinebase_Core::getUser()->getId() : $ownerId;                    
                     $owner = Tinebase_User::getInstance()->getUserById($ownerId);
                     $containerData['name']  = $owner->accountDisplayName;
+                    $containerData['path']  = "/personal/$ownerId";
                     $containerData['owner'] = $owner->toArray();
                 }
                 
