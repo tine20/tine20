@@ -388,7 +388,9 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         
         moreCriterias = this.hidden ? moreCriterias : false;
         
-        this.criteriaText.update(moreCriterias ? _(this.moreFiltersActiveText) : '');
+        if (this.criteriaText && this.criteriaText.rendered) {
+            this.criteriaText.update(moreCriterias ? _(this.moreFiltersActiveText) : '');
+        }
     },
     
     /**

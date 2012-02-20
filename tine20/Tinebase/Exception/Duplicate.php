@@ -55,10 +55,10 @@ class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
     public function toArray()
     {
         return array(
-            'code'		   => $this->getCode(),
-            'message'	   => $this->getMessage(),
-        	'clientRecord' => $this->_clientRecordToArray(),
-            'duplicates'   => $this->_dataToArray(),
+            'code'          => $this->getCode(),
+            'message'       => $this->getMessage(),
+            'clientRecord'  => $this->_clientRecordToArray(),
+            'duplicates'    => $this->_dataToArray(),
         );
     }
     
@@ -69,6 +69,10 @@ class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
      */
     protected function _clientRecordToArray()
     {
+        if (! $this->_clientRecord) {
+            return array();
+        }
+        
         $this->_resolveClientRecordTags();
         $converter = Tinebase_Convert_Factory::factory($this->_clientRecord);
         $result = $converter->fromTine20Model($this->_clientRecord);

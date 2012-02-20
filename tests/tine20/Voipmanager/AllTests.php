@@ -4,7 +4,7 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -12,10 +12,6 @@
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Voipmanager_AllTests::main');
-}
 
 class Voipmanager_AllTests
 {
@@ -30,6 +26,7 @@ class Voipmanager_AllTests
         $suite->addTest(Voipmanager_Backend_Snom_AllTests::suite());
         $suite->addTestSuite('Voipmanager_ControllerTest');
         $suite->addTestSuite('Voipmanager_JsonTest');
+        $suite->addTestSuite('Voipmanager_SnomTest');
         //$suite->addTestSuite('Voipmanager_Backend_Snom_PhoneTest');
         return $suite;
     }

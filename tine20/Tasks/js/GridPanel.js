@@ -276,9 +276,12 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getViewRowClass: function(record, index) {
         var due = record.get('due');
-        
+         
         var className = '';
-        if (due) {
+        
+        if(record.get('status') == 'COMPLETED') {
+            className += 'tasks-grid-completed';
+        } else  if (due) {
             var dueDay = due.format('Y-m-d');
             var today = new Date().format('Y-m-d');
 

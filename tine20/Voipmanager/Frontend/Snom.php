@@ -82,9 +82,12 @@ class Voipmanager_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         
         $xmlConfig = Voipmanager_Controller_Snom_Xml::getInstance()->getConfig($phone);
         
-        header('Content-Type: application/xml');
-        // we must sent this header, as the snom phones can't work with chunked encoding
-        header('Content-Length: ' . strlen($xmlConfig));
+        // check for testing purposes
+        if (! headers_sent()) {
+            header('Content-Type: application/xml');
+            // we must sent this header, as the snom phones can't work with chunked encoding
+            header('Content-Length: ' . strlen($xmlConfig));
+        }
         echo $xmlConfig;
         
         if($phone->http_client_info_sent == false) {
@@ -123,12 +126,16 @@ class Voipmanager_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      * set status
      *
      * @param Voipmanager_Model_Snom_Phone $_phone
-     * @param unknown_type $_type
+     * @param string $_type
      * @return Voipmanager_Model_Snom_Phone
      * @throws  Voipmanager_Exception_UnexpectedValue
      */
     protected function _setStatus($_phone, $_type)
     {
+        if (! isset($_SERVER['HTTP_USER_AGENT']) || ! isset($_SERVER["REMOTE_ADDR"])) {
+            throw new Voipmanager_Exception_UnexpectedValue('useragent string or ip address missing');
+        }
+        
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
         #$userAgent = 'Mozilla/4.0 (compatible; snom320-SIP 7.1.30';
         
@@ -154,5 +161,5 @@ class Voipmanager_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         Voipmanager_Controller_Snom_Phone::getInstance()->update($_phone);
     
         return $_phone;
-    }    
+    }
 }

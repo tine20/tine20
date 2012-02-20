@@ -347,7 +347,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
 
         if ($nodeExistsException) {
             throw $nodeExistsException;
-        }            
+        }
         
         return $result;
     }
@@ -548,7 +548,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             'type'           => $_type,
         )));
         if (count($search) > 0) {
-            throw new Tinebase_Exception_Record_NotAllowed('Container ' . $_name . ' of type ' . $_type . ' already exists.');
+            throw new Filemanager_Exception_NodeExists('Container ' . $_name . ' of type ' . $_type . ' already exists.');
         }
         
         $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
