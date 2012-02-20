@@ -343,6 +343,10 @@ html, body {
     background-image:url(../../images/oxygen/32x32/actions/document-print-preview.png) !important;
 }
 
+.action_resolveDuplicates {
+    background-image: url(../../images/oxygen/16x16/actions/file-revert.png) !important;
+}
+
 .tinebase-action-export-xls {
     background-image:url(../../images/oxygen/16x16/mimetypes/application-vnd.ms-excel.png) !important;
 }

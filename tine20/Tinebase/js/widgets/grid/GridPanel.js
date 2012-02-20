@@ -186,6 +186,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     multipleEditRequiredRight: null,
     
     /**
+     * enable if selection of 2 records should allow merging
+     * @cfg {Bool} duplicateResolvable
+     */
+    duplicateResolvable: false,
+    
+    /**
      * @property autoRefreshTask
      * @type Ext.util.DelayedTask
      */
@@ -426,6 +432,19 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             app:            this.app
         });        
 
+        this.action_resolveDuplicates = new Ext.Action({
+            requiredGrant: null,
+            text: String.format(_('Merge {0}'), this.i18nRecordsName),
+                iconCls: 'action_resolveDuplicates',
+                scope: this,
+                handler: this.onResolveDuplicates,
+                disabled: false,
+                actionUpdater: function(action, grants, records) {
+                    if(records && (records.length != 2)) action.setDisabled(true);
+                    else action.setDisabled(false);
+                }
+        });
+        
         // add actions to updater
         this.actionUpdater.addActions([
             this.action_addInNewWindow,
@@ -433,7 +452,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.action_deleteRecord,
             this.action_tagsMassAttach,
             this.action_tagsMassDetach,
-            this.action_editCopyInNewWindow
+            this.action_editCopyInNewWindow,
+            this.action_resolveDuplicates
         ]);
 
         // init actionToolbar (needed for correct fitertoolbar init atm -> fixme)
@@ -1009,7 +1029,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 this.action_editInNewWindow,
                 this.action_deleteRecord
             ];
-
+            
+            if(this.duplicateResolvable) {
+                items.push(this.action_resolveDuplicates);
+            }
+            
             if (! this.action_tagsMassAttach.hidden) {
                 items.push('-', this.action_tagsMassAttach, this.action_tagsMassDetach);
             }
@@ -1369,6 +1393,28 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
     },
 
+    
+    /**
+     * is called to resolve conflicts from 2 records
+     */
+    onResolveDuplicates: function() {
+        // TODO: allow more than 2 records      
+        if(this.grid.getSelectionModel().getSelections().length != 2) return;
+        
+        var selections = [];
+        Ext.each(this.grid.getSelectionModel().getSelections(), function(sel) {
+            selections.push(sel.data);
+        });
+        
+        var window = Tine.widgets.dialog.DuplicateMergeDialog.getWindow({
+            selections: Ext.encode(selections),
+            appName: this.app.name,
+            modelName: this.recordClass.getMeta('modelName')
+        });
+        
+        window.on('contentschange', function() { this.store.reload(); }, this);
+    },
+    
     /**
      * add record to edit buffer
      * 

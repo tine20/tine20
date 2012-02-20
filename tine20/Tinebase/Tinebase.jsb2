@@ -430,6 +430,10 @@
           "path": "js/widgets/dialog/"
         },
         {
+          "text": "DuplicateMergeDialog.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
           "text": "DuplicateResolveGridPanel.js",
           "path": "js/widgets/dialog/"
         },
