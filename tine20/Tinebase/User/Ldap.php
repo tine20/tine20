@@ -109,6 +109,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     protected $_queryFilter = '|(uid=%s)(cn=%s)(sn=%s)(givenName=%s)';
     
     protected $_ldapPlugins = array();
+    
+    protected $_isReadOnlyBackend     = false;
 
     /**
      * the constructor
@@ -142,7 +144,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         if (isset($_options['requiredObjectClass'])) {
             $this->_requiredObjectClass = (array)$_options['requiredObjectClass'];
         }
-
+        if (array_key_exists('readonly', $_options)) {
+            $this->_isReadOnlyBackend = (bool)$_options['readonly'];
+        }
+        
         $this->_options = $_options;
 
         $this->_userUUIDAttribute  = strtolower($this->_options['userUUIDAttribute']);
@@ -278,6 +283,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null)
     {
+        if ($this->_isReadOnlyBackend) {
+            return;
+        }
+        
         $user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : $this->getFullUserById($_userId);
 
         $metaData = $this->_getMetaData($user);
@@ -319,6 +328,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function setStatusInSyncBackend($_accountId, $_status)
     {
+        if ($this->_isReadOnlyBackend) {
+            return;
+        }
+        
         $metaData = $this->_getMetaData($_accountId);
 
         if ($_status == 'disabled') {
@@ -352,6 +365,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function setExpiryDateInSyncBackend($_accountId, $_expiryDate)
     {
+        if ($this->_isReadOnlyBackend) {
+            return;
+        }
+        
         $metaData = $this->_getMetaData($_accountId);
 
         if ($_expiryDate instanceof DateTime) {
@@ -380,6 +397,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function updateUserInSyncBackend(Tinebase_Model_FullUser $_account)
     {
+        if ($this->_isReadOnlyBackend) {
+            return;
+        }
+        
         $ldapEntry = $this->_getLdapEntry('accountId', $_account);
 
         $ldapData = $this->_user2ldap($_account, $ldapEntry);
@@ -435,6 +456,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function addUserToSyncBackend(Tinebase_Model_FullUser $_user)
     {
+        if ($this->_isReadOnlyBackend) {
+            return;
+        }
+        
         $ldapData = $this->_user2ldap($_user);
 
         $ldapData['uidnumber'] = $this->_generateUidNumber();
@@ -466,6 +491,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function deleteUserInSyncBackend($_userId)
     {
+        if ($this->_isReadOnlyBackend) {
+            return;
+        }
+        
         try {
             $metaData = $this->_getMetaData($_userId);
     
@@ -485,6 +514,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function deleteUsersInSyncBackend(array $_accountIds)
     {
+        if ($this->_isReadOnlyBackend) {
+            return;
+        }
+        
         foreach ($_accountIds as $accountId) {
             $this->deleteUserInSyncBackend($accountId);
         }

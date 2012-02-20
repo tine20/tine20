@@ -82,6 +82,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     protected $_userSearchScope      = Zend_Ldap::SEARCH_SCOPE_SUB;
     
+    protected $_isReadOnlyBackend    = false;
+    
     /**
      * the constructor
      *
@@ -113,7 +115,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         if (isset($_options['requiredObjectClass'])) {
             $this->_requiredObjectClass = (array)$_options['requiredObjectClass'];
         }
-
+        if (array_key_exists('readonly', $_options)) {
+            $this->_isReadOnlyBackend = (bool)$_options['readonly'];
+        }
+        
         $this->_options = $_options;
 
         $this->_userUUIDAttribute  = strtolower($this->_options['userUUIDAttribute']);
@@ -141,7 +146,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      * @return Tinebase_Model_Group
      */
     public function getGroupByIdFromSyncBackend($_groupId)
-    {   
+    {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
         
         $filter = Zend_Ldap_Filter::andFilter(
@@ -220,10 +225,18 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function setGroupMembersInSyncBackend($_groupId, $_groupMembers) 
     {
+        if ($this->_isReadOnlyBackend) {
+            return;
+        }
+        
         $metaData = $this->_getMetaData($_groupId);
         $membersMetaDatas = $this->_getAccountsMetaData((array)$_groupMembers);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $group data: ' . print_r($metaData, true));
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $memebers: ' . print_r($membersMetaDatas, true));
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $group data: ' . print_r($metaData, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $memebers: ' . print_r($membersMetaDatas, true));
+        
         $groupDn = $this->_getDn($_groupId);
         
         $memberDn = array(); 
@@ -246,8 +259,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
         $this->_ldap->update($metaData['dn'], $ldapData);
     }
@@ -262,6 +277,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function setGroupMembershipsInSyncBackend($_userId, $_groupIds)
     {
+        if ($this->_isReadOnlyBackend) {
+            return;
+        }
+        
         if ($_groupIds instanceof Tinebase_Record_RecordSet) {
             $_groupIds = $_groupIds->getArrayOfIds();
         }
@@ -301,6 +320,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function addGroupMemberInSyncBackend($_groupId, $_accountId) 
     {
+        if ($this->_isReadOnlyBackend) {
+            return;
+        }
+        
         $userId  = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
@@ -388,6 +411,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function removeGroupMemberInSyncBackend($_groupId, $_accountId) 
     {
+        if ($this->_isReadOnlyBackend) {
+            return;
+        }
+        
         $userId  = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
@@ -458,6 +485,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function addGroupInSyncBackend(Tinebase_Model_Group $_group) 
     {
+        if ($this->_isReadOnlyBackend) {
+            return;
+        }
+        
         $dn = $this->_generateDn($_group);
         $objectClass = array(
             'top',
@@ -505,6 +536,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function updateGroupInSyncBackend(Tinebase_Model_Group $_group) 
     {
+        if ($this->_isReadOnlyBackend) {
+            return;
+        }
+        
         $metaData = $this->_getMetaData($_group->getId());
         $dn = $metaData['dn'];
         
@@ -534,6 +569,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function deleteGroupsInSyncBackend($_groupId) 
     {
+        if ($this->_isReadOnlyBackend) {
+            return;
+        }
+        
         $groupIds = array();
         
         if (is_array($_groupId) or $_groupId instanceof Tinebase_Record_RecordSet) {
