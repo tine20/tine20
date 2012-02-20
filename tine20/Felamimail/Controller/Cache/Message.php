@@ -179,10 +179,12 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * 
      * @param Felamimail_Model_Folder $_folder
      * @return boolean
+     * 
+     * @todo remove int casting when http://forge.tine20.org/mantisbt/view.php?id=5764 is resolved
      */
     protected function _cacheIsInvalid($_folder)
     {
-        return (isset($_folder->cache_uidvalidity) && $_folder->imap_uidvalidity != $_folder->cache_uidvalidity);
+        return (isset($_folder->cache_uidvalidity) && (int) $_folder->imap_uidvalidity !== (int) $_folder->cache_uidvalidity);
     }
     
     /**
