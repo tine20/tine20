@@ -312,9 +312,9 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
             if (this.hasContainerTreePanel) {
                 var containerTreePanel = this.getContainerTreePanel();
                 
-                var containersName = containerTreePanel.recordClass ? 
-                    this.app.i18n._hidden(containerTreePanel.recordClass.getMeta('containersName')) :
-                    _('containers');
+                var containersName = containerTreePanel.recordClass
+                    ? containerTreePanel.recordClass.getContainersName()
+                    : _('containers');
                 
                 // recheck if container tree is a container tree as in apps not dealing
                 // with containers we don't want a collapsed arrow header
