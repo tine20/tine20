@@ -46,15 +46,15 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
      */
     protected $_foreignTables = array(
         'members'    => array(
-        	'table'  => 'addressbook_list_members',
+            'table'  => 'addressbook_list_members',
             'field'  => 'contact_id',
-    		'joinOn' => 'list_id',
+            'joinOn' => 'list_id',
             'preserve' => TRUE,
         ),
         'group_id'    => array(
-        	'table'        => 'groups',
+            'table'        => 'groups',
             'field'        => 'id',
-        	'joinOn'       => 'list_id',
+            'joinOn'       => 'list_id',
         // use first element of result array
             'singleValue'  => TRUE,
         )

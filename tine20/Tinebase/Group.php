@@ -159,7 +159,31 @@ class Tinebase_Group
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' group memberships: ' . print_r($membershipsSyncBackend, TRUE));
         
-        $groupBackend->setGroupMembershipsInSqlBackend($user, $membershipsSyncBackend);
+        $groupIds = $groupBackend->setGroupMembershipsInSqlBackend($user, $membershipsSyncBackend);
+        self::syncLists($groupIds);
+    }
+    
+    /**
+     * creates or updates addressbook lists for an array of group ids
+     * 
+     * @param array $groupIds
+     */
+    public static function syncLists($groupIds)
+    {
+        if (! Tinebase_Application::getInstance()->isInstalled('Addressbook')) {
+            return;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            .' Syncing ' . count($groupIds) . ' group <-> lists');
+        
+        $groups = Tinebase_Group::getInstance()->getMultiple($groupIds);
+        foreach ($groups as $group) {
+            $group->members = Tinebase_Group::getInstance()->getGroupMembers($group);
+            $list = Admin_Controller_Group::getInstance()->createOrUpdateList($group);
+            $group->list_id = $list->getId();
+            Tinebase_Group::getInstance()->updateGroup($group);
+        }
     }
     
     /**

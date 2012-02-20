@@ -398,10 +398,9 @@ class Tinebase_User
             $group = $groupBackend->addGroupInSqlBackend($group);
         }
         
-        // update or create user in local sql backend
         try {
             $currentUser = $userBackend->getUserByProperty('accountId', $user, 'Tinebase_Model_FullUser');
-            
+        
             $currentUser->accountLoginName          = $user->accountLoginName;
             $currentUser->accountLastPasswordChange = $user->accountLastPasswordChange;
             $currentUser->accountExpires            = $user->accountExpires;
@@ -413,7 +412,7 @@ class Tinebase_User
             $currentUser->accountEmailAddress       = $user->accountEmailAddress;
             $currentUser->accountHomeDirectory      = $user->accountHomeDirectory;
             $currentUser->accountLoginShell         = $user->accountLoginShell;
-            
+        
             $user = $userBackend->updateUserInSqlBackend($currentUser);
         } catch (Tinebase_Exception_NotFound $ten) {
             try {
@@ -423,32 +422,10 @@ class Tinebase_User
             } catch (Tinebase_Exception_NotFound $ten) {
                 // do nothing
             }
-            
-            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-                $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-                $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
-                
-                $contact = new Addressbook_Model_Contact(array(
-                    'n_family'      => $user->accountLastName,
-                    'n_given'       => $user->accountFirstName,
-                    'n_fn'          => $user->accountFullName,
-                    'n_fileas'      => $user->accountDisplayName,
-                    'email'         => $user->accountEmailAddress,
-                    'type'          => Addressbook_Model_Contact::CONTACTTYPE_USER,
-                    'container_id'  => $internalAddressbook->getId()
-                ));
-                
-                // add modlog info
-                Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'create');
         
-                $contact = $addressbook->create($contact);        
-
-                $user->contact_id = $contact->getId();
-            }
+            self::syncContact($user);
             $user = $userBackend->addUserInSqlBackend($user);
         }
-        
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  synced user object: " . print_r($user->toArray(), true));
         
         // import contactdata(phone, address, fax, birthday. photo)
         if($_syncContactData === true && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
@@ -468,6 +445,41 @@ class Tinebase_User
         Tinebase_Group::syncMemberships($user);
         
         return $user;
+    }
+    
+    /**
+     * create contact in addressbook
+     * 
+     * @param Tinebase_Model_FullUser $user
+     */
+    public static function syncContact($user)
+    {
+        if (! Tinebase_Application::getInstance()->isInstalled('Addressbook')) {
+            return;
+        }
+        
+        $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+    
+        $contact = new Addressbook_Model_Contact(array(
+            'n_family'      => $user->accountLastName,
+            'n_given'       => $user->accountFirstName,
+            'n_fn'          => $user->accountFullName,
+            'n_fileas'      => $user->accountDisplayName,
+            'email'         => $user->accountEmailAddress,
+            'type'          => Addressbook_Model_Contact::CONTACTTYPE_USER,
+            'container_id'  => $internalAddressbook->getId()
+        ));
+    
+        // add modlog info
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'create');
+    
+        $contact = $addressbook->create($contact);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . " Added contact " . $contact->n_given);
+    
+        $user->contact_id = $contact->getId();
     }
     
     /**

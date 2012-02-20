@@ -155,7 +155,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         
         $group = Tinebase_Group::getInstance()->getGroupById($_groupId);
 
-        return $group;            
+        return $group;
     }  
 
    /**
@@ -198,7 +198,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         $event->group = $group;
         Tinebase_Event::fireEvent($event);
         
-        return $group;            
+        return $group;
     }  
 
    /**
@@ -390,6 +390,8 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
      * 
      * @param  Tinebase_Model_Group  $_group
      * @return Addressbook_Model_List
+     * 
+     * @todo should be moved to Tinebase
      */
     public function createOrUpdateList(Tinebase_Model_Group $_group)
     {
@@ -400,9 +402,11 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             $_group->container_id = $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK];
         }
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_group->toArray(), TRUE));
+        
         try {
             if (empty($_group->list_id)) {
-
+                
                 $filter = new Addressbook_Model_ListFilter(array(
                     array('field' => 'name', 'operator' => 'equals', 'value' => $_group->name),
                     array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP)
@@ -420,7 +424,9 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             
             $list = $listsBackend->get($_group->list_id);
             
-            // update exisiting list
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Update list ' . $_group->name);
+            
             $list->name         = $_group->name;
             $list->description  = $_group->description;
             $list->email        = $_group->email;
@@ -434,7 +440,6 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             $list = $listsBackend->update($list);
             
         } catch (Tinebase_Exception_NotFound $tenf) {
-            // add new list
             $list = new Addressbook_Model_List(array(
                 'name'          => $_group->name,
                 'description'   => $_group->description,
@@ -446,15 +451,19 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             
             // add modlog info
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($list, 'create');
-    
-            $list = $listsBackend->create($list);        
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Add new list ' . $_group->name);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($list->toArray(), TRUE));
+            
+            $list = $listsBackend->create($list);
         }
         
         return $list;
     }
     
     /**
-     * get contact_id's of users
+     * get contact_ids of users
      * 
      * @param  array  $_userIds
      * @return array
