@@ -184,7 +184,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             this.filterPlugin = new Tine.Filemanager.PathFilterPlugin({
                 treePanel: this,
                 field: 'path',
-                nodeAttributeField: 'path'                
+                nodeAttributeField: 'path'
             });
         }
         
@@ -371,26 +371,20 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
    
         if (node.id == 'otherUsers' || (node.parentNode && node.parentNode.id == 'otherUsers')) {
             this.contextMenuOtherUserFolder.showAt(event.getXY());
-        }
-        else if (node.id == 'personal' || node.id == 'shared') {
+        } else if (node.id == 'personal' || node.id == 'shared') {
             this.contextMenuRootFolder.showAt(event.getXY());
-        }
-        else if (path.match(/^\/shared/) && (Tine.Tinebase.common.hasRight('admin', this.app.appName) 
+        } else if (path.match(/^\/shared/) && (Tine.Tinebase.common.hasRight('admin', this.app.appName) 
                 || Tine.Tinebase.common.hasRight('manage_shared_folders', this.app.appName))){
-            this.contextMenuUserFolder.showAt(event.getXY());
-        } 
-        else if (path.match(/^\/shared/)){
+            this.contextMenuContainerFolder.showAt(event.getXY());
+        } else if (path.match(/^\/shared/)){
             this.contextMenuReloadFolder.showAt(event.getXY());
-        } 
-        else if (path.match(/^\/personal/) && path.match('/personal/' + currentAccount.accountLoginName)) {
+        } else if (path.match(/^\/personal/) && path.match('/personal/' + currentAccount.accountLoginName)) {
             if(typeof container.name == 'object') {
                 this.contextMenuContainerFolder.showAt(event.getXY());
-            }
-            else {
+            } else {
                 this.contextMenuUserFolder.showAt(event.getXY());
             }
-        }
-        else if (path.match(/^\/personal/) && container.account_grants) {
+        } else if (path.match(/^\/personal/) && container.account_grants) {
             this.contextMenuUserFolder.showAt(event.getXY());
         }
     },

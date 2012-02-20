@@ -285,6 +285,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             case 'get':
                 $requiredGrant = Tinebase_Model_Grants::GRANT_READ;
                 break;
+            case 'add':
+                $requiredGrant = Tinebase_Model_Grants::GRANT_ADD;
+                break;
             case 'update':
                 $requiredGrant = Tinebase_Model_Grants::GRANT_EDIT;
                 break;
@@ -395,16 +398,29 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             ? $_path : Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($_path));
         $parentPathRecord = $path->getParent();
         
-        $this->_checkPathACL($parentPathRecord, 'update');
-        
         try {
             $this->_checkIfExists($path);
+            $this->_checkPathACL($parentPathRecord, 'add');
         } catch (Filemanager_Exception_NodeExists $fene) {
-            if ($_forceOverwrite && ! $_tempFileId) {
-                // just return the exisiting node and do not overwrite existing file if no tempfile id was given
+            if ($_forceOverwrite) {
                 $existingNode = $this->_backend->stat($path->statpath);
-                $this->resolveContainerAndAddPath($existingNode, $parentPathRecord);
-                return $existingNode;
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' Existing node: ' . print_r($existingNode->toArray(), TRUE));
+                
+                if (! $_tempFileId) {
+                    // just return the exisiting node and do not overwrite existing file if no tempfile id was given
+                    $this->_checkPathACL($path, 'get');
+                    $this->resolveContainerAndAddPath($existingNode, $parentPathRecord);
+                    return $existingNode;
+                } else {
+                    // check if a new (size 0) file is overwritten
+                    // @todo check revision here?
+                    if ($existingNode->size == 0) {
+                        $this->_checkPathACL($parentPathRecord, 'add');
+                    } else {
+                        $this->_checkPathACL($parentPathRecord, 'update');
+                    }
+                }
             } else if (! $_forceOverwrite) {
                 throw $fene;
             }

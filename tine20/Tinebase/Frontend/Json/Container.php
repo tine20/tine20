@@ -193,7 +193,7 @@ class Tinebase_Frontend_Json_Container
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
                     try {
                         $group = Tinebase_Group::getInstance()->getGroupById($value['account_id']);
-                    } catch (Tinebase_Exception_NotFound $e) {
+                    } catch (Tinebase_Exception_Record_NotDefined $e) {
                         $group = Tinebase_Group::getInstance()->getNonExistentGroup();
                     }
                     $value['account_name'] = $group->toArray();
@@ -204,7 +204,7 @@ class Tinebase_Frontend_Json_Container
                 default:
                     throw new Tinebase_Exception_InvalidArgument('Unsupported accountType.');
                     break;    
-            }            
+            }
         }
         
         return $_grants;
