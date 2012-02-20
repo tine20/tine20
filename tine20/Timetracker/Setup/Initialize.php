@@ -5,7 +5,7 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -30,8 +30,8 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
         );
 
         $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => "Timesheets today", // _("Timesheets today")
-            'description'       => "Timesheets today",
+            'name'              => "My Timesheets today", // _("My Timesheets today")
+            'description'       => "My Timesheets today",
             'filters'           => array(array(
                 'field'     => 'account_id',
                 'operator'  => 'equals',
@@ -44,8 +44,8 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
         ))));
 
         $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => "Timesheets this week", // _("Timesheets this week")
-            'description'       => "Timesheets this week",
+            'name'              => "My Timesheets this week", // _("My Timesheets this week")
+            'description'       => "My Timesheets this week",
             'filters'           => array(array(
                 'field'     => 'account_id',
                 'operator'  => 'equals',
@@ -58,8 +58,8 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
         ))));
 
         $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => "Timesheets last week", // _("Timesheets last week")
-            'description'       => "Timesheets last week",
+            'name'              => "My Timesheets last week", // _("My Timesheets last week")
+            'description'       => "My Timesheets last week",
             'filters'           => array(array(
                 'field'     => 'account_id',
                 'operator'  => 'equals',
@@ -72,8 +72,8 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
         ))));
 
         $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => "Timesheets this month", // _("Timesheets this month")
-            'description'       => "Timesheets this month",
+            'name'              => "My Timesheets this month", // _("My Timesheets this month")
+            'description'       => "My Timesheets this month",
             'filters'           => array(array(
                 'field'     => 'account_id',
                 'operator'  => 'equals',
@@ -86,8 +86,8 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
         ))));
 
         $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => "Timesheets last month", // _("Timesheets last month")
-            'description'       => "Timesheets last month",
+            'name'              => "My Timesheets last month", // _("My Timesheets last month")
+            'description'       => "My Timesheets last month",
             'filters'           => array(array(
                 'field'     => 'account_id',
                 'operator'  => 'equals',
@@ -140,10 +140,10 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
             array_merge($commonValues, array(
                 'name'              => "Timeaccounts already billed", // _('Timeaccounts already billed')
                 'description'       => "Timeaccounts already billed",
-               	'filters'           => array(
+                   'filters'           => array(
                     array(
                         'field'     => 'status',
-                		'operator'  => 'equals',
+                        'operator'  => 'equals',
                         'value'     => 'billed',
                     )
                 ),

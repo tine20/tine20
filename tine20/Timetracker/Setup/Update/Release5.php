@@ -5,7 +5,7 @@
  * @package     Timetracker
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Timetracker_Setup_Update_Release5 extends Setup_Update_Abstract
@@ -118,7 +118,23 @@ class Timetracker_Setup_Update_Release5 extends Setup_Update_Abstract
             ))
         ));        
         
-        $this->setApplicationVersion('Timetracker', '5.3');        
+        $this->setApplicationVersion('Timetracker', '5.3');
     }
-
+    /**
+    * rename timesheet favorites and update to 5.4
+    *
+    * @return void
+    */
+    public function update_3()
+    {
+        $rename = array("Timesheets today", "Timesheets this week", "Timesheets last week", "Timesheets this month", "Timesheets last month");
+        foreach ($rename as $name) {
+            $this->_db->update(SQL_TABLE_PREFIX . 'filter', array(
+                'name'        => 'My ' . $name,
+                'description' => 'My ' . $name
+            ), "`name` = '{$name}' and account_id IS NULL");
+        }
+        
+        $this->setApplicationVersion('Timetracker', '5.3');
+    }
 }
