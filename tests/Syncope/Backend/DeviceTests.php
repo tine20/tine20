@@ -92,13 +92,17 @@ class Syncope_Backend_DeviceTests extends PHPUnit_Framework_TestCase
         $this->_deviceBackend->get('invalidId');
     }
     
-    public function testGetNewUserDevice()
+    public function testGetUserDevice()
     {
         $device = $this->testCreateDevice();
         
         $userDevice = $this->_deviceBackend->getUserDevice('1234', 'iphone-abcd');
         
         $this->assertEquals($device->id, $userDevice->id);
+        
+        $this->setExpectedException('Syncope_Exception_NotFound');
+        
+        $userDevice = $this->_deviceBackend->getUserDevice('1234', 'iphone-xyz');
     }
     
     /**
