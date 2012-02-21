@@ -179,6 +179,8 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         $this->assertContains('SUMMARY:New Event', $vcalendar);
         $this->assertContains('EXDATE;VALUE=DATE-TIME:20111005T080000Z', $vcalendar);
         $this->assertContains('RECURRENCE-ID;VALUE=DATE-TIME;TZID=Europe/Berlin:20111008T100000', $vcalendar);
+        $this->assertContains('TRIGGER;VALUE=DURATION:-PT1H30M', $vcalendar); // base alarm
+        $this->assertContains('TRIGGER;VALUE=DURATION:-PT1H15M', $vcalendar); // exception alarm
     }
     
     /**

@@ -451,9 +451,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         }
 
         // resolve alarms
-        if (empty($this->_event->alarms)) {
-            Calendar_Controller_MSEventFacade::getInstance()->getAlarms($this->_event);
-        }
+        Calendar_Controller_MSEventFacade::getInstance()->getAlarms($this->_event);
+        
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($this->_event->toArray(), true));
         return $this->_event;
     }

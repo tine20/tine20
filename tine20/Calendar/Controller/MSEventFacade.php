@@ -392,7 +392,12 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     public function getAlarms($_record)
     {
-        return $this->_eventController->getAlarms($_record);
+        $events = new Tinebase_Record_RecordSet('Calendar_Model_Event', array($_record));
+        if ($_record->exdate instanceof Tinebase_Record_RecordSet) {
+            $events->merge($_record->exdate->filter('is_deleted', 0));
+        }
+        
+        $this->_eventController->getAlarms($events);
     }
     
     /**
