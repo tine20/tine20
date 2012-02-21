@@ -209,6 +209,9 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
         $diff = $currentAlarms->getMigration($alarms->getArrayOfIds());
         $this->_backend->delete($diff['toDeleteIds']);
         
+        if (count($alarms) > 1) {
+            Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__ . "only the first alarm could is saved: " . print_r($alarms->toArray(), TRUE));
+        }
         // create / update alarms
         foreach ($alarms as $alarm) {
             $id = $alarm->getId();
@@ -223,6 +226,8 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                 }
                 $alarm = $this->_backend->create($alarm);
             }
+            
+            break;
         }
     }
     

@@ -241,6 +241,24 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * @see #5788: Silently discard alarms if more than 1 alarm is defined
+     */
+    public function testPutEventMultipleAlarms()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+        
+        $event = $this->testCreateEvent();
+        
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/event_with_multiple_alarm.ics', 'r');
+        
+        $event->put($vcalendarStream);
+        
+        $record = $event->getRecord();
+        
+        $this->assertEquals('1', count($record->alarms));
+    }
+    
+    /**
      * test get name of vcard
      */
     public function testGetNameOfEvent()
