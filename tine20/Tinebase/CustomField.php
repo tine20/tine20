@@ -449,16 +449,20 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      */
     public function resolveMultipleCustomfields(Tinebase_Record_RecordSet $_records)
     {
+        if (count($_records) == 0) {
+            return;
+        }
+        
         //Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' seconds  MEMORY: ' . memory_get_usage(true)/1024/1024 . ' MBytes');
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             . ' Resolving custom fields for ' . count($_records) . ' ' . $_records->getRecordClassName() . ' records.');
         
-        $customFields = $this->_getCustomFields($_records->getArrayOfIds());
+        $configs = $this->getCustomFieldsForApplication(Tinebase_Application::getInstance()->getApplicationByName($_records->getFirstRecord()->getApplication()));
+        $customFields = $this->_getCustomFields($_records->getArrayOfIds(), $configs->getArrayOfIds());
         $customFields->addIndices(array('record_id'));
         
-        $config = NULL;
         foreach ($_records as $record) {
-            $this->resolveRecordCustomFields($record, $customFields->filter('record_id', $record->getId()), $config);
+            $this->resolveRecordCustomFields($record, $customFields->filter('record_id', $record->getId()), $configs);
         }
         
         //Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' seconds  MEMORY: ' . memory_get_usage(true)/1024/1024 . ' MBytes');
@@ -468,15 +472,23 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * get custom fields of record(s)
      *
      * @param string|array $_recordId
+     * @param array $_recordId
      * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField_Value
      */
-    protected function _getCustomFields($_recordId)
+    protected function _getCustomFields($_recordId, $_configIds = NULL)
     {
         $filterValues = array(array(
             'field'     => 'record_id', 
             'operator'  => 'in', 
             'value'     => (array) $_recordId
         ));
+        if ($_configIds) {
+            $filterValues[] = array(
+                'field'     => 'customfield_id', 
+                'operator'  => 'in', 
+                'value'     => (array) $_configIds
+            );
+        }
         $filter = new Tinebase_Model_CustomField_ValueFilter($filterValues);
         
         return $this->_backendValue->search($filter);
