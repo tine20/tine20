@@ -243,22 +243,22 @@
                     break;
                 case 'created':
                     $messageSubject = sprintf($translate->_('Event invitation "%1$s" at %2$s'), $_event->summary, $startDateString);
-                    $method = 'REQUEST';
+                    $method = Calendar_Model_iMIP::METHOD_REQUEST;
                     break;
                 case 'deleted':
                     $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been canceled' ), $_event->summary, $startDateString);
-                    $method = 'CANCEL';
+                    $method = Calendar_Model_iMIP::METHOD_CANCEL;
                     break;
                 case 'changed':
                     switch ($_notificationLevel) {
                         case self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE:
                             $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been rescheduled' ), $_event->summary, $startDateString);
-                            $method = 'REQUEST';
+                            $method = Calendar_Model_iMIP::METHOD_REQUEST;
                             break;
                             
                         case self::NOTIFICATION_LEVEL_EVENT_UPDATE:
                             $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been updated' ), $_event->summary, $startDateString);
-                            $method = 'REQUEST';
+                            $method = Calendar_Model_iMIP::METHOD_REQUEST;
                             break;
                             
                         case self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE:
@@ -286,7 +286,7 @@
                             } else {
                                 $messageSubject = sprintf($translate->_('Attendee changes for event "%1$s" at %2$s' ), $_event->summary, $startDateString);
                             }
-                            //$method = 'REPLY';
+                            //$method = Calendar_Model_iMIP::METHOD_REPLY;
                             break;
                     }
                     break;
@@ -310,14 +310,33 @@
             if (isset($method) && version_compare(PHP_VERSION, '5.3.0', '>=')) {
                 $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
                 $converter->setMethod($method);
-                $vevent = $converter->fromTine20Model($_event);
+                $vcalendar = $converter->fromTine20Model($_event);
                 
-                $calendarPart           = new Zend_Mime_Part($vevent->serialize());
+                // in Tine 2.0 non organizers might be given the grant to update events
+                // @see rfc6047 section 2.2.1 & rfc5545 section 3.2.18
+                if ($method != Calendar_Model_iMIP::METHOD_REPLY && $_event->organizer !== $_updater->contact_id) {
+                    foreach($vcalendar->children() as $component) {
+                        if ($component->name == 'VEVENT') {
+                            if (isset($component->{'ORGANIZER'})) {
+                                $component->{'ORGANIZER'}->add(new  Sabre_VObject_Parameter('SEND-BY', 'mailto:' . $_updater->accountEmailAddress));
+                            }
+                        }
+                    }
+                }
+                
+                /* not yet supported
+                // in Tine 2.0 status updater might not be updater
+                if ($method == Calendar_Model_iMIP::METHOD_REPLY) {
+                    
+                }
+                */
+                
+                $calendarPart           = new Zend_Mime_Part($vcalendar->serialize());
                 $calendarPart->charset  = 'UTF-8';
                 $calendarPart->type     = 'text/calendar; method=' . $method;
                 $calendarPart->encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE;
                 
-                $attachment = new Zend_Mime_Part($vevent->serialize());
+                $attachment = new Zend_Mime_Part($vcalendar->serialize());
                 $attachment->type     = 'application/ics';
                 $attachment->encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE;
                 $attachment->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;

@@ -437,13 +437,18 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $this->_iMIPFrontend->autoProcess($iMIP);
     }
 
-    /**
-     * testInvitationCancel
-     * 
-     * @todo implement
-     */
-    public function testInvitationCancel()
-    {
+//     /**
+//      * testInvitationCancel
+//      * 
+//      * @todo implement
+//      */
+//     public function testInvitationCancel()
+//     {
         
-    }
+//     }
+    
+//     public function testOrganizerSendBy()
+//     {
+        
+//     }
 }
