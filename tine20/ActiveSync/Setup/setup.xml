@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>5.6</version>
+    <version>5.7</version>
     <order>90</order>
     <depends>
         <application>Tinebase</application>
@@ -49,10 +49,10 @@
                     </field>
                 </index>
             </declaration>
-        </table>        
+        </table>
         <table>
             <name>acsync_device</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -194,7 +194,7 @@
                         <table>acsync_policy</table>
                         <field>id</field>
                     </reference>
-                </index>   
+                </index>
                 <index>
                     <name>acsync_device::calendarfilter_id--filter::id</name>
                     <field>
@@ -207,7 +207,7 @@
                         <ondelete>set null</ondelete>
                         <onupdate>cascade</onupdate>
                     </reference>
-                </index>   
+                </index>
                 <index>
                     <name>acsync_device::contactsfilter_id--filter::id</name>
                     <field>
@@ -220,7 +220,7 @@
                         <ondelete>set null</ondelete>
                         <onupdate>cascade</onupdate>
                     </reference>
-                </index>   
+                </index>
                 <index>
                     <name>acsync_device::emailfilter_id--filter::id</name>
                     <field>
@@ -233,7 +233,7 @@
                         <ondelete>set null</ondelete>
                         <onupdate>cascade</onupdate>
                     </reference>
-                </index>   
+                </index>
                 <index>
                     <name>acsync_device::tasksfilter_id--filter::id</name>
                     <field>
@@ -246,9 +246,20 @@
                         <ondelete>set null</ondelete>
                         <onupdate>cascade</onupdate>
                     </reference>
-                </index>   
+                </index>
+                <index>
+                    <name>deviceid--owner_id</name>
+                    <unique>true</unique>
+                    <length>40</length>
+                    <field>
+                        <name>deviceid</name>
+                    </field>
+                    <field>
+                        <name>owner_id</name>
+                    </field>
+                </index>
             </declaration>
-        </table>        
+        </table>
         <table>
             <name>acsync_synckey</name>
             <engine>InnoDB</engine>
@@ -311,7 +322,7 @@
                         <ondelete>cascade</ondelete>
                         <onupdate>cascade</onupdate>
                     </reference>
-                </index>   
+                </index>
             </declaration>
         </table>
         <table>
@@ -348,7 +359,7 @@
                     <name>creation_time</name>
                     <type>datetime</type>
                     <notnull>true</notnull>
-                </field> 
+                </field>
                 <field>
                     <name>lastfiltertype</name>
                     <type>integer</type>
@@ -400,10 +411,10 @@
                     <reference>
                         <table>acsync_device</table>
                         <field>id</field>
+                        <ondelete>cascade</ondelete>
+                        <onupdate>cascade</onupdate>
                     </reference>
-                    <ondelete>cascade</ondelete>
-                    <onupdate>cascade</onupdate>
-                </index>   
+                </index>
             </declaration>
         </table>
         <table>
@@ -440,7 +451,7 @@
                     <name>creation_time</name>
                     <type>datetime</type>
                     <notnull>true</notnull>
-                </field> 
+                </field>
                 <field>
                     <name>is_deleted</name>
                     <type>boolean</type>
@@ -479,7 +490,7 @@
                         <ondelete>cascade</ondelete>
                         <onupdate>cascade</onupdate>
                     </reference>
-                </index>   
+                </index>
                 <index>
                     <name>acsync_content::folder_id--acsync_folder::id</name>
                     <field>
@@ -492,7 +503,7 @@
                         <ondelete>cascade</ondelete>
                         <onupdate>cascade</onupdate>
                     </reference>
-                </index>   
+                </index>
             </declaration>
         </table>
     </tables>
@@ -524,5 +535,5 @@
                 <value>1</value>
             </field>
         </record>
-    </defaultRecords>     
+    </defaultRecords>
 </application>

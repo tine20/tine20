@@ -59,14 +59,14 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
                     <onupdate>cascade</onupdate>
                 </reference>
             </index>   
-	    ');
+        ');
         $this->_backend->addForeignKey('acsync_synckey', $declaration);        
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>pendingdata</name>
                 <type>blob</type>
-	        </field>
+            </field>
         ');
         $this->_backend->addCol('acsync_synckey', $declaration);
         
@@ -102,7 +102,7 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
                     <onupdate>cascade</onupdate>
                 </reference>
             </index>   
-	    ');
+        ');
         $this->_backend->addForeignKey('acsync_content', $declaration);
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
@@ -183,7 +183,7 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
             </field>
         ');
         $this->_backend->addCol('acsync_synckey', $declaration);
-                
+        
         $this->setTableVersion('acsync_synckey', '3');
         $this->setApplicationVersion('ActiveSync', '5.4');
     }
@@ -228,7 +228,7 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
                 <length>64</length>
                 <notnull>true</notnull>
             </field>
-	    ');
+        ');
         $this->_backend->alterCol('acsync_content', $declaration);
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
@@ -237,12 +237,12 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
                 <type>datetime</type>
                 <notnull>true</notnull>
             </field>
-	    ');
+        ');
         $this->_backend->alterCol('acsync_content', $declaration);
         
         $this->_backend->dropCol('acsync_content', 'class');
         $this->_backend->dropCol('acsync_content', 'collectionid');
-                
+        
         $this->setTableVersion('acsync_content', '3');
         $this->setApplicationVersion('ActiveSync', '5.5');
     }
@@ -285,8 +285,8 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
                     <ondelete>cascade</ondelete>
                     <onupdate>cascade</onupdate>
                 </reference>
-            </index>   
-	    ');
+            </index>
+        ');
         $this->_backend->addForeignKey('acsync_content', $declaration);
         
         $declaration = new Setup_Backend_Schema_Index_Xml('
@@ -303,10 +303,61 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
                     <onupdate>cascade</onupdate>
                 </reference>
             </index>   
-	    ');
+        ');
         $this->_backend->addForeignKey('acsync_content', $declaration);        
                 
         $this->setTableVersion('acsync_content', '4');
         $this->setApplicationVersion('ActiveSync', '5.6');
+    }
+    
+    /**
+     * update to 5.6
+     * - fix cascade statements
+     * - added new unique key for deviceid and owner_id
+     * 
+     * @return void
+     */
+    public function update_6()
+    {
+        $this->_backend->dropForeignKey('acsync_folder', 'acsync_folder::device_id--acsync_device::id');
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>acsync_folder::device_id--acsync_device::id</name>
+                <field>
+                    <name>device_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>acsync_device</table>
+                    <field>id</field>
+                    <ondelete>cascade</ondelete>
+                    <onupdate>cascade</onupdate>
+                </reference>
+            </index>   
+        ');
+        $this->_backend->addForeignKey('acsync_folder', $declaration);
+        
+        $this->validateTableVersion('acsync_device', '2');
+        
+        $this->_backend->truncateTable('acsync_device');
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>deviceid--owner_id</name>
+                <unique>true</unique>
+                <length>40</length>
+                <field>
+                    <name>deviceid</name>
+                </field>
+                <field>
+                    <name>owner_id</name>
+                </field>
+            </index>
+        ');
+        $this->_backend->addIndex('acsync_device', $declaration);
+        
+        $this->setTableVersion('acsync_device', '3');
+        $this->setApplicationVersion('ActiveSync', '5.7');
     }
 }
