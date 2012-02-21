@@ -395,7 +395,14 @@ class Tinebase_User
             $group = $groupBackend->getGroupById($user->accountPrimaryGroup);
         } catch (Tinebase_Exception_Record_NotDefined $tern) {
             $group = $groupBackend->getGroupByIdFromSyncBackend($user->accountPrimaryGroup);
-            $group = $groupBackend->addGroupInSqlBackend($group);
+            try {
+                $sqlGgroup = $groupBackend->getGroupByName($group->name);
+                throw new Tinebase_Exception('Group already exists but it has a different ID: ' . $group->name);
+                
+            } catch (Tinebase_Exception_Record_NotDefined $tern) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Adding group " . $group->name);
+                $group = $groupBackend->addGroupInSqlBackend($group);
+            }
         }
         
         try {

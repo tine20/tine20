@@ -142,7 +142,6 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         return Tinebase_Group::getInstance()->getGroupMemberships($userId);
     }
     
-    
     /**
      * fetch one group identified by groupid
      *
@@ -388,101 +387,11 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     /**
      * create or update list in addressbook sql backend
      * 
-     * @param  Tinebase_Model_Group  $_group
+     * @param  Tinebase_Model_Group  $group
      * @return Addressbook_Model_List
-     * 
-     * @todo should be moved to Tinebase
      */
-    public function createOrUpdateList(Tinebase_Model_Group $_group)
+    public function createOrUpdateList(Tinebase_Model_Group $group)
     {
-        $listsBackend = new Addressbook_Backend_List();
-        
-        if (empty($_group->container_id)) {
-            $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
-            $_group->container_id = $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK];
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_group->toArray(), TRUE));
-        
-        try {
-            if (empty($_group->list_id)) {
-                
-                $filter = new Addressbook_Model_ListFilter(array(
-                    array('field' => 'name', 'operator' => 'equals', 'value' => $_group->name),
-                    array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP)
-                ));
-                
-                $existingLists = $listsBackend->search($filter);
-                
-                if (count($existingLists) == 0) {
-                    // jump to catch block => no list_id provided and no existing list for group found
-                    throw new Tinebase_Exception_NotFound('list_id is empty');
-                }
-                
-                $_group->list_id = $existingLists[0]->id;
-            }
-            
-            $list = $listsBackend->get($_group->list_id);
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Update list ' . $_group->name);
-            
-            $list->name         = $_group->name;
-            $list->description  = $_group->description;
-            $list->email        = $_group->email;
-            $list->type         = Addressbook_Model_List::LISTTYPE_GROUP;
-            $list->container_id = $_group->container_id;
-            $list->members		= $this->_getContactIds($_group->members);
-            
-            // add modlog info
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($list, 'update');
-            
-            $list = $listsBackend->update($list);
-            
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            $list = new Addressbook_Model_List(array(
-                'name'          => $_group->name,
-                'description'   => $_group->description,
-                'email'         => $_group->email,
-                'type'          => Addressbook_Model_List::LISTTYPE_GROUP,
-                'container_id'  => $_group->container_id,
-                'members'		=> $this->_getContactIds($_group->members)
-            ));
-            
-            // add modlog info
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($list, 'create');
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Add new list ' . $_group->name);
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($list->toArray(), TRUE));
-            
-            $list = $listsBackend->create($list);
-        }
-        
-        return $list;
-    }
-    
-    /**
-     * get contact_ids of users
-     * 
-     * @param  array  $_userIds
-     * @return array
-     */
-    protected function _getContactIds($_userIds)
-    {
-        $contactIds = array();
-        
-        if (empty($_userIds)) {
-            return $contactIds;
-        }
-        
-        foreach ($_userIds as $userId) {
-            $fullUser = Tinebase_User::getInstance()->getUserById($userId, 'Tinebase_Model_FullUser');
-            if (!empty($fullUser->contact_id)) {
-                $contactIds[] = $fullUser->contact_id;
-            }
-        }
-        
-        return $contactIds;
+        return Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($group);
     }
 }
