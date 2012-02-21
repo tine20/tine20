@@ -80,36 +80,27 @@ class Syncope_Backend_Device implements Syncope_Backend_IDevice
     
     /**
      * return device for this user
-     * either we found an existing device or we create a new one
      * 
      * @param  string  $userId
      * @param  string  $deviceId
-     * @param  string  $deviceType
+     * @throws Syncope_Exception_NotFound
      * @return Syncope_Model_Device
      */
-    public function getUserDevice($ownerId, $deviceId, $deviceType)
+    public function getUserDevice($ownerId, $deviceId)
     {
         $select = $this->_db->select()
             ->from($this->_tablePrefix . 'device')
             ->where('owner_id = ?', $ownerId)
-            ->where('deviceid = ?', $deviceId)
-            ->where('devicetype = ?', $deviceType);
+            ->where('deviceid = ?', $deviceId);
         
         $stmt = $this->_db->query($select);
         $device = $stmt->fetchObject('Syncope_Model_Device');
         
-        if ($device instanceof Syncope_Model_IDevice) {
-            return $device;
+        if (! $device instanceof Syncope_Model_IDevice) {
+            throw new Syncope_Exception_NotFound('device not found');
         }
         
-        // device not found
-        $newDevice = new Syncope_Model_Device(array(
-            'owner_id'   => $ownerId,
-            'deviceid'   => $deviceId,
-            'devicetype' => $deviceType
-        ));
-        
-        return $this->create($newDevice);
+        return $device;
     }
     
     public function delete($_id)
