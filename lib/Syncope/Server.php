@@ -105,12 +105,14 @@ class Syncope_Server
             throw new Syncope_Exception_CommandNotFound('unsupported command ' . $requestParameters['command']);
         }
         
-        $device = $this->_deviceBackend->getUserDevice($this->_userId, $requestParameters['deviceId'], $requestParameters['deviceType']);
-        
-        $device->useragent = $userAgent;
-        $device->acsversion = $requestParameters['protocolVersion'];
-        
-        $this->_deviceBackend->update($device);
+        // get user device
+        $device = $this->_getUserDevice(
+            $this->_userId, 
+            $requestParameters['deviceId'],
+            $requestParameters['deviceType'],
+            $userAgent,
+            $requestParameters['protocolVersion']
+        );
         
         if ($this->_request->getServer('CONTENT_TYPE') == 'application/vnd.ms-sync.wbxml') {
             // decode wbxml request
@@ -194,5 +196,37 @@ class Syncope_Server
         );
         
         return $result;
+    }
+    
+    /**
+     * get existing device of owner or create new device for owner
+     * 
+     * @param unknown_type $ownerId
+     * @param unknown_type $deviceId
+     * @param unknown_type $deviceType
+     * @param unknown_type $userAgent
+     * @param unknown_type $protocolVersion
+     * @return Syncope_Model_Device
+     */
+    protected function _getUserDevice($ownerId, $deviceId, $deviceType, $userAgent, $protocolVersion)
+    {
+        try {
+            $device = $this->_deviceBackend->getUserDevice($ownerId, $deviceId);
+        
+            $device->useragent = $userAgent;
+            $device->acsversion = $protocolVersion;
+            $device = $this->_deviceBackend->update($device);
+        
+        } catch (Syncope_Exception_NotFound $senf) {
+            $device = $this->_deviceBackend->create(new Syncope_Model_Device(array(
+                'owner_id'   => $ownerId,
+                'deviceid'   => $deviceId,
+                'devicetype' => $deviceType,
+                'useragent'  => $userAgent,
+                'acsversion' => $protocolVersion
+            )));
+        }
+        
+        return $device;
     }
 }
