@@ -135,6 +135,6 @@ class Timetracker_Setup_Update_Release5 extends Setup_Update_Abstract
             ), "`name` = '{$name}' and account_id IS NULL");
         }
         
-        $this->setApplicationVersion('Timetracker', '5.3');
+        $this->setApplicationVersion('Timetracker', '5.4');
     }
 }
