@@ -259,6 +259,11 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
         $modLog->setRecordMetaData($updatedFileObject, 'update', $currentFileObject);
         
+        // sanitize file size, somehow filesize() seems to return empty strings on some systems
+        if (empty($updatedFileObject->size)) {
+            $updatedFileObject->size = 0;
+        }
+        
         return $this->_fileObjectBackend->update($updatedFileObject);
     }
     
