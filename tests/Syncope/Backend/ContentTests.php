@@ -162,10 +162,11 @@ class Syncope_Backend_ContentTests extends PHPUnit_Framework_TestCase
     public static function getTestContent(Syncope_Model_IDevice $_device, Syncope_Model_IFolder $_folder)
     {
         return new Syncope_Model_Content(array(
-            'device_id'     => $_device,
-            'folder_id'     => $_folder,
-            'contentid'     => 'abc1234',
-            'creation_time' => new DateTime(null, new DateTimeZone('utc'))
+            'device_id'        => $_device,
+            'folder_id'        => $_folder,
+            'contentid'        => 'abc1234',
+            'creation_time'    => new DateTime(null, new DateTimeZone('utc')),
+            'creation_synckey' => 1
         ));
     }
 }

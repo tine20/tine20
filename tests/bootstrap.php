@@ -74,6 +74,7 @@ function getTestDatabase()
         `folder_id` varchar(40) NOT NULL,
         `contentid` varchar(64) NOT NULL,
         `creation_time` datetime NOT NULL,
+        `creation_synckey` int(11) NOT NULL,
         `is_deleted` int(11) DEFAULT '0',
         PRIMARY KEY (`id`),
         UNIQUE (`device_id`,`folder_id`,`contentid`)
