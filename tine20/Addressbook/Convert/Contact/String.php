@@ -67,6 +67,7 @@ class Addressbook_Convert_Contact_String implements Tinebase_Convert_Interface
         $contactString = $_blob;
         
         foreach ($this->_config->rules->rule as $rule) {
+            // use the first match
             if (isset($contactData[$rule->field])) {
                 continue;
             }
