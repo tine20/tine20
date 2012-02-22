@@ -845,6 +845,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         if (this.editing && this.editing.summaryEditor && (targetEvent != this.editing)) {
             this.editing.summaryEditor.fireEvent('blur', this.editing.summaryEditor, null);
         }
+
+        var sm = this.getSelectionModel();
+        sm.select(targetEvent);
         
         var dtStart = this.getTargetDateTime(e);
         if (dtStart) {
@@ -969,12 +972,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var originalRegistry = (event.modified.hasOwnProperty('is_all_day_event') ? event.modified.is_all_day_event : event.get('is_all_day_event')) ? 
             this.parallelWholeDayEventsRegistry : 
             this.parallelScrollerEventsRegistry;
+
         var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
         var originalDtstart = event.modified.hasOwnProperty('dtstart') ? event.modified.dtstart : event.get('dtstart');
         var originalDtend = event.modified.hasOwnProperty('dtend') ? event.modified.dtend : event.get('dtend');
-            
-        
-        
+
         var originalParallels = originalRegistry.getEvents(originalDtstart, originalDtend);
         for (var j=0; j<originalParallels.length; j++) {
             this.removeEvent(originalParallels[j]);
