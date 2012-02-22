@@ -246,11 +246,11 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                             'serverId'     => $serverId,
                             'status'       => self::STATUS_SUCCESS,
                             'contentState' => $this->_contentStateBackend->create(new Syncope_Model_Content(array(
-                                'device_id'     => $this->_device,
-                                'folder_id'     => $collectionData['folder'],
-                                'contentid'     => $serverId,
-                                'creation_time' => $this->_syncTimeStamp
-                            
+                                'device_id'        => $this->_device,
+                                'folder_id'        => $collectionData['folder'],
+                                'contentid'        => $serverId,
+                                'creation_time'    => $this->_syncTimeStamp,
+                                'creation_synckey' => $collectionData['syncKey'] + 1
                             )))
                         );
                         
@@ -557,25 +557,25 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         break;
                     }
                     
-                    /**
-                     * somewhere is a problem in the logic for handling moreAvailable
-                     * 
-                     * it can happen, that we have a contentstate (which means we sent the entry to the client
-                     * and that this entry is yet in $collectionData['syncState']->pendingdata['serverAdds']
-                     * I have no idea how this can happen, but the next lines of code work around this problem
-                     */
-                    try {
-                        $this->_contentStateBackend->getContentState($this->_device, $collectionData['folder'], $serverId);
-                    
-                        if ($this->_logger instanceof Zend_Log) 
-                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped an entry($serverId) which is already on the client");
-                        
-                        unset($serverAdds[$id]);
-                        continue;
-                        
-                    } catch (Syncope_Exception_NotFound $senf) {
-                        // do nothing => content state should not exist yet
-                    }
+                    #/**
+                    # * somewhere is a problem in the logic for handling moreAvailable
+                    # * 
+                    # * it can happen, that we have a contentstate (which means we sent the entry to the client
+                    # * and that this entry is yet in $collectionData['syncState']->pendingdata['serverAdds']
+                    # * I have no idea how this can happen, but the next lines of code work around this problem
+                    # */
+                    #try {
+                    #    $this->_contentStateBackend->getContentState($this->_device, $collectionData['folder'], $serverId);
+                    # 
+                    #    if ($this->_logger instanceof Zend_Log) 
+                    #        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped an entry($serverId) which is already on the client");
+                    #    
+                    #    unset($serverAdds[$id]);
+                    #    continue;
+                    #    
+                    #} catch (Syncope_Exception_NotFound $senf) {
+                    #    // do nothing => content state should not exist yet
+                    #}
                     
                     try {
                         $add = $this->_outputDom->createElementNS('uri:AirSync', 'Add');
@@ -594,10 +594,11 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     
                     // mark as send to the client, even the conversion to xml might have failed 
                     $newContentStates[] = new Syncope_Model_Content(array(
-                        'device_id'     => $this->_device,
-                        'folder_id'     => $collectionData['folder'],
-                        'contentid'     => $serverId,
-                        'creation_time' => $this->_syncTimeStamp
+                        'device_id'        => $this->_device,
+                        'folder_id'        => $collectionData['folder'],
+                        'contentid'        => $serverId,
+                        'creation_time'    => $this->_syncTimeStamp,
+                        'creation_synckey' => $collectionData['syncState']->counter
                     ));
                     unset($serverAdds[$id]);    
                 }

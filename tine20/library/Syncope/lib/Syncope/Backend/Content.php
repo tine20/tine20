@@ -47,12 +47,13 @@ class Syncope_Backend_Content implements Syncope_Backend_IContent
         $folderId = $_state->folder_id instanceof Syncope_Model_IFolder ? $_state->folder_id->id : $_state->folder_id;
         
         $this->_db->insert($this->_tablePrefix . 'content', array(
-            'id'            => $id, 
-            'device_id'     => $deviceId,
-            'folder_id'     => $folderId,
-            'contentid'     => $_state->contentid,
-            'creation_time' => $_state->creation_time->format('Y-m-d H:i:s'),
-            'is_deleted'    => isset($_state->is_deleted) ? (int)!!$_state->is_deleted : 0
+            'id'               => $id, 
+            'device_id'        => $deviceId,
+            'folder_id'        => $folderId,
+            'contentid'        => $_state->contentid,
+            'creation_time'    => $_state->creation_time->format('Y-m-d H:i:s'),
+            'creation_synckey' => $_state->creation_synckey,
+            'is_deleted'       => isset($_state->is_deleted) ? (int)!!$_state->is_deleted : 0
         ));
         
         return $this->get($id);

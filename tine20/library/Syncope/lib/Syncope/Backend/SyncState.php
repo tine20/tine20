@@ -223,16 +223,17 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
             $this->_db->update($this->_tablePrefix . 'content', array(
                 'is_deleted'  => 0,
             ), array(
-                'device_id = ?'  => $deviceId,
-                'folder_id = ?'  => $folderId,
-                'is_deleted = ?' => 1
+                'device_id = ?'        => $deviceId,
+                'folder_id = ?'        => $folderId,
+                'creation_synckey = ?' => $state->counter,
+                'is_deleted = ?'       => 1
             ));
             
             // remove entries added during latest sync in syncope_content table
             $this->_db->delete($this->_tablePrefix . 'content', array(
-                'device_id = ?'     => $deviceId,
-                'folder_id = ?'     => $folderId,
-                'creation_time > ?' => $state->lastsync->format('Y-m-d H:i:s'),
+                'device_id = ?'        => $deviceId,
+                'folder_id = ?'        => $folderId,
+                'creation_synckey > ?' => $state->counter,
             ));
             
         } else {

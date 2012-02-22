@@ -18,6 +18,7 @@
  * @property    string    folder_id
  * @property    string    contentid
  * @property    DateTime  creation_time
+ * @property    string    creation_synckey
  * @property    string    is_deleted
  */
 
