@@ -86,16 +86,48 @@ class Syncope_Data_Contacts extends Syncope_Data_AData
          */
         if (!isset(Syncope_Data_AData::$entries[get_class($this)])) {
             Syncope_Data_AData::$entries[get_class($this)] = array(
-            		'addressbookFolderId' => array(
-                        'contact1' => array(
-                            	'FirstName' => 'Lars', 
-                            	'LastName'  => 'Kneschke'
-            	        ),
-                        'contact2' => array(
-                        	'FirstName' => 'Cornelius', 
-                        	'LastName'  => 'Weiß'
-                	    )
-            	    )
+                'addressbookFolderId' => array(
+                    'contact1' => array(
+                        'FirstName' => 'Lars', 
+                        'LastName'  => 'Kneschke'
+                    ),
+                    'contact2' => array(
+                        'FirstName' => 'Cornelius', 
+                        'LastName'  => 'Weiß'
+                    ),
+                    'contact3' => array(
+                        'FirstName' => 'Lars', 
+                        'LastName'  => 'Kneschke'
+                    ),
+                    'contact4' => array(
+                        'FirstName' => 'Cornelius', 
+                        'LastName'  => 'Weiß'
+                    ),
+                    'contact5' => array(
+                        'FirstName' => 'Lars', 
+                        'LastName'  => 'Kneschke'
+                    ),
+                    'contact6' => array(
+                        'FirstName' => 'Cornelius', 
+                        'LastName'  => 'Weiß'
+                    ),
+                    'contact7' => array(
+                        'FirstName' => 'Lars', 
+                        'LastName'  => 'Kneschke'
+                    ),
+                    'contact8' => array(
+                        'FirstName' => 'Cornelius', 
+                        'LastName'  => 'Weiß'
+                    ),
+                    'contact9' => array(
+                        'FirstName' => 'Lars', 
+                        'LastName'  => 'Kneschke'
+                    ),
+                    'contact10' => array(
+                        'FirstName' => 'Cornelius', 
+                        'LastName'  => 'Weiß'
+                    )
+                )
             );
         }
     }

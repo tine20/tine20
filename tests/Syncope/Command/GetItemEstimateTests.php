@@ -91,7 +91,7 @@ class Syncope_Command_GetItemEstimateTests extends Syncope_Command_ATestCase
                 
         $nodes = $xpath->query('//ItemEstimate:GetItemEstimate/ItemEstimate:Response/ItemEstimate:Collection/ItemEstimate:Estimate');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        $this->assertEquals(2, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        $this->assertEquals(10, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
         
     }    
 }
