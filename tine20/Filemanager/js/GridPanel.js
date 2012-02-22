@@ -54,7 +54,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     recordClass: Tine.Filemanager.Model.Node,
     hasDetailsPanel: false,
-    evalGrants: false,
+    evalGrants: true,
     
     /**
      * grid specific
@@ -319,17 +319,16 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
 
         this.action_download = new Ext.Action({
-            requiredGrant: 'exportGrant',
+            requiredGrant: 'readGrant',
             allowMultiple: false,
             actionType: 'saveLocaly',
             text: this.app.i18n._('Save locally'),
-            actionUpdater: this.updateSaveAction,
             handler: this.onDownload,
             iconCls: 'action_filemanager_save_all',
             disabled: true,
             scope: this
         });
-//             
+
         this.action_deleteRecord = new Ext.Action({
             requiredGrant: 'deleteGrant',
             allowMultiple: true,
@@ -381,12 +380,11 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.actionUpdater.addActions(this.contextMenu.items);
 
         this.actionUpdater.addActions([
-                                       this.action_createFolder,
-                                       this.action_goUpFolder,
-                                       this.action_download,
-//                                       this.action_renameItem,
-                                       this.action_deleteRecord
-                                       ]);
+           this.action_createFolder,
+           this.action_goUpFolder,
+           this.action_download,
+           this.action_deleteRecord
+       ]);
 
     },
     
@@ -447,34 +445,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         return this.actionToolbar;
     },
-    
-    /**
-     * updates context menu
-     * 
-     * @param {Ext.Action} action
-     * @param {Object} grants grants sum of grants
-     * @param {Object} records
-     */
-    updateSaveAction: function(action, grants, records) {
-        for(var i=0; i<records.length; i++) {
-            if(records[i].data.type === 'folder') {
-                action.setDisabled(true);
-                return;
-            }
-        }
-        action.setDisabled(false);
-        
-        var grid = this;
-        var selectedRows = grid.selectionModel.getSelections(); 
-        
-        if(selectedRows.length > 1) {
-            action.setDisabled(true);
-        }
-        else {
-            action.setDisabled(false);
-        }
-    },
-    
     
     /**
      * create folder in current position

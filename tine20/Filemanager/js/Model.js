@@ -37,7 +37,7 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     // ngettext('user file', 'user files', n); gettext('user file');
     recordName: 'user file',
     recordsName: 'user files',
-    containerProperty: 'container_id',
+    containerProperty: null,
     // ngettext('user file folder', 'user file folders', n); gettext('user file folder');
     containerName: 'user file folder',
     containersName: 'user file folders',
@@ -55,6 +55,8 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
             || (this.data.id === 'shared' && (Tine.Tinebase.common.hasRight('admin', this.appName) 
                     || Tine.Tinebase.common.hasRight('manage_shared_folders', this.appName))))) {
             return true;
+        } else if (!grants) {
+            return false;
         }
         
         return this.get('type') == 'file' ? grants.editGrant : grants.addGrant;

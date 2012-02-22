@@ -302,7 +302,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         
         this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.app.i18n._(this.containerName),
-            actions: ['add', 'reload', 'delete', 'rename'],
+            actions: ['add', 'reload', 'delete', 'rename', 'properties'],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
@@ -326,7 +326,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         
         this.contextMenuContainerFolder = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.app.i18n._(this.containerName),
-            actions: ['add', 'reload', 'delete', 'rename', 'grants'],
+            actions: ['add', 'reload', 'delete', 'rename', 'grants', 'properties'],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
@@ -334,7 +334,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
 
         this.contextMenuReloadFolder = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.app.i18n._(this.containerName),
-            actions: ['reload'],
+            actions: ['reload', 'properties'],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
