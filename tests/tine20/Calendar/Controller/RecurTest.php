@@ -476,6 +476,46 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->assertEquals(3, count($updatedPersistentEvent->attendee));
     }
     
+   /**
+    * @see #5806: thisandfuture range updates with count part fail
+    */
+    public function testCreateRecurExceptionAllFollowingWithCount()
+    {
+        $from = new Tinebase_DateTime('2012-02-20 00:00:00');
+        $until = new Tinebase_DateTime('2012-02-26 23:59:59');
+        
+        $event = new Calendar_Model_Event(array(
+                        'uid'           => Tinebase_Record_Abstract::generateUID(),
+                        'summary'       => 'Abendessen',
+                        'dtstart'       => '2012-02-21 14:00:00',
+                        'dtend'         => '2012-02-21 15:30:00',
+                        'originator_tz' => 'Europe/Berlin',
+                        'rrule'         => 'FREQ=DAILY;COUNT=5',
+                        'container_id'  => $this->_testCalendar->getId(),
+        ));
+        
+        $persistentEvent = $this->_controller->create($event);
+        
+        // create exception
+        $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+        )));
+        Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
+        $weekviewEvents[2]->dtstart->subHour(5);
+        $weekviewEvents[2]->dtend->subHour(5);
+        $this->_controller->createRecurException($weekviewEvents[2], FALSE, TRUE);
+        
+        // load events
+        $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+        )));
+        Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
+        $weekviewEvents->sort('dtstart', 'ASC');
+        
+        $this->assertEquals(2, count($weekviewEvents->filter('uid', $weekviewEvents[0]->uid)), 'shorten failed');
+        $this->assertEquals(5, count($weekviewEvents), 'wrong total count');
+    }
+    
     /**
      * returns a simple recure event
      *
