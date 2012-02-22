@@ -599,44 +599,44 @@ msgstr ""
 msgid "Leads with overdue tasks"
 msgstr ""
 
-msgid "Lead %s has been creaded"
-msgstr "Mulighet %s har blitt opprettet"
+#~ msgid "Lead %s has been creaded"
+#~ msgstr "Mulighet %s har blitt opprettet"
 
-msgid "Add task"
-msgstr "Legg til oppgave"
+#~ msgid "Add task"
+#~ msgstr "Legg til oppgave"
 
-msgid "Add task for selected lead"
-msgstr "Legg til oppgave for valgt mulighet"
+#~ msgid "Add task for selected lead"
+#~ msgstr "Legg til oppgave for valgt mulighet"
 
-msgid "Task"
-msgstr "Oppgave"
+#~ msgid "Task"
+#~ msgstr "Oppgave"
 
-msgid "History"
-msgstr "Historikk"
+#~ msgid "History"
+#~ msgstr "Historikk"
 
-msgid "Lead Name"
-msgstr "Mulighets Navn"
+#~ msgid "Lead Name"
+#~ msgstr "Mulighets Navn"
 
-msgid "Date Start"
-msgstr "Dato Start"
+#~ msgid "Date Start"
+#~ msgstr "Dato Start"
 
-msgid "Date End"
-msgstr "Dato Slutt"
+#~ msgid "Date End"
+#~ msgstr "Dato Slutt"
 
-msgid "Date End Scheduled"
-msgstr "Dato Slutt Avtalt"
+#~ msgid "Date End Scheduled"
+#~ msgstr "Dato Slutt Avtalt"
 
-msgid "Created By"
-msgstr "Opprettet Av"
+#~ msgid "Created By"
+#~ msgstr "Opprettet Av"
 
-msgid "Last modified By"
-msgstr "Sist endret Av"
+#~ msgid "Last modified By"
+#~ msgstr "Sist endret Av"
 
-msgid "Lead states"
-msgstr "Mulighet status"
+#~ msgid "Lead states"
+#~ msgstr "Mulighet status"
 
-msgid "Lead sources"
-msgstr "Mulighet kilder"
+#~ msgid "Lead sources"
+#~ msgstr "Mulighet kilder"
 
-msgid "Lead types"
-msgstr "Mulighets typer"
+#~ msgid "Lead types"
+#~ msgstr "Mulighets typer"

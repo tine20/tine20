@@ -9,7 +9,7 @@ Ext.ns('Ext.ux.file');
  * @class       Ext.ux.file.UploadManager
  */
 Ext.ux.file.UploadManager = function(config) {
-	
+    
     Ext.apply(this, config);
     Ext.ux.file.UploadManager.superclass.constructor.apply(this, arguments);
     
@@ -53,9 +53,9 @@ Ext.ux.file.UploadManager = function(config) {
           */
          'update'
     ); 
-};	
-	
-Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {   	
+};    
+    
+Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {       
         /**
          * @cfg {Int} number of allowed concurrent uploads
          */

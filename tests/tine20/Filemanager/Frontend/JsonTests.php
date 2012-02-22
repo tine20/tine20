@@ -232,6 +232,10 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         if ($_toplevel) {
             // toplevel containers are resolved
             $this->assertEquals($_expectedName, $result['results'][0]['name']['name']);
+            if ($_checkAccountGrants) {
+                $this->assertTrue(isset($result['results'][0]['name']['account_grants']));
+                $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['name']['account_grants']['account_id']);
+            }
         } else {
             $this->assertEquals($_expectedName, $result['results'][0]['name']);
         }

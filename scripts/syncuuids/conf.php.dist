@@ -1,0 +1,31 @@
+<?php
+    /**
+     * config for syncuuids.php -> rename to conf.php to make it work!
+     */
+return array (
+    'ldap'    => array(
+        'username'    => 'cn=admin,dc=example,dc=com',
+        'password'    => '****',
+        'baseDn'      => 'dc=example,dc=com',
+        'host'        => 'localhost',
+    ),
+    'logfile'         => '/var/log/tine20/sync.log',
+    'loglevel'        => 7,
+    'inputfile'       => 'tine20.sql',
+    'outputfile'      => 'tine20synced.sql',
+    // name mapping (ldap => tine)
+    'groupNameMapping' => array(
+        'users'       => 'Users',
+        'admins'      => 'Administrators',
+        'elektronik'  => 'Elektroniklabor',
+        'gd'          => 'GD',
+        // @todo add
+        //'jeder'       => 'Users',
+//         '?'          => 'IT-Team',
+//         '?'          => 'VZ',
+//         '?'          => 'Z',
+//         '?'          => 'ZI',
+//         '?'          => 'ZII',
+//         '?'          => 'ZII-3',
+    ),
+);

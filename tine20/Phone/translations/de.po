@@ -156,161 +156,161 @@ msgstr "Klingeln"
 msgid "Call ID"
 msgstr "Anruf-ID"
 
-msgid "Dial phone number"
-msgstr "Telefonnummer wählen"
+#~ msgid "Dial phone number"
+#~ msgstr "Telefonnummer wählen"
 
-msgid "Name"
-msgstr "Name"
+#~ msgid "Name"
+#~ msgstr "Name"
 
-msgid "Phone Model"
-msgstr "Telefon"
+#~ msgid "Phone Model"
+#~ msgstr "Telefon"
 
-msgid "MAC Address"
-msgstr "MAC Adresse"
+#~ msgid "MAC Address"
+#~ msgstr "MAC Adresse"
 
-msgid "infos"
-msgstr "Informationen"
+#~ msgid "infos"
+#~ msgstr "Informationen"
 
-msgid "Current IP Address"
-msgstr "Derzeitige IP Adresse"
+#~ msgid "Current IP Address"
+#~ msgstr "Derzeitige IP Adresse"
 
-msgid "Firmware last checked at"
-msgstr "Letzter Firmware check"
+#~ msgid "Firmware last checked at"
+#~ msgstr "Letzter Firmware check"
 
-msgid "Current Software Version"
-msgstr "Derzeitige Software Version"
+#~ msgid "Current Software Version"
+#~ msgstr "Derzeitige Software Version"
 
-msgid "Settings Loaded at"
-msgstr "Laden der Einstellungen"
+#~ msgid "Settings Loaded at"
+#~ msgstr "Laden der Einstellungen"
 
-msgid "redirection"
-msgstr "Weiterleitung"
+#~ msgid "redirection"
+#~ msgstr "Weiterleitung"
 
-msgid "redirect_event"
-msgstr "weiterleitungs anlass"
+#~ msgid "redirect_event"
+#~ msgstr "weiterleitungs anlass"
 
-msgid "all"
-msgstr "Alle"
+#~ msgid "all"
+#~ msgstr "Alle"
 
-msgid "busy"
-msgstr "belegt"
+#~ msgid "busy"
+#~ msgstr "belegt"
 
-msgid "none"
-msgstr "Keine"
+#~ msgid "none"
+#~ msgstr "Keine"
 
-msgid "time"
-msgstr "Zeit"
+#~ msgid "time"
+#~ msgstr "Zeit"
 
-msgid "redirect_number"
-msgstr "Weiterleitungs  Nummer"
+#~ msgid "redirect_number"
+#~ msgstr "Weiterleitungs  Nummer"
 
-msgid "redirect_time"
-msgstr "Weiterleitungs Zeit"
+#~ msgid "redirect_time"
+#~ msgstr "Weiterleitungs Zeit"
 
-msgid "Settings"
-msgstr "Einstellungen"
+#~ msgid "Settings"
+#~ msgstr "Einstellungen"
 
-msgid "web_language"
-msgstr "Sprache des Web-Interfaces"
+#~ msgid "web_language"
+#~ msgstr "Sprache des Web-Interfaces"
 
-msgid "- factory default -"
-msgstr "- Firmen Einstellungen -"
+#~ msgid "- factory default -"
+#~ msgstr "- Firmen Einstellungen -"
 
-msgid "language"
-msgstr "Sprache"
+#~ msgid "language"
+#~ msgstr "Sprache"
 
-msgid "display_method"
-msgstr "Anzeige Methode"
+#~ msgid "display_method"
+#~ msgstr "Anzeige Methode"
 
-msgid "whole url"
-msgstr "Vollständige URL"
+#~ msgid "whole url"
+#~ msgstr "Vollständige URL"
 
-msgid "name"
-msgstr "Name"
+#~ msgid "name"
+#~ msgstr "Name"
 
-msgid "number"
-msgstr "Nummer"
+#~ msgid "number"
+#~ msgstr "Nummer"
 
-msgid "name + number"
-msgstr "Name + Nummer"
+#~ msgid "name + number"
+#~ msgstr "Name + Nummer"
 
-msgid "number + name"
-msgstr "Nummer + Name"
+#~ msgid "number + name"
+#~ msgstr "Nummer + Name"
 
-msgid "call_waiting"
-msgstr "Anruf Wartet"
+#~ msgid "call_waiting"
+#~ msgstr "Anruf Wartet"
 
-msgid "on"
-msgstr "An"
+#~ msgid "on"
+#~ msgstr "An"
 
-msgid "visual"
-msgstr "Wählen"
+#~ msgid "visual"
+#~ msgstr "Wählen"
 
-msgid "ringer"
-msgstr "Leitung"
+#~ msgid "ringer"
+#~ msgstr "Leitung"
 
-msgid "off"
-msgstr "Aus"
+#~ msgid "off"
+#~ msgstr "Aus"
 
-msgid "mwi_notification"
-msgstr "MWI Benachrichtigung"
+#~ msgid "mwi_notification"
+#~ msgstr "MWI Benachrichtigung"
 
-msgid "silent"
-msgstr "Stumm"
+#~ msgid "silent"
+#~ msgstr "Stumm"
 
-msgid "beep"
-msgstr "Signalton"
+#~ msgid "beep"
+#~ msgstr "Signalton"
 
-msgid "reminder"
-msgstr "Erinnerung"
+#~ msgid "reminder"
+#~ msgstr "Erinnerung"
 
-msgid "mwi_dialtone"
-msgstr "MWI Klingelton"
+#~ msgid "mwi_dialtone"
+#~ msgstr "MWI Klingelton"
 
-msgid "normal"
-msgstr "Normal"
+#~ msgid "normal"
+#~ msgstr "Normal"
 
-msgid "stutter"
-msgstr "Stutter"
+#~ msgid "stutter"
+#~ msgstr "Stutter"
 
-msgid "headset_device"
-msgstr "Headset Gerät"
+#~ msgid "headset_device"
+#~ msgstr "Headset Gerät"
 
-msgid "headset_rj"
-msgstr "Headset RJ"
+#~ msgid "headset_rj"
+#~ msgstr "Headset RJ"
 
-msgid "message_led_other"
-msgstr "Andere LED"
+#~ msgid "message_led_other"
+#~ msgstr "Andere LED"
 
-msgid "global_missed_counter"
-msgstr "Genereller verpasst Zähler"
+#~ msgid "global_missed_counter"
+#~ msgstr "Genereller verpasst Zähler"
 
-msgid "scroll_outgoing"
-msgstr "Blättern"
+#~ msgid "scroll_outgoing"
+#~ msgstr "Blättern"
 
-msgid "show_local_line"
-msgstr "Meine Nummer"
+#~ msgid "show_local_line"
+#~ msgstr "Meine Nummer"
 
-msgid "show_call_status"
-msgstr "Anruf Status"
+#~ msgid "show_call_status"
+#~ msgstr "Anruf Status"
 
-msgid "lineactive"
-msgstr "Aktive Leitung"
+#~ msgid "lineactive"
+#~ msgstr "Aktive Leitung"
 
-msgid "sipCombo"
-msgstr "SIP Auswahl"
+#~ msgid "sipCombo"
+#~ msgstr "SIP Auswahl"
 
-msgid "Idle Text"
-msgstr "Ruhezustands Nachricht"
+#~ msgid "Idle Text"
+#~ msgstr "Ruhezustands Nachricht"
 
-msgid "Lines"
-msgstr "Leitung"
+#~ msgid "Lines"
+#~ msgstr "Leitung"
 
-msgid "Users"
-msgstr "Benutzer"
+#~ msgid "Users"
+#~ msgstr "Benutzer"
 
-msgid "Rights"
-msgstr "Rechte"
+#~ msgid "Rights"
+#~ msgstr "Rechte"
 
-msgid "enter searchfilter"
-msgstr "Suchfilter eingeben"
+#~ msgid "enter searchfilter"
+#~ msgstr "Suchfilter eingeben"

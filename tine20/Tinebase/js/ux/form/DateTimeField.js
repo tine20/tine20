@@ -25,15 +25,41 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     timeEditable: true,
     markedInvalid: false,
     
+    /*
+     * @cfg {String} Default Time in the form HH:MM, if null current time is used
+     */
+    defaultTime: null,
+    
     initComponent: function () {
         Ext.ux.form.DateTimeField.superclass.initComponent.call(this);
         this.lastValues = [];
-        
+        this.on('change', this.onChange, this);
+    },
+    
+    /**
+     * Sets the default time when using the first time or after clearing the datefield
+     * @param {Ext.form.Field}
+     * @param {DateTime} newValue
+     * @param {DateTime} oldValue
+     */
+    onChange: function(f, newValue, oldValue) {
+
+        if(oldValue == '' && newValue) {
+            var newDate = newValue.clone(),
+                now = new Date(),
+                times = (this.defaultTime) ? this.defaultTime.split(':') : [now.getHours(), now.getMinutes()];
+                
+            
+            newDate.setHours(parseInt(times[0]));
+            newDate.setMinutes(parseInt(times[1]));
+                
+            f.setValue(newDate);
+        }
     },
     
     clearInvalid: function () {
-    	this.markedInvalid = false;
-    	
+        this.markedInvalid = false;
+        
         if (this.dateField) {
             this.dateField.clearInvalid();
         }
@@ -89,8 +115,8 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     },
     
     markInvalid: function (msg) {
-    	this.markedInvalid = true;
-    	
+        this.markedInvalid = true;
+        
         this.dateField.markInvalid(msg);
         this.timeField.markInvalid(msg);
     },
@@ -103,7 +129,9 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         ct.dom.insertBefore(this.el.dom, position);
         this.el.applyStyles('overflow:visible;');
         
-        this.dateField = new Ext.form.DateField({
+        var dateField = (this.allowBlank) ? Ext.ux.form.ClearableDateField : Ext.form.DateField;
+        
+        this.dateField = new dateField({
             lazyRender: false,
             renderTo: this.el,
             readOnly: this.readOnly,
@@ -144,13 +172,13 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     },
     
     onDateFocus: function () {
-    	this.hasFocus = true;
-    	this.fireEvent('focus', this);
+        this.hasFocus = true;
+        this.fireEvent('focus', this);
     },
     
     onDateBlur: function () {
-    	this.hasFocus = false;
-    	this.fireEvent('blur', this);
+        this.hasFocus = false;
+        this.fireEvent('blur', this);
     },
     
     onDateChange: function () {
@@ -196,7 +224,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     },
     
     setReadOnly: function (bool, what) {
-    	if (what !== 'time' && this.dateField) {
+        if (what !== 'time' && this.dateField) {
             this.dateField.setReadOnly(bool);
         }
         
@@ -230,7 +258,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     },
     
     isValid: function (preventMark) {
-		return this.dateField.isValid(preventMark) && this.timeField.isValid(preventMark) && ! this.markedInvalid;
+        return this.dateField.isValid(preventMark) && this.timeField.isValid(preventMark) && ! this.markedInvalid;
     }
 });
 Ext.reg('datetimefield', Ext.ux.form.DateTimeField);

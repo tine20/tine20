@@ -284,20 +284,20 @@ msgstr ""
 msgid "Tasks without responsible"
 msgstr ""
 
-msgid "NEEDS-ACTION"
-msgstr "REQUEREIX-ACCIÓ"
+#~ msgid "NEEDS-ACTION"
+#~ msgstr "REQUEREIX-ACCIÓ"
 
-msgid "COMPLETED"
-msgstr "COMPLETADA"
+#~ msgid "COMPLETED"
+#~ msgstr "COMPLETADA"
 
-msgid "IN-PROCESS"
-msgstr "EN-PROCÉS"
+#~ msgid "IN-PROCESS"
+#~ msgstr "EN-PROCÉS"
 
-msgid "CANCELLED"
-msgstr "CANCEL·LADA"
+#~ msgid "CANCELLED"
+#~ msgstr "CANCEL·LADA"
 
-msgid "Failed"
-msgstr "Ha fallat"
+#~ msgid "Failed"
+#~ msgstr "Ha fallat"
 
-msgid "Could not save task."
-msgstr "No s'ha pogut desar la tasca."
+#~ msgid "Could not save task."
+#~ msgstr "No s'ha pogut desar la tasca."

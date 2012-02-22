@@ -136,7 +136,7 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             selection = dropEvent.data.selections,
             mainScreenPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel(),
             abort = false;
-        
+
         // @todo move this to dragOver
         if (! containerData.account_grants.addGrant) {
             abort = true;
@@ -147,10 +147,11 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                 // origin container will only be moved for personal events with their origin in
                 // a personal container of the current user
                 event.set('container_id', containerData.id);
-                mainScreenPanel.onUpdateEventAction(event);
-                
+                mainScreenPanel.onUpdateEvent(event);
+
                 dropEvent.cancel = false;
-                dropEvent.dropNode = [];
+                dropEvent.dropStatus = true;
+                
             } else {
                 // @todo move displaycal if curruser is attender
                 abort = true;

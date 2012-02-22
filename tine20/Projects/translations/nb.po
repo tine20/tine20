@@ -204,53 +204,53 @@ msgstr ""
 msgid "My projects that are on hold"
 msgstr ""
 
-msgid "Budget"
-msgstr "Budsjett"
+#~ msgid "Budget"
+#~ msgstr "Budsjett"
 
-msgid "Show closed"
-msgstr "Vis lukket"
+#~ msgid "Show closed"
+#~ msgstr "Vis lukket"
 
 #, fuzzy
-msgid "ExampleRecord"
-msgstr "EksempelPost"
+#~ msgid "ExampleRecord"
+#~ msgstr "EksempelPost"
 
-msgid "ExampleApplication"
-msgstr "EksempelApplikasjon"
+#~ msgid "ExampleApplication"
+#~ msgstr "EksempelApplikasjon"
 
-msgid "ExampleRecords"
-msgstr "EksempelPoster"
+#~ msgid "ExampleRecords"
+#~ msgstr "EksempelPoster"
 
-msgid "All ExampleRecords"
-msgstr "Alle EksempelPoster"
+#~ msgid "All ExampleRecords"
+#~ msgstr "Alle EksempelPoster"
 
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "lagre liste"
-msgstr[1] "lagre lister"
+#~ msgid "record list"
+#~ msgid_plural "record lists"
+#~ msgstr[0] "lagre liste"
+#~ msgstr[1] "lagre lister"
 
-msgid "Unit"
-msgstr "Enhet"
+#~ msgid "Unit"
+#~ msgstr "Enhet"
 
-msgid "Unit Price"
-msgstr "Enhets Pris"
+#~ msgid "Unit Price"
+#~ msgstr "Enhets Pris"
 
-msgid "Timesheets are billable"
-msgstr "Tidskjemaer er fakturerbare"
+#~ msgid "Timesheets are billable"
+#~ msgstr "Tidskjemaer er fakturerbare"
 
-msgid "closed"
-msgstr "lukket"
+#~ msgid "closed"
+#~ msgstr "lukket"
 
-msgid "open"
-msgstr "åpen"
+#~ msgid "open"
+#~ msgstr "åpen"
 
-msgid "Billed"
-msgstr "Fakturert"
+#~ msgid "Billed"
+#~ msgstr "Fakturert"
 
-msgid "not yet billed"
-msgstr "ikke fakturert enda"
+#~ msgid "not yet billed"
+#~ msgstr "ikke fakturert enda"
 
-msgid "to bill"
-msgstr "å fakturere"
+#~ msgid "to bill"
+#~ msgstr "å fakturere"
 
-msgid "billed"
-msgstr "fakturert"
+#~ msgid "billed"
+#~ msgstr "fakturert"

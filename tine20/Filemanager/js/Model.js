@@ -3,11 +3,10 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Filemanager.Model');
-
-
+    
 /**
  * @namespace   Tine.Filemanager.Model
  * @class       Tine.Filemanager.Model.Node
@@ -20,8 +19,6 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     { name: 'id' },
     { name: 'name' },
     { name: 'path' },
-    // TODO add more record fields here
-    // tine 2.0 notes + tags
     { name: 'size' },
     { name: 'revision' },
     { name: 'type' },
@@ -34,13 +31,13 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     modelName: 'Node',
     idProperty: 'id',
     titleProperty: 'title',
-    // ngettext('user file', 'user files', n); gettext('user file');
-    recordName: 'user file',
-    recordsName: 'user files',
-    containerProperty: 'container_id',
-    // ngettext('user file folder', 'user file folders', n); gettext('user file folder');
-    containerName: 'user file folder',
-    containersName: 'user file folders',
+    // ngettext('file', 'files', n); gettext('file');
+    recordName: 'file',
+    recordsName: 'files',
+    containerProperty: null,
+    // ngettext('folder', 'folders', n); gettext('folder');
+    containerName: 'folder',
+    containersName: 'folders',
     
     /**
      * checks whether creating folders is allowed
@@ -53,8 +50,10 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
         }
         else if(!grants && (this.data.id === 'personal' 
             || (this.data.id === 'shared' && (Tine.Tinebase.common.hasRight('admin', this.appName) 
-                    || Tine.Tinebase.common.hasRight('manage_shared_folders', this.appName))))) {
+            || Tine.Tinebase.common.hasRight('manage_shared_folders', this.appName))))) {
             return true;
+        } else if (!grants) {
+            return false;
         }
         
         return this.get('type') == 'file' ? grants.editGrant : grants.addGrant;
@@ -70,10 +69,10 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
         }
         return true;
     },
-
+    
     isDragable: function() {
         var grants = this.get('account_grants');
-
+        
         if(!grants) {
             return false;
         }
@@ -85,7 +84,7 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
         return true;
     }
 });
-
+    
 /**
  * create Node from File
  * 
@@ -99,8 +98,7 @@ Tine.Filemanager.Model.Node.createFromFile = function(file) {
         contenttype: file.type ? file.type : file.fileType, // missing if safari and chrome 
         revision: 0
     });
-} 
-
+};
 
 /**
  * default ExampleRecord backend
@@ -121,12 +119,12 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         
         options = options || {};
         var params = {
-                application : this.appName,                            
+                application : this.appName,
                 filename : name,
                 type : 'folder',
                 method : this.appName + ".createNode"  
         };
-                    
+        
         options.params = params;
         
         options.beforeSuccess = function(response) {
@@ -150,7 +148,6 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         };
         
         return this.doXHTTPRequest(options);
-        
     },
     
     /**
@@ -161,7 +158,6 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
      * @returns
      */
     deleteItems: function(items, options) {
-        
         options = options || {};
         
         var filenames = new Array();
@@ -169,14 +165,14 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         for(var i=0; i<nodeCount; i++) {
             filenames.push(items[i].data.path );
         }
-
+        
         var params = {
             application: this.appName,
             filenames: filenames,
             method: this.appName + ".deleteNodes",
             timeout: 300000 // 5 minutes
         };
-
+        
         options.params = params;
         
         options.beforeSuccess = function(response) {
@@ -195,14 +191,14 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 var treeNode = treePanel.getNodeById(nodeData[i].id);
                 if(treeNode) {
                     treeNode.parentNode.removeChild(treeNode);
-                }              
+                }
             }
             
             grid.getStore().remove(nodeData);
             grid.selectionModel.deselectRange(0, grid.getStore().getCount());
             grid.pagingToolbar.refresh.enable();
 //            this.fireEvent('containerdelete', nodeData);
-
+            
         }).createDelegate({items: items});
         
         return this.doXHTTPRequest(options);
@@ -221,21 +217,21 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         var containsFolder = false,
             message = '',
             app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
-
+        
         
         if(!params) {
         
             if(!target || !items || items.length < 1) {
                 return false;
             }
-
+            
             var sourceFilenames = new Array(),
             destinationFilenames = new Array(),
             forceOverwrite = false,
             treeIsTarget = false,
             treeIsSource = false,
             targetPath;
-
+            
             if(target.data) {
                 targetPath = target.data.path;
             }
@@ -243,9 +239,9 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 targetPath = target.attributes.path;
                 treeIsTarget = true;
             }
-
+            
             for(var i=0; i<items.length; i++) {
-
+                
                 var item = items[i];            
                 var itemData = item.data;
                 if(!itemData) {
@@ -253,35 +249,35 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                     treeIsSource = true;
                 }
                 sourceFilenames.push(itemData.path);
-
+                
                 var itemName = itemData.name;
                 if(typeof itemName == 'object') {
                     itemName = itemName.name;
                 }
-
+                
                 destinationFilenames.push(targetPath + '/' + itemName);
                 if(itemData.type == 'folder') {
                     containsFolder = true;
                 }
             };
-
+            
             var method = "Filemanager.copyNodes",
                 message = app.i18n._('Copying data .. {0}');
             if(move) {
                 method = "Filemanager.moveNodes";
                 message = app.i18n._('Moving data .. {0}');
             }
- 
+            
             params = {
-                    application: this.appName,                                
+                    application: this.appName,
                     sourceFilenames: sourceFilenames,
                     destinationFilenames: destinationFilenames,
                     forceOverwrite: forceOverwrite,
                     method: method
             };
-
+            
         }
-        else {            
+        else {
             message = app.i18n._('Copying data .. {0}');
             if(params.method == 'Filemanager.moveNodes') {
                 message = app.i18n._('Moving data .. {0}');
@@ -302,7 +298,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 this.loadMask.hide();
                 app.getMainScreen().getWestPanel().setDisabled(false);
                 app.getMainScreen().getNorthPanel().setDisabled(false);
-
+                
                 var nodeData = Ext.util.JSON.decode(result.responseText),
                     treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
                     grid = app.getMainScreen().getCenterPanel();
@@ -317,7 +313,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                         if(nodeToCopy.data && nodeToCopy.data.type !== 'folder') {
                             continue;
                         }
-
+                        
                         if(move) {   
                             var copiedNode = treePanel.cloneTreeNode(nodeToCopy, target),
                                 nodeToCopyId = nodeToCopy.id,
@@ -326,7 +322,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                             if(removeNode && removeNode.parentNode) {
                                 removeNode.parentNode.removeChild(removeNode);
                             }
-
+                            
                             target.appendChild(copiedNode); 
                             copiedNode.setId(nodeData[i].id);    
                         } 
@@ -334,12 +330,11 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                             var copiedNode = treePanel.cloneTreeNode(nodeToCopy, target);
                             target.appendChild(copiedNode);  
                             copiedNode.setId(nodeData[i].id);
-
+                            
                         }
                     }
                 }
                
-                                 
                 // Grid refresh
                 grid.getStore().reload();
             },
@@ -350,7 +345,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 this.loadMask.hide();
                 app.getMainScreen().getWestPanel().setDisabled(false);
                 app.getMainScreen().getNorthPanel().setDisabled(false);
-
+                
                 Tine.Filemanager.fileRecordBackend.handleRequestException(nodeData.data, request);
             }
         });
@@ -369,7 +364,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             grid = app.getMainScreen().getCenterPanel(),
             gridStore = grid.getStore();
         
-        params.application = 'Filemanager';                              
+        params.application = 'Filemanager';
         params.method = 'Filemanager.createNode';
         params.uploadKey = uploadKey;
         params.addToGridStore = addToGridStore;
@@ -378,26 +373,27 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             
             var nodeData = Ext.util.JSON.decode(response.responseText),
                 fileRecord = Tine.Tinebase.uploadManager.upload(this.uploadKey);  
-
+            
             if(addToGridStore) {
                 var recordToRemove = gridStore.query('name', fileRecord.get('name'));
                 if(recordToRemove.items[0]) {
                     gridStore.remove(recordToRemove.items[0]);
                 }
-
+                
                 fileRecord = Tine.Filemanager.fileRecordBackend.updateNodeRecord(nodeData[i], fileRecord);
                 var nodeRecord = new Tine.Filemanager.Model.Node(nodeData[i]);
                 
                 nodeRecord.fileRecord = fileRecord;
                 gridStore.add(nodeRecord);
-
-            }           
+                
+            }
         }).createDelegate({uploadKey: uploadKey, addToGridStore: addToGridStore});
         
         var onFailure = (function(response, request) {
             
             var nodeData = Ext.util.JSON.decode(response.responseText),
-            request = Ext.util.JSON.decode(request.jsonData);
+                request = Ext.util.JSON.decode(request.jsonData);
+            
             nodeData.data.uploadKey = this.uploadKey;
             nodeData.data.addToGridStore = this.addToGridStore;
             Tine.Filemanager.fileRecordBackend.handleRequestException(nodeData.data, request);
@@ -429,7 +425,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         params.method = 'Filemanager.createNodes';
         params.uploadKeyArray = uploadKeyArray;
         params.addToGridStore = addToGridStore;
-
+        
         
         var onSuccess = (function(response, request){ 
             
@@ -453,19 +449,19 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                     }
                 }
             }
-
+            
         }).createDelegate({uploadKeyArray: uploadKeyArray, addToGridStore: addToGridStore});
         
         var onFailure = (function(response, request) {
             
             var nodeData = Ext.util.JSON.decode(response.responseText),
-            request = Ext.util.JSON.decode(request.jsonData);
+                request = Ext.util.JSON.decode(request.jsonData);
+            
             nodeData.data.uploadKeyArray = this.uploadKeyArray;
             nodeData.data.addToGridStore = this.addToGridStore;
             Tine.Filemanager.fileRecordBackend.handleRequestException(nodeData.data, request);
             
         }).createDelegate({uploadKeyArray: uploadKeyArray, addToGridStore: addToGridStore});
-        
         
         Ext.Ajax.request({
             params: params,

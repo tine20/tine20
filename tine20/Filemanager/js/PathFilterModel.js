@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 Ext.ns('Tine.Filemanager');
@@ -85,7 +85,7 @@ Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
             }
             
             return this.origSetValue(value);
-        }
+        };
         
         return value;
     }

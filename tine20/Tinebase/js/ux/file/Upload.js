@@ -217,12 +217,14 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      * @return {Ext.Record} Ext.ux.file.Upload.file
      */
     upload: function() {
-                                   
         if ((
                 (! Ext.isGecko && window.XMLHttpRequest && window.File && window.FileList) || // safari, chrome, ...?
                 (Ext.isGecko && window.FileReader) // FF
         ) && this.file) {
      
+            // free browse plugin
+            this.getInput();
+            
             if (this.isHtml5ChunkedUpload()) {
 
 //                if(this.fileSize > this.maxAllowedFileSize) { // admin confgured max file size (nothing technically)
@@ -528,11 +530,11 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     html4upload: function() {
                 
         var form = this.createForm();
-        var input = this.getInput();       
+        var input = this.getInput();
         form.appendChild(input);
         
         this.fileRecord = new Ext.ux.file.Upload.file({
-            name: this.fileSelector.getFileName(),          
+            name: this.fileSelector.getFileName(),
             size: 0,
             type: this.fileSelector.getFileCls(),
             input: input,
@@ -594,8 +596,8 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      * 
      * @param tempfile to add
      */
-    addTempfile: function(tempFile) {              
-        this.tempFiles.push(tempFile);               
+    addTempfile: function(tempFile) {
+        this.tempFiles.push(tempFile);
         return true;
     },
     

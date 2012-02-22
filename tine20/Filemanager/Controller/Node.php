@@ -630,6 +630,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                     Tinebase_Core::getUser(), 
                     $aclContainer
                 )->toArray();
+                $aclContainer->account_grants = $record->account_grants;
                 
                 // needed for sorting
                 $record->container_name = $aclContainer->name;

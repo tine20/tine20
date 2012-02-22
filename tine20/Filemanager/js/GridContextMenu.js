@@ -15,16 +15,16 @@ Tine.Filemanager.GridContextMenu = {
     addNode: function() {
         Tine.log.debug("grid add");
     },
-
+    
     /**
      * rename tree node
      */
-
+    
     renameNode: function() {
         if (this.scope.ctxNode) {
-
+            
             var node = this.scope.ctxNode[0];
-
+            
             var nodeText = node.data.name;
             if(typeof nodeText == 'object') {
                 nodeText = nodeText.name;
@@ -41,34 +41,34 @@ Tine.Filemanager.GridContextMenu = {
                             Ext.Msg.alert(String.format(_('Not renamed {0}'), this.nodeName), String.format(_('You have to supply a {0} name!'), this.nodeName));
                             return;
                         }
-
+                        
                         var params = {
                                 method: this.backend + '.rename' + this.backendModel,
                                 newName: _text
                         };
-
+                        
                         if (this.backendModel == 'Node') {
-                            params.application = this.scope.app.appName || this.scope.appName;                                
+                            params.application = this.scope.app.appName || this.scope.appName;
                             var filename = node.data.path;
                             params.sourceFilenames = [filename];
-
+                            
                             var targetFilename = "/";
                             var sourceSplitArray = filename.split("/");
                             for (var i=1; i<sourceSplitArray.length-1; i++) {
                                 targetFilename += sourceSplitArray[i] + '/'; 
                             }
-
+                            
                             params.destinationFilenames = [targetFilename + _text];
                             params.method = this.backend + '.moveNodes';
                         }
-
+                        
                         Ext.Ajax.request({
                             params: params,
                             scope: this,
                             success: function(_result, _request){
                                 var nodeData = Ext.util.JSON.decode(_result.responseText)[0];
                                 this.scope.fireEvent('containerrename', nodeData);
-
+                                
                                 // TODO: im event auswerten
                                 if (this.backendModel == 'Node') {
                                     var grid = this.scope.app.getMainScreen().getCenterPanel();
@@ -121,22 +121,22 @@ Tine.Filemanager.GridContextMenu = {
     deleteNode: function() {
         if (this.scope.ctxNode) {
             var nodes = this.scope.ctxNode;
-
+            
             var nodeName = "";
             if(nodes && nodes.length) {
                 for(var i=0; i<nodes.length; i++) {
                     var currNodeData = nodes[i].data;
-
+                    
                     if(typeof currNodeData.name == 'object') {
-                        nodeName += currNodeData.name.name + '<br />';    
+                        nodeName += currNodeData.name.name + '<br />';
                     }
                     else {
-                        nodeName += currNodeData.name + '<br />';  
+                        nodeName += currNodeData.name + '<br />';
                     }
                 }
-
+                
             }
-
+            
             this.conflictConfirmWin = Tine.widgets.dialog.FileListDialog.openWindow({
                 modal: true,
                 allowCancel: false,
@@ -150,36 +150,34 @@ Tine.Filemanager.GridContextMenu = {
                         var params = {
                                 method: this.backend + '.delete' + this.backendModel
                         };
-    
+                        
                         if (this.backendModel == 'Node') {
-    
+                            
                             var filenames = new Array();
                             if(nodes) {
                                 for(var i=0; i<nodes.length; i++) {
                                     filenames.push(nodes[i].data.path);
-                                }   
+                                }
                             }
-                            params.application = this.scope.app.appName || this.scope.appName;    
+                            params.application = this.scope.app.appName || this.scope.appName;
                             params.filenames = filenames;
                             params.method = this.backend + ".deleteNodes";
                         }
-    
+                        
                         Ext.Ajax.request({
                             params: params,
                             scope: this,
                             success: function(_result, _request){
-    
+                                
                                 if(nodes &&  this.backendModel == 'Node') {
                                     var treePanel = this.scope.app.getMainScreen().getWestPanel().getContainerTreePanel();
                                     for(var i=0; i<nodes.length; i++){
-//                                        this.scope.fireEvent('containerdelete', nodes[i].data.container_id);                                    
                                         treePanel.fireEvent('containerdelete', nodes[i].data.container_id);
-//        
                                         // TODO: in EventHandler auslagern
                                         var treeNode = treePanel.getNodeById(nodes[i].id);
                                         if(treeNode) {
                                             treeNode.parentNode.removeChild(treeNode);
-                                        }        
+                                        }
                                     }
                                     for(var i=0; i<nodes.length; i++) {
                                         var node = nodes[i];
@@ -189,12 +187,12 @@ Tine.Filemanager.GridContextMenu = {
                                             Tine.Tinebase.uploadManager.unregisterUpload(upload.id);
                                         }
                                     }
-                                    this.scope.app.getMainScreen().getCenterPanel().getStore().remove(nodes);        
-                                }    
+                                    this.scope.app.getMainScreen().getCenterPanel().getStore().remove(nodes);
+                                }
                             },
                             failure: function(result, request) {
                                 var nodeData = Ext.util.JSON.decode(result.responseText);
-        
+                                
                                 var appContext = Tine[this.scope.app.appName];
                                 if(appContext && appContext.handleRequestException) {
                                     appContext.handleRequestException(nodeData.data);
@@ -289,7 +287,7 @@ Tine.Filemanager.GridContextMenu = {
      * @param {} button
      * @param {} event
      */
-    onPause: function (button, event) {     
+    onPause: function (button, event) {
 
         var grid = this.scope;
         var gridStore = grid.store;
@@ -302,7 +300,7 @@ Tine.Filemanager.GridContextMenu = {
             }
             var upload = Tine.Tinebase.uploadManager.getUpload(fileRecord.get('uploadKey'));
             upload.setPaused(true);
-        }       
+        }
         gridStore.resumeEvents();
         grid.actionUpdater.updateActions(gridStore);  
         this.scope.selectionModel.deselectRange(0, this.scope.selectionModel.getCount());
@@ -384,8 +382,8 @@ Tine.Filemanager.GridContextMenu = {
             else {
                 action.setDisabled(true);
             }
-            if(record.get('status') && record.get('status') != 'paused'){               
-                action.setDisabled(true);               
+            if(record.get('status') && record.get('status') != 'paused') {
+                action.setDisabled(true);
             }
             
         }   
@@ -446,8 +444,8 @@ Tine.Filemanager.GridContextMenu = {
                 action.setDisabled(true);
             }
             
-        }                 
-    }  
+        }
+    }
 };
 
 // extends Tine.widgets.tree.ContextMenu

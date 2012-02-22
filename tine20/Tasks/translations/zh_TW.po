@@ -281,20 +281,20 @@ msgstr ""
 msgid "Tasks without responsible"
 msgstr ""
 
-msgid "NEEDS-ACTION"
-msgstr "需要被執行"
+#~ msgid "NEEDS-ACTION"
+#~ msgstr "需要被執行"
 
-msgid "COMPLETED"
-msgstr "已完成"
+#~ msgid "COMPLETED"
+#~ msgstr "已完成"
 
-msgid "IN-PROCESS"
-msgstr "正在處理中"
+#~ msgid "IN-PROCESS"
+#~ msgstr "正在處理中"
 
-msgid "CANCELLED"
-msgstr "已取消"
+#~ msgid "CANCELLED"
+#~ msgstr "已取消"
 
-msgid "Failed"
-msgstr "已失敗"
+#~ msgid "Failed"
+#~ msgstr "已失敗"
 
-msgid "Could not save task."
-msgstr "無法儲存任務"
+#~ msgid "Could not save task."
+#~ msgstr "無法儲存任務"

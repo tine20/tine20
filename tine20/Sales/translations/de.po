@@ -121,20 +121,20 @@ msgstr "Meine Aufträge"
 msgid "Contracts created by myself"
 msgstr "Von mir erstellte Aufträge"
 
-msgid "Shared Contracts"
-msgstr "Gemeinsame Verträge"
+#~ msgid "Shared Contracts"
+#~ msgstr "Gemeinsame Verträge"
 
-msgid "Summary"
-msgstr "Zusammenfassung"
+#~ msgid "Summary"
+#~ msgstr "Zusammenfassung"
 
-msgid "Products"
-msgstr "Produkte"
+#~ msgid "Products"
+#~ msgstr "Produkte"
 
-msgid "All Products"
-msgstr "Alle Produkte"
+#~ msgid "All Products"
+#~ msgstr "Alle Produkte"
 
-msgid "Contracts"
-msgstr "Verträge"
+#~ msgid "Contracts"
+#~ msgstr "Verträge"
 
-msgid "All Contracts"
-msgstr "Alle Verträge"
+#~ msgid "All Contracts"
+#~ msgstr "Alle Verträge"

@@ -92,25 +92,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             ]
         });
     },
-    
-    /**
-     * Set default time for date time field
-     * 
-     * @param {Ext.ux.form.DateTimeField} field
-     * @param {Date} newValue
-     * @param {Date} oldValue
-     */
-    setDueDateDefaultTime: function (field, newValue, oldValue) {
-    	if (newValue.getHours() === 0 && newValue.getMinutes() === 0) {
-			var newDate = newValue.clone(),
-				now     = new Date();
-			
-			newDate.setHours(now.getHours());
-			newDate.setMinutes(now.getMinutes());
-				
-			field.setValue(newDate);
-		}
-    },
+
     
     /**
      * returns cm
@@ -141,16 +123,12 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             dataIndex: 'due',
             renderer: Tine.Tinebase.common.dateTimeRenderer,
             editor: new Ext.ux.form.DateTimeField({
-            	allowBlank: true,
-            	listeners: {
-            		'change': this.setDueDateDefaultTime
-            	}
+                defaultTime: '12:00',
+            	allowBlank: true
             }),
             quickaddField: new Ext.ux.form.DateTimeField({
-            	allowBlank: true,
-            	listeners: {
-            		'change': this.setDueDateDefaultTime
-            	}
+                defaultTime: '12:00',
+            	allowBlank: true
             })
         }, {
             id: 'priority',

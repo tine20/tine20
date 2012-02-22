@@ -363,7 +363,7 @@ function launchpadMerge($_verbose, $_archive, $_git)
         
         if (is_dir("$contributionDir/.bzr")) {
             `cd $contributionDir
-            bzr merge`;
+            bzr merge --pull`;
         }
     } else {
         $contributionDir = '/tmp/tinetranslations/';

@@ -289,100 +289,100 @@ msgstr ""
 msgid "Tasks without responsible"
 msgstr ""
 
-msgid "NEEDS-ACTION"
-msgstr "VYŽADUJE ZÁSAH"
+#~ msgid "NEEDS-ACTION"
+#~ msgstr "VYŽADUJE ZÁSAH"
 
-msgid "COMPLETED"
-msgstr "DOKONČENÝ"
+#~ msgid "COMPLETED"
+#~ msgstr "DOKONČENÝ"
 
-msgid "IN-PROCESS"
-msgstr "ROZPRACOVANÝ"
+#~ msgid "IN-PROCESS"
+#~ msgstr "ROZPRACOVANÝ"
 
-msgid "CANCELLED"
-msgstr "ZRUŠENÝ"
+#~ msgid "CANCELLED"
+#~ msgstr "ZRUŠENÝ"
 
-msgid "Failed"
-msgstr "Nepodařilo se"
+#~ msgid "Failed"
+#~ msgstr "Nepodařilo se"
 
-msgid "Could not save task."
-msgstr "Nepodařilo se uložit úkol."
-
-#, fuzzy
-msgid "to to list"
-msgstr "seznam úkolů"
+#~ msgid "Could not save task."
+#~ msgstr "Nepodařilo se uložit úkol."
 
 #, fuzzy
-msgid "Tasks) "
-msgstr "Úkoly"
+#~ msgid "to to list"
+#~ msgstr "seznam úkolů"
 
-msgid "Could not delete task(s)."
-msgstr "Nepodařilo se smazat úkol(y)."
+#, fuzzy
+#~ msgid "Tasks) "
+#~ msgstr "Úkoly"
 
-msgid "Edit task"
-msgstr "Editovat úkol"
+#~ msgid "Could not delete task(s)."
+#~ msgstr "Nepodařilo se smazat úkol(y)."
 
-msgid "Delete task"
-msgid_plural "Delete tasks"
-msgstr[0] "Smazat úkol"
-msgstr[1] "Smazat úkoly"
-msgstr[2] "Smazat úkoly"
+#~ msgid "Edit task"
+#~ msgstr "Editovat úkol"
 
-msgid "Enter searchfilter"
-msgstr "Zadejte hledaný výraz"
+#~ msgid "Delete task"
+#~ msgid_plural "Delete tasks"
+#~ msgstr[0] "Smazat úkol"
+#~ msgstr[1] "Smazat úkoly"
+#~ msgstr[2] "Smazat úkoly"
 
-msgid "Search:"
-msgstr "Hledat:"
+#~ msgid "Enter searchfilter"
+#~ msgstr "Zadejte hledaný výraz"
 
-msgid "Displaying tasks {0} - {1} of {2}"
-msgstr "Zobrazuji úkoly {0} - {1} z {2}"
+#~ msgid "Search:"
+#~ msgstr "Hledat:"
 
-msgid "No tasks to display"
-msgstr "Žádné úkoly ke zobrazení"
+#~ msgid "Displaying tasks {0} - {1} of {2}"
+#~ msgstr "Zobrazuji úkoly {0} - {1} z {2}"
 
-msgid "No Tasks to display"
-msgstr "Žádné úkoly ke zobrazení"
+#~ msgid "No tasks to display"
+#~ msgstr "Žádné úkoly ke zobrazení"
 
-msgid "Loading Task..."
-msgstr "Načítám úkol..."
+#~ msgid "No Tasks to display"
+#~ msgstr "Žádné úkoly ke zobrazení"
 
-msgid "Please Wait"
-msgstr "Čekejte prosím"
+#~ msgid "Loading Task..."
+#~ msgstr "Načítám úkol..."
 
-msgid "Add New Task"
-msgstr "Přidat nový úkol"
+#~ msgid "Please Wait"
+#~ msgstr "Čekejte prosím"
 
-msgid "Edit Task \"{0}\""
-msgstr "Editovat úkol \"{0}\""
+#~ msgid "Add New Task"
+#~ msgstr "Přidat nový úkol"
 
-msgid "Please wait"
-msgstr "Čekejte prosím"
+#~ msgid "Edit Task \"{0}\""
+#~ msgstr "Editovat úkol \"{0}\""
 
-msgid "Saving Task"
-msgstr "Ukládám úkol"
+#~ msgid "Please wait"
+#~ msgstr "Čekejte prosím"
 
-msgid "Errors"
-msgstr "Chyby"
+#~ msgid "Saving Task"
+#~ msgstr "Ukládám úkol"
 
-msgid "Please fix the errors noted."
-msgstr "Opravte prosím vyznačené chyby."
+#~ msgid "Errors"
+#~ msgstr "Chyby"
 
-msgid "Confirm"
-msgstr "Povrdit"
+#~ msgid "Please fix the errors noted."
+#~ msgstr "Opravte prosím vyznačené chyby."
 
-msgid "Do you really want to delete this task?"
-msgstr "Opravdu chcete smazat tento úkol?"
+#~ msgid "Confirm"
+#~ msgstr "Povrdit"
 
-msgid "Please wait a moment..."
-msgstr "Počkejte prosím okmažik..."
+#~ msgid "Do you really want to delete this task?"
+#~ msgstr "Opravdu chcete smazat tento úkol?"
 
-msgid "Enter short name..."
-msgstr "Zadejte stručný název..."
+#~ msgid "Please wait a moment..."
+#~ msgstr "Počkejte prosím okmažik..."
 
-msgid "Saved in"
-msgstr "Uloženo v"
+#~ msgid "Enter short name..."
+#~ msgstr "Zadejte stručný název..."
 
-msgid "Folder"
-msgstr "Složka"
+#~ msgid "Saved in"
+#~ msgstr "Uloženo v"
 
-msgid "Edit Task \"%s\""
-msgstr "Editovat úkol \"%s\""
+#~ msgid "Folder"
+#~ msgstr "Složka"
+
+#~ msgid "Edit Task \"%s\""
+#~ msgstr "Editovat úkol \"%s\""

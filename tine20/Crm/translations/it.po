@@ -599,20 +599,20 @@ msgstr ""
 msgid "Leads with overdue tasks"
 msgstr ""
 
-msgid "Lead %s has been creaded"
-msgstr "Il cliente potenziale %s è stato creato"
+#~ msgid "Lead %s has been creaded"
+#~ msgstr "Il cliente potenziale %s è stato creato"
 
-msgid "Last Modified Time"
-msgstr "Data Ultima Modifica"
+#~ msgid "Last Modified Time"
+#~ msgstr "Data Ultima Modifica"
 
-msgid "Add task"
-msgstr "Aggiungi compito"
+#~ msgid "Add task"
+#~ msgstr "Aggiungi compito"
 
-msgid "Add task for selected lead"
-msgstr "Aggiungi compito per il cliente potenziale selezionato"
+#~ msgid "Add task for selected lead"
+#~ msgstr "Aggiungi compito per il cliente potenziale selezionato"
 
-msgid "Task"
-msgstr "Compito"
+#~ msgid "Task"
+#~ msgstr "Compito"
 
-msgid "History"
-msgstr "Storia"
+#~ msgid "History"
+#~ msgstr "Storia"

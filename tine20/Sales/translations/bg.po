@@ -121,11 +121,11 @@ msgstr ""
 msgid "Contracts created by myself"
 msgstr ""
 
-msgid "Shared Contracts"
-msgstr "Общи договори"
+#~ msgid "Shared Contracts"
+#~ msgstr "Общи договори"
 
-msgid "Summary"
-msgstr "Заключение"
+#~ msgid "Summary"
+#~ msgstr "Заключение"
 
-msgid "Contracts"
-msgstr "Договори"
+#~ msgid "Contracts"
+#~ msgstr "Договори"

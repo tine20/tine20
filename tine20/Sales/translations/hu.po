@@ -122,20 +122,20 @@ msgstr ""
 msgid "Contracts created by myself"
 msgstr ""
 
-msgid "Shared Contracts"
-msgstr "Megosztott szerződések"
+#~ msgid "Shared Contracts"
+#~ msgstr "Megosztott szerződések"
 
-msgid "Summary"
-msgstr "Összefoglalás"
+#~ msgid "Summary"
+#~ msgstr "Összefoglalás"
 
-msgid "Products"
-msgstr "Termék"
+#~ msgid "Products"
+#~ msgstr "Termék"
 
-msgid "All Products"
-msgstr "Összes termék"
+#~ msgid "All Products"
+#~ msgstr "Összes termék"
 
-msgid "Contracts"
-msgstr "Szerződések"
+#~ msgid "Contracts"
+#~ msgstr "Szerződések"
 
-msgid "All Contracts"
-msgstr "Összes szerződés"
+#~ msgid "All Contracts"
+#~ msgstr "Összes szerződés"
