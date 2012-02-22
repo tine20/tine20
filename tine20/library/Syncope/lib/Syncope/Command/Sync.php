@@ -106,9 +106,6 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
      */
     public function handle()
     {
-        // wrap whole Sync command in one transaction
-        $this->_transactionId = Syncope_Registry::getTransactionManager()->startTransaction(Syncope_Registry::getDatabase());
-        
         // input xml
         $xml = simplexml_import_dom($this->_inputDom);
         
@@ -245,18 +242,19 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                         $serverId = $dataController->createEntry($collectionData['collectionId'], $add->ApplicationData);
                         
                         $collectionData['added'][$serverId] = array(
-                            'clientId' => (string)$add->ClientId,
-                            'serverId' => $serverId,
-                            'status'   => self::STATUS_SUCCESS
+                            'clientId'     => (string)$add->ClientId,
+                            'serverId'     => $serverId,
+                            'status'       => self::STATUS_SUCCESS,
+                            'contentState' => $this->_contentStateBackend->create(new Syncope_Model_Content(array(
+                                'device_id'     => $this->_device,
+                                'folder_id'     => $collectionData['folder'],
+                                'contentid'     => $serverId,
+                                'creation_time' => $this->_syncTimeStamp
+                            
+                            )))
                         );
                         
-                        $this->_contentStateBackend->create(new Syncope_Model_Content(array(
-                            'device_id'     => $this->_device,
-                            'folder_id'     => $collectionData['folder'],
-                            'contentid'     => $serverId,
-                            'creation_time' => $this->_syncTimeStamp
                         
-                        )));
                     } catch (Exception $e) {
                         if ($this->_logger instanceof Zend_Log) 
                             $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " failed to add entry " . $e->getMessage());
@@ -670,6 +668,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
             
             if (isset($collectionData['syncState']) && $collectionData['syncState'] instanceof Syncope_Model_ISyncState && 
                 $collectionData['syncState']->counter != $collectionData['syncKey']) {
+                        
                 // increment sync timestamp by 1 second
                 $this->_syncTimeStamp->modify('+1 sec');
                 
@@ -695,22 +694,43 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                 
                 $collectionData['syncState']->lastsync = $this->_syncTimeStamp;
                 
-                // store new synckey
-                $this->_syncStateBackend->create($collectionData['syncState'], $keepPreviousSyncKey);
-                
-                // store contentstates for new entries
-                if (isset($newContentStates)) {
-                    foreach($newContentStates as $state) {
-                        $this->_contentStateBackend->create($state);
+                try {
+                    $transactionId = Syncope_Registry::getTransactionManager()->startTransaction(Syncope_Registry::getDatabase());
+                    
+                    // store new synckey
+                    $this->_syncStateBackend->create($collectionData['syncState'], $keepPreviousSyncKey);
+                    
+                    // store contentstates for new entries added to client
+                    if (isset($newContentStates)) {
+                        foreach($newContentStates as $state) {
+                            $this->_contentStateBackend->create($state);
+                        }
                     }
-                }
-                
-                // removed contentstates for deleted entries
-                if (isset($deletedContentStates)) {
-                    foreach($deletedContentStates as $state) {
-                        $this->_contentStateBackend->delete($state);
+                    
+                    // remove contentstates for entries to be deleted on client
+                    if (isset($deletedContentStates)) {
+                        foreach($deletedContentStates as $state) {
+                            $this->_contentStateBackend->delete($state);
+                        }
                     }
+                    
+                    Syncope_Registry::getTransactionManager()->commitTransaction($transactionId);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    // something went wrong
+                    // maybe another parallel request added a new synckey
+                    // we must remove data added from client
+                    if (!empty($collectionData['added'])) {
+                        foreach ($collectionData['added'] as $added) {
+                            $this->_contentStateBackend->delete($added['contentState']);
+                            $dataController->deleteEntry($collectionData['collectionId'], $added['serverId'], array());
+                        }
+                    }
+                    
+                    Syncope_Registry::getTransactionManager()->rollBack();
+                    
+                    throw $zdse;
                 }
+                    
                 
                 // store current filter type
                 try {
@@ -725,7 +745,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
             }
         }
         
-        Syncope_Registry::getTransactionManager()->commitTransaction($this->_transactionId);
+        
         
         return $this->_outputDom;
     }
