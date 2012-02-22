@@ -217,12 +217,12 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
-            	<Collection>
-            		<Class>Contacts</Class><SyncKey>2</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
-            		<Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
-            		<Commands><Add><ClientId>42</ClientId><ApplicationData></ApplicationData></Add></Commands>
-            	</Collection>
-        	</Collections></Sync>'
+                <Collection>
+                    <Class>Contacts</Class><SyncKey>2</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+                    <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
+                    <Commands><Add><ClientId>42</ClientId><ApplicationData></ApplicationData></Add></Commands>
+                </Collection>
+            </Collections></Sync>'
         );
         
         $sync = new Syncope_Command_Sync($doc, $this->_device, $this->_device->policykey);
@@ -263,12 +263,12 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:Contacts="uri:Contacts" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
-            	<Collection>
-            		<Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
-            		<Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
-            		<Commands><Change><ServerId>' . $serverId . '</ServerId><ApplicationData><Contacts:FirstName>aaaadde</Contacts:FirstName><Contacts:LastName>aaaaade</Contacts:LastName></ApplicationData></Change></Commands>
-            	</Collection>
-        	</Collections></Sync>'
+                <Collection>
+                    <Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+                    <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
+                    <Commands><Change><ServerId>' . $serverId . '</ServerId><ApplicationData><Contacts:FirstName>aaaadde</Contacts:FirstName><Contacts:LastName>aaaaade</Contacts:LastName></ApplicationData></Change></Commands>
+                </Collection>
+            </Collections></Sync>'
         );
         
         $sync = new Syncope_Command_Sync($doc, $this->_device, $this->_device->policykey);
@@ -309,12 +309,12 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
-            	<Collection>
-            		<Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
-            		<Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
-            		<Commands><Delete><ServerId>' . $serverId . '</ServerId></Delete></Commands>
-            	</Collection>
-        	</Collections></Sync>'
+                <Collection>
+                    <Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+                    <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
+                    <Commands><Delete><ServerId>' . $serverId . '</ServerId></Delete></Commands>
+                </Collection>
+            </Collections></Sync>'
         );
         
         $sync = new Syncope_Command_Sync($doc, $this->_device, $this->_device->policykey);
@@ -351,11 +351,11 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
-            	<Collection>
-            		<Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
-            		<Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
-            	</Collection>
-        	</Collections></Sync>'
+                <Collection>
+                    <Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+                    <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
+                </Collection>
+            </Collections></Sync>'
         );
         
         $sync = new Syncope_Command_Sync($doc, $this->_device, $this->_device->policykey);
@@ -398,11 +398,11 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
-            	<Collection>
-            		<Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
-            		<Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
-            	</Collection>
-        	</Collections></Sync>'
+                <Collection>
+                    <Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+                    <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
+                </Collection>
+            </Collections></Sync>'
         );
         
         $sync = new Syncope_Command_Sync($doc, $this->_device, $this->_device->policykey);
@@ -440,11 +440,11 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
-            	<Collection>
-            		<Class>Contacts</Class><SyncKey>2</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
-            		<Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
-            	</Collection>
-        	</Collections></Sync>'
+                <Collection>
+                    <Class>Contacts</Class><SyncKey>2</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+                    <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
+                </Collection>
+            </Collections></Sync>'
         );
         
         $sync = new Syncope_Command_Sync($doc, $this->_device, $this->_device->policykey);
@@ -465,4 +465,45 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
         $this->assertEquals(Syncope_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
     }
+    
+    /**
+     * @return string the id of the newly created contact
+     */
+    public function testConcurringSyncRequest()
+    {
+        $this->testSyncOfContacts();
+        
+        // lets add one contact
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
+                <Collection>
+                    <Class>Contacts</Class><SyncKey>2</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+                    <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
+                    <Commands><Add><ClientId>42</ClientId><ApplicationData></ApplicationData></Add></Commands>
+                </Collection>
+            </Collections></Sync>'
+        );
+        
+        $sync = new Syncope_Command_Sync($doc, $this->_device, $this->_device->policykey);
+        
+        $sync->handle();
+        $count = count(Syncope_Data_Contacts::$entries['Syncope_Data_Contacts']["addressbookFolderId"]);
+        $folder = $this->_folderBackend->getFolder($this->_device, 'addressbookFolderId');
+        $syncState = $this->_syncStateBackend->getSyncState($this->_device, $folder);
+        $syncState->counter++;
+        $syncState = $this->_syncStateBackend->create($syncState);
+        
+        try {
+            $syncDoc = $sync->getResponse();
+            $catchedException = false;
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            $catchedException = true;
+        }
+        
+        $this->assertTrue($catchedException);
+        $this->assertGreaterThan(count(Syncope_Data_Contacts::$entries['Syncope_Data_Contacts']["addressbookFolderId"]), $count);
+    }
+            
 }
