@@ -1125,7 +1125,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @return {Date}
      */
     getTargetDateTime: function(e) {
-        var target = e.getTarget();
+        var target = e.getTarget('div[class=cal-daysviewpanel-daycolumn-row]');
+        
         if (target.id.match(/^ext-gen\d+:\d+/)) {
             var parts = target.id.split(':');
             
@@ -1444,8 +1445,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         );
         
         ts.overRow = new Ext.XTemplate(
-            '<div class="cal-daysviewpanel-daycolumn-row" style="height: {height};">' +
-                '<div id="{id}" class="{cls}" >{time}</div>'+
+            '<div id="{id}" class="cal-daysviewpanel-daycolumn-row" style="height: {height};">' +
+                '<div class="{cls}" >{time}</div>'+
             '</div>'
         );
         

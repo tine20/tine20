@@ -193,7 +193,9 @@
 	/*background-color:#FFFFFF;*/
 }
 
+.cal-daysviewpanel-daycolumn-row-on,
 .cal-daysviewpanel-daycolumn-row-on {
+    height: 100%;
 }
 
 .cal-daysviewpanel-daycolumn-row-off {
