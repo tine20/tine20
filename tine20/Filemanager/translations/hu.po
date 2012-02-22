@@ -10,8 +10,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-17 05:34+0000\n"
-"X-Generator: Launchpad (build 14814)\n"
+"X-Launchpad-Export-Date: 2012-02-21 06:33+0000\n"
+"X-Generator: Launchpad (build 14838)\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -45,19 +45,19 @@ msgstr "%s személyes file-ai"
 msgid "Filemanager"
 msgstr "Filekezelő"
 
-#: js/Filemanager.js:64
+#: js/Filemanager.js:67
 msgid "Files already exists"
 msgstr "File már létezik"
 
-#: js/Filemanager.js:64
+#: js/Filemanager.js:67
 msgid "Do you want to replace the following file(s)?"
 msgstr "Szeretnéd cserélni a következő file(oka)t?"
 
-#: js/Filemanager.js:98
+#: js/Filemanager.js:100
 msgid "Failure on create folder"
 msgstr "Hiba a könyvtár létrehozásakor"
 
-#: js/Filemanager.js:99
+#: js/Filemanager.js:101
 msgid "Item with this name already exists!"
 msgstr "Ezen a néven már létezik adat!"
 
@@ -85,7 +85,7 @@ msgstr "Név"
 msgid "Size"
 msgstr "Méret"
 
-#: js/GridPanel.js:145 js/Model.js:524
+#: js/GridPanel.js:145 js/Model.js:526
 msgid "Contenttype"
 msgstr "Tartalomtípus"
 
@@ -97,7 +97,7 @@ msgstr "Könyvtár"
 msgid "Revision"
 msgstr "Javítás"
 
-#: js/GridPanel.js:177 js/Model.js:525
+#: js/GridPanel.js:177 js/Model.js:527
 msgid "Creation Time"
 msgstr "Készítés ideje"
 
@@ -149,9 +149,12 @@ msgstr "Feltöltés szünetelése"
 msgid "Resume upload"
 msgstr "Feltöltés folytatása"
 
-#: js/GridPanel.js:488 js/Model.js:40
+#: js/GridPanel.js:488 js/Model.js:41
+#, fuzzy
 msgid "user file folder"
-msgstr "felhasználó file könyvtára"
+msgid_plural "user file folders"
+msgstr[0] "felhasználó file könyvtára"
+msgstr[1] "felhasználó file könyvtára"
 
 #: js/GridPanel.js:490
 msgid "New {0}"
@@ -165,12 +168,12 @@ msgstr "Kérlek ad meg az új {0} nevét:"
 msgid "No {0} added"
 msgstr "{0} hozzáadása sikertelen"
 
-#: js/GridPanel.js:641 js/GridPanel.js:796 js/TreePanel.js:656
-#: js/TreePanel.js:766
+#: js/GridPanel.js:641 js/GridPanel.js:796 js/TreePanel.js:650
+#: js/TreePanel.js:760
 msgid "Upload Failed"
 msgstr "Feltöltés sikertelen"
 
-#: js/GridPanel.js:642 js/TreePanel.js:657
+#: js/GridPanel.js:642 js/TreePanel.js:651
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
@@ -178,42 +181,43 @@ msgstr ""
 "File nem tölthető fel. Fileméret túl nagy lehet. Kérlek értesítsd a "
 "rendszergazdádat. Max. feltöltési méret: "
 
-#: js/GridPanel.js:797 js/TreePanel.js:767
+#: js/GridPanel.js:797 js/TreePanel.js:761
 msgid "Putting files in this folder is not allowed!"
 msgstr "Fileok ebbe a könyvtárba helyezése nem engedélyezett!"
 
 #: js/Model.js:37
+#, fuzzy
 msgid "user file"
-msgstr "felhasználói file"
+msgid_plural "user files"
+msgstr[0] "felhasználói file"
+msgstr[1] "felhasználói file"
 
-#: js/Model.js:38
-msgid "user files"
-msgstr "felhasználói fileok"
-
-#: js/Model.js:41
-msgid "user file folders"
-msgstr "felhasználó file könyvtárai"
-
-#: js/Model.js:267 js/Model.js:283
+#: js/Model.js:269 js/Model.js:285
 msgid "Copying data .. {0}"
 msgstr "Adat másolása.. {0}"
 
-#: js/Model.js:270 js/Model.js:285
+#: js/Model.js:272 js/Model.js:287
 msgid "Moving data .. {0}"
 msgstr "Adat áthelyezése.. {0}"
 
-#: js/Model.js:289
+#: js/Model.js:291
 msgid "Please wait"
 msgstr "Kérlek várj"
 
-#: js/Model.js:522
+#: js/Model.js:524
 msgid "Quick search"
 msgstr "Gyors keresés"
 
-#: js/Model.js:523
+#: js/Model.js:525
 msgid "Type"
 msgstr "Típus"
 
 #: js/PathFilterModel.js:50
 msgid "path"
 msgstr "elérési út"
+
+#~ msgid "user files"
+#~ msgstr "felhasználói fileok"
+
+#~ msgid "user file folders"
+#~ msgstr "felhasználó file könyvtárai"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-16 11:26+0000\n"
+"PO-Revision-Date: 2012-02-20 12:26+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-17 05:34+0000\n"
-"X-Generator: Launchpad (build 14814)\n"
+"X-Launchpad-Export-Date: 2012-02-21 06:34+0000\n"
+"X-Generator: Launchpad (build 14838)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Bulgarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -366,6 +366,7 @@ msgstr[1] "списъка със задачи"
 #: js/ExceptionDialog.js:72 js/PasswordChangeDialog.js:60
 #: js/ux/form/LayerCombo.js:193 js/widgets/ActivitiesPanel.js:303
 #: js/widgets/container/ContainerSelect.js:450
+#: js/widgets/dialog/DuplicateMergeDialog.js:79
 #: js/widgets/dialog/EditDialog.js:249
 #: js/widgets/dialog/MultiOptionsDialog.js:109
 #: js/widgets/dialog/PreferencesDialog.js:117
@@ -689,7 +690,7 @@ msgstr ""
 
 #: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:568
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:354
-#: js/widgets/grid/GridPanel.js:1421
+#: js/widgets/grid/GridPanel.js:1467
 #: js/widgets/persistentfilter/PickerPanel.js:321
 #: js/widgets/tree/ContextMenu.js:336
 msgid "Confirm"
@@ -1012,7 +1013,7 @@ msgstr "Добави {0} бележка"
 msgid "Type"
 msgstr "Тип"
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1094
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1118
 msgid "Created By"
 msgstr "Зададен/Обработен от"
 
@@ -1249,6 +1250,67 @@ msgstr ""
 msgid "Please enter your credentials"
 msgstr ""
 
+#: js/widgets/dialog/DuplicateMergeDialog.js:87
+#: js/widgets/dialog/MultipleEditResultSummary.js:86
+#: js/widgets/persistentfilter/PickerPanel.js:545
+msgid "OK"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:113
+msgid "Merging Records..."
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:150
+msgid "Invalid data after merge"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:150
+msgid ""
+"The resulting {0} has invalid data. Both {1} haven't been touched. <br /"
+"><b>Validation Message:</b><br />{2}"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:153
+msgid "Remove Duplicate Failed"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:153
+msgid "The merge succeeded, but the duplicate {0} could not be removed"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:155
+msgid "Merge Failed"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:155
+msgid "The merge failed. Both {0} haven't been touched."
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:193
+msgid "Merge {0}, prefer First"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:194
+msgid "Merge {0}, prefer Second"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:201
+#: js/widgets/grid/GridPanel.js:437
+msgid "Merge {0}"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:204
+msgid "First {0}"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:205
+msgid "Second {0}"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:206
+msgid "Final {0}"
+msgstr ""
+
 #: js/widgets/dialog/DuplicateResolveGridPanel.js:41
 msgid "The record you try to add might already exist."
 msgstr ""
@@ -1298,7 +1360,7 @@ msgstr "изтрий"
 msgid "Saved in"
 msgstr "Съхранен в"
 
-#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:382
+#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:388
 msgid "Copy {0}"
 msgstr ""
 
@@ -1318,17 +1380,17 @@ msgstr ""
 msgid "Do you really want to delete this {0}?"
 msgstr "Наистина ли желаете да изтриете тези {0}?"
 
-#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1454
+#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1500
 msgid "Deleting {0}"
 msgstr "Изтрива {0}"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1471
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1517
 #: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:409
 #: js/widgets/tags/TagsPanel.js:442
 msgid "Failed"
 msgstr "Грешка"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1471
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1517
 msgid "Could not delete {0}."
 msgstr "Не може да изтрие {0}."
 
@@ -1549,11 +1611,6 @@ msgstr ""
 
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:359
 msgid "Applying changes"
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditResultSummary.js:86
-#: js/widgets/persistentfilter/PickerPanel.js:545
-msgid "OK"
 msgstr ""
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:146
@@ -1827,7 +1884,7 @@ msgstr "следващата година"
 msgid "Attention: There are more filters active!"
 msgstr ""
 
-#: js/widgets/grid/FilterPanel.js:175 js/widgets/grid/FilterPanel.js:473
+#: js/widgets/grid/FilterPanel.js:175 js/widgets/grid/FilterPanel.js:475
 msgid "Criteria {0}"
 msgstr ""
 
@@ -1913,7 +1970,7 @@ msgstr ""
 msgid "Related to"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:265
+#: js/widgets/grid/GridPanel.js:271
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
@@ -1921,71 +1978,71 @@ msgstr ""
 "Няма {0} намерени. Моля оритайте до промените Вашите критерий на търсене, "
 "опции на показване или {1} в които търсите."
 
-#: js/widgets/grid/GridPanel.js:267 js/widgets/grid/GridPanel.js:367
-#: js/widgets/grid/GridPanel.js:368 js/widgets/grid/GridPanel.js:369
+#: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:373
+#: js/widgets/grid/GridPanel.js:374 js/widgets/grid/GridPanel.js:375
 msgid "Edit {0}"
 msgid_plural "Edit {0}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:393
+#: js/widgets/grid/GridPanel.js:399
 msgid "Add {0}"
 msgstr "Добавяне {0}"
 
-#: js/widgets/grid/GridPanel.js:401
+#: js/widgets/grid/GridPanel.js:407
 msgid "Print Page"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:448 js/widgets/grid/GridPanel.js:449
-#: js/widgets/grid/GridPanel.js:451
+#: js/widgets/grid/GridPanel.js:468 js/widgets/grid/GridPanel.js:469
+#: js/widgets/grid/GridPanel.js:471
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Изтриване {0}"
 msgstr[1] "Изтривания {0}"
 
-#: js/widgets/grid/GridPanel.js:813
+#: js/widgets/grid/GridPanel.js:833
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Покажи записи {0} - {1} от {2}"
 
-#: js/widgets/grid/GridPanel.js:814
+#: js/widgets/grid/GridPanel.js:834
 msgid "No {0} to display"
 msgstr "Няма намерени {0}"
 
-#: js/widgets/grid/GridPanel.js:1030
+#: js/widgets/grid/GridPanel.js:1054
 msgid "New..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1049
+#: js/widgets/grid/GridPanel.js:1073
 msgid "Add to..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1093
+#: js/widgets/grid/GridPanel.js:1117
 msgid "Creation Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1095
+#: js/widgets/grid/GridPanel.js:1119
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1096
+#: js/widgets/grid/GridPanel.js:1120
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1395
+#: js/widgets/grid/GridPanel.js:1441
 msgid "Not Allowed"
 msgstr "Непозволено"
 
-#: js/widgets/grid/GridPanel.js:1396
+#: js/widgets/grid/GridPanel.js:1442
 msgid "You are not allowed to delete all pages at once"
 msgstr "Вие нямате необходите права да изтриете всички страници наведнъж"
 
-#: js/widgets/grid/GridPanel.js:1419
+#: js/widgets/grid/GridPanel.js:1465
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:1454
+#: js/widgets/grid/GridPanel.js:1500
 msgid " ... This may take a long time!"
 msgstr " ... това може да продължи дълго!"
 

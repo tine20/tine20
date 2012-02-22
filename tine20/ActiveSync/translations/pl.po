@@ -10,7 +10,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
 "X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Language: Polish\n"
@@ -83,10 +84,10 @@ msgstr "Domyślna lista zadań"
 msgid "The default task list to create new tasks in."
 msgstr "Domyślna lista dla nowo tworzonych zadań"
 
-#: Setup/setup.xml:511
+#: Setup/setup.xml:522
 msgid "Default Policy"
 msgstr "Domyślna polityka"
 
-#: Setup/setup.xml:516
+#: Setup/setup.xml:527
 msgid "Default Policy installed during setup"
 msgstr "Domyślna polityka określona podczas definiowania ustawień"

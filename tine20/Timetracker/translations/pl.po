@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-17 20:34+0000\n"
-"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
+"PO-Revision-Date: 2012-02-20 11:45+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-18 05:50+0000\n"
-"X-Generator: Launchpad (build 14814)\n"
+"X-Launchpad-Export-Date: 2012-02-21 06:34+0000\n"
+"X-Generator: Launchpad (build 14838)\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -384,24 +384,24 @@ msgid "default"
 msgstr "domyślnie"
 
 #: Setup/Initialize.php:33
-msgid "Timesheets today"
-msgstr "Dzisiejsze karty czasu pracy"
+msgid "My Timesheets today"
+msgstr ""
 
 #: Setup/Initialize.php:47
-msgid "Timesheets this week"
-msgstr "Karty czasu pracy z bieżącego tygodnia"
+msgid "My Timesheets this week"
+msgstr ""
 
 #: Setup/Initialize.php:61
-msgid "Timesheets last week"
-msgstr "Karty czasu pracy z minionego tygodnia"
+msgid "My Timesheets last week"
+msgstr ""
 
 #: Setup/Initialize.php:75
-msgid "Timesheets this month"
-msgstr "Karty czasu pracy z bieżącego miesiąca"
+msgid "My Timesheets this month"
+msgstr ""
 
 #: Setup/Initialize.php:89
-msgid "Timesheets last month"
-msgstr "Karty czasu pracy z minionego miesiąca"
+msgid "My Timesheets last month"
+msgstr ""
 
 #: Setup/Initialize.php:112 Setup/Update/Release5.php:81
 msgid "Timeaccounts to bill"
@@ -472,6 +472,21 @@ msgstr "Konta godzin"
 
 msgid "All Timeaccounts"
 msgstr "Wszystkie konta godzin"
+
+#~ msgid "Timesheets today"
+#~ msgstr "Dzisiejsze karty czasu pracy"
+
+#~ msgid "Timesheets this week"
+#~ msgstr "Karty czasu pracy z bieżącego tygodnia"
+
+#~ msgid "Timesheets last week"
+#~ msgstr "Karty czasu pracy z minionego tygodnia"
+
+#~ msgid "Timesheets this month"
+#~ msgstr "Karty czasu pracy z bieżącego miesiąca"
+
+#~ msgid "Timesheets last month"
+#~ msgstr "Karty czasu pracy z minionego miesiąca"
 
 #~ msgid "Billed in ..."
 #~ msgstr "Przeliczone w ..."

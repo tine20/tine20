@@ -639,7 +639,7 @@ msgstr ""
 msgid "Bcc:"
 msgstr ""
 
-#: js/RecipientGrid.js:332
+#: js/RecipientGrid.js:337
 msgid "Remove"
 msgstr ""
 

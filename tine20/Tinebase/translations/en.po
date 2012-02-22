@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-17 05:35+0000\n"
-"X-Generator: Launchpad (build 14814)\n"
+"X-Launchpad-Export-Date: 2012-02-21 06:34+0000\n"
+"X-Generator: Launchpad (build 14838)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -365,6 +365,7 @@ msgstr[1] "to do lists"
 #: js/ExceptionDialog.js:72 js/PasswordChangeDialog.js:60
 #: js/ux/form/LayerCombo.js:193 js/widgets/ActivitiesPanel.js:303
 #: js/widgets/container/ContainerSelect.js:450
+#: js/widgets/dialog/DuplicateMergeDialog.js:79
 #: js/widgets/dialog/EditDialog.js:249
 #: js/widgets/dialog/MultiOptionsDialog.js:109
 #: js/widgets/dialog/PreferencesDialog.js:117
@@ -705,7 +706,7 @@ msgstr "Install Tine 2.0 as web app in your browser."
 
 #: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:568
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:354
-#: js/widgets/grid/GridPanel.js:1421
+#: js/widgets/grid/GridPanel.js:1467
 #: js/widgets/persistentfilter/PickerPanel.js:321
 #: js/widgets/tree/ContextMenu.js:336
 msgid "Confirm"
@@ -1028,7 +1029,7 @@ msgstr "Add a {0} Note"
 msgid "Type"
 msgstr "Type"
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1094
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1118
 msgid "Created By"
 msgstr "Created By"
 
@@ -1265,6 +1266,69 @@ msgstr "2 days before"
 msgid "Please enter your credentials"
 msgstr "Please enter your credentials"
 
+#: js/widgets/dialog/DuplicateMergeDialog.js:87
+#: js/widgets/dialog/MultipleEditResultSummary.js:86
+#: js/widgets/persistentfilter/PickerPanel.js:545
+msgid "OK"
+msgstr "OK"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:113
+msgid "Merging Records..."
+msgstr "Merging Records..."
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:150
+msgid "Invalid data after merge"
+msgstr "Invalid data after merge"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:150
+msgid ""
+"The resulting {0} has invalid data. Both {1} haven't been touched. <br /"
+"><b>Validation Message:</b><br />{2}"
+msgstr ""
+"The resulting {0} has invalid data. Both {1} haven't been touched. <br /"
+"><b>Validation Message:</b><br />{2}"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:153
+msgid "Remove Duplicate Failed"
+msgstr "Remove Duplicate Failed"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:153
+msgid "The merge succeeded, but the duplicate {0} could not be removed"
+msgstr "The merge succeeded, but the duplicate {0} could not be removed"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:155
+msgid "Merge Failed"
+msgstr "Merge Failed"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:155
+msgid "The merge failed. Both {0} haven't been touched."
+msgstr "The merge failed. Both {0} haven't been touched."
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:193
+msgid "Merge {0}, prefer First"
+msgstr "Merge {0}, prefer First"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:194
+msgid "Merge {0}, prefer Second"
+msgstr "Merge {0}, prefer Second"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:201
+#: js/widgets/grid/GridPanel.js:437
+msgid "Merge {0}"
+msgstr "Merge {0}"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:204
+msgid "First {0}"
+msgstr "First {0}"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:205
+msgid "Second {0}"
+msgstr "Second {0}"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:206
+msgid "Final {0}"
+msgstr "Final {0}"
+
 #: js/widgets/dialog/DuplicateResolveGridPanel.js:41
 msgid "The record you try to add might already exist."
 msgstr "The record you try to add might already exist."
@@ -1314,7 +1378,7 @@ msgstr "delete"
 msgid "Saved in"
 msgstr "Saved in"
 
-#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:382
+#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:388
 msgid "Copy {0}"
 msgstr "Copy {0}"
 
@@ -1334,17 +1398,17 @@ msgstr "Transferring {0}..."
 msgid "Do you really want to delete this {0}?"
 msgstr "Do you really want to delete this {0}?"
 
-#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1454
+#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1500
 msgid "Deleting {0}"
 msgstr "Deleting {0}"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1471
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1517
 #: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:409
 #: js/widgets/tags/TagsPanel.js:442
 msgid "Failed"
 msgstr "Failed"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1471
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1517
 msgid "Could not delete {0}."
 msgstr "Could not delete {0}."
 
@@ -1574,11 +1638,6 @@ msgstr "Do you really want to change these {0} records?"
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:359
 msgid "Applying changes"
 msgstr "Applying changes"
-
-#: js/widgets/dialog/MultipleEditResultSummary.js:86
-#: js/widgets/persistentfilter/PickerPanel.js:545
-msgid "OK"
-msgstr "OK"
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:146
 msgid "You edited {0} {1}."
@@ -1855,7 +1914,7 @@ msgstr "next year"
 msgid "Attention: There are more filters active!"
 msgstr "Attention: There are more filters active!"
 
-#: js/widgets/grid/FilterPanel.js:175 js/widgets/grid/FilterPanel.js:473
+#: js/widgets/grid/FilterPanel.js:175 js/widgets/grid/FilterPanel.js:475
 msgid "Criteria {0}"
 msgstr "Criteria {0}"
 
@@ -1941,7 +2000,7 @@ msgstr "Start defintion"
 msgid "Related to"
 msgstr "Related to"
 
-#: js/widgets/grid/GridPanel.js:265
+#: js/widgets/grid/GridPanel.js:271
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
@@ -1949,71 +2008,71 @@ msgstr ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 
-#: js/widgets/grid/GridPanel.js:267 js/widgets/grid/GridPanel.js:367
-#: js/widgets/grid/GridPanel.js:368 js/widgets/grid/GridPanel.js:369
+#: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:373
+#: js/widgets/grid/GridPanel.js:374 js/widgets/grid/GridPanel.js:375
 msgid "Edit {0}"
 msgid_plural "Edit {0}"
 msgstr[0] "Edit {0}"
 msgstr[1] "Edit {0}"
 
-#: js/widgets/grid/GridPanel.js:393
+#: js/widgets/grid/GridPanel.js:399
 msgid "Add {0}"
 msgstr "Add {0}"
 
-#: js/widgets/grid/GridPanel.js:401
+#: js/widgets/grid/GridPanel.js:407
 msgid "Print Page"
 msgstr "Print Page"
 
-#: js/widgets/grid/GridPanel.js:448 js/widgets/grid/GridPanel.js:449
-#: js/widgets/grid/GridPanel.js:451
+#: js/widgets/grid/GridPanel.js:468 js/widgets/grid/GridPanel.js:469
+#: js/widgets/grid/GridPanel.js:471
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Delete {0}"
 msgstr[1] "Delete {0}"
 
-#: js/widgets/grid/GridPanel.js:813
+#: js/widgets/grid/GridPanel.js:833
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Displaying records {0} - {1} of {2}"
 
-#: js/widgets/grid/GridPanel.js:814
+#: js/widgets/grid/GridPanel.js:834
 msgid "No {0} to display"
 msgstr "No {0} to display"
 
-#: js/widgets/grid/GridPanel.js:1030
+#: js/widgets/grid/GridPanel.js:1054
 msgid "New..."
 msgstr "New..."
 
-#: js/widgets/grid/GridPanel.js:1049
+#: js/widgets/grid/GridPanel.js:1073
 msgid "Add to..."
 msgstr "Add to..."
 
-#: js/widgets/grid/GridPanel.js:1093
+#: js/widgets/grid/GridPanel.js:1117
 msgid "Creation Time"
 msgstr "Creation Time"
 
-#: js/widgets/grid/GridPanel.js:1095
+#: js/widgets/grid/GridPanel.js:1119
 msgid "Last Modified Time"
 msgstr "Last Modified Time"
 
-#: js/widgets/grid/GridPanel.js:1096
+#: js/widgets/grid/GridPanel.js:1120
 msgid "Last Modified By"
 msgstr "Last Modified By"
 
-#: js/widgets/grid/GridPanel.js:1395
+#: js/widgets/grid/GridPanel.js:1441
 msgid "Not Allowed"
 msgstr "Not Allowed"
 
-#: js/widgets/grid/GridPanel.js:1396
+#: js/widgets/grid/GridPanel.js:1442
 msgid "You are not allowed to delete all pages at once"
 msgstr "You are not allowed to delete all pages at once"
 
-#: js/widgets/grid/GridPanel.js:1419
+#: js/widgets/grid/GridPanel.js:1465
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] "Do you really want to delete the selected record ({0})?"
 msgstr[1] "Do you really want to delete the selected records ({0})?"
 
-#: js/widgets/grid/GridPanel.js:1454
+#: js/widgets/grid/GridPanel.js:1500
 msgid " ... This may take a long time!"
 msgstr " ... This may take a long time!"
 

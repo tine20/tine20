@@ -10,8 +10,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-17 05:34+0000\n"
-"X-Generator: Launchpad (build 14814)\n"
+"X-Launchpad-Export-Date: 2012-02-21 06:33+0000\n"
+"X-Generator: Launchpad (build 14838)\n"
 "X-Poedit-Country: \n"
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -45,19 +45,19 @@ msgstr ""
 msgid "Filemanager"
 msgstr ""
 
-#: js/Filemanager.js:64
+#: js/Filemanager.js:67
 msgid "Files already exists"
 msgstr ""
 
-#: js/Filemanager.js:64
+#: js/Filemanager.js:67
 msgid "Do you want to replace the following file(s)?"
 msgstr ""
 
-#: js/Filemanager.js:98
+#: js/Filemanager.js:100
 msgid "Failure on create folder"
 msgstr ""
 
-#: js/Filemanager.js:99
+#: js/Filemanager.js:101
 msgid "Item with this name already exists!"
 msgstr ""
 
@@ -85,7 +85,7 @@ msgstr ""
 msgid "Size"
 msgstr ""
 
-#: js/GridPanel.js:145 js/Model.js:524
+#: js/GridPanel.js:145 js/Model.js:526
 msgid "Contenttype"
 msgstr ""
 
@@ -97,7 +97,7 @@ msgstr ""
 msgid "Revision"
 msgstr ""
 
-#: js/GridPanel.js:177 js/Model.js:525
+#: js/GridPanel.js:177 js/Model.js:527
 msgid "Creation Time"
 msgstr ""
 
@@ -149,9 +149,11 @@ msgstr ""
 msgid "Resume upload"
 msgstr ""
 
-#: js/GridPanel.js:488 js/Model.js:40
+#: js/GridPanel.js:488 js/Model.js:41
 msgid "user file folder"
-msgstr ""
+msgid_plural "user file folders"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/GridPanel.js:490
 msgid "New {0}"
@@ -165,50 +167,44 @@ msgstr ""
 msgid "No {0} added"
 msgstr ""
 
-#: js/GridPanel.js:641 js/GridPanel.js:796 js/TreePanel.js:656
-#: js/TreePanel.js:766
+#: js/GridPanel.js:641 js/GridPanel.js:796 js/TreePanel.js:650
+#: js/TreePanel.js:760
 msgid "Upload Failed"
 msgstr ""
 
-#: js/GridPanel.js:642 js/TreePanel.js:657
+#: js/GridPanel.js:642 js/TreePanel.js:651
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
 msgstr ""
 
-#: js/GridPanel.js:797 js/TreePanel.js:767
+#: js/GridPanel.js:797 js/TreePanel.js:761
 msgid "Putting files in this folder is not allowed!"
 msgstr ""
 
 #: js/Model.js:37
 msgid "user file"
-msgstr ""
+msgid_plural "user files"
+msgstr[0] ""
+msgstr[1] ""
 
-#: js/Model.js:38
-msgid "user files"
-msgstr ""
-
-#: js/Model.js:41
-msgid "user file folders"
-msgstr ""
-
-#: js/Model.js:267 js/Model.js:283
+#: js/Model.js:269 js/Model.js:285
 msgid "Copying data .. {0}"
 msgstr ""
 
-#: js/Model.js:270 js/Model.js:285
+#: js/Model.js:272 js/Model.js:287
 msgid "Moving data .. {0}"
 msgstr ""
 
-#: js/Model.js:289
+#: js/Model.js:291
 msgid "Please wait"
 msgstr ""
 
-#: js/Model.js:522
+#: js/Model.js:524
 msgid "Quick search"
 msgstr ""
 
-#: js/Model.js:523
+#: js/Model.js:525
 msgid "Type"
 msgstr ""
 

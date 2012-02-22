@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-16 11:26+0000\n"
+"PO-Revision-Date: 2012-02-20 12:17+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-17 05:34+0000\n"
-"X-Generator: Launchpad (build 14814)\n"
+"X-Launchpad-Export-Date: 2012-02-21 06:34+0000\n"
+"X-Generator: Launchpad (build 14838)\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -37,7 +37,7 @@ msgstr "Utwórz albo uaktualnij ulubione ze wspólnych zadań"
 
 #: Config.php:38
 msgid "Tasks status available"
-msgstr ""
+msgstr "Dostępny status zadań"
 
 #: Config.php:40
 msgid ""
@@ -49,13 +49,15 @@ msgstr ""
 
 #: Config.php:48
 msgid "Task priorities available"
-msgstr ""
+msgstr "Dostępne priorytety zadań"
 
 #: Config.php:50
 msgid ""
 "Possible task priorities. Please note that additional priorities might "
 "impact other Tasks systems on export or syncronisation."
 msgstr ""
+"Możliwe priorytety zadań. Zauważ proszę, że podczas eksportu albo "
+"synchronizacji dodatkowe priorytety mogą mieć wpływ na inne systemy zadań."
 
 #: Controller/Task.php:165
 msgid "Notification for Task "
@@ -246,19 +248,19 @@ msgstr "W opracowaniu"
 
 #: Setup/Initialize.php:50 Setup/Update/Release5.php:154
 msgid "low"
-msgstr ""
+msgstr "niski"
 
 #: Setup/Initialize.php:51 Setup/Update/Release5.php:155
 msgid "normal"
-msgstr ""
+msgstr "normalny"
 
 #: Setup/Initialize.php:52 Setup/Update/Release5.php:156
 msgid "high"
-msgstr ""
+msgstr "wysoki"
 
 #: Setup/Initialize.php:53 Setup/Update/Release5.php:157
 msgid "urgent"
-msgstr ""
+msgstr "pilny"
 
 #: Setup/Initialize.php:81 Setup/Update/Release3.php:65
 msgid "All tasks of my taskslists"

@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-17 05:34+0000\n"
-"X-Generator: Launchpad (build 14814)\n"
+"X-Launchpad-Export-Date: 2012-02-21 06:34+0000\n"
+"X-Generator: Launchpad (build 14838)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -375,24 +375,24 @@ msgid "default"
 msgstr "default"
 
 #: Setup/Initialize.php:33
-msgid "Timesheets today"
-msgstr "Timesheets today"
+msgid "My Timesheets today"
+msgstr "My Timesheets today"
 
 #: Setup/Initialize.php:47
-msgid "Timesheets this week"
-msgstr "Timesheets this week"
+msgid "My Timesheets this week"
+msgstr "My Timesheets this week"
 
 #: Setup/Initialize.php:61
-msgid "Timesheets last week"
-msgstr "Timesheets last week"
+msgid "My Timesheets last week"
+msgstr "My Timesheets last week"
 
 #: Setup/Initialize.php:75
-msgid "Timesheets this month"
-msgstr "Timesheets this month"
+msgid "My Timesheets this month"
+msgstr "My Timesheets this month"
 
 #: Setup/Initialize.php:89
-msgid "Timesheets last month"
-msgstr "Timesheets last month"
+msgid "My Timesheets last month"
+msgstr "My Timesheets last month"
 
 #: Setup/Initialize.php:112 Setup/Update/Release5.php:81
 msgid "Timeaccounts to bill"
@@ -409,6 +409,21 @@ msgstr "Timeaccounts already billed"
 #: Setup/setup.xml:4
 msgid "Timetracker"
 msgstr "Timetracker"
+
+#~ msgid "Timesheets today"
+#~ msgstr "Timesheets today"
+
+#~ msgid "Timesheets this week"
+#~ msgstr "Timesheets this week"
+
+#~ msgid "Timesheets last week"
+#~ msgstr "Timesheets last week"
+
+#~ msgid "Timesheets this month"
+#~ msgstr "Timesheets this month"
+
+#~ msgid "Timesheets last month"
+#~ msgstr "Timesheets last month"
 
 #~ msgid "Billed in ..."
 #~ msgstr "Billed in ..."

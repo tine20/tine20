@@ -356,23 +356,23 @@ msgid "default"
 msgstr ""
 
 #: Setup/Initialize.php:33
-msgid "Timesheets today"
+msgid "My Timesheets today"
 msgstr ""
 
 #: Setup/Initialize.php:47
-msgid "Timesheets this week"
+msgid "My Timesheets this week"
 msgstr ""
 
 #: Setup/Initialize.php:61
-msgid "Timesheets last week"
+msgid "My Timesheets last week"
 msgstr ""
 
 #: Setup/Initialize.php:75
-msgid "Timesheets this month"
+msgid "My Timesheets this month"
 msgstr ""
 
 #: Setup/Initialize.php:89
-msgid "Timesheets last month"
+msgid "My Timesheets last month"
 msgstr ""
 
 #: Setup/Initialize.php:112 Setup/Update/Release5.php:81

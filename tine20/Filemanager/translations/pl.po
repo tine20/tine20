@@ -3,15 +3,15 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-18 09:50+0000\n"
-"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
+"PO-Revision-Date: 2012-02-20 11:44+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-19 06:33+0000\n"
-"X-Generator: Launchpad (build 14814)\n"
+"X-Launchpad-Export-Date: 2012-02-21 06:33+0000\n"
+"X-Generator: Launchpad (build 14838)\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -44,19 +44,19 @@ msgstr "%s osobistych plików"
 msgid "Filemanager"
 msgstr "Zarządca plików"
 
-#: js/Filemanager.js:64
+#: js/Filemanager.js:67
 msgid "Files already exists"
 msgstr "Te pliki już istnieją"
 
-#: js/Filemanager.js:64
+#: js/Filemanager.js:67
 msgid "Do you want to replace the following file(s)?"
 msgstr "Czy chcesz zastąpić następujące pliki?"
 
-#: js/Filemanager.js:98
+#: js/Filemanager.js:100
 msgid "Failure on create folder"
 msgstr "Błąd podczas tworzenia katalogu"
 
-#: js/Filemanager.js:99
+#: js/Filemanager.js:101
 msgid "Item with this name already exists!"
 msgstr "Obiekt o takiej nazwie już istnieje!"
 
@@ -84,7 +84,7 @@ msgstr "Nazwa"
 msgid "Size"
 msgstr "Rozmiar"
 
-#: js/GridPanel.js:145 js/Model.js:524
+#: js/GridPanel.js:145 js/Model.js:526
 msgid "Contenttype"
 msgstr "Typ zawartości"
 
@@ -96,7 +96,7 @@ msgstr "Katalog"
 msgid "Revision"
 msgstr "Rewizja"
 
-#: js/GridPanel.js:177 js/Model.js:525
+#: js/GridPanel.js:177 js/Model.js:527
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
@@ -148,9 +148,12 @@ msgstr "Zatrzymaj przesyłanie"
 msgid "Resume upload"
 msgstr "Kontynuuj przesyłanie"
 
-#: js/GridPanel.js:488 js/Model.js:40
+#: js/GridPanel.js:488 js/Model.js:41
+#, fuzzy
 msgid "user file folder"
-msgstr "katalog pliku użytkownika"
+msgid_plural "user file folders"
+msgstr[0] "katalog pliku użytkownika"
+msgstr[1] "katalog pliku użytkownika"
 
 #: js/GridPanel.js:490
 msgid "New {0}"
@@ -164,12 +167,12 @@ msgstr "Proszę wpisać nazwę nowego {0}:"
 msgid "No {0} added"
 msgstr "{0} nie został dodany"
 
-#: js/GridPanel.js:641 js/GridPanel.js:796 js/TreePanel.js:656
-#: js/TreePanel.js:766
+#: js/GridPanel.js:641 js/GridPanel.js:796 js/TreePanel.js:650
+#: js/TreePanel.js:760
 msgid "Upload Failed"
 msgstr "Przesyłanie zakończone niepowodzeniem"
 
-#: js/GridPanel.js:642 js/TreePanel.js:657
+#: js/GridPanel.js:642 js/TreePanel.js:651
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
@@ -178,39 +181,34 @@ msgstr ""
 "Proszę powiadomić swojego administratora. Maksymalny rozmiar przesyłanego "
 "pliku: "
 
-#: js/GridPanel.js:797 js/TreePanel.js:767
+#: js/GridPanel.js:797 js/TreePanel.js:761
 msgid "Putting files in this folder is not allowed!"
 msgstr "Wstawianie plików do tego katalogu jest niedozwolone!"
 
 #: js/Model.js:37
+#, fuzzy
 msgid "user file"
-msgstr "plik użytkownika"
+msgid_plural "user files"
+msgstr[0] "plik użytkownika"
+msgstr[1] "plik użytkownika"
 
-#: js/Model.js:38
-msgid "user files"
-msgstr "pliki użytkownika"
-
-#: js/Model.js:41
-msgid "user file folders"
-msgstr "katalogi plików użytkownika"
-
-#: js/Model.js:267 js/Model.js:283
+#: js/Model.js:269 js/Model.js:285
 msgid "Copying data .. {0}"
 msgstr "Kopiowanie danych .. {0}"
 
-#: js/Model.js:270 js/Model.js:285
+#: js/Model.js:272 js/Model.js:287
 msgid "Moving data .. {0}"
 msgstr "Przenoszenie danych .. {0}"
 
-#: js/Model.js:289
+#: js/Model.js:291
 msgid "Please wait"
 msgstr "Proszę czekać"
 
-#: js/Model.js:522
+#: js/Model.js:524
 msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
 
-#: js/Model.js:523
+#: js/Model.js:525
 msgid "Type"
 msgstr "Typ"
 
@@ -241,3 +239,9 @@ msgstr "Usuwanie {0}..."
 
 msgid "Dropping on this folder not allowed!"
 msgstr "Usunięcie niniejszego katalogu jest niedozwolone!"
+
+#~ msgid "user files"
+#~ msgstr "pliki użytkownika"
+
+#~ msgid "user file folders"
+#~ msgstr "katalogi plików użytkownika"

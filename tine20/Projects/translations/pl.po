@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - ExampleApplication\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-16 11:25+0000\n"
+"PO-Revision-Date: 2012-02-20 12:24+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-17 05:34+0000\n"
-"X-Generator: Launchpad (build 14814)\n"
+"X-Launchpad-Export-Date: 2012-02-21 06:33+0000\n"
+"X-Generator: Launchpad (build 14838)\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -58,23 +58,23 @@ msgstr[2] "Projekty"
 
 #: js/AddToProjectPanel.js:56
 msgid "Cancel"
-msgstr ""
+msgstr "Anuluj"
 
 #: js/AddToProjectPanel.js:64
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: js/AddToProjectPanel.js:99
 msgid "Please choose the Project to add the contacts to"
-msgstr ""
+msgstr "Proszę wybrać projekt, do którego należy dodać kontakty"
 
 #: js/AddToProjectPanel.js:103
 msgid "Please select the attenders' role"
-msgstr ""
+msgstr "Proszę wybrać rolę uczestnika"
 
 #: js/AddToProjectPanel.js:123
 msgid "Select Project"
-msgstr ""
+msgstr "Wybierz projekt"
 
 #: js/AddToProjectPanel.js:147 js/ProjectEditDialog.js:115
 msgid "Role"
@@ -82,11 +82,11 @@ msgstr "Rola"
 
 #: js/AddToProjectPanel.js:148
 msgid "Select Role"
-msgstr ""
+msgstr "Wybierz rolę"
 
 #: js/AddToProjectPanel.js:168
 msgid "Adding {0} Participants to project"
-msgstr ""
+msgstr "Dodawanie {0} uczestników do projektu"
 
 #: js/Model.js:37
 msgid "Project list"

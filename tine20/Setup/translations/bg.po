@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-16 11:34+0000\n"
+"PO-Revision-Date: 2012-02-20 12:26+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-17 05:34+0000\n"
-"X-Generator: Launchpad (build 14814)\n"
+"X-Launchpad-Export-Date: 2012-02-21 06:33+0000\n"
+"X-Generator: Launchpad (build 14838)\n"
 "X-Poedit-Language: Bulgarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -119,16 +119,16 @@ msgstr ""
 #: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
 #: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:484
 #: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:553
-#: js/AuthenticationPanel.js:575 js/AuthenticationPanel.js:581
-#: js/EmailPanel.js:207
+#: js/AuthenticationPanel.js:559 js/AuthenticationPanel.js:581
+#: js/AuthenticationPanel.js:587 js/EmailPanel.js:207
 msgid "Yes"
 msgstr ""
 
 #: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
 #: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:484
 #: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:553
-#: js/AuthenticationPanel.js:575 js/AuthenticationPanel.js:581
-#: js/EmailPanel.js:207
+#: js/AuthenticationPanel.js:559 js/AuthenticationPanel.js:581
+#: js/AuthenticationPanel.js:587 js/EmailPanel.js:207
 msgid "No"
 msgstr ""
 
@@ -285,37 +285,41 @@ msgstr ""
 msgid "Allow user to change her password?"
 msgstr ""
 
-#: js/AuthenticationPanel.js:562
+#: js/AuthenticationPanel.js:558
+msgid "Readonly access"
+msgstr ""
+
+#: js/AuthenticationPanel.js:568
 msgid "Redirect Settings"
 msgstr ""
 
-#: js/AuthenticationPanel.js:570
+#: js/AuthenticationPanel.js:576
 msgid "Redirect Url (redirect to login screen if empty)"
 msgstr ""
 
-#: js/AuthenticationPanel.js:574
+#: js/AuthenticationPanel.js:580
 msgid "Redirect Always (if No, only redirect after logout)"
 msgstr ""
 
-#: js/AuthenticationPanel.js:580
+#: js/AuthenticationPanel.js:586
 msgid "Redirect to referring site, if exists"
 msgstr ""
 
-#: js/AuthenticationPanel.js:594
+#: js/AuthenticationPanel.js:600
 msgid "Save config and install"
 msgstr ""
 
-#: js/AuthenticationPanel.js:596 js/ConfigManagerPanel.js:359
+#: js/AuthenticationPanel.js:602 js/ConfigManagerPanel.js:359
 msgid "Save config"
 msgstr "Запаметяване на конфигурацията"
 
-#: js/AuthenticationPanel.js:621
+#: js/AuthenticationPanel.js:627
 msgid "Passwords don't match"
 msgstr ""
 
-#: js/AuthenticationPanel.js:631 js/AuthenticationPanel.js:638
-#: js/AuthenticationPanel.js:642 js/AuthenticationPanel.js:654
-#: js/AuthenticationPanel.js:665
+#: js/AuthenticationPanel.js:637 js/AuthenticationPanel.js:644
+#: js/AuthenticationPanel.js:648 js/AuthenticationPanel.js:660
+#: js/AuthenticationPanel.js:671
 msgid "Should not be empty"
 msgstr ""
 

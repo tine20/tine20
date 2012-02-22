@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-14 06:53+0000\n"
-"X-Generator: Launchpad (build 14781)\n"
+"X-Launchpad-Export-Date: 2012-02-21 06:33+0000\n"
+"X-Generator: Launchpad (build 14838)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -662,7 +662,7 @@ msgstr "Cc:"
 msgid "Bcc:"
 msgstr "Bcc:"
 
-#: js/RecipientGrid.js:332
+#: js/RecipientGrid.js:337
 msgid "Remove"
 msgstr "Remove"
 

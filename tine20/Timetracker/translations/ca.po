@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-16 11:31+0000\n"
+"PO-Revision-Date: 2012-02-20 12:21+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators <dverger@joomla.cat>\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-17 05:34+0000\n"
-"X-Generator: Launchpad (build 14814)\n"
+"X-Launchpad-Export-Date: 2012-02-21 06:34+0000\n"
+"X-Generator: Launchpad (build 14838)\n"
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -376,23 +376,23 @@ msgid "default"
 msgstr "per defecte"
 
 #: Setup/Initialize.php:33
-msgid "Timesheets today"
+msgid "My Timesheets today"
 msgstr ""
 
 #: Setup/Initialize.php:47
-msgid "Timesheets this week"
+msgid "My Timesheets this week"
 msgstr ""
 
 #: Setup/Initialize.php:61
-msgid "Timesheets last week"
+msgid "My Timesheets last week"
 msgstr ""
 
 #: Setup/Initialize.php:75
-msgid "Timesheets this month"
+msgid "My Timesheets this month"
 msgstr ""
 
 #: Setup/Initialize.php:89
-msgid "Timesheets last month"
+msgid "My Timesheets last month"
 msgstr ""
 
 #: Setup/Initialize.php:112 Setup/Update/Release5.php:81

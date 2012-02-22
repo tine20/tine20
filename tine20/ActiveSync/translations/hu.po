@@ -83,10 +83,10 @@ msgstr "Alapértelmezett Feladat Lista"
 msgid "The default task list to create new tasks in."
 msgstr "Alapértelmezett Feladat Lista új feladatok létrehozására."
 
-#: Setup/setup.xml:511
+#: Setup/setup.xml:522
 msgid "Default Policy"
 msgstr "Alapértelmezett szabály"
 
-#: Setup/setup.xml:516
+#: Setup/setup.xml:527
 msgid "Default Policy installed during setup"
 msgstr "Alapértelmezett szabály beállításra került a telepítés közben"
