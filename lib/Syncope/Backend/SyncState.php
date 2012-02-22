@@ -127,8 +127,10 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
         $select = $this->_db->select()
             ->from($this->_tablePrefix . 'synckey')
             ->where($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
-            ->where($this->_db->quoteIdentifier('type')      . ' = ?', $folderId);
-    
+            ->where($this->_db->quoteIdentifier('type')      . ' = ?', $folderId)
+            ->order('counter DESC')
+            ->limit(1);
+        
         $stmt = $this->_db->query($select);
         $state = $stmt->fetchObject('Syncope_Model_SyncState');
         $stmt = null; # see https://bugs.php.net/bug.php?id=44081
