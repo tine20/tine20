@@ -69,6 +69,46 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
     }
     
     /**
+     * @see #5802: moving last event of a recurring set with count part creates a instance a day later
+     */
+    public function testLastInstanceExcepetion()
+    {
+        $from = new Tinebase_DateTime('2012-02-20 00:00:00');
+        $until = new Tinebase_DateTime('2012-02-26 23:59:59');
+        
+        $event = new Calendar_Model_Event(array(
+                'uid'           => Tinebase_Record_Abstract::generateUID(),
+                'summary'       => 'Abendessen',
+                'dtstart'       => '2012-02-22 14:00:00',
+                'dtend'         => '2012-02-22 15:30:00',
+                'originator_tz' => 'Europe/Berlin',
+                'rrule'         => 'FREQ=DAILY;COUNT=3',
+                'container_id'  => $this->_testCalendar->getId(),
+        ));
+        
+        $persistentEvent = $this->_controller->create($event);
+        
+        // create exception
+        $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+        )));
+        Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
+        $weekviewEvents[2]->dtstart->subHour(5);
+        $weekviewEvents[2]->dtend->subHour(5);
+        $this->_controller->createRecurException($weekviewEvents[2]);
+        
+        // load series
+        $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+        )));
+        Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
+        $weekviewEvents->sort('dtstart', 'ASC');
+        
+        $this->assertEquals(3, count($weekviewEvents), 'wrong count');
+        $this->assertEquals('2012-02-24 09:00:00', $weekviewEvents[2]->dtstart->toString());
+    }
+    
+    /**
      * http://forge.tine20.org/mantisbt/view.php?id=4810
      */
     public function testWeeklyException()
