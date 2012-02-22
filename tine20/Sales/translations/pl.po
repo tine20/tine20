@@ -126,20 +126,20 @@ msgstr "Moje kontrakty"
 msgid "Contracts created by myself"
 msgstr "Kontrakty utworzone przeze mnie"
 
-msgid "Shared Contracts"
-msgstr "Wspólne kontrakty"
+#~ msgid "Shared Contracts"
+#~ msgstr "Wspólne kontrakty"
 
-msgid "Summary"
-msgstr "Streszczenie"
+#~ msgid "Summary"
+#~ msgstr "Streszczenie"
 
-msgid "Products"
-msgstr "produkty"
+#~ msgid "Products"
+#~ msgstr "produkty"
 
-msgid "All Products"
-msgstr "Wszystkie produkty"
+#~ msgid "All Products"
+#~ msgstr "Wszystkie produkty"
 
-msgid "Contracts"
-msgstr "Kontrakty"
+#~ msgid "Contracts"
+#~ msgstr "Kontrakty"
 
-msgid "All Contracts"
-msgstr "Wszystkie kontrakty"
+#~ msgid "All Contracts"
+#~ msgstr "Wszystkie kontrakty"

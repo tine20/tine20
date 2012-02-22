@@ -122,20 +122,20 @@ msgstr ""
 msgid "Contracts created by myself"
 msgstr ""
 
-msgid "Shared Contracts"
-msgstr "Delte Kontrakter"
+#~ msgid "Shared Contracts"
+#~ msgstr "Delte Kontrakter"
 
-msgid "Summary"
-msgstr "Sammendrag"
+#~ msgid "Summary"
+#~ msgstr "Sammendrag"
 
-msgid "Products"
-msgstr "Produkter"
+#~ msgid "Products"
+#~ msgstr "Produkter"
 
-msgid "All Products"
-msgstr "Alle Produkter"
+#~ msgid "All Products"
+#~ msgstr "Alle Produkter"
 
-msgid "Contracts"
-msgstr "Kontrakter"
+#~ msgid "Contracts"
+#~ msgstr "Kontrakter"
 
-msgid "All Contracts"
-msgstr "Alle Kontrakter"
+#~ msgid "All Contracts"
+#~ msgstr "Alle Kontrakter"

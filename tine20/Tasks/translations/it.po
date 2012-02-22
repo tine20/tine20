@@ -284,20 +284,20 @@ msgstr ""
 msgid "Tasks without responsible"
 msgstr ""
 
-msgid "NEEDS-ACTION"
-msgstr "NECESSITA-AZIONE"
+#~ msgid "NEEDS-ACTION"
+#~ msgstr "NECESSITA-AZIONE"
 
-msgid "COMPLETED"
-msgstr "COMPLETATA"
+#~ msgid "COMPLETED"
+#~ msgstr "COMPLETATA"
 
-msgid "IN-PROCESS"
-msgstr "IN-ESECUZIONE"
+#~ msgid "IN-PROCESS"
+#~ msgstr "IN-ESECUZIONE"
 
-msgid "CANCELLED"
-msgstr "CANCELLATA"
+#~ msgid "CANCELLED"
+#~ msgstr "CANCELLATA"
 
-msgid "Failed"
-msgstr "Fallito"
+#~ msgid "Failed"
+#~ msgstr "Fallito"
 
-msgid "Could not save task."
-msgstr "Impossibile salvare l'attività"
+#~ msgid "Could not save task."
+#~ msgstr "Impossibile salvare l'attività"

@@ -598,44 +598,44 @@ msgstr ""
 msgid "Leads with overdue tasks"
 msgstr ""
 
-msgid "Lead %s has been creaded"
-msgstr "Gestor %s ha sido creado"
+#~ msgid "Lead %s has been creaded"
+#~ msgstr "Gestor %s ha sido creado"
 
-msgid "Add task"
-msgstr "Agregar tarea"
+#~ msgid "Add task"
+#~ msgstr "Agregar tarea"
 
-msgid "Add task for selected lead"
-msgstr "Agregar tarea al gestor seleccionado"
+#~ msgid "Add task for selected lead"
+#~ msgstr "Agregar tarea al gestor seleccionado"
 
-msgid "Task"
-msgstr "Tarea"
+#~ msgid "Task"
+#~ msgstr "Tarea"
 
-msgid "History"
-msgstr "Historial"
+#~ msgid "History"
+#~ msgstr "Historial"
 
-msgid "Lead Name"
-msgstr "Nombre del Gestor"
+#~ msgid "Lead Name"
+#~ msgstr "Nombre del Gestor"
 
-msgid "Date Start"
-msgstr "Fecha de Inicio"
+#~ msgid "Date Start"
+#~ msgstr "Fecha de Inicio"
 
-msgid "Date End"
-msgstr "Fecha de Término"
+#~ msgid "Date End"
+#~ msgstr "Fecha de Término"
 
-msgid "Date End Scheduled"
-msgstr "Fecha de Término Agendada"
+#~ msgid "Date End Scheduled"
+#~ msgstr "Fecha de Término Agendada"
 
-msgid "Created By"
-msgstr "Creado Por"
+#~ msgid "Created By"
+#~ msgstr "Creado Por"
 
-msgid "Last modified By"
-msgstr "Última modificación Por"
+#~ msgid "Last modified By"
+#~ msgstr "Última modificación Por"
 
-msgid "Lead states"
-msgstr "Estados de gestión"
+#~ msgid "Lead states"
+#~ msgstr "Estados de gestión"
 
-msgid "Lead sources"
-msgstr "Fuentes de gestión"
+#~ msgid "Lead sources"
+#~ msgstr "Fuentes de gestión"
 
-msgid "Lead types"
-msgstr "Tipos de gestión"
+#~ msgid "Lead types"
+#~ msgstr "Tipos de gestión"

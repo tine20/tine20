@@ -257,5 +257,5 @@ msgstr "Numer tel. komórkowego"
 msgid "Used when sending SMS"
 msgstr "Używany podczas wysyłania SMSa z poziomu aplikacji"
 
-msgid "Initiate a new outgoing call"
-msgstr "Rozpocznij połączenie wychodzące"
+#~ msgid "Initiate a new outgoing call"
+#~ msgstr "Rozpocznij połączenie wychodzące"

@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-21 06:34+0000\n"
+"X-Launchpad-Export-Date: 2012-02-22 06:54+0000\n"
 "X-Generator: Launchpad (build 14838)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -376,23 +376,23 @@ msgstr "default"
 
 #: Setup/Initialize.php:33
 msgid "My Timesheets today"
-msgstr "My Timesheets today"
+msgstr ""
 
 #: Setup/Initialize.php:47
 msgid "My Timesheets this week"
-msgstr "My Timesheets this week"
+msgstr ""
 
 #: Setup/Initialize.php:61
 msgid "My Timesheets last week"
-msgstr "My Timesheets last week"
+msgstr ""
 
 #: Setup/Initialize.php:75
 msgid "My Timesheets this month"
-msgstr "My Timesheets this month"
+msgstr ""
 
 #: Setup/Initialize.php:89
 msgid "My Timesheets last month"
-msgstr "My Timesheets last month"
+msgstr ""
 
 #: Setup/Initialize.php:112 Setup/Update/Release5.php:81
 msgid "Timeaccounts to bill"

@@ -603,35 +603,35 @@ msgstr ""
 msgid "Leads with overdue tasks"
 msgstr ""
 
-msgid "Lead %s has been creaded"
-msgstr "Le prospect %s a été créé"
+#~ msgid "Lead %s has been creaded"
+#~ msgstr "Le prospect %s a été créé"
 
-msgid "Add task"
-msgstr "Ajouter une tâche"
+#~ msgid "Add task"
+#~ msgstr "Ajouter une tâche"
 
-msgid "Task"
-msgstr "Tâche"
+#~ msgid "Task"
+#~ msgstr "Tâche"
 
-msgid "History"
-msgstr "Historique"
+#~ msgid "History"
+#~ msgstr "Historique"
 
-msgid "Date Start"
-msgstr "Date de début"
+#~ msgid "Date Start"
+#~ msgstr "Date de début"
 
-msgid "Date End"
-msgstr "Date de fin"
+#~ msgid "Date End"
+#~ msgstr "Date de fin"
 
-msgid "Date End Scheduled"
-msgstr "Date de fin planifiée"
+#~ msgid "Date End Scheduled"
+#~ msgstr "Date de fin planifiée"
 
-msgid "Created By"
-msgstr "Créé par"
+#~ msgid "Created By"
+#~ msgstr "Créé par"
 
-msgid "Last modified By"
-msgstr "Dernière modification par"
+#~ msgid "Last modified By"
+#~ msgstr "Dernière modification par"
 
-msgid "Last Modified Time"
-msgstr "Heure de la dernière modification"
+#~ msgid "Last Modified Time"
+#~ msgstr "Heure de la dernière modification"
 
-msgid "Add task for selected lead"
-msgstr "Ajouter une tâche pour le prospect sélectionné"
+#~ msgid "Add task for selected lead"
+#~ msgstr "Ajouter une tâche pour le prospect sélectionné"

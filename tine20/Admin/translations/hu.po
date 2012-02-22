@@ -1021,59 +1021,60 @@ msgid_plural "Email Users"
 msgstr[0] "Email User"
 msgstr[1] "Email Users"
 
-msgid "Quota (MB)"
-msgstr "Kvóta (MB)"
+#~ msgid "Quota (MB)"
+#~ msgstr "Kvóta (MB)"
 
-msgid "Current Mail Size"
-msgstr "Jelenlegi levél méret"
+#~ msgid "Current Mail Size"
+#~ msgstr "Jelenlegi levél méret"
 
-msgid "Sieve Quota"
-msgstr "Sieve Kvóta"
+#~ msgid "Sieve Quota"
+#~ msgstr "Sieve Kvóta"
 
-msgid "Sieve Size"
-msgstr "Sieve Méret"
+#~ msgid "Sieve Size"
+#~ msgstr "Sieve Méret"
 
-msgid "Aliases"
-msgstr "Aliaszok"
+#~ msgid "Aliases"
+#~ msgstr "Aliaszok"
 
-msgid "Forwards"
-msgstr "Továbbítások"
+#~ msgid "Forwards"
+#~ msgstr "Továbbítások"
 
-msgid "User memberships"
-msgstr "Fiók tagságok"
+#~ msgid "User memberships"
+#~ msgstr "Fiók tagságok"
 
-msgid "Transfering {0}..."
-msgstr "Átadás alatt: {0}..."
+#~ msgid "Transfering {0}..."
+#~ msgstr "Átadás alatt: {0}..."
 
-msgid "Loading Tag..."
-msgstr "Címke betöltése..."
+#~ msgid "Loading Tag..."
+#~ msgstr "Címke betöltése..."
 
-msgid "Please Wait"
-msgstr "Kérlek várj"
+#~ msgid "Please Wait"
+#~ msgstr "Kérlek várj"
 
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "Biztos törölni akarja a kiválaszott hozzáférési napló bejegyzéseket?"
+#~ msgid "Do you really want to delete the selected access log entries?"
+#~ msgstr ""
+#~ "Biztos törölni akarja a kiválaszott hozzáférési napló bejegyzéseket?"
 
-msgid "delete entry"
-msgstr "bejegyzés törlése"
+#~ msgid "delete entry"
+#~ msgstr "bejegyzés törlése"
 
-msgid "select all"
-msgstr "mind kijelölése"
+#~ msgid "select all"
+#~ msgstr "mind kijelölése"
 
-msgid "Display from:"
-msgstr "Megjelenítés innen:"
+#~ msgid "Display from:"
+#~ msgstr "Megjelenítés innen:"
 
-msgid "to:"
-msgstr "eddig:"
+#~ msgid "to:"
+#~ msgstr "eddig:"
 
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Hozzáférési napló bejegyzések megjelenítése {0} - {1} / {2}"
+#~ msgid "Displaying access log entries {0} - {1} of {2}"
+#~ msgstr "Hozzáférési napló bejegyzések megjelenítése {0} - {1} / {2}"
 
-msgid "No access log entries to display"
-msgstr "Nincs megjeleníthető bejegyzés"
+#~ msgid "No access log entries to display"
+#~ msgstr "Nincs megjeleníthető bejegyzés"
 
-msgid "Account ID"
-msgstr "Fiók ID"
+#~ msgid "Account ID"
+#~ msgstr "Fiók ID"
 
-msgid "Loading Role..."
-msgstr "Szerep betöltése..."
+#~ msgid "Loading Role..."
+#~ msgstr "Szerep betöltése..."

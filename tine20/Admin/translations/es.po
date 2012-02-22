@@ -1020,86 +1020,86 @@ msgid_plural "Email Users"
 msgstr[0] "Usuario de Correo"
 msgstr[1] "Usuarios de Correo"
 
-msgid "Current Mail Size"
-msgstr "Tamaño Actual del Correo"
+#~ msgid "Current Mail Size"
+#~ msgstr "Tamaño Actual del Correo"
 
-msgid "Sieve Quota"
-msgstr "Cuota Discreta"
+#~ msgid "Sieve Quota"
+#~ msgstr "Cuota Discreta"
 
-msgid "Aliases"
-msgstr "Pseudónimos"
+#~ msgid "Aliases"
+#~ msgstr "Pseudónimos"
 
-msgid "Forwards"
-msgstr "Reenvíos"
+#~ msgid "Forwards"
+#~ msgstr "Reenvíos"
 
-msgid "Loading Tag..."
-msgstr "Cargando Etiqueta..."
+#~ msgid "Loading Tag..."
+#~ msgstr "Cargando Etiqueta..."
 
-msgid "Please Wait"
-msgstr "Por favor espere"
+#~ msgid "Please Wait"
+#~ msgstr "Por favor espere"
 
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "¿Realmente desea borrar los logs de accesos seleccionados?"
+#~ msgid "Do you really want to delete the selected access log entries?"
+#~ msgstr "¿Realmente desea borrar los logs de accesos seleccionados?"
 
-msgid "delete entry"
-msgstr "borrar ingreso"
+#~ msgid "delete entry"
+#~ msgstr "borrar ingreso"
 
-msgid "select all"
-msgstr "seleccionar todo"
+#~ msgid "select all"
+#~ msgstr "seleccionar todo"
 
-msgid "Display from:"
-msgstr "Mostrar de:"
+#~ msgid "Display from:"
+#~ msgstr "Mostrar de:"
 
-msgid "to:"
-msgstr "para:"
+#~ msgid "to:"
+#~ msgstr "para:"
 
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Mostrando logs de acceso {0} - {1} of {2}"
+#~ msgid "Displaying access log entries {0} - {1} of {2}"
+#~ msgstr "Mostrando logs de acceso {0} - {1} of {2}"
 
-msgid "No access log entries to display"
-msgstr "No hay logs de acceso para mostrar"
+#~ msgid "No access log entries to display"
+#~ msgstr "No hay logs de acceso para mostrar"
 
-msgid "Account ID"
-msgstr "ID de Cuenta"
+#~ msgid "Account ID"
+#~ msgstr "ID de Cuenta"
 
-msgid "Loading Role..."
-msgstr "Cargando cargo..."
+#~ msgid "Loading Role..."
+#~ msgstr "Cargando cargo..."
 
-msgid "Do you really want to delete the selected account(s)?"
-msgstr "¿Realmente desea borrar la(s) cuenta(s) seleccionada(s)?"
+#~ msgid "Do you really want to delete the selected account(s)?"
+#~ msgstr "¿Realmente desea borrar la(s) cuenta(s) seleccionada(s)?"
 
-msgid "Deleting account(s)..."
-msgstr "Borrando cuenta(s)..."
+#~ msgid "Deleting account(s)..."
+#~ msgstr "Borrando cuenta(s)..."
 
-msgid "Some error occurred while trying to delete the account(s)."
-msgstr "Ocurrió un error al intentar borrar la(s) cuenta(s)."
+#~ msgid "Some error occurred while trying to delete the account(s)."
+#~ msgstr "Ocurrió un error al intentar borrar la(s) cuenta(s)."
 
-msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "Mostrando Cuentas {0} - {1} de {2}"
+#~ msgid "Displaying accounts {0} - {1} of {2}"
+#~ msgstr "Mostrando Cuentas {0} - {1} de {2}"
 
-msgid "No accounts to display"
-msgstr "No hay cuentas para mostrar"
+#~ msgid "No accounts to display"
+#~ msgstr "No hay cuentas para mostrar"
 
-msgid "add account"
-msgstr "agregar cuenta"
+#~ msgid "add account"
+#~ msgstr "agregar cuenta"
 
-msgid "edit account"
-msgstr "editar cuenta"
+#~ msgid "edit account"
+#~ msgstr "editar cuenta"
 
-msgid "delete account"
-msgstr "borrar cuenta"
+#~ msgid "delete account"
+#~ msgstr "borrar cuenta"
 
-msgid "Deleting group..."
-msgstr "Borrando grupo..."
+#~ msgid "Deleting group..."
+#~ msgstr "Borrando grupo..."
 
-msgid "Email UID"
-msgstr "Email UID"
+#~ msgid "Email UID"
+#~ msgstr "Email UID"
 
-msgid "Email GID"
-msgstr "Email GID"
+#~ msgid "Email GID"
+#~ msgstr "Email GID"
 
-msgid "Email Username"
-msgstr "Usuario de Email"
+#~ msgid "Email Username"
+#~ msgstr "Usuario de Email"
 
-msgid "Current Sieve Size"
-msgstr "Tamaño Actual de Cuota Discreta"
+#~ msgid "Current Sieve Size"
+#~ msgstr "Tamaño Actual de Cuota Discreta"

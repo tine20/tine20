@@ -111,5 +111,5 @@ msgstr "Feldolgozás alatt"
 msgid "ExampleApplication"
 msgstr "PéldaAlkalmazás"
 
-msgid "Example Application"
-msgstr "Példa Alkalmazás"
+#~ msgid "Example Application"
+#~ msgstr "Példa Alkalmazás"

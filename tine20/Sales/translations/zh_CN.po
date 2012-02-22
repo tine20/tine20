@@ -120,29 +120,29 @@ msgstr ""
 msgid "Contracts created by myself"
 msgstr ""
 
-msgid "Shared Contracts"
-msgstr "共享的联系人"
+#~ msgid "Shared Contracts"
+#~ msgstr "共享的联系人"
 
-msgid "Due date"
-msgstr "过期日"
+#~ msgid "Due date"
+#~ msgstr "过期日"
 
-msgid "Priority"
-msgstr "优先级"
+#~ msgid "Priority"
+#~ msgstr "优先级"
 
-msgid "Responsible"
-msgstr "责任"
+#~ msgid "Responsible"
+#~ msgstr "责任"
 
-msgid "Notes"
-msgstr "注释"
+#~ msgid "Notes"
+#~ msgstr "注释"
 
-msgid "Percentage"
-msgstr "百分比"
+#~ msgid "Percentage"
+#~ msgstr "百分比"
 
-msgid "Completed"
-msgstr "完成的"
+#~ msgid "Completed"
+#~ msgstr "完成的"
 
-msgid "Summary"
-msgstr "摘要"
+#~ msgid "Summary"
+#~ msgstr "摘要"
 
-msgid "Contracts"
-msgstr "联系人"
+#~ msgid "Contracts"
+#~ msgstr "联系人"

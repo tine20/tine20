@@ -287,23 +287,23 @@ msgstr "Minden feladat amit utoljára én módosítottam"
 msgid "Tasks without responsible"
 msgstr "Feladatok felelős nélkül"
 
-msgid "Tasks Status Available"
-msgstr "Feladat állapot elérhető"
+#~ msgid "Tasks Status Available"
+#~ msgstr "Feladat állapot elérhető"
 
-msgid "NEEDS-ACTION"
-msgstr "TEVÉKENYSÉG-SZÜKSÉGES"
+#~ msgid "NEEDS-ACTION"
+#~ msgstr "TEVÉKENYSÉG-SZÜKSÉGES"
 
-msgid "COMPLETED"
-msgstr "ELKÉSZÜLT"
+#~ msgid "COMPLETED"
+#~ msgstr "ELKÉSZÜLT"
 
-msgid "IN-PROCESS"
-msgstr "FELDOLGOZÁS ALATT"
+#~ msgid "IN-PROCESS"
+#~ msgstr "FELDOLGOZÁS ALATT"
 
-msgid "CANCELLED"
-msgstr "TÖRÖLVE"
+#~ msgid "CANCELLED"
+#~ msgstr "TÖRÖLVE"
 
-msgid "Failed"
-msgstr "Sikertelen"
+#~ msgid "Failed"
+#~ msgstr "Sikertelen"
 
-msgid "Could not save task."
-msgstr "Feladat nem menthető."
+#~ msgid "Could not save task."
+#~ msgstr "Feladat nem menthető."

@@ -204,29 +204,29 @@ msgstr ""
 msgid "My projects that are on hold"
 msgstr ""
 
-msgid "Name"
-msgstr "Nombre"
+#~ msgid "Name"
+#~ msgstr "Nombre"
 
-msgid "Budget"
-msgstr "Presupuesto"
+#~ msgid "Budget"
+#~ msgstr "Presupuesto"
 
-msgid "Show closed"
-msgstr "Función Cerrada"
+#~ msgid "Show closed"
+#~ msgstr "Función Cerrada"
 
 #, fuzzy
-msgid "ExampleRecord"
-msgstr "RegistroDeEjemplo"
+#~ msgid "ExampleRecord"
+#~ msgstr "RegistroDeEjemplo"
 
-msgid "ExampleApplication"
-msgstr "AplicaciónDeEjemplo"
+#~ msgid "ExampleApplication"
+#~ msgstr "AplicaciónDeEjemplo"
 
-msgid "ExampleRecords"
-msgstr "RegistrosDeEjemplo"
+#~ msgid "ExampleRecords"
+#~ msgstr "RegistrosDeEjemplo"
 
-msgid "All ExampleRecords"
-msgstr "Todos los RegistrosDeEjemplo"
+#~ msgid "All ExampleRecords"
+#~ msgstr "Todos los RegistrosDeEjemplo"
 
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "listado de registro"
-msgstr[1] "listado de registros"
+#~ msgid "record list"
+#~ msgid_plural "record lists"
+#~ msgstr[0] "listado de registro"
+#~ msgstr[1] "listado de registros"

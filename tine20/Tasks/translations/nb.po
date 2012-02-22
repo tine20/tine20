@@ -284,20 +284,20 @@ msgstr ""
 msgid "Tasks without responsible"
 msgstr ""
 
-msgid "NEEDS-ACTION"
-msgstr "TRENGER-HANDLING"
+#~ msgid "NEEDS-ACTION"
+#~ msgstr "TRENGER-HANDLING"
 
-msgid "COMPLETED"
-msgstr "FULLFØRT"
+#~ msgid "COMPLETED"
+#~ msgstr "FULLFØRT"
 
-msgid "IN-PROCESS"
-msgstr "I-PROSESS"
+#~ msgid "IN-PROCESS"
+#~ msgstr "I-PROSESS"
 
-msgid "CANCELLED"
-msgstr "AVBRUTT"
+#~ msgid "CANCELLED"
+#~ msgstr "AVBRUTT"
 
-msgid "Failed"
-msgstr "Feilet"
+#~ msgid "Failed"
+#~ msgstr "Feilet"
 
-msgid "Could not save task."
-msgstr "Klarte ikke å lagre oppgave."
+#~ msgid "Could not save task."
+#~ msgstr "Klarte ikke å lagre oppgave."

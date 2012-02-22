@@ -602,14 +602,14 @@ msgstr ""
 msgid "Leads with overdue tasks"
 msgstr ""
 
-msgid "Lead %s has been creaded"
-msgstr "S'ha creat el client potencial %s"
+#~ msgid "Lead %s has been creaded"
+#~ msgstr "S'ha creat el client potencial %s"
 
-msgid "Last Modified Time"
-msgstr "Modificat per darrera vegada"
+#~ msgid "Last Modified Time"
+#~ msgstr "Modificat per darrera vegada"
 
-msgid "Add task"
-msgstr "Afegeix una tasca"
+#~ msgid "Add task"
+#~ msgstr "Afegeix una tasca"
 
-msgid "Add task for selected lead"
-msgstr "Afegeix una tasca per al client potencial seleccionat"
+#~ msgid "Add task for selected lead"
+#~ msgstr "Afegeix una tasca per al client potencial seleccionat"

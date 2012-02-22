@@ -280,20 +280,20 @@ msgstr ""
 msgid "Tasks without responsible"
 msgstr ""
 
-msgid "NEEDS-ACTION"
-msgstr "要アクション"
+#~ msgid "NEEDS-ACTION"
+#~ msgstr "要アクション"
 
-msgid "COMPLETED"
-msgstr "完了"
+#~ msgid "COMPLETED"
+#~ msgstr "完了"
 
-msgid "IN-PROCESS"
-msgstr "進行中"
+#~ msgid "IN-PROCESS"
+#~ msgstr "進行中"
 
-msgid "CANCELLED"
-msgstr "キャンセル"
+#~ msgid "CANCELLED"
+#~ msgstr "キャンセル"
 
-msgid "Failed"
-msgstr "失敗"
+#~ msgid "Failed"
+#~ msgstr "失敗"
 
-msgid "Could not save task."
-msgstr "タスクの保存に失敗しました"
+#~ msgid "Could not save task."
+#~ msgstr "タスクの保存に失敗しました"

@@ -1024,112 +1024,112 @@ msgid_plural "Email Users"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Loading Tag..."
-msgstr "Загрузка тэга..."
+#~ msgid "Loading Tag..."
+#~ msgstr "Загрузка тэга..."
 
-msgid "Please Wait"
-msgstr "Пожалуйста, подождите"
+#~ msgid "Please Wait"
+#~ msgstr "Пожалуйста, подождите"
 
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "Вы действительно хотите удалить выбранные элементы лога доступа?"
+#~ msgid "Do you really want to delete the selected access log entries?"
+#~ msgstr "Вы действительно хотите удалить выбранные элементы лога доступа?"
 
-msgid "delete entry"
-msgstr "удалить элемент"
+#~ msgid "delete entry"
+#~ msgstr "удалить элемент"
 
-msgid "select all"
-msgstr "выбрать все"
+#~ msgid "select all"
+#~ msgstr "выбрать все"
 
-msgid "Display from:"
-msgstr "Показаны с:"
+#~ msgid "Display from:"
+#~ msgstr "Показаны с:"
 
-msgid "to:"
-msgstr "до:"
+#~ msgid "to:"
+#~ msgstr "до:"
 
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Показаны элементы лога доступа {0} - {1} из {2}"
+#~ msgid "Displaying access log entries {0} - {1} of {2}"
+#~ msgstr "Показаны элементы лога доступа {0} - {1} из {2}"
 
-msgid "No access log entries to display"
-msgstr "Нет записей лога доступа"
+#~ msgid "No access log entries to display"
+#~ msgstr "Нет записей лога доступа"
 
-msgid "Account ID"
-msgstr "ID учётной записи"
+#~ msgid "Account ID"
+#~ msgstr "ID учётной записи"
 
-msgid "Loading Role..."
-msgstr "Загрузка роли..."
+#~ msgid "Loading Role..."
+#~ msgstr "Загрузка роли..."
 
-msgid "Do you really want to delete the selected account(s)?"
-msgstr "Вы действительно хотите удалить выбранную учётную запись(и)?"
+#~ msgid "Do you really want to delete the selected account(s)?"
+#~ msgstr "Вы действительно хотите удалить выбранную учётную запись(и)?"
 
-msgid "Deleting account(s)..."
-msgstr "Удаление учётной записи(ей)..."
+#~ msgid "Deleting account(s)..."
+#~ msgstr "Удаление учётной записи(ей)..."
 
-msgid "Some error occurred while trying to delete the account(s)."
-msgstr "При удалении учётной записи (ей) произошла ошибка."
+#~ msgid "Some error occurred while trying to delete the account(s)."
+#~ msgstr "При удалении учётной записи (ей) произошла ошибка."
 
-msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "Показаны учётные записи {0} - {1} из {2}"
+#~ msgid "Displaying accounts {0} - {1} of {2}"
+#~ msgstr "Показаны учётные записи {0} - {1} из {2}"
 
-msgid "No accounts to display"
-msgstr "Нет учётных записей"
+#~ msgid "No accounts to display"
+#~ msgstr "Нет учётных записей"
 
-msgid "add account"
-msgstr "добавить учётную запись"
+#~ msgid "add account"
+#~ msgstr "добавить учётную запись"
 
-msgid "edit account"
-msgstr "изменить учётную запись"
+#~ msgid "edit account"
+#~ msgstr "изменить учётную запись"
 
-msgid "delete account"
-msgstr "удалить учётную запись"
+#~ msgid "delete account"
+#~ msgstr "удалить учётную запись"
 
-msgid "Deleting group..."
-msgstr "Удаление группы..."
-
-#, fuzzy
-msgid "Email UID"
-msgstr "Электронная почта"
+#~ msgid "Deleting group..."
+#~ msgstr "Удаление группы..."
 
 #, fuzzy
-msgid "Email GID"
-msgstr "Электронная почта"
+#~ msgid "Email UID"
+#~ msgstr "Электронная почта"
 
 #, fuzzy
-msgid "Email Username"
-msgstr "Пользователь Samba"
-
-msgid "enter searchfilter"
-msgstr "Введите поисковый фильтр"
-
-msgid "remove account"
-msgstr "удалить учётную запись"
-
-msgid "Role members"
-msgstr "Участники роли"
-
-msgid "Deleting tag..."
-msgstr "Удаление тэга..."
-
-msgid "name"
-msgstr "Имя"
-
-msgid "status"
-msgstr "Статус"
-
-msgid "Deleting account..."
-msgstr "Счет удаляется..."
+#~ msgid "Email GID"
+#~ msgstr "Электронная почта"
 
 #, fuzzy
-msgid "Some error occurred while trying to delete the account."
-msgstr "При удаление счета произошла  ошибка."
+#~ msgid "Email Username"
+#~ msgstr "Пользователь Samba"
 
-msgid "Saving User Account"
-msgstr "Счет пользователя выл сохранен"
+#~ msgid "enter searchfilter"
+#~ msgstr "Введите поисковый фильтр"
 
-msgid "Could not save user account."
-msgstr "Счет пользователя не мог бить сохранен."
+#~ msgid "remove account"
+#~ msgstr "удалить учётную запись"
 
-msgid "Add New User Account"
-msgstr "Добавить новый счет пользователя"
+#~ msgid "Role members"
+#~ msgstr "Участники роли"
+
+#~ msgid "Deleting tag..."
+#~ msgstr "Удаление тэга..."
+
+#~ msgid "name"
+#~ msgstr "Имя"
+
+#~ msgid "status"
+#~ msgstr "Статус"
+
+#~ msgid "Deleting account..."
+#~ msgstr "Счет удаляется..."
 
 #, fuzzy
-msgid "Edit User Account \"{0}\""
-msgstr "Обработать счёт пользователя \"{0}\""
+#~ msgid "Some error occurred while trying to delete the account."
+#~ msgstr "При удаление счета произошла  ошибка."
+
+#~ msgid "Saving User Account"
+#~ msgstr "Счет пользователя выл сохранен"
+
+#~ msgid "Could not save user account."
+#~ msgstr "Счет пользователя не мог бить сохранен."
+
+#~ msgid "Add New User Account"
+#~ msgstr "Добавить новый счет пользователя"
+
+#, fuzzy
+#~ msgid "Edit User Account \"{0}\""
+#~ msgstr "Обработать счёт пользователя \"{0}\""

@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-21 06:34+0000\n"
+"X-Launchpad-Export-Date: 2012-02-22 06:55+0000\n"
 "X-Generator: Launchpad (build 14838)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -1274,60 +1274,58 @@ msgstr "OK"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:113
 msgid "Merging Records..."
-msgstr "Merging Records..."
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:150
 msgid "Invalid data after merge"
-msgstr "Invalid data after merge"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:150
 msgid ""
 "The resulting {0} has invalid data. Both {1} haven't been touched. <br /"
 "><b>Validation Message:</b><br />{2}"
 msgstr ""
-"The resulting {0} has invalid data. Both {1} haven't been touched. <br /"
-"><b>Validation Message:</b><br />{2}"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:153
 msgid "Remove Duplicate Failed"
-msgstr "Remove Duplicate Failed"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:153
 msgid "The merge succeeded, but the duplicate {0} could not be removed"
-msgstr "The merge succeeded, but the duplicate {0} could not be removed"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:155
 msgid "Merge Failed"
-msgstr "Merge Failed"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:155
 msgid "The merge failed. Both {0} haven't been touched."
-msgstr "The merge failed. Both {0} haven't been touched."
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:193
 msgid "Merge {0}, prefer First"
-msgstr "Merge {0}, prefer First"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:194
 msgid "Merge {0}, prefer Second"
-msgstr "Merge {0}, prefer Second"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:201
 #: js/widgets/grid/GridPanel.js:437
 msgid "Merge {0}"
-msgstr "Merge {0}"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:204
 msgid "First {0}"
-msgstr "First {0}"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:205
 msgid "Second {0}"
-msgstr "Second {0}"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:206
 msgid "Final {0}"
-msgstr "Final {0}"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateResolveGridPanel.js:41
 msgid "The record you try to add might already exist."

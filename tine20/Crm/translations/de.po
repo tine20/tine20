@@ -605,62 +605,62 @@ msgstr "Alle Leads, für die ich verantwortlich bin"
 msgid "Leads with overdue tasks"
 msgstr "Leads mit überfälligen Aufgaben"
 
-msgid "Lead %s has been creaded"
-msgstr "Lead %s wurde erstellt "
+#~ msgid "Lead %s has been creaded"
+#~ msgstr "Lead %s wurde erstellt "
 
-msgid "Last Modified Time"
-msgstr "Zuletzt geändert"
+#~ msgid "Last Modified Time"
+#~ msgstr "Zuletzt geändert"
 
-msgid "Add task"
-msgstr "Aufgabe hinzufügen"
+#~ msgid "Add task"
+#~ msgstr "Aufgabe hinzufügen"
 
-msgid "Add task for selected lead"
-msgstr "Aufgabe zum Lead hinzufügen"
+#~ msgid "Add task for selected lead"
+#~ msgstr "Aufgabe zum Lead hinzufügen"
 
-msgid "Task"
-msgstr "Aufgabe"
+#~ msgid "Task"
+#~ msgstr "Aufgabe"
 
-msgid "History"
-msgstr "Historie"
+#~ msgid "History"
+#~ msgstr "Historie"
 
-msgid "Lead Name"
-msgstr "Lead Name"
+#~ msgid "Lead Name"
+#~ msgstr "Lead Name"
 
-msgid "Date Start"
-msgstr "Startdatum"
+#~ msgid "Date Start"
+#~ msgstr "Startdatum"
 
-msgid "Date End"
-msgstr "Enddatum"
+#~ msgid "Date End"
+#~ msgstr "Enddatum"
 
-msgid "Date End Scheduled"
-msgstr "geplantes Ende"
+#~ msgid "Date End Scheduled"
+#~ msgstr "geplantes Ende"
 
-msgid "Created By"
-msgstr "Erstellt von"
+#~ msgid "Created By"
+#~ msgstr "Erstellt von"
 
-msgid "Last modified By"
-msgstr "Zuletzt bearbeitet von"
+#~ msgid "Last modified By"
+#~ msgstr "Zuletzt bearbeitet von"
 
-msgid "Lead states"
-msgstr "Lead-Status"
+#~ msgid "Lead states"
+#~ msgstr "Lead-Status"
 
-msgid "Lead sources"
-msgstr "Lead-Quellen"
+#~ msgid "Lead sources"
+#~ msgstr "Lead-Quellen"
 
-msgid "Lead types"
-msgstr "Lead-Typen"
+#~ msgid "Lead types"
+#~ msgstr "Lead-Typen"
 
-msgid "Remove Option"
-msgstr "Option entfernen"
+#~ msgid "Remove Option"
+#~ msgstr "Option entfernen"
 
-msgid "Type"
-msgstr "Typ"
+#~ msgid "Type"
+#~ msgstr "Typ"
 
-msgid "Select lead"
-msgstr "Lead auswählen"
+#~ msgid "Select lead"
+#~ msgstr "Lead auswählen"
 
-msgid "Open tasks"
-msgstr "Aufgaben öffnen"
+#~ msgid "Open tasks"
+#~ msgstr "Aufgaben öffnen"
 
-msgid "Tasks status"
-msgstr "Aufgabenstatus"
+#~ msgid "Tasks status"
+#~ msgstr "Aufgabenstatus"
