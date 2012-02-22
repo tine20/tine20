@@ -73,9 +73,6 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
      */
     public function handle()
     {
-        // wrap whole FolderSync command in one transaction
-        $this->_transactionId = Syncope_Registry::getTransactionManager()->startTransaction(Syncope_Registry::getDatabase());
-        
         $xml = simplexml_import_dom($this->_inputDom);
         $syncKey = (int)$xml->SyncKey;
         
@@ -213,8 +210,6 @@ class Syncope_Command_FolderSync extends Syncope_Command_Wbxml
                 $this->_syncStateBackend->update($this->_syncState);
             }
         }
-        
-        Syncope_Registry::getTransactionManager()->commitTransaction($this->_transactionId);
         
         return $this->_outputDom;
     }    

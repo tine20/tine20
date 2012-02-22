@@ -159,8 +159,6 @@ class Syncope_Server
             if ($this->_logger instanceof Zend_Log)
                 $this->_logger->crit(__METHOD__ . '::' . __LINE__ . " " . $e->getTraceAsString());
             
-            Syncope_Registry::getTransactionManager()->rollBack();
-            
             header("HTTP/1.1 500 Internal server error");
             return;
         }
