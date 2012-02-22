@@ -360,4 +360,31 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->setTableVersion('acsync_device', '3');
         $this->setApplicationVersion('ActiveSync', '5.7');
     }
+    
+    /**
+     * update to 5.7
+     * - fix cascade statements
+     * - added new unique key for deviceid and owner_id
+     * 
+     * @return void
+     */
+    public function update_7()
+    {
+        $this->validateTableVersion('acsync_content', '4');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>creation_synckey</name>
+                <type>integer</type>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_content', $declaration);
+                
+        $this->setTableVersion('acsync_content', '5');
+        
+        $this->_backend->truncateTable('acsync_device');
+        
+        $this->setApplicationVersion('ActiveSync', '5.8');
+    }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>5.7</version>
+    <version>5.8</version>
     <order>90</order>
     <depends>
         <application>Tinebase</application>
@@ -421,7 +421,7 @@
             <name>acsync_content</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -456,6 +456,11 @@
                     <name>is_deleted</name>
                     <type>boolean</type>
                     <default>false</default>
+                </field>
+                <field>
+                    <name>creation_synckey</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
                 </field>
                 <index>
                     <name>id</name>
