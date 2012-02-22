@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 Ext.ns('Tine.Filemanager');
@@ -23,11 +23,10 @@ Tine.Filemanager.PathFilterPlugin = Ext.extend(Tine.widgets.tree.FilterPlugin, {
      * @param {String} value
      */
     selectValue: function(value) {
-
         var values = Ext.isArray(value) ? value : [value];
         Ext.each(values, function(value) {
             var treePath = '/';
-     
+            
             treePath = this.treePanel.getTreePath(value);
             
             this.selectPath.call(this.treePanel, treePath, null, function() {
@@ -44,5 +43,4 @@ Tine.Filemanager.PathFilterPlugin = Ext.extend(Tine.widgets.tree.FilterPlugin, {
             }.createDelegate(this), true);
         }, this);
     }
-   
 });
