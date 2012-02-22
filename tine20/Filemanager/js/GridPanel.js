@@ -455,9 +455,9 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onCreateFolder: function(button, event) {
         
         var app = this.app,
-        nodeName = app.i18n._('user file folder');
+            nodeName = Tine.Filemanager.Model.Node.getContainerName();
         
-        Ext.MessageBox.prompt(String.format(_('New {0}'), nodeName), String.format(_('Please enter the name of the new {0}:'), nodeName), function(_btn, _text) {
+        Ext.MessageBox.prompt(_('New Folder'), _('Please enter the name of the new folder:'), function(_btn, _text) {
             
             var currentFolderNode = app.mainScreen.GridPanel.currentFolderNode;
             if(currentFolderNode && _btn == 'ok') {
