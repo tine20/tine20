@@ -14,3 +14,4 @@ scripts/packaging/tine20build/
 tine20/build
 scripts/weeklyevents
 scripts/custom
+scripts/syncuuids/conf.php
