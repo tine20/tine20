@@ -34,7 +34,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
 
     
     /**
-	 * @todo why is this needed???
+     * @todo why is this needed???
      */
     protected $_omitModLog = true;
     
@@ -231,7 +231,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             $list->email        = $group->email;
             $list->type         = Addressbook_Model_List::LISTTYPE_GROUP;
             $list->container_id = $group->container_id;
-            $list->members		= $this->_getContactIds($group->members);
+            $list->members      = $this->_getContactIds($group->members);
         
             // add modlog info
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($list, 'update');
@@ -245,7 +245,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
                 'email'         => $group->email,
                 'type'          => Addressbook_Model_List::LISTTYPE_GROUP,
                 'container_id'  => $group->container_id,
-                'members'		=> $this->_getContactIds($group->members)
+                'members'       => $this->_getContactIds($group->members)
             ));
         
             // add modlog info

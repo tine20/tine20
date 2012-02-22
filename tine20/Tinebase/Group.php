@@ -135,7 +135,7 @@ class Tinebase_Group
         $userBackend  = Tinebase_User::getInstance();
         $groupBackend = Tinebase_Group::getInstance();
         
-        $user = $userBackend->getUserByProperty('accountLoginName', $username, 'Tinebase_Model_FullUser');        
+        $user = $userBackend->getUserByProperty('accountLoginName', $username, 'Tinebase_Model_FullUser');
         
         $membershipsSyncBackend = $groupBackend->getGroupMembershipsFromSyncBackend($user);
         if(!in_array($user->accountPrimaryGroup, $membershipsSyncBackend)) {
@@ -160,15 +160,16 @@ class Tinebase_Group
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' group memberships: ' . print_r($membershipsSyncBackend, TRUE));
         
         $groupIds = $groupBackend->setGroupMembershipsInSqlBackend($user, $membershipsSyncBackend);
-        self::syncLists($groupIds);
+        self::syncListsOfUserContact($groupIds, $user->contact_id);
     }
     
     /**
      * creates or updates addressbook lists for an array of group ids
      * 
      * @param array $groupIds
+     * @param string $contactId
      */
-    public static function syncLists($groupIds)
+    public static function syncListsOfUserContact($groupIds, $contactId)
     {
         if (! Tinebase_Application::getInstance()->isInstalled('Addressbook')) {
             return;
@@ -177,12 +178,33 @@ class Tinebase_Group
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             .' Syncing ' . count($groupIds) . ' group <-> lists');
         
+        $listBackend = new Addressbook_Backend_List();
+        
         $groups = Tinebase_Group::getInstance()->getMultiple($groupIds);
         foreach ($groups as $group) {
-            $group->members = Tinebase_Group::getInstance()->getGroupMembers($group);
+            // check if list already exists and user is member of the group
+            if (! empty($group->list_id)) {
+                try {
+                    $list = $listBackend->get($group->list_id);
+                    if (in_array($contactId, $list->members)) {
+                        // 
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            .' User already in list ' . $group->name . ', no need to further process this list.');
+                        continue;
+                    }
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    // list not found -> create new one in createOrUpdateList
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        .' List ' . $group->name . ' not found.');
+                }
+            }
+            
+            $group->members = Tinebase_Group::getInstance()->getGroupMembers($group->getId());
             $list = Admin_Controller_Group::getInstance()->createOrUpdateList($group);
-            $group->list_id = $list->getId();
-            Tinebase_Group::getInstance()->updateGroup($group);
+            if ($group->list_id !== $list->getId()) {
+                $group->list_id = $list->getId();
+                Tinebase_Group::getInstance()->updateGroup($group);
+            }
         }
     }
     

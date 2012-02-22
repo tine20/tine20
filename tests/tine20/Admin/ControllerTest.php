@@ -31,9 +31,9 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Admin Controller Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Admin Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -97,7 +97,7 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	
+    
     }
     
     /**
@@ -200,9 +200,4 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
         $group = Admin_Controller_Group::getInstance()->get($groups[0]->getId());
     }
     
-}		
-	
-
-if (PHPUnit_MAIN_METHOD == 'Admin_ControllerTest::main') {
-    Admin_ControllerTest::main();
 }

@@ -40,7 +40,7 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'id';    
+    protected $_identifier = 'id';
     
     /**
      * @see Tinebase_Record_Abstract

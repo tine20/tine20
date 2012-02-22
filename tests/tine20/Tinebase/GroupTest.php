@@ -298,16 +298,21 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
         Tinebase_User::getInstance()->updateUserInSqlBackend($this->objects['account1']);
         
         $this->testSetGroupMembers();
-        Tinebase_Group::syncLists(array($this->objects['initialGroup']->getId()));
+        Tinebase_Group::syncListsOfUserContact(array($this->objects['initialGroup']->getId()), $this->objects['account1']->contact_id);
         $group = Tinebase_Group::getInstance()->getGroupById($this->objects['initialGroup']);
         
-        $this->assertTrue(! empty($group->list_id));
+        $this->assertTrue(! empty($group->list_id), 'list id empty: ' . print_r($group->toArray(), TRUE));
         
         $list = Addressbook_Controller_List::getInstance()->get($group->list_id);
         
         $this->assertEquals($group->getId(), $list->group_id);
         $this->assertEquals($group->name, $list->name);
-        $this->assertTrue(! empty($list->members));
+        $this->assertTrue(! empty($list->members), 'list members empty: ' . print_r($list->toArray(), TRUE));
         $this->assertEquals($this->objects['account1']->contact_id, $list->members[0]);
+        
+        // sync again -> should not change anything
+        Tinebase_Group::syncListsOfUserContact(array($group->getId()), $this->objects['account1']->contact_id);
+        $listAgain = Addressbook_Controller_List::getInstance()->get($group->list_id);
+        $this->assertEquals($list->toArray(), $listAgain->toArray());
     }
 }
