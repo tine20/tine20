@@ -174,14 +174,14 @@ class Setup_Core extends Tinebase_Core
     
     /**
      * initializes the database connection
-     *
-     * @throws  Tinebase_Exception_UnexpectedValue
+     * 
+     * @return boolean
      * 
      * @todo try to write to db, if it fails: self::set(Setup_Core::CHECKDB, FALSE);
      */
     public static function setupDatabaseConnection()
     {
-        self::set(Setup_Core::CHECKDB, FALSE);
+        $dbcheck = FALSE;
         
         // check database first
         if (self::configFileExists()) {
@@ -190,8 +190,7 @@ class Setup_Core extends Tinebase_Core
             if ($dbConfig->adapter === self::PDO_MYSQL && (! defined(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY) || ! defined(PDO::MYSQL_ATTR_INIT_COMMAND))) {
                 Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                     . ' MySQL PDO constants not defined.');
-
-                return;
+                return FALSE;
             }
             
             try {
@@ -199,11 +198,10 @@ class Setup_Core extends Tinebase_Core
                 
                 $serverVersion = self::getDb()->getServerVersion();
                 
-                switch($dbConfig->adapter) {
+                switch ($dbConfig->adapter) {
                     case self::PDO_MYSQL:
                         if (version_compare(self::MYSQL_MINIMAL_VERSION, $serverVersion, '<')) {
-
-                            self::set(Setup_Core::CHECKDB, TRUE);
+                            $dbcheck = TRUE;
                         } else {
                             Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                                 . ' MySQL server version incompatible! ' . $serverVersion
@@ -214,7 +212,7 @@ class Setup_Core extends Tinebase_Core
                         
                     case self::PDO_PGSQL:
                         if (version_compare(self::PGSQL_MINIMAL_VERSION, $serverVersion, '<')) {
-                            self::set(Setup_Core::CHECKDB, TRUE);
+                            $dbcheck = TRUE;
                         } else {
                             Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                                 . ' PostgreSQL server version incompatible! ' . $serverVersion
@@ -224,8 +222,8 @@ class Setup_Core extends Tinebase_Core
                         break;
                     
                     default:
-                        //@todo check version requirements for other db adapters
-                        self::set(Setup_Core::CHECKDB, TRUE);
+                        // @todo check version requirements for other db adapters
+                        $dbcheck = TRUE;
                         break;
                 }
                 
@@ -235,6 +233,9 @@ class Setup_Core extends Tinebase_Core
                 Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $zde->getMessage());
             }
         }
+        
+        self::set(Setup_Core::CHECKDB, $dbcheck);
+        return $dbcheck;
     }
     
     /**

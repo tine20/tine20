@@ -6,7 +6,7 @@
  * @subpackage  AsyncJob
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -71,20 +71,7 @@ class Tinebase_AsyncJob
      */
     public function getNextSequence($_name)
     {
-        // get last job of this name
-        $filter = new Tinebase_Model_AsyncJobFilter(array(array(
-            'field'     => 'name',
-            'operator'  => 'equals',
-            'value'     => $_name
-        )));
-        $pagination = new Tinebase_Model_Pagination(array(
-            'sort'		=> 'start_time',
-            'dir'		=> 'DESC',
-            'limit'		=> 1,
-        ));
-        $jobs = $this->_backend->search($filter, $pagination);
-        $lastJob = $jobs->getFirstRecord();
-        
+        $lastJob = $this->getLastJob($_name);
         if ($lastJob) {
             if ($lastJob->status === Tinebase_Model_AsyncJob::STATUS_RUNNING) {
                 if (Tinebase_DateTime::now()->isLater($lastJob->end_time)) {
@@ -101,6 +88,29 @@ class Tinebase_AsyncJob
         }
         
         return $result;
+    }
+    
+    /**
+     * get last job of this name
+     * 
+     * @param string $name
+     * @return Tinebase_Model_AsyncJob
+     */
+    public function getLastJob($name)
+    {
+        $filter = new Tinebase_Model_AsyncJobFilter(array(array(
+            'field'     => 'name',
+            'operator'  => 'equals',
+            'value'     => $name
+        )));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'sort'		=> 'start_time',
+            'dir'		=> 'DESC',
+            'limit'		=> 1,
+        ));
+        $jobs = $this->_backend->search($filter, $pagination);
+        $lastJob = $jobs->getFirstRecord();
+        return $lastJob;
     }
 
     /**

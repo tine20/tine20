@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -62,7 +62,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             
         } else {
             echo "Wrong username and/or password.\n";
-            exit();            
+            exit();
         }
     }
     
@@ -361,5 +361,111 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo "\n";
         
         return TRUE;
+    }
+    
+    /**
+     * nagios monitoring for tine 2.0 database connection
+     * 
+     * @return integer
+     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+     * 
+     * @todo add verbose param?
+     */
+    public function monitoringCheckDB()
+    {
+        $message = 'DB CONNECTION FAIL';
+        try {
+            if (! Setup_Core::isRegistered(Setup_Core::CONFIG)) {
+                Setup_Core::setupConfig();
+            }
+            if (! Setup_Core::isRegistered(Setup_Core::LOGGER)) {
+                Setup_Core::setupLogger();
+            }
+            $dbcheck = Setup_Core::setupDatabaseConnection();
+        } catch (Exception $e) {
+            $message .= ': ' . $e->getMessage();
+            $dbcheck = FALSE;
+        }
+        
+        if ($dbcheck) {
+            echo "DB CONNECTION OK\n";
+            return 0;
+        } else {
+            echo $message . "\n";
+            return 2;
+        }
+    }
+    
+    /**
+     * nagios monitoring for tine 2.0 config file
+     * 
+     * @return integer
+     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+     * 
+     * @todo add verbose param?
+     */
+    public function monitoringCheckConfig()
+    {
+        $message = 'CONFIG FAIL';
+        $configcheck = FALSE;
+        
+        $configfile = Setup_Core::getConfigFilePath();
+        if ($configfile) {
+            $configfile = escapeshellcmd($configfile);
+            exec("php -l $configfile 2> /dev/null", $error, $code);
+            if ($code == 0) {
+                $configcheck = TRUE;
+            } else {
+                $message .= ': CONFIG FILE SYNTAX ERROR';
+            }
+        } else {
+            $message .= ': CONFIG FILE MISSING';
+        }
+        
+        if ($configcheck) {
+            echo "CONFIG FILE OK\n";
+            return 0;
+        } else {
+            echo $message . "\n";
+            return 2;
+        }
+    }
+    
+    /**
+    * nagios monitoring for tine 2.0 async cronjob run
+    *
+    * @return integer
+    * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+    *
+    * @todo add verbose param?
+    */
+    public function monitoringCheckCron()
+    {
+        $message = 'CRON FAIL';
+        $result  = 2;
+        
+        try {
+            $lastJob = Tinebase_AsyncJob::getInstance()->getLastJob('Tinebase_Event_Async_Minutely');
+            
+            if ($lastJob === NULL) {
+                $message .= ': NO LAST JOB FOUND';
+                $result = 1;
+            } else if ($lastJob->status === Tinebase_Model_AsyncJob::STATUS_RUNNING && Tinebase_DateTime::now()->isLater($lastJob->end_time)) {
+                $message .= ': LAST JOB TOOK TOO LONG';
+                $result = 1;
+            } else if ($lastJob->status === Tinebase_Model_AsyncJob::STATUS_FAILURE) {
+                $message .= ': LAST JOB FAILED';
+                $result = 1;
+            } else {
+                $message = 'CRON OK';
+                $result = 0;
+            }
+        } catch (Exception $e) {
+            $message .= ': ' . $e->getMessage();
+            $result = 2;
+        }
+        
+        echo $message . "\n";
+        return $result;
     }
 }
