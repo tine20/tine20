@@ -53,7 +53,7 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
     syncGrantTitle: 'Sync', // _('Sync')
     syncGrantDescription: 'The grant to synchronise records with this container', // _('The grant to synchronise records with this container')
     adminGrantTitle: 'Admin', // _('Admin')
-    adminGrantDescription: 'The grant to synchronise records with this container', // _('The grant to synchronise records with this container')
+    adminGrantDescription: 'The grant to administrate this container', // _('The grant to administrate this container')
     
     freebusyGrantTitle: 'Free Busy', // _('Free Busy')
     freebusyGrantDescription: 'The grant to access free busy information of events in this calendar', // _('The grant to access free busy information of events in this calendar')
