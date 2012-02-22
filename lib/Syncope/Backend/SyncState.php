@@ -113,6 +113,8 @@ class Syncope_Backend_SyncState implements Syncope_Backend_ISyncState
     }
     
     /**
+     * always returns the latest syncstate
+     * 
      * @param  Syncope_Model_IDevice|string  $_deviceId
      * @param  Syncope_Model_IFolder|string  $_folderId
      * @return Syncope_Model_SyncState
