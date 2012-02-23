@@ -601,7 +601,21 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         if (this.summaryPanel) {
             return this.summaryPanel;
         }
-        
+        var exceptionExpander = new Ext.ux.grid.RowExpander({
+            tpl : new Ext.XTemplate('{[this.showClientRecord(values)]}', { showClientRecord: function(values) {
+                if (values && values.exception && values.exception.clientRecord) {
+                    // there is no generic detailsPanel retirval yet
+//                    if (Ext.isObject(values.exception.clientRecord)) {
+//                        var detailsPanel = new Tine.Addressbook.ContactGridDetailsPanel({});
+//                        
+//                        return detailsPanel.tpl.apply(values.exception.clientRecord);
+//                    }
+                    return Ext.util.Format.htmlEncode(Ext.encode(values.exception.clientRecord));
+                } else {
+                    return _('No Detail Informations');
+                }
+            }})
+        });
         return {
             title: _('Summary'),
             border: false,
@@ -629,7 +643,9 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                     xtype: 'grid',
                     store: this.exceptionStore,
                     autoHeight: true,
+                    plugins: exceptionExpander,
                     columns: [
+                        exceptionExpander,
                         { id: 'index', header: _('Index'), width: 60, sortable: false, dataIndex: 'index'}, 
                         { id: 'failure', header: _('Failure'), width: 60, sortable: false, dataIndex: 'message'}
                     ],
