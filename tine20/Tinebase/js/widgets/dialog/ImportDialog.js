@@ -740,7 +740,9 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         
         // failures
         if (failcount) {
-            this.exceptionStore.filter('code', 0);
+            this.exceptionStore.filterBy(function(record, id) {
+                return ! (record.get('code') == 629 && ! record.get('isResolved'));
+            });
             this.summaryPanelFailures.show();
             this.summaryPanelFailures.setTitle(String.format(_('{0} records have failures and will be discarded.'), failcount));
             
