@@ -1127,7 +1127,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     getTargetDateTime: function(e) {
         var target = e.getTarget('div[class=cal-daysviewpanel-daycolumn-row]');
         
-        if (target.id.match(/^ext-gen\d+:\d+/)) {
+        if (target && target.id.match(/^ext-gen\d+:\d+/)) {
             var parts = target.id.split(':');
             
             var date = this.startDate.add(Date.DAY, parseInt(parts[1], 10));
