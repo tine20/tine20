@@ -38,7 +38,8 @@ $anonymousMethods = array(
     'Tinebase.processQueue',
     'Tinebase.monitoringCheckDB',
     'Tinebase.monitoringCheckConfig',
-    'Tinebase.monitoringCheckCron'
+    'Tinebase.monitoringCheckCron',
+    'Tinebase.monitoringLoginNumber',
 );
 
 /**

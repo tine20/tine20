@@ -76,7 +76,8 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
             'Tinebase.processQueue',
             'Tinebase.monitoringCheckDB',
             'Tinebase.monitoringCheckConfig',
-            'Tinebase.monitoringCheckCron'
+            'Tinebase.monitoringCheckCron',
+            'Tinebase.monitoringLoginNumber',
         ))) {
             $tinebaseServer->authenticate($opts->username, $opts->password);
         }

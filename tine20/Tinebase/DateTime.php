@@ -114,9 +114,18 @@ class Tinebase_DateTime extends DateTime
         }
     }
     
+    /**
+     * call interceptor
+     * 
+     * @param string $name
+     * @param array $arguments
+     */
     public function __call($name, $arguments)
     {
-        return call_user_func_array(array($this, "php52compat_$name"), $arguments);
+        if (strpos($name, 'php52compat_') === FALSE) {
+            return call_user_func_array(array($this, "php52compat_$name"), $arguments);
+        }
+        throw new Tinebase_Exception_InvalidArgument('unknown method: ' . str_replace('php52compat_', '', $name));
     }
     
     /**

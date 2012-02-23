@@ -368,8 +368,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * 
      * @return integer
      * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
-     * 
-     * @todo add verbose param?
      */
     public function monitoringCheckDB()
     {
@@ -381,14 +379,16 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             if (! Setup_Core::isRegistered(Setup_Core::LOGGER)) {
                 Setup_Core::setupLogger();
             }
+            $time_start = microtime(true);
             $dbcheck = Setup_Core::setupDatabaseConnection();
+            $time = (microtime(true) - $time_start) * 1000;
         } catch (Exception $e) {
             $message .= ': ' . $e->getMessage();
             $dbcheck = FALSE;
         }
         
         if ($dbcheck) {
-            echo "DB CONNECTION OK\n";
+            echo "DB CONNECTION OK | connecttime={$time}ms;;;;\n";
             return 0;
         } else {
             echo $message . "\n";
@@ -401,8 +401,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * 
      * @return integer
      * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
-     * 
-     * @todo add verbose param?
      */
     public function monitoringCheckConfig()
     {
@@ -436,8 +434,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     *
     * @return integer
     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
-    *
-    * @todo add verbose param?
     */
     public function monitoringCheckCron()
     {
@@ -450,18 +446,57 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             if ($lastJob === NULL) {
                 $message .= ': NO LAST JOB FOUND';
                 $result = 1;
-            } else if ($lastJob->status === Tinebase_Model_AsyncJob::STATUS_RUNNING && Tinebase_DateTime::now()->isLater($lastJob->end_time)) {
-                $message .= ': LAST JOB TOOK TOO LONG';
-                $result = 1;
-            } else if ($lastJob->status === Tinebase_Model_AsyncJob::STATUS_FAILURE) {
-                $message .= ': LAST JOB FAILED';
-                $result = 1;
             } else {
-                $message = 'CRON OK';
-                $result = 0;
+                if ($lastJob->end_time instanceof Tinebase_DateTime) {
+                    $duration = $lastJob->end_time->getTimestamp() - $lastJob->start_time->getTimestamp();
+                    $valueString = ' | duration=' . $duration . 's;;;;';
+                    $valueString .= ' end=' . $lastJob->end_time->getIso() . ';;;;';
+                } else {
+                    $valueString = '';
+                }
+                
+                if ($lastJob->status === Tinebase_Model_AsyncJob::STATUS_RUNNING && Tinebase_DateTime::now()->isLater($lastJob->end_time)) {
+                    $message .= ': LAST JOB TOOK TOO LONG';
+                    $result = 1;
+                } else if ($lastJob->status === Tinebase_Model_AsyncJob::STATUS_FAILURE) {
+                    $message .= ': LAST JOB FAILED';
+                    $result = 1;
+                } else {
+                    $message = 'CRON OK';
+                    $result = 0;
+                }
+                $message .= $valueString;
             }
         } catch (Exception $e) {
             $message .= ': ' . $e->getMessage();
+            $result = 2;
+        }
+        
+        echo $message . "\n";
+        return $result;
+    }
+    
+    /**
+     * nagios monitoring for tine 2.0 logins during the last 5 mins
+     * 
+     * @return number
+     * 
+     * @todo allow to configure timeslot
+     */
+    public function monitoringLoginNumber()
+    {
+        $message = 'LOGINS';
+        $result  = 0;
+        
+        try {
+            $filter = new Tinebase_Model_AccessLogFilter(array(
+                array('field' => 'li', 'operator' => 'after', 'value' => Tinebase_DateTime::now()->subMinute(5))
+            ));
+            $accesslogs = Tinebase_AccessLog::getInstance()->search($filter, NULL, FALSE, TRUE);
+            $valueString = ' | count=' . count($accesslogs) . ';;;;';
+            $message .= ' OK' . $valueString;
+        } catch (Exception $e) {
+            $message .= ' FAIL: ' . $e->getMessage();
             $result = 2;
         }
         

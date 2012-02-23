@@ -254,11 +254,26 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
         
         $lastJob = Tinebase_AsyncJob::getInstance()->getLastJob('Tinebase_Event_Async_Minutely');
         if ($lastJob) {
-            $this->assertEquals("CRON OK\n", $out);
+            $this->assertContains('CRON OK', $out);
             $this->assertEquals(0, $result);
         } else {
             $this->assertEquals("CRON FAIL: NO LAST JOB FOUND\n", $out);
             $this->assertEquals(1, $result);
         }
+    }
+
+    /**
+     * testMonitoringLoginNumber
+     */
+    public function testMonitoringLoginNumber()
+    {
+        ob_start();
+        $result = $this->_cli->monitoringLoginNumber();
+        $out = ob_get_clean();
+        $this->assertEquals(0, $result);
+
+        preg_match('/LOGINS OK \| count=(\d+);;;;/', $out, $matches);
+        $this->assertGreaterThan(1, count($matches));
+        $this->assertGreaterThanOrEqual(0, $matches[1]);
     }
 }
