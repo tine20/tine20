@@ -189,10 +189,16 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 
                 if (empty($recordDataToImport)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' Empty record data.');
-                    continue;
+                        . ' Empty record, invalid data or mapping failed.');
+                    if (empty($recordData)) {
+                        $recordIndex++;
+                        continue;
+                    } else {
+                        $recordToImport = $recordData;
+                        throw new Tinebase_Exception_Record_Validation('Invalid data or mapping failed');
+                    }
                 }
-                    
+                
                 $recordToImport = $this->_createRecordToImport($recordDataToImport);
                 if ($resolveStrategy !== 'discard') {
                     $importedRecord = $this->_importRecord($recordToImport, $resolveStrategy, $recordDataToImport);
@@ -257,7 +263,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Got empty record from mapping! Was: ' . print_r($_data, TRUE));
-            $this->_importResult['failcount']++;
         }
         
         return $result;
@@ -478,7 +483,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $tag = Tinebase_Tags::getInstance()->getTagByName($name, NULL, 'Tinebase', TRUE);
         
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-            	' Added existing tag ' . $name . ' to record.');
+                ' Added existing tag ' . $name . ' to record.');
             
         } catch (Tinebase_Exception_NotFound $tenf) {
             if ($_create) {
@@ -544,7 +549,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $autotags = $this->_sanitizeAutotagsOption();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-        	' Trying to add ' . count($autotags) . ' autotag(s) to record.');
+            ' Trying to add ' . count($autotags) . ' autotag(s) to record.');
         
         $tags = ($_record->tags instanceof Tinebase_Record_RecordSet) ? $_record->tags : new Tinebase_Record_RecordSet('Tinebase_Model_Tag');
         foreach ($autotags as $tagData) {
@@ -568,9 +573,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $result = $_tagData;
         
         $search = array(
-        	'###CURRENTDATE###', 
-        	'###CURRENTTIME###', 
-        	'###USERFULLNAME###'
+            '###CURRENTDATE###', 
+            '###CURRENTTIME###', 
+            '###USERFULLNAME###'
         );
         $now = Tinebase_DateTime::now();
         $replacements = array(
@@ -647,7 +652,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * 
      * @param Exception $_e
      * @param integer $_recordIndex
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Abstract|array $_record
      * 
      * @todo use json converter for client record
      */
@@ -662,16 +667,17 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         } else {
             $this->_importResult['failcount']++;
             $exception = array(
-                'code'		   => $_e->getCode(),
-                'message'	   => $_e->getMessage(),
-            	'clientRecord' => ($_record !== NULL) ? $_record->toArray() : array(),
+                'code'           => $_e->getCode(),
+                'message'       => $_e->getMessage(),
+                'clientRecord' => ($_record !== NULL && $_record instanceof Tinebase_Record_Abstract) ? $_record->toArray() 
+                    : (is_array($_record) ? $_record : array()),
             );
         }        
 
         $this->_importResult['exceptions']->addRecord(new Tinebase_Model_ImportException(array(
-            'code'		    => $_e->getCode(),
-            'message'	    => $_e->getMessage(),
-        	'exception'     => $exception,
+            'code'            => $_e->getCode(),
+            'message'        => $_e->getMessage(),
+            'exception'     => $exception,
             'index'         => $_recordIndex,
         )));
     }
