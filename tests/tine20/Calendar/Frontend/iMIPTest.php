@@ -54,9 +54,9 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar iMIP Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar iMIP Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -102,7 +102,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $ics = file_get_contents(dirname(__FILE__) . '/files/invitation_request_external.ics' );
         $iMIP = new Calendar_Model_iMIP(array(
             'id'             => Tinebase_Record_Abstract::generateUID(),
-        	'ics'            => $ics,
+            'ics'            => $ics,
             'method'         => 'REQUEST',
             'originator'     => 'l.kneschke@caldav.org',
         ));
@@ -152,7 +152,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         
         $iMIP = new Calendar_Model_iMIP(array(
             'id'             => Tinebase_Record_Abstract::generateUID(),
-        	'ics'            => $ics,
+            'ics'            => $ics,
             'method'         => ($_testEmptyMethod) ? NULL : $_method,
             'originator'     => $email,
         ));
@@ -371,7 +371,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         
         $iMIP = new Calendar_Model_iMIP(array(
             'id'             => Tinebase_Record_Abstract::generateUID(),
-        	'ics'            => $ics,
+            'ics'            => $ics,
             'method'         => 'REPLY',
             'originator'     => 'mail@corneliusweiss.de',
         ));

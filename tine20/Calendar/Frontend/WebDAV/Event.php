@@ -380,7 +380,15 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
                 break;
             }
         }
+        
+        // iCal does sends back an old value, because it does refetch the vcalendar after update
+        // therefor we have to keep the current value and must apply it after the convert
+        $currentLastModifiedTime = $this->getRecord()->last_modified_time;
+        
         $event = $this->_converter->toTine20Model($vobject, $this->getRecord());
+        
+        $event->last_modified_time = $currentLastModifiedTime;
+        
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
         $currentContainer = Tinebase_Container::getInstance()->getContainerById($this->getRecord()->container_id);
         $ownAttendee = Calendar_Model_Attender::getOwnAttender($this->getRecord()->attendee);
@@ -417,7 +425,11 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         
         self::enforceEventParameters($event);
         
-        $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
+        try {
+            $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
+        } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
+            throw new Sabre_DAV_Exception_PreconditionFailed('An If-Match header was specified, but none of the specified the ETags matched.','If-Match');
+        }
         
         // avoid sending headers during unit tests
         if (php_sapi_name() != 'cli') {
