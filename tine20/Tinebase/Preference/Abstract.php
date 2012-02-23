@@ -161,9 +161,10 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             'dir'       => 'ASC',
             'sort'      => array('name')
         ));
-        $allPrefs = parent::search($_filter, $_pagination, $_onlyIds);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($allPrefs->toArray(), TRUE));
+        $allPrefs = parent::search($_filter, $_pagination, $_onlyIds);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r((is_array($allPrefs)) ? $allPrefs : $allPrefs->toArray(), TRUE));
         
         if (! $_onlyIds) {
             $this->_addDefaultAndRemoveUndefinedPrefs($allPrefs, $_filter);
