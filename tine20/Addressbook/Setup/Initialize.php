@@ -225,12 +225,31 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      */
     protected function _initializeConfig()
     {
+        self::setDefaultInternalAddressbook($this->_getInternalAddressbook());
+    }
+    
+    /**
+     * set default internal addressbook
+     * 
+     * @param Tinebase_Model_Container $internalAddressbook
+     * @return Tinebase_Model_Container
+     * 
+     * @todo create new internal adb on the fly if it does not exist?
+     */
+    public static function setDefaultInternalAddressbook($internalAddressbook = NULL)
+    {
+        if ($internalAddressbook === NULL) {
+            $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+        }
+        
         Tinebase_Config::getInstance()->setConfigForApplication(
             Tinebase_Config::APPDEFAULTS,
             Zend_Json::encode(array(
-                Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK => $this->_getInternalAddressbook()->getId()
+                Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK => $internalAddressbook->getId()
             )),
             'Admin'
         );
+        
+        return $internalAddressbook;
     }
 }
