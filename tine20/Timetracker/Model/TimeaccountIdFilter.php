@@ -14,6 +14,7 @@
  * @package     Timetracker
  * 
  * @todo move orWhere 'owner' to TS filter
+ * @todo extend Tinebase_Model_Filter_Id
  */
 class Timetracker_Model_TimeaccountIdFilter extends Tinebase_Model_Filter_Abstract implements Tinebase_Model_Filter_AclFilter 
 {
@@ -148,7 +149,6 @@ class Timetracker_Model_TimeaccountIdFilter extends Tinebase_Model_Filter_Abstra
     
     /**
      * resolve timeaccount ids
-     *
      */
     protected function _resolve()
     {
