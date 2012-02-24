@@ -419,7 +419,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function setLastLoginFailure($_loginName)
     {
-        Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Login of user ' . $_loginName . ' failed.');
+        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Login of user ' . $_loginName . ' failed.');
         
         try {
             $user = $this->getUserByLoginName($_loginName);
