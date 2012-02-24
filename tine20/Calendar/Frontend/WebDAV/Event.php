@@ -188,6 +188,18 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
                     $exdate->organizer    = $_event->organizer;
                     self::enforceEventParameters($exdate);
                 }
+                
+                if (! $exdate->getId()) {
+                    // new exdates must authenticate for status updates
+                    foreach($_event->attendee as $attendee) {
+                        if ($attendee->status_authkey) {
+                            $exdateAttedee = Calendar_Model_Attender::getAttendee($exdate->attendee, $attendee);
+                            if ($exdateAttedee) {
+                                $exdateAttedee->status_authkey = $attendee->status_authkey;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
