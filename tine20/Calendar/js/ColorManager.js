@@ -181,10 +181,8 @@ Ext.extend(Tine.Calendar.ColorManager, Ext.util.Observable, {
             // tree comes with containers only
             container = event;
         } else {
-            container = event.get('container_id');
-            if (! container || !container.type || container.type != 'shared') {
-                container = event.getDisplayContainer();
-            }
+            // always show displayContainer
+            container = event.getDisplayContainer();
         }
         
         if (! container.color) {
