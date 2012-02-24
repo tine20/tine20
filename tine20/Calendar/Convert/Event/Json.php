@@ -40,7 +40,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
             return;
         }
         
-        Calendar_Model_Attender::resolveAttendee($_record->attendee);
+        Calendar_Model_Attender::resolveAttendee($_record->attendee, TRUE, $_record);
         self::resolveRrule($_record);
         self::resolveOrganizer($_record);
     }

@@ -542,12 +542,16 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     
     /**
      * resolves given attendee for json representation
-     *
+     * 
+     * @TODO move status_authkey cleanup elsewhere
+     * 
      * @param Tinebase_Record_RecordSet|array   $_eventAttendee 
      * @param bool                              $_resolveDisplayContainers
+     * @param Calendar_Model_Event|array        $_events
      */
-    public static function resolveAttendee($_eventAttendee, $_resolveDisplayContainers = TRUE) {
+    public static function resolveAttendee($_eventAttendee, $_resolveDisplayContainers = TRUE, $_events = NULL) {
         $eventAttendee = $_eventAttendee instanceof Tinebase_Record_RecordSet ? array($_eventAttendee) : $_eventAttendee;
+        $events = $_events instanceof Tinebase_Record_Abstract ? array($_events) : $_events;
         
         // set containing all attendee
         $allAttendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
@@ -643,15 +647,21 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
         
         
-        foreach ($eventAttendee as $attendee) {
+        foreach ($eventAttendee as $idx => $attendee) {
+            $event = is_array($events) && array_key_exists($idx, $events) ? $events[$idx] : NULL;
+            
             foreach ($attendee as $attender) {
                 // keep authkey if user has editGrant to displaycontainer
                 if (isset($attender['displaycontainer_id']) && !is_scalar($attender['displaycontainer_id']) && array_key_exists(Tinebase_Model_Grants::GRANT_EDIT, $attender['displaycontainer_id']['account_grants']) &&  $attender['displaycontainer_id']['account_grants'][Tinebase_Model_Grants::GRANT_EDIT]) {
                     continue;
                 }
                 
-                // keep authkey if attender is not an account and user has editGrant for event
-                if ($attender->user_id instanceof Tinebase_Record_Abstract && (!$attender->user_id->has('account_id') || !$attender->user_id->account_id)) {
+                // keep authkey if attender resource OR contact (no account) and user has editGrant for event
+                if (in_array($attender->user_type, array(self::USERTYPE_USER, self::USERTYPE_RESOURCE))
+                    && $attender->user_id instanceof Tinebase_Record_Abstract
+                    && (!$attender->user_id->has('account_id') || !$attender->user_id->account_id)
+                    && (!$event || $event->{Tinebase_Model_Grants::GRANT_EDIT})
+                ) {
                     continue;
                 }
                 
