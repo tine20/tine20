@@ -308,6 +308,37 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $loadedEvent->alarms->getFirstRecord()->sent_status, 'alarmtime is set to pending');
     }
     
+    // test alarm inspection from 24.03.2012 -> 25.03.2012
+    public function testAdoptAlarmDSTBoundary()
+    {
+        $event = $this->_getEvent();
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1';
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => 30
+            ), TRUE)
+        ));
+        $persistentEvent = $this->_eventController->create($event);
+        
+        // prepare alarm for last non DST instance
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $from = new Tinebase_DateTime('2012-03-24 00:00:00');
+        $until = new Tinebase_DateTime('2012-03-24 23:59:59');
+        $recurSet =Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
+        
+        $alarm = $persistentEvent->alarms->getFirstRecord();
+        $alarm->setOption('recurid', $recurSet[0]->recurid);
+        Tinebase_Alarm::getInstance()->update($alarm);
+        
+        $loadedBaseEvent = $this->_eventController->get($persistentEvent->getId());
+        $alarm = $loadedBaseEvent->alarms->getFirstRecord();
+        $this->assertEquals('2012-03-24', substr($alarm->getOption('recurid'), -19, -9), 'precondition failed');
+        
+        // adopt alarm
+        $this->_eventController->adoptAlarmTime($loadedBaseEvent, $alarm, 'instance');
+        $this->assertEquals('2012-03-25', substr($alarm->getOption('recurid'), -19, -9), 'alarm adoption failed');
+    }
+    
     /**
      * flush mailer (send all remaining mails first)
      */
