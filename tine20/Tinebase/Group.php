@@ -180,8 +180,10 @@ class Tinebase_Group
         
         $listBackend = new Addressbook_Backend_List();
         
-        $groups = Tinebase_Group::getInstance()->getMultiple($groupIds);
-        foreach ($groups as $group) {
+        foreach ($groupIds as $groupId) {
+            // get single groups to make sure that container id is joined
+            $group = Tinebase_Group::getInstance()->getGroupById($groupId);
+            
             // check if list already exists and user is member of the group
             if (! empty($group->list_id)) {
                 try {

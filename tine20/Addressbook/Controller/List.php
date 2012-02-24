@@ -126,7 +126,13 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     protected function _getDefaultInternalAddressbook()
     {
         $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
-        return $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK];
+        $result = $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK];
+        
+        if (empty($result)) {
+            // @todo perhaps we should create a new one if this is missing
+            throw new Tinebase_Exception_NotFound('Default internal addressbook not found.');
+        }
+        return $result;
     }
     
     /**
