@@ -34,41 +34,22 @@ Tine.widgets.persistentfilter.store.PersistentFilterStore = Ext.extend(Ext.data.
  * @singleton
  * @return {PersistentFilterStore}
  */
-Tine.widgets.persistentfilter.store.getPersistentFilterStore = function(stateId) {
+Tine.widgets.persistentfilter.store.getPersistentFilterStore = function() {
     if (! Tine.widgets.persistentfilter.store.persistentFilterStore) {
-        
         if (window.isMainWindow) {
-        
-        var fields = Tine.widgets.persistentfilter.model.PersistentFilter.getFieldDefinitions();
-        fields.push('sorting');
-                      
-            // get sorting from state
-            var state = Ext.state.Manager.get(stateId, {});
-            var sortField = 'name';
+            var fields = Tine.widgets.persistentfilter.model.PersistentFilter.getFieldDefinitions();
             
-        for(var prop in state) {
-                if (state.hasOwnProperty(prop)) {
-                    sortField = 'sorting';
-                       break;
-                    }
-                }
-                
             // create store
             var s = Tine.widgets.persistentfilter.store.persistentFilterStore = new Tine.widgets.persistentfilter.store.PersistentFilterStore({
-                fields: fields,
-                sortInfo: {field: sortField, direction: 'ASC'}
+                fields: fields
             });
             
             // populate store
             var persistentFiltersData = Tine.Tinebase.registry.get("persistentFilters").results;
 
             Ext.each(persistentFiltersData, function(data,index) {
-            
-            if(state[data.id]) data.sorting = state[data.id];
-            else data.sorting = 10000;
-            
-                var r = new Tine.widgets.persistentfilter.model.PersistentFilter(data);
-                s.addSorted(r);
+                var filterRecord = new Tine.widgets.persistentfilter.model.PersistentFilter(data);
+                s.add(filterRecord);
             }, this);
         } else {
             // TODO test this in IE!

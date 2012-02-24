@@ -658,6 +658,10 @@
           "path": "js/widgets/persistentfilter/"
         },
         {
+          "text": "EditPersistentFilterPanel.js",
+          "path": "js/widgets/persistentfilter/"
+        },
+        {
           "text": "PasswordChangeDialog.js",
           "path": "js/"
         },
