@@ -298,7 +298,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	        
 	        Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
 	        
-	        Calendar_Model_Attender::resolveAttendee($_records->attendee);
+	        Calendar_Model_Attender::resolveAttendee($_records->attendee, TRUE, $_records);
 	        Calendar_Convert_Event_Json::resolveOrganizer($_records);
 	        Calendar_Convert_Event_Json::resolveRrule($_records);
             Calendar_Controller_Event::getInstance()->getAlarms($_records);

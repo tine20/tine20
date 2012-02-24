@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Addressbook_Frontend_WebDAV_ContainerTest::main');
-}
-
 /**
  * Test class for Addressbook_Frontend_WebDAV_Container
  */

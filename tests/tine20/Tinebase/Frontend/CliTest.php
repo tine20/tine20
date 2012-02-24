@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -211,5 +211,69 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($adminGroup->getId(), $cronuser->accountPrimaryGroup);
         $this->assertContains('Tine 2.0 scheduler run', $out, $out);
+    }
+
+    /**
+     * testMonitoringCheckDB
+     * 
+     * NOTE deactivated this test as it might affect other tests
+     * 
+     * @todo fix this test / make cli method testable
+     */
+    public function _testMonitoringCheckDB()
+    {
+        ob_start();
+        $result = $this->_cli->monitoringCheckDB();
+        $out = ob_get_clean();
+        
+        $this->assertEquals("DB CONNECTION OK\n", $out);
+        $this->assertEquals(0, $result);
+    }
+
+    /**
+     * testMonitoringCheckConfig
+     */
+    public function testMonitoringCheckConfig()
+    {
+        ob_start();
+        $result = $this->_cli->monitoringCheckConfig();
+        $out = ob_get_clean();
+        
+        $this->assertEquals("CONFIG FILE OK\n", $out);
+        $this->assertEquals(0, $result);
+    }
+
+    /**
+     * testMonitoringCheckCron
+     */
+    public function testMonitoringCheckCron()
+    {
+        ob_start();
+        $result = $this->_cli->monitoringCheckCron();
+        $out = ob_get_clean();
+        
+        $lastJob = Tinebase_AsyncJob::getInstance()->getLastJob('Tinebase_Event_Async_Minutely');
+        if ($lastJob) {
+            $this->assertContains('CRON OK', $out);
+            $this->assertEquals(0, $result);
+        } else {
+            $this->assertEquals("CRON FAIL: NO LAST JOB FOUND\n", $out);
+            $this->assertEquals(1, $result);
+        }
+    }
+
+    /**
+     * testMonitoringLoginNumber
+     */
+    public function testMonitoringLoginNumber()
+    {
+        ob_start();
+        $result = $this->_cli->monitoringLoginNumber();
+        $out = ob_get_clean();
+        $this->assertEquals(0, $result);
+
+        preg_match('/LOGINS OK \| count=(\d+);;;;/', $out, $matches);
+        $this->assertGreaterThan(1, count($matches));
+        $this->assertGreaterThanOrEqual(0, $matches[1]);
     }
 }

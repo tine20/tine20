@@ -15,6 +15,8 @@
  * 
  * @package     Admin
  * @subpackage  Record
+ * 
+ * @todo        refactor to use new config implementation
  */
 class Admin_Model_Config extends Tinebase_Record_Abstract 
 {   
@@ -22,6 +24,8 @@ class Admin_Model_Config extends Tinebase_Record_Abstract
      * default internal addressbook for new users/groups
      * 
      * @var string
+     * 
+     * @todo move to addressbook?
      */
     const DEFAULTINTERNALADDRESSBOOK = 'defaultInternalAddressbook';
         

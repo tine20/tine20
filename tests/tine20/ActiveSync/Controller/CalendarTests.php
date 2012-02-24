@@ -119,30 +119,26 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
                 
         $eventDaily = Calendar_Controller_Event::getInstance()->create($eventDaily);
         
-        // existing exceptions
-        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        // compute recurset
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($eventDaily, new Tinebase_Record_RecordSet('Calendar_Model_Event'), $eventDaily->dtstart, $eventDaily->rrule_until);
         
         // first deleted instance
-        $deletedInstance1 = Calendar_Model_Rrule::computeNextOccurrence($eventDaily, $exceptions, $eventDaily->dtend);
-        Calendar_Controller_Event::getInstance()->createRecurException($deletedInstance1, true);
+        Calendar_Controller_Event::getInstance()->createRecurException($recurSet[0], true);
         
         // second deleted instance
-        $deletedInstance2 = Calendar_Model_Rrule::computeNextOccurrence($eventDaily, $exceptions, $deletedInstance1->dtend);
-        Calendar_Controller_Event::getInstance()->createRecurException($deletedInstance2, true);
+        Calendar_Controller_Event::getInstance()->createRecurException($recurSet[1], true);
         
         // first exception instance
-        $exceptionInstance1 = Calendar_Model_Rrule::computeNextOccurrence($eventDaily, $exceptions, $deletedInstance2->dtend);
-        $exceptionInstance1->dtstart->addHour(2);
-        $exceptionInstance1->dtend->addHour(2);
-        $exceptionInstance1->summary = 'Test Exception 1';
-        $exceptionInstance1 = Calendar_Controller_Event::getInstance()->createRecurException($exceptionInstance1);
+        $recurSet[2]->dtstart->addHour(2);
+        $recurSet[2]->dtend->addHour(2);
+        $recurSet[2]->summary = 'Test Exception 1';
+        Calendar_Controller_Event::getInstance()->createRecurException($recurSet[2]);
         
         // first exception instance
-        $exceptionInstance2 = Calendar_Model_Rrule::computeNextOccurrence($eventDaily, $exceptions, $exceptionInstance1->dtend);
-        $exceptionInstance2->dtstart->addHour(3);
-        $exceptionInstance2->dtend->addHour(3);
-        $exceptionInstance2->summary = 'Test Exception 2';
-        $exceptionInstance2 = Calendar_Controller_Event::getInstance()->createRecurException($exceptionInstance2);
+        $recurSet[3]->dtstart->addHour(3);
+        $recurSet[3]->dtend->addHour(3);
+        $recurSet[3]->summary = 'Test Exception 2';
+        Calendar_Controller_Event::getInstance()->createRecurException($recurSet[3]);
         
         // reread event from database again
         $eventDaily = Calendar_Controller_Event::getInstance()->get($eventDaily);        
@@ -260,6 +256,8 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
     
     /**
      * test xml generation for IPhone
+     * 
+     * FIXME fix this test! -> seems to fail depending on the current time / date 
      */
     public function testAppendXml_dailyEvent()
     {

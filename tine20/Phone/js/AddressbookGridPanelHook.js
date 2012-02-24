@@ -36,7 +36,6 @@ Tine.Phone.AddressbookGridPanelHook = function(config) {
         iconCls: 'PhoneIconCls',
         disabled: true,
         scope: this,
-        handler: this.onComposeEmail,
         actionUpdater: this.updateAction,
         menu: this.phoneMenu,
         listeners: {
@@ -156,13 +155,13 @@ Ext.apply(Tine.Phone.AddressbookGridPanelHook.prototype, {
         if (action.isHidden()) {
             return;
         }
-        
+
         this.phoneMenu.removeAll();
         action.setDisabled(true);
-            
+
         if (records.length == 1) {
             var contact = records[0];
-            
+
             if (! contact) {
                 return false;
             }

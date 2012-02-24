@@ -197,7 +197,7 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         $event->put($vcalendarStream);
         
         $record = $event->getRecord();
-        #var_dump($record->attendee[0]->toArray());
+        
         $this->assertEquals('New Event', $record->summary);
         $this->assertTrue(! empty($record->attendee[0]["status_authkey"]));
     }

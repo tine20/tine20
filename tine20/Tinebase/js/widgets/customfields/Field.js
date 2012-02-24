@@ -11,6 +11,8 @@ Ext.ns('Tine.widgets.customfields');
 Tine.widgets.customfields.Field = {
 //    this.cfConfig = Tine.widgets.customfields.ConfigManager.getConfig(this.app, this.model, this.name);
     get: function (app, cfConfig, config) {
+        Tine.log.debug(cfConfig);
+        
         var def = cfConfig.get('definition'),
             uiConfig = def && def.uiconfig ? def.uiconfig : {},
             fieldDef = {

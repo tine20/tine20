@@ -54,6 +54,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         
         if (! $this->_event instanceof Calendar_Model_Event) {
             $this->_event = ($pos = strpos($this->_event, '.')) === false ? $this->_event : substr($this->_event, 0, $pos);
+        } else {
+            // resolve alarms
+            Calendar_Controller_MSEventFacade::getInstance()->getAlarms($this->_event);
         }
         
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
@@ -380,7 +383,15 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
                 break;
             }
         }
+        
+        // iCal does sends back an old value, because it does refetch the vcalendar after update
+        // therefor we have to keep the current value and must apply it after the convert
+        $currentLastModifiedTime = $this->getRecord()->last_modified_time;
+        
         $event = $this->_converter->toTine20Model($vobject, $this->getRecord());
+        
+        $event->last_modified_time = $currentLastModifiedTime;
+        
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
         $currentContainer = Tinebase_Container::getInstance()->getContainerById($this->getRecord()->container_id);
         $ownAttendee = Calendar_Model_Attender::getOwnAttender($this->getRecord()->attendee);
@@ -417,7 +428,11 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         
         self::enforceEventParameters($event);
         
-        $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
+        try {
+            $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
+        } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
+            throw new Sabre_DAV_Exception_PreconditionFailed('An If-Match header was specified, but none of the specified the ETags matched.','If-Match');
+        }
         
         // avoid sending headers during unit tests
         if (php_sapi_name() != 'cli') {
@@ -448,12 +463,13 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
     {
         if (! $this->_event instanceof Calendar_Model_Event) {
             $this->_event = Calendar_Controller_MSEventFacade::getInstance()->get($this->_event);
+            
+            // resolve alarms
+            Calendar_Controller_MSEventFacade::getInstance()->getAlarms($this->_event);
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($this->_event->toArray(), true));
         }
 
-        // resolve alarms
-        Calendar_Controller_MSEventFacade::getInstance()->getAlarms($this->_event);
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($this->_event->toArray(), true));
         return $this->_event;
     }
     

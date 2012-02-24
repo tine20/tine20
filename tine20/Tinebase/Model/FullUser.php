@@ -27,7 +27,7 @@
  * @property    string                  container_id        
  * @property    array                   groups              list of group memberships
  * @property    DateTime                lastLoginFailure    time of last login failure
- * @property    int						loginFailures       number of login failures
+ * @property    int                        loginFailures       number of login failures
  * @subpackage  User
  */
 class Tinebase_Model_FullUser extends Tinebase_Model_User
@@ -100,8 +100,8 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             'accountEmailAddress'   => array('allowEmpty' => true),
             'accountHomeDirectory'  => array('allowEmpty' => true),
             'accountLoginShell'     => array('allowEmpty' => true),
-            'lastLoginFailure'		=> array('allowEmpty' => true),
-            'loginFailures'			=> array('allowEmpty' => true),
+            'lastLoginFailure'      => array('allowEmpty' => true),
+            'loginFailures'         => array('allowEmpty' => true),
             'sambaSAM'              => array('allowEmpty' => true),
             'openid'                => array('allowEmpty' => true),
             'contact_id'            => array('allowEmpty' => true),

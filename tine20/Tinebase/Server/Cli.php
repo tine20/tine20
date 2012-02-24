@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo remove cli session/cache path (add http://aidanlister.com/2004/04/recursively-deleting-a-folder-in-php/ to helpers?)
  */
@@ -21,7 +21,6 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
 {
     /**
      * init tine framework
-     *
      */
     protected function _initFramework()
     {
@@ -46,8 +45,8 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
     public function _setupCliConfig()
     {
         $configData = include('config.inc.php');
-        if($configData === false) {
-            die ('central configuration file config.inc.php not found in includepath: ' . get_include_path());
+        if ($configData === false) {
+            die('central configuration file config.inc.php not found in includepath: ' . get_include_path());
         }
         $configData['sessiondir'] = Tinebase_Core::getTempDir();
         
@@ -62,18 +61,28 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
      */
     public function handle()
     {
-        $this->_initFramework();
-        
         $opts = Tinebase_Core::get('opts');
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . (isset($opts->method) ? $opts->method : 'EMPTY'));
-
+        
+        if (! in_array($opts->method, array('Tinebase.monitoringCheckDB', 'Tinebase.monitoringCheckConfig'))) {
+            $this->_initFramework();
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                .' Is cli request. method: ' . (isset($opts->method) ? $opts->method : 'EMPTY'));
+        }
+        
         $tinebaseServer = new Tinebase_Frontend_Cli();
-        if (! in_array($opts->method, array('Tinebase.triggerAsyncEvents', 'Tinebase.processQueue'))) {
+        
+        if (! in_array($opts->method, array(
+            'Tinebase.triggerAsyncEvents',
+            'Tinebase.processQueue',
+            'Tinebase.monitoringCheckDB',
+            'Tinebase.monitoringCheckConfig',
+            'Tinebase.monitoringCheckCron',
+            'Tinebase.monitoringLoginNumber',
+        ))) {
             $tinebaseServer->authenticate($opts->username, $opts->password);
         }
         $result = $tinebaseServer->handle($opts);
-
+        
         //@todo remove cli session path
         
         return $result;

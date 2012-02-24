@@ -5,8 +5,8 @@
  *
  * @package     Cli
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 if (php_sapi_name() != 'cli') {
@@ -33,7 +33,14 @@ $tine20path = dirname(__FILE__);
 /**
  * anonymous methods (no pw/user required)
  */
-$anonymousMethods = array('Tinebase.triggerAsyncEvents');
+$anonymousMethods = array(
+    'Tinebase.triggerAsyncEvents',
+    'Tinebase.processQueue',
+    'Tinebase.monitoringCheckDB',
+    'Tinebase.monitoringCheckConfig',
+    'Tinebase.monitoringCheckCron',
+    'Tinebase.monitoringLoginNumber',
+);
 
 /**
  * options

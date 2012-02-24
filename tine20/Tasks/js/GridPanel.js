@@ -82,6 +82,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterPanel({
             recordClass: this.recordClass,
+            app: this.app,
             filterModels: Tine.Tasks.Task.getFilterModel(),
             defaultFilter: 'query',
             filters: [

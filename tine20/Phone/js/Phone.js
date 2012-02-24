@@ -102,9 +102,11 @@ Tine.Phone.getPanel = function(){
                 node = panel.getRootNode();
                 node.select();
                 node.expand();
+                panel.getSelectionModel().fireEvent('selectionchange', panel.getSelectionModel());
             } else {
                 panel.expandPath(node.getPath(), null, function(success, expandedNode) {
                     expandedNode.select();
+                    panel.getSelectionModel().fireEvent('selectionchange', panel.getSelectionModel());
                 });
             }
             
@@ -176,11 +178,10 @@ Tine.Phone.updatePhoneTree = function(store){
  * @todo what todo if no lines are available?
  */
 Tine.Phone.dialPhoneNumber = function(number) {
-    
     var phonesStore = Tine.Phone.loadPhoneStore();
     var lines = (phonesStore.getAt(0)) ? phonesStore.getAt(0).data.lines : [];
     
-    // check if only one phone / one line exists and numer is set
+    // check if only one phone / one line exists and number is set
     if (phonesStore.getTotalCount() == 1 && lines.length == 1 && number) {
         // call Phone.dialNumber
         Ext.Ajax.request({
@@ -212,7 +213,7 @@ Tine.Phone.dialPhoneNumber = function(number) {
             modal: true,
             width: 400,
             height: 150,
-            layout: 'hfit',
+            layout: 'fit',
             plain:true,
             bodyStyle:'padding:5px;',
             closeAction: 'close',
@@ -266,10 +267,10 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
                 mode: 'local',
                 editable: false,
                 stateful: true,
-   //             stateId: 'lastPhoneLine',
                 stateEvents: ['select'],
                 displayField:'description',
                 valueField: 'id',
+
                 id: 'phoneId',
                 name: 'phoneId',
                 triggerAction: 'all',
@@ -410,15 +411,15 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
                 return;
             }
         }
-        
+
         var phone = this.phoneStore.getById(phoneId);
-        for(var i=0; i<phone.data.lines.length; i++) {
-            var lineRecord = new Tine.Voipmanager.Model.SnomLine(phone.data.lines[i], phone.data.lines[i].id);
-            this.linesStore.add(lineRecord);
+
+        if(phone) {
+            for(var i=0; i<phone.data.lines.length; i++) {
+                var lineRecord = new Tine.Voipmanager.Model.SnomLine(phone.data.lines[i], phone.data.lines[i].id);
+                this.linesStore.add(lineRecord);
+            }
         }
-        
-        //console.log(phone);
-        //console.log(this.linesStore);
         
         // disable lineCombo if only 1 line available
         if (form) {
@@ -521,7 +522,7 @@ Tine.Phone.Main = {
             var number = '';
             var grid = Ext.getCmp('Phone_Callhistory_Grid');
             if (grid) {
-                record = grid.getSelectionModel().getSelected();
+                var record = grid.getSelectionModel().getSelected();
                 if (record) {
                     number = record.data.destination;
                 }

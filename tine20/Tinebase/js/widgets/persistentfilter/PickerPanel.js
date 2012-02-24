@@ -63,43 +63,58 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         
         this.stateId = 'widgets-persistentfilter-pickerpanel_' + this.app.name + '_' + this.contentType;
 
-        this.store = this.store || Tine.widgets.persistentfilter.store.getPersistentFilterStore(this.stateId);
-
-        this.store.on('update', this.onStoreUpdate, this);
-        this.store.on('remove', this.onStoreRemove, this);
-        this.store.on('add', this.onStoreAdd, this);
-
+        this.store = this.store || Tine.widgets.persistentfilter.store.getPersistentFilterStore();
+        var state = Ext.state.Manager.get(this.stateId, {});
+        
+        this.recordCollection = this.store.queryBy(function(record, id) {
+            if(record.get('application_id') == this.app.id) {
+                if(this.contentType) {
+                    var modelName = this.app.appName + '_Model_' + this.contentType + 'Filter'; 
+                    if(record.get('model') == modelName) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return true;
+                }
+            }
+            return false;
+        }, this);
+        
+        var sorting = 10000;
+        
+        this.recordCollection.each(function(record) {
+            if(state[record.get('id')]) record.set('sorting', state[record.get('id')]);
+            else {
+                sorting++;
+                record.set('sorting',sorting);
+            }
+        }, this);
+                
         this.loader = new Tine.widgets.persistentfilter.PickerTreePanelLoader({
-                    app : this.app,
-                    store : this.store,
-                    contentType: this.contentType
-                });
+            app : this.app,
+            recordCollection : this.recordCollection,
+            contentType: this.contentType
+        });
 
         new Ext.tree.TreeSorter(this, {
-                    dir : 'ASC',
-                    sortType : function(node) {
-                        return 0;
-                    }
-                });
+            property: 'sorting',                   
+            sortType : function(node) {
+                return node.attributes.sorting;
+            }
+        });
 
-        this.on('nodedrop', function(el) {
-                    var root = this.getRootNode();
-                    var state = {};
-                    var i = 0;
-                    root.eachChild(function(el) {
-                                i++;
-                                state[el.id] = i;
-                            });
-
-                    Ext.state.Manager.set(this.stateId, state);
-                });
+        this.on('nodedrop', function() {
+            this.saveState();           
+        }, this);
 
         this.filterNode = this.filterNode || new Ext.tree.AsyncTreeNode({
-                    text : _('My favorites'),
-                    id : '_persistentFilters',
-                    leaf : false,
-                    expanded : true
-                });
+            text : _('My favorites'),
+            id : '_persistentFilters',
+            leaf : false,
+            expanded : true
+        });
 
         if (this.filterMountId === null) {
             this.root = this.filterNode;
@@ -108,15 +123,15 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         Tine.widgets.persistentfilter.PickerPanel.superclass.initComponent.call(this);
 
         this.on('click', function(node) {
-                    if (node.attributes.isPersistentFilter) {
-                        this.getFilterToolbar().fireEvent('change',    this.getFilterToolbar());
-                        node.select();
-                        this.onFilterSelect(this.store.getById(node.id));
-                    } else if (node.id == '_persistentFilters') {
-                        node.expand();
-                        return false;
-                    }
-                }, this);
+            if (node.attributes.isPersistentFilter) {
+                this.getFilterToolbar().fireEvent('change', this.getFilterToolbar());
+                node.select();
+                this.onFilterSelect(this.recordCollection.get(node.id));
+            } else if (node.id == '_persistentFilters') {
+                node.expand();
+                return false;
+            }
+        }, this);
 
         this.on('contextmenu', this.onContextMenu, this);
     },
@@ -125,8 +140,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * @private
      */
     afterRender : function() {
-        Tine.widgets.persistentfilter.PickerPanel.superclass.afterRender
-                .call(this);
+        Tine.widgets.persistentfilter.PickerPanel.superclass.afterRender.call(this);
 
         if (this.filterMountId !== null) {
             this.getNodeById(this.filterMountId).appendChild(this.filterNode);
@@ -136,50 +150,27 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     },
 
     /**
-     * need to reload filter if records in store were updated (only if the have
-     * the same app id)
+     * saves the sort state of the tree
      */
-    onStoreUpdate : function(store, record) {
-        this.checkReload(record);
-    },
+    saveState: function() {
+        var state = {};
+        var i = 0;
 
-    /**
-     * need to reload filter if records in store were removed (only if the have
-     * the same app id)
-     */
-    onStoreRemove : function(store, record) {
-        this.checkReload(record);
-    },
+        this.getRootNode().eachChild(function(node) {
+            i++;
+            node.attributes.sorting = i;
+            var rec = this.recordCollection.get(node.attributes.id);
+            var oldSort = rec.get('sorting');
+            if(oldSort != i) {    
+                rec.set('sorting', i);
+                rec.commit();
+            }
+            state[node.id] = i;
+        }, this);
 
-    /**
-     * need to reload filter if records in store were added (only if the have
-     * the same app id)
-     */
-    onStoreAdd : function(store, records) {
-        var reload = false;
-        Ext.each(records, function(record) {
-                    reload = this.checkReload(record);
-                    if (reload) {
-                        return;
-                    }
-                }, this);
+        Ext.state.Manager.set(this.stateId, state);
     },
-
-    /**
-     * reload nodes if filters for this app have changed
-     * 
-     * @param {PersistentFilter}
-     *            record
-     */
-    checkReload : function(record) {
-        if (record.get('application_id') === this.app.id && this.filterNode
-                && this.filterNode.rendered) {
-            this.filterNode.reload(function(callback) {
-                    });
-            return true;
-        }
-    },
-
+    
     /**
      * load grid from saved filter
      * 
@@ -289,23 +280,23 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         var isHidden = record.isShipped();
     
         var menu = new Ext.menu.Menu({
-                    items : [{
-                        text : _('Delete Favorite'),
-                        iconCls : 'action_delete',
-                        hidden : isHidden,
-                        handler : this.onDeletePersistentFilter.createDelegate(this, [node, e])
-                    }, {
-                        text : _('Edit Favorite'),
-                        iconCls : 'action_edit',
-                        hidden : isHidden,
-                        handler : this.onEditPersistentFilter.createDelegate(this, [node, e])
-                    }, {
-                        text : _('Overwrite Favorite'),
-                        iconCls : 'action_saveFilter',
-                        hidden : isHidden,
-                        handler : this.onOverwritePersistentFilter.createDelegate(this, [node, e])
-                    }].concat(this.getAdditionalCtxItems(record))
-                });
+            items : [{
+                text : _('Delete Favorite'),
+                iconCls : 'action_delete',
+                hidden : isHidden,
+                handler : this.onDeletePersistentFilter.createDelegate(this, [node, e])
+            }, {
+                text : _('Edit Favorite'),
+                iconCls : 'action_edit',
+                hidden : isHidden,
+                handler : this.onEditPersistentFilter.createDelegate(this, [node, e])
+            }, {
+                text : _('Overwrite Favorite'),
+                iconCls : 'action_saveFilter',
+                hidden : isHidden,
+                handler : this.onOverwritePersistentFilter.createDelegate(this, [node, e])
+            }].concat(this.getAdditionalCtxItems(record))
+        });
 
         menu.showAt(e.getXY());
 
@@ -319,22 +310,21 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      */
     onDeletePersistentFilter : function(node) {
         Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the favorite "{0}"?'), node.text), function(_btn) {
-                    if (_btn == 'yes') {
-                        Ext.MessageBox.wait(_('Please wait'), String.format(
-                                        _('Deleting Favorite "{0}"'),
-                                        this.containerName, node.text));
+            if (_btn == 'yes') {
+                Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting Favorite "{0}"'), this.containerName, node.text));
 
-                        var record = this.store.getById(node.id);
-                        Tine.widgets.persistentfilter.model.persistentFilterProxy
-                                .deleteRecords([record], {
-                                            scope : this,
-                                            success : function() {
-                                                this.store.remove(record);
-                                                Ext.MessageBox.hide();
-                                            }
-                                        });
+                var record = this.store.getById(node.id);
+                Tine.widgets.persistentfilter.model.persistentFilterProxy.deleteRecords([record], {
+                    scope : this,
+                    success : function() {
+                        this.store.remove(record);
+                        this.recordCollection.remove(record);
+                        this.filterNode.findChild('id', record.get('id')).remove();
+                        Ext.MessageBox.hide();
                     }
-                }, this);
+                });
+            }
+        }, this);
     },
 
     /**
@@ -356,21 +346,16 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      */
     onOverwritePersistentFilter : function(node) {
         
-        var record = this.store.getById(node.id);
-        
-        Ext.MessageBox.confirm(_('Overwrite?'), String.format(
-                        _('Do you want to overwrite the favorite "{0}"?'),
-                        node.text), function(_btn) {
-                    if (_btn == 'yes') {
-                        Ext.MessageBox.wait(_('Please wait'), String.format(
-                                        _('Overwriting Favorite "{0}"'),
-                                        node.text));
-                        var ftb = this.getFilterToolbar();
-                        record.set('filters', ftb.getAllFilterData());
-                        
-                        this.createOrUpdateFavorite(record);
-                    }
-                }, this, false, node.text);
+        var record = this.store.getById(node.id);        
+        Ext.MessageBox.confirm(_('Overwrite?'), String.format(_('Do you want to overwrite the favorite "{0}"?'), node.text), function(_btn) {
+            if (_btn == 'yes') {
+                Ext.MessageBox.wait(_('Please wait'), String.format(_('Overwriting Favorite "{0}"'), node.text));
+                var ftb = this.getFilterToolbar();
+                record.set('filters', ftb.getAllFilterData());
+                
+                this.createOrUpdateFavorite(record);
+            }
+        }, this, false, node.text);
     },
 
     /**
@@ -416,8 +401,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         newWindow.on('update', function(win) {
             Ext.MessageBox.wait(_('Please wait'), String.format(_('Saving Favorite "{0}"'), record.get('name')));
             this.createOrUpdateFavorite(newWindow.record);
-            
-            }, this);
+        }, this);
         
     },
 
@@ -429,22 +413,39 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     
     createOrUpdateFavorite : function(record) {
         
-        Tine.widgets.persistentfilter.model.persistentFilterProxy.saveRecord(
-                record, {
-                    scope : this,
-                    success : function(savedRecord) {
-                        var existing = this.store.getById(savedRecord.id);
-                        if (existing) {
-                            this.store.remove(existing);
-                        }
+        Tine.widgets.persistentfilter.model.persistentFilterProxy.saveRecord(record, {
+            scope : this,
+            success : function(savedRecord) {
 
-                        this.store.addSorted(savedRecord);
-                        Ext.Msg.hide();
+                var existing = this.recordCollection.get(savedRecord.id);
 
-                        // reload this filter?
-                        this.selectFilter(savedRecord);
-                    }
-                });
+                if (existing) {
+                    savedRecord.set('sorting', existing.get('sorting'));
+                    this.store.remove(existing);
+                    this.recordCollection.remove(existing);
+                    
+                    this.filterNode.findChild('id', existing.get('id')).remove();
+                } else {
+                    var sorting = 0;
+                    savedRecord.set('sorting', sorting);
+                }
+
+                var attr = savedRecord.data;
+                this.loader.inspectCreateNode(attr);
+                
+                this.filterNode.appendChild(new Ext.tree.TreeNode(attr));
+                
+                this.store.add(savedRecord);
+                this.recordCollection.add(savedRecord);
+                this.recordCollection.sort();
+                
+                if(!existing) this.saveState();
+                
+                Ext.Msg.hide();
+                // reload this filter?
+                this.selectFilter(savedRecord);
+            }
+        });
     },
 
     /**
@@ -473,9 +474,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     getNewEmptyRecord: function() {
         var model = this.filterModel;
         if (!model) {
-            var recordClass = this.recordClass || this.treePanel
-                ? this.treePanel.recordClass
-                : ftb.store.reader.recordType;
+            var recordClass = this.recordClass || this.treePanel ? this.treePanel.recordClass : ftb.store.reader.recordType;
             model = recordClass.getMeta('appName') + '_Model_' + recordClass.getMeta('modelName') + 'Filter';
         }
 
@@ -490,186 +489,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         
         return record;
     }
-
 });
-
-/**
- * @namespace Tine.widgets.persistentfilter
- * @class Tine.widgets.persistentfilter.EditPersistentFilterPanel
- * @extends Ext.FormPanel
- * 
- * <p>
- * PersistentFilter Edit Dialog
- * </p>
- * 
- * @author Alexander Stintzing <c.weiss@metaways.de>
- * @license http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * 
- * @param {Object}
- *            config
- */
-
-Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(
-        Ext.FormPanel, {
-
-            layout : 'fit',
-            border : false,
-            cls : 'tw-editdialog',
-
-            bodyStyle : 'padding:5px',
-            labelAlign : 'top',
-
-            anchor : '100% 100%',
-            deferredRender : false,
-            buttonAlign : null,
-            bufferResize : 500,
-
-            // private
-            initComponent : function() {
-                this.addEvents('cancel', 'save', 'close');
-                // init actions
-                this.initActions();
-                // init buttons and tbar
-                this.initButtons();
-                // get items for this dialog
-                this.items = this.getFormItems();
-
-                Tine.widgets.persistentfilter.EditPersistentFilterPanel.superclass.initComponent.call(this);
-            },
-
-            /**
-             * init actions
-             */
-            initActions : function() {
-                this.action_save = new Ext.Action({
-                            text : _('OK'),
-                            minWidth : 70,
-                            scope : this,
-                            handler : this.onSave,
-                            iconCls : 'action_saveAndClose'
-                        });
-                this.action_cancel = new Ext.Action({
-                            text : _('Cancel'),
-                            minWidth : 70,
-                            scope : this,
-                            handler : this.onCancel,
-                            iconCls : 'action_cancel'
-                        });
-            },
-
-            initButtons : function() {
-                this.fbar = ['->', this.action_cancel, this.action_save];
-            },
-
-            onRender : function(ct, position) {
-                Tine.widgets.dialog.EditDialog.superclass.onRender.call(this, ct, position);
-
-                // generalized keybord map for edit dlgs
-                var map = new Ext.KeyMap(this.el, [{
-                                    key : [13],
-                                    ctrl : false,
-                                    fn : this.onSave,
-                                    scope : this
-                                }]);
-
-            },
-
-            
-            onSave : function() {
-                
-                if(!this.window.record) {
-                    this.window.record = this.getNewEmptyRecord();
-                }
-
-                // Name of the favorite
-                if (this.inputTitle.isValid()) {
-                    if (this.inputTitle.getValue().length < 40) {
-                        this.window.record.set('name', this.inputTitle.getValue());
-                    } else {
-                        Ext.Msg.alert(_('Favorite not Saved'),
-                                      _('You have to supply a shorter name! Names of favorite can only be up to 40 characters long.'));
-                        this.onCancel();
-                    }
-                } else {
-                    Ext.Msg.alert(_('Favorite not Saved'),
-                                  _('You have to supply a name for the favorite!'));
-                    this.onCancel();
-                }
-
-                // Description of the favorite
-                if (this.inputDescription.isValid()) {
-                    this.window.record.set('description', this.inputDescription.getValue());
-                }
-
-                this.window.record.set('account_id', Tine.Tinebase.registry.get('currentAccount').accountId);
-
-                // Favorite Checkbox
-                if (Tine.Tinebase.common.hasRight('manage_shared_favorites',
-                        this.window.app.name)) {
-                    if (this.inputCheck.getValue()) {
-                        this.window.record.set('account_id', null);
-                    }
-                }
-                this.window.fireEvent('update');
-                this.purgeListeners();
-                this.window.purgeListeners();
-                this.window.close();
-            },
-
-            onCancel : function() {
-                this.fireEvent('cancel');
-                this.purgeListeners();
-                this.window.close();
-            },
-
-            getFormItems : function() {
-
-                this.inputTitle = new Ext.form.TextField({
-                            value: (this.window.record) ? this.window.record.get('name') : '',
-                            allowBlank : false,
-                            fieldLabel : _('Title'),
-                            width : '97%',
-                            minLength : 1,
-                            maxLength : 40
-                        });
-
-                this.inputDescription = new Ext.form.TextField({
-                            value: (this.window.record) ? this.window.record.get('description') : '',
-                            allowBlank : true,
-                            fieldLabel : _('Description'),
-                            width : '97%',
-                            minLength : 0,
-                            maxLength : 255
-                        });
-
-                this.inputCheck = new Ext.form.Checkbox({
-                           checked: (this.window.record) ? this.window.record.isShared() : false,
-                           hideLabel: true,
-                           boxLabel: _('Shared Favorite (visible by all users)')
-                        });
-
-                var items = [{
-                            region : 'center',
-                            layout : {
-                                align : 'stretch',
-                                type : 'vbox'
-                            }
-
-                        }, this.inputTitle, this.inputDescription];
-
-                if (Tine.Tinebase.common.hasRight('manage_shared_favorites', this.window.app.name)) {
-                    items.push(this.inputCheck);
-                }
-
-                return {
-                    border : false,
-                    frame : true,
-                    layout : 'form',
-                    items : items
-                };
-            }
-
-        });
 
 /**
  * @namespace Tine.widgets.persistentfilter
@@ -691,9 +511,9 @@ Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(
         Tine.widgets.tree.Loader, {
 
             /**
-             * @cfg {Ext.data.Store} store
-             */
-            store : null,
+             * @cfg {Ext.util.MixedCollection} recordCollection
+             */          
+            recordCollection: null,
 
             /**
              * @cfg {String} selectedFilterId id to autoselect
@@ -714,25 +534,9 @@ Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(
              */
             requestData : function(node, callback, scope) {
                 if (this.fireEvent("beforeload", this, node, callback) !== false) {
-
-                    var recordCollection = this.store.queryBy(function(record, id) {
-                        if(record.get('application_id') == this.app.id) {
-                            if(this.contentType) {
-                                var modelName = this.app.appName + '_Model_' + this.contentType + 'Filter'; 
-                                if(record.get('model') == modelName) {
-                                    return true;
-                                } else {
-                                    return false;
-                                }
-                            } else {
-                                return true;
-                            }
-                        }
-                        return false;
-                    }, this);
                     
                     node.beginUpdate();
-                    recordCollection.each(function(record) {
+                    this.recordCollection.each(function(record) {
                                 var n = this.createNode(record.copy().data);
                                 if (n) {
                                     node.appendChild(n);
@@ -763,19 +567,19 @@ Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(
 
                 if (isPersistentFilter) {
                     Ext.apply(attr, {
-                                isPersistentFilter : isPersistentFilter,
-                                text : Ext.util.Format.htmlEncode(this.app.i18n._hidden(attr.name)),
-                                qtip : Ext.util.Format.htmlEncode(attr.description ? this.app.i18n._hidden(attr.description) + ' ' + addText : addText),
-                                selected : attr.id === this.selectedFilterId,
-                                id : attr.id,
+                        isPersistentFilter : isPersistentFilter,
+                        text : Ext.util.Format.htmlEncode(this.app.i18n._hidden(attr.name)),
+                        qtip : Ext.util.Format.htmlEncode(attr.description ? this.app.i18n._hidden(attr.description) + ' ' + addText : addText),
+                        selected : attr.id === this.selectedFilterId,
+                        id : attr.id,
 
-                                sorting : attr.sorting,
-                                draggable : true,
-                                allowDrop : false,
+                        sorting : attr.sorting,
+                        draggable : true,
+                        allowDrop : false,
 
-                                leaf : attr.leaf === false ? attr.leaf : true,
-                                cls : 'tinebase-westpanel-node-favorite' + addClass
-                            });
+                        leaf : attr.leaf === false ? attr.leaf : true,
+                        cls : 'tinebase-westpanel-node-favorite' + addClass
+                    });
                 }
             }
         });

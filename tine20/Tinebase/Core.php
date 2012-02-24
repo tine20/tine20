@@ -764,6 +764,7 @@ class Tinebase_Core
      * initializes the database connection
      *
      * @throws  Tinebase_Exception_UnexpectedValue
+     * @throws  Tinebase_Exception_Backend_Database
      */
     public static function setupDatabaseConnection()
     {
@@ -855,6 +856,10 @@ class Tinebase_Core
      */
     public static function getDbProfiling()
     {
+        if (! self::getConfig() || ! self::getConfig()->database) {
+            return;
+        }
+        
         $config = self::getConfig()->database;
 
         if ((bool) $config->profiler) {

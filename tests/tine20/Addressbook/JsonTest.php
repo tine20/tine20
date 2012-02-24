@@ -1216,6 +1216,26 @@ Fax: +49 (0)40 343244-222";
         $this->assertEquals('+49 (0)40 343244-232', $result['contact']['tel_work']);
         $this->assertEquals('http://www.metaways.de', $result['contact']['url']);
     }
+
+    /**
+    * testParseAnotherAddressData
+    * 
+    * @see http://forge.tine20.org/mantisbt/view.php?id=5800
+    */
+    public function testParseAnotherAddressData()
+    {
+        // NOTE: on some systems the /u modifier fails
+        if (! preg_match('/\w/u', 'ä')) {
+            $this->markTestSkipped('preg_match has no unicode support');
+        }
+        
+        $addressString = "Straßenname 25 · 23569 Lübeck
+Steuernummer 33/111/32212";
+        
+        $result = $this->_instance->parseAddressData($addressString);
+        $this->assertEquals('Straßenname 25', $result['contact']['adr_one_street'], 'wrong street: ' . print_r($result, TRUE));
+        $this->assertEquals('Lübeck', $result['contact']['adr_one_locality'], 'wrong street: ' . print_r($result, TRUE));
+    }
     
     /**
      * testContactDisabledFilter

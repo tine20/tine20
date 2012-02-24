@@ -51,12 +51,12 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
         // fill definition col
         foreach ($cfConfigs as $cfConfig) {
             $definition = array(
-                'label'     => $cfConfig['label'],
-                'type'      => array_key_exists($cfConfig['type'], $typeMap) ? $typeMap[$cfConfig['type']] : 'string',
-                'length'    =>$cfConfig['length'], // validation like definiton
+                'label'          => $cfConfig['label'],
+                'type'           => array_key_exists($cfConfig['type'], $typeMap) ? $typeMap[$cfConfig['type']] : 'string',
+                'length'         => $cfConfig['length'], // validation like definiton
+                'value_search'   => $cfConfig['value_search'],
                 'uiconfig' => array(
                     'xtype'          => $cfConfig['type'],
-                    'value_search'   => $cfConfig['value_search'],
                     'group'          => $cfConfig['group'],
                     'order'          => $cfConfig['order'],
                 )

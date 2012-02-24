@@ -17,10 +17,24 @@
  * @property    string  id
  * @property    string  name
  * @property    array   members
- * @property	string  visibility
+ * @property    string  visibility
  */
 class Tinebase_Model_Group extends Tinebase_Record_Abstract
 {
+    /**
+    * hidden from addressbook
+    *
+    * @var string
+    */
+    const VISIBILITY_HIDDEN    = 'hidden';
+    
+    /**
+     * visible in addressbook
+     *
+     * @var string
+     */
+    const VISIBILITY_DISPLAYED = 'displayed';
+    
     /**
      * list of zend inputfilter
      * 
@@ -40,7 +54,7 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'id';    
+    protected $_identifier = 'id';
     
     /**
      * @see Tinebase_Record_Abstract
@@ -55,7 +69,8 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
             'description'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             'members'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
             'email'         => array('allowEmpty' => true),
-            'visibility'    => array(new Zend_Validate_InArray(array('hidden', 'displayed')), Zend_Filter_Input::DEFAULT_VALUE => 'displayed')
+            'visibility'    => array(new Zend_Validate_InArray(array(self::VISIBILITY_HIDDEN, self::VISIBILITY_DISPLAYED)),
+                Zend_Filter_Input::DEFAULT_VALUE => self::VISIBILITY_DISPLAYED)
         );
         
         parent::__construct($_data, $_bypassFilters, $_convertDates);
@@ -72,19 +87,6 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
      */
     static public function convertGroupIdToInt($_groupId)
     {
-        if($_groupId instanceof Tinebase_Model_Group) {
-            if(empty($_groupId->id)) {
-                throw new Tinebase_Exception_InvalidArgument('groupId can not be empty');
-            }
-            $groupId = (string) $_groupId->id;
-        } else {
-            $groupId = (string) $_groupId;
-        }
-        
-        if(empty($groupId)) {
-            throw new Tinebase_Exception_InvalidArgument('groupId can not be empty');
-        }
-        
-        return $groupId;
+        return self::convertId($_groupId, 'Tinebase_Model_Group');
     }
 }

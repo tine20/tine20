@@ -377,7 +377,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
     
     protected function _addEventAttendee(Sabre_VObject_Component $_vevent, Calendar_Model_Event $_event)
     {
-        Calendar_Model_Attender::resolveAttendee($_event->attendee, FALSE);
+        Calendar_Model_Attender::resolveAttendee($_event->attendee, FALSE, $_event);
         
         foreach($_event->attendee as $eventAttendee) {
             $attendeeEmail = $eventAttendee->getEmail();

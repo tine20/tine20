@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -34,7 +34,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
 
     
     /**
-	 * @todo why is this needed???
+     * @todo why is this needed???
      */
     protected $_omitModLog = true;
     
@@ -43,7 +43,8 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_backend = new Addressbook_Backend_List();
         $this->_currentAccount = Tinebase_Core::getUser();
     }
@@ -126,7 +127,14 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     protected function _getDefaultInternalAddressbook()
     {
         $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
-        return $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK];
+        $result = (isset($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])) ? $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK] : NULL;
+        
+        if (empty($result)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                . ' Default internal addressbook not found. Creating new config setting.');
+            $result = Addressbook_Setup_Initialize::setDefaultInternalAddressbook()->getId();
+        }
+        return $result;
     }
     
     /**
@@ -141,26 +149,9 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         $list = $this->get($_listId);
         
         $this->_checkGrant($list, 'update', TRUE, 'No permission to remove list member.');
-        
         $list = $this->_backend->removeListMember($_listId, $_newMembers);
         
         return $list;
-    }
-    
-    /**
-     * delete one record
-     * - don't delete if it belongs to an user account
-     *
-     * @param Tinebase_Record_Interface $_record
-     * @throws Addressbook_Exception_AccessDenied
-     */
-    protected function _deleteRecord(Tinebase_Record_Interface $_record)
-    {
-        #if (!empty($_record->account_id)) {
-        #    throw new Addressbook_Exception_AccessDenied('It is not allowed to delete a contact linked to an user account!');
-        #}
-        
-        parent::_deleteRecord($_record);
     }
     
     /**
@@ -231,7 +222,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             $list->email        = $group->email;
             $list->type         = Addressbook_Model_List::LISTTYPE_GROUP;
             $list->container_id = $group->container_id;
-            $list->members		= $this->_getContactIds($group->members);
+            $list->members      = $this->_getContactIds($group->members);
         
             // add modlog info
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($list, 'update');
@@ -245,7 +236,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
                 'email'         => $group->email,
                 'type'          => Addressbook_Model_List::LISTTYPE_GROUP,
                 'container_id'  => $group->container_id,
-                'members'		=> $this->_getContactIds($group->members)
+                'members'       => $this->_getContactIds($group->members)
             ));
         
             // add modlog info

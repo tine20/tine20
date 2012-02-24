@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -178,7 +178,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         return $userProfile;
     }
 
-
     /**
      * update multiple records in an iteration
      * @see Tinebase_Record_Iterator / self::updateMultiple()
@@ -186,8 +185,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * @param Tinebase_Record_RecordSet $_records
      * @param array $_data
      *
-	 *	Overwrites Tinebase_Controller_Record_Abstract::processUpdateMultipleIteration: jpegphoto is set to null, so no deletion of photos on multipleUpdate happens
-	 *	@TODO: Can be removed when "0000284: modlog of contact images / move images to vfs" is resolved. 
+     *    Overwrites Tinebase_Controller_Record_Abstract::processUpdateMultipleIteration: jpegphoto is set to null, so no deletion of photos on multipleUpdate happens
+     *    @TODO: Can be removed when "0000284: modlog of contact images / move images to vfs" is resolved. 
      * 
      */
     public function processUpdateMultipleIteration($_records, $_data)
@@ -306,22 +305,22 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-    	// do update of geo data only if one of address field changed
-    	$addressDataChanged = FALSE;
-    	foreach ($this->_addressFields as $field) {
-       		if (
-       			($_record->{'adr_one_' . $field} != $_oldRecord->{'adr_one_' . $field}) ||
-       			($_record->{'adr_two_' . $field} != $_oldRecord->{'adr_two_' . $field})
-       		) {
-				$addressDataChanged = TRUE;
-				break;
-			}
-    	}
-    	
-    	if ($addressDataChanged) {
-    		$this->_setGeoData($_record);
-    	}
-    	        
+        // do update of geo data only if one of address field changed
+        $addressDataChanged = FALSE;
+        foreach ($this->_addressFields as $field) {
+               if (
+                   ($_record->{'adr_one_' . $field} != $_oldRecord->{'adr_one_' . $field}) ||
+                   ($_record->{'adr_two_' . $field} != $_oldRecord->{'adr_two_' . $field})
+               ) {
+                $addressDataChanged = TRUE;
+                break;
+            }
+        }
+        
+        if ($addressDataChanged) {
+            $this->_setGeoData($_record);
+        }
+                
         if (isset($_oldRecord->type) && $_oldRecord->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
             $_record->type = Addressbook_Model_Contact::CONTACTTYPE_USER;
         }
@@ -330,19 +329,19 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     /**
      * set geodata for given address of record
      * 
-     * @param string 					$_address (addressbook prefix - adr_one_ or adr_two_)
+     * @param string                     $_address (addressbook prefix - adr_one_ or adr_two_)
      * @param Addressbook_Model_Contact $_record
      * @param array $_ommitFields do not submit these fields to nominatim
      * @return void
      */
     protected function _setGeoDataForAddress($_address, Addressbook_Model_Contact $_record, $_ommitFields = array())
     {
-    	if (
-    		empty($_record->{$_address . 'locality'}) && 
-    		empty($_record->{$_address . 'postalcode'}) && 
-    		empty($_record->{$_address . 'street'}) && 
-    		empty($_record->{$_address . 'countryname'})
-    	) {
+        if (
+            empty($_record->{$_address . 'locality'}) && 
+            empty($_record->{$_address . 'postalcode'}) && 
+            empty($_record->{$_address . 'street'}) && 
+            empty($_record->{$_address . 'countryname'})
+        ) {
             $_record->{$_address . 'lon'} = NULL;
             $_record->{$_address . 'lat'} = NULL;
             
@@ -389,20 +388,20 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 }
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-					($_address == 'adr_one_' ? ' Company' : ' Private') . ' Place found: lon/lat ' . $_record->{$_address . 'lon'} . ' / ' . $_record->{$_address . 'lat'});
+                    ($_address == 'adr_one_' ? ' Company' : ' Private') . ' Place found: lon/lat ' . $_record->{$_address . 'lon'} . ' / ' . $_record->{$_address . 'lat'});
                 
             } else {
                 if (! in_array($_address . 'postalcode', $_ommitFields)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-						($_address == 'adr_one_' ? ' Company address' : ' Private address') . ' could not find place - try it again without postalcode.');
-						
+                        ($_address == 'adr_one_' ? ' Company address' : ' Private address') . ' could not find place - try it again without postalcode.');
+                        
                     $this->_setGeoDataForAddress($_address, $_record, array($_address . 'postalcode'));
                     return;
                 }
                 
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ($_address == 'adr_one_' ? 'Company address' : 'Private address') . ' Could not find place.');
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-					' ' . $_record->{$_address . 'street'} . ', ' . $_record->{$_address . 'postalcode'} . ', ' . $_record->{$_address . 'locality'} . ', ' . $_record->{$_address . 'countryname'});
+                    ' ' . $_record->{$_address . 'street'} . ', ' . $_record->{$_address . 'postalcode'} . ', ' . $_record->{$_address . 'locality'} . ', ' . $_record->{$_address . 'countryname'});
                 
                 $_record->{$_address . 'lon'} = NULL;
                 $_record->{$_address . 'lat'} = NULL;
