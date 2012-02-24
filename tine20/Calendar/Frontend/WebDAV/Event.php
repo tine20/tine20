@@ -54,6 +54,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         
         if (! $this->_event instanceof Calendar_Model_Event) {
             $this->_event = ($pos = strpos($this->_event, '.')) === false ? $this->_event : substr($this->_event, 0, $pos);
+        } else {
+            // resolve alarms
+            Calendar_Controller_MSEventFacade::getInstance()->getAlarms($this->_event);
         }
         
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
@@ -460,12 +463,13 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
     {
         if (! $this->_event instanceof Calendar_Model_Event) {
             $this->_event = Calendar_Controller_MSEventFacade::getInstance()->get($this->_event);
+            
+            // resolve alarms
+            Calendar_Controller_MSEventFacade::getInstance()->getAlarms($this->_event);
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($this->_event->toArray(), true));
         }
 
-        // resolve alarms
-        Calendar_Controller_MSEventFacade::getInstance()->getAlarms($this->_event);
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($this->_event->toArray(), true));
         return $this->_event;
     }
     
