@@ -319,7 +319,7 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
         this.clientRecord = this.createRecord(data.clientRecord);
 
         this.duplicates = data.duplicates;
-        Ext.each([].concat(this.duplicates), function(duplicate, idx) {this.duplicates[idx] = this.createRecord(this.duplicates[idx])}, this);
+        Ext.each([].concat(this.duplicates), function(duplicate, idx) {this.duplicates[idx] = this.createRecord(this.duplicates[idx]);}, this);
 
         this.resolveStrategy = resolveStrategy || this.defaultResolveStrategy;
 
@@ -334,6 +334,7 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
             if (field.isMetaField || field.omitDuplicateResolving) return;
 
             var fieldName = field.name,
+                fieldGroup = field.uiconfig ? field.uiconfig.group : field.group,
                 recordData = {
                     fieldName: fieldName,
                     fieldDef: field,
@@ -341,8 +342,8 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
                     clientValue: Tine.Tinebase.common.assertComparable(this.clientRecord.get(fieldName))
                 };
 
-            recordData.group = field.group ? this.app.i18n._hidden(field.group) : recordData.i18nFieldName,
-            Ext.each([].concat(this.duplicates), function(duplicate, idx) {recordData['value' + idx] =  Tine.Tinebase.common.assertComparable(this.duplicates[idx].get(fieldName))}, this);
+            recordData.group = fieldGroup ? this.app.i18n._hidden(fieldGroup) : recordData.i18nFieldName;
+            Ext.each([].concat(this.duplicates), function(duplicate, idx) {recordData['value' + idx] =  Tine.Tinebase.common.assertComparable(this.duplicates[idx].get(fieldName));}, this);
 
             var record = new Tine.widgets.dialog.DuplicateResolveModel(recordData, fieldName);
 
@@ -423,7 +424,7 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
             Tine.log.info('Tine.widgets.dialog.DuplicateResolveStore::applyStrategy user has no editGrant, changeing strategy to keep');
 
             this.resolveStrategy = strategy = 'keep';
-            this.fireEvent('strategychange', this, strategy)
+            this.fireEvent('strategychange', this, strategy);
         }
 
         this.resolveStrategy = strategy;
