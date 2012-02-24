@@ -312,4 +312,23 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->setTableVersion('container', '5');
         $this->setApplicationVersion('Tinebase', '5.8');
     }
+
+    /**
+    * update to 5.9
+    * - increase tag description size to 256
+    */
+    public function update_8()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>description</name>
+                <type>text</type>
+                <length>256</length>
+                <default>NULL</default>
+            </field>');
+        $this->_backend->alterCol('tags', $declaration);
+        
+        $this->setTableVersion('tags', '4');
+        $this->setApplicationVersion('Tinebase', '5.9');
+    }
 }
