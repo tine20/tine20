@@ -339,11 +339,32 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
     /**
      * Returns an ETag for this object
      *
+     * How to calculate the etag?
+     * The etag consists of 2 parts. The part, which is equal for all users (subject, dtstart, dtend, ...) and
+     * the part which is different for all users(X-MOZ-LASTACK for example).
+     * Because of the this we have to generate the etag as the hash of the record id, the lastmodified time stamp and the
+     * hash of the json encoded attendee object.
+     * This way the etag changes when the general properties or the user specific properties change.
+     * 
      * @return string
      */
     public function getETag() 
     {
-        return '"' . md5($this->getRecord()->getId() . $this->getLastModified()) . '"'; 
+        $attendeeHash = null;
+        
+        if ( ($ownAttendee = Calendar_Model_Attender::getOwnAttender($this->getRecord()->attendee)) instanceof Calendar_Model_Attender) {
+            $attendeeHash = sha1(Zend_Json::encode($ownAttendee->toArray()));
+        }
+        
+        if ($_event->exdate instanceof Tinebase_Record_RecordSet) {
+            foreach ($_event->exdate as $exdate) {
+                if ( ($ownAttendee = Calendar_Model_Attender::getOwnAttender($exdate->attendee)) instanceof Calendar_Model_Attender) {
+                    $attendeeHash = sha1($attendeeHash . Zend_Json::encode($ownAttendee->toArray()));
+                }
+            }
+        }
+        
+        return '"' . sha1($this->getRecord()->getId() . $this->getLastModified()) . $attendeeHash . '"'; 
     }
     
     /**

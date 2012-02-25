@@ -216,7 +216,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         $vevent->add($lastModified);
         
         $dtstamp = new Sabre_VObject_Element_DateTime('DTSTAMP');
-        $dtstamp->setDateTime($lastModifiedDatTime, Sabre_VObject_Element_DateTime::UTC);
+        $dtstamp->setDateTime(Tinebase_DateTime::now(), Sabre_VObject_Element_DateTime::UTC);
         $vevent->add($dtstamp);
         
         $vevent->add(new Sabre_VObject_Property('UID', $event->uid));
