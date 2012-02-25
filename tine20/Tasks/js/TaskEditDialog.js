@@ -221,7 +221,9 @@ Ext.namespace('Tine.Tasks');
                             name: 'status',
                             listeners: {scope: this, 'change': this.handleCompletedDate}
                         }), 
-                        new Ext.form.DateField({
+                        new Ext.ux.form.DateTimeField({
+                            allowBlank: true,
+                            defaultTime: '12:00',
                             fieldLabel: this.app.i18n._('Completed'),
                             name: 'completed'
                         })
