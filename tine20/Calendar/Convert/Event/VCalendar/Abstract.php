@@ -328,13 +328,13 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             
             if ($ownAttendee && $ownAttendee->alarm_ack_time instanceof Tinebase_DateTime) {
                 $xMozLastAck = new Sabre_VObject_Element_DateTime('X-MOZ-LASTACK');
-                $xMozLastAck->setDateTime(Tinebase_DateTime::now(), Sabre_VObject_Element_DateTime::UTC);
+                $xMozLastAck->setDateTime($ownAttendee->alarm_ack_time, Sabre_VObject_Element_DateTime::UTC);
                 $vevent->add($xMozLastAck);
             }
             
             if ($ownAttendee && $ownAttendee->alarm_snooze_time instanceof Tinebase_DateTime) {
                 $xMozSnoozeTime = new Sabre_VObject_Element_DateTime('X-MOZ-SNOOZE-TIME');
-                $xMozSnoozeTime->setDateTime(Tinebase_DateTime::now(), Sabre_VObject_Element_DateTime::UTC);
+                $xMozSnoozeTime->setDateTime($ownAttendee->alarm_snooze_time, Sabre_VObject_Element_DateTime::UTC);
                 $vevent->add($xMozSnoozeTime);
             }
             

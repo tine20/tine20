@@ -112,7 +112,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     protected $_datetimeFields = array(
         'alarm_ack_time',
-        'alarm_snoze_time'
+        'alarm_snooze_time'
     );
     
     /**
