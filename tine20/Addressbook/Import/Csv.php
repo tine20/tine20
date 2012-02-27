@@ -87,6 +87,14 @@ class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
             unset($result['account_id']);
         }
         
+        if (empty($result['n_family']) && empty($result['org_name'])) {
+            if (isset($result['n_fn'])) {
+                $result['n_family'] = $result['n_fn'];
+            } else {
+                $result['n_family'] = 'imported';
+            }
+        } 
+        
         return $result;
     }
 }
