@@ -25,7 +25,8 @@
  *  - despite RFC2445 we have an expicit isAllDayEvent property
  * 
  * @package Calendar
- * @property Tinnebase_DateTime creation_time
+ * @property Tinebase_Record_RecordSet alarms
+ * @property Tinebase_DateTime creation_time
  * @property string is_all_day_event
  * @property string originator_tz
  * @property string seq
@@ -173,7 +174,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         if ($_name == 'attendee' && is_array($_value)) {
             $_value = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $_value);
         }
-          
+        
         parent::__set($_name, $_value);
     }
     
