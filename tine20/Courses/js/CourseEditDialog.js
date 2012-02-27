@@ -4,7 +4,7 @@
  * @package     Courses
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -44,18 +44,18 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     // todo: wrap this into a uploadAction widget
     onFileSelect: function(fileSelector) {
-    	
-    	var files = fileSelector.getFileList();
+        
+        var files = fileSelector.getFileList();
         this.loadMask.show();
         var upload = new Ext.ux.file.Upload({
-        	file: files[0],
+            file: files[0],
             fileSelector: fileSelector
         });
         
         upload.on('uploadcomplete', function(uploader, record){
-        	var tempFile = record.get('tempFile');
+            var tempFile = record.get('tempFile');
             Ext.Ajax.request({
-            	scope: this,
+                scope: this,
                 timeout: 1200000, // 20 minutes
                 params: {
                     method: 'Courses.importMembers',
@@ -66,9 +66,6 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 success: this.onMembersImport,
                 failure: function() {}
             });
-        	
-            //this.loadMask.hide();
-        	//console.log(record.get('tempFile'));
             
         }, this);
         
@@ -77,7 +74,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }, this);
         
         this.loadMask.show();
-        var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);        	
+        var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
         var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey); 
     },
     
@@ -109,7 +106,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.action_import.setDisabled(disabled);
         this.action_saveAndClose.setDisabled(!Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts'));
         
-       	Tine.Courses.CourseEditDialog.superclass.onRecordLoad.call(this);        
+           Tine.Courses.CourseEditDialog.superclass.onRecordLoad.call(this);
     },
     
     onRecordUpdate: function() {
@@ -180,19 +177,22 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         preventScrollbars:false,
                         xtype: 'textarea',
                         height: 60
-                    }/*, {
-                        hideLabel: true,
-                        boxLabel: this.app.i18n._('Internet Access'),
-                        name: 'internet',
-                        xtype: 'checkbox',
-                        columnWidth: 0.5
-                    }, {
-                        hideLabel: true,
-                        boxLabel: this.app.i18n._('Fileserver Access'),
-                        name: 'fileserver',
-                        xtype: 'checkbox',
-                        columnWidth: 0.5
-                    }*/]]
+                    }
+                    // TODO make these configurable (http://forge.tine20.org/mantisbt/view.php?id=5884)
+//                    , {
+//                        hideLabel: true,
+//                        boxLabel: this.app.i18n._('Internet Access'),
+//                        name: 'internet',
+//                        xtype: 'checkbox',
+//                        columnWidth: 0.5
+//                    }, {
+//                        hideLabel: true,
+//                        boxLabel: this.app.i18n._('Fileserver Access'),
+//                        name: 'fileserver',
+//                        xtype: 'checkbox',
+//                        columnWidth: 0.5
+//                    }
+                    ]]
                 }, {
                     // activities and tags
                     layout: 'accordion',
@@ -257,8 +257,8 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 text: _('Reset Password'),
                 scope: this,
                 handler: function(_button, _event) {
-                	this.loadMask.show();
-                	var accountObject = this.membersGrid.getSelectionModel().getSelected().data;
+                    this.loadMask.show();
+                    var accountObject = this.membersGrid.getSelectionModel().getSelected().data;
                     Ext.Ajax.request( {
                         params : {
                             method    : 'Courses.resetPassword',
