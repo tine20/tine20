@@ -1322,7 +1322,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             record = new this.recordClass(this.recordClass.getDefaultData(), 0);
         }
 
-        var useMultiple = ((this.selectionModel.getCount() > 1) && (this.multipleEdit) && (button.actionType == 'edit')),
+        var totalcount = this.selectionModel.getCount(),
+            useMultiple = ((totalcount > 1) && (this.multipleEdit) && (button.actionType == 'edit')),
             selectedRecords = [];
 
         if (useMultiple) {
@@ -1340,6 +1341,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 selectedRecords: Ext.encode(selectedRecords),
                 selectionFilter: Ext.encode(this.selectionModel.getSelectionFilter()),
                 isFilterSelect: this.selectionModel.isFilterSelect,
+                totalRecordCount: totalcount,
                 /* end multi edit stuff */
                 record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
                 copyRecord: (button.actionType == 'copy'),
@@ -1347,7 +1349,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     scope: this,
                     'update': ((this.selectionModel.getCount() > 1) && (this.multipleEdit)) ? this.onUpdateMultipleRecords : this.onUpdateRecord
                 }
-            }, 'useMultiple,selectedRecords,selectionFilter,isFilterSelect,record,listeners,copyRecord')
+            }, 'useMultiple,selectedRecords,selectionFilter,isFilterSelect,totalRecordCount,record,listeners,copyRecord')
         );
     },
 

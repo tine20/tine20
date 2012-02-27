@@ -105,7 +105,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         this.interRecord.dirty = false;
         this.interRecord.modified = {};
         
-        this.editDialog.window.setTitle(String.format(_('Edit {0} {1}'), this.editDialog.selectedRecords.length, this.editDialog.i18nRecordsName));
+        this.editDialog.window.setTitle(String.format(_('Edit {0} {1}'), this.editDialog.totalRecordCount, this.editDialog.i18nRecordsName));
 
         Tine.log.debug('loading of the following intermediate record completed:');
         Tine.log.debug(this.interRecord);
@@ -352,14 +352,14 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             
             Ext.MessageBox.confirm(
                 _('Confirm'),
-                String.format(_('Do you really want to change these {0} records?') + this.changedHuman, this.editDialog.selectedRecords.length),
+                String.format(_('Do you really want to change these {0} records?') + this.changedHuman, this.editDialog.totalRecordCount),
                 
                 function(_btn) {
                 if (_btn == 'yes') {
                     Ext.MessageBox.wait(_('Please wait'),_('Applying changes'));
                     Ext.Ajax.request({
                         url: 'index.php',
-                        timeout: 120000,
+                        timeout: 240000,
                         params: {
                             method: 'Tinebase.updateMultipleRecords',
                             appName: this.editDialog.recordClass.getMeta('appName'),
