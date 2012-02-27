@@ -135,10 +135,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->search($filter, null, false, false, 'sync')->getFirstRecord();
         
         if ($existingEvent === null) {
-            if ($event->organizer != Tinebase_Core::getUser()->contact_id) {
-                throw new Sabre_DAV_Exception_PreconditionFailed('invalid organizer provided: ' . $event->organizer .' => '. Tinebase_Core::getUser()->contact_id);
-            }
-            
             $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
             
             $vevent = new self($container, $event);
@@ -461,9 +457,14 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         
         self::enforceEventParameters($event);
         
-        // don't allow update of alarms for non organizer
+        // don't allow update of alarms for non organizer if oganizer is Tine 2.0 user
         if ($event->organizer !== Tinebase_Core::getUser()->contact_id) {
-            $this->_resetAlarms($event, $recordBeforeUpdate);
+            $organizerContact = Addressbook_Controller_Contact::getInstance()->get($event->organizer);
+            
+            // reset alarms if organizer is Tine 2.0 user
+            if (!empty($organizerContact->account_id)) {
+                $this->_resetAlarms($event, $recordBeforeUpdate);
+            }
         }
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));

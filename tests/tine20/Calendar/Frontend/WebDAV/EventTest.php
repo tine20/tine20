@@ -73,17 +73,40 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test create contact
+     * test create event with internal organizer
      * 
      * @return Calendar_Frontend_WebDAV_Event
      */
-    public function testCreateEvent()
+    public function testCreateEventWithInternalOrganizer()
     {
         if (!isset($_SERVER['HTTP_USER_AGENT'])) {
             $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
         }
         
         $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
+        
+        $id = Tinebase_Record_Abstract::generateUID();
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
+        
+        $record = $event->getRecord();
+
+        $this->assertEquals('New Event', $record->summary);
+        
+        return $event;
+    }
+    
+    /**
+     * test create event with external organizer
+     * 
+     * @return Calendar_Frontend_WebDAV_Event
+     */
+    public function testCreateEventWithExternalOrganizer()
+    {
+        if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+            $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
+        }
+        
+        $vcalendar = file_get_contents(dirname(__FILE__) . '/../../Import/files/lightning.ics');
         
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
@@ -110,7 +133,7 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
-        $existingEvent = $this->testCreateEvent();
+        $existingEvent = $this->testCreateEventWithInternalOrganizer();
         $existingRecord = $existingEvent->getRecord();
         $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
         
@@ -151,11 +174,11 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
     
     /**
      * test get vcard
-     * @depends testCreateEvent
+     * @depends testCreateEventWithInternalOrganizer
      */
     public function testGetVCalendar()
     {
-        $event = $this->testCreateEvent();
+        $event = $this->testCreateEventWithInternalOrganizer();
         
         $vcalendar = stream_get_contents($event->get());
         
@@ -190,7 +213,26 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
-        $event = $this->testCreateEvent();
+        $event = $this->testCreateEventWithInternalOrganizer();
+        
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
+        
+        $event->put($vcalendarStream);
+        
+        $record = $event->getRecord();
+        
+        $this->assertEquals('New Event', $record->summary);
+        $this->assertTrue(! empty($record->attendee[0]["status_authkey"]));
+    }
+    
+    /**
+     * test updating existing event
+     */
+    public function testPutEventWithExternalOrganizer()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+        
+        $event = $this->testCreateEventWithExternalOrganizer();
         
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
         
@@ -209,7 +251,7 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
         
-        $event = $this->testCreateEvent();
+        $event = $this->testCreateEventWithInternalOrganizer();
     
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
     
@@ -227,7 +269,7 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
         
-        $event = $this->testCreateEvent();
+        $event = $this->testCreateEventWithInternalOrganizer();
         
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
         
@@ -247,7 +289,7 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
         
-        $event = $this->testCreateEvent();
+        $event = $this->testCreateEventWithInternalOrganizer();
         
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/event_with_multiple_alarm.ics', 'r');
         
@@ -263,7 +305,7 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
      */
     public function testGetNameOfEvent()
     {
-        $event = $this->testCreateEvent();
+        $event = $this->testCreateEventWithInternalOrganizer();
         
         $record = $event->getRecord();
         
@@ -453,6 +495,26 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         $loadedEvent = new Calendar_Frontend_WebDAV_Event($this->objects['sharedContainer'], "$id.ics");
         $ownAttendee = Calendar_Model_Attender::getOwnAttender($loadedEvent->getRecord()->attendee);
         $this->assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $ownAttendee->status, 'event must be declined');
+    }
+    
+    /**
+     * validate that users can set alarms for events with external organizers
+     * 
+     */
+    public function testSetAlarmForEventWithExternalOrganizer()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+        
+        $event = $this->testCreateEventWithExternalOrganizer();
+        
+        $vcalendar = file_get_contents(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
+        $vcalendar = preg_replace('/PT1H15M/', 'PT1H30M', $vcalendar);
+        
+        $event->put($vcalendar);
+        
+        $record = $event->getRecord();
+        
+        $this->assertEquals('2011-10-04 06:30:00', (string) $record->alarms[0]->alarm_time);
     }
     
     /**

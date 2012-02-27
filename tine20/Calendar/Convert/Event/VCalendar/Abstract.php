@@ -711,14 +711,14 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     
                 case 'ORGANIZER':
                     if (preg_match('/mailto:(?P<email>.*)/i', $property->value, $matches)) {
-                        $name = isset($property['CN']) ? $property['CN']->value : $matches['email'];
-                        $contact = Calendar_Model_Attender::resolveEmailToContact(array(
-                            'email'     => $matches['email'],
-                            'lastName'    => $name,
-                        ));
-                        
                         // it's not possible to change the organizer by spec
                         if (empty($event->organizer)) {
+                            $name = isset($property['CN']) ? $property['CN']->value : $matches['email'];
+                            $contact = Calendar_Model_Attender::resolveEmailToContact(array(
+                                'email'     => $matches['email'],
+                                'lastName'  => $name,
+                            ));
+                        
                             $event->organizer = $contact->getId();
                         }
                         
