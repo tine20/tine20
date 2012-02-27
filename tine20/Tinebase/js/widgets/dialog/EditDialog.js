@@ -634,10 +634,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         mainCardPanel.add(resolveGridPanel);
         mainCardPanel.layout.setActiveItem(resolveGridPanel.id);
         resolveGridPanel.doLayout();
-        
-        this.loadMask.hide();
-
-        return;
     },
     
     /**
@@ -646,12 +642,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @param {Object} exception
      */
     onRequestFailed: function(exception) {
-        // Duplicate record(s) found
         if (exception.code == 629) {
-            return this.onDuplicateException.apply(this, arguments);
+            this.onDuplicateException.apply(this, arguments);
+        } else {
+            Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
         }
-        
-        Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+        this.loadMask.hide();
     },
     
     /**
