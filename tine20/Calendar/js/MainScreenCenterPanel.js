@@ -701,8 +701,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             view = panel.getView();
 
         if(!view.rendered) return;            
-            
-        filterData[0].filters[0].filters.push({field: 'id', operator: 'in', value: [ event.get('id') ]});
+        
+        filterData[0].filters[0].filters.push({field: 'id', operator: 'in', value: [ updatedEvent.get('id') ]});
         
         Tine.Calendar.searchEvents(filterData, {}, function(r) {
             if(event) store.replaceRecord(event, updatedEvent);
