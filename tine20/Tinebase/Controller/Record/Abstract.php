@@ -812,7 +812,7 @@ abstract class Tinebase_Controller_Record_Abstract
             'iteratable' => $this,
             'controller' => $this,
             'filter'     => $_filter,
-            'function'     => 'processUpdateMultipleIteration',
+            'function'   => 'processUpdateMultipleIteration',
         ));
         $result = $iterator->iterate($_data);
     
@@ -878,7 +878,6 @@ abstract class Tinebase_Controller_Record_Abstract
 
         $records = $this->_backend->getMultiple((array)$ids);
         if (count((array)$ids) != count($records)) {
-            //throw new Tinebase_Exception_NotFound('Error, only ' . count($records) . ' of ' . count((array)$ids) . ' records exist');
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records) . ' of ' . count((array)$ids) . ' records exist.');
         }
 

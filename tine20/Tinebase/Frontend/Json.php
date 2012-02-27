@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -233,6 +233,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     /**
      * Used for updating multiple records
+     * 
      * @param string $appName
      * @param string $modelName
      * @param array $changes
@@ -241,7 +242,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function updateMultipleRecords($appName, $modelName, $changes, $filter)
     {
         $filterModel = $appName . '_Model_' . $modelName . 'Filter';
-        foreach($changes as $f) {
+        foreach ($changes as $f) {
             $data[preg_replace('/^customfield_/','#', $f['name'])] = $f['value'];
         }
 

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -197,12 +197,16 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _updateMultiple($_filter, $_data, Tinebase_Controller_Record_Interface $_controller, $_filterModel)
     {
+        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(0);
+        
         $decodedData   = is_array($_data) ? $_data : Zend_Json::decode($_data);
         $filter = $this->_decodeFilter($_filter, $_filterModel, TRUE);
 
         $result = $_controller->updateMultiple($filter, $decodedData);
         $result['results']     = $this->_multipleRecordsToJson($result['results']);
         $result['exceptions']  = $this->_multipleRecordsToJson($result['exceptions']);
+        
+        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
         
         return $result;
     }

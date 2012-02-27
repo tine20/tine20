@@ -126,6 +126,9 @@ class Tinebase_Record_Iterator
             'totalcount' => count($records),
             'results' 	 => array(),
         );
+        
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         while (count($records) > 0) {
             $arguments = func_get_args();
             array_unshift($arguments, $records);
@@ -135,6 +138,8 @@ class Tinebase_Record_Iterator
             $records = $this->_getRecords();
             $result['totalcount'] += count($records);
         }
+        
+        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
         return $result;
     }
@@ -161,6 +166,9 @@ class Tinebase_Record_Iterator
         
         // get records by filter (ensure acl)
         $records = $this->_controller->search($this->_filter, $pagination, $this->_options['getRelations'], FALSE, $this->_options['searchAction']);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Got ' . count($records) . ' for next iteration.');
 
         return $records;
     }

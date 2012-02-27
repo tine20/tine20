@@ -115,7 +115,6 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
      * @param boolean force creation of the record
      * @return Timetracker_Model_Timesheet
      */
- //   protected function _getTimesheet($_taId = NULL, $_startDate = NULL)
     protected function _getTimesheet($_data = array(), $_forceCreation = false)
     {
         $defaultData = array('account_id'        => Tinebase_Core::getUser()->getId(),
@@ -138,7 +137,7 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
 
         $ts = new Timetracker_Model_Timesheet($data, TRUE);
 
-        if($_forceCreation) {
+        if ($_forceCreation) {
             $tsRec = $this->_json->saveTimesheet($ts->toArray(), $_forceCreation);
             $this->_lastCreatedRecord = $tsRec;
         }
@@ -394,6 +393,9 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, $searchResult['totalcount'], 'cf filter not working');
     }
 
+    /**
+     * get last created record
+     */
     protected function _getLastCreatedRecord() {
         return $this->_lastCreatedRecord;
     }
