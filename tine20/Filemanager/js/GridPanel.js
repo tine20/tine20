@@ -100,7 +100,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         Tine.Filemanager.GridPanel.superclass.initComponent.call(this);
         this.getStore().on('load', this.onLoad);
-        
+        this.initPagingToolbar();
         Tine.Tinebase.uploadManager.on('update', this.onUpdate);
     },
     
@@ -241,6 +241,24 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.action_showClosedToggle
             
         ];
+    },
+    
+    /**
+     * inserts a quota Message when using old Browsers with html4upload
+     */
+    initPagingToolbar: function() {
+        
+        if(!this.app.mainScreen.GridPanel || !this.app.mainScreen.GridPanel.pagingToolbar || !this.app.mainScreen.GridPanel.pagingToolbar.rendered) {
+            this.initPagingToolbar.defer(50, this);
+            return;
+        }
+        // old browsers
+        if (!((! Ext.isGecko && window.XMLHttpRequest && window.File && window.FileList) || (Ext.isGecko && window.FileReader))) {
+            var text = new Ext.Panel({padding: 2, html: String.format(this.app.i18n._('The max. Upload Filesize is {0} MB'), Tine.Tinebase.registry.get('maxFileUploadSize') / 1048576 )});
+            this.app.mainScreen.GridPanel.pagingToolbar.insert(12, new Ext.Toolbar.Separator());
+            this.app.mainScreen.GridPanel.pagingToolbar.insert(12, text);
+            this.app.mainScreen.GridPanel.pagingToolbar.doLayout();
+        }
     },
     
     /**
