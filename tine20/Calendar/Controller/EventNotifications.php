@@ -192,6 +192,16 @@
                 break;
                 
         }
+        
+        // SEND REPLY/COUNTER to external organizer
+        if ($_event->organizer && ! $_event->resolveOrganizer()->account_id && count($_event->attendee) == 1) {
+            $updates = array('attendee' => array('toUpdate' => array($_event->attendee->getFirstRecord())));
+            $organizer = new Calendar_Model_Attender(array(
+                'user_type'  => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'    => $_event->resolveOrganizer()
+            ));
+            $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE, $updates);
+        }
     }
     
     /**
@@ -210,9 +220,8 @@
         try {
                 
             // find organizer account
-            if ($_event->organizer) {
-                $organizerContact = Addressbook_Controller_Contact::getInstance()->get($_event->organizer);
-                $organizer = Tinebase_User::getInstance()->getFullUserById($organizerContact->account_id);
+            if ($_event->organizer && $_event->resolveOrganizer()->account_id) {
+                $organizer = Tinebase_User::getInstance()->getFullUserById($_event->resolveOrganizer()->account_id);
             } else {
                 // use creator as organizer
                 $organizer = Tinebase_User::getInstance()->getFullUserById($_event->created_by);
@@ -286,7 +295,11 @@
                             } else {
                                 $messageSubject = sprintf($translate->_('Attendee changes for event "%1$s" at %2$s' ), $_event->summary, $startDateString);
                             }
-                            //$method = Calendar_Model_iMIP::METHOD_REPLY;
+                            
+                            // we don't send iMIP parts to organizers with an account cause event is already up to date
+                            if ($_event->organizer && !$_event->resolveOrganizer()->account_id) {
+                                $method = Calendar_Model_iMIP::METHOD_REPLY;
+                            }
                             break;
                     }
                     break;

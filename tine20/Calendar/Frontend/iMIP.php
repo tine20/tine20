@@ -183,7 +183,7 @@ class Calendar_Frontend_iMIP
     protected function _checkRequestPreconditions($_iMIP)
     {
         $result  = $this->_assertOwnAttender($_iMIP, TRUE, FALSE);
-        $result &= $this->_assertOrganizer($_iMIP, TRUE, TRUE, TRUE);
+        $result &= $this->_assertOrganizer($_iMIP, TRUE, TRUE);
         
         $existingEvent = $_iMIP->getExistingEvent();
         if ($existingEvent && $_iMIP->getEvent()->isObsoletedBy($existingEvent)) {
@@ -281,11 +281,13 @@ class Calendar_Frontend_iMIP
         }
         */
         
+        /*
         if ($_assertAccount && (! $organizer || ! $organizer->account_id)) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORGANIZER, "processing {$_iMIP->method} without organizer user account is not possible");
             $result = FALSE;
         }
-    
+    	*/
+        
         return $result;
     }
     
@@ -326,10 +328,24 @@ class Calendar_Frontend_iMIP
         }
         
         // external organizer:
-        //  - update (might have acl problems)
-        //  - set status
-        //  - send reply to organizer
-        //  - remove $_assertAccount precondition
+        else {
+            if ($ownAttender && $_status) {
+                $ownAttender->status = $_status;
+            }
+            
+            if (! $existingEvent) {
+                $event = $_iMIP->getEvent();
+                if (! $event->container_id) {
+                    $event->container_id = Tinebase_Core::getPreference('Calendar')->{Calendar_Preference::DEFAULTCALENDAR};
+                }
+                
+                $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
+            } else {
+                $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->update($existingEvent);
+            }
+            
+            //  - send reply to organizer
+        }
     }
     
     /**

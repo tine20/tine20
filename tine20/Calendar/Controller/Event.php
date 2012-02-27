@@ -167,9 +167,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
-            $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
-            $_record->originator_tz = $_record->originator_tz ? $_record->originator_tz : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
-            $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->contact_id;
+            $this->_inspectEvent($_record);
             
             // we need to resolve groupmembers before free/busy checking
             Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
@@ -182,7 +180,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $sendNotifications = $this->_sendNotifications;
             $this->_sendNotifications = FALSE;
             
-            $_record->setRruleUntil();
             $event = parent::create($_record);
             $this->_saveAttendee($_record);
             
@@ -447,7 +444,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     }
                 }
                 
-                $_record->setRruleUntil();
+                $this->_inspectEvent($_record);
                 parent::update($_record);
                 $this->_saveAttendee($_record, $_record->isRescheduled($event));
                 
@@ -1035,6 +1032,27 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $baseEvent = $this->getRecurBaseEvent($_record);
             $this->_touch($baseEvent, TRUE);
         }
+    }
+    
+    /**
+     * inspect before create/update
+     * 
+     * @TODO move stuff from other places here
+     * @param   Calendar_Model_Event $_record      the record to inspect
+     */
+    protected function _inspectEvent($_record)
+    {
+        $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
+        $_record->originator_tz = $_record->originator_tz ? $_record->originator_tz : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+        $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->contact_id;
+        
+        // external organizer (iTIP)
+        if (! $_record->resolveOrganizer()->account_id && count($_record->attendee) > 1) {
+            $ownAttendee = Calendar_Model_Attender::getOwnAttender($_record->attendee);
+            $_record->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $ownAttendee ? array($ownAttendee) : array());
+        }
+        
+        $_record->setRruleUntil();
     }
     
     /**

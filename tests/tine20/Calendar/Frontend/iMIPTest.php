@@ -258,8 +258,26 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         
         $iMIP = $complete->preparedParts->getFirstRecord()->preparedData;
         
-        $this->setExpectedException('Calendar_Exception_iMIP', 'iMIP preconditions failed: ORGANIZER');
+        Calendar_Controller_EventNotificationsTests::flushMailer();
         $result = $this->_iMIPFrontend->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        $this->_eventIdsToDelete[] = $iMIP->event->getId();
+        
+        // assert external organizer
+        $this->assertEquals('l.kneschke@caldav.org', $iMIP->event->organizer->email, 'wrong organizer');
+        $this->assertEmpty($iMIP->event->organizer->account_id, 'organizer must not have an account');
+        
+        // assert attendee
+        $this->assertEquals(1, count($iMIP->event->attendee), 'all attendee but curruser must be whiped');
+        $this->assertEquals($email, $iMIP->event->attendee->getFirstRecord()->user_id->email, 'wrong attendee mail');
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $iMIP->event->attendee->getFirstRecord()->user_id->account_id, 'wrong attendee');
+        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $iMIP->event->attendee->getFirstRecord()->status);
+        
+        // assert REPLY message
+        $messages = Calendar_Controller_EventNotificationsTests::getMessages();
+        $this->assertEquals(1, count($messages), 'only one mails should be send');
+        $this->assertTrue(in_array('l.kneschke@caldav.org', $messages[0]->getRecipients()), 'organizer is not a receipient');
+        $this->assertContains('METHOD:REPLY', var_export($messages[0], TRUE), 'method missing');
     }
     
     /**
@@ -279,6 +297,8 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     /**
      * testExternalPublishProcess
      * - uses felamimail to cache external publish message
+     * 
+     * NOTE: meetup sends REQUEST w.o. attendee. We might think of autoconvert this to PUBLISH
      */
     public function testExternalPublishProcess()
     {
@@ -290,7 +310,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         
         $iMIP = $complete->preparedParts->getFirstRecord()->preparedData;
         
-        $this->setExpectedException('Calendar_Exception_iMIP', 'iMIP preconditions failed: ATTENDEE, ORGANIZER');
+        $this->setExpectedException('Calendar_Exception_iMIP', 'iMIP preconditions failed: ATTENDEE');
         $result = $this->_iMIPFrontend->process($iMIP);
     }
 
