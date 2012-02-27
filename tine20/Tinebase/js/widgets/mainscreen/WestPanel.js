@@ -101,7 +101,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         this.stateId = this.app.appName + this.getContentType() + '-mainscreen-westpanel';
         var fpcn = this.getContentType() + this.favoritesPanelClassName;
         this.hasFavoritesPanel = Ext.isBoolean(this.hasFavoritesPanel) ? this.hasFavoritesPanel : !! Tine[this.app.appName][fpcn];
-        this.hasContentTypeTreePanel = ((this.contentTypes) && (this.contentTypes.length > 1));
+        this.hasContentTypeTreePanel = Ext.isArray(this.contentTypes);
         
         if (this.hasContainerTreePanel === null) {
             this.hasContainerTreePanel = true;            

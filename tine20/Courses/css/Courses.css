@@ -9,7 +9,7 @@
  *
  */
  
-.CoursesIconCls {
+.CoursesCourse, .CoursesIconCls {
     background-image:url(../../images/oxygen/16x16/apps/kbruch.png) !important;
 }
 .x-btn-medium .CoursesIconCls {
