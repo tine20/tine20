@@ -92,7 +92,8 @@ class Calendar_Frontend_iMIP
             }
         }
         
-        $method = ucfirst(strtolower($_iMIP->method));
+        $method = $_iMIP->method ? ucfirst(strtolower($_iMIP->method)) : 'MISSINGMETHOD';
+        
         $preconditionMethodName  = '_check'     . $method . 'Preconditions';
         if (method_exists($this, $preconditionMethodName)) {
             $preconditionCheckSuccessful = $this->{$preconditionMethodName}($_iMIP, $_status);

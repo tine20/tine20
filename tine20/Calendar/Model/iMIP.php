@@ -153,6 +153,18 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
     }
     
     /**
+     * (non-PHPdoc)
+     * @see Tinebase_Record_Abstract::__get()
+     */
+    public function __get($_name) {
+        if ($_name == 'method' && !$this->_properties['method'] && $this->_properties['ics']) {
+            $this->getEvent();
+        }
+        
+        return parent::__get($_name);
+    }
+    
+    /**
      * get event record
      * 
      * @return Calendar_Model_Event
@@ -166,7 +178,7 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
             
             $this->event = $this->_getConverter()->toTine20Model($this->ics);
             
-            if (! $this->method) {
+            if (! $this->_properties['method']) {
                 $this->method = $this->_getConverter()->getMethod($this->ics);
             }
         }
