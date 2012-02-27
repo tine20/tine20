@@ -33,7 +33,10 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
     
     public function tearDown()
     {
-        Calendar_Controller_Resource::getInstance()->delete($this->_toCleanup->id);
+        if (! $this->_transactionId) {
+            Calendar_Controller_Resource::getInstance()->delete($this->_toCleanup->id);
+        }
+        
         parent::tearDown();
     }
     

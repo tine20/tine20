@@ -66,11 +66,17 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
     protected $_personasDefaultCals = array();
     
     /**
+     * transaction id if test is wrapped in an transaction
+     */
+    protected $_transactionId = NULL;
+    /**
      * set up tests
      *
      */
     public function setUp()
     {
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
     	$this->_backend = new Calendar_Backend_Sql();
     	
         $this->_personas = Zend_Registry::get('personas');
@@ -100,19 +106,25 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_testCalendars->getId()),
-        )), new Tinebase_Model_Pagination(array()));
-        
-        // delete alarms
-        Tinebase_Alarm::getInstance()->deleteAlarmsOfRecord('Calendar_Model_Event', $events->getArrayOfIds());
-        
-        foreach ($events as $event) {
-            $this->_backend->delete($event->getId());
+        if ($this->_transactionId) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
         }
         
-        foreach ($this->_testCalendars as $cal) {
-            Tinebase_Container::getInstance()->deleteContainer($cal, true);
+        else {
+            $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
+                array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_testCalendars->getId()),
+            )), new Tinebase_Model_Pagination(array()));
+            
+            // delete alarms
+            Tinebase_Alarm::getInstance()->deleteAlarmsOfRecord('Calendar_Model_Event', $events->getArrayOfIds());
+            
+            foreach ($events as $event) {
+                $this->_backend->delete($event->getId());
+            }
+            
+            foreach ($this->_testCalendars as $cal) {
+                Tinebase_Container::getInstance()->deleteContainer($cal, true);
+            }
         }
     }
     
@@ -187,5 +199,13 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
             )
             */
         ));
+    }
+    
+    protected function _testNeedsTransaction()
+    {
+        if ($this->_transactionId) {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $this->_transactionId = NULL;
+        }
     }
 }

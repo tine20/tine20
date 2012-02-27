@@ -54,7 +54,10 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     public function tearDown()
     {
         parent::tearDown();
-        $this->cleanupTestCalendars();
+        
+        if (! $this->_transactionId) {
+            $this->cleanupTestCalendars();
+        }
     }
     
     /**
