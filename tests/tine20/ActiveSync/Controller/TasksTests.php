@@ -4,7 +4,7 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -43,11 +43,22 @@ class ActiveSync_Controller_TasksTests extends ActiveSync_TestCase
     protected $_exampleXMLExisting = '<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
 <Sync xmlns="uri:AirSync" xmlns:Contacts="uri:Contacts"><Collections><Collection><Class>Contacts</Class><SyncKey>1</SyncKey><CollectionId>addressbook-root</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>0</FilterType><Truncation>2</Truncation><Conflict>0</Conflict></Options><Commands><Add><ClientId>1</ClientId><ApplicationData><Contacts:FileAs>Kneschke, Lars</Contacts:FileAs><Contacts:FirstName>Lars</Contacts:FirstName><Contacts:LastName>Kneschke</Contacts:LastName></ApplicationData></Add></Commands></Collection></Collections></Sync>';
-  */  
+  */
+    
+    /**
+     * xml input
+     * 
+     * @var string
+     */
     protected $_testXMLInput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Tasks="uri:Tasks"><Collections><Collection><Class>Tasks</Class><SyncKey>17</SyncKey><CollectionId>tasks-root</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>8</FilterType><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>2048</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>0</Conflict></Options><Commands><Change><ClientId>1</ClientId><ApplicationData><AirSyncBase:Body><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:Data>test beschreibung zeile 1&#13;
 Zeile 2&#13;
 Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe</Tasks:Subject><Tasks:Importance>1</Tasks:Importance><Tasks:UtcDueDate>2010-11-28T22:59:00.000Z</Tasks:UtcDueDate><Tasks:DueDate>2010-11-28T23:59:00.000Z</Tasks:DueDate><Tasks:Complete>0</Tasks:Complete><Tasks:Sensitivity>0</Tasks:Sensitivity></ApplicationData></Change></Commands></Collection></Collections></Sync>';
     
+    /**
+     * xml output
+     * 
+     * @var string
+     */
     protected $_testXMLOutput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Tasks="uri:Tasks"><Collections><Collection><Class>Tasks</Class><SyncKey>17</SyncKey><CollectionId>tasks-root</CollectionId><Commands><Change><ClientId>1</ClientId><ApplicationData/></Change></Commands></Collection></Collections></Sync>';
     
     /**
@@ -157,6 +168,10 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         $this->assertEquals('Testaufgabe auf mfe', $task[0]->summary);
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see ActiveSync_TestCase::_validateGetServerEntries()
+     */
     protected function _validateGetServerEntries($_recordId)
     {
         $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
@@ -258,9 +273,29 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         $syncable   = $this->_getContainerWithSyncGrant();
         $unsyncable = $this->_getContainerWithoutSyncGrant();
         $supportedFolders = $controller->getAllFolders();
-    
-        //$this->assertEquals(1, count($supportedFolders));
+
         $this->assertTrue(isset($supportedFolders[$syncable->getId()]));
         $this->assertFalse(isset($supportedFolders[$unsyncable->getId()]));
+    }
+
+   /**
+    * test server entries
+    * 
+    * @see #5894: Tasks sync is broken (http://forge.tine20.org/mantisbt/view.php?id=5894)
+    */
+    public function testGetServerEntries()
+    {
+        $controller = new ActiveSync_Controller_Tasks($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        $syncable   = $this->_getContainerWithSyncGrant();
+        Tasks_Controller_Task::getInstance()->create(new Tasks_Model_Task(array(
+            'container_id' => $syncable->getId(),
+            'summary'      => 'sync test task',
+            'status'       => 'NEEDS-ACTION',
+        )));
+        
+        $entries = $controller->getServerEntries($syncable->getId(), Syncope_Command_Sync::FILTER_INCOMPLETE);
+        
+        $this->assertEquals(1, count($entries));
     }
 }

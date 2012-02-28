@@ -79,7 +79,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
      * @see PHPUnit_Framework_TestCase::setUp()
      */
     protected function setUp()
-    {   	
+    {       
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         $this->_testUser          = Tinebase_Core::getUser();        
@@ -107,11 +107,11 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
      */
     public function testGetFoldersPalm()
     {
-    	$controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
+        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
         
-    	$folders = $controller->getAllFolders();
-    	
-    	$this->assertArrayHasKey($this->_specialFolderName, $folders, "key {$this->_specialFolderName} not found in " . print_r($folders, true));
+        $folders = $controller->getAllFolders();
+        
+        $this->assertArrayHasKey($this->_specialFolderName, $folders, "key {$this->_specialFolderName} not found in " . print_r($folders, true));
     }
     
     /**
@@ -158,7 +158,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
         $folders = $controller->getAllFolders();
         
         foreach($folders as $folder) {
-        	$this->assertTrue($this->_testUser->hasGrant($folder['folderId'], Tinebase_Model_Grants::GRANT_SYNC));
+            $this->assertTrue($this->_testUser->hasGrant($folder['folderId'], Tinebase_Model_Grants::GRANT_SYNC));
         }
         
         $this->assertArrayNotHasKey($this->_specialFolderName, $folders, "key {$this->_specialFolderName} found in " . print_r($folders, true));
@@ -230,14 +230,14 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
                 Tinebase_Core::getUser()
             );
         } catch (Tinebase_Exception_NotFound $e) {
-	        $containerWithSyncGrant = new Tinebase_Model_Container(array(
-	            'name'              => 'ContainerWithSyncGrant-' . $this->_applicationName,
-	            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-	        	'owner_id'          => Tinebase_Core::getUser(),
-	            'backend'           => 'Sql',
-	            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
-	        ));
-	        $containerWithSyncGrant = Tinebase_Container::getInstance()->addContainer($containerWithSyncGrant);
+            $containerWithSyncGrant = new Tinebase_Model_Container(array(
+                'name'              => 'ContainerWithSyncGrant-' . $this->_applicationName,
+                'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+                'owner_id'          => Tinebase_Core::getUser(),
+                'backend'           => 'Sql',
+                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
+            ));
+            $containerWithSyncGrant = Tinebase_Container::getInstance()->addContainer($containerWithSyncGrant);
         }
         
         $this->objects['container']['withSyncGrant'] = $containerWithSyncGrant;
@@ -275,13 +275,13 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
                 //Tinebase_Model_Grants::GRANT_SYNC      => true,
                 // NOTE: Admin Grant implies all other grants
                 //Tinebase_Model_Grants::GRANT_ADMIN     => true,
-            );        	
-        	$grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($creatorGrants));
-        	
+            );            
+            $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($creatorGrants));
+            
             $containerWithoutSyncGrant = new Tinebase_Model_Container(array(
                 'name'              => 'ContainerWithoutSyncGrant-' . $this->_applicationName,
                 'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            	'owner_id'          => Tinebase_Core::getUser(),
+                'owner_id'          => Tinebase_Core::getUser(),
                 'backend'           => 'Sql',
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
             ));
@@ -334,7 +334,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _getInputDOMDocument($xml = NULL)
     {
-    	$dom = new DOMDocument();
+        $dom = new DOMDocument();
         $dom->formatOutput = false;
         $dom->encoding     = 'utf-8';
         $dom->loadXML($xml ? $xml : $this->_testXMLInput);
@@ -349,7 +349,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _getOutputDOMDocument()
     {
-    	$dom = new DOMDocument();
+        $dom = new DOMDocument();
         $dom->formatOutput = false;
         $dom->encoding     = 'utf-8';
         $dom->loadXML($this->_testXMLOutput);
