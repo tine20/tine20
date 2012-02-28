@@ -146,16 +146,11 @@ Tine.widgets.dialog.DuplicateMergeDialog = Ext.extend(Ext.FormPanel, {
      * @param {} failure
      */
     onFailure: function(step, failure) {            
-            if(failure.code == 505) {   // Throwing an exception dialog seems too brutal
-                Ext.MessageBox.alert(_('Invalid data after merge'), String.format(_('The resulting {0} has invalid data. Both {1} haven\'t been touched. <br /><b>Validation Message:</b><br />{2}'), this.recordClass.getRecordName(), this.recordClass.getRecordsName(), failure.message), this.onCancel, this);
-            } else { // Alert & Exception Dialog
-                if(step == 'remove') {
-                    Ext.MessageBox.alert(_('Remove Duplicate Failed'), String.format(_('The merge succeeded, but the duplicate {0} could not be removed'), this.recordClass.getRecordName()));
-                } else {
-                    Ext.MessageBox.alert(_('Merge Failed'), String.format(_('The merge failed. Both {0} haven\'t been touched.'), this.recordClass.getRecordsName()));                    
-                }
-                Tine.Tinebase.ExceptionHandler.handleRequestException(failure);
-            }
+        if(step == 'remove') {
+            Ext.MessageBox.alert(_('Remove Duplicate Failed'), String.format(_('The merge succeeded, but the duplicate {0} could not be removed'), this.recordClass.getRecordName()), function() { Tine.Tinebase.ExceptionHandler.handleRequestException(failure); this.onCancel()}, this);
+        } else {
+            Ext.MessageBox.alert(_('Merge Failed'), String.format(_('The merge failed. Both {0} haven\'t been touched.'), this.recordClass.getRecordsName()), function() { Tine.Tinebase.ExceptionHandler.handleRequestException(failure); this.onCancel()}, this);                    
+        }
     },
     /**
      * returns the form items of this panel

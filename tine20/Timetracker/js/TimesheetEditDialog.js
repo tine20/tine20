@@ -256,14 +256,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 String.format(this.app.i18n._('Could not save {0}.'), this.i18nRecordName) 
                     + ' ( ' + this.app.i18n._('Booking deadline for this Timeaccount has been exceeded.') /* + ' ' + response.message  */ + ')'
             );
-        } else if (response.code && response.code == 505) {
-            // validation exception
-            // NOTE: it sometimes happens (ExtJS bug?) that the record is submitted even if no timeaccount_id is set in the picker ...
-            Ext.MessageBox.alert(
-                this.app.i18n._('No Timeaccount set'), 
-                String.format(this.app.i18n._('Could not save {0}.'), this.i18nRecordName) 
-                    + ' ( ' + this.app.i18n._('You need to set a Timeaccount this Timesheet belongs to.') + ')'
-            );
         } else {
             // call default exception handler
             Tine.Tinebase.ExceptionHandler.handleRequestException(response);

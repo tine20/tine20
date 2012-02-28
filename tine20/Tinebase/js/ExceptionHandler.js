@@ -188,6 +188,17 @@ Tine.Tinebase.ExceptionHandler = function() {
                     icon: Ext.MessageBox.WARNING
                 });
                 break;
+                
+            // invalid record exception
+            case 505:
+                var message = exception.message ? '<br /><b>' + _('Server Message:') + '</b><br />' + exception.message : '';
+                Ext.MessageBox.show({
+                    title: _('Invalid Data'),
+                    msg: _('Your input data is not valid. Please provide valid data.') + message,
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.WARNING
+                });
+                break;
             // server communication loss
             case 510:
                 // NOTE: when communication is lost, we can't create a nice ext window.
