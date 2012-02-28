@@ -134,8 +134,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordUpdate: function() {
         Tine.Crm.LeadEditDialog.superclass.onRecordUpdate.call(this);
-        
-        this.getAdditionalData();
+        this.getAdditionalData();        
     },
     
     /**

@@ -232,7 +232,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             minWidth: 70,
             ref: '../btnSaveAndClose',
             scope: this,
-            handler: this.onSaveAndClose,
+            handler: function() { this.onSaveAndClose.defer(500, this) },
             iconCls: 'action_saveAndClose'
         });
     
