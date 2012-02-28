@@ -106,7 +106,7 @@ class Syncope_Command_Ping extends Syncope_Command_Wbxml
                     try {
                         $syncState = $this->_syncStateBackend->getSyncState($this->_device, $folder);
 
-                        $foundChanges = $dataController->hasChanges($this->_contentStateBackend, $folder, $syncState);
+                        $foundChanges = !!$dataController->getCountOfChanges($this->_contentStateBackend, $folder, $syncState);
                         
                     } catch (Syncope_Exception_NotFound $e) {
                         // folder got never synchronized to client
