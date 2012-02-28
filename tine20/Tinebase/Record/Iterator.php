@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -17,11 +17,11 @@
  * 
  * use it like this:
        $iterator = new Tinebase_Record_Iterator(array(
-            'iteratable' => $this,				// should implement Tinebase_Record_IteratableInterface
-        	'controller' => $this->_controller, // Tinebase_Controller_Record_Abstract
-        	'filter'     => $this->_filter,     // Tinebase_Model_Filter_FilterGroup
-            'options'	 => array(
-            	// add specific options here
+            'iteratable' => $this,              // should implement Tinebase_Record_IteratableInterface
+            'controller' => $this->_controller, // Tinebase_Controller_Record_Abstract
+            'filter'     => $this->_filter,     // Tinebase_Model_Filter_FilterGroup
+            'options'     => array(
+                // add specific options here
             ),
         ));
         $totalcount = $iterator->iterate();
@@ -67,16 +67,23 @@ class Tinebase_Record_Iterator
      * @var integer
      */
     protected $_start = 0;
-
+    
+    /**
+     * record ids
+     * 
+     * @var array
+     */
+    protected $_recordIds = array();
+    
     /**
      * options array
      * 
      * @var array
      */
     protected $_options = array(
-        'limit'		    => 100,
-        'searchAction'	=> 'get',
-        'sortInfo'		=> NULL,
+        'limit'            => 100,
+        'searchAction'    => 'get',
+        'sortInfo'        => NULL,
         'getRelations'  => FALSE,
     );
 
@@ -124,7 +131,7 @@ class Tinebase_Record_Iterator
 
         $result = array(
             'totalcount' => count($records),
-            'results' 	 => array(),
+            'results'    => array(),
         );
         
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
@@ -153,6 +160,16 @@ class Tinebase_Record_Iterator
      */
     protected function _getRecords()
     {
+        if (empty($this->_recordIds)) {
+            // need to fetch record ids first because filtered fields can change during iteration step 
+            $this->_recordIds = $this->_controller->search($this->_filter, NULL, FALSE, TRUE, $this->_options['searchAction']);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Found ' . count($this->_recordIds) . ' total records to process.');
+            if (empty($this->_recordIds)) {
+                return new Tinebase_Record_RecordSet($this->_filter->getModelName());
+            }
+        }
+        
         $pagination = (! empty($this->_options['sortInfo'])) ? new Tinebase_Model_Pagination($this->_options['sortInfo']) : new Tinebase_Model_Pagination();
         if ($this->_start !== NULL) {
             $pagination->start = $this->_start;
@@ -165,11 +182,15 @@ class Tinebase_Record_Iterator
             . ' and pagination: ' . print_r($pagination->toArray(), TRUE));
         
         // get records by filter (ensure acl)
-        $records = $this->_controller->search($this->_filter, $pagination, $this->_options['getRelations'], FALSE, $this->_options['searchAction']);
+        $filterClassname = get_class($this->_filter);
+        $idFilter = new $filterClassname(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => $this->_recordIds)
+        ));
+        $records = $this->_controller->search($idFilter, $pagination, $this->_options['getRelations']);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Got ' . count($records) . ' for next iteration.');
-
+        
         return $records;
     }
 }

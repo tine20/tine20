@@ -716,6 +716,11 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         
         // update multi with filter
         $filterArray = $this->_getTimesheetDateFilter();
+        $filterArray[] = array(
+            'field'     => 'is_cleared_combined',
+            'operator'  => 'equals',
+            'value'     => 0
+        );
         $tinebaseJson = new Tinebase_Frontend_Json();
         $result = $tinebaseJson->updateMultipleRecords('Timetracker', 'Timesheet', array(array('name' => 'is_cleared', 'value' => 1)), $filterArray);
         
