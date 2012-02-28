@@ -201,8 +201,9 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         
         $decodedData   = is_array($_data) ? $_data : Zend_Json::decode($_data);
         $filter = $this->_decodeFilter($_filter, $_filterModel, TRUE);
-
+        
         $result = $_controller->updateMultiple($filter, $decodedData);
+        
         $result['results']     = $this->_multipleRecordsToJson($result['results']);
         $result['exceptions']  = $this->_multipleRecordsToJson($result['exceptions']);
         
