@@ -74,9 +74,9 @@ msgstr[0] "Contract"
 msgstr[1] "Contracts"
 
 #: js/Models.js:117
-msgid "contracts list"
+msgid "All Contracts"
 msgid_plural "contracts lists"
-msgstr[0] "contracts list"
+msgstr[0] "All Contracts"
 msgstr[1] "contracts lists"
 
 #: js/Models.js:141
@@ -118,3 +118,8 @@ msgstr "My Contracts"
 #: Setup/Initialize.php:56 Setup/Update/Release5.php:84
 msgid "Contracts created by myself"
 msgstr "Contracts created by myself"
+
+#~ msgid "contracts list"
+#~ msgid_plural "contracts lists"
+#~ msgstr[0] "contracts list"
+#~ msgstr[1] "contracts lists"

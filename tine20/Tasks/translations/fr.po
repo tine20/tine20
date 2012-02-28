@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-02-20 12:24+0000\n"
+"PO-Revision-Date: 2012-02-22 09:22+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2012-02-21 06:34+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-02-23 05:22+0000\n"
+"X-Generator: Launchpad (build 14855)\n"
 "X-Poedit-Country: FRANCE\n"
 "X-Poedit-Language: French\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -70,55 +70,55 @@ msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Êtes-vous sûr de vouloir supprimer la tâche sélectionnée?"
 msgstr[1] "Êtes-vous sûr de vouloir supprimer les tâches sélectionnées?"
 
-#: js/GridPanel.js:127
+#: js/GridPanel.js:110
 msgid "Tags"
 msgstr "Marqueur"
 
-#: js/GridPanel.js:128 Model/Task.php:199
+#: js/GridPanel.js:111 Model/Task.php:199
 msgid "Lead"
 msgstr "Propsect"
 
-#: js/GridPanel.js:131 js/TaskEditDialog.js:180 js/Tasks.js:148
+#: js/GridPanel.js:114 js/TaskEditDialog.js:180 js/Tasks.js:148
 msgid "Summary"
 msgstr "Résumé"
 
-#: js/GridPanel.js:135
+#: js/GridPanel.js:118
 msgid "Add a task..."
 msgstr "Ajouter"
 
-#: js/GridPanel.js:139 js/Tasks.js:149
+#: js/GridPanel.js:122 js/Tasks.js:149
 msgid "Due Date"
 msgstr "Date de fin"
 
-#: js/GridPanel.js:157 js/TaskEditDialog.js:208 Model/Task.php:190
+#: js/GridPanel.js:136 js/TaskEditDialog.js:191 Model/Task.php:190
 msgid "Priority"
 msgstr "Priorité"
 
-#: js/GridPanel.js:173 Model/Task.php:192
+#: js/GridPanel.js:152 Model/Task.php:192
 msgid "Percent"
 msgstr "Pourcent"
 
-#: js/GridPanel.js:186 js/TaskEditDialog.js:237 js/Tasks.js:151
+#: js/GridPanel.js:165 js/TaskEditDialog.js:220 js/Tasks.js:151
 #: js/Tasks.js:211 Model/Task.php:191
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/GridPanel.js:202 js/Tasks.js:163
+#: js/GridPanel.js:181 js/Tasks.js:163
 msgid "Creation Time"
 msgstr "Date de création"
 
-#: js/GridPanel.js:209 js/TaskEditDialog.js:242 Setup/Initialize.php:35
+#: js/GridPanel.js:188 js/TaskEditDialog.js:227 Setup/Initialize.php:35
 #: Setup/Update/Release5.php:66
 msgid "Completed"
 msgstr "Terminé"
 
-#: js/GridPanel.js:216 js/Tasks.js:159
+#: js/GridPanel.js:195 js/Tasks.js:159
 msgid "Responsible"
 msgstr "Responsable"
 
-#: js/GridPanel.js:259
+#: js/GridPanel.js:238
 msgid "Show closed"
 msgstr "Afficher terminées"
 
@@ -126,27 +126,27 @@ msgstr "Afficher terminées"
 msgid "You have to supply a due date, because an alarm ist set!"
 msgstr "Vous devez indiquer une date prévue, car l'alerte est activée !"
 
-#: js/TaskEditDialog.js:186 js/TaskEditDialog.js:190
+#: js/TaskEditDialog.js:187
 msgid "Due date"
 msgstr "Date de fin"
 
-#: js/TaskEditDialog.js:215 Model/Task.php:188
+#: js/TaskEditDialog.js:198 Model/Task.php:188
 msgid "Organizer"
 msgstr "Organisateur"
 
-#: js/TaskEditDialog.js:216
+#: js/TaskEditDialog.js:199
 msgid "Add Responsible ..."
 msgstr "Ajouter un responsable..."
 
-#: js/TaskEditDialog.js:223
+#: js/TaskEditDialog.js:206
 msgid "Notes"
 msgstr "Notes"
 
-#: js/TaskEditDialog.js:224
+#: js/TaskEditDialog.js:207
 msgid "Enter description..."
 msgstr "Saisissez une description..."
 
-#: js/TaskEditDialog.js:230
+#: js/TaskEditDialog.js:213
 msgid "Percentage"
 msgstr "Pourcentage"
 
@@ -286,20 +286,20 @@ msgstr ""
 msgid "Tasks without responsible"
 msgstr ""
 
-#~ msgid "NEEDS-ACTION"
-#~ msgstr "ACTION-REQUISE"
+msgid "NEEDS-ACTION"
+msgstr "ACTION-REQUISE"
 
-#~ msgid "COMPLETED"
-#~ msgstr "TERMINE"
+msgid "COMPLETED"
+msgstr "TERMINE"
 
-#~ msgid "IN-PROCESS"
-#~ msgstr "EN-COURS"
+msgid "IN-PROCESS"
+msgstr "EN-COURS"
 
-#~ msgid "CANCELLED"
-#~ msgstr "ANNULE"
+msgid "CANCELLED"
+msgstr "ANNULE"
 
-#~ msgid "Failed"
-#~ msgstr "Échoué"
+msgid "Failed"
+msgstr "Échoué"
 
-#~ msgid "Could not save task."
-#~ msgstr "Erreur de sauvegarde."
+msgid "Could not save task."
+msgstr "Erreur de sauvegarde."

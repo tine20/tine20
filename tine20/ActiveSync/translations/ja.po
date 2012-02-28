@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-02-22 06:53+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-02-23 05:20+0000\n"
+"X-Generator: Launchpad (build 14855)\n"
 "X-Poedit-Country: \n"
 "X-Poedit-Language: Japanese\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -83,10 +83,10 @@ msgstr ""
 msgid "The default task list to create new tasks in."
 msgstr ""
 
-#: Setup/setup.xml:522
+#: Setup/setup.xml:527
 msgid "Default Policy"
 msgstr ""
 
-#: Setup/setup.xml:527
+#: Setup/setup.xml:532
 msgid "Default Policy installed during setup"
 msgstr ""

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-20 12:26+0000\n"
+"PO-Revision-Date: 2012-02-22 09:16+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-21 06:33+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-02-23 05:21+0000\n"
+"X-Generator: Launchpad (build 14855)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Norwegian Bokmål\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -21,23 +21,23 @@ msgstr ""
 msgid "Call contact"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:172
+#: js/AddressbookGridPanelHook.js:171
 msgid "Work"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:181
+#: js/AddressbookGridPanelHook.js:180
 msgid "Home"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:190
+#: js/AddressbookGridPanelHook.js:189
 msgid "Cell"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:199
+#: js/AddressbookGridPanelHook.js:198
 msgid "Cell private"
 msgstr ""
 
-#: js/Models.js:69 js/Phone.js:59 js/Phone.js:264
+#: js/Models.js:69 js/Phone.js:59 js/Phone.js:265
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] ""
@@ -49,7 +49,7 @@ msgid_plural "phones lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Phone.js:29 js/Phone.js:489 js/Phone.js:490
+#: js/Phone.js:29 js/Phone.js:490 js/Phone.js:491
 msgid "Edit phone settings"
 msgstr "Rediger telefon instillinger"
 
@@ -57,243 +57,243 @@ msgstr "Rediger telefon instillinger"
 msgid "Phones"
 msgstr "Telefoner"
 
-#: js/Phone.js:287
+#: js/Phone.js:288
 msgid "Line"
 msgstr "Linje"
 
-#: js/Phone.js:296
+#: js/Phone.js:297
 msgid "Number"
 msgstr "Nummer"
 
-#: js/Phone.js:305
+#: js/Phone.js:306
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: js/Phone.js:315
+#: js/Phone.js:316
 msgid "Dial"
 msgstr "Ring"
 
-#: js/Phone.js:335
+#: js/Phone.js:336
 msgid "Error"
 msgstr ""
 
-#: js/Phone.js:336
+#: js/Phone.js:337
 msgid "Not possible to dial."
 msgstr ""
 
-#: js/Phone.js:479
+#: js/Phone.js:480
 msgid "Dial number"
 msgstr "Ring nummer"
 
-#: js/Phone.js:480
+#: js/Phone.js:481
 msgid "Initiate a new outgoing call"
 msgstr "Initsier en ny utgående samtale"
 
-#: js/Phone.js:541
+#: js/Phone.js:542
 msgid "Incoming call"
 msgstr "Innkommende samtale"
 
-#: js/Phone.js:545
+#: js/Phone.js:546
 msgid "Outgoing call"
 msgstr "Utgående samtale"
 
-#: js/Phone.js:553
+#: js/Phone.js:554
 msgid "unknown number"
 msgstr "ukjent nummer"
 
-#: js/Phone.js:590
+#: js/Phone.js:591
 msgid "Search:"
 msgstr "Søk:"
 
-#: js/Phone.js:675
+#: js/Phone.js:676
 msgid "Source or Destination"
 msgstr "Kilde eller Destinasjon"
 
-#: js/Phone.js:691
+#: js/Phone.js:692
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Viser samtaler {0} - {1} av {2}"
 
-#: js/Phone.js:692 js/Phone.js:735
+#: js/Phone.js:693 js/Phone.js:736
 msgid "No calls to display"
 msgstr "Ingen samtaler å vise"
 
-#: js/Phone.js:702
+#: js/Phone.js:703
 msgid "Direction"
 msgstr "Retning"
 
-#: js/Phone.js:703
+#: js/Phone.js:704
 msgid "Source"
 msgstr "Kilde"
 
-#: js/Phone.js:704
+#: js/Phone.js:705
 msgid "Caller Id"
 msgstr "Samtale ID"
 
-#: js/Phone.js:705
+#: js/Phone.js:706
 msgid "Destination"
 msgstr "Destinasjon"
 
-#: js/Phone.js:706
+#: js/Phone.js:707
 msgid "Start"
 msgstr "Start"
 
-#: js/Phone.js:707
+#: js/Phone.js:708
 msgid "Connected"
 msgstr "Tilkoblet"
 
-#: js/Phone.js:708
+#: js/Phone.js:709
 msgid "Disconnected"
 msgstr "Frakoblet"
 
-#: js/Phone.js:709
+#: js/Phone.js:710
 msgid "Duration"
 msgstr "Varighet"
 
-#: js/Phone.js:710
+#: js/Phone.js:711
 msgid "Ringing"
 msgstr "Ringer"
 
-#: js/Phone.js:711
+#: js/Phone.js:712
 msgid "Call ID"
 msgstr "Samtale ID"
 
-#~ msgid "Dial phone number"
-#~ msgstr "Tast telefon nummer"
+msgid "Dial phone number"
+msgstr "Tast telefon nummer"
 
-#~ msgid "Name"
-#~ msgstr "Navn"
+msgid "Name"
+msgstr "Navn"
 
-#~ msgid "Phone Model"
-#~ msgstr "Telefon Modell"
+msgid "Phone Model"
+msgstr "Telefon Modell"
 
-#~ msgid "MAC Address"
-#~ msgstr "MAC Adresse"
+msgid "MAC Address"
+msgstr "MAC Adresse"
 
-#~ msgid "infos"
-#~ msgstr "informasjoner"
+msgid "infos"
+msgstr "informasjoner"
 
-#~ msgid "Current IP Address"
-#~ msgstr "Gjeldende IP Adresse"
+msgid "Current IP Address"
+msgstr "Gjeldende IP Adresse"
 
-#~ msgid "Firmware last checked at"
-#~ msgstr "Fimware sist kontrollert på"
+msgid "Firmware last checked at"
+msgstr "Fimware sist kontrollert på"
 
-#~ msgid "Current Software Version"
-#~ msgstr "Gjeldende Programvare Versjon"
+msgid "Current Software Version"
+msgstr "Gjeldende Programvare Versjon"
 
-#~ msgid "Settings Loaded at"
-#~ msgstr "Innstillinger Lastet på"
+msgid "Settings Loaded at"
+msgstr "Innstillinger Lastet på"
 
-#~ msgid "redirection"
-#~ msgstr "viderekobling"
+msgid "redirection"
+msgstr "viderekobling"
 
-#~ msgid "redirect_event"
-#~ msgstr "viderekoblet_hendelse"
+msgid "redirect_event"
+msgstr "viderekoblet_hendelse"
 
-#~ msgid "all"
-#~ msgstr "alle"
+msgid "all"
+msgstr "alle"
 
-#~ msgid "busy"
-#~ msgstr "opptatt"
+msgid "busy"
+msgstr "opptatt"
 
-#~ msgid "none"
-#~ msgstr "ingen"
+msgid "none"
+msgstr "ingen"
 
-#~ msgid "time"
-#~ msgstr "tid"
+msgid "time"
+msgstr "tid"
 
-#~ msgid "redirect_number"
-#~ msgstr "vidrekoble_nummer"
+msgid "redirect_number"
+msgstr "vidrekoble_nummer"
 
-#~ msgid "redirect_time"
-#~ msgstr "viderekoblings_tid"
+msgid "redirect_time"
+msgstr "viderekoblings_tid"
 
-#~ msgid "Settings"
-#~ msgstr "Instillinger"
+msgid "Settings"
+msgstr "Instillinger"
 
-#~ msgid "web_language"
-#~ msgstr "web_språk"
+msgid "web_language"
+msgstr "web_språk"
 
-#~ msgid "- factory default -"
-#~ msgstr "- fabrikk standard -"
+msgid "- factory default -"
+msgstr "- fabrikk standard -"
 
-#~ msgid "language"
-#~ msgstr "språk"
+msgid "language"
+msgstr "språk"
 
-#~ msgid "display_method"
-#~ msgstr "visnings_metode"
+msgid "display_method"
+msgstr "visnings_metode"
 
-#~ msgid "whole url"
-#~ msgstr "hele url"
+msgid "whole url"
+msgstr "hele url"
 
-#~ msgid "name"
-#~ msgstr "navn"
+msgid "name"
+msgstr "navn"
 
-#~ msgid "number"
-#~ msgstr "numme"
+msgid "number"
+msgstr "numme"
 
-#~ msgid "name + number"
-#~ msgstr "navn + nummer"
+msgid "name + number"
+msgstr "navn + nummer"
 
-#~ msgid "number + name"
-#~ msgstr "nummer + navn"
+msgid "number + name"
+msgstr "nummer + navn"
 
-#~ msgid "call_waiting"
-#~ msgstr "samtale_venter"
+msgid "call_waiting"
+msgstr "samtale_venter"
 
-#~ msgid "on"
-#~ msgstr "på"
+msgid "on"
+msgstr "på"
 
-#~ msgid "visual"
-#~ msgstr "visuell"
+msgid "visual"
+msgstr "visuell"
 
-#~ msgid "ringer"
-#~ msgstr "ringer"
+msgid "ringer"
+msgstr "ringer"
 
-#~ msgid "off"
-#~ msgstr "av"
+msgid "off"
+msgstr "av"
 
-#~ msgid "mwi_notification"
-#~ msgstr "mwi_varsling"
+msgid "mwi_notification"
+msgstr "mwi_varsling"
 
-#~ msgid "silent"
-#~ msgstr "stille"
+msgid "silent"
+msgstr "stille"
 
-#~ msgid "beep"
-#~ msgstr "pip"
+msgid "beep"
+msgstr "pip"
 
-#~ msgid "reminder"
-#~ msgstr "varsel"
+msgid "reminder"
+msgstr "varsel"
 
-#~ msgid "mwi_dialtone"
-#~ msgstr "mwi_ringetone"
+msgid "mwi_dialtone"
+msgstr "mwi_ringetone"
 
-#~ msgid "normal"
-#~ msgstr "normal"
+msgid "normal"
+msgstr "normal"
 
-#~ msgid "stutter"
-#~ msgstr "hakking"
+msgid "stutter"
+msgstr "hakking"
 
-#~ msgid "headset_device"
-#~ msgstr "hodesett_enhet"
+msgid "headset_device"
+msgstr "hodesett_enhet"
 
-#~ msgid "headset_rj"
-#~ msgstr "hodesett_rj"
+msgid "headset_rj"
+msgstr "hodesett_rj"
 
-#~ msgid "lineactive"
-#~ msgstr "linjeaktiv"
+msgid "lineactive"
+msgstr "linjeaktiv"
 
-#~ msgid "Idle Text"
-#~ msgstr "Vente Tekst"
+msgid "Idle Text"
+msgstr "Vente Tekst"
 
-#~ msgid "Lines"
-#~ msgstr "Linjer"
+msgid "Lines"
+msgstr "Linjer"
 
-#~ msgid "Users"
-#~ msgstr "Brukere"
+msgid "Users"
+msgstr "Brukere"
 
-#~ msgid "Rights"
-#~ msgstr "Rettigheter"
+msgid "Rights"
+msgstr "Rettigheter"
 
-#~ msgid "enter searchfilter"
-#~ msgstr "tast inn søkefilter"
+msgid "enter searchfilter"
+msgstr "tast inn søkefilter"

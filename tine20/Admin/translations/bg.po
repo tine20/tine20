@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-20 12:26+0000\n"
+"PO-Revision-Date: 2012-02-22 09:16+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-21 06:32+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-02-23 05:20+0000\n"
+"X-Generator: Launchpad (build 14855)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Bulgarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -1020,116 +1020,116 @@ msgid_plural "Email Users"
 msgstr[0] ""
 msgstr[1] ""
 
-#~ msgid "Loading Tag..."
-#~ msgstr "Зареждо таг..."
+msgid "Loading Tag..."
+msgstr "Зареждо таг..."
 
-#~ msgid "Please Wait"
-#~ msgstr "Моля изчакайте"
+msgid "Please Wait"
+msgstr "Моля изчакайте"
 
-#~ msgid "Do you really want to delete the selected access log entries?"
-#~ msgstr "Наистина ли желаете да изтриете селектираните усрешни влизания?"
+msgid "Do you really want to delete the selected access log entries?"
+msgstr "Наистина ли желаете да изтриете селектираните усрешни влизания?"
 
-#~ msgid "delete entry"
-#~ msgstr "изтрий влизане"
+msgid "delete entry"
+msgstr "изтрий влизане"
 
-#~ msgid "select all"
-#~ msgstr "селектирай всичко"
+msgid "select all"
+msgstr "селектирай всичко"
 
-#~ msgid "Display from:"
-#~ msgstr "Покажи от:"
+msgid "Display from:"
+msgstr "Покажи от:"
 
-#~ msgid "to:"
-#~ msgstr "до:"
+msgid "to:"
+msgstr "до:"
 
-#~ msgid "Displaying access log entries {0} - {1} of {2}"
-#~ msgstr "Показва усрешни влизания {0} - {1} от {2}"
+msgid "Displaying access log entries {0} - {1} of {2}"
+msgstr "Показва усрешни влизания {0} - {1} от {2}"
 
-#~ msgid "No access log entries to display"
-#~ msgstr "Няма регистрирани усрешни влизания"
+msgid "No access log entries to display"
+msgstr "Няма регистрирани усрешни влизания"
 
-#~ msgid "Account ID"
-#~ msgstr "Конто  ID"
+msgid "Account ID"
+msgstr "Конто  ID"
 
-#~ msgid "Loading Role..."
-#~ msgstr "Зарежда роля..."
+msgid "Loading Role..."
+msgstr "Зарежда роля..."
 
-#~ msgid "Do you really want to delete the selected account(s)?"
-#~ msgstr "Наистина ли желаете да изтриете селектираното(-ите) конто(-а)?"
+msgid "Do you really want to delete the selected account(s)?"
+msgstr "Наистина ли желаете да изтриете селектираното(-ите) конто(-а)?"
 
-#~ msgid "Deleting account(s)..."
-#~ msgstr "Изтрива конто(-а)..."
+msgid "Deleting account(s)..."
+msgstr "Изтрива конто(-а)..."
 
-#~ msgid "Some error occurred while trying to delete the account(s)."
-#~ msgstr "Настъпила е грешка при опит за изтриване на конто(-а)."
+msgid "Some error occurred while trying to delete the account(s)."
+msgstr "Настъпила е грешка при опит за изтриване на конто(-а)."
 
-#~ msgid "Displaying accounts {0} - {1} of {2}"
-#~ msgstr "Намерени конта {0} - {1} от {2}"
+msgid "Displaying accounts {0} - {1} of {2}"
+msgstr "Намерени конта {0} - {1} от {2}"
 
-#~ msgid "No accounts to display"
-#~ msgstr "Няма намерени конта"
+msgid "No accounts to display"
+msgstr "Няма намерени конта"
 
-#~ msgid "add account"
-#~ msgstr "добави потребителско конто"
+msgid "add account"
+msgstr "добави потребителско конто"
 
-#~ msgid "edit account"
-#~ msgstr "обработи достъп"
+msgid "edit account"
+msgstr "обработи достъп"
 
-#~ msgid "delete account"
-#~ msgstr "изтрий достъп"
+msgid "delete account"
+msgstr "изтрий достъп"
 
-#~ msgid "Deleting group..."
-#~ msgstr "Изтрива група..."
-
-#, fuzzy
-#~ msgid "Email UID"
-#~ msgstr "Имейл"
+msgid "Deleting group..."
+msgstr "Изтрива група..."
 
 #, fuzzy
-#~ msgid "Email GID"
-#~ msgstr "Имейл"
+msgid "Email UID"
+msgstr "Имейл"
 
 #, fuzzy
-#~ msgid "Email Username"
-#~ msgstr "Имейл"
+msgid "Email GID"
+msgstr "Имейл"
 
-#~ msgid "enter searchfilter"
-#~ msgstr "вкарай филтър за търсене"
+#, fuzzy
+msgid "Email Username"
+msgstr "Имейл"
 
-#~ msgid "remove account"
-#~ msgstr "изтрий потребителско конто"
+msgid "enter searchfilter"
+msgstr "вкарай филтър за търсене"
 
-#~ msgid "Role members"
-#~ msgstr "Роля на членове"
+msgid "remove account"
+msgstr "изтрий потребителско конто"
 
-#~ msgid "Deleting tag..."
-#~ msgstr "Изтрива категория..."
+msgid "Role members"
+msgstr "Роля на членове"
 
-#~ msgid "name"
-#~ msgstr "име"
+msgid "Deleting tag..."
+msgstr "Изтрива категория..."
 
-#~ msgid "status"
-#~ msgstr "статус"
+msgid "name"
+msgstr "име"
 
-#~ msgid "Deleting account..."
-#~ msgstr "Изтрива конто..."
+msgid "status"
+msgstr "статус"
 
-#~ msgid "Some error occurred while trying to delete the account."
-#~ msgstr "Настъпила е грешка при опит за изтриване на контото."
+msgid "Deleting account..."
+msgstr "Изтрива конто..."
 
-#~ msgid "Saving User Account"
-#~ msgstr "Съхранява потребителско конто"
+msgid "Some error occurred while trying to delete the account."
+msgstr "Настъпила е грешка при опит за изтриване на контото."
 
-#~ msgid "Could not save user account."
-#~ msgstr "Потребителското конто не можа да бъде съхранено."
+msgid "Saving User Account"
+msgstr "Съхранява потребителско конто"
 
-#~ msgid "Add New User Account"
-#~ msgstr "Добави ново потребителско конто"
+msgid "Could not save user account."
+msgstr "Потребителското конто не можа да бъде съхранено."
 
-#~ msgid "Edit User Account \"{0}\""
-#~ msgstr "Редактирайра ново потребителско конто \"{0}\""
+msgid "Add New User Account"
+msgstr "Добави ново потребителско конто"
 
-#~ msgid "Password again"
-#~ msgstr "Задай отново парола"
+msgid "Edit User Account \"{0}\""
+msgstr "Редактирайра ново потребителско конто \"{0}\""
 
-#~ msgid "Passwords don't match"
-#~ msgstr "Паролите не съответстват"
+msgid "Password again"
+msgstr "Задай отново парола"
+
+msgid "Passwords don't match"
+msgstr "Паролите не съответстват"

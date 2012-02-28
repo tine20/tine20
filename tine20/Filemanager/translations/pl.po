@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-20 11:44+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-02-27 20:03+0000\n"
+"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-22 06:54+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-02-28 06:29+0000\n"
+"X-Generator: Launchpad (build 14874)\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -70,11 +70,11 @@ msgstr "Proszę wpisać nową nazwę dla {0}:"
 msgid "Not renamed {0}"
 msgstr "Nazwa {0} nie została zmieniona"
 
-#: js/GridContextMenu.js:41 js/GridPanel.js:495
+#: js/GridContextMenu.js:41 js/GridPanel.js:483
 msgid "You have to supply a {0} name!"
 msgstr "Musisz wprowadzić nazwę {0}!"
 
-#: js/GridContextMenu.js:145 js/GridPanel.js:539
+#: js/GridContextMenu.js:145 js/GridPanel.js:527
 msgid "Do you really want to delete the following files?"
 msgstr "Czy na pewno chcesz usunąć następujące pliki?"
 
@@ -86,7 +86,7 @@ msgstr "Nazwa"
 msgid "Size"
 msgstr "Rozmiar"
 
-#: js/GridPanel.js:145 js/Model.js:526
+#: js/GridPanel.js:145 js/Model.js:522
 msgid "Contenttype"
 msgstr "Typ zawartości"
 
@@ -98,7 +98,7 @@ msgstr "Katalog"
 msgid "Revision"
 msgstr "Rewizja"
 
-#: js/GridPanel.js:177 js/Model.js:527
+#: js/GridPanel.js:177 js/Model.js:523
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
@@ -118,62 +118,60 @@ msgstr "Ostatnio zmienione przez"
 msgid "Show closed"
 msgstr "Pokaż zamknięte"
 
-#: js/GridPanel.js:277
+#: js/GridPanel.js:257
+msgid "The max. Upload Filesize is {0} MB"
+msgstr ""
+
+#: js/GridPanel.js:295
 msgid "Upload"
 msgstr "Przesyłanie"
 
-#: js/GridPanel.js:303
+#: js/GridPanel.js:321
 msgid "Create Folder"
 msgstr "Utwórz katalog"
 
-#: js/GridPanel.js:314
+#: js/GridPanel.js:332
 msgid "Folder Up"
 msgstr "Katalog nadrzędny"
 
-#: js/GridPanel.js:325
+#: js/GridPanel.js:343
 msgid "Save locally"
 msgstr "Zapisz lokalnie"
 
-#: js/GridPanel.js:336 js/GridPanel.js:337 js/GridPanel.js:339
+#: js/GridPanel.js:353 js/GridPanel.js:354 js/GridPanel.js:356
 msgid "Delete"
 msgstr "Usuń"
 
-#: js/GridPanel.js:349 js/GridPanel.js:350 js/GridPanel.js:352
+#: js/GridPanel.js:366 js/GridPanel.js:367 js/GridPanel.js:369
 msgid "Rename"
 msgstr "Zmień nazwę"
 
-#: js/GridPanel.js:360
+#: js/GridPanel.js:377
 msgid "Pause upload"
 msgstr "Zatrzymaj przesyłanie"
 
-#: js/GridPanel.js:367
+#: js/GridPanel.js:384
 msgid "Resume upload"
 msgstr "Kontynuuj przesyłanie"
 
-#: js/GridPanel.js:488 js/Model.js:41
-msgid "user file folder"
-msgid_plural "user file folders"
-msgstr[0] ""
-msgstr[1] ""
+#: js/GridPanel.js:478
+msgid "New Folder"
+msgstr ""
 
-#: js/GridPanel.js:490
-msgid "New {0}"
-msgstr "Nowy {0}"
+#: js/GridPanel.js:478
+msgid "Please enter the name of the new folder:"
+msgstr ""
 
-#: js/GridPanel.js:490
-msgid "Please enter the name of the new {0}:"
-msgstr "Proszę wpisać nazwę nowego {0}:"
-
-#: js/GridPanel.js:495
+#: js/GridPanel.js:483
 msgid "No {0} added"
 msgstr "{0} nie został dodany"
 
-#: js/GridPanel.js:641 js/GridPanel.js:796 js/TreePanel.js:650
+#: js/GridPanel.js:624 js/GridPanel.js:777 js/TreePanel.js:650
 #: js/TreePanel.js:760
 msgid "Upload Failed"
 msgstr "Przesyłanie zakończone niepowodzeniem"
 
-#: js/GridPanel.js:642 js/TreePanel.js:651
+#: js/GridPanel.js:625 js/TreePanel.js:651
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
@@ -182,33 +180,41 @@ msgstr ""
 "Proszę powiadomić swojego administratora. Maksymalny rozmiar przesyłanego "
 "pliku: "
 
-#: js/GridPanel.js:797 js/TreePanel.js:761
+#: js/GridPanel.js:778 js/TreePanel.js:761
 msgid "Putting files in this folder is not allowed!"
 msgstr "Wstawianie plików do tego katalogu jest niedozwolone!"
 
-#: js/Model.js:37
-msgid "user file"
-msgid_plural "user files"
+#: js/Model.js:34
+msgid "file"
+msgid_plural "files"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
-#: js/Model.js:269 js/Model.js:285
+#: js/Model.js:38
+msgid "folder"
+msgid_plural "folders"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Model.js:265 js/Model.js:281
 msgid "Copying data .. {0}"
 msgstr "Kopiowanie danych .. {0}"
 
-#: js/Model.js:272 js/Model.js:287
+#: js/Model.js:268 js/Model.js:283
 msgid "Moving data .. {0}"
 msgstr "Przenoszenie danych .. {0}"
 
-#: js/Model.js:291
+#: js/Model.js:287
 msgid "Please wait"
 msgstr "Proszę czekać"
 
-#: js/Model.js:524
+#: js/Model.js:520
 msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
 
-#: js/Model.js:525
+#: js/Model.js:521
 msgid "Type"
 msgstr "Typ"
 
@@ -240,8 +246,26 @@ msgstr "Usuwanie {0}..."
 msgid "Dropping on this folder not allowed!"
 msgstr "Usunięcie niniejszego katalogu jest niedozwolone!"
 
+#~ msgid "New {0}"
+#~ msgstr "Nowy {0}"
+
+#~ msgid "Please enter the name of the new {0}:"
+#~ msgstr "Proszę wpisać nazwę nowego {0}:"
+
 #~ msgid "user files"
 #~ msgstr "pliki użytkownika"
 
 #~ msgid "user file folders"
 #~ msgstr "katalogi plików użytkownika"
+
+#~ msgid "user file folder"
+#~ msgid_plural "user file folders"
+#~ msgstr[0] "katalog plików użytkownika"
+#~ msgstr[1] "katalogi plików  użytkownika"
+#~ msgstr[2] "katalogi plików użytkownika"
+
+#~ msgid "user file"
+#~ msgid_plural "user files"
+#~ msgstr[0] "plik użytkownika"
+#~ msgstr[1] "pliki użytkownika"
+#~ msgstr[2] "pliki użytkownika"

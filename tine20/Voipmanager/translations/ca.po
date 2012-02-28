@@ -845,18 +845,6 @@ msgstr ""
 msgid "Users"
 msgstr "Usuaris"
 
-#: js/Snom/PhoneEditDialog.js:592
-msgid "Failed"
-msgstr ""
-
-#: js/Snom/PhoneEditDialog.js:593
-msgid "Could not save {0}."
-msgstr ""
-
-#: js/Snom/PhoneEditDialog.js:594
-msgid "Duplicate MAC address detected"
-msgstr ""
-
 #: js/Snom/PhoneGridPanel.js:41
 msgid "reset phones HTTP authentication"
 msgstr "reinicialitza l'autenticació HTTP dels telèfons"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - CRM\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-20 12:19+0000\n"
+"PO-Revision-Date: 2012-02-22 09:43+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators <dverger@joomla.cat>\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-21 06:33+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-02-23 05:21+0000\n"
+"X-Generator: Launchpad (build 14855)\n"
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -52,7 +52,7 @@ msgstr "Rol"
 msgid "Source"
 msgstr "Font"
 
-#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:439
+#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:438
 #: js/LeadGridDetailsPanel.js:445
 msgid "Start"
 msgstr "Inici"
@@ -61,7 +61,7 @@ msgstr "Inici"
 msgid "Scheduled end"
 msgstr "Finalització prevista"
 
-#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:270
+#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:269
 msgid "End"
 msgstr "Finalització"
 
@@ -71,7 +71,7 @@ msgid "Turnover"
 msgstr "Volum de negoci"
 
 #: Controller/Lead.php:184 Export/Pdf.php:90 js/GridPanel.js:143
-#: js/LeadEditDialog.js:263 js/Model.js:106
+#: js/LeadEditDialog.js:262 js/Model.js:106
 msgid "Probability"
 msgstr "Probabilitat"
 
@@ -168,16 +168,16 @@ msgid "Lead Data"
 msgstr "Dades del client potencial"
 
 #: Export/Pdf.php:78 js/AdminPanel.js:157 js/GridPanel.js:142
-#: js/LeadEditDialog.js:381 js/LeadStateFilterModel.js:32
+#: js/LeadEditDialog.js:380 js/LeadStateFilterModel.js:32
 msgid "Leadstate"
 msgstr "Estat"
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:400
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:399
 #: js/LeadGridDetailsPanel.js:455
 msgid "Leadtype"
 msgstr "Tipus"
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:407
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:406
 #: js/LeadGridDetailsPanel.js:460
 msgid "Leadsource"
 msgstr "Font"
@@ -194,7 +194,7 @@ msgstr "Contactes"
 msgid "Address"
 msgstr "Adreça"
 
-#: Export/Pdf.php:232 js/LeadEditDialog.js:286 js/Task.js:85
+#: Export/Pdf.php:232 js/LeadEditDialog.js:285 js/Task.js:85
 msgid "Tasks"
 msgstr "Tasques"
 
@@ -206,7 +206,7 @@ msgstr "Data de venciment"
 msgid "Priority"
 msgstr "Prioritat"
 
-#: Export/Pdf.php:274 js/LeadEditDialog.js:297 js/Product.js:85
+#: Export/Pdf.php:274 js/LeadEditDialog.js:296 js/Product.js:85
 msgid "Products"
 msgstr "Productes"
 
@@ -227,7 +227,7 @@ msgid "urgent"
 msgstr "urgent"
 
 #: js/AddressbookGridPanelHook.js:36 js/AddressbookGridPanelHook.js:50
-#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:312 js/Model.js:48
+#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:311 js/Model.js:48
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] "Client potencial"
@@ -358,7 +358,7 @@ msgstr "Exporta com a ODS"
 msgid "Export as XLS"
 msgstr "Exporta com a XLS"
 
-#: js/LeadEditDialog.js:287
+#: js/LeadEditDialog.js:286
 msgid ""
 "You do not have the run right for the Tasks application or it is not "
 "activated."
@@ -366,7 +366,7 @@ msgstr ""
 "No disposeu dels permisos per a executar l'aplicació Tasques o bé aquesta no "
 "es troba activada."
 
-#: js/LeadEditDialog.js:298
+#: js/LeadEditDialog.js:297
 msgid ""
 "You do not have the run right for the Sales application or it is not "
 "activated."
@@ -374,23 +374,23 @@ msgstr ""
 "No disposeu dels permisos per a executar l'aplicació Vendes o bé aquesta no "
 "es troba activada."
 
-#: js/LeadEditDialog.js:339
+#: js/LeadEditDialog.js:338
 msgid "Enter short name"
 msgstr "Introduïu el nom curt"
 
-#: js/LeadEditDialog.js:423
+#: js/LeadEditDialog.js:422
 msgid "Expected turnover"
 msgstr "Volum de negoci previst"
 
-#: js/LeadEditDialog.js:445 js/LeadGridDetailsPanel.js:450
+#: js/LeadEditDialog.js:444 js/LeadGridDetailsPanel.js:450
 msgid "Estimated end"
 msgstr "Finalització estimada"
 
-#: js/LeadEditDialog.js:477 js/Product.js:139
+#: js/LeadEditDialog.js:476 js/Product.js:139
 msgid "Description"
 msgstr "Descripció"
 
-#: js/LeadEditDialog.js:491
+#: js/LeadEditDialog.js:490
 msgid "Enter description"
 msgstr "Introduïu una descripció"
 
@@ -602,14 +602,14 @@ msgstr ""
 msgid "Leads with overdue tasks"
 msgstr ""
 
-#~ msgid "Lead %s has been creaded"
-#~ msgstr "S'ha creat el client potencial %s"
+msgid "Lead %s has been creaded"
+msgstr "S'ha creat el client potencial %s"
 
-#~ msgid "Last Modified Time"
-#~ msgstr "Modificat per darrera vegada"
+msgid "Last Modified Time"
+msgstr "Modificat per darrera vegada"
 
-#~ msgid "Add task"
-#~ msgstr "Afegeix una tasca"
+msgid "Add task"
+msgstr "Afegeix una tasca"
 
-#~ msgid "Add task for selected lead"
-#~ msgstr "Afegeix una tasca per al client potencial seleccionat"
+msgid "Add task for selected lead"
+msgstr "Afegeix una tasca per al client potencial seleccionat"

@@ -58,7 +58,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: js/Models.js:117
-msgid "contracts list"
+msgid "All Contracts"
 msgid_plural "contracts lists"
 msgstr[0] ""
 msgstr[1] ""

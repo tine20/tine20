@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-20 11:45+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-02-27 20:19+0000\n"
+"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-22 06:55+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-02-28 06:29+0000\n"
+"X-Generator: Launchpad (build 14874)\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -25,7 +25,7 @@ msgstr "Zarządzaj kontami godzin"
 msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
 msgstr ""
 "Dodaj, edytuj i usuń konta godzin (razem ze wszystkimi uprawnieniami do kart "
-"godzin)"
+"czasu pracy)"
 
 #: Acl/Rights.php:109 Acl/Rights.php:110
 msgid "Add timeaccounts"
@@ -296,7 +296,7 @@ msgstr "Wprowadź opis..."
 msgid "Failed"
 msgstr "Próba nieudana"
 
-#: js/TimesheetEditDialog.js:256 js/TimesheetEditDialog.js:264
+#: js/TimesheetEditDialog.js:256
 msgid "Could not save {0}."
 msgstr "Zapisanie {0} było niemożliwe."
 
@@ -305,14 +305,6 @@ msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr ""
 "Ostateczny termin rezerwacji dla niniejszego konta godzin został "
 "przekroczony."
-
-#: js/TimesheetEditDialog.js:263
-msgid "No Timeaccount set"
-msgstr "Brak konta godzin"
-
-#: js/TimesheetEditDialog.js:265
-msgid "You need to set a Timeaccount this Timesheet belongs to."
-msgstr "Proszę ustawić konto godzin, do którego należy ta karta czasu pracy."
 
 #: js/TimesheetGridPanel.js:98
 msgid "Start time"
@@ -385,23 +377,23 @@ msgstr "domyślnie"
 
 #: Setup/Initialize.php:33
 msgid "My Timesheets today"
-msgstr ""
+msgstr "Moje, dzisiejsze karty czasu pracy"
 
 #: Setup/Initialize.php:47
 msgid "My Timesheets this week"
-msgstr ""
+msgstr "Moje karty czasu pracy z bieżącego tygodnia"
 
 #: Setup/Initialize.php:61
 msgid "My Timesheets last week"
-msgstr ""
+msgstr "Moje karty czasu pracy z ubiegłego tygodnia"
 
 #: Setup/Initialize.php:75
 msgid "My Timesheets this month"
-msgstr ""
+msgstr "Moje karty czasu pracy z bieżącego miesiąca"
 
 #: Setup/Initialize.php:89
 msgid "My Timesheets last month"
-msgstr ""
+msgstr "Moje karty czasu pracy z ubiegłego miesiąca"
 
 #: Setup/Initialize.php:112 Setup/Update/Release5.php:81
 msgid "Timeaccounts to bill"
@@ -472,6 +464,13 @@ msgstr "Konta godzin"
 
 msgid "All Timeaccounts"
 msgstr "Wszystkie konta godzin"
+
+#~ msgid "No Timeaccount set"
+#~ msgstr "Brak konta godzin"
+
+#~ msgid "You need to set a Timeaccount this Timesheet belongs to."
+#~ msgstr ""
+#~ "Proszę ustawić konto godzin, do którego należy ta karta czasu pracy."
 
 #~ msgid "Timesheets today"
 #~ msgstr "Dzisiejsze karty czasu pracy"

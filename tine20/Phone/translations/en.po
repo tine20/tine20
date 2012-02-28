@@ -18,23 +18,23 @@ msgstr ""
 msgid "Call contact"
 msgstr "Call contact"
 
-#: js/AddressbookGridPanelHook.js:172
+#: js/AddressbookGridPanelHook.js:171
 msgid "Work"
 msgstr "Work"
 
-#: js/AddressbookGridPanelHook.js:181
+#: js/AddressbookGridPanelHook.js:180
 msgid "Home"
 msgstr "Home"
 
-#: js/AddressbookGridPanelHook.js:190
+#: js/AddressbookGridPanelHook.js:189
 msgid "Cell"
 msgstr "Cell"
 
-#: js/AddressbookGridPanelHook.js:199
+#: js/AddressbookGridPanelHook.js:198
 msgid "Cell private"
 msgstr "Cell private"
 
-#: js/Models.js:69 js/Phone.js:59 js/Phone.js:264
+#: js/Models.js:69 js/Phone.js:59 js/Phone.js:265
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Phone"
@@ -46,7 +46,7 @@ msgid_plural "phones lists"
 msgstr[0] "phones list"
 msgstr[1] "phones lists"
 
-#: js/Phone.js:29 js/Phone.js:489 js/Phone.js:490
+#: js/Phone.js:29 js/Phone.js:490 js/Phone.js:491
 msgid "Edit phone settings"
 msgstr "Edit phone settings"
 
@@ -54,102 +54,102 @@ msgstr "Edit phone settings"
 msgid "Phones"
 msgstr "Phones"
 
-#: js/Phone.js:287
+#: js/Phone.js:288
 msgid "Line"
 msgstr "Line"
 
-#: js/Phone.js:296
+#: js/Phone.js:297
 msgid "Number"
 msgstr "Number"
 
-#: js/Phone.js:305
+#: js/Phone.js:306
 msgid "Cancel"
 msgstr "Cancel"
 
-#: js/Phone.js:315
+#: js/Phone.js:316
 msgid "Dial"
 msgstr "Dial"
 
-#: js/Phone.js:335
+#: js/Phone.js:336
 msgid "Error"
 msgstr "Error"
 
-#: js/Phone.js:336
+#: js/Phone.js:337
 msgid "Not possible to dial."
 msgstr "Not possible to dial."
 
-#: js/Phone.js:479
+#: js/Phone.js:480
 msgid "Dial number"
 msgstr "Dial number"
 
-#: js/Phone.js:480
+#: js/Phone.js:481
 msgid "Initiate a new outgoing call"
 msgstr "Initiate a new outgoing call"
 
-#: js/Phone.js:541
+#: js/Phone.js:542
 msgid "Incoming call"
 msgstr "Incoming call"
 
-#: js/Phone.js:545
+#: js/Phone.js:546
 msgid "Outgoing call"
 msgstr "Outgoing call"
 
-#: js/Phone.js:553
+#: js/Phone.js:554
 msgid "unknown number"
 msgstr "unknown number"
 
-#: js/Phone.js:590
+#: js/Phone.js:591
 msgid "Search:"
 msgstr "Search:"
 
-#: js/Phone.js:675
+#: js/Phone.js:676
 msgid "Source or Destination"
 msgstr "Source or Destination"
 
-#: js/Phone.js:691
+#: js/Phone.js:692
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Displaying calls {0} - {1} of {2}"
 
-#: js/Phone.js:692 js/Phone.js:735
+#: js/Phone.js:693 js/Phone.js:736
 msgid "No calls to display"
 msgstr "No calls to display"
 
-#: js/Phone.js:702
+#: js/Phone.js:703
 msgid "Direction"
 msgstr "Direction"
 
-#: js/Phone.js:703
+#: js/Phone.js:704
 msgid "Source"
 msgstr "Source"
 
-#: js/Phone.js:704
+#: js/Phone.js:705
 msgid "Caller Id"
 msgstr "Caller Id"
 
-#: js/Phone.js:705
+#: js/Phone.js:706
 msgid "Destination"
 msgstr "Destination"
 
-#: js/Phone.js:706
+#: js/Phone.js:707
 msgid "Start"
 msgstr "Start"
 
-#: js/Phone.js:707
+#: js/Phone.js:708
 msgid "Connected"
 msgstr "Connected"
 
-#: js/Phone.js:708
+#: js/Phone.js:709
 msgid "Disconnected"
 msgstr "Disconnected"
 
-#: js/Phone.js:709
+#: js/Phone.js:710
 msgid "Duration"
 msgstr "Duration"
 
-#: js/Phone.js:710
+#: js/Phone.js:711
 msgid "Ringing"
 msgstr "Ringing"
 
-#: js/Phone.js:711
+#: js/Phone.js:712
 msgid "Call ID"
 msgstr "Call ID"

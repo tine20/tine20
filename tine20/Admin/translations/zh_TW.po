@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-20 12:22+0000\n"
+"PO-Revision-Date: 2012-02-22 09:32+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-02-21 06:32+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-02-23 05:20+0000\n"
+"X-Generator: Launchpad (build 14855)\n"
 "X-Poedit-Country: TAIWAN\n"
 "X-Poedit-Language: Chinese\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -1016,74 +1016,74 @@ msgid_plural "Email Users"
 msgstr[0] ""
 msgstr[1] ""
 
-#~ msgid "Loading Tag..."
-#~ msgstr "載入標籤中..."
+msgid "Loading Tag..."
+msgstr "載入標籤中..."
 
-#~ msgid "Please Wait"
-#~ msgstr "請稍後"
+msgid "Please Wait"
+msgstr "請稍後"
 
-#~ msgid "select all"
-#~ msgstr "全選"
+msgid "select all"
+msgstr "全選"
 
-#~ msgid "Loading Role..."
-#~ msgstr "角色載入中..."
+msgid "Loading Role..."
+msgstr "角色載入中..."
 
-#~ msgid "Deleting account(s)..."
-#~ msgstr "正在刪除帳號..."
+msgid "Deleting account(s)..."
+msgstr "正在刪除帳號..."
 
-#~ msgid "No accounts to display"
-#~ msgstr "無此帳號"
+msgid "No accounts to display"
+msgstr "無此帳號"
 
-#~ msgid "add account"
-#~ msgstr "新增帳號"
+msgid "add account"
+msgstr "新增帳號"
 
-#~ msgid "edit account"
-#~ msgstr "編輯帳號"
+msgid "edit account"
+msgstr "編輯帳號"
 
-#~ msgid "delete account"
-#~ msgstr "刪除帳號"
+msgid "delete account"
+msgstr "刪除帳號"
 
-#~ msgid "Deleting group..."
-#~ msgstr "正在刪除群組..."
-
-#, fuzzy
-#~ msgid "Email UID"
-#~ msgstr "電子郵件"
+msgid "Deleting group..."
+msgstr "正在刪除群組..."
 
 #, fuzzy
-#~ msgid "Email GID"
-#~ msgstr "電子郵件"
+msgid "Email UID"
+msgstr "電子郵件"
 
 #, fuzzy
-#~ msgid "Email Username"
-#~ msgstr "電子郵件"
+msgid "Email GID"
+msgstr "電子郵件"
 
-#~ msgid "remove account"
-#~ msgstr "移除帳號"
+#, fuzzy
+msgid "Email Username"
+msgstr "電子郵件"
 
-#~ msgid "Role members"
-#~ msgstr "角色成員"
+msgid "remove account"
+msgstr "移除帳號"
 
-#~ msgid "Deleting tag..."
-#~ msgstr "正在刪除標記..."
+msgid "Role members"
+msgstr "角色成員"
 
-#~ msgid "status"
-#~ msgstr "狀態"
+msgid "Deleting tag..."
+msgstr "正在刪除標記..."
 
-#~ msgid "Deleting account..."
-#~ msgstr "正在刪除帳號中..."
+msgid "status"
+msgstr "狀態"
 
-#~ msgid "Some error occurred while trying to delete the account."
-#~ msgstr "刪除帳號時, 系統發生錯誤"
+msgid "Deleting account..."
+msgstr "正在刪除帳號中..."
 
-#~ msgid "Saving User Account"
-#~ msgstr "正在儲存使用者帳號"
+msgid "Some error occurred while trying to delete the account."
+msgstr "刪除帳號時, 系統發生錯誤"
 
-#~ msgid "Could not save user account."
-#~ msgstr "無法儲存使用者帳號"
+msgid "Saving User Account"
+msgstr "正在儲存使用者帳號"
 
-#~ msgid "Add New User Account"
-#~ msgstr "加入新的使用者帳號"
+msgid "Could not save user account."
+msgstr "無法儲存使用者帳號"
 
-#~ msgid "Edit User Account \"{0}\""
-#~ msgstr "編輯使用者帳號 \"{0}\""
+msgid "Add New User Account"
+msgstr "加入新的使用者帳號"
+
+msgid "Edit User Account \"{0}\""
+msgstr "編輯使用者帳號 \"{0}\""

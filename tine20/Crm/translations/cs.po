@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 CRM\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-02-20 12:21+0000\n"
+"PO-Revision-Date: 2012-02-22 09:38+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-21 06:33+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-02-23 05:21+0000\n"
+"X-Generator: Launchpad (build 14855)\n"
 "X-Poedit-Country: CZECH REPUBLIC\n"
 "X-Poedit-Language: Czech\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -55,7 +55,7 @@ msgstr "Role"
 msgid "Source"
 msgstr "Zdroj"
 
-#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:439
+#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:438
 #: js/LeadGridDetailsPanel.js:445
 msgid "Start"
 msgstr "Začátek"
@@ -64,7 +64,7 @@ msgstr "Začátek"
 msgid "Scheduled end"
 msgstr "Plánovaný konec"
 
-#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:270
+#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:269
 msgid "End"
 msgstr "Konec"
 
@@ -74,7 +74,7 @@ msgid "Turnover"
 msgstr "Obrat"
 
 #: Controller/Lead.php:184 Export/Pdf.php:90 js/GridPanel.js:143
-#: js/LeadEditDialog.js:263 js/Model.js:106
+#: js/LeadEditDialog.js:262 js/Model.js:106
 msgid "Probability"
 msgstr "Pravděpodobnost"
 
@@ -171,16 +171,16 @@ msgid "Lead Data"
 msgstr "Data leadu"
 
 #: Export/Pdf.php:78 js/AdminPanel.js:157 js/GridPanel.js:142
-#: js/LeadEditDialog.js:381 js/LeadStateFilterModel.js:32
+#: js/LeadEditDialog.js:380 js/LeadStateFilterModel.js:32
 msgid "Leadstate"
 msgstr "Stav leadu"
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:400
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:399
 #: js/LeadGridDetailsPanel.js:455
 msgid "Leadtype"
 msgstr "Typ leadu"
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:407
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:406
 #: js/LeadGridDetailsPanel.js:460
 msgid "Leadsource"
 msgstr "Zdroj leadu"
@@ -197,7 +197,7 @@ msgstr "Kontakty"
 msgid "Address"
 msgstr "Adresa"
 
-#: Export/Pdf.php:232 js/LeadEditDialog.js:286 js/Task.js:85
+#: Export/Pdf.php:232 js/LeadEditDialog.js:285 js/Task.js:85
 msgid "Tasks"
 msgstr "Úkoly"
 
@@ -209,7 +209,7 @@ msgstr "Termín dokončení"
 msgid "Priority"
 msgstr "Priorita"
 
-#: Export/Pdf.php:274 js/LeadEditDialog.js:297 js/Product.js:85
+#: Export/Pdf.php:274 js/LeadEditDialog.js:296 js/Product.js:85
 msgid "Products"
 msgstr "Produkty"
 
@@ -230,7 +230,7 @@ msgid "urgent"
 msgstr "urgentní"
 
 #: js/AddressbookGridPanelHook.js:36 js/AddressbookGridPanelHook.js:50
-#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:312 js/Model.js:48
+#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:311 js/Model.js:48
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] "Lead"
@@ -362,37 +362,37 @@ msgstr "Exportovat do ODS"
 msgid "Export as XLS"
 msgstr "Exportovat do XLS"
 
-#: js/LeadEditDialog.js:287
+#: js/LeadEditDialog.js:286
 msgid ""
 "You do not have the run right for the Tasks application or it is not "
 "activated."
 msgstr ""
 "Nemáte oprávnění ke spuštění aplikace Úkoly nebo aplikace není povolena."
 
-#: js/LeadEditDialog.js:298
+#: js/LeadEditDialog.js:297
 msgid ""
 "You do not have the run right for the Sales application or it is not "
 "activated."
 msgstr ""
 "Nemáte oprávnění ke spuštění aplikace Prodej nebo aplikace není povolena."
 
-#: js/LeadEditDialog.js:339
+#: js/LeadEditDialog.js:338
 msgid "Enter short name"
 msgstr "Zadejte stručný název"
 
-#: js/LeadEditDialog.js:423
+#: js/LeadEditDialog.js:422
 msgid "Expected turnover"
 msgstr "Očekávaný obrat"
 
-#: js/LeadEditDialog.js:445 js/LeadGridDetailsPanel.js:450
+#: js/LeadEditDialog.js:444 js/LeadGridDetailsPanel.js:450
 msgid "Estimated end"
 msgstr "Odhadovaný konec"
 
-#: js/LeadEditDialog.js:477 js/Product.js:139
+#: js/LeadEditDialog.js:476 js/Product.js:139
 msgid "Description"
 msgstr "Popis"
 
-#: js/LeadEditDialog.js:491
+#: js/LeadEditDialog.js:490
 msgid "Enter description"
 msgstr "Zadejte popis"
 
@@ -610,206 +610,206 @@ msgstr ""
 msgid "Leads with overdue tasks"
 msgstr ""
 
-#~ msgid "Lead %s has been creaded"
-#~ msgstr "Lead %s byl vytvořen"
+msgid "Lead %s has been creaded"
+msgstr "Lead %s byl vytvořen"
 
-#~ msgid "Last Modified Time"
-#~ msgstr "Naposledy změněno"
+msgid "Last Modified Time"
+msgstr "Naposledy změněno"
 
-#~ msgid "Add task"
-#~ msgstr "Přidat úkol"
+msgid "Add task"
+msgstr "Přidat úkol"
 
-#~ msgid "Add task for selected lead"
-#~ msgstr "Přiat úkol pro vybraný lead"
+msgid "Add task for selected lead"
+msgstr "Přiat úkol pro vybraný lead"
 
-#~ msgid "Lead Name"
-#~ msgstr "Jméno leadu"
+msgid "Lead Name"
+msgstr "Jméno leadu"
 
-#~ msgid "Date Start"
-#~ msgstr "Začátek"
+msgid "Date Start"
+msgstr "Začátek"
 
-#~ msgid "Date End"
-#~ msgstr "Konec"
+msgid "Date End"
+msgstr "Konec"
 
-#~ msgid "Date End Scheduled"
-#~ msgstr "Plánovaný konec"
+msgid "Date End Scheduled"
+msgstr "Plánovaný konec"
 
-#~ msgid "Created By"
-#~ msgstr "Vytvořil(a)"
+msgid "Created By"
+msgstr "Vytvořil(a)"
 
-#~ msgid "Last modified By"
-#~ msgstr "Naposledy změnil(a)"
+msgid "Last modified By"
+msgstr "Naposledy změnil(a)"
 
-#~ msgid "Task"
-#~ msgstr "Úkol"
+msgid "Task"
+msgstr "Úkol"
 
-#~ msgid "History"
-#~ msgstr "Historie"
+msgid "History"
+msgstr "Historie"
 
-#~ msgid "Type"
-#~ msgstr "Typ"
+msgid "Type"
+msgstr "Typ"
 
-#~ msgid "Remove Option"
-#~ msgstr "Odstranit volbu"
+msgid "Remove Option"
+msgstr "Odstranit volbu"
 
-#~ msgid "Are you sure you want to delete this lead?"
-#~ msgstr "Určitě chcete smazat tento lead?"
+msgid "Are you sure you want to delete this lead?"
+msgstr "Určitě chcete smazat tento lead?"
 
-#~ msgid "Deleting lead"
-#~ msgstr "Mažu lead"
+msgid "Deleting lead"
+msgstr "Mažu lead"
 
-#~ msgid "Some error occured while trying to delete the lead."
-#~ msgstr "Při pokusu o smazání tohoto leadu došlo k chybě."
+msgid "Some error occured while trying to delete the lead."
+msgstr "Při pokusu o smazání tohoto leadu došlo k chybě."
 
-#~ msgid "Show details"
-#~ msgstr "Zobrazit detaily"
+msgid "Show details"
+msgstr "Zobrazit detaily"
 
-#~ msgid "Displaying leads {0} - {1} of {2}"
-#~ msgstr "Zobrazuji leady {0} - {1} z {2}"
+msgid "Displaying leads {0} - {1} of {2}"
+msgstr "Zobrazuji leady {0} - {1} z {2}"
 
-#~ msgid "No leads found."
-#~ msgstr "Žádné leady nebyly nalezeny."
+msgid "No leads found."
+msgstr "Žádné leady nebyly nalezeny."
 
-#~ msgid "Edit lead"
-#~ msgstr "Editovat lead"
+msgid "Edit lead"
+msgstr "Editovat lead"
 
-#~ msgid "Delete lead"
-#~ msgid_plural "Delete leads"
-#~ msgstr[0] "Smazat lead"
-#~ msgstr[1] "Smazat leady"
-#~ msgstr[2] "Smazat leady"
+msgid "Delete lead"
+msgid_plural "Delete leads"
+msgstr[0] "Smazat lead"
+msgstr[1] "Smazat leady"
+msgstr[2] "Smazat leady"
 
-#~ msgid "Delete selected leads"
-#~ msgstr "Smazat vybrané leady"
+msgid "Delete selected leads"
+msgstr "Smazat vybrané leady"
 
-#~ msgid "Export selected lead as PDF"
-#~ msgstr "Exportovat vybrané leady do PDF"
+msgid "Export selected lead as PDF"
+msgstr "Exportovat vybrané leady do PDF"
 
-#~ msgid "Please wait"
-#~ msgstr "Čekejte prosím"
+msgid "Please wait"
+msgstr "Čekejte prosím"
 
-#~ msgid "Saving lead"
-#~ msgstr "Ukládám lead"
+msgid "Saving lead"
+msgstr "Ukládám lead"
 
-#~ msgid "Failed"
-#~ msgstr "Nepodařilo se"
+msgid "Failed"
+msgstr "Nepodařilo se"
 
-#~ msgid "Could not save lead."
-#~ msgstr "Nepodařilo se uložit lead."
+msgid "Could not save lead."
+msgstr "Nepodařilo se uložit lead."
 
-#~ msgid "Please fix the errors noted."
-#~ msgstr "Opravte prosím vyznačené chyby."
+msgid "Please fix the errors noted."
+msgstr "Opravte prosím vyznačené chyby."
 
-#~ msgid "Contactdata"
-#~ msgstr "Kontaktní údaje"
+msgid "Contactdata"
+msgstr "Kontaktní údaje"
 
-#~ msgid "Add a product..."
-#~ msgstr "Přidat produkt..."
+msgid "Add a product..."
+msgstr "Přidat produkt..."
 
-#~ msgid "Add new contact"
-#~ msgstr "Přidat nový kontakt"
+msgid "Add new contact"
+msgstr "Přidat nový kontakt"
 
-#~ msgid "Add new customer contact"
-#~ msgstr "Přidat nový kontakt na zákazníka"
+msgid "Add new customer contact"
+msgstr "Přidat nový kontakt na zákazníka"
 
-#~ msgid "Edit contact"
-#~ msgstr "Editovat kontakt"
+msgid "Edit contact"
+msgstr "Editovat kontakt"
 
-#~ msgid "Edit selected contact"
-#~ msgstr "Editovat vybraný kontakt"
+msgid "Edit selected contact"
+msgstr "Editovat vybraný kontakt"
 
-#~ msgid "Unlink contact"
-#~ msgstr "Zrušit odkaz na kontakt"
+msgid "Unlink contact"
+msgstr "Zrušit odkaz na kontakt"
 
-#~ msgid "Add new task"
-#~ msgstr "Přidat nový úkol"
+msgid "Add new task"
+msgstr "Přidat nový úkol"
 
-#~ msgid "Edit task"
-#~ msgstr "Editovat úkol"
+msgid "Edit task"
+msgstr "Editovat úkol"
 
-#~ msgid "Edit selected task"
-#~ msgstr "Editovat vybraný úkol"
+msgid "Edit selected task"
+msgstr "Editovat vybraný úkol"
 
-#~ msgid "Add existing task to lead"
-#~ msgstr "Přidat k leadu existující úkol"
+msgid "Add existing task to lead"
+msgstr "Přidat k leadu existující úkol"
 
-#~ msgid "Remove tasks"
-#~ msgstr "Odstranit úkoly"
+msgid "Remove tasks"
+msgstr "Odstranit úkoly"
 
-#~ msgid "Remove selected tasks"
-#~ msgstr "Odstranit vybrané úkoly"
+msgid "Remove selected tasks"
+msgstr "Odstranit vybrané úkoly"
 
-#~ msgid "Remove selected products"
-#~ msgstr "Odstranit vybrané produkty"
+msgid "Remove selected products"
+msgstr "Odstranit vybrané produkty"
 
-#~ msgid "Leads"
-#~ msgstr "Leady"
+msgid "Leads"
+msgstr "Leady"
 
-#~ msgid "Loading Lead..."
-#~ msgstr "Načítám lead..."
+msgid "Loading Lead..."
+msgstr "Načítám lead..."
 
-#~ msgid "Please Wait"
-#~ msgstr "Čekejte prosím"
+msgid "Please Wait"
+msgstr "Čekejte prosím"
 
-#~ msgid "Add New Lead"
-#~ msgstr "Přidat nový lead"
+msgid "Add New Lead"
+msgstr "Přidat nový lead"
 
-#~ msgid "Overview"
-#~ msgstr "Přehled"
+msgid "Overview"
+msgstr "Přehled"
 
-#~ msgid "telephone"
-#~ msgstr "telefon"
+msgid "telephone"
+msgstr "telefon"
 
-#~ msgid "email"
-#~ msgstr "email"
+msgid "email"
+msgstr "email"
 
-#~ msgid "fair"
-#~ msgstr "veletrh"
+msgid "fair"
+msgstr "veletrh"
 
-#~ msgid "customer"
-#~ msgstr "zákazník"
+msgid "customer"
+msgstr "zákazník"
 
-#~ msgid "partner"
-#~ msgstr "partner"
+msgid "partner"
+msgstr "partner"
 
-#~ msgid "folder"
-#~ msgstr "složka"
+msgid "folder"
+msgstr "složka"
 
-#~ msgid "Enter searchfilter"
-#~ msgstr "Zadejte hledaný výraz"
+msgid "Enter searchfilter"
+msgstr "Zadejte hledaný výraz"
 
-#~ msgid "leadstate"
-#~ msgstr "stav leadu"
+msgid "leadstate"
+msgstr "stav leadu"
 
-#~ msgid "Search Contacts"
-#~ msgstr "Hledat kontakty"
+msgid "Search Contacts"
+msgstr "Hledat kontakty"
 
-#~ msgid "Add existing contact"
-#~ msgstr "Přidat existující kontakt"
+msgid "Add existing contact"
+msgstr "Přidat existující kontakt"
 
-#~ msgid "Add existing contact to lead"
-#~ msgstr "Přidat k leadu existující kontakt"
+msgid "Add existing contact to lead"
+msgstr "Přidat k leadu existující kontakt"
 
-#~ msgid "Organisation"
-#~ msgstr "Organizace"
+msgid "Organisation"
+msgstr "Organizace"
 
-#~ msgid "Lead updated"
-#~ msgstr "Lead zaktualizován"
+msgid "Lead updated"
+msgstr "Lead zaktualizován"
 
-#~ msgid "Lead added"
-#~ msgstr "Lead přidán"
+msgid "Lead added"
+msgstr "Lead přidán"
 
-#~ msgid "Add responsible"
-#~ msgstr "Přidat zodpovědnou osobu"
+msgid "Add responsible"
+msgstr "Přidat zodpovědnou osobu"
 
-#~ msgid "Add new responsible contact"
-#~ msgstr "Přidat nový kontakt na zodpovědnou osobu"
+msgid "Add new responsible contact"
+msgstr "Přidat nový kontakt na zodpovědnou osobu"
 
-#~ msgid "Add customer"
-#~ msgstr "Přidat zákazníka"
+msgid "Add customer"
+msgstr "Přidat zákazníka"
 
-#~ msgid "Add partner"
-#~ msgstr "Přidat partnera"
+msgid "Add partner"
+msgstr "Přidat partnera"
 
-#~ msgid "Add new partner contact"
-#~ msgstr "Přidat nový kontakt na partnera"
+msgid "Add new partner contact"
+msgstr "Přidat nový kontakt na partnera"

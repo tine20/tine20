@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-20 12:23+0000\n"
+"PO-Revision-Date: 2012-02-22 09:26+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-22 06:54+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-02-23 05:22+0000\n"
+"X-Generator: Launchpad (build 14855)\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -292,22 +292,13 @@ msgstr "Leírás megadása..."
 msgid "Failed"
 msgstr "Hibás"
 
-#: js/TimesheetEditDialog.js:256 js/TimesheetEditDialog.js:264
+#: js/TimesheetEditDialog.js:256
 msgid "Could not save {0}."
 msgstr "{0} nem menthető."
 
 #: js/TimesheetEditDialog.js:257
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr "Könyvelési határidő ehhez az időazonosítóhoz lejárt."
-
-#: js/TimesheetEditDialog.js:263
-msgid "No Timeaccount set"
-msgstr "Nincs beállított időazonosító"
-
-#: js/TimesheetEditDialog.js:265
-msgid "You need to set a Timeaccount this Timesheet belongs to."
-msgstr ""
-"Be kell állítanod ehhez a Munkaidő nyílvántartáshoz tartozó időazonosítót."
 
 #: js/TimesheetGridPanel.js:98
 msgid "Start time"
@@ -439,6 +430,13 @@ msgstr "Időazonosítók"
 
 msgid "All Timeaccounts"
 msgstr "Minden időazonosító"
+
+#~ msgid "No Timeaccount set"
+#~ msgstr "Nincs beállított időazonosító"
+
+#~ msgid "You need to set a Timeaccount this Timesheet belongs to."
+#~ msgstr ""
+#~ "Be kell állítanod ehhez a Munkaidő nyílvántartáshoz tartozó időazonosítót."
 
 #~ msgid "Timesheets today"
 #~ msgstr "Mai munkaidő nyílvántartások"

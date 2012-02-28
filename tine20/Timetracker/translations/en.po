@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-22 06:54+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-02-23 05:22+0000\n"
+"X-Generator: Launchpad (build 14855)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -290,21 +290,13 @@ msgstr "Enter description..."
 msgid "Failed"
 msgstr "Failed"
 
-#: js/TimesheetEditDialog.js:256 js/TimesheetEditDialog.js:264
+#: js/TimesheetEditDialog.js:256
 msgid "Could not save {0}."
 msgstr "Could not save {0}."
 
 #: js/TimesheetEditDialog.js:257
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr "Booking deadline for this Timeaccount has been exceeded."
-
-#: js/TimesheetEditDialog.js:263
-msgid "No Timeaccount set"
-msgstr "No Timeaccount set"
-
-#: js/TimesheetEditDialog.js:265
-msgid "You need to set a Timeaccount this Timesheet belongs to."
-msgstr "You need to set a Timeaccount this Timesheet belongs to."
 
 #: js/TimesheetGridPanel.js:98
 msgid "Start time"
@@ -409,6 +401,12 @@ msgstr "Timeaccounts already billed"
 #: Setup/setup.xml:4
 msgid "Timetracker"
 msgstr "Timetracker"
+
+#~ msgid "No Timeaccount set"
+#~ msgstr "No Timeaccount set"
+
+#~ msgid "You need to set a Timeaccount this Timesheet belongs to."
+#~ msgstr "You need to set a Timeaccount this Timesheet belongs to."
 
 #~ msgid "Timesheets today"
 #~ msgstr "Timesheets today"

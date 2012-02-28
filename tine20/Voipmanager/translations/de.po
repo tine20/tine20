@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 Voipmanager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-15 11:02+0100\n"
-"PO-Revision-Date: 2012-02-20 12:02+0000\n"
+"PO-Revision-Date: 2012-02-22 10:03+0000\n"
 "Last-Translator: ph_il <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-21 06:35+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-02-23 05:23+0000\n"
+"X-Generator: Launchpad (build 14855)\n"
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -846,18 +846,6 @@ msgstr "Anrufstatusinfo anzeigen"
 msgid "Users"
 msgstr "Besitzer"
 
-#: js/Snom/PhoneEditDialog.js:592
-msgid "Failed"
-msgstr "Fehlgeschlagen"
-
-#: js/Snom/PhoneEditDialog.js:593
-msgid "Could not save {0}."
-msgstr "Konnte {0} nicht speichern."
-
-#: js/Snom/PhoneEditDialog.js:594
-msgid "Duplicate MAC address detected"
-msgstr "Doppelte MAC-Adresse festgestellt"
-
 #: js/Snom/PhoneGridPanel.js:41
 msgid "reset phones HTTP authentication"
 msgstr "HTTP-Authentifizierung des Telefons zurücksetzen"
@@ -946,45 +934,54 @@ msgstr "Telefone"
 msgid "Templates"
 msgstr "Vorlagen"
 
-#~ msgid "Owner"
-#~ msgid_plural "Owners"
-#~ msgstr[0] "Besitzer"
-#~ msgstr[1] "Besitzer"
+msgid "Owner"
+msgid_plural "Owners"
+msgstr[0] "Besitzer"
+msgstr[1] "Besitzer"
 
-#~ msgid "owners list"
-#~ msgid_plural "owners lists"
-#~ msgstr[0] "owners list"
-#~ msgstr[1] "owners lists"
+msgid "owners list"
+msgid_plural "owners lists"
+msgstr[0] "owners list"
+msgstr[1] "owners lists"
 
-#~ msgid "redirection"
-#~ msgstr "Umleitung"
+msgid "redirection"
+msgstr "Umleitung"
 
-#~ msgid "redirect_event"
-#~ msgstr "Ereignis"
+msgid "redirect_event"
+msgstr "Ereignis"
 
-#~ msgid "all"
-#~ msgstr "alle"
+msgid "all"
+msgstr "alle"
 
-#~ msgid "busy"
-#~ msgstr "besetzt"
+msgid "busy"
+msgstr "besetzt"
 
-#~ msgid "time"
-#~ msgstr "Zeit"
+msgid "time"
+msgstr "Zeit"
 
-#~ msgid "redirect_number"
-#~ msgstr "Ziel"
+msgid "redirect_number"
+msgstr "Ziel"
 
-#~ msgid "redirect_time"
-#~ msgstr "Zeitüberschreitung (Sek)"
+msgid "redirect_time"
+msgstr "Zeitüberschreitung (Sek)"
 
-#~ msgid "lineactive"
-#~ msgstr "Line aktiv"
+msgid "lineactive"
+msgstr "Line aktiv"
 
-#~ msgid "sipCombo"
-#~ msgstr "SIP Combo"
+msgid "sipCombo"
+msgstr "SIP Combo"
 
-#~ msgid "Sip Peer"
-#~ msgstr "Sip Peer"
+msgid "Sip Peer"
+msgstr "Sip Peer"
 
-#~ msgid "Rights"
-#~ msgstr "Rechte"
+msgid "Rights"
+msgstr "Rechte"
+
+#~ msgid "Failed"
+#~ msgstr "Fehlgeschlagen"
+
+#~ msgid "Could not save {0}."
+#~ msgstr "Konnte {0} nicht speichern."
+
+#~ msgid "Duplicate MAC address detected"
+#~ msgstr "Doppelte MAC-Adresse festgestellt"

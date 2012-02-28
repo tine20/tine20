@@ -843,18 +843,6 @@ msgstr "show_call_status"
 msgid "Users"
 msgstr "Users"
 
-#: js/Snom/PhoneEditDialog.js:592
-msgid "Failed"
-msgstr "Failed"
-
-#: js/Snom/PhoneEditDialog.js:593
-msgid "Could not save {0}."
-msgstr "Could not save {0}."
-
-#: js/Snom/PhoneEditDialog.js:594
-msgid "Duplicate MAC address detected"
-msgstr "Duplicate MAC address detected"
-
 #: js/Snom/PhoneGridPanel.js:41
 msgid "reset phones HTTP authentication"
 msgstr "reset phones HTTP authentication"
@@ -942,3 +930,12 @@ msgstr "Phones"
 #: js/Voipmanager.js:123
 msgid "Templates"
 msgstr "Templates"
+
+#~ msgid "Failed"
+#~ msgstr "Failed"
+
+#~ msgid "Could not save {0}."
+#~ msgstr "Could not save {0}."
+
+#~ msgid "Duplicate MAC address detected"
+#~ msgstr "Duplicate MAC address detected"

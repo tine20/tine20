@@ -68,55 +68,55 @@ msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/GridPanel.js:127
+#: js/GridPanel.js:110
 msgid "Tags"
 msgstr ""
 
-#: js/GridPanel.js:128 Model/Task.php:199
+#: js/GridPanel.js:111 Model/Task.php:199
 msgid "Lead"
 msgstr ""
 
-#: js/GridPanel.js:131 js/TaskEditDialog.js:180 js/Tasks.js:148
+#: js/GridPanel.js:114 js/TaskEditDialog.js:180 js/Tasks.js:148
 msgid "Summary"
 msgstr ""
 
-#: js/GridPanel.js:135
+#: js/GridPanel.js:118
 msgid "Add a task..."
 msgstr ""
 
-#: js/GridPanel.js:139 js/Tasks.js:149
+#: js/GridPanel.js:122 js/Tasks.js:149
 msgid "Due Date"
 msgstr ""
 
-#: js/GridPanel.js:157 js/TaskEditDialog.js:208 Model/Task.php:190
+#: js/GridPanel.js:136 js/TaskEditDialog.js:191 Model/Task.php:190
 msgid "Priority"
 msgstr ""
 
-#: js/GridPanel.js:173 Model/Task.php:192
+#: js/GridPanel.js:152 Model/Task.php:192
 msgid "Percent"
 msgstr ""
 
-#: js/GridPanel.js:186 js/TaskEditDialog.js:237 js/Tasks.js:151
+#: js/GridPanel.js:165 js/TaskEditDialog.js:220 js/Tasks.js:151
 #: js/Tasks.js:211 Model/Task.php:191
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/GridPanel.js:202 js/Tasks.js:163
+#: js/GridPanel.js:181 js/Tasks.js:163
 msgid "Creation Time"
 msgstr ""
 
-#: js/GridPanel.js:209 js/TaskEditDialog.js:242 Setup/Initialize.php:35
+#: js/GridPanel.js:188 js/TaskEditDialog.js:227 Setup/Initialize.php:35
 #: Setup/Update/Release5.php:66
 msgid "Completed"
 msgstr ""
 
-#: js/GridPanel.js:216 js/Tasks.js:159
+#: js/GridPanel.js:195 js/Tasks.js:159
 msgid "Responsible"
 msgstr ""
 
-#: js/GridPanel.js:259
+#: js/GridPanel.js:238
 msgid "Show closed"
 msgstr ""
 
@@ -124,27 +124,27 @@ msgstr ""
 msgid "You have to supply a due date, because an alarm ist set!"
 msgstr ""
 
-#: js/TaskEditDialog.js:186 js/TaskEditDialog.js:190
+#: js/TaskEditDialog.js:187
 msgid "Due date"
 msgstr ""
 
-#: js/TaskEditDialog.js:215 Model/Task.php:188
+#: js/TaskEditDialog.js:198 Model/Task.php:188
 msgid "Organizer"
 msgstr ""
 
-#: js/TaskEditDialog.js:216
+#: js/TaskEditDialog.js:199
 msgid "Add Responsible ..."
 msgstr ""
 
-#: js/TaskEditDialog.js:223
+#: js/TaskEditDialog.js:206
 msgid "Notes"
 msgstr ""
 
-#: js/TaskEditDialog.js:224
+#: js/TaskEditDialog.js:207
 msgid "Enter description..."
 msgstr ""
 
-#: js/TaskEditDialog.js:230
+#: js/TaskEditDialog.js:213
 msgid "Percentage"
 msgstr ""
 

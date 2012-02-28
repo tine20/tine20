@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-02-20 12:23+0000\n"
+"PO-Revision-Date: 2012-02-22 09:24+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2012-02-21 06:35+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-02-23 05:23+0000\n"
+"X-Generator: Launchpad (build 14855)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: French\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -846,18 +846,6 @@ msgstr ""
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: js/Snom/PhoneEditDialog.js:592
-msgid "Failed"
-msgstr ""
-
-#: js/Snom/PhoneEditDialog.js:593
-msgid "Could not save {0}."
-msgstr ""
-
-#: js/Snom/PhoneEditDialog.js:594
-msgid "Duplicate MAC address detected"
-msgstr ""
-
 #: js/Snom/PhoneGridPanel.js:41
 msgid "reset phones HTTP authentication"
 msgstr "Réinitialiser l'authentification HTTP des téléphones"
@@ -946,14 +934,14 @@ msgstr "Téléphones"
 msgid "Templates"
 msgstr "Modèles"
 
-#~ msgid "redirection"
-#~ msgstr "renvoi"
+msgid "redirection"
+msgstr "renvoi"
 
-#~ msgid "all"
-#~ msgstr "tous"
+msgid "all"
+msgstr "tous"
 
-#~ msgid "busy"
-#~ msgstr "occupés"
+msgid "busy"
+msgstr "occupés"
 
-#~ msgid "time"
-#~ msgstr "heure"
+msgid "time"
+msgstr "heure"

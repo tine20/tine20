@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-20 11:46+0000\n"
+"PO-Revision-Date: 2012-02-22 10:16+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-21 06:33+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-02-23 05:21+0000\n"
+"X-Generator: Launchpad (build 14855)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -53,7 +53,7 @@ msgstr "Cargo"
 msgid "Source"
 msgstr "Fuente"
 
-#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:439
+#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:438
 #: js/LeadGridDetailsPanel.js:445
 msgid "Start"
 msgstr "Iniciar"
@@ -62,7 +62,7 @@ msgstr "Iniciar"
 msgid "Scheduled end"
 msgstr "Final previsto"
 
-#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:270
+#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:269
 msgid "End"
 msgstr "Fin"
 
@@ -72,7 +72,7 @@ msgid "Turnover"
 msgstr "volúmen de ventas"
 
 #: Controller/Lead.php:184 Export/Pdf.php:90 js/GridPanel.js:143
-#: js/LeadEditDialog.js:263 js/Model.js:106
+#: js/LeadEditDialog.js:262 js/Model.js:106
 msgid "Probability"
 msgstr "Probabilidad"
 
@@ -169,16 +169,16 @@ msgid "Lead Data"
 msgstr "Datos de Gestor"
 
 #: Export/Pdf.php:78 js/AdminPanel.js:157 js/GridPanel.js:142
-#: js/LeadEditDialog.js:381 js/LeadStateFilterModel.js:32
+#: js/LeadEditDialog.js:380 js/LeadStateFilterModel.js:32
 msgid "Leadstate"
 msgstr "Estadodegestión"
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:400
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:399
 #: js/LeadGridDetailsPanel.js:455
 msgid "Leadtype"
 msgstr "Tipodegestión"
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:407
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:406
 #: js/LeadGridDetailsPanel.js:460
 msgid "Leadsource"
 msgstr "Fuentedegestión"
@@ -195,7 +195,7 @@ msgstr "Contactos"
 msgid "Address"
 msgstr "Dirección"
 
-#: Export/Pdf.php:232 js/LeadEditDialog.js:286 js/Task.js:85
+#: Export/Pdf.php:232 js/LeadEditDialog.js:285 js/Task.js:85
 msgid "Tasks"
 msgstr "Tareas"
 
@@ -207,7 +207,7 @@ msgstr "Fecha de Vencimiento"
 msgid "Priority"
 msgstr "Prioridad"
 
-#: Export/Pdf.php:274 js/LeadEditDialog.js:297 js/Product.js:85
+#: Export/Pdf.php:274 js/LeadEditDialog.js:296 js/Product.js:85
 msgid "Products"
 msgstr "Productos"
 
@@ -228,7 +228,7 @@ msgid "urgent"
 msgstr "urgente"
 
 #: js/AddressbookGridPanelHook.js:36 js/AddressbookGridPanelHook.js:50
-#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:312 js/Model.js:48
+#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:311 js/Model.js:48
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] "Gestor"
@@ -359,35 +359,35 @@ msgstr "Exportar como ODS"
 msgid "Export as XLS"
 msgstr "Exportar como XLS"
 
-#: js/LeadEditDialog.js:287
+#: js/LeadEditDialog.js:286
 msgid ""
 "You do not have the run right for the Tasks application or it is not "
 "activated."
 msgstr ""
 
-#: js/LeadEditDialog.js:298
+#: js/LeadEditDialog.js:297
 msgid ""
 "You do not have the run right for the Sales application or it is not "
 "activated."
 msgstr ""
 
-#: js/LeadEditDialog.js:339
+#: js/LeadEditDialog.js:338
 msgid "Enter short name"
 msgstr "Escribir Nombre Abreviado"
 
-#: js/LeadEditDialog.js:423
+#: js/LeadEditDialog.js:422
 msgid "Expected turnover"
 msgstr "Volúmen de ventas esperado"
 
-#: js/LeadEditDialog.js:445 js/LeadGridDetailsPanel.js:450
+#: js/LeadEditDialog.js:444 js/LeadGridDetailsPanel.js:450
 msgid "Estimated end"
 msgstr "Final estimado"
 
-#: js/LeadEditDialog.js:477 js/Product.js:139
+#: js/LeadEditDialog.js:476 js/Product.js:139
 msgid "Description"
 msgstr "Descripción"
 
-#: js/LeadEditDialog.js:491
+#: js/LeadEditDialog.js:490
 msgid "Enter description"
 msgstr "Escribir descripción"
 
@@ -598,44 +598,44 @@ msgstr ""
 msgid "Leads with overdue tasks"
 msgstr ""
 
-#~ msgid "Lead %s has been creaded"
-#~ msgstr "Gestor %s ha sido creado"
+msgid "Lead %s has been creaded"
+msgstr "Gestor %s ha sido creado"
 
-#~ msgid "Add task"
-#~ msgstr "Agregar tarea"
+msgid "Add task"
+msgstr "Agregar tarea"
 
-#~ msgid "Add task for selected lead"
-#~ msgstr "Agregar tarea al gestor seleccionado"
+msgid "Add task for selected lead"
+msgstr "Agregar tarea al gestor seleccionado"
 
-#~ msgid "Task"
-#~ msgstr "Tarea"
+msgid "Task"
+msgstr "Tarea"
 
-#~ msgid "History"
-#~ msgstr "Historial"
+msgid "History"
+msgstr "Historial"
 
-#~ msgid "Lead Name"
-#~ msgstr "Nombre del Gestor"
+msgid "Lead Name"
+msgstr "Nombre del Gestor"
 
-#~ msgid "Date Start"
-#~ msgstr "Fecha de Inicio"
+msgid "Date Start"
+msgstr "Fecha de Inicio"
 
-#~ msgid "Date End"
-#~ msgstr "Fecha de Término"
+msgid "Date End"
+msgstr "Fecha de Término"
 
-#~ msgid "Date End Scheduled"
-#~ msgstr "Fecha de Término Agendada"
+msgid "Date End Scheduled"
+msgstr "Fecha de Término Agendada"
 
-#~ msgid "Created By"
-#~ msgstr "Creado Por"
+msgid "Created By"
+msgstr "Creado Por"
 
-#~ msgid "Last modified By"
-#~ msgstr "Última modificación Por"
+msgid "Last modified By"
+msgstr "Última modificación Por"
 
-#~ msgid "Lead states"
-#~ msgstr "Estados de gestión"
+msgid "Lead states"
+msgstr "Estados de gestión"
 
-#~ msgid "Lead sources"
-#~ msgstr "Fuentes de gestión"
+msgid "Lead sources"
+msgstr "Fuentes de gestión"
 
-#~ msgid "Lead types"
-#~ msgstr "Tipos de gestión"
+msgid "Lead types"
+msgstr "Tipos de gestión"

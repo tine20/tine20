@@ -10,7 +10,7 @@ msgstr ""
 msgid "Teacher Account"
 msgstr ""
 
-#: Frontend/Json.php:254 js/CourseEditDialog.js:144 js/Models.js:41
+#: Frontend/Json.php:254 js/CourseEditDialog.js:141 js/Models.js:41
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] ""
@@ -20,23 +20,23 @@ msgstr[1] ""
 msgid "Import course members"
 msgstr ""
 
-#: js/CourseEditDialog.js:160
+#: js/CourseEditDialog.js:157
 msgid "Course Name"
 msgstr ""
 
-#: js/CourseEditDialog.js:167
+#: js/CourseEditDialog.js:164
 msgid "Course / School Type"
 msgstr ""
 
-#: js/CourseEditDialog.js:178
+#: js/CourseEditDialog.js:175
 msgid "Description"
 msgstr ""
 
-#: js/CourseEditDialog.js:185 js/CourseGridPanel.js:85
+#: js/CourseEditDialog.js:184 js/CourseGridPanel.js:85
 msgid "Internet Access"
 msgstr ""
 
-#: js/CourseEditDialog.js:191 js/CourseGridPanel.js:93
+#: js/CourseEditDialog.js:190 js/CourseGridPanel.js:93
 msgid "Fileserver Access"
 msgstr ""
 
@@ -64,48 +64,40 @@ msgstr ""
 msgid "Please enter the new password:"
 msgstr ""
 
-#: js/CourseGridPanel.js:49
+#: js/CourseGridPanel.js:48
 msgid "Quick search"
 msgstr ""
 
-#: js/CourseGridPanel.js:72
+#: js/CourseGridPanel.js:70
 msgid "Name"
 msgstr ""
 
-#: js/CourseGridPanel.js:78
+#: js/CourseGridPanel.js:76
 msgid "Type"
 msgstr ""
 
-#: js/CourseGridPanel.js:119
+#: js/CourseGridPanel.js:124
 msgid "Internet Access On"
 msgstr ""
 
-#: js/CourseGridPanel.js:130
+#: js/CourseGridPanel.js:135
 msgid "Internet Access Off"
 msgstr ""
 
-#: js/CourseGridPanel.js:141
+#: js/CourseGridPanel.js:146
 msgid "Fileserver Access On"
 msgstr ""
 
-#: js/CourseGridPanel.js:152
+#: js/CourseGridPanel.js:157
 msgid "Fileserver Access Off"
 msgstr ""
 
-#: js/CourseGridPanel.js:212
+#: js/CourseGridPanel.js:217
 msgid "Failed"
 msgstr ""
 
-#: js/CourseGridPanel.js:213
+#: js/CourseGridPanel.js:218
 msgid "Some error occured while trying to update the courses."
-msgstr ""
-
-#: js/Courses.js:41 Setup/setup.xml:4
-msgid "Courses"
-msgstr ""
-
-#: js/Courses.js:46
-msgid "All Courses"
 msgstr ""
 
 #: js/Models.js:45
@@ -119,3 +111,16 @@ msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] ""
 msgstr[1] ""
+
+#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:30
+msgid "All courses"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr ""

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-20 11:44+0000\n"
+"PO-Revision-Date: 2012-02-22 09:08+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-21 06:33+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-02-23 05:21+0000\n"
+"X-Generator: Launchpad (build 14855)\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -56,7 +56,7 @@ msgstr "Funkcja"
 msgid "Source"
 msgstr "Źródło"
 
-#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:439
+#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:438
 #: js/LeadGridDetailsPanel.js:445
 msgid "Start"
 msgstr "Początek"
@@ -65,7 +65,7 @@ msgstr "Początek"
 msgid "Scheduled end"
 msgstr "Planowane zakończenie"
 
-#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:270
+#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:269
 msgid "End"
 msgstr "Koniec"
 
@@ -75,7 +75,7 @@ msgid "Turnover"
 msgstr "Obroty"
 
 #: Controller/Lead.php:184 Export/Pdf.php:90 js/GridPanel.js:143
-#: js/LeadEditDialog.js:263 js/Model.js:106
+#: js/LeadEditDialog.js:262 js/Model.js:106
 msgid "Probability"
 msgstr "Prawdopodobieństwo"
 
@@ -172,16 +172,16 @@ msgid "Lead Data"
 msgstr "Dane dot. zapytania"
 
 #: Export/Pdf.php:78 js/AdminPanel.js:157 js/GridPanel.js:142
-#: js/LeadEditDialog.js:381 js/LeadStateFilterModel.js:32
+#: js/LeadEditDialog.js:380 js/LeadStateFilterModel.js:32
 msgid "Leadstate"
 msgstr "Status zapytania"
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:400
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:399
 #: js/LeadGridDetailsPanel.js:455
 msgid "Leadtype"
 msgstr "Typ zapytania"
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:407
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:406
 #: js/LeadGridDetailsPanel.js:460
 msgid "Leadsource"
 msgstr "Źródło zapytania"
@@ -198,7 +198,7 @@ msgstr "Kontakty"
 msgid "Address"
 msgstr "Adres"
 
-#: Export/Pdf.php:232 js/LeadEditDialog.js:286 js/Task.js:85
+#: Export/Pdf.php:232 js/LeadEditDialog.js:285 js/Task.js:85
 msgid "Tasks"
 msgstr "Zadania"
 
@@ -210,7 +210,7 @@ msgstr "Termin"
 msgid "Priority"
 msgstr "Priorytet"
 
-#: Export/Pdf.php:274 js/LeadEditDialog.js:297 js/Product.js:85
+#: Export/Pdf.php:274 js/LeadEditDialog.js:296 js/Product.js:85
 msgid "Products"
 msgstr "Produkty"
 
@@ -231,7 +231,7 @@ msgid "urgent"
 msgstr "pilny"
 
 #: js/AddressbookGridPanelHook.js:36 js/AddressbookGridPanelHook.js:50
-#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:312 js/Model.js:48
+#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:311 js/Model.js:48
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] "zapytanie"
@@ -363,37 +363,37 @@ msgstr "Eksportuj jako ODS"
 msgid "Export as XLS"
 msgstr "Exportuj jako XLS"
 
-#: js/LeadEditDialog.js:287
+#: js/LeadEditDialog.js:286
 msgid ""
 "You do not have the run right for the Tasks application or it is not "
 "activated."
 msgstr ""
 "Brak uprawnień do uruchomienia aplikacji Zadania albo jest ona nieaktywna"
 
-#: js/LeadEditDialog.js:298
+#: js/LeadEditDialog.js:297
 msgid ""
 "You do not have the run right for the Sales application or it is not "
 "activated."
 msgstr ""
 "Brak uprawnień do uruchomienia aplikacji Sprzedaż albo jest ona nieaktywna"
 
-#: js/LeadEditDialog.js:339
+#: js/LeadEditDialog.js:338
 msgid "Enter short name"
 msgstr "wpisz skróconą nazwę"
 
-#: js/LeadEditDialog.js:423
+#: js/LeadEditDialog.js:422
 msgid "Expected turnover"
 msgstr "Oczekiwany obrót"
 
-#: js/LeadEditDialog.js:445 js/LeadGridDetailsPanel.js:450
+#: js/LeadEditDialog.js:444 js/LeadGridDetailsPanel.js:450
 msgid "Estimated end"
 msgstr "Szacowane zakończenie"
 
-#: js/LeadEditDialog.js:477 js/Product.js:139
+#: js/LeadEditDialog.js:476 js/Product.js:139
 msgid "Description"
 msgstr "Opis"
 
-#: js/LeadEditDialog.js:491
+#: js/LeadEditDialog.js:490
 msgid "Enter description"
 msgstr "Wprowadź opis"
 
@@ -611,248 +611,248 @@ msgstr "Wszystkie zapytania, za które odpowiadam"
 msgid "Leads with overdue tasks"
 msgstr "Zapytania z zaległymi zadaniami"
 
-#~ msgid "Lead %s has been creaded"
-#~ msgstr "Zapytanie %s zostało utworzone"
+msgid "Lead %s has been creaded"
+msgstr "Zapytanie %s zostało utworzone"
 
-#~ msgid "Searching..."
-#~ msgstr "Wyszukiwanie..."
+msgid "Searching..."
+msgstr "Wyszukiwanie..."
 
-#~ msgid "Last Modified Time"
-#~ msgstr "Czas ostatniej zmiany"
+msgid "Last Modified Time"
+msgstr "Czas ostatniej zmiany"
 
-#~ msgid "Add task"
-#~ msgstr "Dodaj zadanie"
+msgid "Add task"
+msgstr "Dodaj zadanie"
 
-#~ msgid "Add task for selected lead"
-#~ msgstr "Dodaj zadanie do zaznaczonego zapytania"
+msgid "Add task for selected lead"
+msgstr "Dodaj zadanie do zaznaczonego zapytania"
 
-#~ msgid "Task"
-#~ msgstr "Zadanie"
+msgid "Task"
+msgstr "Zadanie"
 
-#~ msgid "History"
-#~ msgstr "Historia"
+msgid "History"
+msgstr "Historia"
 
-#~ msgid "Lead Name"
-#~ msgstr "Nazwa zapytania"
+msgid "Lead Name"
+msgstr "Nazwa zapytania"
 
-#~ msgid "Date Start"
-#~ msgstr "Data zgłoszenia"
+msgid "Date Start"
+msgstr "Data zgłoszenia"
 
-#~ msgid "Date End"
-#~ msgstr "Data zakończenia"
+msgid "Date End"
+msgstr "Data zakończenia"
 
-#~ msgid "Date End Scheduled"
-#~ msgstr "Planowany koniec"
+msgid "Date End Scheduled"
+msgstr "Planowany koniec"
 
-#~ msgid "Created By"
-#~ msgstr "Zaktualizowane przez"
+msgid "Created By"
+msgstr "Zaktualizowane przez"
 
-#~ msgid "Last modified By"
-#~ msgstr "Ostatnio modyfikowane przez"
+msgid "Last modified By"
+msgstr "Ostatnio modyfikowane przez"
 
-#~ msgid "Lead states"
-#~ msgstr "Status zapytania"
+msgid "Lead states"
+msgstr "Status zapytania"
 
-#~ msgid "Lead sources"
-#~ msgstr "Źródła zapytań"
+msgid "Lead sources"
+msgstr "Źródła zapytań"
 
-#~ msgid "Lead types"
-#~ msgstr "Typy zapytań"
+msgid "Lead types"
+msgstr "Typy zapytań"
 
 # The other possibilities would be: "Błąd" (see the german translation) or "Zakończone niepowodzeniem" or "Akcja nieudana".
 # Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
-#~ msgid "Failed"
-#~ msgstr "Próba nieudana"
+msgid "Failed"
+msgstr "Próba nieudana"
 
-#~ msgid "Could not save lead."
-#~ msgstr "Zapisanie zapytania było niemożliwe."
+msgid "Could not save lead."
+msgstr "Zapisanie zapytania było niemożliwe."
 
-#~ msgid "Please fix the errors noted."
-#~ msgstr "Proszę poprawić wskazane błędy."
+msgid "Please fix the errors noted."
+msgstr "Proszę poprawić wskazane błędy."
 
-#~ msgid "Contactdata"
-#~ msgstr "Kontakty"
+msgid "Contactdata"
+msgstr "Kontakty"
 
-#~ msgid "Add new contact"
-#~ msgstr "Dodaj nowy kontakt"
+msgid "Add new contact"
+msgstr "Dodaj nowy kontakt"
 
-#~ msgid "Add new customer contact"
-#~ msgstr "Dodaj nowego klienta"
+msgid "Add new customer contact"
+msgstr "Dodaj nowego klienta"
 
-#~ msgid "Edit contact"
-#~ msgstr "Edytuj kontakt"
+msgid "Edit contact"
+msgstr "Edytuj kontakt"
 
-#~ msgid "Edit selected contact"
-#~ msgstr "Edytuj zaznaczony kontakt"
+msgid "Edit selected contact"
+msgstr "Edytuj zaznaczony kontakt"
 
-#~ msgid "Unlink contact"
-#~ msgstr "Usuń kontakt"
+msgid "Unlink contact"
+msgstr "Usuń kontakt"
 
-#~ msgid "Add new task"
-#~ msgstr "Dodaj nowe zadanie"
+msgid "Add new task"
+msgstr "Dodaj nowe zadanie"
 
-#~ msgid "Edit task"
-#~ msgstr "Edytuj zadanie"
+msgid "Edit task"
+msgstr "Edytuj zadanie"
 
-#~ msgid "Edit selected task"
-#~ msgstr "Edytuj zaznaczone zadanie"
+msgid "Edit selected task"
+msgstr "Edytuj zaznaczone zadanie"
 
-#~ msgid "Add existing task to lead"
-#~ msgstr "Dodaj istniejące zadanie do zapytania"
+msgid "Add existing task to lead"
+msgstr "Dodaj istniejące zadanie do zapytania"
 
-#~ msgid "Remove selected tasks"
-#~ msgstr "Usuń zaznaczone zadania"
+msgid "Remove selected tasks"
+msgstr "Usuń zaznaczone zadania"
 
-#~ msgid "Remove selected products"
-#~ msgstr "Usuń wybrane produkty"
+msgid "Remove selected products"
+msgstr "Usuń wybrane produkty"
 
-#~ msgid "Leads"
-#~ msgstr "zapytania wstępne"
+msgid "Leads"
+msgstr "zapytania wstępne"
 
-#~ msgid "Loading Lead..."
-#~ msgstr "Ładowanie wstępnego zapytania..."
+msgid "Loading Lead..."
+msgstr "Ładowanie wstępnego zapytania..."
 
-#~ msgid "Please Wait"
-#~ msgstr "Proszę czekać"
+msgid "Please Wait"
+msgstr "Proszę czekać"
 
-#~ msgid "Add New Lead"
-#~ msgstr "Dodaj nowe zapytanie"
+msgid "Add New Lead"
+msgstr "Dodaj nowe zapytanie"
 
-#~ msgid "Overview"
-#~ msgstr "Przegląd"
+msgid "Overview"
+msgstr "Przegląd"
 
-#~ msgid "folder"
-#~ msgstr "katalog"
+msgid "folder"
+msgstr "katalog"
 
-#~ msgid "Enter searchfilter"
-#~ msgstr "wpisz szukaną frazę"
+msgid "Enter searchfilter"
+msgstr "wpisz szukaną frazę"
 
-#~ msgid "Search Contacts"
-#~ msgstr "Znajdź kontakty"
+msgid "Search Contacts"
+msgstr "Znajdź kontakty"
 
-#~ msgid "Add existing contact"
-#~ msgstr "Utwórz istniejący kontakt"
+msgid "Add existing contact"
+msgstr "Utwórz istniejący kontakt"
 
-#~ msgid "Add existing contact to lead"
-#~ msgstr "Dodaj istniejący kontakt do zapytania"
+msgid "Add existing contact to lead"
+msgstr "Dodaj istniejący kontakt do zapytania"
 
-#~ msgid "Organisation"
-#~ msgstr "Organizacja"
+msgid "Organisation"
+msgstr "Organizacja"
 
-#~ msgid "Lead updated"
-#~ msgstr "Zapytanie zaktualizowane"
+msgid "Lead updated"
+msgstr "Zapytanie zaktualizowane"
 
-#~ msgid "Lead added"
-#~ msgstr "Zapytanie dodane"
+msgid "Lead added"
+msgstr "Zapytanie dodane"
 
-#~ msgid "Add responsible"
-#~ msgstr "Dodaj osobę odpowiedzialną"
+msgid "Add responsible"
+msgstr "Dodaj osobę odpowiedzialną"
 
-#~ msgid "Add new responsible contact"
-#~ msgstr "Dodaj nowy kontakt jako osobę odpowiedzialną"
+msgid "Add new responsible contact"
+msgstr "Dodaj nowy kontakt jako osobę odpowiedzialną"
 
-#~ msgid "Add customer"
-#~ msgstr "Dodaj klienta"
+msgid "Add customer"
+msgstr "Dodaj klienta"
 
-#~ msgid "Add partner"
-#~ msgstr "Dodaj wspólnika"
+msgid "Add partner"
+msgstr "Dodaj wspólnika"
 
-#~ msgid "Add new partner contact"
-#~ msgstr "Dodaj nowy kontakt jako wspólnika"
+msgid "Add new partner contact"
+msgstr "Dodaj nowy kontakt jako wspólnika"
 
-#~ msgid "Show closed leads"
-#~ msgstr "Pokaż zrealizowane zapytania"
+msgid "Show closed leads"
+msgstr "Pokaż zrealizowane zapytania"
 
-#~ msgid "Add new lead"
-#~ msgstr "Dodaj nowe zapytanie"
+msgid "Add new lead"
+msgstr "Dodaj nowe zapytanie"
 
-#~ msgid "Edit selected lead"
-#~ msgstr "Edytuj zaznaczone zapytanie"
+msgid "Edit selected lead"
+msgstr "Edytuj zaznaczone zapytanie"
 
-#~ msgid "Unlink selected contacts"
-#~ msgstr "Usuń zaznaczone kontakty"
+msgid "Unlink selected contacts"
+msgstr "Usuń zaznaczone kontakty"
 
-#~ msgid "Edit Lead \"{0}\""
-#~ msgstr "Edytuj zapytanie \"{0}\""
+msgid "Edit Lead \"{0}\""
+msgstr "Edytuj zapytanie \"{0}\""
 
-#~ msgid "Add a product..."
-#~ msgstr "Dodaj produkt"
+msgid "Add a product..."
+msgstr "Dodaj produkt"
 
-#~ msgid "website"
-#~ msgstr "strona WWW"
+msgid "website"
+msgstr "strona WWW"
 
-#~ msgid "reseller"
-#~ msgstr "dystrybutor"
+msgid "reseller"
+msgstr "dystrybutor"
 
-#~ msgid "Remove products"
-#~ msgstr "Usuń produkty"
+msgid "Remove products"
+msgstr "Usuń produkty"
 
-#~ msgid "Remove Option"
-#~ msgstr "Usuń opcję"
+msgid "Remove Option"
+msgstr "Usuń opcję"
 
-#~ msgid "Type"
-#~ msgstr "Ikona"
-
-#, fuzzy
-#~ msgid "Select lead"
-#~ msgstr "Usuń zapytanie"
+msgid "Type"
+msgstr "Ikona"
 
 #, fuzzy
-#~ msgid "Open tasks"
-#~ msgstr "Usuń zadania"
+msgid "Select lead"
+msgstr "Usuń zapytanie"
 
 #, fuzzy
-#~ msgid "Tasks status"
-#~ msgstr "Status zapytania"
-
-#~ msgid "telephone"
-#~ msgstr "telefon"
-
-#~ msgid "email"
-#~ msgstr "e-mail"
+msgid "Open tasks"
+msgstr "Usuń zadania"
 
 #, fuzzy
-#~ msgid "fair"
-#~ msgstr "rynek"
+msgid "Tasks status"
+msgstr "Status zapytania"
 
-#~ msgid "customer"
-#~ msgstr "klient"
+msgid "telephone"
+msgstr "telefon"
 
-#~ msgid "partner"
-#~ msgstr "wspólnik"
+msgid "email"
+msgstr "e-mail"
 
-#~ msgid "Are you sure you want to delete this lead?"
-#~ msgstr "Czy na pewno chcesz usunąć to zapytanie?"
+#, fuzzy
+msgid "fair"
+msgstr "rynek"
 
-#~ msgid "Deleting lead"
-#~ msgstr "Usuwanie zapytania"
+msgid "customer"
+msgstr "klient"
 
-#~ msgid "Some error occured while trying to delete the lead."
-#~ msgstr "Podczas próby usunięcia zapytania wystąpił błąd."
+msgid "partner"
+msgstr "wspólnik"
 
-#~ msgid "Show details"
-#~ msgstr "Pokaż szczegóły"
+msgid "Are you sure you want to delete this lead?"
+msgstr "Czy na pewno chcesz usunąć to zapytanie?"
 
-#~ msgid "Displaying leads {0} - {1} of {2}"
-#~ msgstr "Wyświetlane zapytania {0} - {1} z {2}"
+msgid "Deleting lead"
+msgstr "Usuwanie zapytania"
 
-#~ msgid "No leads found."
-#~ msgstr "Nie znaleziono zapytań."
+msgid "Some error occured while trying to delete the lead."
+msgstr "Podczas próby usunięcia zapytania wystąpił błąd."
 
-#~ msgid "Add lead"
-#~ msgstr "Dodaj zapytanie"
+msgid "Show details"
+msgstr "Pokaż szczegóły"
 
-#~ msgid "Edit lead"
-#~ msgstr "Edytuj zapytanie"
+msgid "Displaying leads {0} - {1} of {2}"
+msgstr "Wyświetlane zapytania {0} - {1} z {2}"
 
-#~ msgid "Delete selected leads"
-#~ msgstr "Usuń zaznaczone zapytania"
+msgid "No leads found."
+msgstr "Nie znaleziono zapytań."
 
-#~ msgid "Export selected lead as PDF"
-#~ msgstr "Eksportuj zaznaczone zapytania jako PDF"
+msgid "Add lead"
+msgstr "Dodaj zapytanie"
 
-#~ msgid "Please wait"
-#~ msgstr "Proszę czekać"
+msgid "Edit lead"
+msgstr "Edytuj zapytanie"
 
-#~ msgid "Saving lead"
-#~ msgstr "Zapisywanie zapytania"
+msgid "Delete selected leads"
+msgstr "Usuń zaznaczone zapytania"
+
+msgid "Export selected lead as PDF"
+msgstr "Eksportuj zaznaczone zapytania jako PDF"
+
+msgid "Please wait"
+msgstr "Proszę czekać"
+
+msgid "Saving lead"
+msgstr "Zapisywanie zapytania"

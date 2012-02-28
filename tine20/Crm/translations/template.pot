@@ -34,7 +34,7 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
-#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:439
+#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:438
 #: js/LeadGridDetailsPanel.js:445
 msgid "Start"
 msgstr ""
@@ -43,7 +43,7 @@ msgstr ""
 msgid "Scheduled end"
 msgstr ""
 
-#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:270
+#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:269
 msgid "End"
 msgstr ""
 
@@ -53,7 +53,7 @@ msgid "Turnover"
 msgstr ""
 
 #: Controller/Lead.php:184 Export/Pdf.php:90 js/GridPanel.js:143
-#: js/LeadEditDialog.js:263 js/Model.js:106
+#: js/LeadEditDialog.js:262 js/Model.js:106
 msgid "Probability"
 msgstr ""
 
@@ -150,16 +150,16 @@ msgid "Lead Data"
 msgstr ""
 
 #: Export/Pdf.php:78 js/AdminPanel.js:157 js/GridPanel.js:142
-#: js/LeadEditDialog.js:381 js/LeadStateFilterModel.js:32
+#: js/LeadEditDialog.js:380 js/LeadStateFilterModel.js:32
 msgid "Leadstate"
 msgstr ""
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:400
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:399
 #: js/LeadGridDetailsPanel.js:455
 msgid "Leadtype"
 msgstr ""
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:407
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:406
 #: js/LeadGridDetailsPanel.js:460
 msgid "Leadsource"
 msgstr ""
@@ -176,7 +176,7 @@ msgstr ""
 msgid "Address"
 msgstr ""
 
-#: Export/Pdf.php:232 js/LeadEditDialog.js:286 js/Task.js:85
+#: Export/Pdf.php:232 js/LeadEditDialog.js:285 js/Task.js:85
 msgid "Tasks"
 msgstr ""
 
@@ -188,7 +188,7 @@ msgstr ""
 msgid "Priority"
 msgstr ""
 
-#: Export/Pdf.php:274 js/LeadEditDialog.js:297 js/Product.js:85
+#: Export/Pdf.php:274 js/LeadEditDialog.js:296 js/Product.js:85
 msgid "Products"
 msgstr ""
 
@@ -209,7 +209,7 @@ msgid "urgent"
 msgstr ""
 
 #: js/AddressbookGridPanelHook.js:36 js/AddressbookGridPanelHook.js:50
-#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:312 js/Model.js:48
+#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:311 js/Model.js:48
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] ""
@@ -340,35 +340,35 @@ msgstr ""
 msgid "Export as XLS"
 msgstr ""
 
-#: js/LeadEditDialog.js:287
+#: js/LeadEditDialog.js:286
 msgid ""
 "You do not have the run right for the Tasks application or it is not "
 "activated."
 msgstr ""
 
-#: js/LeadEditDialog.js:298
+#: js/LeadEditDialog.js:297
 msgid ""
 "You do not have the run right for the Sales application or it is not "
 "activated."
 msgstr ""
 
-#: js/LeadEditDialog.js:339
+#: js/LeadEditDialog.js:338
 msgid "Enter short name"
 msgstr ""
 
-#: js/LeadEditDialog.js:423
+#: js/LeadEditDialog.js:422
 msgid "Expected turnover"
 msgstr ""
 
-#: js/LeadEditDialog.js:445 js/LeadGridDetailsPanel.js:450
+#: js/LeadEditDialog.js:444 js/LeadGridDetailsPanel.js:450
 msgid "Estimated end"
 msgstr ""
 
-#: js/LeadEditDialog.js:477 js/Product.js:139
+#: js/LeadEditDialog.js:476 js/Product.js:139
 msgid "Description"
 msgstr ""
 
-#: js/LeadEditDialog.js:491
+#: js/LeadEditDialog.js:490
 msgid "Enter description"
 msgstr ""
 

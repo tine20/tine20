@@ -160,6 +160,10 @@ msgstr ""
 msgid "Contact CSV import from mac address book"
 msgstr ""
 
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:14
+msgid "CSV Outlook 2007 German"
+msgstr ""
+
 #: Import/definitions/adb_outlook_import_csv.xml:13
 msgid "Contact CSV import from Outlook address book"
 msgstr ""

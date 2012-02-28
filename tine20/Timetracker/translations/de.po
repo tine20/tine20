@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-20 12:23+0000\n"
-"Last-Translator: ph_il <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2012-02-22 10:14+0000\n"
+"Last-Translator: Alexander Stintzing <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-22 06:54+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-02-23 05:22+0000\n"
+"X-Generator: Launchpad (build 14855)\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -261,7 +261,7 @@ msgstr "Als CSV exportieren"
 
 #: js/TimeaccountGridPanel.js:170 js/TimeaccountPickerCombo.js:44
 msgid "Show closed"
-msgstr "Geschlosse anzeigen"
+msgstr "Geschlossene anzeigen"
 
 #: js/TimeAccountStatusFilterModel.js:24
 msgid "Time Account - Status"
@@ -291,21 +291,13 @@ msgstr "Bitte geben Sie eine Beschreibung an..."
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: js/TimesheetEditDialog.js:256 js/TimesheetEditDialog.js:264
+#: js/TimesheetEditDialog.js:256
 msgid "Could not save {0}."
 msgstr "Konnte {0} nicht speichern."
 
 #: js/TimesheetEditDialog.js:257
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr "Die Buchungsfrist für dieses Zeitkonto wurde überschritten."
-
-#: js/TimesheetEditDialog.js:263
-msgid "No Timeaccount set"
-msgstr "Kein Zeitkonto gesetzt"
-
-#: js/TimesheetEditDialog.js:265
-msgid "You need to set a Timeaccount this Timesheet belongs to."
-msgstr "Sie müssen für diesen Stundenzettel ein Zeitkonto setzen."
 
 #: js/TimesheetGridPanel.js:98
 msgid "Start time"
@@ -378,23 +370,23 @@ msgstr "Standard"
 
 #: Setup/Initialize.php:33
 msgid "My Timesheets today"
-msgstr ""
+msgstr "Meine Stundenzettel von heute"
 
 #: Setup/Initialize.php:47
 msgid "My Timesheets this week"
-msgstr ""
+msgstr "Meine Stundenzettel dieser Woche"
 
 #: Setup/Initialize.php:61
 msgid "My Timesheets last week"
-msgstr ""
+msgstr "Meine Stundenzettel letzter Woche"
 
 #: Setup/Initialize.php:75
 msgid "My Timesheets this month"
-msgstr ""
+msgstr "Meine Stundenzettel dieses Monats"
 
 #: Setup/Initialize.php:89
 msgid "My Timesheets last month"
-msgstr ""
+msgstr "Meine Stundenzettel letzten Monats"
 
 #: Setup/Initialize.php:112 Setup/Update/Release5.php:81
 msgid "Timeaccounts to bill"
@@ -477,6 +469,12 @@ msgstr "Zeitkonten"
 
 msgid "All Timeaccounts"
 msgstr "Alle Zeitkonten"
+
+#~ msgid "No Timeaccount set"
+#~ msgstr "Kein Zeitkonto gesetzt"
+
+#~ msgid "You need to set a Timeaccount this Timesheet belongs to."
+#~ msgstr "Sie müssen für diesen Stundenzettel ein Zeitkonto setzen."
 
 #~ msgid "Timesheets today"
 #~ msgstr "Stundenzettel von heute"

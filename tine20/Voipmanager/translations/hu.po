@@ -846,18 +846,6 @@ msgstr "hívás állapot mutatása"
 msgid "Users"
 msgstr "Felhasználók"
 
-#: js/Snom/PhoneEditDialog.js:592
-msgid "Failed"
-msgstr "Sikertelen"
-
-#: js/Snom/PhoneEditDialog.js:593
-msgid "Could not save {0}."
-msgstr "{0} nem menthető."
-
-#: js/Snom/PhoneEditDialog.js:594
-msgid "Duplicate MAC address detected"
-msgstr "Duplikált MAC címet találtam"
-
 #: js/Snom/PhoneGridPanel.js:41
 msgid "reset phones HTTP authentication"
 msgstr "telefon HTTP hitelesítésének visszaállítása"
@@ -945,3 +933,12 @@ msgstr "Telefonok"
 #: js/Voipmanager.js:123
 msgid "Templates"
 msgstr "Sablonok"
+
+#~ msgid "Failed"
+#~ msgstr "Sikertelen"
+
+#~ msgid "Could not save {0}."
+#~ msgstr "{0} nem menthető."
+
+#~ msgid "Duplicate MAC address detected"
+#~ msgstr "Duplikált MAC címet találtam"

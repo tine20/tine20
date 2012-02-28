@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-20 12:06+0000\n"
+"PO-Revision-Date: 2012-02-22 09:59+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-21 06:33+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-02-23 05:21+0000\n"
+"X-Generator: Launchpad (build 14855)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -21,23 +21,23 @@ msgstr ""
 msgid "Call contact"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:172
+#: js/AddressbookGridPanelHook.js:171
 msgid "Work"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:181
+#: js/AddressbookGridPanelHook.js:180
 msgid "Home"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:190
+#: js/AddressbookGridPanelHook.js:189
 msgid "Cell"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:199
+#: js/AddressbookGridPanelHook.js:198
 msgid "Cell private"
 msgstr ""
 
-#: js/Models.js:69 js/Phone.js:59 js/Phone.js:264
+#: js/Models.js:69 js/Phone.js:59 js/Phone.js:265
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] ""
@@ -49,7 +49,7 @@ msgid_plural "phones lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Phone.js:29 js/Phone.js:489 js/Phone.js:490
+#: js/Phone.js:29 js/Phone.js:490 js/Phone.js:491
 msgid "Edit phone settings"
 msgstr "Editar preferencias del teléfono"
 
@@ -57,258 +57,258 @@ msgstr "Editar preferencias del teléfono"
 msgid "Phones"
 msgstr "Teléfonos"
 
-#: js/Phone.js:287
+#: js/Phone.js:288
 msgid "Line"
 msgstr "Línea"
 
-#: js/Phone.js:296
+#: js/Phone.js:297
 msgid "Number"
 msgstr "Número"
 
-#: js/Phone.js:305
+#: js/Phone.js:306
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: js/Phone.js:315
+#: js/Phone.js:316
 msgid "Dial"
 msgstr "Marcar"
 
-#: js/Phone.js:335
+#: js/Phone.js:336
 msgid "Error"
 msgstr "Error"
 
-#: js/Phone.js:336
+#: js/Phone.js:337
 msgid "Not possible to dial."
 msgstr "Fue imposible discar."
 
-#: js/Phone.js:479
+#: js/Phone.js:480
 msgid "Dial number"
 msgstr "Número de discado"
 
-#: js/Phone.js:480
+#: js/Phone.js:481
 msgid "Initiate a new outgoing call"
 msgstr "Comenzar una nueva llamada de salida"
 
-#: js/Phone.js:541
+#: js/Phone.js:542
 msgid "Incoming call"
 msgstr "Llamada entrante"
 
-#: js/Phone.js:545
+#: js/Phone.js:546
 msgid "Outgoing call"
 msgstr "Llamada de salida"
 
-#: js/Phone.js:553
+#: js/Phone.js:554
 msgid "unknown number"
 msgstr "número desconocido"
 
-#: js/Phone.js:590
+#: js/Phone.js:591
 msgid "Search:"
 msgstr "Búscar:"
 
-#: js/Phone.js:675
+#: js/Phone.js:676
 msgid "Source or Destination"
 msgstr "Origen o Destino"
 
-#: js/Phone.js:691
+#: js/Phone.js:692
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Mostrando llamadas {0] - {1} de {2}"
 
-#: js/Phone.js:692 js/Phone.js:735
+#: js/Phone.js:693 js/Phone.js:736
 msgid "No calls to display"
 msgstr "No hay llamadas"
 
-#: js/Phone.js:702
+#: js/Phone.js:703
 msgid "Direction"
 msgstr "Orientación"
 
-#: js/Phone.js:703
+#: js/Phone.js:704
 msgid "Source"
 msgstr "Fuente"
 
-#: js/Phone.js:704
+#: js/Phone.js:705
 msgid "Caller Id"
 msgstr "Identificador de la Llamada"
 
-#: js/Phone.js:705
+#: js/Phone.js:706
 msgid "Destination"
 msgstr "Destino"
 
-#: js/Phone.js:706
+#: js/Phone.js:707
 msgid "Start"
 msgstr "Comenzar"
 
-#: js/Phone.js:707
+#: js/Phone.js:708
 msgid "Connected"
 msgstr "Conectado"
 
-#: js/Phone.js:708
+#: js/Phone.js:709
 msgid "Disconnected"
 msgstr "Desconectado"
 
-#: js/Phone.js:709
+#: js/Phone.js:710
 msgid "Duration"
 msgstr "Duración"
 
-#: js/Phone.js:710
+#: js/Phone.js:711
 msgid "Ringing"
 msgstr "Timbrando"
 
-#: js/Phone.js:711
+#: js/Phone.js:712
 msgid "Call ID"
 msgstr "Identificador de Llamada"
 
-#~ msgid "Dial phone number"
-#~ msgstr "Teléfono de discado"
+msgid "Dial phone number"
+msgstr "Teléfono de discado"
 
-#~ msgid "Name"
-#~ msgstr "Nombre"
+msgid "Name"
+msgstr "Nombre"
 
-#~ msgid "Phone Model"
-#~ msgstr "Modelo de Teléfono"
+msgid "Phone Model"
+msgstr "Modelo de Teléfono"
 
-#~ msgid "MAC Address"
-#~ msgstr "Dirección MAC"
+msgid "MAC Address"
+msgstr "Dirección MAC"
 
-#~ msgid "infos"
-#~ msgstr "informaciones"
+msgid "infos"
+msgstr "informaciones"
 
-#~ msgid "Current IP Address"
-#~ msgstr "Dirección IP Actual"
+msgid "Current IP Address"
+msgstr "Dirección IP Actual"
 
-#~ msgid "Firmware last checked at"
-#~ msgstr "Firmware revisado por última vez el "
+msgid "Firmware last checked at"
+msgstr "Firmware revisado por última vez el "
 
-#~ msgid "Current Software Version"
-#~ msgstr "Versión Actual del Software"
+msgid "Current Software Version"
+msgstr "Versión Actual del Software"
 
-#~ msgid "Settings Loaded at"
-#~ msgstr "Preferncias Guaradas en"
+msgid "Settings Loaded at"
+msgstr "Preferncias Guaradas en"
 
-#~ msgid "redirection"
-#~ msgstr "redirección"
+msgid "redirection"
+msgstr "redirección"
 
-#~ msgid "redirect_event"
-#~ msgstr "evento_redireccion"
+msgid "redirect_event"
+msgstr "evento_redireccion"
 
-#~ msgid "all"
-#~ msgstr "todos"
+msgid "all"
+msgstr "todos"
 
-#~ msgid "busy"
-#~ msgstr "ocupado"
+msgid "busy"
+msgstr "ocupado"
 
-#~ msgid "none"
-#~ msgstr "ninguno"
+msgid "none"
+msgstr "ninguno"
 
-#~ msgid "time"
-#~ msgstr "hora"
+msgid "time"
+msgstr "hora"
 
-#~ msgid "redirect_number"
-#~ msgstr "numero_redireccion"
+msgid "redirect_number"
+msgstr "numero_redireccion"
 
-#~ msgid "redirect_time"
-#~ msgstr "hora_redireccion"
+msgid "redirect_time"
+msgstr "hora_redireccion"
 
-#~ msgid "Settings"
-#~ msgstr "Configuración"
+msgid "Settings"
+msgstr "Configuración"
 
-#~ msgid "web_language"
-#~ msgstr "idioma_web"
+msgid "web_language"
+msgstr "idioma_web"
 
-#~ msgid "- factory default -"
-#~ msgstr "-opciones de fábrica-"
+msgid "- factory default -"
+msgstr "-opciones de fábrica-"
 
-#~ msgid "language"
-#~ msgstr "idioma"
+msgid "language"
+msgstr "idioma"
 
-#~ msgid "display_method"
-#~ msgstr "forma_a_mostrar"
+msgid "display_method"
+msgstr "forma_a_mostrar"
 
-#~ msgid "whole url"
-#~ msgstr "url completa"
+msgid "whole url"
+msgstr "url completa"
 
-#~ msgid "name"
-#~ msgstr "nombre"
+msgid "name"
+msgstr "nombre"
 
-#~ msgid "number"
-#~ msgstr "numero"
+msgid "number"
+msgstr "numero"
 
-#~ msgid "name + number"
-#~ msgstr "nombre + numero"
+msgid "name + number"
+msgstr "nombre + numero"
 
-#~ msgid "number + name"
-#~ msgstr "numero + nombre"
+msgid "number + name"
+msgstr "numero + nombre"
 
-#~ msgid "call_waiting"
-#~ msgstr "llamada_en_espera"
+msgid "call_waiting"
+msgstr "llamada_en_espera"
 
-#~ msgid "on"
-#~ msgstr "encendido"
+msgid "on"
+msgstr "encendido"
 
-#~ msgid "visual"
-#~ msgstr "visual"
+msgid "visual"
+msgstr "visual"
 
-#~ msgid "ringer"
-#~ msgstr "timbre"
+msgid "ringer"
+msgstr "timbre"
 
-#~ msgid "off"
-#~ msgstr "apagado"
+msgid "off"
+msgstr "apagado"
 
-#~ msgid "mwi_notification"
-#~ msgstr "notificacion_mwi"
+msgid "mwi_notification"
+msgstr "notificacion_mwi"
 
-#~ msgid "silent"
-#~ msgstr "silencioso"
+msgid "silent"
+msgstr "silencioso"
 
-#~ msgid "beep"
-#~ msgstr "alarma"
+msgid "beep"
+msgstr "alarma"
 
-#~ msgid "reminder"
-#~ msgstr "recordatorio"
+msgid "reminder"
+msgstr "recordatorio"
 
-#~ msgid "mwi_dialtone"
-#~ msgstr "tono_marcado_mwi"
+msgid "mwi_dialtone"
+msgstr "tono_marcado_mwi"
 
-#~ msgid "normal"
-#~ msgstr "normal"
+msgid "normal"
+msgstr "normal"
 
-#~ msgid "stutter"
-#~ msgstr "balbucear"
+msgid "stutter"
+msgstr "balbucear"
 
-#~ msgid "headset_device"
-#~ msgstr "dispositivo_auricular"
+msgid "headset_device"
+msgstr "dispositivo_auricular"
 
-#~ msgid "headset_rj"
-#~ msgstr "auricular_rj"
+msgid "headset_rj"
+msgstr "auricular_rj"
 
-#~ msgid "message_led_other"
-#~ msgstr "mensaje_dirigido_a_otr"
+msgid "message_led_other"
+msgstr "mensaje_dirigido_a_otr"
 
-#~ msgid "global_missed_counter"
-#~ msgstr "contador_global_perdido"
+msgid "global_missed_counter"
+msgstr "contador_global_perdido"
 
-#~ msgid "scroll_outgoing"
-#~ msgstr "desplazamiento_de_salida"
+msgid "scroll_outgoing"
+msgstr "desplazamiento_de_salida"
 
-#~ msgid "show_local_line"
-#~ msgstr "mostrar_linea_local"
+msgid "show_local_line"
+msgstr "mostrar_linea_local"
 
-#~ msgid "show_call_status"
-#~ msgstr "mostrar_estado_llamada"
+msgid "show_call_status"
+msgstr "mostrar_estado_llamada"
 
-#~ msgid "lineactive"
-#~ msgstr "lineaactiva"
+msgid "lineactive"
+msgstr "lineaactiva"
 
-#~ msgid "sipCombo"
-#~ msgstr "comboSip"
+msgid "sipCombo"
+msgstr "comboSip"
 
-#~ msgid "Idle Text"
-#~ msgstr "Texto de espera"
+msgid "Idle Text"
+msgstr "Texto de espera"
 
-#~ msgid "Lines"
-#~ msgstr "Líneas"
+msgid "Lines"
+msgstr "Líneas"
 
-#~ msgid "Users"
-#~ msgstr "Usuarios"
+msgid "Users"
+msgstr "Usuarios"
 
-#~ msgid "Rights"
-#~ msgstr "Derechos"
+msgid "Rights"
+msgstr "Derechos"
