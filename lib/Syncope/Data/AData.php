@@ -94,9 +94,16 @@ abstract class Syncope_Data_AData implements Syncope_Data_IData
         return array_keys(Syncope_Data_AData::$entries[get_class($this)][$folderId]);
     }
     
-    public function hasChanges(Syncope_Backend_IContent $contentBackend, Syncope_Model_IFolder $folder, Syncope_Model_ISyncState $syncState)
+    public function getCountOfChanges(Syncope_Backend_IContent $contentBackend, Syncope_Model_IFolder $folder, Syncope_Model_ISyncState $syncState)
     {
-        return true;
+        $allClientEntries = $contentBackend->getFolderState($this->_device, $folder);
+        $allServerEntries = $this->getServerEntries($folder->folderid, $folder->lastfiltertype);
+        
+        $addedEntries       = array_diff($allServerEntries, $allClientEntries);
+        $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
+        $changedEntries     = $this->getChangedEntries($folder->folderid, $syncState->lastsync);
+        
+        return count($addedEntries) + count($deletedEntries) + count($changedEntries);
     }
     
     public function moveItem($_srcFolderId, $_serverId, $_dstFolderId)

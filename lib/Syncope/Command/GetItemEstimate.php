@@ -72,7 +72,7 @@ class Syncope_Command_GetItemEstimate extends Syncope_Command_Wbxml
                     
                 } else {
                     $collectionData['syncState'] = $this->_syncStateBackend->validate($this->_device, $collectionData['folder'], $collectionData['syncKey']);
-                }                
+                }
             } catch (Syncope_Exception_NotFound $senf) {
                 if ($this->_logger instanceof Zend_Log)
                     $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " " . $senf->getMessage());
@@ -135,7 +135,7 @@ class Syncope_Command_GetItemEstimate extends Syncope_Command_Wbxml
                     // this is the first sync. in most cases there are data on the server.
                     $count = count($dataController->getServerEntries($collectionData['collectionId'], $collectionData['filterType']));
                 } else {
-                    $count = $this->_getItemEstimate($dataController, $collectionData);
+                    $count = $dataController->getCountOfChanges($this->_contentStateBackend, $collectionData['folder'], $collectionData['syncState']);
                 }
                 $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', $count));
             }
@@ -147,27 +147,5 @@ class Syncope_Command_GetItemEstimate extends Syncope_Command_Wbxml
         }
                 
         return $this->_outputDom;
-    }
-
-    /**
-     * return number of chnaged entries
-     * 
-     * @param $_dataController
-     * @param array $_collectionData
-     * @param $_lastSyncTimeStamp
-     * @return int number of changed entries
-     */
-    protected function _getItemEstimate($_dataController, $_collectionData)
-    {
-        $dataController = Syncope_Data_Factory::factory($_collectionData['folder']->class , $this->_device, $this->_syncTimeStamp);
-        
-        $allClientEntries = $this->_contentStateBackend->getFolderState($this->_device, $_collectionData['folder']);
-        $allServerEntries = $_dataController->getServerEntries($_collectionData['collectionId'], $_collectionData['filterType']);
-        
-        $addedEntries       = array_diff($allServerEntries, $allClientEntries);
-        $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
-        $changedEntries     = $_dataController->getChangedEntries($_collectionData['collectionId'], $_collectionData['syncState']->lastsync, $this->_syncTimeStamp);
-        
-        return count($addedEntries) + count($deletedEntries) + count($changedEntries);
     }
 }
