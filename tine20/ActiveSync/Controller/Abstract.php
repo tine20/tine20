@@ -482,20 +482,18 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
         return $result;
     }
     
-    public function hasChanges(Syncope_Backend_IContent $contentBackend, Syncope_Model_IFolder $folder, Syncope_Model_ISyncState $syncState)
+    public function getCountOfChanges(Syncope_Backend_IContent $contentBackend, Syncope_Model_IFolder $folder, Syncope_Model_ISyncState $syncState)
     {
-        $filterType = $folder->lastfiltertype;
-        
         $this->updateCache($folder->folderid);
         
-        $allClientEntries   = $contentBackend->getFolderState($this->_device, $folder);
-        $allServerEntries   = $this->getServerEntries($folder->folderid, $filterType);
+        $allClientEntries = $contentBackend->getFolderState($this->_device, $folder);
+        $allServerEntries = $this->getServerEntries($folder->folderid, $folder->lastfiltertype);
         
         $addedEntries       = array_diff($allServerEntries, $allClientEntries);
         $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
         $changedEntries     = $this->getChangedEntries($folder->folderid, $syncState->lastsync);
-
-        return !!(count($addedEntries) + count($deletedEntries) + count($changedEntries));
+        
+        return count($addedEntries) + count($deletedEntries) + count($changedEntries);
     }
     
     

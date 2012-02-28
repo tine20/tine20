@@ -561,7 +561,16 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      */
     public function updateCache($_folderId)
     {
-        Felamimail_Controller_Cache_Message::getInstance()->updateCache($_folderId, 5);
+        try {
+            Felamimail_Controller_Cache_Message::getInstance()->updateCache($_folderId, 5);
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " catched exception " . get_class($e));
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getTraceAsString());
+        }
     }
     
     /**
