@@ -411,7 +411,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
     /**
      * if not resheduled, attendee status must be preserved
      */
-    public function testCreateRecurExceptionAllFollowingAttendeeStatus()
+    public function testCreateRecurExceptionAllFollowingPreserveAttendeeStatus()
     {
         $from = new Tinebase_DateTime('2012-02-01 00:00:00');
         $until = new Tinebase_DateTime('2012-02-29 23:59:59');
@@ -442,6 +442,50 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         
         $updatedPersistentSClever = Calendar_Model_Attender::getAttendee($updatedPersistentEvent->attendee, $event->attendee[1]);
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedPersistentSClever->status, 'status must not change');
+    }
+    
+    /**
+     * test implicit recur (exception) series creation for attendee status only
+     */
+    public function testAttendeeSetStatusRecurExceptionAllFollowing()
+    {
+        $from = new Tinebase_DateTime('2012-02-01 00:00:00');
+        $until = new Tinebase_DateTime('2012-02-29 23:59:59');
+        
+        $event = new Calendar_Model_Event(array(
+            'summary'       => 'Some Daily Event',
+            'dtstart'       => '2012-02-03 09:00:00',
+            'dtend'         => '2012-02-03 10:00:00',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1',
+            'container_id'  => $this->_testCalendar->getId(),
+            'attendee'      => $this->_getAttendee(),
+        ));
+        
+        $persistentEvent = $this->_controller->create($event);
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
+        
+        // accept for sclever thisandfuture
+        $start = $recurSet[10];
+        $sclever = Calendar_Model_Attender::getAttendee($start->attendee, $event->attendee[1]);
+        $sclever->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $this->_controller->attenderStatusCreateRecurException($start, $sclever, $sclever->status_authkey, TRUE);
+        
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId())
+        )))->sort('dtstart', 'ASC');
+        
+        // assert two baseEvents
+        $this->assertTrue($events[0]->rrule_until instanceof Tinebase_DateTime, 'rrule_until of first baseEvent is not set');
+        $this->assertTrue($events[0]->rrule_until < new Tinebase_DateTime('2012-02-14 09:00:00'), 'rrule_until of first baseEvent is not adopted properly');
+        $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, Calendar_Model_Attender::getAttendee($events[0]->attendee, $event->attendee[1])->status, 'first baseEvent status must not be touched');
+        
+        $this->assertEquals($events[1]->dtstart, new Tinebase_DateTime('2012-02-14 09:00:00'), 'start of second baseEvent is wrong');
+        $this->assertTrue(empty($events[1]->recurid), 'second baseEvent is not a baseEvent');
+        $this->assertEquals($events[1]->rrule, $event->rrule, 'rrule of second baseEvent must be set');
+        $this->assertFalse($events[1]->rrule_until instanceof Tinebase_DateTime, 'rrule_until of second baseEvent must not be set');
+        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, Calendar_Model_Attender::getAttendee($events[1]->attendee, $event->attendee[1])->status, 'second baseEvent status is not touched');
     }
     
    /**
@@ -485,13 +529,13 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $until = new Tinebase_DateTime('2012-02-26 23:59:59');
         
         $event = new Calendar_Model_Event(array(
-                        'uid'           => Tinebase_Record_Abstract::generateUID(),
-                        'summary'       => 'Abendessen',
-                        'dtstart'       => '2012-02-21 14:00:00',
-                        'dtend'         => '2012-02-21 15:30:00',
-                        'originator_tz' => 'Europe/Berlin',
-                        'rrule'         => 'FREQ=DAILY;COUNT=5',
-                        'container_id'  => $this->_testCalendar->getId(),
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'Abendessen',
+            'dtstart'       => '2012-02-21 14:00:00',
+            'dtend'         => '2012-02-21 15:30:00',
+            'originator_tz' => 'Europe/Berlin',
+            'rrule'         => 'FREQ=DAILY;COUNT=5',
+            'container_id'  => $this->_testCalendar->getId(),
         ));
         
         $persistentEvent = $this->_controller->create($event);
