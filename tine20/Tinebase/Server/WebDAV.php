@@ -65,7 +65,7 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
         
         // compute base uri
         $request = new Zend_Controller_Request_Http();
-        self::$_server->setBaseUri($request->getBaseUrl());
+        self::$_server->setBaseUri($request->getBaseUrl() . '/');
         
         $tempDir = Tinebase_Core::getTempDir();
         if (!empty($tempDir)) {
