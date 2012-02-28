@@ -265,7 +265,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         
         // assert external organizer
         $this->assertEquals('l.kneschke@caldav.org', $iMIP->event->organizer->email, 'wrong organizer');
-        $this->assertEmpty($iMIP->event->organizer->account_id, 'organizer must not have an account');
+        $this->assertTrue(empty($iMIP->event->organizer->account_id), 'organizer must not have an account');
         
         // assert attendee
         $this->assertEquals(1, count($iMIP->event->attendee), 'all attendee but curruser must be whiped');
