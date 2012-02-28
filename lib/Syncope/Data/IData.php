@@ -27,7 +27,7 @@ interface Syncope_Data_IData
     
     public function getChangedEntries($_folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL);
     
-    public function hasChanges(Syncope_Backend_IContent $contentBackend, Syncope_Model_IFolder $folder, Syncope_Model_ISyncState $syncState);
+    public function getCountOfChanges(Syncope_Backend_IContent $contentBackend, Syncope_Model_IFolder $folder, Syncope_Model_ISyncState $syncState);
     
     public function moveItem($_srcFolderId, $_serverId, $_dstFolderId);
     
