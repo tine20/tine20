@@ -51,7 +51,7 @@ Tine.Timetracker.Model.Timesheet = Tine.Tinebase.data.Record.create(Tine.Timetra
     containersName: 'timesheets lists',
     getTitle: function() {
         var timeaccount = this.get('timeaccount_id'),
-            description = this.get('description'),
+            description = Ext.util.Format.ellipsis(this.get('description'), 30, true),
             timeaccountTitle = '';
         
         if (timeaccount) {

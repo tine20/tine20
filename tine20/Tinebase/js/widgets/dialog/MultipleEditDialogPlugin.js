@@ -76,6 +76,11 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
      */
     onRecordLoad : function() {
 
+        if(!this.editDialog.rendered) {
+            this.onRecordLoad.defer(100, this);
+            return;
+        }
+        
         Ext.each(this.handleFields, function(field) {
             var refData = false; 
             
@@ -274,9 +279,12 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             });
             
             if (ff.isXType('checkbox')) {
-                ff.getEl().wrap({tag: 'span', 'class': 'tinebase-editmultipledialog-dirtycheck'});
-                ff.originalValue = null;
-                ff.setValue(false);
+                ff.on('afterrender', function() {
+                    this.getEl().wrap({tag: 'span', 'class': 'tinebase-editmultipledialog-dirtycheck'});
+                    this.originalValue = null;
+                    this.setValue(false);
+                });
+                
             } else {
                 ff.on('focus', function() {
                     if (this.readOnly) this.originalValue = this.getValue();
@@ -359,7 +367,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                     Ext.MessageBox.wait(_('Please wait'),_('Applying changes'));
                     Ext.Ajax.request({
                         url: 'index.php',
-                        timeout: 240000,
+                        timeout: 480000,
                         params: {
                             method: 'Tinebase.updateMultipleRecords',
                             appName: this.editDialog.recordClass.getMeta('appName'),
