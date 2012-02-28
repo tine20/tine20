@@ -97,6 +97,8 @@ class Syncope_Command_PingTests extends Syncope_Command_ATestCase
         // sleep one second; otherwise we are to fast
         sleep(1);
         
+        Syncope_Data_Contacts::$changedEntries['Syncope_Data_Contacts'][] = 'contact1';
+        
         // and now we can start the ping request
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
@@ -110,6 +112,8 @@ class Syncope_Command_PingTests extends Syncope_Command_ATestCase
         
         $responseDoc = $search->getResponse();
         #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        
+        Syncope_Data_Contacts::$changedEntries['Syncope_Data_Contacts'] = array();
         
         $xpath = new DomXPath($responseDoc);
         $xpath->registerNamespace('Ping', 'uri:Ping');
