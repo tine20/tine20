@@ -39,7 +39,7 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
     
     protected $_validators = array(
         // image identifiers
-        'id'          => array('presence' => 'required', 'allowEmpty' => false, 'Alnum' ),
+        'id'          => array('presence' => 'required', 'allowEmpty' => false, /*'Alnum'*/ ),
         'application' => array('presence' => 'required', 'allowEmpty' => false, 'Alnum' ),
         'location'    => array('default' => '', 'allowEmpty' => true, 'Alnum', ),
         

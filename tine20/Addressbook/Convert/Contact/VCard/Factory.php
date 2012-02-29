@@ -19,6 +19,7 @@
 class Addressbook_Convert_Contact_VCard_Factory
 {
     const CLIENT_GENERIC = 'generic';
+    const CLIENT_IOS     = 'ios';
     const CLIENT_KDE     = 'kde';
     const CLIENT_MACOSX  = 'macosx';
     const CLIENT_SOGO    = 'sogo';
@@ -35,6 +36,11 @@ class Addressbook_Convert_Contact_VCard_Factory
 	    switch ($_backend) {
 	        case Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC:
 	            return new Addressbook_Convert_Contact_VCard_Generic($_version);
+	            
+	            break;
+	            
+	        case Addressbook_Convert_Contact_VCard_Factory::CLIENT_IOS:
+	            return new Addressbook_Convert_Contact_VCard_IOS($_version);
 	            
 	            break;
 	            
@@ -73,6 +79,11 @@ class Addressbook_Convert_Contact_VCard_Factory
         // Thunderbird with Sogo Connector
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_Sogo::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO;
+            $version = $matches['version'];
+        
+        // iOS addressbook
+        } elseif (preg_match(Addressbook_Convert_Contact_VCard_IOS::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_IOS;
             $version = $matches['version'];
         
         // KDE addressbook

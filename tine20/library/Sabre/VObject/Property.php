@@ -152,28 +152,34 @@ class Sabre_VObject_Property extends Sabre_VObject_Element {
      */
     public function serialize() {
 
+        $encoding = null;
         $str = $this->name;
         if ($this->group) $str = $this->group . '.' . $this->name;
 
         if (count($this->parameters)) {
             foreach($this->parameters as $param) {
-                
                 $str.=';' . $param->serialize();
-
+                if ($param->name == 'ENCODING') {
+                    $encoding = $param->value;
+                }
             }
         }
 
-        $str.=':' . $this->addSlashes($this->value);
-        $out = '';
-        
-        while(!empty($str)) {
-            if (($strlen = iconv_strlen($str,'utf-8')) > 75) {
-                $out.= iconv_substr($str,0,75,'utf-8') . "\r\n ";
-                $str = iconv_substr($str,75,$strlen,'utf-8');
-            } else {
-                $out.= $str . "\r\n";
-                $str = null;
-                break;
+        if ($encoding == 'b') {
+            $out = $str . ":\r\n " . wordwrap(base64_encode($this->value), 75, "\r\n ", true) . "\r\n";
+        } else {
+            $str.=':' . $this->addSlashes($this->value);
+            $out = '';
+            
+            while(!empty($str)) {
+                if (($strlen = iconv_strlen($str,'utf-8')) > 75) {
+                    $out.= iconv_substr($str,0,75,'utf-8') . "\r\n ";
+                    $str = iconv_substr($str,75,$strlen,'utf-8');
+                } else {
+                    $out.= $str . "\r\n";
+                    $str = null;
+                    break;
+                }
             }
         }
         

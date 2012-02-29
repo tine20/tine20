@@ -42,15 +42,14 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      */
     public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . print_r($_blob, true));
-        
         if ($_blob instanceof Sabre_VObject_Component) {
             $vcard = $_blob;
         } else {
             if (is_resource($_blob)) {
                 $_blob = stream_get_contents($_blob);
             }
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . print_r($_blob, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' vcard data: ' . $_blob);
             $vcard = Sabre_VObject_Reader::read($_blob);
         }
         
@@ -69,7 +68,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                 case 'UID':
                     // do nothing
                     break;
-                
+                    
                 case 'ADR':
                     $type = null;
                     foreach($property['TYPE'] as $typeProperty) {
@@ -132,67 +131,22 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                     $data['org_name'] = $property->value[0];
                     $data['org_unit'] = isset($property->value[1]) ? $property->value[1] : null;
                     break;
-                
+                    
                 case 'PHOTO':
                     $data['jpegphoto'] = base64_decode($property->value);
                     break;
                     
                 case 'TEL':
-                    $telField = null;
-                    $types    = array();
-                    
-                    if (isset($property['TYPE'])) {
-                        // get all types
-                        foreach($property['TYPE'] as $typeProperty) {
-                            $types[] = strtoupper($typeProperty->value);
-                        }
-
-                        // CELL
-                        if (in_array('CELL', $types)) {
-                            if (count($types) == 1 || in_array('WORK', $types)) {
-                                $telField = 'tel_cell';
-                            } elseif(in_array('HOME', $types)) {
-                                $telField = 'tel_cell_home';
-                            }
-                            
-                        // PAGER
-                        } elseif (in_array('PAGER', $types)) {
-                            $telField = 'tel_pager';
-                            
-                        // FAX
-                        } elseif (in_array('FAX', $types)) {
-                            if (count($property['TYPE']) == 1 || in_array('WORK', $types)) {
-                                $telField = 'tel_fax';
-                            } elseif(in_array('HOME', $types)) {
-                                $telField = 'tel_fax_home';
-                            }
-                            
-                        // HOME
-                        } elseif (in_array('HOME', $types)) {
-                            $telField = 'tel_home';
-                            
-                        // WORK
-                        } elseif (in_array('WORK', $types)) {
-                            $telField = 'tel_work';
-                        }
-                        
-                        
-                    } else {
-                        $telField = 'work';
-                    }
-                    
-                    if (!empty($telField)) {
-                        $data[$telField] = $property->value;
-                    }
-                    
+                    $this->_toTine20ModelParseTel($data, $property);
                     break;
-                
+                    
                 case 'URL':
-                    switch ($property['TYPE']) {
-                        case 'home':
+                    switch (strtoupper($property['TYPE'])) {
+                        case 'HOME':
                             $data['url_home'] = $property->value;
                             break;
-                        case 'work':
+                            
+                        case 'WORK':
                         default:
                             $data['url'] = $property->value;
                             break;
@@ -222,16 +176,64 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' data ' . print_r($contact->toArray(), true));
         
         return $contact;
-    }    
+    }
 
     /**
-    * converts Tinebase_Record_Abstract to external format
-    *
-    * @param  Tinebase_Record_Abstract  $_record
-    * @return mixed
-    */
+     * converts Tinebase_Record_Abstract to external format
+     *
+     * @param  Tinebase_Record_Abstract  $_record
+     * @return mixed
+     */
     public function fromTine20Model(Tinebase_Record_Abstract $_record)
     {
+    }
+    
+    protected function _toTine20ModelParseTel(&$data, $property)
+    {
+        $telField = null;
+        $types    = array();
+    
+        if (isset($property['TYPE'])) {
+            // get all types
+            foreach($property['TYPE'] as $typeProperty) {
+                $types[] = strtoupper($typeProperty->value);
+            }
+            
+            // CELL
+            if (in_array('CELL', $types)) {
+                if (count($types) == 1 || in_array('WORK', $types)) {
+                    $telField = 'tel_cell';
+                } elseif(in_array('HOME', $types)) {
+                    $telField = 'tel_cell_private';
+                }
+    
+                // PAGER
+            } elseif (in_array('PAGER', $types)) {
+                $telField = 'tel_pager';
+    
+                // FAX
+            } elseif (in_array('FAX', $types)) {
+                if (count($property['TYPE']) == 1 || in_array('WORK', $types)) {
+                    $telField = 'tel_fax';
+                } elseif(in_array('HOME', $types)) {
+                    $telField = 'tel_fax_home';
+                }
+    
+                // HOME
+            } elseif (in_array('HOME', $types)) {
+                $telField = 'tel_home';
+    
+                // WORK
+            } elseif (in_array('WORK', $types)) {
+                $telField = 'tel_work';
+            }
+        } else {
+            $telField = 'work';
+        }
+    
+        if (!empty($telField)) {
+            $data[$telField] = $property->value;
+        }
     }
     
     protected function _toTine20ModelParseEmail(&$_data, $_property)

@@ -1,0 +1,33 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iOS 5.0.1//EN
+N:Kneschke;Lars;Paul;Prefix;Suffix
+FN:Titel AAASync AAASync
+ORG:Organisation;Department
+TITLE:Team Leader
+EMAIL;type=INTERNET;type=HOME;type=pref:lars@kneschke.de
+EMAIL;type=INTERNET;type=WORK:l.kneschke@metaways.de
+item1.EMAIL;type=INTERNET:andere@mail.de
+item1.X-ABLabel:_$!<Other>!$_
+TEL;type=CELL;type=VOICE;type=pref:+49 MOBIL
+TEL;type=IPHONE;type=CELL;type=VOICE:Tel Iphone
+TEL;type=HOME;type=VOICE:+49 PRIVAT
+TEL;type=WORK;type=VOICE:+49 BUSINESS
+TEL;type=MAIN:zentrale
+TEL;type=HOME;type=FAX:+49 FAX PRIVAT
+TEL;type=WORK;type=FAX:+49 FAX
+TEL;type=OTHER;type=FAX:anderesfax
+TEL;type=PAGER:+49 PAGER
+
+item2.ADR;type=HOME;type=pref:;;Address Privat 1;City Privat;;12345;COUNTRY PRIVAT
+item2.X-ABADR:de
+item3.ADR;type=WORK:;;Pickhuben 2;Hamburg;;20457;COUNTRY BUSINESS
+item3.X-ABADR:de
+NOTE:Notes\nwith\nLine Break
+item4.URL;type=pref:www.heise.de
+item4.X-ABLabel:_$!<HomePage>!$_
+URL;type=HOME:www.private.de
+URL;type=WORK:www.work.de
+REV:2012-02-29T09:41:37Z
+UID:20485418136d9bfbe50cecb587cb12afb0a0cec9
+END:VCARD

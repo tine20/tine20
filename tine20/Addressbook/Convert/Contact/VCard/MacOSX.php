@@ -152,7 +152,10 @@ class Addressbook_Convert_Contact_VCard_MacOSX extends Addressbook_Convert_Conta
             try {
                 $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $_record->getId());
                 $jpegData = $image->getBlob('image/jpeg');
-                $card->add(new Sabre_VObject_Property('PHOTO;ENCODING=b;TYPE=JPEG', base64_encode($jpegData)));
+                $photo = new Sabre_VObject_Property('PHOTO', $jpegData);
+                $photo->add('ENCODING', 'b');
+                $photo->add('TYPE', 'JPEG');
+                $card->add($photo);
             } catch (Exception $e) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Image for contact {$_record->getId()} not found or invalid");
             }
