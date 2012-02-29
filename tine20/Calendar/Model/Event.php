@@ -31,6 +31,7 @@
  * @property string originator_tz
  * @property string seq
  * @property string uid
+ * @property int container_id
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
 {

@@ -763,6 +763,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                             $attendee->status_authkey = Tinebase_Record_Abstract::generateUID();
                         }
                         $this->_backend->createAttendee($attendee);
+                        $this->_increaseDisplayContainerContentSequence($attendee, $persistentExceptionEvent->container_id);
                     }
                 }
                 
@@ -1227,10 +1228,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             try {
                 // check if we already have a persistent exception for this event
-                $eventInsance = $this->_backend->getByProperty($_recurInstance->recurid, $_property = 'recurid');
+                $eventInstance = $this->_backend->getByProperty($_recurInstance->recurid, $_property = 'recurid');
                 
                 // NOTE: the user must exist (added by someone with appropriate rights by createRecurException)
-                $exceptionAttender = Calendar_Model_Attender::getAttendee($eventInsance->attendee, $_attender);
+                $exceptionAttender = Calendar_Model_Attender::getAttendee($eventInstance->attendee, $_attender);
                 if (! $exceptionAttender) {
                     throw new Tinebase_Exception_AccessDenied('not an attendee');
                 }
@@ -1276,23 +1277,24 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $attendee = $baseEvent->attendee;
                 unset($baseEvent->attendee);
                 
-                $eventInsance = $this->createRecurException($baseEvent, FALSE, $_allFollowing);
-                $eventInsance->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+                $eventInstance = $this->createRecurException($baseEvent, FALSE, $_allFollowing);
+                $eventInstance->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
                 $this->doContainerACLChecks($doContainerAclChecks);
                 
                 foreach ($attendee as $attender) {
                     $attender->setId(NULL);
-                    $attender->cal_event_id = $eventInsance->getId();
+                    $attender->cal_event_id = $eventInstance->getId();
                     
                     $attender = $this->_backend->createAttendee($attender);
-                    $eventInsance->attendee->addRecord($attender);
+                    $eventInstance->attendee->addRecord($attender);
+                    $this->_increaseDisplayContainerContentSequence($attender, $eventInstance->container_id);
                 }
                 
-                $exceptionAttender = Calendar_Model_Attender::getAttendee($eventInsance->attendee, $_attender);
+                $exceptionAttender = Calendar_Model_Attender::getAttendee($eventInstance->attendee, $_attender);
             }
             
             $exceptionAttender->status = $_attender->status;
-            $updatedAttender = $this->attenderStatusUpdate($eventInsance, $exceptionAttender, $exceptionAttender->status_authkey);
+            $updatedAttender = $this->attenderStatusUpdate($eventInstance, $exceptionAttender, $exceptionAttender->status_authkey);
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
@@ -1369,6 +1371,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
             $updatedAttender = $this->_backend->updateAttendee($updatedAttender);
+            $this->_increaseDisplayContainerContentSequence($updatedAttender, $event->container_id);
 
             if ($currentAttender->status != $updatedAttender->status) {
                 $this->_touch($event, TRUE);
@@ -1416,9 +1419,19 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $currentAttendee = $currentEvent->attendee;
         
         $diff = $currentAttendee->getMigration($_event->attendee->getArrayOfIds());
+
+        $calendar = Tinebase_Container::getInstance()->getContainerById($_event->container_id);
+        
         $this->_backend->deleteAttendee($diff['toDeleteIds']);
         
-        $calendar = Tinebase_Container::getInstance()->getContainerById($_event->container_id);
+        // increase display container content seq for each deleted attender
+        foreach ($diff['toDeleteIds'] as $deleteAttenderId) {
+            $idx = $currentAttendee->getIndexById($deleteAttenderId);
+            if ($idx !== FALSE) {
+                $currentAttenderToDelete = $currentAttendee[$idx];
+                $this->_increaseDisplayContainerContentSequence($currentAttenderToDelete, $calendar->getId());
+            }
+        }
         
         foreach ($_event->attendee as $attender) {
             $attenderId = $attender->getId();
@@ -1493,7 +1506,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             return; 
         }
         
-        Tinebase_Container::getInstance()->increaseContentSequence($_attender->displaycontainer_id);        
+        Tinebase_Container::getInstance()->increaseContentSequence($_attender->displaycontainer_id);
     }
     
     /**
