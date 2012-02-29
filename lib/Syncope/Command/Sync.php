@@ -115,7 +115,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                 'class'           => isset($xmlCollection->Class) ? (string)$xmlCollection->Class : null,
                 'collectionId'    => (string)$xmlCollection->CollectionId,
                 'windowSize'      => isset($xmlCollection->WindowSize) ? (int)$xmlCollection->WindowSize : 100,
-                'deletesAsMoves'  => isset($xmlCollection->DeletesAsMoves) ? true : false,
+                'deletesAsMoves'  => isset($xmlCollection->DeletesAsMoves) && (string)$xmlCollection->DeletesAsMoves === '0' ? false : true,
                 'getChanges'      => isset($xmlCollection->GetChanges) ? true : false,
                 'added'           => array(),
                 'changed'         => array(),
