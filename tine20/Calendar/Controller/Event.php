@@ -625,7 +625,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if ($_event->attendee instanceof Tinebase_Record_RecordSet) {
                 foreach ($_event->attendee as $attender) {
                     if ($attender->status_authkey) {
-                        $exceptionAttender = $this->attenderStatusCreateRecurException($_event, $attender, $attender->status_authkey);
+                        $exceptionAttender = $this->attenderStatusCreateRecurException($_event, $attender, $attender->status_authkey, $_allFollowing);
                     }
                 }
             }
@@ -1203,9 +1203,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param  Calendar_Model_Event    $_recurInstance
      * @param  Calendar_Model_Attender $_attender
      * @param  string                  $_authKey
+     * @param  bool                    $_allFollowing
      * @return Calendar_Model_Attender updated attender
      */
-    public function attenderStatusCreateRecurException($_recurInstance, $_attender, $_authKey)
+    public function attenderStatusCreateRecurException($_recurInstance, $_attender, $_authKey, $_allFollowing = FALSE)
     {
         try {
             $db = $this->_backend->getAdapter();
@@ -1275,7 +1276,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $attendee = $baseEvent->attendee;
                 unset($baseEvent->attendee);
                 
-                $eventInsance = $this->createRecurException($baseEvent);
+                $eventInsance = $this->createRecurException($baseEvent, FALSE, $_allFollowing);
                 $eventInsance->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
                 $this->doContainerACLChecks($doContainerAclChecks);
                 
