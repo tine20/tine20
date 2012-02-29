@@ -583,6 +583,12 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function diff($_recordSet)
     {
+        if (! $_recordSet instanceof Tinebase_Record_RecordSet) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' 
+                . ' Did not get Tinebase_Record_RecordSet, skipping diff()');
+            return array();
+        }
+        
         if ($this->getRecordClassName() !== $_recordSet->getRecordClassName()) {
             throw new Tinebase_Exception_InvalidArgument('can only compare recordsets with the same type of records');
         }
