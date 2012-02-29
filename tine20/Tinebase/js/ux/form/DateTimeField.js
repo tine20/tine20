@@ -190,18 +190,24 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     onResize: function (w, h) {
         Ext.ux.form.DateTimeField.superclass.onResize.apply(this, arguments);
         
+        if(this.allowBlank) {
+            var korrel = [0.65, 0.35];
+        } else {
+            var korrel = [0.55, 0.45];
+        }
+        
         // needed for readonly
         this.el.setHeight(20);
         
         this.el.setStyle({'position': 'relative'});
         
         this.dateField.wrap.setStyle({'position': 'absolute'});
-        var dateFieldWidth = Math.abs(w * 0.55 - 5);
+        var dateFieldWidth = Math.abs(w * korrel[0] - 5);
         this.dateField.setWidth(dateFieldWidth);
         this.dateField.wrap.setWidth(dateFieldWidth);
         
         this.timeField.wrap.setStyle({'position': 'absolute'});
-        var timeFieldWidth = Math.abs(w * 0.45);
+        var timeFieldWidth = Math.abs(w * korrel[1]);
         this.timeField.setWidth(timeFieldWidth);
         this.timeField.wrap.setWidth(timeFieldWidth);
         this.timeField.wrap.setLeft(dateFieldWidth + 5);
