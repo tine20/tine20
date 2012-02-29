@@ -310,18 +310,15 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         if(in_array($_filterType, $this->_filterArray)) {
             switch($_filterType) {
                 case Syncope_Command_Sync::FILTER_INCOMPLETE:
-                    $filter->removeFilter('status_id');
+                    $filter->removeFilter('status');
+                    $openStatus = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)->records->filter('is_open', 1);
                     
-                    $status = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)
-                        ->records
-                        ->filter('is_open', 1);
-
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter by status ids " . print_r($status->getArrayOfIds(), true));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter by status ids " . print_r($openStatus->getId(), true));
                     
-                    $filter->addFilter(new Tinebase_Model_Filter_Int(
-                        'status_id', 
+                    $filter->addFilter(new Tinebase_Model_Filter_Text(
+                        'status', 
                         'in', 
-                        $status->getArrayOfIds()
+                        $openStatus->getId()
                     ));
                     
                     break;
