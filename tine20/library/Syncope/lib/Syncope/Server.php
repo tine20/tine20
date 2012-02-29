@@ -163,7 +163,7 @@ class Syncope_Server
             return;
         }
         
-        if ($this->_request->getServer('CONTENT_TYPE') == 'application/vnd.ms-sync.wbxml' && $response instanceof DOMDocument) {
+        if ($response instanceof DOMDocument) {
             if ($this->_logger instanceof Zend_Log) 
                 $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " xml response: " . $response->saveXML());
         
