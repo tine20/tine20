@@ -107,6 +107,7 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
                 return;
             }
             
+            this.lastFocusEl = document.activeElement;
             this.treePanel.getSelectionModel().suspendEvents();
             this.selectValue(filter.value);
         }, this);
@@ -135,6 +136,11 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
                 
                 if (allValuesExpanded) {
                     this.treePanel.getSelectionModel().resumeEvents();
+                    try {
+                        if (this.lastFocusEl) {
+                            Ext.fly(this.lastFocusEl).focus(10);
+                        }
+                    } catch (e) {}
                 }
             }.createDelegate(this), true);
         }, this);
