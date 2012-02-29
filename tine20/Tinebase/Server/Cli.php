@@ -44,9 +44,10 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
      */
     public function _setupCliConfig()
     {
-        $configData = include('config.inc.php');
+        $configData = @include('config.inc.php');
         if ($configData === false) {
-            die('central configuration file config.inc.php not found in includepath: ' . get_include_path());
+            echo 'UNKNOWN STATUS / CONFIG FILE NOT FOUND (include path: ' . get_include_path() . ")\n";
+            exit(3);
         }
         $configData['sessiondir'] = Tinebase_Core::getTempDir();
         
