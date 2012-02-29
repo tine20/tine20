@@ -334,12 +334,14 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
                     <ondelete>cascade</ondelete>
                     <onupdate>cascade</onupdate>
                 </reference>
-            </index>   
+            </index> 
         ');
         $this->_backend->addForeignKey('acsync_folder', $declaration);
-        
+
         $this->validateTableVersion('acsync_device', '2');
         
+        $this->_resetSyncKeyFK();
+
         $this->_backend->truncateTable('acsync_device');
         
         $declaration = new Setup_Backend_Schema_Index_Xml('
@@ -362,6 +364,30 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
     }
     
     /**
+     * reset acsync_synckey / device id FK
+     */
+    protected function _resetSyncKeyFK()
+    {
+        $this->_backend->dropForeignKey('acsync_synckey', 'acsync_synckey::device_id--acsync_device::id');
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+        <index>
+            <name>acsync_synckey::device_id--acsync_device::id</name>
+            <field>
+                <name>device_id</name>
+            </field>
+            <foreign>true</foreign>
+            <reference>
+                <table>acsync_device</table>
+                <field>id</field>
+                <ondelete>cascade</ondelete>
+                <onupdate>cascade</onupdate>
+            </reference>
+        </index> 
+        ');
+        $this->_backend->addForeignKey('acsync_synckey', $declaration);
+    }
+    
+    /**
      * update to 5.7
      * - fix cascade statements
      * - added new unique key for deviceid and owner_id
@@ -370,6 +396,8 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
      */
     public function update_7()
     {
+        $this->_resetSyncKeyFK();
+        
         $this->validateTableVersion('acsync_content', '4');
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
