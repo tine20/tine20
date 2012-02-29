@@ -850,22 +850,27 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
     
     /**
-     * @param {String} action add|edit
+     * open event in new window
+     * 
+     * @param {String} action  add|edit
+     * @param {Object} default properties for new items
+     * @param {String} event   edit given event instead of selected event
      */
     onEditInNewWindow: function (action, defaults, event) {
         if(!event) event = null;
 
-        if (action === 'edit') {
+        if (action === 'edit' && ! event) {
             var panel = this.getCalendarPanel(this.activeView);
             var selection = panel.getSelectionModel().getSelectedEvents();
             if (Ext.isArray(selection) && selection.length === 1) {
                 event = selection[0];
-                if (! event || event.dirty) {
-                    return;
-                }
             }
         }
 
+        if (action === 'edit' && (!event || event.dirty)) {
+            return;
+        }
+        
         if (! event) {
             event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), defaults), 0);
             if (defaults && Ext.isDate(defaults.dtStart)) {
