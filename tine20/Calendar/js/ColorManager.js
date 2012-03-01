@@ -175,7 +175,9 @@ Ext.extend(Tine.Calendar.ColorManager, Ext.util.Observable, {
      * @return {Object} colorset
      */
     getColor: function(event) {
-        var container = null;
+        var container = null,
+            color = null,
+            schema = null;
         
         if (typeof event.get != 'function') {
             // tree comes with containers only
@@ -185,76 +187,49 @@ Ext.extend(Tine.Calendar.ColorManager, Ext.util.Observable, {
             container = event.getDisplayContainer();
         }
         
-        if (! container.color) {
+        color = String(container.color).replace('#', '');
+        if (! color.match(/[0-9a-fA-F]{6}/)) {
             return this.gray;
         }
         
-        return this.colorSchemata[container.color.replace('#', '')];
-        //var container_id = container.id ? container.id : container;
-        //return container ? this.getColorSchema(container_id) : this.gray;
+        schema = this.colorSchemata[container.color.replace('#', '')];
+        return schema ? schema : this.getCustomSchema(color);
+    },
+    
+    getCustomSchema: function(color) {
+        var diffs = new Ext.util.MixedCollection();
+        for (var key in this.colorSchemata) {
+            if (this.colorSchemata.hasOwnProperty(key)) {
+                diffs.add(Tine.Calendar.ColorManager.compare(color, key, true), this.colorSchemata[key]);
+            }
+        }
+        
+        //NOTE default is string sort
+        diffs.keySort('ASC', function(v1,v2) {return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);});
+        
+        // cache result
+        this.colorSchemata[color] = diffs.first();
+        
+        return this.colorSchemata[color];
     }
-    
-//    /**
-//     * gets the next free color set
-//     * 
-//     * @param {String} item e.g. a calendar id
-//     * @return {Object} colorset
-//     */
-//    getColorSchema: function(item) {
-//        if (this.colorMap[item]) {
-//            return this.colorSchemata[this.colorMap[item]];
-//        }
-//        
-//        // find a 'free' schema
-//        for (var i=1,cpi; i<=this.colorPalette.length; i++) {
-//            // color palette index
-//            cpi = (i+this.colorSchemataPointer) % this.colorPalette.length;
-//            if (this.colorSchemata[cpi].color && !this.inUse(this.colorPalette[cpi])) {
-//                this.colorSchemataPointer = cpi;
-//                this.colorMap[item] = this.colorSchemataPointer;
-//                this.saveState();
-//                //console.log('assigned color ' + this.colorMap[item] + ' to item ' + item);
-//                
-//                return this.colorSchemata[this.colorSchemataPointer];
-//            }
-//        }
-//
-//        // no more free colors ;-(
-//        this.colorSchemataPointer++;
-//        this.colorMap[item] = this.colorSchemataPointer;
-//        return this.colorSchemata[this.colorSchemataPointer];
-//    },
-//    
-//    /**
-//     * checkes if given color is already in use
-//     * 
-//     * @param {String} color
-//     * @return {Boolean}
-//     */
-//    inUse: function(color) {
-//        for (var item in this.colorMap) {
-//            if (this.colorMap.hasOwnProperty(item) && this.colorMap[item] == color) {
-//                //console.log(color + ' is already used');
-//                return true;
-//            }
-//        }
-//        //console.log(color + 'is not in use yet');
-//        return false;
-//    },
-//    
-//    /* state handling */
-//    initState:       Ext.Component.prototype.initState,
-//    getStateId:      Ext.Component.prototype.getStateId,
-//    //initStateEvents: Ext.Component.prototype.initState,
-//    applyState:      Ext.Component.prototype.applyState,
-//    saveState:       Ext.Component.prototype.saveState,
-//    getState:        function() {
-//        return {
-//            colorMap            : this.colorMap,
-//            colorSchemataPointer: this.colorSchemataPointer
-//        };
-//    }
-    
-    
-    
 });
+
+Tine.Calendar.ColorManager.str2dec = function(string) {
+    var s = String(string).replace('#', ''),
+        parts = s.match(/([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})/);
+    
+    if (! parts || parts.length != 4) return;
+    
+    return [parseInt('0x' + parts[1]), parseInt('0x' + parts[2]), parseInt('0x' + parts[3])];
+};
+
+Tine.Calendar.ColorManager.compare = function(color1, color2, abs) {
+    var c1 = Ext.isArray(color1) ? color1 : Tine.Calendar.ColorManager.str2dec(color1),
+        c2 = Ext.isArray(color2) ? color2 : Tine.Calendar.ColorManager.str2dec(color2);
+    
+    if (!c1 || !c2) return;
+    
+    var diff = [c1[0] - c2[0], c1[1] - c2[1], c1[2] - c2[2]];
+    
+    return abs ? (Math.abs(diff[0]) + Math.abs(diff[1]) + Math.abs(diff[2])) : diff;
+};
