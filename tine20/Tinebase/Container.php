@@ -53,6 +53,13 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     protected $_containerAclTable;
     
     /**
+     * container content history backend
+     * 
+     * @var Tinebase_Backend_Sql
+     */
+    protected $_contentBackend = NULL;
+    
+    /**
      * don't clone. Use the singleton.
      *
      */
@@ -73,10 +80,29 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_Container;
+            self::$_instance = new Tinebase_Container();
         }
         
         return self::$_instance;
+    }
+    
+    /**
+     * get content backend
+     * 
+     * @return Tinebase_Backend_Sql
+     * 
+     * @todo move this to constructor when this no longer extends Tinebase_Backend_Sql_Abstract
+     */
+    protected function _getContentBackend()
+    {
+        if ($this->_contentBackend === NULL) {
+            $this->_contentBackend  = new Tinebase_Backend_Sql(array(
+                'modelName' => 'Tinebase_Model_ContainerContent', 
+                'tableName' => 'container_content',
+            ));
+        }
+        
+        return $this->_contentBackend;
     }
 
     /**
@@ -1257,53 +1283,102 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * increase content sequence of container
      * - should be increased for each create/update/delete operation in this container
      * 
-     * @param integer|Tinebase_Model_Container $_containerId
-     * @return integer number of updated rows
+     * @param integer|Tinebase_Model_Container $containerId
+     * @param string $action
+     * @param string $recordId
+     * @return integer new content seq
      * 
      * @todo clear cache? perhaps not, we have getContentSequence() for that
      */
-    public function increaseContentSequence($_containerId)
+    public function increaseContentSequence($containerId, $action = NULL, $recordId = NULL)
     {
-        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        $containerId = Tinebase_Model_Container::convertContainerIdToInt($containerId);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Increasing content seq of container ' . $containerId . ' ...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Increasing content seq of container ' . $containerId . ' ...');
         
-        $quotedIdentifier = $this->_db->quoteIdentifier('content_seq');
-        $data = array(
-            'content_seq' => new Zend_Db_Expr('IF(' . $quotedIdentifier . ' >= 1 ,' . $quotedIdentifier . ' + 1, 1)')
-        );
-        $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $containerId)
-        );
-        $result = $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
+        $newContentSeq = NULL;
+        try {
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+        
+            $quotedIdentifier = $this->_db->quoteIdentifier('content_seq');
+            $data = array(
+                'content_seq' => new Zend_Db_Expr('IF(' . $quotedIdentifier . ' >= 1 ,' . $quotedIdentifier . ' + 1, 1)')
+            );
+            $where = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $containerId)
+            );
+            $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
+            
+            $newContentSeq = $this->getContentSequence($containerId);
+            
+            // create new entry in container_content table
+            if ($action !== NULL && $recordId !== NULL) {
+                $contentRecord = new Tinebase_Model_ContainerContent(array(
+                    'container_id' => $containerId,
+                    'action'       => $action,
+                    'record_id'    => $recordId,
+                    'time'         => Tinebase_DateTime::now(),
+                    'content_seq'  => $newContentSeq,
+                ));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Creating ' . $action . ' content history record for record id ' . $recordId);
+                $this->_getContentBackend()->create($contentRecord);
+            }
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw $e;
+        }
+        
+        return $newContentSeq;
+    }
+    
+    /**
+     * get content history since given content_seq 
+     * 
+     * @param integer|Tinebase_Model_Container $containerId
+     * @param integer $lastContentSeq
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getContentHistory($containerId, $lastContentSeq = 0)
+    {
+        $containerId = Tinebase_Model_Container::convertContainerIdToInt($containerId);
+        $filter = new Tinebase_Model_ContainerContentFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals',  'value' => $containerId),
+            array('field' => 'content_seq',  'operator' => 'greater', 'value' => $lastContentSeq),
+        ));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'sort' => 'content_seq'
+        ));
+        $result = $this->_getContentBackend()->search($filter, $pagination);
+        return $result;
     }
 
     /**
      * get content sequences for single container or array of ids
      * 
-     * @param array|integer|Tinebase_Model_Container $_containerIds
-     * @return array with key = container id / value = content seq number
+     * @param array|integer|Tinebase_Model_Container $containerIds
+     * @return array with key = container id / value = content seq number | integer
      */
-    public function getContentSequence($_containerIds)
+    public function getContentSequence($containerIds)
     {
-        if (empty($_containerIds)) {
+        if (empty($containerIds)) {
             return NULL;
         }
         
-        if (is_array($_containerIds)) {
-            $containerIds = $_containerIds;
-        } else {
-            $containerIds = array(Tinebase_Model_Container::convertContainerIdToInt($_containerIds));
-        }
+        $containerIds = (! is_array($containerIds)) ? Tinebase_Model_Container::convertContainerIdToInt($containerIds) : $containerIds;
         
         $select = $this->_getSelect(array('id', 'content_seq'));
-        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $containerIds));
+        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', (array) $containerIds));
         $stmt = $this->_db->query($select);
         $result = $stmt->fetchAll(Zend_Db::FETCH_GROUP | Zend_Db::FETCH_COLUMN);
         foreach ($result as $key => $value) {
             $result[$key] = $value[0];
         }
         
-        return $result;
+        return (is_array($containerIds)) ? $result : $result[$containerIds];
     }
 }

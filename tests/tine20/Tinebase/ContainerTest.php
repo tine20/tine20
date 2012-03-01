@@ -475,6 +475,12 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $contentSeqs = $this->_instance->getContentSequence(array($sharedContainer->getId(), $initialContainer->getId()));
         $this->assertEquals(2, $contentSeqs[$sharedContainer->getId()], 'content seq mismatch: ' . print_r($contentSeqs, TRUE));
         $this->assertEquals(1, $contentSeqs[$initialContainer->getId()], 'content seq mismatch: ' . print_r($contentSeqs, TRUE));
+        
+        // check container content
+        $contentRecords = $this->_instance->getContentHistory($sharedContainer->getId());
+        $this->assertEquals(2, count($contentRecords));
+        $this->assertEquals($contact->getId(), $contentRecords->getFirstRecord()->record_id);
+        $this->assertEquals(Tinebase_Model_ContainerContent::ACTION_CREATE, $contentRecords->getFirstRecord()->action);
     }
     
     /**

@@ -85,7 +85,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = 'Calendar';
         $this->_modelName       = 'Calendar_Model_Event';
         $this->_backend         = new Calendar_Backend_Sql();
@@ -545,7 +546,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 // increase display container content sequence for all attendee of deleted event
                 if ($record->attendee instanceof Tinebase_Record_RecordSet) {
                     foreach ($record->attendee as $attender) {
-                        $this->_increaseDisplayContainerContentSequence($attender, $record->container_id);
+                        $this->_increaseDisplayContainerContentSequence($attender, $record, Tinebase_Model_ContainerContent::ACTION_DELETE);
                     }
                 }
                 
@@ -763,12 +764,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                             $attendee->status_authkey = Tinebase_Record_Abstract::generateUID();
                         }
                         $this->_backend->createAttendee($attendee);
-                        $this->_increaseDisplayContainerContentSequence($attendee, $persistentExceptionEvent->container_id);
+                        $this->_increaseDisplayContainerContentSequence($attendee, $persistentExceptionEvent, Tinebase_Model_ContainerContent::ACTION_CREATE);
                     }
                 }
                 
                 // @todo save notes and add a update note -> what was updated? -> modlog is also missing
-                
                 
                 $persistentExceptionEvent = $this->get($persistentExceptionEvent->getId());
                 
@@ -785,7 +785,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     $persistentExceptionEvent = $this->update($persistentExceptionEvent, $_checkBusyConflicts);
                 }
             }
-                
         }
         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -1287,7 +1286,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     
                     $attender = $this->_backend->createAttendee($attender);
                     $eventInstance->attendee->addRecord($attender);
-                    $this->_increaseDisplayContainerContentSequence($attender, $eventInstance->container_id);
+                    $this->_increaseDisplayContainerContentSequence($attender, $eventInstance, Tinebase_Model_ContainerContent::ACTION_CREATE);
                 }
                 
                 $exceptionAttender = Calendar_Model_Attender::getAttendee($eventInstance->attendee, $_attender);
@@ -1371,7 +1370,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
             $updatedAttender = $this->_backend->updateAttendee($updatedAttender);
-            $this->_increaseDisplayContainerContentSequence($updatedAttender, $event->container_id);
+            $this->_increaseDisplayContainerContentSequence($updatedAttender, $event);
 
             if ($currentAttender->status != $updatedAttender->status) {
                 $this->_touch($event, TRUE);
@@ -1429,7 +1428,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $idx = $currentAttendee->getIndexById($deleteAttenderId);
             if ($idx !== FALSE) {
                 $currentAttenderToDelete = $currentAttendee[$idx];
-                $this->_increaseDisplayContainerContentSequence($currentAttenderToDelete, $calendar->getId());
+                $this->_increaseDisplayContainerContentSequence($currentAttenderToDelete, $_event, Tinebase_Model_ContainerContent::ACTION_DELETE);
             }
         }
         
@@ -1440,11 +1439,16 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if ($idx !== FALSE) {
                 $currentAttender = $currentAttendee[$idx];
                 $this->_updateAttender($attender, $currentAttender, $calendar, $_isRescheduled);
+                if ($attender->displaycontainer_id !== $currentAttender->displaycontainer_id) {
+                    $this->_increaseDisplayContainerContentSequence($currentAttender, $_event, Tinebase_Model_ContainerContent::ACTION_DELETE);
+                    $this->_increaseDisplayContainerContentSequence($attender, $_event, Tinebase_Model_ContainerContent::ACTION_CREATE);
+                } else {
+                    $this->_increaseDisplayContainerContentSequence($attender, $_event);
+                }
             } else {
                 $this->_createAttender($attender, $calendar);
+                $this->_increaseDisplayContainerContentSequence($attender, $_event, Tinebase_Model_ContainerContent::ACTION_CREATE);
             }
-            
-            $this->_increaseDisplayContainerContentSequence($attender, $calendar->getId());
         }
     }
 
@@ -1496,17 +1500,18 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     /**
      * increases content sequence of attender display container
      * 
-     * @param Calendar_Model_Attender $_attender
-     * @param integer $_eventContainerId
+     * @param Calendar_Model_Attender $attender
+     * @param Calendar_Model_Event $event
+     * @param string $action
      */
-    protected function _increaseDisplayContainerContentSequence($_attender, $_eventContainerId)
+    protected function _increaseDisplayContainerContentSequence($attender, $event, $action = Tinebase_Model_ContainerContent::ACTION_UPDATE)
     {
-        if ($_eventContainerId === $_attender->displaycontainer_id || empty($_attender->displaycontainer_id)) {
+        if ($event->container_id === $attender->displaycontainer_id || empty($attender->displaycontainer_id)) {
             // no need to increase sequence
             return; 
         }
         
-        Tinebase_Container::getInstance()->increaseContentSequence($_attender->displaycontainer_id);
+        Tinebase_Container::getInstance()->increaseContentSequence($attender->displaycontainer_id, $action, $event->getId());
     }
     
     /**

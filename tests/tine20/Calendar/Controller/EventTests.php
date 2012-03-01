@@ -807,7 +807,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->_controller->delete($persistentEvent->getId());
         
         $contentSeq = Tinebase_Container::getInstance()->getContentSequence($this->_testCalendar);
-        $this->assertEquals(2, $contentSeq[$this->_testCalendar->getId()], 'container content seq should be increased 2 times!');
+        $this->assertEquals(2, $contentSeq, 'container content seq should be increased 2 times!');
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_controller->get($persistentEvent->getId());

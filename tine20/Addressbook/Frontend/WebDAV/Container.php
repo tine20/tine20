@@ -37,7 +37,7 @@ class Addressbook_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
         $ctags = Tinebase_Container::getInstance()->getContentSequence($this->_container);
         
         $properties = array(
-            '{http://calendarserver.org/ns/}getctag' => $ctags[$this->_container->getId()],
+            '{http://calendarserver.org/ns/}getctag' => $ctags,
             'id'                                     => $this->_container->getId(),
             'uri'                                    => $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name,
             '{DAV:}resource-id'                      => 'urn:uuid:' . $this->_container->getId(),

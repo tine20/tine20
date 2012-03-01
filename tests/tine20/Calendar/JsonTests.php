@@ -75,9 +75,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->_assertJsonEvent($eventData, $loadedEventData, 'failed to create/load event');
         
         $contentSeqAfter = Tinebase_Container::getInstance()->getContentSequence($scleverDisplayContainerId);
-        $this->assertEquals($contentSeqBefore[$scleverDisplayContainerId] + 1, $contentSeqAfter[$scleverDisplayContainerId],
-        	'content sequence of display container should be increased by 1:' . print_r($contentSeqAfter, TRUE));
-        $this->assertEquals($contentSeqAfter[$scleverDisplayContainerId], Tinebase_Container::getInstance()->get($scleverDisplayContainerId)->content_seq);
+        $this->assertEquals($contentSeqBefore + 1, $contentSeqAfter,
+            'content sequence of display container should be increased by 1:' . $contentSeqAfter);
+        $this->assertEquals($contentSeqAfter, Tinebase_Container::getInstance()->get($scleverDisplayContainerId)->content_seq);
         
         return $loadedEventData;
     }

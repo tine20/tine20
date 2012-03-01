@@ -426,7 +426,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 $this->doSendNotifications($createdRecord, $this->_currentAccount, 'created');
             }
             
-            $this->_increaseContainerContentSequence($createdRecord);
+            $this->_increaseContainerContentSequence($createdRecord, Tinebase_Model_ContainerContent::ACTION_CREATE);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
@@ -547,11 +547,12 @@ abstract class Tinebase_Controller_Record_Abstract
      * increase container content sequence
      * 
      * @param Tinebase_Record_Interface $_record
+     * @param string $action
      */
-    protected function _increaseContainerContentSequence(Tinebase_Record_Interface $_record)
+    protected function _increaseContainerContentSequence(Tinebase_Record_Interface $record, $action = NULL)
     {
-        if ($_record->has('container_id')) {
-            Tinebase_Container::getInstance()->increaseContentSequence($_record->container_id);
+        if ($record->has('container_id')) {
+            Tinebase_Container::getInstance()->increaseContentSequence($record->container_id, $action, $record->getId());
         }
     }
     
@@ -609,7 +610,12 @@ abstract class Tinebase_Controller_Record_Abstract
                 $this->doSendNotifications($updatedRecordWithRelatedData, $this->_currentAccount, 'changed', $currentRecord);
             }
             
-            $this->_increaseContainerContentSequence($updatedRecord);
+            if ($_record->has('container_id') && $currentRecord->container_id !== $updatedRecord->container_id) {
+                $this->_increaseContainerContentSequence($currentRecord, Tinebase_Model_ContainerContent::ACTION_DELETE);
+                $this->_increaseContainerContentSequence($updatedRecord, Tinebase_Model_ContainerContent::ACTION_CREATE);
+            } else {
+                $this->_increaseContainerContentSequence($updatedRecord, Tinebase_Model_ContainerContent::ACTION_UPDATE);
+            }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
@@ -735,7 +741,6 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-
     }
 
     /**
@@ -747,7 +752,6 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterUpdate($_updatedRecord, $_record)
     {
-
     }
 
     /**
@@ -991,11 +995,6 @@ abstract class Tinebase_Controller_Record_Abstract
             $_containerProperty => $targetContainerId
         ));
         
-        foreach ($updateResult['results'] as $record) {
-            // only increase original container content seq of successfully updated records
-            $this->_increaseContainerContentSequence($records->getById($record->getId()));
-        }
-        
         return $idsToMove;
     }
 
@@ -1020,7 +1019,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_backend->delete($_record);
         }
         
-        $this->_increaseContainerContentSequence($_record);
+        $this->_increaseContainerContentSequence($_record, Tinebase_Model_ContainerContent::ACTION_DELETE);
     }
 
     /**

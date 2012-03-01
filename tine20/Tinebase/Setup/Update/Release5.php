@@ -331,4 +331,83 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->setTableVersion('tags', '4');
         $this->setApplicationVersion('Tinebase', '5.9');
     }
+
+    /**
+    * update to 5.10
+    * - add container_content table
+    */
+    public function update_9()
+    {
+        $declaration = new Setup_Backend_Schema_Table_Xml('
+        <table>
+            <name>container_content</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>container_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>record_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>action</name>
+                    <type>text</type>
+                    <length>16</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>content_seq</name>
+                    <type>integer</type>
+                    <length>64</length>
+                </field>
+                <field>
+                    <name>time</name>
+                    <type>datetime</type>
+                    <notnull>true</notnull>
+                </field>
+
+                <index>
+                    <name>container_id-content_seq-record_id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>container_id</name>
+                    </field>
+                    <field>
+                        <name>content_seq</name>
+                    </field>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>container_content::container_id--container::id</name>
+                    <field>
+                        <name>container_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>
+            </declaration>
+        </table>
+        ');
+        
+        $this->_backend->createTable($declaration, 'Tinebase', 'container_content');
+        $this->setApplicationVersion('Tinebase', '5.10');
+    }
 }
