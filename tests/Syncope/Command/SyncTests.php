@@ -86,7 +86,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(Syncope_Command_Sync::STATUS_OBJECT_NOT_FOUND, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(Syncope_Command_Sync::STATUS_FOLDER_HIERARCHY_HAS_CHANGED, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
     }
     
     /**
@@ -116,7 +116,7 @@ class Syncope_Command_SyncTests extends Syncope_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(Syncope_Command_Sync::STATUS_OBJECT_NOT_FOUND, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(Syncope_Command_Sync::STATUS_FOLDER_HIERARCHY_HAS_CHANGED, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
     }
     
     /**

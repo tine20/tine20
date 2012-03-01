@@ -370,12 +370,7 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                 $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
                 $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey', 0));
                 $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $collectionData['collectionId']));
-                /**
-                 * i would expect to send STATUS_FOLDER_HIERARCHY_HAS_CHANGED but by reading the source code of Android I found out
-                 * that android triggers the FolderSync only on STATUS_OBJECT_NOT_FOUND
-                 */
-                #$collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_FOLDER_HIERARCHY_HAS_CHANGED));
-                $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_OBJECT_NOT_FOUND));
+                $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_FOLDER_HIERARCHY_HAS_CHANGED));
 
             // invalid synckey provided
             } elseif (! ($collectionData['syncState'] instanceof Syncope_Model_ISyncState)) {
@@ -385,7 +380,6 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                 $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $collectionData['collectionId']));
                 $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_INVALID_SYNC_KEY));
                 
-
             // initial sync
             } elseif ($collectionData['syncState']->counter === 0) {
                 $collectionData['syncState']->counter++;
