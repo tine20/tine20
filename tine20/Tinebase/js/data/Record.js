@@ -223,7 +223,7 @@ Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
         if (! Ext.isFunction(record.getMeta)) {
             throw new Ext.Error('only records of type Tinebase.data.Record could be added');
         }
-        var appName = record.getMeta('appName')
+        var appName = record.getMeta('appName'),
             modelName = record.getMeta('modelName');
             
         if (! appName && modelName) {

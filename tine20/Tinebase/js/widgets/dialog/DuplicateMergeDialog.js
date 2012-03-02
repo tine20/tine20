@@ -46,7 +46,7 @@ Tine.widgets.dialog.DuplicateMergeDialog = Ext.extend(Ext.FormPanel, {
             this.app = Tine.Tinebase.appMgr.get(this.appName);
         }
 
-        this.recordClass = Tine[this.appName].Model[this.modelName];
+        this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.appName, this.modelName);
         this.selections = Ext.decode(this.selections);
         this.records = [];
         
