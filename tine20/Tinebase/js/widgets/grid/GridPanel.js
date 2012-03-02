@@ -264,10 +264,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     initComponent: function(){
         // init some translations
-        this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
-        this.i18nRecordsName = this.app.i18n._hidden(this.recordClass.getMeta('recordsName'));
-        this.i18nContainerName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1);
-        this.i18nContainersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
+        this.i18nRecordName = this.recordClass.getRecordName();
+        this.i18nRecordsName = this.recordClass.getRecordsName();
+        this.i18nContainerName = this.recordClass.getContainerName();
+        this.i18nContainersName = this.recordClass.getContainersName();
         this.i18nEmptyText = this.i18nEmptyText || String.format(Tine.Tinebase.translation._("No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, this.i18nContainersName);
 
         this.i18nEditActionText = this.i18nEditActionText ? this.i18nEditActionText : [String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 1), this.i18nRecordName), String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 2), this.i18nRecordsName)];
@@ -379,7 +379,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             handler: this.onEditInNewWindow,
             iconCls: 'action_edit',
             scope: this,
-            allowMultiple: true
+            allowMultiple: this.multipleEdit
         });
 
         this.action_editCopyInNewWindow = new Ext.Action({

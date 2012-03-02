@@ -69,7 +69,7 @@ Tine.Admin.Model.User = Tine.Tinebase.data.Record.create(Tine.Admin.Model.UserAr
     modelName: 'User',
     idProperty: 'accountId',
     titleProperty: 'accountDisplayName',
-    // ngettext('User', 'Users', n);
+    // ngettext('User', 'Users', n); gettext('Users');
     recordName: 'User',
     recordsName: 'Users'
 });

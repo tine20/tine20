@@ -468,6 +468,16 @@ msgstr "Geografischer Ort"
 msgid "Export Contact"
 msgstr "Kontakt exportieren"
 
+#: js/ContactGrid.js:153
+msgid "Export {0}"
+msgstr "{0} exportieren"
+
+#: js/ContactGrid.js:154
+msgid "Export {0}"
+msgid_plural "Export {0}"
+msgstr[0] "{0} exportieren"
+msgstr[1] "{0} exportieren"
+
 #: js/ContactGrid.js:160
 msgid "Export as PDF"
 msgstr "Als Pdf exportieren"

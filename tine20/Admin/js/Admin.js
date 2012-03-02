@@ -13,103 +13,103 @@
 Ext.ns('Tine.Admin');
 
 Tine.Admin = function () {
-	
-	/**
-	 * builds the admin applications tree
-	 */
+    
+    /**
+     * builds the admin applications tree
+     */
     var getInitialTree = function (translation) { 
-    	
-    	return [{
-	        text: translation.gettext('User'),
-	        cls: 'treemain',
-	        iconCls: 'admin-node-user',
-	        allowDrag: false,
-	        allowDrop: true,
-	        id: 'accounts',
-	        icon: false,
-	        children: [],
-	        leaf: null,
-	        expanded: true,
-	        dataPanelType: 'accounts',
-	        viewRight: 'accounts'
-	    }, {
-	        text: translation.gettext('Groups'),
-	        cls: 'treemain',
-	        iconCls: 'admin-node-groups',
-	        allowDrag: false,
-	        allowDrop: true,
-	        id: 'groups',
-	        icon: false,
-	        children: [],
-	        leaf: null,
-	        expanded: true,
-	        dataPanelType: 'groups', 
-	        viewRight: 'accounts'
-	    }, {
-	        text: translation.gettext('Roles'),
-	        cls: "treemain",
-	        iconCls: 'action_permissions',
-	        allowDrag: false,
-	        allowDrop: true,
-	        id: "roles",
-	        children: [],
-	        leaf: null,
-	        expanded: true,
-	        dataPanelType: "roles",
-	        viewRight: 'roles'
-	    }, {
-	        text: translation.gettext('Computers'),
-	        cls: 'treemain',
-	        iconCls: 'admin-node-computers',
-	        allowDrag: false,
-	        allowDrop: true,
-	        id: 'computers',
-	        icon: false,
-	        children: [],
-	        leaf: null,
-	        expanded: true,
-	        dataPanelType: 'computers', 
-	        viewRight: 'computers'
-	    }, {
-	        text: translation.gettext('Applications'),
-			cls: "treemain",
-	        iconCls: 'admin-node-applications',
-			allowDrag: false,
-			allowDrop: true,
-			id: "applications",
-			icon: false,
-			children: [],
-			leaf: null,
-			expanded: true,
-			dataPanelType: "applications",
-			viewRight: 'apps'
-		}, {
-			text: translation.gettext('Access Log'),
-			cls: "treemain",
-	        iconCls: 'admin-node-accesslog',
-			allowDrag: false,
-			allowDrop: true,
-			id: "accesslog",
-			icon: false,
-			children: [],
-			leaf: null,
-			expanded: true,
-			dataPanelType: "accesslog",
-			viewRight: 'access_log'
-		}, {
-	        text: translation.gettext('Shared Tags'),
-	        cls: "treemain",
-	        iconCls: 'action_tag',
-	        allowDrag: false,
-	        allowDrop: true,
-	        id: "sharedtags",
-	        //icon :false,
-	        children: [],
-	        leaf: null,
-	        expanded: true,
-	        dataPanelType: "sharedtags",
-	        viewRight: 'shared_tags'
-	    }, {
+        
+        return [{
+            text: translation.ngettext('User', 'Users', 50),
+            cls: 'treemain',
+            iconCls: 'admin-node-user',
+            allowDrag: false,
+            allowDrop: true,
+            id: 'accounts',
+            icon: false,
+            children: [],
+            leaf: null,
+            expanded: true,
+            dataPanelType: 'accounts',
+            viewRight: 'accounts'
+        }, {
+            text: translation.gettext('Groups'),
+            cls: 'treemain',
+            iconCls: 'admin-node-groups',
+            allowDrag: false,
+            allowDrop: true,
+            id: 'groups',
+            icon: false,
+            children: [],
+            leaf: null,
+            expanded: true,
+            dataPanelType: 'groups', 
+            viewRight: 'accounts'
+        }, {
+            text: translation.gettext('Roles'),
+            cls: "treemain",
+            iconCls: 'action_permissions',
+            allowDrag: false,
+            allowDrop: true,
+            id: "roles",
+            children: [],
+            leaf: null,
+            expanded: true,
+            dataPanelType: "roles",
+            viewRight: 'roles'
+        }, {
+            text: translation.gettext('Computers'),
+            cls: 'treemain',
+            iconCls: 'admin-node-computers',
+            allowDrag: false,
+            allowDrop: true,
+            id: 'computers',
+            icon: false,
+            children: [],
+            leaf: null,
+            expanded: true,
+            dataPanelType: 'computers', 
+            viewRight: 'computers'
+        }, {
+            text: translation.gettext('Applications'),
+            cls: "treemain",
+            iconCls: 'admin-node-applications',
+            allowDrag: false,
+            allowDrop: true,
+            id: "applications",
+            icon: false,
+            children: [],
+            leaf: null,
+            expanded: true,
+            dataPanelType: "applications",
+            viewRight: 'apps'
+        }, {
+            text: translation.gettext('Access Log'),
+            cls: "treemain",
+            iconCls: 'admin-node-accesslog',
+            allowDrag: false,
+            allowDrop: true,
+            id: "accesslog",
+            icon: false,
+            children: [],
+            leaf: null,
+            expanded: true,
+            dataPanelType: "accesslog",
+            viewRight: 'access_log'
+        }, {
+            text: translation.gettext('Shared Tags'),
+            cls: "treemain",
+            iconCls: 'action_tag',
+            allowDrag: false,
+            allowDrop: true,
+            id: "sharedtags",
+            //icon :false,
+            children: [],
+            leaf: null,
+            expanded: true,
+            dataPanelType: "sharedtags",
+            viewRight: 'shared_tags'
+        }, {
             text: translation.gettext('Containers'),
             cls: "treemain",
             iconCls: 'admin-node-containers',
@@ -134,14 +134,14 @@ Tine.Admin = function () {
             dataPanelType: "customfields",
             viewRight: 'customfields'
         }];
-	};
+    };
 
-	/**
+    /**
      * creates the admin menu tree
      *
      */
     var getAdminTree = function () {
-    	
+        
         var translation = new Locale.Gettext();
         translation.textdomain('Admin');
         
@@ -179,25 +179,25 @@ Tine.Admin = function () {
         var initialTree = getInitialTree(translation);
         
         for (var i = 0; i < initialTree.length; i += 1) {
-        	var node = new Ext.tree.AsyncTreeNode(initialTree[i]);
-        	
-        	// check view right
-        	if (initialTree[i].viewRight && !Tine.Tinebase.common.hasRight('view', 'Admin', initialTree[i].viewRight)) {
+            var node = new Ext.tree.AsyncTreeNode(initialTree[i]);
+            
+            // check view right
+            if (initialTree[i].viewRight && !Tine.Tinebase.common.hasRight('view', 'Admin', initialTree[i].viewRight)) {
                 node.disabled = true;
-        	}
-        	
+            }
+            
             treeRoot.appendChild(node);
         }
         
         treePanel.on('click', function (node, event) {
-        	
-        	if (node === null|| node.disabled) {
-        		return false;
-        	}
-        	
-        	var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
+            
+            if (node === null|| node.disabled) {
+                return false;
+            }
+            
+            var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
-        	switch (node.attributes.dataPanelType) {
+            switch (node.attributes.dataPanelType) {
             case 'accesslog':
                 Tine.Admin.accessLog.show();
                 break;
@@ -211,18 +211,18 @@ Tine.Admin = function () {
                 Tine.Admin.sambaMachine.show();
                 break;
             case 'applications':
-				Tine.Admin.Applications.Main.show();
+                Tine.Admin.Applications.Main.show();
                 break;
             case 'sharedtags':
-				Tine.Admin.Tags.Main.show();
+                Tine.Admin.Tags.Main.show();
                 break;
             case 'roles':
-				Tine.Admin.Roles.Main.show();
+                Tine.Admin.Roles.Main.show();
                 break;
             case 'containers':
                 Tine.Admin.container.show();
                 break;
-           	case 'customfields':
+               case 'customfields':
                 Tine.Admin.customfield.show();
                 break;
             }

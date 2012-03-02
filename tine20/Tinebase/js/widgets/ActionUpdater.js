@@ -137,7 +137,7 @@
             action.setDisabled(! (grantCondition && nCondition));
         }
                  
-        if(action.initialConfig.requiredMultipleGrant) {
+        if (action.initialConfig.requiredMultipleGrant) {
             if(records && records.length > 1) {
                 var right = action.initialConfig.requiredMultipleGrant.split('_');
                 if(right.length == 2) {
@@ -148,7 +148,7 @@
             }
         }
         
-        if (action.initialConfig.singularText && action.initialConfig.pluralText && action.initialConfig.translationObject) {
+        if (action.initialConfig.allowMultiple && action.initialConfig.singularText && action.initialConfig.pluralText && action.initialConfig.translationObject) {
             var text = action.initialConfig.translationObject.n_(action.initialConfig.singularText, action.initialConfig.pluralText, records.length);
             action.setText(text);
         }
