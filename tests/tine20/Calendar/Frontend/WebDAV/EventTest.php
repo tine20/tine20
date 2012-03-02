@@ -526,7 +526,17 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
     {
         $vcalendar = file_get_contents($_filename);
         
-        $vcalendar = preg_replace('/l.kneschke@metaway\n s.de/', Tinebase_Core::getUser()->accountEmailAddress, $vcalendar);
+        $vcalendar = preg_replace(
+            array(
+                '/l.kneschke@metaway\n s.de/', 
+                '/pwulf\n @tine20.org/'
+            ), 
+            array(
+                Tinebase_Core::getUser()->accountEmailAddress, 
+                array_value('pwulf', Zend_Registry::get('personas'))->accountEmailAddress
+            ), 
+            $vcalendar
+        );
         
         return $vcalendar;
     }
