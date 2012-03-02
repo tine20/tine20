@@ -146,8 +146,8 @@ Tine.widgets.dialog.DuplicateMergeDialog = Ext.extend(Ext.FormPanel, {
      * @param {} failure
      */
     onFailure: function(step, failure) {            
-        if(step == 'remove') {
-            Ext.MessageBox.alert(_('Remove Duplicate Failed'), String.format(_('The merge succeeded, but the duplicate {0} could not be removed'), this.recordClass.getRecordName()), function() { Tine.Tinebase.ExceptionHandler.handleRequestException(failure); this.onCancel()}, this);
+        if(step == 'update') {
+             Tine.Tinebase.ExceptionHandler.handleRequestException(failure, this.onCancel, this);
         } else {
             Ext.MessageBox.alert(_('Merge Failed'), String.format(_('The merge failed. Both {0} haven\'t been touched.'), this.recordClass.getRecordsName()), function() { Tine.Tinebase.ExceptionHandler.handleRequestException(failure); this.onCancel()}, this);                    
         }

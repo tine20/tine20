@@ -122,21 +122,29 @@ Tine.Tinebase.ExceptionHandler = function() {
      * 
      * @param {Tine.Exception|Object} exception
      */
-    var handleRequestException = function(exception) {
+    var handleRequestException = function(exception, callback, callbackScope) {
          if (! exception.code && exception.responseText) {
             // we need to decode the exception first
             var response = Ext.util.JSON.decode(exception.responseText);
             exception = response.data;
         }
+        
+        var defaults = {
+            buttons: Ext.Msg.OK,
+            icon: Ext.MessageBox.WARNING,
+            fn: callback,
+            scope: callbackScope
+        };
     
+        if(!callback) callback = Ext.emptyFn;
+        if(!callbackScope) callbackScope = this;
+        
         switch (exception.code) {
             // not authorised
             case 401:
-                Ext.MessageBox.show({
+                Ext.MessageBox.show(Ext.apply(defaults, {
                     title: _('Authorisation Required'), 
                     msg: _('Your session timed out. You need to login again.'),
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.WARNING,
                     fn: function() {
                         var redirect = (Tine.Tinebase.registry.get('redirectUrl'));
                         if (redirect && redirect != '') {
@@ -145,59 +153,51 @@ Tine.Tinebase.ExceptionHandler = function() {
                             window.location.reload();
                         }
                     }
-                });
+                }));
                 break;
             
             // insufficient rights
             case 403:
-                Ext.MessageBox.show({
+                Ext.MessageBox.show(Ext.apply(defaults, {
                     title: _('Insufficient Rights'), 
                     msg: _('Sorry, you are not permitted to perform this action'),
-                    buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.ERROR
-                });
+                }));
                 break;
             
             // not found
             case 404:
-                Ext.MessageBox.show({
+                Ext.MessageBox.show(Ext.apply(defaults, {
                     title: _('Not Found'), 
                     msg: _('Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view.'),
-                    buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.ERROR
-                });
+                }));
                 break;
             
             // concurrency conflict
             case 409:
-                Ext.MessageBox.show({
-                    title: _('Concurrent Updates'), 
-                    msg: _('Someone else saved this record while you where editing the data. You need to reload and make your changes again.'),
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.WARNING
-                });
+                Ext.MessageBox.show(Ext.apply(defaults, {
+                    title: _('Concurrent Updates'),
+                    msg: _('Someone else saved this record while you where editing the data. You need to reload and make your changes again.')
+                }));
                 break;
             
             // Service Unavailable!
             // Use this error code for generic problems like misconfig we don't want to see bugreports for
             case 503:
-                Ext.MessageBox.show({
+                Ext.MessageBox.show(Ext.apply(defaults, {
                     title: _('Service Unavailable'), 
-                    msg: _('The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator.'),
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.WARNING
-                });
+                    msg: _('The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator.')
+                }));
                 break;
                 
             // invalid record exception
             case 505:
                 var message = exception.message ? '<br /><b>' + _('Server Message:') + '</b><br />' + exception.message : '';
-                Ext.MessageBox.show({
+                Ext.MessageBox.show(Ext.apply(defaults, {
                     title: _('Invalid Data'),
-                    msg: _('Your input data is not valid. Please provide valid data.') + message,
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.WARNING
-                });
+                    msg: _('Your input data is not valid. Please provide valid data.') + message
+                }));
                 break;
             // server communication loss
             case 510:
@@ -213,42 +213,34 @@ Tine.Tinebase.ExceptionHandler = function() {
                 
             // transaction aborted / timeout
             case 520:
-                Ext.MessageBox.show({
+                Ext.MessageBox.show(Ext.apply(defaults, {
                     title: _('Timeout'), 
-                    msg: _('Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator.'),
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.WARNING
-                });
+                    msg: _('Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator.')
+                }));
                 break;
                 
             // empty response
             case 540:
-                Ext.MessageBox.show({
+                Ext.MessageBox.show(Ext.apply(defaults, {
                     title: _('No Response'), 
-                    msg: _('Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator.'),
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.WARNING
-                });
+                    msg: _('Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator.')
+                }));
                 break;
             
             // memory exhausted
             case 550: 
-                Ext.MessageBox.show({
+                Ext.MessageBox.show(Ext.apply(defaults, {
                     title: _('Out of Resources'), 
-                    msg: _('Sorry, the Server stated a "memory exhausted" condition. Please contact your administrator.'),
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.WARNING
-                });
+                    msg: _('Sorry, the Server stated a "memory exhausted" condition. Please contact your administrator.')
+                }));
                 break;
                 
             // user in no role
             case 610:
-            Ext.MessageBox.show({
+            Ext.MessageBox.show(Ext.apply(defaults, {
                     title: _('No Role Memberships'), 
-                    msg: _('Your user account has no role memberships. Please contact your administrator.'),
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.WARNING
-                });
+                    msg: _('Your user account has no role memberships. Please contact your administrator.')
+                }));
                 break;
                 
             // generic failure -> notify developers
