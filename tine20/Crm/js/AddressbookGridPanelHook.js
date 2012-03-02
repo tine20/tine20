@@ -28,12 +28,14 @@ Tine.Crm.AddressbookGridPanelHook = function(config) {
     Tine.log.info('initialising crm addressbook hooks');
     Ext.apply(this, config);
     
+    var text = this.app.i18n.n_hidden(Tine.Crm.Model.Lead.prototype.recordName, Tine.Crm.Model.Lead.prototype.recordsName, 1);
+    
     // NOTE: due to the action updater this action is bound the the adb grid only!
     this.newLeadAction = new Ext.Action({
         actionType: 'new',
         requiredGrant: 'readGrant',
         allowMultiple: true,
-        text: this.app.i18n._('Lead'),
+        text: text,
         iconCls: this.app.getIconCls(),
         scope: this,
         handler: this.onNewLead,
@@ -47,7 +49,7 @@ Tine.Crm.AddressbookGridPanelHook = function(config) {
         actionType: 'add',
         requiredGrant: 'readGrant',
         allowMultiple: true,
-        text: this.app.i18n._('Lead'),
+        text: text,
         iconCls: this.app.getIconCls(),
         scope: this,
         handler: this.onAddLead,

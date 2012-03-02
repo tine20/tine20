@@ -107,6 +107,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             }, this);
         }, this);
 
+        this.interRecord.set('container_id', {account_grants: {editGrant: true}});
         this.interRecord.dirty = false;
         this.interRecord.modified = {};
         
@@ -201,7 +202,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                             this.setValue('');
                             button.set({title: _('Undo delete value from all selected records')});
                         }
-                        this.fireEvent('blur',this);
+                        this.fireEvent('blur', this);
                     }, this);
                     
                     this.el.insertSibling(button);

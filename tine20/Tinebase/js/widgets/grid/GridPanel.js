@@ -369,7 +369,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         this.action_editInNewWindow = new Ext.Action({
             requiredGrant: 'readGrant',
-            requiredMultipleGrant: this.multipleEditRequiredRight,
+            requiredMultipleGrant: 'editGrant',
+            requiredMultipleRight: this.multipleEditRequiredRight,
             text: this.i18nEditActionText ? this.i18nEditActionText[0] : String.format(_('Edit {0}'), this.i18nRecordName),
             singularText: this.i18nEditActionText ? this.i18nEditActionText[0] : String.format(_('Edit {0}'), this.i18nRecordName),
             pluralText:  this.i18nEditActionText ? this.i18nEditActionText[1] : String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 1), this.i18nRecordsName),
@@ -1051,7 +1052,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
 
             this.newRecordAction = new Ext.Action({
-                text: this.app.i18n._('New...'),
+                text: _('New...'),
                 hidden: ! this.newRecordMenu.items.length,
                 iconCls: this.app.getIconCls(),
                 scope: this,
@@ -1070,7 +1071,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
 
             this.addToRecordAction = new Ext.Action({
-                text: this.app.i18n._('Add to...'),
+                text: _('Add to...'),
                 hidden: ! this.addToRecordMenu.items.length,
                 iconCls: this.app.getIconCls(),
                 scope: this,

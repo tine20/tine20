@@ -26,10 +26,12 @@ Ext.ns('Tine.Projects');
 Tine.Projects.AddressbookGridPanelHook = function(config) {
     Tine.log.info('initialising projects addressbook hooks');
     Ext.apply(this, config);
+
+    var text = this.app.i18n.n_hidden(Tine.Projects.Model.Project.prototype.recordName, Tine.Projects.Model.Project.prototype.recordsName, 1);
     
     this.addProjectAction = new Ext.Action({
         requiredGrant: 'readGrant',
-        text: this.app.i18n._('Project'),
+        text: text,
         iconCls: this.app.getIconCls(),
         scope: this,
         handler: this.onAddProject,
@@ -41,7 +43,7 @@ Tine.Projects.AddressbookGridPanelHook = function(config) {
     
     this.newProjectAction = new Ext.Action({
         requiredGrant: 'readGrant',
-        text: this.app.i18n._('Project'),
+        text: text,
         iconCls: this.app.getIconCls(),
         scope: this,
         handler: this.onNewProject,

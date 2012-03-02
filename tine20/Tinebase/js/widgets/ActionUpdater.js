@@ -136,21 +136,37 @@
         if (action.initialConfig.requiredGrant && action.initialConfig.requiredGrant != 'addGrant') {
             action.setDisabled(! (grantCondition && nCondition));
         }
-                 
-        if (action.initialConfig.requiredMultipleGrant) {
-            if(records && records.length > 1) {
-                var right = action.initialConfig.requiredMultipleGrant.split('_');
-                if(right.length == 2) {
-                    action.setDisabled(!Tine.Tinebase.common.hasRight(right[0], action.initialConfig.scope.app.name, right[1]));
-                } else {
-                    Tine.log.debug('multiple edit right was not properly applied');
+
+        if(nCondition) {
+            if(action.initialConfig.requiredMultipleRight) {
+                if(records && records.length > 1) {
+                    var right = action.initialConfig.requiredMultipleRight.split('_');
+                    if(right.length == 2) {
+                        action.setDisabled(!Tine.Tinebase.common.hasRight(right[0], action.initialConfig.scope.app.name, right[1]));
+                    } else {
+                        Tine.log.debug('multiple edit right was not properly applied');
+                    }
                 }
             }
-        }
-        
-        if (action.initialConfig.allowMultiple && action.initialConfig.singularText && action.initialConfig.pluralText && action.initialConfig.translationObject) {
-            var text = action.initialConfig.translationObject.n_(action.initialConfig.singularText, action.initialConfig.pluralText, records.length);
-            action.setText(text);
+    
+            if(action.initialConfig.requiredMultipleGrant) {
+                var hasRight = true;
+                if(Ext.isArray(records)) {
+                    Ext.each(records, function(record) {
+                        if(record.get('container_id')) {
+                            hasRight = (hasRight && (record.get('container_id').account_grants[action.initialConfig.requiredMultipleGrant]));
+                        } else {
+                            return false;
+                        }
+                    }, this);
+                    action.setDisabled(! hasRight);
+                }
+            }
+            
+            if (action.initialConfig.singularText && action.initialConfig.pluralText && action.initialConfig.translationObject) {
+                var text = action.initialConfig.translationObject.n_(action.initialConfig.singularText, action.initialConfig.pluralText, records.length);
+                action.setText(text);
+            }
         }
     },
     
