@@ -23,7 +23,7 @@ Tine.Tinebase.widgets.keyfield.Store = function(config) {
     config.keyFieldConfig = config.app.getRegistry().get('config')[config.keyFieldName];
     
     // init data / translate values
-    var data = config.keyFieldConfig && config.keyFieldConfig.value && Ext.isArray(config.keyFieldConfig.value.records) ? config.keyFieldConfig.value.records : [];
+    var data = config.keyFieldConfig && config.keyFieldConfig.value && config.keyFieldConfig.value.records.length ? config.keyFieldConfig.value.records : [];
     Ext.each(data, function(d) {
         d.i18nValue = d.value ? config.app.i18n._hidden(d.value) : "";
     });
@@ -97,5 +97,5 @@ Tine.Tinebase.widgets.keyfield.StoreMgr = function(){
             
             return stores[key];
         }
-    }
+    };
 }();
