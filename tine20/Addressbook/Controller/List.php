@@ -189,10 +189,6 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     public function createOrUpdateByGroup(Tinebase_Model_Group $group)
     {
-        if (empty($group->container_id)) {
-            $group->container_id = $this->_getDefaultInternalAddressbook();
-        }
-        
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($group->toArray(), TRUE));
         
         try {
@@ -221,8 +217,8 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             $list->description  = $group->description;
             $list->email        = $group->email;
             $list->type         = Addressbook_Model_List::LISTTYPE_GROUP;
-            $list->container_id = $group->container_id;
-            $list->members      = $this->_getContactIds($group->members);
+            $list->container_id = (empty($group->container_id)) ? $this->_getDefaultInternalAddressbook() : $group->container_id;
+            $list->members      = (isset($group->members)) ? $this->_getContactIds($group->members) : array();
         
             // add modlog info
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($list, 'update');
@@ -230,24 +226,38 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             $list = $this->_backend->update($list);
         
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $list = new Addressbook_Model_List(array(
-                'name'          => $group->name,
-                'description'   => $group->description,
-                'email'         => $group->email,
-                'type'          => Addressbook_Model_List::LISTTYPE_GROUP,
-                'container_id'  => $group->container_id,
-                'members'       => $this->_getContactIds($group->members)
-            ));
-        
-            // add modlog info
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($list, 'create');
-        
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Add new list ' . $group->name);
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($list->toArray(), TRUE));
-        
-            $list = $this->_backend->create($list);
+            $list = $this->createByGroup($group);
         }
+        
+        return $list;
+    }
+    
+    /**
+     * create new list by group
+     * 
+     * @param Tinebase_Model_Group $group
+     * @return Addressbook_Model_List
+     */
+    public function createByGroup($group)
+    {
+        $list = new Addressbook_Model_List(array(
+            'name'          => $group->name,
+            'description'   => $group->description,
+            'email'         => $group->email,
+            'type'          => Addressbook_Model_List::LISTTYPE_GROUP,
+            'container_id'  => (empty($group->container_id)) ? $this->_getDefaultInternalAddressbook() : $group->container_id,
+            'members'       => (isset($group->members)) ? $this->_getContactIds($group->members) : array(),
+        ));
+        
+        // add modlog info
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($list, 'create');
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Add new list ' . $group->name);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' ' . print_r($list->toArray(), TRUE));
+        
+        $list = $this->_backend->create($list);
         
         return $list;
     }

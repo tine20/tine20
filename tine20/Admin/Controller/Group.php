@@ -103,7 +103,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     /**
      * set all groups an user is member of
      *
-     * @param  mixed  $_usertId   the account as integer or Tinebase_Model_User
+     * @param  mixed  $_userId   the account as integer or Tinebase_Model_User
      * @param  mixed  $_groupIds
      * @return array
      */
@@ -119,7 +119,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             throw new Tinebase_Exception_InvalidArgument('user must belong to at least one group');
         }
         
-        $userId = Tinebase_Model_user::convertUserIdToInt($_userId);
+        $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
         
         $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($userId);
         

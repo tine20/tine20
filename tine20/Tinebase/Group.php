@@ -176,38 +176,37 @@ class Tinebase_Group
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            .' Syncing ' . count($groupIds) . ' group <-> lists');
+            .' Syncing ' . count($groupIds) . ' group -> lists / memberships');
         
         $listBackend = new Addressbook_Backend_List();
         
+        $listIds = array();
         foreach ($groupIds as $groupId) {
             // get single groups to make sure that container id is joined
             $group = Tinebase_Group::getInstance()->getGroupById($groupId);
-            
-            // check if list already exists and user is member of the group
+
             if (! empty($group->list_id)) {
                 try {
                     $list = $listBackend->get($group->list_id);
-                    if (in_array($contactId, $list->members)) {
-                        // 
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            .' User already in list ' . $group->name . ', no need to further process this list.');
-                        continue;
-                    }
                 } catch (Tinebase_Exception_NotFound $tenf) {
-                    // list not found -> create new one in createOrUpdateList
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         .' List ' . $group->name . ' not found.');
+                    $list = Addressbook_Controller_List::getInstance()->createByGroup($group);
                 }
+            } else {
+                $list = Addressbook_Controller_List::getInstance()->createByGroup($group);
             }
             
-            $group->members = Tinebase_Group::getInstance()->getGroupMembers($group->getId());
-            $list = Admin_Controller_Group::getInstance()->createOrUpdateList($group);
             if ($group->list_id !== $list->getId()) {
+                // list id changed / is new -> update group
                 $group->list_id = $list->getId();
                 Tinebase_Group::getInstance()->updateGroup($group);
             }
+            
+            $listIds[] = $list->getId();
         }
+        
+        $listBackend->setMemberships($contactId, $listIds);
     }
     
     /**
