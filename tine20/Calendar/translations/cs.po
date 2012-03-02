@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-02-22 10:15+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 13:09+0000\n"
+"Last-Translator: Michal Sladek <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:20+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Language: Czech\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -144,7 +144,7 @@ msgid "Select Role"
 msgstr ""
 
 #: js/AddToEventPanel.js:216 js/AttendeeGridPanel.js:186
-#: js/ContactEventsGridPanel.js:125 js/GridView.js:149 Model/Event.php:244
+#: js/ContactEventsGridPanel.js:125 js/GridView.js:149 Model/Event.php:245
 msgid "Status"
 msgstr "Stav"
 
@@ -246,7 +246,7 @@ msgid "Events"
 msgstr "Události"
 
 #: js/ContactEventsGridPanel.js:112 js/EventEditDialog.js:90
-#: js/GridView.js:139 js/Model.js:201 Model/Event.php:245
+#: js/GridView.js:139 js/Model.js:201 Model/Event.php:246
 msgid "Summary"
 msgstr "Shrnutí"
 
@@ -291,16 +291,16 @@ msgstr ""
 msgid "End Time"
 msgstr "Čas ukončení"
 
-#: js/EventDetailsPanel.js:244 Model/Event.php:238
+#: js/EventDetailsPanel.js:244 Model/Event.php:239
 msgid "Blocking"
 msgstr "Blokující"
 
 #: js/EventDetailsPanel.js:249 js/EventEditDialog.js:98 js/GridView.js:144
-#: js/Model.js:202 js/ResourcesGridPanel.js:52 Model/Event.php:241
+#: js/Model.js:202 js/ResourcesGridPanel.js:52 Model/Event.php:242
 msgid "Location"
 msgstr "Umístění"
 
-#: js/EventDetailsPanel.js:253 js/Model.js:215 Model/Event.php:242
+#: js/EventDetailsPanel.js:253 js/Model.js:215 Model/Event.php:243
 msgid "Organizer"
 msgstr "Organizátor"
 
@@ -318,7 +318,7 @@ msgid "Private"
 msgstr "Soukromé"
 
 #: js/EventEditDialog.js:201 js/Model.js:203 js/ResourceEditDialog.js:72
-#: Model/Event.php:240
+#: Model/Event.php:241
 msgid "Description"
 msgstr "Popis"
 
@@ -529,31 +529,31 @@ msgstr[0] "Opravdu chcete smazat tuto událost?"
 msgstr[1] "Opravdu chcete smazat tyto události?"
 msgstr[2] "Opravdu chcete smazat tyto události?"
 
-#: js/MainScreenCenterPanel.js:935
+#: js/MainScreenCenterPanel.js:940
 msgid "Could not Print"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:935
+#: js/MainScreenCenterPanel.js:940
 msgid "Sorry, your current view does not support printing."
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1084
+#: js/MainScreenCenterPanel.js:1089
 msgid "Scheduling Conflict"
 msgstr "Konflikt plánování"
 
-#: js/MainScreenCenterPanel.js:1086
+#: js/MainScreenCenterPanel.js:1091
 msgid "The following attendee are busy at the requested time:"
 msgstr "Následující účastníci jsou v požadovaný čas zaneprázdněni:"
 
-#: js/MainScreenCenterPanel.js:1090
+#: js/MainScreenCenterPanel.js:1095
 msgid "Ignore Conflict"
 msgstr "Ingorovat konflikt"
 
-#: js/MainScreenCenterPanel.js:1091
+#: js/MainScreenCenterPanel.js:1096
 msgid "Edit Event"
 msgstr "Editovat událost"
 
-#: js/MainScreenCenterPanel.js:1092
+#: js/MainScreenCenterPanel.js:1097
 msgid "Cancel this action"
 msgstr ""
 
@@ -660,7 +660,7 @@ msgstr ""
 msgid "after {0} occurrences"
 msgstr ""
 
-#: js/RrulePanel.js:312 Model/Event.php:237
+#: js/RrulePanel.js:312 Model/Event.php:238
 msgid "End"
 msgstr "Konec"
 
@@ -738,39 +738,39 @@ msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr "Systém automaticky přídal kontakt jako účastníka události"
 
-#: Model/Event.php:236
+#: Model/Event.php:237
 msgid "Start"
 msgstr "Začátek"
 
-#: Model/Event.php:239
+#: Model/Event.php:240
 msgid "Classification"
 msgstr "Kategorie"
 
-#: Model/Event.php:243
+#: Model/Event.php:244
 msgid "Priority"
 msgstr "Priorita"
 
-#: Model/Event.php:246
+#: Model/Event.php:247
 msgid "Url"
 msgstr "URL"
 
-#: Model/Event.php:247
+#: Model/Event.php:248
 msgid "Recurrance rule"
 msgstr "Pravidlo opakování"
 
-#: Model/Event.php:248
+#: Model/Event.php:249
 msgid "Is all day event"
 msgstr "Celodenní událost"
 
-#: Model/Event.php:249
+#: Model/Event.php:250
 msgid "Organizer timezone"
 msgstr "Časové pásmo organizátora"
 
-#: Model/Event.php:274
+#: Model/Event.php:275
 msgid "Yes"
 msgstr "Ano"
 
-#: Model/Event.php:274
+#: Model/Event.php:275
 msgid "No"
 msgstr "Ne"
 
@@ -932,92 +932,95 @@ msgstr ""
 msgid "Event details"
 msgstr "Detaily události"
 
-msgid "forever"
-msgstr "navždy"
+#~ msgid "forever"
+#~ msgstr "navždy"
 
-msgid "Forever"
-msgstr "Navždy"
+#~ msgid "Forever"
+#~ msgstr "Navždy"
 
-msgid "Until"
-msgstr "Do"
+#~ msgid "Until"
+#~ msgstr "Do"
 
-msgid "Unknown calendar"
-msgstr "Neznámý kalendář"
+#~ msgid "Unknown calendar"
+#~ msgstr "Neznámý kalendář"
 
-msgid "unknown)"
-msgstr "neznámý)"
+#~ msgid "unknown)"
+#~ msgstr "neznámý)"
 
-msgid "Confirm Update of Series"
-msgstr "Potvrdit aktualizaci řady"
+#~ msgid "Confirm Update of Series"
+#~ msgstr "Potvrdit aktualizaci řady"
 
-msgid "Do you really want to update all events of this recurring event series?"
-msgstr ""
-"Opravdu chcete aktualizovat všechny události z této řady opakovaných "
-"událostí?"
+#~ msgid ""
+#~ "Do you really want to update all events of this recurring event series?"
+#~ msgstr ""
+#~ "Opravdu chcete aktualizovat všechny události z této řady opakovaných "
+#~ "událostí?"
 
-msgid "Confirm Deletion of Series"
-msgstr "Potvrdit smazání řady"
+#~ msgid "Confirm Deletion of Series"
+#~ msgstr "Potvrdit smazání řady"
 
-msgid "Do you really want to delete all events of this recurring event series?"
-msgstr "Opravdu chcete smazat všechny události této řady opakovaných událostí?"
+#~ msgid ""
+#~ "Do you really want to delete all events of this recurring event series?"
+#~ msgstr ""
+#~ "Opravdu chcete smazat všechny události této řady opakovaných událostí?"
 
-msgid "Do you want to update the whole series, or just this event"
-msgstr "Chete aktuaklizovat celou řadu nebo jen tuto událost"
+#~ msgid "Do you want to update the whole series, or just this event"
+#~ msgstr "Chete aktuaklizovat celou řadu nebo jen tuto událost"
 
-msgid "Failed not update recurring event series"
-msgstr "Pokus neaktualizovat řadu opakovaných událostí se nezdařil"
+#~ msgid "Failed not update recurring event series"
+#~ msgstr "Pokus neaktualizovat řadu opakovaných událostí se nezdařil"
 
-msgid "Failed not update event"
-msgstr "Pokus neaktualizovat událost se nezdařil"
+#~ msgid "Failed not update event"
+#~ msgstr "Pokus neaktualizovat událost se nezdařil"
 
-msgid "Resources {0}"
-msgstr "Zdroje {0}"
+#~ msgid "Resources {0}"
+#~ msgstr "Zdroje {0}"
 
-msgid "Show declined events"
-msgstr "Zobrazit odmítnuté události"
+#~ msgid "Show declined events"
+#~ msgstr "Zobrazit odmítnuté události"
 
-msgid ""
-"Do you want to delete the whole series, this and all future events of this "
-"series, or just this event"
-msgstr ""
-"Chcete smazat celou řadu, tuto a všechny budoucí události této řady, nebo "
-"jen tuto událost"
+#~ msgid ""
+#~ "Do you want to delete the whole series, this and all future events of "
+#~ "this series, or just this event"
+#~ msgstr ""
+#~ "Chcete smazat celou řadu, tuto a všechny budoucí události této řady, nebo "
+#~ "jen tuto událost"
 
-msgid "Every"
-msgstr "Každý"
+#~ msgid "Every"
+#~ msgstr "Každý"
 
-msgid ". Day"
-msgstr ". den"
+#~ msgid ". Day"
+#~ msgstr ". den"
 
-msgid ". Year"
-msgstr ". rok"
+#~ msgid ". Year"
+#~ msgstr ". rok"
 
-msgid "Publish Free/Busy Information"
-msgstr "Publikovat informace o zaneprázdněnosti"
+#~ msgid "Publish Free/Busy Information"
+#~ msgstr "Publikovat informace o zaneprázdněnosti"
 
-msgid "Allow all users to view your free/busy information"
-msgstr "Povolit všem uživatelům prohlížet informaci o Vaší zaneprázdněnosti"
+#~ msgid "Allow all users to view your free/busy information"
+#~ msgstr "Povolit všem uživatelům prohlížet informaci o Vaší zaneprázdněnosti"
 
-msgid "Here is your requested alarm for to following event:"
-msgstr "Zde je Váš požadovaný alarm pro následující událost:"
+#~ msgid "Here is your requested alarm for to following event:"
+#~ msgstr "Zde je Váš požadovaný alarm pro následující událost:"
 
-msgid "You have been invited to the following event:"
-msgstr "Byl(a) jste pozván(a) na následující událost:"
+#~ msgid "You have been invited to the following event:"
+#~ msgstr "Byl(a) jste pozván(a) na následující událost:"
 
-msgid "The following event has been canceled:"
-msgstr "Následující událost byla zrušena:"
+#~ msgid "The following event has been canceled:"
+#~ msgstr "Následující událost byla zrušena:"
 
-msgid "From"
-msgstr "Od"
+#~ msgid "From"
+#~ msgstr "Od"
 
-msgid "To"
-msgstr "Do"
+#~ msgid "To"
+#~ msgstr "Do"
 
-msgid "The following event has been updated:"
-msgstr "Následující událost byla zaktualizována:"
+#~ msgid "The following event has been updated:"
+#~ msgstr "Následující událost byla zaktualizována:"
 
-msgid "Ignore Scheduling Conflict?"
-msgstr "Ignorovat konflikt plánování?"
+#~ msgid "Ignore Scheduling Conflict?"
+#~ msgstr "Ignorovat konflikt plánování?"
 
-msgid "Event description:<br/>"
-msgstr "Popis události:<br/>"
+#~ msgid "Event description:<br/>"
+#~ msgstr "Popis události:<br/>"

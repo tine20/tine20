@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-22 09:17+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 13:29+0000\n"
+"Last-Translator: Faragó Tamás <Unknown>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:20+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -131,11 +131,11 @@ msgstr[1] "Események"
 
 #: js/AddToEventPanel.js:61
 msgid "Cancel"
-msgstr "Mégsem"
+msgstr ""
 
 #: js/AddToEventPanel.js:69
 msgid "OK"
-msgstr "Ok"
+msgstr ""
 
 #: js/AddToEventPanel.js:121
 msgid "Please choose the Event to add the contacts to"
@@ -150,7 +150,7 @@ msgid "Select Role"
 msgstr ""
 
 #: js/AddToEventPanel.js:216 js/AttendeeGridPanel.js:186
-#: js/ContactEventsGridPanel.js:125 js/GridView.js:149 Model/Event.php:244
+#: js/ContactEventsGridPanel.js:125 js/GridView.js:149 Model/Event.php:245
 msgid "Status"
 msgstr "Állapot"
 
@@ -250,7 +250,7 @@ msgid "Events"
 msgstr "Események"
 
 #: js/ContactEventsGridPanel.js:112 js/EventEditDialog.js:90
-#: js/GridView.js:139 js/Model.js:201 Model/Event.php:245
+#: js/GridView.js:139 js/Model.js:201 Model/Event.php:246
 msgid "Summary"
 msgstr "Összegzés"
 
@@ -295,16 +295,16 @@ msgstr ""
 msgid "End Time"
 msgstr "Befejezési idő"
 
-#: js/EventDetailsPanel.js:244 Model/Event.php:238
+#: js/EventDetailsPanel.js:244 Model/Event.php:239
 msgid "Blocking"
 msgstr "Blokkolva"
 
 #: js/EventDetailsPanel.js:249 js/EventEditDialog.js:98 js/GridView.js:144
-#: js/Model.js:202 js/ResourcesGridPanel.js:52 Model/Event.php:241
+#: js/Model.js:202 js/ResourcesGridPanel.js:52 Model/Event.php:242
 msgid "Location"
 msgstr "Hely"
 
-#: js/EventDetailsPanel.js:253 js/Model.js:215 Model/Event.php:242
+#: js/EventDetailsPanel.js:253 js/Model.js:215 Model/Event.php:243
 msgid "Organizer"
 msgstr "Szervező"
 
@@ -322,7 +322,7 @@ msgid "Private"
 msgstr "Privát"
 
 #: js/EventEditDialog.js:201 js/Model.js:203 js/ResourceEditDialog.js:72
-#: Model/Event.php:240
+#: Model/Event.php:241
 msgid "Description"
 msgstr "Leírás"
 
@@ -532,31 +532,31 @@ msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Biztosan törlöd ezt az eseményt?"
 msgstr[1] "Biztosan törlöd a(z) {0} kiválasztott eseményt?"
 
-#: js/MainScreenCenterPanel.js:935
+#: js/MainScreenCenterPanel.js:940
 msgid "Could not Print"
 msgstr "Nem lehet nyomtatni"
 
-#: js/MainScreenCenterPanel.js:935
+#: js/MainScreenCenterPanel.js:940
 msgid "Sorry, your current view does not support printing."
 msgstr "Bocsánat, a mostani nézeted nem támogatja a nyomtatást."
 
-#: js/MainScreenCenterPanel.js:1084
+#: js/MainScreenCenterPanel.js:1089
 msgid "Scheduling Conflict"
 msgstr "Ütemezési hiba"
 
-#: js/MainScreenCenterPanel.js:1086
+#: js/MainScreenCenterPanel.js:1091
 msgid "The following attendee are busy at the requested time:"
 msgstr "Az alábbi résztvevők elfoglaltak a kért időpontban:"
 
-#: js/MainScreenCenterPanel.js:1090
+#: js/MainScreenCenterPanel.js:1095
 msgid "Ignore Conflict"
 msgstr "Hiba figyelmen kívűl hagyása"
 
-#: js/MainScreenCenterPanel.js:1091
+#: js/MainScreenCenterPanel.js:1096
 msgid "Edit Event"
 msgstr "Esemény szerkesztése"
 
-#: js/MainScreenCenterPanel.js:1092
+#: js/MainScreenCenterPanel.js:1097
 msgid "Cancel this action"
 msgstr "Esemény megszakítása"
 
@@ -662,7 +662,7 @@ msgstr ""
 msgid "after {0} occurrences"
 msgstr ""
 
-#: js/RrulePanel.js:312 Model/Event.php:237
+#: js/RrulePanel.js:312 Model/Event.php:238
 msgid "End"
 msgstr "Befejezés"
 
@@ -741,39 +741,39 @@ msgid ""
 msgstr ""
 "A rendszer ezt a kapcsolatot automatikusan hozzáadta, mint esemény résztvevő"
 
-#: Model/Event.php:236
+#: Model/Event.php:237
 msgid "Start"
 msgstr "Indulás"
 
-#: Model/Event.php:239
+#: Model/Event.php:240
 msgid "Classification"
 msgstr "Besorolás"
 
-#: Model/Event.php:243
+#: Model/Event.php:244
 msgid "Priority"
 msgstr "Prioritás"
 
-#: Model/Event.php:246
+#: Model/Event.php:247
 msgid "Url"
 msgstr "URL"
 
-#: Model/Event.php:247
+#: Model/Event.php:248
 msgid "Recurrance rule"
 msgstr "Ismétlődési szabály"
 
-#: Model/Event.php:248
+#: Model/Event.php:249
 msgid "Is all day event"
 msgstr "Mindennapos esemény"
 
-#: Model/Event.php:249
+#: Model/Event.php:250
 msgid "Organizer timezone"
 msgstr "Szervező időzónája"
 
-#: Model/Event.php:274
+#: Model/Event.php:275
 msgid "Yes"
 msgstr "Igen"
 
-#: Model/Event.php:274
+#: Model/Event.php:275
 msgid "No"
 msgstr "Nem"
 
@@ -935,33 +935,35 @@ msgstr "\"%2$s\" válasz tőle: %1$s"
 msgid "Event details"
 msgstr "Esemény részletei"
 
-msgid "forever"
-msgstr "örökre"
+#~ msgid "forever"
+#~ msgstr "örökre"
 
-msgid "Forever"
-msgstr "Örökre"
+#~ msgid "Forever"
+#~ msgstr "Örökre"
 
-msgid "Until"
-msgstr "Eddig:"
+#~ msgid "Until"
+#~ msgstr "Eddig:"
 
-msgid "Events I have not yet respondet to"
-msgstr "Események amire még jeleztem vissza"
+#~ msgid "Events I have not yet respondet to"
+#~ msgstr "Események amire még jeleztem vissza"
 
-msgid "Unknown calendar"
-msgstr "Ismeretlen naptár"
+#~ msgid "Unknown calendar"
+#~ msgstr "Ismeretlen naptár"
 
-msgid "unknown)"
-msgstr "ismeretlen)"
+#~ msgid "unknown)"
+#~ msgstr "ismeretlen)"
 
-msgid "Confirm Update of Series"
-msgstr "Sorozat frissítéseinek megerősítése"
+#~ msgid "Confirm Update of Series"
+#~ msgstr "Sorozat frissítéseinek megerősítése"
 
-msgid "Do you really want to update all events of this recurring event series?"
-msgstr "Biztosan frissíted az ismétlődő eseménysorozat összes eseményét?"
+#~ msgid ""
+#~ "Do you really want to update all events of this recurring event series?"
+#~ msgstr "Biztosan frissíted az ismétlődő eseménysorozat összes eseményét?"
 
-msgid "Confirm Deletion of Series"
-msgstr "Erősitsd meg a sorozat törlését"
+#~ msgid "Confirm Deletion of Series"
+#~ msgstr "Erősitsd meg a sorozat törlését"
 
-msgid "Do you really want to delete all events of this recurring event series?"
-msgstr ""
-"Biztosan törlöd ennek az ismétlődő esemény sorozatnak az összes eseményét?"
+#~ msgid ""
+#~ "Do you really want to delete all events of this recurring event series?"
+#~ msgstr ""
+#~ "Biztosan törlöd ennek az ismétlődő esemény sorozatnak az összes eseményét?"

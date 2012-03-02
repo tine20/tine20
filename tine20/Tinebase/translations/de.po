@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-08 14:14+0100\n"
-"PO-Revision-Date: 2012-02-22 09:14+0000\n"
-"Last-Translator: ph_il <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 20:36+0000\n"
+"Last-Translator: Lars Kneschke <Unknown>\n"
 "Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:22+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -92,11 +92,11 @@ msgstr "System SIEVE Serverkonfiguration."
 
 #: Config.php:200
 msgid "Authentication Backend"
-msgstr "Authentifizierungs-Backend"
+msgstr ""
 
 #: Config.php:202
 msgid "Backend adapter for user authentication."
-msgstr "Benutzer-Authentifizierungs-Backend"
+msgstr ""
 
 #: Config.php:210
 msgid "Authentication Configuration"
@@ -104,39 +104,39 @@ msgstr "Konfiguration der Authentifizierung"
 
 #: Config.php:212
 msgid "Authentication backend configuration."
-msgstr "Authentifizierungs-Backend Konfiguration"
+msgstr ""
 
 #: Config.php:221
 msgid "User Backend"
-msgstr "Benutzer-Backend"
+msgstr ""
 
 #: Config.php:223
 msgid "Backend adapter for user data."
-msgstr "Backend für Benutzerdaten"
+msgstr ""
 
 #: Config.php:231
 msgid "User Configuration"
-msgstr "Benutzerkonfiguration"
+msgstr ""
 
 #: Config.php:233
 msgid "User backend configuration."
-msgstr "Benutzer-Backend Konfiguration"
+msgstr ""
 
 #: Config.php:242
 msgid "Cronuser ID"
-msgstr "Cronuser ID"
+msgstr ""
 
 #: Config.php:244
 msgid "User ID of the cron user."
-msgstr "ID des Cronjob-Benutzers"
+msgstr ""
 
 #: Config.php:252
 msgid "Title Postfix"
-msgstr "Titel-Postfix"
+msgstr ""
 
 #: Config.php:254
 msgid "Postfix string appended to the title of this installation."
-msgstr "Zeichenkette, die dem Titel der Installation vorangestellt wird"
+msgstr ""
 
 #: Config.php:262
 msgid "Redirect URL"
@@ -148,11 +148,11 @@ msgstr "Zu dieser URL nach der Abmeldung weiterleiten"
 
 #: Config.php:272
 msgid "Redirect to Referrer"
-msgstr "Weiterleitung zum Referrer"
+msgstr ""
 
 #: Config.php:274
 msgid "Redirect to referrer after logout."
-msgstr "Nach dem Ausloggen zum Referrer weiterleiten."
+msgstr ""
 
 #: Config.php:282
 msgid "Redirect Always"
@@ -160,15 +160,15 @@ msgstr "Immer weiterleiten"
 
 #: Config.php:284
 msgid "Redirect to configured redirect URL also for login."
-msgstr "Für den Login zur konfigurierten URL weiterleiten."
+msgstr ""
 
 #: Config.php:292
 msgid "Accepted Terms Version"
-msgstr "Nutzungsbedingungenversion"
+msgstr ""
 
 #: Config.php:294
 msgid "Accepted version number of the terms and conditions document."
-msgstr "Version der Zustimmung zu den Nutzungsbedingungen."
+msgstr ""
 
 #: Config.php:302
 msgid "Use Geolocation Services"
@@ -176,24 +176,23 @@ msgstr "Geolocation-Dienst benutzen"
 
 #: Config.php:304
 msgid "Use of external Geolocation services is allowed."
-msgstr "Benutzung eines externen Geodaten-Dienstes wird erlaubt."
+msgstr ""
 
 #: Config.php:312
 msgid "IP Session Validator"
-msgstr "IP Session Validator"
+msgstr ""
 
 #: Config.php:314
 msgid "Destroy session if the users IP changes."
-msgstr "Session beenden, wenn der Benutzer seine IP ändert."
+msgstr ""
 
 #: Config.php:322
 msgid "UA Session Validator"
-msgstr "UA Session Validator"
+msgstr ""
 
 #: Config.php:324
 msgid "Destroy session if the users user agent string changes."
 msgstr ""
-"Session beenden, wenn der Benutzer seine User-Agent-Zeichenkette ändert."
 
 #: Config.php:332
 msgid "Files Directory"
@@ -202,12 +201,11 @@ msgstr "Verzeichnis für Dateien"
 #: Config.php:334
 msgid "Directory with web server write access for user files."
 msgstr ""
-"Verzeichnis für Benutzerdateien, zu dem der Webserver Schreibzugriff hat"
 
-#: Container.php:582
+#: Container.php:608
 #, python-format
 msgid "%s's personal container"
-msgstr "%s's persönlicher Ordner"
+msgstr ""
 
 #: Export/Pdf.php:216 js/widgets/tags/TagsPanel.js:57
 msgid "Tags"
@@ -479,9 +477,6 @@ msgid ""
 "overloading, maintenance or misconfiguration of the server. Please try again "
 "or contact your administrator."
 msgstr ""
-"Der Server kann Ihre Anfrage leider Aufgrund einer temporären Überlastung, "
-"Wartungsarbeiten oder Fehlkonfiguration nicht beantworten. Bitte versuchen "
-"Sie es später noch einmal oder kontaktieren Sie Ihren Administrator."
 
 #: js/ExceptionHandler.js:194
 msgid "Server Message:"
@@ -747,10 +742,11 @@ msgstr ""
 "Ihr Passwort ist abgelaufen. Bitte setzen Sie ein neues Benutzer-Passwort:"
 
 #: js/Models.js:131 js/widgets/tags/TagFilter.js:30
+#, fuzzy
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Tag"
-msgstr[1] "Tags"
+msgstr[1] "Tag"
 
 #: js/Models.js:279
 msgid "Import"
@@ -1503,9 +1499,9 @@ msgid ""
 "Tine 2.0 does not understand all kind of files you might want to upload. You "
 "will have to manually adjust your file so Tine 2.0 can handle it."
 msgstr ""
-"Tine 2.0 versteht nicht alle Dateien, die Sie möglicherweise hochladen "
-"möchten. Eventuell müssen Sie manuell die Datei so anpassen, dass sie von "
-"Tine 2.0 verarbeitet werden kann."
+"Tine 2.0 versteht nich alle Dateien, die Sie möglicherweise hochladen "
+"möchten. Eventuell müssen Sie manuell das File so anpassen, dass Tine 2.0 es "
+"verarbeiten kann."
 
 #: js/widgets/dialog/ImportDialog.js:256
 msgid ""
@@ -1676,28 +1672,24 @@ msgstr "Führe Änderungen durch"
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:146
 msgid "You edited {0} {1}."
-msgstr "Sie haben {0} {1} editiert."
+msgstr ""
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:149
 msgid "{0} {1} have been updated properly."
-msgstr "{0} {1} wurden erfolgreich aktualisiert."
+msgstr ""
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:149
 msgid "{0} {1} has been updated properly."
-msgstr "{0} {1} wurde erfolgreich aktualisiert."
+msgstr ""
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:152
 msgid ""
 "{0} {1} have invalid data after updating. These {1} have not been changed."
 msgstr ""
-"{0} {1} haben invalide Daten nach der Aktualisierung. Diese {1} wurden nicht "
-"geändert."
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:152
 msgid "{0} {1} has invalid data after updating. This {1} has not been changed."
 msgstr ""
-"{0} {1} hat invalide Daten nach der Aktualisierung. Dieser {1} wurde nicht "
-"geändert."
 
 #: js/widgets/dialog/PreferencesDialog.js:125
 msgid "Admin Mode"
@@ -2153,7 +2145,7 @@ msgstr "Favoriten"
 
 #: js/widgets/mainscreen/WestPanel.js:358
 msgid "Modules"
-msgstr "Module"
+msgstr ""
 
 #: js/widgets/mainscreen/WestPanel.js:369
 msgid "Save current view as favorite"
@@ -2182,7 +2174,7 @@ msgstr "Bezeichnung"
 
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:155
 msgid "Shared Favorite (visible by all users)"
-msgstr "Gemeinsame Favoriten (sichtbar für alle Benutzer)"
+msgstr ""
 
 #: js/widgets/persistentfilter/PickerPanel.js:113
 msgid "My favorites"
@@ -2542,43 +2534,43 @@ msgstr "Ausloggen bestätigen"
 msgid "Show confirmation dialog on logout."
 msgstr "Bestätigungsdialog beim Ausloggen anzeigen."
 
-#: Setup/setup.xml:3039
+#: Setup/setup.xml:3105
 msgid "note"
 msgstr "Notiz"
 
-#: Setup/setup.xml:3044
+#: Setup/setup.xml:3110
 msgid "default note type"
 msgstr "default note type"
 
-#: Setup/setup.xml:3070
+#: Setup/setup.xml:3136
 msgid "telephone"
 msgstr "Telefon"
 
-#: Setup/setup.xml:3075
+#: Setup/setup.xml:3141
 msgid "telephone call"
 msgstr "Telefonanruf"
 
-#: Setup/setup.xml:3101
+#: Setup/setup.xml:3167
 msgid "email"
 msgstr "Email"
 
-#: Setup/setup.xml:3106
+#: Setup/setup.xml:3172
 msgid "email contact"
 msgstr "Email Kontakt"
 
-#: Setup/setup.xml:3132
+#: Setup/setup.xml:3198
 msgid "created"
 msgstr "erstellt"
 
-#: Setup/setup.xml:3137
+#: Setup/setup.xml:3203
 msgid "record created"
 msgstr "Eintrag erstellt"
 
-#: Setup/setup.xml:3163
+#: Setup/setup.xml:3229
 msgid "changed"
 msgstr "geändert"
 
-#: Setup/setup.xml:3168
+#: Setup/setup.xml:3234
 msgid "record changed"
 msgstr "Eintrag geändert"
 
@@ -2591,353 +2583,365 @@ msgstr ""
 msgid "Please wait or contact your administrator"
 msgstr "Bitte warten Sie oder kontaktieren Sie den Administrator"
 
-msgid "low"
-msgstr "niedrig"
-
-msgid "normal"
-msgstr "normal"
-
-msgid "high"
-msgstr "hoch"
-
-msgid "urgent"
-msgstr "dringend"
-
-msgid "progress"
-msgstr "Fortschritt"
+msgid "Invalid data after merge"
+msgstr "Invalide Daten nach Zusammenführung"
 
 msgid ""
-"The server is currently unable to handle the request due to a temporary "
-"overloading or maintenance of the server. Please try again or contact your "
-"administrator."
+"The resulting {0} has invalid data. Both {1} haven't been touched. <br /"
+"><b>Validation Message:</b><br />{2}"
 msgstr ""
-"Der Server kann Ihre Anfrage momentan nicht beantworten. Bitte versuchen Sie "
-"es später noch einmal oder kontaktieren Sie Ihren Administrator."
+"Der/die resultierende {0} hat invalide Daten. Beide {1} wurden nicht "
+"verändert. <br /><b>Validierungsmeldung:</b><br />{2}"
 
-msgid "Tagging"
-msgstr "Taggen"
+#~ msgid "low"
+#~ msgstr "niedrig"
 
-msgid "Events"
-msgstr "Ereignisse"
+#~ msgid "normal"
+#~ msgstr "normal"
 
-msgid "Rename Favorite"
-msgstr "Favorit umbenennen"
+#~ msgid "high"
+#~ msgstr "hoch"
 
-msgid "New Name"
-msgstr "Neuer Name"
+#~ msgid "urgent"
+#~ msgstr "dringend"
 
-msgid "Please enter the new name for favorite \"{0}\"?"
-msgstr "Bitte geben sie den neuen Namen für den Favoriten \"{0}\" ein"
+#~ msgid "progress"
+#~ msgstr "Fortschritt"
 
-msgid "save filter"
-msgstr "Filter speichern"
+#~ msgid ""
+#~ "The server is currently unable to handle the request due to a temporary "
+#~ "overloading or maintenance of the server. Please try again or contact "
+#~ "your administrator."
+#~ msgstr ""
+#~ "Der Server kann Ihre Anfrage momentan nicht beantworten. Bitte versuchen "
+#~ "Sie es später noch einmal oder kontaktieren Sie Ihren Administrator."
 
-msgid "Please enter a name for the favorite"
-msgstr "Bitte geben sie einen Namen für den Favoriten ein"
+#~ msgid "Tagging"
+#~ msgstr "Taggen"
 
-msgid "Saving favorite"
-msgstr "Speichere Favoriten"
+#~ msgid "Events"
+#~ msgstr "Ereignisse"
 
-msgid "Updating {0} \"{1}\""
-msgstr "{0} \"{1}\" aktualisieren"
+#~ msgid "Rename Favorite"
+#~ msgstr "Favorit umbenennen"
 
-msgid "Deleting {0} \"{1}\""
-msgstr "{0} \"{1}\" löschen"
+#~ msgid "New Name"
+#~ msgstr "Neuer Name"
 
-msgid "Files"
-msgstr "Dateien"
+#~ msgid "Please enter the new name for favorite \"{0}\"?"
+#~ msgstr "Bitte geben sie den neuen Namen für den Favoriten \"{0}\" ein"
 
-msgid "Dry run"
-msgstr "Probelauf"
+#~ msgid "save filter"
+#~ msgstr "Filter speichern"
 
-msgid "No files added"
-msgstr "Keine Dateien hochgeladen"
+#~ msgid "Please enter a name for the favorite"
+#~ msgstr "Bitte geben sie einen Namen für den Favoriten ein"
 
-msgid "You need to add files to import."
-msgstr "Sie müssen Dateien zum Importieren hochladen."
+#~ msgid "Saving favorite"
+#~ msgstr "Speichere Favoriten"
 
-msgid "Dry run results"
-msgstr "Probelauf-Ergebnis"
+#~ msgid "Updating {0} \"{1}\""
+#~ msgstr "{0} \"{1}\" aktualisieren"
 
-msgid ""
-"Import test successful for {0} records, import test failed for {1} records."
-msgstr "{0} Einträge erfolgreich importiert, {1} Einträge fehlerhaft"
+#~ msgid "Deleting {0} \"{1}\""
+#~ msgstr "{0} \"{1}\" löschen"
 
-msgid "Import results"
-msgstr "Import-Ergebnis"
+#~ msgid "Files"
+#~ msgstr "Dateien"
 
-msgid ""
-"Import successful for {0} records / import failed for {1} records / {2} "
-"duplicates found"
-msgstr ""
-"{0} Einträge erfolgreich importiert, {1} Einträge fehlerhaft, {2} Dubletten"
+#~ msgid "Dry run"
+#~ msgstr "Probelauf"
 
-msgid "Rename {0}"
-msgstr "{0} umbenennen"
+#~ msgid "No files added"
+#~ msgstr "Keine Dateien hochgeladen"
 
-msgid "Reload {0}"
-msgstr "{0} neu laden"
+#~ msgid "You need to add files to import."
+#~ msgstr "Sie müssen Dateien zum Importieren hochladen."
 
-msgid "There are no custom fields yet"
-msgstr "Es gibt derzeit keine Zusatzfelder"
+#~ msgid "Dry run results"
+#~ msgstr "Probelauf-Ergebnis"
 
-msgid "Do you really want to delete the selected record"
-msgid_plural "Do you really want to delete the selected records"
-msgstr[0] "Möchten Sie den ausgewählten Eintrag wirklich löschen?"
-msgstr[1] "Möchten Sie die ausgewählten Einträge wirklich löschen?"
+#~ msgid ""
+#~ "Import test successful for {0} records, import test failed for {1} "
+#~ "records."
+#~ msgstr "{0} Einträge erfolgreich importiert, {1} Einträge fehlerhaft"
 
-msgid "Groups"
-msgstr "Gruppen"
+#~ msgid "Import results"
+#~ msgstr "Import-Ergebnis"
 
-msgid "Overwriting system favorites is not yet supported"
-msgstr "Systemfavoriten können nicht überschrieben werden"
+#~ msgid ""
+#~ "Import successful for {0} records / import failed for {1} records / {2} "
+#~ "duplicates found"
+#~ msgstr ""
+#~ "{0} Einträge erfolgreich importiert, {1} Einträge fehlerhaft, {2} "
+#~ "Dubletten"
 
-msgid "About Tine 2.0"
-msgstr "Über Tine 2.0"
+#~ msgid "Rename {0}"
+#~ msgstr "{0} umbenennen"
 
-msgid "Custom datetime"
-msgstr "Beliebiger Zeitpunkt"
+#~ msgid "Reload {0}"
+#~ msgstr "{0} neu laden"
 
-msgid "Overwriteing system favorites is not yet supported"
-msgstr "Das Überschreiben von System-Favoriten ist derzeit nicht möglich"
+#~ msgid "There are no custom fields yet"
+#~ msgstr "Es gibt derzeit keine Zusatzfelder"
 
-msgid "Subscript"
-msgstr "Index"
+#~ msgid "Do you really want to delete the selected record"
+#~ msgid_plural "Do you really want to delete the selected records"
+#~ msgstr[0] "Möchten Sie den ausgewählten Eintrag wirklich löschen?"
+#~ msgstr[1] "Möchten Sie die ausgewählten Einträge wirklich löschen?"
 
-msgid "Superscript"
-msgstr "Exponent"
+#~ msgid "Groups"
+#~ msgstr "Gruppen"
 
-msgid "Insert Special Character"
-msgstr "Spezialzeichen einfügen"
+#~ msgid "Overwriting system favorites is not yet supported"
+#~ msgstr "Systemfavoriten können nicht überschrieben werden"
 
-msgid "Special Characters"
-msgstr "Spezialzeichen"
+#~ msgid "About Tine 2.0"
+#~ msgstr "Über Tine 2.0"
 
-msgid "Insert Table"
-msgstr "Tabelle einfügen"
+#~ msgid "Custom datetime"
+#~ msgstr "Beliebiger Zeitpunkt"
 
-msgid "Rows"
-msgstr "Zeilen"
+#~ msgid "Overwriteing system favorites is not yet supported"
+#~ msgstr "Das Überschreiben von System-Favoriten ist derzeit nicht möglich"
 
-msgid "Columns"
-msgstr "Spalten"
+#~ msgid "Subscript"
+#~ msgstr "Index"
 
-msgid "Border"
-msgstr "Rand"
+#~ msgid "Superscript"
+#~ msgstr "Exponent"
 
-msgid "Insert"
-msgstr "Einfügen"
+#~ msgid "Insert Special Character"
+#~ msgstr "Spezialzeichen einfügen"
 
-msgid "Table"
-msgstr "Tabelle"
+#~ msgid "Special Characters"
+#~ msgstr "Spezialzeichen"
 
-msgid "Cleanse text pasted from Word or other Rich Text applications"
-msgstr "Text aus Word oder anderen Applikationen säubern"
+#~ msgid "Insert Table"
+#~ msgstr "Tabelle einfügen"
 
-msgid "Insert Rule"
-msgstr "Balken einfügen"
+#~ msgid "Rows"
+#~ msgstr "Zeilen"
 
-msgid ""
-"Enter the width of the Rule in percentage<br/> followed by the % sign at the "
-"end, or to<br/> set a fixed width omit the % symbol.<br/>&nbsp;"
-msgstr ""
-"Breite des Balkens in Prozent<br/> gefolgt vom % Zeichen am Ende, oder "
-"für<br/> feste Breite %weglassen.<br/>&nbsp;"
+#~ msgid "Columns"
+#~ msgstr "Spalten"
 
-msgid "Insert Horizontal Rule"
-msgstr "Horizontalen Balken einfügen"
+#~ msgid "Border"
+#~ msgstr "Rand"
 
-msgid "Horizontal Rule"
-msgstr "Horizontaler Balken"
+#~ msgid "Insert"
+#~ msgstr "Einfügen"
 
-msgid "Filter"
-msgstr "Filter"
+#~ msgid "Table"
+#~ msgstr "Tabelle"
 
-msgid "Transfering Configuration..."
-msgstr "Übertrage Konfiguration"
+#~ msgid "Cleanse text pasted from Word or other Rich Text applications"
+#~ msgstr "Text aus Word oder anderen Applikationen säubern"
 
-msgid "Transfering {0}..."
-msgstr "Übertrage {0}..."
+#~ msgid "Insert Rule"
+#~ msgstr "Balken einfügen"
 
-msgid "Install Google Gears"
-msgstr "Google Gears installieren"
+#~ msgid ""
+#~ "Enter the width of the Rule in percentage<br/> followed by the % sign at "
+#~ "the end, or to<br/> set a fixed width omit the % symbol.<br/>&nbsp;"
+#~ msgstr ""
+#~ "Breite des Balkens in Prozent<br/> gefolgt vom % Zeichen am Ende, oder "
+#~ "für<br/> feste Breite %weglassen.<br/>&nbsp;"
 
-msgid ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
-msgstr ""
-"Die Installation von Gears wird die Geschwindigkeit von Tine 2.0 erhöhen "
-"indem alle benötigten Dateien local auf dem Computer gespeichert werden."
+#~ msgid "Insert Horizontal Rule"
+#~ msgstr "Horizontalen Balken einfügen"
 
-msgid "Please enter a name for the filter"
-msgstr "Bitte den Namen für den Filter eingeben"
+#~ msgid "Horizontal Rule"
+#~ msgstr "Horizontaler Balken"
 
-msgid "Filter not Saved"
-msgstr "Filter nicht gespeichert"
+#~ msgid "Filter"
+#~ msgstr "Filter"
 
-msgid "You have to supply a name for the filter!"
-msgstr "Sie sollten einen Namen für den Filter angeben!"
+#~ msgid "Transfering Configuration..."
+#~ msgstr "Übertrage Konfiguration"
 
-msgid ""
-"You have to supply a shorter name! Names of saved filters can only be up to "
-"40 characters long."
-msgstr ""
-"Sie müssen einen kürzeren Namen eingeben! Der Name eines gespeicherten "
-"Filters darf maximal 40 Zeichen lang sein."
+#~ msgid "Transfering {0}..."
+#~ msgstr "Übertrage {0}..."
 
-msgid "Saving filter"
-msgstr "Filter speichern"
+#~ msgid "Install Google Gears"
+#~ msgstr "Google Gears installieren"
 
-msgid "My saved filters"
-msgstr "Meine gespeicherten Filter"
+#~ msgid ""
+#~ "Installing Gears will improve the performance of Tine 2.0 by caching all "
+#~ "needed files locally on this computer."
+#~ msgstr ""
+#~ "Die Installation von Gears wird die Geschwindigkeit von Tine 2.0 erhöhen "
+#~ "indem alle benötigten Dateien local auf dem Computer gespeichert werden."
 
-msgid "Delete Filter"
-msgstr "Filter löschen"
+#~ msgid "Please enter a name for the filter"
+#~ msgstr "Bitte den Namen für den Filter eingeben"
 
-msgid "Do you really want to delete the Filter \"{0}\"?"
-msgstr "Möchten Sie den Filter \"{0}\" wirklich löschen?"
+#~ msgid "Filter not Saved"
+#~ msgstr "Filter nicht gespeichert"
 
-msgid "Deleting Filter \"{0}\""
-msgstr "Lösche Filter {0}"
+#~ msgid "You have to supply a name for the filter!"
+#~ msgstr "Sie sollten einen Namen für den Filter angeben!"
 
-msgid "Please enter the new name for filter \"{0}\"?"
-msgstr "Bitte geben Sie einen neuen Namen für den Filter \"{0}\" ein."
+#~ msgid ""
+#~ "You have to supply a shorter name! Names of saved filters can only be up "
+#~ "to 40 characters long."
+#~ msgstr ""
+#~ "Sie müssen einen kürzeren Namen eingeben! Der Name eines gespeicherten "
+#~ "Filters darf maximal 40 Zeichen lang sein."
 
-msgid "Renaming Filter \"{0}\""
-msgstr "Benenne Filter \"{0}\" um"
+#~ msgid "Saving filter"
+#~ msgstr "Filter speichern"
 
-msgid "Saved filter"
-msgstr "Gespeicherte Filter"
+#~ msgid "My saved filters"
+#~ msgstr "Meine gespeicherten Filter"
 
-msgid "Report bugs to tine20.org directly when they occur"
-msgstr "Melden Sie Fehler direkt an tine20.org."
+#~ msgid "Delete Filter"
+#~ msgstr "Filter löschen"
 
-msgid "Check tine20.org for new versions"
-msgstr "Bitte prüfen Sie tine20.org auf neue Versionen"
+#~ msgid "Do you really want to delete the Filter \"{0}\"?"
+#~ msgstr "Möchten Sie den Filter \"{0}\" wirklich löschen?"
 
-msgid "Sorry"
-msgstr "Entschuldigung"
+#~ msgid "Deleting Filter \"{0}\""
+#~ msgstr "Lösche Filter {0}"
 
-msgid "Remove account"
-msgstr "Benutzer entfernen"
+#~ msgid "Please enter the new name for filter \"{0}\"?"
+#~ msgstr "Bitte geben Sie einen neuen Namen für den Filter \"{0}\" ein."
 
-msgid "Permission Denied"
-msgstr "Zugriff verweigert"
+#~ msgid "Renaming Filter \"{0}\""
+#~ msgstr "Benenne Filter \"{0}\" um"
 
-msgid "You don't have the required grant to select this {0}"
-msgstr "Sie haben nicht die Berechtigungen um {0} auszuwählen"
+#~ msgid "Saved filter"
+#~ msgstr "Gespeicherte Filter"
 
-msgid "is in"
-msgstr "ist in"
+#~ msgid "Report bugs to tine20.org directly when they occur"
+#~ msgstr "Melden Sie Fehler direkt an tine20.org."
 
-msgid "remove record"
-msgstr "Eintrag entfernen"
+#~ msgid "Check tine20.org for new versions"
+#~ msgstr "Bitte prüfen Sie tine20.org auf neue Versionen"
 
-msgid "Search"
-msgstr "Suchen"
+#~ msgid "Sorry"
+#~ msgstr "Entschuldigung"
 
-msgid "Browse"
-msgstr "Blättern"
+#~ msgid "Remove account"
+#~ msgstr "Benutzer entfernen"
 
-msgid "click to edit"
-msgstr "Zum Ändern hier Klicken"
+#~ msgid "Permission Denied"
+#~ msgstr "Zugriff verweigert"
 
-msgid "Plase select an image file (gif/png/jpeg)"
-msgstr "Bitte wählen Sie eine gültige Bild-Datei (gif/png/jpeg)"
+#~ msgid "You don't have the required grant to select this {0}"
+#~ msgstr "Sie haben nicht die Berechtigungen um {0} auszuwählen"
 
-msgid "Please Select a Group"
-msgstr "Bitte wählen Sie eine Gruppe aus"
+#~ msgid "is in"
+#~ msgstr "ist in"
 
-msgid "Register"
-msgstr "Registrieren"
+#~ msgid "remove record"
+#~ msgstr "Eintrag entfernen"
 
-msgid ""
-"The server did not respond to your request. Please check your network or "
-"contact your administrator."
-msgstr ""
-"Der Server konnte leider auf Ihre Anfrage nicht antworten. Bitte überprüfen "
-"Sie Ihr Netzwerk oder kontaktieren Sie Ihren Administrator."
+#~ msgid "Search"
+#~ msgstr "Suchen"
 
-msgid "No response"
-msgstr "Keine Antwort"
+#~ msgid "Browse"
+#~ msgstr "Blättern"
 
-msgid ""
-"We did not receive a response from the server. Your network could be down or "
-"a timeout occurred."
-msgstr ""
-"Leider haben wir keine Antwort vom Server bekommen. Es könnte ein "
-"Netzwerkfehler oder eine Zeitüberschreitung aufgetreten sein."
+#~ msgid "click to edit"
+#~ msgstr "Zum Ändern hier Klicken"
 
-msgid "Permissions"
-msgstr "Berechtigungen"
+#~ msgid "Plase select an image file (gif/png/jpeg)"
+#~ msgstr "Bitte wählen Sie eine gültige Bild-Datei (gif/png/jpeg)"
 
-msgid "Could not save {0}."
-msgstr "Konnte {0} nicht speichern."
+#~ msgid "Please Select a Group"
+#~ msgstr "Bitte wählen Sie eine Gruppe aus"
 
-msgid "add account"
-msgstr "Benutzer hinzufügen"
+#~ msgid "Register"
+#~ msgstr "Registrieren"
 
-msgid "nobody"
-msgstr "niemand"
+#~ msgid ""
+#~ "The server did not respond to your request. Please check your network or "
+#~ "contact your administrator."
+#~ msgstr ""
+#~ "Der Server konnte leider auf Ihre Anfrage nicht antworten. Bitte "
+#~ "überprüfen Sie Ihr Netzwerk oder kontaktieren Sie Ihren Administrator."
 
-msgid "please select an account"
-msgstr "Bitte wählen Sie einen Benutzer"
+#~ msgid "No response"
+#~ msgstr "Keine Antwort"
 
-msgid "Renaming Favorite \"{0}\""
-msgstr "Umbenennen des Favoriten \"{0}\""
+#~ msgid ""
+#~ "We did not receive a response from the server. Your network could be down "
+#~ "or a timeout occurred."
+#~ msgstr ""
+#~ "Leider haben wir keine Antwort vom Server bekommen. Es könnte ein "
+#~ "Netzwerkfehler oder eine Zeitüberschreitung aufgetreten sein."
 
-msgid "Favorite"
-msgid_plural "Favorites"
-msgstr[0] "Favorit"
-msgstr[1] "Favoriten"
+#~ msgid "Permissions"
+#~ msgstr "Berechtigungen"
 
-msgid "Import definition"
-msgstr "Importdefinition"
+#~ msgid "Could not save {0}."
+#~ msgstr "Konnte {0} nicht speichern."
 
-msgid "Import into {0}"
-msgstr "In {0} importieren"
+#~ msgid "add account"
+#~ msgstr "Benutzer hinzufügen"
 
-msgid "Set color for {0}"
-msgstr "Farbe für {0} einstellen"
+#~ msgid "nobody"
+#~ msgstr "niemand"
 
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "Gruppe"
-msgstr[1] "Gruppen"
+#~ msgid "please select an account"
+#~ msgstr "Bitte wählen Sie einen Benutzer"
 
-msgid "Internal {0}"
-msgstr "Internes {0}"
+#~ msgid "Renaming Favorite \"{0}\""
+#~ msgstr "Umbenennen des Favoriten \"{0}\""
 
-msgid "Rename Filter"
-msgstr "Filter umbenennen"
+#~ msgid "Favorite"
+#~ msgid_plural "Favorites"
+#~ msgstr[0] "Favorit"
+#~ msgstr[1] "Favoriten"
 
-msgid "shared"
-msgstr "geteilt"
+#~ msgid "Import definition"
+#~ msgstr "Importdefinition"
 
-msgid "Remove from shared favorites"
-msgstr "Von gemeinsamen Favoriten entfernen"
+#~ msgid "Import into {0}"
+#~ msgstr "In {0} importieren"
 
-msgid "Add to shared favorites"
-msgstr "Zu gemeinsamen Favoritenen hinzufügen"
+#~ msgid "Set color for {0}"
+#~ msgstr "Farbe für {0} einstellen"
 
-msgid "Setting favorite \"{0}\" not shared"
-msgstr "Favorit \"{0}\" soll nicht gemeinsam sein"
+#~ msgid "Group"
+#~ msgid_plural "Groups"
+#~ msgstr[0] "Gruppe"
+#~ msgstr[1] "Gruppen"
 
-msgid "Setting favorite \"{0}\" shared"
-msgstr "Favorit \"{0}\" soll gemeinsam sein"
+#~ msgid "Internal {0}"
+#~ msgstr "Internes {0}"
 
-msgid "Share this Favorite"
-msgstr "Favorit teilen"
+#~ msgid "Rename Filter"
+#~ msgstr "Filter umbenennen"
 
-msgid "Update Error"
-msgstr "Aktualisierungsfehler"
+#~ msgid "shared"
+#~ msgstr "geteilt"
 
-msgid "There had been {0} Error(s) while updating {1} records."
-msgstr ""
-"Es sind beim aktualisieren von {1} Datensätzen {0} Fehler aufgetreten ."
+#~ msgid "Remove from shared favorites"
+#~ msgstr "Von gemeinsamen Favoriten entfernen"
 
-msgid "Select all visible ({0} records)"
-msgstr "Alle sichtbaren auswählen ({0} Einträge)"
+#~ msgid "Add to shared favorites"
+#~ msgstr "Zu gemeinsamen Favoritenen hinzufügen"
+
+#~ msgid "Setting favorite \"{0}\" not shared"
+#~ msgstr "Favorit \"{0}\" soll nicht gemeinsam sein"
+
+#~ msgid "Setting favorite \"{0}\" shared"
+#~ msgstr "Favorit \"{0}\" soll gemeinsam sein"
+
+#~ msgid "Share this Favorite"
+#~ msgstr "Favorit teilen"
+
+#~ msgid "Update Error"
+#~ msgstr "Aktualisierungsfehler"
+
+#~ msgid "There had been {0} Error(s) while updating {1} records."
+#~ msgstr ""
+#~ "Es sind beim aktualisieren von {1} Datensätzen {0} Fehler aufgetreten ."
+
+#~ msgid "Select all visible ({0} records)"
+#~ msgstr "Alle sichtbaren auswählen ({0} Einträge)"
 
 #~ msgid "Either {0} or {1} must be given"
 #~ msgstr "Entweder {0} oder {1} müssen gesetzt sein"
@@ -2956,13 +2960,3 @@ msgstr "Alle sichtbaren auswählen ({0} Einträge)"
 
 #~ msgid "<br /><ul style=\"padding:10px;border:1px\">"
 #~ msgstr "<br /><ul style=\"padding:10px;border:1px\">"
-
-#~ msgid "Invalid data after merge"
-#~ msgstr "Invalide Daten nach Zusammenführung"
-
-#~ msgid ""
-#~ "The resulting {0} has invalid data. Both {1} haven't been touched. <br /"
-#~ "><b>Validation Message:</b><br />{2}"
-#~ msgstr ""
-#~ "Der/die resultierende {0} hat invalide Daten. Beide {1} wurden nicht "
-#~ "verändert. <br /><b>Validierungsmeldung:</b><br />{2}"

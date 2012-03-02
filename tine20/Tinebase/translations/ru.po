@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-05 17:49+0100\n"
-"PO-Revision-Date: 2012-02-22 09:39+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 12:29+0000\n"
+"Last-Translator: Nkolay Parukhin <Unknown>\n"
 "Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:23+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "X-Poedit-Language: Russian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -205,7 +205,7 @@ msgstr ""
 msgid "Directory with web server write access for user files."
 msgstr ""
 
-#: Container.php:582
+#: Container.php:608
 #, python-format
 msgid "%s's personal container"
 msgstr ""
@@ -729,10 +729,12 @@ msgid "Your password expired. Please enter a new user password:"
 msgstr ""
 
 #: js/Models.js:131 js/widgets/tags/TagFilter.js:30
+#, fuzzy
 msgid "Tag"
 msgid_plural "Tags"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Тэг"
+msgstr[1] "Тэг"
+msgstr[2] "Тэг"
 
 #: js/Models.js:279
 msgid "Import"
@@ -2492,43 +2494,43 @@ msgstr ""
 msgid "Show confirmation dialog on logout."
 msgstr ""
 
-#: Setup/setup.xml:3039
+#: Setup/setup.xml:3105
 msgid "note"
 msgstr "заметка"
 
-#: Setup/setup.xml:3044
+#: Setup/setup.xml:3110
 msgid "default note type"
 msgstr "тип заметки по умолчанию"
 
-#: Setup/setup.xml:3070
+#: Setup/setup.xml:3136
 msgid "telephone"
 msgstr "телефон"
 
-#: Setup/setup.xml:3075
+#: Setup/setup.xml:3141
 msgid "telephone call"
 msgstr "телефонный звонок"
 
-#: Setup/setup.xml:3101
+#: Setup/setup.xml:3167
 msgid "email"
 msgstr "электронная почта"
 
-#: Setup/setup.xml:3106
+#: Setup/setup.xml:3172
 msgid "email contact"
 msgstr "контакт электронной почты"
 
-#: Setup/setup.xml:3132
+#: Setup/setup.xml:3198
 msgid "created"
 msgstr "создано"
 
-#: Setup/setup.xml:3137
+#: Setup/setup.xml:3203
 msgid "record created"
 msgstr "запись создана"
 
-#: Setup/setup.xml:3163
+#: Setup/setup.xml:3229
 msgid "changed"
 msgstr "изменено"
 
-#: Setup/setup.xml:3168
+#: Setup/setup.xml:3234
 msgid "record changed"
 msgstr "запись изменена"
 
@@ -2540,180 +2542,180 @@ msgstr ""
 msgid "Please wait or contact your administrator"
 msgstr ""
 
-msgid "low"
-msgstr "низкий"
+#~ msgid "low"
+#~ msgstr "низкий"
 
-msgid "normal"
-msgstr "нормальный"
+#~ msgid "normal"
+#~ msgstr "нормальный"
 
-msgid "high"
-msgstr "высокий"
+#~ msgid "high"
+#~ msgstr "высокий"
 
-msgid "urgent"
-msgstr "срочный"
-
-#, fuzzy
-msgid "Tagging"
-msgstr "Тэг"
-
-msgid "save filter"
-msgstr "сохранить фильтр"
-
-msgid "Updating {0} \"{1}\""
-msgstr "Обновление {0} \"{1}\""
-
-msgid "Deleting {0} \"{1}\""
-msgstr "Удаление {0} \"{1}\""
-
-msgid "Rename {0}"
-msgstr "Переименовать {0}"
-
-msgid "Reload {0}"
-msgstr "Перезагрузить {0}"
-
-msgid "There are no custom fields yet"
-msgstr "Пока ещё нет дополнительных полей"
-
-msgid "Do you really want to delete the selected record"
-msgid_plural "Do you really want to delete the selected records"
-msgstr[0] "Вы действительно хотите удалить выделенную запись"
-msgstr[1] "Вы действительно хотите удалить выделенные записи"
-msgstr[2] "Вы действительно хотите удалить выделенные записи"
-
-msgid "About Tine 2.0"
-msgstr "О Tine 2.0"
-
-msgid "Filter"
-msgstr "Фильтр"
+#~ msgid "urgent"
+#~ msgstr "срочный"
 
 #, fuzzy
-msgid "Transfering Configuration..."
-msgstr "Передача {0}..."
+#~ msgid "Tagging"
+#~ msgstr "Тэг"
 
-msgid "Transfering {0}..."
-msgstr "Передача {0}..."
+#~ msgid "save filter"
+#~ msgstr "сохранить фильтр"
 
-msgid "Install Google Gears"
-msgstr "Установить Google Gears"
+#~ msgid "Updating {0} \"{1}\""
+#~ msgstr "Обновление {0} \"{1}\""
 
-msgid ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
-msgstr ""
-"Установка Gears повысит скорость Tine 2.0 сохранением необходимых файлов "
-"локально на этом компьютере."
+#~ msgid "Deleting {0} \"{1}\""
+#~ msgstr "Удаление {0} \"{1}\""
 
-msgid "Please enter a name for the filter"
-msgstr "Пожалуйста, введите название фильтра"
+#~ msgid "Rename {0}"
+#~ msgstr "Переименовать {0}"
 
-msgid "Filter not Saved"
-msgstr "Фильтр не сохранен"
+#~ msgid "Reload {0}"
+#~ msgstr "Перезагрузить {0}"
 
-msgid "You have to supply a name for the filter!"
-msgstr "Вы должны дать фильтру название!"
+#~ msgid "There are no custom fields yet"
+#~ msgstr "Пока ещё нет дополнительных полей"
 
-msgid ""
-"You have to supply a shorter name! Names of saved filters can only be up to "
-"40 characters long."
-msgstr ""
-"Вы должны использовать короткое имя! Имена сохраненных фильтров не могут "
-"быть длиннее 40 символов."
+#~ msgid "Do you really want to delete the selected record"
+#~ msgid_plural "Do you really want to delete the selected records"
+#~ msgstr[0] "Вы действительно хотите удалить выделенную запись"
+#~ msgstr[1] "Вы действительно хотите удалить выделенные записи"
+#~ msgstr[2] "Вы действительно хотите удалить выделенные записи"
 
-msgid "Saving filter"
-msgstr "Сохранённый фильтр"
+#~ msgid "About Tine 2.0"
+#~ msgstr "О Tine 2.0"
 
-msgid "My saved filters"
-msgstr "Мои сохранённые фильтры"
-
-msgid "Delete Filter"
-msgstr "Удалить фильтр"
-
-msgid "Do you really want to delete the Filter \"{0}\"?"
-msgstr "Вы уверены, что хотите удалить фильтр \"{0}\"?"
-
-msgid "Deleting Filter \"{0}\""
-msgstr "Удаление фильтра \"{0}\""
-
-msgid "Saved filter"
-msgstr "Сохранённый фильтр"
-
-msgid "Report bugs to tine20.org directly when they occur"
-msgstr "Сообщайте об ошибках, когда они происходят, прямо на tine20.org"
-
-msgid "Check tine20.org for new versions"
-msgstr "Проверить новые версии на tine20.org"
-
-msgid "Remove account"
-msgstr "Удалить учётную запись"
-
-msgid "shared"
-msgstr "общие"
+#~ msgid "Filter"
+#~ msgstr "Фильтр"
 
 #, fuzzy
-msgid "Permission Denied"
-msgstr "Разрешения"
+#~ msgid "Transfering Configuration..."
+#~ msgstr "Передача {0}..."
+
+#~ msgid "Transfering {0}..."
+#~ msgstr "Передача {0}..."
+
+#~ msgid "Install Google Gears"
+#~ msgstr "Установить Google Gears"
+
+#~ msgid ""
+#~ "Installing Gears will improve the performance of Tine 2.0 by caching all "
+#~ "needed files locally on this computer."
+#~ msgstr ""
+#~ "Установка Gears повысит скорость Tine 2.0 сохранением необходимых файлов "
+#~ "локально на этом компьютере."
+
+#~ msgid "Please enter a name for the filter"
+#~ msgstr "Пожалуйста, введите название фильтра"
+
+#~ msgid "Filter not Saved"
+#~ msgstr "Фильтр не сохранен"
+
+#~ msgid "You have to supply a name for the filter!"
+#~ msgstr "Вы должны дать фильтру название!"
+
+#~ msgid ""
+#~ "You have to supply a shorter name! Names of saved filters can only be up "
+#~ "to 40 characters long."
+#~ msgstr ""
+#~ "Вы должны использовать короткое имя! Имена сохраненных фильтров не могут "
+#~ "быть длиннее 40 символов."
+
+#~ msgid "Saving filter"
+#~ msgstr "Сохранённый фильтр"
+
+#~ msgid "My saved filters"
+#~ msgstr "Мои сохранённые фильтры"
+
+#~ msgid "Delete Filter"
+#~ msgstr "Удалить фильтр"
+
+#~ msgid "Do you really want to delete the Filter \"{0}\"?"
+#~ msgstr "Вы уверены, что хотите удалить фильтр \"{0}\"?"
+
+#~ msgid "Deleting Filter \"{0}\""
+#~ msgstr "Удаление фильтра \"{0}\""
+
+#~ msgid "Saved filter"
+#~ msgstr "Сохранённый фильтр"
+
+#~ msgid "Report bugs to tine20.org directly when they occur"
+#~ msgstr "Сообщайте об ошибках, когда они происходят, прямо на tine20.org"
+
+#~ msgid "Check tine20.org for new versions"
+#~ msgstr "Проверить новые версии на tine20.org"
+
+#~ msgid "Remove account"
+#~ msgstr "Удалить учётную запись"
+
+#~ msgid "shared"
+#~ msgstr "общие"
 
 #, fuzzy
-msgid "You don't have the required grant to select this {0}"
-msgstr "Вы уверены, что хотите удалить {0}?"
+#~ msgid "Permission Denied"
+#~ msgstr "Разрешения"
 
-msgid "is in"
-msgstr "в"
+#, fuzzy
+#~ msgid "You don't have the required grant to select this {0}"
+#~ msgstr "Вы уверены, что хотите удалить {0}?"
 
-msgid "remove record"
-msgstr "удалить запись"
+#~ msgid "is in"
+#~ msgstr "в"
 
-msgid "Search"
-msgstr "Поиск"
+#~ msgid "remove record"
+#~ msgstr "удалить запись"
 
-msgid "Browse"
-msgstr "Листать"
+#~ msgid "Search"
+#~ msgstr "Поиск"
 
-msgid "click to edit"
-msgstr "нажмите, чтобы изменить"
+#~ msgid "Browse"
+#~ msgstr "Листать"
 
-msgid "Plase select an image file (gif/png/jpeg)"
-msgstr "Пожалуйста, выберите файл изображения (gif/png/jpeg)"
+#~ msgid "click to edit"
+#~ msgstr "нажмите, чтобы изменить"
 
-msgid "Please Select a Group"
-msgstr "Пожалуйста, выберите группу"
+#~ msgid "Plase select an image file (gif/png/jpeg)"
+#~ msgstr "Пожалуйста, выберите файл изображения (gif/png/jpeg)"
 
-msgid "Register"
-msgstr "Регистрация"
+#~ msgid "Please Select a Group"
+#~ msgstr "Пожалуйста, выберите группу"
 
-msgid ""
-"The server did not respond to your request. Please check your network or "
-"contact your administrator."
-msgstr ""
-"Сервер не ответил на Ваш запрос. Пожалуйста, проверьте свою сеть или "
-"свяжитесь с Вашим администратором."
+#~ msgid "Register"
+#~ msgstr "Регистрация"
 
-msgid "Permissions"
-msgstr "Разрешения"
+#~ msgid ""
+#~ "The server did not respond to your request. Please check your network or "
+#~ "contact your administrator."
+#~ msgstr ""
+#~ "Сервер не ответил на Ваш запрос. Пожалуйста, проверьте свою сеть или "
+#~ "свяжитесь с Вашим администратором."
 
-msgid "Could not save {0}."
-msgstr "Не удалось сохранить {0}."
+#~ msgid "Permissions"
+#~ msgstr "Разрешения"
 
-msgid "add account"
-msgstr "добавить учётную запись"
+#~ msgid "Could not save {0}."
+#~ msgstr "Не удалось сохранить {0}."
 
-msgid "nobody"
-msgstr "никто"
+#~ msgid "add account"
+#~ msgstr "добавить учётную запись"
 
-msgid "please select an account"
-msgstr "пожалуйста, выберите учётную запись"
+#~ msgid "nobody"
+#~ msgstr "никто"
 
-msgid "loading new language..."
-msgstr "загрузка нового языка..."
+#~ msgid "please select an account"
+#~ msgstr "пожалуйста, выберите учётную запись"
 
-msgid "Export Date"
-msgstr "Экспорт даты"
+#~ msgid "loading new language..."
+#~ msgstr "загрузка нового языка..."
 
-msgid ""
-"Fatal Error: Client self-update failed, please contact your administrator."
-msgstr ""
-"Неустранимая ошибка: Сбой самообновления клиента, пожалуйста, обратитесь к "
-"администратору."
+#~ msgid "Export Date"
+#~ msgstr "Экспорт даты"
 
-msgid "Select all visible ({0} records)"
-msgstr "Выбрать все видимые ({0} записей)"
+#~ msgid ""
+#~ "Fatal Error: Client self-update failed, please contact your administrator."
+#~ msgstr ""
+#~ "Неустранимая ошибка: Сбой самообновления клиента, пожалуйста, обратитесь "
+#~ "к администратору."
+
+#~ msgid "Select all visible ({0} records)"
+#~ msgstr "Выбрать все видимые ({0} записей)"

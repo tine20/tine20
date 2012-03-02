@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-22 09:14+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 12:14+0000\n"
+"Last-Translator: kitamura yuuki <Unknown>\n"
 "Language-Team: Yuuki 'Taisa' Kitamura <ykitamura@clasi-co.jp>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:23+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: JAPAN\n"
 "X-Poedit-Language: Japanese\n"
 
@@ -200,7 +200,7 @@ msgstr ""
 msgid "Directory with web server write access for user files."
 msgstr ""
 
-#: Container.php:582
+#: Container.php:608
 #, python-format
 msgid "%s's personal container"
 msgstr ""
@@ -709,10 +709,10 @@ msgid "Your password expired. Please enter a new user password:"
 msgstr ""
 
 #: js/Models.js:131 js/widgets/tags/TagFilter.js:30
+#, fuzzy
 msgid "Tag"
 msgid_plural "Tags"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "タグ"
 
 #: js/Models.js:279
 msgid "Import"
@@ -2454,43 +2454,43 @@ msgstr ""
 msgid "Show confirmation dialog on logout."
 msgstr ""
 
-#: Setup/setup.xml:3039
+#: Setup/setup.xml:3105
 msgid "note"
 msgstr "ノート"
 
-#: Setup/setup.xml:3044
+#: Setup/setup.xml:3110
 msgid "default note type"
 msgstr "標準ノートタイプ"
 
-#: Setup/setup.xml:3070
+#: Setup/setup.xml:3136
 msgid "telephone"
 msgstr "電話"
 
-#: Setup/setup.xml:3075
+#: Setup/setup.xml:3141
 msgid "telephone call"
 msgstr "通話"
 
-#: Setup/setup.xml:3101
+#: Setup/setup.xml:3167
 msgid "email"
 msgstr "Eメール"
 
-#: Setup/setup.xml:3106
+#: Setup/setup.xml:3172
 msgid "email contact"
 msgstr "Eメールコンタクト"
 
-#: Setup/setup.xml:3132
+#: Setup/setup.xml:3198
 msgid "created"
 msgstr "作成されました"
 
-#: Setup/setup.xml:3137
+#: Setup/setup.xml:3203
 msgid "record created"
 msgstr "レコードが作製されました"
 
-#: Setup/setup.xml:3163
+#: Setup/setup.xml:3229
 msgid "changed"
 msgstr "変更されました"
 
-#: Setup/setup.xml:3168
+#: Setup/setup.xml:3234
 msgid "record changed"
 msgstr "レコードが変更されました"
 
@@ -2502,154 +2502,154 @@ msgstr ""
 msgid "Please wait or contact your administrator"
 msgstr ""
 
-msgid "low"
-msgstr "低"
+#~ msgid "low"
+#~ msgstr "低"
 
-msgid "normal"
-msgstr "普通"
+#~ msgid "normal"
+#~ msgstr "普通"
 
-msgid "high"
-msgstr "高"
+#~ msgid "high"
+#~ msgstr "高"
 
-msgid "urgent"
-msgstr "緊急"
-
-#, fuzzy
-msgid "Tagging"
-msgstr "タグ"
-
-msgid "save filter"
-msgstr "フィルタの保存"
-
-msgid "Updating {0} \"{1}\""
-msgstr "更新しています{0} \"{1}\""
-
-msgid "Deleting {0} \"{1}\""
-msgstr "削除しています{0} \"{1}\""
-
-msgid "Rename {0}"
-msgstr "名前の変更　{0}"
+#~ msgid "urgent"
+#~ msgstr "緊急"
 
 #, fuzzy
-msgid "Reload {0}"
-msgstr "名前の変更　{0}"
+#~ msgid "Tagging"
+#~ msgstr "タグ"
 
-msgid "There are no custom fields yet"
-msgstr "カスタムフィールドがありません"
+#~ msgid "save filter"
+#~ msgstr "フィルタの保存"
 
-msgid "Do you really want to delete the selected record"
-msgid_plural "Do you really want to delete the selected records"
-msgstr[0] "選択したレコードを本当に削除しますか？"
+#~ msgid "Updating {0} \"{1}\""
+#~ msgstr "更新しています{0} \"{1}\""
 
-#, fuzzy
-msgid "Transfering Configuration..."
-msgstr "移行しています　{0}..."
+#~ msgid "Deleting {0} \"{1}\""
+#~ msgstr "削除しています{0} \"{1}\""
 
-msgid "Transfering {0}..."
-msgstr "移行しています　{0}..."
-
-msgid "Install Google Gears"
-msgstr "Google Gearsをインストールする"
-
-msgid ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
-msgstr ""
-"このコンピュータにGearsをインストールすると、必要なファイルをキャッシュするこ"
-"とによってTine2.0の性能が向上するでしょう。"
-
-msgid "Please enter a name for the filter"
-msgstr "フィルター名を入力してください"
-
-msgid "Filter not Saved"
-msgstr "フィルターは保存されませんでした"
-
-msgid "You have to supply a name for the filter!"
-msgstr "フィルターに名前を付けてください"
-
-msgid "Saving filter"
-msgstr "フィルタの保存"
-
-msgid "My saved filters"
-msgstr "マイフィルター"
-
-msgid "Delete Filter"
-msgstr "フィルタの削除"
-
-msgid "Do you really want to delete the Filter \"{0}\"?"
-msgstr "本当にフィルターを削除しますか \"{0}\"?"
-
-msgid "Deleting Filter \"{0}\""
-msgstr "フィルターを削除しています \"{0}\""
-
-msgid "Saved filter"
-msgstr "フィルタの保存"
-
-msgid "Check tine20.org for new versions"
-msgstr "tine20.orgで新しいバージョンのチェック"
-
-msgid "shared"
-msgstr "共通"
+#~ msgid "Rename {0}"
+#~ msgstr "名前の変更　{0}"
 
 #, fuzzy
-msgid "Permission Denied"
-msgstr "権限"
+#~ msgid "Reload {0}"
+#~ msgstr "名前の変更　{0}"
+
+#~ msgid "There are no custom fields yet"
+#~ msgstr "カスタムフィールドがありません"
+
+#~ msgid "Do you really want to delete the selected record"
+#~ msgid_plural "Do you really want to delete the selected records"
+#~ msgstr[0] "選択したレコードを本当に削除しますか？"
 
 #, fuzzy
-msgid "You don't have the required grant to select this {0}"
-msgstr "本当に削除しますか？ {0}?"
+#~ msgid "Transfering Configuration..."
+#~ msgstr "移行しています　{0}..."
 
-msgid "is in"
-msgstr "に含まれる"
+#~ msgid "Transfering {0}..."
+#~ msgstr "移行しています　{0}..."
 
-msgid "remove record"
-msgstr "レコードの削除"
+#~ msgid "Install Google Gears"
+#~ msgstr "Google Gearsをインストールする"
 
-msgid "Search"
-msgstr "検索"
+#~ msgid ""
+#~ "Installing Gears will improve the performance of Tine 2.0 by caching all "
+#~ "needed files locally on this computer."
+#~ msgstr ""
+#~ "このコンピュータにGearsをインストールすると、必要なファイルをキャッシュす"
+#~ "ることによってTine2.0の性能が向上するでしょう。"
 
-msgid "Browse"
-msgstr "閲覧"
+#~ msgid "Please enter a name for the filter"
+#~ msgstr "フィルター名を入力してください"
 
-msgid "click to edit"
-msgstr "編集するにはクリックしてください"
+#~ msgid "Filter not Saved"
+#~ msgstr "フィルターは保存されませんでした"
 
-msgid "Plase select an image file (gif/png/jpeg)"
-msgstr "画像ファイルを選択してください(gif/png/jpeg)"
+#~ msgid "You have to supply a name for the filter!"
+#~ msgstr "フィルターに名前を付けてください"
 
-msgid "Please Select a Group"
-msgstr "グループを選択してください。"
+#~ msgid "Saving filter"
+#~ msgstr "フィルタの保存"
 
-msgid "Register"
-msgstr "登録者"
+#~ msgid "My saved filters"
+#~ msgstr "マイフィルター"
 
-msgid ""
-"The server did not respond to your request. Please check your network or "
-"contact your administrator."
-msgstr ""
-"サーバが応答しません。ネットワーク接続を確認し、システム管理者に連絡してくだ"
-"さい。"
+#~ msgid "Delete Filter"
+#~ msgstr "フィルタの削除"
 
-msgid "Permissions"
-msgstr "権限"
+#~ msgid "Do you really want to delete the Filter \"{0}\"?"
+#~ msgstr "本当にフィルターを削除しますか \"{0}\"?"
 
-msgid "Could not save {0}."
-msgstr "{0}を保存できませんでした."
+#~ msgid "Deleting Filter \"{0}\""
+#~ msgstr "フィルターを削除しています \"{0}\""
 
-msgid "add account"
-msgstr "アカウントの追加"
+#~ msgid "Saved filter"
+#~ msgstr "フィルタの保存"
 
-msgid "nobody"
-msgstr "だれもいない"
+#~ msgid "Check tine20.org for new versions"
+#~ msgstr "tine20.orgで新しいバージョンのチェック"
 
-msgid "please select an account"
-msgstr "アカウントを設定してください"
+#~ msgid "shared"
+#~ msgstr "共通"
 
-msgid "loading new language..."
-msgstr "新しい言語を読み込んでいます..."
+#, fuzzy
+#~ msgid "Permission Denied"
+#~ msgstr "権限"
 
-msgid "Export Date"
-msgstr "エクスポート日付"
+#, fuzzy
+#~ msgid "You don't have the required grant to select this {0}"
+#~ msgstr "本当に削除しますか？ {0}?"
 
-msgid "Select all visible ({0} records)"
-msgstr "表示しているものを全て選択 ({0} 件)"
+#~ msgid "is in"
+#~ msgstr "に含まれる"
+
+#~ msgid "remove record"
+#~ msgstr "レコードの削除"
+
+#~ msgid "Search"
+#~ msgstr "検索"
+
+#~ msgid "Browse"
+#~ msgstr "閲覧"
+
+#~ msgid "click to edit"
+#~ msgstr "編集するにはクリックしてください"
+
+#~ msgid "Plase select an image file (gif/png/jpeg)"
+#~ msgstr "画像ファイルを選択してください(gif/png/jpeg)"
+
+#~ msgid "Please Select a Group"
+#~ msgstr "グループを選択してください。"
+
+#~ msgid "Register"
+#~ msgstr "登録者"
+
+#~ msgid ""
+#~ "The server did not respond to your request. Please check your network or "
+#~ "contact your administrator."
+#~ msgstr ""
+#~ "サーバが応答しません。ネットワーク接続を確認し、システム管理者に連絡してく"
+#~ "ださい。"
+
+#~ msgid "Permissions"
+#~ msgstr "権限"
+
+#~ msgid "Could not save {0}."
+#~ msgstr "{0}を保存できませんでした."
+
+#~ msgid "add account"
+#~ msgstr "アカウントの追加"
+
+#~ msgid "nobody"
+#~ msgstr "だれもいない"
+
+#~ msgid "please select an account"
+#~ msgstr "アカウントを設定してください"
+
+#~ msgid "loading new language..."
+#~ msgstr "新しい言語を読み込んでいます..."
+
+#~ msgid "Export Date"
+#~ msgstr "エクスポート日付"
+
+#~ msgid "Select all visible ({0} records)"
+#~ msgstr "表示しているものを全て選択 ({0} 件)"

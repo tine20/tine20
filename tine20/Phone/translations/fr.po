@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-02-22 10:14+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 13:46+0000\n"
+"Last-Translator: Etienne Quesselaire <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:21+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Language: French\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -156,149 +156,149 @@ msgstr "Appel"
 msgid "Call ID"
 msgstr "ID d'appel"
 
-msgid "Dial phone number"
-msgstr "Composer un numéro"
+#~ msgid "Dial phone number"
+#~ msgstr "Composer un numéro"
 
-msgid "Name"
-msgstr "Nom"
+#~ msgid "Name"
+#~ msgstr "Nom"
 
-msgid "Phone Model"
-msgstr "Modèle de téléphone"
+#~ msgid "Phone Model"
+#~ msgstr "Modèle de téléphone"
 
-msgid "MAC Address"
-msgstr "Adresse MAC"
+#~ msgid "MAC Address"
+#~ msgstr "Adresse MAC"
 
-msgid "infos"
-msgstr "infos"
+#~ msgid "infos"
+#~ msgstr "infos"
 
-msgid "Current IP Address"
-msgstr "Adresse IP"
+#~ msgid "Current IP Address"
+#~ msgstr "Adresse IP"
 
-msgid "Firmware last checked at"
-msgstr "Dernière vérification de firmware"
+#~ msgid "Firmware last checked at"
+#~ msgstr "Dernière vérification de firmware"
 
-msgid "Current Software Version"
-msgstr "Version actuelle"
+#~ msgid "Current Software Version"
+#~ msgstr "Version actuelle"
 
-msgid "Settings Loaded at"
-msgstr "Paramètres chargés à"
+#~ msgid "Settings Loaded at"
+#~ msgstr "Paramètres chargés à"
 
-msgid "redirection"
-msgstr "renvoi"
-
-#, fuzzy
-msgid "redirect_event"
-msgstr "Supprimer"
-
-msgid "all"
-msgstr "tous"
-
-msgid "busy"
-msgstr "occupé"
-
-msgid "none"
-msgstr "Aucun"
-
-msgid "time"
-msgstr "Heure"
-
-msgid "redirect_number"
-msgstr "numéro de renvoi"
-
-msgid "redirect_time"
-msgstr "heure de renvoi"
-
-msgid "Settings"
-msgstr "paramètres"
-
-msgid "web_language"
-msgstr "Langage_web"
-
-msgid "- factory default -"
-msgstr "- Réglage d'usine -"
-
-msgid "language"
-msgstr "Langue"
-
-msgid "display_method"
-msgstr "Méthode d'affichage"
-
-msgid "whole url"
-msgstr "URL complète"
-
-msgid "name"
-msgstr "nom"
-
-msgid "number"
-msgstr "numéro"
-
-msgid "name + number"
-msgstr "nom + numéro"
-
-msgid "number + name"
-msgstr "numéro + nom"
-
-msgid "call_waiting"
-msgstr "Appel en attente"
-
-msgid "on"
-msgstr "Allumé"
-
-msgid "visual"
-msgstr "visual"
-
-msgid "off"
-msgstr "Éteint"
+#~ msgid "redirection"
+#~ msgstr "renvoi"
 
 #, fuzzy
-msgid "mwi_notification"
-msgstr "Notification de tâche"
+#~ msgid "redirect_event"
+#~ msgstr "Supprimer"
 
-msgid "silent"
-msgstr "muet"
+#~ msgid "all"
+#~ msgstr "tous"
 
-msgid "beep"
-msgstr "bip"
+#~ msgid "busy"
+#~ msgstr "occupé"
 
-msgid "reminder"
-msgstr "alerte"
+#~ msgid "none"
+#~ msgstr "Aucun"
 
-msgid "normal"
-msgstr "normal"
+#~ msgid "time"
+#~ msgstr "Heure"
 
-msgid "headset_device"
-msgstr "Casque"
+#~ msgid "redirect_number"
+#~ msgstr "numéro de renvoi"
+
+#~ msgid "redirect_time"
+#~ msgstr "heure de renvoi"
+
+#~ msgid "Settings"
+#~ msgstr "paramètres"
+
+#~ msgid "web_language"
+#~ msgstr "Langage_web"
+
+#~ msgid "- factory default -"
+#~ msgstr "- Réglage d'usine -"
+
+#~ msgid "language"
+#~ msgstr "Langue"
+
+#~ msgid "display_method"
+#~ msgstr "Méthode d'affichage"
+
+#~ msgid "whole url"
+#~ msgstr "URL complète"
+
+#~ msgid "name"
+#~ msgstr "nom"
+
+#~ msgid "number"
+#~ msgstr "numéro"
+
+#~ msgid "name + number"
+#~ msgstr "nom + numéro"
+
+#~ msgid "number + name"
+#~ msgstr "numéro + nom"
+
+#~ msgid "call_waiting"
+#~ msgstr "Appel en attente"
+
+#~ msgid "on"
+#~ msgstr "Allumé"
+
+#~ msgid "visual"
+#~ msgstr "visual"
+
+#~ msgid "off"
+#~ msgstr "Éteint"
 
 #, fuzzy
-msgid "headset_rj"
-msgstr "Casque"
+#~ msgid "mwi_notification"
+#~ msgstr "Notification de tâche"
+
+#~ msgid "silent"
+#~ msgstr "muet"
+
+#~ msgid "beep"
+#~ msgstr "bip"
+
+#~ msgid "reminder"
+#~ msgstr "alerte"
+
+#~ msgid "normal"
+#~ msgstr "normal"
+
+#~ msgid "headset_device"
+#~ msgstr "Casque"
 
 #, fuzzy
-msgid "scroll_outgoing"
-msgstr "Appel sortant"
+#~ msgid "headset_rj"
+#~ msgstr "Casque"
 
 #, fuzzy
-msgid "show_local_line"
-msgstr "afficher les dossiers intelligents"
-
-msgid "show_call_status"
-msgstr "Afficher l'état d'appel"
-
-msgid "lineactive"
-msgstr "Ligne active"
+#~ msgid "scroll_outgoing"
+#~ msgstr "Appel sortant"
 
 #, fuzzy
-msgid "Idle Text"
-msgstr "Texte simple"
+#~ msgid "show_local_line"
+#~ msgstr "afficher les dossiers intelligents"
 
-msgid "Lines"
-msgstr "Lignes"
+#~ msgid "show_call_status"
+#~ msgstr "Afficher l'état d'appel"
 
-msgid "Users"
-msgstr "Utilisateurs"
+#~ msgid "lineactive"
+#~ msgstr "Ligne active"
 
-msgid "Rights"
-msgstr "Droits"
+#, fuzzy
+#~ msgid "Idle Text"
+#~ msgstr "Texte simple"
 
-msgid "enter searchfilter"
-msgstr "saisir un filtre de recherche"
+#~ msgid "Lines"
+#~ msgstr "Lignes"
+
+#~ msgid "Users"
+#~ msgstr "Utilisateurs"
+
+#~ msgid "Rights"
+#~ msgstr "Droits"
+
+#~ msgid "enter searchfilter"
+#~ msgstr "saisir un filtre de recherche"

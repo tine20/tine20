@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-22 10:03+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 12:33+0000\n"
+"Last-Translator: Damià Verger <Unknown>\n"
 "Language-Team: Tine 2.0 Translators <dverger@joomla.cat>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:22+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -200,7 +200,7 @@ msgstr ""
 msgid "Directory with web server write access for user files."
 msgstr ""
 
-#: Container.php:582
+#: Container.php:608
 #, python-format
 msgid "%s's personal container"
 msgstr ""
@@ -732,10 +732,11 @@ msgid "Your password expired. Please enter a new user password:"
 msgstr ""
 
 #: js/Models.js:131 js/widgets/tags/TagFilter.js:30
+#, fuzzy
 msgid "Tag"
 msgid_plural "Tags"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Etiqueta"
+msgstr[1] "Etiqueta"
 
 #: js/Models.js:279
 msgid "Import"
@@ -2502,43 +2503,43 @@ msgstr "Confirma el tancament de sessió"
 msgid "Show confirmation dialog on logout."
 msgstr "Mostra diàleg de confirmació al tancament de sessió."
 
-#: Setup/setup.xml:3039
+#: Setup/setup.xml:3105
 msgid "note"
 msgstr "nota"
 
-#: Setup/setup.xml:3044
+#: Setup/setup.xml:3110
 msgid "default note type"
 msgstr "tipus de nota per defecte"
 
-#: Setup/setup.xml:3070
+#: Setup/setup.xml:3136
 msgid "telephone"
 msgstr "telèfon"
 
-#: Setup/setup.xml:3075
+#: Setup/setup.xml:3141
 msgid "telephone call"
 msgstr "trucada telefònica"
 
-#: Setup/setup.xml:3101
+#: Setup/setup.xml:3167
 msgid "email"
 msgstr "correu electrònic"
 
-#: Setup/setup.xml:3106
+#: Setup/setup.xml:3172
 msgid "email contact"
 msgstr "contacte de correu electrònic"
 
-#: Setup/setup.xml:3132
+#: Setup/setup.xml:3198
 msgid "created"
 msgstr "creat"
 
-#: Setup/setup.xml:3137
+#: Setup/setup.xml:3203
 msgid "record created"
 msgstr "registre creat"
 
-#: Setup/setup.xml:3163
+#: Setup/setup.xml:3229
 msgid "changed"
 msgstr "canviat"
 
-#: Setup/setup.xml:3168
+#: Setup/setup.xml:3234
 msgid "record changed"
 msgstr "registre canviat"
 
@@ -2550,154 +2551,155 @@ msgstr ""
 msgid "Please wait or contact your administrator"
 msgstr ""
 
-msgid "low"
-msgstr "baixa"
+#~ msgid "low"
+#~ msgstr "baixa"
 
-msgid "normal"
-msgstr "normal"
+#~ msgid "normal"
+#~ msgstr "normal"
 
-msgid "high"
-msgstr "alta"
+#~ msgid "high"
+#~ msgstr "alta"
 
-msgid "urgent"
-msgstr "urgent"
+#~ msgid "urgent"
+#~ msgstr "urgent"
 
-msgid ""
-"The server is currently unable to handle the request due to a temporary "
-"overloading or maintenance of the server. Please try again or contact your "
-"administrator."
-msgstr ""
-"El servidor en aquests moments no pot respondre a la petició degut a una "
-"sobrecàrrega puntual o per manteniment del servidor. Intenteu-ho altra "
-"vegada o contacteu l'administrador."
+#~ msgid ""
+#~ "The server is currently unable to handle the request due to a temporary "
+#~ "overloading or maintenance of the server. Please try again or contact "
+#~ "your administrator."
+#~ msgstr ""
+#~ "El servidor en aquests moments no pot respondre a la petició degut a una "
+#~ "sobrecàrrega puntual o per manteniment del servidor. Intenteu-ho altra "
+#~ "vegada o contacteu l'administrador."
 
-msgid "Files"
-msgstr "Fitxers"
+#~ msgid "Files"
+#~ msgstr "Fitxers"
 
-msgid "Import definition"
-msgstr "Definició de la importació"
+#~ msgid "Import definition"
+#~ msgstr "Definició de la importació"
 
-msgid "Import into {0}"
-msgstr "Importa a {0}"
+#~ msgid "Import into {0}"
+#~ msgstr "Importa a {0}"
 
-msgid "Dry run"
-msgstr "Executa en sec"
+#~ msgid "Dry run"
+#~ msgstr "Executa en sec"
 
-msgid "No files added"
-msgstr "No s'ha afegit cap fitxer"
+#~ msgid "No files added"
+#~ msgstr "No s'ha afegit cap fitxer"
 
-msgid "You need to add files to import."
-msgstr "Cal que afegiu fitxers a importar."
+#~ msgid "You need to add files to import."
+#~ msgstr "Cal que afegiu fitxers a importar."
 
-msgid "Dry run results"
-msgstr "Resultats de l'execució en sec"
+#~ msgid "Dry run results"
+#~ msgstr "Resultats de l'execució en sec"
 
-msgid ""
-"Import test successful for {0} records, import test failed for {1} records."
-msgstr ""
-"La prova d'importació ha anat bé per als registres de {0}, i ha fallat per "
-"als registres de {1}"
+#~ msgid ""
+#~ "Import test successful for {0} records, import test failed for {1} "
+#~ "records."
+#~ msgstr ""
+#~ "La prova d'importació ha anat bé per als registres de {0}, i ha fallat "
+#~ "per als registres de {1}"
 
-msgid "Import results"
-msgstr "Resultats de la importació"
+#~ msgid "Import results"
+#~ msgstr "Resultats de la importació"
 
-msgid ""
-"Import successful for {0} records / import failed for {1} records / {2} "
-"duplicates found"
-msgstr ""
-"La importació ha anat bé per a registres {0} / la importació ha fallat per a "
-"registres {1} / s'han trobat {2} duplicats"
+#~ msgid ""
+#~ "Import successful for {0} records / import failed for {1} records / {2} "
+#~ "duplicates found"
+#~ msgstr ""
+#~ "La importació ha anat bé per a registres {0} / la importació ha fallat "
+#~ "per a registres {1} / s'han trobat {2} duplicats"
 
-msgid "Tagging"
-msgstr "Etiquetatge"
+#~ msgid "Tagging"
+#~ msgstr "Etiquetatge"
 
-msgid "Favorite"
-msgid_plural "Favorites"
-msgstr[0] "Preferit"
-msgstr[1] "Preferits"
+#~ msgid "Favorite"
+#~ msgid_plural "Favorites"
+#~ msgstr[0] "Preferit"
+#~ msgstr[1] "Preferits"
 
-msgid "Events"
-msgstr "Esdeveniments"
+#~ msgid "Events"
+#~ msgstr "Esdeveniments"
 
-msgid "Rename Favorite"
-msgstr "Canvia el nom a un preferit"
+#~ msgid "Rename Favorite"
+#~ msgstr "Canvia el nom a un preferit"
 
-msgid "New Name"
-msgstr "Nou nom"
+#~ msgid "New Name"
+#~ msgstr "Nou nom"
 
-msgid "Please enter the new name for favorite \"{0}\"?"
-msgstr "Introduïu el nou nom per al preferit \"{0}\"?"
+#~ msgid "Please enter the new name for favorite \"{0}\"?"
+#~ msgstr "Introduïu el nou nom per al preferit \"{0}\"?"
 
-msgid "Renaming Favorite \"{0}\""
-msgstr "Es canvia el nom al preferit \"{0}\""
+#~ msgid "Renaming Favorite \"{0}\""
+#~ msgstr "Es canvia el nom al preferit \"{0}\""
 
-msgid "save filter"
-msgstr "desa el filtre"
+#~ msgid "save filter"
+#~ msgstr "desa el filtre"
 
-msgid "Please enter a name for the favorite"
-msgstr "Introduïu un nom per al preferit"
+#~ msgid "Please enter a name for the favorite"
+#~ msgstr "Introduïu un nom per al preferit"
 
-msgid "Saving favorite"
-msgstr "Es desa el preferit"
+#~ msgid "Saving favorite"
+#~ msgstr "Es desa el preferit"
 
-msgid "Updating {0} \"{1}\""
-msgstr "Actualitzant el {0} \"{1}\""
+#~ msgid "Updating {0} \"{1}\""
+#~ msgstr "Actualitzant el {0} \"{1}\""
 
-msgid "Deleting {0} \"{1}\""
-msgstr "Eliminant el {0} \"{1}\""
+#~ msgid "Deleting {0} \"{1}\""
+#~ msgstr "Eliminant el {0} \"{1}\""
 
-msgid "Rename {0}"
-msgstr "Canvia el nom del {0}"
+#~ msgid "Rename {0}"
+#~ msgstr "Canvia el nom del {0}"
 
-msgid "Reload {0}"
-msgstr "Torna a carregar el {0}"
+#~ msgid "Reload {0}"
+#~ msgstr "Torna a carregar el {0}"
 
-msgid "There are no custom fields yet"
-msgstr "Encara no hi ha camps personalitzats"
+#~ msgid "There are no custom fields yet"
+#~ msgstr "Encara no hi ha camps personalitzats"
 
-msgid "Do you really want to delete the selected record"
-msgid_plural "Do you really want to delete the selected records"
-msgstr[0] "Esteu segur que voleu eliminar el registre seleccionat"
-msgstr[1] "Esteu segur que voleu eliminar els registres seleccionats"
+#~ msgid "Do you really want to delete the selected record"
+#~ msgid_plural "Do you really want to delete the selected records"
+#~ msgstr[0] "Esteu segur que voleu eliminar el registre seleccionat"
+#~ msgstr[1] "Esteu segur que voleu eliminar els registres seleccionats"
 
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "Grup"
-msgstr[1] "Grups"
+#~ msgid "Group"
+#~ msgid_plural "Groups"
+#~ msgstr[0] "Grup"
+#~ msgstr[1] "Grups"
 
-msgid "Groups"
-msgstr "Grups"
+#~ msgid "Groups"
+#~ msgstr "Grups"
 
-msgid "About Tine 2.0"
-msgstr "Quant al Tine 2.0"
+#~ msgid "About Tine 2.0"
+#~ msgstr "Quant al Tine 2.0"
 
-msgid "Custom datetime"
-msgstr "Data i hora per defecte"
+#~ msgid "Custom datetime"
+#~ msgstr "Data i hora per defecte"
 
-msgid "Internal {0}"
-msgstr "{0} interns"
+#~ msgid "Internal {0}"
+#~ msgstr "{0} interns"
 
-msgid "Overwriteing system favorites is not yet supported"
-msgstr "Encara no s'admet la sobreescriptura de preferits de sistema"
+#~ msgid "Overwriteing system favorites is not yet supported"
+#~ msgstr "Encara no s'admet la sobreescriptura de preferits de sistema"
 
-msgid "Filter"
-msgstr "Filtre"
+#~ msgid "Filter"
+#~ msgstr "Filtre"
 
-msgid "Transfering Configuration..."
-msgstr "Es transfereix la configuració..."
+#~ msgid "Transfering Configuration..."
+#~ msgstr "Es transfereix la configuració..."
 
-msgid "Transfering {0}..."
-msgstr "Transferint {0}..."
+#~ msgid "Transfering {0}..."
+#~ msgstr "Transferint {0}..."
 
-msgid "Install Google Gears"
-msgstr "Instal·la el Google Gears"
+#~ msgid "Install Google Gears"
+#~ msgstr "Instal·la el Google Gears"
 
-msgid ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
-msgstr ""
-"La instal·lació del Gears millorarà el rendiment del Tine 2.0 emmagatzemant "
-"a cau els fitxers requerits localment en aquest ordinador."
+#~ msgid ""
+#~ "Installing Gears will improve the performance of Tine 2.0 by caching all "
+#~ "needed files locally on this computer."
+#~ msgstr ""
+#~ "La instal·lació del Gears millorarà el rendiment del Tine 2.0 "
+#~ "emmagatzemant a cau els fitxers requerits localment en aquest ordinador."
 
-msgid "Select all visible ({0} records)"
-msgstr "Selecciona tots els visibles ({0} registres)"
+#~ msgid "Select all visible ({0} records)"
+#~ msgstr "Selecciona tots els visibles ({0} registres)"

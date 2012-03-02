@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-22 09:23+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 12:42+0000\n"
+"Last-Translator: Frank <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:22+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: TAIWAN\n"
 "X-Poedit-Language: Chinese\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -95,7 +95,7 @@ msgstr "優先權"
 msgid "Percent"
 msgstr "百分比"
 
-#: js/GridPanel.js:165 js/TaskEditDialog.js:220 js/Tasks.js:151
+#: js/GridPanel.js:165 js/TaskEditDialog.js:221 js/Tasks.js:151
 #: js/Tasks.js:211 Model/Task.php:191
 msgid "Status"
 msgid_plural "Status"
@@ -106,7 +106,7 @@ msgstr[1] ""
 msgid "Creation Time"
 msgstr "建立時間"
 
-#: js/GridPanel.js:188 js/TaskEditDialog.js:227 Setup/Initialize.php:35
+#: js/GridPanel.js:188 js/TaskEditDialog.js:228 Setup/Initialize.php:35
 #: Setup/Update/Release5.php:66
 msgid "Completed"
 msgstr "已完成"
@@ -127,23 +127,23 @@ msgstr ""
 msgid "Due date"
 msgstr "到期日"
 
-#: js/TaskEditDialog.js:198 Model/Task.php:188
+#: js/TaskEditDialog.js:199 Model/Task.php:188
 msgid "Organizer"
 msgstr ""
 
-#: js/TaskEditDialog.js:199
+#: js/TaskEditDialog.js:200
 msgid "Add Responsible ..."
 msgstr ""
 
-#: js/TaskEditDialog.js:206
+#: js/TaskEditDialog.js:207
 msgid "Notes"
 msgstr "備註"
 
-#: js/TaskEditDialog.js:207
+#: js/TaskEditDialog.js:208
 msgid "Enter description..."
 msgstr "輸入說明"
 
-#: js/TaskEditDialog.js:213
+#: js/TaskEditDialog.js:214
 msgid "Percentage"
 msgstr "百分比"
 
@@ -281,20 +281,20 @@ msgstr ""
 msgid "Tasks without responsible"
 msgstr ""
 
-msgid "NEEDS-ACTION"
-msgstr "需要被執行"
+#~ msgid "NEEDS-ACTION"
+#~ msgstr "需要被執行"
 
-msgid "COMPLETED"
-msgstr "已完成"
+#~ msgid "COMPLETED"
+#~ msgstr "已完成"
 
-msgid "IN-PROCESS"
-msgstr "正在處理中"
+#~ msgid "IN-PROCESS"
+#~ msgstr "正在處理中"
 
-msgid "CANCELLED"
-msgstr "已取消"
+#~ msgid "CANCELLED"
+#~ msgstr "已取消"
 
-msgid "Failed"
-msgstr "已失敗"
+#~ msgid "Failed"
+#~ msgstr "已失敗"
 
-msgid "Could not save task."
-msgstr "無法儲存任務"
+#~ msgid "Could not save task."
+#~ msgstr "無法儲存任務"

@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-22 09:31+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 09:47+0000\n"
+"Last-Translator: Faragó Tamás <Unknown>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:20+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -50,24 +50,21 @@ msgstr ""
 
 #: Config.php:59
 msgid "Contact salutations available"
-msgstr "Kapcsolat megszólítás elérhető"
+msgstr ""
 
 #: Config.php:61
 msgid ""
 "Possible contact salutations. Please note that additional values might "
 "impact other Addressbook systems on export or syncronisation."
 msgstr ""
-"Lehetséges kapcsolat megszólítás- Kérlek jegyezd meg, hogy azok további "
-"értékek ütközhetnek más Címjegyzék rendszerekkel exportáláskor vagy "
-"szinkronizáláskor."
 
 #: Config.php:69
 msgid "Parsing rules for addresses"
-msgstr "Címek felbontási szabályai"
+msgstr ""
 
 #: Config.php:71
 msgid "Path to a XML file with address parsing rules."
-msgstr "Címek felbontási szabályait tartalmazó XML fájl elérése"
+msgstr ""
 
 #: Controller.php:98
 #, python-format
@@ -223,7 +220,7 @@ msgstr[1] "Címjegyzékek"
 
 #: js/CardDAVContainerPropertiesHookField.js:35
 msgid "CardDAV URL"
-msgstr "CardDAV URL"
+msgstr ""
 
 #: js/ContactEditDialog.js:45 js/ContactEditDialog.js:51 js/MapPanel.js:40
 msgid "Map"
@@ -378,7 +375,7 @@ msgstr "Exportálás pdf-be"
 
 #: js/ContactEditDialog.js:416 js/ContactEditDialog.js:501
 msgid "Parse address"
-msgstr "Cím felbontása"
+msgstr ""
 
 #: js/ContactEditDialog.js:440 js/ContactEditDialog.js:458
 msgid "Either {0} or {1} must be given"
@@ -386,11 +383,11 @@ msgstr "Vagy {0} vagy {1} megadása kötelező"
 
 #: js/ContactEditDialog.js:493
 msgid "Paste address"
-msgstr "Cím beillesztése"
+msgstr ""
 
 #: js/ContactEditDialog.js:493
 msgid "Please paste an address that should be parsed:"
-msgstr "Kérlek illessz be egy címet ami felbontásra kerül:"
+msgstr ""
 
 #: js/ContactEditDialog.js:527
 msgid "End token mode"
@@ -696,26 +693,26 @@ msgstr "Minden kapcsolat amit utoljára én módosítottam"
 msgid "Internal Contacts"
 msgstr "Belső kapcsolatok"
 
-msgid "Searching..."
-msgstr "Keresés..."
+#~ msgid "Searching..."
+#~ msgstr "Keresés..."
 
-msgid "Call contact"
-msgstr "Kapcsolat hívása"
+#~ msgid "Call contact"
+#~ msgstr "Kapcsolat hívása"
 
-msgid "Compose email"
-msgstr "Email írása"
+#~ msgid "Compose email"
+#~ msgstr "Email írása"
 
-msgid "Work"
-msgstr "Üzlet"
+#~ msgid "Work"
+#~ msgstr "Üzlet"
 
-msgid "Home"
-msgstr "Otthon"
+#~ msgid "Home"
+#~ msgstr "Otthon"
 
-msgid "Cell"
-msgstr "Mobil"
+#~ msgid "Cell"
+#~ msgstr "Mobil"
 
-msgid "Cell private"
-msgstr "Mobil privát"
+#~ msgid "Cell private"
+#~ msgstr "Mobil privát"
 
-msgid "Last Modified Time"
-msgstr "Utolsó módosítás ideje"
+#~ msgid "Last Modified Time"
+#~ msgstr "Utolsó módosítás ideje"

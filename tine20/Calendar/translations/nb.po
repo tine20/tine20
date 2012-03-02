@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-22 10:13+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 13:32+0000\n"
+"Last-Translator: Cirion <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:20+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Norwegian Bokmål\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -144,7 +144,7 @@ msgid "Select Role"
 msgstr ""
 
 #: js/AddToEventPanel.js:216 js/AttendeeGridPanel.js:186
-#: js/ContactEventsGridPanel.js:125 js/GridView.js:149 Model/Event.php:244
+#: js/ContactEventsGridPanel.js:125 js/GridView.js:149 Model/Event.php:245
 msgid "Status"
 msgstr "Status"
 
@@ -244,7 +244,7 @@ msgid "Events"
 msgstr "Hendelser"
 
 #: js/ContactEventsGridPanel.js:112 js/EventEditDialog.js:90
-#: js/GridView.js:139 js/Model.js:201 Model/Event.php:245
+#: js/GridView.js:139 js/Model.js:201 Model/Event.php:246
 msgid "Summary"
 msgstr "Oppsumering"
 
@@ -289,16 +289,16 @@ msgstr ""
 msgid "End Time"
 msgstr "Slutt Tid"
 
-#: js/EventDetailsPanel.js:244 Model/Event.php:238
+#: js/EventDetailsPanel.js:244 Model/Event.php:239
 msgid "Blocking"
 msgstr "Blokkerer"
 
 #: js/EventDetailsPanel.js:249 js/EventEditDialog.js:98 js/GridView.js:144
-#: js/Model.js:202 js/ResourcesGridPanel.js:52 Model/Event.php:241
+#: js/Model.js:202 js/ResourcesGridPanel.js:52 Model/Event.php:242
 msgid "Location"
 msgstr "Sted"
 
-#: js/EventDetailsPanel.js:253 js/Model.js:215 Model/Event.php:242
+#: js/EventDetailsPanel.js:253 js/Model.js:215 Model/Event.php:243
 msgid "Organizer"
 msgstr "Organiserer"
 
@@ -316,7 +316,7 @@ msgid "Private"
 msgstr ""
 
 #: js/EventEditDialog.js:201 js/Model.js:203 js/ResourceEditDialog.js:72
-#: Model/Event.php:240
+#: Model/Event.php:241
 msgid "Description"
 msgstr "Beskrivelse"
 
@@ -526,31 +526,31 @@ msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Vil du virkelig slette denn hendelsen?"
 msgstr[1] "Vil du virkelig slette disse {0} hendelsene?"
 
-#: js/MainScreenCenterPanel.js:935
+#: js/MainScreenCenterPanel.js:940
 msgid "Could not Print"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:935
+#: js/MainScreenCenterPanel.js:940
 msgid "Sorry, your current view does not support printing."
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1084
+#: js/MainScreenCenterPanel.js:1089
 msgid "Scheduling Conflict"
 msgstr "Avtale Konflikt"
 
-#: js/MainScreenCenterPanel.js:1086
+#: js/MainScreenCenterPanel.js:1091
 msgid "The following attendee are busy at the requested time:"
 msgstr "Følgende deltagere er opptatt på ønsket tid:"
 
-#: js/MainScreenCenterPanel.js:1090
+#: js/MainScreenCenterPanel.js:1095
 msgid "Ignore Conflict"
 msgstr "Ignorer Konflikt"
 
-#: js/MainScreenCenterPanel.js:1091
+#: js/MainScreenCenterPanel.js:1096
 msgid "Edit Event"
 msgstr "Rediger Hendelse"
 
-#: js/MainScreenCenterPanel.js:1092
+#: js/MainScreenCenterPanel.js:1097
 msgid "Cancel this action"
 msgstr ""
 
@@ -656,7 +656,7 @@ msgstr ""
 msgid "after {0} occurrences"
 msgstr ""
 
-#: js/RrulePanel.js:312 Model/Event.php:237
+#: js/RrulePanel.js:312 Model/Event.php:238
 msgid "End"
 msgstr "Slutt"
 
@@ -736,39 +736,39 @@ msgstr ""
 "Denne kontakten har blitt automatisk lagt til av systemet som en handligs "
 "deltager"
 
-#: Model/Event.php:236
+#: Model/Event.php:237
 msgid "Start"
 msgstr "Start"
 
-#: Model/Event.php:239
+#: Model/Event.php:240
 msgid "Classification"
 msgstr "Klasifisering"
 
-#: Model/Event.php:243
+#: Model/Event.php:244
 msgid "Priority"
 msgstr "Prioritet"
 
-#: Model/Event.php:246
+#: Model/Event.php:247
 msgid "Url"
 msgstr "Url"
 
-#: Model/Event.php:247
+#: Model/Event.php:248
 msgid "Recurrance rule"
 msgstr "Gjentagelse regel"
 
-#: Model/Event.php:248
+#: Model/Event.php:249
 msgid "Is all day event"
 msgstr "Er hele dagen hendelse"
 
-#: Model/Event.php:249
+#: Model/Event.php:250
 msgid "Organizer timezone"
 msgstr "Organiserer tidssone"
 
-#: Model/Event.php:274
+#: Model/Event.php:275
 msgid "Yes"
 msgstr "Ja"
 
-#: Model/Event.php:274
+#: Model/Event.php:275
 msgid "No"
 msgstr "Nei"
 
@@ -930,78 +930,81 @@ msgstr ""
 msgid "Event details"
 msgstr "Hendelse detaljer"
 
-msgid "forever"
-msgstr "for alltid"
+#~ msgid "forever"
+#~ msgstr "for alltid"
 
-msgid "Forever"
-msgstr "For alltid"
+#~ msgid "Forever"
+#~ msgstr "For alltid"
 
-msgid "Until"
-msgstr "Intill"
+#~ msgid "Until"
+#~ msgstr "Intill"
 
-msgid "Unknown calendar"
-msgstr "Ukjent kalender"
+#~ msgid "Unknown calendar"
+#~ msgstr "Ukjent kalender"
 
-msgid "unknown)"
-msgstr "ukjent)"
+#~ msgid "unknown)"
+#~ msgstr "ukjent)"
 
-msgid "Confirm Update of Series"
-msgstr "Bekreft Oppdatering av Serie"
+#~ msgid "Confirm Update of Series"
+#~ msgstr "Bekreft Oppdatering av Serie"
 
-msgid "Do you really want to update all events of this recurring event series?"
-msgstr ""
-"Vil du virkelig oppdatere alle hendelser for denne gjentagende hendelses "
-"serien?"
+#~ msgid ""
+#~ "Do you really want to update all events of this recurring event series?"
+#~ msgstr ""
+#~ "Vil du virkelig oppdatere alle hendelser for denne gjentagende hendelses "
+#~ "serien?"
 
-msgid "Confirm Deletion of Series"
-msgstr "Bekreft Sletting av Serie"
+#~ msgid "Confirm Deletion of Series"
+#~ msgstr "Bekreft Sletting av Serie"
 
-msgid "Do you really want to delete all events of this recurring event series?"
-msgstr ""
-"Vil du virkelig slette alle hendelser av denne gjentagende hendelses serien?"
+#~ msgid ""
+#~ "Do you really want to delete all events of this recurring event series?"
+#~ msgstr ""
+#~ "Vil du virkelig slette alle hendelser av denne gjentagende hendelses "
+#~ "serien?"
 
-msgid "Event \"%1$s\" at %s has been canceled"
-msgstr "Hendelse  \"%1$s\" på %2$s har blitt avlyst"
+#~ msgid "Event \"%1$s\" at %s has been canceled"
+#~ msgstr "Hendelse  \"%1$s\" på %2$s har blitt avlyst"
 
-msgid "Resources {0}"
-msgstr "Resurser {0}"
+#~ msgid "Resources {0}"
+#~ msgstr "Resurser {0}"
 
-msgid "Show declined events"
-msgstr "Vis aviste hendelser"
+#~ msgid "Show declined events"
+#~ msgstr "Vis aviste hendelser"
 
-msgid "Publish Free/Busy Information"
-msgstr "Utgi Ledig/Opptatt informasjon"
+#~ msgid "Publish Free/Busy Information"
+#~ msgstr "Utgi Ledig/Opptatt informasjon"
 
-msgid "Allow all users to view your free/busy information"
-msgstr "Tillat alle brukere å se din ledig/opptatt informasjon"
+#~ msgid "Allow all users to view your free/busy information"
+#~ msgstr "Tillat alle brukere å se din ledig/opptatt informasjon"
 
-msgid "Do you want to update the whole series, or just this event"
-msgstr "Vil du oppdatere hele serien, eller bare denne hendelsen"
+#~ msgid "Do you want to update the whole series, or just this event"
+#~ msgstr "Vil du oppdatere hele serien, eller bare denne hendelsen"
 
-msgid "Failed not update recurring event series"
-msgstr "Feilet, ikke oppdater gjentagende hendelses serie"
+#~ msgid "Failed not update recurring event series"
+#~ msgstr "Feilet, ikke oppdater gjentagende hendelses serie"
 
-msgid "Failed not update event"
-msgstr "Feilet, ikke oppdatert hendelse"
+#~ msgid "Failed not update event"
+#~ msgstr "Feilet, ikke oppdatert hendelse"
 
-msgid ""
-"Do you want to delete the whole series, this and all future events of this "
-"series, or just this event"
-msgstr ""
-"Vil du slette hele serien, dinne og alle framtidige hendelser av denne "
-"serien, eller bare denne hendelsen"
+#~ msgid ""
+#~ "Do you want to delete the whole series, this and all future events of "
+#~ "this series, or just this event"
+#~ msgstr ""
+#~ "Vil du slette hele serien, dinne og alle framtidige hendelser av denne "
+#~ "serien, eller bare denne hendelsen"
 
-msgid "Every"
-msgstr "Hver"
+#~ msgid "Every"
+#~ msgstr "Hver"
 
-msgid ". Day"
-msgstr ". Dag"
+#~ msgid ". Day"
+#~ msgstr ". Dag"
 
-msgid ". Week at"
-msgstr ". Uke på "
+#~ msgid ". Week at"
+#~ msgstr ". Uke på "
 
-msgid ". Month"
-msgstr ". Måned"
+#~ msgid ". Month"
+#~ msgstr ". Måned"
 
-msgid ". Year"
-msgstr ". År"
+#~ msgid ". Year"
+#~ msgstr ". År"

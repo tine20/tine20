@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-22 09:21+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 12:38+0000\n"
+"Last-Translator: kitamura yuuki <Unknown>\n"
 "Language-Team: Yuuki ’Taisa’ Kitamura <ykitamura@clasi-co.jp>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:22+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: JAPAN\n"
 "X-Poedit-Language: Japanese\n"
 
@@ -94,7 +94,7 @@ msgstr "重要度"
 msgid "Percent"
 msgstr "パーセント"
 
-#: js/GridPanel.js:165 js/TaskEditDialog.js:220 js/Tasks.js:151
+#: js/GridPanel.js:165 js/TaskEditDialog.js:221 js/Tasks.js:151
 #: js/Tasks.js:211 Model/Task.php:191
 msgid "Status"
 msgid_plural "Status"
@@ -105,7 +105,7 @@ msgstr[1] ""
 msgid "Creation Time"
 msgstr "作成時間"
 
-#: js/GridPanel.js:188 js/TaskEditDialog.js:227 Setup/Initialize.php:35
+#: js/GridPanel.js:188 js/TaskEditDialog.js:228 Setup/Initialize.php:35
 #: Setup/Update/Release5.php:66
 msgid "Completed"
 msgstr "完了"
@@ -126,23 +126,23 @@ msgstr ""
 msgid "Due date"
 msgstr "期日"
 
-#: js/TaskEditDialog.js:198 Model/Task.php:188
+#: js/TaskEditDialog.js:199 Model/Task.php:188
 msgid "Organizer"
 msgstr ""
 
-#: js/TaskEditDialog.js:199
+#: js/TaskEditDialog.js:200
 msgid "Add Responsible ..."
 msgstr ""
 
-#: js/TaskEditDialog.js:206
+#: js/TaskEditDialog.js:207
 msgid "Notes"
 msgstr "ノート"
 
-#: js/TaskEditDialog.js:207
+#: js/TaskEditDialog.js:208
 msgid "Enter description..."
 msgstr "説明を入力してください..."
 
-#: js/TaskEditDialog.js:213
+#: js/TaskEditDialog.js:214
 msgid "Percentage"
 msgstr "割合"
 
@@ -280,20 +280,20 @@ msgstr ""
 msgid "Tasks without responsible"
 msgstr ""
 
-msgid "NEEDS-ACTION"
-msgstr "要アクション"
+#~ msgid "NEEDS-ACTION"
+#~ msgstr "要アクション"
 
-msgid "COMPLETED"
-msgstr "完了"
+#~ msgid "COMPLETED"
+#~ msgstr "完了"
 
-msgid "IN-PROCESS"
-msgstr "進行中"
+#~ msgid "IN-PROCESS"
+#~ msgstr "進行中"
 
-msgid "CANCELLED"
-msgstr "キャンセル"
+#~ msgid "CANCELLED"
+#~ msgstr "キャンセル"
 
-msgid "Failed"
-msgstr "失敗"
+#~ msgid "Failed"
+#~ msgstr "失敗"
 
-msgid "Could not save task."
-msgstr "タスクの保存に失敗しました"
+#~ msgid "Could not save task."
+#~ msgstr "タスクの保存に失敗しました"

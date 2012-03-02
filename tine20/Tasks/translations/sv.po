@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-10 12:00+0000\n"
+"PO-Revision-Date: 2012-01-13 11:16+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-21 06:34+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Swedish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -96,7 +96,7 @@ msgstr ""
 msgid "Percent"
 msgstr ""
 
-#: js/GridPanel.js:165 js/TaskEditDialog.js:220 js/Tasks.js:151
+#: js/GridPanel.js:165 js/TaskEditDialog.js:221 js/Tasks.js:151
 #: js/Tasks.js:211 Model/Task.php:191
 msgid "Status"
 msgid_plural "Status"
@@ -107,7 +107,7 @@ msgstr[1] ""
 msgid "Creation Time"
 msgstr ""
 
-#: js/GridPanel.js:188 js/TaskEditDialog.js:227 Setup/Initialize.php:35
+#: js/GridPanel.js:188 js/TaskEditDialog.js:228 Setup/Initialize.php:35
 #: Setup/Update/Release5.php:66
 msgid "Completed"
 msgstr ""
@@ -128,23 +128,23 @@ msgstr ""
 msgid "Due date"
 msgstr ""
 
-#: js/TaskEditDialog.js:198 Model/Task.php:188
+#: js/TaskEditDialog.js:199 Model/Task.php:188
 msgid "Organizer"
 msgstr ""
 
-#: js/TaskEditDialog.js:199
+#: js/TaskEditDialog.js:200
 msgid "Add Responsible ..."
 msgstr ""
 
-#: js/TaskEditDialog.js:206
+#: js/TaskEditDialog.js:207
 msgid "Notes"
 msgstr ""
 
-#: js/TaskEditDialog.js:207
+#: js/TaskEditDialog.js:208
 msgid "Enter description..."
 msgstr ""
 
-#: js/TaskEditDialog.js:213
+#: js/TaskEditDialog.js:214
 msgid "Percentage"
 msgstr ""
 

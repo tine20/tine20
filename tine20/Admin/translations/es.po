@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-25 11:38+0000\n"
-"Last-Translator: Fitoschido <fitoschido@gmail.com>\n"
+"PO-Revision-Date: 2012-01-13 11:23+0000\n"
+"Last-Translator: Lars Kneschke <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-26 05:20+0000\n"
-"X-Generator: Launchpad (build 14860)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:20+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -686,31 +686,31 @@ msgstr "Usar"
 
 #: js/TagEditDialog.js:219
 msgid "Tag Name"
-msgstr "Nombre de la etiqueta"
+msgstr "Nombre de Etiqueta"
 
 #: js/TagEditDialog.js:290
 msgid "Tag"
-msgstr "Etiqueta"
+msgstr ""
 
 #: js/TagEditDialog.js:300
 msgid "Add New Tag"
-msgstr "Añadir etiqueta nueva"
+msgstr "Agregar Nueva Etiqueta"
 
 #: js/TagEditDialog.js:302
 msgid "Edit Tag \"{0}\""
-msgstr "Editar etiqueta «{0}»"
+msgstr "Editar Etiqueta \"{0}\""
 
 #: js/Tags.js:64
 msgid "Do you really want to delete the selected tags?"
-msgstr "¿Realmente quiere eliminar las etiquetas seleccionadas?"
+msgstr "¿Realmente desea borrar las etiquetas seleccionadas?"
 
 #: js/Tags.js:82
 msgid "Deleting tag(s)..."
-msgstr "Eliminando etiqueta(s)..."
+msgstr "Borrando etiqueta(s)..."
 
 #: js/Tags.js:97
 msgid "add tag"
-msgstr "añadir etiqueta"
+msgstr "agregar etiqueta"
 
 #: js/Tags.js:105
 msgid "edit tag"
@@ -718,33 +718,32 @@ msgstr "editar etiqueta"
 
 #: js/Tags.js:113
 msgid "delete tag"
-msgstr "eliminar etiqueta"
+msgstr "borrar etiqueta"
 
 #: js/Tags.js:211
 msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Mostrando etiquetas {0} - {1} de {2}"
+msgstr "Mostrando etiquetas {0} - {1} of {2}"
 
 #: js/Tags.js:212 js/Tags.js:268
 msgid "No tags to display"
-msgstr "No hay etiquetas que mostrar"
+msgstr "No hay etiquetas para mostrar"
 
 #: js/Tags.js:223
 msgid "Usage:&#160;"
-msgstr "Uso:&#160;"
+msgstr ""
 
 #: js/user/EditDialog.js:187
 msgid "Domain is not allowed. Check your SMTP domain configuration."
 msgstr ""
-"El dominio no está permitido. Compruebe su configuración de dominios SMTP."
 
 #: js/user/EditDialog.js:234 js/user/EditDialog.js:237
 #: js/user/EditDialog.js:688
 msgid "Passwords do not match!"
-msgstr "¡Las contraseñas no coinciden!"
+msgstr "¡Las contraseñas no concuerdan!"
 
 #: js/user/EditDialog.js:240
 msgid "Passwords match!"
-msgstr "¡Las contraseñas coinciden!"
+msgstr ""
 
 #: js/user/EditDialog.js:286 js/user/EditDialog.js:811
 msgid "Primary group"
@@ -756,11 +755,11 @@ msgstr "Unix"
 
 #: js/user/EditDialog.js:377
 msgid "Home Directory"
-msgstr "Carpeta personal"
+msgstr "Directorio Home"
 
 #: js/user/EditDialog.js:381
 msgid "Login Shell"
-msgstr "Intérprete (shell) de acceso"
+msgstr "Consola de Ingreso"
 
 #: js/user/EditDialog.js:387
 msgid "Windows"
@@ -1021,86 +1020,86 @@ msgid_plural "Email Users"
 msgstr[0] "Usuario de Correo"
 msgstr[1] "Usuarios de Correo"
 
-msgid "Current Mail Size"
-msgstr "Tamaño Actual del Correo"
+#~ msgid "Current Mail Size"
+#~ msgstr "Tamaño Actual del Correo"
 
-msgid "Sieve Quota"
-msgstr "Cuota Discreta"
+#~ msgid "Sieve Quota"
+#~ msgstr "Cuota Discreta"
 
-msgid "Aliases"
-msgstr "Pseudónimos"
+#~ msgid "Aliases"
+#~ msgstr "Pseudónimos"
 
-msgid "Forwards"
-msgstr "Reenvíos"
+#~ msgid "Forwards"
+#~ msgstr "Reenvíos"
 
-msgid "Loading Tag..."
-msgstr "Cargando Etiqueta..."
+#~ msgid "Loading Tag..."
+#~ msgstr "Cargando Etiqueta..."
 
-msgid "Please Wait"
-msgstr "Por favor espere"
+#~ msgid "Please Wait"
+#~ msgstr "Por favor espere"
 
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "¿Realmente desea borrar los logs de accesos seleccionados?"
+#~ msgid "Do you really want to delete the selected access log entries?"
+#~ msgstr "¿Realmente desea borrar los logs de accesos seleccionados?"
 
-msgid "delete entry"
-msgstr "borrar ingreso"
+#~ msgid "delete entry"
+#~ msgstr "borrar ingreso"
 
-msgid "select all"
-msgstr "seleccionar todo"
+#~ msgid "select all"
+#~ msgstr "seleccionar todo"
 
-msgid "Display from:"
-msgstr "Mostrar de:"
+#~ msgid "Display from:"
+#~ msgstr "Mostrar de:"
 
-msgid "to:"
-msgstr "para:"
+#~ msgid "to:"
+#~ msgstr "para:"
 
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Mostrando logs de acceso {0} - {1} of {2}"
+#~ msgid "Displaying access log entries {0} - {1} of {2}"
+#~ msgstr "Mostrando logs de acceso {0} - {1} of {2}"
 
-msgid "No access log entries to display"
-msgstr "No hay logs de acceso para mostrar"
+#~ msgid "No access log entries to display"
+#~ msgstr "No hay logs de acceso para mostrar"
 
-msgid "Account ID"
-msgstr "ID de Cuenta"
+#~ msgid "Account ID"
+#~ msgstr "ID de Cuenta"
 
-msgid "Loading Role..."
-msgstr "Cargando cargo..."
+#~ msgid "Loading Role..."
+#~ msgstr "Cargando cargo..."
 
-msgid "Do you really want to delete the selected account(s)?"
-msgstr "¿Realmente desea borrar la(s) cuenta(s) seleccionada(s)?"
+#~ msgid "Do you really want to delete the selected account(s)?"
+#~ msgstr "¿Realmente desea borrar la(s) cuenta(s) seleccionada(s)?"
 
-msgid "Deleting account(s)..."
-msgstr "Borrando cuenta(s)..."
+#~ msgid "Deleting account(s)..."
+#~ msgstr "Borrando cuenta(s)..."
 
-msgid "Some error occurred while trying to delete the account(s)."
-msgstr "Ocurrió un error al intentar borrar la(s) cuenta(s)."
+#~ msgid "Some error occurred while trying to delete the account(s)."
+#~ msgstr "Ocurrió un error al intentar borrar la(s) cuenta(s)."
 
-msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "Mostrando Cuentas {0} - {1} de {2}"
+#~ msgid "Displaying accounts {0} - {1} of {2}"
+#~ msgstr "Mostrando Cuentas {0} - {1} de {2}"
 
-msgid "No accounts to display"
-msgstr "No hay cuentas para mostrar"
+#~ msgid "No accounts to display"
+#~ msgstr "No hay cuentas para mostrar"
 
-msgid "add account"
-msgstr "agregar cuenta"
+#~ msgid "add account"
+#~ msgstr "agregar cuenta"
 
-msgid "edit account"
-msgstr "editar cuenta"
+#~ msgid "edit account"
+#~ msgstr "editar cuenta"
 
-msgid "delete account"
-msgstr "borrar cuenta"
+#~ msgid "delete account"
+#~ msgstr "borrar cuenta"
 
-msgid "Deleting group..."
-msgstr "Borrando grupo..."
+#~ msgid "Deleting group..."
+#~ msgstr "Borrando grupo..."
 
-msgid "Email UID"
-msgstr "Email UID"
+#~ msgid "Email UID"
+#~ msgstr "Email UID"
 
-msgid "Email GID"
-msgstr "Email GID"
+#~ msgid "Email GID"
+#~ msgstr "Email GID"
 
-msgid "Email Username"
-msgstr "Usuario de Email"
+#~ msgid "Email Username"
+#~ msgstr "Usuario de Email"
 
-msgid "Current Sieve Size"
-msgstr "Tamaño Actual de Cuota Discreta"
+#~ msgid "Current Sieve Size"
+#~ msgstr "Tamaño Actual de Cuota Discreta"

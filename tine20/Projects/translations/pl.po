@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - ExampleApplication\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-22 09:22+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 13:59+0000\n"
+"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:21+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:22+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -58,23 +58,23 @@ msgstr[2] "Projekty"
 
 #: js/AddToProjectPanel.js:56
 msgid "Cancel"
-msgstr "Anuluj"
+msgstr ""
 
 #: js/AddToProjectPanel.js:64
 msgid "OK"
-msgstr "OK"
+msgstr ""
 
 #: js/AddToProjectPanel.js:99
 msgid "Please choose the Project to add the contacts to"
-msgstr "Proszę wybrać projekt, do którego należy dodać kontakty"
+msgstr ""
 
 #: js/AddToProjectPanel.js:103
 msgid "Please select the attenders' role"
-msgstr "Proszę wybrać rolę uczestnika"
+msgstr ""
 
 #: js/AddToProjectPanel.js:123
 msgid "Select Project"
-msgstr "Wybierz projekt"
+msgstr ""
 
 #: js/AddToProjectPanel.js:147 js/ProjectEditDialog.js:115
 msgid "Role"
@@ -82,11 +82,11 @@ msgstr "Rola"
 
 #: js/AddToProjectPanel.js:148
 msgid "Select Role"
-msgstr "Wybierz rolę"
+msgstr ""
 
 #: js/AddToProjectPanel.js:168
 msgid "Adding {0} Participants to project"
-msgstr "Dodawanie {0} uczestników do projektu"
+msgstr ""
 
 #: js/Model.js:37
 msgid "Project list"
@@ -211,74 +211,74 @@ msgstr "Moje, oczekujące projekty"
 msgid "My projects that are on hold"
 msgstr "Moje, wstrzymane projekty"
 
-msgid "Example Application"
-msgstr "Przykładowa aplikacja"
+#~ msgid "Example Application"
+#~ msgstr "Przykładowa aplikacja"
 
-msgid "Name"
-msgstr "Nazwa"
+#~ msgid "Name"
+#~ msgstr "Nazwa"
 
-msgid "Budget"
-msgstr "Budżet"
+#~ msgid "Budget"
+#~ msgstr "Budżet"
 
-msgid "Show closed"
-msgstr "Pokaż zakończone"
+#~ msgid "Show closed"
+#~ msgstr "Pokaż zakończone"
 
-msgid "ExampleRecord"
-msgstr "Przykładowy wiersz"
+#~ msgid "ExampleRecord"
+#~ msgstr "Przykładowy wiersz"
 
-msgid "example record"
-msgid_plural "example records"
-msgstr[0] "Przykładowy wiersz"
-msgstr[1] "przykładowe wiersze"
-msgstr[2] "przykładowe wiersze"
+#~ msgid "example record"
+#~ msgid_plural "example records"
+#~ msgstr[0] "Przykładowy wiersz"
+#~ msgstr[1] "przykładowe wiersze"
+#~ msgstr[2] "przykładowe wiersze"
 
-msgid "example record list"
-msgid_plural "example record lists"
-msgstr[0] "Lista przykładowych wierszy"
-msgstr[1] "listy przykładowych wierszy"
-msgstr[2] "listy przykładowych wierszy"
+#~ msgid "example record list"
+#~ msgid_plural "example record lists"
+#~ msgstr[0] "Lista przykładowych wierszy"
+#~ msgstr[1] "listy przykładowych wierszy"
+#~ msgstr[2] "listy przykładowych wierszy"
 
-msgid "ExampleApplication"
-msgstr "Przykładowa aplikacja"
+#~ msgid "ExampleApplication"
+#~ msgstr "Przykładowa aplikacja"
 
-msgid "%s's personal example records"
-msgstr "%s przykładowe, osobiste wiersze"
+#~ msgid "%s's personal example records"
+#~ msgstr "%s przykładowe, osobiste wiersze"
 
-msgid "ExampleRecords"
-msgstr "Przykładowe wiersze"
+#~ msgid "ExampleRecords"
+#~ msgstr "Przykładowe wiersze"
 
-msgid "All ExampleRecords"
-msgstr "Wszystkie przykładowe wiersze"
+#~ msgid "All ExampleRecords"
+#~ msgstr "Wszystkie przykładowe wiersze"
 
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "lista aplikacji"
-msgstr[1] "listy aplikacji"
-msgstr[2] "list aplikacji"
+#~ msgid "record list"
+#~ msgid_plural "record lists"
+#~ msgstr[0] "lista aplikacji"
+#~ msgstr[1] "listy aplikacji"
+#~ msgstr[2] "list aplikacji"
 
-msgid "Unit"
-msgstr "Jednostka"
+#~ msgid "Unit"
+#~ msgstr "Jednostka"
 
-msgid "Unit Price"
-msgstr "Cena jednostkowa"
+#~ msgid "Unit Price"
+#~ msgstr "Cena jednostkowa"
 
-msgid "Timesheets are billable"
-msgstr "Karty godzin gotowe do przeliczenia"
+#~ msgid "Timesheets are billable"
+#~ msgstr "Karty godzin gotowe do przeliczenia"
 
-msgid "closed"
-msgstr "zakończone"
+#~ msgid "closed"
+#~ msgstr "zakończone"
 
-msgid "open"
-msgstr "otwarte"
+#~ msgid "open"
+#~ msgstr "otwarte"
 
-msgid "Billed"
-msgstr "Przeliczone"
+#~ msgid "Billed"
+#~ msgstr "Przeliczone"
 
-msgid "not yet billed"
-msgstr "jeszcze nie przeliczone"
+#~ msgid "not yet billed"
+#~ msgstr "jeszcze nie przeliczone"
 
-msgid "to bill"
-msgstr "przelicz"
+#~ msgid "to bill"
+#~ msgstr "przelicz"
 
-msgid "billed"
-msgstr "przeliczone"
+#~ msgid "billed"
+#~ msgstr "przeliczone"

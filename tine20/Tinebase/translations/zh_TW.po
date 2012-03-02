@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-22 09:21+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 12:13+0000\n"
+"Last-Translator: Frank <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:23+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: TAIWAN\n"
 "X-Poedit-Language: Chinese\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -201,7 +201,7 @@ msgstr ""
 msgid "Directory with web server write access for user files."
 msgstr ""
 
-#: Container.php:582
+#: Container.php:608
 #, python-format
 msgid "%s's personal container"
 msgstr ""
@@ -708,10 +708,10 @@ msgid "Your password expired. Please enter a new user password:"
 msgstr ""
 
 #: js/Models.js:131 js/widgets/tags/TagFilter.js:30
+#, fuzzy
 msgid "Tag"
 msgid_plural "Tags"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "標記"
 
 #: js/Models.js:279
 msgid "Import"
@@ -2452,43 +2452,43 @@ msgstr ""
 msgid "Show confirmation dialog on logout."
 msgstr ""
 
-#: Setup/setup.xml:3039
+#: Setup/setup.xml:3105
 msgid "note"
 msgstr ""
 
-#: Setup/setup.xml:3044
+#: Setup/setup.xml:3110
 msgid "default note type"
 msgstr ""
 
-#: Setup/setup.xml:3070
+#: Setup/setup.xml:3136
 msgid "telephone"
 msgstr "電話"
 
-#: Setup/setup.xml:3075
+#: Setup/setup.xml:3141
 msgid "telephone call"
 msgstr ""
 
-#: Setup/setup.xml:3101
+#: Setup/setup.xml:3167
 msgid "email"
 msgstr "電子郵件"
 
-#: Setup/setup.xml:3106
+#: Setup/setup.xml:3172
 msgid "email contact"
 msgstr ""
 
-#: Setup/setup.xml:3132
+#: Setup/setup.xml:3198
 msgid "created"
 msgstr ""
 
-#: Setup/setup.xml:3137
+#: Setup/setup.xml:3203
 msgid "record created"
 msgstr ""
 
-#: Setup/setup.xml:3163
+#: Setup/setup.xml:3229
 msgid "changed"
 msgstr ""
 
-#: Setup/setup.xml:3168
+#: Setup/setup.xml:3234
 msgid "record changed"
 msgstr ""
 
@@ -2500,73 +2500,73 @@ msgstr ""
 msgid "Please wait or contact your administrator"
 msgstr ""
 
-msgid "low"
-msgstr "低"
+#~ msgid "low"
+#~ msgstr "低"
 
-msgid "normal"
-msgstr "正常"
+#~ msgid "normal"
+#~ msgstr "正常"
 
-msgid "high"
-msgstr "高"
+#~ msgid "high"
+#~ msgstr "高"
 
-msgid "urgent"
-msgstr "緊急"
-
-#, fuzzy
-msgid "Tagging"
-msgstr "標記"
+#~ msgid "urgent"
+#~ msgstr "緊急"
 
 #, fuzzy
-msgid "About Tine 2.0"
-msgstr "登出 Tine 2.0"
-
-msgid "Install Google Gears"
-msgstr "安裝 Google Gears"
-
-msgid ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
-msgstr "安裝 Gears 可以改善 Tine 2.0 存取你電腦檔案的效能"
+#~ msgid "Tagging"
+#~ msgstr "標記"
 
 #, fuzzy
-msgid "Report bugs to tine20.org directly when they occur"
-msgstr "直接連上tine20.org 回報臭蟲"
+#~ msgid "About Tine 2.0"
+#~ msgstr "登出 Tine 2.0"
 
-msgid "Check tine20.org for new versions"
-msgstr "檢查到可更新版本"
+#~ msgid "Install Google Gears"
+#~ msgstr "安裝 Google Gears"
+
+#~ msgid ""
+#~ "Installing Gears will improve the performance of Tine 2.0 by caching all "
+#~ "needed files locally on this computer."
+#~ msgstr "安裝 Gears 可以改善 Tine 2.0 存取你電腦檔案的效能"
 
 #, fuzzy
-msgid "You don't have the required grant to select this {0}"
-msgstr "你確定要刪除 {0}?"
+#~ msgid "Report bugs to tine20.org directly when they occur"
+#~ msgstr "直接連上tine20.org 回報臭蟲"
 
-msgid "remove record"
-msgstr "移除記錄"
+#~ msgid "Check tine20.org for new versions"
+#~ msgstr "檢查到可更新版本"
 
-msgid "Search"
-msgstr "搜尋"
+#, fuzzy
+#~ msgid "You don't have the required grant to select this {0}"
+#~ msgstr "你確定要刪除 {0}?"
 
-msgid "Browse"
-msgstr "瀏覽"
+#~ msgid "remove record"
+#~ msgstr "移除記錄"
 
-msgid "click to edit"
-msgstr "click to edit"
+#~ msgid "Search"
+#~ msgstr "搜尋"
 
-msgid "Plase select an image file (gif/png/jpeg)"
-msgstr "請選擇影像格式 (gif/png/jpeg)"
+#~ msgid "Browse"
+#~ msgstr "瀏覽"
 
-msgid "Please Select a Group"
-msgstr "選擇一個群組"
+#~ msgid "click to edit"
+#~ msgstr "click to edit"
 
-msgid "Register"
-msgstr "註冊"
+#~ msgid "Plase select an image file (gif/png/jpeg)"
+#~ msgstr "請選擇影像格式 (gif/png/jpeg)"
 
-msgid ""
-"The server did not respond to your request. Please check your network or "
-"contact your administrator."
-msgstr "伺服器無法收到回應, 請檢查網路狀態或聯絡系統管理者"
+#~ msgid "Please Select a Group"
+#~ msgstr "選擇一個群組"
 
-msgid "please select an account"
-msgstr "請選擇一個帳號"
+#~ msgid "Register"
+#~ msgstr "註冊"
 
-msgid "loading new language..."
-msgstr "正在載入新語系..."
+#~ msgid ""
+#~ "The server did not respond to your request. Please check your network or "
+#~ "contact your administrator."
+#~ msgstr "伺服器無法收到回應, 請檢查網路狀態或聯絡系統管理者"
+
+#~ msgid "please select an account"
+#~ msgstr "請選擇一個帳號"
+
+#~ msgid "loading new language..."
+#~ msgstr "正在載入新語系..."

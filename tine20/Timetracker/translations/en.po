@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-10 14:27+0000\n"
+"PO-Revision-Date: 2012-01-13 14:36+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:22+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:22+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -368,23 +368,23 @@ msgstr "default"
 
 #: Setup/Initialize.php:33
 msgid "My Timesheets today"
-msgstr ""
+msgstr "My Timesheets today"
 
 #: Setup/Initialize.php:47
 msgid "My Timesheets this week"
-msgstr ""
+msgstr "My Timesheets this week"
 
 #: Setup/Initialize.php:61
 msgid "My Timesheets last week"
-msgstr ""
+msgstr "My Timesheets last week"
 
 #: Setup/Initialize.php:75
 msgid "My Timesheets this month"
-msgstr ""
+msgstr "My Timesheets this month"
 
 #: Setup/Initialize.php:89
 msgid "My Timesheets last month"
-msgstr ""
+msgstr "My Timesheets last month"
 
 #: Setup/Initialize.php:112 Setup/Update/Release5.php:81
 msgid "Timeaccounts to bill"
@@ -401,6 +401,12 @@ msgstr "Timeaccounts already billed"
 #: Setup/setup.xml:4
 msgid "Timetracker"
 msgstr "Timetracker"
+
+#~ msgid "Billed in ..."
+#~ msgstr "Billed in ..."
+
+#~ msgid "Searching..."
+#~ msgstr "Searching..."
 
 #~ msgid "No Timeaccount set"
 #~ msgstr "No Timeaccount set"
@@ -423,8 +429,14 @@ msgstr "Timetracker"
 #~ msgid "Timesheets last month"
 #~ msgstr "Timesheets last month"
 
-#~ msgid "Billed in ..."
-#~ msgstr "Billed in ..."
+#~ msgid "Timesheets"
+#~ msgstr "Timesheets"
 
-#~ msgid "Searching..."
-#~ msgstr "Searching..."
+#~ msgid "All Timesheets"
+#~ msgstr "All Timesheets"
+
+#~ msgid "Timeaccounts"
+#~ msgstr "Timeaccounts"
+
+#~ msgid "All Timeaccounts"
+#~ msgstr "All Timeaccounts"

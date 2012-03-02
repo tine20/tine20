@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-22 10:01+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 12:29+0000\n"
+"Last-Translator: Faragó Tamás <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:22+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -203,7 +203,7 @@ msgid "Directory with web server write access for user files."
 msgstr ""
 "Felhasználói fileok könyvtára, ahol a web kiszolgáló írás joggal rendelkezik."
 
-#: Container.php:582
+#: Container.php:608
 #, python-format
 msgid "%s's personal container"
 msgstr ""
@@ -736,10 +736,11 @@ msgid "Your password expired. Please enter a new user password:"
 msgstr "Lejárt a jelszód. Írj be egy új jelszót:"
 
 #: js/Models.js:131 js/widgets/tags/TagFilter.js:30
+#, fuzzy
 msgid "Tag"
 msgid_plural "Tags"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Címke"
+msgstr[1] "Címke"
 
 #: js/Models.js:279
 msgid "Import"
@@ -2503,43 +2504,43 @@ msgstr "Kijelentkezés megerősítése"
 msgid "Show confirmation dialog on logout."
 msgstr "Megerősítő ablak muitatása kijelentkezéskor."
 
-#: Setup/setup.xml:3039
+#: Setup/setup.xml:3105
 msgid "note"
 msgstr "megjegyzés"
 
-#: Setup/setup.xml:3044
+#: Setup/setup.xml:3110
 msgid "default note type"
 msgstr "alapértelmezett megjegyzés típus"
 
-#: Setup/setup.xml:3070
+#: Setup/setup.xml:3136
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:3075
+#: Setup/setup.xml:3141
 msgid "telephone call"
 msgstr "telefon hívás"
 
-#: Setup/setup.xml:3101
+#: Setup/setup.xml:3167
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:3106
+#: Setup/setup.xml:3172
 msgid "email contact"
 msgstr "email kapcsolat"
 
-#: Setup/setup.xml:3132
+#: Setup/setup.xml:3198
 msgid "created"
 msgstr "készítette"
 
-#: Setup/setup.xml:3137
+#: Setup/setup.xml:3203
 msgid "record created"
 msgstr "adatot készítette"
 
-#: Setup/setup.xml:3163
+#: Setup/setup.xml:3229
 msgid "changed"
 msgstr "változtatta"
 
-#: Setup/setup.xml:3168
+#: Setup/setup.xml:3234
 msgid "record changed"
 msgstr "adatot változtatta"
 
@@ -2551,185 +2552,188 @@ msgstr "Tine 2.0 frissítése szükséges vagy még nincs telepítve."
 msgid "Please wait or contact your administrator"
 msgstr "Kérlek várj vagy lépj kapcsolatba a rendszergazdával"
 
-msgid "low"
-msgstr "alacsony"
+#~ msgid "low"
+#~ msgstr "alacsony"
 
-msgid "normal"
-msgstr "normális"
+#~ msgid "normal"
+#~ msgstr "normális"
 
-msgid "high"
-msgstr "magas"
+#~ msgid "high"
+#~ msgstr "magas"
 
-msgid "urgent"
-msgstr "sürgős"
+#~ msgid "urgent"
+#~ msgstr "sürgős"
 
-msgid "Import into {0}"
-msgstr "Importálás ebbe a {0}be"
+#~ msgid "Import into {0}"
+#~ msgstr "Importálás ebbe a {0}be"
 
-msgid "Favorite"
-msgid_plural "Favorites"
-msgstr[0] "Kedvenc"
-msgstr[1] "Kedvencek"
+#~ msgid "Favorite"
+#~ msgid_plural "Favorites"
+#~ msgstr[0] "Kedvenc"
+#~ msgstr[1] "Kedvencek"
 
-msgid "Renaming Favorite \"{0}\""
-msgstr "Kedvenc átnevezése: \"{0}\""
+#~ msgid "Renaming Favorite \"{0}\""
+#~ msgstr "Kedvenc átnevezése: \"{0}\""
 
-msgid "Set color for {0}"
-msgstr "{0} színének beállítása"
+#~ msgid "Set color for {0}"
+#~ msgstr "{0} színének beállítása"
 
-msgid "Do you really want to delete the selected record"
-msgid_plural "Do you really want to delete the selected records"
-msgstr[0] "Biztosan törlöd a kiválasztott adatot"
-msgstr[1] "Biztosan törlöd a kiválasztott adatokat"
+#~ msgid "Do you really want to delete the selected record"
+#~ msgid_plural "Do you really want to delete the selected records"
+#~ msgstr[0] "Biztosan törlöd a kiválasztott adatot"
+#~ msgstr[1] "Biztosan törlöd a kiválasztott adatokat"
 
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "Csoport"
-msgstr[1] "Csoportok"
+#~ msgid "Group"
+#~ msgid_plural "Groups"
+#~ msgstr[0] "Csoport"
+#~ msgstr[1] "Csoportok"
 
-msgid "Internal {0}"
-msgstr "Belső {0}"
+#~ msgid "Internal {0}"
+#~ msgstr "Belső {0}"
 
-msgid "Transfering Configuration..."
-msgstr "Konfiguráció átvitele..."
+#~ msgid "Transfering Configuration..."
+#~ msgstr "Konfiguráció átvitele..."
 
-msgid "Install Google Gears"
-msgstr "Google Gears telepítése"
+#~ msgid "Install Google Gears"
+#~ msgstr "Google Gears telepítése"
 
-msgid ""
-"The server is currently unable to handle the request due to a temporary "
-"overloading or maintenance of the server. Please try again or contact your "
-"administrator."
-msgstr ""
-"A szerver éppen nem tudja teljesíteni a kérést, átmenteti túlterhelés vagy "
-"karbantartás miatt. Próbáld újra vagy lépj kapcsolatba a rendszergazdával."
+#~ msgid ""
+#~ "The server is currently unable to handle the request due to a temporary "
+#~ "overloading or maintenance of the server. Please try again or contact "
+#~ "your administrator."
+#~ msgstr ""
+#~ "A szerver éppen nem tudja teljesíteni a kérést, átmenteti túlterhelés "
+#~ "vagy karbantartás miatt. Próbáld újra vagy lépj kapcsolatba a "
+#~ "rendszergazdával."
 
-msgid "Files"
-msgstr "Fileok"
+#~ msgid "Files"
+#~ msgstr "Fileok"
 
-msgid "Import definition"
-msgstr "Importálás meghatározása"
+#~ msgid "Import definition"
+#~ msgstr "Importálás meghatározása"
 
-msgid "Dry run"
-msgstr "Teszt futtatás"
+#~ msgid "Dry run"
+#~ msgstr "Teszt futtatás"
 
-msgid "No files added"
-msgstr "File nem lett hozzáadva"
+#~ msgid "No files added"
+#~ msgstr "File nem lett hozzáadva"
 
-msgid "You need to add files to import."
-msgstr "Importáláshoz hozzá kell adnod fileokat."
+#~ msgid "You need to add files to import."
+#~ msgstr "Importáláshoz hozzá kell adnod fileokat."
 
-msgid "Dry run results"
-msgstr "Teszt futtatás eredménye"
+#~ msgid "Dry run results"
+#~ msgstr "Teszt futtatás eredménye"
 
-msgid ""
-"Import test successful for {0} records, import test failed for {1} records."
-msgstr ""
-"Teszt importálás eredményes {0} adatnál, teszt importálás hibás {1} adatnál."
+#~ msgid ""
+#~ "Import test successful for {0} records, import test failed for {1} "
+#~ "records."
+#~ msgstr ""
+#~ "Teszt importálás eredményes {0} adatnál, teszt importálás hibás {1} "
+#~ "adatnál."
 
-msgid "Import results"
-msgstr "Importálás eredménye"
+#~ msgid "Import results"
+#~ msgstr "Importálás eredménye"
 
-msgid ""
-"Import successful for {0} records / import failed for {1} records / {2} "
-"duplicates found"
-msgstr ""
-"Importálás eredményes {0} adatnál / importálás hibás {1} adatnál / {2} "
-"duplázás található"
+#~ msgid ""
+#~ "Import successful for {0} records / import failed for {1} records / {2} "
+#~ "duplicates found"
+#~ msgstr ""
+#~ "Importálás eredményes {0} adatnál / importálás hibás {1} adatnál / {2} "
+#~ "duplázás található"
 
-msgid "Tagging"
-msgstr "Címkézés"
+#~ msgid "Tagging"
+#~ msgstr "Címkézés"
 
-msgid "Events"
-msgstr "Események"
+#~ msgid "Events"
+#~ msgstr "Események"
 
-msgid "Rename Favorite"
-msgstr "Kedvenc átnevezése"
+#~ msgid "Rename Favorite"
+#~ msgstr "Kedvenc átnevezése"
 
-msgid "New Name"
-msgstr "Új név"
+#~ msgid "New Name"
+#~ msgstr "Új név"
 
-msgid "Please enter the new name for favorite \"{0}\"?"
-msgstr "Kérlek írd be az új nevét ennek a kedvencnek: \"{0}\"?"
+#~ msgid "Please enter the new name for favorite \"{0}\"?"
+#~ msgstr "Kérlek írd be az új nevét ennek a kedvencnek: \"{0}\"?"
 
-msgid "save filter"
-msgstr "szűrő mentése"
+#~ msgid "save filter"
+#~ msgstr "szűrő mentése"
 
-msgid "Please enter a name for the favorite"
-msgstr "Kérlek írj be egy nevet a kedvencnek"
+#~ msgid "Please enter a name for the favorite"
+#~ msgstr "Kérlek írj be egy nevet a kedvencnek"
 
-msgid "Saving favorite"
-msgstr "Kedvenc mentése"
+#~ msgid "Saving favorite"
+#~ msgstr "Kedvenc mentése"
 
-msgid "Updating {0} \"{1}\""
-msgstr "{0} \"{1}\" frissítése"
+#~ msgid "Updating {0} \"{1}\""
+#~ msgstr "{0} \"{1}\" frissítése"
 
-msgid "Deleting {0} \"{1}\""
-msgstr "{0} \"{1}\" törlése"
+#~ msgid "Deleting {0} \"{1}\""
+#~ msgstr "{0} \"{1}\" törlése"
 
-msgid "Rename {0}"
-msgstr "{0} átnevezése"
+#~ msgid "Rename {0}"
+#~ msgstr "{0} átnevezése"
 
-msgid "Reload {0}"
-msgstr "{0} újratöltése"
+#~ msgid "Reload {0}"
+#~ msgstr "{0} újratöltése"
 
-msgid "There are no custom fields yet"
-msgstr "Nincs még egyedi mező"
+#~ msgid "There are no custom fields yet"
+#~ msgstr "Nincs még egyedi mező"
 
-msgid "Groups"
-msgstr "Csoportok"
+#~ msgid "Groups"
+#~ msgstr "Csoportok"
 
-msgid "Overwriting system favorites is not yet supported"
-msgstr "Rendszer kedvenceinek felülírása még nem támogatott"
+#~ msgid "Overwriting system favorites is not yet supported"
+#~ msgstr "Rendszer kedvenceinek felülírása még nem támogatott"
 
-msgid "About Tine 2.0"
-msgstr "Tine 2.0-ról"
+#~ msgid "About Tine 2.0"
+#~ msgstr "Tine 2.0-ról"
 
-msgid "Custom datetime"
-msgstr "Egyedi időpont"
+#~ msgid "Custom datetime"
+#~ msgstr "Egyedi időpont"
 
-msgid "Overwriteing system favorites is not yet supported"
-msgstr "Rendszer kedvenceinek felül írása még nem támogatott"
+#~ msgid "Overwriteing system favorites is not yet supported"
+#~ msgstr "Rendszer kedvenceinek felül írása még nem támogatott"
 
-msgid "Filter"
-msgstr "Szűrő"
+#~ msgid "Filter"
+#~ msgstr "Szűrő"
 
-msgid "Transfering {0}..."
-msgstr "{0} átvitele ..."
+#~ msgid "Transfering {0}..."
+#~ msgstr "{0} átvitele ..."
 
-msgid ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
-msgstr ""
-"A Gears telepítése növeli a Tine 2.0 teljesítményét az összes szükséges file "
-"helyi gépen tárolásával."
+#~ msgid ""
+#~ "Installing Gears will improve the performance of Tine 2.0 by caching all "
+#~ "needed files locally on this computer."
+#~ msgstr ""
+#~ "A Gears telepítése növeli a Tine 2.0 teljesítményét az összes szükséges "
+#~ "file helyi gépen tárolásával."
 
-msgid "No Tags to remove found in the selected records"
-msgstr "Nincs eltávolítható címke a kiválasztott rekordokban"
+#~ msgid "No Tags to remove found in the selected records"
+#~ msgstr "Nincs eltávolítható címke a kiválasztott rekordokban"
 
-msgid "Detaching selected tags"
-msgstr "Kiválasztott címkék eltávolítása"
+#~ msgid "Detaching selected tags"
+#~ msgstr "Kiválasztott címkék eltávolítása"
 
-msgid "progress"
-msgstr "folyamat"
+#~ msgid "progress"
+#~ msgstr "folyamat"
 
-msgid "Remove from shared favorites"
-msgstr "Eltávolítás a megosztott kedvencek közül"
+#~ msgid "Remove from shared favorites"
+#~ msgstr "Eltávolítás a megosztott kedvencek közül"
 
-msgid "Add to shared favorites"
-msgstr "Hozzáadás a megosztott kedvencekhez"
+#~ msgid "Add to shared favorites"
+#~ msgstr "Hozzáadás a megosztott kedvencekhez"
 
-msgid "Setting favorite \"{0}\" not shared"
-msgstr "\"{0}\" kedvenc beállítása nem megosztottként"
+#~ msgid "Setting favorite \"{0}\" not shared"
+#~ msgstr "\"{0}\" kedvenc beállítása nem megosztottként"
 
-msgid "Setting favorite \"{0}\" shared"
-msgstr "\"{0}\" kedvenc beállítása megosztottként"
+#~ msgid "Setting favorite \"{0}\" shared"
+#~ msgstr "\"{0}\" kedvenc beállítása megosztottként"
 
-msgid "Share this Favorite"
-msgstr "Kedvenc megosztása"
+#~ msgid "Share this Favorite"
+#~ msgstr "Kedvenc megosztása"
 
-msgid "Select all visible ({0} records)"
-msgstr "Összes látható ({0} adat) kiválasztása"
+#~ msgid "Select all visible ({0} records)"
+#~ msgstr "Összes látható ({0} adat) kiválasztása"
 
 #~ msgid ""
 #~ "The window you want to work with is backgrounded. Your browser does't "

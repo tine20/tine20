@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-22 09:27+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 13:28+0000\n"
+"Last-Translator: Nkolay Parukhin <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:20+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Language: Russian\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -145,7 +145,7 @@ msgid "Select Role"
 msgstr ""
 
 #: js/AddToEventPanel.js:216 js/AttendeeGridPanel.js:186
-#: js/ContactEventsGridPanel.js:125 js/GridView.js:149 Model/Event.php:244
+#: js/ContactEventsGridPanel.js:125 js/GridView.js:149 Model/Event.php:245
 msgid "Status"
 msgstr "Состояние"
 
@@ -246,7 +246,7 @@ msgid "Events"
 msgstr "События"
 
 #: js/ContactEventsGridPanel.js:112 js/EventEditDialog.js:90
-#: js/GridView.js:139 js/Model.js:201 Model/Event.php:245
+#: js/GridView.js:139 js/Model.js:201 Model/Event.php:246
 msgid "Summary"
 msgstr "Сводка"
 
@@ -291,16 +291,16 @@ msgstr ""
 msgid "End Time"
 msgstr "Окончание"
 
-#: js/EventDetailsPanel.js:244 Model/Event.php:238
+#: js/EventDetailsPanel.js:244 Model/Event.php:239
 msgid "Blocking"
 msgstr ""
 
 #: js/EventDetailsPanel.js:249 js/EventEditDialog.js:98 js/GridView.js:144
-#: js/Model.js:202 js/ResourcesGridPanel.js:52 Model/Event.php:241
+#: js/Model.js:202 js/ResourcesGridPanel.js:52 Model/Event.php:242
 msgid "Location"
 msgstr "Местоположение"
 
-#: js/EventDetailsPanel.js:253 js/Model.js:215 Model/Event.php:242
+#: js/EventDetailsPanel.js:253 js/Model.js:215 Model/Event.php:243
 msgid "Organizer"
 msgstr ""
 
@@ -318,7 +318,7 @@ msgid "Private"
 msgstr ""
 
 #: js/EventEditDialog.js:201 js/Model.js:203 js/ResourceEditDialog.js:72
-#: Model/Event.php:240
+#: Model/Event.php:241
 msgid "Description"
 msgstr "Описание"
 
@@ -527,31 +527,31 @@ msgstr[0] "Вы действительно хотите удалить это с
 msgstr[1] "Вы действительно хотите удалить {0} выделенных события?"
 msgstr[2] "Вы действительно хотите удалить {0} выделенных событий?"
 
-#: js/MainScreenCenterPanel.js:935
+#: js/MainScreenCenterPanel.js:940
 msgid "Could not Print"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:935
+#: js/MainScreenCenterPanel.js:940
 msgid "Sorry, your current view does not support printing."
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1084
+#: js/MainScreenCenterPanel.js:1089
 msgid "Scheduling Conflict"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1086
+#: js/MainScreenCenterPanel.js:1091
 msgid "The following attendee are busy at the requested time:"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1090
+#: js/MainScreenCenterPanel.js:1095
 msgid "Ignore Conflict"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1091
+#: js/MainScreenCenterPanel.js:1096
 msgid "Edit Event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1092
+#: js/MainScreenCenterPanel.js:1097
 msgid "Cancel this action"
 msgstr ""
 
@@ -658,7 +658,7 @@ msgstr ""
 msgid "after {0} occurrences"
 msgstr ""
 
-#: js/RrulePanel.js:312 Model/Event.php:237
+#: js/RrulePanel.js:312 Model/Event.php:238
 msgid "End"
 msgstr ""
 
@@ -736,39 +736,39 @@ msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr ""
 
-#: Model/Event.php:236
+#: Model/Event.php:237
 msgid "Start"
 msgstr ""
 
-#: Model/Event.php:239
+#: Model/Event.php:240
 msgid "Classification"
 msgstr ""
 
-#: Model/Event.php:243
+#: Model/Event.php:244
 msgid "Priority"
 msgstr ""
 
-#: Model/Event.php:246
+#: Model/Event.php:247
 msgid "Url"
 msgstr ""
 
-#: Model/Event.php:247
+#: Model/Event.php:248
 msgid "Recurrance rule"
 msgstr ""
 
-#: Model/Event.php:248
+#: Model/Event.php:249
 msgid "Is all day event"
 msgstr ""
 
-#: Model/Event.php:249
+#: Model/Event.php:250
 msgid "Organizer timezone"
 msgstr ""
 
-#: Model/Event.php:274
+#: Model/Event.php:275
 msgid "Yes"
 msgstr ""
 
-#: Model/Event.php:274
+#: Model/Event.php:275
 msgid "No"
 msgstr ""
 
@@ -927,76 +927,79 @@ msgstr ""
 msgid "Event details"
 msgstr ""
 
-msgid "forever"
-msgstr "всегда"
+#~ msgid "forever"
+#~ msgstr "всегда"
 
-msgid "Forever"
-msgstr "Всегда"
+#~ msgid "Forever"
+#~ msgstr "Всегда"
 
-msgid "Until"
-msgstr "До"
+#~ msgid "Until"
+#~ msgstr "До"
 
-msgid "Confirm Update of Series"
-msgstr "Подтвердите обновление серии"
+#~ msgid "Confirm Update of Series"
+#~ msgstr "Подтвердите обновление серии"
 
-msgid "Confirm Deletion of Series"
-msgstr "Подтвердите удаление серии"
+#~ msgid "Confirm Deletion of Series"
+#~ msgstr "Подтвердите удаление серии"
 
-msgid "Publish Free/Busy Information"
-msgstr "Публиковать информацию Свободен/Занят"
+#~ msgid "Publish Free/Busy Information"
+#~ msgstr "Публиковать информацию Свободен/Занят"
 
-msgid "Allow all users to view your free/busy information"
-msgstr "Разрешить всем пользователям видеть вашу информацию Свободен/Занят"
+#~ msgid "Allow all users to view your free/busy information"
+#~ msgstr "Разрешить всем пользователям видеть вашу информацию Свободен/Занят"
 
-msgid "Do you want to update the whole series, or just this event"
-msgstr "Вы хотите обновить всю серию или только это событие"
+#~ msgid "Do you want to update the whole series, or just this event"
+#~ msgstr "Вы хотите обновить всю серию или только это событие"
 
-msgid "Failed not update recurring event series"
-msgstr "Не удалось обновить серию повторяющихся событий"
+#~ msgid "Failed not update recurring event series"
+#~ msgstr "Не удалось обновить серию повторяющихся событий"
 
-msgid "Failed not update event"
-msgstr "Не удалось обновить событие"
+#~ msgid "Failed not update event"
+#~ msgstr "Не удалось обновить событие"
 
-msgid ""
-"Do you want to delete the whole series, this and all future events of this "
-"series, or just this event"
-msgstr ""
-"Вы хотите удалить всю серию, это и все будущие события этой серии, или "
-"только это событие"
+#~ msgid ""
+#~ "Do you want to delete the whole series, this and all future events of "
+#~ "this series, or just this event"
+#~ msgstr ""
+#~ "Вы хотите удалить всю серию, это и все будущие события этой серии, или "
+#~ "только это событие"
 
-msgid "Every"
-msgstr "Каждые"
+#~ msgid "Every"
+#~ msgstr "Каждые"
 
-msgid ". Day"
-msgstr ". День"
+#~ msgid ". Day"
+#~ msgstr ". День"
 
-msgid ". Week at"
-msgstr ". Неделя на"
+#~ msgid ". Week at"
+#~ msgstr ". Неделя на"
 
-msgid ". Month"
-msgstr ". Месяц"
+#~ msgid ". Month"
+#~ msgstr ". Месяц"
 
-msgid ". Year"
-msgstr ". Год"
+#~ msgid ". Year"
+#~ msgstr ". Год"
 
-msgid "Event description:<br/>"
-msgstr "Описание события:<br/>"
+#~ msgid "Event description:<br/>"
+#~ msgstr "Описание события:<br/>"
 
-msgid "Do you realy want to update all events of this recuring event series?"
-msgstr ""
-"Вы действительно хотите обновить все события в этой серии повторяющихся "
-"событий?"
+#~ msgid ""
+#~ "Do you realy want to update all events of this recuring event series?"
+#~ msgstr ""
+#~ "Вы действительно хотите обновить все события в этой серии повторяющихся "
+#~ "событий?"
 
-msgid ""
-"Your selection contains recuring events. Recuring events must be deleted "
-"seperatly!"
-msgstr ""
-"Ваше выделение содержит повторяющиеся события. Они должны удалятся отдельно!"
+#~ msgid ""
+#~ "Your selection contains recuring events. Recuring events must be deleted "
+#~ "seperatly!"
+#~ msgstr ""
+#~ "Ваше выделение содержит повторяющиеся события. Они должны удалятся "
+#~ "отдельно!"
 
-msgid "Do you realy want to delete all events of this recuring event series?"
-msgstr ""
-"Вы действительно хотите удалить все события в этой серии повторяющихся "
-"событий?"
+#~ msgid ""
+#~ "Do you realy want to delete all events of this recuring event series?"
+#~ msgstr ""
+#~ "Вы действительно хотите удалить все события в этой серии повторяющихся "
+#~ "событий?"
 
-msgid "No recuring rule defined"
-msgstr "Правила повторения не заданы"
+#~ msgid "No recuring rule defined"
+#~ msgstr "Правила повторения не заданы"

@@ -3,17 +3,15 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-27 20:03+0000\n"
+"PO-Revision-Date: 2012-01-13 13:18+0000\n"
 "Last-Translator: Wojciech Kaczmarek <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-28 06:29+0000\n"
-"X-Generator: Launchpad (build 14874)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -31,7 +29,7 @@ msgstr "Moje katalogi"
 
 #: Controller/Node.php:171
 msgid "Shared folders"
-msgstr "Wspólne katalogi"
+msgstr "Katalogi współdzielone"
 
 #: Controller/Node.php:178
 msgid "Other users folders"
@@ -40,7 +38,7 @@ msgstr "Katalogi innych użytkowników"
 #: Controller.php:95
 #, python-format
 msgid "%s's personal files"
-msgstr "%s osobistych plików"
+msgstr "%s's osobistych plików"
 
 #: js/Filemanager.js:26
 msgid "Filemanager"
@@ -112,7 +110,7 @@ msgstr "Data ostatniej modyfikacji"
 
 #: js/GridPanel.js:199
 msgid "Last Modified By"
-msgstr "Ostatnio zmienione przez"
+msgstr "Ostatnio zmodyfikowane przez"
 
 #: js/GridPanel.js:233
 msgid "Show closed"
@@ -176,9 +174,8 @@ msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
 msgstr ""
-"Przesłanie pliku było niemożliwe. Możliwe, że rozmiar pliku jest za duży. "
-"Proszę powiadomić swojego administratora. Maksymalny rozmiar przesyłanego "
-"pliku: "
+"Plik nie został przesłany. Być może jego rozmiar jest za duży. Proszę "
+"powiadomić swojego administratora. Maksymalny rozmiar przesyłanego pliku: "
 
 #: js/GridPanel.js:778 js/TreePanel.js:761
 msgid "Putting files in this folder is not allowed!"
@@ -189,14 +186,12 @@ msgid "file"
 msgid_plural "files"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
 
 #: js/Model.js:38
 msgid "folder"
 msgid_plural "folders"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
 
 #: js/Model.js:265 js/Model.js:281
 msgid "Copying data .. {0}"
@@ -222,29 +217,29 @@ msgstr "Typ"
 msgid "path"
 msgstr "ścieżka"
 
-msgid "Do you want to replace the files?"
-msgstr "Czy chcesz zastąpić niniejsze pliki?"
+#~ msgid "Do you want to replace the files?"
+#~ msgstr "Czy chcesz zastąpić niniejsze pliki?"
 
-msgid "Updating {0} \"{1}\""
-msgstr "Aktualizuję {0} \"{1}\""
+#~ msgid "Updating {0} \"{1}\""
+#~ msgstr "Aktualizuję {0} \"{1}\""
 
-msgid "Confirm"
-msgstr "Potwierdź"
+#~ msgid "Confirm"
+#~ msgstr "Potwierdź"
 
-msgid "Do you really want to delete \"{0}\"?"
-msgstr "Czy na pewno chcesz usunąć \"{0}\"?"
+#~ msgid "Do you really want to delete \"{0}\"?"
+#~ msgstr "Czy na pewno chcesz usunąć \"{0}\"?"
 
-msgid "Deleting {0} \"{1}\""
-msgstr "Usuwanie {0} \"{1}\""
+#~ msgid "Deleting {0} \"{1}\""
+#~ msgstr "Usuwanie {0} \"{1}\""
 
-msgid "Creating {0}..."
-msgstr "Tworzenie {0}..."
+#~ msgid "Creating {0}..."
+#~ msgstr "Tworzenie {0}..."
 
-msgid "Deleting {0} "
-msgstr "Usuwanie {0}..."
+#~ msgid "Deleting {0} "
+#~ msgstr "Usuwanie {0}..."
 
-msgid "Dropping on this folder not allowed!"
-msgstr "Usunięcie niniejszego katalogu jest niedozwolone!"
+#~ msgid "Dropping on this folder not allowed!"
+#~ msgstr "Usunięcie niniejszego katalogu jest niedozwolone!"
 
 #~ msgid "New {0}"
 #~ msgstr "Nowy {0}"
@@ -258,14 +253,14 @@ msgstr "Usunięcie niniejszego katalogu jest niedozwolone!"
 #~ msgid "user file folders"
 #~ msgstr "katalogi plików użytkownika"
 
+#, fuzzy
 #~ msgid "user file folder"
 #~ msgid_plural "user file folders"
-#~ msgstr[0] "katalog plików użytkownika"
-#~ msgstr[1] "katalogi plików  użytkownika"
-#~ msgstr[2] "katalogi plików użytkownika"
+#~ msgstr[0] "katalog pliku użytkownika"
+#~ msgstr[1] "katalog pliku użytkownika"
 
+#, fuzzy
 #~ msgid "user file"
 #~ msgid_plural "user files"
 #~ msgstr[0] "plik użytkownika"
-#~ msgstr[1] "pliki użytkownika"
-#~ msgstr[2] "pliki użytkownika"
+#~ msgstr[1] "plik użytkownika"

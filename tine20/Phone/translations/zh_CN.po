@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-22 09:04+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 13:42+0000\n"
+"Last-Translator: Lars Kneschke <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:21+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: CHINA\n"
 "X-Poedit-Language: Chinese\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -157,48 +157,48 @@ msgstr "振铃"
 msgid "Call ID"
 msgstr "来电号码"
 
-msgid "Dial phone number"
-msgstr "拨号"
+#~ msgid "Dial phone number"
+#~ msgstr "拨号"
 
 #, fuzzy
-msgid "Name"
-msgstr "号码"
+#~ msgid "Name"
+#~ msgstr "号码"
 
 #, fuzzy
-msgid "Phone Model"
-msgstr "电话"
+#~ msgid "Phone Model"
+#~ msgstr "电话"
 
 #, fuzzy
-msgid "redirection"
-msgstr "方向"
+#~ msgid "redirection"
+#~ msgstr "方向"
 
 #, fuzzy
-msgid "all"
-msgstr "来电号码"
+#~ msgid "all"
+#~ msgstr "来电号码"
 
 #, fuzzy
-msgid "none"
-msgstr "电话"
+#~ msgid "none"
+#~ msgstr "电话"
 
 #, fuzzy
-msgid "number"
-msgstr "号码"
+#~ msgid "number"
+#~ msgstr "号码"
 
 #, fuzzy
-msgid "name + number"
-msgstr "拨号"
+#~ msgid "name + number"
+#~ msgstr "拨号"
 
 #, fuzzy
-msgid "visual"
-msgstr "拨号"
+#~ msgid "visual"
+#~ msgstr "拨号"
 
 #, fuzzy
-msgid "ringer"
-msgstr "线路"
+#~ msgid "ringer"
+#~ msgstr "线路"
 
 #, fuzzy
-msgid "Lines"
-msgstr "线路"
+#~ msgid "Lines"
+#~ msgstr "线路"
 
-msgid "enter searchfilter"
-msgstr "输入搜索过滤器"
+#~ msgid "enter searchfilter"
+#~ msgstr "输入搜索过滤器"

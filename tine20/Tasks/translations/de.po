@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-02-22 09:07+0000\n"
+"PO-Revision-Date: 2012-01-13 12:42+0000\n"
 "Last-Translator: ph_il <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:22+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -101,7 +101,7 @@ msgstr "Priorität"
 msgid "Percent"
 msgstr "Prozent"
 
-#: js/GridPanel.js:165 js/TaskEditDialog.js:220 js/Tasks.js:151
+#: js/GridPanel.js:165 js/TaskEditDialog.js:221 js/Tasks.js:151
 #: js/Tasks.js:211 Model/Task.php:191
 msgid "Status"
 msgid_plural "Status"
@@ -112,7 +112,7 @@ msgstr[1] "Status"
 msgid "Creation Time"
 msgstr "Angelegt am"
 
-#: js/GridPanel.js:188 js/TaskEditDialog.js:227 Setup/Initialize.php:35
+#: js/GridPanel.js:188 js/TaskEditDialog.js:228 Setup/Initialize.php:35
 #: Setup/Update/Release5.php:66
 msgid "Completed"
 msgstr "Abgeschlossen"
@@ -133,23 +133,23 @@ msgstr "Sie müssen ein Fälligkeitsdatum angeben, da ein Alarm gesetzt wurde!"
 msgid "Due date"
 msgstr "Fälligkeitsdatum"
 
-#: js/TaskEditDialog.js:198 Model/Task.php:188
+#: js/TaskEditDialog.js:199 Model/Task.php:188
 msgid "Organizer"
 msgstr "Organisator"
 
-#: js/TaskEditDialog.js:199
+#: js/TaskEditDialog.js:200
 msgid "Add Responsible ..."
 msgstr "Verantwortlichen hinzufügen ..."
 
-#: js/TaskEditDialog.js:206
+#: js/TaskEditDialog.js:207
 msgid "Notes"
 msgstr "Anmerkungen"
 
-#: js/TaskEditDialog.js:207
+#: js/TaskEditDialog.js:208
 msgid "Enter description..."
 msgstr "Beschreibung eingeben..."
 
-#: js/TaskEditDialog.js:213
+#: js/TaskEditDialog.js:214
 msgid "Percentage"
 msgstr "Prozent"
 
@@ -289,20 +289,20 @@ msgstr "Alle Aufgaben, die ich zuletzt bearbeitet habe"
 msgid "Tasks without responsible"
 msgstr "Aufgaben ohne Verantwortlichen"
 
-msgid "NEEDS-ACTION"
-msgstr "ZU BEARBEITEN"
+#~ msgid "NEEDS-ACTION"
+#~ msgstr "ZU BEARBEITEN"
 
-msgid "COMPLETED"
-msgstr "ERLEDIGT"
+#~ msgid "COMPLETED"
+#~ msgstr "ERLEDIGT"
 
-msgid "IN-PROCESS"
-msgstr "IN BEARBEITUNG"
+#~ msgid "IN-PROCESS"
+#~ msgstr "IN BEARBEITUNG"
 
-msgid "CANCELLED"
-msgstr "ZURÜCKGESTELLT"
+#~ msgid "CANCELLED"
+#~ msgstr "ZURÜCKGESTELLT"
 
-msgid "Failed"
-msgstr "Fehlgeschlagen"
+#~ msgid "Failed"
+#~ msgstr "Fehlgeschlagen"
 
-msgid "Could not save task."
-msgstr "Konnte Aufgabe nicht speichern."
+#~ msgid "Could not save task."
+#~ msgstr "Konnte Aufgabe nicht speichern."

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-27 20:00+0000\n"
+"PO-Revision-Date: 2012-01-13 12:17+0000\n"
 "Last-Translator: Wojciech Kaczmarek <Unknown>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-28 06:29+0000\n"
-"X-Generator: Launchpad (build 14874)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -207,10 +207,10 @@ msgid "Directory with web server write access for user files."
 msgstr ""
 "Katalog serwera WWW umożliwiający zapisywanie plików przez użytkowników."
 
-#: Container.php:582
+#: Container.php:608
 #, python-format
 msgid "%s's personal container"
-msgstr "%s osobistych katalogów"
+msgstr ""
 
 #: Export/Pdf.php:216 js/widgets/tags/TagsPanel.js:57
 msgid "Tags"
@@ -754,11 +754,12 @@ msgid "Your password expired. Please enter a new user password:"
 msgstr "Twoje hasło wygasło. Proszę wprowadzić nowe hasło użytkownika:"
 
 #: js/Models.js:131 js/widgets/tags/TagFilter.js:30
+#, fuzzy
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Znacznik"
-msgstr[1] "Znaczniki"
-msgstr[2] "Znaczniki"
+msgstr[1] "Znacznik"
+msgstr[2] "Znacznik"
 
 #: js/Models.js:279
 msgid "Import"
@@ -1676,26 +1677,24 @@ msgstr "Zmieniam"
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:146
 msgid "You edited {0} {1}."
-msgstr "Edytowano {0}{1}."
+msgstr ""
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:149
 msgid "{0} {1} have been updated properly."
-msgstr "{0}{1} zostały zaktualizowane."
+msgstr ""
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:149
 msgid "{0} {1} has been updated properly."
-msgstr "{0}{1} zostały zaktualizowane."
+msgstr ""
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:152
 msgid ""
 "{0} {1} have invalid data after updating. These {1} have not been changed."
 msgstr ""
-"{0}{1} zawierają nieważne dane po aktualizacji. {1} nie zostały zmienione."
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:152
 msgid "{0} {1} has invalid data after updating. This {1} has not been changed."
 msgstr ""
-"{0}{1} zawierają nieważne dane po aktualizacji {1} nie został zmieniony."
 
 #: js/widgets/dialog/PreferencesDialog.js:125
 msgid "Admin Mode"
@@ -2079,11 +2078,11 @@ msgstr "{0} niezdefiniowane"
 
 #: js/widgets/grid/GridPanel.js:1054
 msgid "New..."
-msgstr "Nowy..."
+msgstr ""
 
 #: js/widgets/grid/GridPanel.js:1073
 msgid "Add to..."
-msgstr "Dodaj do..."
+msgstr ""
 
 #: js/widgets/grid/GridPanel.js:1117
 msgid "Creation Time"
@@ -2154,7 +2153,7 @@ msgstr "Ulubione"
 
 #: js/widgets/mainscreen/WestPanel.js:358
 msgid "Modules"
-msgstr "Moduły"
+msgstr ""
 
 #: js/widgets/mainscreen/WestPanel.js:369
 msgid "Save current view as favorite"
@@ -2182,7 +2181,7 @@ msgstr "Tytuł"
 
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:155
 msgid "Shared Favorite (visible by all users)"
-msgstr "Współdzielone Ulubione (widoczne dla wszystkich użytkowników)"
+msgstr ""
 
 #: js/widgets/persistentfilter/PickerPanel.js:113
 msgid "My favorites"
@@ -2548,43 +2547,43 @@ msgstr "Potwierdź wylogowanie"
 msgid "Show confirmation dialog on logout."
 msgstr "Wyświetl okno dialogowe potwierdzające chęć wylogowania"
 
-#: Setup/setup.xml:3039
+#: Setup/setup.xml:3105
 msgid "note"
 msgstr "zwykłą"
 
-#: Setup/setup.xml:3044
+#: Setup/setup.xml:3110
 msgid "default note type"
 msgstr "domyślny typ: notatka"
 
-#: Setup/setup.xml:3070
+#: Setup/setup.xml:3136
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:3075
+#: Setup/setup.xml:3141
 msgid "telephone call"
 msgstr "telefon"
 
-#: Setup/setup.xml:3101
+#: Setup/setup.xml:3167
 msgid "email"
 msgstr "e-mail"
 
-#: Setup/setup.xml:3106
+#: Setup/setup.xml:3172
 msgid "email contact"
 msgstr "kontakt e-mail"
 
-#: Setup/setup.xml:3132
+#: Setup/setup.xml:3198
 msgid "created"
 msgstr "utworzony"
 
-#: Setup/setup.xml:3137
+#: Setup/setup.xml:3203
 msgid "record created"
 msgstr "wiersz utworzony"
 
-#: Setup/setup.xml:3163
+#: Setup/setup.xml:3229
 msgid "changed"
 msgstr "zmieniony"
 
-#: Setup/setup.xml:3168
+#: Setup/setup.xml:3234
 msgid "record changed"
 msgstr "wiersz zmieniony"
 
@@ -2596,323 +2595,335 @@ msgstr "Tine 2.0 wymaga aktualizacji albo jeszcze nie jest zainstalowana."
 msgid "Please wait or contact your administrator"
 msgstr "Proszę poczekać albo skontaktować się ze swoim administratorem"
 
-msgid "low"
-msgstr "niski"
-
-msgid "normal"
-msgstr "normalny"
-
-msgid "high"
-msgstr "wysoki"
-
-msgid "urgent"
-msgstr "pilny"
+msgid "Invalid data after merge"
+msgstr "Nieprawidłowe dane po złączeniu"
 
 msgid ""
-"The server is currently unable to handle the request due to a temporary "
-"overloading or maintenance of the server. Please try again or contact your "
-"administrator."
+"The resulting {0} has invalid data. Both {1} haven't been touched. <br /"
+"><b>Validation Message:</b><br />{2}"
 msgstr ""
-"Serwer nie może teraz zrealizować zapytania z powodu chwilowego przeciążenia "
-"albo prac konserwacyjnych. Proszę spróbować ponownie lub powiadomić swojego "
-"administratora."
+"Wynik {0} zawiera nieprawidłowe dane. {1} nie zostały przetworzone. <br /"
+"><b>Validation Message:</b><br />{2}"
 
-msgid "No Tags to remove found in the selected records"
-msgstr "W zaznaczonych wierszach nie znaleziono znaczników do usunięcia"
+#~ msgid "low"
+#~ msgstr "niski"
 
-msgid "Detaching selected tags"
-msgstr "Odłączenie wybranych znaczników"
+#~ msgid "normal"
+#~ msgstr "normalny"
 
-msgid "Files"
-msgstr "Pliki"
+#~ msgid "high"
+#~ msgstr "wysoki"
 
-msgid "Import definition"
-msgstr "Definicja importu"
+#~ msgid "urgent"
+#~ msgstr "pilny"
 
-msgid "Import into {0}"
-msgstr "Importuj do: {0}"
+#~ msgid ""
+#~ "The server is currently unable to handle the request due to a temporary "
+#~ "overloading or maintenance of the server. Please try again or contact "
+#~ "your administrator."
+#~ msgstr ""
+#~ "Serwer nie może teraz zrealizować zapytania z powodu chwilowego "
+#~ "przeciążenia albo prac konserwacyjnych. Proszę spróbować ponownie lub "
+#~ "powiadomić swojego administratora."
 
-msgid "Dry run"
-msgstr "Przetestuj"
+#~ msgid "No Tags to remove found in the selected records"
+#~ msgstr "W zaznaczonych wierszach nie znaleziono znaczników do usunięcia"
 
-msgid "No files added"
-msgstr "Nie dodano plików"
+#~ msgid "Detaching selected tags"
+#~ msgstr "Odłączenie wybranych znaczników"
 
-msgid "You need to add files to import."
-msgstr "Należy dodać plik(i) z danymi do zaimportowania"
+#~ msgid "Files"
+#~ msgstr "Pliki"
 
-msgid "Dry run results"
-msgstr "Wyniki testów"
+#~ msgid "Import definition"
+#~ msgstr "Definicja importu"
 
-msgid ""
-"Import test successful for {0} records, import test failed for {1} records."
-msgstr ""
-"Testy importu powiodły się dla {0} wierszy, testy importu nie powiodły się "
-"dla {1} wierszy."
+#~ msgid "Import into {0}"
+#~ msgstr "Importuj do: {0}"
 
-msgid "Import results"
-msgstr "Wyniki importu"
+#~ msgid "Dry run"
+#~ msgstr "Przetestuj"
 
-msgid ""
-"Import successful for {0} records / import failed for {1} records / {2} "
-"duplicates found"
-msgstr ""
-"Import skuteczny dla {0} wierszy / import nieskuteczny dla {1} wierszy / "
-"znaleziono {2} powtórzenia"
+#~ msgid "No files added"
+#~ msgstr "Nie dodano plików"
 
-msgid "progress"
-msgstr "postęp"
+#~ msgid "You need to add files to import."
+#~ msgstr "Należy dodać plik(i) z danymi do zaimportowania"
 
-msgid "Tagging"
-msgstr "Przypisywanie znaczników"
+#~ msgid "Dry run results"
+#~ msgstr "Wyniki testów"
 
-msgid "Favorite"
-msgid_plural "Favorites"
-msgstr[0] "Ulubiony"
-msgstr[1] "ulubione"
-msgstr[2] "ulubione"
+#~ msgid ""
+#~ "Import test successful for {0} records, import test failed for {1} "
+#~ "records."
+#~ msgstr ""
+#~ "Testy importu powiodły się dla {0} wierszy, testy importu nie powiodły "
+#~ "się dla {1} wierszy."
 
-msgid "Events"
-msgstr "Terminy"
+#~ msgid "Import results"
+#~ msgstr "Wyniki importu"
 
-msgid "Rename Favorite"
-msgstr "Zmień nazwę ulubionych"
+#~ msgid ""
+#~ "Import successful for {0} records / import failed for {1} records / {2} "
+#~ "duplicates found"
+#~ msgstr ""
+#~ "Import skuteczny dla {0} wierszy / import nieskuteczny dla {1} wierszy / "
+#~ "znaleziono {2} powtórzenia"
 
-msgid "New Name"
-msgstr "Nowa nazwa"
+#~ msgid "progress"
+#~ msgstr "postęp"
 
-msgid "Please enter the new name for favorite \"{0}\"?"
-msgstr "Proszę zmienić nazwę \"{0}\" w ulubionych."
+#~ msgid "Tagging"
+#~ msgstr "Przypisywanie znaczników"
 
-msgid "Renaming Favorite \"{0}\""
-msgstr "Zmień nazwę \"{0}\" w ulubionych"
+#~ msgid "Favorite"
+#~ msgid_plural "Favorites"
+#~ msgstr[0] "Ulubiony"
+#~ msgstr[1] "ulubione"
+#~ msgstr[2] "ulubione"
 
-msgid "save filter"
-msgstr "Zapisz filtr"
+#~ msgid "Events"
+#~ msgstr "Terminy"
 
-msgid "Please enter a name for the favorite"
-msgstr "Proszę dodać nazwę do ulubionych"
+#~ msgid "Rename Favorite"
+#~ msgstr "Zmień nazwę ulubionych"
 
-msgid "Saving favorite"
-msgstr "Zapisywanie ulubionych"
+#~ msgid "New Name"
+#~ msgstr "Nowa nazwa"
 
-msgid "Updating {0} \"{1}\""
-msgstr "Aktualizacja {0} \"{1}\""
+#~ msgid "Please enter the new name for favorite \"{0}\"?"
+#~ msgstr "Proszę zmienić nazwę \"{0}\" w ulubionych."
 
-msgid "Deleting {0} \"{1}\""
-msgstr "Usuwanie {0} \"{1}\""
+#~ msgid "Renaming Favorite \"{0}\""
+#~ msgstr "Zmień nazwę \"{0}\" w ulubionych"
 
-msgid "Rename {0}"
-msgstr "Zmień nazwę w: {0}"
+#~ msgid "save filter"
+#~ msgstr "Zapisz filtr"
 
-msgid "Set color for {0}"
-msgstr "Ustaw kolor dla: {0}"
+#~ msgid "Please enter a name for the favorite"
+#~ msgstr "Proszę dodać nazwę do ulubionych"
 
-msgid "Reload {0}"
-msgstr "Przeładuj {0}"
+#~ msgid "Saving favorite"
+#~ msgstr "Zapisywanie ulubionych"
 
-msgid "There are no custom fields yet"
-msgstr "Brak pól użytkownika"
+#~ msgid "Updating {0} \"{1}\""
+#~ msgstr "Aktualizacja {0} \"{1}\""
 
-msgid "Do you really want to delete the selected record"
-msgid_plural "Do you really want to delete the selected records"
-msgstr[0] "Czy na pewno chcesz usunąć zaznaczony wiersz?"
-msgstr[1] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
-msgstr[2] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
+#~ msgid "Deleting {0} \"{1}\""
+#~ msgstr "Usuwanie {0} \"{1}\""
 
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "Grupa"
-msgstr[1] "grupy"
-msgstr[2] "grup"
+#~ msgid "Rename {0}"
+#~ msgstr "Zmień nazwę w: {0}"
 
-msgid "Groups"
-msgstr "Grupy"
+#~ msgid "Set color for {0}"
+#~ msgstr "Ustaw kolor dla: {0}"
 
-msgid "Overwriting system favorites is not yet supported"
-msgstr "Nadpisywanie systemowych ulubionych jeszcze nie jest obsługiwane"
+#~ msgid "Reload {0}"
+#~ msgstr "Przeładuj {0}"
 
-msgid "About Tine 2.0"
-msgstr "O Tine 2.0"
+#~ msgid "There are no custom fields yet"
+#~ msgstr "Brak pól użytkownika"
 
-msgid "Custom datetime"
-msgstr "Data i czas użytkownika"
+#~ msgid "Do you really want to delete the selected record"
+#~ msgid_plural "Do you really want to delete the selected records"
+#~ msgstr[0] "Czy na pewno chcesz usunąć zaznaczony wiersz?"
+#~ msgstr[1] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
+#~ msgstr[2] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
 
-msgid "Internal {0}"
-msgstr "Wewnętrzne {0}"
+#~ msgid "Group"
+#~ msgid_plural "Groups"
+#~ msgstr[0] "Grupa"
+#~ msgstr[1] "grupy"
+#~ msgstr[2] "grup"
 
-msgid "Overwriteing system favorites is not yet supported"
-msgstr "Nadpisywanie systemowych ulubionych nie jest jeszcze obsługiwane"
+#~ msgid "Groups"
+#~ msgstr "Grupy"
 
-msgid "Filter"
-msgstr "Filtr"
+#~ msgid "Overwriting system favorites is not yet supported"
+#~ msgstr "Nadpisywanie systemowych ulubionych jeszcze nie jest obsługiwane"
 
-msgid "Transfering Configuration..."
-msgstr "Przesyłanie konfiguracji..."
+#~ msgid "About Tine 2.0"
+#~ msgstr "O Tine 2.0"
 
-msgid "Transfering {0}..."
-msgstr "Dodaję {0}..."
+#~ msgid "Custom datetime"
+#~ msgstr "Data i czas użytkownika"
 
-msgid "Install Google Gears"
-msgstr "Zainstaluj (Google) Gears"
+#~ msgid "Internal {0}"
+#~ msgstr "Wewnętrzne {0}"
 
-msgid ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
-msgstr ""
-"Instalacja (Google) Gears przyczyni się do poprawy wydajności Tine 2.0 "
-"dzięki lokalnemu buforowaniu na tym komputerze wszystkich wymaganych plików."
+#~ msgid "Overwriteing system favorites is not yet supported"
+#~ msgstr "Nadpisywanie systemowych ulubionych nie jest jeszcze obsługiwane"
 
-msgid "Application picker style"
-msgstr "Sposób wyboru aplikacji"
+#~ msgid "Filter"
+#~ msgstr "Filtr"
 
-msgid "Please enter a name for the filter"
-msgstr "Proszę wprowadzić nazwę filtra"
+#~ msgid "Transfering Configuration..."
+#~ msgstr "Przesyłanie konfiguracji..."
 
-msgid "Filter not Saved"
-msgstr "Filtr nie został zapisany"
+#~ msgid "Transfering {0}..."
+#~ msgstr "Dodaję {0}..."
 
-msgid "You have to supply a name for the filter!"
-msgstr "Musisz wprowadzić nazwę filtra!"
+#~ msgid "Install Google Gears"
+#~ msgstr "Zainstaluj (Google) Gears"
 
-msgid ""
-"You have to supply a shorter name! Names of saved filters can only be up to "
-"40 characters long."
-msgstr ""
-"Musisz wprowadzić krótszą nazwę! Nazwy zapisanych filtrów nie mogą "
-"przekraczać 40 znaków."
+#~ msgid ""
+#~ "Installing Gears will improve the performance of Tine 2.0 by caching all "
+#~ "needed files locally on this computer."
+#~ msgstr ""
+#~ "Instalacja (Google) Gears przyczyni się do poprawy wydajności Tine 2.0 "
+#~ "dzięki lokalnemu buforowaniu na tym komputerze wszystkich wymaganych "
+#~ "plików."
 
-msgid "Saving filter"
-msgstr "Zapisywanie filtra"
+#~ msgid "Application picker style"
+#~ msgstr "Sposób wyboru aplikacji"
 
-msgid "My saved filters"
-msgstr "Moje filtry"
+#~ msgid "Please enter a name for the filter"
+#~ msgstr "Proszę wprowadzić nazwę filtra"
 
-msgid "Delete Filter"
-msgstr "Usuń filtr"
+#~ msgid "Filter not Saved"
+#~ msgstr "Filtr nie został zapisany"
 
-msgid "Do you really want to delete the Filter \"{0}\"?"
-msgstr "Czy na pewno chcesz usunąć filtr \"{0}\"?"
+#~ msgid "You have to supply a name for the filter!"
+#~ msgstr "Musisz wprowadzić nazwę filtra!"
 
-msgid "Deleting Filter \"{0}\""
-msgstr "Usuwanie filtra \"{0}\""
+#~ msgid ""
+#~ "You have to supply a shorter name! Names of saved filters can only be up "
+#~ "to 40 characters long."
+#~ msgstr ""
+#~ "Musisz wprowadzić krótszą nazwę! Nazwy zapisanych filtrów nie mogą "
+#~ "przekraczać 40 znaków."
 
-msgid "Rename Filter"
-msgstr "Zmień nazwę filtra"
+#~ msgid "Saving filter"
+#~ msgstr "Zapisywanie filtra"
 
-msgid "Please enter the new name for filter \"{0}\"?"
-msgstr "Proszę wprowadzić nową nazwę filtra \"{0}\"."
+#~ msgid "My saved filters"
+#~ msgstr "Moje filtry"
 
-msgid "Renaming Filter \"{0}\""
-msgstr "Zmienianie nazwy filtra \"{0}\""
+#~ msgid "Delete Filter"
+#~ msgstr "Usuń filtr"
 
-msgid "Saved filter"
-msgstr "filtry"
+#~ msgid "Do you really want to delete the Filter \"{0}\"?"
+#~ msgstr "Czy na pewno chcesz usunąć filtr \"{0}\"?"
 
-msgid "Report bugs to tine20.org directly when they occur"
-msgstr ""
-"W przypadku wystąpienia błędów, prosimy o zgłaszanie ich bezpośrednio do "
-"tine20.org"
+#~ msgid "Deleting Filter \"{0}\""
+#~ msgstr "Usuwanie filtra \"{0}\""
 
-msgid "Check tine20.org for new versions"
-msgstr "Sprawdź na stronach tine20.org, czy są nowe wersje Tine"
+#~ msgid "Rename Filter"
+#~ msgstr "Zmień nazwę filtra"
 
-msgid "Sorry"
-msgstr "Przykro mi"
+#~ msgid "Please enter the new name for filter \"{0}\"?"
+#~ msgstr "Proszę wprowadzić nową nazwę filtra \"{0}\"."
 
-msgid "Remove account"
-msgstr "usuń konto"
+#~ msgid "Renaming Filter \"{0}\""
+#~ msgstr "Zmienianie nazwy filtra \"{0}\""
 
-msgid "shared"
-msgstr "wspólnych"
+#~ msgid "Saved filter"
+#~ msgstr "filtry"
 
-msgid "Permission Denied"
-msgstr "Brak uprawnień"
+#~ msgid "Report bugs to tine20.org directly when they occur"
+#~ msgstr ""
+#~ "W przypadku wystąpienia błędów, prosimy o zgłaszanie ich bezpośrednio do "
+#~ "tine20.org"
 
-msgid "You don't have the required grant to select this {0}"
-msgstr "Nie masz wymaganych uprawnień, aby usunąć {0}"
+#~ msgid "Check tine20.org for new versions"
+#~ msgstr "Sprawdź na stronach tine20.org, czy są nowe wersje Tine"
 
-msgid "Import successful for {0} records, import failed for {1} records."
-msgstr "Udany import {0} wierszy, nieudany import {1} wierszy."
+#~ msgid "Sorry"
+#~ msgstr "Przykro mi"
 
-msgid "is in"
-msgstr "jest w"
+#~ msgid "Remove account"
+#~ msgstr "usuń konto"
 
-msgid "remove record"
-msgstr "usuń wiersz"
+#~ msgid "shared"
+#~ msgstr "wspólnych"
 
-msgid "Search"
-msgstr "Znajdź"
+#~ msgid "Permission Denied"
+#~ msgstr "Brak uprawnień"
 
-msgid "Browse"
-msgstr "Przeszukaj"
+#~ msgid "You don't have the required grant to select this {0}"
+#~ msgstr "Nie masz wymaganych uprawnień, aby usunąć {0}"
 
-msgid "click to edit"
-msgstr "kliknij, aby edytować"
+#~ msgid "Import successful for {0} records, import failed for {1} records."
+#~ msgstr "Udany import {0} wierszy, nieudany import {1} wierszy."
 
-msgid "Plase select an image file (gif/png/jpeg)"
-msgstr "Proszę wybrać plik graficzny (gif/png/jpeg)"
+#~ msgid "is in"
+#~ msgstr "jest w"
 
-msgid "Please Select a Group"
-msgstr "Proszę zaznaczyć grupę"
+#~ msgid "remove record"
+#~ msgstr "usuń wiersz"
 
-msgid "Register"
-msgstr "Zarejestruj się"
+#~ msgid "Search"
+#~ msgstr "Znajdź"
 
-msgid ""
-"The server did not respond to your request. Please check your network or "
-"contact your administrator."
-msgstr ""
-"Serwer nie odpowiedział na Twoje zapytanie. Proszę sprawdzić połączenie "
-"sieciowe albo skontaktować się ze swoim administratorem."
+#~ msgid "Browse"
+#~ msgstr "Przeszukaj"
 
-msgid "Permissions"
-msgstr "Uprawnienia"
+#~ msgid "click to edit"
+#~ msgstr "kliknij, aby edytować"
 
-msgid "Could not save {0}."
-msgstr "Zapisanie było niemożliwe {0}."
+#~ msgid "Plase select an image file (gif/png/jpeg)"
+#~ msgstr "Proszę wybrać plik graficzny (gif/png/jpeg)"
 
-msgid "add account"
-msgstr "dodaj konto"
+#~ msgid "Please Select a Group"
+#~ msgstr "Proszę zaznaczyć grupę"
 
-msgid "nobody"
-msgstr "brak"
+#~ msgid "Register"
+#~ msgstr "Zarejestruj się"
 
-msgid "please select an account"
-msgstr "Proszę zaznaczyć konto"
+#~ msgid ""
+#~ "The server did not respond to your request. Please check your network or "
+#~ "contact your administrator."
+#~ msgstr ""
+#~ "Serwer nie odpowiedział na Twoje zapytanie. Proszę sprawdzić połączenie "
+#~ "sieciowe albo skontaktować się ze swoim administratorem."
 
-msgid "loading new language..."
-msgstr "ładowanie nowego języka..."
+#~ msgid "Permissions"
+#~ msgstr "Uprawnienia"
 
-msgid "Export Date"
-msgstr "Data eksportu"
+#~ msgid "Could not save {0}."
+#~ msgstr "Zapisanie było niemożliwe {0}."
 
-msgid "Login successful. Loading Tine 2.0..."
-msgstr "Logowanie udane. Trwa ładowanie Tine 2.0 …"
+#~ msgid "add account"
+#~ msgstr "dodaj konto"
 
-msgid "Logout from Tine 2.0"
-msgstr "Wylogowanie z Tine 2.0"
+#~ msgid "nobody"
+#~ msgstr "brak"
 
-msgid "Our Forum for questions and ideas"
-msgstr "Nasze forum do zadawania pytań i wpisywania sugestii"
+#~ msgid "please select an account"
+#~ msgstr "Proszę zaznaczyć konto"
 
-msgid "Remove from shared favorites"
-msgstr "Usuń ze współdzielonych ulubionych"
+#~ msgid "loading new language..."
+#~ msgstr "ładowanie nowego języka..."
 
-msgid "Add to shared favorites"
-msgstr "Dodaj do współdzielonych ulubionych"
+#~ msgid "Export Date"
+#~ msgstr "Data eksportu"
 
-msgid "Setting favorite \"{0}\" not shared"
-msgstr "Ustawianie ulubionych \"{0}\" bez współdzielenia"
+#~ msgid "Login successful. Loading Tine 2.0..."
+#~ msgstr "Logowanie udane. Trwa ładowanie Tine 2.0 …"
 
-msgid "Setting favorite \"{0}\" shared"
-msgstr "Ustawianie ulubionych \"{0}\" jako współdzielone"
+#~ msgid "Logout from Tine 2.0"
+#~ msgstr "Wylogowanie z Tine 2.0"
 
-msgid "Share this Favorite"
-msgstr "Współdziel to ulubione"
+#~ msgid "Our Forum for questions and ideas"
+#~ msgstr "Nasze forum do zadawania pytań i wpisywania sugestii"
 
-msgid "Select all visible ({0} records)"
-msgstr "Zaznacz wszystkie widoczne ({0} wiersze /-y)"
+#~ msgid "Remove from shared favorites"
+#~ msgstr "Usuń ze współdzielonych ulubionych"
+
+#~ msgid "Add to shared favorites"
+#~ msgstr "Dodaj do współdzielonych ulubionych"
+
+#~ msgid "Setting favorite \"{0}\" not shared"
+#~ msgstr "Ustawianie ulubionych \"{0}\" bez współdzielenia"
+
+#~ msgid "Setting favorite \"{0}\" shared"
+#~ msgstr "Ustawianie ulubionych \"{0}\" jako współdzielone"
+
+#~ msgid "Share this Favorite"
+#~ msgstr "Współdziel to ulubione"
+
+#~ msgid "Select all visible ({0} records)"
+#~ msgstr "Zaznacz wszystkie widoczne ({0} wiersze /-y)"
 
 #~ msgid ""
 #~ "The window you want to work with is backgrounded. Your browser does't "
@@ -2939,16 +2950,3 @@ msgstr "Zaznacz wszystkie widoczne ({0} wiersze /-y)"
 
 #~ msgid "<br /><ul style=\"padding:10px;border:1px\">"
 #~ msgstr "<br /><ul style=\"padding:10px;border:1px\">"
-
-#~ msgid "multiple"
-#~ msgstr "wielokrotny"
-
-#~ msgid "Invalid data after merge"
-#~ msgstr "Nieprawidłowe dane po złączeniu"
-
-#~ msgid ""
-#~ "The resulting {0} has invalid data. Both {1} haven't been touched. <br /"
-#~ "><b>Validation Message:</b><br />{2}"
-#~ msgstr ""
-#~ "Wynik {0} zawiera nieprawidłowe dane. {1} nie zostały przetworzone. <br /"
-#~ "><b>Validation Message:</b><br />{2}"

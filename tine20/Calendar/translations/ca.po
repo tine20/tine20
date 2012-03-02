@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-22 09:17+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 13:31+0000\n"
+"Last-Translator: Damià Verger <Unknown>\n"
 "Language-Team: Tine 2.0 Translators <dverger@joomla.cat>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:20+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -143,7 +143,7 @@ msgid "Select Role"
 msgstr ""
 
 #: js/AddToEventPanel.js:216 js/AttendeeGridPanel.js:186
-#: js/ContactEventsGridPanel.js:125 js/GridView.js:149 Model/Event.php:244
+#: js/ContactEventsGridPanel.js:125 js/GridView.js:149 Model/Event.php:245
 msgid "Status"
 msgstr "Estat"
 
@@ -243,7 +243,7 @@ msgid "Events"
 msgstr "Esdeveniments"
 
 #: js/ContactEventsGridPanel.js:112 js/EventEditDialog.js:90
-#: js/GridView.js:139 js/Model.js:201 Model/Event.php:245
+#: js/GridView.js:139 js/Model.js:201 Model/Event.php:246
 msgid "Summary"
 msgstr "Resum"
 
@@ -288,16 +288,16 @@ msgstr ""
 msgid "End Time"
 msgstr "Hora d'acabament"
 
-#: js/EventDetailsPanel.js:244 Model/Event.php:238
+#: js/EventDetailsPanel.js:244 Model/Event.php:239
 msgid "Blocking"
 msgstr "Blocant"
 
 #: js/EventDetailsPanel.js:249 js/EventEditDialog.js:98 js/GridView.js:144
-#: js/Model.js:202 js/ResourcesGridPanel.js:52 Model/Event.php:241
+#: js/Model.js:202 js/ResourcesGridPanel.js:52 Model/Event.php:242
 msgid "Location"
 msgstr "Ubicació"
 
-#: js/EventDetailsPanel.js:253 js/Model.js:215 Model/Event.php:242
+#: js/EventDetailsPanel.js:253 js/Model.js:215 Model/Event.php:243
 msgid "Organizer"
 msgstr "Organitzador"
 
@@ -315,7 +315,7 @@ msgid "Private"
 msgstr "Privat"
 
 #: js/EventEditDialog.js:201 js/Model.js:203 js/ResourceEditDialog.js:72
-#: Model/Event.php:240
+#: Model/Event.php:241
 msgid "Description"
 msgstr "Descripció"
 
@@ -525,31 +525,31 @@ msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Esteu segur que voleu eliminar aquest esdeveniment?"
 msgstr[1] "Esteu segur que voleu eliminar els {0} esdeveniments seleccionats?"
 
-#: js/MainScreenCenterPanel.js:935
+#: js/MainScreenCenterPanel.js:940
 msgid "Could not Print"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:935
+#: js/MainScreenCenterPanel.js:940
 msgid "Sorry, your current view does not support printing."
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1084
+#: js/MainScreenCenterPanel.js:1089
 msgid "Scheduling Conflict"
 msgstr "Conflicte a la planificació"
 
-#: js/MainScreenCenterPanel.js:1086
+#: js/MainScreenCenterPanel.js:1091
 msgid "The following attendee are busy at the requested time:"
 msgstr "L'assistent següent es troba ocupat a l'hora en qüestió:"
 
-#: js/MainScreenCenterPanel.js:1090
+#: js/MainScreenCenterPanel.js:1095
 msgid "Ignore Conflict"
 msgstr "Ignora el conflicte"
 
-#: js/MainScreenCenterPanel.js:1091
+#: js/MainScreenCenterPanel.js:1096
 msgid "Edit Event"
 msgstr "Edita l'esdeveniment"
 
-#: js/MainScreenCenterPanel.js:1092
+#: js/MainScreenCenterPanel.js:1097
 msgid "Cancel this action"
 msgstr ""
 
@@ -655,7 +655,7 @@ msgstr ""
 msgid "after {0} occurrences"
 msgstr ""
 
-#: js/RrulePanel.js:312 Model/Event.php:237
+#: js/RrulePanel.js:312 Model/Event.php:238
 msgid "End"
 msgstr "Finalització"
 
@@ -735,39 +735,39 @@ msgstr ""
 "El sistema ha afegit automàticament aquest contacte com a organitzador de "
 "l'esdeveniment"
 
-#: Model/Event.php:236
+#: Model/Event.php:237
 msgid "Start"
 msgstr "Inici"
 
-#: Model/Event.php:239
+#: Model/Event.php:240
 msgid "Classification"
 msgstr "Classificació"
 
-#: Model/Event.php:243
+#: Model/Event.php:244
 msgid "Priority"
 msgstr "Prioritat"
 
-#: Model/Event.php:246
+#: Model/Event.php:247
 msgid "Url"
 msgstr "Url"
 
-#: Model/Event.php:247
+#: Model/Event.php:248
 msgid "Recurrance rule"
 msgstr "Regla de recurrència"
 
-#: Model/Event.php:248
+#: Model/Event.php:249
 msgid "Is all day event"
 msgstr "És un esdeveniment de tot el dia"
 
-#: Model/Event.php:249
+#: Model/Event.php:250
 msgid "Organizer timezone"
 msgstr "Zona horària de l'organitzador"
 
-#: Model/Event.php:274
+#: Model/Event.php:275
 msgid "Yes"
 msgstr "Sí"
 
-#: Model/Event.php:274
+#: Model/Event.php:275
 msgid "No"
 msgstr "No"
 
@@ -929,33 +929,35 @@ msgstr ""
 msgid "Event details"
 msgstr "Detalls de l'esdeveniment"
 
-msgid "forever"
-msgstr "per sempre"
+#~ msgid "forever"
+#~ msgstr "per sempre"
 
-msgid "Forever"
-msgstr "Per sempre"
+#~ msgid "Forever"
+#~ msgstr "Per sempre"
 
-msgid "Until"
-msgstr "Fins"
+#~ msgid "Until"
+#~ msgstr "Fins"
 
-msgid "Unknown calendar"
-msgstr "Calendari desconegut"
+#~ msgid "Unknown calendar"
+#~ msgstr "Calendari desconegut"
 
-msgid "unknown)"
-msgstr "desconegut)"
+#~ msgid "unknown)"
+#~ msgstr "desconegut)"
 
-msgid "Confirm Update of Series"
-msgstr "Confirma actualització de sèries"
+#~ msgid "Confirm Update of Series"
+#~ msgstr "Confirma actualització de sèries"
 
-msgid "Do you really want to update all events of this recurring event series?"
-msgstr ""
-"Esteu segur que voleu actualitzar tots els esdeveniments d'aquestes sèries "
-"d'esdeveniments recurrents?"
+#~ msgid ""
+#~ "Do you really want to update all events of this recurring event series?"
+#~ msgstr ""
+#~ "Esteu segur que voleu actualitzar tots els esdeveniments d'aquestes "
+#~ "sèries d'esdeveniments recurrents?"
 
-msgid "Confirm Deletion of Series"
-msgstr "Confirma eliminació de sèries"
+#~ msgid "Confirm Deletion of Series"
+#~ msgstr "Confirma eliminació de sèries"
 
-msgid "Do you really want to delete all events of this recurring event series?"
-msgstr ""
-"Esteu segur que voleu eliminar tots els esdeveniments d'aquestes sèries "
-"d'esdeveniments recurrents?"
+#~ msgid ""
+#~ "Do you really want to delete all events of this recurring event series?"
+#~ msgstr ""
+#~ "Esteu segur que voleu eliminar tots els esdeveniments d'aquestes sèries "
+#~ "d'esdeveniments recurrents?"

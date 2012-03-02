@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-22 09:46+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 13:09+0000\n"
+"Last-Translator: Etienne Quesselaire <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:20+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Language: French\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -143,7 +143,7 @@ msgid "Select Role"
 msgstr ""
 
 #: js/AddToEventPanel.js:216 js/AttendeeGridPanel.js:186
-#: js/ContactEventsGridPanel.js:125 js/GridView.js:149 Model/Event.php:244
+#: js/ContactEventsGridPanel.js:125 js/GridView.js:149 Model/Event.php:245
 msgid "Status"
 msgstr "Statut"
 
@@ -243,7 +243,7 @@ msgid "Events"
 msgstr "Évènements"
 
 #: js/ContactEventsGridPanel.js:112 js/EventEditDialog.js:90
-#: js/GridView.js:139 js/Model.js:201 Model/Event.php:245
+#: js/GridView.js:139 js/Model.js:201 Model/Event.php:246
 msgid "Summary"
 msgstr "Résumé"
 
@@ -288,16 +288,16 @@ msgstr ""
 msgid "End Time"
 msgstr "Date de fin"
 
-#: js/EventDetailsPanel.js:244 Model/Event.php:238
+#: js/EventDetailsPanel.js:244 Model/Event.php:239
 msgid "Blocking"
 msgstr "Bloquant"
 
 #: js/EventDetailsPanel.js:249 js/EventEditDialog.js:98 js/GridView.js:144
-#: js/Model.js:202 js/ResourcesGridPanel.js:52 Model/Event.php:241
+#: js/Model.js:202 js/ResourcesGridPanel.js:52 Model/Event.php:242
 msgid "Location"
 msgstr "Lieu"
 
-#: js/EventDetailsPanel.js:253 js/Model.js:215 Model/Event.php:242
+#: js/EventDetailsPanel.js:253 js/Model.js:215 Model/Event.php:243
 msgid "Organizer"
 msgstr "Organisateur"
 
@@ -315,7 +315,7 @@ msgid "Private"
 msgstr "Privé"
 
 #: js/EventEditDialog.js:201 js/Model.js:203 js/ResourceEditDialog.js:72
-#: Model/Event.php:240
+#: Model/Event.php:241
 msgid "Description"
 msgstr "Description"
 
@@ -525,31 +525,31 @@ msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Êtes-vous sûr de vouloir supprimer l'évènement sélectionné?"
 msgstr[1] "Êtes-vous sûr de vouloir supprimer les {0} évènements sélectionnés?"
 
-#: js/MainScreenCenterPanel.js:935
+#: js/MainScreenCenterPanel.js:940
 msgid "Could not Print"
 msgstr "L'impression a échoué"
 
-#: js/MainScreenCenterPanel.js:935
+#: js/MainScreenCenterPanel.js:940
 msgid "Sorry, your current view does not support printing."
 msgstr "Désolé, cette vue n'est pas imprimable."
 
-#: js/MainScreenCenterPanel.js:1084
+#: js/MainScreenCenterPanel.js:1089
 msgid "Scheduling Conflict"
 msgstr "Conflit de planification"
 
-#: js/MainScreenCenterPanel.js:1086
+#: js/MainScreenCenterPanel.js:1091
 msgid "The following attendee are busy at the requested time:"
 msgstr "Le participant suivant est déjà occupé à l'heure demandée :"
 
-#: js/MainScreenCenterPanel.js:1090
+#: js/MainScreenCenterPanel.js:1095
 msgid "Ignore Conflict"
 msgstr "Ignorer le conflit"
 
-#: js/MainScreenCenterPanel.js:1091
+#: js/MainScreenCenterPanel.js:1096
 msgid "Edit Event"
 msgstr "Modifier l'évènement"
 
-#: js/MainScreenCenterPanel.js:1092
+#: js/MainScreenCenterPanel.js:1097
 msgid "Cancel this action"
 msgstr ""
 
@@ -655,7 +655,7 @@ msgstr ""
 msgid "after {0} occurrences"
 msgstr ""
 
-#: js/RrulePanel.js:312 Model/Event.php:237
+#: js/RrulePanel.js:312 Model/Event.php:238
 msgid "End"
 msgstr "Fin"
 
@@ -733,39 +733,39 @@ msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr "Ce contact a été ajouté automatiquement comme participant"
 
-#: Model/Event.php:236
+#: Model/Event.php:237
 msgid "Start"
 msgstr "Début"
 
-#: Model/Event.php:239
+#: Model/Event.php:240
 msgid "Classification"
 msgstr "Catégorie"
 
-#: Model/Event.php:243
+#: Model/Event.php:244
 msgid "Priority"
 msgstr "Priorité"
 
-#: Model/Event.php:246
+#: Model/Event.php:247
 msgid "Url"
 msgstr "Site Internet"
 
-#: Model/Event.php:247
+#: Model/Event.php:248
 msgid "Recurrance rule"
 msgstr "Récurrences"
 
-#: Model/Event.php:248
+#: Model/Event.php:249
 msgid "Is all day event"
 msgstr "Toute la journée"
 
-#: Model/Event.php:249
+#: Model/Event.php:250
 msgid "Organizer timezone"
 msgstr "Fuseau horaire de l'organisateur"
 
-#: Model/Event.php:274
+#: Model/Event.php:275
 msgid "Yes"
 msgstr "Oui"
 
-#: Model/Event.php:274
+#: Model/Event.php:275
 msgid "No"
 msgstr "Non"
 
@@ -927,100 +927,105 @@ msgstr ""
 msgid "Event details"
 msgstr "Détails de l'événement"
 
-msgid "forever"
-msgstr "toujours"
+#~ msgid "forever"
+#~ msgstr "toujours"
 
-msgid "Forever"
-msgstr "Toujours"
+#~ msgid "Forever"
+#~ msgstr "Toujours"
 
-msgid "Until"
-msgstr "Jusqu'au"
+#~ msgid "Until"
+#~ msgstr "Jusqu'au"
 
-msgid "Unknown calendar"
-msgstr "Calendrier inconnu"
+#~ msgid "Unknown calendar"
+#~ msgstr "Calendrier inconnu"
 
-msgid "unknown)"
-msgstr "inconnu)"
+#~ msgid "unknown)"
+#~ msgstr "inconnu)"
 
-msgid "Confirm Update of Series"
-msgstr "Confirmer la mise à jour de la série"
+#~ msgid "Confirm Update of Series"
+#~ msgstr "Confirmer la mise à jour de la série"
 
-msgid "Do you really want to update all events of this recurring event series?"
-msgstr ""
-"Confirmez-vous la mise à jour de toutes les occurrences de cette série ?"
+#~ msgid ""
+#~ "Do you really want to update all events of this recurring event series?"
+#~ msgstr ""
+#~ "Confirmez-vous la mise à jour de toutes les occurrences de cette série ?"
 
-msgid "Confirm Deletion of Series"
-msgstr "Confirmer la suppression de la série"
+#~ msgid "Confirm Deletion of Series"
+#~ msgstr "Confirmer la suppression de la série"
 
-msgid "Do you really want to delete all events of this recurring event series?"
-msgstr ""
-"Êtes-vous sûr de vouloir supprimer tous les évènement récurrents de cette "
-"série?"
+#~ msgid ""
+#~ "Do you really want to delete all events of this recurring event series?"
+#~ msgstr ""
+#~ "Êtes-vous sûr de vouloir supprimer tous les évènement récurrents de cette "
+#~ "série?"
 
-msgid "Event \"%1$s\" at %s has been canceled"
-msgstr "L'évènement \"%1$s\" du %s a été annulé"
+#~ msgid "Event \"%1$s\" at %s has been canceled"
+#~ msgstr "L'évènement \"%1$s\" du %s a été annulé"
 
-msgid "Resources {0}"
-msgstr "Ressources {0}"
+#~ msgid "Resources {0}"
+#~ msgstr "Ressources {0}"
 
-msgid "Show declined events"
-msgstr "Afficher les évènements refusés"
+#~ msgid "Show declined events"
+#~ msgstr "Afficher les évènements refusés"
 
-msgid "Publish Free/Busy Information"
-msgstr "Publier son statut (libre/occupé)"
+#~ msgid "Publish Free/Busy Information"
+#~ msgstr "Publier son statut (libre/occupé)"
 
-msgid "Allow all users to view your free/busy information"
-msgstr "Autoriser tous les utilisateurs à voir mon statut (libre/occupé)"
+#~ msgid "Allow all users to view your free/busy information"
+#~ msgstr "Autoriser tous les utilisateurs à voir mon statut (libre/occupé)"
 
-msgid "Do you want to update the whole series, or just this event"
-msgstr "Voulez-vous mettre à jour toute la série, ou juste cet évènement?"
+#~ msgid "Do you want to update the whole series, or just this event"
+#~ msgstr "Voulez-vous mettre à jour toute la série, ou juste cet évènement?"
 
-msgid "Failed not update recurring event series"
-msgstr "Échec de mise à jour de la série d'évènements"
+#~ msgid "Failed not update recurring event series"
+#~ msgstr "Échec de mise à jour de la série d'évènements"
 
-msgid "Failed not update event"
-msgstr "Impossible de mettre à jour l'évenement"
+#~ msgid "Failed not update event"
+#~ msgstr "Impossible de mettre à jour l'évenement"
 
-msgid ""
-"Do you want to delete the whole series, this and all future events of this "
-"series, or just this event"
-msgstr ""
-"Voulez-vous supprimer toute la série, cet évènement et tous les suivants, ou "
-"juste cet évènement?"
+#~ msgid ""
+#~ "Do you want to delete the whole series, this and all future events of "
+#~ "this series, or just this event"
+#~ msgstr ""
+#~ "Voulez-vous supprimer toute la série, cet évènement et tous les suivants, "
+#~ "ou juste cet évènement?"
 
-msgid "Every"
-msgstr "Tous les"
+#~ msgid "Every"
+#~ msgstr "Tous les"
 
-msgid ". Day"
-msgstr ". Jour"
+#~ msgid ". Day"
+#~ msgstr ". Jour"
 
-msgid ". Week at"
-msgstr ". Semaine"
+#~ msgid ". Week at"
+#~ msgstr ". Semaine"
 
-msgid ". Month"
-msgstr ". Mois"
+#~ msgid ". Month"
+#~ msgstr ". Mois"
 
-msgid ". Year"
-msgstr ". Année"
+#~ msgid ". Year"
+#~ msgstr ". Année"
 
-msgid "Event description:<br/>"
-msgstr "Description:<br/>"
+#~ msgid "Event description:<br/>"
+#~ msgstr "Description:<br/>"
 
-msgid "Do you realy want to update all events of this recuring event series?"
-msgstr ""
-"Êtes-vous sûr de vouloir mettre à jour toutes les occurrences de cette série?"
+#~ msgid ""
+#~ "Do you realy want to update all events of this recuring event series?"
+#~ msgstr ""
+#~ "Êtes-vous sûr de vouloir mettre à jour toutes les occurrences de cette "
+#~ "série?"
 
-msgid ""
-"Your selection contains recuring events. Recuring events must be deleted "
-"seperatly!"
-msgstr ""
-"La sélection contient des évènements récurrents. Les évènements récurrents "
-"doivent être supprimés séparément!"
+#~ msgid ""
+#~ "Your selection contains recuring events. Recuring events must be deleted "
+#~ "seperatly!"
+#~ msgstr ""
+#~ "La sélection contient des évènements récurrents. Les évènements "
+#~ "récurrents doivent être supprimés séparément!"
 
-msgid "Do you realy want to delete all events of this recuring event series?"
-msgstr ""
-"Êtes-vous sûr de vouloir supprimer tous les évènement récurrents de cette "
-"série?"
+#~ msgid ""
+#~ "Do you realy want to delete all events of this recuring event series?"
+#~ msgstr ""
+#~ "Êtes-vous sûr de vouloir supprimer tous les évènement récurrents de cette "
+#~ "série?"
 
-msgid "No recuring rule defined"
-msgstr "Aucune récurrence de définie"
+#~ msgid "No recuring rule defined"
+#~ msgstr "Aucune récurrence de définie"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-16 11:33+0000\n"
+"PO-Revision-Date: 2012-01-13 12:12+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:22+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -201,7 +201,7 @@ msgstr "Files Directory"
 msgid "Directory with web server write access for user files."
 msgstr "Directory with web server write access for user files."
 
-#: Container.php:582
+#: Container.php:608
 #, python-format
 msgid "%s's personal container"
 msgstr "%s's personal container"
@@ -738,10 +738,11 @@ msgid "Your password expired. Please enter a new user password:"
 msgstr "Your password expired. Please enter a new user password:"
 
 #: js/Models.js:131 js/widgets/tags/TagFilter.js:30
+#, fuzzy
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Tag"
-msgstr[1] "Tags"
+msgstr[1] "Tag"
 
 #: js/Models.js:279
 msgid "Import"
@@ -1291,48 +1292,48 @@ msgstr "OK"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:113
 msgid "Merging Records..."
-msgstr ""
+msgstr "Merging Records..."
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:150
 msgid "Remove Duplicate Failed"
-msgstr ""
+msgstr "Remove Duplicate Failed"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:150
 msgid "The merge succeeded, but the duplicate {0} could not be removed"
-msgstr ""
+msgstr "The merge succeeded, but the duplicate {0} could not be removed"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:152
 msgid "Merge Failed"
-msgstr ""
+msgstr "Merge Failed"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:152
 msgid "The merge failed. Both {0} haven't been touched."
-msgstr ""
+msgstr "The merge failed. Both {0} haven't been touched."
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:188
 msgid "Merge {0}, prefer First"
-msgstr ""
+msgstr "Merge {0}, prefer First"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:189
 msgid "Merge {0}, prefer Second"
-msgstr ""
+msgstr "Merge {0}, prefer Second"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:196
 #: js/widgets/grid/GridPanel.js:437
 msgid "Merge {0}"
-msgstr ""
+msgstr "Merge {0}"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:199
 msgid "First {0}"
-msgstr ""
+msgstr "First {0}"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:200
 msgid "Second {0}"
-msgstr ""
+msgstr "Second {0}"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:201
 msgid "Final {0}"
-msgstr ""
+msgstr "Final {0}"
 
 #: js/widgets/dialog/DuplicateResolveGridPanel.js:41
 msgid "The record you try to add might already exist."
@@ -2510,43 +2511,43 @@ msgstr "Confirm Logout"
 msgid "Show confirmation dialog on logout."
 msgstr "Show confirmation dialog on logout."
 
-#: Setup/setup.xml:3039
+#: Setup/setup.xml:3105
 msgid "note"
 msgstr "note"
 
-#: Setup/setup.xml:3044
+#: Setup/setup.xml:3110
 msgid "default note type"
 msgstr "default note type"
 
-#: Setup/setup.xml:3070
+#: Setup/setup.xml:3136
 msgid "telephone"
 msgstr "telephone"
 
-#: Setup/setup.xml:3075
+#: Setup/setup.xml:3141
 msgid "telephone call"
 msgstr "telephone call"
 
-#: Setup/setup.xml:3101
+#: Setup/setup.xml:3167
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:3106
+#: Setup/setup.xml:3172
 msgid "email contact"
 msgstr "email contact"
 
-#: Setup/setup.xml:3132
+#: Setup/setup.xml:3198
 msgid "created"
 msgstr "created"
 
-#: Setup/setup.xml:3137
+#: Setup/setup.xml:3203
 msgid "record created"
 msgstr "record created"
 
-#: Setup/setup.xml:3163
+#: Setup/setup.xml:3229
 msgid "changed"
 msgstr "changed"
 
-#: Setup/setup.xml:3168
+#: Setup/setup.xml:3234
 msgid "record changed"
 msgstr "record changed"
 
@@ -2557,6 +2558,17 @@ msgstr "Tine 2.0 needs to be updated or is not installed yet."
 #: views/update.php:25
 msgid "Please wait or contact your administrator"
 msgstr "Please wait or contact your administrator"
+
+#~ msgid ""
+#~ "The window you want to work with is backgrounded. Your browser does't "
+#~ "support to forground the window for you, so you need to use your "
+#~ "operating systems window switching features. Please send complaints to "
+#~ "your browser vendor!"
+#~ msgstr ""
+#~ "The window you want to work with is backgrounded. Your browser does't "
+#~ "support to forground the window for you, so you need to use your "
+#~ "operating systems window switching features. Please send complaints to "
+#~ "your browser vendor!"
 
 #~ msgid "Either {0} or {1} must be given"
 #~ msgstr "Either {0} or {1} must be given"
@@ -2576,13 +2588,26 @@ msgstr "Please wait or contact your administrator"
 #~ msgid "<br /><ul style=\"padding:10px;border:1px\">"
 #~ msgstr "<br /><ul style=\"padding:10px;border:1px\">"
 
-#~ msgid ""
-#~ "The window you want to work with is backgrounded. Your browser does't "
-#~ "support to forground the window for you, so you need to use your "
-#~ "operating systems window switching features. Please send complaints to "
-#~ "your browser vendor!"
-#~ msgstr ""
-#~ "The window you want to work with is backgrounded. Your browser does't "
-#~ "support to forground the window for you, so you need to use your "
-#~ "operating systems window switching features. Please send complaints to "
-#~ "your browser vendor!"
+#~ msgid "Remove from shared favorites"
+#~ msgstr "Remove from shared favorites"
+
+#~ msgid "Add to shared favorites"
+#~ msgstr "Add to shared favorites"
+
+#~ msgid "Setting favorite \"{0}\" not shared"
+#~ msgstr "Setting favorite \"{0}\" not shared"
+
+#~ msgid "Setting favorite \"{0}\" shared"
+#~ msgstr "Setting favorite \"{0}\" shared"
+
+#~ msgid "Share this Favorite"
+#~ msgstr "Share this Favorite"
+
+#~ msgid "Update Error"
+#~ msgstr "Update Error"
+
+#~ msgid "There had been {0} Error(s) while updating {1} records."
+#~ msgstr "There had been {0} Error(s) while updating {1} records."
+
+#~ msgid "Select all visible ({0} records)"
+#~ msgstr "Select all visible ({0} records)"

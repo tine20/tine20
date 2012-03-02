@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-05 17:48+0100\n"
-"PO-Revision-Date: 2012-02-22 09:23+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 11:19+0000\n"
+"Last-Translator: Nkolay Parukhin <Unknown>\n"
 "Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:20+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:20+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "X-Poedit-Language: Russian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -1024,112 +1024,112 @@ msgid_plural "Email Users"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Loading Tag..."
-msgstr "Загрузка тэга..."
+#~ msgid "Loading Tag..."
+#~ msgstr "Загрузка тэга..."
 
-msgid "Please Wait"
-msgstr "Пожалуйста, подождите"
+#~ msgid "Please Wait"
+#~ msgstr "Пожалуйста, подождите"
 
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "Вы действительно хотите удалить выбранные элементы лога доступа?"
+#~ msgid "Do you really want to delete the selected access log entries?"
+#~ msgstr "Вы действительно хотите удалить выбранные элементы лога доступа?"
 
-msgid "delete entry"
-msgstr "удалить элемент"
+#~ msgid "delete entry"
+#~ msgstr "удалить элемент"
 
-msgid "select all"
-msgstr "выбрать все"
+#~ msgid "select all"
+#~ msgstr "выбрать все"
 
-msgid "Display from:"
-msgstr "Показаны с:"
+#~ msgid "Display from:"
+#~ msgstr "Показаны с:"
 
-msgid "to:"
-msgstr "до:"
+#~ msgid "to:"
+#~ msgstr "до:"
 
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Показаны элементы лога доступа {0} - {1} из {2}"
+#~ msgid "Displaying access log entries {0} - {1} of {2}"
+#~ msgstr "Показаны элементы лога доступа {0} - {1} из {2}"
 
-msgid "No access log entries to display"
-msgstr "Нет записей лога доступа"
+#~ msgid "No access log entries to display"
+#~ msgstr "Нет записей лога доступа"
 
-msgid "Account ID"
-msgstr "ID учётной записи"
+#~ msgid "Account ID"
+#~ msgstr "ID учётной записи"
 
-msgid "Loading Role..."
-msgstr "Загрузка роли..."
+#~ msgid "Loading Role..."
+#~ msgstr "Загрузка роли..."
 
-msgid "Do you really want to delete the selected account(s)?"
-msgstr "Вы действительно хотите удалить выбранную учётную запись(и)?"
+#~ msgid "Do you really want to delete the selected account(s)?"
+#~ msgstr "Вы действительно хотите удалить выбранную учётную запись(и)?"
 
-msgid "Deleting account(s)..."
-msgstr "Удаление учётной записи(ей)..."
+#~ msgid "Deleting account(s)..."
+#~ msgstr "Удаление учётной записи(ей)..."
 
-msgid "Some error occurred while trying to delete the account(s)."
-msgstr "При удалении учётной записи (ей) произошла ошибка."
+#~ msgid "Some error occurred while trying to delete the account(s)."
+#~ msgstr "При удалении учётной записи (ей) произошла ошибка."
 
-msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "Показаны учётные записи {0} - {1} из {2}"
+#~ msgid "Displaying accounts {0} - {1} of {2}"
+#~ msgstr "Показаны учётные записи {0} - {1} из {2}"
 
-msgid "No accounts to display"
-msgstr "Нет учётных записей"
+#~ msgid "No accounts to display"
+#~ msgstr "Нет учётных записей"
 
-msgid "add account"
-msgstr "добавить учётную запись"
+#~ msgid "add account"
+#~ msgstr "добавить учётную запись"
 
-msgid "edit account"
-msgstr "изменить учётную запись"
+#~ msgid "edit account"
+#~ msgstr "изменить учётную запись"
 
-msgid "delete account"
-msgstr "удалить учётную запись"
+#~ msgid "delete account"
+#~ msgstr "удалить учётную запись"
 
-msgid "Deleting group..."
-msgstr "Удаление группы..."
-
-#, fuzzy
-msgid "Email UID"
-msgstr "Электронная почта"
+#~ msgid "Deleting group..."
+#~ msgstr "Удаление группы..."
 
 #, fuzzy
-msgid "Email GID"
-msgstr "Электронная почта"
+#~ msgid "Email UID"
+#~ msgstr "Электронная почта"
 
 #, fuzzy
-msgid "Email Username"
-msgstr "Пользователь Samba"
-
-msgid "enter searchfilter"
-msgstr "Введите поисковый фильтр"
-
-msgid "remove account"
-msgstr "удалить учётную запись"
-
-msgid "Role members"
-msgstr "Участники роли"
-
-msgid "Deleting tag..."
-msgstr "Удаление тэга..."
-
-msgid "name"
-msgstr "Имя"
-
-msgid "status"
-msgstr "Статус"
-
-msgid "Deleting account..."
-msgstr "Счет удаляется..."
+#~ msgid "Email GID"
+#~ msgstr "Электронная почта"
 
 #, fuzzy
-msgid "Some error occurred while trying to delete the account."
-msgstr "При удаление счета произошла  ошибка."
+#~ msgid "Email Username"
+#~ msgstr "Пользователь Samba"
 
-msgid "Saving User Account"
-msgstr "Счет пользователя выл сохранен"
+#~ msgid "enter searchfilter"
+#~ msgstr "Введите поисковый фильтр"
 
-msgid "Could not save user account."
-msgstr "Счет пользователя не мог бить сохранен."
+#~ msgid "remove account"
+#~ msgstr "удалить учётную запись"
 
-msgid "Add New User Account"
-msgstr "Добавить новый счет пользователя"
+#~ msgid "Role members"
+#~ msgstr "Участники роли"
+
+#~ msgid "Deleting tag..."
+#~ msgstr "Удаление тэга..."
+
+#~ msgid "name"
+#~ msgstr "Имя"
+
+#~ msgid "status"
+#~ msgstr "Статус"
+
+#~ msgid "Deleting account..."
+#~ msgstr "Счет удаляется..."
 
 #, fuzzy
-msgid "Edit User Account \"{0}\""
-msgstr "Обработать счёт пользователя \"{0}\""
+#~ msgid "Some error occurred while trying to delete the account."
+#~ msgstr "При удаление счета произошла  ошибка."
+
+#~ msgid "Saving User Account"
+#~ msgstr "Счет пользователя выл сохранен"
+
+#~ msgid "Could not save user account."
+#~ msgstr "Счет пользователя не мог бить сохранен."
+
+#~ msgid "Add New User Account"
+#~ msgstr "Добавить новый счет пользователя"
+
+#, fuzzy
+#~ msgid "Edit User Account \"{0}\""
+#~ msgstr "Обработать счёт пользователя \"{0}\""

@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Erp\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-22 10:14+0000\n"
-"Last-Translator: ph_il <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2012-01-13 13:37+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-23 05:21+0000\n"
-"X-Generator: Launchpad (build 14855)\n"
+"X-Launchpad-Export-Date: 2012-02-09 09:22+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -67,7 +67,7 @@ msgstr "Produktname"
 
 #: js/Models.js:81 js/Models.js:142
 msgid "Creator"
-msgstr "Ersteller"
+msgstr ""
 
 #: js/Models.js:113
 msgid "Contract"
@@ -84,7 +84,7 @@ msgstr[1] "Alle Verträge"
 
 #: js/Models.js:141
 msgid "Contract name"
-msgstr "Auftragsname"
+msgstr ""
 
 #: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
 msgid "Name"
@@ -108,34 +108,34 @@ msgstr "Tags"
 
 #: Setup/Initialize.php:34 Setup/Update/Release5.php:62
 msgid "My Products"
-msgstr "Meine Produkte"
+msgstr ""
 
 #: Setup/Initialize.php:35 Setup/Update/Release5.php:63
 msgid "Products created by myself"
-msgstr "Von mir erstellte Produkte"
+msgstr ""
 
 #: Setup/Initialize.php:55 Setup/Update/Release5.php:83
 msgid "My Contracts"
-msgstr "Meine Aufträge"
+msgstr ""
 
 #: Setup/Initialize.php:56 Setup/Update/Release5.php:84
 msgid "Contracts created by myself"
-msgstr "Von mir erstellte Aufträge"
+msgstr ""
 
-msgid "Shared Contracts"
-msgstr "Gemeinsame Verträge"
+#~ msgid "Shared Contracts"
+#~ msgstr "Gemeinsame Verträge"
 
-msgid "Summary"
-msgstr "Zusammenfassung"
+#~ msgid "Summary"
+#~ msgstr "Zusammenfassung"
 
-msgid "Products"
-msgstr "Produkte"
+#~ msgid "Products"
+#~ msgstr "Produkte"
 
-msgid "All Products"
-msgstr "Alle Produkte"
+#~ msgid "All Products"
+#~ msgstr "Alle Produkte"
 
-msgid "Contracts"
-msgstr "Verträge"
+#~ msgid "Contracts"
+#~ msgstr "Verträge"
 
 #~ msgid "contracts list"
 #~ msgid_plural "contracts lists"
