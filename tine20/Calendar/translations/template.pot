@@ -97,13 +97,6 @@ msgstr ""
 msgid "%s's personal calendar"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:33 js/AddressbookGridPanelHook.js:47
-#: js/Model.js:63 js/Model.js:362 js/SearchCombo.js:76
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] ""
-msgstr[1] ""
-
 #: js/AddToEventPanel.js:61
 msgid "Cancel"
 msgstr ""
@@ -532,6 +525,12 @@ msgstr ""
 #: js/MainScreenCenterPanel.js:1097
 msgid "Cancel this action"
 msgstr ""
+
+#: js/Model.js:63 js/Model.js:362 js/SearchCombo.js:76
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/Model.js:67
 msgid "Calendars"

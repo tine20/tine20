@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 12:12+0000\n"
+"PO-Revision-Date: 2012-02-28 18:52+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -631,7 +631,7 @@ msgid "Logging you in..."
 msgstr "Logging you in..."
 
 #: js/LoginPanel.js:341 js/widgets/container/GrantsDialog.js:95
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:367
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
 #: js/widgets/persistentfilter/PickerPanel.js:314
 #: js/widgets/persistentfilter/PickerPanel.js:352
 #: js/widgets/persistentfilter/PickerPanel.js:402
@@ -657,7 +657,7 @@ msgstr "Your username and/or your password are wrong!!!"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:551 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:350
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Errors"
@@ -665,7 +665,7 @@ msgstr "Errors"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:561 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:350
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 msgid "Please fix the errors noted."
 msgstr "Please fix the errors noted."
 
@@ -718,8 +718,8 @@ msgid "Install Tine 2.0 as web app in your browser."
 msgstr "Install Tine 2.0 as web app in your browser."
 
 #: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:568
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:362
-#: js/widgets/grid/GridPanel.js:1469
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:363
+#: js/widgets/grid/GridPanel.js:1470
 #: js/widgets/persistentfilter/PickerPanel.js:312
 #: js/widgets/tree/ContextMenu.js:336
 msgid "Confirm"
@@ -738,11 +738,10 @@ msgid "Your password expired. Please enter a new user password:"
 msgstr "Your password expired. Please enter a new user password:"
 
 #: js/Models.js:131 js/widgets/tags/TagFilter.js:30
-#, fuzzy
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Tag"
-msgstr[1] "Tag"
+msgstr[1] "Tags"
 
 #: js/Models.js:279
 msgid "Import"
@@ -1043,7 +1042,7 @@ msgstr "Add a {0} Note"
 msgid "Type"
 msgstr "Type"
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1118
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1119
 msgid "Created By"
 msgstr "Created By"
 
@@ -1292,48 +1291,48 @@ msgstr "OK"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:113
 msgid "Merging Records..."
-msgstr "Merging Records..."
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:150
 msgid "Remove Duplicate Failed"
-msgstr "Remove Duplicate Failed"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:150
 msgid "The merge succeeded, but the duplicate {0} could not be removed"
-msgstr "The merge succeeded, but the duplicate {0} could not be removed"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:152
 msgid "Merge Failed"
-msgstr "Merge Failed"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:152
 msgid "The merge failed. Both {0} haven't been touched."
-msgstr "The merge failed. Both {0} haven't been touched."
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:188
 msgid "Merge {0}, prefer First"
-msgstr "Merge {0}, prefer First"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:189
 msgid "Merge {0}, prefer Second"
-msgstr "Merge {0}, prefer Second"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:196
-#: js/widgets/grid/GridPanel.js:437
+#: js/widgets/grid/GridPanel.js:438
 msgid "Merge {0}"
-msgstr "Merge {0}"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:199
 msgid "First {0}"
-msgstr "First {0}"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:200
 msgid "Second {0}"
-msgstr "Second {0}"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:201
 msgid "Final {0}"
-msgstr "Final {0}"
+msgstr ""
 
 #: js/widgets/dialog/DuplicateResolveGridPanel.js:41
 msgid "The record you try to add might already exist."
@@ -1384,7 +1383,7 @@ msgstr "delete"
 msgid "Saved in"
 msgstr "Saved in"
 
-#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:388
+#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:389
 msgid "Copy {0}"
 msgstr "Copy {0}"
 
@@ -1404,17 +1403,17 @@ msgstr "Transferring {0}..."
 msgid "Do you really want to delete this {0}?"
 msgstr "Do you really want to delete this {0}?"
 
-#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1502
+#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1503
 msgid "Deleting {0}"
 msgstr "Deleting {0}"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1519
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1520
 #: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:409
 #: js/widgets/tags/TagsPanel.js:442
 msgid "Failed"
 msgstr "Failed"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1519
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1520
 msgid "Could not delete {0}."
 msgstr "Could not delete {0}."
 
@@ -1616,24 +1615,24 @@ msgstr "{0} records have failures and will be discarded."
 msgid "Links"
 msgstr "Links"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:113
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:114
 msgid "Edit {0} {1}"
 msgstr "Edit {0} {1}"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:186
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:197
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:187
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:198
 msgid "Delete value from all selected records"
 msgstr "Delete value from all selected records"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:202
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:203
 msgid "Undo delete value from all selected records"
 msgstr "Undo delete value from all selected records"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:276
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:277
 msgid "Different Values"
 msgstr "Different Values"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:277
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:278
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
@@ -1641,11 +1640,11 @@ msgstr ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:363
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:364
 msgid "Do you really want to change these {0} records?"
 msgstr "Do you really want to change these {0} records?"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:367
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
 msgid "Applying changes"
 msgstr "Applying changes"
 
@@ -2018,71 +2017,71 @@ msgstr ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 
-#: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:373
-#: js/widgets/grid/GridPanel.js:374 js/widgets/grid/GridPanel.js:375
+#: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:374
+#: js/widgets/grid/GridPanel.js:375 js/widgets/grid/GridPanel.js:376
 msgid "Edit {0}"
 msgid_plural "Edit {0}"
 msgstr[0] "Edit {0}"
 msgstr[1] "Edit {0}"
 
-#: js/widgets/grid/GridPanel.js:399
+#: js/widgets/grid/GridPanel.js:400
 msgid "Add {0}"
 msgstr "Add {0}"
 
-#: js/widgets/grid/GridPanel.js:407
+#: js/widgets/grid/GridPanel.js:408
 msgid "Print Page"
 msgstr "Print Page"
 
-#: js/widgets/grid/GridPanel.js:468 js/widgets/grid/GridPanel.js:469
-#: js/widgets/grid/GridPanel.js:471
+#: js/widgets/grid/GridPanel.js:469 js/widgets/grid/GridPanel.js:470
+#: js/widgets/grid/GridPanel.js:472
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Delete {0}"
 msgstr[1] "Delete {0}"
 
-#: js/widgets/grid/GridPanel.js:833
+#: js/widgets/grid/GridPanel.js:834
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Displaying records {0} - {1} of {2}"
 
-#: js/widgets/grid/GridPanel.js:834
+#: js/widgets/grid/GridPanel.js:835
 msgid "No {0} to display"
 msgstr "No {0} to display"
 
-#: js/widgets/grid/GridPanel.js:1054
+#: js/widgets/grid/GridPanel.js:1055
 msgid "New..."
 msgstr "New..."
 
-#: js/widgets/grid/GridPanel.js:1073
+#: js/widgets/grid/GridPanel.js:1074
 msgid "Add to..."
 msgstr "Add to..."
 
-#: js/widgets/grid/GridPanel.js:1117
+#: js/widgets/grid/GridPanel.js:1118
 msgid "Creation Time"
 msgstr "Creation Time"
 
-#: js/widgets/grid/GridPanel.js:1119
+#: js/widgets/grid/GridPanel.js:1120
 msgid "Last Modified Time"
 msgstr "Last Modified Time"
 
-#: js/widgets/grid/GridPanel.js:1120
+#: js/widgets/grid/GridPanel.js:1121
 msgid "Last Modified By"
 msgstr "Last Modified By"
 
-#: js/widgets/grid/GridPanel.js:1443
+#: js/widgets/grid/GridPanel.js:1444
 msgid "Not Allowed"
 msgstr "Not Allowed"
 
-#: js/widgets/grid/GridPanel.js:1444
+#: js/widgets/grid/GridPanel.js:1445
 msgid "You are not allowed to delete all pages at once"
 msgstr "You are not allowed to delete all pages at once"
 
-#: js/widgets/grid/GridPanel.js:1467
+#: js/widgets/grid/GridPanel.js:1468
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] "Do you really want to delete the selected record ({0})?"
 msgstr[1] "Do you really want to delete the selected records ({0})?"
 
-#: js/widgets/grid/GridPanel.js:1502
+#: js/widgets/grid/GridPanel.js:1503
 msgid " ... This may take a long time!"
 msgstr " ... This may take a long time!"
 
@@ -2559,17 +2558,6 @@ msgstr "Tine 2.0 needs to be updated or is not installed yet."
 msgid "Please wait or contact your administrator"
 msgstr "Please wait or contact your administrator"
 
-#~ msgid ""
-#~ "The window you want to work with is backgrounded. Your browser does't "
-#~ "support to forground the window for you, so you need to use your "
-#~ "operating systems window switching features. Please send complaints to "
-#~ "your browser vendor!"
-#~ msgstr ""
-#~ "The window you want to work with is backgrounded. Your browser does't "
-#~ "support to forground the window for you, so you need to use your "
-#~ "operating systems window switching features. Please send complaints to "
-#~ "your browser vendor!"
-
 #~ msgid "Either {0} or {1} must be given"
 #~ msgstr "Either {0} or {1} must be given"
 
@@ -2588,26 +2576,13 @@ msgstr "Please wait or contact your administrator"
 #~ msgid "<br /><ul style=\"padding:10px;border:1px\">"
 #~ msgstr "<br /><ul style=\"padding:10px;border:1px\">"
 
-#~ msgid "Remove from shared favorites"
-#~ msgstr "Remove from shared favorites"
-
-#~ msgid "Add to shared favorites"
-#~ msgstr "Add to shared favorites"
-
-#~ msgid "Setting favorite \"{0}\" not shared"
-#~ msgstr "Setting favorite \"{0}\" not shared"
-
-#~ msgid "Setting favorite \"{0}\" shared"
-#~ msgstr "Setting favorite \"{0}\" shared"
-
-#~ msgid "Share this Favorite"
-#~ msgstr "Share this Favorite"
-
-#~ msgid "Update Error"
-#~ msgstr "Update Error"
-
-#~ msgid "There had been {0} Error(s) while updating {1} records."
-#~ msgstr "There had been {0} Error(s) while updating {1} records."
-
-#~ msgid "Select all visible ({0} records)"
-#~ msgstr "Select all visible ({0} records)"
+#~ msgid ""
+#~ "The window you want to work with is backgrounded. Your browser does't "
+#~ "support to forground the window for you, so you need to use your "
+#~ "operating systems window switching features. Please send complaints to "
+#~ "your browser vendor!"
+#~ msgstr ""
+#~ "The window you want to work with is backgrounded. Your browser does't "
+#~ "support to forground the window for you, so you need to use your "
+#~ "operating systems window switching features. Please send complaints to "
+#~ "your browser vendor!"

@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-05 17:48+0100\n"
-"PO-Revision-Date: 2012-01-13 12:05+0000\n"
-"Last-Translator: Nkolay Parukhin <Unknown>\n"
+"PO-Revision-Date: 2012-02-28 18:34+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:20+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "X-Poedit-Language: Russian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -231,13 +231,6 @@ msgstr "высокий"
 msgid "urgent"
 msgstr "срочный"
 
-#: js/AddressbookGridPanelHook.js:36 js/AddressbookGridPanelHook.js:50
-#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:311 js/Model.js:48
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] ""
-msgstr[1] ""
-
 #: js/AddToLeadPanel.js:56
 msgid "Cancel"
 msgstr ""
@@ -253,6 +246,12 @@ msgstr ""
 #: js/AddToLeadPanel.js:104
 msgid "Please select the attenders' role"
 msgstr ""
+
+#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:311 js/Model.js:48
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/AddToLeadPanel.js:145
 msgid "Select Lead"
@@ -603,211 +602,211 @@ msgstr ""
 msgid "Leads with overdue tasks"
 msgstr ""
 
-#~ msgid "Lead %s has been creaded"
-#~ msgstr "Предложение %s было создано"
+msgid "Lead %s has been creaded"
+msgstr "Предложение %s было создано"
 
-#~ msgid "Add task"
-#~ msgstr "Добавить задание"
+msgid "Add task"
+msgstr "Добавить задание"
 
-#~ msgid "Add task for selected lead"
-#~ msgstr "Добавить задачу выбранному предложению"
-
-#, fuzzy
-#~ msgid "Lead Name"
-#~ msgstr "Название предложения"
+msgid "Add task for selected lead"
+msgstr "Добавить задачу выбранному предложению"
 
 #, fuzzy
-#~ msgid "Date Start"
-#~ msgstr "Начать"
+msgid "Lead Name"
+msgstr "Название предложения"
 
 #, fuzzy
-#~ msgid "Date End Scheduled"
-#~ msgstr "Конец запланирован"
+msgid "Date Start"
+msgstr "Начать"
 
 #, fuzzy
-#~ msgid "Created By"
-#~ msgstr "Обновлено"
-
-#~ msgid "Lead states"
-#~ msgstr "Состояния предложений"
-
-#~ msgid "Lead sources"
-#~ msgstr "Источники предложений"
-
-#~ msgid "Lead types"
-#~ msgstr "Типы предложений"
+msgid "Date End Scheduled"
+msgstr "Конец запланирован"
 
 #, fuzzy
-#~ msgid "Remove Option"
-#~ msgstr "Удалить продукты"
+msgid "Created By"
+msgstr "Обновлено"
 
-#~ msgid "Type"
-#~ msgstr "Тип"
+msgid "Lead states"
+msgstr "Состояния предложений"
 
-#, fuzzy
-#~ msgid "Select lead"
-#~ msgstr "Удалить предложение"
+msgid "Lead sources"
+msgstr "Источники предложений"
 
-#, fuzzy
-#~ msgid "Open tasks"
-#~ msgstr "Удалить задания"
+msgid "Lead types"
+msgstr "Типы предложений"
 
 #, fuzzy
-#~ msgid "Tasks status"
-#~ msgstr "Состояния предложений"
+msgid "Remove Option"
+msgstr "Удалить продукты"
 
-#~ msgid "telephone"
-#~ msgstr "телефон"
+msgid "Type"
+msgstr "Тип"
 
-#~ msgid "email"
-#~ msgstr "электронная почта"
+#, fuzzy
+msgid "Select lead"
+msgstr "Удалить предложение"
 
-#~ msgid "fair"
-#~ msgstr "рынок"
+#, fuzzy
+msgid "Open tasks"
+msgstr "Удалить задания"
 
-#~ msgid "customer"
-#~ msgstr "клиент"
+#, fuzzy
+msgid "Tasks status"
+msgstr "Состояния предложений"
 
-#~ msgid "partner"
-#~ msgstr "партнер"
+msgid "telephone"
+msgstr "телефон"
 
-#~ msgid "Are you sure you want to delete this lead?"
-#~ msgstr "Вы уверены, что хотите удалить предложение?"
+msgid "email"
+msgstr "электронная почта"
 
-#~ msgid "Deleting lead"
-#~ msgstr "Удаление предложения"
+msgid "fair"
+msgstr "рынок"
 
-#~ msgid "Some error occured while trying to delete the lead."
-#~ msgstr "При удалении предложения произошла ошибка."
+msgid "customer"
+msgstr "клиент"
 
-#~ msgid "Show details"
-#~ msgstr "Показать подробности"
+msgid "partner"
+msgstr "партнер"
 
-#~ msgid "Displaying leads {0} - {1} of {2}"
-#~ msgstr "Показаны предложения {0} - {1} из {2}"
+msgid "Are you sure you want to delete this lead?"
+msgstr "Вы уверены, что хотите удалить предложение?"
 
-#~ msgid "No leads found."
-#~ msgstr "Предложения не найдены."
+msgid "Deleting lead"
+msgstr "Удаление предложения"
 
-#~ msgid "Add lead"
-#~ msgstr "Добавить предложение"
+msgid "Some error occured while trying to delete the lead."
+msgstr "При удалении предложения произошла ошибка."
 
-#~ msgid "Edit lead"
-#~ msgstr "Изменить предложение"
+msgid "Show details"
+msgstr "Показать подробности"
 
-#~ msgid "Delete selected leads"
-#~ msgstr "Удалить выбранные предложения"
+msgid "Displaying leads {0} - {1} of {2}"
+msgstr "Показаны предложения {0} - {1} из {2}"
 
-#~ msgid "Export selected lead as PDF"
-#~ msgstr "Экспортировать выбранное предложение как PDF"
+msgid "No leads found."
+msgstr "Предложения не найдены."
 
-#~ msgid "Please wait"
-#~ msgstr "Пожалуйста, подождите"
+msgid "Add lead"
+msgstr "Добавить предложение"
 
-#~ msgid "Saving lead"
-#~ msgstr "Сохранение предложения"
+msgid "Edit lead"
+msgstr "Изменить предложение"
 
-#~ msgid "Failed"
-#~ msgstr "Неудача"
+msgid "Delete selected leads"
+msgstr "Удалить выбранные предложения"
 
-#~ msgid "Could not save lead."
-#~ msgstr "Предложение не было сохранено."
+msgid "Export selected lead as PDF"
+msgstr "Экспортировать выбранное предложение как PDF"
 
-#~ msgid "Please fix the errors noted."
-#~ msgstr "Пожалуйста, исправьте ошибки."
+msgid "Please wait"
+msgstr "Пожалуйста, подождите"
 
-#~ msgid "Contactdata"
-#~ msgstr "Контакты"
+msgid "Saving lead"
+msgstr "Сохранение предложения"
 
-#~ msgid "Add new contact"
-#~ msgstr "Добавить новый контакт"
+msgid "Failed"
+msgstr "Неудача"
 
-#~ msgid "Add new customer contact"
-#~ msgstr "Добавить контакт нового клиента"
+msgid "Could not save lead."
+msgstr "Предложение не было сохранено."
 
-#~ msgid "Edit contact"
-#~ msgstr "Изменить контакт"
+msgid "Please fix the errors noted."
+msgstr "Пожалуйста, исправьте ошибки."
 
-#~ msgid "Edit selected contact"
-#~ msgstr "Изменить выбранный контакт"
+msgid "Contactdata"
+msgstr "Контакты"
 
-#~ msgid "Unlink contact"
-#~ msgstr "Убрать контакт"
+msgid "Add new contact"
+msgstr "Добавить новый контакт"
 
-#~ msgid "Add new task"
-#~ msgstr "Добавить новое задание"
+msgid "Add new customer contact"
+msgstr "Добавить контакт нового клиента"
 
-#~ msgid "Edit task"
-#~ msgstr "Изменить задание"
+msgid "Edit contact"
+msgstr "Изменить контакт"
 
-#~ msgid "Edit selected task"
-#~ msgstr "Изменить выбранное задание"
+msgid "Edit selected contact"
+msgstr "Изменить выбранный контакт"
 
-#~ msgid "Add existing task to lead"
-#~ msgstr "Добавить существующее задание к предложению"
+msgid "Unlink contact"
+msgstr "Убрать контакт"
 
-#~ msgid "Remove selected tasks"
-#~ msgstr "Удалить выбранные задания"
+msgid "Add new task"
+msgstr "Добавить новое задание"
 
-#~ msgid "Remove selected products"
-#~ msgstr "Удалить выбранные продукты"
+msgid "Edit task"
+msgstr "Изменить задание"
 
-#~ msgid "Leads"
-#~ msgstr "Предложения"
+msgid "Edit selected task"
+msgstr "Изменить выбранное задание"
 
-#~ msgid "Loading Lead..."
-#~ msgstr "Загрузка предложения..."
+msgid "Add existing task to lead"
+msgstr "Добавить существующее задание к предложению"
 
-#~ msgid "Please Wait"
-#~ msgstr "Пожалуйста, подождите"
+msgid "Remove selected tasks"
+msgstr "Удалить выбранные задания"
 
-#~ msgid "Add New Lead"
-#~ msgstr "Добавить новое предложение"
+msgid "Remove selected products"
+msgstr "Удалить выбранные продукты"
 
-#~ msgid "Overview"
-#~ msgstr "Краткий обзор"
+msgid "Leads"
+msgstr "Предложения"
 
-#~ msgid "folder"
-#~ msgstr "Папка"
+msgid "Loading Lead..."
+msgstr "Загрузка предложения..."
 
-#~ msgid "Enter searchfilter"
-#~ msgstr "Введите поисковой фильтр"
+msgid "Please Wait"
+msgstr "Пожалуйста, подождите"
 
-#~ msgid "leadstate"
-#~ msgstr "Статус"
+msgid "Add New Lead"
+msgstr "Добавить новое предложение"
 
-#~ msgid "Search Contacts"
-#~ msgstr "Поиск контактов"
+msgid "Overview"
+msgstr "Краткий обзор"
 
-#~ msgid "Add existing contact"
-#~ msgstr "Добавьте существующий контакт"
+msgid "folder"
+msgstr "Папка"
 
-#~ msgid "Add existing contact to lead"
-#~ msgstr "Добавить существующий контакт "
+msgid "Enter searchfilter"
+msgstr "Введите поисковой фильтр"
 
-#~ msgid "Organisation"
-#~ msgstr "Организация"
+msgid "leadstate"
+msgstr "Статус"
 
-#~ msgid "Lead updated"
-#~ msgstr "Указание продажи обновлено"
+msgid "Search Contacts"
+msgstr "Поиск контактов"
 
-#~ msgid "Lead added"
-#~ msgstr "Указание продажи добавлено"
+msgid "Add existing contact"
+msgstr "Добавьте существующий контакт"
 
-#~ msgid "Add responsible"
-#~ msgstr "Добавьте ответственного"
+msgid "Add existing contact to lead"
+msgstr "Добавить существующий контакт "
 
-#~ msgid "Add new responsible contact"
-#~ msgstr "Добавьте нового ответственного"
+msgid "Organisation"
+msgstr "Организация"
 
-#~ msgid "Add customer"
-#~ msgstr "Добавьте клиента"
+msgid "Lead updated"
+msgstr "Указание продажи обновлено"
 
-#~ msgid "Add partner"
-#~ msgstr "Добавьте партнёра"
+msgid "Lead added"
+msgstr "Указание продажи добавлено"
 
-#~ msgid "Add new partner contact"
-#~ msgstr "Добавьте нового партнёра"
+msgid "Add responsible"
+msgstr "Добавьте ответственного"
 
-#~ msgid "Add contact"
-#~ msgstr "Добавить контакт"
+msgid "Add new responsible contact"
+msgstr "Добавьте нового ответственного"
+
+msgid "Add customer"
+msgstr "Добавьте клиента"
+
+msgid "Add partner"
+msgstr "Добавьте партнёра"
+
+msgid "Add new partner contact"
+msgstr "Добавьте нового партнёра"
+
+msgid "Add contact"
+msgstr "Добавить контакт"

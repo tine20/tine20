@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 11:22+0000\n"
-"Last-Translator: kitamura yuuki <Unknown>\n"
+"PO-Revision-Date: 2012-02-28 18:38+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Yuuki ’Taisa’ Kitamura <ykitamura@clasi-co.jp>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:20+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: JAPAN\n"
 "X-Poedit-Language: Japanese\n"
 
@@ -143,8 +143,7 @@ msgstr[1] ""
 msgid "IP Address"
 msgstr "ＩＰアドレス"
 
-#: js/AccessLog.js:107 js/Admin.js:23 js/user/GridPanel.js:98
-#: js/user/Users.js:72
+#: js/AccessLog.js:107 js/Admin.js:23 js/user/Users.js:72
 msgid "User"
 msgid_plural "Users"
 msgstr[0] ""
@@ -1007,6 +1006,10 @@ msgstr "新しいパスワードの設定"
 msgid "Please enter the new password:"
 msgstr "新しいパスワードを入力してください"
 
+#: js/user/Users.js:72
+msgid "Users"
+msgstr ""
+
 #: js/user/Users.js:118
 msgid "Samba User"
 msgid_plural "Samba Users"
@@ -1019,110 +1022,110 @@ msgid_plural "Email Users"
 msgstr[0] ""
 msgstr[1] ""
 
-#~ msgid "Loading Tag..."
-#~ msgstr "タグをロードしています..."
+msgid "Loading Tag..."
+msgstr "タグをロードしています..."
 
-#~ msgid "Please Wait"
-#~ msgstr "お待ちください"
+msgid "Please Wait"
+msgstr "お待ちください"
 
-#~ msgid "Do you really want to delete the selected access log entries?"
-#~ msgstr "本当に選択したアクセスログエントリを削除しますか？"
+msgid "Do you really want to delete the selected access log entries?"
+msgstr "本当に選択したアクセスログエントリを削除しますか？"
 
-#~ msgid "delete entry"
-#~ msgstr "エントリの削除"
+msgid "delete entry"
+msgstr "エントリの削除"
 
-#~ msgid "select all"
-#~ msgstr "全て選択"
+msgid "select all"
+msgstr "全て選択"
 
-#~ msgid "Display from:"
-#~ msgstr "表示："
+msgid "Display from:"
+msgstr "表示："
 
-#~ msgid "to:"
-#~ msgstr "ＴＯ："
+msgid "to:"
+msgstr "ＴＯ："
 
-#~ msgid "Displaying access log entries {0} - {1} of {2}"
-#~ msgstr "アクセスログエントリの表示 {0} - {1} 件中 {2}"
+msgid "Displaying access log entries {0} - {1} of {2}"
+msgstr "アクセスログエントリの表示 {0} - {1} 件中 {2}"
 
-#~ msgid "No access log entries to display"
-#~ msgstr "表示するアクセスログエントリがありません"
+msgid "No access log entries to display"
+msgstr "表示するアクセスログエントリがありません"
 
-#~ msgid "Account ID"
-#~ msgstr "アカウントＩＤ"
+msgid "Account ID"
+msgstr "アカウントＩＤ"
 
-#~ msgid "Loading Role..."
-#~ msgstr "ロールをロードしています..."
+msgid "Loading Role..."
+msgstr "ロールをロードしています..."
 
-#~ msgid "Do you really want to delete the selected account(s)?"
-#~ msgstr "選択されたアカウントを本当に削除しますか？"
+msgid "Do you really want to delete the selected account(s)?"
+msgstr "選択されたアカウントを本当に削除しますか？"
 
-#~ msgid "Deleting account(s)..."
-#~ msgstr "アカウントを削除しています..."
+msgid "Deleting account(s)..."
+msgstr "アカウントを削除しています..."
 
-#~ msgid "Some error occurred while trying to delete the account(s)."
-#~ msgstr "アカウントの削除中にエラーが発生しました"
+msgid "Some error occurred while trying to delete the account(s)."
+msgstr "アカウントの削除中にエラーが発生しました"
 
-#~ msgid "Displaying accounts {0} - {1} of {2}"
-#~ msgstr "アカウントの表示 {0} - {1} 件中 {2}"
+msgid "Displaying accounts {0} - {1} of {2}"
+msgstr "アカウントの表示 {0} - {1} 件中 {2}"
 
-#~ msgid "No accounts to display"
-#~ msgstr "表示するアカウントがありません"
+msgid "No accounts to display"
+msgstr "表示するアカウントがありません"
 
-#~ msgid "add account"
-#~ msgstr "アカウントの追加"
+msgid "add account"
+msgstr "アカウントの追加"
 
-#~ msgid "edit account"
-#~ msgstr "アカウントの編集"
+msgid "edit account"
+msgstr "アカウントの編集"
 
-#~ msgid "delete account"
-#~ msgstr "アカウントの削除"
+msgid "delete account"
+msgstr "アカウントの削除"
 
-#~ msgid "Deleting group..."
-#~ msgstr "グループを削除しています..."
-
-#, fuzzy
-#~ msgid "Email UID"
-#~ msgstr "Eメール"
+msgid "Deleting group..."
+msgstr "グループを削除しています..."
 
 #, fuzzy
-#~ msgid "Email GID"
-#~ msgstr "Eメール"
+msgid "Email UID"
+msgstr "Eメール"
 
 #, fuzzy
-#~ msgid "Email Username"
-#~ msgstr "Eメール"
+msgid "Email GID"
+msgstr "Eメール"
 
-#~ msgid "enter searchfilter"
-#~ msgstr "サーチフィルタの入力"
+#, fuzzy
+msgid "Email Username"
+msgstr "Eメール"
 
-#~ msgid "remove account"
-#~ msgstr "アカウントの削除"
+msgid "enter searchfilter"
+msgstr "サーチフィルタの入力"
 
-#~ msgid "Role members"
-#~ msgstr "ロールメンバー"
+msgid "remove account"
+msgstr "アカウントの削除"
 
-#~ msgid "Deleting tag..."
-#~ msgstr "タグを削除しています..."
+msgid "Role members"
+msgstr "ロールメンバー"
 
-#~ msgid "name"
-#~ msgstr "名前"
+msgid "Deleting tag..."
+msgstr "タグを削除しています..."
 
-#~ msgid "status"
-#~ msgstr "状態"
+msgid "name"
+msgstr "名前"
 
-#~ msgid "Deleting account..."
-#~ msgstr "アカウントを削除しています..."
+msgid "status"
+msgstr "状態"
 
-#~ msgid "Some error occurred while trying to delete the account."
-#~ msgstr "アカウントの削除中にエラーが発生しました。"
+msgid "Deleting account..."
+msgstr "アカウントを削除しています..."
 
-#~ msgid "Saving User Account"
-#~ msgstr "アカウントを保存しています"
+msgid "Some error occurred while trying to delete the account."
+msgstr "アカウントの削除中にエラーが発生しました。"
 
-#~ msgid "Could not save user account."
-#~ msgstr "アカウントを保存できません"
+msgid "Saving User Account"
+msgstr "アカウントを保存しています"
 
-#~ msgid "Add New User Account"
-#~ msgstr "新規ユーザアカウントの追加"
+msgid "Could not save user account."
+msgstr "アカウントを保存できません"
 
-#~ msgid "Edit User Account \"{0}\""
-#~ msgstr "ユーザアカウントの編集 \"{0}\""
+msgid "Add New User Account"
+msgstr "新規ユーザアカウントの追加"
+
+msgid "Edit User Account \"{0}\""
+msgstr "ユーザアカウントの編集 \"{0}\""

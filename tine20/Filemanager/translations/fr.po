@@ -3,15 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 12:10+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-02-29 13:11+0000\n"
+"Last-Translator: Etienne Quesselaire <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: \n"
 "X-Poedit-Language: French\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -79,31 +80,31 @@ msgstr ""
 
 #: js/GridPanel.js:131
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: js/GridPanel.js:138
 msgid "Size"
-msgstr ""
+msgstr "Taille"
 
 #: js/GridPanel.js:145 js/Model.js:522
 msgid "Contenttype"
-msgstr ""
+msgstr "Type"
 
 #: js/GridPanel.js:153
 msgid "Folder"
-msgstr ""
+msgstr "Dossier"
 
 #: js/GridPanel.js:162
 msgid "Revision"
-msgstr ""
+msgstr "Révision"
 
 #: js/GridPanel.js:177 js/Model.js:523
 msgid "Creation Time"
-msgstr ""
+msgstr "Date et heure de création"
 
 #: js/GridPanel.js:185
 msgid "Created By"
-msgstr ""
+msgstr "Créé par"
 
 #: js/GridPanel.js:192
 msgid "Last Modified Time"
@@ -123,7 +124,7 @@ msgstr ""
 
 #: js/GridPanel.js:295
 msgid "Upload"
-msgstr ""
+msgstr "Télécharger"
 
 #: js/GridPanel.js:321
 msgid "Create Folder"
@@ -131,27 +132,27 @@ msgstr ""
 
 #: js/GridPanel.js:332
 msgid "Folder Up"
-msgstr ""
+msgstr "Dossier parent"
 
 #: js/GridPanel.js:343
 msgid "Save locally"
-msgstr ""
+msgstr "Sauvegarder sur le disque"
 
 #: js/GridPanel.js:353 js/GridPanel.js:354 js/GridPanel.js:356
 msgid "Delete"
-msgstr ""
+msgstr "Supprimer"
 
 #: js/GridPanel.js:366 js/GridPanel.js:367 js/GridPanel.js:369
 msgid "Rename"
-msgstr ""
+msgstr "Renommer"
 
 #: js/GridPanel.js:377
 msgid "Pause upload"
-msgstr ""
+msgstr "Mettre le téléchargement en pause"
 
 #: js/GridPanel.js:384
 msgid "Resume upload"
-msgstr ""
+msgstr "Reprendre le téléchargement"
 
 #: js/GridPanel.js:478
 msgid "New Folder"
@@ -168,13 +169,15 @@ msgstr ""
 #: js/GridPanel.js:624 js/GridPanel.js:777 js/TreePanel.js:650
 #: js/TreePanel.js:760
 msgid "Upload Failed"
-msgstr ""
+msgstr "Échec du téléchargement"
 
 #: js/GridPanel.js:625 js/TreePanel.js:651
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
 msgstr ""
+"Le fichier est trop volumineux. Veuillez vérifier sa taille (   maximum) ou "
+"avertir votre administrateur. "
 
 #: js/GridPanel.js:778 js/TreePanel.js:761
 msgid "Putting files in this folder is not allowed!"

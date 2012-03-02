@@ -24,13 +24,6 @@ msgstr ""
 msgid "%s's personal Projects"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:32 js/AddressbookGridPanelHook.js:44
-#: js/Model.js:33 js/ProjectEditDialog.js:139 js/ProjectEditDialog.js:152
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] ""
-msgstr[1] ""
-
 #: js/AddToProjectPanel.js:56
 msgid "Cancel"
 msgstr ""
@@ -62,6 +55,12 @@ msgstr ""
 #: js/AddToProjectPanel.js:168
 msgid "Adding {0} Participants to project"
 msgstr ""
+
+#: js/Model.js:33 js/ProjectEditDialog.js:139 js/ProjectEditDialog.js:152
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/Model.js:37
 msgid "Project list"

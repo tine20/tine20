@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 11:11+0000\n"
+"PO-Revision-Date: 2012-02-10 12:00+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Italian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -606,7 +606,7 @@ msgid "Logging you in..."
 msgstr ""
 
 #: js/LoginPanel.js:341 js/widgets/container/GrantsDialog.js:95
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:367
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
 #: js/widgets/persistentfilter/PickerPanel.js:314
 #: js/widgets/persistentfilter/PickerPanel.js:352
 #: js/widgets/persistentfilter/PickerPanel.js:402
@@ -632,7 +632,7 @@ msgstr ""
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:551 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:350
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Errors"
@@ -640,7 +640,7 @@ msgstr ""
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:561 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:350
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 msgid "Please fix the errors noted."
 msgstr ""
 
@@ -693,8 +693,8 @@ msgid "Install Tine 2.0 as web app in your browser."
 msgstr ""
 
 #: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:568
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:362
-#: js/widgets/grid/GridPanel.js:1469
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:363
+#: js/widgets/grid/GridPanel.js:1470
 #: js/widgets/persistentfilter/PickerPanel.js:312
 #: js/widgets/tree/ContextMenu.js:336
 msgid "Confirm"
@@ -1009,7 +1009,7 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1118
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1119
 msgid "Created By"
 msgstr ""
 
@@ -1285,7 +1285,7 @@ msgid "Merge {0}, prefer Second"
 msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:196
-#: js/widgets/grid/GridPanel.js:437
+#: js/widgets/grid/GridPanel.js:438
 msgid "Merge {0}"
 msgstr ""
 
@@ -1350,7 +1350,7 @@ msgstr ""
 msgid "Saved in"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:388
+#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:389
 msgid "Copy {0}"
 msgstr ""
 
@@ -1370,17 +1370,17 @@ msgstr ""
 msgid "Do you really want to delete this {0}?"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1502
+#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1503
 msgid "Deleting {0}"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1519
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1520
 #: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:409
 #: js/widgets/tags/TagsPanel.js:442
 msgid "Failed"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1519
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1520
 msgid "Could not delete {0}."
 msgstr ""
 
@@ -1576,34 +1576,34 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:113
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:114
 msgid "Edit {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:186
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:197
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:187
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:198
 msgid "Delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:202
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:203
 msgid "Undo delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:276
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:277
 msgid "Different Values"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:277
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:278
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:363
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:364
 msgid "Do you really want to change these {0} records?"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:367
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
 msgid "Applying changes"
 msgstr ""
 
@@ -1970,71 +1970,71 @@ msgid ""
 "or the {1} you search in."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:373
-#: js/widgets/grid/GridPanel.js:374 js/widgets/grid/GridPanel.js:375
+#: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:374
+#: js/widgets/grid/GridPanel.js:375 js/widgets/grid/GridPanel.js:376
 msgid "Edit {0}"
 msgid_plural "Edit {0}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:399
+#: js/widgets/grid/GridPanel.js:400
 msgid "Add {0}"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:407
+#: js/widgets/grid/GridPanel.js:408
 msgid "Print Page"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:468 js/widgets/grid/GridPanel.js:469
-#: js/widgets/grid/GridPanel.js:471
+#: js/widgets/grid/GridPanel.js:469 js/widgets/grid/GridPanel.js:470
+#: js/widgets/grid/GridPanel.js:472
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:833
+#: js/widgets/grid/GridPanel.js:834
 msgid "Displaying records {0} - {1} of {2}"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:834
+#: js/widgets/grid/GridPanel.js:835
 msgid "No {0} to display"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1054
+#: js/widgets/grid/GridPanel.js:1055
 msgid "New..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1073
+#: js/widgets/grid/GridPanel.js:1074
 msgid "Add to..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1117
+#: js/widgets/grid/GridPanel.js:1118
 msgid "Creation Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1119
+#: js/widgets/grid/GridPanel.js:1120
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1120
+#: js/widgets/grid/GridPanel.js:1121
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1443
+#: js/widgets/grid/GridPanel.js:1444
 msgid "Not Allowed"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1444
+#: js/widgets/grid/GridPanel.js:1445
 msgid "You are not allowed to delete all pages at once"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1467
+#: js/widgets/grid/GridPanel.js:1468
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:1502
+#: js/widgets/grid/GridPanel.js:1503
 msgid " ... This may take a long time!"
 msgstr ""
 

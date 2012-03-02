@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 12:14+0000\n"
-"Last-Translator: kitamura yuuki <Unknown>\n"
+"PO-Revision-Date: 2012-02-28 18:33+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Yuuki 'Taisa' Kitamura <ykitamura@clasi-co.jp>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: JAPAN\n"
 "X-Poedit-Language: Japanese\n"
 
@@ -602,7 +602,7 @@ msgid "Logging you in..."
 msgstr "ログインしています..."
 
 #: js/LoginPanel.js:341 js/widgets/container/GrantsDialog.js:95
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:367
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
 #: js/widgets/persistentfilter/PickerPanel.js:314
 #: js/widgets/persistentfilter/PickerPanel.js:352
 #: js/widgets/persistentfilter/PickerPanel.js:402
@@ -628,7 +628,7 @@ msgstr "ユーザ名またはパスワードが違います"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:551 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:350
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Errors"
@@ -636,7 +636,7 @@ msgstr "エラー"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:561 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:350
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 msgid "Please fix the errors noted."
 msgstr "表示されているエラー項目を修正してくだささい。"
 
@@ -689,8 +689,8 @@ msgid "Install Tine 2.0 as web app in your browser."
 msgstr ""
 
 #: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:568
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:362
-#: js/widgets/grid/GridPanel.js:1469
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:363
+#: js/widgets/grid/GridPanel.js:1470
 #: js/widgets/persistentfilter/PickerPanel.js:312
 #: js/widgets/tree/ContextMenu.js:336
 msgid "Confirm"
@@ -709,10 +709,10 @@ msgid "Your password expired. Please enter a new user password:"
 msgstr ""
 
 #: js/Models.js:131 js/widgets/tags/TagFilter.js:30
-#, fuzzy
 msgid "Tag"
 msgid_plural "Tags"
-msgstr[0] "タグ"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/Models.js:279
 msgid "Import"
@@ -1007,7 +1007,7 @@ msgstr "{0} ノートの追加"
 msgid "Type"
 msgstr "タイプ"
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1118
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1119
 msgid "Created By"
 msgstr "作成者"
 
@@ -1283,7 +1283,7 @@ msgid "Merge {0}, prefer Second"
 msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:196
-#: js/widgets/grid/GridPanel.js:437
+#: js/widgets/grid/GridPanel.js:438
 msgid "Merge {0}"
 msgstr ""
 
@@ -1348,7 +1348,7 @@ msgstr "削除"
 msgid "Saved in"
 msgstr "保存する"
 
-#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:388
+#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:389
 msgid "Copy {0}"
 msgstr ""
 
@@ -1368,17 +1368,17 @@ msgstr ""
 msgid "Do you really want to delete this {0}?"
 msgstr "本当に削除しますか？ {0}?"
 
-#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1502
+#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1503
 msgid "Deleting {0}"
 msgstr "{0}　を削除しています"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1519
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1520
 #: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:409
 #: js/widgets/tags/TagsPanel.js:442
 msgid "Failed"
 msgstr "失敗"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1519
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1520
 msgid "Could not delete {0}."
 msgstr "{0}を削除できません"
 
@@ -1574,34 +1574,34 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:113
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:114
 msgid "Edit {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:186
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:197
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:187
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:198
 msgid "Delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:202
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:203
 msgid "Undo delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:276
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:277
 msgid "Different Values"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:277
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:278
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:363
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:364
 msgid "Do you really want to change these {0} records?"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:367
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
 msgid "Applying changes"
 msgstr ""
 
@@ -1970,70 +1970,70 @@ msgstr ""
 "{0} が見つかりません。フィルターの変更、表示オプションの変更か {1} 再検索をし"
 "てください"
 
-#: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:373
-#: js/widgets/grid/GridPanel.js:374 js/widgets/grid/GridPanel.js:375
+#: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:374
+#: js/widgets/grid/GridPanel.js:375 js/widgets/grid/GridPanel.js:376
 msgid "Edit {0}"
 msgid_plural "Edit {0}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:399
+#: js/widgets/grid/GridPanel.js:400
 msgid "Add {0}"
 msgstr "追加 {0}"
 
-#: js/widgets/grid/GridPanel.js:407
+#: js/widgets/grid/GridPanel.js:408
 msgid "Print Page"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:468 js/widgets/grid/GridPanel.js:469
-#: js/widgets/grid/GridPanel.js:471
+#: js/widgets/grid/GridPanel.js:469 js/widgets/grid/GridPanel.js:470
+#: js/widgets/grid/GridPanel.js:472
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "削除"
 
-#: js/widgets/grid/GridPanel.js:833
+#: js/widgets/grid/GridPanel.js:834
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "レコードの表示{0} - {1}　件中 {2}"
 
-#: js/widgets/grid/GridPanel.js:834
+#: js/widgets/grid/GridPanel.js:835
 msgid "No {0} to display"
 msgstr "表示する {0} がありません"
 
-#: js/widgets/grid/GridPanel.js:1054
+#: js/widgets/grid/GridPanel.js:1055
 msgid "New..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1073
+#: js/widgets/grid/GridPanel.js:1074
 msgid "Add to..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1117
+#: js/widgets/grid/GridPanel.js:1118
 msgid "Creation Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1119
+#: js/widgets/grid/GridPanel.js:1120
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1120
+#: js/widgets/grid/GridPanel.js:1121
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1443
+#: js/widgets/grid/GridPanel.js:1444
 msgid "Not Allowed"
 msgstr "許可されていません"
 
-#: js/widgets/grid/GridPanel.js:1444
+#: js/widgets/grid/GridPanel.js:1445
 msgid "You are not allowed to delete all pages at once"
 msgstr "全てのページを一度に削除する権限がありません。"
 
-#: js/widgets/grid/GridPanel.js:1467
+#: js/widgets/grid/GridPanel.js:1468
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:1502
+#: js/widgets/grid/GridPanel.js:1503
 msgid " ... This may take a long time!"
 msgstr ""
 
@@ -2502,154 +2502,154 @@ msgstr ""
 msgid "Please wait or contact your administrator"
 msgstr ""
 
-#~ msgid "low"
-#~ msgstr "低"
+msgid "low"
+msgstr "低"
 
-#~ msgid "normal"
-#~ msgstr "普通"
+msgid "normal"
+msgstr "普通"
 
-#~ msgid "high"
-#~ msgstr "高"
+msgid "high"
+msgstr "高"
 
-#~ msgid "urgent"
-#~ msgstr "緊急"
-
-#, fuzzy
-#~ msgid "Tagging"
-#~ msgstr "タグ"
-
-#~ msgid "save filter"
-#~ msgstr "フィルタの保存"
-
-#~ msgid "Updating {0} \"{1}\""
-#~ msgstr "更新しています{0} \"{1}\""
-
-#~ msgid "Deleting {0} \"{1}\""
-#~ msgstr "削除しています{0} \"{1}\""
-
-#~ msgid "Rename {0}"
-#~ msgstr "名前の変更　{0}"
+msgid "urgent"
+msgstr "緊急"
 
 #, fuzzy
-#~ msgid "Reload {0}"
-#~ msgstr "名前の変更　{0}"
+msgid "Tagging"
+msgstr "タグ"
 
-#~ msgid "There are no custom fields yet"
-#~ msgstr "カスタムフィールドがありません"
+msgid "save filter"
+msgstr "フィルタの保存"
 
-#~ msgid "Do you really want to delete the selected record"
-#~ msgid_plural "Do you really want to delete the selected records"
-#~ msgstr[0] "選択したレコードを本当に削除しますか？"
+msgid "Updating {0} \"{1}\""
+msgstr "更新しています{0} \"{1}\""
 
-#, fuzzy
-#~ msgid "Transfering Configuration..."
-#~ msgstr "移行しています　{0}..."
+msgid "Deleting {0} \"{1}\""
+msgstr "削除しています{0} \"{1}\""
 
-#~ msgid "Transfering {0}..."
-#~ msgstr "移行しています　{0}..."
-
-#~ msgid "Install Google Gears"
-#~ msgstr "Google Gearsをインストールする"
-
-#~ msgid ""
-#~ "Installing Gears will improve the performance of Tine 2.0 by caching all "
-#~ "needed files locally on this computer."
-#~ msgstr ""
-#~ "このコンピュータにGearsをインストールすると、必要なファイルをキャッシュす"
-#~ "ることによってTine2.0の性能が向上するでしょう。"
-
-#~ msgid "Please enter a name for the filter"
-#~ msgstr "フィルター名を入力してください"
-
-#~ msgid "Filter not Saved"
-#~ msgstr "フィルターは保存されませんでした"
-
-#~ msgid "You have to supply a name for the filter!"
-#~ msgstr "フィルターに名前を付けてください"
-
-#~ msgid "Saving filter"
-#~ msgstr "フィルタの保存"
-
-#~ msgid "My saved filters"
-#~ msgstr "マイフィルター"
-
-#~ msgid "Delete Filter"
-#~ msgstr "フィルタの削除"
-
-#~ msgid "Do you really want to delete the Filter \"{0}\"?"
-#~ msgstr "本当にフィルターを削除しますか \"{0}\"?"
-
-#~ msgid "Deleting Filter \"{0}\""
-#~ msgstr "フィルターを削除しています \"{0}\""
-
-#~ msgid "Saved filter"
-#~ msgstr "フィルタの保存"
-
-#~ msgid "Check tine20.org for new versions"
-#~ msgstr "tine20.orgで新しいバージョンのチェック"
-
-#~ msgid "shared"
-#~ msgstr "共通"
+msgid "Rename {0}"
+msgstr "名前の変更　{0}"
 
 #, fuzzy
-#~ msgid "Permission Denied"
-#~ msgstr "権限"
+msgid "Reload {0}"
+msgstr "名前の変更　{0}"
+
+msgid "There are no custom fields yet"
+msgstr "カスタムフィールドがありません"
+
+msgid "Do you really want to delete the selected record"
+msgid_plural "Do you really want to delete the selected records"
+msgstr[0] "選択したレコードを本当に削除しますか？"
 
 #, fuzzy
-#~ msgid "You don't have the required grant to select this {0}"
-#~ msgstr "本当に削除しますか？ {0}?"
+msgid "Transfering Configuration..."
+msgstr "移行しています　{0}..."
 
-#~ msgid "is in"
-#~ msgstr "に含まれる"
+msgid "Transfering {0}..."
+msgstr "移行しています　{0}..."
 
-#~ msgid "remove record"
-#~ msgstr "レコードの削除"
+msgid "Install Google Gears"
+msgstr "Google Gearsをインストールする"
 
-#~ msgid "Search"
-#~ msgstr "検索"
+msgid ""
+"Installing Gears will improve the performance of Tine 2.0 by caching all "
+"needed files locally on this computer."
+msgstr ""
+"このコンピュータにGearsをインストールすると、必要なファイルをキャッシュするこ"
+"とによってTine2.0の性能が向上するでしょう。"
 
-#~ msgid "Browse"
-#~ msgstr "閲覧"
+msgid "Please enter a name for the filter"
+msgstr "フィルター名を入力してください"
 
-#~ msgid "click to edit"
-#~ msgstr "編集するにはクリックしてください"
+msgid "Filter not Saved"
+msgstr "フィルターは保存されませんでした"
 
-#~ msgid "Plase select an image file (gif/png/jpeg)"
-#~ msgstr "画像ファイルを選択してください(gif/png/jpeg)"
+msgid "You have to supply a name for the filter!"
+msgstr "フィルターに名前を付けてください"
 
-#~ msgid "Please Select a Group"
-#~ msgstr "グループを選択してください。"
+msgid "Saving filter"
+msgstr "フィルタの保存"
 
-#~ msgid "Register"
-#~ msgstr "登録者"
+msgid "My saved filters"
+msgstr "マイフィルター"
 
-#~ msgid ""
-#~ "The server did not respond to your request. Please check your network or "
-#~ "contact your administrator."
-#~ msgstr ""
-#~ "サーバが応答しません。ネットワーク接続を確認し、システム管理者に連絡してく"
-#~ "ださい。"
+msgid "Delete Filter"
+msgstr "フィルタの削除"
 
-#~ msgid "Permissions"
-#~ msgstr "権限"
+msgid "Do you really want to delete the Filter \"{0}\"?"
+msgstr "本当にフィルターを削除しますか \"{0}\"?"
 
-#~ msgid "Could not save {0}."
-#~ msgstr "{0}を保存できませんでした."
+msgid "Deleting Filter \"{0}\""
+msgstr "フィルターを削除しています \"{0}\""
 
-#~ msgid "add account"
-#~ msgstr "アカウントの追加"
+msgid "Saved filter"
+msgstr "フィルタの保存"
 
-#~ msgid "nobody"
-#~ msgstr "だれもいない"
+msgid "Check tine20.org for new versions"
+msgstr "tine20.orgで新しいバージョンのチェック"
 
-#~ msgid "please select an account"
-#~ msgstr "アカウントを設定してください"
+msgid "shared"
+msgstr "共通"
 
-#~ msgid "loading new language..."
-#~ msgstr "新しい言語を読み込んでいます..."
+#, fuzzy
+msgid "Permission Denied"
+msgstr "権限"
 
-#~ msgid "Export Date"
-#~ msgstr "エクスポート日付"
+#, fuzzy
+msgid "You don't have the required grant to select this {0}"
+msgstr "本当に削除しますか？ {0}?"
 
-#~ msgid "Select all visible ({0} records)"
-#~ msgstr "表示しているものを全て選択 ({0} 件)"
+msgid "is in"
+msgstr "に含まれる"
+
+msgid "remove record"
+msgstr "レコードの削除"
+
+msgid "Search"
+msgstr "検索"
+
+msgid "Browse"
+msgstr "閲覧"
+
+msgid "click to edit"
+msgstr "編集するにはクリックしてください"
+
+msgid "Plase select an image file (gif/png/jpeg)"
+msgstr "画像ファイルを選択してください(gif/png/jpeg)"
+
+msgid "Please Select a Group"
+msgstr "グループを選択してください。"
+
+msgid "Register"
+msgstr "登録者"
+
+msgid ""
+"The server did not respond to your request. Please check your network or "
+"contact your administrator."
+msgstr ""
+"サーバが応答しません。ネットワーク接続を確認し、システム管理者に連絡してくだ"
+"さい。"
+
+msgid "Permissions"
+msgstr "権限"
+
+msgid "Could not save {0}."
+msgstr "{0}を保存できませんでした."
+
+msgid "add account"
+msgstr "アカウントの追加"
+
+msgid "nobody"
+msgstr "だれもいない"
+
+msgid "please select an account"
+msgstr "アカウントを設定してください"
+
+msgid "loading new language..."
+msgstr "新しい言語を読み込んでいます..."
+
+msgid "Export Date"
+msgstr "エクスポート日付"
+
+msgid "Select all visible ({0} records)"
+msgstr "表示しているものを全て選択 ({0} 件)"

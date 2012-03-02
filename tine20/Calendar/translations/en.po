@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 12:52+0000\n"
+"PO-Revision-Date: 2012-02-20 12:04+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -121,13 +121,6 @@ msgstr "Attendee changes for event \"%1$s\" at %2$s"
 #, python-format
 msgid "%s's personal calendar"
 msgstr "%s's personal calendar"
-
-#: js/AddressbookGridPanelHook.js:33 js/AddressbookGridPanelHook.js:47
-#: js/Model.js:63 js/Model.js:362 js/SearchCombo.js:76
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] "Event"
-msgstr[1] "Events"
 
 #: js/AddToEventPanel.js:61
 msgid "Cancel"
@@ -452,27 +445,27 @@ msgstr "Set my response"
 
 #: js/MainScreenCenterPanel.js:472
 msgid "Updating event in the past"
-msgstr ""
+msgstr "Updating event in the past"
 
 #: js/MainScreenCenterPanel.js:473
 msgid "Update this event"
-msgstr ""
+msgstr "Update this event"
 
 #: js/MainScreenCenterPanel.js:474
 msgid "Do not update this event"
-msgstr ""
+msgstr "Do not update this event"
 
 #: js/MainScreenCenterPanel.js:478
 msgid "Creating event in the past"
-msgstr ""
+msgstr "Creating event in the past"
 
 #: js/MainScreenCenterPanel.js:479
 msgid "Create this event"
-msgstr ""
+msgstr "Create this event"
 
 #: js/MainScreenCenterPanel.js:480
 msgid "Do not create this event"
-msgstr ""
+msgstr "Do not create this event"
 
 #: js/MainScreenCenterPanel.js:601
 msgid "Update Event"
@@ -559,6 +552,12 @@ msgstr "Edit Event"
 #: js/MainScreenCenterPanel.js:1097
 msgid "Cancel this action"
 msgstr "Cancel this action"
+
+#: js/Model.js:63 js/Model.js:362 js/SearchCombo.js:76
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] "Event"
+msgstr[1] "Events"
 
 #: js/Model.js:67
 msgid "Calendars"
@@ -656,11 +655,11 @@ msgstr "at"
 
 #: js/RrulePanel.js:245
 msgid "never"
-msgstr ""
+msgstr "never"
 
 #: js/RrulePanel.js:254
 msgid "after {0} occurrences"
-msgstr ""
+msgstr "after {0} occurrences"
 
 #: js/RrulePanel.js:312 Model/Event.php:238
 msgid "End"
@@ -934,8 +933,3 @@ msgstr "\"%2$s\" response from %1$s"
 #: views/eventNotification.php:63
 msgid "Event details"
 msgstr "Event details"
-
-#~ msgid "Edit {0}"
-#~ msgid_plural "Edit {0}"
-#~ msgstr[0] "Edit {0}"
-#~ msgstr[1] "Edit {0}"

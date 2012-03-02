@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 12:59+0000\n"
+"PO-Revision-Date: 2012-02-28 19:36+0000\n"
 "Last-Translator: ph_il <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -133,11 +133,11 @@ msgstr[1] "Klassentypen"
 #: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
 #: Setup/Update/Release5.php:30
 msgid "All courses"
-msgstr ""
+msgstr "Alle Klassen"
 
 #: Preference.php:61
 msgid "The default favorite which is loaded on Classes startup"
-msgstr ""
+msgstr "Standardfilter, der beim Starten der Klassenverwaltung geladen wird"
 
 #: Setup/setup.xml:4
 msgid "Courses"

@@ -3,15 +3,15 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Sipgate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-03 00:19+0100\n"
-"PO-Revision-Date: 2012-01-15 12:29+0000\n"
-"Last-Translator: Daniel Winzen <d@winzen4.de>\n"
+"PO-Revision-Date: 2012-02-29 13:17+0000\n"
+"Last-Translator: Alexander Stintzing <Unknown>\n"
 "Language-Team: Alexander Stintzing <alex@stintzing.net>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:22+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -29,11 +29,11 @@ msgstr "Verfasse SMS"
 
 #: js/AddressbookGridPanelHook.js:256
 msgid "Work"
-msgstr "Arbeit"
+msgstr "Geschäftlich"
 
 #: js/AddressbookGridPanelHook.js:266
 msgid "Home"
-msgstr "zu Hause"
+msgstr "Privat"
 
 #: js/AddressbookGridPanelHook.js:276 js/AddressbookGridPanelHook.js:321
 msgid "Cell"
@@ -54,11 +54,11 @@ msgstr "verbinde..."
 
 #: js/CallStateWindow.js:144
 msgid "Connecting to: "
-msgstr "Verbinde zu: "
+msgstr "Verbinden mit: "
 
 #: js/DialNumberDialog.js:56 js/DialNumberDialog.js:152
 msgid "Dial Number"
-msgstr ""
+msgstr "Wähle Nummer"
 
 #: js/DialNumberDialog.js:72 js/SearchAddressDialog.js:72
 #: js/SmsEditDialog.js:68
@@ -117,7 +117,7 @@ msgstr ""
 
 #: js/SearchAddressDialog.js:181
 msgid "Choose Device"
-msgstr ""
+msgstr "Gerät auswählen"
 
 #: js/SearchAddressDialog.js:214
 msgid "Choose Address"
@@ -141,7 +141,7 @@ msgstr "wählen"
 
 #: js/Sipgate.js:155
 msgid "Initiates a new outgoing call"
-msgstr ""
+msgstr "Startet ausgehenden Anruf"
 
 #: js/Sipgate.js:162
 msgid "Add Number to Addressbook"
@@ -149,7 +149,7 @@ msgstr "Telefonnummer zum Adressbuch hinzufügen"
 
 #: js/Sipgate.js:163
 msgid "Adds this number to the Addressbook"
-msgstr ""
+msgstr "Fügt diese Telefonnummer zum Adressbuch hinzu"
 
 #: js/Sipgate.js:282
 msgid "Calls from"
@@ -157,7 +157,7 @@ msgstr "Anrufe vom"
 
 #: js/Sipgate.js:293
 msgid "Calls to"
-msgstr ""
+msgstr "Anrufe zu"
 
 #: js/Sipgate.js:312
 msgid "Displaying calls {0} - {1} of {2}"
@@ -165,7 +165,7 @@ msgstr "Zeige Anrufe {0} - {1} of {2}"
 
 #: js/Sipgate.js:313 js/Sipgate.js:398
 msgid "No calls to display"
-msgstr "Heute keine Anrufe"
+msgstr "Keine Anrufe"
 
 #: js/Sipgate.js:325
 msgid "Status"
@@ -201,11 +201,11 @@ msgstr "unbekannte Person"
 
 #: js/Sipgate.js:555
 msgid "Configuration not set"
-msgstr ""
+msgstr "Keine Konfiguration angegeben"
 
 #: js/Sipgate.js:555
 msgid "Please configure the Sipgate application"
-msgstr ""
+msgstr "Bitte konfigurieren Sie die Sipgate Anwendung"
 
 #: js/Sipgate.js:620
 msgid "first dial"
@@ -245,7 +245,7 @@ msgstr "Ihr Telefon"
 
 #: Preference.php:73
 msgid "This is your phone"
-msgstr ""
+msgstr "Das ist Ihr Telefon"
 
 #: Preference.php:76
 msgid "Your fax"
@@ -263,47 +263,46 @@ msgstr "Ihre Handynummer"
 msgid "Used when sending SMS"
 msgstr "Wird benutzt beim Verschicken einer SMS aus der Anwendung heraus"
 
-#~ msgid "Body"
-#~ msgstr "Text"
+msgid "Body"
+msgstr "Text"
 
-#~ msgid "Incoming call"
-#~ msgstr "Eingehender Anruf"
+msgid "Incoming call"
+msgstr "Eingehender Anruf"
 
-#~ msgid "Outgoing call"
-#~ msgstr "Ausgehender Anruf"
+msgid "Outgoing call"
+msgstr "Ausgehender Anruf"
 
-#~ msgid "This is the outgoing fax number"
-#~ msgstr ""
-#~ "Das ist die ausgehende Faxnummer beim Faxen aus der Anwendung heraus"
+msgid "This is the outgoing fax number"
+msgstr "Das ist die ausgehende Faxnummer beim Faxen aus der Anwendung heraus"
 
-#~ msgid "Sipgates"
-#~ msgstr "Sipgates"
+msgid "Sipgates"
+msgstr "Sipgates"
 
-#~ msgid "Search:"
-#~ msgstr "Suche:"
+msgid "Search:"
+msgstr "Suche:"
 
-#~ msgid "Source or Destination"
-#~ msgstr "Quelle oder Ziel"
+msgid "Source or Destination"
+msgstr "Quelle oder Ziel"
 
-#~ msgid "Folder"
-#~ msgid_plural "Folders"
-#~ msgstr[0] "Ordner"
-#~ msgstr[1] "Ordner"
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] "Ordner"
+msgstr[1] "Ordner"
 
-#~ msgid "Click to send the SMS"
-#~ msgstr "Klicken Sie hier, um die SMS zu versenden"
+msgid "Click to send the SMS"
+msgstr "Klicken Sie hier, um die SMS zu versenden"
 
-#~ msgid "Failed"
-#~ msgstr "Vorgang fehlgeschlagen"
+msgid "Failed"
+msgstr "Vorgang fehlgeschlagen"
 
-#~ msgid "Could not send {0}."
-#~ msgstr "Konnte {0} nicht senden."
+msgid "Could not send {0}."
+msgstr "Konnte {0} nicht senden."
 
-#~ msgid "Error:"
-#~ msgstr "Fehler:"
+msgid "Error:"
+msgstr "Fehler:"
 
-#~ msgid "Subject"
-#~ msgstr "Betreff"
+msgid "Subject"
+msgstr "Betreff"
 
-#~ msgid "Compose email:"
-#~ msgstr "Verfasse SMS:"
+msgid "Compose email:"
+msgstr "Verfasse SMS:"

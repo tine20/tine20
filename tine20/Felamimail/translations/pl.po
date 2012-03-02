@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 13:07+0000\n"
-"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
+"PO-Revision-Date: 2012-02-28 18:53+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -96,15 +96,15 @@ msgstr "Organizacja"
 
 #: js/AccountEditDialog.js:134
 msgid "Signature position"
-msgstr ""
+msgstr "Pozycja sygnaturki"
 
 #: js/AccountEditDialog.js:145
 msgid "Above the quote"
-msgstr ""
+msgstr "Nad cytatem"
 
 #: js/AccountEditDialog.js:146
 msgid "Below the quote"
-msgstr ""
+msgstr "Pod cytatem"
 
 #: js/AccountEditDialog.js:151
 msgid "IMAP"
@@ -920,7 +920,7 @@ msgstr "Ostatnia aktualizacja:"
 #: js/TreePanel.js:732
 #, python-format
 msgid "Fetching messages... ({0}%% done)"
-msgstr ""
+msgstr "Pobieranie wiadomości... (pobrano %% {0})"
 
 #: js/TreePanel.js:748
 msgid "{0} unread message"
@@ -1006,291 +1006,291 @@ msgstr "Wszystkie szkice"
 msgid "All mails with the draft flag"
 msgstr "Wszystkie wiadomości z flagą szkic"
 
-#~ msgid "Fetching messages... ({0}% done)"
-#~ msgstr "Pobieranie wiadomości... ({0}% pobrano)"
+msgid "Fetching messages... ({0}% done)"
+msgstr "Pobieranie wiadomości... ({0}% pobrano)"
 
-#~ msgid "Quota unknown"
-#~ msgstr "Kwota nieznana"
+msgid "Quota unknown"
+msgstr "Kwota nieznana"
 
-#~ msgid "Re:"
-#~ msgstr "Odp:"
+msgid "Re:"
+msgstr "Odp:"
 
-#~ msgid ""
-#~ "One of your folders was deleted from an other client, please reload you "
-#~ "browser"
-#~ msgstr ""
-#~ "Jeden katalog został usunięty przez innego klienta, proszę odśwież widok "
-#~ "w przeglądarce"
+msgid ""
+"One of your folders was deleted from an other client, please reload you "
+"browser"
+msgstr ""
+"Jeden katalog został usunięty przez innego klienta, proszę odśwież widok w "
+"przeglądarce"
 
-#~ msgid "{0} left"
-#~ msgstr "Pozostało {0}"
+msgid "{0} left"
+msgstr "Pozostało {0}"
 
-#~ msgid "Current usage: {0} of {1}"
-#~ msgstr "Bieżące zużycie: {0} z {1}"
+msgid "Current usage: {0} of {1}"
+msgstr "Bieżące zużycie: {0} z {1}"
 
-#~ msgid "Searching..."
-#~ msgstr "Wyszukiwanie..."
+msgid "Searching..."
+msgstr "Wyszukiwanie..."
 
-#~ msgid "Type"
-#~ msgstr "Typ"
+msgid "Type"
+msgstr "Typ"
 
-#~ msgid "Tags"
-#~ msgstr "Znaczniki"
+msgid "Tags"
+msgstr "Znaczniki"
 
-#~ msgid "Last Name"
-#~ msgstr "Nazwisko"
+msgid "Last Name"
+msgstr "Nazwisko"
 
-#~ msgid "First Name"
-#~ msgstr "Imię"
+msgid "First Name"
+msgstr "Imię"
 
-#~ msgid "Full Name"
-#~ msgstr "Imię i nazwisko"
+msgid "Full Name"
+msgstr "Imię i nazwisko"
 
-#~ msgid "Display Name"
-#~ msgstr "Wyświetlana nazwa"
+msgid "Display Name"
+msgstr "Wyświetlana nazwa"
 
-#~ msgid "Company"
-#~ msgstr "Firma"
+msgid "Company"
+msgstr "Firma"
 
-#~ msgid "Unit"
-#~ msgstr "Oddział"
+msgid "Unit"
+msgstr "Oddział"
 
-#~ msgid "Job Title"
-#~ msgstr "Zawód"
+msgid "Job Title"
+msgstr "Zawód"
 
-#~ msgid "Job Role"
-#~ msgstr "Funkcja"
+msgid "Job Role"
+msgstr "Funkcja"
 
-#~ msgid "Room"
-#~ msgstr "Pokój"
+msgid "Room"
+msgstr "Pokój"
 
-#~ msgid "Street"
-#~ msgstr "Ulica"
+msgid "Street"
+msgstr "Ulica"
 
-#~ msgid "City"
-#~ msgstr "Miasto"
+msgid "City"
+msgstr "Miasto"
 
-#~ msgid "Region"
-#~ msgstr "Województwo"
+msgid "Region"
+msgstr "Województwo"
 
-#~ msgid "Postalcode"
-#~ msgstr "Kod pocztowy"
+msgid "Postalcode"
+msgstr "Kod pocztowy"
 
-#~ msgid "Country"
-#~ msgstr "Państwo"
+msgid "Country"
+msgstr "Państwo"
 
-#~ msgid "Street (private)"
-#~ msgstr "Ulica (prywatnie)"
+msgid "Street (private)"
+msgstr "Ulica (prywatnie)"
 
-#~ msgid "City (private)"
-#~ msgstr "Miasto (prywatnie)"
+msgid "City (private)"
+msgstr "Miasto (prywatnie)"
 
-#~ msgid "Region (private)"
-#~ msgstr "Województwo (prywatnie)"
+msgid "Region (private)"
+msgstr "Województwo (prywatnie)"
 
-#~ msgid "Postalcode (private)"
-#~ msgstr "Kod pocztowy (prywatnie)"
+msgid "Postalcode (private)"
+msgstr "Kod pocztowy (prywatnie)"
 
-#~ msgid "Country (private)"
-#~ msgstr "Kraj (prywatnie)"
+msgid "Country (private)"
+msgstr "Kraj (prywatnie)"
 
-#~ msgid "Phone"
-#~ msgstr "Telefon"
+msgid "Phone"
+msgstr "Telefon"
 
-#~ msgid "Mobile"
-#~ msgstr "Komórka"
+msgid "Mobile"
+msgstr "Komórka"
 
-#~ msgid "Fax"
-#~ msgstr "Faks"
+msgid "Fax"
+msgstr "Faks"
 
-#~ msgid "Car phone"
-#~ msgstr "Telefon w samochodzie"
+msgid "Car phone"
+msgstr "Telefon w samochodzie"
 
-#~ msgid "Pager"
-#~ msgstr "Pager"
+msgid "Pager"
+msgstr "Pager"
 
-#~ msgid "Phone (private)"
-#~ msgstr "Telefon (prywatnie)"
+msgid "Phone (private)"
+msgstr "Telefon (prywatnie)"
 
-#~ msgid "Fax (private)"
-#~ msgstr "Faks (prywatnie)"
+msgid "Fax (private)"
+msgstr "Faks (prywatnie)"
 
-#~ msgid "Mobile (private)"
-#~ msgstr "Komórka (prywatnie)"
+msgid "Mobile (private)"
+msgstr "Komórka (prywatnie)"
 
-#~ msgid "Email (private)"
-#~ msgstr "E-mail (prywatnie)"
+msgid "Email (private)"
+msgstr "E-mail (prywatnie)"
 
-#~ msgid "Web"
-#~ msgstr "WWW"
+msgid "Web"
+msgstr "WWW"
 
-#~ msgid "URL (private)"
-#~ msgstr "URL (prywatnie)"
+msgid "URL (private)"
+msgstr "URL (prywatnie)"
 
-#~ msgid "Note"
-#~ msgstr "Notatka"
+msgid "Note"
+msgstr "Notatka"
 
-#~ msgid "Timezone"
-#~ msgstr "Strefa czasowa"
+msgid "Timezone"
+msgstr "Strefa czasowa"
 
-#~ msgid "Geo"
-#~ msgstr "Położenie"
+msgid "Geo"
+msgstr "Położenie"
 
-#~ msgid "Birthday"
-#~ msgstr "Urodziny"
+msgid "Birthday"
+msgstr "Urodziny"
 
-#~ msgid "Export Contact"
-#~ msgstr "Eksportuj kontakt"
+msgid "Export Contact"
+msgstr "Eksportuj kontakt"
 
-#~ msgid "Export as PDF"
-#~ msgstr "Eksportuj jako PDF"
+msgid "Export as PDF"
+msgstr "Eksportuj jako PDF"
 
-#~ msgid "Export as CSV"
-#~ msgstr "Eksportuj jako CSV"
+msgid "Export as CSV"
+msgstr "Eksportuj jako CSV"
 
-#~ msgid "Export as ODS"
-#~ msgstr "Eksportuj jako ODS"
+msgid "Export as ODS"
+msgstr "Eksportuj jako ODS"
 
-#~ msgid "Export as XLS"
-#~ msgstr "Eksportuj jako XLS"
+msgid "Export as XLS"
+msgstr "Eksportuj jako XLS"
 
-#~ msgid "Export as ..."
-#~ msgstr "Eksportuj jako ..."
+msgid "Export as ..."
+msgstr "Eksportuj jako ..."
 
-#~ msgid "Call contact"
-#~ msgstr "Wywołaj kontakt"
+msgid "Call contact"
+msgstr "Wywołaj kontakt"
 
-#~ msgid "Import contacts"
-#~ msgstr "Importuj kontakty"
+msgid "Import contacts"
+msgstr "Importuj kontakty"
 
-#~ msgid "Work"
-#~ msgstr "Praca"
+msgid "Work"
+msgstr "Praca"
 
-#~ msgid "Home"
-#~ msgstr "Dom"
+msgid "Home"
+msgstr "Dom"
 
-#~ msgid "Cell"
-#~ msgstr "Komórka"
+msgid "Cell"
+msgstr "Komórka"
 
-#~ msgid "Cell private"
-#~ msgstr "Prywatna komórka"
+msgid "Cell private"
+msgstr "Prywatna komórka"
 
-#~ msgid "Internal Contact"
-#~ msgstr "Kontakt wewnętrzny"
+msgid "Internal Contact"
+msgstr "Kontakt wewnętrzny"
 
-#~ msgid "Out of Office reply"
-#~ msgstr "Poza biurem"
+msgid "Out of Office reply"
+msgstr "Poza biurem"
 
-#~ msgid "wrote"
-#~ msgstr "napisał(a)"
+msgid "wrote"
+msgstr "napisał(a)"
 
-#~ msgid "You got {0} new mail(s) in Folder {1}."
-#~ msgstr "Masz {0} nowych wiadomości w katalogu {1}."
+msgid "You got {0} new mail(s) in Folder {1}."
+msgstr "Masz {0} nowych wiadomości w katalogu {1}."
 
-#~ msgid "Download"
-#~ msgstr "Piobieranie"
+msgid "Download"
+msgstr "Piobieranie"
 
-#~ msgid "Write"
-#~ msgstr "Napisz"
+msgid "Write"
+msgstr "Napisz"
 
-#~ msgid "Contacts"
-#~ msgstr "Kontakty"
+msgid "Contacts"
+msgstr "Kontakty"
 
-#~ msgid "Recipients (drag and drop contacts here to add)"
-#~ msgstr "Adresaci (aby ich dodać, przeciągnij i upuść kontakty)"
+msgid "Recipients (drag and drop contacts here to add)"
+msgstr "Adresaci (aby ich dodać, przeciągnij i upuść kontakty)"
 
-#~ msgid "All INBOXES of my email accounts"
-#~ msgstr "Wszystkie ODEBRANE moich kont pocztowych"
+msgid "All INBOXES of my email accounts"
+msgstr "Wszystkie ODEBRANE moich kont pocztowych"
 
-#~ msgid "All INBOXES"
-#~ msgstr "Wszystkie ODEBRANE"
+msgid "All INBOXES"
+msgstr "Wszystkie ODEBRANE"
 
-#~ msgid "Folder Selection"
-#~ msgstr "Wybór katalogu"
+msgid "Folder Selection"
+msgstr "Wybór katalogu"
 
-#~ msgid "Select Folder"
-#~ msgstr "Zaznacz katalog"
+msgid "Select Folder"
+msgstr "Zaznacz katalog"
 
-#~ msgid "Invalid drop target"
-#~ msgstr "Nieprawidłowy katalog docelowy"
+msgid "Invalid drop target"
+msgstr "Nieprawidłowy katalog docelowy"
 
-#~ msgid "Could not move message(s)."
-#~ msgstr "Przeniesienie wiadomości było niemożliwe."
+msgid "Could not move message(s)."
+msgstr "Przeniesienie wiadomości było niemożliwe."
 
-#~ msgid "Select Folders"
-#~ msgstr "Wybierz katalogi"
+msgid "Select Folders"
+msgstr "Wybierz katalogi"
 
-#~ msgid "Show Intelligent Folders"
-#~ msgstr "Pokaż inteligentne katalogi"
+msgid "Show Intelligent Folders"
+msgstr "Pokaż inteligentne katalogi"
 
-#~ msgid "No"
-#~ msgstr "Nie"
+msgid "No"
+msgstr "Nie"
 
-#~ msgid "Yes"
-#~ msgstr "Tak"
+msgid "Yes"
+msgstr "Tak"
 
-#~ msgid "Marked"
-#~ msgstr "Zaznaczone"
+msgid "Marked"
+msgstr "Zaznaczone"
 
-#~ msgid "Contains marked messages"
-#~ msgstr "Zawiera zaznaczone wiadomości"
+msgid "Contains marked messages"
+msgstr "Zawiera zaznaczone wiadomości"
 
-#~ msgid "Unread"
-#~ msgstr "Nieprzeczytane"
+msgid "Unread"
+msgstr "Nieprzeczytane"
 
-#~ msgid "Contains unread messages"
-#~ msgstr "Zawiera nieprzeczytane wiadomości"
+msgid "Contains unread messages"
+msgstr "Zawiera nieprzeczytane wiadomości"
 
-#~ msgid "Recipients"
-#~ msgstr "Adresaci"
+msgid "Recipients"
+msgstr "Adresaci"
 
-#~ msgid "Depending on content type"
-#~ msgstr "W zależności od treści"
+msgid "Depending on content type"
+msgstr "W zależności od treści"
 
-#~ msgid "Add Attachment(s)"
-#~ msgstr "Dodaj załącznik(i)"
+msgid "Add Attachment(s)"
+msgstr "Dodaj załącznik(i)"
 
-#~ msgid "Toggle Flag"
-#~ msgstr "Ustaw flagę"
+msgid "Toggle Flag"
+msgstr "Ustaw flagę"
 
-#~ msgid "Save contact note"
-#~ msgstr "Zapisz notatkę kontaktową"
+msgid "Save contact note"
+msgstr "Zapisz notatkę kontaktową"
 
-#~ msgid "Enabled"
-#~ msgstr "Włączony"
+msgid "Enabled"
+msgstr "Włączony"
 
-#~ msgid "Argument"
-#~ msgstr "Argument"
+msgid "Argument"
+msgstr "Argument"
 
-#~ msgid "Reload Folder List"
-#~ msgstr "Przeładuj listę w katalogu"
+msgid "Reload Folder List"
+msgstr "Przeładuj listę w katalogu"
 
-#~ msgid "Move to folder"
-#~ msgstr "Przenieś do katalogu"
+msgid "Move to folder"
+msgstr "Przenieś do katalogu"
 
-#~ msgid "Error"
-#~ msgstr "Błąd"
+msgid "Error"
+msgstr "Błąd"
 
-#~ msgid "No Account configured"
-#~ msgstr "Brak skonfigurowanych kont"
+msgid "No Account configured"
+msgstr "Brak skonfigurowanych kont"
 
-#~ msgid "Re: "
-#~ msgstr "Odp:"
+msgid "Re: "
+msgstr "Odp:"
 
-#~ msgid "Original Message"
-#~ msgstr "Oryginalna wiadomość"
+msgid "Original Message"
+msgstr "Oryginalna wiadomość"
 
-#~ msgid "Fwd: "
-#~ msgstr "Fw:"
+msgid "Fwd: "
+msgstr "Fw:"
 
-#~ msgid "Some error occured while trying to update the messages."
-#~ msgstr "Podczas próby aktualizacji wiadomości wystąpił błąd."
+msgid "Some error occured while trying to update the messages."
+msgstr "Podczas próby aktualizacji wiadomości wystąpił błąd."
 
-#~ msgid "Sort Folders"
-#~ msgstr "Segreguj katalogi"
+msgid "Sort Folders"
+msgstr "Segreguj katalogi"
 
-#~ msgid "Totalcount"
-#~ msgstr "Łączna ilość"
+msgid "Totalcount"
+msgstr "Łączna ilość"
 
-#~ msgid "Cache"
-#~ msgstr "Pamięć podręczna"
+msgid "Cache"
+msgstr "Pamięć podręczna"

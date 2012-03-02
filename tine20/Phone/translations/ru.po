@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 13:37+0000\n"
-"Last-Translator: Nkolay Parukhin <Unknown>\n"
+"PO-Revision-Date: 2012-02-28 18:38+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Language: Russian\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -157,152 +157,152 @@ msgstr "Звонок"
 msgid "Call ID"
 msgstr "ID звонка"
 
-#~ msgid "Dial phone number"
-#~ msgstr "Набрать телефонный номер"
+msgid "Dial phone number"
+msgstr "Набрать телефонный номер"
 
-#~ msgid "Name"
-#~ msgstr "Имя"
+msgid "Name"
+msgstr "Имя"
 
-#~ msgid "Phone Model"
-#~ msgstr "Модель телефона"
+msgid "Phone Model"
+msgstr "Модель телефона"
 
-#~ msgid "MAC Address"
-#~ msgstr "MAC адрес"
+msgid "MAC Address"
+msgstr "MAC адрес"
 
-#~ msgid "infos"
-#~ msgstr "данные"
+msgid "infos"
+msgstr "данные"
 
-#~ msgid "Current IP Address"
-#~ msgstr "Текущий IP адрес"
+msgid "Current IP Address"
+msgstr "Текущий IP адрес"
 
-#~ msgid "Firmware last checked at"
-#~ msgstr "Прошивка проверена"
+msgid "Firmware last checked at"
+msgstr "Прошивка проверена"
 
-#~ msgid "Current Software Version"
-#~ msgstr "Текущая версия ПО"
+msgid "Current Software Version"
+msgstr "Текущая версия ПО"
 
-#~ msgid "Settings Loaded at"
-#~ msgstr "Настройки загружены"
+msgid "Settings Loaded at"
+msgstr "Настройки загружены"
 
-#~ msgid "redirection"
-#~ msgstr "переадресация"
+msgid "redirection"
+msgstr "переадресация"
 
-#~ msgid "all"
-#~ msgstr "все"
+msgid "all"
+msgstr "все"
 
-#~ msgid "busy"
-#~ msgstr "занято"
+msgid "busy"
+msgstr "занято"
 
-#~ msgid "none"
-#~ msgstr "нет"
+msgid "none"
+msgstr "нет"
 
-#~ msgid "time"
-#~ msgstr "время"
+msgid "time"
+msgstr "время"
 
-#~ msgid "redirect_number"
-#~ msgstr "номер_переадресации"
+msgid "redirect_number"
+msgstr "номер_переадресации"
 
-#~ msgid "redirect_time"
-#~ msgstr "время_переадресации"
+msgid "redirect_time"
+msgstr "время_переадресации"
 
-#~ msgid "Settings"
-#~ msgstr "Настройки"
+msgid "Settings"
+msgstr "Настройки"
 
-#~ msgid "web_language"
-#~ msgstr "язык_веб"
+msgid "web_language"
+msgstr "язык_веб"
 
-#~ msgid "- factory default -"
-#~ msgstr "- заводские установки -"
+msgid "- factory default -"
+msgstr "- заводские установки -"
 
-#~ msgid "language"
-#~ msgstr "язык"
+msgid "language"
+msgstr "язык"
 
-#~ msgid "display_method"
-#~ msgstr "способ_показа"
+msgid "display_method"
+msgstr "способ_показа"
 
-#~ msgid "whole url"
-#~ msgstr "весь url"
+msgid "whole url"
+msgstr "весь url"
 
-#~ msgid "name"
-#~ msgstr "имя"
+msgid "name"
+msgstr "имя"
 
-#~ msgid "number"
-#~ msgstr "номер"
+msgid "number"
+msgstr "номер"
 
-#~ msgid "name + number"
-#~ msgstr "имя + номер"
+msgid "name + number"
+msgstr "имя + номер"
 
-#~ msgid "number + name"
-#~ msgstr "номер + имя"
+msgid "number + name"
+msgstr "номер + имя"
 
-#~ msgid "call_waiting"
-#~ msgstr "ожидание_звонка"
+msgid "call_waiting"
+msgstr "ожидание_звонка"
 
-#~ msgid "on"
-#~ msgstr "вкл"
-
-#, fuzzy
-#~ msgid "visual"
-#~ msgstr "видимый"
-
-#~ msgid "ringer"
-#~ msgstr "звонок"
-
-#~ msgid "off"
-#~ msgstr "выкл"
-
-#~ msgid "silent"
-#~ msgstr "беззвучный"
-
-#~ msgid "reminder"
-#~ msgstr "напоминание"
-
-#~ msgid "normal"
-#~ msgstr "нормальный"
-
-#~ msgid "stutter"
-#~ msgstr "заикание"
-
-#~ msgid "headset_device"
-#~ msgstr "гарнитура"
-
-#~ msgid "headset_rj"
-#~ msgstr "разъём_гарнитуры"
-
-#~ msgid "global_missed_counter"
-#~ msgstr "общий_счётчик_пропущенных"
+msgid "on"
+msgstr "вкл"
 
 #, fuzzy
-#~ msgid "scroll_outgoing"
-#~ msgstr "прокрутка_исходящего"
+msgid "visual"
+msgstr "видимый"
 
-#~ msgid "show_local_line"
-#~ msgstr "показывать_местное_время"
+msgid "ringer"
+msgstr "звонок"
 
-#~ msgid "show_call_status"
-#~ msgstr "показать_состояние_звонка"
+msgid "off"
+msgstr "выкл"
+
+msgid "silent"
+msgstr "беззвучный"
+
+msgid "reminder"
+msgstr "напоминание"
+
+msgid "normal"
+msgstr "нормальный"
+
+msgid "stutter"
+msgstr "заикание"
+
+msgid "headset_device"
+msgstr "гарнитура"
+
+msgid "headset_rj"
+msgstr "разъём_гарнитуры"
+
+msgid "global_missed_counter"
+msgstr "общий_счётчик_пропущенных"
 
 #, fuzzy
-#~ msgid "lineactive"
-#~ msgstr "активная линия"
+msgid "scroll_outgoing"
+msgstr "прокрутка_исходящего"
 
-#~ msgid "sipCombo"
-#~ msgstr "sipCombo"
+msgid "show_local_line"
+msgstr "показывать_местное_время"
 
-#~ msgid "Idle Text"
-#~ msgstr "Текст при ожидании"
+msgid "show_call_status"
+msgstr "показать_состояние_звонка"
 
-#~ msgid "Lines"
-#~ msgstr "Линии"
+#, fuzzy
+msgid "lineactive"
+msgstr "активная линия"
 
-#~ msgid "Users"
-#~ msgstr "Пользователи"
+msgid "sipCombo"
+msgstr "sipCombo"
 
-#~ msgid "Rights"
-#~ msgstr "Права"
+msgid "Idle Text"
+msgstr "Текст при ожидании"
 
-#~ msgid "enter searchfilter"
-#~ msgstr "ввести поисковый фильтр"
+msgid "Lines"
+msgstr "Линии"
 
-#~ msgid "Incoming"
-#~ msgstr "Входящий"
+msgid "Users"
+msgstr "Пользователи"
+
+msgid "Rights"
+msgstr "Права"
+
+msgid "enter searchfilter"
+msgstr "ввести поисковый фильтр"
+
+msgid "Incoming"
+msgstr "Входящий"

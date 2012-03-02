@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 12:17+0000\n"
-"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
+"PO-Revision-Date: 2012-02-28 18:49+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -210,7 +210,7 @@ msgstr ""
 #: Container.php:608
 #, python-format
 msgid "%s's personal container"
-msgstr ""
+msgstr "%s osobistych katalogów"
 
 #: Export/Pdf.php:216 js/widgets/tags/TagsPanel.js:57
 msgid "Tags"
@@ -647,7 +647,7 @@ msgid "Logging you in..."
 msgstr "Trwa logowanie …"
 
 #: js/LoginPanel.js:341 js/widgets/container/GrantsDialog.js:95
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:367
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
 #: js/widgets/persistentfilter/PickerPanel.js:314
 #: js/widgets/persistentfilter/PickerPanel.js:352
 #: js/widgets/persistentfilter/PickerPanel.js:402
@@ -673,7 +673,7 @@ msgstr "Twój login oraz / lub hasło są nieprawidłowe!!!"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:551 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:350
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Errors"
@@ -681,7 +681,7 @@ msgstr "Błędy"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:561 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:350
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 msgid "Please fix the errors noted."
 msgstr "Proszę poprawić wskazane błędy."
 
@@ -734,8 +734,8 @@ msgid "Install Tine 2.0 as web app in your browser."
 msgstr "Zainstaluj Tine 2.0 w swojej przeglądarce jako aplikację WWW"
 
 #: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:568
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:362
-#: js/widgets/grid/GridPanel.js:1469
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:363
+#: js/widgets/grid/GridPanel.js:1470
 #: js/widgets/persistentfilter/PickerPanel.js:312
 #: js/widgets/tree/ContextMenu.js:336
 msgid "Confirm"
@@ -754,12 +754,11 @@ msgid "Your password expired. Please enter a new user password:"
 msgstr "Twoje hasło wygasło. Proszę wprowadzić nowe hasło użytkownika:"
 
 #: js/Models.js:131 js/widgets/tags/TagFilter.js:30
-#, fuzzy
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Znacznik"
-msgstr[1] "Znacznik"
-msgstr[2] "Znacznik"
+msgstr[1] "Znaczniki"
+msgstr[2] "Znaczniki"
 
 #: js/Models.js:279
 msgid "Import"
@@ -1068,7 +1067,7 @@ msgstr "Dodaj notatkę ({0})"
 msgid "Type"
 msgstr "Ikona"
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1118
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1119
 msgid "Created By"
 msgstr "Utworzona przez"
 
@@ -1347,7 +1346,7 @@ msgid "Merge {0}, prefer Second"
 msgstr "Łączenie {0}, preferuj drugie"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:196
-#: js/widgets/grid/GridPanel.js:437
+#: js/widgets/grid/GridPanel.js:438
 msgid "Merge {0}"
 msgstr "Łączenie {0}"
 
@@ -1412,7 +1411,7 @@ msgstr "usuń"
 msgid "Saved in"
 msgstr "Zapisz w"
 
-#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:388
+#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:389
 msgid "Copy {0}"
 msgstr "Kopiuj {0}"
 
@@ -1432,17 +1431,17 @@ msgstr "Przesyłanie {0}..."
 msgid "Do you really want to delete this {0}?"
 msgstr "Czy na pewno chcesz usunąć ten {0}?"
 
-#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1502
+#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1503
 msgid "Deleting {0}"
 msgstr "Usuwanie {0}"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1519
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1520
 #: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:409
 #: js/widgets/tags/TagsPanel.js:442
 msgid "Failed"
 msgstr "Próba nieudana"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1519
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1520
 msgid "Could not delete {0}."
 msgstr "Usunięcie {0} było niemożliwe."
 
@@ -1644,57 +1643,59 @@ msgstr "{0} wierszy zawiera błędy i zostanie usuniętych."
 msgid "Links"
 msgstr "Linki"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:113
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:114
 msgid "Edit {0} {1}"
 msgstr "Edytuj {0} {1}"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:186
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:197
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:187
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:198
 msgid "Delete value from all selected records"
 msgstr "Usuń wartość z zaznaczonych wierszy"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:202
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:203
 msgid "Undo delete value from all selected records"
 msgstr "Przywróć usuniętą wartość do zaznaczonych wierszy"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:276
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:277
 msgid "Different Values"
 msgstr "Różne wartości"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:277
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:278
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr "To pole zawiera różne wartości. Edycja nadpisze stare wartości."
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:363
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:364
 msgid "Do you really want to change these {0} records?"
 msgstr "Czy na pewno chcesz zmienić tych {0} wierszy?"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:367
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
 msgid "Applying changes"
 msgstr "Zmieniam"
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:146
 msgid "You edited {0} {1}."
-msgstr ""
+msgstr "Edytowano {0}{1}."
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:149
 msgid "{0} {1} have been updated properly."
-msgstr ""
+msgstr "{0}{1} zostały zaktualizowane."
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:149
 msgid "{0} {1} has been updated properly."
-msgstr ""
+msgstr "{0}{1} zostały zaktualizowane."
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:152
 msgid ""
 "{0} {1} have invalid data after updating. These {1} have not been changed."
 msgstr ""
+"{0}{1} zawierają nieważne dane po aktualizacji. {1} nie zostały zmienione."
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:152
 msgid "{0} {1} has invalid data after updating. This {1} has not been changed."
 msgstr ""
+"{0}{1} zawierają nieważne dane po aktualizacji {1} nie został zmieniony."
 
 #: js/widgets/dialog/PreferencesDialog.js:125
 msgid "Admin Mode"
@@ -2044,74 +2045,74 @@ msgstr ""
 "{0} nie zostały znalezione. Proszę spróbować zmienić kryteria wyszukiwania, "
 "opcje wyświetlania albo {1}, w których szukasz."
 
-#: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:373
-#: js/widgets/grid/GridPanel.js:374 js/widgets/grid/GridPanel.js:375
+#: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:374
+#: js/widgets/grid/GridPanel.js:375 js/widgets/grid/GridPanel.js:376
 msgid "Edit {0}"
 msgid_plural "Edit {0}"
 msgstr[0] "Edytuj {0}"
 msgstr[1] "Edytuj {0}"
 msgstr[2] "Edytuj {0}"
 
-#: js/widgets/grid/GridPanel.js:399
+#: js/widgets/grid/GridPanel.js:400
 msgid "Add {0}"
 msgstr "Dodaj {0}"
 
-#: js/widgets/grid/GridPanel.js:407
+#: js/widgets/grid/GridPanel.js:408
 msgid "Print Page"
 msgstr "Drukuj stronę"
 
-#: js/widgets/grid/GridPanel.js:468 js/widgets/grid/GridPanel.js:469
-#: js/widgets/grid/GridPanel.js:471
+#: js/widgets/grid/GridPanel.js:469 js/widgets/grid/GridPanel.js:470
+#: js/widgets/grid/GridPanel.js:472
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Usuń {0}"
 msgstr[1] "Usuń {0}"
 msgstr[2] "Usuń {0}"
 
-#: js/widgets/grid/GridPanel.js:833
+#: js/widgets/grid/GridPanel.js:834
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Wyświetlane wiersze {0} - {1} z {2}"
 
-#: js/widgets/grid/GridPanel.js:834
+#: js/widgets/grid/GridPanel.js:835
 msgid "No {0} to display"
 msgstr "{0} niezdefiniowane"
 
-#: js/widgets/grid/GridPanel.js:1054
+#: js/widgets/grid/GridPanel.js:1055
 msgid "New..."
-msgstr ""
+msgstr "Nowy..."
 
-#: js/widgets/grid/GridPanel.js:1073
+#: js/widgets/grid/GridPanel.js:1074
 msgid "Add to..."
-msgstr ""
+msgstr "Dodaj do..."
 
-#: js/widgets/grid/GridPanel.js:1117
+#: js/widgets/grid/GridPanel.js:1118
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
-#: js/widgets/grid/GridPanel.js:1119
+#: js/widgets/grid/GridPanel.js:1120
 msgid "Last Modified Time"
 msgstr "Data ostatniej zmiany"
 
-#: js/widgets/grid/GridPanel.js:1120
+#: js/widgets/grid/GridPanel.js:1121
 msgid "Last Modified By"
 msgstr "Ostatnio zmienione przez"
 
-#: js/widgets/grid/GridPanel.js:1443
+#: js/widgets/grid/GridPanel.js:1444
 msgid "Not Allowed"
 msgstr "Brak uprawnień"
 
-#: js/widgets/grid/GridPanel.js:1444
+#: js/widgets/grid/GridPanel.js:1445
 msgid "You are not allowed to delete all pages at once"
 msgstr "Nie masz uprawnień, aby usunąć wszystkie strony na raz"
 
-#: js/widgets/grid/GridPanel.js:1467
+#: js/widgets/grid/GridPanel.js:1468
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] "Czy na pewno chcesz usunąć zaznaczony ({0}) wiersz?"
 msgstr[1] "Czy na pewno chcesz usunąć zaznaczone ({0}) wiersze?"
 msgstr[2] "Czy na pewno chcesz usunąć zaznaczonych ({0}) wierszy?"
 
-#: js/widgets/grid/GridPanel.js:1502
+#: js/widgets/grid/GridPanel.js:1503
 msgid " ... This may take a long time!"
 msgstr " ... To może długo potrwać!"
 
@@ -2153,7 +2154,7 @@ msgstr "Ulubione"
 
 #: js/widgets/mainscreen/WestPanel.js:358
 msgid "Modules"
-msgstr ""
+msgstr "Moduły"
 
 #: js/widgets/mainscreen/WestPanel.js:369
 msgid "Save current view as favorite"
@@ -2181,7 +2182,7 @@ msgstr "Tytuł"
 
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:155
 msgid "Shared Favorite (visible by all users)"
-msgstr ""
+msgstr "Współdzielone Ulubione (widoczne dla wszystkich użytkowników)"
 
 #: js/widgets/persistentfilter/PickerPanel.js:113
 msgid "My favorites"
@@ -2605,325 +2606,323 @@ msgstr ""
 "Wynik {0} zawiera nieprawidłowe dane. {1} nie zostały przetworzone. <br /"
 "><b>Validation Message:</b><br />{2}"
 
-#~ msgid "low"
-#~ msgstr "niski"
+msgid "low"
+msgstr "niski"
 
-#~ msgid "normal"
-#~ msgstr "normalny"
+msgid "normal"
+msgstr "normalny"
 
-#~ msgid "high"
-#~ msgstr "wysoki"
+msgid "high"
+msgstr "wysoki"
 
-#~ msgid "urgent"
-#~ msgstr "pilny"
+msgid "urgent"
+msgstr "pilny"
 
-#~ msgid ""
-#~ "The server is currently unable to handle the request due to a temporary "
-#~ "overloading or maintenance of the server. Please try again or contact "
-#~ "your administrator."
-#~ msgstr ""
-#~ "Serwer nie może teraz zrealizować zapytania z powodu chwilowego "
-#~ "przeciążenia albo prac konserwacyjnych. Proszę spróbować ponownie lub "
-#~ "powiadomić swojego administratora."
+msgid ""
+"The server is currently unable to handle the request due to a temporary "
+"overloading or maintenance of the server. Please try again or contact your "
+"administrator."
+msgstr ""
+"Serwer nie może teraz zrealizować zapytania z powodu chwilowego przeciążenia "
+"albo prac konserwacyjnych. Proszę spróbować ponownie lub powiadomić swojego "
+"administratora."
 
-#~ msgid "No Tags to remove found in the selected records"
-#~ msgstr "W zaznaczonych wierszach nie znaleziono znaczników do usunięcia"
+msgid "No Tags to remove found in the selected records"
+msgstr "W zaznaczonych wierszach nie znaleziono znaczników do usunięcia"
 
-#~ msgid "Detaching selected tags"
-#~ msgstr "Odłączenie wybranych znaczników"
+msgid "Detaching selected tags"
+msgstr "Odłączenie wybranych znaczników"
 
-#~ msgid "Files"
-#~ msgstr "Pliki"
+msgid "Files"
+msgstr "Pliki"
 
-#~ msgid "Import definition"
-#~ msgstr "Definicja importu"
+msgid "Import definition"
+msgstr "Definicja importu"
 
-#~ msgid "Import into {0}"
-#~ msgstr "Importuj do: {0}"
+msgid "Import into {0}"
+msgstr "Importuj do: {0}"
 
-#~ msgid "Dry run"
-#~ msgstr "Przetestuj"
+msgid "Dry run"
+msgstr "Przetestuj"
 
-#~ msgid "No files added"
-#~ msgstr "Nie dodano plików"
+msgid "No files added"
+msgstr "Nie dodano plików"
 
-#~ msgid "You need to add files to import."
-#~ msgstr "Należy dodać plik(i) z danymi do zaimportowania"
+msgid "You need to add files to import."
+msgstr "Należy dodać plik(i) z danymi do zaimportowania"
 
-#~ msgid "Dry run results"
-#~ msgstr "Wyniki testów"
+msgid "Dry run results"
+msgstr "Wyniki testów"
 
-#~ msgid ""
-#~ "Import test successful for {0} records, import test failed for {1} "
-#~ "records."
-#~ msgstr ""
-#~ "Testy importu powiodły się dla {0} wierszy, testy importu nie powiodły "
-#~ "się dla {1} wierszy."
+msgid ""
+"Import test successful for {0} records, import test failed for {1} records."
+msgstr ""
+"Testy importu powiodły się dla {0} wierszy, testy importu nie powiodły się "
+"dla {1} wierszy."
 
-#~ msgid "Import results"
-#~ msgstr "Wyniki importu"
+msgid "Import results"
+msgstr "Wyniki importu"
 
-#~ msgid ""
-#~ "Import successful for {0} records / import failed for {1} records / {2} "
-#~ "duplicates found"
-#~ msgstr ""
-#~ "Import skuteczny dla {0} wierszy / import nieskuteczny dla {1} wierszy / "
-#~ "znaleziono {2} powtórzenia"
+msgid ""
+"Import successful for {0} records / import failed for {1} records / {2} "
+"duplicates found"
+msgstr ""
+"Import skuteczny dla {0} wierszy / import nieskuteczny dla {1} wierszy / "
+"znaleziono {2} powtórzenia"
 
-#~ msgid "progress"
-#~ msgstr "postęp"
+msgid "progress"
+msgstr "postęp"
 
-#~ msgid "Tagging"
-#~ msgstr "Przypisywanie znaczników"
+msgid "Tagging"
+msgstr "Przypisywanie znaczników"
 
-#~ msgid "Favorite"
-#~ msgid_plural "Favorites"
-#~ msgstr[0] "Ulubiony"
-#~ msgstr[1] "ulubione"
-#~ msgstr[2] "ulubione"
+msgid "Favorite"
+msgid_plural "Favorites"
+msgstr[0] "Ulubiony"
+msgstr[1] "ulubione"
+msgstr[2] "ulubione"
 
-#~ msgid "Events"
-#~ msgstr "Terminy"
+msgid "Events"
+msgstr "Terminy"
 
-#~ msgid "Rename Favorite"
-#~ msgstr "Zmień nazwę ulubionych"
+msgid "Rename Favorite"
+msgstr "Zmień nazwę ulubionych"
 
-#~ msgid "New Name"
-#~ msgstr "Nowa nazwa"
+msgid "New Name"
+msgstr "Nowa nazwa"
 
-#~ msgid "Please enter the new name for favorite \"{0}\"?"
-#~ msgstr "Proszę zmienić nazwę \"{0}\" w ulubionych."
+msgid "Please enter the new name for favorite \"{0}\"?"
+msgstr "Proszę zmienić nazwę \"{0}\" w ulubionych."
 
-#~ msgid "Renaming Favorite \"{0}\""
-#~ msgstr "Zmień nazwę \"{0}\" w ulubionych"
+msgid "Renaming Favorite \"{0}\""
+msgstr "Zmień nazwę \"{0}\" w ulubionych"
 
-#~ msgid "save filter"
-#~ msgstr "Zapisz filtr"
+msgid "save filter"
+msgstr "Zapisz filtr"
 
-#~ msgid "Please enter a name for the favorite"
-#~ msgstr "Proszę dodać nazwę do ulubionych"
+msgid "Please enter a name for the favorite"
+msgstr "Proszę dodać nazwę do ulubionych"
 
-#~ msgid "Saving favorite"
-#~ msgstr "Zapisywanie ulubionych"
+msgid "Saving favorite"
+msgstr "Zapisywanie ulubionych"
 
-#~ msgid "Updating {0} \"{1}\""
-#~ msgstr "Aktualizacja {0} \"{1}\""
+msgid "Updating {0} \"{1}\""
+msgstr "Aktualizacja {0} \"{1}\""
 
-#~ msgid "Deleting {0} \"{1}\""
-#~ msgstr "Usuwanie {0} \"{1}\""
+msgid "Deleting {0} \"{1}\""
+msgstr "Usuwanie {0} \"{1}\""
 
-#~ msgid "Rename {0}"
-#~ msgstr "Zmień nazwę w: {0}"
+msgid "Rename {0}"
+msgstr "Zmień nazwę w: {0}"
 
-#~ msgid "Set color for {0}"
-#~ msgstr "Ustaw kolor dla: {0}"
+msgid "Set color for {0}"
+msgstr "Ustaw kolor dla: {0}"
 
-#~ msgid "Reload {0}"
-#~ msgstr "Przeładuj {0}"
+msgid "Reload {0}"
+msgstr "Przeładuj {0}"
 
-#~ msgid "There are no custom fields yet"
-#~ msgstr "Brak pól użytkownika"
+msgid "There are no custom fields yet"
+msgstr "Brak pól użytkownika"
 
-#~ msgid "Do you really want to delete the selected record"
-#~ msgid_plural "Do you really want to delete the selected records"
-#~ msgstr[0] "Czy na pewno chcesz usunąć zaznaczony wiersz?"
-#~ msgstr[1] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
-#~ msgstr[2] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
+msgid "Do you really want to delete the selected record"
+msgid_plural "Do you really want to delete the selected records"
+msgstr[0] "Czy na pewno chcesz usunąć zaznaczony wiersz?"
+msgstr[1] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
+msgstr[2] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
 
-#~ msgid "Group"
-#~ msgid_plural "Groups"
-#~ msgstr[0] "Grupa"
-#~ msgstr[1] "grupy"
-#~ msgstr[2] "grup"
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Grupa"
+msgstr[1] "grupy"
+msgstr[2] "grup"
 
-#~ msgid "Groups"
-#~ msgstr "Grupy"
+msgid "Groups"
+msgstr "Grupy"
 
-#~ msgid "Overwriting system favorites is not yet supported"
-#~ msgstr "Nadpisywanie systemowych ulubionych jeszcze nie jest obsługiwane"
+msgid "Overwriting system favorites is not yet supported"
+msgstr "Nadpisywanie systemowych ulubionych jeszcze nie jest obsługiwane"
 
-#~ msgid "About Tine 2.0"
-#~ msgstr "O Tine 2.0"
+msgid "About Tine 2.0"
+msgstr "O Tine 2.0"
 
-#~ msgid "Custom datetime"
-#~ msgstr "Data i czas użytkownika"
+msgid "Custom datetime"
+msgstr "Data i czas użytkownika"
 
-#~ msgid "Internal {0}"
-#~ msgstr "Wewnętrzne {0}"
+msgid "Internal {0}"
+msgstr "Wewnętrzne {0}"
 
-#~ msgid "Overwriteing system favorites is not yet supported"
-#~ msgstr "Nadpisywanie systemowych ulubionych nie jest jeszcze obsługiwane"
+msgid "Overwriteing system favorites is not yet supported"
+msgstr "Nadpisywanie systemowych ulubionych nie jest jeszcze obsługiwane"
 
-#~ msgid "Filter"
-#~ msgstr "Filtr"
+msgid "Filter"
+msgstr "Filtr"
 
-#~ msgid "Transfering Configuration..."
-#~ msgstr "Przesyłanie konfiguracji..."
+msgid "Transfering Configuration..."
+msgstr "Przesyłanie konfiguracji..."
 
-#~ msgid "Transfering {0}..."
-#~ msgstr "Dodaję {0}..."
+msgid "Transfering {0}..."
+msgstr "Dodaję {0}..."
 
-#~ msgid "Install Google Gears"
-#~ msgstr "Zainstaluj (Google) Gears"
+msgid "Install Google Gears"
+msgstr "Zainstaluj (Google) Gears"
 
-#~ msgid ""
-#~ "Installing Gears will improve the performance of Tine 2.0 by caching all "
-#~ "needed files locally on this computer."
-#~ msgstr ""
-#~ "Instalacja (Google) Gears przyczyni się do poprawy wydajności Tine 2.0 "
-#~ "dzięki lokalnemu buforowaniu na tym komputerze wszystkich wymaganych "
-#~ "plików."
+msgid ""
+"Installing Gears will improve the performance of Tine 2.0 by caching all "
+"needed files locally on this computer."
+msgstr ""
+"Instalacja (Google) Gears przyczyni się do poprawy wydajności Tine 2.0 "
+"dzięki lokalnemu buforowaniu na tym komputerze wszystkich wymaganych plików."
 
-#~ msgid "Application picker style"
-#~ msgstr "Sposób wyboru aplikacji"
+msgid "Application picker style"
+msgstr "Sposób wyboru aplikacji"
 
-#~ msgid "Please enter a name for the filter"
-#~ msgstr "Proszę wprowadzić nazwę filtra"
+msgid "Please enter a name for the filter"
+msgstr "Proszę wprowadzić nazwę filtra"
 
-#~ msgid "Filter not Saved"
-#~ msgstr "Filtr nie został zapisany"
+msgid "Filter not Saved"
+msgstr "Filtr nie został zapisany"
 
-#~ msgid "You have to supply a name for the filter!"
-#~ msgstr "Musisz wprowadzić nazwę filtra!"
+msgid "You have to supply a name for the filter!"
+msgstr "Musisz wprowadzić nazwę filtra!"
 
-#~ msgid ""
-#~ "You have to supply a shorter name! Names of saved filters can only be up "
-#~ "to 40 characters long."
-#~ msgstr ""
-#~ "Musisz wprowadzić krótszą nazwę! Nazwy zapisanych filtrów nie mogą "
-#~ "przekraczać 40 znaków."
+msgid ""
+"You have to supply a shorter name! Names of saved filters can only be up to "
+"40 characters long."
+msgstr ""
+"Musisz wprowadzić krótszą nazwę! Nazwy zapisanych filtrów nie mogą "
+"przekraczać 40 znaków."
 
-#~ msgid "Saving filter"
-#~ msgstr "Zapisywanie filtra"
+msgid "Saving filter"
+msgstr "Zapisywanie filtra"
 
-#~ msgid "My saved filters"
-#~ msgstr "Moje filtry"
+msgid "My saved filters"
+msgstr "Moje filtry"
 
-#~ msgid "Delete Filter"
-#~ msgstr "Usuń filtr"
+msgid "Delete Filter"
+msgstr "Usuń filtr"
 
-#~ msgid "Do you really want to delete the Filter \"{0}\"?"
-#~ msgstr "Czy na pewno chcesz usunąć filtr \"{0}\"?"
+msgid "Do you really want to delete the Filter \"{0}\"?"
+msgstr "Czy na pewno chcesz usunąć filtr \"{0}\"?"
 
-#~ msgid "Deleting Filter \"{0}\""
-#~ msgstr "Usuwanie filtra \"{0}\""
+msgid "Deleting Filter \"{0}\""
+msgstr "Usuwanie filtra \"{0}\""
 
-#~ msgid "Rename Filter"
-#~ msgstr "Zmień nazwę filtra"
+msgid "Rename Filter"
+msgstr "Zmień nazwę filtra"
 
-#~ msgid "Please enter the new name for filter \"{0}\"?"
-#~ msgstr "Proszę wprowadzić nową nazwę filtra \"{0}\"."
+msgid "Please enter the new name for filter \"{0}\"?"
+msgstr "Proszę wprowadzić nową nazwę filtra \"{0}\"."
 
-#~ msgid "Renaming Filter \"{0}\""
-#~ msgstr "Zmienianie nazwy filtra \"{0}\""
+msgid "Renaming Filter \"{0}\""
+msgstr "Zmienianie nazwy filtra \"{0}\""
 
-#~ msgid "Saved filter"
-#~ msgstr "filtry"
+msgid "Saved filter"
+msgstr "filtry"
 
-#~ msgid "Report bugs to tine20.org directly when they occur"
-#~ msgstr ""
-#~ "W przypadku wystąpienia błędów, prosimy o zgłaszanie ich bezpośrednio do "
-#~ "tine20.org"
+msgid "Report bugs to tine20.org directly when they occur"
+msgstr ""
+"W przypadku wystąpienia błędów, prosimy o zgłaszanie ich bezpośrednio do "
+"tine20.org"
 
-#~ msgid "Check tine20.org for new versions"
-#~ msgstr "Sprawdź na stronach tine20.org, czy są nowe wersje Tine"
+msgid "Check tine20.org for new versions"
+msgstr "Sprawdź na stronach tine20.org, czy są nowe wersje Tine"
 
-#~ msgid "Sorry"
-#~ msgstr "Przykro mi"
+msgid "Sorry"
+msgstr "Przykro mi"
 
-#~ msgid "Remove account"
-#~ msgstr "usuń konto"
+msgid "Remove account"
+msgstr "usuń konto"
 
-#~ msgid "shared"
-#~ msgstr "wspólnych"
+msgid "shared"
+msgstr "wspólnych"
 
-#~ msgid "Permission Denied"
-#~ msgstr "Brak uprawnień"
+msgid "Permission Denied"
+msgstr "Brak uprawnień"
 
-#~ msgid "You don't have the required grant to select this {0}"
-#~ msgstr "Nie masz wymaganych uprawnień, aby usunąć {0}"
+msgid "You don't have the required grant to select this {0}"
+msgstr "Nie masz wymaganych uprawnień, aby usunąć {0}"
 
-#~ msgid "Import successful for {0} records, import failed for {1} records."
-#~ msgstr "Udany import {0} wierszy, nieudany import {1} wierszy."
+msgid "Import successful for {0} records, import failed for {1} records."
+msgstr "Udany import {0} wierszy, nieudany import {1} wierszy."
 
-#~ msgid "is in"
-#~ msgstr "jest w"
+msgid "is in"
+msgstr "jest w"
 
-#~ msgid "remove record"
-#~ msgstr "usuń wiersz"
+msgid "remove record"
+msgstr "usuń wiersz"
 
-#~ msgid "Search"
-#~ msgstr "Znajdź"
+msgid "Search"
+msgstr "Znajdź"
 
-#~ msgid "Browse"
-#~ msgstr "Przeszukaj"
+msgid "Browse"
+msgstr "Przeszukaj"
 
-#~ msgid "click to edit"
-#~ msgstr "kliknij, aby edytować"
+msgid "click to edit"
+msgstr "kliknij, aby edytować"
 
-#~ msgid "Plase select an image file (gif/png/jpeg)"
-#~ msgstr "Proszę wybrać plik graficzny (gif/png/jpeg)"
+msgid "Plase select an image file (gif/png/jpeg)"
+msgstr "Proszę wybrać plik graficzny (gif/png/jpeg)"
 
-#~ msgid "Please Select a Group"
-#~ msgstr "Proszę zaznaczyć grupę"
+msgid "Please Select a Group"
+msgstr "Proszę zaznaczyć grupę"
 
-#~ msgid "Register"
-#~ msgstr "Zarejestruj się"
+msgid "Register"
+msgstr "Zarejestruj się"
 
-#~ msgid ""
-#~ "The server did not respond to your request. Please check your network or "
-#~ "contact your administrator."
-#~ msgstr ""
-#~ "Serwer nie odpowiedział na Twoje zapytanie. Proszę sprawdzić połączenie "
-#~ "sieciowe albo skontaktować się ze swoim administratorem."
+msgid ""
+"The server did not respond to your request. Please check your network or "
+"contact your administrator."
+msgstr ""
+"Serwer nie odpowiedział na Twoje zapytanie. Proszę sprawdzić połączenie "
+"sieciowe albo skontaktować się ze swoim administratorem."
 
-#~ msgid "Permissions"
-#~ msgstr "Uprawnienia"
+msgid "Permissions"
+msgstr "Uprawnienia"
 
-#~ msgid "Could not save {0}."
-#~ msgstr "Zapisanie było niemożliwe {0}."
+msgid "Could not save {0}."
+msgstr "Zapisanie było niemożliwe {0}."
 
-#~ msgid "add account"
-#~ msgstr "dodaj konto"
+msgid "add account"
+msgstr "dodaj konto"
 
-#~ msgid "nobody"
-#~ msgstr "brak"
+msgid "nobody"
+msgstr "brak"
 
-#~ msgid "please select an account"
-#~ msgstr "Proszę zaznaczyć konto"
+msgid "please select an account"
+msgstr "Proszę zaznaczyć konto"
 
-#~ msgid "loading new language..."
-#~ msgstr "ładowanie nowego języka..."
+msgid "loading new language..."
+msgstr "ładowanie nowego języka..."
 
-#~ msgid "Export Date"
-#~ msgstr "Data eksportu"
+msgid "Export Date"
+msgstr "Data eksportu"
 
-#~ msgid "Login successful. Loading Tine 2.0..."
-#~ msgstr "Logowanie udane. Trwa ładowanie Tine 2.0 …"
+msgid "Login successful. Loading Tine 2.0..."
+msgstr "Logowanie udane. Trwa ładowanie Tine 2.0 …"
 
-#~ msgid "Logout from Tine 2.0"
-#~ msgstr "Wylogowanie z Tine 2.0"
+msgid "Logout from Tine 2.0"
+msgstr "Wylogowanie z Tine 2.0"
 
-#~ msgid "Our Forum for questions and ideas"
-#~ msgstr "Nasze forum do zadawania pytań i wpisywania sugestii"
+msgid "Our Forum for questions and ideas"
+msgstr "Nasze forum do zadawania pytań i wpisywania sugestii"
 
-#~ msgid "Remove from shared favorites"
-#~ msgstr "Usuń ze współdzielonych ulubionych"
+msgid "Remove from shared favorites"
+msgstr "Usuń ze współdzielonych ulubionych"
 
-#~ msgid "Add to shared favorites"
-#~ msgstr "Dodaj do współdzielonych ulubionych"
+msgid "Add to shared favorites"
+msgstr "Dodaj do współdzielonych ulubionych"
 
-#~ msgid "Setting favorite \"{0}\" not shared"
-#~ msgstr "Ustawianie ulubionych \"{0}\" bez współdzielenia"
+msgid "Setting favorite \"{0}\" not shared"
+msgstr "Ustawianie ulubionych \"{0}\" bez współdzielenia"
 
-#~ msgid "Setting favorite \"{0}\" shared"
-#~ msgstr "Ustawianie ulubionych \"{0}\" jako współdzielone"
+msgid "Setting favorite \"{0}\" shared"
+msgstr "Ustawianie ulubionych \"{0}\" jako współdzielone"
 
-#~ msgid "Share this Favorite"
-#~ msgstr "Współdziel to ulubione"
+msgid "Share this Favorite"
+msgstr "Współdziel to ulubione"
 
-#~ msgid "Select all visible ({0} records)"
-#~ msgstr "Zaznacz wszystkie widoczne ({0} wiersze /-y)"
+msgid "Select all visible ({0} records)"
+msgstr "Zaznacz wszystkie widoczne ({0} wiersze /-y)"
 
 #~ msgid ""
 #~ "The window you want to work with is backgrounded. Your browser does't "
@@ -2950,3 +2949,6 @@ msgstr ""
 
 #~ msgid "<br /><ul style=\"padding:10px;border:1px\">"
 #~ msgstr "<br /><ul style=\"padding:10px;border:1px\">"
+
+#~ msgid "multiple"
+#~ msgstr "wielokrotny"

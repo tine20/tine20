@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 12:36+0000\n"
-"Last-Translator: Cirion <Unknown>\n"
+"PO-Revision-Date: 2012-02-28 18:33+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators <ronny@speedy.no>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Norwegian Bokmål\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -620,7 +620,7 @@ msgid "Logging you in..."
 msgstr "Logger deg inn..."
 
 #: js/LoginPanel.js:341 js/widgets/container/GrantsDialog.js:95
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:367
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
 #: js/widgets/persistentfilter/PickerPanel.js:314
 #: js/widgets/persistentfilter/PickerPanel.js:352
 #: js/widgets/persistentfilter/PickerPanel.js:402
@@ -646,7 +646,7 @@ msgstr "Ditt brukernavn og/eller passord er feil!!!"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:551 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:350
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Errors"
@@ -654,7 +654,7 @@ msgstr "Feil"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:561 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:350
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 msgid "Please fix the errors noted."
 msgstr "Vennligst fiks disse feilene."
 
@@ -707,8 +707,8 @@ msgid "Install Tine 2.0 as web app in your browser."
 msgstr ""
 
 #: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:568
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:362
-#: js/widgets/grid/GridPanel.js:1469
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:363
+#: js/widgets/grid/GridPanel.js:1470
 #: js/widgets/persistentfilter/PickerPanel.js:312
 #: js/widgets/tree/ContextMenu.js:336
 msgid "Confirm"
@@ -727,11 +727,10 @@ msgid "Your password expired. Please enter a new user password:"
 msgstr ""
 
 #: js/Models.js:131 js/widgets/tags/TagFilter.js:30
-#, fuzzy
 msgid "Tag"
 msgid_plural "Tags"
-msgstr[0] "Merke"
-msgstr[1] "Merke"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/Models.js:279
 msgid "Import"
@@ -1028,7 +1027,7 @@ msgstr "Leg til et {0} Notat"
 msgid "Type"
 msgstr "Type"
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1118
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1119
 msgid "Created By"
 msgstr "Opprettet Av"
 
@@ -1304,7 +1303,7 @@ msgid "Merge {0}, prefer Second"
 msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:196
-#: js/widgets/grid/GridPanel.js:437
+#: js/widgets/grid/GridPanel.js:438
 msgid "Merge {0}"
 msgstr ""
 
@@ -1369,7 +1368,7 @@ msgstr "slett"
 msgid "Saved in"
 msgstr "Lagret i"
 
-#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:388
+#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:389
 msgid "Copy {0}"
 msgstr ""
 
@@ -1389,17 +1388,17 @@ msgstr ""
 msgid "Do you really want to delete this {0}?"
 msgstr "Vil du virkelig slette dette {0}?"
 
-#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1502
+#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1503
 msgid "Deleting {0}"
 msgstr "Sletter {0}"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1519
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1520
 #: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:409
 #: js/widgets/tags/TagsPanel.js:442
 msgid "Failed"
 msgstr "Feilet"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1519
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1520
 msgid "Could not delete {0}."
 msgstr "Klarte ikke å slette {0}"
 
@@ -1595,34 +1594,34 @@ msgstr ""
 msgid "Links"
 msgstr "Linker"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:113
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:114
 msgid "Edit {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:186
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:197
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:187
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:198
 msgid "Delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:202
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:203
 msgid "Undo delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:276
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:277
 msgid "Different Values"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:277
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:278
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:363
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:364
 msgid "Do you really want to change these {0} records?"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:367
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
 msgid "Applying changes"
 msgstr ""
 
@@ -1991,71 +1990,71 @@ msgstr ""
 "Ingen {0} ble funnet. Vennligst forsøk å endre ditt filter-kriteria, vis-"
 "alternativer eller {1} du søkte i."
 
-#: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:373
-#: js/widgets/grid/GridPanel.js:374 js/widgets/grid/GridPanel.js:375
+#: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:374
+#: js/widgets/grid/GridPanel.js:375 js/widgets/grid/GridPanel.js:376
 msgid "Edit {0}"
 msgid_plural "Edit {0}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:399
+#: js/widgets/grid/GridPanel.js:400
 msgid "Add {0}"
 msgstr "Legg til {0}"
 
-#: js/widgets/grid/GridPanel.js:407
+#: js/widgets/grid/GridPanel.js:408
 msgid "Print Page"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:468 js/widgets/grid/GridPanel.js:469
-#: js/widgets/grid/GridPanel.js:471
+#: js/widgets/grid/GridPanel.js:469 js/widgets/grid/GridPanel.js:470
+#: js/widgets/grid/GridPanel.js:472
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Slett  {0}"
 msgstr[1] "Slett {0}"
 
-#: js/widgets/grid/GridPanel.js:833
+#: js/widgets/grid/GridPanel.js:834
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Viser poster {0} - {1} of {2}"
 
-#: js/widgets/grid/GridPanel.js:834
+#: js/widgets/grid/GridPanel.js:835
 msgid "No {0} to display"
 msgstr "Ingen  {0} å vise"
 
-#: js/widgets/grid/GridPanel.js:1054
+#: js/widgets/grid/GridPanel.js:1055
 msgid "New..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1073
+#: js/widgets/grid/GridPanel.js:1074
 msgid "Add to..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1117
+#: js/widgets/grid/GridPanel.js:1118
 msgid "Creation Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1119
+#: js/widgets/grid/GridPanel.js:1120
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1120
+#: js/widgets/grid/GridPanel.js:1121
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1443
+#: js/widgets/grid/GridPanel.js:1444
 msgid "Not Allowed"
 msgstr "Ikke Tillatt"
 
-#: js/widgets/grid/GridPanel.js:1444
+#: js/widgets/grid/GridPanel.js:1445
 msgid "You are not allowed to delete all pages at once"
 msgstr "Du har ikke tilatelse til å slette alle sider på en gang"
 
-#: js/widgets/grid/GridPanel.js:1467
+#: js/widgets/grid/GridPanel.js:1468
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:1502
+#: js/widgets/grid/GridPanel.js:1503
 msgid " ... This may take a long time!"
 msgstr " ... Dette kan ta lang tid!"
 
@@ -2531,149 +2530,149 @@ msgstr ""
 msgid "Please wait or contact your administrator"
 msgstr ""
 
-#~ msgid "low"
-#~ msgstr "lav"
+msgid "low"
+msgstr "lav"
 
-#~ msgid "normal"
-#~ msgstr "normal"
+msgid "normal"
+msgstr "normal"
 
-#~ msgid "high"
-#~ msgstr "høy"
+msgid "high"
+msgstr "høy"
 
-#~ msgid "urgent"
-#~ msgstr "haster"
+msgid "urgent"
+msgstr "haster"
 
-#~ msgid "Tagging"
-#~ msgstr "Merking"
+msgid "Tagging"
+msgstr "Merking"
 
-#~ msgid "save filter"
-#~ msgstr "lagre filter"
+msgid "save filter"
+msgstr "lagre filter"
 
-#~ msgid "Updating {0} \"{1}\""
-#~ msgstr "Oppdaterer {0} \"{1}\""
+msgid "Updating {0} \"{1}\""
+msgstr "Oppdaterer {0} \"{1}\""
 
-#~ msgid "Deleting {0} \"{1}\""
-#~ msgstr "Sletter {0} \"{1}\""
+msgid "Deleting {0} \"{1}\""
+msgstr "Sletter {0} \"{1}\""
 
-#~ msgid "Rename {0}"
-#~ msgstr "Endre navn {0}"
+msgid "Rename {0}"
+msgstr "Endre navn {0}"
 
-#~ msgid "Reload {0}"
-#~ msgstr "Laste på nytt {0}"
+msgid "Reload {0}"
+msgstr "Laste på nytt {0}"
 
-#~ msgid "There are no custom fields yet"
-#~ msgstr "Det er ingen egendefinerte felter enda"
+msgid "There are no custom fields yet"
+msgstr "Det er ingen egendefinerte felter enda"
 
-#~ msgid "Do you really want to delete the selected record"
-#~ msgid_plural "Do you really want to delete the selected records"
-#~ msgstr[0] "Vil du virkelig slette valgt post"
-#~ msgstr[1] "Vil du virkelig slette valgte poster"
+msgid "Do you really want to delete the selected record"
+msgid_plural "Do you really want to delete the selected records"
+msgstr[0] "Vil du virkelig slette valgt post"
+msgstr[1] "Vil du virkelig slette valgte poster"
 
-#~ msgid "Group"
-#~ msgid_plural "Groups"
-#~ msgstr[0] "Gruppe"
-#~ msgstr[1] "Grupper"
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Gruppe"
+msgstr[1] "Grupper"
 
-#~ msgid "Groups"
-#~ msgstr "Grupper"
+msgid "Groups"
+msgstr "Grupper"
 
-#~ msgid "About Tine 2.0"
-#~ msgstr "Om Tine 2.0"
+msgid "About Tine 2.0"
+msgstr "Om Tine 2.0"
 
-#~ msgid "Filter"
-#~ msgstr "Filter"
+msgid "Filter"
+msgstr "Filter"
 
-#~ msgid "Transfering Configuration..."
-#~ msgstr "Overfører Konfigurasjon..."
+msgid "Transfering Configuration..."
+msgstr "Overfører Konfigurasjon..."
 
-#~ msgid "Transfering {0}..."
-#~ msgstr "Overfører {0}..."
+msgid "Transfering {0}..."
+msgstr "Overfører {0}..."
 
-#~ msgid "Install Google Gears"
-#~ msgstr "Installer Google Gears"
+msgid "Install Google Gears"
+msgstr "Installer Google Gears"
 
-#~ msgid ""
-#~ "Installing Gears will improve the performance of Tine 2.0 by caching all "
-#~ "needed files locally on this computer."
-#~ msgstr ""
-#~ "Innstallering av Gears vil øke ytelsen på Tine 2.0 ved å mellomlagre alle "
-#~ "nødvendige filer lokalt på denne maskinen."
+msgid ""
+"Installing Gears will improve the performance of Tine 2.0 by caching all "
+"needed files locally on this computer."
+msgstr ""
+"Innstallering av Gears vil øke ytelsen på Tine 2.0 ved å mellomlagre alle "
+"nødvendige filer lokalt på denne maskinen."
 
-#~ msgid "Please enter a name for the filter"
-#~ msgstr "Vennligst tas inn et navn for filteret"
+msgid "Please enter a name for the filter"
+msgstr "Vennligst tas inn et navn for filteret"
 
-#~ msgid "Filter not Saved"
-#~ msgstr "Filter ikke lagret"
+msgid "Filter not Saved"
+msgstr "Filter ikke lagret"
 
-#~ msgid "You have to supply a name for the filter!"
-#~ msgstr "Du å oppgi et navn for filteret!"
+msgid "You have to supply a name for the filter!"
+msgstr "Du å oppgi et navn for filteret!"
 
-#~ msgid ""
-#~ "You have to supply a shorter name! Names of saved filters can only be up "
-#~ "to 40 characters long."
-#~ msgstr ""
-#~ "Du må oppgi et kortere navn! Navn på lagrede filter kan bare være opp til "
-#~ "40 tegn."
+msgid ""
+"You have to supply a shorter name! Names of saved filters can only be up to "
+"40 characters long."
+msgstr ""
+"Du må oppgi et kortere navn! Navn på lagrede filter kan bare være opp til 40 "
+"tegn."
 
-#~ msgid "Saving filter"
-#~ msgstr "Lagrer filter"
+msgid "Saving filter"
+msgstr "Lagrer filter"
 
-#~ msgid "My saved filters"
-#~ msgstr "Mine lagrede filter"
+msgid "My saved filters"
+msgstr "Mine lagrede filter"
 
-#~ msgid "Delete Filter"
-#~ msgstr "Slette Filter"
+msgid "Delete Filter"
+msgstr "Slette Filter"
 
-#~ msgid "Do you really want to delete the Filter \"{0}\"?"
-#~ msgstr "Vil du virkelig slette Filteret \"{0}\"?"
+msgid "Do you really want to delete the Filter \"{0}\"?"
+msgstr "Vil du virkelig slette Filteret \"{0}\"?"
 
-#~ msgid "Deleting Filter \"{0}\""
-#~ msgstr "Sletter Filter \"{0}\"?"
+msgid "Deleting Filter \"{0}\""
+msgstr "Sletter Filter \"{0}\"?"
 
-#~ msgid "Saved filter"
-#~ msgstr "Lagret filter"
+msgid "Saved filter"
+msgstr "Lagret filter"
 
-#~ msgid "Report bugs to tine20.org directly when they occur"
-#~ msgstr "Rapporter feil til tine20.org direkte når de oppstår"
+msgid "Report bugs to tine20.org directly when they occur"
+msgstr "Rapporter feil til tine20.org direkte når de oppstår"
 
-#~ msgid "Check tine20.org for new versions"
-#~ msgstr "Kontroller tine20.org for nye versjoner"
+msgid "Check tine20.org for new versions"
+msgstr "Kontroller tine20.org for nye versjoner"
 
-#~ msgid "Sorry"
-#~ msgstr "Beklager"
+msgid "Sorry"
+msgstr "Beklager"
 
-#~ msgid "Remove account"
-#~ msgstr "Fjern konto"
+msgid "Remove account"
+msgstr "Fjern konto"
 
-#~ msgid "shared"
-#~ msgstr "delt"
+msgid "shared"
+msgstr "delt"
 
-#~ msgid "Permission Denied"
-#~ msgstr "Tilgang Avvist"
+msgid "Permission Denied"
+msgstr "Tilgang Avvist"
 
-#~ msgid "You don't have the required grant to select this {0}"
-#~ msgstr "Du har ikke nødvendig tillatelse for å velge dette  {0}"
+msgid "You don't have the required grant to select this {0}"
+msgstr "Du har ikke nødvendig tillatelse for å velge dette  {0}"
 
-#~ msgid "is in"
-#~ msgstr "er i"
+msgid "is in"
+msgstr "er i"
 
-#~ msgid "remove record"
-#~ msgstr "Fjern post"
+msgid "remove record"
+msgstr "Fjern post"
 
-#~ msgid "Search"
-#~ msgstr "Søk"
+msgid "Search"
+msgstr "Søk"
 
-#~ msgid "Browse"
-#~ msgstr "Bla gjennom"
+msgid "Browse"
+msgstr "Bla gjennom"
 
-#~ msgid "click to edit"
-#~ msgstr "trykk for å redigere"
+msgid "click to edit"
+msgstr "trykk for å redigere"
 
-#~ msgid "Plase select an image file (gif/png/jpeg)"
-#~ msgstr "Vennligst velg en bilde fil (gif/png/jpeg)"
+msgid "Plase select an image file (gif/png/jpeg)"
+msgstr "Vennligst velg en bilde fil (gif/png/jpeg)"
 
-#~ msgid "Please Select a Group"
-#~ msgstr "Vennligst Velg en Gruppe"
+msgid "Please Select a Group"
+msgstr "Vennligst Velg en Gruppe"
 
-#~ msgid "Select all visible ({0} records)"
-#~ msgstr "Velg alle synlige ({0} poster)"
+msgid "Select all visible ({0} records)"
+msgstr "Velg alle synlige ({0} poster)"

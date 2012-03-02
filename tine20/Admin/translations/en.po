@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 11:19+0000\n"
+"PO-Revision-Date: 2012-02-10 12:00+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:20+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -142,8 +142,7 @@ msgstr[1] "Access Logs"
 msgid "IP Address"
 msgstr "IP Address"
 
-#: js/AccessLog.js:107 js/Admin.js:23 js/user/GridPanel.js:98
-#: js/user/Users.js:72
+#: js/AccessLog.js:107 js/Admin.js:23 js/user/Users.js:72
 msgid "User"
 msgid_plural "Users"
 msgstr[0] "User"
@@ -1005,6 +1004,10 @@ msgstr "Set new password"
 #: js/user/GridPanel.js:243
 msgid "Please enter the new password:"
 msgstr "Please enter the new password:"
+
+#: js/user/Users.js:72
+msgid "Users"
+msgstr "Users"
 
 #: js/user/Users.js:118
 msgid "Samba User"

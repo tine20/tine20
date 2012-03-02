@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 09:46+0000\n"
-"Last-Translator: Damià Verger <Unknown>\n"
+"PO-Revision-Date: 2012-02-28 18:32+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators <dverger@joomla.cat>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -459,31 +459,37 @@ msgstr "Geoubicació"
 msgid "Export Contact"
 msgstr "Exporta el contacte"
 
-#: js/ContactGrid.js:160
+#: js/ContactGrid.js:153 js/ContactGrid.js:154
+msgid "Export {0}"
+msgid_plural "Export {0}"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/ContactGrid.js:163
 msgid "Export as PDF"
 msgstr "Exporta com a PDF"
 
-#: js/ContactGrid.js:167
+#: js/ContactGrid.js:170
 msgid "Export as CSV"
 msgstr "Exporta com a CSV"
 
-#: js/ContactGrid.js:174
+#: js/ContactGrid.js:177
 msgid "Export as ODS"
 msgstr "Exporta com a ODS"
 
-#: js/ContactGrid.js:181
+#: js/ContactGrid.js:184
 msgid "Export as XLS"
 msgstr "Exporta com a XLS"
 
-#: js/ContactGrid.js:188
+#: js/ContactGrid.js:191
 msgid "Export as ..."
 msgstr ""
 
-#: js/ContactGrid.js:200
+#: js/ContactGrid.js:203
 msgid "Import contacts"
 msgstr "Importa contactes"
 
-#: js/ContactGrid.js:289
+#: js/ContactGrid.js:292
 msgid "Internal Contact"
 msgstr "Contacte intern"
 
@@ -685,26 +691,26 @@ msgstr ""
 msgid "Internal Contacts"
 msgstr "Contactes interns"
 
-#~ msgid "Searching..."
-#~ msgstr "Cercant..."
+msgid "Searching..."
+msgstr "Cercant..."
 
-#~ msgid "Call contact"
-#~ msgstr "Truca al contacte"
+msgid "Call contact"
+msgstr "Truca al contacte"
 
-#~ msgid "Compose email"
-#~ msgstr "Redacta un correu electrònic"
+msgid "Compose email"
+msgstr "Redacta un correu electrònic"
 
-#~ msgid "Work"
-#~ msgstr "Feina"
+msgid "Work"
+msgstr "Feina"
 
-#~ msgid "Home"
-#~ msgstr "Casa"
+msgid "Home"
+msgstr "Casa"
 
-#~ msgid "Cell"
-#~ msgstr "Mòbil"
+msgid "Cell"
+msgstr "Mòbil"
 
-#~ msgid "Cell private"
-#~ msgstr "Mòbil particular"
+msgid "Cell private"
+msgstr "Mòbil particular"
 
-#~ msgid "Last Modified Time"
-#~ msgstr "Data d'última modificació"
+msgid "Last Modified Time"
+msgstr "Data d'última modificació"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - ExampleApplication\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 12:29+0000\n"
+"PO-Revision-Date: 2012-02-10 12:00+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:22+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: \n"
 "X-Poedit-Language: French\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -42,13 +42,6 @@ msgstr ""
 #, python-format
 msgid "%s's personal Projects"
 msgstr ""
-
-#: js/AddressbookGridPanelHook.js:32 js/AddressbookGridPanelHook.js:44
-#: js/Model.js:33 js/ProjectEditDialog.js:139 js/ProjectEditDialog.js:152
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] ""
-msgstr[1] ""
 
 #: js/AddToProjectPanel.js:56
 msgid "Cancel"
@@ -81,6 +74,12 @@ msgstr ""
 #: js/AddToProjectPanel.js:168
 msgid "Adding {0} Participants to project"
 msgstr ""
+
+#: js/Model.js:33 js/ProjectEditDialog.js:139 js/ProjectEditDialog.js:152
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/Model.js:37
 msgid "Project list"

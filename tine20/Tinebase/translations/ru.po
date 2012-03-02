@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-05 17:49+0100\n"
-"PO-Revision-Date: 2012-01-13 12:29+0000\n"
-"Last-Translator: Nkolay Parukhin <Unknown>\n"
+"PO-Revision-Date: 2012-02-28 18:37+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "X-Poedit-Language: Russian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -622,7 +622,7 @@ msgid "Logging you in..."
 msgstr "Регистрирую Вас в..."
 
 #: js/LoginPanel.js:341 js/widgets/container/GrantsDialog.js:95
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:367
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
 #: js/widgets/persistentfilter/PickerPanel.js:314
 #: js/widgets/persistentfilter/PickerPanel.js:352
 #: js/widgets/persistentfilter/PickerPanel.js:402
@@ -648,7 +648,7 @@ msgstr "Ваше имя пользователя и/или Ваш пароль �
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:551 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:350
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Errors"
@@ -656,7 +656,7 @@ msgstr "Ошибки"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:561 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:350
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 msgid "Please fix the errors noted."
 msgstr "Пожалуйста, исправьте отмеченные ошибки."
 
@@ -709,8 +709,8 @@ msgid "Install Tine 2.0 as web app in your browser."
 msgstr ""
 
 #: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:568
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:362
-#: js/widgets/grid/GridPanel.js:1469
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:363
+#: js/widgets/grid/GridPanel.js:1470
 #: js/widgets/persistentfilter/PickerPanel.js:312
 #: js/widgets/tree/ContextMenu.js:336
 msgid "Confirm"
@@ -729,12 +729,10 @@ msgid "Your password expired. Please enter a new user password:"
 msgstr ""
 
 #: js/Models.js:131 js/widgets/tags/TagFilter.js:30
-#, fuzzy
 msgid "Tag"
 msgid_plural "Tags"
-msgstr[0] "Тэг"
-msgstr[1] "Тэг"
-msgstr[2] "Тэг"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/Models.js:279
 msgid "Import"
@@ -1031,7 +1029,7 @@ msgstr "Добавить {0} примечание"
 msgid "Type"
 msgstr "Тип"
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1118
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1119
 msgid "Created By"
 msgstr "Создано"
 
@@ -1307,7 +1305,7 @@ msgid "Merge {0}, prefer Second"
 msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:196
-#: js/widgets/grid/GridPanel.js:437
+#: js/widgets/grid/GridPanel.js:438
 msgid "Merge {0}"
 msgstr ""
 
@@ -1372,7 +1370,7 @@ msgstr "удалить"
 msgid "Saved in"
 msgstr "Сохранено в"
 
-#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:388
+#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:389
 msgid "Copy {0}"
 msgstr ""
 
@@ -1392,17 +1390,17 @@ msgstr ""
 msgid "Do you really want to delete this {0}?"
 msgstr "Вы уверены, что хотите удалить {0}?"
 
-#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1502
+#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1503
 msgid "Deleting {0}"
 msgstr "Удаление {0}"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1519
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1520
 #: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:409
 #: js/widgets/tags/TagsPanel.js:442
 msgid "Failed"
 msgstr "Не удалось"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1519
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1520
 msgid "Could not delete {0}."
 msgstr "Не удалось удалить {0}."
 
@@ -1598,34 +1596,34 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:113
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:114
 msgid "Edit {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:186
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:197
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:187
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:198
 msgid "Delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:202
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:203
 msgid "Undo delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:276
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:277
 msgid "Different Values"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:277
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:278
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:363
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:364
 msgid "Do you really want to change these {0} records?"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:367
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
 msgid "Applying changes"
 msgstr ""
 
@@ -1994,72 +1992,72 @@ msgstr ""
 "Никаких {0} не найдено. Пожалуйста попытайтесь изменить свои критерии "
 "фильтра, варианты представления, или {1} поменять в тех в которых Вы ищете."
 
-#: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:373
-#: js/widgets/grid/GridPanel.js:374 js/widgets/grid/GridPanel.js:375
+#: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:374
+#: js/widgets/grid/GridPanel.js:375 js/widgets/grid/GridPanel.js:376
 msgid "Edit {0}"
 msgid_plural "Edit {0}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:399
+#: js/widgets/grid/GridPanel.js:400
 msgid "Add {0}"
 msgstr "Добавить {0}"
 
-#: js/widgets/grid/GridPanel.js:407
+#: js/widgets/grid/GridPanel.js:408
 msgid "Print Page"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:468 js/widgets/grid/GridPanel.js:469
-#: js/widgets/grid/GridPanel.js:471
+#: js/widgets/grid/GridPanel.js:469 js/widgets/grid/GridPanel.js:470
+#: js/widgets/grid/GridPanel.js:472
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Удалить {0}"
 msgstr[1] "Удалить {0}"
 msgstr[2] "Удалить {0}"
 
-#: js/widgets/grid/GridPanel.js:833
+#: js/widgets/grid/GridPanel.js:834
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Показаны записи {0} - {1} из {2}"
 
-#: js/widgets/grid/GridPanel.js:834
+#: js/widgets/grid/GridPanel.js:835
 msgid "No {0} to display"
 msgstr "Нет {0} для отображения"
 
-#: js/widgets/grid/GridPanel.js:1054
+#: js/widgets/grid/GridPanel.js:1055
 msgid "New..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1073
+#: js/widgets/grid/GridPanel.js:1074
 msgid "Add to..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1117
+#: js/widgets/grid/GridPanel.js:1118
 msgid "Creation Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1119
+#: js/widgets/grid/GridPanel.js:1120
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1120
+#: js/widgets/grid/GridPanel.js:1121
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1443
+#: js/widgets/grid/GridPanel.js:1444
 msgid "Not Allowed"
 msgstr "Не разрешено"
 
-#: js/widgets/grid/GridPanel.js:1444
+#: js/widgets/grid/GridPanel.js:1445
 msgid "You are not allowed to delete all pages at once"
 msgstr "Вам не позволяется удалить все страницы сразу"
 
-#: js/widgets/grid/GridPanel.js:1467
+#: js/widgets/grid/GridPanel.js:1468
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:1502
+#: js/widgets/grid/GridPanel.js:1503
 msgid " ... This may take a long time!"
 msgstr " ... Это может занять много времени!"
 
@@ -2542,180 +2540,180 @@ msgstr ""
 msgid "Please wait or contact your administrator"
 msgstr ""
 
-#~ msgid "low"
-#~ msgstr "низкий"
+msgid "low"
+msgstr "низкий"
 
-#~ msgid "normal"
-#~ msgstr "нормальный"
+msgid "normal"
+msgstr "нормальный"
 
-#~ msgid "high"
-#~ msgstr "высокий"
+msgid "high"
+msgstr "высокий"
 
-#~ msgid "urgent"
-#~ msgstr "срочный"
-
-#, fuzzy
-#~ msgid "Tagging"
-#~ msgstr "Тэг"
-
-#~ msgid "save filter"
-#~ msgstr "сохранить фильтр"
-
-#~ msgid "Updating {0} \"{1}\""
-#~ msgstr "Обновление {0} \"{1}\""
-
-#~ msgid "Deleting {0} \"{1}\""
-#~ msgstr "Удаление {0} \"{1}\""
-
-#~ msgid "Rename {0}"
-#~ msgstr "Переименовать {0}"
-
-#~ msgid "Reload {0}"
-#~ msgstr "Перезагрузить {0}"
-
-#~ msgid "There are no custom fields yet"
-#~ msgstr "Пока ещё нет дополнительных полей"
-
-#~ msgid "Do you really want to delete the selected record"
-#~ msgid_plural "Do you really want to delete the selected records"
-#~ msgstr[0] "Вы действительно хотите удалить выделенную запись"
-#~ msgstr[1] "Вы действительно хотите удалить выделенные записи"
-#~ msgstr[2] "Вы действительно хотите удалить выделенные записи"
-
-#~ msgid "About Tine 2.0"
-#~ msgstr "О Tine 2.0"
-
-#~ msgid "Filter"
-#~ msgstr "Фильтр"
+msgid "urgent"
+msgstr "срочный"
 
 #, fuzzy
-#~ msgid "Transfering Configuration..."
-#~ msgstr "Передача {0}..."
+msgid "Tagging"
+msgstr "Тэг"
 
-#~ msgid "Transfering {0}..."
-#~ msgstr "Передача {0}..."
+msgid "save filter"
+msgstr "сохранить фильтр"
 
-#~ msgid "Install Google Gears"
-#~ msgstr "Установить Google Gears"
+msgid "Updating {0} \"{1}\""
+msgstr "Обновление {0} \"{1}\""
 
-#~ msgid ""
-#~ "Installing Gears will improve the performance of Tine 2.0 by caching all "
-#~ "needed files locally on this computer."
-#~ msgstr ""
-#~ "Установка Gears повысит скорость Tine 2.0 сохранением необходимых файлов "
-#~ "локально на этом компьютере."
+msgid "Deleting {0} \"{1}\""
+msgstr "Удаление {0} \"{1}\""
 
-#~ msgid "Please enter a name for the filter"
-#~ msgstr "Пожалуйста, введите название фильтра"
+msgid "Rename {0}"
+msgstr "Переименовать {0}"
 
-#~ msgid "Filter not Saved"
-#~ msgstr "Фильтр не сохранен"
+msgid "Reload {0}"
+msgstr "Перезагрузить {0}"
 
-#~ msgid "You have to supply a name for the filter!"
-#~ msgstr "Вы должны дать фильтру название!"
+msgid "There are no custom fields yet"
+msgstr "Пока ещё нет дополнительных полей"
 
-#~ msgid ""
-#~ "You have to supply a shorter name! Names of saved filters can only be up "
-#~ "to 40 characters long."
-#~ msgstr ""
-#~ "Вы должны использовать короткое имя! Имена сохраненных фильтров не могут "
-#~ "быть длиннее 40 символов."
+msgid "Do you really want to delete the selected record"
+msgid_plural "Do you really want to delete the selected records"
+msgstr[0] "Вы действительно хотите удалить выделенную запись"
+msgstr[1] "Вы действительно хотите удалить выделенные записи"
+msgstr[2] "Вы действительно хотите удалить выделенные записи"
 
-#~ msgid "Saving filter"
-#~ msgstr "Сохранённый фильтр"
+msgid "About Tine 2.0"
+msgstr "О Tine 2.0"
 
-#~ msgid "My saved filters"
-#~ msgstr "Мои сохранённые фильтры"
-
-#~ msgid "Delete Filter"
-#~ msgstr "Удалить фильтр"
-
-#~ msgid "Do you really want to delete the Filter \"{0}\"?"
-#~ msgstr "Вы уверены, что хотите удалить фильтр \"{0}\"?"
-
-#~ msgid "Deleting Filter \"{0}\""
-#~ msgstr "Удаление фильтра \"{0}\""
-
-#~ msgid "Saved filter"
-#~ msgstr "Сохранённый фильтр"
-
-#~ msgid "Report bugs to tine20.org directly when they occur"
-#~ msgstr "Сообщайте об ошибках, когда они происходят, прямо на tine20.org"
-
-#~ msgid "Check tine20.org for new versions"
-#~ msgstr "Проверить новые версии на tine20.org"
-
-#~ msgid "Remove account"
-#~ msgstr "Удалить учётную запись"
-
-#~ msgid "shared"
-#~ msgstr "общие"
+msgid "Filter"
+msgstr "Фильтр"
 
 #, fuzzy
-#~ msgid "Permission Denied"
-#~ msgstr "Разрешения"
+msgid "Transfering Configuration..."
+msgstr "Передача {0}..."
+
+msgid "Transfering {0}..."
+msgstr "Передача {0}..."
+
+msgid "Install Google Gears"
+msgstr "Установить Google Gears"
+
+msgid ""
+"Installing Gears will improve the performance of Tine 2.0 by caching all "
+"needed files locally on this computer."
+msgstr ""
+"Установка Gears повысит скорость Tine 2.0 сохранением необходимых файлов "
+"локально на этом компьютере."
+
+msgid "Please enter a name for the filter"
+msgstr "Пожалуйста, введите название фильтра"
+
+msgid "Filter not Saved"
+msgstr "Фильтр не сохранен"
+
+msgid "You have to supply a name for the filter!"
+msgstr "Вы должны дать фильтру название!"
+
+msgid ""
+"You have to supply a shorter name! Names of saved filters can only be up to "
+"40 characters long."
+msgstr ""
+"Вы должны использовать короткое имя! Имена сохраненных фильтров не могут "
+"быть длиннее 40 символов."
+
+msgid "Saving filter"
+msgstr "Сохранённый фильтр"
+
+msgid "My saved filters"
+msgstr "Мои сохранённые фильтры"
+
+msgid "Delete Filter"
+msgstr "Удалить фильтр"
+
+msgid "Do you really want to delete the Filter \"{0}\"?"
+msgstr "Вы уверены, что хотите удалить фильтр \"{0}\"?"
+
+msgid "Deleting Filter \"{0}\""
+msgstr "Удаление фильтра \"{0}\""
+
+msgid "Saved filter"
+msgstr "Сохранённый фильтр"
+
+msgid "Report bugs to tine20.org directly when they occur"
+msgstr "Сообщайте об ошибках, когда они происходят, прямо на tine20.org"
+
+msgid "Check tine20.org for new versions"
+msgstr "Проверить новые версии на tine20.org"
+
+msgid "Remove account"
+msgstr "Удалить учётную запись"
+
+msgid "shared"
+msgstr "общие"
 
 #, fuzzy
-#~ msgid "You don't have the required grant to select this {0}"
-#~ msgstr "Вы уверены, что хотите удалить {0}?"
+msgid "Permission Denied"
+msgstr "Разрешения"
 
-#~ msgid "is in"
-#~ msgstr "в"
+#, fuzzy
+msgid "You don't have the required grant to select this {0}"
+msgstr "Вы уверены, что хотите удалить {0}?"
 
-#~ msgid "remove record"
-#~ msgstr "удалить запись"
+msgid "is in"
+msgstr "в"
 
-#~ msgid "Search"
-#~ msgstr "Поиск"
+msgid "remove record"
+msgstr "удалить запись"
 
-#~ msgid "Browse"
-#~ msgstr "Листать"
+msgid "Search"
+msgstr "Поиск"
 
-#~ msgid "click to edit"
-#~ msgstr "нажмите, чтобы изменить"
+msgid "Browse"
+msgstr "Листать"
 
-#~ msgid "Plase select an image file (gif/png/jpeg)"
-#~ msgstr "Пожалуйста, выберите файл изображения (gif/png/jpeg)"
+msgid "click to edit"
+msgstr "нажмите, чтобы изменить"
 
-#~ msgid "Please Select a Group"
-#~ msgstr "Пожалуйста, выберите группу"
+msgid "Plase select an image file (gif/png/jpeg)"
+msgstr "Пожалуйста, выберите файл изображения (gif/png/jpeg)"
 
-#~ msgid "Register"
-#~ msgstr "Регистрация"
+msgid "Please Select a Group"
+msgstr "Пожалуйста, выберите группу"
 
-#~ msgid ""
-#~ "The server did not respond to your request. Please check your network or "
-#~ "contact your administrator."
-#~ msgstr ""
-#~ "Сервер не ответил на Ваш запрос. Пожалуйста, проверьте свою сеть или "
-#~ "свяжитесь с Вашим администратором."
+msgid "Register"
+msgstr "Регистрация"
 
-#~ msgid "Permissions"
-#~ msgstr "Разрешения"
+msgid ""
+"The server did not respond to your request. Please check your network or "
+"contact your administrator."
+msgstr ""
+"Сервер не ответил на Ваш запрос. Пожалуйста, проверьте свою сеть или "
+"свяжитесь с Вашим администратором."
 
-#~ msgid "Could not save {0}."
-#~ msgstr "Не удалось сохранить {0}."
+msgid "Permissions"
+msgstr "Разрешения"
 
-#~ msgid "add account"
-#~ msgstr "добавить учётную запись"
+msgid "Could not save {0}."
+msgstr "Не удалось сохранить {0}."
 
-#~ msgid "nobody"
-#~ msgstr "никто"
+msgid "add account"
+msgstr "добавить учётную запись"
 
-#~ msgid "please select an account"
-#~ msgstr "пожалуйста, выберите учётную запись"
+msgid "nobody"
+msgstr "никто"
 
-#~ msgid "loading new language..."
-#~ msgstr "загрузка нового языка..."
+msgid "please select an account"
+msgstr "пожалуйста, выберите учётную запись"
 
-#~ msgid "Export Date"
-#~ msgstr "Экспорт даты"
+msgid "loading new language..."
+msgstr "загрузка нового языка..."
 
-#~ msgid ""
-#~ "Fatal Error: Client self-update failed, please contact your administrator."
-#~ msgstr ""
-#~ "Неустранимая ошибка: Сбой самообновления клиента, пожалуйста, обратитесь "
-#~ "к администратору."
+msgid "Export Date"
+msgstr "Экспорт даты"
 
-#~ msgid "Select all visible ({0} records)"
-#~ msgstr "Выбрать все видимые ({0} записей)"
+msgid ""
+"Fatal Error: Client self-update failed, please contact your administrator."
+msgstr ""
+"Неустранимая ошибка: Сбой самообновления клиента, пожалуйста, обратитесь к "
+"администратору."
+
+msgid "Select all visible ({0} records)"
+msgstr "Выбрать все видимые ({0} записей)"

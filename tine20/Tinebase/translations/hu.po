@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 12:29+0000\n"
-"Last-Translator: Faragó Tamás <Unknown>\n"
+"PO-Revision-Date: 2012-02-28 18:56+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -629,7 +629,7 @@ msgid "Logging you in..."
 msgstr "Bejelentkezés..."
 
 #: js/LoginPanel.js:341 js/widgets/container/GrantsDialog.js:95
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:367
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
 #: js/widgets/persistentfilter/PickerPanel.js:314
 #: js/widgets/persistentfilter/PickerPanel.js:352
 #: js/widgets/persistentfilter/PickerPanel.js:402
@@ -655,7 +655,7 @@ msgstr "A felhasználóneved és/vagy a jelszavad hibás!!!"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:551 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:350
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Errors"
@@ -663,7 +663,7 @@ msgstr "Hibák"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:561 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:350
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 msgid "Please fix the errors noted."
 msgstr "Javítsd a jegyzett hibákat."
 
@@ -716,8 +716,8 @@ msgid "Install Tine 2.0 as web app in your browser."
 msgstr "Tine 2.0 telepítése web programként a böngésződben."
 
 #: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:568
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:362
-#: js/widgets/grid/GridPanel.js:1469
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:363
+#: js/widgets/grid/GridPanel.js:1470
 #: js/widgets/persistentfilter/PickerPanel.js:312
 #: js/widgets/tree/ContextMenu.js:336
 msgid "Confirm"
@@ -736,11 +736,10 @@ msgid "Your password expired. Please enter a new user password:"
 msgstr "Lejárt a jelszód. Írj be egy új jelszót:"
 
 #: js/Models.js:131 js/widgets/tags/TagFilter.js:30
-#, fuzzy
 msgid "Tag"
 msgid_plural "Tags"
-msgstr[0] "Címke"
-msgstr[1] "Címke"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/Models.js:279
 msgid "Import"
@@ -1037,7 +1036,7 @@ msgstr "{0} megjegyzés hozzáadása"
 msgid "Type"
 msgstr "Típus"
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1118
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1119
 msgid "Created By"
 msgstr "Létrehozta"
 
@@ -1314,7 +1313,7 @@ msgid "Merge {0}, prefer Second"
 msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:196
-#: js/widgets/grid/GridPanel.js:437
+#: js/widgets/grid/GridPanel.js:438
 msgid "Merge {0}"
 msgstr ""
 
@@ -1379,7 +1378,7 @@ msgstr "törlés"
 msgid "Saved in"
 msgstr "Mentve ide:"
 
-#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:388
+#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:389
 msgid "Copy {0}"
 msgstr "{0} másolása"
 
@@ -1399,17 +1398,17 @@ msgstr "{0} átvitele..."
 msgid "Do you really want to delete this {0}?"
 msgstr "Biztosan töröld ezt: {0}?"
 
-#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1502
+#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1503
 msgid "Deleting {0}"
 msgstr "{0} törlése"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1519
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1520
 #: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:409
 #: js/widgets/tags/TagsPanel.js:442
 msgid "Failed"
 msgstr "Sikertelen"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1519
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1520
 msgid "Could not delete {0}."
 msgstr "{0} nem törölhető."
 
@@ -1613,34 +1612,34 @@ msgstr "{0} rekordnak van hibája és eldobásra kerülnek."
 msgid "Links"
 msgstr "Linkek"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:113
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:114
 msgid "Edit {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:186
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:197
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:187
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:198
 msgid "Delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:202
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:203
 msgid "Undo delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:276
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:277
 msgid "Different Values"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:277
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:278
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:363
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:364
 msgid "Do you really want to change these {0} records?"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:367
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
 msgid "Applying changes"
 msgstr ""
 
@@ -2011,71 +2010,71 @@ msgstr ""
 "{0} nem található. Kérlek változtasd meg a szűrő-feltételeket, nézet-"
 "beállításokat vagy amiben keresel: {1}."
 
-#: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:373
-#: js/widgets/grid/GridPanel.js:374 js/widgets/grid/GridPanel.js:375
+#: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:374
+#: js/widgets/grid/GridPanel.js:375 js/widgets/grid/GridPanel.js:376
 msgid "Edit {0}"
 msgid_plural "Edit {0}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:399
+#: js/widgets/grid/GridPanel.js:400
 msgid "Add {0}"
 msgstr "{0} hozzáadása"
 
-#: js/widgets/grid/GridPanel.js:407
+#: js/widgets/grid/GridPanel.js:408
 msgid "Print Page"
 msgstr "Oldal nyomtatása"
 
-#: js/widgets/grid/GridPanel.js:468 js/widgets/grid/GridPanel.js:469
-#: js/widgets/grid/GridPanel.js:471
+#: js/widgets/grid/GridPanel.js:469 js/widgets/grid/GridPanel.js:470
+#: js/widgets/grid/GridPanel.js:472
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "{0} törlése"
 msgstr[1] "{0} törlése"
 
-#: js/widgets/grid/GridPanel.js:833
+#: js/widgets/grid/GridPanel.js:834
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Adatok kijelzése {0} - {1} / {2}"
 
-#: js/widgets/grid/GridPanel.js:834
+#: js/widgets/grid/GridPanel.js:835
 msgid "No {0} to display"
 msgstr "Nincs kijelezhető {0}"
 
-#: js/widgets/grid/GridPanel.js:1054
+#: js/widgets/grid/GridPanel.js:1055
 msgid "New..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1073
+#: js/widgets/grid/GridPanel.js:1074
 msgid "Add to..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1117
+#: js/widgets/grid/GridPanel.js:1118
 msgid "Creation Time"
 msgstr "Készítés ideje"
 
-#: js/widgets/grid/GridPanel.js:1119
+#: js/widgets/grid/GridPanel.js:1120
 msgid "Last Modified Time"
 msgstr "Utolsó módosítás ideje"
 
-#: js/widgets/grid/GridPanel.js:1120
+#: js/widgets/grid/GridPanel.js:1121
 msgid "Last Modified By"
 msgstr "Utolsó módosító"
 
-#: js/widgets/grid/GridPanel.js:1443
+#: js/widgets/grid/GridPanel.js:1444
 msgid "Not Allowed"
 msgstr "Nem megengedett"
 
-#: js/widgets/grid/GridPanel.js:1444
+#: js/widgets/grid/GridPanel.js:1445
 msgid "You are not allowed to delete all pages at once"
 msgstr "Nincs engedélyed az összes lap egyszerre törléséhez"
 
-#: js/widgets/grid/GridPanel.js:1467
+#: js/widgets/grid/GridPanel.js:1468
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] "Biztosan törlöd a kiválasztott adatot ({0})?"
 msgstr[1] "Biztosan törlöd a kiválasztott adatokat ({0})?"
 
-#: js/widgets/grid/GridPanel.js:1502
+#: js/widgets/grid/GridPanel.js:1503
 msgid " ... This may take a long time!"
 msgstr " ... Ez hosszabb időt vehet igénybe!"
 
@@ -2552,188 +2551,185 @@ msgstr "Tine 2.0 frissítése szükséges vagy még nincs telepítve."
 msgid "Please wait or contact your administrator"
 msgstr "Kérlek várj vagy lépj kapcsolatba a rendszergazdával"
 
-#~ msgid "low"
-#~ msgstr "alacsony"
+msgid "low"
+msgstr "alacsony"
 
-#~ msgid "normal"
-#~ msgstr "normális"
+msgid "normal"
+msgstr "normális"
 
-#~ msgid "high"
-#~ msgstr "magas"
+msgid "high"
+msgstr "magas"
 
-#~ msgid "urgent"
-#~ msgstr "sürgős"
+msgid "urgent"
+msgstr "sürgős"
 
-#~ msgid "Import into {0}"
-#~ msgstr "Importálás ebbe a {0}be"
+msgid "Import into {0}"
+msgstr "Importálás ebbe a {0}be"
 
-#~ msgid "Favorite"
-#~ msgid_plural "Favorites"
-#~ msgstr[0] "Kedvenc"
-#~ msgstr[1] "Kedvencek"
+msgid "Favorite"
+msgid_plural "Favorites"
+msgstr[0] "Kedvenc"
+msgstr[1] "Kedvencek"
 
-#~ msgid "Renaming Favorite \"{0}\""
-#~ msgstr "Kedvenc átnevezése: \"{0}\""
+msgid "Renaming Favorite \"{0}\""
+msgstr "Kedvenc átnevezése: \"{0}\""
 
-#~ msgid "Set color for {0}"
-#~ msgstr "{0} színének beállítása"
+msgid "Set color for {0}"
+msgstr "{0} színének beállítása"
 
-#~ msgid "Do you really want to delete the selected record"
-#~ msgid_plural "Do you really want to delete the selected records"
-#~ msgstr[0] "Biztosan törlöd a kiválasztott adatot"
-#~ msgstr[1] "Biztosan törlöd a kiválasztott adatokat"
+msgid "Do you really want to delete the selected record"
+msgid_plural "Do you really want to delete the selected records"
+msgstr[0] "Biztosan törlöd a kiválasztott adatot"
+msgstr[1] "Biztosan törlöd a kiválasztott adatokat"
 
-#~ msgid "Group"
-#~ msgid_plural "Groups"
-#~ msgstr[0] "Csoport"
-#~ msgstr[1] "Csoportok"
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Csoport"
+msgstr[1] "Csoportok"
 
-#~ msgid "Internal {0}"
-#~ msgstr "Belső {0}"
+msgid "Internal {0}"
+msgstr "Belső {0}"
 
-#~ msgid "Transfering Configuration..."
-#~ msgstr "Konfiguráció átvitele..."
+msgid "Transfering Configuration..."
+msgstr "Konfiguráció átvitele..."
 
-#~ msgid "Install Google Gears"
-#~ msgstr "Google Gears telepítése"
+msgid "Install Google Gears"
+msgstr "Google Gears telepítése"
 
-#~ msgid ""
-#~ "The server is currently unable to handle the request due to a temporary "
-#~ "overloading or maintenance of the server. Please try again or contact "
-#~ "your administrator."
-#~ msgstr ""
-#~ "A szerver éppen nem tudja teljesíteni a kérést, átmenteti túlterhelés "
-#~ "vagy karbantartás miatt. Próbáld újra vagy lépj kapcsolatba a "
-#~ "rendszergazdával."
+msgid ""
+"The server is currently unable to handle the request due to a temporary "
+"overloading or maintenance of the server. Please try again or contact your "
+"administrator."
+msgstr ""
+"A szerver éppen nem tudja teljesíteni a kérést, átmenteti túlterhelés vagy "
+"karbantartás miatt. Próbáld újra vagy lépj kapcsolatba a rendszergazdával."
 
-#~ msgid "Files"
-#~ msgstr "Fileok"
+msgid "Files"
+msgstr "Fileok"
 
-#~ msgid "Import definition"
-#~ msgstr "Importálás meghatározása"
+msgid "Import definition"
+msgstr "Importálás meghatározása"
 
-#~ msgid "Dry run"
-#~ msgstr "Teszt futtatás"
+msgid "Dry run"
+msgstr "Teszt futtatás"
 
-#~ msgid "No files added"
-#~ msgstr "File nem lett hozzáadva"
+msgid "No files added"
+msgstr "File nem lett hozzáadva"
 
-#~ msgid "You need to add files to import."
-#~ msgstr "Importáláshoz hozzá kell adnod fileokat."
+msgid "You need to add files to import."
+msgstr "Importáláshoz hozzá kell adnod fileokat."
 
-#~ msgid "Dry run results"
-#~ msgstr "Teszt futtatás eredménye"
+msgid "Dry run results"
+msgstr "Teszt futtatás eredménye"
 
-#~ msgid ""
-#~ "Import test successful for {0} records, import test failed for {1} "
-#~ "records."
-#~ msgstr ""
-#~ "Teszt importálás eredményes {0} adatnál, teszt importálás hibás {1} "
-#~ "adatnál."
+msgid ""
+"Import test successful for {0} records, import test failed for {1} records."
+msgstr ""
+"Teszt importálás eredményes {0} adatnál, teszt importálás hibás {1} adatnál."
 
-#~ msgid "Import results"
-#~ msgstr "Importálás eredménye"
+msgid "Import results"
+msgstr "Importálás eredménye"
 
-#~ msgid ""
-#~ "Import successful for {0} records / import failed for {1} records / {2} "
-#~ "duplicates found"
-#~ msgstr ""
-#~ "Importálás eredményes {0} adatnál / importálás hibás {1} adatnál / {2} "
-#~ "duplázás található"
+msgid ""
+"Import successful for {0} records / import failed for {1} records / {2} "
+"duplicates found"
+msgstr ""
+"Importálás eredményes {0} adatnál / importálás hibás {1} adatnál / {2} "
+"duplázás található"
 
-#~ msgid "Tagging"
-#~ msgstr "Címkézés"
+msgid "Tagging"
+msgstr "Címkézés"
 
-#~ msgid "Events"
-#~ msgstr "Események"
+msgid "Events"
+msgstr "Események"
 
-#~ msgid "Rename Favorite"
-#~ msgstr "Kedvenc átnevezése"
+msgid "Rename Favorite"
+msgstr "Kedvenc átnevezése"
 
-#~ msgid "New Name"
-#~ msgstr "Új név"
+msgid "New Name"
+msgstr "Új név"
 
-#~ msgid "Please enter the new name for favorite \"{0}\"?"
-#~ msgstr "Kérlek írd be az új nevét ennek a kedvencnek: \"{0}\"?"
+msgid "Please enter the new name for favorite \"{0}\"?"
+msgstr "Kérlek írd be az új nevét ennek a kedvencnek: \"{0}\"?"
 
-#~ msgid "save filter"
-#~ msgstr "szűrő mentése"
+msgid "save filter"
+msgstr "szűrő mentése"
 
-#~ msgid "Please enter a name for the favorite"
-#~ msgstr "Kérlek írj be egy nevet a kedvencnek"
+msgid "Please enter a name for the favorite"
+msgstr "Kérlek írj be egy nevet a kedvencnek"
 
-#~ msgid "Saving favorite"
-#~ msgstr "Kedvenc mentése"
+msgid "Saving favorite"
+msgstr "Kedvenc mentése"
 
-#~ msgid "Updating {0} \"{1}\""
-#~ msgstr "{0} \"{1}\" frissítése"
+msgid "Updating {0} \"{1}\""
+msgstr "{0} \"{1}\" frissítése"
 
-#~ msgid "Deleting {0} \"{1}\""
-#~ msgstr "{0} \"{1}\" törlése"
+msgid "Deleting {0} \"{1}\""
+msgstr "{0} \"{1}\" törlése"
 
-#~ msgid "Rename {0}"
-#~ msgstr "{0} átnevezése"
+msgid "Rename {0}"
+msgstr "{0} átnevezése"
 
-#~ msgid "Reload {0}"
-#~ msgstr "{0} újratöltése"
+msgid "Reload {0}"
+msgstr "{0} újratöltése"
 
-#~ msgid "There are no custom fields yet"
-#~ msgstr "Nincs még egyedi mező"
+msgid "There are no custom fields yet"
+msgstr "Nincs még egyedi mező"
 
-#~ msgid "Groups"
-#~ msgstr "Csoportok"
+msgid "Groups"
+msgstr "Csoportok"
 
-#~ msgid "Overwriting system favorites is not yet supported"
-#~ msgstr "Rendszer kedvenceinek felülírása még nem támogatott"
+msgid "Overwriting system favorites is not yet supported"
+msgstr "Rendszer kedvenceinek felülírása még nem támogatott"
 
-#~ msgid "About Tine 2.0"
-#~ msgstr "Tine 2.0-ról"
+msgid "About Tine 2.0"
+msgstr "Tine 2.0-ról"
 
-#~ msgid "Custom datetime"
-#~ msgstr "Egyedi időpont"
+msgid "Custom datetime"
+msgstr "Egyedi időpont"
 
-#~ msgid "Overwriteing system favorites is not yet supported"
-#~ msgstr "Rendszer kedvenceinek felül írása még nem támogatott"
+msgid "Overwriteing system favorites is not yet supported"
+msgstr "Rendszer kedvenceinek felül írása még nem támogatott"
 
-#~ msgid "Filter"
-#~ msgstr "Szűrő"
+msgid "Filter"
+msgstr "Szűrő"
 
-#~ msgid "Transfering {0}..."
-#~ msgstr "{0} átvitele ..."
+msgid "Transfering {0}..."
+msgstr "{0} átvitele ..."
 
-#~ msgid ""
-#~ "Installing Gears will improve the performance of Tine 2.0 by caching all "
-#~ "needed files locally on this computer."
-#~ msgstr ""
-#~ "A Gears telepítése növeli a Tine 2.0 teljesítményét az összes szükséges "
-#~ "file helyi gépen tárolásával."
+msgid ""
+"Installing Gears will improve the performance of Tine 2.0 by caching all "
+"needed files locally on this computer."
+msgstr ""
+"A Gears telepítése növeli a Tine 2.0 teljesítményét az összes szükséges file "
+"helyi gépen tárolásával."
 
-#~ msgid "No Tags to remove found in the selected records"
-#~ msgstr "Nincs eltávolítható címke a kiválasztott rekordokban"
+msgid "No Tags to remove found in the selected records"
+msgstr "Nincs eltávolítható címke a kiválasztott rekordokban"
 
-#~ msgid "Detaching selected tags"
-#~ msgstr "Kiválasztott címkék eltávolítása"
+msgid "Detaching selected tags"
+msgstr "Kiválasztott címkék eltávolítása"
 
-#~ msgid "progress"
-#~ msgstr "folyamat"
+msgid "progress"
+msgstr "folyamat"
 
-#~ msgid "Remove from shared favorites"
-#~ msgstr "Eltávolítás a megosztott kedvencek közül"
+msgid "Remove from shared favorites"
+msgstr "Eltávolítás a megosztott kedvencek közül"
 
-#~ msgid "Add to shared favorites"
-#~ msgstr "Hozzáadás a megosztott kedvencekhez"
+msgid "Add to shared favorites"
+msgstr "Hozzáadás a megosztott kedvencekhez"
 
-#~ msgid "Setting favorite \"{0}\" not shared"
-#~ msgstr "\"{0}\" kedvenc beállítása nem megosztottként"
+msgid "Setting favorite \"{0}\" not shared"
+msgstr "\"{0}\" kedvenc beállítása nem megosztottként"
 
-#~ msgid "Setting favorite \"{0}\" shared"
-#~ msgstr "\"{0}\" kedvenc beállítása megosztottként"
+msgid "Setting favorite \"{0}\" shared"
+msgstr "\"{0}\" kedvenc beállítása megosztottként"
 
-#~ msgid "Share this Favorite"
-#~ msgstr "Kedvenc megosztása"
+msgid "Share this Favorite"
+msgstr "Kedvenc megosztása"
 
-#~ msgid "Select all visible ({0} records)"
-#~ msgstr "Összes látható ({0} adat) kiválasztása"
+msgid "Select all visible ({0} records)"
+msgstr "Összes látható ({0} adat) kiválasztása"
 
 #~ msgid ""
 #~ "The window you want to work with is backgrounded. Your browser does't "

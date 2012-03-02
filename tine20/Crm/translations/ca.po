@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - CRM\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 12:08+0000\n"
-"Last-Translator: Damià Verger <Unknown>\n"
+"PO-Revision-Date: 2012-02-28 18:37+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators <dverger@joomla.cat>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:20+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -226,13 +226,6 @@ msgstr "alta"
 msgid "urgent"
 msgstr "urgent"
 
-#: js/AddressbookGridPanelHook.js:36 js/AddressbookGridPanelHook.js:50
-#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:311 js/Model.js:48
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "Client potencial"
-msgstr[1] "Clients potencials"
-
 #: js/AddToLeadPanel.js:56
 msgid "Cancel"
 msgstr ""
@@ -248,6 +241,12 @@ msgstr ""
 #: js/AddToLeadPanel.js:104
 msgid "Please select the attenders' role"
 msgstr ""
+
+#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:311 js/Model.js:48
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "Client potencial"
+msgstr[1] "Clients potencials"
 
 #: js/AddToLeadPanel.js:145
 msgid "Select Lead"
@@ -602,14 +601,14 @@ msgstr ""
 msgid "Leads with overdue tasks"
 msgstr ""
 
-#~ msgid "Lead %s has been creaded"
-#~ msgstr "S'ha creat el client potencial %s"
+msgid "Lead %s has been creaded"
+msgstr "S'ha creat el client potencial %s"
 
-#~ msgid "Last Modified Time"
-#~ msgstr "Modificat per darrera vegada"
+msgid "Last Modified Time"
+msgstr "Modificat per darrera vegada"
 
-#~ msgid "Add task"
-#~ msgstr "Afegeix una tasca"
+msgid "Add task"
+msgstr "Afegeix una tasca"
 
-#~ msgid "Add task for selected lead"
-#~ msgstr "Afegeix una tasca per al client potencial seleccionat"
+msgid "Add task for selected lead"
+msgstr "Afegeix una tasca per al client potencial seleccionat"

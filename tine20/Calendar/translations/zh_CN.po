@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 13:29+0000\n"
-"Last-Translator: jason qi <Unknown>\n"
+"PO-Revision-Date: 2012-02-28 18:36+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: CHINA\n"
 "X-Poedit-Language: Chinese\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -115,12 +115,6 @@ msgstr ""
 #, python-format
 msgid "%s's personal calendar"
 msgstr "%s 的个人日历"
-
-#: js/AddressbookGridPanelHook.js:33 js/AddressbookGridPanelHook.js:47
-#: js/Model.js:63 js/Model.js:362 js/SearchCombo.js:76
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] "事件"
 
 #: js/AddToEventPanel.js:61
 msgid "Cancel"
@@ -549,6 +543,11 @@ msgstr "编辑事件"
 msgid "Cancel this action"
 msgstr ""
 
+#: js/Model.js:63 js/Model.js:362 js/SearchCombo.js:76
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] "事件"
+
 #: js/Model.js:67
 msgid "Calendars"
 msgstr "日历"
@@ -922,41 +921,41 @@ msgstr ""
 msgid "Event details"
 msgstr "事件细节"
 
-#~ msgid "forever"
-#~ msgstr "永远"
+msgid "forever"
+msgstr "永远"
 
-#~ msgid "Forever"
-#~ msgstr "永远"
+msgid "Forever"
+msgstr "永远"
 
-#~ msgid "Until"
-#~ msgstr "知道"
+msgid "Until"
+msgstr "知道"
 
-#~ msgid "Unknown calendar"
-#~ msgstr "未知日历"
+msgid "Unknown calendar"
+msgstr "未知日历"
 
-#~ msgid "Event \"%1$s\" at %s has been canceled"
-#~ msgstr "事件 \"%1$s\" at %s 被取消了"
+msgid "Event \"%1$s\" at %s has been canceled"
+msgstr "事件 \"%1$s\" at %s 被取消了"
 
-#~ msgid "Resources {0}"
-#~ msgstr "资源{0}"
+msgid "Resources {0}"
+msgstr "资源{0}"
 
-#~ msgid "Show declined events"
-#~ msgstr "显示被拒绝的事件"
+msgid "Show declined events"
+msgstr "显示被拒绝的事件"
 
-#~ msgid "Publish Free/Busy Information"
-#~ msgstr "发布 闲/忙 信息"
+msgid "Publish Free/Busy Information"
+msgstr "发布 闲/忙 信息"
 
-#~ msgid "Allow all users to view your free/busy information"
-#~ msgstr "允许所有用户浏览你的闲/忙信息"
+msgid "Allow all users to view your free/busy information"
+msgstr "允许所有用户浏览你的闲/忙信息"
 
-#~ msgid "Every"
-#~ msgstr "每个"
+msgid "Every"
+msgstr "每个"
 
-#~ msgid ". Day"
-#~ msgstr ".日"
+msgid ". Day"
+msgstr ".日"
 
-#~ msgid ". Month"
-#~ msgstr ".月"
+msgid ". Month"
+msgstr ".月"
 
-#~ msgid ". Year"
-#~ msgstr ".年"
+msgid ". Year"
+msgstr ".年"

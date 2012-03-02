@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 12:33+0000\n"
-"Last-Translator: Damià Verger <Unknown>\n"
+"PO-Revision-Date: 2012-02-28 18:56+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators <dverger@joomla.cat>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -625,7 +625,7 @@ msgid "Logging you in..."
 msgstr "Iniciant sessió..."
 
 #: js/LoginPanel.js:341 js/widgets/container/GrantsDialog.js:95
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:367
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
 #: js/widgets/persistentfilter/PickerPanel.js:314
 #: js/widgets/persistentfilter/PickerPanel.js:352
 #: js/widgets/persistentfilter/PickerPanel.js:402
@@ -651,7 +651,7 @@ msgstr "El vostre nom d'usuari i/o la vostra contrasenya són incorrectes!!!"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:551 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:350
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Errors"
@@ -659,7 +659,7 @@ msgstr "Errors"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:561 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:350
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
 msgid "Please fix the errors noted."
 msgstr "Arregleu els errors notificats."
 
@@ -712,8 +712,8 @@ msgid "Install Tine 2.0 as web app in your browser."
 msgstr ""
 
 #: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:568
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:362
-#: js/widgets/grid/GridPanel.js:1469
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:363
+#: js/widgets/grid/GridPanel.js:1470
 #: js/widgets/persistentfilter/PickerPanel.js:312
 #: js/widgets/tree/ContextMenu.js:336
 msgid "Confirm"
@@ -732,11 +732,10 @@ msgid "Your password expired. Please enter a new user password:"
 msgstr ""
 
 #: js/Models.js:131 js/widgets/tags/TagFilter.js:30
-#, fuzzy
 msgid "Tag"
 msgid_plural "Tags"
-msgstr[0] "Etiqueta"
-msgstr[1] "Etiqueta"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/Models.js:279
 msgid "Import"
@@ -1033,7 +1032,7 @@ msgstr "Afegeix una nota de {0}"
 msgid "Type"
 msgstr "Tipus"
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1118
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1119
 msgid "Created By"
 msgstr "Creat per"
 
@@ -1313,7 +1312,7 @@ msgid "Merge {0}, prefer Second"
 msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:196
-#: js/widgets/grid/GridPanel.js:437
+#: js/widgets/grid/GridPanel.js:438
 msgid "Merge {0}"
 msgstr ""
 
@@ -1378,7 +1377,7 @@ msgstr "elimina"
 msgid "Saved in"
 msgstr "Desat a"
 
-#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:388
+#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:389
 msgid "Copy {0}"
 msgstr "Copia {0}"
 
@@ -1398,17 +1397,17 @@ msgstr ""
 msgid "Do you really want to delete this {0}?"
 msgstr "Esteu segur que voleu eliminar aquest {0}?"
 
-#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1502
+#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1503
 msgid "Deleting {0}"
 msgstr "Eliminant {0}"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1519
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1520
 #: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:409
 #: js/widgets/tags/TagsPanel.js:442
 msgid "Failed"
 msgstr "Ha fallat"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1519
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1520
 msgid "Could not delete {0}."
 msgstr "No s'ha pogut eliminar {0}."
 
@@ -1604,34 +1603,34 @@ msgstr ""
 msgid "Links"
 msgstr "Enllaços"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:113
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:114
 msgid "Edit {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:186
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:197
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:187
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:198
 msgid "Delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:202
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:203
 msgid "Undo delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:276
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:277
 msgid "Different Values"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:277
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:278
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:363
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:364
 msgid "Do you really want to change these {0} records?"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:367
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
 msgid "Applying changes"
 msgstr ""
 
@@ -2004,71 +2003,71 @@ msgstr ""
 "No s'ha trobat cap {0}. Proveu a canviar el criteri de filtre, les opcions "
 "de visualització o bé el/la {1} on cerqueu."
 
-#: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:373
-#: js/widgets/grid/GridPanel.js:374 js/widgets/grid/GridPanel.js:375
+#: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:374
+#: js/widgets/grid/GridPanel.js:375 js/widgets/grid/GridPanel.js:376
 msgid "Edit {0}"
 msgid_plural "Edit {0}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:399
+#: js/widgets/grid/GridPanel.js:400
 msgid "Add {0}"
 msgstr "Afegeix {0}"
 
-#: js/widgets/grid/GridPanel.js:407
+#: js/widgets/grid/GridPanel.js:408
 msgid "Print Page"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:468 js/widgets/grid/GridPanel.js:469
-#: js/widgets/grid/GridPanel.js:471
+#: js/widgets/grid/GridPanel.js:469 js/widgets/grid/GridPanel.js:470
+#: js/widgets/grid/GridPanel.js:472
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Elimina {0}"
 msgstr[1] "Elimina {0}"
 
-#: js/widgets/grid/GridPanel.js:833
+#: js/widgets/grid/GridPanel.js:834
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Es mostren els registres {0} - {1} de {2}"
 
-#: js/widgets/grid/GridPanel.js:834
+#: js/widgets/grid/GridPanel.js:835
 msgid "No {0} to display"
 msgstr "Cap {0} a mostrar"
 
-#: js/widgets/grid/GridPanel.js:1054
+#: js/widgets/grid/GridPanel.js:1055
 msgid "New..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1073
+#: js/widgets/grid/GridPanel.js:1074
 msgid "Add to..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1117
+#: js/widgets/grid/GridPanel.js:1118
 msgid "Creation Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1119
+#: js/widgets/grid/GridPanel.js:1120
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1120
+#: js/widgets/grid/GridPanel.js:1121
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1443
+#: js/widgets/grid/GridPanel.js:1444
 msgid "Not Allowed"
 msgstr "No teniu permís"
 
-#: js/widgets/grid/GridPanel.js:1444
+#: js/widgets/grid/GridPanel.js:1445
 msgid "You are not allowed to delete all pages at once"
 msgstr "No teniu permís per a eliminar totes les pàgines a la vegada"
 
-#: js/widgets/grid/GridPanel.js:1467
+#: js/widgets/grid/GridPanel.js:1468
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:1502
+#: js/widgets/grid/GridPanel.js:1503
 msgid " ... This may take a long time!"
 msgstr " ... Això pot requerir un temps considerable!"
 
@@ -2551,155 +2550,154 @@ msgstr ""
 msgid "Please wait or contact your administrator"
 msgstr ""
 
-#~ msgid "low"
-#~ msgstr "baixa"
+msgid "low"
+msgstr "baixa"
 
-#~ msgid "normal"
-#~ msgstr "normal"
+msgid "normal"
+msgstr "normal"
 
-#~ msgid "high"
-#~ msgstr "alta"
+msgid "high"
+msgstr "alta"
 
-#~ msgid "urgent"
-#~ msgstr "urgent"
+msgid "urgent"
+msgstr "urgent"
 
-#~ msgid ""
-#~ "The server is currently unable to handle the request due to a temporary "
-#~ "overloading or maintenance of the server. Please try again or contact "
-#~ "your administrator."
-#~ msgstr ""
-#~ "El servidor en aquests moments no pot respondre a la petició degut a una "
-#~ "sobrecàrrega puntual o per manteniment del servidor. Intenteu-ho altra "
-#~ "vegada o contacteu l'administrador."
+msgid ""
+"The server is currently unable to handle the request due to a temporary "
+"overloading or maintenance of the server. Please try again or contact your "
+"administrator."
+msgstr ""
+"El servidor en aquests moments no pot respondre a la petició degut a una "
+"sobrecàrrega puntual o per manteniment del servidor. Intenteu-ho altra "
+"vegada o contacteu l'administrador."
 
-#~ msgid "Files"
-#~ msgstr "Fitxers"
+msgid "Files"
+msgstr "Fitxers"
 
-#~ msgid "Import definition"
-#~ msgstr "Definició de la importació"
+msgid "Import definition"
+msgstr "Definició de la importació"
 
-#~ msgid "Import into {0}"
-#~ msgstr "Importa a {0}"
+msgid "Import into {0}"
+msgstr "Importa a {0}"
 
-#~ msgid "Dry run"
-#~ msgstr "Executa en sec"
+msgid "Dry run"
+msgstr "Executa en sec"
 
-#~ msgid "No files added"
-#~ msgstr "No s'ha afegit cap fitxer"
+msgid "No files added"
+msgstr "No s'ha afegit cap fitxer"
 
-#~ msgid "You need to add files to import."
-#~ msgstr "Cal que afegiu fitxers a importar."
+msgid "You need to add files to import."
+msgstr "Cal que afegiu fitxers a importar."
 
-#~ msgid "Dry run results"
-#~ msgstr "Resultats de l'execució en sec"
+msgid "Dry run results"
+msgstr "Resultats de l'execució en sec"
 
-#~ msgid ""
-#~ "Import test successful for {0} records, import test failed for {1} "
-#~ "records."
-#~ msgstr ""
-#~ "La prova d'importació ha anat bé per als registres de {0}, i ha fallat "
-#~ "per als registres de {1}"
+msgid ""
+"Import test successful for {0} records, import test failed for {1} records."
+msgstr ""
+"La prova d'importació ha anat bé per als registres de {0}, i ha fallat per "
+"als registres de {1}"
 
-#~ msgid "Import results"
-#~ msgstr "Resultats de la importació"
+msgid "Import results"
+msgstr "Resultats de la importació"
 
-#~ msgid ""
-#~ "Import successful for {0} records / import failed for {1} records / {2} "
-#~ "duplicates found"
-#~ msgstr ""
-#~ "La importació ha anat bé per a registres {0} / la importació ha fallat "
-#~ "per a registres {1} / s'han trobat {2} duplicats"
+msgid ""
+"Import successful for {0} records / import failed for {1} records / {2} "
+"duplicates found"
+msgstr ""
+"La importació ha anat bé per a registres {0} / la importació ha fallat per a "
+"registres {1} / s'han trobat {2} duplicats"
 
-#~ msgid "Tagging"
-#~ msgstr "Etiquetatge"
+msgid "Tagging"
+msgstr "Etiquetatge"
 
-#~ msgid "Favorite"
-#~ msgid_plural "Favorites"
-#~ msgstr[0] "Preferit"
-#~ msgstr[1] "Preferits"
+msgid "Favorite"
+msgid_plural "Favorites"
+msgstr[0] "Preferit"
+msgstr[1] "Preferits"
 
-#~ msgid "Events"
-#~ msgstr "Esdeveniments"
+msgid "Events"
+msgstr "Esdeveniments"
 
-#~ msgid "Rename Favorite"
-#~ msgstr "Canvia el nom a un preferit"
+msgid "Rename Favorite"
+msgstr "Canvia el nom a un preferit"
 
-#~ msgid "New Name"
-#~ msgstr "Nou nom"
+msgid "New Name"
+msgstr "Nou nom"
 
-#~ msgid "Please enter the new name for favorite \"{0}\"?"
-#~ msgstr "Introduïu el nou nom per al preferit \"{0}\"?"
+msgid "Please enter the new name for favorite \"{0}\"?"
+msgstr "Introduïu el nou nom per al preferit \"{0}\"?"
 
-#~ msgid "Renaming Favorite \"{0}\""
-#~ msgstr "Es canvia el nom al preferit \"{0}\""
+msgid "Renaming Favorite \"{0}\""
+msgstr "Es canvia el nom al preferit \"{0}\""
 
-#~ msgid "save filter"
-#~ msgstr "desa el filtre"
+msgid "save filter"
+msgstr "desa el filtre"
 
-#~ msgid "Please enter a name for the favorite"
-#~ msgstr "Introduïu un nom per al preferit"
+msgid "Please enter a name for the favorite"
+msgstr "Introduïu un nom per al preferit"
 
-#~ msgid "Saving favorite"
-#~ msgstr "Es desa el preferit"
+msgid "Saving favorite"
+msgstr "Es desa el preferit"
 
-#~ msgid "Updating {0} \"{1}\""
-#~ msgstr "Actualitzant el {0} \"{1}\""
+msgid "Updating {0} \"{1}\""
+msgstr "Actualitzant el {0} \"{1}\""
 
-#~ msgid "Deleting {0} \"{1}\""
-#~ msgstr "Eliminant el {0} \"{1}\""
+msgid "Deleting {0} \"{1}\""
+msgstr "Eliminant el {0} \"{1}\""
 
-#~ msgid "Rename {0}"
-#~ msgstr "Canvia el nom del {0}"
+msgid "Rename {0}"
+msgstr "Canvia el nom del {0}"
 
-#~ msgid "Reload {0}"
-#~ msgstr "Torna a carregar el {0}"
+msgid "Reload {0}"
+msgstr "Torna a carregar el {0}"
 
-#~ msgid "There are no custom fields yet"
-#~ msgstr "Encara no hi ha camps personalitzats"
+msgid "There are no custom fields yet"
+msgstr "Encara no hi ha camps personalitzats"
 
-#~ msgid "Do you really want to delete the selected record"
-#~ msgid_plural "Do you really want to delete the selected records"
-#~ msgstr[0] "Esteu segur que voleu eliminar el registre seleccionat"
-#~ msgstr[1] "Esteu segur que voleu eliminar els registres seleccionats"
+msgid "Do you really want to delete the selected record"
+msgid_plural "Do you really want to delete the selected records"
+msgstr[0] "Esteu segur que voleu eliminar el registre seleccionat"
+msgstr[1] "Esteu segur que voleu eliminar els registres seleccionats"
 
-#~ msgid "Group"
-#~ msgid_plural "Groups"
-#~ msgstr[0] "Grup"
-#~ msgstr[1] "Grups"
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Grup"
+msgstr[1] "Grups"
 
-#~ msgid "Groups"
-#~ msgstr "Grups"
+msgid "Groups"
+msgstr "Grups"
 
-#~ msgid "About Tine 2.0"
-#~ msgstr "Quant al Tine 2.0"
+msgid "About Tine 2.0"
+msgstr "Quant al Tine 2.0"
 
-#~ msgid "Custom datetime"
-#~ msgstr "Data i hora per defecte"
+msgid "Custom datetime"
+msgstr "Data i hora per defecte"
 
-#~ msgid "Internal {0}"
-#~ msgstr "{0} interns"
+msgid "Internal {0}"
+msgstr "{0} interns"
 
-#~ msgid "Overwriteing system favorites is not yet supported"
-#~ msgstr "Encara no s'admet la sobreescriptura de preferits de sistema"
+msgid "Overwriteing system favorites is not yet supported"
+msgstr "Encara no s'admet la sobreescriptura de preferits de sistema"
 
-#~ msgid "Filter"
-#~ msgstr "Filtre"
+msgid "Filter"
+msgstr "Filtre"
 
-#~ msgid "Transfering Configuration..."
-#~ msgstr "Es transfereix la configuració..."
+msgid "Transfering Configuration..."
+msgstr "Es transfereix la configuració..."
 
-#~ msgid "Transfering {0}..."
-#~ msgstr "Transferint {0}..."
+msgid "Transfering {0}..."
+msgstr "Transferint {0}..."
 
-#~ msgid "Install Google Gears"
-#~ msgstr "Instal·la el Google Gears"
+msgid "Install Google Gears"
+msgstr "Instal·la el Google Gears"
 
-#~ msgid ""
-#~ "Installing Gears will improve the performance of Tine 2.0 by caching all "
-#~ "needed files locally on this computer."
-#~ msgstr ""
-#~ "La instal·lació del Gears millorarà el rendiment del Tine 2.0 "
-#~ "emmagatzemant a cau els fitxers requerits localment en aquest ordinador."
+msgid ""
+"Installing Gears will improve the performance of Tine 2.0 by caching all "
+"needed files locally on this computer."
+msgstr ""
+"La instal·lació del Gears millorarà el rendiment del Tine 2.0 emmagatzemant "
+"a cau els fitxers requerits localment en aquest ordinador."
 
-#~ msgid "Select all visible ({0} records)"
-#~ msgstr "Selecciona tots els visibles ({0} registres)"
+msgid "Select all visible ({0} records)"
+msgstr "Selecciona tots els visibles ({0} registres)"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Sales\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 13:47+0000\n"
+"PO-Revision-Date: 2012-02-28 18:56+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:22+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -77,11 +77,10 @@ msgstr[0] "Contract"
 msgstr[1] "Contracts"
 
 #: js/Models.js:117
-#, fuzzy
 msgid "All Contracts"
 msgid_plural "contracts lists"
 msgstr[0] "All Contracts"
-msgstr[1] "All Contracts"
+msgstr[1] "contracts lists"
 
 #: js/Models.js:141
 msgid "Contract name"
@@ -127,15 +126,3 @@ msgstr "Contracts created by myself"
 #~ msgid_plural "contracts lists"
 #~ msgstr[0] "contracts list"
 #~ msgstr[1] "contracts lists"
-
-#~ msgid "Summary"
-#~ msgstr "Summary"
-
-#~ msgid "Products"
-#~ msgstr "Products"
-
-#~ msgid "All Products"
-#~ msgstr "All Products"
-
-#~ msgid "Contracts"
-#~ msgstr "Contracts"

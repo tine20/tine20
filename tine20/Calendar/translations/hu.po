@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 13:29+0000\n"
-"Last-Translator: Faragó Tamás <Unknown>\n"
+"PO-Revision-Date: 2012-02-28 18:34+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -122,20 +122,13 @@ msgstr "Résztvevők megváltoztak ezen az eseményen:\"%1$s\" ekkor:%2$s"
 msgid "%s's personal calendar"
 msgstr "%s személyes naptára"
 
-#: js/AddressbookGridPanelHook.js:33 js/AddressbookGridPanelHook.js:47
-#: js/Model.js:63 js/Model.js:362 js/SearchCombo.js:76
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] "Esemény"
-msgstr[1] "Események"
-
 #: js/AddToEventPanel.js:61
 msgid "Cancel"
-msgstr ""
+msgstr "Mégsem"
 
 #: js/AddToEventPanel.js:69
 msgid "OK"
-msgstr ""
+msgstr "Ok"
 
 #: js/AddToEventPanel.js:121
 msgid "Please choose the Event to add the contacts to"
@@ -560,6 +553,12 @@ msgstr "Esemény szerkesztése"
 msgid "Cancel this action"
 msgstr "Esemény megszakítása"
 
+#: js/Model.js:63 js/Model.js:362 js/SearchCombo.js:76
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] "Esemény"
+msgstr[1] "Események"
+
 #: js/Model.js:67
 msgid "Calendars"
 msgstr "Naptárak"
@@ -935,35 +934,33 @@ msgstr "\"%2$s\" válasz tőle: %1$s"
 msgid "Event details"
 msgstr "Esemény részletei"
 
-#~ msgid "forever"
-#~ msgstr "örökre"
+msgid "forever"
+msgstr "örökre"
 
-#~ msgid "Forever"
-#~ msgstr "Örökre"
+msgid "Forever"
+msgstr "Örökre"
 
-#~ msgid "Until"
-#~ msgstr "Eddig:"
+msgid "Until"
+msgstr "Eddig:"
 
-#~ msgid "Events I have not yet respondet to"
-#~ msgstr "Események amire még jeleztem vissza"
+msgid "Events I have not yet respondet to"
+msgstr "Események amire még jeleztem vissza"
 
-#~ msgid "Unknown calendar"
-#~ msgstr "Ismeretlen naptár"
+msgid "Unknown calendar"
+msgstr "Ismeretlen naptár"
 
-#~ msgid "unknown)"
-#~ msgstr "ismeretlen)"
+msgid "unknown)"
+msgstr "ismeretlen)"
 
-#~ msgid "Confirm Update of Series"
-#~ msgstr "Sorozat frissítéseinek megerősítése"
+msgid "Confirm Update of Series"
+msgstr "Sorozat frissítéseinek megerősítése"
 
-#~ msgid ""
-#~ "Do you really want to update all events of this recurring event series?"
-#~ msgstr "Biztosan frissíted az ismétlődő eseménysorozat összes eseményét?"
+msgid "Do you really want to update all events of this recurring event series?"
+msgstr "Biztosan frissíted az ismétlődő eseménysorozat összes eseményét?"
 
-#~ msgid "Confirm Deletion of Series"
-#~ msgstr "Erősitsd meg a sorozat törlését"
+msgid "Confirm Deletion of Series"
+msgstr "Erősitsd meg a sorozat törlését"
 
-#~ msgid ""
-#~ "Do you really want to delete all events of this recurring event series?"
-#~ msgstr ""
-#~ "Biztosan törlöd ennek az ismétlődő esemény sorozatnak az összes eseményét?"
+msgid "Do you really want to delete all events of this recurring event series?"
+msgstr ""
+"Biztosan törlöd ennek az ismétlődő esemény sorozatnak az összes eseményét?"

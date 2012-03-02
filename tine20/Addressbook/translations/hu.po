@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 09:47+0000\n"
+"PO-Revision-Date: 2012-02-29 13:15+0000\n"
 "Last-Translator: Faragó Tamás <Unknown>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -50,21 +50,24 @@ msgstr ""
 
 #: Config.php:59
 msgid "Contact salutations available"
-msgstr ""
+msgstr "Kapcsolat megszólítás elérhető"
 
 #: Config.php:61
 msgid ""
 "Possible contact salutations. Please note that additional values might "
 "impact other Addressbook systems on export or syncronisation."
 msgstr ""
+"Lehetséges kapcsolat megszólítás- Kérlek jegyezd meg, hogy azok további "
+"értékek ütközhetnek más Címjegyzék rendszerekkel exportáláskor vagy "
+"szinkronizáláskor."
 
 #: Config.php:69
 msgid "Parsing rules for addresses"
-msgstr ""
+msgstr "Címek felbontási szabályai"
 
 #: Config.php:71
 msgid "Path to a XML file with address parsing rules."
-msgstr ""
+msgstr "Címek felbontási szabályait tartalmazó XML fájl elérése"
 
 #: Controller.php:98
 #, python-format
@@ -220,7 +223,7 @@ msgstr[1] "Címjegyzékek"
 
 #: js/CardDAVContainerPropertiesHookField.js:35
 msgid "CardDAV URL"
-msgstr ""
+msgstr "CardDAV URL"
 
 #: js/ContactEditDialog.js:45 js/ContactEditDialog.js:51 js/MapPanel.js:40
 msgid "Map"
@@ -375,7 +378,7 @@ msgstr "Exportálás pdf-be"
 
 #: js/ContactEditDialog.js:416 js/ContactEditDialog.js:501
 msgid "Parse address"
-msgstr ""
+msgstr "Cím felbontása"
 
 #: js/ContactEditDialog.js:440 js/ContactEditDialog.js:458
 msgid "Either {0} or {1} must be given"
@@ -383,15 +386,15 @@ msgstr "Vagy {0} vagy {1} megadása kötelező"
 
 #: js/ContactEditDialog.js:493
 msgid "Paste address"
-msgstr ""
+msgstr "Cím beillesztése"
 
 #: js/ContactEditDialog.js:493
 msgid "Please paste an address that should be parsed:"
-msgstr ""
+msgstr "Kérlek illessz be egy címet ami felbontásra kerül:"
 
 #: js/ContactEditDialog.js:527
 msgid "End token mode"
-msgstr ""
+msgstr "Token mód vége"
 
 #: js/ContactFilterModel.js:35 js/Model.js:94 js/Model.js:133
 msgid "Contact"
@@ -467,31 +470,37 @@ msgstr "Geo"
 msgid "Export Contact"
 msgstr "Kapcsolat exportálása"
 
-#: js/ContactGrid.js:160
+#: js/ContactGrid.js:153 js/ContactGrid.js:154
+msgid "Export {0}"
+msgid_plural "Export {0}"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/ContactGrid.js:163
 msgid "Export as PDF"
 msgstr "Exportálás PDF-be"
 
-#: js/ContactGrid.js:167
+#: js/ContactGrid.js:170
 msgid "Export as CSV"
 msgstr "Exportálás CSV-be"
 
-#: js/ContactGrid.js:174
+#: js/ContactGrid.js:177
 msgid "Export as ODS"
 msgstr "Exportálás ODS-be"
 
-#: js/ContactGrid.js:181
+#: js/ContactGrid.js:184
 msgid "Export as XLS"
 msgstr "Exportálás XLS-be"
 
-#: js/ContactGrid.js:188
+#: js/ContactGrid.js:191
 msgid "Export as ..."
 msgstr "Exportálás mint ..."
 
-#: js/ContactGrid.js:200
+#: js/ContactGrid.js:203
 msgid "Import contacts"
 msgstr "Kapcsolatok importálása"
 
-#: js/ContactGrid.js:289
+#: js/ContactGrid.js:292
 msgid "Internal Contact"
 msgstr "Belső kapcsolatok"
 
@@ -693,26 +702,26 @@ msgstr "Minden kapcsolat amit utoljára én módosítottam"
 msgid "Internal Contacts"
 msgstr "Belső kapcsolatok"
 
-#~ msgid "Searching..."
-#~ msgstr "Keresés..."
+msgid "Searching..."
+msgstr "Keresés..."
 
-#~ msgid "Call contact"
-#~ msgstr "Kapcsolat hívása"
+msgid "Call contact"
+msgstr "Kapcsolat hívása"
 
-#~ msgid "Compose email"
-#~ msgstr "Email írása"
+msgid "Compose email"
+msgstr "Email írása"
 
-#~ msgid "Work"
-#~ msgstr "Üzlet"
+msgid "Work"
+msgstr "Üzlet"
 
-#~ msgid "Home"
-#~ msgstr "Otthon"
+msgid "Home"
+msgstr "Otthon"
 
-#~ msgid "Cell"
-#~ msgstr "Mobil"
+msgid "Cell"
+msgstr "Mobil"
 
-#~ msgid "Cell private"
-#~ msgstr "Mobil privát"
+msgid "Cell private"
+msgstr "Mobil privát"
 
-#~ msgid "Last Modified Time"
-#~ msgstr "Utolsó módosítás ideje"
+msgid "Last Modified Time"
+msgstr "Utolsó módosítás ideje"

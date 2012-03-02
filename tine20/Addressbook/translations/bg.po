@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 09:46+0000\n"
-"Last-Translator: Dimitrina Mileva <Unknown>\n"
+"PO-Revision-Date: 2012-02-28 18:52+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Bulgarian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -461,31 +461,37 @@ msgstr "Географско местонахождение / Координат
 msgid "Export Contact"
 msgstr ""
 
-#: js/ContactGrid.js:160
+#: js/ContactGrid.js:153 js/ContactGrid.js:154
+msgid "Export {0}"
+msgid_plural "Export {0}"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/ContactGrid.js:163
 msgid "Export as PDF"
 msgstr "Експортира като pdf"
 
-#: js/ContactGrid.js:167
+#: js/ContactGrid.js:170
 msgid "Export as CSV"
 msgstr "Експортира като pdf"
 
-#: js/ContactGrid.js:174
+#: js/ContactGrid.js:177
 msgid "Export as ODS"
 msgstr ""
 
-#: js/ContactGrid.js:181
+#: js/ContactGrid.js:184
 msgid "Export as XLS"
 msgstr ""
 
-#: js/ContactGrid.js:188
+#: js/ContactGrid.js:191
 msgid "Export as ..."
 msgstr ""
 
-#: js/ContactGrid.js:200
+#: js/ContactGrid.js:203
 msgid "Import contacts"
 msgstr ""
 
-#: js/ContactGrid.js:289
+#: js/ContactGrid.js:292
 msgid "Internal Contact"
 msgstr ""
 
@@ -687,117 +693,117 @@ msgstr ""
 msgid "Internal Contacts"
 msgstr "Международни контакти"
 
-#~ msgid "Searching..."
-#~ msgstr "Търси..."
+msgid "Searching..."
+msgstr "Търси..."
 
 #, fuzzy
-#~ msgid "Call contact"
-#~ msgstr "Отвори контакт"
+msgid "Call contact"
+msgstr "Отвори контакт"
 
-#~ msgid "Work"
-#~ msgstr "Работа"
+msgid "Work"
+msgstr "Работа"
 
-#~ msgid "Home"
-#~ msgstr "URL"
+msgid "Home"
+msgstr "URL"
 
-#~ msgid "Cell"
-#~ msgstr "Мобилен"
+msgid "Cell"
+msgstr "Мобилен"
 
-#~ msgid "Cell private"
-#~ msgstr "Мобилен (частен)"
+msgid "Cell private"
+msgstr "Мобилен (частен)"
 
-#~ msgid "addressbook"
-#~ msgid_plural "addressbooks"
-#~ msgstr[0] "Списък адреси"
-#~ msgstr[1] "Списъка на адреси"
+msgid "addressbook"
+msgid_plural "addressbooks"
+msgstr[0] "Списък адреси"
+msgstr[1] "Списъка на адреси"
 
-#~ msgid "addressbooks"
-#~ msgstr "Списъци на адреси"
+msgid "addressbooks"
+msgstr "Списъци на адреси"
 
-#~ msgid "contacts"
-#~ msgstr "Контакти"
+msgid "contacts"
+msgstr "Контакти"
 
-#~ msgid "export as pdf"
-#~ msgstr "Експортирай като pdf"
+msgid "export as pdf"
+msgstr "Експортирай като pdf"
 
-#~ msgid "Loading Contact..."
-#~ msgstr "Зарежда контакт..."
+msgid "Loading Contact..."
+msgstr "Зарежда контакт..."
 
-#~ msgid "Please Wait"
-#~ msgstr "Моля изчакайте"
+msgid "Please Wait"
+msgstr "Моля изчакайте"
 
-#~ msgid "Add new contact"
-#~ msgstr "Прибави нов контакт"
+msgid "Add new contact"
+msgstr "Прибави нов контакт"
 
-#~ msgid "Edit Contact \"{0}\""
-#~ msgstr "Редактирай контакт  \"{0}\""
+msgid "Edit Contact \"{0}\""
+msgstr "Редактирай контакт  \"{0}\""
 
-#~ msgid "Please wait a moment..."
-#~ msgstr "Моля изчакайте за момент..."
+msgid "Please wait a moment..."
+msgstr "Моля изчакайте за момент..."
 
-#~ msgid "Saving Contact"
-#~ msgstr "Съхранява контакт"
+msgid "Saving Contact"
+msgstr "Съхранява контакт"
 
-#~ msgid "Failed"
-#~ msgstr "Несполучливо"
+msgid "Failed"
+msgstr "Несполучливо"
 
-#~ msgid "Could not save contact."
-#~ msgstr "Не може да съхрани контакта."
+msgid "Could not save contact."
+msgstr "Не може да съхрани контакта."
 
-#~ msgid "Errors"
-#~ msgstr "Грешки"
+msgid "Errors"
+msgstr "Грешки"
 
-#~ msgid "Please fix the errors noted."
-#~ msgstr "Моля коригирайте грешките."
+msgid "Please fix the errors noted."
+msgstr "Моля коригирайте грешките."
 
-#~ msgid "Deleting contact..."
-#~ msgstr "Изтрива контакт..."
+msgid "Deleting contact..."
+msgstr "Изтрива контакт..."
 
-#~ msgid "Some error occured while trying to delete the contact."
-#~ msgstr "грешка при опит за изтриване на контакта."
+msgid "Some error occured while trying to delete the contact."
+msgstr "грешка при опит за изтриване на контакта."
 
-#~ msgid "Custom Fields"
-#~ msgstr "Допълнителни данни"
+msgid "Custom Fields"
+msgstr "Допълнителни данни"
 
-#~ msgid "Link"
-#~ msgid_plural "Links [%d]"
-#~ msgstr[0] "Линк"
-#~ msgstr[1] "Линкове"
+msgid "Link"
+msgid_plural "Links [%d]"
+msgstr[0] "Линк"
+msgstr[1] "Линкове"
 
-#~ msgid "Export"
-#~ msgstr "Ехрорт"
+msgid "Export"
+msgstr "Ехрорт"
 
-#~ msgid "Are you Sure?"
-#~ msgstr "Сигурни ли сте?"
+msgid "Are you Sure?"
+msgstr "Сигурни ли сте?"
 
-#~ msgid "Do you really want to delete the selected contact?"
-#~ msgid_plural "Do you really want to delete the selected contacts?"
-#~ msgstr[0] "Наистина ли искате да изтриете селектираният контакт?"
-#~ msgstr[1] "Наистина ли искате да изтриете селектираните контакти?"
+msgid "Do you really want to delete the selected contact?"
+msgid_plural "Do you really want to delete the selected contacts?"
+msgstr[0] "Наистина ли искате да изтриете селектираният контакт?"
+msgstr[1] "Наистина ли искате да изтриете селектираните контакти?"
 
 #, fuzzy
-#~ msgid "Some error occured while trying to delete the conctact."
-#~ msgstr "Настъпила е грешка при опит за изтриване но контакта."
+msgid "Some error occured while trying to delete the conctact."
+msgstr "Настъпила е грешка при опит за изтриване но контакта."
 
-#~ msgid "add contact"
-#~ msgstr "Прибави контакт"
+msgid "add contact"
+msgstr "Прибави контакт"
 
-#~ msgid "edit contact"
-#~ msgstr "Промени контакт"
+msgid "edit contact"
+msgstr "Промени контакт"
 
-#~ msgid "delete contact"
-#~ msgid_plural "delete contacts"
-#~ msgstr[0] "Изтрий контакт"
-#~ msgstr[1] "Изтрий контакти"
+msgid "delete contact"
+msgid_plural "delete contacts"
+msgstr[0] "Изтрий контакт"
+msgstr[1] "Изтрий контакти"
 
-#~ msgid "Displaying contacts {0} - {1} of {2}"
-#~ msgstr "Контакти {0} - {1} от {2}"
+msgid "Displaying contacts {0} - {1} of {2}"
+msgstr "Контакти {0} - {1} от {2}"
 
-#~ msgid "No contacts to display"
-#~ msgstr "Няма намерени контакти"
+msgid "No contacts to display"
+msgstr "Няма намерени контакти"
 
-#~ msgid "Saved in"
-#~ msgstr "Запаметен в"
+msgid "Saved in"
+msgstr "Запаметен в"
 
-#~ msgid "call contact"
-#~ msgstr "Отвори контакт"
+msgid "call contact"
+msgstr "Отвори контакт"

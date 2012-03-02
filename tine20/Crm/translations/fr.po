@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-01-13 12:07+0000\n"
-"Last-Translator: Etienne Quesselaire <Unknown>\n"
+"PO-Revision-Date: 2012-02-28 18:44+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: French\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -227,13 +227,6 @@ msgstr "haute"
 msgid "urgent"
 msgstr "urgent"
 
-#: js/AddressbookGridPanelHook.js:36 js/AddressbookGridPanelHook.js:50
-#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:311 js/Model.js:48
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "Prospect"
-msgstr[1] "Prospects"
-
 #: js/AddToLeadPanel.js:56
 msgid "Cancel"
 msgstr ""
@@ -249,6 +242,12 @@ msgstr ""
 #: js/AddToLeadPanel.js:104
 msgid "Please select the attenders' role"
 msgstr ""
+
+#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:311 js/Model.js:48
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "Prospect"
+msgstr[1] "Prospects"
 
 #: js/AddToLeadPanel.js:145
 msgid "Select Lead"
@@ -603,35 +602,35 @@ msgstr ""
 msgid "Leads with overdue tasks"
 msgstr ""
 
-#~ msgid "Lead %s has been creaded"
-#~ msgstr "Le prospect %s a été créé"
+msgid "Lead %s has been creaded"
+msgstr "Le prospect %s a été créé"
 
-#~ msgid "Add task"
-#~ msgstr "Ajouter une tâche"
+msgid "Add task"
+msgstr "Ajouter une tâche"
 
-#~ msgid "Task"
-#~ msgstr "Tâche"
+msgid "Task"
+msgstr "Tâche"
 
-#~ msgid "History"
-#~ msgstr "Historique"
+msgid "History"
+msgstr "Historique"
 
-#~ msgid "Date Start"
-#~ msgstr "Date de début"
+msgid "Date Start"
+msgstr "Date de début"
 
-#~ msgid "Date End"
-#~ msgstr "Date de fin"
+msgid "Date End"
+msgstr "Date de fin"
 
-#~ msgid "Date End Scheduled"
-#~ msgstr "Date de fin planifiée"
+msgid "Date End Scheduled"
+msgstr "Date de fin planifiée"
 
-#~ msgid "Created By"
-#~ msgstr "Créé par"
+msgid "Created By"
+msgstr "Créé par"
 
-#~ msgid "Last modified By"
-#~ msgstr "Dernière modification par"
+msgid "Last modified By"
+msgstr "Dernière modification par"
 
-#~ msgid "Last Modified Time"
-#~ msgstr "Heure de la dernière modification"
+msgid "Last Modified Time"
+msgstr "Heure de la dernière modification"
 
-#~ msgid "Add task for selected lead"
-#~ msgstr "Ajouter une tâche pour le prospect sélectionné"
+msgid "Add task for selected lead"
+msgstr "Ajouter une tâche pour le prospect sélectionné"

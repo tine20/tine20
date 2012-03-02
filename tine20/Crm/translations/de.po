@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-30 11:06+0100\n"
-"PO-Revision-Date: 2012-01-13 12:09+0000\n"
+"PO-Revision-Date: 2012-02-28 18:35+0000\n"
 "Last-Translator: ph_il <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:20+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -227,16 +227,9 @@ msgstr "Hoch"
 msgid "urgent"
 msgstr "Dringend"
 
-#: js/AddressbookGridPanelHook.js:36 js/AddressbookGridPanelHook.js:50
-#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:311 js/Model.js:48
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "Lead"
-msgstr[1] "Lead"
-
 #: js/AddToLeadPanel.js:56
 msgid "Cancel"
-msgstr ""
+msgstr "Abbruch"
 
 #: js/AddToLeadPanel.js:64
 msgid "Ok"
@@ -245,22 +238,29 @@ msgstr "Ok"
 #: js/AddToLeadPanel.js:99
 msgid "Please choose the Lead to add the contacts to"
 msgstr ""
+"Bitte wählen Sie den Lead, zu dem die Kontakte hinzugefügt werden sollen"
 
 #: js/AddToLeadPanel.js:104
 msgid "Please select the attenders' role"
-msgstr ""
+msgstr "Bitte wählen Sie die Rolle des Teilnehmers"
+
+#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:311 js/Model.js:48
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "Lead"
+msgstr[1] "Lead"
 
 #: js/AddToLeadPanel.js:145
 msgid "Select Lead"
-msgstr ""
+msgstr "Lead auswählen"
 
 #: js/AddToLeadPanel.js:150
 msgid "Select Role"
-msgstr ""
+msgstr "Rolle auswählen"
 
 #: js/AddToLeadPanel.js:164
 msgid "Adding {0} Contacts to lead"
-msgstr ""
+msgstr "Füge {0} Kontakte zum Lead hinzu"
 
 #: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:194
 #: js/LeadGridDetailsPanel.js:227
@@ -604,62 +604,62 @@ msgstr "Alle Leads, für die ich verantwortlich bin"
 msgid "Leads with overdue tasks"
 msgstr "Leads mit überfälligen Aufgaben"
 
-#~ msgid "Lead %s has been creaded"
-#~ msgstr "Lead %s wurde erstellt "
+msgid "Lead %s has been creaded"
+msgstr "Lead %s wurde erstellt "
 
-#~ msgid "Last Modified Time"
-#~ msgstr "Zuletzt geändert"
+msgid "Last Modified Time"
+msgstr "Zuletzt geändert"
 
-#~ msgid "Add task"
-#~ msgstr "Aufgabe hinzufügen"
+msgid "Add task"
+msgstr "Aufgabe hinzufügen"
 
-#~ msgid "Add task for selected lead"
-#~ msgstr "Aufgabe zum Lead hinzufügen"
+msgid "Add task for selected lead"
+msgstr "Aufgabe zum Lead hinzufügen"
 
-#~ msgid "Task"
-#~ msgstr "Aufgabe"
+msgid "Task"
+msgstr "Aufgabe"
 
-#~ msgid "History"
-#~ msgstr "Historie"
+msgid "History"
+msgstr "Historie"
 
-#~ msgid "Lead Name"
-#~ msgstr "Lead Name"
+msgid "Lead Name"
+msgstr "Lead Name"
 
-#~ msgid "Date Start"
-#~ msgstr "Startdatum"
+msgid "Date Start"
+msgstr "Startdatum"
 
-#~ msgid "Date End"
-#~ msgstr "Enddatum"
+msgid "Date End"
+msgstr "Enddatum"
 
-#~ msgid "Date End Scheduled"
-#~ msgstr "geplantes Ende"
+msgid "Date End Scheduled"
+msgstr "geplantes Ende"
 
-#~ msgid "Created By"
-#~ msgstr "Erstellt von"
+msgid "Created By"
+msgstr "Erstellt von"
 
-#~ msgid "Last modified By"
-#~ msgstr "Zuletzt bearbeitet von"
+msgid "Last modified By"
+msgstr "Zuletzt bearbeitet von"
 
-#~ msgid "Lead states"
-#~ msgstr "Lead-Status"
+msgid "Lead states"
+msgstr "Lead-Status"
 
-#~ msgid "Lead sources"
-#~ msgstr "Lead-Quellen"
+msgid "Lead sources"
+msgstr "Lead-Quellen"
 
-#~ msgid "Lead types"
-#~ msgstr "Lead-Typen"
+msgid "Lead types"
+msgstr "Lead-Typen"
 
-#~ msgid "Remove Option"
-#~ msgstr "Option entfernen"
+msgid "Remove Option"
+msgstr "Option entfernen"
 
-#~ msgid "Type"
-#~ msgstr "Typ"
+msgid "Type"
+msgstr "Typ"
 
-#~ msgid "Select lead"
-#~ msgstr "Lead auswählen"
+msgid "Select lead"
+msgstr "Lead auswählen"
 
-#~ msgid "Open tasks"
-#~ msgstr "Aufgaben öffnen"
+msgid "Open tasks"
+msgstr "Aufgaben öffnen"
 
-#~ msgid "Tasks status"
-#~ msgstr "Aufgabenstatus"
+msgid "Tasks status"
+msgstr "Aufgabenstatus"

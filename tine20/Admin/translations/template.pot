@@ -121,8 +121,7 @@ msgstr[1] ""
 msgid "IP Address"
 msgstr ""
 
-#: js/AccessLog.js:107 js/Admin.js:23 js/user/GridPanel.js:98
-#: js/user/Users.js:72
+#: js/AccessLog.js:107 js/Admin.js:23 js/user/Users.js:72
 msgid "User"
 msgid_plural "Users"
 msgstr[0] ""
@@ -983,6 +982,10 @@ msgstr ""
 
 #: js/user/GridPanel.js:243
 msgid "Please enter the new password:"
+msgstr ""
+
+#: js/user/Users.js:72
+msgid "Users"
 msgstr ""
 
 #: js/user/Users.js:118

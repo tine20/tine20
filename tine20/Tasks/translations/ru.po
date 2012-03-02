@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-05 17:49+0100\n"
-"PO-Revision-Date: 2012-01-13 12:44+0000\n"
-"Last-Translator: Nkolay Parukhin <Unknown>\n"
+"PO-Revision-Date: 2012-02-28 18:33+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:21+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "X-Poedit-Language: Russian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -291,111 +291,111 @@ msgstr ""
 msgid "Tasks without responsible"
 msgstr ""
 
-#~ msgid "NEEDS-ACTION"
-#~ msgstr "ТРЕБУЕТ-ДЕЙСТВИЯ"
+msgid "NEEDS-ACTION"
+msgstr "ТРЕБУЕТ-ДЕЙСТВИЯ"
 
-#~ msgid "COMPLETED"
-#~ msgstr "ЗАКОНЧЕНО"
+msgid "COMPLETED"
+msgstr "ЗАКОНЧЕНО"
 
-#~ msgid "IN-PROCESS"
-#~ msgstr "НЕЗАВЕРШЕННЫЙ"
+msgid "IN-PROCESS"
+msgstr "НЕЗАВЕРШЕННЫЙ"
 
-#~ msgid "CANCELLED"
-#~ msgstr "ОТМЕНЕНО"
+msgid "CANCELLED"
+msgstr "ОТМЕНЕНО"
 
-#~ msgid "Failed"
-#~ msgstr "Сбой"
+msgid "Failed"
+msgstr "Сбой"
 
-#~ msgid "Could not save task."
-#~ msgstr "Не удалось сохранить задание."
-
-#, fuzzy
-#~ msgid "to to list"
-#~ msgstr "Сделать список"
+msgid "Could not save task."
+msgstr "Не удалось сохранить задание."
 
 #, fuzzy
-#~ msgid "Tasks) "
-#~ msgstr "Задания"
-
-#~ msgid "Could not delete task(s)."
-#~ msgstr "Задание(я) не могло быть удалино."
-
-#~ msgid "Edit task"
-#~ msgstr "Введите задание"
-
-#~ msgid "Add task"
-#~ msgstr "Добавть задание"
+msgid "to to list"
+msgstr "Сделать список"
 
 #, fuzzy
-#~ msgid "Delete task"
-#~ msgid_plural "Delete tasks"
-#~ msgstr[0] "Удолить задание"
-#~ msgstr[1] "Удолить задание"
-#~ msgstr[2] "Удолить задание"
+msgid "Tasks) "
+msgstr "Задания"
 
-#~ msgid "Enter searchfilter"
-#~ msgstr "Введите поисковый фильтр"
+msgid "Could not delete task(s)."
+msgstr "Задание(я) не могло быть удалино."
 
-#~ msgid "Search:"
-#~ msgstr "Поиск:"
+msgid "Edit task"
+msgstr "Введите задание"
 
-#~ msgid "Displaying tasks {0} - {1} of {2}"
-#~ msgstr "Показ задач {0} - {1} of {2}"
-
-#~ msgid "No tasks to display"
-#~ msgstr "Никаких заданий не было найдено"
-
-#~ msgid "No Tasks to display"
-#~ msgstr "Никаких заданий не было найдено"
-
-#~ msgid "Loading Task..."
-#~ msgstr "Задание загружается"
-
-#~ msgid "Please Wait"
-#~ msgstr "Пожалуйста подождите"
-
-#~ msgid "Add New Task"
-#~ msgstr "Добавить новое задание"
-
-#~ msgid "Edit Task \"{0}\""
-#~ msgstr "Обработать задание \"{0}\""
-
-#~ msgid "Please wait"
-#~ msgstr "Пожалуйста подождите"
-
-#~ msgid "Saving Task"
-#~ msgstr "Сохранить задание"
-
-#~ msgid "Errors"
-#~ msgstr "Ошибки"
-
-#~ msgid "Please fix the errors noted."
-#~ msgstr "Пожалуйста, устраните показанные ошибки."
-
-#~ msgid "Confirm"
-#~ msgstr "Подтвердить"
-
-#~ msgid "Do you really want to delete this task?"
-#~ msgstr "Вы уверены что хотите удалить задание?"
-
-#~ msgid "Please wait a moment..."
-#~ msgstr "Пожалуйста подождите момент..."
-
-#~ msgid "Enter short name..."
-#~ msgstr "Введите короткое имя..."
-
-#~ msgid "Saved in"
-#~ msgstr "Сохранено в"
-
-#~ msgid "Folder"
-#~ msgstr "Папка"
-
-#~ msgid "Delete tasks"
-#~ msgstr "Удолить задания"
+msgid "Add task"
+msgstr "Добавть задание"
 
 #, fuzzy
-#~ msgid "Do you realy want to delte the selected task?"
-#~ msgid_plural "Do you relay want to delete the selected tasks?"
-#~ msgstr[0] "Вы уверены что хотите удалить выбранное задание"
-#~ msgstr[1] "Вы уверены что хотите удалить выбранные задания"
-#~ msgstr[2] "Вы уверены что хотите удалить выбранных заданий"
+msgid "Delete task"
+msgid_plural "Delete tasks"
+msgstr[0] "Удолить задание"
+msgstr[1] "Удолить задание"
+msgstr[2] "Удолить задание"
+
+msgid "Enter searchfilter"
+msgstr "Введите поисковый фильтр"
+
+msgid "Search:"
+msgstr "Поиск:"
+
+msgid "Displaying tasks {0} - {1} of {2}"
+msgstr "Показ задач {0} - {1} of {2}"
+
+msgid "No tasks to display"
+msgstr "Никаких заданий не было найдено"
+
+msgid "No Tasks to display"
+msgstr "Никаких заданий не было найдено"
+
+msgid "Loading Task..."
+msgstr "Задание загружается"
+
+msgid "Please Wait"
+msgstr "Пожалуйста подождите"
+
+msgid "Add New Task"
+msgstr "Добавить новое задание"
+
+msgid "Edit Task \"{0}\""
+msgstr "Обработать задание \"{0}\""
+
+msgid "Please wait"
+msgstr "Пожалуйста подождите"
+
+msgid "Saving Task"
+msgstr "Сохранить задание"
+
+msgid "Errors"
+msgstr "Ошибки"
+
+msgid "Please fix the errors noted."
+msgstr "Пожалуйста, устраните показанные ошибки."
+
+msgid "Confirm"
+msgstr "Подтвердить"
+
+msgid "Do you really want to delete this task?"
+msgstr "Вы уверены что хотите удалить задание?"
+
+msgid "Please wait a moment..."
+msgstr "Пожалуйста подождите момент..."
+
+msgid "Enter short name..."
+msgstr "Введите короткое имя..."
+
+msgid "Saved in"
+msgstr "Сохранено в"
+
+msgid "Folder"
+msgstr "Папка"
+
+msgid "Delete tasks"
+msgstr "Удолить задания"
+
+#, fuzzy
+msgid "Do you realy want to delte the selected task?"
+msgid_plural "Do you relay want to delete the selected tasks?"
+msgstr[0] "Вы уверены что хотите удалить выбранное задание"
+msgstr[1] "Вы уверены что хотите удалить выбранные задания"
+msgstr[2] "Вы уверены что хотите удалить выбранных заданий"

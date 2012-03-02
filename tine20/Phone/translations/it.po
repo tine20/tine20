@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 13:44+0000\n"
+"PO-Revision-Date: 2012-02-29 13:16+0000\n"
 "Last-Translator: impiastro <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,42 +11,41 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:22+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Language: Italian\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: js/AddressbookGridPanelHook.js:35
 msgid "Call contact"
-msgstr ""
+msgstr "Chiama contatto"
 
 #: js/AddressbookGridPanelHook.js:171
 msgid "Work"
-msgstr ""
+msgstr "Lavoro"
 
 #: js/AddressbookGridPanelHook.js:180
 msgid "Home"
-msgstr ""
+msgstr "Casa"
 
 #: js/AddressbookGridPanelHook.js:189
 msgid "Cell"
-msgstr ""
+msgstr "Cellulare"
 
 #: js/AddressbookGridPanelHook.js:198
 msgid "Cell private"
-msgstr ""
+msgstr "Cellulare privato"
 
 #: js/Models.js:69 js/Phone.js:59 js/Phone.js:265
 msgid "Phone"
 msgid_plural "Phones"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Telefono"
 
 #: js/Models.js:73
 msgid "phones list"
 msgid_plural "phones lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "lista telefoni"
+msgstr[1] "liste telefoni"
 
 #: js/Phone.js:29 js/Phone.js:490 js/Phone.js:491
 msgid "Edit phone settings"
@@ -66,7 +65,7 @@ msgstr "Numero"
 
 #: js/Phone.js:306
 msgid "Cancel"
-msgstr "Cancella"
+msgstr "Annulla"
 
 #: js/Phone.js:316
 msgid "Dial"
@@ -156,165 +155,165 @@ msgstr "Squillo in corso"
 msgid "Call ID"
 msgstr "ID Chiamata"
 
-#~ msgid "Dial phone number"
-#~ msgstr "Componi numero telefonico"
+msgid "Dial phone number"
+msgstr "Componi numero telefonico"
 
-#~ msgid "Name"
-#~ msgstr "Nome"
+msgid "Name"
+msgstr "Nome"
 
-#~ msgid "Phone Model"
-#~ msgstr "Modello Telefono"
+msgid "Phone Model"
+msgstr "Modello Telefono"
 
-#~ msgid "MAC Address"
-#~ msgstr "Indirizzo MAC"
+msgid "MAC Address"
+msgstr "Indirizzo MAC"
 
-#~ msgid "infos"
-#~ msgstr "informazioni"
+msgid "infos"
+msgstr "informazioni"
 
-#~ msgid "Current IP Address"
-#~ msgstr "Indirizzo IP corrente"
+msgid "Current IP Address"
+msgstr "Indirizzo IP corrente"
 
-#~ msgid "Firmware last checked at"
-#~ msgstr "Ultimo Firmware controllato a"
+msgid "Firmware last checked at"
+msgstr "Ultimo Firmware controllato a"
 
-#~ msgid "Current Software Version"
-#~ msgstr "VersioneSoftware Attuale"
+msgid "Current Software Version"
+msgstr "VersioneSoftware Attuale"
 
-#~ msgid "Settings Loaded at"
-#~ msgstr "Impostazioni Caricate  a"
+msgid "Settings Loaded at"
+msgstr "Impostazioni Caricate  a"
 
-#~ msgid "redirection"
-#~ msgstr "redirezione"
+msgid "redirection"
+msgstr "redirezione"
 
-#~ msgid "redirect_event"
-#~ msgstr "evento_redirezione"
+msgid "redirect_event"
+msgstr "evento_redirezione"
 
-#~ msgid "all"
-#~ msgstr "tutti"
+msgid "all"
+msgstr "tutti"
 
-#~ msgid "busy"
-#~ msgstr "occupato"
+msgid "busy"
+msgstr "occupato"
 
-#~ msgid "none"
-#~ msgstr "nessuno"
+msgid "none"
+msgstr "nessuno"
 
-#~ msgid "time"
-#~ msgstr "tempo"
+msgid "time"
+msgstr "tempo"
 
-#~ msgid "redirect_number"
-#~ msgstr "numero_redirezione"
+msgid "redirect_number"
+msgstr "numero_redirezione"
 
-#~ msgid "redirect_time"
-#~ msgstr "tempo_redirezione"
+msgid "redirect_time"
+msgstr "tempo_redirezione"
 
-#~ msgid "Settings"
-#~ msgstr "Impostazioni"
+msgid "Settings"
+msgstr "Impostazioni"
 
-#~ msgid "web_language"
-#~ msgstr "linguaggio_web"
+msgid "web_language"
+msgstr "linguaggio_web"
 
-#~ msgid "- factory default -"
-#~ msgstr "- impostazioni fabbrica - "
+msgid "- factory default -"
+msgstr "- impostazioni fabbrica - "
 
-#~ msgid "language"
-#~ msgstr "linguaggio"
+msgid "language"
+msgstr "linguaggio"
 
-#~ msgid "display_method"
-#~ msgstr "metodo_visualizzazione"
+msgid "display_method"
+msgstr "metodo_visualizzazione"
 
-#~ msgid "whole url"
-#~ msgstr "url intero"
+msgid "whole url"
+msgstr "url intero"
 
-#~ msgid "name"
-#~ msgstr "nome"
+msgid "name"
+msgstr "nome"
 
-#~ msgid "number"
-#~ msgstr "numero"
+msgid "number"
+msgstr "numero"
 
-#~ msgid "name + number"
-#~ msgstr "nome + numero"
+msgid "name + number"
+msgstr "nome + numero"
 
-#~ msgid "number + name"
-#~ msgstr "numero + nome"
+msgid "number + name"
+msgstr "numero + nome"
 
-#~ msgid "call_waiting"
-#~ msgstr "chiamata_inattesa"
+msgid "call_waiting"
+msgstr "chiamata_inattesa"
 
-#~ msgid "on"
-#~ msgstr "attivo"
+msgid "on"
+msgstr "attivo"
 
-#~ msgid "visual"
-#~ msgstr "visuale"
+msgid "visual"
+msgstr "visuale"
 
-#~ msgid "ringer"
-#~ msgstr "suoneria"
+msgid "ringer"
+msgstr "suoneria"
 
-#~ msgid "off"
-#~ msgstr "disattivo"
+msgid "off"
+msgstr "disattivo"
 
-#~ msgid "mwi_notification"
-#~ msgstr "notifica_mwi"
+msgid "mwi_notification"
+msgstr "notifica_mwi"
 
-#~ msgid "silent"
-#~ msgstr "silenzioso"
+msgid "silent"
+msgstr "silenzioso"
 
-#~ msgid "beep"
-#~ msgstr "beep"
+msgid "beep"
+msgstr "beep"
 
-#~ msgid "reminder"
-#~ msgstr "reminder"
-
-#, fuzzy
-#~ msgid "mwi_dialtone"
-#~ msgstr "mwi_dialtone"
-
-#~ msgid "normal"
-#~ msgstr "normale"
+msgid "reminder"
+msgstr "reminder"
 
 #, fuzzy
-#~ msgid "stutter"
-#~ msgstr "interruzione"
+msgid "mwi_dialtone"
+msgstr "mwi_dialtone"
 
-#~ msgid "headset_device"
-#~ msgstr "dispositivo_cuffia"
-
-#~ msgid "headset_rj"
-#~ msgstr "dispositivo_rj"
+msgid "normal"
+msgstr "normale"
 
 #, fuzzy
-#~ msgid "message_led_other"
-#~ msgstr "altro_messaggio_led"
+msgid "stutter"
+msgstr "interruzione"
+
+msgid "headset_device"
+msgstr "dispositivo_cuffia"
+
+msgid "headset_rj"
+msgstr "dispositivo_rj"
 
 #, fuzzy
-#~ msgid "global_missed_counter"
-#~ msgstr "contatore_globale_chiamatemancate"
+msgid "message_led_other"
+msgstr "altro_messaggio_led"
 
 #, fuzzy
-#~ msgid "scroll_outgoing"
-#~ msgstr "scroll_chiamateuscenti"
+msgid "global_missed_counter"
+msgstr "contatore_globale_chiamatemancate"
 
 #, fuzzy
-#~ msgid "show_local_line"
-#~ msgstr "visualizza_linea_locale"
-
-#~ msgid "show_call_status"
-#~ msgstr "visualizza_stato_chiamata"
-
-#~ msgid "lineactive"
-#~ msgstr "lineaattiva"
+msgid "scroll_outgoing"
+msgstr "scroll_chiamateuscenti"
 
 #, fuzzy
-#~ msgid "sipCombo"
-#~ msgstr "sipCombo"
+msgid "show_local_line"
+msgstr "visualizza_linea_locale"
 
-#~ msgid "Idle Text"
-#~ msgstr "Testo Pronto"
+msgid "show_call_status"
+msgstr "visualizza_stato_chiamata"
 
-#~ msgid "Lines"
-#~ msgstr "Linee"
+msgid "lineactive"
+msgstr "lineaattiva"
 
-#~ msgid "Users"
-#~ msgstr "Utenti"
+#, fuzzy
+msgid "sipCombo"
+msgstr "sipCombo"
 
-#~ msgid "Rights"
-#~ msgstr "Diritti"
+msgid "Idle Text"
+msgstr "Testo Pronto"
+
+msgid "Lines"
+msgstr "Linee"
+
+msgid "Users"
+msgstr "Utenti"
+
+msgid "Rights"
+msgstr "Diritti"

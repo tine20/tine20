@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-01-13 14:44+0000\n"
-"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
+"PO-Revision-Date: 2012-02-28 18:49+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,20 +12,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-02-09 09:22+0000\n"
-"X-Generator: Launchpad (build 14763)\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:105
 msgid "Manage timeaccounts"
-msgstr "edytowanie kont godzin"
+msgstr "Zarządzaj kontami godzin"
 
 #: Acl/Rights.php:106
 msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
 msgstr ""
 "Dodaj, edytuj i usuń konta godzin (razem ze wszystkimi uprawnieniami do kart "
-"godzin)"
+"czasu pracy)"
 
 #: Acl/Rights.php:109 Acl/Rights.php:110
 msgid "Add timeaccounts"
@@ -37,7 +37,7 @@ msgstr "Zarządzaj wspólnymi ulubionymi śledzenia czasu"
 
 #: Acl/Rights.php:114
 msgid "Create or update shared timetracker favorites"
-msgstr "Utwórz albo uaktualnij wspólne ulubione z kart godzin"
+msgstr "Utwórz albo uaktualnij wspólne ulubione śledzenia czasu"
 
 #: js/DurationSlider.js:94
 msgid "{0}"
@@ -50,16 +50,16 @@ msgstr "Nieprawidłowy czas"
 #: js/Models.js:45 js/TimesheetEditDialog.js:122
 msgid "Timesheet"
 msgid_plural "Timesheets"
-msgstr[0] "kartę godzin"
-msgstr[1] "karty godzin"
-msgstr[2] "karty godzin"
+msgstr[0] "Karta czasu pracy"
+msgstr[1] "karty czasu pracy"
+msgstr[2] "karty czasu pracy"
 
 #: js/Models.js:49
 msgid "timesheets list"
 msgid_plural "timesheets lists"
-msgstr[0] "Lista kart godzin"
-msgstr[1] "listy kart godzin"
-msgstr[2] "listy kart godzin"
+msgstr[0] "Lista kart czasu pracy"
+msgstr[1] "listy kart czasu pracy"
+msgstr[2] "listy kart czasu pracy"
 
 #: js/Models.js:84 js/Models.js:155
 msgid "Quick search"
@@ -185,7 +185,7 @@ msgstr "ubiegły tydzień"
 
 #: js/TimeaccountEditDialog.js:149
 msgid "Timesheets are billable"
-msgstr "Karty godzin gotowe do przeliczenia"
+msgstr "Karty czasu pracy gotowe do przeliczenia"
 
 #: js/TimeaccountEditDialog.js:182
 msgid "Enter description"
@@ -201,15 +201,15 @@ msgstr "Zarezerwuj własne"
 
 #: js/TimeaccountEditDialog.js:223
 msgid "The grant to add Timesheets to this Timeaccount"
-msgstr "Uprawnienia do dodawania kart godzin do konta godzin"
+msgstr "Uprawnienia do dodawania kart czasu pracy do konta godzin"
 
 #: js/TimeaccountEditDialog.js:227
 msgid "View All"
-msgstr "Wyświetl wszystkie"
+msgstr "Pokaż wszystko"
 
 #: js/TimeaccountEditDialog.js:228
 msgid "The grant to view Timesheets of other users"
-msgstr "Uprawnienia do podglądu kart godzin innych użytkowników"
+msgstr "Uprawnienia do podglądu kart czasu pracy innych użytkowników"
 
 #: js/TimeaccountEditDialog.js:233
 msgid "Book All"
@@ -217,7 +217,7 @@ msgstr "Zarezerwuj wszystkie"
 
 #: js/TimeaccountEditDialog.js:234
 msgid "The grant to add Timesheets for other users"
-msgstr "Uprawnienia do dodawania kart godzin innych użytkowników"
+msgstr "Uprawnienia do dodawania kart czasu pracy innych użytkowników"
 
 #: js/TimeaccountEditDialog.js:239
 msgid "Manage Clearing"
@@ -225,7 +225,7 @@ msgstr "Edytuj przeliczalne"
 
 #: js/TimeaccountEditDialog.js:240
 msgid "The grant to manage clearing of Timesheets"
-msgstr "Uprawnienia do czyszczenia kart godzin"
+msgstr "Uprawnienia do czyszczenia kart czasu pracy"
 
 #: js/TimeaccountEditDialog.js:245 js/TimeaccountGridPanel.js:143
 msgid "Export"
@@ -233,7 +233,7 @@ msgstr "Eksportuj"
 
 #: js/TimeaccountEditDialog.js:246
 msgid "The grant to export Timesheets of Timeaccount"
-msgstr "Uprawnienia do eksportu kart godzin z konta godzin"
+msgstr "Uprawnienia do eksportu kart czasu pracy z konta godzin"
 
 #: js/TimeaccountEditDialog.js:251
 msgid "Manage All"
@@ -324,11 +324,11 @@ msgstr "streszczenie"
 
 #: js/TimesheetGridPanel.js:192
 msgid "Total Timesheets"
-msgstr "Wszystkie karty godzin"
+msgstr "Wszystkie karty czasu pracy"
 
 #: js/TimesheetGridPanel.js:193
 msgid "Billable Timesheets"
-msgstr "Karty godz. do przeliczenia"
+msgstr "Karty czasu pracy do przeliczenia"
 
 #: js/TimesheetGridPanel.js:194
 msgid "Total Time"
@@ -336,7 +336,7 @@ msgstr "Łączny czas"
 
 #: js/TimesheetGridPanel.js:195
 msgid "Time of Billable Timesheets"
-msgstr "Czas z kart godzin gotowych do przeliczenia"
+msgstr "Czas z kart czasu pracy gotowych do przeliczenia"
 
 #: js/TimesheetGridPanel.js:266
 msgid "Detail"
@@ -344,7 +344,7 @@ msgstr "Szczegół"
 
 #: js/TimesheetGridPanel.js:317
 msgid "Export Timesheets"
-msgstr "Eksportuj karty godzin"
+msgstr "Eksportuj karty czasu pracy"
 
 #: js/TimesheetGridPanel.js:340
 msgid "Export as ..."
@@ -360,16 +360,16 @@ msgstr "Aktualizacja zakończona niepowodzeniem"
 
 #: js/Timetracker.js:25
 msgid "New Timesheet"
-msgstr "Nowa karta godzin"
+msgstr "Nowa karta czasu pracy"
 
 #: Preference.php:64
 msgid "Timesheets ODS export configuration"
-msgstr "Konfiguracja eksportu kart godzin do formatu ODS"
+msgstr "Konfiguracja eksportu kart czasu pracy do formatu ODS"
 
 #: Preference.php:65
 msgid "Use this configuration for the timesheet ODS export."
 msgstr ""
-"Użyj niniejszej konfiguracji podczas eksportu kart godzin do formatu ODS"
+"Użyj niniejszej konfiguracji podczas eksportu kart czasu pracy do formatu ODS"
 
 #: Preference.php:116
 msgid "default"
@@ -397,94 +397,95 @@ msgstr "Moje karty czasu pracy z ubiegłego miesiąca"
 
 #: Setup/Initialize.php:112 Setup/Update/Release5.php:81
 msgid "Timeaccounts to bill"
-msgstr ""
+msgstr "Karty czasu pracy do przeliczenia"
 
 #: Setup/Initialize.php:126 Setup/Update/Release5.php:95
 msgid "Timeaccounts not yet billed"
-msgstr ""
+msgstr "Nieprzeliczone konta godzin"
 
 #: Setup/Initialize.php:141 Setup/Update/Release5.php:109
 msgid "Timeaccounts already billed"
-msgstr ""
+msgstr "Przeliczone konta godzin"
 
 #: Setup/setup.xml:4
 msgid "Timetracker"
 msgstr "Zliczanie czasu"
 
-#~ msgid "Update {0} records"
-#~ msgstr "Aktualizuj {0} wierszy"
+msgid "Update {0} records"
+msgstr "Aktualizuj {0} wierszy"
 
-#~ msgid "Cancel"
-#~ msgstr "Anuluj"
+msgid "Cancel"
+msgstr "Anuluj"
 
-#~ msgid "Ok"
-#~ msgstr "OK"
+msgid "Ok"
+msgstr "OK"
 
-#~ msgid "Success"
-#~ msgstr "Zakończone sukcesem"
+msgid "Success"
+msgstr "Zakończone sukcesem"
 
-#~ msgid "Updated {0} records"
-#~ msgstr "Zaktualizowano {0} wierszy"
+msgid "Updated {0} records"
+msgstr "Zaktualizowano {0} wierszy"
 
-#~ msgid "Add, edit and delete timeaccounts"
-#~ msgstr "Dodawaj, edytuj i usuwaj konta godzin"
+msgid "Add, edit and delete timeaccounts"
+msgstr "Dodawaj, edytuj i usuwaj konta godzin"
 
-#~ msgid "manage shared timetracker favorites"
-#~ msgstr "zarządzanie wspólnymi ulubionymi z kart godzin"
+msgid "manage shared timetracker favorites"
+msgstr "zarządzanie wspólnymi ulubionymi z kart godzin"
 
-#~ msgid "Creation Time"
-#~ msgstr "Czas utworzenia"
+msgid "Creation Time"
+msgstr "Czas utworzenia"
 
-#~ msgid "Last Modified Time"
-#~ msgstr "Czas ostatniej modyfikacji"
+msgid "Last Modified Time"
+msgstr "Czas ostatniej modyfikacji"
 
-#~ msgid "Last Modified By"
-#~ msgstr "Ostatnio zmieniony przez"
+msgid "Last Modified By"
+msgstr "Ostatnio zmieniony przez"
 
-#~ msgid "The grant to view Timesheetsof other users"
-#~ msgstr "Uprawnienia do wyświetlania kart godzin innych użytkowników"
+msgid "The grant to view Timesheetsof other users"
+msgstr "Uprawnienia do wyświetlania kart godzin innych użytkowników"
 
-#~ msgid "Total Sum"
-#~ msgstr "Suma"
+msgid "Total Sum"
+msgstr "Suma"
 
-#~ msgid "Not billable"
-#~ msgstr "Nie gotowe do przeliczenia"
+msgid "Not billable"
+msgstr "Nie gotowe do przeliczenia"
 
-#~ msgid "Total"
-#~ msgstr "Ogółem"
+msgid "Total"
+msgstr "Ogółem"
 
-#~ msgid "Timesheets"
-#~ msgstr "Karty godzin"
+msgid "Timesheets"
+msgstr "Karty godzin"
 
-#~ msgid "All Timesheets"
-#~ msgstr "Wszystkie karty godzin"
+msgid "All Timesheets"
+msgstr "Wszystkie karty godzin"
 
-#~ msgid "Timeaccounts"
-#~ msgstr "Konta godzin"
+msgid "Timeaccounts"
+msgstr "Konta godzin"
 
-#~ msgid "All Timeaccounts"
-#~ msgstr "Wszystkie konta godzin"
+msgid "All Timeaccounts"
+msgstr "Wszystkie konta godzin"
 
 #~ msgid "No Timeaccount set"
 #~ msgstr "Brak konta godzin"
 
 #~ msgid "You need to set a Timeaccount this Timesheet belongs to."
-#~ msgstr "Należy ustawić konto godzin, do którego należy ta karta godzin."
+#~ msgstr ""
+#~ "Proszę ustawić konto godzin, do którego należy ta karta czasu pracy."
 
 #~ msgid "Timesheets today"
-#~ msgstr "Dzisiejsze karty godzin"
+#~ msgstr "Dzisiejsze karty czasu pracy"
 
 #~ msgid "Timesheets this week"
-#~ msgstr "Karty godzin z bieżącego tygodnia"
+#~ msgstr "Karty czasu pracy z bieżącego tygodnia"
 
 #~ msgid "Timesheets last week"
-#~ msgstr "Karty godzin z minionego tygodnia"
+#~ msgstr "Karty czasu pracy z minionego tygodnia"
 
 #~ msgid "Timesheets this month"
-#~ msgstr "Karty godzin z bieżącego miesiąca"
+#~ msgstr "Karty czasu pracy z bieżącego miesiąca"
 
 #~ msgid "Timesheets last month"
-#~ msgstr "Karty godzin z minionego miesiąca"
+#~ msgstr "Karty czasu pracy z minionego miesiąca"
 
 #~ msgid "Billed in ..."
 #~ msgstr "Przeliczone w ..."
