@@ -289,7 +289,16 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             $user  = Tinebase_User::getInstance()->getUserById($_userId);
             
             if (!empty($user->contact_id) && !empty($group->list_id)) {
-                Addressbook_Controller_List::getInstance()->removeListMember($group->list_id, $user->contact_id);
+                try {
+                    Addressbook_Controller_List::getInstance()->removeListMember($group->list_id, $user->contact_id);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' catched exception: ' . get_class($tenf));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getTraceAsString());
+                }
             }
         }
         
