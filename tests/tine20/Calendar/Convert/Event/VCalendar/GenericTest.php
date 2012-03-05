@@ -62,9 +62,9 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      */
     public function testConvertToTine20Model()
     {
-        $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics', 'r');
+        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics');
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
-        $event = $converter->toTine20Model($vcalendarStream);
+        $event = $converter->toTine20Model($vcalendar);
         
         //var_dump($event->toArray());
         
@@ -92,6 +92,34 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $event = $converter->toTine20Model($vcalendarStream);
         
         $this->assertEquals('Europe/Berlin', $event->originator_tz);
+    }
+    
+    /**
+     * test converting vcard from lighting to Calendar_Model_Event
+     *
+     * @return Calendar_Model_Event
+     */
+    public function testConvertToTine20ModelWithGroupInvitation()
+    {
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP, 'Tinebase');
+        
+        if (!isset($smtpConfig['primarydomain'])) {
+            $this->markTestSkipped('no primary smtp domain configured');
+        }
+        
+        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics');
+    
+        $vcalendar = preg_replace('/lars@kneschke.de/', 'users@' . $smtpConfig['primarydomain'], $vcalendar);
+    
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $event = $converter->toTine20Model($vcalendar);
+    
+        #var_dump($event->attendee->toArray());
+    
+        $this->assertEquals(2, count($event->attendee));
+        $this->assertContains('group', $event->attendee->user_type);
+    
+        return $event;
     }
     
     /**

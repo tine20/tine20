@@ -310,16 +310,43 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         $attendeesToAdd    = array_diff_key($emailsOfNewAttendees,     $emailsOfCurrentAttendees);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " attendees to add " . print_r(array_keys($attendeesToAdd), true));
         
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP, 'Tinebase');
+        
         // add attendee identified by their emailAdress
         foreach ($attendeesToAdd as $newAttendee) {
             $attendeeId = NULL;
             
             if ($newAttendee['userType'] == Calendar_Model_Attender::USERTYPE_USER) {
-                $contact = self::resolveEmailToContact($newAttendee, $_implicitAddMissingContacts);
-                if ($contact) {
+                // does the email address exist?
+                if ($contact = self::resolveEmailToContact($newAttendee, false)) {
                     $attendeeId = $contact->getId();
+                    
+                // does a list with this name exist?
+                } else if (
+                    isset($smtpConfig['primarydomain']) && 
+                    preg_match('/(?P<localName>.*)@' . preg_quote($smtpConfig['primarydomain']) . '$/', $newAttendee['email'], $matches)
+                ) {
+                    $lists = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter(array(
+                        array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
+                        array('field' => 'name', 'operator' => 'equals', 'value' => $matches['localName']),
+                        array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP)
+                    )));
+                    
+                    if(count($lists) > 0) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of lists " . count($lists));
+                    
+                        $newAttendee['userType'] = Calendar_Model_Attender::USERTYPE_GROUP;
+                        $attendeeId = $lists->getFirstRecord()->group_id;
+                    }
+                    
+                // autocreate a contact if allowed
+                } else {
+                    $contact = self::resolveEmailToContact($newAttendee, $_implicitAddMissingContacts);
+                    if ($contact) {
+                        $attendeeId = $contact->getId();
+                    }
                 }
-                
             } else if($newAttendee['userType'] == Calendar_Model_Attender::USERTYPE_GROUP) {
                 $lists = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter(array(
                     array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),

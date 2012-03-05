@@ -381,19 +381,18 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         
         foreach($_event->attendee as $eventAttendee) {
             $attendeeEmail = $eventAttendee->getEmail();
-            if ($attendeeEmail) {
-                $attendee = new Sabre_VObject_Property('ATTENDEE', (strpos($attendeeEmail, '@') !== false ? 'mailto:' : 'urn:uuid:') . $attendeeEmail);
-                $attendee->add('CN',       $eventAttendee->getName());
-                $attendee->add('CUTYPE',   Calendar_Convert_Event_VCalendar_Abstract::$cutypeMap[$eventAttendee->user_type]);
-                $attendee->add('PARTSTAT', $eventAttendee->status);
-                $attendee->add('ROLE',     "{$eventAttendee->role}-PARTICIPANT");
-                $attendee->add('RSVP',     'FALSE');
-                if (strpos($attendeeEmail, '@') !== false) {
-                    $attendee->add('EMAIL',    $attendeeEmail);
-                }
-
-                $_vevent->add($attendee);
+            
+            $attendee = new Sabre_VObject_Property('ATTENDEE', (strpos($attendeeEmail, '@') !== false ? 'mailto:' : 'urn:uuid:') . $attendeeEmail);
+            $attendee->add('CN',       $eventAttendee->getName());
+            $attendee->add('CUTYPE',   Calendar_Convert_Event_VCalendar_Abstract::$cutypeMap[$eventAttendee->user_type]);
+            $attendee->add('PARTSTAT', $eventAttendee->status);
+            $attendee->add('ROLE',     "{$eventAttendee->role}-PARTICIPANT");
+            $attendee->add('RSVP',     'FALSE');
+            if (strpos($attendeeEmail, '@') !== false) {
+                $attendee->add('EMAIL',    $attendeeEmail);
             }
+
+            $_vevent->add($attendee);
         }
     }
     
@@ -593,10 +592,14 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             $status = Calendar_Model_Attender::STATUS_NEEDSACTION;
         }
         
-        if (!preg_match('/(?P<protocol>mailto:|urn:uuid:)(?P<email>.*)/', $_attendee->value, $matches)) {
-            throw new Tinebase_Exception_UnexpectedValue('invalid attendee provided: ' . $_attendee->value);
+        if (isset($_attendee['EMAIL']) && !empty($_attendee['EMAIL']->value)) {
+            $email = $_attendee['EMAIL']->value;
+        } else {
+            if (!preg_match('/(?P<protocol>mailto:|urn:uuid:)(?P<email>.*)/', $_attendee->value, $matches)) {
+                throw new Tinebase_Exception_UnexpectedValue('invalid attendee provided: ' . $_attendee->value);
+            }
+            $email = $matches['email'];
         }
-        $email = $matches['email'];
         
         $fullName = isset($_attendee['CN']) ? $_attendee['CN']->value : $email;
         
