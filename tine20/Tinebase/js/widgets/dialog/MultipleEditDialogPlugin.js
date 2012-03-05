@@ -377,7 +377,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                     Ext.MessageBox.wait(_('Please wait'),_('Applying changes'));
                     Ext.Ajax.request({
                         url: 'index.php',
-                        timeout: 480000,
+                        timeout: 3600000, // 1 hour
                         params: {
                             method: 'Tinebase.updateMultipleRecords',
                             appName: this.editDialog.recordClass.getMeta('appName'),

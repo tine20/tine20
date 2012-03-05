@@ -447,6 +447,7 @@ Tine.Tinebase.tineInit = {
         Ext.namespace('Tine.Tinebase.registry');
         if (window.isMainWindow) {
             Ext.Ajax.request({
+                timeout: 120000, // 2 minutes
                 params: {
                     method: Tine.Tinebase.tineInit.getAllRegistryDataMethod
                 },

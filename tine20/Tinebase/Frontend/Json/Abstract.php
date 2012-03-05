@@ -207,8 +207,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $result['results']     = $this->_multipleRecordsToJson($result['results']);
         $result['exceptions']  = $this->_multipleRecordsToJson($result['exceptions']);
         
-        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
-        
         return $result;
     }
 
