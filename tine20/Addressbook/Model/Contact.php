@@ -182,6 +182,25 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     );
     
     /**
+    * overwrite constructor to add more filters
+    *
+    * @param mixed $_data
+    * @param bool $_bypassFilters
+    * @param mixed $_convertDates
+    * @return void
+    */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        // set geofields to NULL if empty
+        $geoFields = array('adr_one_lon', 'adr_one_lat', 'adr_one_lon', 'adr_one_lat');
+        foreach ($geoFields as $geoField) {
+            $this->_filters[$geoField]        = new Zend_Filter_Empty(NULL);
+        }
+    
+        return parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
+    
+    /**
      * returns prefered email address of given contact
      * 
      * @return string
@@ -264,18 +283,15 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * @param $_throwExceptionOnInvalidData
      * @return bool
      * @throws Tinebase_Exception_Record_Validation
+     * @see Tinebase_Record_Abstract::isValid()
      */
-    
-    
     function isValid($_throwExceptionOnInvalidData = false) {
         
         if ((!$this->__get('org_name')) && (!$this->__get('n_family'))) {
-
             array_push($this->_validationErrors, array('id' => 'org_name', 'msg' => 'either "org_name" or "n_family" must be given!'));
             array_push($this->_validationErrors, array('id' => 'n_family', 'msg' => 'either "org_name" or "n_family" must be given!'));
             
             $valid = false;
-
         } else {
             $valid = true;
         }
@@ -304,7 +320,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         return $parentValid && $valid;        
     }    
 
-    
     /**
      * fills a contact from json data
      *
