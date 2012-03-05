@@ -209,7 +209,7 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $currValue = $this->{$name};
         if ($value !== NULL) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resetting ' . $name . ' to ' . (int) $value);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Resetting ' . $name . ' to ' . (int) $value);
             $this->{$name} = $value;
         }
         
@@ -431,13 +431,30 @@ abstract class Tinebase_Controller_Record_Abstract
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
         } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-            throw $e;
+            $this->_handleRecordCreateOrUpdateException($e);
         }
 
         return $this->get($createdRecord);
+    }
+    
+    /**
+     * handle record exception
+     * 
+     * @param Exception $e
+     * @throws Exception
+     * 
+     * @todo invent hooking mechanism for database/backend independant exception handling (like lock timeouts)
+     */
+    protected function _handleRecordCreateOrUpdateException(Exception $e)
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+        
+        if ($e instanceof Zend_Db_Statement_Exception && preg_match('/Lock wait timeout exceeded/', $e->getMessage())) {
+            throw new Tinebase_Exception_Backend_Database_LockTimeout($e->getMessage());
+        }
+        
+        throw $e;
     }
     
     /**
@@ -620,8 +637,7 @@ abstract class Tinebase_Controller_Record_Abstract
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
         } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
+            $this->_handleRecordCreateOrUpdateException($e);
         }
         return $this->get($updatedRecord->getId());
     }
@@ -1126,7 +1142,8 @@ abstract class Tinebase_Controller_Record_Abstract
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
         if (! $this->_doContainerACLChecks) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Container ACL disabled for ' . $_filter->getModelName() . '.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                . ' Container ACL disabled for ' . $_filter->getModelName() . '.');
             return TRUE;
         }
 
@@ -1138,8 +1155,8 @@ abstract class Tinebase_Controller_Record_Abstract
             $_filter->addFilter($containerFilter);
         }
 
-        // set grants according to action
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting filter grants for action ' . $_action);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Setting filter grants for action ' . $_action);
         switch ($_action) {
             case 'get':
                 $_filter->setRequiredGrants(array(
