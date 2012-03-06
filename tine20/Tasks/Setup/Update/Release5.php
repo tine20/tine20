@@ -130,7 +130,6 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
     {
         $tasksAppId = Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId();
 
-        // alter status_id -> status
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>priority</name>
@@ -173,5 +172,22 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
         
         $this->setTableVersion('tasks', '5');
         $this->setApplicationVersion('Tasks', '5.3');
+    }
+    
+    /**
+     * update to 5.4
+     * - status_id might be set in state as sort column
+     */
+    public function update_3()
+    {
+        $stmt = $this->_db->query("SELECT * FROM `" . SQL_TABLE_PREFIX . "state`");
+        $stateDatas = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        foreach ($stateDatas as $state) {
+            $this->_db->update(SQL_TABLE_PREFIX . 'state', array(
+                'data' => str_replace('sort%3Do%253Afield%253Ds%25253Astatus_id', 'sort%3Do%253Afield%253Ds%25253Astatus', $state['data'])
+            ), "`id` = '{$state['id']}'");
+        }
+        
+        $this->setApplicationVersion('Tasks', '5.4');
     }
 }
