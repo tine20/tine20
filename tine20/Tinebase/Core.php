@@ -1007,12 +1007,14 @@ class Tinebase_Core
         
         if ($oldMaxExcecutionTime > 0) {
             if ((bool)ini_get('safe_mode') === true) {
-                if (Tinebase_Core::isRegistered(self::LOGGER)) {
-                    Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' max_execution_time(' . $oldMaxExcecutionTime . ') is too low. Can\'t set limit to ' . $_seconds . ' because of safe mode restrictions.');    
+                if (Tinebase_Core::isRegistered(self::LOGGER) && Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                        . ' max_execution_time(' . $oldMaxExcecutionTime . ') is too low. Can\'t set limit to ' 
+                        . $_seconds . ' because of safe mode restrictions.');
                 }
             } else {
-                if (Tinebase_Core::isRegistered(self::LOGGER)) {
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' setting execution life time to: ' . $_seconds);    
+                if (Tinebase_Core::isRegistered(self::LOGGER) && Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' setting execution life time to: ' . $_seconds);
                 }
                 set_time_limit($_seconds);
             }
