@@ -453,11 +453,16 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
             if ($groupAttender->user_id instanceof Addressbook_Model_List) {
                 $listId = $groupAttender->user_id->getId();
-            } else {
+            } else if ($groupAttender->user_id !== NULL) {
                 $group = Tinebase_Group::getInstance()->getGroupById($groupAttender->user_id);
                 if (!empty($group->list_id)) {
                     $listId = $group->list_id;
                 }
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                    . ' Group attender ID missing');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' ' . print_r($groupAttender->toArray(), TRUE));
             }
             
             if ($listId !== null) {
