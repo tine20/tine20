@@ -64,6 +64,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 switch(item.name) {
                     case 'signature':
                     case 'signature_position':
+                    case 'display_format':
                         break;
                     default:
                         item.setDisabled(true);
