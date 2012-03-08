@@ -341,7 +341,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             foreach($event->alarms as $alarm) {
                 $valarm = new Sabre_VObject_Component('VALARM');
                 $valarm->add('ACTION', 'DISPLAY');
-                $valarm->add('DESCRIPTION', $event->summary);
+                $valarm->add(new Sabre_VObject_Property('DESCRIPTION', $event->summary));
                 
                 if (is_numeric($alarm->minutes_before)) {
                     if ($event->dtstart == $alarm->alarm_time) {
