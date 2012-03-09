@@ -36,7 +36,6 @@ Ext.ux.file.BrowsePlugin.prototype = {
     enableFileDrop: true,
     /**
      * @cfg {Boolean} enableFileDialog
-     * @see http://www.w3.org/TR/2008/WD-html5-20080610/editing.html
      * 
      * enable file dialog on click(defaults to true)
      */
@@ -359,7 +358,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
         }
         this.input_file = null;
         
-        if (!no_create) {
+        if (this.enableFileDialog && !no_create) {
             this.createInputFile();
         }
         return result;

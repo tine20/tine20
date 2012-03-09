@@ -95,6 +95,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             ptype: 'ux.browseplugin',
             multiple: true,
             scope: this,
+            enableFileDialog: false,
             handler: this.onFilesSelect
         });
         
