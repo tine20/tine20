@@ -69,19 +69,29 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     summaryRenderer: function(summary) {
         
         var myAttenderRecord = this.record.getMyAttenderRecord(),
-            ret = '';
-        if(myAttenderRecord) {
-            var status = Tine.Tinebase.widgets.keyfield.Renderer.render('Calendar', 'attendeeStatus', myAttenderRecord.get('status'));
-            if(status) ret += status;
-        }
+            ret = Ext.util.Format.htmlEncode(summary),
+            status = null,
+            recur = null;
             
-        if(this.record.isRecurBase() || this.record.isRecurInstance()) {   
-            ret += '<img class="cal-recurring" unselectable="on" src="' + Ext.BLANK_IMAGE_URL + '">' + this.app.i18n._('recurring event');
+        if(myAttenderRecord) {
+            status = Tine.Tinebase.widgets.keyfield.Renderer.render('Calendar', 'attendeeStatus', myAttenderRecord.get('status'));
+        }
+           
+        if(this.record.isRecurBase() || this.record.isRecurInstance()) {  
+            recur = '<img class="cal-recurring" unselectable="on" src="' + Ext.BLANK_IMAGE_URL + '">' + this.app.i18n._('recurring event');
         } else if (this.record.isRecurException()) {
-            ret += '<img class="cal-recurring exception" unselectable="on" src="' + Ext.BLANK_IMAGE_URL + '">' + this.app.i18n._('recurring event exception');
+            recur = '<img class="cal-recurring exception" unselectable="on" src="' + Ext.BLANK_IMAGE_URL + '">' + this.app.i18n._('recurring event exception');
         }   
+
+        if(status || recur) {
+            ret += '&nbsp;&nbsp;&nbsp;(&nbsp;';
+            if(status) ret += status; 
+            if(status && recur) ret += '&nbsp;&nbsp;'
+            if(recur) ret += recur;
+            ret += '&nbsp;)';
+        }
         
-        return Ext.util.Format.htmlEncode(summary) + '&nbsp;&nbsp;&nbsp;(' + ret + ')';
+        return ret;
                    
     },
     
