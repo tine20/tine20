@@ -267,6 +267,10 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     protected function _setMainscreenHeaders()
     {
+        if (headers_sent()) {
+            return;
+        }
+        
         header('Content-Type: text/html; charset=utf-8');
         
         // set x-frame header against clickjacking
