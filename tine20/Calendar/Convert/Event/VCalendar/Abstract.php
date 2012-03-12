@@ -264,6 +264,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             if ($organizerContact instanceof Addressbook_Model_Contact && !empty($organizerContact->email)) {
                 $organizer = new Sabre_VObject_Property('ORGANIZER', 'mailto:' . $organizerContact->email);
                 $organizer->add('CN', $organizerContact->n_fileas);
+                $organizer->add('EMAIL', $organizerContact->email);
                 $vevent->add($organizer);
             }
         }
@@ -713,12 +714,20 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     break;
                     
                 case 'ORGANIZER':
-                    if (preg_match('/mailto:(?P<email>.*)/i', $property->value, $matches)) {
+                    $email = null;
+                    
+                    if (isset($property['EMAIL']) && !empty($property['EMAIL']->value)) {
+                        $email = $property['EMAIL']->value;
+                    } else if (preg_match('/mailto:(?P<email>.*)/i', $property->value, $matches)) {
+                        $email = $matches['email'];
+                    }
+                    
+                    if ($email !== null) {
                         // it's not possible to change the organizer by spec
                         if (empty($event->organizer)) {
-                            $name = isset($property['CN']) ? $property['CN']->value : $matches['email'];
+                            $name = isset($property['CN']) ? $property['CN']->value : $email;
                             $contact = Calendar_Model_Attender::resolveEmailToContact(array(
-                                'email'     => $matches['email'],
+                                'email'     => $email,
                                 'lastName'  => $name,
                             ));
                         

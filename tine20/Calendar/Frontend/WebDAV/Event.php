@@ -87,6 +87,10 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         $event = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version)->toTine20Model($vobjectData);
         $event->container_id = $container->getId();
         $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
+        if (strlen($id) > 40) {
+            $id = sha1($id);
+        }
+        
         $event->setId($id);
         
         self::enforceEventParameters($event);

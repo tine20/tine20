@@ -43,6 +43,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
     }
 
     /**
@@ -53,6 +54,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      */
     protected function tearDown()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
@@ -81,7 +83,49 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         return $event;
     }
-
+    
+    /**
+     * test converting vcalendar from iCloud to Calendar_Model_Event
+     *
+     * @return Calendar_Model_Event
+     */
+    public function testConvertToTine20ModelFromICloud()
+    {
+        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/calendarserver_external_invitation.ics');
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $event = $converter->toTine20Model($vcalendar);
+    
+        //var_dump($event->toArray());
+    
+        $this->assertEquals(Calendar_Model_Event::CLASS_PUBLIC,     $event->class);
+        $this->assertEquals('9320E052-6AF0-45E7-9352-04BBEC898D47', $event->uid);
+        $this->assertEquals(2, count($event->attendee));
+        $this->assertTrue(!empty($event->organizer));
+    
+        return $event;
+    }
+    
+    /**
+     * test converting vcalendar from Lotus Notes to Calendar_Model_Event
+     *
+     * @return Calendar_Model_Event
+     */
+    public function testConvertToTine20ModelFromLotusNotes()
+    {
+        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/lotusnotes_external_invitation.ics');
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $event = $converter->toTine20Model($vcalendar);
+    
+        //var_dump($event->toArray());
+    
+        $this->assertEquals(Calendar_Model_Event::CLASS_PUBLIC,     $event->class);
+        $this->assertEquals('A5C4058C8C5926C8C12579B100622D66-Lotus_Notes_Generated', $event->uid);
+        $this->assertEquals(3, count($event->attendee));
+        $this->assertTrue(!empty($event->organizer));
+    
+        return $event;
+    }
+    
     /**
     * test converting vcard from lighting to Calendar_Model_Event (with unrecognized timezone)
     */
@@ -246,7 +290,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertContains('DTSTAMP;VALUE=DATE-TIME:',                       $vevent, $vevent);
         $this->assertContains('RRULE:FREQ=DAILY;UNTIL=20111112;INTERVAL=1',     $vevent, $vevent);
         $this->assertContains('EXDATE;VALUE=DATE:20111111',                     $vevent, $vevent);
-        $this->assertContains('ORGANIZER;CN="' . Tinebase_Core::getUser()->accountDisplayName . '":mailto:' . Tinebase_Core::getUser()->accountEmailAddress, $vevent, $vevent);
+        $this->assertContains('ORGANIZER;CN="' . Tinebase_Core::getUser()->accountDisplayName . '";EMAIL=' . Tinebase_Core::getUser()->accountEmailAddress . ':mailto:', $vevent, $vevent);
         
 
     }
