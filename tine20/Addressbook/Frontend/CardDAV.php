@@ -108,16 +108,7 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
             # path == /account->contact_id
             # list container
             case 1:
-                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_application->name, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_SYNC);
-                foreach ($containers as $container) {
-                    try {
-                        $children[] = $this->getChild($container);
-                    } catch (Sabre_DAV_Exception_FileNotFound $sdavfnf) {
-                        // skip child => no read permissions
-                    }
-                }
-            
-                $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_application->name, Tinebase_Model_Grants::GRANT_SYNC);
+                $containers = Tinebase_Container::getInstance()->getContainerByACL(Tinebase_Core::getUser(), $this->_application->name, Tinebase_Model_Grants::GRANT_SYNC);
                 foreach ($containers as $container) {
                     try {
                         $children[] = $this->getChild($container);
