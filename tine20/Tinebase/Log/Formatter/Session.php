@@ -18,7 +18,8 @@ class Tinebase_Log_Formatter_Session extends Zend_Log_Formatter_Simple
     static $_sessionId;
     
     /**
-     * Formats data into a single line to be written by the writer.
+     * Add session id in front of log line
+     * Replace LDAP and SQL passwords with ********
      *
      * @param  array    $event    event data
      * @return string             formatted line to write to the log
@@ -32,6 +33,23 @@ class Tinebase_Log_Formatter_Session extends Zend_Log_Formatter_Simple
         $user = Tinebase_Core::getUser();
         $userName = ($user && is_object($user)) ? $user->accountDisplayName : '-- none --';
         $output = parent::format($event);
+        
+        // replace passwords
+        $config = Tinebase_Core::getConfig();
+        
+        $search = array();
+        $replace = array();
+        
+        if (isset($config->database) && isset($config->database->password)) {
+            $search[] = '/' . $config->database->password . '/';
+            $replace[] = '********';
+        }
+        if (isset($config->{Tinebase_Config::AUTHENTICATIONBACKEND}) && isset($config->{Tinebase_Config::AUTHENTICATIONBACKEND}->password)) {
+            $search[] = '/' . $config->{Tinebase_Config::AUTHENTICATIONBACKEND}->password . '/';
+            $replace[] = '********';
+        }
+        
+        $output = preg_replace($search, $replace, $output);
         
         return self::$_sessionId . " $userName - $output";
     }
