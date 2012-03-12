@@ -4,8 +4,8 @@
  * @package     Tinebase
  * @subpackage  widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -147,10 +147,11 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
     },
     
     /**
+     * define actions
+     * 
      * @return {Ext.Action}
      */
     getAccountTypeSelector: function () {
-        // define actions
         var userActionCfg = {
             text: _('Search User'),
             scope: this,
@@ -166,22 +167,8 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
         var anyoneActionCfg = {
             text: _('Add Anyone'),
             scope: this,
-            newRecordClass: this.recordClass,
-            newRecordDefaults: this.recordDefaults,
             iconCls: 'tinebase-accounttype-addanyone',
-            handler: function () {
-                // add anyone
-                var recordData = {};
-                recordData[this.recordPrefix + 'type'] = 'anyone';
-                recordData[this.recordPrefix + 'name'] = _('Anyone');
-                recordData[this.recordPrefix + 'id'] = 0;
-                var record = new this.recordClass(recordData, 0);
-                
-                // check if already in
-                if (! this.store.getById(record.id)) {
-                    this.store.add([record]);
-                }
-            }
+            handler: this.onAddAnyone
         };
         
         // set items
@@ -214,7 +201,23 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             scope: this
         });
     },
-
+    
+    /**
+     * add anyone to grid
+     */
+    onAddAnyone: function() {
+        var recordData = (this.recordDefaults !== null) ? this.recordDefaults : {};
+        recordData[this.recordPrefix + 'type'] = 'anyone';
+        recordData[this.recordPrefix + 'name'] = _('Anyone');
+        recordData[this.recordPrefix + 'id'] = 0;
+        var record = new this.recordClass(recordData, 0);
+        
+        // check if already in
+        if (! this.store.getById(record.id)) {
+            this.store.add([record]);
+        }
+    },
+    
     /**
      * @return {Tine.Addressbook.SearchCombo}
      */
