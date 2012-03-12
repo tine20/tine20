@@ -155,4 +155,34 @@ class Calendar_Setup_Update_Release5 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Calendar', '5.4');
     }
+    
+    /**
+     * update to 5.5
+     * - change length of uid field
+     */
+    public function update_4()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>uid</name>
+                <type>text</type>
+                <length>255</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('cal_events', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>recurid</name>
+                <type>text</type>
+                <length>255</length>
+            </field>
+        ');
+        $this->_backend->alterCol('cal_events', $declaration);
+        
+        $this->setTableVersion('cal_events', 5);
+        
+        $this->setApplicationVersion('Calendar', '5.5');
+    }
 }
