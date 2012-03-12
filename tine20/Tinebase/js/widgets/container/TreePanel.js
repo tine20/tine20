@@ -135,9 +135,9 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             this.selModel = new Ext.tree.MultiSelectionModel({});
         }
         
-        var containerName = this.recordClass ? this.recordClass.getMeta('containerName') : 'container';
-        var containersName = this.recordClass ? this.recordClass.getMeta('containersName') : 'containers';
-        
+        var containerName = this.recordClass ? this.recordClass.getContainerName() : 'container';
+        var containersName = this.recordClass ? this.recordClass.getContainersName() : 'containers';
+
         //ngettext('container', 'containers', n);
         this.containerName = this.containerName || this.app.i18n.n_hidden(containerName, containersName, 1);
         this.containersName = this.containersName || this.app.i18n._hidden(containersName);
