@@ -226,4 +226,22 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
         
         return $result;
     }
+    
+    /**
+     * get list by group name
+     * 
+     * @param string $groupName
+     * @return NULL|Addressbook_Model_List
+     */
+    public function getByGroupName($groupName)
+    {
+        $filter = new Addressbook_Model_ListFilter(array(
+            array('field' => 'name', 'operator' => 'equals', 'value' => $groupName),
+            array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP)
+        ));
+        
+        $existingLists = $this->search($filter);
+        
+        return $existingLists->getFirstRecord();
+    }
 }

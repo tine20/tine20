@@ -317,5 +317,11 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
         Tinebase_Group::syncListsOfUserContact(array($group->getId()), $this->objects['account1']->contact_id);
         $listAgain = Addressbook_Controller_List::getInstance()->get($group->list_id);
         $this->assertEquals($list->toArray(), $listAgain->toArray());
+        
+        // change list id -> should get list by (group) name
+        $group->list_id = NULL;
+        $group = Tinebase_Group::getInstance()->updateGroup($group);
+        Tinebase_Group::syncListsOfUserContact(array($group->getId()), $this->objects['account1']->contact_id);
+        $this->assertEquals($list->getId(), Tinebase_Group::getInstance()->getGroupById($group)->list_id);
     }
 }

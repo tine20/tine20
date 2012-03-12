@@ -185,21 +185,30 @@ class Tinebase_Group
             // get single groups to make sure that container id is joined
             $group = Tinebase_Group::getInstance()->getGroupById($groupId);
 
+            $list = NULL;
             if (! empty($group->list_id)) {
                 try {
                     $list = $listBackend->get($group->list_id);
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         .' List ' . $group->name . ' not found.');
-                    $list = Addressbook_Controller_List::getInstance()->createByGroup($group);
                 }
-            } else {
-                $list = Addressbook_Controller_List::getInstance()->createByGroup($group);
             }
             
+            // could not get list by list_id -> try to get by name 
+            // if no list can be found, create new one
+            if (! $list) {
+                $list = $listBackend->getByGroupName($group->name);
+                if (! $list) {
+                    $list = Addressbook_Controller_List::getInstance()->createByGroup($group);
+                }
+            }
+
             if ($group->list_id !== $list->getId()) {
-                // list id changed / is new -> update group
+                // list id changed / is new -> update group and make group visible
                 $group->list_id = $list->getId();
+                $group->visibility = Tinebase_Model_Group::VISIBILITY_DISPLAYED;
+                
                 Tinebase_Group::getInstance()->updateGroup($group);
             }
             

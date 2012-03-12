@@ -193,22 +193,15 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         
         try {
             if (empty($group->list_id)) {
-        
-                $filter = new Addressbook_Model_ListFilter(array(
-                    array('field' => 'name', 'operator' => 'equals', 'value' => $group->name),
-                    array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP)
-                ));
-        
-                $existingLists = $this->_backend->search($filter);
-        
-                if (count($existingLists) == 0) {
+                $list = $this->_backend->getByGroupName($group->name);
+                if (! $list) {
                     // jump to catch block => no list_id provided and no existing list for group found
                     throw new Tinebase_Exception_NotFound('list_id is empty');
                 }
-                $group->list_id = $existingLists[0]->id;
+                $group->list_id = $list->getId();
+            } else {
+                $list = $this->_backend->get($group->list_id);
             }
-        
-            $list = $this->_backend->get($group->list_id);
         
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Update list ' . $group->name);
