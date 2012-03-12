@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -253,9 +253,21 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         $view->registryData = array();
         
-        header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('jsclient.php');
+        $this->_setMainscreenHeaders();
         
+        echo $view->render('jsclient.php');
+    }
+    
+    /**
+     * set headers for mainscreen
+     */
+    protected function _setMainscreenHeaders()
+    {
+        if (headers_sent()) {
+            return;
+        }
+        
+        header('Content-Type: text/html; charset=utf-8');
     }
     
     /**
