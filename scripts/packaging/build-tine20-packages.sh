@@ -31,7 +31,7 @@ function checkout()
     mkdir $TEMPDIR/tine20.git
     cd $TEMPDIR/tine20.git
     
-    git clone $1 .
+    git clone "$1" .
 
     if [ -n "$GITBRANCH" ]; then
         echo "checkout refspec"
@@ -316,7 +316,7 @@ function prepareDebianPackaging()
 getOptions $*
                  
 createDirectories
-checkout $GITURL $GITBRANCH
+checkout "$GITURL" $GITBRANCH
 setupPackageDir
 activateReleaseMode
 buildClient
