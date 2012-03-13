@@ -610,6 +610,19 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 currentFolderNode.select();
                 currentFolderNode.expand();
                 app.mainScreen.GridPanel.currentFolderNode = currentFolderNode; 
+            } else {
+                // get ftb path filter
+                this.filterToolbar.filterStore.each(function(filter) {
+                    var field = filter.get('field');
+                    if (field === 'path') {
+                        filter.set('value', '');
+                        filter.set('value', rowRecord.data);
+                        filter.formFields.value.setValue(rowRecord.get('path'));
+                        
+                        this.filterToolbar.onFiltertrigger();
+                        return false;
+                    }
+                }, this);
             }
         }
     }, 

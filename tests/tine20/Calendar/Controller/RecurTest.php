@@ -323,6 +323,48 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->assertEquals(1, count($weekviewEvents), '17.6. is an exception date and must not be part of this weekview');
     }
     
+    public function testCreateRecurExceptionPreservAttendeeStatus()
+    {
+        $from = new Tinebase_DateTime('2012-03-01 00:00:00');
+        $until = new Tinebase_DateTime('2012-03-31 23:59:59');
+        
+        $event = new Calendar_Model_Event(array(
+                'summary'       => 'Some Daily Event',
+                'dtstart'       => '2012-03-13 09:00:00',
+                'dtend'         => '2012-03-13 10:00:00',
+                'rrule'         => 'FREQ=DAILY;INTERVAL=1',
+                'container_id'  => $this->_testCalendar->getId(),
+                'attendee'      => $this->_getAttendee(),
+        ));
+        
+        $persistentEvent = $this->_controller->create($event);
+        $persistentSClever = Calendar_Model_Attender::getAttendee($persistentEvent->attendee, $event->attendee[1]);
+        
+        // accept series for sclever
+        $persistentSClever->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $this->_controller->attenderStatusUpdate($persistentEvent, $persistentSClever, $persistentSClever->status_authkey);
+        
+        // create recur exception w.o. scheduling change
+        $persistentEvent = $this->_controller->get($persistentEvent->getId());
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
+        
+        $recurSet[5]->description = 'From now on, everything will be better'; //2012-03-19
+        $updatedPersistentEvent = $this->_controller->createRecurException($recurSet[5], FALSE, FALSE);
+        
+        $updatedPersistentSClever = Calendar_Model_Attender::getAttendee($updatedPersistentEvent->attendee, $event->attendee[1]);
+        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedPersistentSClever->status, 'status must not change');
+        
+        
+        // create recur exception with scheduling change
+        $recurSet[6]->dtstart->addHour(2);
+        $recurSet[6]->dtend->addHour(2);
+        $updatedPersistentEvent = $this->_controller->createRecurException($recurSet[6], FALSE, FALSE);
+        
+        $updatedPersistentSClever = Calendar_Model_Attender::getAttendee($updatedPersistentEvent->attendee, $event->attendee[1]);
+        $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $updatedPersistentSClever->status, 'status must change');
+    }
+    
     public function testCreateRecurExceptionAllFollowing()
     {
         $from = new Tinebase_DateTime('2011-04-21 00:00:00');

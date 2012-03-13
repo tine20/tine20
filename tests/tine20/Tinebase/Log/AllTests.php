@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -22,13 +22,14 @@ class Tinebase_Log_AllTests
 {
     public static function main() 
     {
-        PHPUnit_TextUI_TestRunner::run(self::suite(), $testArguments);
+        PHPUnit_TextUI_TestRunner::run(self::suite());
     }
     
     public static function suite() 
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Log Tests');
         $suite->addTestSuite('Tinebase_Log_Filter_FilterTest');
+        $suite->addTestSuite('Tinebase_Log_FormatterTest');
         return $suite;
     }
 }

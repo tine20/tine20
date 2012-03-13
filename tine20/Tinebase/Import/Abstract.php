@@ -480,13 +480,19 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         
         $tag = NULL;
         try {
-            $tag = Tinebase_Tags::getInstance()->getTagByName($name, NULL, 'Tinebase', TRUE);
+            $tag = Tinebase_Tags::getInstance()->getTagByName($name, NULL, NULL, TRUE);
         
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 ' Added existing tag ' . $name . ' to record.');
             
         } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' ' . $tenf->getMessage());
+            
             if ($_create) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' ' . print_r($_tagData, TRUE));
+                
                 $tagData = (! empty($_tagData)) ? $_tagData : array(
                     'name'          => $name,
                 );
@@ -520,21 +526,26 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             'description'   => $description,
             'type'          => strtolower($type),
             'color'         => $color,
+            'type'          => $type,
         ));
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new shared tag: ' . $_tagData['name']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Creating new ' . $type . ' tag: ' . $_tagData['name']);
         
         $tag = Tinebase_Tags::getInstance()->createTag($newTag, TRUE);
         
-        $right = new Tinebase_Model_TagRight(array(
-            'tag_id'        => $newTag->getId(),
-            'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-            'account_id'    => 0,
-            'view_right'    => TRUE,
-            'use_right'     => TRUE,
-        ));
-        Tinebase_Tags::getInstance()->setRights($right);
-        Tinebase_Tags::getInstance()->setContexts(array('any'), $newTag->getId());
+        // @todo should be moved to Tinebase_Tags / always be done for all kinds of tags on create
+        if ($type === Tinebase_Model_Tag::TYPE_SHARED) {
+            $right = new Tinebase_Model_TagRight(array(
+                'tag_id'        => $newTag->getId(),
+                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                'account_id'    => 0,
+                'view_right'    => TRUE,
+                'use_right'     => TRUE,
+            ));
+            Tinebase_Tags::getInstance()->setRights($right);
+            Tinebase_Tags::getInstance()->setContexts(array('any'), $newTag->getId());
+        }
         
         return $tag;
     }
@@ -550,11 +561,21 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Trying to add ' . count($autotags) . ' autotag(s) to record.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($autotags, TRUE));
         
         $tags = ($_record->tags instanceof Tinebase_Record_RecordSet) ? $_record->tags : new Tinebase_Record_RecordSet('Tinebase_Model_Tag');
         foreach ($autotags as $tagData) {
-            $tagData = $this->_doAutoTagReplacements($tagData);
-            $tag = $this->_getSingleTag($tagData['name'], $tagData);
+            if (is_string($tagData)) {
+                try {
+                    $tag = Tinebase_Tags::getInstance()->get($tagData);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $tenf);
+                    $tag = NULL;
+                }
+            } else {
+                $tagData = $this->_doAutoTagReplacements($tagData);
+                $tag = $this->_getSingleTag($tagData['name'], $tagData);
+            }
             if ($tag !== NULL) {
                 $tags->addRecord($tag);
             }
@@ -603,6 +624,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     {
         $autotags = (array_key_exists('tag', $this->_options['autotags']) && count($this->_options['autotags']) == 1) 
             ? $this->_options['autotags']['tag'] : $this->_options['autotags'];
+
         $autotags = (array_key_exists('name', $autotags)) ? array($autotags) : $autotags;
         
         if (array_key_exists('tag', $autotags)) {

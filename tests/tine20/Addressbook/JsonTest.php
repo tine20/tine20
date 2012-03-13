@@ -585,16 +585,27 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function _createAndAttachTag($_filter, $_tagType = Tinebase_Model_Tag::TYPE_SHARED)
     {
+        $tag = $this->_getTag($_tagType);
+        Tinebase_Tags::getInstance()->attachTagToMultipleRecords($_filter, $tag);
+        
+        return $tag->name;
+    }
+    
+    /**
+     * get tag
+     * 
+     * @param string $_tagType
+     * @return Tinebase_Model_Tag
+     */
+    protected function _getTag($_tagType = Tinebase_Model_Tag::TYPE_SHARED)
+    {
         $tagName = Tinebase_Record_Abstract::generateUID();
-        $tag = new Tinebase_Model_Tag(array(
+        return new Tinebase_Model_Tag(array(
             'type'          => $_tagType,
             'name'          => $tagName,
             'description'   => 'testTagDescription',
             'color'         => '#009B31',
         ));
-        Tinebase_Tags::getInstance()->attachTagToMultipleRecords($_filter, $tag);
-        
-        return $tagName;
     }
 
     /**
@@ -685,7 +696,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
         $definitionOptions = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($definition);
-
+        
         $tempFileBackend = new Tinebase_TempFile();
         $tempFile = $tempFileBackend->createTempFile(dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20/' . $definitionOptions->example);
         $options = array_merge($_additionalOptions, array(
@@ -721,6 +732,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_importHelper($options);
         $fritz = $result['results'][1];
         
+        //print_r($result);
         $this->assertEquals(2, count($result['results']), 'should import 2');
         $this->assertEquals(1, count($result['results'][0]['tags']), 'no tag added');
         $this->assertEquals('Importliste (19.10.2011)', $result['results'][0]['tags'][0]['name']);
@@ -755,6 +767,45 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(NULL, $result['results'][0]['adr_one_locality'], 'Should remove locality');
     }
 
+    /**
+    * testImportWithExistingTag
+    */
+    public function testImportWithExistingTag()
+    {
+        $tag = $this->_getTag(Tinebase_Model_Tag::TYPE_PERSONAL);
+        $tag = Tinebase_Tags::getInstance()->create($tag);
+        
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
+        $definitionOptions = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($definition);
+        $options = array(
+            'dryrun'     => 0,
+            'autotags'   => array($tag->getId()),
+        );
+        $result = $this->_importHelper($options);
+        
+        $this->assertEquals(0, count($result['exceptions']));
+        $this->assertEquals($tag->name, $result['results'][0]['tags'][0]['name']);
+    }
+    
+    /**
+    * testImportWithNewTag
+    */
+    public function testImportWithNewTag()
+    {
+        $tag = $this->_getTag(Tinebase_Model_Tag::TYPE_PERSONAL);
+        
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
+        $definitionOptions = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($definition);
+        $options = array(
+            'dryrun'     => 0,
+            'autotags'   => array($tag->toArray()),
+        );
+        $result = $this->_importHelper($options);
+        
+        $this->assertEquals(0, count($result['exceptions']));
+        $this->assertEquals($tag->name, $result['results'][0]['tags'][0]['name']);
+    }
+    
     /**
      * test project relation filter
      */

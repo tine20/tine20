@@ -453,9 +453,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         
         // find the main event - the main event has no RECURRENCE-ID
         foreach($vcalendar->VEVENT as $vevent) {
-            // "-" is not allowed in property names
-            $RECURRENCEID = 'RECURRENCE-ID';
-            if(!isset($vevent->$RECURRENCEID)) {
+            if(!isset($vevent->{'RECURRENCE-ID'})) {
                 $this->_convertVevent($vevent, $event);
                 
                 break;
@@ -463,13 +461,13 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         }
 
         // if we have found no VEVENT component something went wrong, lets stop here
-        if (!isset($event)) {
+        if (! $event->toArray()) {
             throw new Tinebase_Exception_UnexpectedValue('no main VEVENT component found in VCALENDAR');
         }
         
         // parse the event exceptions
         foreach($vcalendar->VEVENT as $vevent) {
-            if(isset($vevent->$RECURRENCEID) && $event->uid == $vevent->UID) {
+            if(isset($vevent->{'RECURRENCE-ID'}) && $event->uid == $vevent->UID) {
                 $recurException = $this->_getRecurException($oldExdates, $vevent);
                 
                 // initialize attendee with attendee from base events for new exceptions
@@ -546,10 +544,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
      */
     protected function _getRecurException(Tinebase_Record_RecordSet $_oldExdates, Sabre_VObject_Component $_vevent)
     {
-        // "-" is not allowed in property names
-        $RECURRENCEID = 'RECURRENCE-ID';
-        
-        $exDate = clone $_vevent->$RECURRENCEID->getDateTime();
+        $exDate = clone $_vevent->{'RECURRENCE-ID'}->getDateTime();
         $exDate->setTimeZone(new DateTimeZone('UTC'));
         $exDateString = $exDate->format('Y-m-d H:i:s');
         foreach ($_oldExdates as $id => $oldExdate) {
