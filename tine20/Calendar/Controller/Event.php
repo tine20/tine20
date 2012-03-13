@@ -648,6 +648,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         $exdates = is_array($baseEvent->exdate) ? $baseEvent->exdate : array();
         
+        
         if ($_allFollowing != TRUE) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " adding exdate for: '{$_event->recurid}'");
             
@@ -667,7 +668,35 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                         $_event->{$prop}->setId(NULL);
                     }
                 }
+                
+                $originalDtstart = $_event->getOriginalDtStart();
+                $dtStartHasDiff = $originalDtstart->compare($_event->dtstart) != 0; // php52 compat
+                
+                if (! $dtStartHasDiff) {
+                    $attendees = $_event->attendee;
+                    unset($_event->attendee);
+                }
+                $note = $_event->notes; unset($_event->notes);
                 $persistentExceptionEvent = $this->create($_event, $_checkBusyConflicts);
+                
+                if (! $dtStartHasDiff) {
+                    // we save attendee seperatly to preserve their attributes
+                    if ($attendees instanceof Tinebase_Record_RecordSet) {
+                        $attendees->cal_event_id = $persistentExceptionEvent->getId();
+                        
+                        foreach($attendees as $attendee) {
+                            if (! $attendee->status_authkey) {
+                                // new invitations
+                                $attendee->status_authkey = Tinebase_Record_Abstract::generateUID();
+                            }
+                            $this->_backend->createAttendee($attendee);
+                            $this->_increaseDisplayContainerContentSequence($attendee, $persistentExceptionEvent, Tinebase_Model_ContainerContent::ACTION_CREATE);
+                        }
+                    }
+                }
+                
+                // @todo save notes and add a update note -> what was updated? -> modlog is also missing
+                $persistentExceptionEvent = $this->get($persistentExceptionEvent->getId());
             }
             
         } else {
