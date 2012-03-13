@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -444,7 +444,8 @@ class Tinebase_Core
                 $priority = (int)$loggerConfig->priority;
 
                 $writer = new Zend_Log_Writer_Stream($filename);
-                $formatter = new Tinebase_Log_Formatter_Session();
+                $formatter = new Tinebase_Log_Formatter();
+                $formatter->setReplacements();
                 $writer->setFormatter($formatter);
                 $logger->addWriter($writer);
 
@@ -852,7 +853,6 @@ class Tinebase_Core
 
     /**
      * get db profiling
-     *
      */
     public static function getDbProfiling()
     {
@@ -952,7 +952,6 @@ class Tinebase_Core
 
     /**
      * intializes the timezone handling
-     *
      */
     public static function setupServerTimezone()
     {
