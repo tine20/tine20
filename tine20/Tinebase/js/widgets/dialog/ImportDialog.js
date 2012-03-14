@@ -746,11 +746,19 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             }
             
             if (Ext.isArray(tags) && tags.length) {
-                var tagNames = [];
-                Ext.each(tags, function(tag) {tagNames.push(tag.name)});
-                info.push(String.format(_('All records will be tagged with: "{0}" so you can find them easily.'), tagNames.join(',')));
+                var tagNames = [],
+                    tagRecord = null;
+                Ext.each(tags, function(tag) {
+                    if (Ext.isString(tag)) {
+                        tagRecord = this.tagsPanel.recordTagsStore.getById(tag);
+                        tag = (tagRecord) ? tagRecord.data : null;
+                    }
+                    if (tag) {
+                        tagNames.push(tag.name)
+                    }
+                }, this);
+                info.push(String.format(_('All records will be tagged with: "{0}" so you can find them easily.'), tagNames.join(', ')));
             }
-            
             
         this.summaryPanelInfo.update('<div style="padding: 5px;">' + info.join('<br />') + '</div>');
         
