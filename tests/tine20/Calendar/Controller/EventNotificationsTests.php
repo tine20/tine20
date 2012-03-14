@@ -262,6 +262,58 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertTrue($foundPWulfMessage, 'notfication for pwulf not found');
     }
     
+    public function testRecuringExceptions()
+    {
+        $from = new Tinebase_DateTime('2012-03-01 00:00:00');
+        $until = new Tinebase_DateTime('2012-03-31 23:59:59');
+        
+        $event = new Calendar_Model_Event(array(
+                'summary'       => 'Some Daily Event',
+                'dtstart'       => '2012-03-14 09:00:00',
+                'dtend'         => '2012-03-14 10:00:00',
+                'rrule'         => 'FREQ=DAILY;INTERVAL=1',
+                'container_id'  => $this->_testCalendar->getId(),
+                'attendee'      => $this->_getPersonaAttendee('jmcblack'),
+        ));
+        
+        $persistentEvent = $this->_eventController->create($event);
+        //$persistentSClever = Calendar_Model_Attender::getAttendee($persistentEvent->attendee, $event->attendee[1]);
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
+        
+        // cancel instance
+        self::flushMailer();
+        $this->_eventController->createRecurException($recurSet[4], TRUE, FALSE); //2012-03-19
+        $this->_assertMail('jmcblack', 'cancel');
+        
+        // update instance
+        self::flushMailer();
+        $recurSet[5]->summary = 'exceptional summary';
+        $this->_eventController->createRecurException($recurSet[5], FALSE, FALSE); //2012-03-20
+        $this->_assertMail('jmcblack', 'update');
+        
+        // reschedule instance
+        self::flushMailer();
+        $recurSet[6]->dtstart->addHour(2);
+        $recurSet[6]->dtend->addHour(2);
+        $this->_eventController->createRecurException($recurSet[6], FALSE, FALSE); //2012-03-21
+        $this->_assertMail('jmcblack', 'reschedule');
+        
+        // cancle thisandfuture
+        // @TODO check RANGE in ics
+        // @TODO add RANGE text to message
+        self::flushMailer();
+        $this->_eventController->createRecurException($recurSet[16], TRUE, TRUE); //2012-03-31
+        $this->_assertMail('jmcblack', 'cancel');
+        
+        // update thisandfuture
+        
+        // reschedule thisandfuture
+        
+        
+    }
+    
     public function testRecuringAlarm()
     {
         $event = $this->_getEvent();
