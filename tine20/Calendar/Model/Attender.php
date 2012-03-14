@@ -573,6 +573,34 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     }
     
     /**
+     * returns migration of two attendee sets
+     * 
+     * @param  Tinebase_Record_RecordSet $_current
+     * @param  Tinebase_Record_RecordSet $_update
+     * @return array migrationKey => Tinebase_Record_RecordSet
+     */
+    public static function getMigration($_current, $_update)
+    {
+        $result = array(
+            'toDelete' => new Tinebase_Record_RecordSet('Calendar_Model_Attender'),
+            'toCreate' => clone $_update,
+            'toUpdate' => new Tinebase_Record_RecordSet('Calendar_Model_Attender'),
+        );
+        
+        foreach($_current as $currAttendee) {
+            $updateAttendee = self::getAttendee($result['toCreate'], $currAttendee);
+            if ($updateAttendee) {
+                $result['toUpdate']->addRecord($updateAttendee);
+                $result['toCreate']->removeRecord($updateAttendee);
+            } else {
+                $result['toDelete']->addRecord($currAttendee);
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
      * resolves given attendee for json representation
      * 
      * @TODO move status_authkey cleanup elsewhere

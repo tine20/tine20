@@ -148,20 +148,18 @@
                 }
                 break;
             case 'changed':
-                $attendeeMigration = $_oldEvent->attendee->getMigration($_event->attendee->getArrayOfIds());
+                $attendeeMigration = Calendar_Model_Attender::getMigration($_oldEvent->attendee, $_event->attendee);
                 
-                foreach ($attendeeMigration['toCreateIds'] as $attenderId) {
-                    $attender = $_event->attendee[$_event->attendee->getIndexById($attenderId)];
+                foreach ($attendeeMigration['toCreate'] as $attender) {
                     $this->sendNotificationToAttender($attender, $_event, $_updater, 'created', self::NOTIFICATION_LEVEL_INVITE_CANCEL);
                 }
                 
-                foreach ($attendeeMigration['toDeleteIds'] as $attenderId) {
-                    $attender = $_oldEvent->attendee[$_oldEvent->attendee->getIndexById($attenderId)];
+                foreach ($attendeeMigration['toDelete'] as $attender) {
                     $this->sendNotificationToAttender($attender, $_oldEvent, $_updater, 'deleted', self::NOTIFICATION_LEVEL_INVITE_CANCEL);
                 }
                 
-                // NOTE: toUpdateIds are all attendee to be notified
-                if (! empty($attendeeMigration['toUpdateIds'])) {
+                // NOTE: toUpdate are all attendee to be notified
+                if (count($attendeeMigration['toUpdate']) > 0) {
                     $updates = $this->_getUpdates($_event, $_oldEvent);
                     
                     if (empty($updates)) {
@@ -179,8 +177,7 @@
                     }
                     
                     // send notifications
-                    foreach ($attendeeMigration['toUpdateIds'] as $attenderId) {
-                        $attender = $_event->attendee[$_event->attendee->getIndexById($attenderId)];
+                    foreach ($attendeeMigration['toUpdate'] as $attender) {
                         $this->sendNotificationToAttender($attender, $_event, $_updater, 'changed', $notificationLevel, $updates);
                     }
                 }
@@ -337,12 +334,14 @@
                     }
                 }
                 
-                /* not yet supported
-                // in Tine 2.0 status updater might not be updater
+                // @TODO in Tine 2.0 status updater might not be updater
                 if ($method == Calendar_Model_iMIP::METHOD_REPLY) {
-                    
+                    foreach($vcalendar->children() as $component) {
+                        if ($component->name == 'VEVENT') {
+                            $component->{'REQUEST-STATUS'} = '2.0;Success';
+                        }
+                    }
                 }
-                */
                 
                 $calendarPart           = new Zend_Mime_Part($vcalendar->serialize());
                 $calendarPart->charset  = 'UTF-8';

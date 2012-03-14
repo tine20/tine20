@@ -638,7 +638,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if (empty($_event->recurid)) {
             throw new Exception('recurid must be present to create exceptions!');
         }
-        $exdate = new Tinebase_DateTime(substr($_event->recurid, -19));
         
         // we do notifications ourself
         $sendNotifications = $this->sendNotifications(FALSE);
@@ -646,8 +645,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $db = $this->_backend->getAdapter();
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
         
+        $exdate = new Tinebase_DateTime(substr($_event->recurid, -19));
         $exdates = is_array($baseEvent->exdate) ? $baseEvent->exdate : array();
-        
+        $originalDtstart = $_event->getOriginalDtStart();
+        $originalEvent = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, new Tinebase_Record_RecordSet('Calendar_Model_Event'), $originalDtstart);
         
         if ($_allFollowing != TRUE) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " adding exdate for: '{$_event->recurid}'");
@@ -820,7 +821,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // restore original notification handling
         $this->sendNotifications($sendNotifications);
-        $notificationAction = $_deleteInstance ? 'deleted' : 'created';
+        $notificationAction = $_deleteInstance ? 'deleted' : 'changed';
         $notificationEvent = $_deleteInstance ? $_event : $persistentExceptionEvent;
         
         // send notifications
@@ -833,7 +834,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
                 $_event->created_by = $baseEvent->created_by;
                 
-                $this->doSendNotifications($notificationEvent, $this->_currentAccount, $notificationAction);
+                $this->doSendNotifications($notificationEvent, $this->_currentAccount, $notificationAction, $originalEvent);
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getTraceAsString());
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " could not send notification {$e->getMessage()}");

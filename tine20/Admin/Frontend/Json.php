@@ -322,7 +322,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
     
-    
     /**
      * save user
      *
@@ -339,7 +338,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         unset($recordData['accountFullName']);
         
         try {
-            $account->setFromArray($recordData);
+            $account->setFromJsonInUsersTimezone($recordData);
             if (isset($recordData['sambaSAM'])) {
                 $account->sambaSAM = new Tinebase_Model_SAMUser($recordData['sambaSAM']);
             }

@@ -58,7 +58,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.onRecordLoad.defer(250, this);
             return;
         }
-                
+        
         // samba user
         var response = {
             responseText: Ext.util.JSON.encode(this.record.get('sambaSAM'))
@@ -136,14 +136,14 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         var newGroups = [],
             newRoles = [];
-            
+        
         this.storeGroups.each(function (rec) {
             newGroups.push(rec.data.id);
         });
         // add selected primary group to new groups if not exists
         if (newGroups.indexOf(this.record.get('accountPrimaryGroup')) === -1) {
             newGroups.push(this.record.get('accountPrimaryGroup'));
-        }   
+        }
          
         this.storeRoles.each(function (rec) {
             newRoles.push(rec.data.id);
@@ -164,7 +164,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     unsetLocalizedDateTimeFields: function(record, dateTimeDisplayFields) {
         Ext.each(dateTimeDisplayFields, function (dateTimeDisplayField) {
             record.set(dateTimeDisplayField, '');
-        }, this);        
+        }, this);
     },
 
     /**
@@ -320,7 +320,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             recordClass: Tine.Tinebase.Model.Role,
             columns: [{id: 'name', header: Tine.Tinebase.translation.gettext('Name'), sortable: true, dataIndex: 'name'}],
             initActionsAndToolbars: function () {
-                // for now removed abillity to edit role membership                
+                // for now removed abillity to edit role membership
 //                Tine.widgets.grid.PickerGridPanel.prototype.initActionsAndToolbars.call(this);
 //                
 //                this.comboPanel = new Ext.Container({
@@ -831,7 +831,38 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         triggerAction: 'all',
                         allowBlank: false,
                         editable: false,
-                        store: [['enabled', this.app.i18n.gettext('enabled')], ['disabled', this.app.i18n.gettext('disabled')], ['expired', this.app.i18n.gettext('expired')], ['blocked', this.app.i18n.gettext('blocked')]]
+                        store: [
+                            ['enabled',  this.app.i18n.gettext('enabled')],
+                            ['disabled', this.app.i18n.gettext('disabled')],
+                            ['expired',  this.app.i18n.gettext('expired')],
+                            ['blocked',  this.app.i18n.gettext('blocked')]
+                        ],
+                        listeners: {
+                            scope: this,
+                            select: function (combo, record) {
+                                switch (record.data.field1) {
+                                    case 'blocked':
+                                        Ext.Msg.alert(this.app.i18n._('Invalid Status'),
+                                            this.app.i18n._('Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here.'));
+                                        combo.setValue(combo.startValue);
+                                        break;
+                                    case 'expired':
+                                        this.getForm().findField('accountExpires').setValue(new Date());
+                                        break;
+                                    case 'enabled':
+                                        var expiryDateField = this.getForm().findField('accountExpires'),
+                                            expiryDate = expiryDateField.getValue(),
+                                            now = new Date();
+                                            
+                                        if (expiryDate < now) {
+                                            expiryDateField.setValue('');
+                                        }
+                                        break;
+                                    default:
+                                        // do nothing
+                                }
+                            }
+                        }
                     }, {
                         xtype: 'extuxclearabledatefield',
                         fieldLabel: this.app.i18n.gettext('Expires'),

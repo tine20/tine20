@@ -707,14 +707,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 $event->attendee->addRecord($newAttender);
             }
         }
-        
-        if (isset($xmlData->BusyStatus) && ($ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee)) !== null) {
-            if (isset($this->_busyStatusMapping[(string)$xmlData->BusyStatus])) {
-                $ownAttendee->status = $this->_busyStatusMapping[(string)$xmlData->BusyStatus];
-            } else {
-                $ownAttendee->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
-            }
-        }
+        $this->_handleBusyStatus($xmlData, $event);
         
         // handle recurrence
         if(isset($xmlData->Recurrence) && isset($xmlData->Recurrence->Type)) {
@@ -814,6 +807,47 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " eventData " . print_r($event->toArray(), true));
         
         return $event;
+    }
+    
+    /**
+     * set status of own attender depending on BusyStatus
+     * 
+     * @param SimpleXMLElement $xmlData
+     * @param Calendar_Model_Event $event
+     * 
+     * @todo move detection of special handling / device type to device library or add flag for this
+     */
+    protected function _handleBusyStatus($xmlData, $event)
+    {
+        if (! isset($xmlData->BusyStatus)) {
+            return;
+        }
+        
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($event->attendee);
+        if ($ownAttender === NULL) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' No own attender found.');
+            return;
+        }
+        
+        $busyStatus = (string)$xmlData->BusyStatus;
+        if (preg_match('/samsunggti9100/', strtolower($this->_device->devicetype))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' Device uses a bad default setting. BUSY and FREE are mapped to ACCEPTED.');
+            $busyStatusMapping = array(
+                self::BUSY_STATUS_BUSY      => Calendar_Model_Attender::STATUS_ACCEPTED,
+                self::BUSY_STATUS_TENATTIVE => Calendar_Model_Attender::STATUS_TENTATIVE,
+                self::BUSY_STATUS_FREE      => Calendar_Model_Attender::STATUS_ACCEPTED
+            );
+        } else {
+            $busyStatusMapping = $this->_busyStatusMapping;
+        }
+        
+        if (isset($busyStatusMapping[$busyStatus])) {
+            $ownAttender->status = $busyStatusMapping[$busyStatus];
+        } else {
+            $ownAttender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+        }
     }
     
     /**

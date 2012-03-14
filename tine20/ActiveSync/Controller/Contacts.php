@@ -71,7 +71,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         #'RadioPhoneNumber'      => 'radiophonenumber',
         #'Spouse'                => 'spouse',
         'Suffix'                => 'n_prefix',
-        #'Title'                 => '', //salutation_id
+        #'Title'                 => '', //salutation
         'WebPage'               => 'url',
         #'YomiCompanyName'       => 'yomicompanyname',
         #'YomiFirstName'         => 'yomifirstname',
