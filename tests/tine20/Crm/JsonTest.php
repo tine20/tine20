@@ -4,7 +4,7 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -46,6 +46,7 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_instance = new Crm_Frontend_Json();
     }
 
@@ -56,8 +57,9 @@ class Crm_JsonTest extends Crm_AbstractTest
      * @access protected
      */
     protected function tearDown()
-    {	
-    }    
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+    }
     
     /**
      * test get crm registry
@@ -138,7 +140,6 @@ class Crm_JsonTest extends Crm_AbstractTest
     
     /**
      * try to add a lead and link a contact
-     *
      */
     public function testAddGetSearchDeleteLead()
     {
@@ -249,6 +250,18 @@ class Crm_JsonTest extends Crm_AbstractTest
         $result = $this->_instance->searchLeads($filter, array());
         $this->assertEquals(0, $result['totalcount'], 'Should not find the lead!');
     }    
+    
+    /**
+     * testSearchByBrokenFilter
+     * 
+     * @see 0005990: cardinality violation when searching for leads / http://forge.tine20.org/mantisbt/view.php?id=5990
+     */
+    public function testSearchByBrokenFilter()
+    {
+        $filter = Zend_Json::decode('[{"field":"query","operator":"contains","value":"test"},{"field":"container_id","operator":"equals","value":{"path":"/"}},{"field":"contact","operator":"AND","value":[{"field":":id","operator":"equals","value":{"n_fn":"","n_fileas":"","org_name":"","container_id":"2576"}}]}]');
+        $result = $this->_instance->searchLeads($filter, array());
+        $this->assertEquals(0, $result['totalcount']);
+    }
     
     /**
      * add relation, remove relation and add relation again
