@@ -760,7 +760,10 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'resolveStrategy'   => 'mergeMine',
             'index'             => 1,
         ));
-        //print_r($clientRecords);
+        
+        // need to sleep for 1 second because modlog does not allow to change the same attribute twice in the same second ...
+        sleep(1);
+        
         $result = $this->_importHelper(array('dryrun' => 0), $clientRecords);
         $this->assertEquals(1, $result['totalcount'], 'Should merge fritz: ' . print_r($result['exceptions'], TRUE));
         $this->assertEquals(2, count($result['results'][0]['tags']), 'Should merge tags');
