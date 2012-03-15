@@ -29,7 +29,7 @@ Ext.ns('Tine.Calendar');
  * Create a new Tine.Calendar.SearchCombo
  */
 
-Tine.Calendar.SearchCombo = Ext.extend(Ext.form.ComboBox, {
+Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     anchor: '100% 100%',
     margins: '10px 10px',
     
@@ -37,7 +37,7 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.form.ComboBox, {
     appName: 'Calendar',
 
     store: null,
-    
+    allowBlank: false,
     triggerAction: 'all',
     itemSelector: 'div.search-item',
     minChars: 3,

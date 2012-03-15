@@ -56,6 +56,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
      * TODO remove this later
      */
     useAccountRecord: false,
+    allowBlank: false,
     
     itemSelector: 'div.search-item',
     minListWidth: 200,

@@ -16,10 +16,16 @@ Ext.ns('Ext.ux', 'Ext.ux.form');
  * @class       Ext.ux.form.ClearableComboBox
  * @extends     Ext.form.ComboBox
  */
-Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
+Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {  
+    
+    /**
+     * @cfg {bool} disableClearer
+     * disables the clearer
+     */
+    disableClearer: null,
+    
     initComponent : function(){
         Ext.ux.form.ClearableComboBox.superclass.initComponent.call(this);
-
         this.triggerConfig = {
             tag:'span', cls:'x-form-twin-triggers', style:'padding-right:2px',  // padding needed to prevent IE from clipping 2nd trigger button
             cn:[
@@ -73,23 +79,27 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
         Ext.ux.form.ClearableComboBox.superclass.clearValue.apply(this, arguments);
         this.fireEvent('select', this, this.getRawValue(), this.startValue);
         this.startValue = this.getRawValue();
-        this.triggers[0].hide();
+        if(this.disableClearer !== true) {
+            this.triggers[0].hide();
+        }
     },
     
     // pass to original combobox trigger handler
     onTrigger2Click : function() {
         this.onTriggerClick();
     },
-    // show clear triger when item got selected
+    // show clear trigger when item got selected
     onSelect: function(combo, record, index) {
-        this.triggers[0].show();
+        if(this.disableClearer !== true) {
+            this.triggers[0].show();
+        }
         Ext.ux.form.ClearableComboBox.superclass.onSelect.call(this, combo, record, index);
         this.startValue = this.getValue();
     },
     
     setValue: function(value) {
         Ext.ux.form.ClearableComboBox.superclass.setValue.call(this, value);
-        if (value) {
+        if (value && (this.disableClearer !== true)) {
             this.triggers[0].show();
         }
     }
