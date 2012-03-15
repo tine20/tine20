@@ -4,7 +4,7 @@
  * 
  * @package     Tasks
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -44,8 +44,9 @@ abstract class Tasks_TestCase extends PHPUnit_Framework_TestCase
             'geo'                  => 0.2345,
             'location'             => 'here and there',
             'organizer'            => 4,
-            'priority'             => 2,
-            //'status'               => 'NEDDS_ACTION',
+            'priority'             => Tasks_Model_Priority::NORMAL,
+            // @todo why is the status missing?
+            //'status'               => 'NEEDS_ACTION',
             'summary'              => 'our first test task',
             'url'                  => 'http://www.testtask.com',
         ),true, false);

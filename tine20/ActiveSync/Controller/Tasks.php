@@ -29,6 +29,11 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         Syncope_Command_Sync::FILTER_INCOMPLETE
     );
     
+    /**
+     * ActiveSync -> record field mapping
+     * 
+     * @var array
+     */
     protected $_mapping = array(
         #'Body'              => 'body',
         #'BodySize'          => 'bodysize',
@@ -101,7 +106,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      * 
      * @var string
      */
-    protected $_filterProperty = 'tasksfilter_id';        
+    protected $_filterProperty = 'tasksfilter_id';
     
     /**
      * append task data to xml element
@@ -138,18 +143,19 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                         break;
                         
                     case 'priority':
-                        $nodeContent = ($data->$value <= 2) ? $data->$value : 2;
+                        $prioMapping = array_flip(Tasks_Model_Priority::getMapping());
+                        $priority = (isset($prioMapping[$data->$value])) ? $prioMapping[$data->$value] : 2;
+                        // ActiveSync does not support URGENT (3) priority
+                        $nodeContent = ($priority <= 2) ? $priority : 2;
                         break;
                         
                     default:
                         $nodeContent = $data->$value;
-                        
                         break;
                 }
                 
                 // skip empty elements
                 if($nodeContent === null || $nodeContent == '') {
-                    //Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Value for $key is empty. Skip element.");
                     continue;
                 }
                 
@@ -212,7 +218,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         foreach($this->_mapping as $fieldName => $value) {
             switch($value) {
                 case 'completed':
-                    if((int)$xmlData->$fieldName === 1) {
+                    if ((int)$xmlData->$fieldName === 1) {
                         $task->status = 'COMPLETED';
                         $task->completed = (string)$xmlData->DateCompleted;
                     } else {
@@ -221,12 +227,19 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                     }
                     break;
                 case 'due':
-                    if(isset($xmlData->$fieldName)) {
+                    if (isset($xmlData->$fieldName)) {
                         $task->$value = new Tinebase_DateTime((string)$xmlData->$fieldName);
                     } else {
                         $task->$value = null;
                     }
                     break;
+                case 'priority':
+                    $prioMapping = Tasks_Model_Priority::getMapping();
+                    $task->$value = (isset($xmlData->$fieldName) && isset($prioMapping[(int)$xmlData->$fieldName]))
+                        ? $prioMapping[(int)$xmlData->$fieldName]
+                        : Tasks_Model_Priority::NORMAL;
+                    break;
+                    
                 default:
                     if(isset($xmlData->$fieldName)) {
                         $task->$value = (string)$xmlData->$fieldName;

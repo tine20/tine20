@@ -96,6 +96,8 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
     
     /**
      * test xml generation for sync to client
+     * 
+     * @see (test of priority/Importance) 0006016: Missing mapping of task severity int/string / http://forge.tine20.org/mantisbt/view.php?id=6016
      */
     public function testAppendXml()
     {
@@ -117,6 +119,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         // namespace === uri:Calendar
         $dueDate = $task->due->format("Y-m-d\TH:i:s") . '.000Z';
         $this->assertEquals($dueDate, @$dom->getElementsByTagNameNS('uri:Tasks', 'DueDate')->item(0)->nodeValue, $dom->saveXML());
+        $this->assertEquals(1, @$dom->getElementsByTagNameNS('uri:Tasks', 'Importance')->item(0)->nodeValue, $dom->saveXML());
         $this->assertEquals("Hello\r\nTask\r\nLars", @$dom->getElementsByTagNameNS('uri:AirSyncBase', 'Data')->item(0)->nodeValue, $dom->saveXML());
         
         // try to encode XML until we have wbxml tests
@@ -130,24 +133,27 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
     
     /**
      * test convert from XML to Tine 2.0 model
+     * 
+     * @see (test of priority) 0006016: Missing mapping of task severity int/string / http://forge.tine20.org/mantisbt/view.php?id=6016
      */
     public function testConvertToTine20Model()
     {
         $xml = simplexml_import_dom($this->_getInputDOMDocument());
         
-        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));   
+        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
         
         $task = $controller->toTineModel($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
-        
-        #var_dump($task->toArray());
         
         $this->assertEquals('Testaufgabe auf mfe', $task->summary);
         $this->assertEquals(0,                     $task->percent);
         $this->assertEquals("test beschreibung zeile 1\r\nZeile 2\r\nZeile 3", $task->description);
+        $this->assertEquals(Tasks_Model_Priority::NORMAL, $task->priority);
     }
     
     /**
      * test search tasks
+     * 
+     * @todo finish test!
      */
     public function testSearch()
     {
