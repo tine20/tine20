@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -35,6 +35,7 @@ class Tinebase_User_EmailUser_AllTests
         
         $suite->addTestSuite('Tinebase_User_EmailUser_Smtp_PostfixTest');
         $suite->addTestSuite('Tinebase_User_EmailUser_Smtp_LdapDbmailSchemaTest');
+        $suite->addTestSuite('Tinebase_User_EmailUser_Smtp_LdapMailSchemaTest');
         
         return $suite;
     }

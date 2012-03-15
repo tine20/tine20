@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_S
 /**
  * Test class for Tinebase_Group
  */
-class Tinebase_User_EmailUser_Smtp_LdapDbmailSchemaTest extends PHPUnit_Framework_TestCase
+class Tinebase_User_EmailUser_Smtp_LdapMailSchemaTest extends PHPUnit_Framework_TestCase
 {
     /**
      * ldap group backend
@@ -31,8 +31,6 @@ class Tinebase_User_EmailUser_Smtp_LdapDbmailSchemaTest extends PHPUnit_Framewor
      */
     protected $objects = array();
     
-    protected $_config;
-
     /**
      * Runs the test methods of this class.
      *
@@ -59,11 +57,9 @@ class Tinebase_User_EmailUser_Smtp_LdapDbmailSchemaTest extends PHPUnit_Framewor
         
         $this->_backend = Tinebase_User::getInstance();
         
-        if (!array_key_exists('Tinebase_EmailUser_Smtp_LdapDbmailSchema', $this->_backend->getPlugins())) {
-            $this->markTestSkipped('Dbmail LDAP plugin not enabled');
+        if (!array_key_exists('Tinebase_EmailUser_Smtp_LdapMailSchema', $this->_backend->getPlugins())) {
+            $this->markTestSkipped('Mail LDAP plugin not enabled');
         }
-        
-        $this->_config = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::IMAP);
         
         $this->objects['users'] = array();
     }
@@ -91,20 +87,13 @@ class Tinebase_User_EmailUser_Smtp_LdapDbmailSchemaTest extends PHPUnit_Framewor
         $user = Tinebase_User_LdapTest::getTestRecord();
         $user->smtpUser = new Tinebase_Model_EmailUser(array(
             'emailAddress'     => $user->accountEmailAddress,
-            'emailForwardOnly' => true,
-            'emailForwards'    => array('unittest@tine20.org', 'test@tine20.org'),
             'emailAliases'     => array('bla@tine20.org', 'blubb@tine20.org')
         ));
         
         $testUser = $this->_backend->addUser($user);
         $this->objects['users']['testUser'] = $testUser;
-
-        #var_dump($testUser->toArray());
-        #var_dump($this->_config);
         
-        $this->assertEquals(array('unittest@tine20.org', 'test@tine20.org'), $testUser->smtpUser->emailForwards);
         $this->assertEquals(array('bla@tine20.org', 'blubb@tine20.org'),     $testUser->smtpUser->emailAliases);
-        $this->assertEquals(true,                                            $testUser->smtpUser->emailForwardOnly);
         $this->assertEquals($user->accountEmailAddress,                      $testUser->smtpUser->emailAddress);
         
         return $testUser;
@@ -119,53 +108,12 @@ class Tinebase_User_EmailUser_Smtp_LdapDbmailSchemaTest extends PHPUnit_Framewor
         $user = $this->testAddUser();
         
         // update user
-        $user->smtpUser->emailForwardOnly = 1;
         $user->smtpUser->emailAliases = array('bla@tine20.org');
-        $user->smtpUser->emailForwards = array();
         $user->accountEmailAddress = 'j.smith@tine20.org';
         
         $testUser = $this->_backend->updateUser($user);
         
-        $this->assertEquals(array(),                 $testUser->smtpUser->emailForwards, 'forwards mismatch');
         $this->assertEquals(array('bla@tine20.org'), $testUser->smtpUser->emailAliases,  'aliases mismatch');
-        $this->assertEquals(false,                   $testUser->smtpUser->emailForwardOnly);
         $this->assertEquals('j.smith@tine20.org',    $testUser->smtpUser->emailAddress);
     }
-        
-    /**
-     * try to enable an account
-     *
-     */
-    public function testSetStatus()
-    {
-        $user = $this->testAddUser();
-
-        
-        $this->_backend->setStatus($user, Tinebase_User::STATUS_DISABLED);
-        
-        $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
-        
-        $this->assertEquals(Tinebase_User::STATUS_DISABLED, $testUser->accountStatus);
-        
-        
-        $this->_backend->setStatus($user, Tinebase_User::STATUS_ENABLED);
-        
-        $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
-        
-        $this->assertEquals(Tinebase_User::STATUS_ENABLED, $testUser->accountStatus);
-    }
-        
-    /**
-     * try to update an email account
-     */
-    public function testSetPassword()
-    {
-        // add smtp user
-        $user = $this->testAddUser();
-        
-        $this->_backend->setPassword($user, Tinebase_Record_Abstract::generateUID());
-        
-        //$this->assertEquals(md5('password'), $updatedUser->emailPassword);
-    }
 }
-

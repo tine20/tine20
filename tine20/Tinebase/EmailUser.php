@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        think about splitting email user model in two (imap + smtp)
  */
@@ -28,7 +28,7 @@ class Tinebase_EmailUser
      */
     const DBMAIL    = 'Dbmail';
 
-	/**
+    /**
      * Dovecot imap backend const
      * 
      * @staticvar string
@@ -55,6 +55,13 @@ class Tinebase_EmailUser
      * @staticvar string
      */
     const LDAP_SMTP      = 'Ldapsmtp';
+    
+    /**
+     * smtp ldap mail attribute backend const
+     * 
+     * @staticvar string
+     */
+    const LDAP_SMTP_MAIL      = 'Ldapsmtpmail';
     
     /**
      * smtp ldap backend const
@@ -155,12 +162,18 @@ class Tinebase_EmailUser
                 }
                 break;
                 
+            case self::LDAP_SMTP_MAIL:
+                if (!isset(self::$_backends[$_type])) {
+                    self::$_backends[$_type] = new Tinebase_EmailUser_Smtp_LdapMailSchema();
+                }
+                break;
+                
             case self::LDAP_SMTP_QMAIL:
                 if (!isset(self::$_backends[$_type])) {
                     self::$_backends[$_type] = new Tinebase_EmailUser_Smtp_LdapQmailSchema();
                 }
                 break;
-			
+            
             case self::DOVECOT_IMAP:
                 if (!isset(self::$_backends[$_type])) {
                     self::$_backends[$_type] = new Tinebase_EmailUser_Imap_Dovecot();
@@ -185,7 +198,7 @@ class Tinebase_EmailUser
      */
     public static function getConfiguredBackend($_configType = Tinebase_Config::IMAP)
     {
-        $result = '';        
+        $result = '';
         
         $config = self::getConfig($_configType);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($config, TRUE));
@@ -209,6 +222,8 @@ class Tinebase_EmailUser
                         $result = self::POSTFIX;
                     } else if ($backend == self::LDAP_SMTP) {
                         $result = self::LDAP_SMTP;
+                    } else if ($backend == self::LDAP_SMTP_MAIL) {
+                        $result = self::LDAP_SMTP_MAIL;
                     } else if ($backend == self::LDAP_SMTP_QMAIL) {
                         $result = self::LDAP_SMTP_QMAIL;
                     }
