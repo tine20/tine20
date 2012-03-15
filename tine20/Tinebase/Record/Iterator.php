@@ -134,8 +134,6 @@ class Tinebase_Record_Iterator
             'results'    => array(),
         );
         
-        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        
         while (count($records) > 0) {
             $arguments = func_get_args();
             array_unshift($arguments, $records);
@@ -145,8 +143,6 @@ class Tinebase_Record_Iterator
             $records = $this->_getRecords();
             $result['totalcount'] += count($records);
         }
-        
-        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
         return $result;
     }
