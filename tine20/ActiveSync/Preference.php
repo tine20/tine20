@@ -7,8 +7,8 @@
  *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL), 
  *              Version 1, the distribution of the Tine 2.0 ActiveSync module in or to the 
  *              United States of America is excluded from the scope of this license.
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -42,7 +42,7 @@ class ActiveSync_Preference extends Tinebase_Preference_Abstract
      *
      * @var string
      */
-    protected $_application = 'ActiveSync';    
+    protected $_application = 'ActiveSync';
         
     /**
      * get all possible application prefs
@@ -53,10 +53,15 @@ class ActiveSync_Preference extends Tinebase_Preference_Abstract
     {
         $allPrefs = array(
             self::DEFAULTADDRESSBOOK,
-            self::DEFAULTCALENDAR,
-            self::DEFAULTTASKLIST,
         );
-            
+        
+        if (Setup_Controller::getInstance()->isInstalled('Calendar')) {
+            $allPrefs[] = self::DEFAULTCALENDAR;
+        }
+        if (Setup_Controller::getInstance()->isInstalled('Tasks')) {
+            $allPrefs[] = self::DEFAULTTASKLIST;
+        }
+        
         return $allPrefs;
     }
     

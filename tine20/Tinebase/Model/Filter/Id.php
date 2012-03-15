@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -57,13 +57,16 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
          // quote field identifier
          $field = $this->_getQuotedFieldName($_backend);
          
-         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_value, TRUE));
-         
          if (empty($this->_value)) {
              // prevent sql error
              if ($this->_operator == 'in') {
-                $_select->where('1=0');
+                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                     . ' Empty value with "in" operator.');
+                 $_select->where('1=0');
              }
+         } else if ($this->_operator == 'equals' && is_array($this->_value)) {
+             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                 . ' Unexpected array value with "equals" operator.');
          } else {
              // finally append query to select object
              $_select->where($field . $action['sqlop'], $this->_value);

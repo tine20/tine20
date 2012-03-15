@@ -23,12 +23,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @todo do we still need this?
      */
-	public function ping()
-	{
-	    Zend_Session::writeClose(true);
-	    sleep(10);
-	    return array('changes' => 'contacts');
-	}
+    public function ping()
+    {
+        Zend_Session::writeClose(true);
+        sleep(10);
+        return array('changes' => 'contacts');
+    }
 
     /**
      * get list of translated country names
@@ -133,7 +133,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchRoles($filter, $paging)
     {
-    	$result = array(
+        $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
@@ -185,7 +185,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function clearState($name)
     {
-    	Tinebase_State::getInstance()->clearState($name);
+        Tinebase_State::getInstance()->clearState($name);
     }
 
     /**
@@ -441,9 +441,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         if ($success) {
             $response = array(
-				'success'       => TRUE,
+                'success'       => TRUE,
                 'account'       => Tinebase_Core::getUser()->getPublicUser()->toArray(),
-				'jsonKey'       => Tinebase_Core::get('jsonKey'),
+                'jsonKey'       => Tinebase_Core::get('jsonKey'),
                 'welcomeMessage' => "Welcome to Tine 2.0!"
             );
             $success = $this->_setCredentialCacheCookie();
@@ -453,9 +453,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->resetCache();
 
             $response = array(
-				'success'      => FALSE,
-				'errorMessage' => "Wrong username or password!"
-			);
+                'success'      => FALSE,
+                'errorMessage' => "Wrong username or password!"
+            );
         }
 
         return $response;
@@ -520,7 +520,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->resetCache();
 
         $result = array(
-			'success'=> true,
+            'success'=> true,
         );
 
         return $result;
@@ -613,31 +613,31 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         if (Tinebase_Core::getUser()) {
             $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
-			$clientConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
-
+            $clientConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
+            
             foreach ($userApplications as $application) {
                 $jsonAppName = $application->name . '_Frontend_Json';
-
+                
                 if (class_exists($jsonAppName)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting registry data for app ' . $application->name);
-
+                    
                     $applicationJson = new $jsonAppName;
 
                     $registryData[$application->name] = $applicationJson->getRegistryData();
                     $registryData[$application->name]['rights'] = Tinebase_Core::getUser()->getRights($application->name);
                     $registryData[$application->name]['config'] = isset($clientConfig[$application->name]) ? $clientConfig[$application->name]->toArray() : array();
-
+                    
                     // @todo do we need this for all apps?
                     $exportDefinitions = Tinebase_ImportExportDefinition::getInstance()->getExportDefinitionsForApplication($application);
                     $registryData[$application->name]['exportDefinitions'] = array(
                         'results'               => $exportDefinitions->toArray(),
                         'totalcount'            => count($exportDefinitions),
                     );
-
+                    
                     $customfields = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application);
                     Tinebase_CustomField::getInstance()->resolveConfigGrants($customfields);
                     $registryData[$application->name]['customfields'] = $customfields->toArray();
-
+                    
                     // add preferences for app
                     $appPrefs = Tinebase_Core::getPreference($application->name);
                     if ($appPrefs !== NULL) {
@@ -648,16 +648,16 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     }
                 }
             }
-
+            
             if (! array_key_exists('Tinebase', $registryData)) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' User has no permissions to run Tinebase or unable to get Tinebase preferences. Aborting ...');
                 $this->logout();
             }
-
+            
         } else {
             $registryData['Tinebase'] = $this->getRegistryData();
         }
-
+        
         return $registryData;
     }
 

@@ -8,7 +8,7 @@
  *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL), 
  *              Version 1, the distribution of the Tine 2.0 ActiveSync module in or to the 
  *              United States of America is excluded from the scope of this license.
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -219,6 +219,16 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      * @var string
      */
     protected $_contentControllerName = 'Calendar_Controller_MSEventFacade';
+    
+    /**
+     * list of devicetypes with wrong busy status default (0 = FREE)
+     * 
+     * @var array
+     */
+    protected $_devicesWithWrongBusyStatusDefault = array(
+        'samsunggti9100', // Samsung Galaxy S-2
+        'samsunggtn7000', // Samsung Galaxy Note 
+    );
     
     /**
      * append event data to xml element
@@ -815,7 +825,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      * @param SimpleXMLElement $xmlData
      * @param Calendar_Model_Event $event
      * 
-     * @todo move detection of special handling / device type to device library or add flag for this
+     * @todo move detection of special handling / device type to device library
      */
     protected function _handleBusyStatus($xmlData, $event)
     {
@@ -831,7 +841,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         }
         
         $busyStatus = (string)$xmlData->BusyStatus;
-        if (preg_match('/samsunggti9100/', strtolower($this->_device->devicetype))) {
+        if (in_array(strtolower($this->_device->devicetype), $this->_devicesWithWrongBusyStatusDefault)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . ' Device uses a bad default setting. BUSY and FREE are mapped to ACCEPTED.');
             $busyStatusMapping = array(

@@ -21,16 +21,16 @@
  */
 class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAccess
 {
-	/**
-	 * class name of records this instance can hold
-	 * @var string
-	 */
-	protected $_recordClass;
-	
-	/**
-	 * Holds records
-	 * @var array
-	 */
+    /**
+     * class name of records this instance can hold
+     * @var string
+     */
+    protected $_recordClass;
+    
+    /**
+     * Holds records
+     * @var array
+     */
     protected $_listOfRecords = array();
     
     /**
@@ -72,8 +72,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         $this->_recordClass = $_className;
 
         foreach($_records as $record) {
-        	$toAdd = is_array($record) ? new $this->_recordClass($record, $_bypassFilters, $_convertDates) : $record;
-        	$this->addRecord($toAdd);
+            $toAdd = is_array($record) ? new $this->_recordClass($record, $_bypassFilters, $_convertDates) : $record;
+            $this->addRecord($toAdd);
         }
     }
     
@@ -124,7 +124,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         foreach ($this->_indices as $name => &$propertyIndex) {
             $propertyIndex[$index] = $_record->$name;
         }
-		
+        
         return $index;
     }
     
@@ -183,7 +183,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     {
         foreach ($this->_listOfRecords as $index => $record) {
             if (!$record->isValid()) {
-            	$this->_validationErrors[$index] = $record->getValidationErrors();
+                $this->_validationErrors[$index] = $record->getValidationErrors();
             }
         }
         return !(bool)count($this->_validationErrors);
@@ -196,7 +196,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function getValidationErrors()
     {
-    	return $this->_validationErrors;
+        return $this->_validationErrors;
     }
     
     /**
@@ -298,9 +298,9 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function __set($_name, $_value)
     {
-    	foreach ($this->_listOfRecords as $record) {
-    		$record->$_name = $_value;
-    	}
+        foreach ($this->_listOfRecords as $record) {
+            $record->$_name = $_value;
+        }
         if (array_key_exists($_name, $this->_indices)) {
             foreach ($this->_indices[$_name] as $key => $oldvalue) {
                 $this->_indices[$_name][$key] = $_value;
@@ -364,7 +364,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         return count($this->_listOfRecords);
     }
 
-	/**
+    /**
      * required by IteratorAggregate interface
      * 
      * @return iterator
@@ -374,7 +374,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         return new ArrayIterator($this->_listOfRecords);    
     }
 
-	/**
+    /**
      * required by ArrayAccess interface
      */
     public function offsetExists($_offset)
@@ -407,26 +407,26 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         }
         
         if (!is_int($_offset)) {
-        	$this->addRecord($_value);
+            $this->addRecord($_value);
         } else {
             if (!array_key_exists($_offset, $this->_listOfRecords)) {
                 throw new Tinebase_Exception_Record_NotAllowed('adding a record is only allowd via the addRecord method');
             }
-        	$this->_listOfRecords[$_offset] = $_value;
-        	$id = $_value->getId();
-        	if ($id) {
-        	    if(! array_key_exists($id, $this->_idMap)) {
-        	        $this->_idMap[$id] = $_offset;
-        	        $idLessIdx = array_search($_offset, $this->_idLess);
+            $this->_listOfRecords[$_offset] = $_value;
+            $id = $_value->getId();
+            if ($id) {
+                if(! array_key_exists($id, $this->_idMap)) {
+                    $this->_idMap[$id] = $_offset;
+                    $idLessIdx = array_search($_offset, $this->_idLess);
                     unset($this->_idLess[$idLessIdx]);
-        	    }
-        	} else {
-        	    if (array_search($_offset, $this->_idLess) === false) {
-        	        $this->_idLess[] = $_offset;
-        	        $idMapIdx = array_search($_offset, $this->_idMap);
-        	        unset($this->_idMap[$idMapIdx]);
-        	    }
-        	}
+                }
+            } else {
+                if (array_search($_offset, $this->_idLess) === false) {
+                    $this->_idLess[] = $_offset;
+                    $idMapIdx = array_search($_offset, $this->_idMap);
+                    unset($this->_idMap[$idMapIdx]);
+                }
+            }
         }
     }
     
@@ -454,11 +454,11 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function getMigration(array $_toCompareWithRecordsIds)
     {
-    	$existingRecordsIds = $this->getArrayOfIds();
-    	
+        $existingRecordsIds = $this->getArrayOfIds();
+        
         $result = array();
         
-    	$result['toDeleteIds'] = array_diff($existingRecordsIds, $_toCompareWithRecordsIds);
+        $result['toDeleteIds'] = array_diff($existingRecordsIds, $_toCompareWithRecordsIds);
         $result['toCreateIds'] = array_diff($_toCompareWithRecordsIds, $existingRecordsIds);
         $result['toUpdateIds'] = array_intersect($existingRecordsIds, $_toCompareWithRecordsIds);
         

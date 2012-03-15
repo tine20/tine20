@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -80,8 +80,8 @@ abstract class Tinebase_Model_Filter_Abstract
         if (is_array($_fieldOrData)) {
             $data = $_fieldOrData;
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' 
-                . 'Using deprecated constructor syntax. Please pass all filter data in one array.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Using deprecated constructor syntax. Please pass all filter data in one array (filter field: ' . $_fieldOrData . ').');
             
             $data = array(
                 'field'     => $_fieldOrData,
