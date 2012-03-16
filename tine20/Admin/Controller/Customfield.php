@@ -31,10 +31,10 @@ class Admin_Controller_Customfield extends Tinebase_Controller_Record_Abstract
      */
     private function __construct() 
     {
-        $this->_currentAccount        = Tinebase_Core::getUser();        
+        $this->_currentAccount        = Tinebase_Core::getUser();
         $this->_applicationName       = 'Admin';
-		$this->_modelName             = 'Tinebase_Model_CustomField_Config';
-		$this->_doContainerACLChecks  = FALSE;
+        $this->_modelName             = 'Tinebase_Model_CustomField_Config';
+        $this->_doContainerACLChecks  = FALSE;
                 
         $this->_backend = new Tinebase_CustomField_Config();
         
@@ -81,7 +81,7 @@ class Admin_Controller_Customfield extends Tinebase_Controller_Record_Abstract
      */
     public function create(Tinebase_Record_Interface $_record)
     {
-    	return $this->_customfieldController->addCustomField($_record);
+        return $this->_customfieldController->addCustomField($_record);
     }
     
     /**
@@ -93,7 +93,7 @@ class Admin_Controller_Customfield extends Tinebase_Controller_Record_Abstract
      */
     public function get($_id)
     {
-    	return $this->_customfieldController->getCustomField($_id);
+        return $this->_customfieldController->getCustomField($_id);
     }
     
     /**
@@ -105,10 +105,22 @@ class Admin_Controller_Customfield extends Tinebase_Controller_Record_Abstract
      */
     public function delete($_ids)
     {
-    	foreach ( (array)$_ids as $id ) {
-       		$this->_customfieldController->deleteCustomField($id);
-		}
-		
-		return (array)$_ids;
+        foreach ( (array)$_ids as $id ) {
+            $this->_customfieldController->deleteCustomField($id);
+        }
+        
+        return (array)$_ids;
+    }
+    
+    /**
+    * inspect update of one record (after update)
+    *
+    * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
+    * @param   Tinebase_Record_Interface $_record          the update record
+    * @return  void
+    */
+    protected function _inspectAfterUpdate($_updatedRecord, $_record)
+    {
+        $this->_customfieldController->clearCacheForConfig($_updatedRecord);
     }
 }

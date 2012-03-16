@@ -149,7 +149,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             keys.push({key: key, type: 'default', formField: field, recordKey: key});
         }, this);
         
-        Ext.each(this.editDialog.cfConfigs, function(config) {
+        this.editDialog.cfConfigs.each(function(config) {
             var field = this.form.findField('customfield_' + config.data.name);
             if (!field) return true;
             keys.push({key: config.data.name, type: 'custom', formField: field, recordKey: '#' + config.data.name});

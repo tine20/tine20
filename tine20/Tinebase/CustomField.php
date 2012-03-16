@@ -557,11 +557,32 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * remove all customfield related entries from cache
      */
     protected function _clearCache() 
-    {        
+    {
         $this->_cfByApplicationCache = array();
         
         $cache = Tinebase_Core::getCache();
         $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
+    }
+
+    /**
+    * remove related entries from cache for given cf config record
+    * 
+    * @param Tinebase_Model_CustomField_Config $record
+    */
+    public function clearCacheForConfig(Tinebase_Model_CustomField_Config $record)
+    {
+        $cfIndexRead  = Tinebase_Model_CustomField_Grant::GRANT_READ;
+        $cfIndexWrite = Tinebase_Model_CustomField_Grant::GRANT_WRITE;
+        $cfIndexModelRead  = $record->model . Tinebase_Model_CustomField_Grant::GRANT_READ;
+        $cfIndexModelWrite = $record->model . Tinebase_Model_CustomField_Grant::GRANT_WRITE;
+        $idsToClear = array($cfIndexRead, $cfIndexModelRead, $cfIndexWrite, $cfIndexModelWrite);
+        
+        $cache = Tinebase_Core::getCache();
+        foreach ($idsToClear as $id) {
+            $cacheId = 'getCustomFieldsForApplication' . $record->application_id . $id;
+            unset($this->_cfByApplicationCache[$record->application_id . $id]);
+            $cache->remove($cacheId);
+        }
     }
     
     /******************** functions for Tinebase_Controller_SearchInterface / get custom field values ***************************/
