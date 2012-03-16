@@ -105,7 +105,7 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
      * @return {Integer}
      */
     getTabIndex: function () {
-    	return this.tabIndexCounter++;
+        return this.tabIndexCounter++;
     },
     
     /**
@@ -115,20 +115,20 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
      * @return {Array} items
      */
     getFormItems: function () {
-    	// common config for all combos in this setup
-    	var commonComboConfig = {
-    		xtype: 'combo',
-    		listWidth: 300,
+        // common config for all combos in this setup
+        var commonComboConfig = {
+            xtype: 'combo',
+            listWidth: 300,
             mode: 'local',
             forceSelection: true,
             allowEmpty: false,
             triggerAction: 'all',
             editable: false,
             tabIndex: this.getTabIndex
-    	};
-    	
+        };
+        
         this.sessionBackendCombo = new Ext.form.ComboBox(Ext.applyIf({
-        	name: 'session_backend',
+            name: 'session_backend',
             fieldLabel: this.app.i18n._('Backend'),
             value: 'File',
             // TODO add redis again when we are ready
@@ -141,7 +141,7 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
         }, commonComboConfig));
         
         this.sqlBackendCombo = new Ext.form.ComboBox(Ext.applyIf({
-        	name: 'database_adapter',
+            name: 'database_adapter',
             fieldLabel: this.app.i18n._('Adapter'),
             value: 'pdo_mysql',
             store: [
@@ -158,8 +158,8 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
         return [{
             title: this.app.i18n._('Setup Authentication'),
             defaults: {
-            	width: 300,
-            	tabIndex: this.getTabIndex
+                width: 300,
+                tabIndex: this.getTabIndex
             },
             items: [{
                 name: 'setupuser_username',
@@ -180,50 +180,50 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             title: this.app.i18n._('Database'),
             id: 'setup-database-group',
             defaults: {
-            	width: 300,
-            	tabIndex: this.getTabIndex
+                width: 300,
+                tabIndex: this.getTabIndex
             },
             items: [ 
-	            this.sqlBackendCombo, 
-	        	{
-	                name: 'database_host',
-	                fieldLabel: this.app.i18n._('Hostname'),
-	                allowBlank: false
-	            }, {
-	            	xtype: 'numberfield',
-	                name: 'database_port',
-	                fieldLabel: this.app.i18n._('Port')
-	            }, {
-	                name: 'database_dbname',
-	                fieldLabel: this.app.i18n._('Database'),
-	                allowBlank: false
-	            }, {
-	                name: 'database_username',
-	                fieldLabel: this.app.i18n._('User'),
-	                allowBlank: false
-	            }, {
-	                name: 'database_password',
-	                fieldLabel: this.app.i18n._('Password'),
-	                inputType: 'password'
-	            }, {
-	                name: 'database_tableprefix',
-	                fieldLabel: this.app.i18n._('Prefix')
-	            }
-			]
+                this.sqlBackendCombo, 
+                {
+                    name: 'database_host',
+                    fieldLabel: this.app.i18n._('Hostname'),
+                    allowBlank: false
+                }, {
+                    xtype: 'numberfield',
+                    name: 'database_port',
+                    fieldLabel: this.app.i18n._('Port')
+                }, {
+                    name: 'database_dbname',
+                    fieldLabel: this.app.i18n._('Database'),
+                    allowBlank: false
+                }, {
+                    name: 'database_username',
+                    fieldLabel: this.app.i18n._('User'),
+                    allowBlank: false
+                }, {
+                    name: 'database_password',
+                    fieldLabel: this.app.i18n._('Password'),
+                    inputType: 'password'
+                }, {
+                    name: 'database_tableprefix',
+                    fieldLabel: this.app.i18n._('Prefix')
+                }
+            ]
         }, {
             title: this.app.i18n._('Logging'),
             id: 'setup-logger-group',
             checkboxToggle: true,
             collapsed: true,
             defaults: {
-            	width: 300,
-            	tabIndex: this.getTabIndex
+                width: 300,
+                tabIndex: this.getTabIndex
             },
             items: [{
                 name: 'logger_filename',
                 fieldLabel: this.app.i18n._('Filename')
             }, Ext.applyIf({
-            	name: 'logger_priority',
+                name: 'logger_priority',
                 fieldLabel: this.app.i18n._('Priority'),
                 store: [[0, 'Emergency'], [1, 'Alert'], [2, 'Critical'], [3, 'Error'], [4, 'Warning'], [5, 'Notice'], [6, 'Informational'], [7, 'Debug'], [8, 'Trace']]
             }, commonComboConfig)]
@@ -233,14 +233,14 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             checkboxToggle: true,
             collapsed: true,
             defaults: {
-            	width: 300,
-            	tabIndex: this.getTabIndex
+                width: 300,
+                tabIndex: this.getTabIndex
             },
             items: [{
                 name: 'caching_path',
                 fieldLabel: this.app.i18n._('Path')
             }, {
-            	xtype: 'numberfield',
+                xtype: 'numberfield',
                 name: 'caching_lifetime',
                 fieldLabel: this.app.i18n._('Lifetime (seconds)'),
                 minValue: 0,
@@ -250,8 +250,8 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             title: this.app.i18n._('Temporary files'),
             id: 'setup-tmpDir-group',
             defaults: {
-            	width: 300,
-            	tabIndex: this.getTabIndex
+                width: 300,
+                tabIndex: this.getTabIndex
             },
             items: [{
                 name: 'tmpdir',
@@ -262,8 +262,8 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             title: this.app.i18n._('Session'),
             id: 'setup-session-group',
             defaults: {
-            	width: 300,
-            	tabIndex: this.getTabIndex
+                width: 300,
+                tabIndex: this.getTabIndex
             },
             items: [{
                 name: 'session_lifetime',
@@ -288,7 +288,7 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
                     defaults: {
                         width: 300,
                         xtype: 'textfield',
-            			tabIndex: this.getTabIndex
+                        tabIndex: this.getTabIndex
                     },
                     items: [{
                         name: 'session_path',
@@ -322,8 +322,8 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             title: this.app.i18n._('Filestore directory'),
             id: 'setup-filesDir-group',
             defaults: {
-            	width: 300,
-            	tabIndex: this.getTabIndex
+                width: 300,
+                tabIndex: this.getTabIndex
             },
             items: [{
                 name: 'filesdir',
@@ -334,17 +334,17 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             // TODO move map panel config to common config panel -> it should not be saved in config.inc.php
             title: this.app.i18n._('Addressbook Map panel'),
             defaults: {
-            	width: 300,
-            	tabIndex: this.getTabIndex
+                width: 300,
+                tabIndex: this.getTabIndex
             },
             items: [
-            	Ext.applyIf({
-	                name: 'mapPanel',
-	                fieldLabel: this.app.i18n._('Map panel'),
-	                value: Tine.Setup.registry.get(this.registryKey)['mapPanel'],
-	                store: [[0, this.app.i18n._('disabled')], [1,this.app.i18n._('enabled')]]
-	            }, commonComboConfig)
-			] 
+                Ext.applyIf({
+                    name: 'mapPanel',
+                    fieldLabel: this.app.i18n._('Map panel'),
+                    value: Tine.Setup.registry.get(this.registryKey)['mapPanel'],
+                    store: [[0, this.app.i18n._('disabled')], [1,this.app.i18n._('enabled')]]
+                }, commonComboConfig)
+            ] 
         }];
     },
     
