@@ -13,13 +13,13 @@ $autoloader->setFallbackAutoloader(true);
 
 function getTestDatabase()
 {
-    if (file_exists('/tmp/syncope_test.sq3')) {
-        unlink('/tmp/syncope_test.sq3');
+    if (file_exists('/tmp/Syncroton_test.sq3')) {
+        unlink('/tmp/Syncroton_test.sq3');
     }
     
     // create in memory database by default 
     $params = array (
-    	#'dbname' => '/tmp/syncope_test.sq3',
+    	#'dbname' => '/tmp/Syncroton_test.sq3',
     	'dbname' => ':memory:'
     );
     
@@ -28,7 +28,7 @@ function getTestDatabase()
     // enable foreign keys
     #$db->query('PRAGMA read_uncommitted = true');
     
-    $db->query("CREATE TABLE IF NOT EXISTS `syncope_device` (
+    $db->query("CREATE TABLE IF NOT EXISTS `Syncroton_device` (
         `id` varchar(40) NOT NULL,
         `deviceid` varchar(64) NOT NULL,                                                                                                                                                                         
         `devicetype` varchar(64) NOT NULL,
@@ -43,7 +43,7 @@ function getTestDatabase()
         PRIMARY KEY (`id`)
 	)");
 
-    $db->query("CREATE TABLE IF NOT EXISTS `syncope_folder` (
+    $db->query("CREATE TABLE IF NOT EXISTS `Syncroton_folder` (
         `id` varchar(40) NOT NULL,
         `device_id` varchar(40) NOT NULL,
         `class` varchar(64) NOT NULL,
@@ -57,7 +57,7 @@ function getTestDatabase()
         UNIQUE (`device_id`,`class`,`folderid`)
 	)");
     
-    $db->query("CREATE TABLE `syncope_synckey` (
+    $db->query("CREATE TABLE `Syncroton_synckey` (
     	`id` varchar(40) NOT NULL,
       	`device_id` varchar(40) NOT NULL,
       	`type` varchar(64) NOT NULL,
@@ -68,7 +68,7 @@ function getTestDatabase()
       	UNIQUE (`device_id`,`type`,`counter`)
     )");
     
-    $db->query("CREATE TABLE `syncope_content` (
+    $db->query("CREATE TABLE `Syncroton_content` (
         `id` varchar(40) NOT NULL,
         `device_id` varchar(40) NOT NULL,
         `folder_id` varchar(40) NOT NULL,
