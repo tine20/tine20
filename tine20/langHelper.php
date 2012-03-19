@@ -42,9 +42,10 @@ try {
     array(
         'verbose|v'       => 'Output messages',
         'clean|c'         => 'Cleanup all tmp files',
-        'wipe|w'         => 'wipe all local translations',
+        'wipe|w'          => 'wipe all local translations',
         'update|u'        => 'Update lang files (shortcut for --pot --potmerge --mo --clean)',
         'package=s'       => 'Create a translation package',
+        'app=s'           => 'Work only on this Application',
         'pot'             => '(re) generate xgettext po template files',
         'potmerge'        => 'merge pot contents into po files',
         'statistics'      => 'generate lang statistics',
@@ -56,6 +57,7 @@ try {
         'git'             => 'Add new/updated lang files to git',
         'lp:merge=s'      => 'merge langpackage from launchpad',
         'help|h'          => 'Display this help Message',
+        
         //'filter=s'        => 'Filter for applications'
     ));
     $opts->parse();
@@ -64,8 +66,24 @@ try {
    exit;
 }
 
+// Check app Parameter
+if(!empty($opts->app)) {
+    if(!array_key_exists($opts->app, Tinebase_Translation::getTranslationDirs())) {
+        echo chr(10);
+        echo 'Application "' . $opts->app . '" not found!'. chr(10);
+        echo chr(10);
+        exit;
+    } else {
+        echo 'Working on Application "' . $opts->app . '"...'. chr(10) ;
+    }
+
+}
+
 if ($opts->wipe) {
     foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
+        
+        if( ! checkAppName($appName)) continue;
+        
         if ($_verbose) {
             echo "Processing $appName po files \n";
         }
@@ -176,6 +194,21 @@ function getExistingLanguages($_verbose)
 }
 
 /**
+ * Checks if Application is needed 
+ * @param string $appName
+ */
+function checkAppName($appName) {
+    
+    global $opts;
+    
+    if(!empty($opts->app)) {
+        return strtolower($appName) == strtolower($opts->app);
+    } else {
+        return true;
+    }
+}
+
+/**
  * checks wether a translation exists or not
  * 
  * @param  string $_locale
@@ -202,6 +235,9 @@ function generatePOTFiles($_verbose)
     }
     
     foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
+        
+        if( ! checkAppName($appName)) continue;
+        
         if ($_verbose) {
             echo "Creating $appName template \n";
         }
@@ -224,6 +260,9 @@ function potmerge($_verbose)
     $msgDebug = $_verbose ? '' : '2> /dev/null';
     
     foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
+        
+        if( ! checkAppName($appName)) continue;
+        
         if ($_verbose) {
             echo "Processing $appName po files \n";
         }
@@ -315,6 +354,9 @@ function contributorsMerge($_verbose, $_language, $_archive)
     
     foreach ($contents as $appName) {
         if ($appName{0} == '.' || $appName{0} == '_') continue;
+        
+        if( ! checkAppName($appName)) continue;
+        
         if ($_verbose) {
             echo "Processing translation updates for $appName \n";
         }
@@ -383,6 +425,9 @@ function launchpadMerge($_verbose, $_archive, $_git)
     
     foreach (scandir($contributionDir) as $appName) {
         if ($appName{0} == '.' || $appName{0} == '_') continue;
+        
+        if( ! checkAppName($appName)) continue;
+        
         if ($_verbose) echo "Processing translation updates for $appName \n";
         
         foreach (scandir("$contributionDir/$appName") as $poFile) {
@@ -414,6 +459,9 @@ function launchpadMerge($_verbose, $_archive, $_git)
 function msgfmt ($_verbose)
 {
     foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
+        
+        if( ! checkAppName($appName)) continue;
+        
         if ($_verbose) {
             echo "Entering $appName \n";
         }
@@ -445,6 +493,9 @@ function buildpackage($_verbose, $_archive)
     `mkdir $tmpdir`;
     
     foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
+        
+        if( ! checkAppName($appName)) continue;
+        
         `mkdir $tmpdir/$appName`;
         generateNewTranslationFile('en', 'GB', $appName, getPluralForm('English'), "$tmpdir/$appName/$appName.pot",  $_verbose);
         `cat $translationPath/template.pot >> $tmpdir/$appName/$appName.pot`;
@@ -484,6 +535,9 @@ function statistics($_verbose)
     $poFilesStats    = array();
     
     foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
+        
+        if( ! checkAppName($appName)) continue;
+        
         if ($_verbose) {
             echo "Entering $appName \n";
         }
@@ -645,6 +699,9 @@ function generateNewTranslationFiles($_locale, $_verbose=false, $_overwrite=fals
     $pluralForm = getPluralForm($languageName);
     
     foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
+        
+        if( ! checkAppName($appName)) continue;
+        
         $file = "$translationPath/$_locale.po";
         generateNewTranslationFile($languageName, $regionName, $appName, $pluralForm, $file, $_verbose);
     }
