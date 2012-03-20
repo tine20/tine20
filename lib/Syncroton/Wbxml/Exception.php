@@ -17,7 +17,7 @@
  * @subpackage  Wbxml
  */
 
-class Syncroton_Wbxml_Exception_UnexpectedEndOfFile extends Syncroton_Wbxml_Exception
+class Syncroton_Wbxml_Exception extends Exception 
 {
-    protected $message = 'unexpcted end of file detected';
+    protected $message = 'wbxml exception';
 }

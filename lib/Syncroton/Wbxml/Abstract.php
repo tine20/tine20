@@ -112,7 +112,7 @@ abstract class Syncroton_Wbxml_Abstract
     public function getDPI($_uInt = 0)
     {
         if(($dpi = constant('Syncroton_Wbxml_Abstract::DPI_' . $_uInt)) === NULL) {
-            throw new Exception('unknown wellknown identifier: ' . $_uInt);
+            throw new Syncroton_Wbxml_Exception('unknown wellknown identifier: ' . $_uInt);
         }
 
         return $dpi;
@@ -141,7 +141,7 @@ abstract class Syncroton_Wbxml_Abstract
         $byte = fread($this->_stream, 1);
         
         if($byte === false) {
-            throw new Exception("failed reading one byte");
+            throw new Syncroton_Wbxml_Exception("failed reading one byte");
         }
         
         return ord($byte);
@@ -152,7 +152,7 @@ abstract class Syncroton_Wbxml_Abstract
         $string = fread($this->_stream, $_length);
         
         if($string === false) {
-            throw new Exception("failed reading opaque data");
+            throw new Syncroton_Wbxml_Exception("failed reading opaque data");
         }
         
         return $string;

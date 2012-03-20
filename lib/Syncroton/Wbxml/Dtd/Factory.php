@@ -41,7 +41,7 @@ class Syncroton_Wbxml_Dtd_Factory
                 break;
                                 
             default:
-                throw new Exception('unsupported DTD: ' . $_type);
+                throw new Syncroton_Wbxml_Exception('unsupported DTD: ' . $_type);
                 break;
         }
         return $instance;

@@ -63,7 +63,7 @@ class Syncroton_Wbxml_Dtd_Syncml_Abstract
     public function getTag($_identity)
     {
         if(!isset($this->_identity[$_identity])) {
-            throw new Exception("identity $_identity not found");
+            throw new Syncroton_Wbxml_Exception("identity $_identity not found");
         }
         
         return $this->_identity[$_identity];
@@ -73,7 +73,7 @@ class Syncroton_Wbxml_Dtd_Syncml_Abstract
     {
         if(!isset($this->_tags[$_tag])) {
             var_dump($this->_tags);
-            throw new Exception("tag $_tag not found");
+            throw new Syncroton_Wbxml_Exception("tag $_tag not found");
         }
         
         return $this->_tags[$_tag];

@@ -34,7 +34,7 @@ class Syncroton_Wbxml_Dtd_Syncml
             case 'syncml:metinf1.2':
             case 'syncml:devinf1.1':
             case 'syncml:devinf1.2':
-                throw new Exception('unsupported DTD: ' . $_type);
+                throw new Syncroton_Wbxml_Exception('unsupported DTD: ' . $_type);
                 break;
         }
         return $instance;

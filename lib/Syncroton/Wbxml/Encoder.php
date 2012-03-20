@@ -135,7 +135,7 @@ class Syncroton_Wbxml_Encoder extends Syncroton_Wbxml_Abstract
                 break;
                 
             default:
-                throw new Exception('unsuported charSet ' . strtoupper($_charSet));
+                throw new Syncroton_Wbxml_Exception('unsuported charSet ' . strtoupper($_charSet));
                 break;
         }
         
@@ -162,7 +162,7 @@ class Syncroton_Wbxml_Encoder extends Syncroton_Wbxml_Abstract
         $xmlString = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', null,  $_dom->saveXML());
         if (!xml_parse($parser, $xmlString)) {
             #file_put_contents(tempnam(sys_get_temp_dir(), "xmlerrors"), $_dom->saveXML());
-            throw new Exception(sprintf('XML error: %s at line %d',
+            throw new Syncroton_Wbxml_Exception(sprintf('XML error: %s at line %d',
                 xml_error_string(xml_get_error_code($parser)),
                 xml_get_current_line_number($parser)
             ));
@@ -237,7 +237,7 @@ class Syncroton_Wbxml_Encoder extends Syncroton_Wbxml_Abstract
             $writenBytes = stream_copy_to_stream($subStream, $this->_stream);
             if($writenBytes !== $subStreamLength) {
                 echo "$writenBytes !== $subStreamLength\n";
-                throw new Exception('blow');
+                throw new Syncroton_Wbxml_Exception('blow');
             }
             fclose($subStream);
             #echo "$this->_nextStackPop \n"; exit;
@@ -285,7 +285,7 @@ class Syncroton_Wbxml_Encoder extends Syncroton_Wbxml_Abstract
     protected function _writeTag($_tag, $_attributes=NULL, $_hasContent=false, $_data=NULL)
     {
         if($_hasContent == false && $_data !== NULL) {
-            throw new Exception('$_hasContent can not be false, when $_data !== NULL');
+            throw new Syncroton_Wbxml_Exception('$_hasContent can not be false, when $_data !== NULL');
         }
         
         // handle the tag
@@ -320,7 +320,7 @@ class Syncroton_Wbxml_Encoder extends Syncroton_Wbxml_Abstract
         try {
             $codePageName = $this->_stripNameSpace($_nameSpace);
             if(!defined('Syncroton_Wbxml_Dtd_ActiveSync::CODEPAGE_'. strtoupper($codePageName))) {
-                throw new Exception('codepage ' . $codePageName . ' not found');
+                throw new Syncroton_Wbxml_Exception('codepage ' . $codePageName . ' not found');
             }
             // switch to another codepage
             // no need to write the wbxml header again

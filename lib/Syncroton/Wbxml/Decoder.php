@@ -55,7 +55,7 @@ class Syncroton_Wbxml_Decoder extends Syncroton_Wbxml_Abstract
     public function __construct($_stream, $_dpi = NULL)
     {
         if(!is_resource($_stream) || get_resource_type($_stream) != 'stream') {
-            throw new Exception('$_stream must be a stream');
+            throw new Syncroton_Wbxml_Exception('$_stream must be a stream');
         }
         if($_dpi !== NULL) {
             $this->_dpi = $_dpi;
@@ -262,7 +262,7 @@ class Syncroton_Wbxml_Decoder extends Syncroton_Wbxml_Abstract
                 break;
                 
             default:
-                throw new Exception('unsuported charSet: ' . $uInt);
+                throw new Syncroton_Wbxml_Exception('unsuported charSet: ' . $uInt);
                 break;
         }
     }
