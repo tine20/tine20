@@ -106,8 +106,12 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 }
             }, this);
         }, this);
-
-        this.interRecord.set('container_id', {account_grants: {editGrant: true}});
+        
+        // TODO: grantsProperty not handled here, not needed at the moment but sometimes, perhaps.
+        var cp = this.editDialog.recordClass.getMeta('containerProperty') ? this.editDialog.recordClass.getMeta('containerProperty') : 'container_id';
+        if(this.interRecord.get(cp) !== undefined) {
+            this.interRecord.set(cp, {account_grants: {editGrant: true}});
+        }
         this.interRecord.dirty = false;
         this.interRecord.modified = {};
         
@@ -123,8 +127,6 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             item.multiEditable = false;
             });
 
-        Ext.QuickTips.init();
-        
         this.editDialog.loadMask.hide();
         return false;
     },
@@ -147,7 +149,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             keys.push({key: key, type: 'default', formField: field, recordKey: key});
         }, this);
         
-        Ext.each(this.editDialog.cfConfigs, function(config) {
+        this.editDialog.cfConfigs.each(function(config) {
             var field = this.form.findField('customfield_' + config.data.name);
             if (!field) return true;
             keys.push({key: config.data.name, type: 'custom', formField: field, recordKey: '#' + config.data.name});
@@ -163,98 +165,97 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             
             this.handleFields.push(field);
 
-                ff.on('focus', function() {
+            ff.on('focus', function() {
 
-                    if (! ff.isXType('extuxclearabledatefield', true)) {
-                    var subLeft = 0;
-                    if (ff.isXType('trigger')) subLeft += 17;
+                if (! ff.isXType('extuxclearabledatefield', true)) {
+                var subLeft = 0;
+                if (ff.isXType('trigger')) subLeft += 17;
 
-                    var el = this.el.parent().select('.tinebase-editmultipledialog-clearer'), 
-                        width = this.getWidth(), 
-                        left = (width - 18 - subLeft) + 'px';
+                var el = this.el.parent().select('.tinebase-editmultipledialog-clearer'), 
+                    width = this.getWidth(), 
+                    left = (width - 18 - subLeft) + 'px';
 
-                    if (el.elements.length > 0) {
-                        el.setStyle({left: left});
-                        el.removeClass('hidden');
-                        return;
+                if (el.elements.length > 0) {
+                    el.setStyle({left: left});
+                    el.removeClass('hidden');
+                    return;
+                }
+
+                // create Button
+                this.multiButton = new Ext.Element(document.createElement('img'));
+                this.multiButton.set({
+                    'src': Ext.BLANK_IMAGE_URL,
+                    'ext:qtip': _('Delete value from all selected records'),
+                    'class': 'tinebase-editmultipledialog-clearer',
+                    'style': 'left:' + left
+                    });
+                
+                this.multiButton.addClassOnOver('over');
+                this.multiButton.addClassOnClick('click');
+
+                this.multiButton.on('click', function() {
+                    if(this.multiButton.hasClass('undo')) {
+                        this.setValue(this.originalValue);
+                        if (this.multi) this.cleared = false;
+                    } else {
+                        this.setValue('');
+                        if (this.multi) this.cleared = true;
                     }
 
-                    // create Button
-                    this.multiButton = new Ext.Element(document.createElement('img'));
-                    this.multiButton.set({
-                        'src': Ext.BLANK_IMAGE_URL,
-                        'ext:qtip': _('Delete value from all selected records'),
-                        'class': 'tinebase-editmultipledialog-clearer',
-                        'style': 'left:' + left
-                        });
-                    
-                    this.multiButton.addClassOnOver('over');
-                    this.multiButton.addClassOnClick('click');
+                    this.fireEvent('blur', this);
 
-                    this.multiButton.on('click', function() {
-                        if(this.multiButton.hasClass('undo')) {
-                            this.setValue(this.originalValue);
-                            if (this.multi) this.cleared = false;
+                }, this);
+                
+                this.el.insertSibling(this.multiButton);
+              }
+                this.on('blur', function(action) {
+
+                    var ar = this.el.parent().select('.tinebase-editmultipledialog-dirty');
+
+                    if ((this.originalValue != this.getValue()) || this.cleared) {  // if edited or cleared
+                        // Create or set arrow
+                        if(ar.elements.length > 0) {
+                            ar.setStyle('display','block');
                         } else {
-                            this.setValue('');
-                            if (this.multi) this.cleared = true;
+                            var arrow = new Ext.Element(document.createElement('img'));
+                            arrow.set({
+                                'src': Ext.BLANK_IMAGE_URL,
+                                'class': 'tinebase-editmultipledialog-dirty',
+                                'height': 5,
+                                'width': 5
+                            });
+                            this.el.insertSibling(arrow);
                         }
-
-                        this.fireEvent('blur', this);
-
-                    }, this);
-                    
-                    this.el.insertSibling(this.multiButton);
-                  }
-                    this.on('blur', function(action) {
-
-                        var ar = this.el.parent().select('.tinebase-editmultipledialog-dirty');
-
-                        if ((this.originalValue != this.getValue()) || this.cleared) {  // if edited or cleared
-                            // Create or set arrow
-                            if(ar.elements.length > 0) {
-                                ar.setStyle('display','block');
-                            } else {
-                                var arrow = new Ext.Element(document.createElement('img'));
-                                arrow.set({
-                                    'src': Ext.BLANK_IMAGE_URL,
-                                    'class': 'tinebase-editmultipledialog-dirty',
-                                    'height': 5,
-                                    'width': 5
-                                });
-                                this.el.insertSibling(arrow);
-                            }
-                            // Set field
-                            this.edited = true;
-                            
-                            this.removeClass('tinebase-editmultipledialog-noneedit');
-                            
-                            // Set button
-                            this.multiButton.addClass('undo');
-                            this.multiButton.removeClass('hidden');
-                            this.multiButton.set({'ext:qtip': _('Undo change for all selected records')});
-                            
-                        } else {    // If set back
-                            // Set arrow
-                            if(ar.elements.length > 0) {
-                                ar.setStyle('display','none');
-                            }
-                            // Set field
-                            this.edited = false;
-                            if (this.multi) {
-                                this.setReadOnly(true);
-                                this.addClass('tinebase-editmultipledialog-noneedit');
-                            }
-                            
-                            // Set button
-                            this.multiButton.removeClass('undo');
-                            this.multiButton.addClass('hidden');
-                            this.multiButton.set({'ext:qtip': _('Delete value from all selected records')});
-                            
+                        // Set field
+                        this.edited = true;
+                        
+                        this.removeClass('tinebase-editmultipledialog-noneedit');
+                        
+                        // Set button
+                        this.multiButton.addClass('undo');
+                        this.multiButton.removeClass('hidden');
+                        this.multiButton.set({'ext:qtip': _('Undo change for all selected records')});
+                        
+                    } else {    // If set back
+                        // Set arrow
+                        if(ar.elements.length > 0) {
+                            ar.setStyle('display','none');
                         }
-                    });
-                    this.un('focus');
+                        // Set field
+                        this.edited = false;
+                        if (this.multi) {
+                            this.setReadOnly(true);
+                            this.addClass('tinebase-editmultipledialog-noneedit');
+                        }
+                        
+                        // Set button
+                        this.multiButton.removeClass('undo');
+                        this.multiButton.addClass('hidden');
+                        this.multiButton.set({'ext:qtip': _('Delete value from all selected records')});
+                    }
                 });
+                this.un('focus');
+            });
 
         }, this);
         
@@ -272,7 +273,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         
         var ff = field.formField;
         
-        if (! samevalue) {
+        if (! samevalue) {  // The records does not have the same value on this field
             ff.setReadOnly(true);
             ff.addClass('tinebase-editmultipledialog-noneedit');
             
@@ -289,24 +290,17 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             });
             
             if (ff.isXType('checkbox')) {
-                ff.on('afterrender', function() {
-                    this.getEl().wrap({tag: 'span', 'class': 'tinebase-editmultipledialog-dirtycheck'});
-                    this.originalValue = null;
-                    this.setValue(false);
-                });
-                
+                this.wrapCheckbox(ff);               
             } else {
                 ff.on('focus', function() {
                     if (this.readOnly) this.originalValue = this.getValue();
                     this.setReadOnly(false);
                 });
-            }
-            
-        } else {
-            
+            }            
+        } else { // All records has the same value on this field
             if (ff.isXType('checkbox')) {
-                ff.originalValue = !! ff.checked;
-                ff.setValue(!!ff.checked);
+                ff.originalValue = this.interRecord.get(ff.name);
+                ff.setValue(this.interRecord.get(ff.name));
             } else {
                 ff.setValue(this.interRecord.get(field.recordKey));
                 ff.on('focus', function() {
@@ -323,6 +317,20 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 });
         }
         
+    },
+    
+    /**
+     * Wraps the checkbox with dirty colored span
+     * @param {Ext.form.Field} checkbox
+     */
+    wrapCheckbox: function(checkbox) {
+        if(checkbox.rendered !== true) {
+            this.wrapCheckbox.defer(100, this, [checkbox]);
+            return;
+        }
+        checkbox.getEl().wrap({tag: 'span', 'class': 'tinebase-editmultipledialog-dirtycheck'});
+        checkbox.originalValue = null;
+        checkbox.setValue(false);
     },
     
     /**

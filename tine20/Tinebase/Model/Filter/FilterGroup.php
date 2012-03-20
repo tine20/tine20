@@ -411,8 +411,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         if (is_array($_fieldOrData)) {
             $data = $_fieldOrData;
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
-                . 'Using deprecated function syntax. Please pass all filter data in one array.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
+                . 'Using deprecated function syntax. Please pass all filter data in one array (field: ' . $_fieldOrData . ')');
             
             $data = array(
                 'field'     => $_fieldOrData,
