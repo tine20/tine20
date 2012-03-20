@@ -1024,13 +1024,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     getContextMenu: function() {
 
         if (! this.contextMenu) {
-            var items = [
-                this.action_addInNewWindow,
-                this.action_editCopyInNewWindow,
-                this.action_editInNewWindow,
-                this.action_deleteRecord
-            ];
+            var items = [];
             
+            if (this.action_addInNewWindow) items.push(this.action_addInNewWindow);
+            if (this.action_editCopyInNewWindow) items.push(this.action_editCopyInNewWindow);
+            if (this.action_editInNewWindow) items.push(this.action_editInNewWindow);
+            if (this.action_deleteRecord) items.push(this.action_deleteRecord);
+
             if(this.duplicateResolvable) {
                 items.push(this.action_resolveDuplicates);
             }
