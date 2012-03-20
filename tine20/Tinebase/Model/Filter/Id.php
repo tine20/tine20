@@ -67,6 +67,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
          } else if ($this->_operator == 'equals' && is_array($this->_value)) {
              if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                  . ' Unexpected array value with "equals" operator.');
+             $_select->where('1=0');
          } else {
              // finally append query to select object
              $_select->where($field . $action['sqlop'], $this->_value);
