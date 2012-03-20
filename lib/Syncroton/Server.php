@@ -117,11 +117,11 @@ class Syncroton_Server
         if ($this->_request->getServer('CONTENT_TYPE') == 'application/vnd.ms-sync.wbxml') {
             // decode wbxml request
             try {
-                $decoder = new Wbxml_Decoder($this->_body);
+                $decoder = new Syncroton_Wbxml_Decoder($this->_body);
                 $requestBody = $decoder->decode();
                 if ($this->_logger instanceof Zend_Log) 
                     $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " xml request: " . $requestBody->saveXML());
-            } catch(Wbxml_Exception_UnexpectedEndOfFile $e) {
+            } catch(Syncroton_Wbxml_Exception_UnexpectedEndOfFile $e) {
                 $requestBody = NULL;
             }
         } else {
@@ -169,7 +169,7 @@ class Syncroton_Server
         
             $outputStream = fopen("php://temp", 'r+');
         
-            $encoder = new Wbxml_Encoder($outputStream, 'UTF-8', 3);
+            $encoder = new Syncroton_Wbxml_Encoder($outputStream, 'UTF-8', 3);
             $encoder->encode($response);
         
             header("Content-Type: application/vnd.ms-sync.wbxml");

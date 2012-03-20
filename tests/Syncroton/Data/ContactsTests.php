@@ -159,7 +159,7 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
 
         // try to encode XML until we have wbxml tests
         $outputStream = fopen("php://temp", 'r+');
-        $encoder = new Wbxml_Encoder($outputStream, 'UTF-8', 3);
+        $encoder = new Syncroton_Wbxml_Encoder($outputStream, 'UTF-8', 3);
         $encoder->encode($testDoc);
         
         #rewind($outputStream);
