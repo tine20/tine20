@@ -3,16 +3,19 @@
  * Tine 2.0
  * 
  * @package     Phone
+ * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        use new filter syntax for Voipmanager_Model_Snom_PhoneFilter
  */
 
 /**
  * Call Filter Class
+ * 
  * @package Phone
+ * @subpackage  Model
  */
 class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
 {
@@ -63,22 +66,19 @@ class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
     protected function _appendAclSqlFilter($_select) {
         
         if (! $this->_isResolved) {
-            
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), true));    
-        
             $phoneIdFilter = $this->_findFilter('phone_id');
             
             // set user phone ids as filter
             $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
                 array('field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId())
-            ));        
+            ));
             $userPhoneIds = Phone_Controller_MyPhone::getInstance()->search($filter)->getArrayOfIds();
             
             if ($phoneIdFilter === NULL) {
                 $phoneIdFilter = $this->createFilter('phone_id', 'in', $userPhoneIds);
                 $this->addFilter($phoneIdFilter);
-
             } else {
+                $phoneIdFilter->setOperator('in');
                 $phoneIdFilter->setValue(array_intersect((array) $phoneIdFilter->getValue(), $userPhoneIds));
             }
             
