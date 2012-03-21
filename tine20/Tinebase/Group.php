@@ -171,7 +171,8 @@ class Tinebase_Group
      */
     public static function syncListsOfUserContact($groupIds, $contactId)
     {
-        if (! Tinebase_Application::getInstance()->isInstalled('Addressbook')) {
+        // check addressbook and empty contact id (for example cronuser)
+        if (! Tinebase_Application::getInstance()->isInstalled('Addressbook') || empty($contactId)) {
             return;
         }
         
