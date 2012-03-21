@@ -126,19 +126,19 @@ class ActiveSync_Controller_Device extends Tinebase_Controller_Record_Abstract
         $filterId = empty($_filterId) ? null : $_filterId;
         
         switch($_class) {
-            case ActiveSync_Controller::CLASS_CALENDAR:
+            case Syncope_Data_Factory::CLASS_CALENDAR:
                 $device->calendarfilter_id = $filterId;
                 break;
                 
-            case ActiveSync_Controller::CLASS_CONTACTS:
+            case Syncope_Data_Factory::CLASS_CONTACTS:
                 $device->contactsfilter_id = $filterId;
                 break;
                 
-            case ActiveSync_Controller::CLASS_EMAIL:
+            case Syncope_Data_Factory::CLASS_EMAIL:
                 $device->emailfilter_id = $filterId;
                 break;
                 
-            case ActiveSync_Controller::CLASS_TASKS:
+            case Syncope_Data_Factory::CLASS_TASKS:
                 $device->tasksfilter_id = $filterId;
                 break;
                 
