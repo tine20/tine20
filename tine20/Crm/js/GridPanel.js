@@ -137,6 +137,7 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 {header: this.app.i18n._('Lead id'), id: 'id', dataIndex: 'id', width: 20, hidden: true},
                 {header: this.app.i18n._('Tags'), id: 'tags', dataIndex: 'tags', width: 50, renderer: Tine.Tinebase.common.tagsRenderer, sortable: false},
                 {header: this.app.i18n._('Lead name'), id: 'lead_name', dataIndex: 'lead_name', width: 200},
+                {header: this.app.i18n._('Responsible'), id: 'lead_responsible', dataIndex: 'relations', width: 175, sortable: false, hidden: true, renderer: this.responsibleRenderer},
                 {header: this.app.i18n._('Partner'), id: 'lead_partner', dataIndex: 'relations', width: 175, sortable: false, renderer: this.partnerRenderer},
                 {header: this.app.i18n._('Customer'), id: 'lead_customer', dataIndex: 'relations', width: 175, sortable: false, renderer: this.customerRenderer},
                 {header: this.app.i18n._('Leadstate'), id: 'leadstate_id', dataIndex: 'leadstate_id', sortable: false, width: 100, renderer: Tine.Crm.LeadState.Renderer},
@@ -147,6 +148,18 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
     },
 
+    /**
+     * render responsible contact
+     * 
+     * @param {Array} value
+     * @return {String}
+     * 
+     * TODO use another renderer (with email, phone, ...) here?
+     */
+    responsibleRenderer: function(value) {
+        return Tine.Crm.GridPanel.shortContactRenderer(value, 'RESPONSIBLE');
+    },
+    
     /**
      * render partner contact
      * 
