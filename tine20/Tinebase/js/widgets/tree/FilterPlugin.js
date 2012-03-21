@@ -107,7 +107,12 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
                 return;
             }
             
+            // save active Element, so we can restore focus after selecting nodes
             this.lastFocusEl = document.activeElement;
+            
+            // save west panel scrolling position so we can restore it after selecting nodes
+            this.leftPanelScrollTop = this.treePanel.app.getMainScreen().getWestPanel().body.getScroll().top;
+            
             this.treePanel.getSelectionModel().suspendEvents();
             this.selectValue(filter.value);
         }, this);
@@ -136,11 +141,22 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
                 
                 if (allValuesExpanded) {
                     this.treePanel.getSelectionModel().resumeEvents();
-                    try {
-                        if (this.lastFocusEl) {
-                            Ext.fly(this.lastFocusEl).focus(10);
-                        }
-                    } catch (e) {}
+                    (function() {
+                        try {
+                            if (this.lastFocusEl) {
+                                var scroller = Ext.fly(this.lastFocusEl).up('div[class$=-scroller]'),
+                                    scrollTop = scroller ? scroller.dom.scrollTop : null;
+                                
+                                Ext.fly(this.lastFocusEl).focus();
+                                if (scrollTop) scroller.dom.scrollTop = scrollTop;
+                            }
+                            
+                            if (this.leftPanelScrollTop) {
+                                this.treePanel.app.getMainScreen().getWestPanel().body.dom.scrollTop = this.leftPanelScrollTop;
+                            }
+                        } catch (e) {}
+                    }).defer(10, this);
+                    
                 }
             }.createDelegate(this), true);
         }, this);
