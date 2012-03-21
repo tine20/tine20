@@ -13,10 +13,10 @@ class Crm_Setup_Update_Release0 extends Setup_Update_Abstract
 {
     public function update_0()
     {
-    	
+        
     }
     
-	/**
+    /**
      * update function 1
      * renames metacrm_products to metacrm_leads_products
      * renames metacrm_productsource to metacrm_products
@@ -38,7 +38,7 @@ class Crm_Setup_Update_Release0 extends Setup_Update_Abstract
                 $userRole->getId(), 
                 $application->getId(), 
                 Crm_Acl_Rights::MANAGE_LEADS
-            );                
+            );
         }        
 
         $this->setApplicationVersion('Crm', '0.2');
@@ -50,7 +50,7 @@ class Crm_Setup_Update_Release0 extends Setup_Update_Abstract
      */    
     public function update_2()
     {
-        $this->validateTableVersion('metacrm_lead', '1');        
+        $this->validateTableVersion('metacrm_lead', '1');
         
         $alterFields = array(
             'created' =>
@@ -201,7 +201,7 @@ class Crm_Setup_Update_Release0 extends Setup_Update_Abstract
                 <name>turnover</name>
                 <type>float</type>
             </field>');
-        $this->_backend->alterCol('metacrm_lead', $declaration, 'turnover');   
+        $this->_backend->alterCol('metacrm_lead', $declaration, 'turnover');
 
         $this->setTableVersion('metacrm_lead', '4');
 

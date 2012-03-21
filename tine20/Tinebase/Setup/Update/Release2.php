@@ -67,7 +67,7 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
             </declaration>
         </table>';
         
-        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition); 
+        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition);
         $this->_backend->createTable($table);
         Tinebase_Application::getInstance()->addApplicationTable(
             Tinebase_Application::getInstance()->getApplicationByName('Tinebase'), 
@@ -107,9 +107,9 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
     {
         $config = Setup_Controller::getInstance()->getConfigData();
         if (!empty($config['accounts'])) {
-			if (empty($config['accounts']['backend'])) {
-				$config['accounts']['backend'] = 'Sql';
-			}
+            if (empty($config['accounts']['backend'])) {
+                $config['accounts']['backend'] = 'Sql';
+            }
             $backendType = ucfirst($config['accounts']['backend']);
             Tinebase_User::setBackendType($backendType);
             

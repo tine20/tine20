@@ -85,7 +85,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     getColumnModel: function() {
-        return new Ext.grid.ColumnModel({ 
+        return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true,
                 hidden: true,
@@ -286,7 +286,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {String} HTML
      */
     contactTidRenderer: function(data, cell, record) {
-    	
+        
         switch(record.get('type')) {
             case 'user':
                 return "<img src='images/oxygen/16x16/actions/user-female.png' width='12' height='12' alt='contact' ext:qtip='" + this.app.i18n._("Internal Contact") + "'/>";

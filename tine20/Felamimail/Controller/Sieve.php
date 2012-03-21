@@ -79,7 +79,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**
@@ -262,7 +262,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             if (strpos($from, '@') === FALSE) {
                 $from .= ' <' . $_account->email . '>';
             }
-            $_vacation->from = $from;            
+            $_vacation->from = $from;
         }
     }
     
@@ -419,7 +419,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             }
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result->toArray(), TRUE));
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Sieve script empty or could not parse it.');            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Sieve script empty or could not parse it.');
         }
         
         return $result;

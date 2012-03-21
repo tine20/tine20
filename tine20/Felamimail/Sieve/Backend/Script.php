@@ -204,7 +204,7 @@ class Felamimail_Sieve_Backend_Script extends Felamimail_Sieve_Backend_Abstract
             $vacation->addAddress($address);
         }
         
-        $this->setVacation($vacation);        
+        $this->setVacation($vacation);
     }
     
     

@@ -48,7 +48,7 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
      */
     public static function getPreparedTask($_type, array $_requestOptions, array $_taskOptions = array())
     {
-        $request = new Zend_Controller_Request_Simple(); 
+        $request = new Zend_Controller_Request_Simple();
         $request->setControllerName($_requestOptions['controller']);
         $request->setActionName($_requestOptions['action']);
         if (array_key_exists('params', $_requestOptions)) {

@@ -116,7 +116,7 @@ class Timetracker_Setup_Update_Release5 extends Setup_Update_Abstract
                     )
                 ),
             ))
-        ));        
+        ));
         
         $this->setApplicationVersion('Timetracker', '5.3');
     }

@@ -245,7 +245,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                 'type'               => $queryResult["level{$i}_type"],
                 'hash'               => $queryResult["level{$i}_hash"],
                 'size'               => $queryResult["level{$i}_size"],
-            	'revision'           => $queryResult["level{$i}_revision"],
+                'revision'           => $queryResult["level{$i}_revision"],
                 'contenttype'        => $queryResult["level{$i}_contenttype"],
                 'created_by'         => $queryResult["level{$i}_created_by"],
                 'creation_time'      => $queryResult["level{$i}_creation_time"],

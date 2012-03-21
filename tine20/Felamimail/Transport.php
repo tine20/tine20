@@ -31,7 +31,7 @@ class Felamimail_Transport extends Zend_Mail_Transport_Smtp
             $mime = $_mail->getMime();
             $message = new Zend_Mime_Message();
             $message->setMime($mime);
-            $this->body = $message->generateMessage($this->EOL);            
+            $this->body = $message->generateMessage($this->EOL);
         }
         
         return $this->body;
@@ -53,7 +53,7 @@ class Felamimail_Transport extends Zend_Mail_Transport_Smtp
         foreach($_additionalHeaders as $key => $value) {
             if (is_array($value)) {
                 foreach ($value as $single) {
-                    $this->header .= $key . ': ' . $single . $this->EOL;    
+                    $this->header .= $key . ': ' . $single . $this->EOL;
                 }
             } else {
                 $this->header .= $key . ': ' . $value . $this->EOL;

@@ -34,9 +34,9 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
      */
     protected $_opSqlMap = array(
         'equals'     => array('sqlop' => ' IS NOT NULL'),
-    	'not'        => array('sqlop' => ' IS NULL'    ),
+        'not'        => array('sqlop' => ' IS NULL'    ),
         'in'         => array('sqlop' => ' IS NOT NULL'),
-    	'notin'      => array('sqlop' => ' IS NULL'    ),
+        'notin'      => array('sqlop' => ' IS NULL'    ),
     );
     
     /**

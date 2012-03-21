@@ -144,14 +144,14 @@ class Addressbook_ListControllerTest extends PHPUnit_Framework_TestCase
             'tel_home'              => '+49TELHOME',
             'tel_pager'             => '+49TELPAGER',
             'tel_work'              => '+49TELWORK',
-        )); 
+        ));
         $this->objects['contact2'] = Addressbook_Controller_Contact::getInstance()->create($this->objects['contact2'], FALSE);
         
         $this->objects['initialList'] = Addressbook_Controller_List::getInstance()->create(new Addressbook_Model_List(array(
             'name'         => 'initial list',
             'container_id' => $container->getId(),
             'members'      => array($this->objects['contact1'], $this->objects['contact2'])
-        ))); 
+        )));
     }
 
     /**

@@ -34,7 +34,7 @@
         Ext.onReady(function() {
             Ext.MessageBox.wait('$msg', '$title');
             window.setTimeout('location.href = location.href', 20000);
-        }); 
+        });
     </script>
 EOT;
 ?>

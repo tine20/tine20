@@ -59,7 +59,7 @@ Tine.Tinebase.AdminPanel.openWindow = function (config) {
         name: 'tinebase-admin-panel',
         contentPanelConstructor: 'Tine.Tinebase.AdminPanel',
         contentPanelConstructorConfig: config
-    }); 
+    });
 };
 
 Ext.ns('Tine.Tinebase.Admin');
@@ -94,7 +94,7 @@ Tine.Tinebase.Admin.UserProfileConfigPanel = Ext.extend(Ext.Panel, { // TODO: ex
         this.loadMask = new Ext.LoadMask(this.getEl(), {msg: _('Please Wait')});
         if (! this.store) {
             (function () {
-            	this.loadMask.show();
+                this.loadMask.show();
             }).defer(50, this);
         }
     },

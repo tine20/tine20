@@ -30,7 +30,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {        
+    private function __construct() {
         $this->_modelName = 'Tinebase_Model_ImportExportDefinition';
         $this->_applicationName = 'Tinebase';
         $this->_purgeRecords = FALSE;
@@ -42,7 +42,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             'tableName'     => 'importexport_definition',
             'modlogActive'  => TRUE,
         ));
-        $this->_currentAccount = Tinebase_Core::getUser();   
+        $this->_currentAccount = Tinebase_Core::getUser();
     }    
     
     /**

@@ -19,156 +19,156 @@ Tine.Voipmanager.PhoneTreePanel = Ext.extend(Ext.tree.TreePanel,{
         this.root = {
             id: 'root',
             children: [{
-		        text: this.app.i18n._('Asterisk'),
-		        cls: 'treemain',
-		        allowDrag: false,
-		        allowDrop: true,
-		        id: 'Asterisk',
-		        icon: false,
-		        children: [{
-		            text: this.app.i18n._('SipPeer'),
-		            cls: "treemain",
-		            allowDrag: false,
-		            allowDrop: true,
-		            id: "SipPeer",
-		            icon: false,
-		            children: [],
-		            leaf: true,
-		            expanded: true
-		        }, {
-		            text: this.app.i18n._('Dialplan'),
-		            cls: "treemain",
-		            allowDrag: false,
-		            allowDrop: true,
-		            id: "Dialplan",
-		            icon: false,
-		            children: [],
-		            leaf: true,
-		            disabled: true,
-		            expanded: true
-		        }, {
-		            text: this.app.i18n._('Context'),
-		            cls: "treemain",
-		            allowDrag: false,
-		            allowDrop: true,
-		            id: "Context",
-		            icon: false,
-		            children: [],
-		            leaf: true,
-		            expanded: true
-		        }, {
-		            text: this.app.i18n._('Voicemail'),
-		            cls: "treemain",
-		            allowDrag: false,
-		            allowDrop: true,
-		            id: "Voicemail",
-		            icon: false,
-		            children: [],
-		            leaf: true,
-		            expanded: true
-		        }, {
-		            text: this.app.i18n._('Meetme'),
-		            cls: "treemain",
-		            allowDrag: false,
-		            allowDrop: true,
-		            id: "Meetme",
-		            icon: false,
-		            children: [],
-		            leaf: true,
-		            expanded: true
-		        }, {
-		            text: this.app.i18n._('Queues'),
-		            cls: "treemain",
-		            allowDrag: false,
-		            allowDrop: true,
-		            id: "Queues",
-		            icon: false,
-		            disabled: true,
-		            children: [],
-		            leaf: true,
-		            expanded: true
-		        }],
-		        leaf: null,
-		        expanded: true,
-		        dataPanelType: 'asterisk',
-		        viewRight: 'asterisk'
-		    }, {
-		        text: this.app.i18n._('Snom'),
-		        cls: 'treemain',
-		        allowDrag: false,
-		        allowDrop: true,
-		        id: 'Snom',
-		        icon: false,
-		        children: [{
-		            text: this.app.i18n._('Phones'),
-		            cls: 'treemain',
-		            allowDrag: false,
-		            allowDrop: true,
-		            id: 'Phone',
-		            icon: false,
-		            children: [],
-		            leaf: true,
-		            expanded: true
-		        }, {
-		            text: this.app.i18n._('Location'),
-		            cls: "treemain",
-		            allowDrag: false,
-		            allowDrop: true,
-		            id: "Location",
-		            icon: false,
-		            children: [],
-		            leaf: true,
-		            expanded: true
-		        }, {
-		            text: this.app.i18n._('Templates'),
-		            cls: "treemain",
-		            allowDrag: false,
-		            allowDrop: true,
-		            id: "Template",
-		            icon: false,
-		            children: [],
-		            leaf: null,
-		            expanded: true
-		        }, {
-		            text: this.app.i18n._('Keylayout'),
-		            cls: "treemain",
-		            allowDrag: false,
-		            allowDrop: true,
-		            id: "Keylayout",
-		            icon: false,
-		            children: [],
-		            leaf: null,
-		            expanded: true,
-		            disabled: true
-		        }, {
-		            text: this.app.i18n._('Setting'),
-		            cls: "treemain",
-		            allowDrag: false,
-		            allowDrop: true,
-		            id: "Setting",
-		            icon: false,
-		            children: [],
-		            leaf: null,
-		            expanded: true
-		        }, {
-		            text: this.app.i18n._('Software'),
-		            cls: "treemain",
-		            allowDrag: false,
-		            allowDrop: true,
-		            id: "Software",
-		            icon: false,
-		            children: [],
-		            leaf: null,
-		            expanded: true
-		        }],
-		        leaf: null,
-		        expanded: true,
-		        dataPanelType: 'snom',
-		        viewRight: 'snom'
-		    }]
+                text: this.app.i18n._('Asterisk'),
+                cls: 'treemain',
+                allowDrag: false,
+                allowDrop: true,
+                id: 'Asterisk',
+                icon: false,
+                children: [{
+                    text: this.app.i18n._('SipPeer'),
+                    cls: "treemain",
+                    allowDrag: false,
+                    allowDrop: true,
+                    id: "SipPeer",
+                    icon: false,
+                    children: [],
+                    leaf: true,
+                    expanded: true
+                }, {
+                    text: this.app.i18n._('Dialplan'),
+                    cls: "treemain",
+                    allowDrag: false,
+                    allowDrop: true,
+                    id: "Dialplan",
+                    icon: false,
+                    children: [],
+                    leaf: true,
+                    disabled: true,
+                    expanded: true
+                }, {
+                    text: this.app.i18n._('Context'),
+                    cls: "treemain",
+                    allowDrag: false,
+                    allowDrop: true,
+                    id: "Context",
+                    icon: false,
+                    children: [],
+                    leaf: true,
+                    expanded: true
+                }, {
+                    text: this.app.i18n._('Voicemail'),
+                    cls: "treemain",
+                    allowDrag: false,
+                    allowDrop: true,
+                    id: "Voicemail",
+                    icon: false,
+                    children: [],
+                    leaf: true,
+                    expanded: true
+                }, {
+                    text: this.app.i18n._('Meetme'),
+                    cls: "treemain",
+                    allowDrag: false,
+                    allowDrop: true,
+                    id: "Meetme",
+                    icon: false,
+                    children: [],
+                    leaf: true,
+                    expanded: true
+                }, {
+                    text: this.app.i18n._('Queues'),
+                    cls: "treemain",
+                    allowDrag: false,
+                    allowDrop: true,
+                    id: "Queues",
+                    icon: false,
+                    disabled: true,
+                    children: [],
+                    leaf: true,
+                    expanded: true
+                }],
+                leaf: null,
+                expanded: true,
+                dataPanelType: 'asterisk',
+                viewRight: 'asterisk'
+            }, {
+                text: this.app.i18n._('Snom'),
+                cls: 'treemain',
+                allowDrag: false,
+                allowDrop: true,
+                id: 'Snom',
+                icon: false,
+                children: [{
+                    text: this.app.i18n._('Phones'),
+                    cls: 'treemain',
+                    allowDrag: false,
+                    allowDrop: true,
+                    id: 'Phone',
+                    icon: false,
+                    children: [],
+                    leaf: true,
+                    expanded: true
+                }, {
+                    text: this.app.i18n._('Location'),
+                    cls: "treemain",
+                    allowDrag: false,
+                    allowDrop: true,
+                    id: "Location",
+                    icon: false,
+                    children: [],
+                    leaf: true,
+                    expanded: true
+                }, {
+                    text: this.app.i18n._('Templates'),
+                    cls: "treemain",
+                    allowDrag: false,
+                    allowDrop: true,
+                    id: "Template",
+                    icon: false,
+                    children: [],
+                    leaf: null,
+                    expanded: true
+                }, {
+                    text: this.app.i18n._('Keylayout'),
+                    cls: "treemain",
+                    allowDrag: false,
+                    allowDrop: true,
+                    id: "Keylayout",
+                    icon: false,
+                    children: [],
+                    leaf: null,
+                    expanded: true,
+                    disabled: true
+                }, {
+                    text: this.app.i18n._('Setting'),
+                    cls: "treemain",
+                    allowDrag: false,
+                    allowDrop: true,
+                    id: "Setting",
+                    icon: false,
+                    children: [],
+                    leaf: null,
+                    expanded: true
+                }, {
+                    text: this.app.i18n._('Software'),
+                    cls: "treemain",
+                    allowDrag: false,
+                    allowDrop: true,
+                    id: "Software",
+                    icon: false,
+                    children: [],
+                    leaf: null,
+                    expanded: true
+                }],
+                leaf: null,
+                expanded: true,
+                dataPanelType: 'snom',
+                viewRight: 'snom'
+            }]
         };
         
-    	Tine.Voipmanager.PhoneTreePanel.superclass.initComponent.call(this);
+        Tine.Voipmanager.PhoneTreePanel.superclass.initComponent.call(this);
         
         this.on('click', function(node) {
             if (node.disabled) {
@@ -185,7 +185,7 @@ Tine.Voipmanager.PhoneTreePanel = Ext.extend(Ext.tree.TreePanel,{
             
             
         }, this);
-	},
+    },
     
     /**
      * @private
@@ -240,7 +240,7 @@ Tine.Voipmanager.AsteriskSipPeerBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Voipmanager',
     modelName: 'AsteriskSipPeer',
     recordClass: Tine.Voipmanager.Model.AsteriskSipPeer
-}); 
+});
 
 /**
  * default Asterisk.Voicemail backend
@@ -514,7 +514,7 @@ Tine.Voipmanager.Data = {
 
         templateDataStore.setDefaultSort('name', 'asc');
 
-//        Ext.StoreMgr.add('templateStore', templateDataStore);               
+//        Ext.StoreMgr.add('templateStore', templateDataStore);
         return templateDataStore;
     },    
     
@@ -567,7 +567,7 @@ Tine.Voipmanager.Data = {
             remoteSort: true
         });
 
-        softwareDataStore.setDefaultSort('description', 'asc');            
+        softwareDataStore.setDefaultSort('description', 'asc');
          
         return softwareDataStore;
     },
@@ -595,7 +595,7 @@ Tine.Voipmanager.Data = {
 
         keylayoutDataStore.setDefaultSort('description', 'asc');
 
-//        Ext.StoreMgr.add('swData', keylayoutDataStore);               
+//        Ext.StoreMgr.add('swData', keylayoutDataStore);
          
         return keylayoutDataStore;
     },
@@ -623,7 +623,7 @@ Tine.Voipmanager.Data = {
 
         settingsDataStore.setDefaultSort('description', 'asc');
 
-//        Ext.StoreMgr.add('swData', settingsDataStore);               
+//        Ext.StoreMgr.add('swData', settingsDataStore);
          
         return settingsDataStore;
     }            

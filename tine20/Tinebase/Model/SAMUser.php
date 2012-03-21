@@ -35,12 +35,12 @@ class Tinebase_Model_SAMUser extends Tinebase_Record_Abstract
      * @var array list of datetime fields
      */    
     protected $_datetimeFields = array(
-		'logonTime',
-		'logoffTime',
-		'kickoffTime',
-		'pwdLastSet',
-		'pwdCanChange',
-		'pwdMustChange'
+        'logonTime',
+        'logoffTime',
+        'kickoffTime',
+        'pwdLastSet',
+        'pwdCanChange',
+        'pwdMustChange'
     );
 
     protected $_validators = array(

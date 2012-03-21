@@ -78,24 +78,24 @@ Tine.Voipmanager.SnomPhoneGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * 
      */
     getColumns: function(){
-        return [{ 
-            	id: 'id', 
-            	header: this.app.i18n._('Id'), 
-            	dataIndex: 'id', 
-            	width: 30,
-            	sortable: true,
-            	hidden: true 
-            },{ 
-            	id: 'macaddress', 
-            	header: this.app.i18n._('MAC address'), 
-            	dataIndex: 'macaddress',
-            	width: 50,
-            	sortable: true
-            },{ 
-            	id: 'description', 
-            	header: this.app.i18n._('description'), 
-            	dataIndex: 'description',
-            	sortable: true
+        return [{
+                id: 'id', 
+                header: this.app.i18n._('Id'), 
+                dataIndex: 'id', 
+                width: 30,
+                sortable: true,
+                hidden: true 
+            },{
+                id: 'macaddress', 
+                header: this.app.i18n._('MAC address'), 
+                dataIndex: 'macaddress',
+                width: 50,
+                sortable: true
+            },{
+                id: 'description', 
+                header: this.app.i18n._('description'), 
+                dataIndex: 'description',
+                sortable: true
             },{
                 id: 'location_id',
                 header: this.app.i18n._('Location'),
@@ -114,63 +114,63 @@ Tine.Voipmanager.SnomPhoneGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 renderer: function(_data,_obj, _rec) {
                     return _rec.data.template;
                 }                                
-            },{ 
-            	id: 'ipaddress', 
-            	header: this.app.i18n._('IP Address'), 
-            	dataIndex: 'ipaddress', 
-            	width: 50,
+            },{
+                id: 'ipaddress', 
+                header: this.app.i18n._('IP Address'), 
+                dataIndex: 'ipaddress', 
+                width: 50,
                 sortable: true
-            },{ 
-            	id: 'current_software', 
-            	header: this.app.i18n._('Software'), 
-            	dataIndex: 'current_software', 
-            	width: 50,
-            	sortable: true
-            },{ 
-            	id: 'current_model', 
-            	header: this.app.i18n._('current model'), 
-            	dataIndex: 'current_model', 
-            	width: 70,
-            	sortable: true,
-            	hidden: true 
-            },{ 
-            	id: 'redirect_event', 
-            	header: this.app.i18n._('redirect event'), 
-            	dataIndex: 'redirect_event', 
-            	width: 70,
-            	sortable: true,
-            	hidden: true 
-            },{ 
-            	id: 'redirect_number', 
-            	header: this.app.i18n._('redirect number'), 
-            	dataIndex: 'redirect_number', 
-            	width: 100,
-            	sortable: true,
-            	hidden: true 
-            },{ 
-            	id: 'redirect_time', 
-            	header: this.app.i18n._('redirect time'), 
-            	dataIndex: 'redirect_time', 
-            	width: 25,
-            	sortable: true,
-            	hidden: true 
-            },{ 
-            	id: 'settings_loaded_at', 
-            	header: this.app.i18n._('settings loaded at'), 
-            	dataIndex: 'settings_loaded_at', 
-            	width: 100, 
+            },{
+                id: 'current_software', 
+                header: this.app.i18n._('Software'), 
+                dataIndex: 'current_software', 
+                width: 50,
+                sortable: true
+            },{
+                id: 'current_model', 
+                header: this.app.i18n._('current model'), 
+                dataIndex: 'current_model', 
+                width: 70,
                 sortable: true,
-            	hidden: true,
-                renderer: Tine.Tinebase.common.dateTimeRenderer 
-            },{ 
-            	id: 'last_modified_time', 
-            	header: this.app.i18n._('last modified'), 
-            	dataIndex: 'last_modified_time', 
-            	width: 100, 
+                hidden: true 
+            },{
+                id: 'redirect_event', 
+                header: this.app.i18n._('redirect event'), 
+                dataIndex: 'redirect_event', 
+                width: 70,
                 sortable: true,
-            	hidden: true,
+                hidden: true 
+            },{
+                id: 'redirect_number', 
+                header: this.app.i18n._('redirect number'), 
+                dataIndex: 'redirect_number', 
+                width: 100,
+                sortable: true,
+                hidden: true 
+            },{
+                id: 'redirect_time', 
+                header: this.app.i18n._('redirect time'), 
+                dataIndex: 'redirect_time', 
+                width: 25,
+                sortable: true,
+                hidden: true 
+            },{
+                id: 'settings_loaded_at', 
+                header: this.app.i18n._('settings loaded at'), 
+                dataIndex: 'settings_loaded_at', 
+                width: 100, 
+                sortable: true,
+                hidden: true,
                 renderer: Tine.Tinebase.common.dateTimeRenderer 
-           	}];
+            },{
+                id: 'last_modified_time', 
+                header: this.app.i18n._('last modified'), 
+                dataIndex: 'last_modified_time', 
+                width: 100, 
+                sortable: true,
+                hidden: true,
+                renderer: Tine.Tinebase.common.dateTimeRenderer 
+               }];
     },
     
     initDetailsPanel: function() { return false; },

@@ -18,14 +18,14 @@
  * @package     ActiveSync
  */
 class ActiveSync_Model_SyncState extends Tinebase_Record_Abstract
-{  
+{
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
      * @var string
      */    
-    protected $_identifier = 'device_id';    
+    protected $_identifier = 'device_id';
     
     /**
      * application the record belongs to
@@ -56,5 +56,5 @@ class ActiveSync_Model_SyncState extends Tinebase_Record_Abstract
      */    
     protected $_datetimeFields = array(
         'lastsync'
-    );    
+    );
 }

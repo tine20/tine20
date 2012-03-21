@@ -161,7 +161,7 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 comperator: comperator,
                 key: conditions[i].value
             };
-            result.push(condition);            
+            result.push(condition);
         }
         return result;
     },
@@ -204,10 +204,10 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 operator: operator,
                 value: conditions[i].key
             };
-            result.push(filter);            
+            result.push(filter);
         }
         
-        return result;     
+        return result;
     },
     
     /**

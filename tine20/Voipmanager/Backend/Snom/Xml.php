@@ -77,7 +77,7 @@ class Voipmanager_Backend_Snom_Xml
     protected function _appendLocationSettings(Voipmanager_Model_Snom_Phone $_phone, SimpleXMLElement $_xml)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $_xml->asXML());
-        $snomLocation     = new Voipmanager_Backend_Snom_Location($this->_db);        
+        $snomLocation     = new Voipmanager_Backend_Snom_Location($this->_db);
         $locationSettings = $snomLocation->get($_phone->location_id);
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " localtion_id " . print_r($locationSettings, true));
         $locationSettings = $locationSettings->toArray();
@@ -383,6 +383,6 @@ class Voipmanager_Backend_Snom_Xml
             $child = $xml->addChild('firmware', $locationSettings->base_download_url . '/' . $firmware);
         }
     
-        return $xml->asXML();        
+        return $xml->asXML();
     }    
 }

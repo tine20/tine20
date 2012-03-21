@@ -27,5 +27,5 @@ class Tinebase_Department_Sql extends Tinebase_Backend_Sql_Abstract
      *
      * @var string
      */
-    protected $_modelName = 'Tinebase_Model_Department';    
+    protected $_modelName = 'Tinebase_Model_Department';
 }

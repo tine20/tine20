@@ -60,7 +60,7 @@ class Tinebase_Event
         }
         
         // try custom user defined listeners
-        try { 
+        try {
             if (@class_exists('CustomEventHooks')) {
                 $methods = get_class_methods('CustomEventHooks');
                 if (in_array('handleEvent', (array)$methods)) {

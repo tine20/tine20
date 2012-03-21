@@ -21,7 +21,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  * Test class for Tinebase_User
  */
 class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
-{    
+{
 
     /**
      * Perform some insignificant string format manipulations (add/remove Whitespace).
@@ -60,7 +60,7 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
                     <notnull>false</notnull>
                 </field>";
             
-        $statement = $this->_fixFieldDeclarationString("`account_id` int(11)  unsigned ");    
+        $statement = $this->_fixFieldDeclarationString("`account_id` int(11)  unsigned ");
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
@@ -91,7 +91,7 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
                     </field>
                 </index>";
             
-        $statement = $this->_fixIndexDeclarationString(" KEY `id-account_type-account_id` (`container_id`,`account_type`,`account_id`) ");    
+        $statement = $this->_fixIndexDeclarationString(" KEY `id-account_type-account_id` (`container_id`,`account_type`,`account_id`) ");
         
         $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index));

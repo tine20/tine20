@@ -38,9 +38,9 @@ class Tinebase_ApplicationTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_ApplicationTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_ApplicationTest');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -50,7 +50,7 @@ class Tinebase_ApplicationTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        return;        
+        return;
     }
 
     /**
@@ -61,7 +61,7 @@ class Tinebase_ApplicationTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	
+    
     }
     
     /**
@@ -97,4 +97,4 @@ class Tinebase_ApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($adminById instanceof Tinebase_Model_Application);
         $this->assertEquals($admin, $adminById);
     }
-}		
+}        

@@ -16,7 +16,7 @@
  * @subpackage  User
  */
 class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
-{    
+{
     /**
      * @var array
      */

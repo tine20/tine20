@@ -40,7 +40,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**
@@ -50,7 +50,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     public static function getInstance() 
     {
-        if (self::$_instance === NULL) {            
+        if (self::$_instance === NULL) {
             self::$_instance = new Felamimail_Controller_Message_Send();
         }
         

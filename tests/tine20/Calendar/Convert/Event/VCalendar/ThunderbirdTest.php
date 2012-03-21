@@ -31,9 +31,9 @@ class Calendar_Convert_Event_VCalendar_ThunderbirdTest extends PHPUnit_Framework
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar WebDAV Thunderbird Event Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar WebDAV Thunderbird Event Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.

@@ -234,7 +234,7 @@ Tine.Voipmanager.LineGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
         var translations;
         if (! this.app) {
             translations = new Locale.Gettext();
-            translations.textdomain('Voipmanager');    
+            translations.textdomain('Voipmanager');
         } else {
             translations = this.app.i18n;
         }

@@ -126,7 +126,7 @@ class Timetracker_Setup_Import_Egw14
      */
     public function __construct($_importAccountName = 'tine20admin')
     {
-        $this->_init();       
+        $this->_init();
 
         // set import user current account
         $account = Tinebase_User::getInstance()->getFullUserByLoginName($_importAccountName);
@@ -179,7 +179,7 @@ class Timetracker_Setup_Import_Egw14
             ->group('ts_extra_name');
             
         $stmt = $this->_db->query($select);
-        $queryResult = $stmt->fetchAll();       
+        $queryResult = $stmt->fetchAll();
         
         foreach($queryResult as $row) {
             $customField = new Tinebase_Model_CustomField_Config(array(
@@ -193,7 +193,7 @@ class Timetracker_Setup_Import_Egw14
             
             try {
                 Tinebase_CustomField::getInstance()->addCustomField($customField);
-            } catch (Zend_Db_Statement_Exception $ze) {                
+            } catch (Zend_Db_Statement_Exception $ze) {
                 // ignore duplicates
                 if (!preg_match("/SQLSTATE\[23000\]/", $ze->getMessage())) {
                     throw $ze;
@@ -245,13 +245,13 @@ class Timetracker_Setup_Import_Egw14
                         ($filter['operator'] == 'equals' && $filter['value'] != $row[$filter['name']])
                        ) {
                         echo "filter not matched for project: " . $row['pm_number'] . $row['pm_title'] . "\n";
-                        $doImport = FALSE;        
+                        $doImport = FALSE;
                     }
                 }
             }
             
             if ($doImport) {
-                $this->_importProject($row);    
+                $this->_importProject($row);
             }
         }        
     }
@@ -270,7 +270,7 @@ class Timetracker_Setup_Import_Egw14
         Tinebase_Core::setupLogger();
         Tinebase_Core::set('locale', new Zend_Locale('de_DE'));
         Tinebase_Core::set('userTimeZone', 'UTC');
-        Tinebase_Core::setupDatabaseConnection();        
+        Tinebase_Core::setupDatabaseConnection();
         Tinebase_Core::setupCache();
     }
     
@@ -327,7 +327,7 @@ class Timetracker_Setup_Import_Egw14
             }
         
             // create contract
-            $contract = $this->_createContract($_data);        
+            $contract = $this->_createContract($_data);
             
             // get timesheets
             $timesheets = $this->_getTimesheetsForProject($_data['pm_id']);
@@ -395,7 +395,7 @@ class Timetracker_Setup_Import_Egw14
                     'type'  => Tinebase_Model_Tag::TYPE_SHARED,
                     'name'  => 'x'
                 ));
-                $_timesheet['record']->tags = new Tinebase_Record_Recordset('Tinebase_Model_Tag', array($tag)); 
+                $_timesheet['record']->tags = new Tinebase_Record_Recordset('Tinebase_Model_Tag', array($tag));
             }
             
             $this->_createTimesheet($_timesheet['record'], $_timeaccounts['main']->getId());
@@ -503,7 +503,7 @@ class Timetracker_Setup_Import_Egw14
                     break;
             }
             
-            Tinebase_Container::getInstance()->addGrants($timeaccountContainer, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, $userId, $grants, TRUE);            
+            Tinebase_Container::getInstance()->addGrants($timeaccountContainer, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, $userId, $grants, TRUE);
         }
         
         $this->_counters['timeaccounts']++;

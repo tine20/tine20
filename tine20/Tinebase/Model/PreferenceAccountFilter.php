@@ -18,7 +18,7 @@
  * @subpackage  Filter 
  */
 class Tinebase_Model_PreferenceAccountFilter extends Tinebase_Model_Filter_Abstract 
-{    
+{
     /**
      * @var array list of allowed operators
      */

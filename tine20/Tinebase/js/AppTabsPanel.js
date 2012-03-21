@@ -121,11 +121,11 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
                 columnWidth: 0.5,
                 hidden: false,
                 listeners: {
-	                scope: this,
-	                itemclick: function(item, e) {
-	                    this.menu.hide();
-	                }
-	            },
+                    scope: this,
+                    itemclick: function(item, e) {
+                        this.menu.hide();
+                    }
+                },
                 style: {
                     //'border-color': 'transparent'
                     'border': '0'

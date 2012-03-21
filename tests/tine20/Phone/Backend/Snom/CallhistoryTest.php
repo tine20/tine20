@@ -29,9 +29,9 @@ class Phone_Backend_Snom_CallhistoryTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Phone Snom Callhistory Backend Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Phone Snom Callhistory Backend Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.

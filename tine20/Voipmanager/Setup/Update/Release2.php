@@ -165,8 +165,8 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
             </table>
         ';
 
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
-        $this->_backend->createTable($table);        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
+        $this->_backend->createTable($table);
 
         $this->setApplicationVersion('Voipmanager', '2.2');
     }
@@ -177,7 +177,7 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
      * add column regserver, useragent and lastms
      */
     public function update_2()
-    {        
+    {
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>context_id</name>
@@ -212,7 +212,7 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
                     <field>id</field>
                 </reference>
             </index>');
-        $this->_backend->addForeignKey('asterisk_voicemail', $declaration);       
+        $this->_backend->addForeignKey('asterisk_voicemail', $declaration);
         
         $this->_backend->dropIndex('asterisk_voicemail', 'mailbox-context');
         $this->_backend->dropCol('asterisk_voicemail', 'context');
@@ -226,7 +226,7 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
      * add column regserver, useragent and lastms
      */
     public function update_3()
-    {        
+    {
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>members</name>
@@ -255,7 +255,7 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
      * make lastms a signed integer
      */
     public function update_4()
-    {        
+    {
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>lastms</name>
@@ -273,7 +273,7 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
      * rename context to context_id and add foreign key for context in sippeers table
      */
     public function update_5()
-    {        
+    {
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>context_id</name>
@@ -314,7 +314,7 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
                     <field>id</field>
                 </reference>
             </index>');
-        $this->_backend->addForeignKey('asterisk_sip_peers', $declaration);       
+        $this->_backend->addForeignKey('asterisk_sip_peers', $declaration);
         
         $this->_backend->dropCol('asterisk_sip_peers', 'context');
         
@@ -325,7 +325,7 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
      * add index for sip_peers.name
      */
     public function update_6()
-    {        
+    {
         $declaration = new Setup_Backend_Schema_Index_Xml('
             <index>
                 <name>name</name>

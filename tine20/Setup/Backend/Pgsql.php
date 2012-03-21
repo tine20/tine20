@@ -65,7 +65,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
         'enum' => array(
             'defaultType' => 'enum',
             'defaultLength' => null     )
-    );  
+    );
     
     /**
      * Generates an SQL CREATE STATEMENT
@@ -78,7 +78,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
         
         $enums = array();
         $statement = "CREATE TABLE " . SQL_TABLE_PREFIX . $_table->name . " (\n";
-        $statementSnippets = array();       
+        $statementSnippets = array();
 
         foreach ($_table->fields as $field) {
             if (isset($field->name)) {
@@ -334,7 +334,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
             $this->execQueryVoid($statements['table']);
             
             // creates indexes
-            if (!empty($statements['index'])) $this->execQueryVoid($statements['index']);           
+            if (!empty($statements['index'])) $this->execQueryVoid($statements['index']);
         }
         catch (Exception $e)
         {

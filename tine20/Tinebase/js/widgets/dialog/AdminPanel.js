@@ -41,7 +41,7 @@ Tine.widgets.dialog.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
     initComponent: function(){
         this.record = new this.recordClass({
             id: this.appName
-        });    
+        });
         
         Tine.widgets.dialog.AdminPanel.superclass.initComponent.call(this);
     },
@@ -116,7 +116,7 @@ Tine.widgets.dialog.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 },
                 items: this.getConfigItems()
             }]
-        };                
+        };
     },
     
     /**

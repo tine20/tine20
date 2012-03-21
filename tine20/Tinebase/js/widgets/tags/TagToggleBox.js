@@ -155,7 +155,7 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
         var els = Ext.select('input.tagcheckel');
         var checked = [];
         els.each(function(el){
-            if(el.dom.checked) checked.push(el.id); 
+            if(el.dom.checked) checked.push(el.id);
         });
 
         var filter = this.selectionModel.getSelectionFilter();

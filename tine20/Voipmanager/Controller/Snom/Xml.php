@@ -47,7 +47,7 @@ class Voipmanager_Controller_Snom_Xml extends Voipmanager_Controller_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
             
     /**

@@ -93,13 +93,13 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
     public function testAddUser()
     {
         $user = Tinebase_User_LdapTest::getTestRecord();
-		$user->smtpUser = new Tinebase_Model_EmailUser(array(
-		    'emailAddress'     => $user->accountEmailAddress,
-		    'emailForwardOnly' => true,
+        $user->smtpUser = new Tinebase_Model_EmailUser(array(
+            'emailAddress'     => $user->accountEmailAddress,
+            'emailForwardOnly' => true,
             'emailForwards'    => array('unittest@' . $this->_mailDomain, 'test@' . $this->_mailDomain),
             'emailAliases'     => array('bla@' . $this->_mailDomain, 'blubb@' . $this->_mailDomain)
-		));
-		
+        ));
+        
         $testUser = $this->_backend->addUser($user);
         $this->objects['users']['testUser'] = $testUser;
 
@@ -170,4 +170,4 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
         
         //$this->assertEquals(md5('password'), $updatedUser->emailPassword);
     }
-}	
+}    

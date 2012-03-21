@@ -54,7 +54,7 @@ class Setup_Initialize
     public static function initializeApplicationRights(Tinebase_Model_Application $_application, $_options = null)
     {
         $applicationName = $_application->name;
-        $classname = "{$applicationName}_Setup_Initialize";     
+        $classname = "{$applicationName}_Setup_Initialize";
         $instance = new $classname;
         $instance->_createInitialRights($_application);
     }
@@ -89,7 +89,7 @@ class Setup_Initialize
      * @return void
      */
     protected function _createInitialRights(Tinebase_Model_Application $_application)
-    {   
+    {
         $roleRights = array(
             'user role'     => $this->_userRoleRights,
             'admin role'    => Tinebase_Application::getInstance()->getAllRights($_application->getId()),

@@ -41,7 +41,7 @@ class Voipmanager_Controller_Asterisk_Voicemail extends Voipmanager_Controller_A
      *
      */
     private function __clone() 
-    {        
+    {
     }
             
     /**
@@ -111,7 +111,7 @@ class Voipmanager_Controller_Asterisk_Voicemail extends Voipmanager_Controller_A
      * @return void
      */
     public static function publishConfiguration()
-    {   
+    {
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' publish voicemail configuration');
         
         if(isset(Tinebase_Core::getConfig()->asterisk)) {

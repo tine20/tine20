@@ -54,9 +54,9 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Timetracker Controller Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Timetracker Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -66,8 +66,8 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_timeaccountController = Timetracker_Controller_Timeaccount::getInstance();        
-        $this->_timesheetController = Timetracker_Controller_Timesheet::getInstance();     
+        $this->_timeaccountController = Timetracker_Controller_Timeaccount::getInstance();
+        $this->_timesheetController = Timetracker_Controller_Timesheet::getInstance();
 
         // get timesheet
         $this->_objects['timesheet'] = $this->_getTimesheet();
@@ -159,9 +159,9 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
             Timetracker_Model_TimeaccountGrants::BOOK_OWN      => TRUE,
-        )));        
+        )));
         
-        $this->_grantTestHelper($grants);        
+        $this->_grantTestHelper($grants);
     }
     
     /**
@@ -174,7 +174,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
             Timetracker_Model_TimeaccountGrants::BOOK_ALL      => TRUE,
-        )));        
+        )));
         
         $this->_grantTestHelper($grants);
     }
@@ -191,7 +191,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             //Tinebase_Model_Grants::GRANT_ADMIN    => TRUE,
             Timetracker_Model_TimeaccountGrants::BOOK_ALL        => TRUE,
             Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE => TRUE,
-        )));        
+        )));
         
         $ts = clone $this->_objects['timesheet'];
         $ts->is_billable = 0;
@@ -211,7 +211,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             //Tinebase_Model_Grants::GRANT_ADMIN    => TRUE,
             Timetracker_Model_TimeaccountGrants::BOOK_ALL        => TRUE,
             Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE => FALSE,
-        )));        
+        )));
         
         $ts = clone $this->_objects['timesheet'];
         $ts->is_billable = 0;
@@ -229,7 +229,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_ADMIN    => TRUE,
-        )));        
+        )));
         
         $this->_grantTestHelper($grants);
     }
@@ -244,7 +244,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
             Timetracker_Model_TimeaccountGrants::VIEW_ALL      => TRUE,
-        )));        
+        )));
         
         $this->_grantTestHelper($grants, 'searchTA', 1);
     }
@@ -258,7 +258,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
-        )));        
+        )));
         
         $this->_grantTestHelper($grants, 'searchTA', 0);
     }
@@ -273,7 +273,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
             Timetracker_Model_TimeaccountGrants::BOOK_OWN      => TRUE,            
-        )));        
+        )));
         
         $this->_grantTestHelper($grants, 'search_bookable', 1);
     }
@@ -289,7 +289,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'account_type'  => 'user',
             Timetracker_Model_TimeaccountGrants::BOOK_OWN      => TRUE,
             Timetracker_Model_TimeaccountGrants::VIEW_ALL      => TRUE,
-        )));        
+        )));
         
         $this->_grantTestHelper($grants, 'searchTS', 1);
     }
@@ -306,7 +306,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_EXPORT   => TRUE,
-        )));        
+        )));
         
         $this->_grantTestHelper($grants, 'searchTSExport', 1, $ts);
     }
@@ -321,7 +321,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
             Timetracker_Model_TimeaccountGrants::BOOK_OWN      => TRUE,
-        )));        
+        )));
         
         $this->_grantTestHelper($grants, 'create_deadline');
     }
@@ -370,23 +370,23 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             case 'search_bookable':
                 $filter = $this->_getTimeaccountFilter(TRUE);
                 $result = $this->_timeaccountController->search($filter);
-                $this->assertEquals($_expect, count($result));                
+                $this->assertEquals($_expect, count($result));
                 break;
             case 'searchTA':
                 $filter = $this->_getTimeaccountFilter();
                 $result = $this->_timeaccountController->search($filter);
-                $this->assertEquals($_expect, count($result));                
+                $this->assertEquals($_expect, count($result));
                 break;
             case 'searchTS':
                 $filter = $this->_getTimesheetFilter();
                 $ts = $this->_timesheetController->create($ts);
                 $result = $this->_timesheetController->search($filter);
-                $this->assertEquals($_expect, count($result));                
+                $this->assertEquals($_expect, count($result));
                 break;
             case 'searchTSExport':
                 $filter = $this->_getTimesheetFilter();
                 $result = $this->_timesheetController->search($filter, NULL, FALSE, FALSE, 'export');
-                $this->assertEquals($_expect, count($result));                
+                $this->assertEquals($_expect, count($result));
                 break;
             default:
                 echo "nothing tested.";
@@ -402,12 +402,12 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             Timetracker_Model_TimeaccountGrants::BOOK_OWN      => TRUE,
             Timetracker_Model_TimeaccountGrants::VIEW_ALL      => TRUE,
             Tinebase_Model_Grants::GRANT_EXPORT  => TRUE,
-        )));    
+        )));
         Timetracker_Model_TimeaccountGrants::setTimeaccountGrants(
             $this->_objects['timeaccount'],
             $grants,
             TRUE
-        ); 
+        );
     }
     
     /**
@@ -460,13 +460,13 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
                 'operator' => 'equals', 
                 'value' => Tinebase_Model_Container::TYPE_SHARED
             ),  
-        )); 
+        ));
         
         if ($bookable) {
             $result->isBookable = TRUE;
         }
         
-        return ($result);        
+        return ($result);
     }
     
     /**
@@ -482,6 +482,6 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
                 'operator' => 'contains', 
                 'value' => 'blabla'
             ),
-        ));        
+        ));
     }
 }

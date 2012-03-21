@@ -36,9 +36,9 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales Controller Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -77,7 +77,7 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
             'turnover'      => '200000',
             'probability'   => 70,
             'end_scheduled' => Tinebase_DateTime::now(),
-        )); 
+        ));
         
         $this->_objects['updatedLead'] = new Crm_Model_Lead(array(
             'id'            => 20,
@@ -92,7 +92,7 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
             'turnover'      => '200000',
             'probability'   => 70,
             'end_scheduled' => NULL,
-        )); 
+        ));
 
         $addressbookPersonalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
@@ -144,7 +144,7 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
             'tel_home'              => '+49TELHOME',
             'tel_pager'             => '+49TELPAGER',
             'tel_work'              => '+49TELWORK',
-        )); 
+        ));
 
         $tasksPersonalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
@@ -327,7 +327,7 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
      * @access protected
      */
     protected function tearDown()
-    {        
+    {
     }
     
     /**
@@ -346,7 +346,7 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
         
         // cleanup
         $this->_backend->delete($contract->getId());
-        $this->_decreaseNumber();        
+        $this->_decreaseNumber();
     }
     
     /**
@@ -366,7 +366,7 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
         
         // cleanup
         $this->_backend->delete($contract->getId());
-        $this->_decreaseNumber();        
+        $this->_decreaseNumber();
     }
     
     /**

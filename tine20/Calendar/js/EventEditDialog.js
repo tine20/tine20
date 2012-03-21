@@ -51,7 +51,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * NOTE: when this method gets called, all initalisation is done.
      * @return {Object} components this.itmes definition
      */
-    getFormItems: function() { 
+    getFormItems: function() {
         return {
             xtype: 'tabpanel',
             border: false,
@@ -243,7 +243,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({});
         this.rrulePanel = new Tine.Calendar.RrulePanel({});
-        this.alarmPanel = new Tine.widgets.dialog.AlarmPanel({});         
+        this.alarmPanel = new Tine.widgets.dialog.AlarmPanel({});
         this.attendeeStore = this.attendeeGridPanel.getStore();
         
         this.CalendarSelectWidget = new Tine.Calendar.CalendarSelectWidget(this);
@@ -328,7 +328,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.attendeeGridPanel.onRecordUpdate(this.record);
         this.rrulePanel.onRecordUpdate(this.record);
         this.alarmPanel.onRecordUpdate(this.record);
-        this.CalendarSelectWidget.onRecordUpdate(this.record);       
+        this.CalendarSelectWidget.onRecordUpdate(this.record);
     },
     
     setTabHeight: function() {

@@ -359,9 +359,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                         $recurrence->appendChild(new DOMElement('DayOfMonth', $rrule->bymonthday,       'uri:Calendar'));
                     } else {
                         $weekOfMonth = (int) substr($rrule->byday, 0, -2);
-                        $weekOfMonth = ($weekOfMonth == -1) ? 5 : $weekOfMonth; 
+                        $weekOfMonth = ($weekOfMonth == -1) ? 5 : $weekOfMonth;
                         $dayOfWeek   = substr($rrule->byday, -2);
-                    	
+                        
                         $recurrence->appendChild(new DOMElement('Type',        self::RECUR_TYPE_MONTHLY_DAYN,           'uri:Calendar'));
                         $recurrence->appendChild(new DOMElement('WeekOfMonth', $weekOfMonth,                            'uri:Calendar'));
                         $recurrence->appendChild(new DOMElement('DayOfWeek',   $this->_convertDayToBitMask($dayOfWeek), 'uri:Calendar'));
@@ -375,9 +375,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                         $recurrence->appendChild(new DOMElement('MonthOfYear', $rrule->bymonth,         'uri:Calendar'));
                     } else {
                         $weekOfMonth = (int) substr($rrule->byday, 0, -2);
-                        $weekOfMonth = ($weekOfMonth == -1) ? 5 : $weekOfMonth; 
+                        $weekOfMonth = ($weekOfMonth == -1) ? 5 : $weekOfMonth;
                         $dayOfWeek   = substr($rrule->byday, -2);
-                    	
+                        
                         $recurrence->appendChild(new DOMElement('Type',        self::RECUR_TYPE_YEARLY_DAYN, 'uri:Calendar'));
                         $recurrence->appendChild(new DOMElement('WeekOfMonth', $weekOfMonth,                 'uri:Calendar'));
                         $recurrence->appendChild(new DOMElement('DayOfWeek',   $this->_convertDayToBitMask($dayOfWeek), 'uri:Calendar'));
@@ -689,7 +689,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 $newAttendees[] = array(
                     'userType'  => Calendar_Model_Attender::USERTYPE_USER,
                     'firstName' => $firstName,
-                	'lastName'  => $lastName,
+                    'lastName'  => $lastName,
                     #'partStat'  => $status,
                     'role'      => $role,
                     'email'     => (string)$attendee->Email
@@ -726,7 +726,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             switch((int)$xmlData->Recurrence->Type) {
                 case self::RECUR_TYPE_DAILY:
                     $rrule->freq = Calendar_Model_Rrule::FREQ_DAILY;
-                    break; 
+                    break;
                     
                 case self::RECUR_TYPE_WEEKLY:
                     $rrule->freq  = Calendar_Model_Rrule::FREQ_WEEKLY;
@@ -765,7 +765,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     $byDay .= $this->_convertBitMaskToDay($day);
                     
                     $rrule->byday = $byDay;
-                    break; 
+                    break;
             }
             $rrule->interval = isset($xmlData->Recurrence->Interval) ? (int)$xmlData->Recurrence->Interval : 1;
             

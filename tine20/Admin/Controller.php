@@ -43,7 +43,7 @@ class Admin_Controller extends Tinebase_Controller_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**

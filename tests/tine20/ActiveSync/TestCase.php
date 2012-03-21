@@ -79,10 +79,10 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
      * @see PHPUnit_Framework_TestCase::setUp()
      */
     protected function setUp()
-    {       
+    {
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
-        $this->_testUser          = Tinebase_Core::getUser();        
+        $this->_testUser          = Tinebase_Core::getUser();
         $this->_specialFolderName = strtolower($this->_applicationName) . '-root';
         
         $this->objects['container'] = array();
@@ -201,7 +201,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
         $xml = simplexml_import_dom($this->_getInputDOMDocument());
         $record = $controller->createEntry($this->_getContainerWithSyncGrant()->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
         
-        $this->_validateGetServerEntries($record);        
+        $this->_validateGetServerEntries($record);
     }
     
     abstract protected function _validateGetServerEntries($_recordId);
@@ -275,7 +275,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
                 //Tinebase_Model_Grants::GRANT_SYNC      => true,
                 // NOTE: Admin Grant implies all other grants
                 //Tinebase_Model_Grants::GRANT_ADMIN     => true,
-            );            
+            );
             $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($creatorGrants));
             
             $containerWithoutSyncGrant = new Tinebase_Model_Container(array(

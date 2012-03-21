@@ -587,28 +587,28 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     {
         foreach ($this->_personasDefaultCals as $loginName => $calendar) {
             Tinebase_Container::getInstance()->setGrants($calendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
-	            'account_id'    => $this->_personas[$loginName]->getId(),
-	            'account_type'  => 'user',
-	            Tinebase_Model_Grants::GRANT_READ     => true,
-	            Tinebase_Model_Grants::GRANT_ADD      => true,
-	            Tinebase_Model_Grants::GRANT_EDIT     => true,
-	            Tinebase_Model_Grants::GRANT_DELETE   => true,
-	            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
-	            Tinebase_Model_Grants::GRANT_ADMIN    => true,
-	        ))), true);
-	        
-	        $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
-	            array('field' => 'container_id', 'operator' => 'equals', 'value' => $calendar->getId()),
-	        )), new Tinebase_Model_Pagination(array()));
-	        
-	        // delete alarms
-	        Tinebase_Alarm::getInstance()->deleteAlarmsOfRecord('Calendar_Model_Event', $events->getArrayOfIds());
-	        
-	        // delete events
-	        foreach ($events as $event) {
-	            $this->_backend->delete($event->getId());
-	        }
-    	}
+                'account_id'    => $this->_personas[$loginName]->getId(),
+                'account_type'  => 'user',
+                Tinebase_Model_Grants::GRANT_READ     => true,
+                Tinebase_Model_Grants::GRANT_ADD      => true,
+                Tinebase_Model_Grants::GRANT_EDIT     => true,
+                Tinebase_Model_Grants::GRANT_DELETE   => true,
+                Tinebase_Model_Grants::GRANT_PRIVATE  => true,
+                Tinebase_Model_Grants::GRANT_ADMIN    => true,
+            ))), true);
+            
+            $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
+                array('field' => 'container_id', 'operator' => 'equals', 'value' => $calendar->getId()),
+            )), new Tinebase_Model_Pagination(array()));
+            
+            // delete alarms
+            Tinebase_Alarm::getInstance()->deleteAlarmsOfRecord('Calendar_Model_Event', $events->getArrayOfIds());
+            
+            // delete events
+            foreach ($events as $event) {
+                $this->_backend->delete($event->getId());
+            }
+        }
     }
 }
     

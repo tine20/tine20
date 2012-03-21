@@ -42,9 +42,9 @@ class Tinebase_WebDav_PrincipalBackendTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_WebDav_PrincipalBackendTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_WebDav_PrincipalBackendTest');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -87,8 +87,8 @@ class Tinebase_WebDav_PrincipalBackendTest extends PHPUnit_Framework_TestCase
         
         $this->assertGreaterThanOrEqual(1, count($groupMemberships));
     }
-}		
-	
+}        
+    
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_WebDav_PrincipalBackendTest::main') {
     Tinebase_WebDav_PrincipalBackendTest::main();

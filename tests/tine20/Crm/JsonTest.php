@@ -34,9 +34,9 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm Json Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm Json Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -148,7 +148,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $task       = $this->_getTask();
         $lead       = $this->_getLead();
         $product    = $this->_getProduct();
-        $price      = 200; 
+        $price      = 200;
         
         $leadData = $lead->toArray();
         $leadData['relations'] = array(
@@ -212,7 +212,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         
         // check if delete worked
         $result = $this->_instance->searchLeads($this->_getLeadFilter(), '');
-        $this->assertEquals(0, $result['totalcount']);   
+        $this->assertEquals(0, $result['totalcount']);
         
         // check if linked task got removed as well
         $this->setExpectedException('Tinebase_Exception_NotFound');
@@ -339,7 +339,7 @@ class Crm_JsonTest extends Crm_AbstractTest
             'tel_home'              => '+49TELHOME',
             'tel_pager'             => '+49TELPAGER',
             'tel_work'              => '+49TELWORK',
-        ));        
+        ));
     }
 
     /**
@@ -404,4 +404,4 @@ class Crm_JsonTest extends Crm_AbstractTest
             array('field' => 'query',           'operator' => 'contains',       'value' => 'PHPUnit'),
         );
     }
-}		
+}        

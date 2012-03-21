@@ -21,7 +21,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  * Test class for Tinebase_AsyncJob
  */
 class Tinebase_DateTimeTest extends PHPUnit_Framework_TestCase
-{    
+{
     
     /**
      * Sets up the fixture.

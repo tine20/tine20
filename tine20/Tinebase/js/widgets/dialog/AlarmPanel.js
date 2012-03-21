@@ -38,7 +38,7 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
     getFormItems: function() {
         
         this.customDateField = new Ext.ux.form.DateTimeField({
-	        fieldLabel  : _('Custom Datetime'),
+            fieldLabel  : _('Custom Datetime'),
             lazyRender  : false,
             name        : 'alarm_date',
             width       : 300,
@@ -48,7 +48,7 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
         
         this.alarmCombo = new Ext.form.ComboBox({
             columnWidth     : .33,
-	        fieldLabel      : _('Send Alarm'),
+            fieldLabel      : _('Send Alarm'),
             name            : 'alarm_time_before',
             typeAhead       : false,
             triggerAction   : 'all',

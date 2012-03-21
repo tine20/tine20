@@ -123,7 +123,7 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
                 return false;
             }
             
-            var mainscreen = app.getMainScreen(); 
+            var mainscreen = app.getMainScreen();
             if (mainscreen) {
                 mainscreen.show();
             } else {

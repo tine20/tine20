@@ -28,8 +28,8 @@ class Setup_Backend_Schema_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Setup All Backend Tests');
         $suite->addTestSuite('Setup_Backend_Schema_TableTest');
-		$suite->addTestSuite('Setup_Backend_Schema_FieldTest');
-		$suite->addTestSuite('Setup_Backend_Schema_IndexTest');
+        $suite->addTestSuite('Setup_Backend_Schema_FieldTest');
+        $suite->addTestSuite('Setup_Backend_Schema_IndexTest');
         return $suite;
     }
 }

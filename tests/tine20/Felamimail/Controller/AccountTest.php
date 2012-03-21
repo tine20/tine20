@@ -44,9 +44,9 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Felamimail Account Controller Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Felamimail Account Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -133,7 +133,7 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
             'no IMAP4(rev1) capability found in ' . print_r($capabilities['capabilities'], TRUE));
         $this->assertTrue(in_array('QUOTA', $capabilities['capabilities']), 'no QUOTA capability found in ' . print_r($capabilities['capabilities'], TRUE));
         
-        $this->assertEquals($capabilities, $_SESSION['Felamimail'][$this->_account->getId()]); 
+        $this->assertEquals($capabilities, $_SESSION['Felamimail'][$this->_account->getId()]);
     }
 
     /**

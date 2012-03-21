@@ -16,7 +16,7 @@ Ext.ns('Ext.ux', 'Ext.ux.form');
  * @class       Ext.ux.form.ClearableComboBox
  * @extends     Ext.form.ComboBox
  */
-Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {  
+Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
     
     /**
      * @cfg {bool} disableClearer
@@ -64,7 +64,7 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
             t.addClassOnClick('x-form-trigger-click');
         }, this);
         this.triggers = ts.elements;
-        this.triggers[0].hide();                   
+        this.triggers[0].hide();
     },
     
     // clear contents of combobox

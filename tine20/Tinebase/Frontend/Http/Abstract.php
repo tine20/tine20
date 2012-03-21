@@ -32,7 +32,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * @todo use stream here instead of temp file?
      */
     protected function _export(Tinebase_Model_Filter_FilterGroup $_filter, $_options, Tinebase_Controller_Record_Abstract $_controller = NULL)
-    { 
+    {
         // extend execution time to 30 minutes
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(1800);
         
@@ -86,7 +86,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         header("Pragma: public");
         header("Cache-Control: max-age=0");
         header("Content-Disposition: " . (($format == 'pdf') ? 'inline' : 'attachment') . '; filename=' . $filename);
-        header("Content-Description: $format File");  
+        header("Content-Description: $format File");
         header("Content-type: $contentType");
         
         // output export file

@@ -78,7 +78,7 @@ class Tinebase_Application
      *
      */
     private function __clone() 
-    {        
+    {
     }
 
     /**
@@ -349,7 +349,7 @@ class Tinebase_Application
             $appAclObj = call_user_func(array($appAclClassName, 'getInstance'));
             $allRights = $appAclObj->getAllApplicationRights();
         } else {
-            $allRights = Tinebase_Acl_Rights::getInstance()->getAllApplicationRights($application->name);   
+            $allRights = Tinebase_Acl_Rights::getInstance()->getAllApplicationRights($application->name);
         }
         
         return $allRights;
@@ -500,7 +500,7 @@ class Tinebase_Application
         $dataToDelete = array(
             'container'     => array('tablename' => ''),
             'config'        => array('tablename' => ''),
-            'customfield'	=> array('tablename' => ''),
+            'customfield'    => array('tablename' => ''),
             'rights'        => array('tablename' => 'role_rights'),
             'definitions'   => array('tablename' => 'importexport_definition'),
             'filter'        => array('tablename' => 'filter'),
@@ -509,7 +509,7 @@ class Tinebase_Application
         
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . '= ?', $_application->getId())
-        );        
+        );
         foreach ($dataToDelete as $dataType => $info) {
             switch ($dataType) {
                 case 'container':
@@ -518,9 +518,9 @@ class Tinebase_Application
                 case 'config':
                     $count = Tinebase_Config::getInstance()->deleteConfigByApplicationId($_application->getId());
                     break;
-              	case 'customfield':
-              		$count = Tinebase_CustomField::getInstance()->deleteCustomFieldsForApplication($_application->getId());
-              		break;
+                  case 'customfield':
+                      $count = Tinebase_CustomField::getInstance()->deleteCustomFieldsForApplication($_application->getId());
+                      break;
                 default:
                     if (array_key_exists('tablename', $info) && ! empty($info['tablename'])) {
                         $count = $this->_db->delete(SQL_TABLE_PREFIX . $info['tablename'], $where);

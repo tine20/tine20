@@ -204,11 +204,11 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
         if (trashId) {
             var filter = [{field: 'id', operator: 'equals', value: this.record.id}];
             
-            Tine.Felamimail.messageBackend.moveMessages(filter, trashId, { 
+            Tine.Felamimail.messageBackend.moveMessages(filter, trashId, {
                 callback: this.onAfterDelete.createDelegate(this, ['move'])
             });
         } else {
-            Tine.Felamimail.messageBackend.addFlags(this.record.id, '\\Deleted', { 
+            Tine.Felamimail.messageBackend.addFlags(this.record.id, '\\Deleted', {
                 callback: this.onAfterDelete.createDelegate(this, ['flag'])
             });
         }

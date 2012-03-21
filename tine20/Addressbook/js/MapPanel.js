@@ -52,16 +52,16 @@ Tine.Addressbook.MapPanel = Ext.extend(Ext.Panel, {
         this.idPrefix = Ext.id();
         
         this.tbar = [{
-        	id: this.idPrefix + 'tglbtn' + 'companyMap',
-        	enableToggle: true,
-        	allowDepress: false,
+            id: this.idPrefix + 'tglbtn' + 'companyMap',
+            enableToggle: true,
+            allowDepress: false,
             text: this.app.i18n._('Company address'),
             handler: this.onMapChange.createDelegate(this, ['companyMap']),
             toggleGroup: this.idPrefix + 'maptglgroup'
         }, ' ', {
-        	id: this.idPrefix + 'tglbtn' + 'privateMap',
-        	enableToggle: true,
-        	allowDepress: false,
+            id: this.idPrefix + 'tglbtn' + 'privateMap',
+            enableToggle: true,
+            allowDepress: false,
             text: this.app.i18n._('Private address'),
             handler: this.onMapChange.createDelegate(this, ['privateMap']),
             toggleGroup: this.idPrefix + 'maptglgroup'
@@ -92,53 +92,53 @@ Tine.Addressbook.MapPanel = Ext.extend(Ext.Panel, {
         this.record = record;
         
         var adrOne = ! Ext.isEmpty(this.record.get('adr_one_lon')) && ! Ext.isEmpty(this.record.get('adr_one_lat')),
-        	adrTwo = ! Ext.isEmpty(this.record.get('adr_two_lon')) && ! Ext.isEmpty(this.record.get('adr_two_lat')),
-        	
-        	btnOne = Ext.getCmp(this.idPrefix + 'tglbtn' + 'companyMap'),
-        	btnTwo = Ext.getCmp(this.idPrefix + 'tglbtn' + 'privateMap');
+            adrTwo = ! Ext.isEmpty(this.record.get('adr_two_lon')) && ! Ext.isEmpty(this.record.get('adr_two_lat')),
+            
+            btnOne = Ext.getCmp(this.idPrefix + 'tglbtn' + 'companyMap'),
+            btnTwo = Ext.getCmp(this.idPrefix + 'tglbtn' + 'privateMap');
         
-       	// if we have coordinates for company address add map panel
+           // if we have coordinates for company address add map panel
         if (adrOne && ! this.companyMap) {
-    		Tine.log.debug('Add company address map');
-    		this.companyMap = new Tine.widgets.MapPanel({
-    			map: 'companyMap',
-            	layout: 'fit',
-            	zoom: 15,
-            	listeners: {
-            		scope: this,
-            		'activate': function (p) {
-            			if (! p.center) {
-        					Tine.log.debug('Loading company address map coordinates: ' + this.record.get('adr_one_lon') + ', ' + this.record.get('adr_one_lat'));
-    						p.setCenter(this.record.get('adr_one_lon'), this.record.get('adr_one_lat'));    				
-            			}
-            		}
-            	}
-        	});
-        	this.mapCards.add(this.companyMap);
-        	this.mapCards.doLayout();
+            Tine.log.debug('Add company address map');
+            this.companyMap = new Tine.widgets.MapPanel({
+                map: 'companyMap',
+                layout: 'fit',
+                zoom: 15,
+                listeners: {
+                    scope: this,
+                    'activate': function (p) {
+                        if (! p.center) {
+                            Tine.log.debug('Loading company address map coordinates: ' + this.record.get('adr_one_lon') + ', ' + this.record.get('adr_one_lat'));
+                            p.setCenter(this.record.get('adr_one_lon'), this.record.get('adr_one_lat'));
+                        }
+                    }
+                }
+            });
+            this.mapCards.add(this.companyMap);
+            this.mapCards.doLayout();
         }
         
         // if we have coordinates for private address add map panel
-		if (adrTwo && ! this.privateMap) {
-        	Tine.log.debug('Add private address map');
-    		this.privateMap = new Tine.widgets.MapPanel({
-    			map: 'privateMap',
-            	layout: 'fit',
-            	zoom: 15,
-            	listeners: {
-            		scope: this,
-            		'activate': function (p) {
-            			if (! p.center) {
-        					Tine.log.debug('Loading private address map coordinates: ' + this.record.get('adr_two_lon') + ', ' + this.record.get('adr_two_lat'));
-    						p.setCenter(this.record.get('adr_two_lon'), this.record.get('adr_two_lat'));    				
-            			}
-            		}
-            	}
-        	});
-        	this.mapCards.add(this.privateMap);
-        	this.mapCards.doLayout();
+        if (adrTwo && ! this.privateMap) {
+            Tine.log.debug('Add private address map');
+            this.privateMap = new Tine.widgets.MapPanel({
+                map: 'privateMap',
+                layout: 'fit',
+                zoom: 15,
+                listeners: {
+                    scope: this,
+                    'activate': function (p) {
+                        if (! p.center) {
+                            Tine.log.debug('Loading private address map coordinates: ' + this.record.get('adr_two_lon') + ', ' + this.record.get('adr_two_lat'));
+                            p.setCenter(this.record.get('adr_two_lon'), this.record.get('adr_two_lat'));
+                        }
+                    }
+                }
+            });
+            this.mapCards.add(this.privateMap);
+            this.mapCards.doLayout();
         }
-        	
+            
         btnOne.toggle(adrOne);
         btnOne.setDisabled(! adrOne);
         

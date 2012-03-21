@@ -37,7 +37,7 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
      *
      */
     private function __construct() 
-    {    
+    {
     }
 
     /**
@@ -297,7 +297,7 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
         
         // check config setting 
         if (!Tinebase_User::getBackendConfiguration('changepw', true)) {
-            throw new Tinebase_Exception_AccessDenied('Password change not allowed.');                
+            throw new Tinebase_Exception_AccessDenied('Password change not allowed.');
         }
         
         $loginName = Tinebase_Core::getUser()->accountLoginName;
@@ -321,7 +321,7 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
             $currentAccount = Tinebase_Core::getUser();
     
             if (is_object($currentAccount)) {
-                Tinebase_AccessLog::getInstance()->setLogout(session_id(), $_ipAddress);                
+                Tinebase_AccessLog::getInstance()->setLogout(session_id(), $_ipAddress);
             }
         }
         

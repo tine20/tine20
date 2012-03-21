@@ -209,7 +209,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     public function getPlugins()
     {
-       return $this->_plugins; 
+       return $this->_plugins;
     }
     
     /**
@@ -398,8 +398,8 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     public function resolveUsers(Tinebase_Record_Abstract $_record, $_userProperties, $_addNonExistingUsers = FALSE)
     {
-    	$recordSet = new Tinebase_Record_RecordSet('Tinebase_Record_Abstract', array($_record));
-    	$this->resolveMultipleUsers($recordSet, $_userProperties, $_addNonExistingUsers);
+        $recordSet = new Tinebase_Record_RecordSet('Tinebase_Record_Abstract', array($_record));
+        $this->resolveMultipleUsers($recordSet, $_userProperties, $_addNonExistingUsers);
     }
     
     /**
@@ -412,16 +412,16 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     public function resolveMultipleUsers(Tinebase_Record_RecordSet $_records, $_userProperties, $_addNonExistingUsers = FALSE)
     {
-    	$userIds = array();
+        $userIds = array();
         foreach ((array)$_userProperties as $property) {
             $userIds = array_merge($userIds, $_records->$property);
         }
 
         $userIds = array_unique($userIds);
         foreach ($userIds as $index => $userId) {
-        	if (empty($userId)) {
-        		unset ($userIds[$index]);
-        	}
+            if (empty($userId)) {
+                unset ($userIds[$index]);
+            }
         }
         
         $users = $this->getMultiple($userIds);
@@ -429,18 +429,18 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         
         foreach ($_records as $record) {
             foreach ((array)$_userProperties as $property) {
-            	if ($record->$property && is_string($record->$property)) {
-            	    $idx = $users->getIndexById($record->$property);
-            	    $user = $idx !== false ? $users[$idx] : NULL;
-            	    
-            	    if (!$user && $_addNonExistingUsers) {
-            	        $user = $nonExistingUser;
-            	    }
-            	    
-            	    if ($user) {
-            	        $record->$property = $user;
-            	    }
-            	}
+                if ($record->$property && is_string($record->$property)) {
+                    $idx = $users->getIndexById($record->$property);
+                    $user = $idx !== false ? $users[$idx] : NULL;
+                    
+                    if (!$user && $_addNonExistingUsers) {
+                        $user = $nonExistingUser;
+                    }
+                    
+                    if ($user) {
+                        $record->$property = $user;
+                    }
+                }
             }
         }
     }
@@ -567,9 +567,9 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     /**
      * Get multiple users
      *
-     * @param string|array 	$_id Ids
-     * @param string  		$_accountClass  type of model to return
+     * @param string|array     $_id Ids
+     * @param string          $_accountClass  type of model to return
      * @return Tinebase_Record_RecordSet
      */
-    abstract public function getMultiple($_id, $_accountClass = 'Tinebase_Model_User');    
+    abstract public function getMultiple($_id, $_accountClass = 'Tinebase_Model_User');
 }

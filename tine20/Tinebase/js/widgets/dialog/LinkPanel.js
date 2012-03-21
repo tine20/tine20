@@ -117,7 +117,7 @@ Tine.widgets.dialog.LinkPanel = Ext.extend(Ext.Panel, {
             store: this.store,
             overClass: 'x-view-over',
             itemSelector: 'activities-item-small' // don't forget that
-        }); 
+        });
     },
     
     /**

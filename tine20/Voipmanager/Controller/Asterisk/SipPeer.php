@@ -41,7 +41,7 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
     {
         $this->_modelName   = 'Voipmanager_Model_Asterisk_SipPeer';
         $this->_backend     = new Voipmanager_Backend_Asterisk_SipPeer();
-        $this->_cache       = Zend_Registry::get('cache');        
+        $this->_cache       = Zend_Registry::get('cache');
     }
         
     /**
@@ -49,7 +49,7 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
      *
      */
     private function __clone() 
-    {        
+    {
     }
             
     /**
@@ -120,7 +120,7 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
      * @return void
      */
     public static function publishConfiguration()
-    {   
+    {
         if (isset(Tinebase_Core::getConfig()->asterisk)) {
             $asteriskConfig = Tinebase_Core::getConfig()->asterisk;
             
@@ -134,7 +134,7 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
         /*
         $filter = new Voipmanager_Model_Asterisk_SipPeerFilter(array());
         
-        $sipPeers = $controller = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->search($filter);     
+        $sipPeers = $controller = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->search($filter);
         
         $fieldsToSkip = array('id', 'name', 'fullcontact', 'username');
         

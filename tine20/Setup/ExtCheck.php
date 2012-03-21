@@ -433,7 +433,7 @@ class Setup_ExtCheck
                             if (!$link) {
                                 //die('Could not connect to mysql database: ' . mysql_error());
                                 Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                                    . 'Could not connect to mysql database: ' . mysql_error()); 
+                                    . 'Could not connect to mysql database: ' . mysql_error());
                                 Setup_Core::set(Setup_Core::CHECKDB, FALSE);
                             }
                             $mysqlVersion = @mysql_get_server_info();
@@ -533,7 +533,7 @@ class Setup_ExtCheck
                                 }
                             } // end INISET
                             
-                            if (!in_array(false, $passed)) {                             
+                            if (!in_array(false, $passed)) {
                                 $succeeded = true;
                             }
                             unset($passed);

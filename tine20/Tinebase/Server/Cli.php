@@ -52,7 +52,7 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
         $configData['sessiondir'] = Tinebase_Core::getTempDir();
         
         $config = new Zend_Config($configData);
-        Tinebase_Core::set(Tinebase_Core::CONFIG, $config);  
+        Tinebase_Core::set(Tinebase_Core::CONFIG, $config);
     }
     
     /**

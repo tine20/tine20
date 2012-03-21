@@ -51,9 +51,9 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
      * @private
      */
     onRecordLoad: function() {
-    	// you can do something here
+        // you can do something here
 
-    	Tine.ExampleApplication.ExampleRecordEditDialog.superclass.onRecordLoad.call(this);        
+        Tine.ExampleApplication.ExampleRecordEditDialog.superclass.onRecordLoad.call(this);
     },
     
     /**
@@ -83,7 +83,7 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
             plain:true,
             activeTab: 0,
             border: false,
-            items:[{               
+            items:[{
                 title: this.app.i18n._('ExampleRecord'),
                 autoScroll: true,
                 border: false,

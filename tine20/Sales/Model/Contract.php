@@ -16,14 +16,14 @@
  * @package     Sales
  */
 class Sales_Model_Contract extends Tinebase_Record_Abstract
-{  
+{
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
      * @var string
      */    
-    protected $_identifier = 'id';    
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to
@@ -110,11 +110,11 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                         case self::RELATION_TYPE_ACCOUNT:                        
                             $relationData['related_model'] = 'Tinebase_Model_User';
                             $relationData['related_backend'] = Tinebase_User::getConfiguredBackend();
-                            break;                    
+                            break;
                         case self::RELATION_TYPE_CUSTOMER:
                             $relationData['related_model'] = 'Addressbook_Model_Contact';
                             $relationData['related_backend'] = Addressbook_Backend_Factory::SQL;
-                            break;                    
+                            break;
                         default:
                             throw new Sales_Exception_UnexpectedValue('Relation type not supported.');
                     }

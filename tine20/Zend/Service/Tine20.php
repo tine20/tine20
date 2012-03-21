@@ -70,7 +70,7 @@ class Zend_Service_Tine20 extends Zend_Json_Client
             $httpClient->setCookieJar();
         }
         
-        parent::__construct($url, $httpClient);        
+        parent::__construct($url, $httpClient);
     }    
 
     /**

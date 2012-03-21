@@ -58,7 +58,7 @@ Ext.extend(Ext.ux.form.ImageCropper, Ext.Component, {
         // cause of the window usage the yui crop mask does not work, so we use the mask obove
         /*
         var Dom = YAHOO.util.Dom, 
-        Event = YAHOO.util.Event; 
+        Event = YAHOO.util.Event;
     
         var crop = new YAHOO.widget.ImageCropper('yui_img');
         */

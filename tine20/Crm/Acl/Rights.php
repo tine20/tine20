@@ -46,7 +46,7 @@ class Crm_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * disabled. use the singleton
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**

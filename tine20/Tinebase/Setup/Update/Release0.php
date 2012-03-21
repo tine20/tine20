@@ -50,9 +50,9 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                         </index>
                     </declaration>
                 </table>'
-				;
-        $table = Setup_Backend_Schema_Index_Factory::factory('String', $tableDefinition); 
-		$this->_backend->createTable($table);
+                ;
+        $table = Setup_Backend_Schema_Index_Factory::factory('String', $tableDefinition);
+        $this->_backend->createTable($table);
         $this->_backend->dropTable('test_table');
     }
 
@@ -360,9 +360,9 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         </table>'     
         );
 
-        foreach ( $tableDefinitions as $tableDefinition ) {                    
-            $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
-            $this->_backend->createTable($table);        
+        foreach ( $tableDefinitions as $tableDefinition ) {
+            $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
+            $this->_backend->createTable($table);
         }
         
         /************ create roles ***************/
@@ -504,8 +504,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             </table>
         ');
 
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
-        $this->_backend->createTable($table);        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
+        $this->_backend->createTable($table);
         
         $this->setApplicationVersion('Tinebase', '0.4');
     }
@@ -514,7 +514,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      * rename timemachine_modificationlog to timemachine_modlog
      */    
     public function update_4()
-    {        
+    {
         try {
             $this->validateTableVersion('timemachine_modificationlog', '1');
             
@@ -605,8 +605,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             </table>
         ');
 
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
-        $this->_backend->createTable($table);        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
+        $this->_backend->createTable($table);
         
         // add config settings for admin and user groups
         Tinebase_User::setBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY, 'Users');
@@ -656,8 +656,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             </table>
         ');
 
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
-        $this->_backend->createTable($table);        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
+        $this->_backend->createTable($table);
 
         $this->setApplicationVersion('Tinebase', '0.8');
     }
@@ -815,8 +815,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         </table>
         ');
         
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
-        $this->_backend->createTable($table);        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
+        $this->_backend->createTable($table);
 
         $this->setApplicationVersion('Tinebase', '0.9');
     }
@@ -883,7 +883,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                         'type'                   => $type,
                         'created_by'             => $link->link_owner,
                         'creation_time'          => Tinebase_DateTime::now()
-                    ));                        
+                    ));
                 }
             }
         }
@@ -903,7 +903,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             }
         }
         echo "done<br/>\n";
-        $this->setApplicationVersion('Tinebase', '0.10');        
+        $this->setApplicationVersion('Tinebase', '0.10');
     }
 
     /**
@@ -959,8 +959,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         </table>
         ');
         
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
-        $this->_backend->createTable($table);    
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
+        $this->_backend->createTable($table);
 
         $tableDefinition = ('
         <table>
@@ -1054,8 +1054,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         </table>
         ');
         
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
-        $this->_backend->createTable($table);        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
+        $this->_backend->createTable($table);
         
         $noteType = new Tinebase_Model_NoteType(array(
             'id'            => '1',
@@ -1218,8 +1218,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             </declaration>
         </table>');
     
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
-        $this->_backend->createTable($table);        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
+        $this->_backend->createTable($table);
         
         $this->setApplicationVersion('Tinebase', '0.14');
     }
@@ -1352,8 +1352,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         </table>
         ');
     
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
-        $this->_backend->createTable($table);        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
+        $this->_backend->createTable($table);
         
         $this->setApplicationVersion('Tinebase', '0.17');
     }
@@ -1535,7 +1535,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         }
         $this->_backend->addForeignKey('container_acl', $declaration);
         
-        $this->setApplicationVersion('Tinebase', '0.18');            
+        $this->setApplicationVersion('Tinebase', '0.18');
     }
 
     /**
@@ -1554,14 +1554,14 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
 
         try {
             $sharedContracts = Tinebase_Container::getInstance()->getContainerByName('Sales', 'Shared Contracts', Tinebase_Model_Container::TYPE_SHARED);
-        } catch (Tinebase_Exception_NotFound $enf) {            
+        } catch (Tinebase_Exception_NotFound $enf) {
             // create it if it doesn't exists
             $newContainer = new Tinebase_Model_Container(array(
                 'name'              => 'Shared Contracts',
                 'type'              => Tinebase_Model_Container::TYPE_SHARED,
                 'backend'           => 'Sql',
                 'application_id'    => $application->getId() 
-            ));        
+            ));
             $sharedContracts = Tinebase_Container::getInstance()->addContainer($newContainer);
         }            
 
@@ -1805,8 +1805,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         </table>
         ');
     
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
-        $this->_backend->createTable($table);        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
+        $this->_backend->createTable($table);
         
         $this->setApplicationVersion('Tinebase', '0.22');
     }
@@ -1931,8 +1931,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             </declaration>
         </table>';
         
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
-        $this->_backend->createTable($table);        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
+        $this->_backend->createTable($table);
         
         $this->setApplicationVersion('Tinebase', '0.23');
     }
@@ -2052,7 +2052,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         foreach ($oldSettings as $oldSetting) {
             try {
                 $oldConfig = Tinebase_Config::getInstance()->getConfig($oldSetting);
-                Tinebase_Config::getInstance()->deleteConfig($oldConfig); 
+                Tinebase_Config::getInstance()->deleteConfig($oldConfig);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // do nothing
             }
@@ -2089,7 +2089,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                 'operator' => 'equals', 
                 'value' => Tinebase_Model_Preference::TYPE_DEFAULT
             )
-        ));        
+        ));
         
         $backend = Tinebase_Core::getPreference();
         $prefs = $backend->search($filter, NULL);
@@ -2148,8 +2148,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             </table>
         ';
         
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
-        $this->_backend->createTable($table);        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
+        $this->_backend->createTable($table);
         
         $this->setApplicationVersion('Tinebase', '0.27');
     }
@@ -2214,7 +2214,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             </table>
         ';
         
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
         $this->_backend->createTable($table);
         
         $select = $orgDb->select()
@@ -2319,7 +2319,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      */    
     public function update_28()
     {
-        $this->validateTableVersion('tags', '1');        
+        $this->validateTableVersion('tags', '1');
         
         // fix for signed / unsigned problem
         $declaration = new Setup_Backend_Schema_Field_Xml('

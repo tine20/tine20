@@ -90,7 +90,7 @@ class Tasks_Model_TaskFilterTest extends PHPUnit_Framework_TestCase
      * Search by container filter
      */
     public function testSearchByContainerFilter() 
-    {           
+    {
         $backend = new Tasks_Backend_Sql();
         $filter = new Tasks_Model_TaskFilter(array(
              array('field' => 'container_id', 'operator' => 'equals', 'value' => '/personal/' . Tinebase_Model_User::CURRENTACCOUNT)
@@ -103,7 +103,7 @@ class Tasks_Model_TaskFilterTest extends PHPUnit_Framework_TestCase
      * Search by organizer filter
      */
     public function testSearchByUserFilter() 
-    {           
+    {
         $backend = new Tasks_Backend_Sql();
         $filter = new Tasks_Model_TaskFilter(array(
              array('field' => 'organizer', 'operator' => 'equals', 'value' => Tinebase_Model_User::CURRENTACCOUNT)

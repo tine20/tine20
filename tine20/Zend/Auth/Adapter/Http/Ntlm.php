@@ -476,7 +476,7 @@ class Zend_Auth_Adapter_Http_Ntlm extends Zend_Auth_Adapter_Http_Abstract
                 'ntlmData' => $this->getClientInfo()
             )),
             $result->getMessages()
-        ); 
+        );
     }
     
     protected function _getAuthHeader()

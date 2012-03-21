@@ -113,7 +113,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 renderer: Tine.Tinebase.common.minutesRenderer }
         ].concat(this.getModlogColumns());
         
-        return new Ext.grid.ColumnModel({ 
+        return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true,
                 resizable: true
@@ -208,19 +208,19 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             ),
             
             showDefault: function(body) {
-            	
-				var data = {
-				    count: this.gridpanel.store.proxy.jsonReader.jsonData.totalcount,
-				    countbillable: (this.gridpanel.store.proxy.jsonReader.jsonData.totalcountbillable) ? this.gridpanel.store.proxy.jsonReader.jsonData.totalcountbillable : 0,
-				    sum:  Tine.Tinebase.common.minutesRenderer(this.gridpanel.store.proxy.jsonReader.jsonData.totalsum),
-				    sumbillable: Tine.Tinebase.common.minutesRenderer(this.gridpanel.store.proxy.jsonReader.jsonData.totalsumbillable)
-			    };
+                
+                var data = {
+                    count: this.gridpanel.store.proxy.jsonReader.jsonData.totalcount,
+                    countbillable: (this.gridpanel.store.proxy.jsonReader.jsonData.totalcountbillable) ? this.gridpanel.store.proxy.jsonReader.jsonData.totalcountbillable : 0,
+                    sum:  Tine.Tinebase.common.minutesRenderer(this.gridpanel.store.proxy.jsonReader.jsonData.totalsum),
+                    sumbillable: Tine.Tinebase.common.minutesRenderer(this.gridpanel.store.proxy.jsonReader.jsonData.totalsumbillable)
+                };
                 
                 this.defaultTpl.overwrite(body, data);
             },
             
             showMulti: function(sm, body) {
-            	
+                
                 var data = {
                     count: sm.getCount(),
                     countbillable: 0,
@@ -231,8 +231,8 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     
                     data.sum = data.sum + parseInt(record.data.duration);
                     if (record.data.is_billable_combined == '1') {
-                    	data.countbillable++;
-                    	data.sumbillable = data.sumbillable + parseInt(record.data.duration);
+                        data.countbillable++;
+                        data.sumbillable = data.sumbillable + parseInt(record.data.duration);
                     }
                 });
                 data.sum = Tine.Tinebase.common.minutesRenderer(data.sum);
@@ -242,49 +242,49 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             },
             
             tpl: new Ext.XTemplate(
-        		'<div class="preview-panel-timesheet-nobreak">',	
-        			'<!-- Preview beschreibung -->',
-        			'<div class="preview-panel preview-panel-timesheet-left">',
-        				'<div class="bordercorner_1"></div>',
-        				'<div class="bordercorner_2"></div>',
-        				'<div class="bordercorner_3"></div>',
-        				'<div class="bordercorner_4"></div>',
-        				'<div class="preview-panel-declaration">' /* + this.app.i18n._('Description') */ + '</div>',
-        				'<div class="preview-panel-timesheet-description preview-panel-left" ext:qtip="{[this.encode(values.description)]}">',
-        					'<span class="preview-panel-nonbold">',
-        					 '{[this.encode(values.description, "longtext")]}',
-        					'<br/>',
-        					'</span>',
-        				'</div>',
-        			'</div>',
-        			'<!-- Preview detail-->',
-        			'<div class="preview-panel-timesheet-right">',
-        				'<div class="bordercorner_gray_1"></div>',
-        				'<div class="bordercorner_gray_2"></div>',
-        				'<div class="bordercorner_gray_3"></div>',
-        				'<div class="bordercorner_gray_4"></div>',
-        				'<div class="preview-panel-declaration">' /* + this.app.i18n._('Detail') */ + '</div>',
-        				'<div class="preview-panel-timesheet-leftside preview-panel-left">',
-        				// @todo add custom fields here
-        				/*
-        					'<span class="preview-panel-bold">',
-        					'Ansprechpartner<br/>',
-        					'Newsletter<br/>',
-        					'Ticketnummer<br/>',
-        					'Ticketsubjekt<br/>',
-        					'</span>',
-        			    */
-        				'</div>',
-        				'<div class="preview-panel-timesheet-rightside preview-panel-left">',
-        					'<span class="preview-panel-nonbold">',
-        					'<br/>',
-        					'<br/>',
-        					'<br/>',
-        					'<br/>',
-        					'</span>',
-        				'</div>',
-        			'</div>',
-        		'</div>',{
+                '<div class="preview-panel-timesheet-nobreak">',    
+                    '<!-- Preview beschreibung -->',
+                    '<div class="preview-panel preview-panel-timesheet-left">',
+                        '<div class="bordercorner_1"></div>',
+                        '<div class="bordercorner_2"></div>',
+                        '<div class="bordercorner_3"></div>',
+                        '<div class="bordercorner_4"></div>',
+                        '<div class="preview-panel-declaration">' /* + this.app.i18n._('Description') */ + '</div>',
+                        '<div class="preview-panel-timesheet-description preview-panel-left" ext:qtip="{[this.encode(values.description)]}">',
+                            '<span class="preview-panel-nonbold">',
+                             '{[this.encode(values.description, "longtext")]}',
+                            '<br/>',
+                            '</span>',
+                        '</div>',
+                    '</div>',
+                    '<!-- Preview detail-->',
+                    '<div class="preview-panel-timesheet-right">',
+                        '<div class="bordercorner_gray_1"></div>',
+                        '<div class="bordercorner_gray_2"></div>',
+                        '<div class="bordercorner_gray_3"></div>',
+                        '<div class="bordercorner_gray_4"></div>',
+                        '<div class="preview-panel-declaration">' /* + this.app.i18n._('Detail') */ + '</div>',
+                        '<div class="preview-panel-timesheet-leftside preview-panel-left">',
+                        // @todo add custom fields here
+                        /*
+                            '<span class="preview-panel-bold">',
+                            'Ansprechpartner<br/>',
+                            'Newsletter<br/>',
+                            'Ticketnummer<br/>',
+                            'Ticketsubjekt<br/>',
+                            '</span>',
+                        */
+                        '</div>',
+                        '<div class="preview-panel-timesheet-rightside preview-panel-left">',
+                            '<span class="preview-panel-nonbold">',
+                            '<br/>',
+                            '<br/>',
+                            '<br/>',
+                            '<br/>',
+                            '</span>',
+                        '</div>',
+                    '</div>',
+                '</div>',{
                 encode: function(value, type, prefix) {
                     if (value) {
                         if (type) {
@@ -296,7 +296,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                                     value += type;
                             }                           
                         }
-                    	
+                        
                         var encoded = Ext.util.Format.htmlEncode(value);
                         encoded = Ext.util.Format.nl2br(encoded);
                         

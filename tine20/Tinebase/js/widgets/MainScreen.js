@@ -138,7 +138,7 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
      * 
      * @return {Ext.Panel}
      */
-    getWestPanel: function() { 
+    getWestPanel: function() {
 
         var contentType = this.getActiveContentType(),
             wpName = contentType + 'WestPanel';

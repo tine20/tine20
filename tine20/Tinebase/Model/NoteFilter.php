@@ -18,7 +18,7 @@
  * @subpackage  Notes 
  */
 class Tinebase_Model_NoteFilter extends Tinebase_Model_Filter_FilterGroup
-{    
+{
     /**
      * @var string application of this filter group
      */

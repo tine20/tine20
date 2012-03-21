@@ -75,7 +75,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.Panel, {
         var translations;
         if (! this.app) {
             translations = new Locale.Gettext();
-            translations.textdomain('Voipmanager');    
+            translations.textdomain('Voipmanager');
         } else {
             translations = this.app.i18n;
         }

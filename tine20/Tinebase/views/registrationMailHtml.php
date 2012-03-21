@@ -14,8 +14,8 @@
 <h1><?php echo $this->mailTextWelcome ?></h1>
 <p>You have successfully registered to the new groupware system Tine 2.0. </p>
 <?php if (isset($this->mailActivationLink)) { ?>
-	<p>Please click on the activation link below to activate your account.</p>
-	<p><a href="<?php echo $this->mailActivationLink ?>"><?php echo $this->mailActivationLink ?></a></p>
+    <p>Please click on the activation link below to activate your account.</p>
+    <p><a href="<?php echo $this->mailActivationLink ?>"><?php echo $this->mailActivationLink ?></a></p>
 <?php } ?>
 <p>Your username and password are: <?php echo $this->username ?> / <?php echo $this->password ?></p>
 <p>Sincerly yours,<br/>

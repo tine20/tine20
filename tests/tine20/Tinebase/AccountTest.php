@@ -37,9 +37,9 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_UserTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_UserTest');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -58,7 +58,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
             'accountEmailAddress'   => 'phpunit@metaways.de'
-        )); 
+        ));
         
         $this->objects['updatedAccount'] = new Tinebase_Model_FullUser(array(
             'accountId'             => 10,
@@ -69,8 +69,8 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
             'accountLastName'       => 'Tine 2.0 Updated',
             'accountFirstName'      => 'PHPUnit Updated',
             'accountEmailAddress'   => 'phpunit@tine20.org'
-        )); 
-    	
+        ));
+        
         $this->objects['deleteAccount'] = new Tinebase_Model_FullUser(array(
             'accountId'             => 11,
             'accountLoginName'      => 'tine20phpunit-delete',
@@ -80,7 +80,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
             'accountLastName'       => 'Tine 2.0 delete',
             'accountFirstName'      => 'PHPUnit delete',
             'accountEmailAddress'   => 'phpunit@tine20.org'
-        )); 
+        ));
 
         $this->objects['noIdAccount'] = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => 'tine20phpunit-noid',
@@ -90,7 +90,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
             'accountLastName'       => 'Tine 2.0 noid',
             'accountFirstName'      => 'PHPUnit noid',
             'accountEmailAddress'   => 'phpunit@tine20.org'
-        )); 
+        ));
  
         return;
         
@@ -104,7 +104,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	
+    
     }
     
      /**
@@ -162,7 +162,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('10', $account->accountId);
     }
     
-	/**
+    /**
      * try to get the full account with the loginName tine20phpunit
      *
      */
@@ -236,7 +236,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
     /**
      * try to update the logintimestamp
      *
-     * @todo	check if set correctly
+     * @todo    check if set correctly
      */
     public function testSetLoginTime()
     {
@@ -246,7 +246,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
     /**
      * try to set the expirydate
      *
-     * @todo	check if set correctly
+     * @todo    check if set correctly
      */
     public function testSetExpiryDate()
     {
@@ -256,12 +256,12 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
    /**
      * try to set the blocked until date
      *
-     * @todo	check if set correctly
+     * @todo    check if set correctly
      */
     public function testSetBlockedDate()
     {
-    	$date = Tinebase_DateTime::now();
-    	$date->add ( '12:00:00' );
+        $date = Tinebase_DateTime::now();
+        $date->add ( '12:00:00' );
         Tinebase_User::getInstance()->setBlockedDate($this->objects['initialAccount'], $date );
     }
  
@@ -300,24 +300,24 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
     public function testConvertAccountIdToInt()
     {
         $this->setExpectedException('Exception');
-    	
+        
         Tinebase_Model_User::convertUserIdToInt(0);
   
     }
 
-  	/**
+      /**
      * try to convert id of account object and check if correct exceptions are thrown 
      *
      */
     public function testConvertAccountIdToIntWithAccount()
     {
         $this->setExpectedException('Exception');
-    	
+        
         Tinebase_Model_User::convertUserIdToInt( $this->objects['noIdAccount'] );
   
     }
-}		
-	
+}        
+    
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_UserTest::main') {
     Tinebase_UserTest::main();

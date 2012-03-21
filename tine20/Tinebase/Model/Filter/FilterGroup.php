@@ -461,7 +461,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         
         foreach ($this->_filterObjects as $object) {
             if ($object instanceof Tinebase_Model_Filter_AclFilter) {
-                $aclFilters[] = $object;        
+                $aclFilters[] = $object;
             }
         }
         
@@ -680,12 +680,12 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         $result = FALSE;
         
         foreach ($this->_filterObjects as $object) {
-        	if ($object instanceof Tinebase_Model_Filter_Abstract) {
-	            if ($object->getField() == $_field) {
-	                $result = TRUE;
-	                break;
-	            }
-        	}
+            if ($object instanceof Tinebase_Model_Filter_Abstract) {
+                if ($object->getField() == $_field) {
+                    $result = TRUE;
+                    break;
+                }
+            }
         }
         
         return $result;
@@ -752,15 +752,15 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         $result = ($_getAll) ? array() : NULL;
         
         foreach ($this->_filterObjects as $object) {
-        	if ($object instanceof Tinebase_Model_Filter_Abstract) {
-	            if ($object->getField() == $_field) {
-    	            if ($_getAll) {
+            if ($object instanceof Tinebase_Model_Filter_Abstract) {
+                if ($object->getField() == $_field) {
+                    if ($_getAll) {
                         $result[] = $object;
                     } else {
                         return $object;
-                    }	                
-	            }
-        	}
+                    }                    
+                }
+            }
         }
         
         foreach ($this->_customData as $customFilter) {
@@ -784,11 +784,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     protected function _removeFilter($_field)
     {
         foreach ($this->_filterObjects as $key => $object) {
-        	if ($object instanceof Tinebase_Model_Filter_Abstract) {
-	            if ($object->getField() == $_field) {
-	                unset($this->_filterObjects[$key]);
-	            }
-        	}
+            if ($object instanceof Tinebase_Model_Filter_Abstract) {
+                if ($object->getField() == $_field) {
+                    unset($this->_filterObjects[$key]);
+                }
+            }
         }
 
         foreach ($this->_customData as $key => $customFilter) {

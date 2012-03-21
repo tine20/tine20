@@ -91,7 +91,7 @@ class ActiveSync_Setup_Update_Release0 extends Setup_Update_Abstract
             </table>        
         ');
     
-        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition); 
+        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition);
         $this->_backend->createTable($table);
                 
         $this->setApplicationVersion('ActiveSync', '0.2');
@@ -264,7 +264,7 @@ class ActiveSync_Setup_Update_Release0 extends Setup_Update_Abstract
             </table>
         ');
     
-        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition); 
+        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition);
         $this->_backend->createTable($table);
                 
         $this->setApplicationVersion('ActiveSync', '0.5');
@@ -335,7 +335,7 @@ class ActiveSync_Setup_Update_Release0 extends Setup_Update_Abstract
                 <onupdate>cascade</onupdate>
             </index>
         ');
-        $this->_backend->addForeignKey('acsync_content', $declaration);   
+        $this->_backend->addForeignKey('acsync_content', $declaration);
                      
         $this->setApplicationVersion('ActiveSync', '0.7');
     }

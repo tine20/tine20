@@ -141,7 +141,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     $value = array(
                         $date->toString('Y') . '-01-01', 
                         $date->toString('Y') . '-12-31',
-                    );                
+                    );
                     break;
                 /******* quarter *********/
                 case 'quarterNext':
@@ -166,7 +166,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     $value = array(
                         $first, 
                         $last
-                    );                
+                    );
                     break;
                 /******* day *********/
                 case 'dayNext':

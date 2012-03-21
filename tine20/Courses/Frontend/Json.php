@@ -309,7 +309,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $tempFile = Tinebase_TempFile::getInstance()->getTempFile($tempFileId);
         
         $course = $this->_controller->get($courseId);
-        $schoolName = strtolower(Tinebase_Department::getInstance()->get($course->type)->name); 
+        $schoolName = strtolower(Tinebase_Department::getInstance()->get($course->type)->name);
         
         // get definition and start import with admin user import csv plugin
         $definitionName = $this->_config->get('import_definition', 'admin_user_import_csv');
@@ -338,7 +338,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // add to student group if available
         if (isset($this->_config->students_group) && !empty($this->_config->students_group)) {
-            $groupController = Admin_Controller_Group::getInstance(); 
+            $groupController = Admin_Controller_Group::getInstance();
             foreach ($members as $member) {
                 $groupController->addGroupMember($this->_config->students_group, $member['id']);
             }

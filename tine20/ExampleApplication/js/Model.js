@@ -45,7 +45,7 @@ Tine.ExampleApplication.Model.ExampleRecord = Tine.Tinebase.data.Record.create(T
  * @return {Object} default data
  * @static
  */ 
-Tine.ExampleApplication.Model.ExampleRecord.getDefaultData = function() { 
+Tine.ExampleApplication.Model.ExampleRecord.getDefaultData = function() {
     var app = Tine.Tinebase.appMgr.get('ExampleApplication');
     var defaultsContainer = Tine.ExampleApplication.registry.get('defaultContainer');
     

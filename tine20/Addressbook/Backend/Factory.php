@@ -64,19 +64,19 @@ class Addressbook_Backend_Factory
                     self::$_backends[$_type] = new Addressbook_Backend_Sql();
                 }
                 $instance = self::$_backends[$_type];
-                break;            
+                break;
             case self::LDAP:
                 if (!isset(self::$_backends[$_type])) {
                     self::$_backends[$_type] = new Addressbook_Backend_Ldap();
                 }
                 $instance = self::$_backends[$_type];
-                break;            
+                break;
             case self::SALUTATION:
                 if (!isset(self::$_backends[$_type])) {
                     self::$_backends[$_type] = new Addressbook_Backend_Salutation();
                 }
                 $instance = self::$_backends[$_type];
-                break;            
+                break;
             default:
                 throw new Addressbook_Exception_InvalidArgument('Unknown backend type (' . $_type . ').');
                 break;

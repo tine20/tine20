@@ -44,5 +44,5 @@ class Tinebase_Model_OpenId_TrustedSite extends Tinebase_Record_Abstract
         'account_id'    => array('presence' => 'required'),
         'site'          => array('presence' => 'required'),
         'trusted'       => array('presence' => 'required')
-    );    
+    );
 }

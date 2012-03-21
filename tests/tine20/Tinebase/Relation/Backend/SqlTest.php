@@ -96,7 +96,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
     {
         $this->object = new Tinebase_Relation_Backend_Sql();
         foreach ($this->relationData as $num => $relation) {
-        	$this->relations[$num] = $this->object->addRelation(new Tinebase_Model_Relation($relation, true));
+            $this->relations[$num] = $this->object->addRelation(new Tinebase_Model_Relation($relation, true));
         }
     }
 
@@ -201,7 +201,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
      * testBreakRelationExcludeSet
      */
     public function testBreakRelationExcludeSet()
-    {    
+    {
         $rel = $this->relations[0];
         $this->object->breakRelation($rel->getId());
         
@@ -209,7 +209,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
         // test that the other relations still exists
         $this->assertGreaterThan(0, count($relations));
         foreach ($relations as $relation) {
-        	$this->assertFalse($relation->getId() == $this->relations[0]->getId());
+            $this->assertFalse($relation->getId() == $this->relations[0]->getId());
         }
     }
 

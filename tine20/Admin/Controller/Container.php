@@ -51,7 +51,7 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
 
     /**
@@ -258,7 +258,7 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
                             'account_id'    => $accountId,
                             'account_type'  => $accountType,
                             $grant          => TRUE,
-                        );                        
+                        );
                     }
                 } else {
                     Tinebase_Container::getInstance()->addGrants($container->getId(), $accountType, $accountId, $grantsArray, TRUE);

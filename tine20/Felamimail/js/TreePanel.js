@@ -78,7 +78,7 @@ Tine.Felamimail.TreePanel = function(config) {
 };
 
 Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
-	
+    
     /**
      * @property app
      * @type Tine.Felamimail.Application
@@ -105,7 +105,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * TreePanel config
      * @private
      */
-	rootVisible: false,
+    rootVisible: false,
     
     /**
      * drag n drop
@@ -119,7 +119,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     border: false,
     recordClass: Tine.Felamimail.Model.Account,
     filterMode: 'filterToolbar',
-	
+    
     /**
      * is needed by Tine.widgets.mainscreen.WestPanel to fake container tree panel
      */
@@ -132,7 +132,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     initComponent: function() {
         // get folder store
         this.folderStore = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore();
-    	
+        
         // init tree loader
         this.loader = new Tine.Felamimail.TreeLoader({
             folderStore: this.folderStore,
@@ -181,7 +181,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         var initCtxMenu = Tine.Felamimail.setTreeContextMenus.createDelegate(this);
         initCtxMenu();
         
-    	// add listeners
+        // add listeners
         this.on('beforeclick', this.onBeforeClick, this);
         this.on('click', this.onClick, this);
         this.on('contextmenu', this.onContextMenu, this);
@@ -195,7 +195,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         
         // call parent::initComponent
         Tine.Felamimail.TreePanel.superclass.initComponent.call(this);
-	},
+    },
     
     /**
      * add accounts from registry as nodes to root node
@@ -567,11 +567,11 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @param {Object} folderData
      */
     onFolderDelete: function(folderData) {
-    	// if we deleted account, remove it from account store
-    	if (folderData.record && folderData.record.modelName === 'Account') {
-    		this.accountStore.remove(this.accountStore.getById(folderData.id));
-    	}
-    	
+        // if we deleted account, remove it from account store
+        if (folderData.record && folderData.record.modelName === 'Account') {
+            this.accountStore.remove(this.accountStore.getById(folderData.id));
+        }
+        
         this.folderStore.remove(this.folderStore.getById(folderData.id));
     },
     

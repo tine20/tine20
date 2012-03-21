@@ -99,7 +99,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
                 <fetch mil="1000">' . $baseUrl . '?method=Phone.directory&mac=' . $mac . '</fetch>
             </SnomIPPhoneText>
             ';
-        } else {        
+        } else {
             $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?>
               <SnomIPPhoneDirectory>
                 <Title>Directory</Title>
@@ -152,7 +152,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      * @todo add correct line_id
      */
     public function callHistory($mac, $event, $callId, $local, $remote)
-    {        
+    {
         $this->_authenticate();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Event: $event CallId: $callId Local: $local Remote: $remote ");
@@ -180,7 +180,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
             'id'            => $callId,
             'phone_id'      => $phone->getId(),
             'line_id'       => $local
-        ));    
+        ));
         
         switch($event) {
             case 'outgoing':

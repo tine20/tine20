@@ -39,7 +39,7 @@ class Crm_Preference extends Tinebase_Preference_Abstract
     /**
      * @var string application
      */
-    protected $_application = 'Crm';    
+    protected $_application = 'Crm';
         
     /**************************** public functions *********************************/
     

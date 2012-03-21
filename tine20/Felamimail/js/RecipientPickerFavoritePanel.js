@@ -63,7 +63,7 @@ Tine.Felamimail.RecipientPickerFavoritePanel = Ext.extend(Tine.widgets.persisten
                 model: 'Addressbook_Model_Contact',
                 application_id: this.app.id,
                 id: Ext.id()
-            })]);        
+            })]);
         }, this);
 
         

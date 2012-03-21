@@ -67,7 +67,7 @@ class Tinebase_User_Registration
      *
      */
     private function __clone ()
-    {        
+    {
     }
     
     /**
@@ -115,9 +115,9 @@ class Tinebase_User_Registration
         if ($row = $this->_invitationsTable->fetchRow($where)) {
             // remove from table
             $this->_invitationsTable->delete($where);
-            $result = true;             
+            $result = true;
         } else {
-            $result = false;            
+            $result = false;
         }
         
         return $result;
@@ -132,7 +132,7 @@ class Tinebase_User_Registration
      * 
      */
     public function registerUser ($regData, $_sendMail = true)
-    { 
+    {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' call registerUser with regData: ' . print_r($regData, true));
         
@@ -264,7 +264,7 @@ class Tinebase_User_Registration
         $mail->addHeader('X-MailGenerator', 'Tine 2.0');
         $mail->setFrom('webmaster@tine20.org', 'Tine 2.0 Webmaster');
         $result = false;
-        if (! empty($recipientEmail)) { 
+        if (! empty($recipientEmail)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 ' send registration email to ' . $recipientEmail);
             $mail->addTo($recipientEmail, $recipientName);
@@ -319,7 +319,7 @@ class Tinebase_User_Registration
         }
         $mail->addHeader('X-MailGenerator', 'Tine 2.0');
         $mail->setFrom('webmaster@tine20.org', 'Tine 2.0 Webmaster');
-        if (! empty($recipientEmail)) { 
+        if (! empty($recipientEmail)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 ' send lost password email to ' . $recipientEmail);
             $mail->addTo($recipientEmail, $recipientName);
@@ -491,7 +491,7 @@ class Tinebase_User_Registration
             $registration = new Tinebase_Model_Registration();
             $registration->setFromArray($row);
         } catch (Exception $e) {
-            $validationErrors = $registration->getValidationErrors(); 
+            $validationErrors = $registration->getValidationErrors();
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 $e->getMessage() . "\n" . "Tinebase_Model_Registration::validation_errors: \n" . 
                 print_r($validationErrors, true));

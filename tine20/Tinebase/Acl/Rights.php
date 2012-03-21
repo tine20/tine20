@@ -81,7 +81,7 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * disabled. use the singleton
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**
@@ -114,7 +114,7 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @return  array   all application rights
      */
     public function getAllApplicationRights($_application = NULL)
-    {        
+    {
         $allRights = parent::getAllApplicationRights();
                 
         if ( $_application === NULL || $_application === 'Tinebase' ) {

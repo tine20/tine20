@@ -90,7 +90,7 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $path);
     
-        if (!$handle = Tinebase_FileSystem::getInstance()->fopen($path, 'x')) {    
+        if (!$handle = Tinebase_FileSystem::getInstance()->fopen($path, 'x')) {
             throw new Sabre_DAV_Exception_Forbidden('Permission denied to create file (filename file://' . $path . ')');
         }
     
@@ -181,7 +181,7 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
     #    $properties = array(
     #        'id'                                     => $this->_container->getId(),
     #        'uri'                                    => $this->_container->name,
-    #    	'{DAV:}displayname'                      => $displayName,
+    #        '{DAV:}displayname'                      => $displayName,
     #    );
     #    
         $response = array();
@@ -220,7 +220,7 @@ class Filemanager_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
      * @return Tinebase_Model_Container
      */
     protected function _getContainer()
-    {        
+    {
         return $this->_container;
     }
 }

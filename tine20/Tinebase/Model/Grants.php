@@ -65,7 +65,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      */
     const GRANT_FREEBUSY = 'freebusyGrant';
     
-	/**
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 

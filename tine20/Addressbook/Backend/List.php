@@ -123,7 +123,7 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($lists) .' lists');
         
         if(count($lists) > 0) {
-            $this->delete($lists->getArrayOfIds());        
+            $this->delete($lists->getArrayOfIds());
         }
     }
     

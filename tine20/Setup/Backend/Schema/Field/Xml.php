@@ -62,7 +62,7 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
             $this->notnull = false;
         }
 
-        switch ($this->type) {            
+        switch ($this->type) {
             case 'enum':
                 if (isset($_declaration->value[0])) {
                     $i = 0;
@@ -82,7 +82,7 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
 
         if(!isset($_declaration->default) || strtolower($_declaration->default) == 'null') {
             $this->default = NULL;
-        } else {        
+        } else {
             switch ($this->type) {
                 case 'integer':
                     $this->default = (int) $_declaration->default;

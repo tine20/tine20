@@ -89,10 +89,10 @@ class Tinebase_User_EmailUser_Imap_DbmailTest extends PHPUnit_Framework_TestCase
     public function testAddUser()
     {
         $user = Tinebase_User_LdapTest::getTestRecord();
-		$user->imapUser = new Tinebase_Model_EmailUser(array(
-		    'emailMailQuota' => 1000
+        $user->imapUser = new Tinebase_Model_EmailUser(array(
+            'emailMailQuota' => 1000
         ));
-		
+        
         $testUser = $this->_backend->addUser($user);
         $this->objects['users']['testUser'] = $testUser;
 
@@ -116,8 +116,8 @@ class Tinebase_User_EmailUser_Imap_DbmailTest extends PHPUnit_Framework_TestCase
     public function testUpdateUser()
     {
         $user = $this->testAddUser();
-		$user->imapUser = new Tinebase_Model_EmailUser(array(
-		    'emailMailQuota' => 2000
+        $user->imapUser = new Tinebase_Model_EmailUser(array(
+            'emailMailQuota' => 2000
         ));
                 
         $testUser = $this->_backend->updateUser($user);
@@ -129,4 +129,4 @@ class Tinebase_User_EmailUser_Imap_DbmailTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(empty($this->_config['domain']) ? $user->accountLoginName : $user->accountLoginName . '@' . $this->_config['domain'], 
             $testUser->imapUser->emailUsername, 'emailUsername');
     }        
-}	
+}    

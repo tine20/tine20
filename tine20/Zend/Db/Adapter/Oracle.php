@@ -415,7 +415,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
         $data_precision  = 9;
         $constraint_type = 10;
         $position        = 11;
-		$char_length     = 12;
+        $char_length     = 12;
 
         $desc = array();
         foreach ($result as $key => $row) {
@@ -437,7 +437,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
                 'DEFAULT'          => $row[$data_default],
                 'NULLABLE'         => (bool) ($row[$nullable] == 'Y'),
                 //'LENGTH'           => $row[$data_length], 
-				'LENGTH'           => $row[$char_length], 				
+                'LENGTH'           => $row[$char_length],                 
                 'SCALE'            => $row[$data_scale],
                 'PRECISION'        => $row[$data_precision],
                 'UNSIGNED'         => null, // @todo
@@ -776,7 +776,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
                     if ($this->_isQuoted($sql, $position)) {
                         $quotedQuestionMarksCounter++;
                     } else {
-                        break;                      
+                        break;
                     }
                 }
                 $sql = substr_replace($sql, ':' . $this->_namedParamPrefix . $keyCounter, $position, 1);

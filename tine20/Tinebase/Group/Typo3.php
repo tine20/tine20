@@ -117,7 +117,7 @@ class Tinebase_Group_Typo3 extends Tinebase_Group_Sql
                 'id'            => $group['uid'],
                 'name'          => $group['title'],
                 'description'   => null
-            )); 
+            ));
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' add group: ' . print_r($groupObject->toArray(), TRUE));
             try {

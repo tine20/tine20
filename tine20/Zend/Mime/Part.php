@@ -80,7 +80,7 @@ class Zend_Mime_Part {
      */
     public function isStream()
     {
-    	return $this->_isStream;
+        return $this->_isStream;
     }
 
     /**

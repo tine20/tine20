@@ -31,8 +31,8 @@ class Admin_Controller_AccessLog extends Tinebase_Controller_Record_Abstract
      */
     private function __construct() 
     {
-	    $this->_currentAccount = Tinebase_Core::getUser();
-	    $this->_applicationName = 'Admin';
+        $this->_currentAccount = Tinebase_Core::getUser();
+        $this->_applicationName = 'Admin';
     }
 
     /**
@@ -40,7 +40,7 @@ class Admin_Controller_AccessLog extends Tinebase_Controller_Record_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**
@@ -98,7 +98,7 @@ class Admin_Controller_AccessLog extends Tinebase_Controller_Record_Abstract
      */
     public function delete($_ids)
     {
-        $this->checkRight('MANAGE_ACCESS_LOG');        
+        $this->checkRight('MANAGE_ACCESS_LOG');
         
         Tinebase_AccessLog::getInstance()->delete($_ids);
     }    

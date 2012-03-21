@@ -88,8 +88,8 @@ class Tinebase_Exception_Data extends Tinebase_Exception
     public function toArray()
     {
         return array(
-            'code'		    => $this->getCode(),
-            'message'		=> $this->getMessage(),
+            'code'            => $this->getCode(),
+            'message'        => $this->getMessage(),
             'exceptionData' => $this->_dataToArray(),
         );
     }

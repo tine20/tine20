@@ -10,13 +10,13 @@
 /**
  * Model of an iMIP (RFC 6047) Message
  * 
- * @property    id           	message <id>_<part> of iMIP mail part
- * @property    ics          	ical string in UTF8
- * @property    event        	iMIP message event
- * @property    method       	method of iMIP transaction
- * @property    userAgent    	userAgent origination iMIP transaction
- * @property    originator   	originator /sender of iMIP transaction
- * @property	preconditions 	array of checked processing preconditions
+ * @property    id               message <id>_<part> of iMIP mail part
+ * @property    ics              ical string in UTF8
+ * @property    event            iMIP message event
+ * @property    method           method of iMIP transaction
+ * @property    userAgent        userAgent origination iMIP transaction
+ * @property    originator       originator /sender of iMIP transaction
+ * @property    preconditions     array of checked processing preconditions
  * @package     Calendar
  * @subpackage  Model
  */
@@ -135,7 +135,7 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
         'originator'           => array('allowEmpty' => false,        ), // email adddress
         'userAgent'            => array('allowEmpty' => true,         ),
         'event'                => array('allowEmpty' => true          ),
-    	'existing_event'       => array('allowEmpty' => true          ),
+        'existing_event'       => array('allowEmpty' => true          ),
         'preconditions'        => array('allowEmpty' => true          ),
         'preconditionsChecked' => array('allowEmpty' => true          ),
     );
@@ -282,7 +282,7 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
         
         $preconditions[$_preconditionName][] = array(
             'check'     => $_check,
-            'message'	=> $_message,
+            'message'    => $_message,
         );
         
         $this->preconditions = $preconditions;

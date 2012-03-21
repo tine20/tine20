@@ -3,7 +3,7 @@
  * class to hold Account data
  * 
  * @package     Felamimail
- * @subpackage	Model
+ * @subpackage    Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -25,10 +25,10 @@
  * @property  string    type
  * @property  string    signature_position
  * @package   Felamimail
- * @subpackage	Model
+ * @subpackage    Model
  */
 class Felamimail_Model_Account extends Tinebase_Record_Abstract
-{  
+{
     /**
      * secure connection setting for no secure connection
      *
@@ -299,13 +299,13 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         
         // get values from account
         if ($this->smtp_hostname) {
-            $result['hostname'] = $this->smtp_hostname; 
+            $result['hostname'] = $this->smtp_hostname;
         }
         if ($this->smtp_user) {
-            $result['username'] = $this->smtp_user; 
+            $result['username'] = $this->smtp_user;
         }
         if ($this->smtp_password) {
-            $result['password'] = $this->smtp_password; 
+            $result['password'] = $this->smtp_password;
         }
         if ($this->smtp_auth) {
             $result['auth'] = $this->smtp_auth;
@@ -314,7 +314,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             $result['ssl'] = $this->smtp_ssl;
         }
         if ($this->smtp_port) {
-            $result['port'] = $this->smtp_port; 
+            $result['port'] = $this->smtp_port;
         }
         
         // system account: overwriting with values from config if set
@@ -329,8 +329,8 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         }
         
         // sanitizing some values
-        if (isset($result['primarydomain']) && ! empty($result['primarydomain'])) {            
-            $result['username'] .= '@' . $result['primarydomain'];        
+        if (isset($result['primarydomain']) && ! empty($result['primarydomain'])) {
+            $result['username'] .= '@' . $result['primarydomain'];
         }        
         if (array_key_exists('auth', $result) && $result['auth'] == 'none') {
             unset($result['username']);

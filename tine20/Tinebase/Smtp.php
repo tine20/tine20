@@ -79,7 +79,7 @@ class Tinebase_Smtp
      *
      */
     private function __clone() 
-    {   
+    {
     }
     
     /**
@@ -89,7 +89,7 @@ class Tinebase_Smtp
      */
     public static function getInstance() 
     {
-		if (self::$_instance === NULL) {
+        if (self::$_instance === NULL) {
             self::$_instance = new Tinebase_Smtp();
         }
         
@@ -135,6 +135,6 @@ class Tinebase_Smtp
         
         $_mail->addHeader('X-MailGenerator', 'Tine 2.0');
         
-        $_mail->send($transport); 
+        $_mail->send($transport);
     }
 }

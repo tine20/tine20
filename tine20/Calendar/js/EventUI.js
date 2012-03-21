@@ -239,7 +239,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             this.statusIcons.push({
                 status: 'recurex',
                 text: this.app.i18n._('recurring event exception')
-            });            
+            });
         }
 
         

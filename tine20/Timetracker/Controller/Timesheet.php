@@ -22,7 +22,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {        
+    private function __construct() {
         
         // config
         $this->_applicationName = 'Timetracker';
@@ -32,7 +32,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         $this->_resolveCustomFields = TRUE;
         
         // disable container ACL checks as we don't init the 'Shared Timesheets' grants in the setup
-        $this->_doContainerACLChecks = FALSE; 
+        $this->_doContainerACLChecks = FALSE;
         
         // use modlog and don't completely delete records
         $this->_purgeRecords = FALSE;

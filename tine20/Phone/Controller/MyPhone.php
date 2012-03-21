@@ -36,7 +36,7 @@ class Phone_Controller_MyPhone extends Voipmanager_Controller_Snom_Phone
      *
      */
     private function __clone() 
-    {        
+    {
     }
             
     /**

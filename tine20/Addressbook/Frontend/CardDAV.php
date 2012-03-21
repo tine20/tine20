@@ -297,6 +297,6 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
     {
         return false;
         
-        return $this->carddavBackend->updateAddressBook($this->addressBookInfo['id'], $mutations); 
+        return $this->carddavBackend->updateAddressBook($this->addressBookInfo['id'], $mutations);
     }
 }

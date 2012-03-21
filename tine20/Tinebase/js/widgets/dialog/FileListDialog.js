@@ -104,7 +104,7 @@ Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
         }];
     },
     
-    onOk: function() {        
+    onOk: function() {
         this.handler.call(this.scope, 'yes');
         this.window.close();
     },

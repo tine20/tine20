@@ -62,155 +62,155 @@ Tine.Voipmanager.AsteriskVoicemailGridPanel = Ext.extend(Tine.widgets.grid.GridP
      * 
      */
     getColumns: function(){
-        return [{ 
-	       	id: 'id', 
-	       	header: this.app.i18n._('id'), 
-	       	dataIndex: 'id', 
-	       	width: 10, 
+        return [{
+               id: 'id', 
+               header: this.app.i18n._('id'), 
+               dataIndex: 'id', 
+               width: 10, 
             sortable: true,
-	       	hidden: true 
-       }, { 
-	       	id: 'mailbox', 
-	       	header: this.app.i18n._('mailbox'), 
-	       	dataIndex: 'mailbox', 
-	       	width: 50, 
+               hidden: true 
+       }, {
+               id: 'mailbox', 
+               header: this.app.i18n._('mailbox'), 
+               dataIndex: 'mailbox', 
+               width: 50, 
             sortable: true
-       },{ 
-	       	id: 'context', 
-	       	header: this.app.i18n._('context'), 
-	       	dataIndex: 'context', 
-	       	width: 70, 
+       },{
+               id: 'context', 
+               header: this.app.i18n._('context'), 
+               dataIndex: 'context', 
+               width: 70, 
             sortable: true
-       },{ 
-	       	id: 'fullname', 
-	       	header: this.app.i18n._('fullname'), 
-	       	dataIndex: 'fullname', 
-	       	width: 180, 
+       },{
+               id: 'fullname', 
+               header: this.app.i18n._('fullname'), 
+               dataIndex: 'fullname', 
+               width: 180, 
             sortable: true
-       },{ 
-	       	id: 'email', 
-	       	header: this.app.i18n._('email'), 
-	       	dataIndex: 'email', 
-	       	width: 120, 
+       },{
+               id: 'email', 
+               header: this.app.i18n._('email'), 
+               dataIndex: 'email', 
+               width: 120, 
             sortable: true
-       },{ 
-	       	id: 'pager', 
-	       	header: this.app.i18n._('pager'), 
-	       	dataIndex: 'pager', 
-	       	width: 120, 
+       },{
+               id: 'pager', 
+               header: this.app.i18n._('pager'), 
+               dataIndex: 'pager', 
+               width: 120, 
             sortable: true 
-       },{ 
-	       	id: 'tz', 
-	       	header: this.app.i18n._('tz'), 
-	       	dataIndex: 'tz', 
-	       	width: 10, 
+       },{
+               id: 'tz', 
+               header: this.app.i18n._('tz'), 
+               dataIndex: 'tz', 
+               width: 10, 
             sortable: true, 
-	       	hidden: true 
-       }, { 
-	       	id: 'attach', 
-	       	header: this.app.i18n._('attach'), 
-	       	dataIndex: 'attach', 
-	       	width: 10, 
+               hidden: true 
+       }, {
+               id: 'attach', 
+               header: this.app.i18n._('attach'), 
+               dataIndex: 'attach', 
+               width: 10, 
             sortable: true, 
-	       	hidden: true 
-       },{ 
-	       	id: 'saycid', 
-	       	header: this.app.i18n._('saycid'), 
-	       	dataIndex: 'saycid', 
-	       	width: 10, 
+               hidden: true 
+       },{
+               id: 'saycid', 
+               header: this.app.i18n._('saycid'), 
+               dataIndex: 'saycid', 
+               width: 10, 
             sortable: true, 
-	       	hidden: true 
-       },{ 
-	       	id: 'dialout', 
-	       	header: this.app.i18n._('dialout'), 
-	       	dataIndex: 'dialout', 
-	       	width: 10, 
+               hidden: true 
+       },{
+               id: 'dialout', 
+               header: this.app.i18n._('dialout'), 
+               dataIndex: 'dialout', 
+               width: 10, 
             sortable: true, 
-	       	hidden: true 
-       },{ 
-	       	id: 'callback', 
-	       	header: this.app.i18n._('callback'), 
-	       	dataIndex: 'callback', 
-	       	width: 10, 
+               hidden: true 
+       },{
+               id: 'callback', 
+               header: this.app.i18n._('callback'), 
+               dataIndex: 'callback', 
+               width: 10, 
             sortable: true, 
-	       	hidden: true 
-       },{ 
-	       	id: 'review', 
-	       	header: this.app.i18n._('review'), 
-	       	dataIndex: 'review', 
-	       	width: 10, 
+               hidden: true 
+       },{
+               id: 'review', 
+               header: this.app.i18n._('review'), 
+               dataIndex: 'review', 
+               width: 10, 
             sortable: true, 
-	       	hidden: true 
-       },{ 
-	       	id: 'operator', 
-	       	header: this.app.i18n._('operator'), 
-	       	dataIndex: 'operator', 
-	       	width: 10, 
+               hidden: true 
+       },{
+               id: 'operator', 
+               header: this.app.i18n._('operator'), 
+               dataIndex: 'operator', 
+               width: 10, 
             sortable: true, 
-	       	hidden: true 
-       },{ 
-	       	id: 'envelope', 
-	       	header: this.app.i18n._('envelope'), 
-	       	dataIndex: 'envelope', 
-	       	width: 10, 
+               hidden: true 
+       },{
+               id: 'envelope', 
+               header: this.app.i18n._('envelope'), 
+               dataIndex: 'envelope', 
+               width: 10, 
             sortable: true, 
-	       	hidden: true 
-      }, { 
-	      	id: 'sayduration', 
-	      	header: this.app.i18n._('sayduration'), 
-	      	dataIndex: 'sayduration', 
-	      	width: 10, 
+               hidden: true 
+      }, {
+              id: 'sayduration', 
+              header: this.app.i18n._('sayduration'), 
+              dataIndex: 'sayduration', 
+              width: 10, 
             sortable: true, 
-	      	hidden: true 
-       }, { 
-	       	id: 'saydurationm', 
-	       	header: this.app.i18n._('saydurationm'), 
-	       	dataIndex: 'saydurationm', 
-	       	width: 10, 
+              hidden: true 
+       }, {
+               id: 'saydurationm', 
+               header: this.app.i18n._('saydurationm'), 
+               dataIndex: 'saydurationm', 
+               width: 10, 
             sortable: true, 
-	       	hidden: true 
-       },{ 
-	       	id: 'sendvoicemail', 
-	       	header: this.app.i18n._('sendvoicemail'), 
-	       	dataIndex: 'sendvoicemail', 
-	       	width: 10, 
+               hidden: true 
+       },{
+               id: 'sendvoicemail', 
+               header: this.app.i18n._('sendvoicemail'), 
+               dataIndex: 'sendvoicemail', 
+               width: 10, 
             sortable: true, 
-	       	hidden: true 
-       },{ 
-	       	id: 'delete', 
-	       	header: this.app.i18n._('delete'), 
-	       	dataIndex: 'delete', 
-	       	width: 10, 
+               hidden: true 
+       },{
+               id: 'delete', 
+               header: this.app.i18n._('delete'), 
+               dataIndex: 'delete', 
+               width: 10, 
             sortable: true, 
-	       	hidden: true 
-       },{ 
-	       	id: 'nextaftercmd', 
-	       	header: this.app.i18n._('nextaftercmd'), 
-	       	dataIndex: 'nextaftercmd', 
-	       	width: 10, 
+               hidden: true 
+       },{
+               id: 'nextaftercmd', 
+               header: this.app.i18n._('nextaftercmd'), 
+               dataIndex: 'nextaftercmd', 
+               width: 10, 
             sortable: true, 
-	       	hidden: true 
-       },{ 
-	       	id: 'forcename', 
-	       	header: this.app.i18n._('forcename'), 
-	       	dataIndex: 'forcename', 
-	       	width: 10, 
+               hidden: true 
+       },{
+               id: 'forcename', 
+               header: this.app.i18n._('forcename'), 
+               dataIndex: 'forcename', 
+               width: 10, 
             sortable: true, 
-	       	hidden: true 
-       },{ 
-	       	id: 'forcegreetings',
-	       	header: this.app.i18n._('forcegreetings'), 
-	       	dataIndex: 'forcegreetings', 
-	       	width: 10, 
+               hidden: true 
+       },{
+               id: 'forcegreetings',
+               header: this.app.i18n._('forcegreetings'), 
+               dataIndex: 'forcegreetings', 
+               width: 10, 
             sortable: true, 
-	       	hidden: true 
-       },{ 
-	       	id: 'hidefromdir', 
-	       	header: this.app.i18n._('hidefromdir'), 
-	       	dataIndex: 'hidefromdir', 
-	       	width: 10, 
+               hidden: true 
+       },{
+               id: 'hidefromdir', 
+               header: this.app.i18n._('hidefromdir'), 
+               dataIndex: 'hidefromdir', 
+               width: 10, 
             sortable: true, 
-	       	hidden: true 
+               hidden: true 
        }];
     },
     

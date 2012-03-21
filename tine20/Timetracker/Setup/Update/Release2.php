@@ -24,14 +24,14 @@ class Timetracker_Setup_Update_Release2 extends Setup_Update_Abstract
                 <name>budget</name>
                 <type>float</type>
             </field>');
-        $this->_backend->alterCol('timetracker_timeaccount', $declaration, 'budget');   
+        $this->_backend->alterCol('timetracker_timeaccount', $declaration, 'budget');
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>price</name>
                 <type>float</type>
             </field>');
-        $this->_backend->alterCol('timetracker_timeaccount', $declaration, 'price');   
+        $this->_backend->alterCol('timetracker_timeaccount', $declaration, 'price');
 
         $this->setTableVersion('timetracker_timeaccount', '5');
 

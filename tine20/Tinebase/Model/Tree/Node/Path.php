@@ -83,7 +83,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         'streamwrapperpath' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'application'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'container'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'user'			    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'user'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'name'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'parentrecord'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );

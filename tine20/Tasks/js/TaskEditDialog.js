@@ -152,7 +152,7 @@ Ext.namespace('Tine.Tasks');
      * NOTE: when this method gets called, all initalisation is done.
      * @private
      */
-    getFormItems: function() { 
+    getFormItems: function() {
         return {
             xtype: 'tabpanel',
             border: false,

@@ -79,20 +79,20 @@ class Tinebase_Server_Http implements Tinebase_Server_Interface
                 header('HTTP/1.0 403 Forbidden');
                 exit;
             } else {
-            	try {
-	                // check if setup is required
-	                $setupController = Setup_Controller::getInstance(); 
-	                if ($setupController->setupRequired()) {
-	                    $server->handle(array('method' => 'Tinebase.setupRequired'));
-	                } else {                
-	                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Http-Api exception: ' . print_r($exception, true));
-	                    $server->handle(array('method' => 'Tinebase.exception'));
-	                }
-            	} catch (Exception $e) {
-            		error_log($exception);
-                	header('HTTP/1.0 503 Service Unavailable');
-                	die('Service Unavailable');
-            	}
+                try {
+                    // check if setup is required
+                    $setupController = Setup_Controller::getInstance();
+                    if ($setupController->setupRequired()) {
+                        $server->handle(array('method' => 'Tinebase.setupRequired'));
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Http-Api exception: ' . print_r($exception, true));
+                        $server->handle(array('method' => 'Tinebase.exception'));
+                    }
+                } catch (Exception $e) {
+                    error_log($exception);
+                    header('HTTP/1.0 503 Service Unavailable');
+                    die('Service Unavailable');
+                }
             }
         }
     }

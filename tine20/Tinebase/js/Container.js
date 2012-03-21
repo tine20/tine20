@@ -143,7 +143,7 @@ Tine.Tinebase.container = {
     path2type: function(path) {
         var pathParts = Ext.isArray(path) ? path : path.split('/');
         
-        return pathParts[1]; 
+        return pathParts[1];
     }
     
 };

@@ -47,7 +47,7 @@ class Tinebase_Model_Filter_Bool extends Tinebase_Model_Filter_Abstract
          
          // prepare value
          $value = $this->_value ? 1 : 0;
-		
+        
          if (! empty($this->_options['fields'])) {
              foreach ((array) $this->_options['fields'] as $fieldName) {
                  $quotedField = $db->quoteIdentifier(strpos($fieldName, '.') === false ? $_backend->getTableName() . '.' . $fieldName : $fieldName);
@@ -59,7 +59,7 @@ class Tinebase_Model_Filter_Bool extends Tinebase_Model_Filter_Abstract
              }
          } else if (! empty($this->_options['leftOperand'])) {
              $_select->where($this->_options['leftOperand'] . $action['sqlop'], $value);
-         } else {  
+         } else {
              $_select->where($this->_getQuotedFieldName($_backend) . $action['sqlop'], $value);
          }
      }

@@ -33,5 +33,5 @@ interface Tinebase_Convert_Interface
      * @param  Tinebase_Record_Abstract  $_record
      * @return mixed
      */
-    public function fromTine20Model(Tinebase_Record_Abstract $_record);    
+    public function fromTine20Model(Tinebase_Record_Abstract $_record);
 }

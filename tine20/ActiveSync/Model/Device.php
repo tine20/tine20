@@ -26,14 +26,14 @@
  * @property  string  $tasksfilter_id     the tasks filter id
  */
 class ActiveSync_Model_Device extends Tinebase_Record_Abstract implements Syncope_Model_IDevice
-{  
+{
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
      * @var string
      */    
-    protected $_identifier = 'id';    
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to

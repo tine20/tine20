@@ -72,14 +72,14 @@ class ActiveSync_Backend_FolderFacade implements Syncope_Backend_IFolder
 
         $folder = $this->_backend->search(new ActiveSync_Model_FolderFilter(array(
             array(
-        		'field'     => 'device_id',
-        		'operator'  => 'equals',
-        		'value'     => $deviceId
+                'field'     => 'device_id',
+                'operator'  => 'equals',
+                'value'     => $deviceId
             ),
             array(
-        		'field'     => 'folderid',
-        		'operator'  => 'equals',
-        		'value'     => $_folderId
+                'field'     => 'folderid',
+                'operator'  => 'equals',
+                'value'     => $_folderId
             )
         )))->getFirstRecord();
         
@@ -97,14 +97,14 @@ class ActiveSync_Backend_FolderFacade implements Syncope_Backend_IFolder
     
         $folders = $this->_backend->search(new ActiveSync_Model_FolderFilter(array(
             array(
-        		'field'     => 'device_id',
-        		'operator'  => 'equals',
-        		'value'     => $deviceId
+                'field'     => 'device_id',
+                'operator'  => 'equals',
+                'value'     => $deviceId
             ),
             array(
-        		'field'     => 'class',
-        		'operator'  => 'equals',
-        		'value'     => $_class
+                'field'     => 'class',
+                'operator'  => 'equals',
+                'value'     => $_class
             )
         )));
         

@@ -3,7 +3,7 @@
  * abstract pdf generation class
  *
  * @package     Tinebase
- * @subpackage	Export
+ * @subpackage    Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -16,7 +16,7 @@
  * defines the datatype for simple registration object
  * 
  * @package     Tinebase
- * @subpackage	Export
+ * @subpackage    Export
  * 
  */
 abstract class Tinebase_Export_Pdf extends Zend_Pdf
@@ -51,7 +51,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * @var integer
      *
      */
-    protected $contentLineHeight = 16;     
+    protected $contentLineHeight = 16;
     
     /**
      * content line height
@@ -59,7 +59,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * @var integer
      *
      */
-    protected $contentBlockLineHeight = 10;   
+    protected $contentBlockLineHeight = 10;
 
     /**
      * zend pdf font
@@ -74,12 +74,12 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
     /**
      * normal font type 
      */
-    protected $_fontName = Zend_Pdf_Font::FONT_HELVETICA; 
+    protected $_fontName = Zend_Pdf_Font::FONT_HELVETICA;
     
     /**
      * bold font type
      */
-    protected $_fontNameBold = Zend_Pdf_Font::FONT_HELVETICA_BOLD; 
+    protected $_fontNameBold = Zend_Pdf_Font::FONT_HELVETICA_BOLD;
 
     /**
      * embed font in pdf
@@ -103,21 +103,21 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * @param   integer $_contentLineHeight
      * @param   integer $_contentBlockLineHeight
      *      */
-	public function __construct($_additionalOptions = array(), $_contentFontSize = NULL, $_footerFontSize = NULL, $_contentLineHeight = NULL, $_contentBlockLineHeight = NULL)
-	{
-		parent::__construct();
-		
-		// get config
-		$config = Tinebase_Core::getConfig()->pdfexport;
-		
-		// add first page 
-		$this->pages[] = $this->newPage(Zend_Pdf_Page::SIZE_A4); 	
-		$this->_pageNumber = 0;	
-		
-		// set params
-		if ( $_footerFontSize !== NULL ) {
-			$this->footerFontSize = $_footerFontSize;
-		}
+    public function __construct($_additionalOptions = array(), $_contentFontSize = NULL, $_footerFontSize = NULL, $_contentLineHeight = NULL, $_contentBlockLineHeight = NULL)
+    {
+        parent::__construct();
+        
+        // get config
+        $config = Tinebase_Core::getConfig()->pdfexport;
+        
+        // add first page 
+        $this->pages[] = $this->newPage(Zend_Pdf_Page::SIZE_A4);
+        $this->_pageNumber = 0;
+        
+        // set params
+        if ( $_footerFontSize !== NULL ) {
+            $this->footerFontSize = $_footerFontSize;
+        }
         if ( $_contentFontSize !== NULL ) {
             $this->contentFontSize = $_contentFontSize;
         }
@@ -144,8 +144,8 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
             $this->_font = Zend_Pdf_Font::fontWithName($this->_fontName);
             $this->_fontBold = Zend_Pdf_Font::fontWithName($this->_fontNameBold);
         }
-	}
-		
+    }
+        
     /**
      * get export format string (csv, ...)
      * 
@@ -185,13 +185,13 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         
         // add page
-        if (!isset($this->pages[$this->_pageNumber])) { 
+        if (!isset($this->pages[$this->_pageNumber])) {
             $this->pages[] = $this->newPage(Zend_Pdf_Page::SIZE_A4);
         }        
         
         // title
         if ( !empty($_title) ) {
-            $this->pages[$this->_pageNumber]->setFont($this->_font, 18); 
+            $this->pages[$this->_pageNumber]->setFont($this->_font, 18);
             $this->_writeText($_title, $xPos, $yPos);
         }
 
@@ -205,8 +205,8 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         // subtitle
         if ( !empty($_subtitle) ) {
             $yPos -= 20;
-            $this->pages[$this->_pageNumber]->setFont($this->_font, 15); 
-            $this->_writeText($_subtitle, $xPos, $yPos);        
+            $this->pages[$this->_pageNumber]->setFont($this->_font, 15);
+            $this->_writeText($_subtitle, $xPos, $yPos);
         }
 
         // tags
@@ -233,7 +233,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
     
             foreach ( $noteArray as $chunk ) {
                 $yPos -= 20;
-                $this->pages[$this->_pageNumber]->setFont($this->_font, 10); 
+                $this->pages[$this->_pageNumber]->setFont($this->_font, 10);
                 $this->_writeText($chunk, $xPos, $yPos);
             }
         }
@@ -255,7 +255,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                     array_pop ( $data );
                 }
                 
-                $data[] = array ( $recordRow['label'], "separator" );            
+                $data[] = array ( $recordRow['label'], "separator" );
                 
             } elseif ( !empty($recordRow['value']) ) {
                 $data[] = array ( $recordRow['label'], $recordRow['value']   );
@@ -298,7 +298,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         $this->_pageNumber++;
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Created PDF export page for record: ' . print_r($_record, TRUE));
-    }			
+    }            
 
     /**
      * get download content type
@@ -342,7 +342,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         $yPos = $_posY;
                 
         // content
-        $this->pages[$this->_pageNumber]->setFont($this->_font, $this->contentFontSize); 
+        $this->pages[$this->_pageNumber]->setFont($this->_font, $this->contentFontSize);
         $this->pages[$this->_pageNumber]->setLineColor( new Zend_Pdf_Color_GrayScale(0.7) );
         
         foreach ( $_content as $row ) {
@@ -351,10 +351,10 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
             
             if ( $yPos <= $marginBottom ) {
                 // add new page 
-                $page = $this->newPage(Zend_Pdf_Page::SIZE_A4); 
-                $this->pages[] = $page;     
+                $page = $this->newPage(Zend_Pdf_Page::SIZE_A4);
+                $this->pages[] = $page;
                 $yPos = $_posY;
-                $this->_pageNumber++;          
+                $this->_pageNumber++;
                 $this->pages[$this->_pageNumber]->setFont($this->_font, $this->contentFontSize);
                 $this->pages[$this->_pageNumber]->setLineColor( new Zend_Pdf_Color_GrayScale(0.7) );
             }
@@ -367,11 +367,11 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                     $yPos -= 10;
                     $this->pages[$this->_pageNumber]->setFont($this->_fontBold, $this->contentFontSize);
                 } else {
-                    $this->pages[$this->_pageNumber]->setFont($this->_font, $this->contentFontSize);                    
+                    $this->pages[$this->_pageNumber]->setFont($this->_font, $this->contentFontSize);
                 }
                 
                 if ( $row[$i] === 'separator' ) {
-                    if ( $_border ) {                            
+                    if ( $_border ) {
                         $this->pages[$this->_pageNumber]->drawLine ( $_posX, $yPos - $padding, $_posX + ($cellWidth*sizeof($row)), $yPos - $padding );
                         $this->pages[$this->_pageNumber]->drawLine ( $xPos, $yPos - $padding, $xPos, $yPos - 2*$padding);
                     }
@@ -383,7 +383,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                     //continue;
                     break;
                 } elseif ( $row[$i] === 'headline' ) {
-                    //if ( $_border ) {                            
+                    //if ( $_border ) {
                         $this->pages[$this->_pageNumber]->drawLine ( $_posX, $yPos - $padding, $_posX + ($cellWidth*(sizeof($row)+1)), $yPos - $padding );
                     //}
                     continue;
@@ -406,8 +406,8 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                             $this->_drawIcon($text['icon'], $xPos, $yPos);
                         } else {
                             $yPos -= $blockLineHeight;
-                            $this->_writeText($text, $xPos, $yPos); 
-                            $blockLineHeight = $this->contentBlockLineHeight;                                                    
+                            $this->_writeText($text, $xPos, $yPos);
+                            $blockLineHeight = $this->contentBlockLineHeight;
                         }
                     }
                 } else {
@@ -420,51 +420,51 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         }
         
     }
-	
-	/**
+    
+    /**
      * create footer on all pages
-	 */
-	protected function _createFooter()
-	{
-		// get translations from tinebase
-		$translate = Tinebase_Translation::getTranslation('Tinebase');
-		
-		$xPos = 50;
-		$yPos = 30;
-		
-		$creationDate = Tinebase_Translation::dateToStringInTzAndLocaleFormat(); 
-		  
-		$creationURL = $translate->_('Created by').": ";
-		$creationURL .= 'http://www.tine20.org';
-		
-		for ($i=0; $i<sizeof($this->pages); $i++) {
-			$this->pages[$i]->setFont($this->_font, $this->footerFontSize);
-			$this->pages[$i]->setFillColor(new Zend_Pdf_Color_GrayScale(0.5));
-			$this->_writeText($creationDate, $xPos, $yPos, $i);
-			//$yPos -= 18;
-			$xPos += 380;
+     */
+    protected function _createFooter()
+    {
+        // get translations from tinebase
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
+        
+        $xPos = 50;
+        $yPos = 30;
+        
+        $creationDate = Tinebase_Translation::dateToStringInTzAndLocaleFormat();
+          
+        $creationURL = $translate->_('Created by').": ";
+        $creationURL .= 'http://www.tine20.org';
+        
+        for ($i=0; $i<sizeof($this->pages); $i++) {
+            $this->pages[$i]->setFont($this->_font, $this->footerFontSize);
+            $this->pages[$i]->setFillColor(new Zend_Pdf_Color_GrayScale(0.5));
+            $this->_writeText($creationDate, $xPos, $yPos, $i);
+            //$yPos -= 18;
+            $xPos += 380;
             $this->_writeText($creationURL, $xPos, $yPos, $i);
-		}
-	}	
+        }
+    }    
 
-	/**
-	 * draws a text in the pdf
-	 *
-	 * @param  string $_string the string to draw
-	 * @param  int $_xPos
-	 * @param  int $_yPos
+    /**
+     * draws a text in the pdf
+     *
+     * @param  string $_string the string to draw
+     * @param  int $_xPos
+     * @param  int $_yPos
      * @param  int $_page page number (optional)
      * @throws Tinebase_Exception_UnexpectedValue
-	 */
-	protected function _writeText($_string, $_xPos, $_yPos, $_page = NULL) {
-	
-	    $page = ($_page !== NULL) ? $_page : $this->_pageNumber;
-	    
-	    $string = @iconv('utf-8', 'utf-8//IGNORE', $_string);
-	    
+     */
+    protected function _writeText($_string, $_xPos, $_yPos, $_page = NULL) {
+    
+        $page = ($_page !== NULL) ? $_page : $this->_pageNumber;
+        
+        $string = @iconv('utf-8', 'utf-8//IGNORE', $_string);
+        
         @$this->pages[$page]->drawText($string, $_xPos, $_yPos, 'utf-8');
-	}
-	
+    }
+    
     /**
      * add notes and activities to pdf
      *
@@ -522,7 +522,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         // add icon
         if (is_file($iconFilename)) {
             $icon = Zend_Pdf_Image::imageWithPath($iconFilename);
-            $this->pages[$this->_pageNumber]->drawImage($icon, $_xPos-170, $_yPos-6, $_xPos-154, $_yPos + 10);                            
+            $this->pages[$this->_pageNumber]->drawImage($icon, $_xPos-170, $_yPos-6, $_xPos-154, $_yPos + 10);
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' icon file not found: ' . $iconFilename);
         }

@@ -124,7 +124,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
     var metaStyle = '';
     
     if(record.fileRecord) {
-    	record = record.fileRecord;
+        record = record.fileRecord;
     }
     
     if(record.get('type') == 'folder') {
@@ -132,10 +132,10 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
     }
     else {
 
-        var contenttype =  record.get('contenttype');       
-        if(contenttype) {       
-        	var iconClass = contenttype.replace("/", "-");
-        	metadata.css = iconClass + '_16x16 ';
+        var contenttype =  record.get('contenttype');
+        if(contenttype) {
+            var iconClass = contenttype.replace("/", "-");
+            metadata.css = iconClass + '_16x16 ';
         }
                
         metadata.css += 'standardFileClass_16x16';
@@ -153,7 +153,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
             metadata.css = 'x-tinebase-uploadrow';
         }
         
-        return fileName;       
+        return fileName;
     }
     
     if (! Ext.ux.PercentRendererWithName.template) {
@@ -195,7 +195,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
     if(percent > -1 && percent < 100) {
         display = '';
         var renderedField = Ext.ux.PercentRendererWithName.template.apply({percent: percent, display: display, fileName: fileName
-        	, additionalStyle: additionalStyle}) ;
+            , additionalStyle: additionalStyle}) ;
         return renderedField;
     }
     else {

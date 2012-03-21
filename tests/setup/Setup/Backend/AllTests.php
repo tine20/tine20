@@ -28,7 +28,7 @@ class Setup_Backend_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Setup All Backend Tests');
         $suite->addTestSuite('Setup_Backend_MysqlTest');
-		$suite->addTestSuite('Setup_Backend_Schema_AllTests');
+        $suite->addTestSuite('Setup_Backend_Schema_AllTests');
         return $suite;
     }
 }

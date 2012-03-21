@@ -381,7 +381,7 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
     {
         $scheduler = new Zend_Scheduler($backend);
         
-        try {            
+        try {
             $tasks = $backend->loadQueue();
         } catch (Zend_Scheduler_Exception $e) {
             $this->fail('Could not load task queue');

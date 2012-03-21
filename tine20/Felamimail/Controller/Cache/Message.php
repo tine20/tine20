@@ -102,7 +102,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**
@@ -361,7 +361,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     protected function _updateMessageSequence(Felamimail_Model_Folder $_folder, Felamimail_Backend_ImapProxy $_imap, $_updateFolder = TRUE)
     {
-        if ($_folder->imap_totalcount > 0) { 
+        if ($_folder->imap_totalcount > 0) {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
             $lastFailedUid   = null;
@@ -551,8 +551,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Cache status cache total count: {$_folder->cache_totalcount} imap total count: {$_folder->imap_totalcount} cache sequence: $this->_cacheMessageSequence imap sequence: $this->_imapMessageSequence");
                 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache status: ' . $_folder->cache_status);      
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache actions to be done yet: ' . ($_folder->cache_job_actions_est - $_folder->cache_job_actions_done));        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache status: ' . $_folder->cache_status);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache actions to be done yet: ' . ($_folder->cache_job_actions_est - $_folder->cache_job_actions_done));
     }
     
     /**
@@ -698,7 +698,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             
             $messageSequenceStart = $messageSequenceEnd + 1;
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache status: ' . $_folder->cache_status);           
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache status: ' . $_folder->cache_status);
         }
         
         return ($messageSequenceEnd == $_folder->imap_totalcount);
@@ -757,13 +757,13 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             
             $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
             
-            if ($this->_timeLeft()) { 
+            if ($this->_timeLeft()) {
                 // add missing messages
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " Retrieve message from {$_folder->imap_totalcount} to 1");
                 
                 $begin = $_folder->cache_job_lowestuid > 0 ? $_folder->cache_job_lowestuid : $this->_imapMessageSequence;
                 
-                for ($i = $begin; $i > 0; $i -= $this->_importCountPerStep) { 
+                for ($i = $begin; $i > 0; $i -= $this->_importCountPerStep) {
                     
                     $messageSequenceStart = (($i - $this->_importCountPerStep) > 0 ) ? $i - $this->_importCountPerStep : 1;
                     
@@ -788,7 +788,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                         $_folder->cache_job_lowestuid = $messageSequenceStart;
                         break;
                     }
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache status: ' . $_folder->cache_status);           
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache status: ' . $_folder->cache_status);
                 }
                 
                 if (defined('messageSequenceStart') && $messageSequenceStart === 1) {
@@ -799,7 +799,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Cache status cache total count: {$_folder->cache_totalcount} imap total count: {$_folder->imap_totalcount} cache sequence: $this->_cacheMessageSequence imap sequence: $this->_imapMessageSequence");
                 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache status: ' . $_folder->cache_status);        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache status: ' . $_folder->cache_status);
     }
     
     /**
@@ -820,7 +820,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $messageToCache = $this->_createMessageToCache($_message, $_folder);
         $cachedMessage = $this->_addMessageToCache($messageToCache);
         
-        if ($cachedMessage !== FALSE) { 
+        if ($cachedMessage !== FALSE) {
             $this->_saveMessageInTinebaseCache($cachedMessage, $_folder, $_message);
             
             if ($_updateFolderCounter == TRUE) {
@@ -976,7 +976,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     
     /**
      * returns true if one if these counts mismatch: 
-     * 	- imap_totalcount/cache_totalcount
+     *     - imap_totalcount/cache_totalcount
      *  - $_updatedCounters_totalcount/cache_totalcount
      *  - $_updatedCounters_unreadcount/cache_unreadcount
      * 
@@ -1144,7 +1144,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated ' . $updateCount . ' flags.');
         
-        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);        
+        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
     }
     
     /**
@@ -1163,7 +1163,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $account = Felamimail_Controller_Account::getInstance()->get($_folder->account_id);
         if (! $account->hasCapability('QUOTA')) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Account ' . $account->name . ' has no QUOTA capability'); 
+                . ' Account ' . $account->name . ' has no QUOTA capability');
             return;
         }
         
@@ -1181,6 +1181,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             $_folder->quota_limit = 0;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($quota, TRUE)); 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($quota, TRUE));
     }
 }

@@ -440,7 +440,7 @@ class Tinebase_Translation
         $po = file_get_contents($filePath);
         
         global $first, $plural;
-        $first = true; 
+        $first = true;
         $plural = false;
         
         $po = preg_replace('/\r?\n/', "\n", $po);

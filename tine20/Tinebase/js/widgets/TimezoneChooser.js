@@ -44,9 +44,9 @@ Tine.widgets.TimezoneChooser = Ext.extend(Ext.form.ComboBox, {
             '</tpl>',{
                 translate: function(timezone, timezoneTranslation) {
                     // use timezoneTranslation as fallback
-                	var translation = (Locale.getTranslationData('CityToTimezone', timezone)) 
-                	   ? Locale.getTranslationData('CityToTimezone', timezone)
-                	   : timezoneTranslation;                	
+                    var translation = (Locale.getTranslationData('CityToTimezone', timezone)) 
+                       ? Locale.getTranslationData('CityToTimezone', timezone)
+                       : timezoneTranslation;
                     return timezone + (translation ? (' - <i>(' + translation + ')</i>') : '');
                 }
             }

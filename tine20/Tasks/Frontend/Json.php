@@ -102,7 +102,7 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected function _recordToJson($_record)
     {
         if ($_record instanceof Tasks_Model_Task) {
-            Tinebase_User::getInstance()->resolveUsers($_record, 'organizer', true); 
+            Tinebase_User::getInstance()->resolveUsers($_record, 'organizer', true);
         }
         
         return parent::_recordToJson($_record);
@@ -165,6 +165,6 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'defaultContainer' => $defaultContainer
         );
         
-        return $registryData;    
+        return $registryData;
     }
 }

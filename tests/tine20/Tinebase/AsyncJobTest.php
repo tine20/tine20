@@ -17,7 +17,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
  * Test class for Tinebase_AsyncJob
  */
 class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
-{    
+{
     /**
      * Runs the test methods of this class.
      *
@@ -53,6 +53,6 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
         $job = $async->startJob('Test_Job1', 5);
         sleep(3);
         $this->assertFalse($async->getNextSequence('Test_Job1'));
-        $async->finishJob($job);        
+        $async->finishJob($job);
     }
 }

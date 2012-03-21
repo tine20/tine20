@@ -36,9 +36,9 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
         
         foreach($this->_testEmailContacts as $email) {
             $contactIdsToDelete = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(array(
-        	    array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
+                array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
                 array('field' => 'email',      'operator'  => 'equals', 'value' => $email)
-        	)), null, false, true);
+            )), null, false, true);
             
             Addressbook_Controller_Contact::getInstance()->delete($contactIdsToDelete);
         }
@@ -49,8 +49,8 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
      */
     public function testEmailsToAttendee()
     {
-    	$event = $this->_getEvent();
-    	
+        $event = $this->_getEvent();
+        
         $persistentEvent = Calendar_Controller_Event::getInstance()->create($event);
         
         $sclever = Tinebase_User::getInstance()->getUserByLoginName('sclever', 'Tinebase_Model_FullUser');
@@ -61,9 +61,9 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
         
         $newAttendees = array(
             array(
-            	'userType'    => Calendar_Model_Attender::USERTYPE_USER,
+                'userType'    => Calendar_Model_Attender::USERTYPE_USER,
                 'firstName'   => $this->_testUser->accountFirstName,
-        		'lastName'    => $this->_testUser->accountLastName,
+                'lastName'    => $this->_testUser->accountLastName,
                 'partStat'    => Calendar_Model_Attender::STATUS_ACCEPTED,
                 'role'        => Calendar_Model_Attender::ROLE_REQUIRED,
                 'email'       => $this->_testUser->accountEmailAddress
@@ -76,9 +76,9 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
                 'email'       => $sclever->accountEmailAddress
             ),
             array(
-            	'userType'    => Calendar_Model_Attender::USERTYPE_USER,
+                'userType'    => Calendar_Model_Attender::USERTYPE_USER,
                 'firstName'   => 'Lars',
-        		'lastName'    => 'Kneschke',
+                'lastName'    => 'Kneschke',
                 'partStat'    => Calendar_Model_Attender::STATUS_TENTATIVE,
                 'role'        => Calendar_Model_Attender::ROLE_REQUIRED,
                 'email'       => $newEmail
@@ -98,17 +98,17 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
      */
     public function testEmailsToAttendeeWithGroups()
     {
-    	$event = $this->_getEvent();
-    	
+        $event = $this->_getEvent();
+        
         $persistentEvent = Calendar_Controller_Event::getInstance()->create($event);
         
         $primaryGroup = Tinebase_Group::getInstance()->getGroupById(Tinebase_Core::getUser()->accountPrimaryGroup);
         
         $newAttendees = array(
             array(
-            	'userType'    => Calendar_Model_Attender::USERTYPE_USER,
+                'userType'    => Calendar_Model_Attender::USERTYPE_USER,
                 'firstName'   => $this->_testUser->accountFirstName,
-        		'lastName'    => $this->_testUser->accountLastName,
+                'lastName'    => $this->_testUser->accountLastName,
                 'partStat'    => Calendar_Model_Attender::STATUS_TENTATIVE,
                 'role'        => Calendar_Model_Attender::ROLE_REQUIRED,
                 'email'       => $this->_testUser->accountEmailAddress
@@ -134,12 +134,12 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
         
         foreach ($attendees as $attendee) {
             $newAttendees[] = array(
-            	'userType'    => $attendee->user_type == 'group' ? Calendar_Model_Attender::USERTYPE_GROUP : Calendar_Model_Attender::USERTYPE_USER,
-            	'partStat'    => Calendar_Model_Attender::STATUS_TENTATIVE,
-            	'role'        => Calendar_Model_Attender::ROLE_REQUIRED,
-            	'email'       => $attendee->user_type == 'group' ? $attendee->user_id->getId() : $attendee->user_id->email,
-            	'displayName' => $attendee->user_type == 'group' ? $attendee->user_id->name : $attendee->user_id->n_fileas
-            ); 
+                'userType'    => $attendee->user_type == 'group' ? Calendar_Model_Attender::USERTYPE_GROUP : Calendar_Model_Attender::USERTYPE_USER,
+                'partStat'    => Calendar_Model_Attender::STATUS_TENTATIVE,
+                'role'        => Calendar_Model_Attender::ROLE_REQUIRED,
+                'email'       => $attendee->user_type == 'group' ? $attendee->user_id->getId() : $attendee->user_id->email,
+                'displayName' => $attendee->user_type == 'group' ? $attendee->user_id->name : $attendee->user_id->n_fileas
+            );
         }
         
         Calendar_Model_Attender::emailsToAttendee($persistentEvent, $newAttendees, TRUE);

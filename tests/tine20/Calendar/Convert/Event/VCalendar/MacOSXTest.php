@@ -35,9 +35,9 @@ class Calendar_Convert_Event_VCalendar_MacOSXTest extends PHPUnit_Framework_Test
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar WebDAV MacOSX Event Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar WebDAV MacOSX Event Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -68,6 +68,6 @@ class Calendar_Convert_Event_VCalendar_MacOSXTest extends PHPUnit_Framework_Test
         
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
-        $event = $converter->toTine20Model($vcalendarStream);        
+        $event = $converter->toTine20Model($vcalendarStream);
     }            
 }

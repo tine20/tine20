@@ -50,9 +50,9 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Voipmanager Json Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Voipmanager Json Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -70,7 +70,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      * @access protected
      */
     protected function tearDown()
-    {	
+    {
         foreach ($this->_toDelete['phone'] as $phone) {
             $phoneTemplate = $this->_json->getSnomTemplate($phone['template_id']['value']);
             $this->_json->deleteSnomPhones(array($phone['id']));
@@ -182,7 +182,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
                 'operator' => 'contains', 
                 'value' => $_name
             ),   
-        );        
+        );
     }
     
     
@@ -267,7 +267,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     public function testSearchAsteriskSipPeer()
     {
         // create
-        $asteriskSipPeer = $this->_getAsteriskSipPeer();        
+        $asteriskSipPeer = $this->_getAsteriskSipPeer();
         $asteriskSipPeerData = $this->_json->saveAsteriskSipPeer($asteriskSipPeer->toArray());
         
         // search & check
@@ -312,7 +312,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
                 'operator' => 'contains', 
                 'value' => $_name
             ),  
-        );        
+        );
     }
     
     
@@ -368,7 +368,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     public function testSearchAsteriskMeetme()
     {
         // create
-        $asteriskMeetme = $this->_getAsteriskMeetme();        
+        $asteriskMeetme = $this->_getAsteriskMeetme();
         $asteriskMeetmeData = $this->_json->saveAsteriskMeetme($asteriskMeetme->toArray());
         
         // search & check
@@ -409,7 +409,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
                 'operator' => 'contains', 
                 'value' => $_name
             ),     
-        );        
+        );
     }
     
     
@@ -466,7 +466,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     public function testSearchAsteriskVoicemail()
     {
         // create
-        $asteriskVoicemail = $this->_getAsteriskVoicemail();        
+        $asteriskVoicemail = $this->_getAsteriskVoicemail();
         $asteriskVoicemailData = $this->_json->saveAsteriskVoicemail($asteriskVoicemail->toArray());
         
         // search & check
@@ -510,7 +510,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
                 'operator' => 'contains', 
                 'value' => $_name
             ),     
-        );        
+        );
     }
     
     
@@ -569,7 +569,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     public function testSearchSnomLocation()
     {
         // create
-        $snomLocation = $this->_getSnomLocation();        
+        $snomLocation = $this->_getSnomLocation();
         $snomLocationData = $this->_json->saveSnomLocation($snomLocation->toArray());
         
         // search & check
@@ -609,7 +609,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
                 'operator' => 'contains', 
                 'value' => $_name
             ),
-        );        
+        );
     }
     
     
@@ -755,7 +755,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
                 'operator' => 'contains', 
                 'value' => $_name
             ),
-        );        
+        );
     }
     
     /**
@@ -782,7 +782,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         
         $phoneTemplate = $this->_json->getSnomTemplate($template_id);
         
-        $settings_id = $phoneTemplate['setting_id'];  
+        $settings_id = $phoneTemplate['setting_id'];
         $software_id = $phoneTemplate['software_id'];
         
         print_r($settings_id);
@@ -848,7 +848,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         
         $phoneTemplate = $this->_json->getSnomTemplate($template_id);
         
-        $settings_id = $phoneTemplate['setting_id']['value'];  
+        $settings_id = $phoneTemplate['setting_id']['value'];
         $software_id = $phoneTemplate['software_id']['value'];
         
         $this->_json->deleteSnomPhoneSettings(array($returned['phone_id']));
@@ -927,7 +927,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     public function testSearchSnomSetting()
     {
         // create
-        $snomSetting = $this->_getSnomSetting();        
+        $snomSetting = $this->_getSnomSetting();
         $snomSettingData = $this->_json->saveSnomSetting($snomSetting->toArray());
         
         // search & check
@@ -966,7 +966,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
                 'operator' => 'contains', 
                 'value' => $_name
             ),
-        );        
+        );
     }
     
     
@@ -1021,7 +1021,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     public function testSearchSnomSoftware()
     {
         // create
-        $snomSoftware = $this->_getSnomSoftware();        
+        $snomSoftware = $this->_getSnomSoftware();
         $snomSoftwareData = $this->_json->saveSnomSoftware($snomSoftware->toArray());
         
         // search & check
@@ -1047,7 +1047,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
                 'operator' => 'contains', 
                 'value' => $_name
             ),
-        );        
+        );
     }
     
     /**
@@ -1098,7 +1098,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      *
      */
     public function testUpdateSnomTemplate()
-    {   
+    {
         $test = $this->_getSnomTemplate();
         $returned = $this->_json->saveSnomTemplate($test->toArray());
         $returned['description'] = Tinebase_Record_Abstract::generateUID();
@@ -1124,7 +1124,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     public function testSearchSnomTemplate()
     {
         // create
-        $snomTemplate = $this->_getSnomTemplate();        
+        $snomTemplate = $this->_getSnomTemplate();
         $snomTemplateData = $this->_json->saveSnomTemplate($snomTemplate->toArray());
         
         // search & check
@@ -1172,7 +1172,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
                 'operator' => 'contains', 
                 'value' => $_name
             ),
-        );        
+        );
     }
     
     /**

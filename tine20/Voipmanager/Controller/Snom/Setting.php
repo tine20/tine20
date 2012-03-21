@@ -41,7 +41,7 @@ class Voipmanager_Controller_Snom_Setting extends Voipmanager_Controller_Abstrac
      *
      */
     private function __clone() 
-    {        
+    {
     }
             
     /**

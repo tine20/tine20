@@ -153,7 +153,7 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $filter = new Voipmanager_Model_Snom_LineFilter(array(
                 array('field' => 'snomphone_id', 'operator' => 'equals', 'value' => $phone->id)
             ));
-            $phone->lines  = Voipmanager_Controller_Snom_Line::getInstance()->search($filter);            
+            $phone->lines  = Voipmanager_Controller_Snom_Line::getInstance()->search($filter);
         }
         
         $registryData = array(

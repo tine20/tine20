@@ -32,7 +32,7 @@ class Tinebase_WebDav_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend
         );
         
         if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-        	$principal['{http://sabredav.org/ns}email-address'] = Tinebase_Core::getUser()->accountEmailAddress;
+            $principal['{http://sabredav.org/ns}email-address'] = Tinebase_Core::getUser()->accountEmailAddress;
         }
         
         if (Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
@@ -62,7 +62,7 @@ class Tinebase_WebDav_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend
         );
         
         if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-        	$principal['{http://sabredav.org/ns}email-address'] = Tinebase_Core::getUser()->accountEmailAddress;
+            $principal['{http://sabredav.org/ns}email-address'] = Tinebase_Core::getUser()->accountEmailAddress;
         }
         
         if (Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {

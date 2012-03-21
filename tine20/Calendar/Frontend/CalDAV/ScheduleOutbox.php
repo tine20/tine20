@@ -84,19 +84,19 @@ class Calendar_Frontend_CalDAV_ScheduleOutbox extends Sabre_DAV_Collection imple
             '{http://calendarserver.org/ns/}getctag' => round(time()/60),
             'id'                => 'schedule-outbox',
             'uri'               => 'schedule-outbox',
-        	'{DAV:}resource-id'	=> 'urn:uuid:schedule-outbox',
-        	'{DAV:}owner'       => new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . $this->_user->contact_id),
+            '{DAV:}resource-id'    => 'urn:uuid:schedule-outbox',
+            '{DAV:}owner'       => new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . $this->_user->contact_id),
             #'principaluri'      => $principalUri,
             '{DAV:}displayname' => 'Schedule Outbox',
             '{http://apple.com/ns/ical/}calendar-color' => '#666666',
             '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre_CalDAV_Property_SupportedCalendarComponentSet(array('VEVENT')),
-        	'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-data'          => new Sabre_CalDAV_Property_SupportedCalendarData(),
-        	'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-description'		       => 'Calendar schedule outbox',
-			'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-timezone'                => $this->_getCalendarVTimezone()
+            '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-data'          => new Sabre_CalDAV_Property_SupportedCalendarData(),
+            '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-description'               => 'Calendar schedule outbox',
+            '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-timezone'                => $this->_getCalendarVTimezone()
         );
     
         if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-            $properties['{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-user-address-set'	] = new Sabre_DAV_Property_HrefList(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress), false);
+            $properties['{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-user-address-set'    ] = new Sabre_DAV_Property_HrefList(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress), false);
         }
     
         $response = array();
@@ -140,7 +140,7 @@ class Calendar_Frontend_CalDAV_ScheduleOutbox extends Sabre_DAV_Collection imple
                 'principal' => 'principals/users/' . $this->_user->contact_id,
                 'protected' => true,
             )
-        );    
+        );
     }
     
     /**

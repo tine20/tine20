@@ -258,7 +258,7 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
 
         this.store.each(function(record) {
             values.push(record.data);
-        }, this);            
+        }, this);
         
         return values;
     },

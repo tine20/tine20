@@ -215,7 +215,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $identifier = $this->_identifier;
         }
         
-        return $identifier;    
+        return $identifier;
     }
 
     /**
@@ -642,7 +642,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         if (!$_getDeleted && $this->_modlogActive) {
             // don't fetch deleted objects
-            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');                        
+            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');
         }
         
         $this->_addForeignTableJoins($select, $cols);
@@ -995,7 +995,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
      */
     public function updateMultiple($_ids, $_data) 
-    {   
+    {
         if (empty($_ids)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No records updated.');
             return 0;
@@ -1003,26 +1003,26 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         // separate CustomFields
         
-    	$myFields = array();
-    	$customFields = array();
-    	
-    	foreach($_data as $key => $value) {
-    		if(stristr($key, '#')) $customFields[substr($key,1)] = $value; 
-    		else $myFields[$key] = $value; 
-    	}
-    	
-    	// handle CustomFields
-    	
-    	if(count($customFields)) {
-    		if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' CustomFields found.');
-    		Tinebase_CustomField::getInstance()->saveMultipleCustomFields($this->_modelName, $_ids, $customFields);    		
-    	}
-    	
-    	// handle StdFields
-    	
-    	if(!count($myFields)) { return 0; } 
+        $myFields = array();
+        $customFields = array();
+        
+        foreach($_data as $key => $value) {
+            if(stristr($key, '#')) $customFields[substr($key,1)] = $value;
+            else $myFields[$key] = $value;
+        }
+        
+        // handle CustomFields
+        
+        if(count($customFields)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' CustomFields found.');
+            Tinebase_CustomField::getInstance()->saveMultipleCustomFields($this->_modelName, $_ids, $customFields);
+        }
+        
+        // handle StdFields
+        
+        if(!count($myFields)) { return 0; } 
 
-    	$identifier = $this->_getRecordIdentifier();
+        $identifier = $this->_getRecordIdentifier();
   
         $recordArray = $myFields;
         $recordArray = array_intersect_key($recordArray, $this->_schema);
@@ -1035,7 +1035,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, TRUE));
         
-        return $this->_db->update($this->_tablePrefix . $this->_tableName, $recordArray, $where);        
+        return $this->_db->update($this->_tablePrefix . $this->_tableName, $recordArray, $where);
     }
     
     /**
@@ -1083,7 +1083,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                 break;
             case 'in':
                 $op = ' IN (?)';
-                $_value = (array) $_value; 
+                $_value = (array) $_value;
                 break;
             default:
                 throw new Tinebase_Exception_InvalidArgument('Invalid operator: ' . $_operator);
@@ -1108,7 +1108,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function appendForeignRecordToRecord($_record, $_appendTo, $_recordKey, $_foreignKey, $_foreignBackend)
     {
-        try { 
+        try {
             $_record->$_appendTo = $_foreignBackend->getByProperty($_record->$_recordKey, $_foreignKey);
         } catch (Tinebase_Exception_NotFound $e) {
             $_record->$_appendTo = NULL;

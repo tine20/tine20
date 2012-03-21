@@ -18,9 +18,9 @@ class Calendar_Exception_AttendeeBusy extends Exception
      * 
      * @var Tinebase_Record_RecordSet
      */
-	protected $_fbInfo = NULL;
-	
-	/**
+    protected $_fbInfo = NULL;
+    
+    /**
      * construct
      * 
      * @param string $_message
@@ -36,26 +36,26 @@ class Calendar_Exception_AttendeeBusy extends Exception
      * 
      * @param Tinebase_Record_RecordSet $_fbInfo
      */
-	public function setFreeBusyInfo(Tinebase_Record_RecordSet $_fbInfo)
-	{
-	   $this->_fbInfo = $_fbInfo;
-	}
-	
-	/**
-	 * get fb info
-	 * 
-	 * @return Tinebase_Record_RecordSet
-	 */
-	public function getFreeBusyInfo()
-	{
-	    return $this->_fbInfo ? $this->_fbInfo : new Tinebase_Record_RecordSet('Calendar_Model_FreeBusy');
-	}
-	
-	/**
-	 * returns free busy info as array
-	 * 
-	 * @return array
-	 */
+    public function setFreeBusyInfo(Tinebase_Record_RecordSet $_fbInfo)
+    {
+       $this->_fbInfo = $_fbInfo;
+    }
+    
+    /**
+     * get fb info
+     * 
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getFreeBusyInfo()
+    {
+        return $this->_fbInfo ? $this->_fbInfo : new Tinebase_Record_RecordSet('Calendar_Model_FreeBusy');
+    }
+    
+    /**
+     * returns free busy info as array
+     * 
+     * @return array
+     */
     public function toArray()
     {
         $this->getFreeBusyInfo()->setTimezone(Tinebase_Core::get('userTimeZone'));

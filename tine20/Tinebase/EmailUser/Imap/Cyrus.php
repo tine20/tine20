@@ -70,7 +70,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
     public function getNewUser(Tinebase_Model_FullUser $_user)
     {
         $result = new Tinebase_Model_EmailUser(array(
-            'emailUserId' 	=> $this->_appendDomain($_user->accountLoginName),
+            'emailUserId'     => $this->_appendDomain($_user->accountLoginName),
             'emailUsername' => $this->_appendDomain($_user->accountLoginName)
         ));
         

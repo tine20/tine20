@@ -127,7 +127,7 @@ Tine.Sales.Model.Contract = Tine.Tinebase.data.Record.create(Tine.Sales.Model.Co
  * @return {Object} default data
  * @static
  */
-Tine.Sales.Model.Contract.getDefaultData = function() { 
+Tine.Sales.Model.Contract.getDefaultData = function() {
     return {
         container_id: Tine.Sales.registry.get('defaultContainer')
     };

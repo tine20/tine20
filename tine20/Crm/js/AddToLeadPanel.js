@@ -109,7 +109,7 @@ Tine.Crm.AddToLeadPanel = Ext.extend(Ext.FormPanel, {
     },
     
     onUpdate: function() {
-        if(this.isValid()) {          
+        if(this.isValid()) {
             var p = new Tine.Crm.Model.Lead({id: this.searchBox.getValue()});
             var window = Tine.Crm.LeadEditDialog.openWindow({record: p, additionalContacts: Ext.encode(this.attendee), additionalContactsRole: this.chooseRoleBox.getValue()});
             window.on('close', function() {

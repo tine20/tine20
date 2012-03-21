@@ -47,9 +47,9 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook SQL Backend Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook SQL Backend Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -113,7 +113,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
             'tel_home'              => '+49TELHOME',
             'tel_pager'             => '+49TELPAGER',
             'tel_work'              => '+49TELWORK',
-        )); 
+        ));
         
         $this->objects['updatedContact'] = new Addressbook_Model_Contact(array(
             'adr_one_countryname'   => 'DE',
@@ -155,44 +155,44 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
             'tel_home'              => '+49TELHOME',
             'tel_pager'             => '+49TELPAGER',
             'tel_work'              => '+49TELWORK',
-        )); 
+        ));
         
         return;
         
-		$this->expectFailure['TestRecord']['testSetId'][] = array('2','3');
-		$this->expectFailure['TestRecord']['testSetId'][] = array('30000000','3000000000000000000000000000');
-		$this->expectSuccess['TestRecord']['testSetId'][] = array('2','2');
-		
-		$this->expectFailure['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('2','3');
-		$this->expectFailure['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('30000000','3000000000000000000000000000');
-		$this->expectSuccess['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('2','2');
-		
-		$this->expectSuccess['TestRecord']['testSetFromArray'][] = array(array('test_1'=>'2', 'test_2'=>NULL), 'test_1');
-		$this->expectFailure['TestRecord']['testSetFromArrayException'][] = array('Tinebase_Exception_Record_Validation', array('test_2' => 'string'), );
-		$this->expectFailure['TestRecord']['testSetTimezoneException'][] = array('Exception', 'UTC', );
-		
-    	$dummy = array(
-					'test_id'=>2, 
-					'test_2'=>'',
-					'date_single' => $date->get(Tinebase_Record_Abstract::ISO8601LONG), 
-					'date_multiple'=>'');
-  	  	$this->expectSuccess['TestRecord']['testToArray'][] = array($dummy);
-  	  	
-  	  	
-  	  	$this->expectSuccess['TestRecord']['__set'][] = array('test_3', 4 );
-  	  	
-  	  	$this->expectSuccess['TestRecord']['__get'][] = array('test_3', 4 );
-  	  	
-  	  	$this->expectSuccess['TestRecord']['test__isset'][] = array('test_id');
-  	  	
-  	  	$this->expectFailure['TestRecord']['test__isset'][] = array('string');
-  	  	
-  	  	
-  	  	$this->expectFailure['TestRecord']['test__setException'][] = array( 'UnexpectedValueException', 'test_100',);
-		$this->expectFailure['TestRecord']['test__getException'][] = array( 'UnexpectedValueException', 'test_100',);
-		
-  	  	
-  	  	$this->expectFailure['TestRecord']['testOffsetUnset'][] = array( 'Tinebase_Exception_Record_NotAllowed', 'test_2',);
+        $this->expectFailure['TestRecord']['testSetId'][] = array('2','3');
+        $this->expectFailure['TestRecord']['testSetId'][] = array('30000000','3000000000000000000000000000');
+        $this->expectSuccess['TestRecord']['testSetId'][] = array('2','2');
+        
+        $this->expectFailure['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('2','3');
+        $this->expectFailure['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('30000000','3000000000000000000000000000');
+        $this->expectSuccess['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('2','2');
+        
+        $this->expectSuccess['TestRecord']['testSetFromArray'][] = array(array('test_1'=>'2', 'test_2'=>NULL), 'test_1');
+        $this->expectFailure['TestRecord']['testSetFromArrayException'][] = array('Tinebase_Exception_Record_Validation', array('test_2' => 'string'), );
+        $this->expectFailure['TestRecord']['testSetTimezoneException'][] = array('Exception', 'UTC', );
+        
+        $dummy = array(
+                    'test_id'=>2, 
+                    'test_2'=>'',
+                    'date_single' => $date->get(Tinebase_Record_Abstract::ISO8601LONG), 
+                    'date_multiple'=>'');
+            $this->expectSuccess['TestRecord']['testToArray'][] = array($dummy);
+            
+            
+            $this->expectSuccess['TestRecord']['__set'][] = array('test_3', 4 );
+            
+            $this->expectSuccess['TestRecord']['__get'][] = array('test_3', 4 );
+            
+            $this->expectSuccess['TestRecord']['test__isset'][] = array('test_id');
+            
+            $this->expectFailure['TestRecord']['test__isset'][] = array('string');
+            
+            
+            $this->expectFailure['TestRecord']['test__setException'][] = array( 'UnexpectedValueException', 'test_100',);
+        $this->expectFailure['TestRecord']['test__getException'][] = array( 'UnexpectedValueException', 'test_100',);
+        
+            
+            $this->expectFailure['TestRecord']['testOffsetUnset'][] = array( 'Tinebase_Exception_Record_NotAllowed', 'test_2',);
     }
 
     /**
@@ -203,7 +203,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	
+    
     }
     
     /**
@@ -298,8 +298,8 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
         
         $contact = $this->_backend->get($GLOBALS['Addressbook_ControllerTest']['contactId']);
     }
-}		
-	
+}        
+    
 
 if (PHPUnit_MAIN_METHOD == 'Addressbook_Backend_SqlTest::main') {
     Addressbook_Backend_SqlTest::main();

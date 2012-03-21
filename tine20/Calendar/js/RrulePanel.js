@@ -103,8 +103,8 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         }];
         
         this.items = [
-        	this.ruleCards
-    	];
+            this.ruleCards
+        ];
         
         Tine.Calendar.RrulePanel.superclass.initComponent.call(this);
     },

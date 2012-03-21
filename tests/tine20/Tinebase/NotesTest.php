@@ -100,12 +100,12 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
      *
      */
     public function testAddNote()
-    {        
+    {
         $this->_instance->addNote($this->_objects['note']);
         
         $note = $this->_instance->getNote($this->_objects['note']->getId());
         
-        $this->assertEquals($this->_objects['note']->note, $note->note);        
+        $this->assertEquals($this->_objects['note']->note, $note->note);
     }
 
     /**
@@ -113,7 +113,7 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
      *
      */
     public function testAddSystemNote()
-    {        
+    {
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         $translatedNoteString = $translate->_('created') . ' ' . $translate->_('by');
         
@@ -138,7 +138,7 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
                 break;
             }
         }
-        $this->assertTrue($found); 
+        $this->assertTrue($found);
     }
     
     /**
@@ -158,8 +158,8 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
         
         //print_r($notes->toArray());
         
-        $this->assertEquals($this->_objects['note']->note, $notes[0]->note); 
-        $this->assertGreaterThan(0, $notesCount); 
+        $this->assertEquals($this->_objects['note']->note, $notes[0]->note);
+        $this->assertGreaterThan(0, $notesCount);
     }
 
     /**

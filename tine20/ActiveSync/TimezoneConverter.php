@@ -43,7 +43,7 @@
  *    'daylightSecond' => 0,
  *    'daylightMilliseconds' => 0,
  *    'daylightBias' => -60                                                         
- *	));
+ *    ));
  *
  *  This will return an array containing all the timezones belonging to 
  *  CEST/CET (UTC/GMT +2 hours), including "Europe/Berlin"
@@ -61,13 +61,13 @@ class ActiveSync_TimezoneConverter
     private static $_instance = NULL;
     
     protected $_startDate          = array();
-		    
-	/**
-	 * If set then the timezone guessing results will be cached.
-	 * This is strongly recommended for performance reasons.
-	 * 
-	 * @var Zend_CacheCore
-	 */
+            
+    /**
+     * If set then the timezone guessing results will be cached.
+     * This is strongly recommended for performance reasons.
+     * 
+     * @var Zend_CacheCore
+     */
     protected $_cache = null;
     
     /**
@@ -76,7 +76,7 @@ class ActiveSync_TimezoneConverter
      * @var Zend_Log
      */
     protected $_logger = null;
-	    
+        
     /**
      * array of offsets know by ActiceSync clients, but unknown by php
      * @var array
@@ -108,7 +108,7 @@ class ActiveSync_TimezoneConverter
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**
@@ -125,17 +125,17 @@ class ActiveSync_TimezoneConverter
         return self::$_instance;
     }
 
-	/**
-	 * {@see $_cache}
-	 * 
-	 * @param Zend_Cache_Core | null $_cache
-	 * @return void
-	 */
+    /**
+     * {@see $_cache}
+     * 
+     * @param Zend_Cache_Core | null $_cache
+     * @return void
+     */
     public function setCache($_cache) 
     {
-    	if (!(is_null($_cache) || $_cache instanceof Zend_Cache_Core)) {
-    		throw new ActiveSync_Exception('Invalid argument: $_cache has to be either an instance of Zend-Cache_Core or null');
-    	}
+        if (!(is_null($_cache) || $_cache instanceof Zend_Cache_Core)) {
+            throw new ActiveSync_Exception('Invalid argument: $_cache has to be either an instance of Zend-Cache_Core or null');
+        }
         $this->_cache = $_cache;
     }
     
@@ -149,7 +149,7 @@ class ActiveSync_TimezoneConverter
     {
         $this->_logger = $_logger;
     }
-	
+    
     /**
      * Returns an array of timezones that match to the {@param $_offsets}
      * 
@@ -169,32 +169,32 @@ class ActiveSync_TimezoneConverter
             $timezones = $this->_knownTimezones[$_offsets];
         } else {
             
-			if (is_string($_offsets)) {
-	            // unpack timezone info to array
-	            $_offsets = $this->_unpackTimezoneInfo($_offsets);
-	        }
-	        
-	        $this->_validateOffsets($_offsets);
-	        $this->_setDefaultStartDateIfEmpty($_offsets);
-	        
-	        // don't use __METHOD__ ":" is not allowed as cache identifier
-	        $cacheId = $this->_getCacheId(__CLASS__ . __FUNCTION__, $_offsets);     
-	           
-	        if (false === ($timezones = $this->_loadFromCache($cacheId))) {        
-	            $timezones = array();
-	            foreach (DateTimeZone::listIdentifiers() as $timezoneIdentifier) {
-	                $timezone = new DateTimeZone($timezoneIdentifier);
-	                if (false !== ($matchingTransition = $this->_checkTimezone($timezone, $_offsets))) {
-	                    if ($timezoneIdentifier === $_expectedTimezone) {
-	                        $timezones = array($timezoneIdentifier => $matchingTransition['abbr']);
-	                        break;
-	                    } else {
-	                        $timezones[$timezoneIdentifier] = $matchingTransition['abbr'];
-	                    }
-	                }
-	            }
-	            $this->_saveInCache($timezones, $cacheId);
-	        }
+            if (is_string($_offsets)) {
+                // unpack timezone info to array
+                $_offsets = $this->_unpackTimezoneInfo($_offsets);
+            }
+            
+            $this->_validateOffsets($_offsets);
+            $this->_setDefaultStartDateIfEmpty($_offsets);
+            
+            // don't use __METHOD__ ":" is not allowed as cache identifier
+            $cacheId = $this->_getCacheId(__CLASS__ . __FUNCTION__, $_offsets);
+               
+            if (false === ($timezones = $this->_loadFromCache($cacheId))) {
+                $timezones = array();
+                foreach (DateTimeZone::listIdentifiers() as $timezoneIdentifier) {
+                    $timezone = new DateTimeZone($timezoneIdentifier);
+                    if (false !== ($matchingTransition = $this->_checkTimezone($timezone, $_offsets))) {
+                        if ($timezoneIdentifier === $_expectedTimezone) {
+                            $timezones = array($timezoneIdentifier => $matchingTransition['abbr']);
+                            break;
+                        } else {
+                            $timezones[$timezoneIdentifier] = $matchingTransition['abbr'];
+                        }
+                    }
+                }
+                $this->_saveInCache($timezones, $cacheId);
+            }
         }
         
         $this->_log(__METHOD__, __LINE__, 'Matching timezones: '.print_r($timezones, true));
@@ -219,7 +219,7 @@ class ActiveSync_TimezoneConverter
         $timezones = $this->getListOfTimezones($_offsets, $_expectedTimezone);
 
         if(isset($timezones[$_expectedTimezone])) {
-            return $_expectedTimezone; 
+            return $_expectedTimezone;
         } else {
             return current($timezones);
         }
@@ -241,92 +241,92 @@ class ActiveSync_TimezoneConverter
 //        $maxMatches = 0;
 //        $matchingAbbr = null;
 //        foreach ($matchingTimezones as $abbr => $timezones) {
-//        	if (count($timezones) > $maxMatches) {
-//        		$maxMatches = count($timezones);
-//        		$matchingAbbr = $abbr;
-//        	}
+//            if (count($timezones) > $maxMatches) {
+//                $maxMatches = count($timezones);
+//                $matchingAbbr = $abbr;
+//            }
 //        }
 //        return $matchingAbbr;
 //    }
     
     
-	/**
-	 * Return packed string for given {@param $_timezone}
-	 * @param String               $_timezone
-	 * @param String | int | null  $_startDate
-	 * @return String
-	 */
-	public function encodeTimezone($_timezone, $_startDate = null)
-	{
-		foreach ($this->_knownTimezones as $packedString => $knownTimezone) {
-			if (array_key_exists($_timezone, $knownTimezone)) {		
-				return $packedString;
-			}
-		}
-		
-		$offsets = $this->getOffsetsForTimezone($_timezone, $_startDate);
-		return $this->_packTimezoneInfo($offsets);
-	}
-	
-	/**
-	 * get offsets for given timezone
-	 * 
-	 * @param string $_timezone
-	 * @param $_startDate
-	 * @return array
-	 */
-	public function getOffsetsForTimezone($_timezone, $_startDate = null)
-	{
+    /**
+     * Return packed string for given {@param $_timezone}
+     * @param String               $_timezone
+     * @param String | int | null  $_startDate
+     * @return String
+     */
+    public function encodeTimezone($_timezone, $_startDate = null)
+    {
+        foreach ($this->_knownTimezones as $packedString => $knownTimezone) {
+            if (array_key_exists($_timezone, $knownTimezone)) {
+                return $packedString;
+            }
+        }
+        
+        $offsets = $this->getOffsetsForTimezone($_timezone, $_startDate);
+        return $this->_packTimezoneInfo($offsets);
+    }
+    
+    /**
+     * get offsets for given timezone
+     * 
+     * @param string $_timezone
+     * @param $_startDate
+     * @return array
+     */
+    public function getOffsetsForTimezone($_timezone, $_startDate = null)
+    {
         $this->_setStartDate($_startDate);
         
         // don't use __METHOD__ ":" is not allowed as cache identifier
-	    $cacheId = $this->_getCacheId(__CLASS__ . __FUNCTION__, array($_timezone));
+        $cacheId = $this->_getCacheId(__CLASS__ . __FUNCTION__, array($_timezone));
 
-	    if (false === ($offsets = $this->_loadFromCache($cacheId))) {
-	        $offsets = $this->_getOffsetsTemplate();
-	        
-	        try {
-	        	$timezone = new DateTimeZone($_timezone);
-	        } catch (Exception $e) {
-	        	$this->_log(__METHOD__, __LINE__, ": could not instantiate timezone {$_timezone}: {$e->getMessage()}");
-	        	return null;
-	        }
-	        
-	        list($standardTransition, $daylightTransition) = $this->_getTransitionsForTimezoneAndYear($timezone, $this->_startDate['year']);
-	        
-	        if ($standardTransition) {
-	            $offsets['bias'] = $standardTransition['offset']/60*-1;
-	            if ($daylightTransition) {          
-	                $offsets = $this->_generateOffsetsForTransition($offsets, $standardTransition, 'standard');
-	                $offsets = $this->_generateOffsetsForTransition($offsets, $daylightTransition, 'daylight');
-	                $offsets['standardHour']    += $daylightTransition['offset']/3600;
-	                $offsets['daylightHour']    += $standardTransition['offset']/3600;
-	                
-	                //@todo how do we get the standardBias (is usually 0)?
-	                //$offsets['standardBias'] = ...
-	                
-	                $offsets['daylightBias'] = ($daylightTransition['offset'] - $standardTransition['offset'])/60*-1;
-	            }   
-	        }
-	        
+        if (false === ($offsets = $this->_loadFromCache($cacheId))) {
+            $offsets = $this->_getOffsetsTemplate();
+            
+            try {
+                $timezone = new DateTimeZone($_timezone);
+            } catch (Exception $e) {
+                $this->_log(__METHOD__, __LINE__, ": could not instantiate timezone {$_timezone}: {$e->getMessage()}");
+                return null;
+            }
+            
+            list($standardTransition, $daylightTransition) = $this->_getTransitionsForTimezoneAndYear($timezone, $this->_startDate['year']);
+            
+            if ($standardTransition) {
+                $offsets['bias'] = $standardTransition['offset']/60*-1;
+                if ($daylightTransition) {
+                    $offsets = $this->_generateOffsetsForTransition($offsets, $standardTransition, 'standard');
+                    $offsets = $this->_generateOffsetsForTransition($offsets, $daylightTransition, 'daylight');
+                    $offsets['standardHour']    += $daylightTransition['offset']/3600;
+                    $offsets['daylightHour']    += $standardTransition['offset']/3600;
+                    
+                    //@todo how do we get the standardBias (is usually 0)?
+                    //$offsets['standardBias'] = ...
+                    
+                    $offsets['daylightBias'] = ($daylightTransition['offset'] - $standardTransition['offset'])/60*-1;
+                }   
+            }
+            
             $this->_saveInCache($offsets, $cacheId);
-	    }
+        }
 
         return $offsets;
-	}
+    }
 
-	
-	/**
-	 * 
-	 * 
-	 * @param array $_offsets
-	 * @param array $_transition
-	 * @param String $_type
-	 * @return array
-	 */
-	protected function _generateOffsetsForTransition(Array $_offsets, Array $_transition, $_type) 
-	{
-	    $transitionDateParsed = getdate($_transition['ts']);
+    
+    /**
+     * 
+     * 
+     * @param array $_offsets
+     * @param array $_transition
+     * @param String $_type
+     * @return array
+     */
+    protected function _generateOffsetsForTransition(Array $_offsets, Array $_transition, $_type) 
+    {
+        $transitionDateParsed = getdate($_transition['ts']);
             
         $_offsets[$_type . 'Month']      = $transitionDateParsed['mon'];
         $_offsets[$_type . 'DayOfWeek']  = $transitionDateParsed['wday'];
@@ -341,7 +341,7 @@ class ActiveSync_TimezoneConverter
         }
         
         return $_offsets;
-	}
+    }
 
     /**
      * Test if the weekday of the given {@param $timestamp} is the {@param $_occurence}th occurence of this weekday within its month.
@@ -379,7 +379,7 @@ class ActiveSync_TimezoneConverter
     protected function _checkTransition($_standardTransition, $_daylightTransition, $_offsets)
     {
         if (empty($_standardTransition) || empty($_offsets)) {
-        	return false;
+            return false;
         }
 
         $standardOffset = ($_offsets['bias'] + $_offsets['standardBias']) * 60 * -1;
@@ -388,10 +388,10 @@ class ActiveSync_TimezoneConverter
         if ($standardOffset == $_standardTransition['offset'] ) {
 
             if (empty($_offsets['daylightMonth']) && (empty($_daylightTransition) || empty($_daylightTransition['isdst']))) {
-        		//No DST
-        		return true;
-        	}
-        	
+                //No DST
+                return true;
+            }
+            
             $daylightOffset = ($_offsets['bias'] + $_offsets['daylightBias']) * 60 * -1;
             
             // the milestone is sending a positive value for daylightBias while it should send a negative value
@@ -414,7 +414,7 @@ class ActiveSync_TimezoneConverter
         
         return false;
     }
-	
+    
     /**
      * decode timezone info from activesync
      * 
@@ -439,7 +439,7 @@ class ActiveSync_TimezoneConverter
     protected function _packTimezoneInfo($_timezoneInfo) 
     {
         if (!is_array($_timezoneInfo)) {
-        	return null;
+            return null;
         }
 
         $packed = pack(
@@ -481,27 +481,27 @@ class ActiveSync_TimezoneConverter
     protected function _getOffsetsTemplate()
     {
         return array(
-	        'bias' => 0,
-	        'standardName' => '',
-	        'standardYear' => 0,
-	        'standardMonth' => 0,
-	        'standardDayOfWeek' => 0,
-	        'standardDay' => 0,
-	        'standardHour' => 0,
-	        'standardMinute' => 0,
-	        'standardSecond' => 0,
-	        'standardMilliseconds' => 0,
-	        'standardBias' => 0,
-	        'daylightName' => '',
-	        'daylightYear' => 0,
-	        'daylightMonth' => 0,
-	        'daylightDayOfWeek' => 0,
-	        'daylightDay' => 0,
-	        'daylightHour' => 0,
-	        'daylightMinute' => 0,
-	        'daylightSecond' => 0,
-	        'daylightMilliseconds' => 0,
-	        'daylightBias' => 0                                                         
+            'bias' => 0,
+            'standardName' => '',
+            'standardYear' => 0,
+            'standardMonth' => 0,
+            'standardDayOfWeek' => 0,
+            'standardDay' => 0,
+            'standardHour' => 0,
+            'standardMinute' => 0,
+            'standardSecond' => 0,
+            'standardMilliseconds' => 0,
+            'standardBias' => 0,
+            'daylightName' => '',
+            'daylightYear' => 0,
+            'daylightMonth' => 0,
+            'daylightDayOfWeek' => 0,
+            'daylightDay' => 0,
+            'daylightHour' => 0,
+            'daylightMinute' => 0,
+            'daylightSecond' => 0,
+            'daylightMilliseconds' => 0,
+            'daylightBias' => 0                                                         
         );
     }
     
@@ -513,7 +513,7 @@ class ActiveSync_TimezoneConverter
      * @return unknown_type
      */
     protected function _validateOffsets($_value)
-    {       
+    {
         //validate $_value
         if ((!empty($_value['standardMonth']) || !empty($_value['standardDay']) || !empty($_value['daylightMonth']) || !empty($_value['daylightDay'])) &&
             (empty($_value['standardMonth']) || empty($_value['standardDay']) || empty($_value['daylightMonth']) || empty($_value['daylightDay']))       
@@ -585,13 +585,13 @@ class ActiveSync_TimezoneConverter
      */
     protected function _checkTimezone(DateTimeZone $_timezone, $_offsets) 
     {
-    	#$this->_log(__METHOD__, __LINE__, 'Checking for matches with timezone: ' . $_timezone->getName());
+        #$this->_log(__METHOD__, __LINE__, 'Checking for matches with timezone: ' . $_timezone->getName());
         list($standardTransition, $daylightTransition) = $this->_getTransitionsForTimezoneAndYear($_timezone, $this->_startDate['year']);
         if ($this->_checkTransition($standardTransition, $daylightTransition, $_offsets)) {
-        	#$this->_log(__METHOD__, __LINE__, 'Matching timezone ' . $_timezone->getName(), 7);
-        	#$this->_log(__METHOD__, __LINE__, 'Matching daylight transition ' . print_r($daylightTransition, 1), 7);
-        	#$this->_log(__METHOD__, __LINE__, 'Matching standard transition ' . print_r($standardTransition, 1), 7);
-        	return $standardTransition;
+            #$this->_log(__METHOD__, __LINE__, 'Matching timezone ' . $_timezone->getName(), 7);
+            #$this->_log(__METHOD__, __LINE__, 'Matching daylight transition ' . print_r($daylightTransition, 1), 7);
+            #$this->_log(__METHOD__, __LINE__, 'Matching standard transition ' . print_r($standardTransition, 1), 7);
+            return $standardTransition;
         }
         
         return false;
@@ -646,11 +646,11 @@ class ActiveSync_TimezoneConverter
     
     protected function _loadFromCache($_id)
     {
-	    if ($this->_cache) {
-	        $this->_log(__METHOD__, __LINE__, 'found in cache: ' . $_id);
-	    	return $this->_cache->load($_id);
-	    }
-	    return false;
+        if ($this->_cache) {
+            $this->_log(__METHOD__, __LINE__, 'found in cache: ' . $_id);
+            return $this->_cache->load($_id);
+        }
+        return false;
     }
     
     protected function _saveInCache($_value, $_id)
@@ -662,9 +662,9 @@ class ActiveSync_TimezoneConverter
     
     protected function _log($_method, $_line, $_message, $_priority = Zend_Log::DEBUG)
     {
-    	if ($this->_logger instanceof Zend_Log) {
-    		$this->_logger->log("$_method::$_line $_message", $_priority);
-    	}
+        if ($this->_logger instanceof Zend_Log) {
+            $this->_logger->log("$_method::$_line $_message", $_priority);
+        }
     }
-	
+    
 }

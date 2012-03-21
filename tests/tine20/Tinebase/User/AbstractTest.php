@@ -66,7 +66,7 @@ class Tinebase_User_AbstractTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-    	$this->_deleteDummyUsers();
+        $this->_deleteDummyUsers();
     }
     
     /**
@@ -147,7 +147,7 @@ class Tinebase_User_AbstractTest extends PHPUnit_Framework_TestCase
 
     public function testResolveUserWithNonExistentUser()
     {
-    	$dummyId = Tinebase_Record_Abstract::generateUID();
+        $dummyId = Tinebase_Record_Abstract::generateUID();
 
         $dummyRecord = new Tinebase_Record_DummyRecord(array('test_1' => $dummyId), true);
 
@@ -177,7 +177,7 @@ class Tinebase_User_AbstractTest extends PHPUnit_Framework_TestCase
                 'accountEmailAddress'   => 'phpunit@metaways.de'
             ));
             $this->_uit->addUser($dummyUser);
-            $this->_objects[] = $dummyUser; 
+            $this->_objects[] = $dummyUser;
         }
     }
     

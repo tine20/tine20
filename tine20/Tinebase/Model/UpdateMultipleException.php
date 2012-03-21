@@ -42,6 +42,6 @@ class Tinebase_Model_UpdateMultipleException extends Tinebase_Record_Abstract
         'exception'         => array('allowEmpty' => TRUE),
         'code'              => array('allowEmpty' => TRUE),
         'message'           => array('allowEmpty' => TRUE),
-    	'record'            => array('allowEmpty' => TRUE),
+        'record'            => array('allowEmpty' => TRUE),
     );
 }

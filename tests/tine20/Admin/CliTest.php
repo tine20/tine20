@@ -42,9 +42,9 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Admin Cli Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Admin Cli Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -153,7 +153,7 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
                 'model'             => 'Tinebase_Model_FullUser',
                 'plugin'            => 'Admin_Import_Csv',
                 'plugin_options'    => $_config
-            ))); 
+            )));
         }
         
         $opts = new Zend_Console_Getopt('abp:');

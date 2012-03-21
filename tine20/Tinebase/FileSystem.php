@@ -162,7 +162,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         
         $timestamp = $node->last_modified_time instanceof Tinebase_DateTime ? $node->last_modified_time->getTimestamp() : $node->creation_time->getTimestamp();
         
-        return $timestamp;        
+        return $timestamp;
     }
     
     /**
@@ -352,7 +352,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     {
         $node = $this->stat($_path);
         
-        return $node->contenttype;        
+        return $node->contenttype;
     }
     
     /**
@@ -366,7 +366,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     {
         $node = $this->stat($_path);
         
-        return $node->hash;        
+        return $node->hash;
     }
     
     /**
@@ -546,7 +546,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         if (isset($this->_statCache[$_path])) {
             $node = $this->_statCache[$_path];
         } else {
-            $node = $this->_treeNodeBackend->getLastPathNode($_path); 
+            $node = $this->_treeNodeBackend->getLastPathNode($_path);
             $this->_statCache[$_path] = $node;
         }
         

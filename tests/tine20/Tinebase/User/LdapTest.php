@@ -248,7 +248,7 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
         
-        $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');        
+        $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
     }
     
     /**
@@ -277,12 +277,12 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit User',
             'accountEmailAddress'   => 'phpunit@' . $emailDomain
-        )); 
+        ));
         
         return $user;
     }
-}		
-	
+}        
+    
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_User_LdapTest::main') {
     Tinebase_Group_SqlTest::main();

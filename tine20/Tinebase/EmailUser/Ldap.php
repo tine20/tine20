@@ -37,7 +37,7 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
      */
     protected $_requiredObjectClass = array(
         'inetOrgPerson'
-    );    
+    );
     
     /**
      * the constructor

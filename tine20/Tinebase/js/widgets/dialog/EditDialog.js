@@ -576,7 +576,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         this.purgeListeners();
                         this.window.close();
                     },
-                    failure: function () { 
+                    failure: function () {
                         Ext.MessageBox.alert(_('Failed'), String.format(_('Could not delete {0}.'), this.i18nRecordName));
                         Ext.MessageBox.hide();
                     }

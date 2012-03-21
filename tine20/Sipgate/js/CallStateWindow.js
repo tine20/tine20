@@ -45,7 +45,7 @@ Tine.Sipgate.CallStateWindow = Ext.extend(Ext.FormPanel, {
         Tine.Sipgate.CallStateWindow.superclass.initComponent.call(this);
     },
     
-    initActions : function() {        
+    initActions : function() {
         this.action_cancel = new Ext.Action({
             text : this.app.i18n._(this.cancelButtonText) ? this.app.i18n._(this.cancelButtonText) : _('Cancel'),
             minWidth : 70,
@@ -149,7 +149,7 @@ Tine.Sipgate.CallStateWindow.openWindow = function(info) {
         
 
     });
-    window.addListener('close', function() {    
+    window.addListener('close', function() {
         Tine.Sipgate.CallStateWindow.stopTask();
         });
 
@@ -169,7 +169,7 @@ Tine.Sipgate.CallStateWindow.startTask = function(sessionId,contact) {
 
 Tine.Sipgate.CallStateWindow.stopTask = function() {
     if(Tine.Sipgate.CallUpdateWindowTask) {
-        Ext.TaskMgr.stop(Tine.Sipgate.CallUpdateWindowTask);        
+        Ext.TaskMgr.stop(Tine.Sipgate.CallUpdateWindowTask);
         Tine.Sipgate.CallUpdateWindowTask = null;
     }
 };

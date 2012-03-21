@@ -51,7 +51,7 @@ Tine.Timetracker.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
         value = value.replace(',', '.');
         
         if(value && typeof value == 'string') {
-        	if (value.search(/:/) != -1) {
+            if (value.search(/:/) != -1) {
                 var parts = value.split(':');
                 parts[0] = parts[0].length == 1 ? '0' + parts[0] : parts[0];
                 parts[1] = parts[1].length == 1 ? '0' + parts[1] : parts[1];
@@ -64,16 +64,16 @@ Tine.Timetracker.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
                 } else {
                     value = time.getHours() * 60 + time.getMinutes();
                 }
-        	} else if (value > 0) {
+            } else if (value > 0) {
                 if (value < 24) {
                     value = value * 60;
                 }
-        	} else {
+            } else {
                 this.markInvalid(_('Not a valid time'));
                 return;
             }
         }
-        this.setValue(value);        
+        this.setValue(value);
         return value;
     }
 });

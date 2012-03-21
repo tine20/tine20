@@ -19,7 +19,7 @@
  */
 class Tinebase_Model_NoteType extends Tinebase_Record_Abstract
 {
-	/**
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
@@ -61,7 +61,7 @@ class Tinebase_Model_NoteType extends Tinebase_Record_Abstract
     
         'description'            => array('allowEmpty' => true),    
         'is_user_type'           => array('allowEmpty' => true),    
-    );    
+    );
     
     /**
      * fields to translate
@@ -71,6 +71,6 @@ class Tinebase_Model_NoteType extends Tinebase_Record_Abstract
     protected $_toTranslate = array(
         'name',
         'description'
-    );    
+    );
     
 }

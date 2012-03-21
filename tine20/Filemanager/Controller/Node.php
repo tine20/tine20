@@ -56,7 +56,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**
@@ -164,7 +164,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 'name' => $translate->_('My folders'),
                 'path' => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName,
                 'type' => Tinebase_Model_Tree_Node::TYPE_FOLDER,
-    	        'id' => Tinebase_Model_Container::TYPE_PERSONAL,
+                'id' => Tinebase_Model_Container::TYPE_PERSONAL,
 
             ),
             array(
@@ -178,7 +178,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 'name' => $translate->_('Other users folders'),
                 'path' => '/' . Tinebase_Model_Container::TYPE_PERSONAL,
                 'type' => Tinebase_Model_Tree_Node::TYPE_FOLDER,
-            	'id' => Tinebase_Model_Container::TYPE_OTHERUSERS,
+                'id' => Tinebase_Model_Container::TYPE_OTHERUSERS,
             ),
         ), TRUE); // bypass validation
         
@@ -751,7 +751,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 break;
         }
         
-        return $newNode;        
+        return $newNode;
     }
     
     /**

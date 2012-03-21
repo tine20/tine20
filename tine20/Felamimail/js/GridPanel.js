@@ -28,18 +28,18 @@ Ext.namespace('Tine.Felamimail');
  * Create a new Tine.Felamimail.GridPanel
  */
 Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
-	/**
-	 * record class
-	 * @cfg {Tine.Felamimail.Model.Message} recordClass
-	 */
+    /**
+     * record class
+     * @cfg {Tine.Felamimail.Model.Message} recordClass
+     */
     recordClass: Tine.Felamimail.Model.Message,
     
-	/**
-	 * message detail panel
-	 * 
-	 * @type Tine.Felamimail.GridDetailsPanel
-	 * @property detailsPanel
-	 */
+    /**
+     * message detail panel
+     * 
+     * @type Tine.Felamimail.GridDetailsPanel
+     * @property detailsPanel
+     */
     detailsPanel: null,
     
     /**
@@ -654,7 +654,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var account = this.app.getActiveAccount(),
             trashId = (account) ? account.getTrashFolderId() : null,
             trash = trashId ? this.app.getFolderStore().getById(trashId) : null,
-            trashConfigured = (account.get('trash_folder')); 
+            trashConfigured = (account.get('trash_folder'));
             
         return (trash && ! trash.isCurrentSelection()) || (! trash && trashConfigured) ? this.moveSelectedMessages(trash, true) : this.deleteSelectedMessages();
     },
@@ -719,7 +719,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
            
             msgsIds.push(msg.id);
-            this.getStore().remove(msg);    
+            this.getStore().remove(msg);
         },  this);
         
         if (folder && increaseUnreadCountInTargetFolder > 0) {
@@ -738,12 +738,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (folder !== null || toTrash) {
             // move
             var targetFolderId = (toTrash) ? '_trash_' : folder.id;
-            this.deleteTransactionId = Tine.Felamimail.messageBackend.moveMessages(filter, targetFolderId, { 
+            this.deleteTransactionId = Tine.Felamimail.messageBackend.moveMessages(filter, targetFolderId, {
                 callback: callbackFn
-            }); 
+            });
         } else {
             // delete
-            this.deleteTransactionId = Tine.Felamimail.messageBackend.addFlags(filter, '\\Deleted', { 
+            this.deleteTransactionId = Tine.Felamimail.messageBackend.addFlags(filter, '\\Deleted', {
                 callback: callbackFn
             });
         }
@@ -814,12 +814,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 if (['reply', 'forward'].indexOf(action) !== -1) {
                     msg.addFlag(action === 'reply' ? '\\Answered' : 'Passed');
                 } else if (action == 'senddraft') {
-                    this.deleteTransactionId = Tine.Felamimail.messageBackend.addFlags(msg.id, '\\Deleted', { 
+                    this.deleteTransactionId = Tine.Felamimail.messageBackend.addFlags(msg.id, '\\Deleted', {
                         callback: this.onAfterDelete.createDelegate(this, [[msg.id]])
                     });
                 }
             }, this);
-		} 
+        } 
     },
     
     /**
@@ -942,7 +942,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             account = this.app.getAccountStore().getById(folder.get('account_id')),
             action = (folder.get('globalname') == account.get('drafts_folder')) ? 'senddraft' :
                      folder.get('globalname') == account.get('templates_folder') ? 'sendtemplate' : null,
-           	win;
+               win;
         
         // check folder to determine if mail should be opened in compose dlg
         if (action !== null) {
@@ -1214,7 +1214,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     treePanel.accountStore.add([account]);
                 }
             }
-        });        
+        });
     },
     
     /**
@@ -1253,7 +1253,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         doc.write(content);
         doc.close();
         
-        frame.contentWindow.focus(); 
+        frame.contentWindow.focus();
         frame.contentWindow.print();
         
         // removeing frame chrashes chrome

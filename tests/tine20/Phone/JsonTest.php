@@ -64,18 +64,18 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
 
         $this->_objects['software'] = new Voipmanager_Model_Snom_Software(array(
             'id' => 20003
-        ));       
+        ));
         
         $this->_objects['setting'] = new Voipmanager_Model_Snom_Setting(array(
             'id' => 20004,
             'name' => 'test setting',
             'description' => 'test setting',
-        ));       
+        ));
 
         $this->_objects['phonesetting'] = new Voipmanager_Model_Snom_PhoneSettings(array(
             'phone_id'  => 1001,
             'web_language' => 'English'
-        ));       
+        ));
         
         $this->_objects['template'] = new Voipmanager_Model_Snom_Template(array(
             'id' => 20002,
@@ -102,7 +102,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         
         $rights = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_PhoneRight', array(
             $this->_objects['phoneOwner']
-        )); 
+        ));
         
         $this->_objects['phone']->rights = $rights;
         
@@ -132,8 +132,8 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $snomLocationBackend        = new Voipmanager_Backend_Snom_Location();
         $snomSettingBackend         = new Voipmanager_Backend_Snom_Setting();
         $snomPhoneSettingBackend    = new Voipmanager_Backend_Snom_PhoneSettings();
-        $snomTemplateBackend        = new Voipmanager_Backend_Snom_Template();     
-        $snomSoftwareBackend        = new Voipmanager_Backend_Snom_Software(); 
+        $snomTemplateBackend        = new Voipmanager_Backend_Snom_Template();
+        $snomSoftwareBackend        = new Voipmanager_Backend_Snom_Software();
         $snomLineBackend            = new Voipmanager_Backend_Snom_Line();
         $asteriskSipPeerBackend     = new Voipmanager_Backend_Asterisk_SipPeer();
         $asteriskContextBackend     = new Voipmanager_Backend_Asterisk_Context();
@@ -151,7 +151,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         
         /******************** call history *************************/
 
-        $phoneController = Phone_Controller::getInstance();    
+        $phoneController = Phone_Controller::getInstance();
         
         $this->_objects['call1'] = new Phone_Model_Call(array(
             'id'                    => 'phpunitcallhistoryid1',
@@ -260,7 +260,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
      *
      */
     public function testGetRegistryData()
-    {        
+    {
         // get phone json
         $data = $this->_json->getRegistryData();
         

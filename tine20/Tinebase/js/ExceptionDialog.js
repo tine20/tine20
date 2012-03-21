@@ -68,7 +68,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
      * @return {Array}
      */
     initButtons: function () {
-    	this.reportButtons = [{
+        this.reportButtons = [{
             text: _('Cancel'),
             iconCls: 'action_cancel',
             scope: this,
@@ -90,9 +90,9 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
      * @private
      */
     getReportForm: function () {
-    	this.initButtons();
-    	
-    	this.reportForm = new Ext.FormPanel({
+        this.initButtons();
+        
+        this.reportForm = new Ext.FormPanel({
             id: 'tb-exceptiondialog-frompanel',
             bodyStyle: 'padding:5px;',
             buttonAlign: 'right',
@@ -103,10 +103,10 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                 xtype: 'panel',
                 border: false,
                 html: '<div class="tb-exceptiondialog-text">' + 
-						'<p>' + _('An error occurred, the program ended abnormal.') + '</p>' +
+                        '<p>' + _('An error occurred, the program ended abnormal.') + '</p>' +
                         '<p>' + _('The last action you made was potentially not performed correctly.') + '</p>' +
                         '<p>' + _('Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred.') + '</p>' + 
-					'</div>'
+                    '</div>'
             }, {
                 id: 'tb-exceptiondialog-description',
                 height: 60,
@@ -143,9 +143,9 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                     anchor: '95%'
                 },
                 html: '<div class="tb-exceptiondialog-details">' +
-						'<p class="tb-exceptiondialog-msg">' + this.exception.message + '</p>' +
-						'<p class="tb-exceptiondialog-trace">' + this.exception.traceHTML + '</p>' +
-					'</div>'
+                        '<p class="tb-exceptiondialog-msg">' + this.exception.message + '</p>' +
+                        '<p class="tb-exceptiondialog-trace">' + this.exception.traceHTML + '</p>' +
+                    '</div>'
             }]
         });
         

@@ -22,17 +22,17 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
      * handle request
      * 
      * @return void
-     */	
-	public function handle()
-	{
-	    try {
-    	    Tinebase_Core::initFramework();
-    	    $exception = FALSE;
-	    } catch (Exception $exception) {
-	        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' initFramework exception: ' . $exception);
+     */    
+    public function handle()
+    {
+        try {
+            Tinebase_Core::initFramework();
+            $exception = FALSE;
+        } catch (Exception $exception) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' initFramework exception: ' . $exception);
             
-	        // handle all kind of session exceptions as 'Not Authorised'
-	        if ($exception instanceof Zend_Session_Exception) {
+            // handle all kind of session exceptions as 'Not Authorised'
+            if ($exception instanceof Zend_Session_Exception) {
                 $exception = new Tinebase_Exception_AccessDenied('Not Authorised', 401);
                 
                 // expire session cookie for client
@@ -47,12 +47,12 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
         
         $json = file_get_contents('php://input');
         if (substr($json, 0, 1) == '[') {
-        	if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' batched request'); 
-        	$isBatchedRequest = true;
-        	$requests = Zend_Json::decode($json);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' batched request');
+            $isBatchedRequest = true;
+            $requests = Zend_Json::decode($json);
         } else {
-        	$isBatchedRequest = false;
-        	$requests = array(Zend_Json::decode($json));
+            $isBatchedRequest = false;
+            $requests = array(Zend_Json::decode($json));
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
@@ -68,12 +68,12 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
         $response = array();
         foreach ($requests as $requestOptions) {
             if ($requestOptions !== NULL) {
-            	$request = new Zend_Json_Server_Request();
-            	$request->setOptions($requestOptions);
-            	
-            	$response[] = $exception ? 
-            	   $this->_handleException($server, $request, $exception) :
-            	   $this->_handle($server, $request);
+                $request = new Zend_Json_Server_Request();
+                $request->setOptions($requestOptions);
+                
+                $response[] = $exception ? 
+                   $this->_handleException($server, $request, $exception) :
+                   $this->_handle($server, $request);
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Got empty request options: skip request.');
                 $response[] = NULL;
@@ -81,8 +81,8 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
         }
         
         echo $isBatchedRequest ? '['. implode(',', $response) .']' : $response[0];
-	}
-	
+    }
+    
     /**
      * handler for JSON api requests
      * @todo session expire handling
@@ -118,10 +118,10 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
                 switch($applicationName) {
                     // additional Tinebase json apis
                     case 'Tinebase_Container':
-                        $server->setClass('Tinebase_Frontend_Json_Container', 'Tinebase_Container');                
+                        $server->setClass('Tinebase_Frontend_Json_Container', 'Tinebase_Container');
                         break;
                     case 'Tinebase_PersistentFilter':
-                        $server->setClass('Tinebase_Frontend_Json_PersistentFilter', 'Tinebase_PersistentFilter');                
+                        $server->setClass('Tinebase_Frontend_Json_PersistentFilter', 'Tinebase_PersistentFilter');
                         break;
                         
                     default;
@@ -263,7 +263,7 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
         $server->setClass('Tinebase_Frontend_Json', 'Tinebase');
         $server->setClass('Tinebase_Frontend_Json_UserRegistration', 'Tinebase_UserRegistration');
         
-        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) { 
+        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
             $server->setClass('Tinebase_Frontend_Json_Container', 'Tinebase_Container');
             $server->setClass('Tinebase_Frontend_Json_PersistentFilter', 'Tinebase_PersistentFilter');
             

@@ -105,7 +105,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
             'emailUserId'     => $this->_objects['user']->getId(),
             'emailUsername'   => $this->_objects['user']->imapUser->emailUsername,
             'emailMailQuota'  => null,
-        	'emailUID'        => !empty($this->_config['dovecot']['uid']) ? $this->_config['dovecot']['uid'] : '1000',
+            'emailUID'        => !empty($this->_config['dovecot']['uid']) ? $this->_config['dovecot']['uid'] : '1000',
             'emailGID'        => !empty($this->_config['dovecot']['gid']) ? $this->_config['dovecot']['gid'] : '1000',
             'emailLastLogin'  => null,
             'emailMailSize'   => 0,
@@ -135,7 +135,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
             'emailUserId'      => $this->_objects['user']->getId(),
             'emailUsername'    => $this->_objects['user']->imapUser->emailUsername,
             'emailMailQuota'   => 600,
-        	'emailUID'         => !empty($this->_config['dovecot']['uid']) ? $this->_config['dovecot']['uid'] : '1000',
+            'emailUID'         => !empty($this->_config['dovecot']['uid']) ? $this->_config['dovecot']['uid'] : '1000',
             'emailGID'         => !empty($this->_config['dovecot']['gid']) ? $this->_config['dovecot']['gid'] : '1000',
             'emailLastLogin'   => null,
             'emailMailSize'    => 0,
@@ -156,4 +156,4 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         
         //$this->assertEquals(md5('password'), $updatedUser->emailPassword);
     }
-}	
+}    

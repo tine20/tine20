@@ -16,7 +16,7 @@
  * @subpackage  Groups 
  */
 class Tinebase_Model_GroupFilter extends Tinebase_Model_Filter_FilterGroup
-{    
+{
     /**
      * @var string application of this filter group
      */

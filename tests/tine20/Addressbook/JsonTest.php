@@ -399,7 +399,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $tag = array(
             'type'          => Tinebase_Model_Tag::TYPE_PERSONAL,
             'name'          => $tagName,
-            'description'	=> 'testModlog',
+            'description'    => 'testModlog',
             'color'         => '#009B31',
         );
         $contact['tags'] = array($tag);

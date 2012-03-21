@@ -263,7 +263,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         if(northPanel.layout.activeItem && northPanel.layout.activeItem.el) {
             return northPanel.layout.activeItem.el;
         } else {
-            return false;            
+            return false;
         }
     },
     

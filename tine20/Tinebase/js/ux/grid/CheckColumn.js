@@ -68,7 +68,7 @@ Ext.ux.grid.CheckColumn.prototype ={
     },
 
     renderer : function(v, p, record){
-        p.css += ' x-grid3-check-col-td'; 
+        p.css += ' x-grid3-check-col-td';
         return String.format('<div class="x-grid3-check-col{0} {1}">&#160;</div>', v ? '-on' : '', this.createId());
     },
     

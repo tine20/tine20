@@ -15,7 +15,7 @@
  */
 class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
 {
-	/**
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 

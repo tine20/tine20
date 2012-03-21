@@ -181,28 +181,28 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
      * @private
      */
     getButtons: function () {
-    	if (! this.hideButtons) {
-	    	this.action_ok = new Ext.Action({
-	    		text: _('Ok'),
-	            scope: this,
-	            handler: this.onOk,
-	            iconCls: 'action_saveAndClose'
-	    	});
-	    	
-	    	this.action_cancel = new Ext.Action({
-	    		text: _('Cancel'),
-				scope: this,
-	            handler: this.onCancel,
-	            iconCls: 'action_cancel'
-	    	});
-	    	
-	    	return [
-    			this.action_cancel,
-    			this.action_ok
-    		]; 
-    	}
-    	    	
-    	return false;
+        if (! this.hideButtons) {
+            this.action_ok = new Ext.Action({
+                text: _('Ok'),
+                scope: this,
+                handler: this.onOk,
+                iconCls: 'action_saveAndClose'
+            });
+            
+            this.action_cancel = new Ext.Action({
+                text: _('Cancel'),
+                scope: this,
+                handler: this.onCancel,
+                iconCls: 'action_cancel'
+            });
+            
+            return [
+                this.action_cancel,
+                this.action_ok
+            ];
+        }
+                
+        return false;
     },
     
     /**

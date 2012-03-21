@@ -50,7 +50,7 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**
@@ -60,7 +60,7 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
      */
     public static function getInstance() 
     {
-        if (self::$_instance === NULL) {            
+        if (self::$_instance === NULL) {
             self::$_instance = new Felamimail_Controller_Message_Flags();
         }
         
@@ -138,7 +138,7 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
                     } else if ($_mode === 'clear') {
                         $folderCounterById[$lastFolderId] = array(
                             'incrementUnreadCounter' => 0
-                        );                        
+                        );
                     }
                 }
                 

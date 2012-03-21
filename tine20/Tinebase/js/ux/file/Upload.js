@@ -20,7 +20,7 @@ Ext.ns('Ext.ux.file');
  * @param       Object config
  */
 Ext.ux.file.Upload = function(config) {
-	
+    
     Ext.apply(this, config);
     
     Ext.ux.file.Upload.superclass.constructor.apply(this, arguments);
@@ -232,15 +232,15 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
 //                    this.fileRecord.beginEdit();
 //                    this.fileRecord.set('status', 'failure');
 //                    this.fileRecord.endEdit();
-//                    this.fireEvent('uploadfailure', this, this.fileRecord); 
+//                    this.fireEvent('uploadfailure', this, this.fileRecord);
 //                    return this.fileRecord;
 //                }
                 
                 // calculate optimal maxChunkSize       
-            	// TODO: own method for chunked upload
-            	
+                // TODO: own method for chunked upload
+                
                 var chunkMax = this.maxChunkSize;
-                var chunkMin = this.minChunkSize;       
+                var chunkMin = this.minChunkSize;
                 var actualChunkSize = this.maxChunkSize;
 
                 if(this.fileSize > 5 * chunkMax) {
@@ -297,7 +297,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      */
     html5upload: function() {
                  
-    	// TODO: move to upload method / checks max post size
+        // TODO: move to upload method / checks max post size
         if(this.maxPostSize/1 < this.file.size/1 && !this.isHtml5ChunkedUpload()) {
             this.fileRecord.html5upload = true;
             this.onUploadFail(null, null, this.fileRecord);
@@ -333,7 +333,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             xmlData: xmlData,
             success: this.onUploadSuccess.createDelegate(this, null, true),
             failure: this.onUploadFail.createDelegate(this, null, true) 
-        });       
+        });
 
         return this.fileRecord;
     },
@@ -344,8 +344,8 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      * @param {Boolean} whether this restarts a paused upload
      */
     html5ChunkedUpload: function() {
-        this.prepareChunk();        
-        this.html5upload();                
+        this.prepareChunk();
+        this.html5upload();
     },
     
     /**
@@ -392,7 +392,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         
         response = Ext.util.JSON.decode(response.responseText);
         if(response.tempFile) {
-        	response = response.tempFile; 
+            response = response.tempFile;
         }
                 
         if(response.error == 0) {
@@ -403,7 +403,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             this.fileRecord.set('tempFile', '');
             this.fileRecord.set('tempFile', response);
             this.fileRecord.commit(false);
-            this.fireEvent('uploadcomplete', this, this.fileRecord);  
+            this.fireEvent('uploadcomplete', this, this.fileRecord);
             this.fireEvent('update', 'uploadcomplete', this, this.fileRecord);
 
         }       
@@ -431,7 +431,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         this.retryCount = 0;
 
         if(responseObj.status && responseObj.status !== 'success') {
-        	this.onUploadFail(responseObj, options, fileRecord);
+            this.onUploadFail(responseObj, options, fileRecord);
         }
 
         this.fileRecord.beginEdit();
@@ -441,46 +441,46 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
 
         this.fireEvent('update', 'uploadprogress', this, this.fileRecord);
         
-        if(! this.isHtml5ChunkedUpload()) {            
+        if(! this.isHtml5ChunkedUpload()) {
 
-        	this.finishUploadRecord(response);           
+            this.finishUploadRecord(response);
         }       
         else {
 
-        	this.addTempfile(this.fileRecord.get('tempFile'));
-        	var percent = parseInt(this.currentChunkPosition * 100 / this.fileSize/1);                
-        	
-        	if(this.lastChunk) {
-        		percent = 98;
-        	}
+            this.addTempfile(this.fileRecord.get('tempFile'));
+            var percent = parseInt(this.currentChunkPosition * 100 / this.fileSize/1);
+            
+            if(this.lastChunk) {
+                percent = 98;
+            }
 
-        	this.fileRecord.beginEdit();
-        	this.fileRecord.set('progress', percent);
-        	this.fileRecord.commit(false);
+            this.fileRecord.beginEdit();
+            this.fileRecord.set('progress', percent);
+            this.fileRecord.commit(false);
 
-        	if(this.lastChunk) {
+            if(this.lastChunk) {
 
-        		window.setTimeout((function() {
-        			Ext.Ajax.request({
-        				timeout: 10*60*1000, // Overriding Ajax timeout - important!
-        				params: {
-        				method: 'Tinebase.joinTempFiles',
-        				tempFilesData: this.tempFiles
-        			},
-        			success: this.finishUploadRecord.createDelegate(this), 
-        			failure: this.finishUploadRecord.createDelegate(this)
-        			});
-        		}).createDelegate(this), this.CHUNK_TIMEOUT_MILLIS);
+                window.setTimeout((function() {
+                    Ext.Ajax.request({
+                        timeout: 10*60*1000, // Overriding Ajax timeout - important!
+                        params: {
+                        method: 'Tinebase.joinTempFiles',
+                        tempFilesData: this.tempFiles
+                    },
+                    success: this.finishUploadRecord.createDelegate(this), 
+                    failure: this.finishUploadRecord.createDelegate(this)
+                    });
+                }).createDelegate(this), this.CHUNK_TIMEOUT_MILLIS);
 
-        	}
-        	else {
-        		window.setTimeout((function() {
-        			if(!this.isPaused()) {
-        				this.prepareChunk();
-        				this.html5upload();
-        			}
-        		}).createDelegate(this), this.CHUNK_TIMEOUT_MILLIS);
-        	}                                               
+            }
+            else {
+                window.setTimeout((function() {
+                    if(!this.isPaused()) {
+                        this.prepareChunk();
+                        this.html5upload();
+                    }
+                }).createDelegate(this), this.CHUNK_TIMEOUT_MILLIS);
+            }                                               
 
         }  
 
@@ -656,7 +656,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      * @returns {Boolean}
      */
     isHtml5ChunkedUpload: function() {
-          	  	
+                    
         if(window.File == undefined) return false;
         if(this.isHostMethod(File.prototype, 'mozSlice') || this.isHostMethod(File.prototype, 'webkitSlice')) {
             return this.fileSize > this.minChunkSize;
@@ -708,7 +708,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         
         var queuedState = 'queued';
         if(!this.queued) {
-        	queuedState = 'uploading';
+            queuedState = 'uploading';
         }
             
         this.fileRecord.beginEdit();

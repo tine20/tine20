@@ -80,7 +80,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
         Ext.each(this.contentTypes, function(ct) {
             var recordClass = Tine[this.app.appName].Model[ct.model];
             // check requiredRight if any
-            if ( ct.requiredRight && (!Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('recordsName').toLowerCase()))) return true; 
+            if ( ct.requiredRight && (!Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('recordsName').toLowerCase()))) return true;
             
             var child = new Ext.tree.TreeNode({
                 id : 'treenode-' + recordClass.getMeta('modelName'),
@@ -94,7 +94,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             child.on('click', function() {
                         this.app.getMainScreen().activeContentType = ct.model;
                         this.app.getMainScreen().show();
-                    }, this);            
+                    }, this);
 
             // append generic ctx-items (Tine.widgets.tree.ContextMenu)
                     
@@ -112,11 +112,11 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
                     this.ctxNode = node;
                     this['contextMenu' + ct.model].showAt(event.getXY());
                 }
-            }, this);         
+            }, this);
              }       
                     
             treeRoot.appendChild(child);
-        }, this); 
+        }, this);
     },
     
     /**

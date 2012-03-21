@@ -6,7 +6,7 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
- * @todo		extend new Data exception and add iMIP record to exception if available
+ * @todo        extend new Data exception and add iMIP record to exception if available
  */
 
 /**

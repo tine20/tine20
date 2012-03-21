@@ -91,14 +91,14 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
      */
     public function testExportOds()
     {
-        //$translate = Tinebase_Translation::getTranslation('Crm');   
+        //$translate = Tinebase_Translation::getTranslation('Crm');
         $odsFilename = $this->_instance->generate();
         
         $this->assertTrue(file_exists($odsFilename));
         
-        $xmlBody = $this->_instance->getDocument()->asXML();    
+        $xmlBody = $this->_instance->getDocument()->asXML();
         //echo  $xmlBody;
-        $this->assertEquals(1, preg_match("/PHPUnit/",      $xmlBody), 'no name'); 
+        $this->assertEquals(1, preg_match("/PHPUnit/",      $xmlBody), 'no name');
         $this->assertEquals(1, preg_match("/Description/",  $xmlBody), 'no description');
         $this->assertEquals(1, preg_match('/open/',         $xmlBody), 'no leadstate');
         $this->assertEquals(1, preg_match('/Admin Account, Tine 2\.0/',        $xmlBody), 'no creator');
@@ -127,9 +127,9 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
         
         $this->assertTrue(file_exists($odsFilename));
         
-        $xmlBody = $this->_instance->getDocument()->asXML();    
+        $xmlBody = $this->_instance->getDocument()->asXML();
         //echo  $xmlBody;
-        $this->assertEquals(0, preg_match("/PHPUnit/",      $xmlBody), 'grant not forced'); 
+        $this->assertEquals(0, preg_match("/PHPUnit/",      $xmlBody), 'grant not forced');
         
         unlink($odsFilename);
     }

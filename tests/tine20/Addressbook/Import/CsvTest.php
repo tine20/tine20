@@ -31,7 +31,7 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
     /**
      * @var boolean
      */
-    protected $_deleteImportFile = TRUE; 
+    protected $_deleteImportFile = TRUE;
     
     protected $_deletePersonalContacts = FALSE;
     

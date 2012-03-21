@@ -60,7 +60,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         $keyfieldConfig = array(
             'name'    => Addressbook_Config::CONTACT_SALUTATION,
             'records' => array(
-                array('id' => 'MR',      'value' => 'Mr', 	   'gender' => Addressbook_Model_Salutation::GENDER_MALE,   'image' => 'images/empty_photo_male.png',    'system' => true), //_('Mr')
+                array('id' => 'MR',      'value' => 'Mr',        'gender' => Addressbook_Model_Salutation::GENDER_MALE,   'image' => 'images/empty_photo_male.png',    'system' => true), //_('Mr')
                 array('id' => 'MS',      'value' => 'Ms',      'gender' => Addressbook_Model_Salutation::GENDER_FEMALE, 'image' => 'images/empty_photo_female.png',  'system' => true), //_('Ms')
                 array('id' => 'COMPANY', 'value' => 'Company', 'gender' => Addressbook_Model_Salutation::GENDER_OTHER,  'image' => 'images/empty_photo_company.png', 'system' => true), //_('Company')
             ),
@@ -194,7 +194,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Tinebase_Model_Grants::GRANT_READ,
             Tinebase_Model_Grants::GRANT_EDIT,
             Tinebase_Model_Grants::GRANT_ADMIN
-        ), TRUE);               
+        ), TRUE);
     }
     
     /**

@@ -3,7 +3,7 @@
  * Tinebase Csv Export class
  *
  * @package     Tinebase
- * @subpackage	Export
+ * @subpackage    Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -15,7 +15,7 @@
  * Tinebase Csv Export class
  * 
  * @package     Tinebase
- * @subpackage	Export
+ * @subpackage    Export
  */
 class Tinebase_Export_Csv extends Tinebase_Export_Abstract implements Tinebase_Record_IteratableInterface
 {
@@ -91,7 +91,7 @@ class Tinebase_Export_Csv extends Tinebase_Export_Abstract implements Tinebase_R
         $string = "";
         $writeDelimiter = false;
         foreach($dataArray as $dataElement) {
-            if ($writeDelimiter) { 
+            if ($writeDelimiter) {
                 $string .= $delimiter;
             }
             $escapedDataElement = (! is_array($dataElement)) ? preg_replace("/$enclosure/", $escapeEnclosure . $enclosure , $dataElement) : '';

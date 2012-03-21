@@ -23,7 +23,7 @@ Tine.Admin.container.show = function () {
         });
     }
     else {
-    	Tine.Admin.container.gridPanel.loadGridData.defer(100, Tine.Admin.container.gridPanel, []);
+        Tine.Admin.container.gridPanel.loadGridData.defer(100, Tine.Admin.container.gridPanel, []);
     }
     
     Tine.Tinebase.MainScreen.setActiveContentPanel(Tine.Admin.container.gridPanel, true);

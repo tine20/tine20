@@ -48,7 +48,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      */
     getRightId: function (applicationId, right) {
         var id = false,
-        	result = null;
+            result = null;
         
         this.rightsDataStore.each(function (item) {
             if (item.data.application_id === applicationId && item.data.right === right) {
@@ -60,7 +60,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         return result;
     },  
     
-	handlerApplyChanges: function (button, event, closeWindow) {
+    handlerApplyChanges: function (button, event, closeWindow) {
         var form = this.getForm();
         
         if (form.isValid()) {
@@ -76,7 +76,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 
             // get role rights                
             var roleRights = [],
-            	rightsStore = this.rightsDataStore;
+                rightsStore = this.rightsDataStore;
             
             rightsStore.each(function (record) {
                 roleRights.push(record.data);
@@ -103,8 +103,8 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                         this.onRecordLoad(response);
                     }
                 },
-                failure: function (result, request) { 
-                    Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save role.')); 
+                failure: function (result, request) {
+                    Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save role.'));
                 },
                 scope: this 
             });
@@ -131,10 +131,10 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 }
                 window.close();
             },
-            failure: function (result, request) { 
-                Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occurred while trying to delete the role.')); 
+            failure: function (result, request) {
+                Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occurred while trying to delete the role.'));
             } 
-        });                           
+        });
     },
 
     updateRecord: function (roleData) {
@@ -156,8 +156,8 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      */
     initRightsTree: function () {
         this.rightsTreePanel = new Ext.tree.TreePanel({
-        	title: this.translation.gettext('Rights'),
-        	autoScroll: true,
+            title: this.translation.gettext('Rights'),
+            autoScroll: true,
             rootVisible: false,
             border: false
         });
@@ -166,7 +166,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.treeSorter = new Ext.tree.TreeSorter(this.rightsTreePanel, {
             folderSort: true,
             dir: "asc"
-        });        
+        });
         
         // set the root node
         var treeRoot = new Ext.tree.TreeNode({
@@ -229,11 +229,11 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                             );
                         } else {
                             var rightId = this.getRightId(applicationId, node.attributes.right);
-                            this.rightsDataStore.remove(this.rightsDataStore.getById(rightId));                                                                                         
+                            this.rightsDataStore.remove(this.rightsDataStore.getById(rightId));
                         }   
                     }, this);
                     
-                    node.appendChild(child);                    
+                    node.appendChild(child);
                 }       
             }
         }     
@@ -297,7 +297,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     height: 60
                 }]
             }, {
-            	xtype: 'tabpanel',
+                xtype: 'tabpanel',
                 plain: true,
                 region: 'center',
                 activeTab: 0,
@@ -355,10 +355,10 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             ctrl: true,
             fn: this.handlerApplyChanges.createDelegate(this, [true], true),
             scope: this
-		}]);
+        }]);
 
         this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transferring {0}...'), this.translation.gettext('Role'))});
-		this.loadMask.show();
+        this.loadMask.show();
     },
     
     onRecordLoad: function (response) {

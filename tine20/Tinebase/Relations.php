@@ -356,7 +356,7 @@ class Tinebase_Relations
         }
         
         try {
-            $result = $this->_backend->addRelation($_relation);            
+            $result = $this->_backend->addRelation($_relation);
         } catch(Zend_Db_Statement_Exception $zse) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not add relation: ' . $zse->getMessage());
             $result = NULL;

@@ -24,11 +24,11 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
      */ 
     protected $_options = array();
 
-	/**
-	 * @var Admin_Backend_SambaMachine_Ldap
-	 */
-	protected $_backend = NULL;
-	
+    /**
+     * @var Admin_Backend_SambaMachine_Ldap
+     */
+    protected $_backend = NULL;
+    
     /**
      * holds the instance of the singleton
      *
@@ -73,11 +73,11 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
          
         $this->_options = $options;
 
-        $this->_currentAccount = Tinebase_Core::getUser();        
+        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_applicationName = 'Admin';
-		
+        
         // we might want to add a factory here when we support multiple backends
-		$this->_backend = new Admin_Backend_SambaMachine($this->_options);
+        $this->_backend = new Admin_Backend_SambaMachine($this->_options);
     }
 
     /**
@@ -228,7 +228,7 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
         
         $this->_setMachineNames($_record);
         
-        return $this->_backend->update($_record); 
+        return $this->_backend->update($_record);
     }
     
     /**
@@ -254,7 +254,7 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
      * @return  integer number of updated records
      */
     public function updateMultiple($_filter, $_data)
-    { 
+    {
         //$this->checkRight('MANAGE_SAMBAMACHINES');
         
         return $this->_backend->updateMultiple($_filter, $_data);

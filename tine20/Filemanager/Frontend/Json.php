@@ -159,7 +159,7 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return input param
      */
     public function saveNode($recordData)
-    {      
+    {
         return $recordData;
     }
     

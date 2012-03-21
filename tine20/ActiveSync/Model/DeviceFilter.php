@@ -17,7 +17,7 @@
  * @package     ActiveSync
  */
 class ActiveSync_Model_DeviceFilter extends Tinebase_Model_Filter_FilterGroup
-{    
+{
     /**
      * @var string class name of this filter group
      *      this is needed to overcome the static late binding
@@ -40,5 +40,5 @@ class ActiveSync_Model_DeviceFilter extends Tinebase_Model_Filter_FilterGroup
         #'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('n_family', 'n_given', 'org_name', 'email', 'adr_one_locality',))),
         'deviceid'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'owner_id'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-    );    
+    );
 }

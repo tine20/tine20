@@ -43,7 +43,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**
@@ -253,7 +253,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
                         $recipients[] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($grant['account_id'], TRUE)->getId();
                     } catch (Addressbook_Exception_NotFound $aenf) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ 
-                            . ' Do not send notification to non-existant user: ' . $aenf->getMessage()); 
+                            . ' Do not send notification to non-existant user: ' . $aenf->getMessage());
                     }
                 }
             }
@@ -328,7 +328,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
                 
                 // check if relation is product and has price
                 if ($relation['type'] == 'PRODUCT') {
-                    $quantity = (isset($relation['remark']['quantity'])) ? $relation['remark']['quantity'] : 1; 
+                    $quantity = (isset($relation['remark']['quantity'])) ? $relation['remark']['quantity'] : 1;
                     $sum += $relation['remark']['price'] * (integer) $quantity;
                 }
             }

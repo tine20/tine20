@@ -211,7 +211,7 @@ class Tinebase_User
             if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
                 self::setBackendType(Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKENDTYPE, self::SQL));
             } else {
-                self::setBackendType(self::SQL); 
+                self::setBackendType(self::SQL);
             }
         }
         
@@ -320,7 +320,7 @@ class Tinebase_User
         }
 
         if (isset($_key)) {
-            return array_key_exists($_key, self::$_backendConfiguration) ? self::$_backendConfiguration[$_key] : $_default; 
+            return array_key_exists($_key, self::$_backendConfiguration) ? self::$_backendConfiguration[$_key] : $_default;
         } else {
             return self::$_backendConfiguration;
         }
@@ -362,7 +362,7 @@ class Tinebase_User
             if (!array_key_exists($_backendType, self::$_backendConfigurationDefaults)) {
                 throw new Tinebase_Exception_InvalidArgument("Unknown backend type '$_backendType'");
             }
-            return self::$_backendConfigurationDefaults[$_backendType]; 
+            return self::$_backendConfigurationDefaults[$_backendType];
         } else {
             return self::$_backendConfigurationDefaults;
         }

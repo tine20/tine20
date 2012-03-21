@@ -152,5 +152,5 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @param string $_field
      * @return boolean
      */
-    public function has($_field);    
+    public function has($_field);
 }

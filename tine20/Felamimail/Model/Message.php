@@ -3,7 +3,7 @@
  * class to hold message cache data
  * 
  * @package     Felamimail
- * @subpackage	Model
+ * @subpackage    Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,7 +13,7 @@
  * class to hold message cache data
  * 
  * @package     Felamimail
- * @subpackage	Model
+ * @subpackage    Model
  * @property    string  $subject        the subject of the email
  * @property    string  $from_email     the address of the sender (from)
  * @property    string  $from_name      the name of the sender (from)
@@ -83,7 +83,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'id';    
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to
@@ -459,7 +459,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         } else {
             // ignore other types for now
             #var_dump($_structure);
-            #throw new Exception('unsupported multipart');    
+            #throw new Exception('unsupported multipart');
         }
         
         return $result;

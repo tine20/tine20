@@ -76,7 +76,7 @@ Tine.Voipmanager.AsteriskContextGridPanel = Ext.extend(Tine.widgets.grid.GridPan
             sortable: true,
             dataIndex: 'name',
             renderer: function(name) {
-            	return Ext.util.Format.htmlEncode(name);
+                return Ext.util.Format.htmlEncode(name);
             }
         }, {
             id: 'description',
@@ -85,7 +85,7 @@ Tine.Voipmanager.AsteriskContextGridPanel = Ext.extend(Tine.widgets.grid.GridPan
             sortable: true,
             dataIndex: 'description',
             renderer: function(description) {
-            	return Ext.util.Format.htmlEncode(description);
+                return Ext.util.Format.htmlEncode(description);
             }
         }];
     },

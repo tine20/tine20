@@ -100,7 +100,7 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getFromStore: function(store) {
         var result = [];
-        store.each(function(record) {                     
+        store.each(function(record) {
             result.push(record.data);
         }, this);
         store.commitChanges();
@@ -180,7 +180,7 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.leadtypePanel,
                 this.leadsourcePanel
             ]            
-        };                
+        };
     } // end of getFormItems
 });
 

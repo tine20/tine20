@@ -21,8 +21,8 @@ class Calendar_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * the right to manage resources
      * @staticvar string
      */
-	const MANAGE_RESOURCES = 'manage_resources';
-	
+    const MANAGE_RESOURCES = 'manage_resources';
+    
     /**
      * holds the instance of the singleton
      *
@@ -36,7 +36,7 @@ class Calendar_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * disabled. use the singleton
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**

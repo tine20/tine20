@@ -76,7 +76,7 @@ Tine.Voipmanager.AsteriskMeetmeGridPanel = Ext.extend(Tine.widgets.grid.GridPane
             sortable: true,
             dataIndex: 'confno',
             renderer: function(confno) {
-            	return Ext.util.Format.htmlEncode(confno);
+                return Ext.util.Format.htmlEncode(confno);
             }
         }, {
             id: 'pin',
@@ -85,7 +85,7 @@ Tine.Voipmanager.AsteriskMeetmeGridPanel = Ext.extend(Tine.widgets.grid.GridPane
             sortable: true,
             dataIndex: 'pin',
             renderer: function(pin) {
-            	return Ext.util.Format.htmlEncode(pin);
+                return Ext.util.Format.htmlEncode(pin);
             }
         }, {
             id: 'adminpin',
@@ -94,7 +94,7 @@ Tine.Voipmanager.AsteriskMeetmeGridPanel = Ext.extend(Tine.widgets.grid.GridPane
             sortable: true,
             dataIndex: 'adminpin',
             renderer: function(adminpin) {
-            	return Ext.util.Format.htmlEncode(adminpin);
+                return Ext.util.Format.htmlEncode(adminpin);
             }
            }];
     },

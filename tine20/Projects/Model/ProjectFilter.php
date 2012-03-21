@@ -42,9 +42,9 @@ class Projects_Model_ProjectFilter extends Tinebase_Model_Filter_FilterGroup
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Projects')),
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'Projects_Model_Project')),
         'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
-        	'idProperty'      => 'projects_project.id',
-        	'applicationName' => 'Projects',
-    	)),
+            'idProperty'      => 'projects_project.id',
+            'applicationName' => 'Projects',
+        )),
 
         'title'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'number'         => array('filter' => 'Tinebase_Model_Filter_Text'),

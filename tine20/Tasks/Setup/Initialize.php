@@ -3,7 +3,7 @@
  * Tine 2.0
  * 
  * @package     Tasks
- * @subpackage	Setup
+ * @subpackage    Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
  * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -14,7 +14,7 @@
  * class for Tasks initialization
  * 
  * @package     Tasks
- * @subpackage	Setup
+ * @subpackage    Setup
  */
 class Tasks_Setup_Initialize extends Setup_Initialize
 {
@@ -47,7 +47,7 @@ class Tasks_Setup_Initialize extends Setup_Initialize
         $tasksPriorityConfig = array(
             'name'    => Tasks_Config::TASK_PRIORITY,
             'records' => array(
-                array('id' => 'LOW', 	'value' => 'low', 	   'icon' => 'images/oxygen/16x16/actions/go-down.png', 'system' => true), //_('low')
+                array('id' => 'LOW',     'value' => 'low',        'icon' => 'images/oxygen/16x16/actions/go-down.png', 'system' => true), //_('low')
                 array('id' => 'NORMAL', 'value' => 'normal',   'icon' => 'images/oxygen/16x16/actions/go-next.png', 'system' => true), //_('normal')
                 array('id' => 'HIGH',   'value' => 'high',     'icon' => 'images/oxygen/16x16/actions/go-up.png',   'system' => true), //_('high')
                 array('id' => 'URGENT', 'value' => 'urgent',   'icon' => 'images/oxygen/16x16/emblems/emblem-important.png', 'system' => true), //_('urgent')

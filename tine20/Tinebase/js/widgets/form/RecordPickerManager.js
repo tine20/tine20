@@ -38,8 +38,8 @@ Tine.widgets.form.RecordPickerManager = function() {
             if(items[key]) {   // if registered
                 if(Ext.isString(items[key])) { // xtype
                     return Ext.ComponentMgr.create(config, items[key]);
-                } else { 
-                    return new items[key](config);   
+                } else {
+                    return new items[key](config);
                 }
             } else {    // not registered, create default
                 var defaultconfig = {

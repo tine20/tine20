@@ -25,53 +25,53 @@ class Addressbook_Convert_Contact_VCard_Factory
     const CLIENT_SOGO    = 'sogo';
     
     /**
-	 * factory function to return a selected phone backend class
-	 *
-	 * @param   string $_backend
-	 * @param   string $_version
-	 * @return  Addressbook_Convert_Contact_VCard_Interface
-	 */
-	static public function factory($_backend, $_version = null)
-	{
-	    switch ($_backend) {
-	        case Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC:
-	            return new Addressbook_Convert_Contact_VCard_Generic($_version);
-	            
-	            break;
-	            
-	        case Addressbook_Convert_Contact_VCard_Factory::CLIENT_IOS:
-	            return new Addressbook_Convert_Contact_VCard_IOS($_version);
-	            
-	            break;
-	            
-	        case Addressbook_Convert_Contact_VCard_Factory::CLIENT_KDE:
-	            return new Addressbook_Convert_Contact_VCard_KDE($_version);
-	            
-	            break;
-	            
+     * factory function to return a selected phone backend class
+     *
+     * @param   string $_backend
+     * @param   string $_version
+     * @return  Addressbook_Convert_Contact_VCard_Interface
+     */
+    static public function factory($_backend, $_version = null)
+    {
+        switch ($_backend) {
+            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC:
+                return new Addressbook_Convert_Contact_VCard_Generic($_version);
+                
+                break;
+                
+            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_IOS:
+                return new Addressbook_Convert_Contact_VCard_IOS($_version);
+                
+                break;
+                
+            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_KDE:
+                return new Addressbook_Convert_Contact_VCard_KDE($_version);
+                
+                break;
+                
             case Addressbook_Convert_Contact_VCard_Factory::CLIENT_MACOSX:
-	            return new Addressbook_Convert_Contact_VCard_MacOSX($_version);
-	            
-	            break;
-	            
+                return new Addressbook_Convert_Contact_VCard_MacOSX($_version);
+                
+                break;
+                
             case Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO:
                 return new Addressbook_Convert_Contact_VCard_Sogo($_version);
                  
                 break;
-	                 
-	    }
-	}
-	
-	/**
-	 * parse iseragent and return backend and version
-	 * 
-	 * @return array
-	 */
-	static public function parseUserAgent($_userAgent)
-	{
-	    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' user agent: ' . $_userAgent);
-	    
-	    // MacOS X
+                     
+        }
+    }
+    
+    /**
+     * parse iseragent and return backend and version
+     * 
+     * @return array
+     */
+    static public function parseUserAgent($_userAgent)
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' user agent: ' . $_userAgent);
+        
+        // MacOS X
         if (preg_match(Addressbook_Convert_Contact_VCard_MacOSX::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_MACOSX;
             $version = $matches['version'];
@@ -98,5 +98,5 @@ class Addressbook_Convert_Contact_VCard_Factory
         }
         
         return array($backend, $version);
-	}
+    }
 }

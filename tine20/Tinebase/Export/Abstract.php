@@ -3,7 +3,7 @@
  * Tinebase Abstract export class
  *
  * @package     Tinebase
- * @subpackage	Export
+ * @subpackage    Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -14,7 +14,7 @@
  * Tinebase Abstract export class
  * 
  * @package     Tinebase
- * @subpackage	Export
+ * @subpackage    Export
  * 
  */
 abstract class Tinebase_Export_Abstract
@@ -196,9 +196,9 @@ abstract class Tinebase_Export_Abstract
             'iteratable' => $this,
             'controller' => $this->_controller,
             'filter'     => $this->_filter,
-            'options'	 => array(
+            'options'     => array(
                 'searchAction' => 'export',
-                'sortInfo'	   => $this->_sortInfo,
+                'sortInfo'       => $this->_sortInfo,
                 'getRelations' => $this->_getRelations,
             ),
         ));
@@ -352,7 +352,7 @@ abstract class Tinebase_Export_Abstract
      */
     protected function _getContainer(Tinebase_Record_Abstract $_record, $_field = 'id', $_property = 'container_id')
     {
-        $container = $_record->{$_property}; 
+        $container = $_record->{$_property};
         return $container[$_field];
     }
     

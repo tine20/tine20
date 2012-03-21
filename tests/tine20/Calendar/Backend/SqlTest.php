@@ -259,7 +259,7 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
         
         $this->assertEquals(2, count($persistentEvent->exdate), 'We put in two exdates, we should get out two exdates!');
         foreach ($persistentEvent->exdate as $exdate) {
-        	$this->assertTrue($exdate->equals($event->exdate[0]) || $exdate->equals($event->exdate[1]), 'exdates mismatch');
+            $this->assertTrue($exdate->equals($event->exdate[0]) || $exdate->equals($event->exdate[1]), 'exdates mismatch');
         }
     }
     

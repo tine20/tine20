@@ -1497,7 +1497,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $userAccountId = $_attender->getUserAccountId();
         
         // reset status if not a contact or my account
-        if ($_attender->user_type != Calendar_Model_Attender::USERTYPE_USER || ($userAccountId && $userAccountId != Tinebase_Core::getUser()->getId())) { 
+        if ($_attender->user_type != Calendar_Model_Attender::USERTYPE_USER || ($userAccountId && $userAccountId != Tinebase_Core::getUser()->getId())) {
             $_attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
         }
         
@@ -1538,7 +1538,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         if ($event->container_id === $attender->displaycontainer_id || empty($attender->displaycontainer_id)) {
             // no need to increase sequence
-            return; 
+            return;
         }
         
         Tinebase_Container::getInstance()->increaseContentSequence($attender->displaycontainer_id, $action, $event->getId());

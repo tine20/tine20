@@ -38,7 +38,7 @@ class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Conta
      */
     private function __construct() 
     {
-        $this->_currentAccount = Tinebase_Core::getUser();        
+        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_applicationName = 'Crm';
     }
 
@@ -47,7 +47,7 @@ class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Conta
      *
      */
     private function __clone() 
-    {        
+    {
     }
 
     /**

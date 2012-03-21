@@ -16,7 +16,7 @@
  * @subpackage  Auth
  */
 class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap implements Tinebase_Auth_Interface
-{    
+{
     /**
      * Constructor
      *

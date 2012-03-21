@@ -203,7 +203,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         }
         
         $statement .= " `" . $oldName .  "` " . $this->getFieldDeclarations($_declaration);
-        $this->execQueryVoid($statement);    
+        $this->execQueryVoid($statement);
     }
  
     /**
@@ -216,7 +216,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
                     . $this->getIndexDeclarations($_declaration);
-        $this->execQueryVoid($statement);    
+        $this->execQueryVoid($statement);
     }
 
     /**
@@ -228,7 +228,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      * @throws  Setup_Exception_NotFound
      */
     public function getIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_key, $_tableName = '')
-    {    
+    {
         $keys = array();
 
         $snippet = "  KEY `" . $_key->name . "`";
@@ -262,7 +262,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      * @return string
      */
     public function getForeignKeyDeclarations(Setup_Backend_Schema_Index_Abstract $_key)
-    { 
+    {
         $snippet = '  CONSTRAINT `' . SQL_TABLE_PREFIX . $_key->name . '` FOREIGN KEY ';
         $snippet .= '(`' . $_key->field . "`) REFERENCES `" . SQL_TABLE_PREFIX
                     . $_key->referenceTable . 

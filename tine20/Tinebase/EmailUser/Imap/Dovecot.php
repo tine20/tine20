@@ -67,19 +67,19 @@ default_pass_scheme = PLAIN-MD5
 
 # passdb with userdb prefetch
 password_query = SELECT dovecot_users.username AS user, 
-	CONCAT('{', scheme, '}', password) AS password, 
-	home AS userdb_home, 
-	uid AS userdb_uid, 
-	gid AS userdb_gid, 
-	CONCAT('*:bytes=', CAST(quota_bytes AS CHAR), 'M') AS userdb_quota_rule   
-	FROM dovecot_users 
-	WHERE dovecot_users.username='%u'
+    CONCAT('{', scheme, '}', password) AS password, 
+    home AS userdb_home, 
+    uid AS userdb_uid, 
+    gid AS userdb_gid, 
+    CONCAT('*:bytes=', CAST(quota_bytes AS CHAR), 'M') AS userdb_quota_rule   
+    FROM dovecot_users 
+    WHERE dovecot_users.username='%u'
 
 # userdb for deliver
 user_query = SELECT home, uid, gid, 
-	CONCAT('*:bytes=', CAST(quota_bytes AS CHAR), 'M') AS userdb_quota_rule   
-	FROM dovecot_users 
-	WHERE dovecot_users.username='%u'
+    CONCAT('*:bytes=', CAST(quota_bytes AS CHAR), 'M') AS userdb_quota_rule   
+    FROM dovecot_users 
+    WHERE dovecot_users.username='%u'
 -- --------------------------------------------------------
 
 -- 
@@ -114,8 +114,8 @@ map {
 -- Postfix LDA config: master.cf
 --
 -- Note: Dovecot Tine backend does not support peruser storage, 
--- 		but you can use the dovecot server for multiple 
--- 		sites. So in other words pertine storage
+--         but you can use the dovecot server for multiple 
+--         sites. So in other words pertine storage
 
 -- All mail is stored as vmail
 dovecot   unix  -       n       n       -       -       pipe
@@ -205,11 +205,11 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
         'prefix'            => 'dovecot_',
         'userTable'         => 'users',
         'quotaTable'        => 'usage',
-        'emailHome'			=> '/var/vmail/%d/%n',
+        'emailHome'            => '/var/vmail/%d/%n',
         'emailUID'          => 'vmail', 
         'emailGID'          => 'vmail',
-        'emailScheme'    	=> 'SSHA256',
-        'domain'			=> null,
+        'emailScheme'        => 'SSHA256',
+        'domain'            => null,
     );
     
     /**
@@ -228,10 +228,10 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
         #'emailSieveQuota'   => 'quota_message',
     
         'emailMailSize'     => 'storage',
-    	'emailSieveSize'    => 'messages',
+        'emailSieveSize'    => 'messages',
 
         // makes mapping data to _config easier
-        'emailHome'			=> 'home'
+        'emailHome'            => 'home'
     );
     
     /**
@@ -286,7 +286,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
     public function getNewUser(Tinebase_Model_FullUser $_user)
     {
         $result = new Tinebase_Model_EmailUser(array(
-            'emailUserId' 	=> $_user->getId(),
+            'emailUserId'     => $_user->getId(),
             'emailUsername' => $this->_appendDomain($_user->accountLoginName)
         ));
         
@@ -402,7 +402,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
      * LIMIT 1
      */
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
-    {        
+    {
         $select = $this->_db->select()
         
             ->from(array($this->_userTable))
@@ -465,8 +465,8 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
             Tinebase_TransactionManager::getInstance()->rollBack();
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error while creating email user: ' . $zdse->getMessage());
         }
-	}
-	
+    }
+    
     /**
      * updates email properties for an existing user
      * 
@@ -569,36 +569,36 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
                      * 
                     // set home from preconfigured home if not already set
                     case 'emailHome':
-                    	if (!empty($value)){
-                    		$this->_config[$keyMapping] = $value;
-                    	} else {
-                    		$this->_config[$keyMapping] = $this->_config['home'];
-                    	}
-                    	break;
+                        if (!empty($value)){
+                            $this->_config[$keyMapping] = $value;
+                        } else {
+                            $this->_config[$keyMapping] = $this->_config['home'];
+                        }
+                        break;
                     // set scheme from preconfigured scheme if not already set
                     case 'emailScheme':
-                    	if (!empty($value)){
-                    		$this->_config[$keyMapping] = $value;
-                    	} else {
-                    		$this->_config[$keyMapping] = $this->_config['scheme'];
-                    	}
-                    	break;
+                        if (!empty($value)){
+                            $this->_config[$keyMapping] = $value;
+                        } else {
+                            $this->_config[$keyMapping] = $this->_config['scheme'];
+                        }
+                        break;
                     // set uid from preconfigured uid if not already set
                     case 'emailUID':
-                    	if (!empty($value)){
-                    		$data[$keyMapping] = $value;
-                    	} else {
-                    		$data[$keyMapping] = $this->_config['uid'];
-                    	}
-                    	break;
+                        if (!empty($value)){
+                            $data[$keyMapping] = $value;
+                        } else {
+                            $data[$keyMapping] = $this->_config['uid'];
+                        }
+                        break;
                     // set gid from preconfigured gid if not already set
                     case 'emailGID':
-                    	if (!empty($value)){
-                    		$data[$keyMapping] = $value;
-                    	} else {
-                    		$data[$keyMapping] = $this->_config['gid'];
-                    	}
-                    	break;
+                        if (!empty($value)){
+                            $data[$keyMapping] = $value;
+                        } else {
+                            $data[$keyMapping] = $this->_config['gid'];
+                        }
+                        break;
                     */
                     default: 
                         $data[$keyMapping] = $value;

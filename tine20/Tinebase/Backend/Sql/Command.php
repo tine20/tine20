@@ -23,7 +23,7 @@ class Tinebase_Backend_Sql_Command implements Tinebase_Backend_Sql_Command_Inter
         $completeClassName = explode('_',get_class($adapter));
         $className = $completeClassName[count($completeClassName)-1];
         $className = str_replace('Oci','Oracle',$className);
-        return $className;		
+        return $className;
     }
     
     /**

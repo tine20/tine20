@@ -24,7 +24,7 @@ class Voipmanager_Server_Snom
      * @return boolean
      */
     public function handle()
-    {        
+    {
         if (isset($_REQUEST['TINE20SESSID'])) {
             Zend_Session::setId($_REQUEST['TINE20SESSID']);
         }

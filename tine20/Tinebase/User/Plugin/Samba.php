@@ -88,7 +88,7 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
         $acctFlags = '[U          ]';
         $acctFlags[2] = $_status == 'disabled' ? 'D' : ' ';
         
-        $_ldapData['sambaacctflags'] = $acctFlags;    	
+        $_ldapData['sambaacctflags'] = $acctFlags;
     }
     
     /**
@@ -206,7 +206,7 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
      * @see Tinebase_User_Plugin_LdapAbstract::_user2ldap()
      */
     protected function _user2ldap(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry = array())
-    {   
+    {
         $this->inspectExpiryDate(isset($_user->accountExpires) ? $_user->accountExpires : null, $_ldapData);
         
         if ($_user->sambaSAM instanceof Tinebase_Model_SAMUser) {

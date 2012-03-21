@@ -30,7 +30,7 @@ class Felamimail_Exception_IMAPInvalidCredentials extends Felamimail_Exception_I
      * 
      * @var string
      */
-    protected $_username = ''; 
+    protected $_username = '';
     
     /**
      * construct

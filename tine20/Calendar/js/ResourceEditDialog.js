@@ -27,7 +27,7 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     //mode: 'local',
     
-    getFormItems: function() { 
+    getFormItems: function() {
         return {
             xtype: 'tabpanel',
             border: false,
@@ -35,7 +35,7 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             activeTab: 0,
             border: false,
             items:[
-                {               
+                {
                 title: this.app.i18n.n_('Resource', 'Resources', 1),
                 autoScroll: true,
                 border: false,

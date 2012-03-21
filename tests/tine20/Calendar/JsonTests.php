@@ -139,7 +139,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function createTask()
     {
-        $request = new Zend_Controller_Request_Http(); 
+        $request = new Zend_Controller_Request_Http();
         $request->setControllerName('Tinebase_Alarm');
         $request->setActionName('sendPendingAlarms');
         $request->setParam('eventName', 'Tinebase_Event_Async_Minutely');

@@ -54,7 +54,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**

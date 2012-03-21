@@ -30,12 +30,12 @@ Tine.Voipmanager.AsteriskContextEditDialog = Ext.extend(Tine.widgets.dialog.Edit
      * 
      * NOTE: when this method gets called, all initalisation is done.
      */
-    getFormItems: function() { 
+    getFormItems: function() {
         return {
             layout: 'form',
             border: false,
             items:[
-            	{
+                {
                     xtype: 'textfield',
                     fieldLabel: this.app.i18n._('Name'),
                     name: 'name',

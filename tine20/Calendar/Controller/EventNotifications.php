@@ -31,7 +31,7 @@
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**

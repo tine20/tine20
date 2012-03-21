@@ -96,7 +96,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
                 //echo "check right: " . $rightToCheck;
                 if (Tinebase_Acl_Roles::getInstance()->hasRight($this->_applicationName, Tinebase_Core::getUser()->getId(), $rightToCheck)) {
                     $result = TRUE;
-                    break;    
+                    break;
                 }
             }
 
@@ -171,6 +171,6 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
             throw new Exception("Controller $_controllerName does not implement Tinebase_Controller_Interface.");
         }
         
-        return call_user_func(array($_controllerName, 'getInstance')); 
+        return call_user_func(array($_controllerName, 'getInstance'));
     }
 }

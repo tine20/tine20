@@ -29,7 +29,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     defaultSortInfo: {field: 'accountLoginName', direction: 'ASC'},
     evalGrants: false,
     gridConfig: {
-    	id: 'gridAdminUsers',
+        id: 'gridAdminUsers',
         autoExpandColumn: 'accountDisplayName'
     },
     
@@ -155,7 +155,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     getColumnModel: function() {
-        return new Ext.grid.ColumnModel({ 
+        return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true,
                 hidden: true,

@@ -29,7 +29,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      * 
      * @var array
      */
-    protected $_coursesToDelete = array(); 
+    protected $_coursesToDelete = array();
     
     /**
      * test department
@@ -46,9 +46,9 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Courses Json Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Courses Json Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.

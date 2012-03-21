@@ -146,7 +146,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         $file = $this->_contentController->getMessagePart($messageId, $partId);
         
         $_domParrent->appendChild(new DOMElement('ContentType', $file->type, 'uri:AirSyncBase'));
-        $_domParrent->appendChild(new DOMElement('Data', base64_encode($file->getDecodedContent()), 'uri:ItemOperations'));  
+        $_domParrent->appendChild(new DOMElement('Data', base64_encode($file->getDecodedContent()), 'uri:ItemOperations'));
     }
     
     /**
@@ -177,7 +177,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                         break;
                         
                     case 'from_email':
-                        $nodeContent = $this->_createEmailAddress($data->from_name, $data->from_email); 
+                        $nodeContent = $this->_createEmailAddress($data->from_name, $data->from_email);
                         break;
                         
                     case 'to':
@@ -210,7 +210,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         
         // read flag
         if (in_array('\Seen', $data->flags)) {
-            $_domParrent->appendChild(new DOMElement('Read', 1, 'uri:Email'));                 
+            $_domParrent->appendChild(new DOMElement('Read', 1, 'uri:Email'));
         } else {
             $_domParrent->appendChild(new DOMElement('Read', 0, 'uri:Email'));
         }
@@ -286,7 +286,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         if ($airSyncBaseType == 4) {
             // getMessagePart will return Zend_Mime_Part
             $messageBody = $this->_contentController->getMessagePart($_serverId);
-            $messageBody = stream_get_contents($messageBody->getRawStream()); 
+            $messageBody = stream_get_contents($messageBody->getRawStream());
             
             if (version_compare($this->_device->acsversion, '12.0', '<')) {
                 // if the email contains non 7bit ascii characters we can't transfer them via MIMEData xml and we need to fall back to plain text
@@ -356,7 +356,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                         case 'low':
                             $_domParrent->appendChild($_xmlDocument->createElementNS('uri:Email', 'Importance', 0));
                             break;
-                    	
+                        
                         case 'high':
                             $_domParrent->appendChild($_xmlDocument->createElementNS('uri:Email', 'Importance', 2));
                             break;
@@ -446,7 +446,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      */
     protected function _createEmailAddress($_realName, $_address)
     {
-        return !empty($_realName) ? sprintf('"%s" <%s>', str_replace('"', '\\"', $_realName), $_address) : $_address; 
+        return !empty($_realName) ? sprintf('"%s" <%s>', str_replace('"', '\\"', $_realName), $_address) : $_address;
     }
     
     /**
@@ -492,7 +492,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         
         if (empty($defaultAccountId)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " no default account set. Can't sync any folders.");
-            return array();            
+            return array();
         }
         
         try {
@@ -659,7 +659,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             'folder_id', 
             'equals', 
             $_containerId
-        ));  
+        ));
 
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter " . print_r($_filter->toArray(), true));
     }

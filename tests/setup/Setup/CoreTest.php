@@ -34,14 +34,14 @@ class Setup_CoreTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Setup Controller Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Setup Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     public function testGetConfigFilePath()
     {
         $configFilePath = Setup_Core::getConfigFilePath();
-    	$this->assertTrue(file_exists($configFilePath));
+        $this->assertTrue(file_exists($configFilePath));
 //        rename($configFilePath, $configFilePath.'.phpunit');
 //        var_dump(Setup_Core::getConfigFilePath());
 //        $this->assertNull(Setup_Core::getConfigFilePath());
@@ -50,6 +50,6 @@ class Setup_CoreTest extends PHPUnit_Framework_TestCase
     
     public function testConfigFilesExists()
     {
-    	$this->assertTrue(Setup_Core::configFileExists());
+        $this->assertTrue(Setup_Core::configFileExists());
     }
 }

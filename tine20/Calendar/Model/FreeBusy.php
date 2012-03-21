@@ -48,7 +48,7 @@ class Calendar_Model_FreeBusy extends Tinebase_Record_Abstract
         'dtend'                => array('allowEmpty' => true,         ),
         'event'                => array('allowEmpty' => true,         ),
         'type'                 => array(
-        	'allowEmpty' => true,
+            'allowEmpty' => true,
             array('InArray', array(self::FREEBUSY_FREE, self::FREEBUSY_BUSY, self::FREEBUSY_BUSY_UNAVAILABLE, self::FREEBUSY_BUSY_TENTATIVE)),
         ),
     );

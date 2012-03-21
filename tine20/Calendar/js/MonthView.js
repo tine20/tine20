@@ -231,7 +231,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         return {
             from: this.dateMesh[0],
             until: this.dateMesh[this.dateMesh.length -1].add(Date.DAY, 1)
-        };    
+        };
     },
     
     getSelectionModel: function() {

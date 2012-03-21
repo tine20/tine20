@@ -112,7 +112,7 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
                     'policykey'  => 1,
                     'acsversion' => '12.0',
                     'remotewipe' => 0
-                )); 
+                ));
                 break;
             
             case Syncope_Model_Device::TYPE_WEBOS:
@@ -125,7 +125,7 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
                     'policykey'  => 1,
                     'acsversion' => '12.0',
                     'remotewipe' => 0
-                )); 
+                ));
                 break;
                 
             case 'SamsungGalaxyS2':
@@ -152,10 +152,10 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
                     'policykey'  => 1,
                     'acsversion' => '2.5',
                     'remotewipe' => 0
-                )); 
+                ));
                 break;
         }
 
-        return $device; 
+        return $device;
     }
 }

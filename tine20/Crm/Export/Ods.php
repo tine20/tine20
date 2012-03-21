@@ -3,7 +3,7 @@
  * Crm Ods generation class
  *
  * @package     Crm
- * @subpackage	Export
+ * @subpackage    Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -14,7 +14,7 @@
  * Crm Ods generation class
  * 
  * @package     Crm
- * @subpackage	Export
+ * @subpackage    Export
  * 
  */
 class Crm_Export_Ods extends Tinebase_Export_Spreadsheet_Ods
@@ -36,7 +36,7 @@ class Crm_Export_Ods extends Tinebase_Export_Spreadsheet_Ods
      * 
      * @var boolean
      */
-    protected $_getRelations = TRUE;    
+    protected $_getRelations = TRUE;
     
     /**
      * constructor (adds more values with Crm_Export_Helper)
@@ -75,6 +75,6 @@ class Crm_Export_Ods extends Tinebase_Export_Spreadsheet_Ods
      */
     protected function _getDataTableName()
     {
-        return 'Leads';        
+        return 'Leads';
     }
 }

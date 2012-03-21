@@ -79,7 +79,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
     
     public function testSetBackendConfiguration()
     {
-        Tinebase_User::setBackendType(Tinebase_User::LDAP);   
+        Tinebase_User::setBackendType(Tinebase_User::LDAP);
      
         $key = 'host';
         $testValue = 'phpunit-test-host';
@@ -101,7 +101,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteBackendConfiguration()
     {
-        Tinebase_User::setBackendType(Tinebase_User::LDAP);   
+        Tinebase_User::setBackendType(Tinebase_User::LDAP);
      
         $key = 'host';
         Tinebase_User::setBackendConfiguration('configured-host', $key);

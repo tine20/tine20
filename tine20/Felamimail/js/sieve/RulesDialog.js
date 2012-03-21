@@ -97,7 +97,7 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     getFormItems: function() {
         this.rulesGrid = new Tine.Felamimail.sieve.RulesGridPanel({
             account: this.account
-        }); 
+        });
         
         return [this.rulesGrid];
     },

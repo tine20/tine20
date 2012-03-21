@@ -40,7 +40,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**
@@ -50,7 +50,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
      */
     public static function getInstance() 
     {
-        if (self::$_instance === NULL) {            
+        if (self::$_instance === NULL) {
             self::$_instance = new Felamimail_Controller_Message_Move();
         }
         
@@ -75,9 +75,9 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
         if ($_messages instanceof Tinebase_Model_Filter_FilterGroup) {
             $iterator = new Tinebase_Record_Iterator(array(
                 'iteratable' => $this,
-            	'controller' => $this, 
-            	'filter'     => $_messages,
-            	'function'   => 'processMoveIteration',
+                'controller' => $this, 
+                'filter'     => $_messages,
+                'function'   => 'processMoveIteration',
             ));
             $iterateResult = $iterator->iterate($targetFolder);
             
@@ -283,7 +283,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
             $_imap->copyMessage($_uids, Felamimail_Model_Folder::encodeFolderName($_targetFolderName));
             $_imap->addFlags($_uids, array(Zend_Mail_Storage::FLAG_DELETED));
         } catch (Felamimail_Exception_IMAP $fei) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $fei->getMessage()); 
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $fei->getMessage());
         }
     }
 }

@@ -33,7 +33,7 @@ class Phone_Controller extends Tinebase_Controller_Abstract
         $snomConfig = Tinebase_Config::getInstance()->getConfigAsArray('snom', 'Tinebase', array(
             'backend' => Phone_Backend_Factory::ASTERISK
         ));
-        $this->_callBackendType = $snomConfig['backend']; 
+        $this->_callBackendType = $snomConfig['backend'];
         $this->_applicationName = 'Phone';
     }
 
@@ -42,7 +42,7 @@ class Phone_Controller extends Tinebase_Controller_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
 
     /**
@@ -140,7 +140,7 @@ class Phone_Controller extends Tinebase_Controller_Abstract
      * @return Tinebase_Record_RecordSet
      */
     public function searchCalls(Phone_Model_CallFilter $_filter, Tinebase_Model_Pagination $_pagination)
-    {        
+    {
         $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
         $calls = $backend->search($_filter, $_pagination);
         
@@ -170,7 +170,7 @@ class Phone_Controller extends Tinebase_Controller_Abstract
      * @return Phone_Model_Call
      */
     public function callStarted(Phone_Model_Call $_call) 
-    {    
+    {
         $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
         
         $_call->start = Tinebase_DateTime::now();

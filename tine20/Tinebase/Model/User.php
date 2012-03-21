@@ -22,7 +22,7 @@
  * 
  * @property    string  accountId
  * @property    string  contact_id
- * @property	string  accountEmailAddress  email address of user
+ * @property    string  accountEmailAddress  email address of user
  * @property    string  accountDisplayName
  * @property    string  accountLastName
  * @property    string  accountFirstName
@@ -357,7 +357,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      * @return string
      */
     public function sanitizeAccountPrimaryGroup()
-    {  
+    {
         try {
             Tinebase_Group::getInstance()->getGroupById($this->accountPrimaryGroup);
         } catch (Tinebase_Exception_Record_NotDefined $e) {

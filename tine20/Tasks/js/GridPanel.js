@@ -118,18 +118,18 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 emptyText: this.app.i18n._('Add a task...')
             })
         }, {
-        	id: 'due',
+            id: 'due',
             header: this.app.i18n._("Due Date"),
-			width: 145,
+            width: 145,
             dataIndex: 'due',
             renderer: Tine.Tinebase.common.dateTimeRenderer,
             editor: new Ext.ux.form.DateTimeField({
                 defaultTime: '12:00',
-            	allowBlank: true
+                allowBlank: true
             }),
             quickaddField: new Ext.ux.form.DateTimeField({
                 defaultTime: '12:00',
-            	allowBlank: true
+                allowBlank: true
             })
         }, {
             id: 'priority',
@@ -214,7 +214,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Object} data
      * @return {String} lead name
      */
-    leadRenderer: function(data) {    
+    leadRenderer: function(data) {
     
         if( Ext.isArray(data) && data.length > 0) {
             var index = 0;

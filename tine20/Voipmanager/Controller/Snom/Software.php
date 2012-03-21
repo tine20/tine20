@@ -17,7 +17,7 @@
  * @subpackage  Controller
  */
 class Voipmanager_Controller_Snom_Software extends Voipmanager_Controller_Abstract
-{   
+{
     /**
      * holds the instance of the singleton
      *
@@ -41,7 +41,7 @@ class Voipmanager_Controller_Snom_Software extends Voipmanager_Controller_Abstra
      *
      */
     private function __clone() 
-    {        
+    {
     }
             
     /**

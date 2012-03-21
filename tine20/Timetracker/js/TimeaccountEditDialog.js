@@ -62,7 +62,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             border: false,
             plain:true,
             activeTab: 0,
-            items:[{               
+            items:[{
                 title: this.app.i18n.ngettext('Time Account', 'Time Accounts', 1),
                 autoScroll: true,
                 border: false,
@@ -264,7 +264,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 selectAnyone: false,
                 selectTypeDefault: 'group',
                 recordClass: Tine.Tinebase.Model.Grant
-            }); 
+            });
         }
         return this.grantsGrid;
     }

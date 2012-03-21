@@ -82,7 +82,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
      */
     public function getGroupMembers($_groupId)
     {
-        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
+        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
         try {
             $groupMembers = $this->_ldap->fetch($this->_options['groupsDn'], 'objectGUID=' . $groupId, array('member'));
@@ -104,7 +104,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
             }
         }
         
-        return $members;        
+        return $members;
     }
 
     /**
@@ -115,7 +115,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
      * @throws  Tinebase_Exception_Record_NotDefined
      */
     public function getGroupByName($_name)
-    {        
+    {
         $groupName = Zend_Ldap::filterEscape($_name);
         
         try {
@@ -141,8 +141,8 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
      * @throws  Tinebase_Exception_Record_NotDefined
      */
     public function getGroupById($_groupId)
-    {   
-        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
+    {
+        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
         try {
             $group = $this->_ldap->fetch($this->_options['groupsDn'], 'objectGUID=' . $groupId, array('cn','description','objectGUID'));
@@ -170,7 +170,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
      * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Group
      */
     public function getGroups($_filter = NULL, $_sort = 'name', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
-    {        
+    {
         if(!empty($_filter)) {
             $searchString = "*" . Tinebase_Ldap::filterEscape($_filter) . "*";
             $filter = "(&(objectclass=group)(|(cn=$searchString)))";
@@ -288,7 +288,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
         
         if ($this->_options['useRfc2307bis']) {
             
-            if (count($memberUidNumbers) > 1) { 
+            if (count($memberUidNumbers) > 1) {
                 $data['member'] = $accountMetaData['dn'];
             } else {
                 // deleting last member is handled by $this->_saveRfc2307GroupMembers

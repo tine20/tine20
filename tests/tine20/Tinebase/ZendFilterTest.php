@@ -38,9 +38,9 @@ class Tinebase_ZendFilterTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_UserTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_UserTest');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -50,18 +50,18 @@ class Tinebase_ZendFilterTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-    	
-    	// data to validate
-    	$this->objects['dataEmptyString'] = array ( 'notEmptyString' => '' );
-    	$this->objects['dataEmpty'] = array (  );
-    	$this->objects['dataNotEmptyString'] = array ( 'notEmptyString' => 'not empty' );
-    	
-    	// declare filter
-    	$filters = array();
-    	$validators = array(
-    				'notEmptyString' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required' ),
-    			);
-    	$this->objects['filter'] = new Zend_Filter_Input ($filters, $validators);
+        
+        // data to validate
+        $this->objects['dataEmptyString'] = array ( 'notEmptyString' => '' );
+        $this->objects['dataEmpty'] = array (  );
+        $this->objects['dataNotEmptyString'] = array ( 'notEmptyString' => 'not empty' );
+        
+        // declare filter
+        $filters = array();
+        $validators = array(
+                    'notEmptyString' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required' ),
+                );
+        $this->objects['filter'] = new Zend_Filter_Input ($filters, $validators);
  
         return;
         
@@ -75,7 +75,7 @@ class Tinebase_ZendFilterTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	
+    
     }
     
      /**
@@ -84,9 +84,9 @@ class Tinebase_ZendFilterTest extends PHPUnit_Framework_TestCase
      */
     public function testZendFilterValidationEmptyString()
     {
-    	$this->objects['filter']->setData($this->objects['dataEmptyString']);
-    	
-    	$this->assertFalse($this->objects['filter']->isValid());
+        $this->objects['filter']->setData($this->objects['dataEmptyString']);
+        
+        $this->assertFalse($this->objects['filter']->isValid());
     }
 
      /**
@@ -95,9 +95,9 @@ class Tinebase_ZendFilterTest extends PHPUnit_Framework_TestCase
      */
     public function testZendFilterValidationEmpty()
     {
-    	$this->objects['filter']->setData($this->objects['dataEmpty']);
+        $this->objects['filter']->setData($this->objects['dataEmpty']);
 
-    	$this->assertFalse($this->objects['filter']->isValid());
+        $this->assertFalse($this->objects['filter']->isValid());
     }
 
      /**
@@ -106,12 +106,12 @@ class Tinebase_ZendFilterTest extends PHPUnit_Framework_TestCase
      */
     public function testZendFilterValidationNotEmptyString()
     {
-    	$this->objects['filter']->setData($this->objects['dataNotEmptyString']);
-    	
-    	$this->assertTrue($this->objects['filter']->isValid());
+        $this->objects['filter']->setData($this->objects['dataNotEmptyString']);
+        
+        $this->assertTrue($this->objects['filter']->isValid());
     }
-}		
-	
+}        
+    
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_UserTest::main') {
     Tinebase_UserTest::main();

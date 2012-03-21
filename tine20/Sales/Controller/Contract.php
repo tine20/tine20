@@ -23,11 +23,11 @@ class Sales_Controller_Contract extends Tinebase_Controller_Record_Abstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {        
+    private function __construct() {
         $this->_applicationName = 'Sales';
         $this->_backend = new Sales_Backend_Contract();
         $this->_modelName = 'Sales_Model_Contract';
-        $this->_currentAccount = Tinebase_Core::getUser();   
+        $this->_currentAccount = Tinebase_Core::getUser();
     }    
     
     /**
@@ -72,7 +72,7 @@ class Sales_Controller_Contract extends Tinebase_Controller_Record_Abstract
      * @return  Sales_Model_Contract
      */
     public function create(Tinebase_Record_Interface $_record)
-    {        
+    {
         // add container
         $_record->container_id = self::getSharedContractsContainer()->getId();
         

@@ -3,7 +3,7 @@
  * Tinebase Ods generation class
  *
  * @package     Tinebase
- * @subpackage	Export
+ * @subpackage    Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -15,7 +15,7 @@
  * Tinebase Ods generation class
  * 
  * @package     Tinebase
- * @subpackage	Export
+ * @subpackage    Export
  */
 class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstract implements Tinebase_Record_IteratableInterface
 {
@@ -131,7 +131,7 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
         $this->_exportRecords();
         
         // create file
-        $result = $this->_openDocumentObject->getDocument();        
+        $result = $this->_openDocumentObject->getDocument();
         return $result;
     }
     
@@ -191,7 +191,7 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
             foreach($this->_config->headers->header as $headerCell) {
                 // replace data
                 $value = preg_replace($patterns, $replacements, $headerCell);
-                $cell = $row->appendCell($value, OpenDocument_SpreadSheet_Cell::TYPE_STRING);                
+                $cell = $row->appendCell($value, OpenDocument_SpreadSheet_Cell::TYPE_STRING);
             }
         }
         
@@ -275,7 +275,7 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
      */
     protected function _getDataTableName()
     {
-        return $this->_translate->_('Data');        
+        return $this->_translate->_('Data');
     }
     
     /**

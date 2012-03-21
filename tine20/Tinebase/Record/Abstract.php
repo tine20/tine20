@@ -103,7 +103,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      *
      * @var string
      */
-    protected $_alarmDateTimeField = ''; 
+    protected $_alarmDateTimeField = '';
     
     /**
      * name of fields containing time information
@@ -358,7 +358,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             foreach ($toConvert as $field => &$value) {
                 
                 if (! method_exists($value, 'setTimezone')) {
-                    throw new Tinebase_Exception_Record_Validation($field . 'must be a method setTimezone'); 
+                    throw new Tinebase_Exception_Record_Validation($field . 'must be a method setTimezone');
                 } 
                 $value->setTimezone($_timezone);
             } 
@@ -620,7 +620,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                         if ($dataValue instanceof DateTime) continue;
                         $_data[$field][$dataKey] =  (int)$dataValue == 0 ? NULL : new Tinebase_DateTime($dataValue);
                     }
-                } else {                    
+                } else {
                     $_data[$field] = (int)$_data[$field] == 0 ? NULL : new Tinebase_DateTime($_data[$field]);
                     
                 }
@@ -686,7 +686,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * @todo    add support for hh:mm:ss AM|PM
      */
     protected function _convertTime(&$_data)
-    {        
+    {
         foreach ($this->_timeFields as $field) {
             if (!isset($_data[$field]) || empty($_data[$field])) {
                 continue;
@@ -750,7 +750,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function getIterator()
     {
-        return new ArrayIterator($this->_properties);    
+        return new ArrayIterator($this->_properties);
     }
     
     /**
@@ -899,7 +899,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function has($_field) 
     {
-        return (array_key_exists ($_field, $this->_validators)); 
+        return (array_key_exists ($_field, $this->_validators));
     }   
 
     /**

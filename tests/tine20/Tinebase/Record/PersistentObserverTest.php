@@ -89,7 +89,7 @@ class Tinebase_Record_PersistentObserverTest extends PHPUnit_Framework_TestCase
         $this->object = Tinebase_Record_PersistentObserver::getInstance();
         
         foreach ($this->persistentObserverDatas as $num => $persistentObserverData) {
-        	$this->persistentObserver[$num] = $this->object->addObserver(new Tinebase_Model_PersistentObserver($persistentObserverData, true));
+            $this->persistentObserver[$num] = $this->object->addObserver(new Tinebase_Model_PersistentObserver($persistentObserverData, true));
         }
     }
 
@@ -101,21 +101,21 @@ class Tinebase_Record_PersistentObserverTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-    	$db = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'record_persistentobserver'));
-    	
-    	foreach ($this->persistentObserver as $persistentObserver) {
-    	     $db->delete(array(
-    	         'identifier' =>$persistentObserver->getId()
-    	     ));
-    	}
-    	
+        $db = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'record_persistentobserver'));
+        
+        foreach ($this->persistentObserver as $persistentObserver) {
+             $db->delete(array(
+                 'identifier' =>$persistentObserver->getId()
+             ));
+        }
+        
     }
 
     /**
      * testGetInstance().
      */
     public function testGetInstance() {
-    	$this->assertTrue($this->object instanceof Tinebase_Record_PersistentObserver);
+        $this->assertTrue($this->object instanceof Tinebase_Record_PersistentObserver);
     }
 
     /**
@@ -132,15 +132,15 @@ class Tinebase_Record_PersistentObserverTest extends PHPUnit_Framework_TestCase
      * testAddObserver().
      */
     public function testAddObserver() {
-    	$application = Tinebase_Application::getInstance();
+        $application = Tinebase_Application::getInstance();
         
-    	foreach ($this->persistentObserver as $num => $persistentObserver) {
-    		$this->assertEquals($application->getApplicationById($persistentObserver->observable_application)->app_name, $this->persistentObserverDatas[$num]['observable_application']);
-    		$this->assertEquals($application->getApplicationById($persistentObserver->observer_application)->app_name, $this->persistentObserverDatas[$num]['observer_application']);
-    	    $this->assertEquals($persistentObserver->observable_identifier, $this->persistentObserverDatas[$num]['observable_identifier']);
-    	    $this->assertEquals($persistentObserver->observer_identifier, $this->persistentObserverDatas[$num]['observer_identifier']);
-    	    $this->assertEquals($persistentObserver->observed_event, $this->persistentObserverDatas[$num]['observed_event']);
-    	}
+        foreach ($this->persistentObserver as $num => $persistentObserver) {
+            $this->assertEquals($application->getApplicationById($persistentObserver->observable_application)->app_name, $this->persistentObserverDatas[$num]['observable_application']);
+            $this->assertEquals($application->getApplicationById($persistentObserver->observer_application)->app_name, $this->persistentObserverDatas[$num]['observer_application']);
+            $this->assertEquals($persistentObserver->observable_identifier, $this->persistentObserverDatas[$num]['observable_identifier']);
+            $this->assertEquals($persistentObserver->observer_identifier, $this->persistentObserverDatas[$num]['observer_identifier']);
+            $this->assertEquals($persistentObserver->observed_event, $this->persistentObserverDatas[$num]['observed_event']);
+        }
         
     }
 

@@ -48,7 +48,7 @@ Tine.Projects.Model.Project = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
  * @return {Object} default data
  * @static
  */ 
-Tine.Projects.Model.Project.getDefaultData = function() { 
+Tine.Projects.Model.Project.getDefaultData = function() {
     var app = Tine.Tinebase.appMgr.get('Projects');
     var defaultsContainer = Tine.Projects.registry.get('defaultContainer');
     

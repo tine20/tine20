@@ -16,7 +16,7 @@
  * @subpackage  CustomField
  */
 class Tinebase_Model_CustomField_Grant extends Tinebase_Record_Abstract 
-{   
+{
     /**
      * grant to write custom field
      */

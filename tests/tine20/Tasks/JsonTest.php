@@ -193,7 +193,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     {
         $scheduler = Tinebase_Core::getScheduler();
         $scheduler->addTask('Tinebase_Alarm', $this->_createTask());
-        try {   
+        try {
             $scheduler->run();
         } catch (Tinebase_Exception $te) {
             // do nothing
@@ -207,7 +207,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function _createTask()
     {
-        $request = new Zend_Controller_Request_Http(); 
+        $request = new Zend_Controller_Request_Http();
         $request->setControllerName('Tinebase_Alarm');
         $request->setActionName('sendPendingAlarms');
         $request->setParam('eventName', 'Tinebase_Event_Async_Minutely');
@@ -344,7 +344,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
      * 
      */
     public function testDeleteOrganizer()
-    {       
+    {
         $organizer = $this->_createUser();
         $organizerId = $organizer->getId();
         
@@ -364,7 +364,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($task['organizer']['accountId'], $organizerId);
 
         // delete user
-        Tinebase_User::getInstance()->deleteUser($organizerId);       
+        Tinebase_User::getInstance()->deleteUser($organizerId);
 
         // test seach search tasks - organizer is deleted
         $tasks = $this->_backend->searchTasks($this->_getFilter(), $this->_getPaging());
@@ -443,7 +443,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
      * @return Tasks_Model_Task
      */
     protected function _getFilter()
-    {        
+    {
         // define filter
         return array(
             array('field' => 'container_id', 'operator' => 'specialNode', 'value' => 'all'),

@@ -92,7 +92,7 @@ class Tinebase_State
         
         $stateInfo = $this->loadStateInfo();
         
-    	$stateInfo[$_name] = $_value;
+        $stateInfo[$_name] = $_value;
         $this->saveStateInfo($stateInfo);
     }
     

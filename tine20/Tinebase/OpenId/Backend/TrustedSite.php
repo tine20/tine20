@@ -37,5 +37,5 @@ class Tinebase_OpenId_Backend_TrustedSite extends Tinebase_Backend_Sql_Abstract
      *
      * @var boolean
      */
-    protected $_modlogActive = false;    
+    protected $_modlogActive = false;
 }

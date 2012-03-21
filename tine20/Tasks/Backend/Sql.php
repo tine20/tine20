@@ -152,7 +152,7 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     protected function _seperateTaskData($_task)
     {
-    	$_task->convertDates = true;
+        $_task->convertDates = true;
         $taskArray = $_task->toArray();
         $TableDescr = $this->_getTableInstance('tasks')->info();
         $taskparts['tasks'] = array_intersect_key($taskArray, array_flip($TableDescr['cols']));

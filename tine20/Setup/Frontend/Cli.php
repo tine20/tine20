@@ -104,7 +104,7 @@ class Setup_Frontend_Cli
             Setup_Controller::getInstance()->saveAcceptedTerms($options['acceptedTermsVersion']);
         }
         
-        echo "Successfully installed " . count($applications) . " applications.\n";        
+        echo "Successfully installed " . count($applications) . " applications.\n";
     }
 
     /**
@@ -127,7 +127,7 @@ class Setup_Frontend_Cli
                 fwrite(STDOUT, PHP_EOL . file_get_contents(dirname(dirname(dirname(__FILE__))) . '/PRIVACY' ));
                 $privacyAnswer = Tinebase_Server_Cli::promptInput('I have read the privacy agreement and accept it (type "yes" to accept)');
             
-                if (! (strtoupper($licenseAnswer) == 'YES' && strtoupper($privacyAnswer) == 'YES')) { 
+                if (! (strtoupper($licenseAnswer) == 'YES' && strtoupper($privacyAnswer) == 'YES')) {
                     echo "error: you need to accept the terms! exiting \n";
                     exit (1);
                 }
@@ -216,7 +216,7 @@ class Setup_Frontend_Cli
             $updatecount = $result['updated'];
         }
         
-        echo "Updated " . $updatecount . " applications.\n";        
+        echo "Updated " . $updatecount . " applications.\n";
     }
 
     /**
@@ -246,7 +246,7 @@ class Setup_Frontend_Cli
         
         $controller->uninstallApplications($applications->name);
 
-        echo "Successfully uninstalled " . count($applications) . " applications.\n";        
+        echo "Successfully uninstalled " . count($applications) . " applications.\n";
     }
 
     /**

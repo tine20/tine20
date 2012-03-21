@@ -56,8 +56,8 @@ class Zend_Scheduler
      * @param array $options Backend options
      */
     public function __construct($backend = null, array $options = array())
-    {	
-		$this->setTime();
+    {
+        $this->setTime();
         if ($backend !== null) {
             $this->setBackend($backend, $options);
         }
@@ -115,7 +115,7 @@ class Zend_Scheduler
      */
     public function getBackend()
     {
-    	return $this->_backend;
+        return $this->_backend;
     }
     
     /** 
@@ -271,7 +271,7 @@ class Zend_Scheduler
         }
 
         // Load previously queued tasks
-        $this->_tasks = $this->mergeTasks();        
+        $this->_tasks = $this->mergeTasks();
         
         if (empty($this->_tasks)) {
             return null;

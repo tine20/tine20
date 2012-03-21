@@ -31,9 +31,9 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook WebDAV Container Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook WebDAV Container Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -96,7 +96,7 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
         $this->testCreateFile();
         
         $requestedProperties = array(
-        	'{http://calendarserver.org/ns/}getctag',
+            '{http://calendarserver.org/ns/}getctag',
             '{DAV:}resource-id'
         );
         

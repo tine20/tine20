@@ -224,6 +224,6 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         $dateString = ($date instanceof Tinebase_DateTime) ? $date->format(Tinebase_Record_Abstract::ISO8601LONG) : $date;
         $dateWhere = $this->_db->quoteInto('time < ?', $dateString);
         
-        $result = $this->_db->delete($this->getTablePrefix() . $this->getTableName(), $dateWhere);            
+        $result = $this->_db->delete($this->getTablePrefix() . $this->getTableName(), $dateWhere);
     }
 }

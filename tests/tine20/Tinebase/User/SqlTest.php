@@ -69,7 +69,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
             // do nothing 
         }
         
-        $this->objects['users'] = array();     
+        $this->objects['users'] = array();
     }
 
     /**
@@ -329,7 +329,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
         
-        $this->_backend->getUserById($testUser, 'Tinebase_Model_FullUser');        
+        $this->_backend->getUserById($testUser, 'Tinebase_Model_FullUser');
     }
     
     public function testSanitizeAccountPrimaryGroupId()
@@ -340,15 +340,15 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
         $adminGroupId   = Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId();
         $nonExistingId  = '77777666999';
         
-        $account->accountPrimaryGroup = $defaultGroupId;  
+        $account->accountPrimaryGroup = $defaultGroupId;
         $this->assertEquals($defaultGroupId, $account->sanitizeAccountPrimaryGroup());
         $this->assertEquals($defaultGroupId, $account->accountPrimaryGroup);
         
-        $account->accountPrimaryGroup = $adminGroupId; 
+        $account->accountPrimaryGroup = $adminGroupId;
         $this->assertEquals($adminGroupId, $account->sanitizeAccountPrimaryGroup());
         $this->assertEquals($adminGroupId, $account->accountPrimaryGroup);
         
-        $account->accountPrimaryGroup = $nonExistingId; 
+        $account->accountPrimaryGroup = $nonExistingId;
         $this->assertEquals($defaultGroupId, $account->sanitizeAccountPrimaryGroup());
         $this->assertEquals($defaultGroupId, $account->accountPrimaryGroup);
         
@@ -368,7 +368,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit User',
             'accountEmailAddress'   => 'phpunit@tine20.org'
-        )); 
+        ));
         
         return $user;
     }

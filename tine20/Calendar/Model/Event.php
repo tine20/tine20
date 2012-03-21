@@ -370,10 +370,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function doFreeBusyCleanup()
     {
-    	if ($this->hasGrant(Tinebase_Model_Grants::GRANT_READ)) {
-    	   return FALSE;
-    	}
-    	
+        if ($this->hasGrant(Tinebase_Model_Grants::GRANT_READ)) {
+           return FALSE;
+        }
+        
         $this->_properties = array_intersect_key($this->_properties, array_flip(array(
             'id', 
             'dtstart', 

@@ -22,8 +22,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * 
      * @return string
      */
-	public static function getServiceMap()
-	{
+    public static function getServiceMap()
+    {
         $smd = Tinebase_Server_Json::getServiceMap();
         
         $smdArray = $smd->toArray();
@@ -310,7 +310,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             #Tinebase_Config::getInstance()->getConfig(Tinebase_Config::USERBACKEND, null, $_SERVER["HTTP_REFERER"])->value;
             
             // try to login user
-            $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR'], 'TineHttpPost') === TRUE); 
+            $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR'], 'TineHttpPost') === TRUE);
         } else {
             $success = FALSE;
         }
@@ -342,8 +342,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     }
     
     /**
-	 * checks authentication and display Tine 2.0 main screen 
-	 */
+     * checks authentication and display Tine 2.0 main screen 
+     */
     public function mainScreen()
     {
         $this->checkAuth();
@@ -491,7 +491,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     protected function _deliverChangedFiles($_fileType)
     {
-	    // close session to allow other requests
+        // close session to allow other requests
         Zend_Session::writeClose(true);
         
         $cacheId         = null;
@@ -504,7 +504,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $ifModifiedSince = trim($_SERVER['If_Modified_Since'], '"');
         } elseif (isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
             $clientETag     = trim($_SERVER['HTTP_IF_NONE_MATCH'], '"');
-            $ifModifiedSince = trim($_SERVER['HTTP_IF_MODIFIED_SINCE'], '"'); 
+            $ifModifiedSince = trim($_SERVER['HTTP_IF_MODIFIED_SINCE'], '"');
         }
         
         $filesToWatch = $this->_getFilesToWatch($_fileType);
@@ -613,19 +613,19 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     }
     
     /**
-	 * activate user account
-	 *
-	 * @param 	string $id
-	 * 
-	 */
-	public function activateUser( $id ) 
-	{
-		// update registration table and get username / account values
-		$account = Tinebase_User_Registration::getInstance()->activateUser( $id );
+     * activate user account
+     *
+     * @param     string $id
+     * 
+     */
+    public function activateUser( $id ) 
+    {
+        // update registration table and get username / account values
+        $account = Tinebase_User_Registration::getInstance()->activateUser( $id );
 
-		if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' activated account for ' . $account['accountLoginName']);
-		
-		$view = new Zend_View();
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' activated account for ' . $account['accountLoginName']);
+        
+        $view = new Zend_View();
         $view->title="Tine 2.0 User Activation";
         $view->username = $account['accountLoginName'];
         $view->loginUrl = $_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'];
@@ -634,73 +634,73 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('activate.php');
-	
-	}
-	
-	/**
-	 * show captcha
-	 *
-	 * @todo	add to user registration process
-	 */
-	public function showCaptcha () 
-	{	
-		$captcha = Tinebase_User_Registration::getInstance()->generateCaptcha();
-		
+    
+    }
+    
+    /**
+     * show captcha
+     *
+     * @todo    add to user registration process
+     */
+    public function showCaptcha () 
+    {
+        $captcha = Tinebase_User_Registration::getInstance()->generateCaptcha();
+        
         //Tell the browser what kind of file is come in
         header("Content-Type: image/jpeg");
 
         //Output the newly created image in jpeg format
-        ImageJpeg($captcha);		
-		
-	}
+        ImageJpeg($captcha);
+        
+    }
 
-	/**
-	 * receives file uploads and stores it in the file_uploads db
-	 * 
-	 * @throws Tinebase_Exception_UnexpectedValue
-	 * @throws Tinebase_Exception_NotFound
-	 */
-	public function uploadTempFile()
-	{
-	    try {
-    	    $this->checkAuth();
-    	    
-    	    // close session to allow other requests
+    /**
+     * receives file uploads and stores it in the file_uploads db
+     * 
+     * @throws Tinebase_Exception_UnexpectedValue
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function uploadTempFile()
+    {
+        try {
+            $this->checkAuth();
+            
+            // close session to allow other requests
             Zend_Session::writeClose(true);
         
-    	    $tempFile = Tinebase_TempFile::getInstance()->uploadTempFile();
-    	    
-    	    die(Zend_Json::encode(array(
-    	       'status'   => 'success',
-    	       'tempFile' => $tempFile->toArray(),
-    	    )));
-	    } catch (Tinebase_Exception $exception) {
-	        Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . " File upload could not be done, due to the following exception: \n" . $exception);
-	        
-	        if (! headers_sent()) {
-	           header("HTTP/1.0 500 Internal Server Error");
-	        }
-	        die(Zend_Json::encode(array(
+            $tempFile = Tinebase_TempFile::getInstance()->uploadTempFile();
+            
+            die(Zend_Json::encode(array(
+               'status'   => 'success',
+               'tempFile' => $tempFile->toArray(),
+            )));
+        } catch (Tinebase_Exception $exception) {
+            Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . " File upload could not be done, due to the following exception: \n" . $exception);
+            
+            if (! headers_sent()) {
+               header("HTTP/1.0 500 Internal Server Error");
+            }
+            die(Zend_Json::encode(array(
                'status'   => 'failed',
             )));
-	    }
-	}
-	
-	/**
-	 * downloads an image/thumbnail at a given size
-	 *
-	 * @param unknown_type $application
-	 * @param string $id
-	 * @param string $location
-	 * @param int $width
-	 * @param int $height
-	 * @param int $ratiomode
-	 */
-	public function getImage($application, $id, $location, $width, $height, $ratiomode)
-	{
-	    $this->checkAuth();
+        }
+    }
+    
+    /**
+     * downloads an image/thumbnail at a given size
+     *
+     * @param unknown_type $application
+     * @param string $id
+     * @param string $location
+     * @param int $width
+     * @param int $height
+     * @param int $ratiomode
+     */
+    public function getImage($application, $id, $location, $width, $height, $ratiomode)
+    {
+        $this->checkAuth();
 
-	    // close session to allow other requests
+        // close session to allow other requests
         Zend_Session::writeClose(true);
         
         $clientETag      = null;
@@ -711,12 +711,12 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $ifModifiedSince = trim($_SERVER['If_Modified_Since'], '"');
         } elseif (isset($_SERVER['HTTP_IF_NONE_MATCH']) && isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
             $clientETag     = trim($_SERVER['HTTP_IF_NONE_MATCH'], '"');
-            $ifModifiedSince = trim($_SERVER['HTTP_IF_MODIFIED_SINCE'], '"'); 
+            $ifModifiedSince = trim($_SERVER['HTTP_IF_MODIFIED_SINCE'], '"');
         }
-	    
-	    if ($application == 'Tinebase' && $location == 'tempFile') {
-	        
-	        $tempFile = Tinebase_TempFile::getInstance()->getTempFile($id);
+        
+        if ($application == 'Tinebase' && $location == 'tempFile') {
+            
+            $tempFile = Tinebase_TempFile::getInstance()->getTempFile($id);
 
             $imgInfo = Tinebase_ImageHelper::getImageInfoFromBlob(file_get_contents($tempFile->path));
             $image = new Tinebase_Model_Image($imgInfo + array(
@@ -724,12 +724,12 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 'id'          => $id,
                 'location'    => $location
             ));
-    	} else {
-    	    $image = Tinebase_Controller::getInstance()->getImage($application, $id, $location);
-    	}
-    	
-    	$serverETag = sha1($image->blob . $width . $height . $ratiomode);
-    	
+        } else {
+            $image = Tinebase_Controller::getInstance()->getImage($application, $id, $location);
+        }
+        
+        $serverETag = sha1($image->blob . $width . $height . $ratiomode);
+        
         // cache for 3600 seconds
         $maxAge = 3600;
         header('Cache-Control: private, max-age=' . $maxAge);
@@ -749,12 +749,12 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             #if ($cache->test($serverETag) === true) {
             #    $image = $cache->load($serverETag);
             #} else {
-            	if ($width != -1 && $height != -1) {
-            	    Tinebase_ImageHelper::resize($image, $width, $height, $ratiomode);
-            	}
+                if ($width != -1 && $height != -1) {
+                    Tinebase_ImageHelper::resize($image, $width, $height, $ratiomode);
+                }
             #    $cache->save($image, $serverETag);
             #}
-    	
+        
             header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
             header('Content-Type: '. $image->mime);
             header('Etag: "' . $serverETag . '"');
@@ -763,26 +763,26 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             
             die($image->blob);
         }
-	}
-	
-	/**
-	 * crops a image identified by an imgageURL and returns a new tempFileImage
-	 * 
-	 * @param  string $imageurl imageURL of the image to be croped
-	 * @param  int    $left     left position of crop window
-	 * @param  int    $top      top  position of crop window
-	 * @param  int    $widht    widht  of crop window
-	 * @param  int    $height   heidht of crop window
-	 * @return string imageURL of new temp image
-	 * 
-	 */
-	public function cropImage($imageurl, $left, $top, $widht, $height)
-	{
-	    $this->checkAuth();
-	    
-	    $image = Tinebase_Model_Image::getImageFromImageURL($imageurl);
-	    Tinebase_ImageHelper::crop($image, $left, $top, $widht, $height);
-	    
-	}
-	
+    }
+    
+    /**
+     * crops a image identified by an imgageURL and returns a new tempFileImage
+     * 
+     * @param  string $imageurl imageURL of the image to be croped
+     * @param  int    $left     left position of crop window
+     * @param  int    $top      top  position of crop window
+     * @param  int    $widht    widht  of crop window
+     * @param  int    $height   heidht of crop window
+     * @return string imageURL of new temp image
+     * 
+     */
+    public function cropImage($imageurl, $left, $top, $widht, $height)
+    {
+        $this->checkAuth();
+        
+        $image = Tinebase_Model_Image::getImageFromImageURL($imageurl);
+        Tinebase_ImageHelper::crop($image, $left, $top, $widht, $height);
+        
+    }
+    
 }

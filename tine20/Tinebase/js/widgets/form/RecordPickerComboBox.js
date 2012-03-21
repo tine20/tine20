@@ -169,7 +169,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             contextmenu: Ext.emptyFn
         });
  
-        this.relayEvents(c, ['contextmenu']);        
+        this.relayEvents(c, ['contextmenu']);
     },
     
     /**

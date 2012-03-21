@@ -34,8 +34,8 @@ Tine.Voipmanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
         var type = this.activeContentType;
         var group = this.activeContentGroup;
         
-        //console.log(group +  '/' + type);		
-         if (! this[group + type  + 'GridPanel']) { 
+        //console.log(group +  '/' + type);
+         if (! this[group + type  + 'GridPanel']) {
             this[group + type + 'GridPanel'] = new Tine[this.app.appName][group + type + 'GridPanel']({
                 app: this.app
             });
@@ -49,7 +49,7 @@ Tine.Voipmanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     /**
      * sets toolbar in mainscreen
      */
-    showNorthPanel: function() { 
+    showNorthPanel: function() {
         var type = this.activeContentType;
         var group = this.activeContentGroup;
               
@@ -57,14 +57,14 @@ Tine.Voipmanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
             this[group + type + 'ActionToolbar'] = this[group + type + 'GridPanel'].actionToolbar;
         }
         
-        Tine.Tinebase.MainScreen.setActiveToolbar(this[group + type + 'ActionToolbar'], true); 
+        Tine.Tinebase.MainScreen.setActiveToolbar(this[group + type + 'ActionToolbar'], true);
     },
     
     /**
      * overwrite default
      * @return Tine.Voipmanager.PhoneTreePanel
      */
-    getWestPanel: function() { 
+    getWestPanel: function() {
 
         if(!this.westPanel) {
             this.westPanel = new Tine.Voipmanager.PhoneTreePanel({app: this.app});

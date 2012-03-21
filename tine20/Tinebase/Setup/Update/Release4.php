@@ -16,7 +16,7 @@
  * @subpackage  Setup
  */
 class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
-{    
+{
     /**
      * update to 4.1
      * - add index for accounts.contact_id

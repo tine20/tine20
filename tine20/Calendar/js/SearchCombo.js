@@ -68,7 +68,7 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
         this.loadingText = _('Searching...');
 
         this.recordClass = Tine.Calendar.Model.Event;
-        this.recordProxy = Tine.Calendar.eventBackend;      
+        this.recordProxy = Tine.Calendar.eventBackend;
 
         this.displayField = this.recordClass.getMeta('titleProperty');
         this.valueField = this.recordClass.getMeta('idProperty');
@@ -149,12 +149,12 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
                 scope: this,
                 change: function() {
                     this.store.removeAll();
-                    this.store.load(); 
+                    this.store.load();
                     }
             }
-        }); 
+        });
 
-        this.assetHeight += this.footer.getHeight();      
+        this.assetHeight += this.footer.getHeight();
     },
     
     onBlur: Ext.emptyFn,

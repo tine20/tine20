@@ -57,7 +57,7 @@ class Tinebase_SambaSAM
      */
     public static function getInstance() 
     {
-		if (self::$_instance === NULL) {
+        if (self::$_instance === NULL) {
             $backendType = self::getConfiguredBackend();
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' samba sam backend: ' . $backendType);
             
@@ -104,9 +104,9 @@ class Tinebase_SambaSAM
     public static function getConfiguredBackend()
     {
         if(isset(Tinebase_Core::getConfig()->samba)) {
-            $backendType = Tinebase_Core::getConfig()->samba->get('backend', self::LDAP); 
-			$backendType = ucfirst($backendType);
-	    } else {
+            $backendType = Tinebase_Core::getConfig()->samba->get('backend', self::LDAP);
+            $backendType = ucfirst($backendType);
+        } else {
             $backendType = self::LDAP;
         }
         return $backendType;

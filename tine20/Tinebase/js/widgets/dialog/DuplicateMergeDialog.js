@@ -106,7 +106,7 @@ Tine.widgets.dialog.DuplicateMergeDialog = Ext.extend(Ext.FormPanel, {
         
         Ext.each(allRecords, function(rec) {
             if(rec.id != updateRecord.id) {
-                removeRecords.push(rec);     
+                removeRecords.push(rec);
             }
         });
         
@@ -145,11 +145,11 @@ Tine.widgets.dialog.DuplicateMergeDialog = Ext.extend(Ext.FormPanel, {
      * @param {} step
      * @param {} failure
      */
-    onFailure: function(step, failure) {            
+    onFailure: function(step, failure) {
         if(step == 'update') {
              Tine.Tinebase.ExceptionHandler.handleRequestException(failure, function() { if (this.loadMask) this.loadMask.hide(); }, this);
         } else {
-             Ext.MessageBox.alert(_('Merge Failed'), String.format(_('The merge succeeded, but the duplicate {0} could not be deleted.'), this.recordClass.getRecordName()), function() { Tine.Tinebase.ExceptionHandler.handleRequestException(failure); if (this.loadMask) this.loadMask.hide();}, this);                    
+             Ext.MessageBox.alert(_('Merge Failed'), String.format(_('The merge succeeded, but the duplicate {0} could not be deleted.'), this.recordClass.getRecordName()), function() { Tine.Tinebase.ExceptionHandler.handleRequestException(failure); if (this.loadMask) this.loadMask.hide();}, this);
         }
     },
     /**

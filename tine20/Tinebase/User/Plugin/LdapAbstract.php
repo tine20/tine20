@@ -73,7 +73,7 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
      */
     public function inspectAddUser(Tinebase_Model_FullUser $_user, array &$_ldapData)
     {
-        $this->_user2ldap($_user, $_ldapData);    
+        $this->_user2ldap($_user, $_ldapData);
     }
     
     /**
@@ -102,7 +102,7 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
      */
     public function inspectSetPassword($_userId, $_password, $_encrypt, $_mustChange, array &$_ldapData)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Nothing to be done on password change.');    
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Nothing to be done on password change.');
     }
     
     /**
@@ -113,7 +113,7 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
      */
     public function inspectStatus($_status, array &$_ldapData)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Nothing to be done on status change.');    	
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Nothing to be done on status change.');
     }
     
     /**
@@ -127,10 +127,10 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Nothing to be done on expiry change.');
     }
     
-	/**
-	 * (non-PHPdoc)
-	 * @see Tinebase_User_Plugin_LdapAbstract::inspectUpdateUser()
-	 */
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase_User_Plugin_LdapAbstract::inspectUpdateUser()
+     */
     public function inspectUpdateUser(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry)
     {
         $this->_user2ldap($_user, $_ldapData, $_ldapEntry);

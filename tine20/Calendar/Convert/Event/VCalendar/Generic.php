@@ -35,7 +35,7 @@ class Calendar_Convert_Event_VCalendar_Generic extends Calendar_Convert_Event_VC
         'exdate',
         'rrule',
         'recurid',
-    	'is_all_day_event',
+        'is_all_day_event',
         #'rrule_until',
         'originator_tz'
     );

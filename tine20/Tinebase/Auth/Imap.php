@@ -16,7 +16,7 @@
  * @subpackage  Auth
  */
 class Tinebase_Auth_Imap extends Zend_Auth_Adapter_Imap implements Tinebase_Auth_Interface
-{    
+{
     /**
      * Constructor
      *

@@ -36,20 +36,20 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'sort' => 'name'
         ));
         $asteriskSipPeers = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->search(NULL, $pagination);
-        $encodedAsteriskSipPeers = Zend_Json::encode($asteriskSipPeers->toArray());    
+        $encodedAsteriskSipPeers = Zend_Json::encode($asteriskSipPeers->toArray());
         
         if (!empty($phoneId)) {
             $snomPhone = Voipmanager_Controller_Snom_Phone::getInstance()->get($phoneId);
-            $_phoneData = $snomPhone->toArray();             
+            $_phoneData = $snomPhone->toArray();
             $_phoneSettingsData = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->get($_phoneData['id'])->toArray();
             
             $_templateData = Voipmanager_Controller_Snom_Template::getInstance()->get($_phoneData['template_id'])->toArray();
-            $_settingsData = Voipmanager_Controller_Snom_Setting::getInstance()->get($_templateData['setting_id'])->toArray();            
+            $_settingsData = Voipmanager_Controller_Snom_Setting::getInstance()->get($_templateData['setting_id'])->toArray();
 
             $_writableFields = array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','call_waiting');
 
             foreach($_writableFields AS $wField)
-            {               
+            {
                 $_fieldRW = $wField.'_writable';
                 
                  if($_settingsData[$_fieldRW] == '0')
@@ -58,9 +58,9 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                      $_notWritable[$wField] = 'true';
                  } else {
                      if(empty($_phoneSettingsData[$wField])) {
-                         $_phoneSettingsData[$wField] = $_settingsData[$wField];                    
+                         $_phoneSettingsData[$wField] = $_settingsData[$wField];
                      }
-                     $_notWritable[$wField] = '';    
+                     $_notWritable[$wField] = '';
                  }
             }
 
@@ -81,7 +81,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         }
 
         $encodedTemplates = Zend_Json::encode($snomTemplates->toArray());
-        $encodedLocations = Zend_Json::encode($snomLocations->toArray());        
+        $encodedLocations = Zend_Json::encode($snomLocations->toArray());
                         
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
@@ -106,11 +106,11 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         } else {
             $sipPeer = new Voipmanager_Model_Asterisk_SipPeer(array(
                 'type'  => 'user'
-            )); 
+            ));
         }
 
         // encode the asterisk sip peer array
-        $encodedSipPeer = Zend_Json::encode($sipPeer->toArray());                   
+        $encodedSipPeer = Zend_Json::encode($sipPeer->toArray());
         
         $encodedContexts = Zend_Json::encode(Voipmanager_Controller_Asterisk_Context::getInstance()->search()->toArray());
         
@@ -135,7 +135,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     {
         if (!empty($contextId)) {
             $context = Voipmanager_Controller_Asterisk_Context::getInstance()->get($contextId);
-            $encodedContext = Zend_Json::encode($context->toArray());                   
+            $encodedContext = Zend_Json::encode($context->toArray());
         } else {
             $encodedContext = '{}';
         }
@@ -161,7 +161,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     {
         if (!empty($voicemailId)) {
             $voicemail = Voipmanager_Controller_Asterisk_Voicemail::getInstance()->get($voicemailId);
-            $encodedVoicemail = Zend_Json::encode($voicemail->toArray());                   
+            $encodedVoicemail = Zend_Json::encode($voicemail->toArray());
         } else {
             $encodedVoicemail = '{}';
         }
@@ -199,7 +199,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         }
         
         // encode the location array
-        $encodedLocation = Zend_Json::encode($location->toArray());                   
+        $encodedLocation = Zend_Json::encode($location->toArray());
         
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
@@ -279,7 +279,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         if (!empty($templateId)) {
             $template = Voipmanager_Controller_Snom_Template::getInstance()->get($templateId);
             // encode the template array
-            $encodedTemplate = Zend_Json::encode($template->toArray()); 
+            $encodedTemplate = Zend_Json::encode($template->toArray());
         } else {
             $encodedTemplate = '{}';
         }
@@ -320,7 +320,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     {
         if (!empty($meetmeId)) {
             $meetme = Voipmanager_Controller_Asterisk_Meetme::getInstance()->get($meetmeId);
-            $encodedMeetme = Zend_Json::encode($meetme->toArray());                   
+            $encodedMeetme = Zend_Json::encode($meetme->toArray());
         } else {
             $encodedMeetme = '{}';
         }
@@ -333,6 +333,6 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('jsclient.php');
-    }	 
-	 
+    }     
+     
 }

@@ -15,10 +15,10 @@ Ext.ns('Tine.Admin.Tags');
 
 Tine.Admin.Tags.Main = {
     
-	//  references to created toolbar and grid panel
-	tagsToolbar: null,
-	gridPanel: null,
-	
+    //  references to created toolbar and grid panel
+    tagsToolbar: null,
+    gridPanel: null,
+    
     actions: {
         addTag: null,
         editTag: null,
@@ -46,7 +46,7 @@ Tine.Admin.Tags.Main = {
          */
         editTag: function (button, event) {
             var selectedRows = Ext.getCmp('AdminTagsGrid').getSelectionModel().getSelections();
-            Tine.Admin.Tags.EditDialog.openWindow({ 
+            Tine.Admin.Tags.EditDialog.openWindow({
                 tag: selectedRows[0],
                 listeners: {
                     scope: this,
@@ -65,8 +65,8 @@ Tine.Admin.Tags.Main = {
                 if (button === 'yes') {
                 
                     var tagIds = [],
-                    	selectedRows = Ext.getCmp('AdminTagsGrid').getSelectionModel().getSelections();
-                    	
+                        selectedRows = Ext.getCmp('AdminTagsGrid').getSelectionModel().getSelections();
+                        
                     for (var i = 0; i < selectedRows.length; ++i) {
                         tagIds.push(selectedRows[i].id);
                     }
@@ -120,17 +120,17 @@ Tine.Admin.Tags.Main = {
     },
     
     displayTagsToolbar: function () {
-    	// if toolbar was allready created set active toolbar and return
-    	if (this.tagsToolbar) {
-    		Tine.Tinebase.MainScreen.setActiveToolbar(this.tagsToolbar, true);
-    		return;
-    	}
-    	
+        // if toolbar was allready created set active toolbar and return
+        if (this.tagsToolbar) {
+            Tine.Tinebase.MainScreen.setActiveToolbar(this.tagsToolbar, true);
+            return;
+        }
+        
         var TagsQuickSearchField = new Ext.ux.SearchField({
             id: 'TagsQuickSearchField',
             width: 240,
             emptyText: Tine.Tinebase.translation._hidden('enter searchfilter')
-        }); 
+        });
         
         TagsQuickSearchField.on('change', function () {
             Ext.getCmp('AdminTagsGrid').getStore().load({
@@ -146,26 +146,26 @@ Tine.Admin.Tags.Main = {
             split: false,
             //height: 26,
             items: [{
-				xtype: 'buttongroup',
-				columns: 5,
-				items: [
-					Ext.apply(new Ext.Button(this.actions.addTag), {
-						scale: 'medium',
-						rowspan: 2,
-						iconAlign: 'top'
-					}), {xtype: 'tbspacer', width: 10},
-					Ext.apply(new Ext.Button(this.actions.editTag), {
-						scale: 'medium',
-						rowspan: 2,
-						iconAlign: 'top'
-					}), {xtype: 'tbspacer', width: 10},
-					Ext.apply(new Ext.Button(this.actions.deleteTag), {
-						scale: 'medium',
-						rowspan: 2,
-						iconAlign: 'top'
-					})
-				]
-			}, '->', 
+                xtype: 'buttongroup',
+                columns: 5,
+                items: [
+                    Ext.apply(new Ext.Button(this.actions.addTag), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
+                    }), {xtype: 'tbspacer', width: 10},
+                    Ext.apply(new Ext.Button(this.actions.editTag), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
+                    }), {xtype: 'tbspacer', width: 10},
+                    Ext.apply(new Ext.Button(this.actions.deleteTag), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
+                    })
+                ]
+            }, '->', 
                 this.translation.gettext('Search:'), 
                 ' ',
                 TagsQuickSearchField
@@ -176,12 +176,12 @@ Tine.Admin.Tags.Main = {
     },
 
     displayTagsGrid: function () {
-    	// if grid panel was allready created set active content panel and return
-    	if (this.gridPanel) {
-    		Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
-    		return;
-    	}
-    	
+        // if grid panel was allready created set active content panel and return
+        if (this.gridPanel) {
+            Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
+            return;
+        }
+        
         // the datastore
         var dataStore = new Ext.data.JsonStore({
             baseParams: {
@@ -201,7 +201,7 @@ Tine.Admin.Tags.Main = {
             options = options || {};
             options.params = options.params || {};
             options.params.query = Ext.getCmp('TagsQuickSearchField').getValue();
-        }, this); 
+        }, this);
                 
         // the paging toolbar
         var pagingToolbar = new Ext.PagingToolbar({
@@ -210,7 +210,7 @@ Tine.Admin.Tags.Main = {
             displayInfo: true,
             displayMsg: this.translation.gettext('Displaying tags {0} - {1} of {2}'),
             emptyMsg: this.translation.gettext("No tags to display")
-        }); 
+        });
         
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel({
@@ -220,7 +220,7 @@ Tine.Admin.Tags.Main = {
             },
             columns: [
                 { id: 'color', header: this.translation.gettext('Color'), dataIndex: 'color', width: 25, renderer: function (color,meta,record) {
-                	return '<div style="margin-top:1px;width: 8px; height: 8px; background-color:' + color + '; border-radius:5px;border: 1px solid black;" title="' + record.get('name') + ' (' +  _('Usage:&#160;') + record.get('occurrence') + ')">&#160;</div>';
+                    return '<div style="margin-top:1px;width: 8px; height: 8px; background-color:' + color + '; border-radius:5px;border: 1px solid black;" title="' + record.get('name') + ' (' +  _('Usage:&#160;') + record.get('occurrence') + ')">&#160;</div>';
                 }},
                 { id: 'name', header: this.translation.gettext('Name'), dataIndex: 'name', width: 200 },
                 { id: 'description', header: this.translation.gettext('Description'), dataIndex: 'description', width: 500}
@@ -276,15 +276,15 @@ Tine.Admin.Tags.Main = {
             }
             
             if (! this.contextMenu) {
-	            this.contextMenu = new Ext.menu.Menu({
-	                id: 'ctxMenuTags', 
-	                items: [
-	                    this.actions.editTag,
-	                    this.actions.deleteTag,
-	                    '-',
-	                    this.actions.addTag 
-	                ]
-	            });
+                this.contextMenu = new Ext.menu.Menu({
+                    id: 'ctxMenuTags', 
+                    items: [
+                        this.actions.editTag,
+                        this.actions.deleteTag,
+                        '-',
+                        this.actions.addTag 
+                    ]
+                });
             }
             this.contextMenu.showAt(eventObject.getXY());
         }, this);
@@ -316,10 +316,10 @@ Tine.Admin.Tags.Main = {
 
     show: function () {
         if (this.tagsToolbar === null || this.gridPanel) {
-        	this.initComponent();
+            this.initComponent();
         }
 
-		this.displayTagsToolbar();
+        this.displayTagsToolbar();
         this.displayTagsGrid();
 
         this.loadData();

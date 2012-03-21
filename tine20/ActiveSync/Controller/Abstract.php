@@ -154,7 +154,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
         if (empty($this->_contentControllerName)) {
             $this->_contentControllerName = $this->_applicationName . '_Controller_' . $this->_modelName;
         }
-        $this->_contentController   = call_user_func(array($this->_contentControllerName, 'getInstance')); 
+        $this->_contentController   = call_user_func(array($this->_contentControllerName, 'getInstance'));
     }
     
     /**
@@ -258,7 +258,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
             }
             
             if(!Tinebase_Core::getUser()->hasGrant($_folderId, Tinebase_Model_Grants::GRANT_SYNC)) {
-            	throw new ActiveSync_Exception_FolderNotFound('No sync right for folder: ' . $_folderId);
+                throw new ActiveSync_Exception_FolderNotFound('No sync right for folder: ' . $_folderId);
             }
             
             $folder[$container->id] = array(
@@ -319,7 +319,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " update CollectionId: $_folderId Id: $_serverId");
         
-        $oldEntry = $this->_contentController->get($_serverId); 
+        $oldEntry = $this->_contentController->get($_serverId);
         
         $entry = $this->toTineModel($_entry, $oldEntry);
         $entry->last_modified_time = new Tinebase_DateTime($this->_syncTimeStamp);
@@ -392,7 +392,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
         if($_containerId == $this->_specialFolderName) {
             $containerIds = array_keys($syncableContainers);
         } elseif(array_key_exists($_containerId, $syncableContainers)) {
-            $containerIds = array($_containerId);        
+            $containerIds = array($_containerId);
         }
 
         $_filter->addFilter($_filter->createFilter('container_id', 'in', $containerIds));

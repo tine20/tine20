@@ -248,7 +248,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             recordPrefix: this.recordPrefix,
             emptyText: _('Search for groups ...'),
             onSelect: this.onAddRecordFromCombo
-        });        
+        });
     },
     
     /**
@@ -274,7 +274,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
      */
     onAddRecordFromCombo: function (recordToAdd) {
         var recordData = {},
-        	record;
+            record;
         
         // account record selected
         if (recordToAdd.data.account_id) {
@@ -287,9 +287,9 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             record = new this.newRecordClass(Ext.applyIf(recordData, this.newRecordDefaults), recordToAdd.data.account_id);
         } 
         // group or addressbook list record selected
-        else if (recordToAdd.data.group_id || recordToAdd.data.id) {         	
-        	recordData[this.recordPrefix + 'id'] = recordToAdd.data.group_id || recordToAdd.data.id;
-        	recordData[this.recordPrefix + 'type'] = 'group';
+        else if (recordToAdd.data.group_id || recordToAdd.data.id) {
+            recordData[this.recordPrefix + 'id'] = recordToAdd.data.group_id || recordToAdd.data.id;
+            recordData[this.recordPrefix + 'type'] = 'group';
             recordData[this.recordPrefix + 'name'] = recordToAdd.data.name;
             recordData[this.recordPrefix + 'data'] = recordToAdd.data;
             

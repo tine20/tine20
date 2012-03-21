@@ -56,7 +56,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**

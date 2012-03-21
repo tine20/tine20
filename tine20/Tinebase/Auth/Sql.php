@@ -16,7 +16,7 @@
  * @subpackage  Auth 
  */
 class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Auth_Interface
-{   
+{
     const ACCTNAME_FORM_USERNAME  = 2;
     const ACCTNAME_FORM_BACKSLASH = 3;
     const ACCTNAME_FORM_PRINCIPAL = 4;

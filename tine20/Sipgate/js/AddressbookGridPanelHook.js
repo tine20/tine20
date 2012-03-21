@@ -32,7 +32,7 @@ Tine.Sipgate.AddressbookGridPanelHook = function(config) {
     });
 
     this.smsMenu = new Ext.menu.Menu({
-    });    
+    });
     
     this.callContactAction = new Ext.Action({
         text: this.app.i18n._('Call contact'),
@@ -79,7 +79,7 @@ Tine.Sipgate.AddressbookGridPanelHook = function(config) {
     
     // register in toolbar + contextmenu
     Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ActionToolbar-leftbtngrp', this.composeSmsBtn, 30);
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu', this.composeSmsAction, 140);    
+    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu', this.composeSmsAction, 140);
     
 };
 

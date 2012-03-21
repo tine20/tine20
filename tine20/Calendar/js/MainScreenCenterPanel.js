@@ -281,7 +281,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 listeners: {
                     scope: this,
                     afterlayout: function (ct) {
-                    	ct.suspendEvents();
+                        ct.suspendEvents();
                         ct.setHeight(this.filterToolbar.getHeight());
                         ct.ownerCt.layout.layout();
                         ct.resumeEvents();
@@ -472,7 +472,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 var title = this.app.i18n._('Updating event in the past'),
                     optionYes = this.app.i18n._('Update this event'),
                     optionNo = this.app.i18n._('Do not update this event');
-                break;                    
+                break;
             case 'add':            
             default:
                 var title = this.app.i18n._('Creating event in the past'),
@@ -481,7 +481,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         if(start < morning) {
-            Tine.widgets.dialog.MultiOptionsDialog.openWindow({                
+            Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                 title: title,
                 height: 170,
                 scope: this,
@@ -700,7 +700,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             store = panel.getStore(),
             view = panel.getView();
 
-        if(!view.rendered) return;            
+        if(!view.rendered) return;
         
         filterData[0].filters[0].filters.push({field: 'id', operator: 'in', value: [ updatedEvent.get('id') ]});
         
@@ -711,11 +711,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             view.getSelectionModel().select(updatedEvent);
             var selection = view.getSelectionModel().getSelected();
             
-            if(r.totalcount == 0) {   
+            if(r.totalcount == 0) {
                 selection.ui.markOutOfFilter();
             } 
 
-            this.setLoading(false);                            
+            this.setLoading(false);
         }, this);
     },
     
@@ -836,7 +836,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             },
             failure: function () {
                 panel.getTopToolbar().onLoad();
-                Ext.MessageBox.alert(Tine.Tinebase.translation._hidden('Failed'), String.format(this.app.i18n.n_('Failed not delete event', 'Failed to delete the {0} events', selection.length), selection.length)); 
+                Ext.MessageBox.alert(Tine.Tinebase.translation._hidden('Failed'), String.format(this.app.i18n.n_('Failed not delete event', 'Failed to delete the {0} events', selection.length), selection.length));
             }
         };
         
@@ -845,7 +845,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     
     onDeleteRecordsConfirmFail: function (panel, selection) {
         Ext.each(selection, function (event) {
-			event.ui.clearDirty();
+            event.ui.clearDirty();
         });
     },
     
@@ -921,10 +921,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     this.onEditInNewWindow('add');
                 }
                 e.preventDefault();
-                break;    
+                break;
             }
         } else if (e.getKey() === e.DELETE) {
-        	if (! this.action_deleteRecord.isDisabled()) {
+            if (! this.action_deleteRecord.isDisabled()) {
                 this.onDeleteRecords.call(this);
             }
         }
@@ -1124,7 +1124,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                             }
                             
                             this.conflictConfirmWin.close();
-                            break;                            
+                            break;
                         case 'cancel':
                         default:
                             this.conflictConfirmWin.close();
@@ -1331,7 +1331,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             for (var i = 0; i < numWeeks; i += 1) {
                 weekNumbers.push(startWeek + i);
             }
-        	break;
+            break;
         }
         miniCal.update(this.startDate, true, weekNumbers);
     }

@@ -31,7 +31,7 @@ class Setup_Backend_Schema_Index_Pgsql extends Setup_Backend_Schema_Index_Abstra
      * @param stdClass $_declaration
      */    
     protected function _setIndex($_declaration)
-    {    
+    {
         $this->setName($_declaration['COLUMN_NAME']);
         $type = '';
         $length= '';

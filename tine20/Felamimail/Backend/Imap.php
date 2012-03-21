@@ -160,7 +160,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     public function getFolderStatus($globalName)
     {
         $this->_currentFolder = $globalName;
-        $result = $this->_protocol->getFolderStatus($this->_currentFolder);        
+        $result = $this->_protocol->getFolderStatus($this->_currentFolder);
         return $result;
     }
     
@@ -608,7 +608,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
                 $value = $_structure[$index][++$i];
                 $parameters[$key] = $this->_mimeDecodeHeader($value);
             }
-            $structure['parameters'] = $parameters; 
+            $structure['parameters'] = $parameters;
         }
         $index++;
         
@@ -632,13 +632,13 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         
         // body language
         if (isset($_structure[$index]) && $_structure[$index] != 'NIL') {
-            $structure['language'] = $_structure[$index]; 
+            $structure['language'] = $_structure[$index];
         }
         $index++;
         
         // body location
         if (isset($_structure[$index]) && $_structure[$index] != 'NIL') {
-            $structure['location'] = strtolower($_structure[$index]); 
+            $structure['location'] = strtolower($_structure[$index]);
         }
         
         return $structure;
@@ -678,27 +678,27 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
                 $value = $_structure[2][++$i];
                 $parameters[$key] = $this->_mimeDecodeHeader($value);
             }
-            $structure['parameters'] = $parameters; 
+            $structure['parameters'] = $parameters;
         }
         
         // body id
         if($_structure[3] != 'NIL') {
-            $structure['id'] = $_structure[3]; 
+            $structure['id'] = $_structure[3];
         }
         
         // body description
         if($_structure[4] != 'NIL') {
-            $structure['description'] = $_structure[4]; 
+            $structure['description'] = $_structure[4];
         }
         
         // body encoding
         if($_structure[5] != 'NIL') {
-            $structure['encoding'] = strtolower($_structure[5]); 
+            $structure['encoding'] = strtolower($_structure[5]);
         }
         
         // body size
         if($_structure[6] != 'NIL') {
-            $structure['size'] = strtolower($_structure[6]); 
+            $structure['size'] = strtolower($_structure[6]);
         }
         
         /** basic fields end **/
@@ -713,7 +713,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             $index = 10;
         } elseif($type == 'text') {
             if($_structure[7] != 'NIL') {
-                $structure['lines'] = $_structure[7]; 
+                $structure['lines'] = $_structure[7];
             }
             // index of the first element containing extension data 
             $index = 8;
@@ -721,7 +721,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         
         // body md5
         if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL') {
-            $structure['md5'] = strtolower($_structure[$index]); 
+            $structure['md5'] = strtolower($_structure[$index]);
         }
         $index++;
         
@@ -743,13 +743,13 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         
         // body language
         if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL' && ! is_array($_structure[$index])) {
-            $structure['language'] = strtolower($_structure[$index]); 
+            $structure['language'] = strtolower($_structure[$index]);
         }
         $index++;
         
         // body location
         if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL' && ! is_array($_structure[$index])) {
-            $structure['location'] = strtolower($_structure[$index]); 
+            $structure['location'] = strtolower($_structure[$index]);
         }
         
         return $structure;

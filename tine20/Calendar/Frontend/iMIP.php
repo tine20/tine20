@@ -88,7 +88,7 @@ class Calendar_Frontend_iMIP
             if (empty($_iMIP->preconditions) || ! $_throwException) {
                 return;
             } else {
-                throw new Calendar_Exception_iMIP('iMIP preconditions failed: ' . implode(', ', array_keys($_iMIP->preconditions))); 
+                throw new Calendar_Exception_iMIP('iMIP preconditions failed: ' . implode(', ', array_keys($_iMIP->preconditions)));
             }
         }
         
@@ -286,7 +286,7 @@ class Calendar_Frontend_iMIP
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORGANIZER, "processing {$_iMIP->method} without organizer user account is not possible");
             $result = FALSE;
         }
-    	*/
+        */
         
         return $result;
     }

@@ -60,7 +60,7 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
                 </reference>
             </index>   
         ');
-        $this->_backend->addForeignKey('acsync_synckey', $declaration);        
+        $this->_backend->addForeignKey('acsync_synckey', $declaration);
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
@@ -304,7 +304,7 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
                 </reference>
             </index>   
         ');
-        $this->_backend->addForeignKey('acsync_content', $declaration);        
+        $this->_backend->addForeignKey('acsync_content', $declaration);
                 
         $this->setTableVersion('acsync_content', '4');
         $this->setApplicationVersion('ActiveSync', '5.6');

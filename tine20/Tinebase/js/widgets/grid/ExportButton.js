@@ -23,7 +23,7 @@ Tine.widgets.grid.ExportButton = function(config) {
     Tine.widgets.grid.ExportButton.superclass.constructor.call(this, config);
 };
 
-Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {	
+Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
     /**
      * @cfg {String} icon class
      */

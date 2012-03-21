@@ -31,9 +31,9 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar WebDAV Generic Event Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar WebDAV Generic Event Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -389,9 +389,9 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $event->last_modified_time = new Tinebase_DateTime('2011-11-11 12:12', 'UTC');
         $event->attendee->addRecord(new Calendar_Model_Attender(array(
             'user_id'   => Tinebase_Core::getUser()->contact_id,
-        	'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-        	'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
-        	'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+            'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
         )));
         
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
@@ -429,9 +429,9 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $event->last_modified_time = new Tinebase_DateTime('2011-11-11 12:12', 'UTC');
         $event->attendee->addRecord(new Calendar_Model_Attender(array(
             'user_id'   => Tinebase_Core::getUser()->contact_id,
-        	'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-        	'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
-        	'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+            'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
         )));
         
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
@@ -499,7 +499,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(array(
             'model'            => 'Calendar_Model_Event',
-            'alarm_time'	   => '2011-10-04 07:10:00',
+            'alarm_time'       => '2011-10-04 07:10:00',
             'minutes_before'   => Tinebase_Model_Alarm::OPTION_CUSTOM
         )));
         

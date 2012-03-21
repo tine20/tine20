@@ -23,11 +23,11 @@ class Projects_Controller_Project extends Tinebase_Controller_Record_Abstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {        
+    private function __construct() {
         $this->_applicationName = 'Projects';
         $this->_backend = new Projects_Backend_Project();
         $this->_modelName = 'Projects_Model_Project';
-        $this->_currentAccount = Tinebase_Core::getUser();   
+        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_purgeRecords = TRUE;
         // activate this if you want to use containers
         $this->_doContainerACLChecks = TRUE;

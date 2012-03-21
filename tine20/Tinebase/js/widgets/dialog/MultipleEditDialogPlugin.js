@@ -60,15 +60,15 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         this.interRecord = new editDialog.recordClass({});
         this.editDialog = editDialog;
         this.app = Tine.Tinebase.appMgr.get(this.editDialog.app);
-        this.form = this.editDialog.getForm();    
+        this.form = this.editDialog.getForm();
         // load in editDialog means rendered and loaded
         this.editDialog.on('load', this.onAfterRender, this);
         this.handleFields = [];
         this.editDialog.initRecord = Ext.emptyFn;
         
-        this.editDialog.onApplyChanges = this.editDialog.onApplyChanges.createInterceptor(this.onRecordUpdate, this); 
+        this.editDialog.onApplyChanges = this.editDialog.onApplyChanges.createInterceptor(this.onRecordUpdate, this);
         this.editDialog.onRecordUpdate = Ext.emptyFn;
-        if (this.editDialog.isMultipleValid) this.editDialog.isValid = this.editDialog.isMultipleValid;       
+        if (this.editDialog.isMultipleValid) this.editDialog.isValid = this.editDialog.isMultipleValid;
     },
 
     /**
@@ -82,7 +82,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         }
         
         Ext.each(this.handleFields, function(field) {
-            var refData = false; 
+            var refData = false;
             
             Ext.each(this.editDialog.selectedRecords, function(recordData, index) {
 
@@ -290,7 +290,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             });
             
             if (ff.isXType('checkbox')) {
-                this.wrapCheckbox(ff);               
+                this.wrapCheckbox(ff);
             } else {
                 ff.on('focus', function() {
                     if (this.readOnly) this.originalValue = this.getValue();
@@ -347,12 +347,12 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         
             if (ff.edited === true) {
                 var label = ff.fieldLabel ? ff.fieldLabel : ff.boxLabel;
-                    label = label ? label : ff.ownerCt.title; 
+                    label = label ? label : ff.ownerCt.title;
 
                 changes.push({name: ff.getName(), value: ff.getValue()});
                 this.changedHuman += '<li><span style="font-weight:bold">' + label + ':</span> ';
                 if(ff.isXType('checkbox')) renderer = Tine.Tinebase.common.booleanRenderer;
-                this.changedHuman += ff.lastSelectionText ? renderer(ff.lastSelectionText) : renderer(ff.getValue());  
+                this.changedHuman += ff.lastSelectionText ? renderer(ff.lastSelectionText) : renderer(ff.getValue());
                 this.changedHuman += '</li>';
             }
         }, this);
@@ -393,7 +393,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                             changes: changes,
                             filter: filter
                         },
-                        success: function(_result, _request) {                           
+                        success: function(_result, _request) {
                             Ext.MessageBox.hide();
                             var resp = Ext.decode(_result.responseText);
                             if(resp.failcount > 0) {

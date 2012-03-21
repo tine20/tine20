@@ -4,7 +4,7 @@
  * @package     Ext.ux
  */
 
-Ext.ns('Ext.ux'); 
+Ext.ns('Ext.ux');
 
 
 Date.prototype.getFirstDateOfWeek = function(){
@@ -22,7 +22,7 @@ Date.prototype.getFirstDateOfWeek = function(){
  * @class       Ext.ux.DatePickerRange
  * @extends     Ext.DatePicker
  */
-Ext.ux.DatePickerRange = Ext.extend(Ext.DatePicker, { 
+Ext.ux.DatePickerRange = Ext.extend(Ext.DatePicker, {
     selectionMode:'month',
     setSelectionMode:function(mode){
         this.selectionMode=mode;
@@ -157,22 +157,22 @@ Ext.ux.DatePickerRange = Ext.extend(Ext.DatePicker, {
     isSelected:function(date){
         date=new Date(date);
         switch(this.selectionMode) {
-        	case 'day':
-        	   return date.clearTime().getTime() == this.value.clearTime().getTime();
-        	   break;
-        	case 'month':
-        	   return date.getFirstDateOfMonth().clearTime().getTime ()==this.value.getFirstDateOfMonth().clearTime().getTime ();
-        	   break;
-        	case 'week':
-        	   return date.getFirstDateOfWeek().clearTime().getTime ()==this.value.getFirstDateOfWeek().clearTime().getTime ();
-        	   break;
-        	default:
-        	   throw 'Illegal selection mode';
-        	   break;
+            case 'day':
+               return date.clearTime().getTime() == this.value.clearTime().getTime();
+               break;
+            case 'month':
+               return date.getFirstDateOfMonth().clearTime().getTime ()==this.value.getFirstDateOfMonth().clearTime().getTime ();
+               break;
+            case 'week':
+               return date.getFirstDateOfWeek().clearTime().getTime ()==this.value.getFirstDateOfWeek().clearTime().getTime ();
+               break;
+            default:
+               throw 'Illegal selection mode';
+               break;
         }        
     }
         
     
-}); 
+});
 
 Ext.reg('datepickerrange', Ext.ux.DatePickerRange);

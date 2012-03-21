@@ -183,7 +183,7 @@ abstract class Setup_Backend_Schema_Field_Abstract extends Setup_Backend_Schema_
         }
         
         $thisTypeMap = $this->getBackend()->getTypeMapping($thisType);
-        $fieldTypeMap = $this->getBackend()->getTypeMapping($fieldType);       
+        $fieldTypeMap = $this->getBackend()->getTypeMapping($fieldType);
         if ($this->_resemblesTypeCheck($thisTypeMap, $fieldType) ||
             $this->_resemblesTypeCheck($fieldTypeMap, $thisType) ||
             $this->_resemblesTypeCheck($fieldTypeMap, $thisTypeMap['defaultType']) ||

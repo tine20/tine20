@@ -50,7 +50,7 @@ Ext.ux.Printer.ColumnTreeRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
           if (column.dataIndex == key) {
             row[key] = column.renderer ? column.renderer(value) : value;
           }
-        }, this);        
+        }, this);
       });
       
       //the property used in the first column is renamed to 'text' in node.attributes, so reassign it here

@@ -197,7 +197,7 @@ class Tinebase_Timemachine_ModificationLog
         if (empty($RawLogEntry)) {
             throw new Tinebase_Exception_NotFound("Modification Log with id: $_id not found!");
         }
-        return new Tinebase_Model_ModificationLog($RawLogEntry[0], true); 
+        return new Tinebase_Model_ModificationLog($RawLogEntry[0], true);
         
     } // end of member function getModification
     
@@ -244,7 +244,7 @@ class Tinebase_Timemachine_ModificationLog
         if (! $_newRecord->last_modified_time instanceof DateTime) {
             
             if ($_curRecord->creation_time instanceof DateTime) {
-                $_newRecord->last_modified_time = clone $_curRecord->creation_time;    
+                $_newRecord->last_modified_time = clone $_curRecord->creation_time;
             } else {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
                     . ' Something went wrong! No creation_time was set in current record: ' 
@@ -271,7 +271,7 @@ class Tinebase_Timemachine_ModificationLog
                     Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " we can't deal with dates yet -> non resolvable conflict!");
                     throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency conflict!');
                 }
-                if (isset($_newRecord[$diff->modified_attribute]) && $_newRecord[$diff->modified_attribute] == $diff->new_value) { 
+                if (isset($_newRecord[$diff->modified_attribute]) && $_newRecord[$diff->modified_attribute] == $diff->new_value) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user updated to same value for field '" .
                     $diff->modified_attribute . "', nothing to do.");
                     $resolved->addRecord($diff);

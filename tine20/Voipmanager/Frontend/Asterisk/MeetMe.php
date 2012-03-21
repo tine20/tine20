@@ -57,7 +57,7 @@ class Voipmanager_Frontend_Asterisk_MeetMe
             if(in_array($key, $skipItems)) {
                 continue;
             }
-            $resultParts[] = $key . '=' . urlencode($value);  
+            $resultParts[] = $key . '=' . urlencode($value);
         }
         
         $result = implode('&', $resultParts);

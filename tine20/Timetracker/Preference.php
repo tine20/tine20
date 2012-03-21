@@ -32,7 +32,7 @@ class Timetracker_Preference extends Tinebase_Preference_Abstract
      *
      * @var string
      */
-    protected $_application = 'Timetracker';    
+    protected $_application = 'Timetracker';
         
     /**************************** public functions *********************************/
     

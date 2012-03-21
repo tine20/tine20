@@ -478,7 +478,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     onFiltertrigger: function() {
         if (! this.supressEvents) {
-            this.onFilterChange();            
+            this.onFilterChange();
         }
     },
     
@@ -552,7 +552,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             this.doLayout();
         }, this);
         
-        if (this.rowPrefix === null) { 
+        if (this.rowPrefix === null) {
             this.rowPrefix = _('Show');
         }
         
@@ -739,10 +739,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             var firstFilter = this.addFilter();
             
             // save buttons somewhere
-        	for (action in this.actions) {
-	            this.actions[action].hide();
-	            this.bwrap.insertFirst(action == 'startSearch' ? this.searchButtonWrap : this.actions[action].getEl());
-	        }
+            for (action in this.actions) {
+                this.actions[action].hide();
+                this.bwrap.insertFirst(action == 'startSearch' ? this.searchButtonWrap : this.actions[action].getEl());
+            }
         }
         fRow.remove();
         

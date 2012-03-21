@@ -52,10 +52,10 @@ Ext.ux.file.UploadManager = function(config) {
           * @param {Ext.Record} Ext.ux.file.Upload.file
           */
          'update'
-    ); 
-};    
+    );
+};
     
-Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {       
+Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
         /**
          * @cfg {Int} number of allowed concurrent uploads
          */
@@ -88,7 +88,7 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
          * @returns {String} upload id
          */
         queueUpload: function(upload) {
-            var uploadId = this.uploadIdPrefix + (1000 + this.uploadCount++).toString(); 
+            var uploadId = this.uploadIdPrefix + (1000 + this.uploadCount++).toString();
             if(upload.id && upload.id !== -1) {
                 uploadId = upload.id;
             }
@@ -183,11 +183,11 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
         onUploadComplete: function() {
             
             Tine.Tinebase.uploadManager.runningUploads 
-                = Math.max(0, Tine.Tinebase.uploadManager.runningUploads - 1);  
+                = Math.max(0, Tine.Tinebase.uploadManager.runningUploads - 1);
     
             for(var uploadKey in Tine.Tinebase.uploadManager.uploads){
 
-                var upload = Tine.Tinebase.uploadManager.uploads[uploadKey];                
+                var upload = Tine.Tinebase.uploadManager.uploads[uploadKey];
                 if(upload.isQueued() && !upload.isPaused() && !Tine.Tinebase.uploadManager.isBusy()) {
                     upload.setQueued(false);
                     upload.resumeUpload();
@@ -203,7 +203,7 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
          */
         onUploadStart: function() {
             Tine.Tinebase.uploadManager.runningUploads 
-                = Math.min(Tine.Tinebase.uploadManager.maxConcurrentUploads, Tine.Tinebase.uploadManager.runningUploads + 1);  
+                = Math.min(Tine.Tinebase.uploadManager.maxConcurrentUploads, Tine.Tinebase.uploadManager.runningUploads + 1);
         }
     
 });

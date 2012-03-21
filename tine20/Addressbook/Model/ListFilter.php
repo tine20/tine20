@@ -55,5 +55,5 @@ class Addressbook_Model_ListFilter extends Tinebase_Model_Filter_FilterGroup
         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Addressbook')),
         'type'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
-    );    
+    );
 }

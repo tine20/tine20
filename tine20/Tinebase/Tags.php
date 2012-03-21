@@ -95,7 +95,7 @@ class Tinebase_Tags
         $controller = Tinebase_Core::getApplicationInstance($_filter->getApplicationName(), $_filter->getModelName());
         $recordIds = $controller->search($_filter, NULL, FALSE, TRUE);
         
-        if (! empty($recordIds)) { 
+        if (! empty($recordIds)) {
             $app = Tinebase_Application::getInstance()->getApplicationByName($_filter->getApplicationName());
             $select = $this->_getSelect($recordIds, $app->getId());
             Tinebase_Model_TagRight::applyAclSql($select);

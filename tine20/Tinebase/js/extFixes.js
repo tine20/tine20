@@ -257,7 +257,7 @@ Ext.ButtonToggleMgr = function(){
            for(var i = 0, l = g.length; i < l; i++){
                if(g[i].pressed === true){
                    if(handler) {
-                        handler.call(scope || g[i], g[i]);   
+                        handler.call(scope || g[i], g[i]);
                    }
                    return g[i];
                }

@@ -103,17 +103,17 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
         
         switch ($_scheme) {
             case 'SSHA256':
-            	$salt = '$5$' . $salt . '$';
-            	break;
-            	
+                $salt = '$5$' . $salt . '$';
+                break;
+                
             case 'SSHA512':
-            	$salt = '$6$' . $salt . '$';
-            	break;
-            	
+                $salt = '$6$' . $salt . '$';
+                break;
+                
             case 'MD5-CRYPT':
             default:
-            	$salt = crypt($_scheme);
-            	break;
+                $salt = crypt($_scheme);
+                break;
         }
 
         return $salt;

@@ -18,14 +18,14 @@
  * @package     ActiveSync
  */
 class ActiveSync_Model_ContentState extends Tinebase_Record_Abstract
-{  
+{
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
      * @var string
      */    
-    protected $_identifier = 'id';    
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to
@@ -48,7 +48,7 @@ class ActiveSync_Model_ContentState extends Tinebase_Record_Abstract
         'collectionid'      => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'contentid'         => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'creation_time'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    	'is_deleted'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'is_deleted'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
@@ -58,6 +58,6 @@ class ActiveSync_Model_ContentState extends Tinebase_Record_Abstract
      */    
     protected $_datetimeFields = array(
         'creation_time'
-    );    
+    );
     
 }

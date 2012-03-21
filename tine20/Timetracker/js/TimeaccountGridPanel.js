@@ -49,7 +49,7 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         this.initFilterToolbar();
         
         this.plugins = this.plugins || [];
-        this.plugins.push(this.action_showClosedToggle, this.filterToolbar);        
+        this.plugins.push(this.action_showClosedToggle, this.filterToolbar);
         
         Tine.Timetracker.TimeaccountGridPanel.superclass.initComponent.call(this);
         
@@ -82,7 +82,7 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * @private
      */
     getColumnModel: function(){
-        return new Ext.grid.ColumnModel({ 
+        return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true,
                 resizable: true
@@ -165,7 +165,7 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 ]
             }
         });
-    	
+        
         this.action_showClosedToggle = new Tine.widgets.grid.FilterButton({
             text: this.app.i18n._('Show closed'),
             iconCls: 'action_showArchived',

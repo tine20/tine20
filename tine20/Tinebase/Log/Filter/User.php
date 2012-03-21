@@ -48,6 +48,6 @@ class Tinebase_Log_Filter_User implements Zend_Log_Filter_Interface
     public function accept($event)
     {
         $username = Tinebase_Core::getUser()->accountLoginName;
-        return strtolower($this->_name) == strtolower($username) ? true : false;    
+        return strtolower($this->_name) == strtolower($username) ? true : false;
     }
 }

@@ -58,7 +58,7 @@ class ActiveSync_Backend_PolicyTests extends PHPUnit_Framework_TestCase
     }
     
     protected function setUp()
-    {   	
+    {
     }
     
     /**

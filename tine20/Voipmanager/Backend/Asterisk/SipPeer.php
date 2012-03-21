@@ -49,7 +49,7 @@ class Voipmanager_Backend_Asterisk_SipPeer extends Tinebase_Backend_Sql_Abstract
      * @return Zend_Db_Select
      */
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
-    {        
+    {
         $select = parent::_getSelect($_cols, $_getDeleted);
         
         // add join only if needed and allowed

@@ -73,15 +73,15 @@ class Addressbook_Setup_Update_Release5 extends Setup_Update_Abstract
      */
     public function update_2()
     {
-    	$declaration = new Setup_Backend_Schema_Field_Xml('
+        $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>adr_one_lon</name>
                 <type>float</type>
                 <unsigned>false</unsigned>
             </field>');
         $this->_backend->alterCol('addressbook', $declaration, 'lon');
-    	
-    	$declaration = new Setup_Backend_Schema_Field_Xml('
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>adr_one_lat</name>
                 <type>float</type>
@@ -95,7 +95,7 @@ class Addressbook_Setup_Update_Release5 extends Setup_Update_Abstract
                 <type>float</type>
                 <unsigned>false</unsigned>
             </field>'
-		);
+        );
         $this->_backend->addCol('addressbook', $declaration);
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
@@ -104,15 +104,15 @@ class Addressbook_Setup_Update_Release5 extends Setup_Update_Abstract
                 <type>float</type>
                 <unsigned>false</unsigned>
             </field>'
-		);
+        );
         $this->_backend->addCol('addressbook', $declaration);
         
         $this->setTableVersion('addressbook', 14);
         
         // delete config we don't need anymore
         Tinebase_Config::getInstance()->deleteConfigForApplication(Tinebase_Config::APPDEFAULTS, 'Addressbook');
-    	
-    	$this->setApplicationVersion('Addressbook', '5.3');
+        
+        $this->setApplicationVersion('Addressbook', '5.3');
     }
 
     /**
@@ -186,7 +186,7 @@ class Addressbook_Setup_Update_Release5 extends Setup_Update_Abstract
         $keyfieldConfig = array(
             'name'    => Addressbook_Config::CONTACT_SALUTATION,
             'records' => array(
-                array('id' => 'MR',      'value' => 'Mr', 	   'gender' => Addressbook_Model_Salutation::GENDER_MALE,   'image' => 'images/empty_photo_male.png',    'system' => true), //_('Mr')
+                array('id' => 'MR',      'value' => 'Mr',        'gender' => Addressbook_Model_Salutation::GENDER_MALE,   'image' => 'images/empty_photo_male.png',    'system' => true), //_('Mr')
                 array('id' => 'MS',      'value' => 'Ms',      'gender' => Addressbook_Model_Salutation::GENDER_FEMALE, 'image' => 'images/empty_photo_female.png',  'system' => true), //_('Ms')
                 array('id' => 'COMPANY', 'value' => 'Company', 'gender' => Addressbook_Model_Salutation::GENDER_OTHER,  'image' => 'images/empty_photo_company.png', 'system' => true), //_('Company')
             ),

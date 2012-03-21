@@ -95,7 +95,7 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
             // Excel 5 content type or other
             : 'application/vnd.ms-excel';
                 
-        return $contentType;  
+        return $contentType;
     }
     
     /**
@@ -145,7 +145,7 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
                 $this->_excelObject = PHPExcel_IOFactory::load($templateFile);
             } else {
                 $reader = PHPExcel_IOFactory::createReader($this->_config->reader);
-                $this->_excelObject = $reader->load($templateFile);                
+                $this->_excelObject = $reader->load($templateFile);
             }
             
             // need to unregister the zip stream wrapper because it is overwritten by PHPExcel!

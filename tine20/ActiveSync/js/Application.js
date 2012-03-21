@@ -88,7 +88,7 @@ Tine.ActiveSync.Application = Ext.extend(Tine.Tinebase.Application, {
         if (btn.checked) {
             // if btn was checked, we need to reset filter
             Tine.ActiveSync.setDeviceContentFilter(device.id, contentClass, null, function(response) {
-                device.set([Ext.util.Format.lowercase(contentClass) + 'filter_id'], null);  
+                device.set([Ext.util.Format.lowercase(contentClass) + 'filter_id'], null);
                 
                 Ext.Msg.alert(this.i18n._('Resetted Sync Filter'), String.format(
                     this.i18n._('{0} filter for device "{1}" is now "{2}"'),
@@ -100,7 +100,7 @@ Tine.ActiveSync.Application = Ext.extend(Tine.Tinebase.Application, {
             }, this);
         } else {
             Tine.ActiveSync.setDeviceContentFilter(device.id, contentClass, filter.id, function(response) {
-                device.set([Ext.util.Format.lowercase(contentClass) + 'filter_id'], filter.id); 
+                device.set([Ext.util.Format.lowercase(contentClass) + 'filter_id'], filter.id);
                 
                 Ext.Msg.alert(this.i18n._('Set Sync Filter'), String.format(
                     this.i18n._('{0} filter for device "{1}" is now "{2}"'),

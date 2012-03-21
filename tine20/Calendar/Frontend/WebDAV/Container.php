@@ -95,12 +95,12 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                 'value'     => $this->_container->getId()
             ),
             array(
-        		'field'    => 'period', 
-        		'operator'  => 'within', 
-        		'value'     => array(
-        			'from'  => Tinebase_DateTime::now()->subWeek(4),
-        			'until' => Tinebase_DateTime::now()->addYear(4)
-    			)
+                'field'    => 'period', 
+                'operator'  => 'within', 
+                'value'     => array(
+                    'from'  => Tinebase_DateTime::now()->subWeek(4),
+                    'until' => Tinebase_DateTime::now()->addYear(4)
+                )
             )
         ));
     
@@ -136,20 +136,20 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             '{http://calendarserver.org/ns/}getctag' => $ctags,
             'id'                => $this->_container->getId(),
             'uri'               => $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name,
-        	'{DAV:}resource-id'	=> 'urn:uuid:' . $this->_container->getId(),
-        	'{DAV:}owner'       => new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id),
+            '{DAV:}resource-id'    => 'urn:uuid:' . $this->_container->getId(),
+            '{DAV:}owner'       => new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id),
             #'principaluri'      => $principalUri,
             '{DAV:}displayname' => $displayName,
             '{http://apple.com/ns/ical/}calendar-color' => (empty($this->_container->color)) ? '#000000' : $this->_container->color,
             
             '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre_CalDAV_Property_SupportedCalendarComponentSet(array('VEVENT')),
-        	'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-data'          => new Sabre_CalDAV_Property_SupportedCalendarData(),
-        	'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-description'		       => 'Calendar ' . $displayName,
-    		'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-timezone'                => $this->_getCalendarVTimezone()
+            '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-data'          => new Sabre_CalDAV_Property_SupportedCalendarData(),
+            '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-description'               => 'Calendar ' . $displayName,
+            '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-timezone'                => $this->_getCalendarVTimezone()
         );
         
         if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-            $properties['{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-user-address-set'	] = new Sabre_DAV_Property_HrefList(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress), false); 
+            $properties['{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-user-address-set'    ] = new Sabre_DAV_Property_HrefList(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress), false);
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . print_r($properties, true));

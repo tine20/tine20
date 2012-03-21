@@ -17,7 +17,7 @@
  * @subpackage  Controller
  */
 class Voipmanager_Controller_Snom_Location extends Voipmanager_Controller_Abstract
-{    
+{
     /**
      * holds the instance of the singleton
      *
@@ -41,7 +41,7 @@ class Voipmanager_Controller_Snom_Location extends Voipmanager_Controller_Abstra
     {
         $this->_modelName   = 'Voipmanager_Model_Snom_Location';
         $this->_backend     = new Voipmanager_Backend_Snom_Location();
-        $this->_cache       = Zend_Registry::get('cache');        
+        $this->_cache       = Zend_Registry::get('cache');
     }
         
     /**
@@ -49,7 +49,7 @@ class Voipmanager_Controller_Snom_Location extends Voipmanager_Controller_Abstra
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**

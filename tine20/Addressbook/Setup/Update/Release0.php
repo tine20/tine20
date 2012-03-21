@@ -15,7 +15,7 @@ class Addressbook_Setup_Update_Release0 extends Setup_Update_Abstract
      */    
     public function update_1()
     {
-        $this->validateTableVersion('addressbook', '1');        
+        $this->validateTableVersion('addressbook', '1');
         
         $this->setApplicationVersion('Addressbook', '0.2');
     }
@@ -27,7 +27,7 @@ class Addressbook_Setup_Update_Release0 extends Setup_Update_Abstract
      */    
     public function update_2()
     {
-        $this->validateTableVersion('addressbook', '1');        
+        $this->validateTableVersion('addressbook', '1');
         
         $this->setTableVersion('addressbook', '2');
         $this->setApplicationVersion('Addressbook', '0.3');
@@ -147,7 +147,7 @@ class Addressbook_Setup_Update_Release0 extends Setup_Update_Abstract
         </table>        
         ');
     
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
         try {
             $this->_backend->createTable($table);
         } catch (Exception $e) {

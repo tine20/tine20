@@ -62,7 +62,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->objects['updatedGroup'] = new Tinebase_Model_Group(array(
             'name'          => 'tine20phpunit',
             'description'   => 'updated group'
-        )); 
+        ));
         
         $this->objects['user'] = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => 'tine20phpunit',
@@ -73,7 +73,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
             'accountEmailAddress'   => 'phpunit@metaways.de'
-        )); 
+        ));
         
         if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
             $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
@@ -211,7 +211,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $account = Tinebase_User::getInstance()->getFullUserById($this->objects['user']);
         
-        $this->assertEquals('disabled', $account->accountStatus);    
+        $this->assertEquals('disabled', $account->accountStatus);
     }
     
     /**
@@ -222,7 +222,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->_json->resetPassword($this->objects['user']->toArray(), 'password', FALSE);
         
         $authResult = Tinebase_Auth::getInstance()->authenticate($this->objects['user']->accountLoginName, 'password');
-        $this->assertTrue($authResult->isValid());    
+        $this->assertTrue($authResult->isValid());
     }
     
     /**
@@ -253,8 +253,8 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $result = $this->_json->saveGroup($data, $groupMembers);
 
-        $this->assertGreaterThan(0,sizeof($result['groupMembers'])); 
-        $this->assertEquals($this->objects['updatedGroup']->description, $result['description']); 
+        $this->assertGreaterThan(0,sizeof($result['groupMembers']));
+        $this->assertEquals($this->objects['updatedGroup']->description, $result['description']);
     }    
 
     /**
@@ -371,11 +371,11 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAccessLogsWithDeletedUser()
     {
-    	$clienttype = 'Unittest';
-    	$user = $this->objects['user'];
+        $clienttype = 'Unittest';
+        $user = $this->objects['user'];
         $this->_addAccessLog($user, $clienttype);
         
-    	Admin_Controller_User::getInstance()->delete($user->getId());
+        Admin_Controller_User::getInstance()->delete($user->getId());
         $accessLogs = $this->_json->searchAccessLogs($this->_getAccessLogFilter($user->accountLoginName, $clienttype), array());
 
         $this->assertGreaterThan(0, sizeof($accessLogs['results']));
@@ -509,7 +509,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $result = $this->_json->saveRole($roleArray, array(),array());
         
-        $this->assertEquals("updated description", $result['description']);        
+        $this->assertEquals("updated description", $result['description']);
     }
 
     /**

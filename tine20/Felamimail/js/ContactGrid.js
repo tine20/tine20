@@ -138,7 +138,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
             return '';
         }
         
-        var lowerType = Ext.util.Format.lowercase(type); 
+        var lowerType = Ext.util.Format.lowercase(type);
         
         return this.radioTpl.apply({
             id: record.id, 
@@ -349,7 +349,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
                 }, this);
                 
                 this['AddressLoadMask'].hide();
-            }.createDelegate(this));            
+            }.createDelegate(this));
         }
     },
     

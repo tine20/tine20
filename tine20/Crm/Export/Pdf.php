@@ -23,32 +23,32 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
     /**
      * create lead pdf
      *
-     * @param	Crm_Model_Lead $_lead lead data
+     * @param    Crm_Model_Lead $_lead lead data
      * 
-     * @return	string	the pdf
+     * @return    string    the pdf
      */
     public function generate(Crm_Model_Lead $_lead, $_pageNumber = 0)
     {
         $locale = Tinebase_Core::get('locale');
-        $translate = Tinebase_Translation::getTranslation('Crm');    
+        $translate = Tinebase_Translation::getTranslation('Crm');
         
         // set user timezone
         $_lead->setTimezone(Tinebase_Core::get('userTimeZone'));
 
         /*********************** build data array ***************************/
         
-        $record = $this->getRecord($_lead, $locale, $translate);	    
+        $record = $this->getRecord($_lead, $locale, $translate);
 
         /******************* build title / subtitle / description ***********/
         
-        $title = $_lead->lead_name; 
+        $title = $_lead->lead_name;
         $subtitle = "";
         $description = $_lead->description;
         $titleIcon = "/images/oxygen/32x32/actions/datashowchart.png";
 
         /*********************** add linked objects *************************/
 
-        $linkedObjects = $this->getLinkedObjects($_lead, $locale, $translate);       
+        $linkedObjects = $this->getLinkedObjects($_lead, $locale, $translate);
         $tags = ($_lead->tags instanceof Tinebase_Record_RecordSet) ? $_lead->tags->toArray() : array();
         
         /***************************** generate pdf now! ********************/
@@ -68,7 +68,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
      *
      */
     protected function getRecord(Crm_Model_Lead $_lead, Zend_Locale $_locale, Zend_Translate $_translate)
-    {        
+    {
         $settings = Crm_Controller::getInstance()->getConfigSettings();
         
         $leadFields = array (
@@ -150,7 +150,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                     $record[] = array ( 'label' => $fieldArray['label'],
                                         'type'  => ( isset($fieldArray['type']) ) ? $fieldArray['type'] : 'singleRow',
                                         'value' => ( sizeof($values) === 1 ) ? $values[0] : $values,
-                    ); 
+                    );
                 }
             } elseif ( isset($fieldArray['type']) && $fieldArray['type'] === 'separator' ) {
                 $record[] = $fieldArray;
@@ -173,7 +173,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
     protected function getLinkedObjects(Crm_Model_Lead $_lead, Zend_Locale $_locale, Zend_Translate $_translate)
     {
         $linkedObjects = array ();
-	
+    
         // check relations
         if ($_lead->relations instanceof Tinebase_Record_RecordSet) {
             
@@ -186,7 +186,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
             $types = array (    "customer" => "/images/oxygen/32x32/apps/system-users.png", 
                                 "partner" => "/images/oxygen/32x32/actions/view-process-own.png", 
                                 "responsible" => "/images/oxygen/32x32/apps/preferences-desktop-user.png",
-                            );        
+                            );
             
             foreach ($types as $type => /* $headline */ $icon) {
     
@@ -247,7 +247,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                         
                         // get due date
                         if (! empty($task->due)) {
-                            $dueDate = new Tinebase_DateTime($task->due);                 
+                            $dueDate = new Tinebase_DateTime($task->due);
                             $linkedObjects[] = array(
                                 $_translate->_('Due Date'), 
                                 Tinebase_Translation::dateToStringInTzAndLocaleFormat($dueDate, NULL, NULL, 'date')

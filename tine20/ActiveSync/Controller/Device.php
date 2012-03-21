@@ -70,7 +70,7 @@ class ActiveSync_Controller_Device extends Tinebase_Controller_Record_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**

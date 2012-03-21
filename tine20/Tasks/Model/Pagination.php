@@ -14,7 +14,7 @@
  * @package Tasks
  */
 class Tasks_Model_Pagination extends Tinebase_Model_Pagination
-{    
+{
     /**
      * Appends pagination statements to a given select object
      * 

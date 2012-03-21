@@ -23,11 +23,11 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {        
+    private function __construct() {
         $this->_applicationName = 'Timetracker';
         $this->_backend = new Timetracker_Backend_Timeaccount();
         $this->_modelName = 'Timetracker_Model_Timeaccount';
-        $this->_currentAccount = Tinebase_Core::getUser();   
+        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_purgeRecords = FALSE;
     }    
     
@@ -64,7 +64,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
      * @todo    check if container name exists ?
      */
     public function create(Tinebase_Record_Interface $_record)
-    {   
+    {
         $this->_checkRight('create');
         
         // create container and add container_id to record
@@ -154,7 +154,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
      * @param Tinebase_Record_Interface $_record
      */
     protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
-    {    
+    {
         // delete linked timesheets
         $timesheets = Timetracker_Controller_Timesheet::getInstance()->getTimesheetsByTimeaccountId($_record->getId());
         Timetracker_Controller_Timesheet::getInstance()->delete($timesheets->getArrayOfIds());
@@ -264,7 +264,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
                     Tinebase_Model_Grants::GRANT_EXPORT,
                     Tinebase_Model_Grants::GRANT_ADMIN,
                 ));
-                break;                
+                break;
             default:
                 throw new Timetracker_Exception_UnexpectedValue('Unknown action: ' . $_action);
         }

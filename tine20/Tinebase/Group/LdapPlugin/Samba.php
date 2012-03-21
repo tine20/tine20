@@ -70,7 +70,7 @@ class Tinebase_Group_LdapPlugin_Samba
      */
     public function inspectAddGroup(Tinebase_Model_Group $_group, array &$_ldapData)
     {
-        $this->_group2ldap($_group, $_ldapData);    
+        $this->_group2ldap($_group, $_ldapData);
     }
     
     /**
@@ -105,8 +105,8 @@ class Tinebase_Group_LdapPlugin_Samba
         }
         
         // when we try to add a group, $_group has no id which leads to Tinebase_Exception_InvalidArgument in $this->_getGroupMetaData
-        try {        
-            $metaData = $this->_getGroupMetaData($_group);  
+        try {
+            $metaData = $this->_getGroupMetaData($_group);
         } catch (Tinebase_Exception_InvalidArgument $teia) {
             $metaData = array();
         }

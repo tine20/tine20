@@ -259,7 +259,7 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
             }
         }
         
-        return true;        
+        return true;
     }
 
     /**

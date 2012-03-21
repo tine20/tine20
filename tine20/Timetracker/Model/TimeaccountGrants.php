@@ -41,7 +41,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Model_Grants
      */
     const MANAGE_BILLABLE = 'manageBillableGrant';
 
-	/**
+    /**
      * key in $_validators/$_properties array for the field which 
      * represents the identifier
      * 

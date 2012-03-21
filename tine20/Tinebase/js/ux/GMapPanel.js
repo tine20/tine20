@@ -34,7 +34,7 @@ Ext.ux.GMapPanel = Ext.extend(Ext.Panel, {
         
         Ext.applyIf(this,defConfig);
         
-        Ext.ux.GMapPanel.superclass.initComponent.call(this);        
+        Ext.ux.GMapPanel.superclass.initComponent.call(this);
 
     },
     afterRender : function(){
@@ -42,7 +42,7 @@ Ext.ux.GMapPanel = Ext.extend(Ext.Panel, {
         var wh = this.ownerCt.getSize();
         Ext.applyIf(this, wh);
         
-        Ext.ux.GMapPanel.superclass.afterRender.call(this); 
+        Ext.ux.GMapPanel.superclass.afterRender.call(this);
         
         if (this.gmapType === 'map'){
             this.gmap = new GMap2(this.body.dom);
@@ -62,7 +62,7 @@ Ext.ux.GMapPanel = Ext.extend(Ext.Panel, {
             }else{
                 if (this.gmapType === 'map'){
                     var point = new GLatLng(this.setCenter.lat,this.setCenter['long']);
-                    this.gmap.setCenter(point, this.zoomLevel); 
+                    this.gmap.setCenter(point, this.zoomLevel);
                 }
                 if (typeof this.setCenter.marker === 'object' && typeof point === 'object'){
                     this.addMarker(point,this.setCenter.marker,this.setCenter.marker.clear);

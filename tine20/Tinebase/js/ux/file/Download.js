@@ -27,7 +27,7 @@ Ext.ux.file.Download = function(config) {
     });
 };
 
-Ext.extend(Ext.ux.file.Download, Ext.util.Observable, {    
+Ext.extend(Ext.ux.file.Download, Ext.util.Observable, {
     url: 'index.php',
     method: 'POST',
     params: null,
