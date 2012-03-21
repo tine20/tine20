@@ -111,7 +111,7 @@ class ActiveSync_Controller_DeviceTests extends PHPUnit_Framework_TestCase
     {
         ActiveSync_Controller_Device::getInstance()->setDeviceContentFilter(
             $this->objects['device']->getId(), 
-            ActiveSync_Controller::CLASS_CONTACTS, 
+            Syncope_Data_Factory::CLASS_CONTACTS, 
             $this->objects['filter']->getId());
             
         $device = ActiveSync_Controller_Device::getInstance()->get($this->objects['device']->getId());
