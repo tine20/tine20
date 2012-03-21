@@ -399,8 +399,6 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param Tinebase_Mail $_mail
      * @param Felamimail_Model_Account $_account
      * @param Felamimail_Model_Message $_message
-     * 
-     * @todo what has to be set in the 'In-Reply-To' header?
      */
     protected function _setMailHeaders(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL)
     {
@@ -413,11 +411,10 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         }
         
         if ($_message !== NULL) {
-            // set in reply to
             if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $_message->original_id instanceof Felamimail_Model_Message) {
-                $_mail->addHeader('In-Reply-To', $_message->original_id->messageuid);
+                $this->_addReplyHeaders($_mail, $_message);
             }
-        
+            
             // add other headers
             if (! empty($_message->headers) && is_array($_message->headers)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding custom headers: ' . print_r($_message->headers, TRUE));
@@ -426,6 +423,33 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 }
             }
         }
+    }
+    
+    /**
+     * set In-Reply-To and References headers
+     * 
+     * @param Zend_Mail $mail
+     * @param Felamimail_Model_Message $message
+     * 
+     * @see http://www.faqs.org/rfcs/rfc2822.html / Section 3.6.4.
+     */
+    protected function _addReplyHeaders(Zend_Mail $mail, Felamimail_Model_Message $message)
+    {
+        $originalHeaders = Felamimail_Controller_Message::getInstance()->getMessageHeaders($message->original_id);
+        if (! isset($originalHeaders['message-id'])) {
+            // no message-id -> skip this
+            return;
+        }
+        
+        $mail->addHeader('In-Reply-To', $originalHeaders['message-id']);
+        if (isset($originalHeaders['references'])) {
+            $references = $originalHeaders['references'] . '\r\n' . $originalHeaders['message-id'];
+        } else if (isset($originalHeaders['in-reply-to'])) {
+            $references = $originalHeaders['in-reply-to'] . '\r\n' . $originalHeaders['message-id'];
+        } else {
+            $references = $originalHeaders['message-id'];
+        }
+        $mail->addHeader('References', $references);
     }
     
     /**

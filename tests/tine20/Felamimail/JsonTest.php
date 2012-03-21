@@ -4,7 +4,7 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -655,7 +655,9 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test reply mail
+     * test reply mail and check some headers
+     * 
+     * @see 0006106: Add References header / https://forge.tine20.org/mantisbt/view.php?id=6106
      */
     public function testReplyMessage()
     {
@@ -665,7 +667,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $returned = $this->_json->saveMessage($replyMessage);
         
         $result = $this->_getMessages();
-        //print_r($result);
         
         $replyMessageFound = array();
         $originalMessage = array();
@@ -677,8 +678,17 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
                 $originalMessage = $mail;
             }
         }
+        $replyMessageFound = $this->_json->getMessage($replyMessageFound['id']);
+        $originalMessage = $this->_json->getMessage($originalMessage['id']);
+        
         $this->assertTrue(! empty($replyMessageFound), 'replied message not found');
         $this->assertTrue(! empty($originalMessage), 'original message not found');
+        
+        // check headers
+        $this->assertTrue(isset($replyMessageFound['headers']['in-reply-to']));
+        $this->assertEquals($originalMessage['headers']['message-id'], $replyMessageFound['headers']['in-reply-to']);
+        $this->assertTrue(isset($replyMessageFound['headers']['references']));
+        $this->assertEquals($originalMessage['headers']['message-id'], $replyMessageFound['headers']['references']);
         
         // check answered flag
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_ANSWERED, $originalMessage['flags'], 'could not find flag'));
